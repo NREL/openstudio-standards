@@ -1,9 +1,9 @@
-
 class Standard
   # @!group BoilerHotWater
 
   # find search criteria
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Hash] used for standards_lookup_table(model)
   def boiler_hot_water_find_search_criteria(boiler_hot_water)
     # Define the criteria to find the boiler properties
@@ -36,6 +36,7 @@ class Standard
 
   # Find capacity in W
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Double] capacity in W
   def boiler_hot_water_find_capacity(boiler_hot_water)
     capacity_w = nil
@@ -52,8 +53,27 @@ class Standard
     return capacity_w
   end
 
+  # Find design water flow rate in m^3/s
+  #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @return [Double] design water flow rate in m^3/s
+  def boiler_hot_water_find_design_water_flow_rate(boiler_hot_water)
+    design_water_flow_rate_m3_per_s = nil
+    if boiler_hot_water.designWaterFlowRate.is_initialized
+      design_water_flow_rate_m3_per_s = boiler_hot_water.designWaterFlowRate.get
+    elsif boiler_hot_water.autosizedDesignWaterFlowRate.is_initialized
+      design_water_flow_rate_m3_per_s = boiler_hot_water.autosizedDesignWaterFlowRate.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name} design water flow rate is not available.")
+      return false
+    end
+
+    return design_water_flow_rate_m3_per_s
+  end
+
   # Finds lookup object in standards and return minimum thermal efficiency
   #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [Double] minimum thermal efficiency
   def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, rename = false)
     # Get the boiler properties
@@ -109,8 +129,8 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify
-  # @return [Bool] true if successful, false if not
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @return [Bool] returns true if successful, false if not
   def boiler_hot_water_apply_efficiency_and_curves(boiler_hot_water)
     successfully_set_all_properties = false
 

@@ -1,5 +1,4 @@
 class NECB2011
-
   def add_all_spacetypes_to_model(model)
     # Get the space Type data from @standards data
     spacetype_data = nil
@@ -10,33 +9,23 @@ class NECB2011
     end
     spacetype_data.each do |spacedata|
       space_type = OpenStudio::Model::SpaceType.new(model)
-      space_type.setStandardsSpaceType(spacedata["space_type"])
-      space_type.setStandardsBuildingType(spacedata["building_type"])
+      space_type.setStandardsSpaceType(spacedata['space_type'])
+      space_type.setStandardsBuildingType(spacedata['building_type'])
       space_type.setName("#{spacedata['building_type']} #{spacedata['space_type']}")
       # Loads
-      self.space_type_apply_internal_loads(space_type,
-                                           true,
-                                           true,
-                                           true,
-                                           true,
-                                           true,
-                                           true)
+      space_type_apply_internal_loads(space_type: space_type)
 
       # Schedules
-      self.space_type_apply_internal_load_schedules(space_type,
-                                                    true,
-                                                    true,
-                                                    true,
-                                                    true,
-                                                    true,
-                                                    true,
-                                                    true)
-
+      space_type_apply_internal_load_schedules(space_type,
+                                               true,
+                                               true,
+                                               true,
+                                               true,
+                                               true,
+                                               true,
+                                               true)
     end
   end
-
-
-
 
   # Sets the selected internal loads to standards-based or typical values.
   # For each category that is selected get all load instances. Remove all
@@ -55,13 +44,23 @@ class NECB2011
   # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
   # @param set_infiltration [Bool] if true, set the infiltration rates
   # @return [Bool] returns true if successful, false if not
-  def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+  def space_type_apply_internal_loads(space_type:,
+                                      set_people: true,
+                                      set_lights: true,
+                                      set_electric_equipment: true,
+                                      set_gas_equipment: true,
+                                      set_ventilation: true,
+                                      set_infiltration: true,
+                                      lights_type: 'NECB_Default',
+                                      lights_scale: 1.0)
+
     # Skip plenums
     # Check if the space type name
     # contains the word plenum.
     if space_type.name.get.to_s.downcase.include?('plenum')
       return false
     end
+
     if space_type.standardsSpaceType.is_initialized
       if space_type.standardsSpaceType.get.downcase.include?('plenum')
         return false
@@ -102,6 +101,7 @@ class NECB2011
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -163,7 +163,11 @@ class NECB2011
     end
 
     # Lights
-    apply_standard_lights(set_lights, space_type, space_type_properties)
+    apply_standard_lights(set_lights: set_lights,
+                          space_type: space_type,
+                          space_type_properties: space_type_properties,
+                          lights_type: lights_type,
+                          lights_scale: lights_scale)
 
     # Electric Equipment
     elec_equip_have_info = false
@@ -188,6 +192,7 @@ class NECB2011
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -236,6 +241,7 @@ class NECB2011
       elsif instances.size > 1
         instances.each_with_index do |inst, i|
           next if i.zero?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
           inst.remove
         end
@@ -266,6 +272,7 @@ class NECB2011
     ventilation_per_area = space_type_properties['ventilation_per_area'].to_f
     ventilation_per_person = space_type_properties['ventilation_per_person'].to_f
     ventilation_ach = space_type_properties['ventilation_air_changes'].to_f
+    ventilation_occupancy_per_area = space_type_properties['ventilation_occupancy_rate_people_per_1000ft2'].to_f
     ventilation_have_info = true unless ventilation_per_area.zero?
     ventilation_have_info = true unless ventilation_per_person.zero?
     ventilation_have_info = true unless ventilation_ach.zero?
@@ -290,8 +297,12 @@ class NECB2011
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per area to #{ventilation_per_area} cfm/ft^2.")
       end
       unless ventilation_per_person.zero?
-        ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per person to #{ventilation_per_person} cfm/person.")
+        # For BTAP we often use an occupancy per area rate for ventilation which is different from the one used for
+        # everything else.  The mod_ventilation_per_person rate adjusts the per person ventilation rate so that the
+        # proper ventilation rate is calculated when using the general occupant per area rate.
+        mod_ventilation_per_person = ventilation_per_person * ventilation_occupancy_per_area / occupancy_per_area
+        ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(mod_ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per person to #{mod_ventilation_per_person} cfm/person.")
       end
       unless ventilation_ach.zero?
         ventilation.setOutdoorAirFlowAirChangesperHour(ventilation_ach)
@@ -318,38 +329,38 @@ class NECB2011
       infiltration_have_info = true
     end
 
-    if set_infiltration && infiltration_have_info
+    return unless set_infiltration && infiltration_have_info
 
-      # Remove all but the first instance
-      instances = space_type.spaceInfiltrationDesignFlowRates.sort
-      if instances.size.zero?
-        instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space_type.model)
-        instance.setName("#{space_type.name} Infiltration")
-        instance.setSpaceType(space_type)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no infiltration objects, one has been created.")
-        instances << instance
-      elsif instances.size > 1
-        instances.each_with_index do |inst, i|
-          next if i.zero?
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
-          inst.remove
-        end
+    # Remove all but the first instance
+    instances = space_type.spaceInfiltrationDesignFlowRates.sort
+    if instances.size.zero?
+      instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space_type.model)
+      instance.setName("#{space_type.name} Infiltration")
+      instance.setSpaceType(space_type)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no infiltration objects, one has been created.")
+      instances << instance
+    elsif instances.size > 1
+      instances.each_with_index do |inst, i|
+        next if i.zero?
+
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
+        inst.remove
       end
+    end
 
-      # Modify each instance
-      space_type.spaceInfiltrationDesignFlowRates.sort.each do |inst|
-        unless infiltration_per_area_ext.zero?
-          inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")
-        end
-        unless infiltration_per_area_ext_wall.zero?
-          inst.setFlowperExteriorWallArea(OpenStudio.convert(infiltration_per_area_ext_wall.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{infiltration_per_area_ext_wall} per ft^2 exterior wall area.")
-        end
-        unless infiltration_ach.zero?
-          inst.setAirChangesperHour(infiltration_ach)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} ACH.")
-        end
+    # Modify each instance
+    space_type.spaceInfiltrationDesignFlowRates.sort.each do |inst|
+      unless infiltration_per_area_ext.zero?
+        inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")
+      end
+      unless infiltration_per_area_ext_wall.zero?
+        inst.setFlowperExteriorWallArea(OpenStudio.convert(infiltration_per_area_ext_wall.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{infiltration_per_area_ext_wall} per ft^2 exterior wall area.")
+      end
+      unless infiltration_ach.zero?
+        inst.setAirChangesperHour(infiltration_ach)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} ACH.")
       end
     end
   end

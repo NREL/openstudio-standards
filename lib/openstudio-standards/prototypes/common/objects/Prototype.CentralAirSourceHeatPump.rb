@@ -3,9 +3,11 @@ class Standard
 
   # Prototype CentralAirSourceHeatPump object using PlantComponentUserDefined
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param hot_water_loop [<OpenStudio::Model::PlantLoop>] a hot water loop served by the central air source heat pump
   # @param name [String] the name of the central air source heat pump, or nil in which case it will be defaulted
   # @param cop [Double] air source heat pump rated cop
+  # @return [OpenStudio::Model::PlantComponentUserDefined] a plant component representing the air source heat pump
   # @todo update curve to better calculate based on the rated cop
   # @todo refactor to use the new EnergyPlus central air source heat pump object when it becomes available
   #   set hot_water_loop to an optional keyword argument, and add input keyword arguments for other characteristics
@@ -66,7 +68,7 @@ class Standard
     setpt_mgr_sch_sen.setName("#{plant_comp.name}_Setpt_Mgr_Temp_Sen")
     hot_water_loop.supplyOutletNode.setpointManagers.each do |m|
       if m.to_SetpointManagerScheduled.is_initialized
-        setpt_mgr_sch_sen.setKeyName("#{m.to_SetpointManagerScheduled.get.schedule.name}")
+        setpt_mgr_sch_sen.setKeyName(m.to_SetpointManagerScheduled.get.schedule.name.to_s)
       end
     end
 
@@ -191,6 +193,7 @@ class Standard
 
     # metered output variable
     elec_mtr_out_var = OpenStudio::Model::EnergyManagementSystemMeteredOutputVariable.new(model, "#{plant_comp.name} Electricity Consumption")
+    elec_mtr_out_var.setName("#{plant_comp.name} Electricity Consumption")
     elec_mtr_out_var.setEMSVariableName('Elec')
     elec_mtr_out_var.setUpdateFrequency('SystemTimestep')
     elec_mtr_out_var.setString(4, sim_pgrm.handle.to_s)

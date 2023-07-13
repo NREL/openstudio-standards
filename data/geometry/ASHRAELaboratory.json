@@ -1,13 +1,12 @@
 [
   {
     "type": "Packaged DOAS",
-	"name": "Lab PVAV All OA",
-	"doas_type": "DOASVAVReheat",
-	"economizer_control_method": "NoEconomizer",
-	"energy_recovery": false,
-	"doas_control_strategy": "ColdSupplyAir",
-	"cooling_design_supply_air_temperature": 55.0,
-	"heating_design_supply_air_temperature": 60.0,
+    "name": "Lab PVAV All OA",
+    "doas_type": "DOASVAVReheat",
+    "economizer_control_method": "NoEconomizer",
+    "doas_control_strategy": "ColdSupplyAir",
+    "cooling_design_supply_air_temperature": 55.0,
+    "heating_design_supply_air_temperature": 60.0,
     "operation_schedule": "Lab_HVACOperationSchd",
     "oa_damper_schedule": "Lab_MinOA_MotorizedDamper_Sched",
     "space_names": [
@@ -17,7 +16,7 @@
       "Lab_mid_corridor",
       "Lab_mid_fumehood",
       "Lab_mid_open",
-	  "Lab_top_corridor",
+      "Lab_top_corridor",
       "Lab_top_fumehood",
       "Lab_top_open"
     ]
@@ -32,11 +31,11 @@
       "Office_bot_2",
       "Office_bot_3",
       "Office_bot_4",
-	  "Office_mid_1",
+      "Office_mid_1",
       "Office_mid_2",
       "Office_mid_3",
       "Office_mid_4",
-	  "Office_top_1",
+      "Office_top_1",
       "Office_top_2",
       "Office_top_3",
       "Office_top_4"

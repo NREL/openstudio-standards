@@ -46,6 +46,8 @@ module EnergyPlus
     attr_accessor :typical_winter_dry_week
     attr_accessor :typical_autumn_week
     attr_accessor :typical_spring_week
+    attr_accessor :monthly_undis_ground_temps_0p5m
+    attr_accessor :monthly_undis_ground_temps_4p0m
 
     def initialize(path)
       @path = Pathname.new(path)
@@ -73,6 +75,8 @@ module EnergyPlus
       @typical_winter_dry_week = []
       @typical_autumn_week = []
       @typical_spring_week = []
+      @monthly_undis_ground_temps_0p5m = []
+      @monthly_undis_ground_temps_4p0m = []
       @data = []
       init
     end
@@ -150,7 +154,7 @@ module EnergyPlus
 
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Weather.stat_file', "Can't find lat/lon/gmt")
-        raise()
+        raise
       else
 
         @lat = match_data[2].to_f + match_data[3].to_f / 60.0
@@ -171,7 +175,7 @@ module EnergyPlus
       match_data = text.match(regex)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find elevation")
-        raise()
+        raise
       else
         @elevation = match_data[1].to_f
         if match_data[2] == 'below'
@@ -184,7 +188,7 @@ module EnergyPlus
       match_data = text.match(cdd_10_regex)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find CDD 10")
-        raise()
+        raise
 
       else
         @cdd10 = match_data[1].to_f
@@ -195,7 +199,7 @@ module EnergyPlus
 
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find HDD 10")
-        raise()
+        raise
       else
         @hdd10 = match_data[1].to_f
       end
@@ -204,7 +208,7 @@ module EnergyPlus
       match_data = text.match(cdd_18_regex)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find CDD 18")
-        raise()
+        raise
       else
         @cdd18 = match_data[1].to_f
       end
@@ -214,7 +218,7 @@ module EnergyPlus
 
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find HDD 18")
-        raise()
+        raise
       else
         @hdd18 = match_data[1].to_f
       end
@@ -224,7 +228,7 @@ module EnergyPlus
       match_data = text.match(regex)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find outdoor air temps")
-        raise()
+        raise
       else
         # first match is outdoor air temps
         monthly_temps = match_data[1].strip.split(/\s+/)
@@ -232,7 +236,7 @@ module EnergyPlus
         # have to be 12 months
         if monthly_temps.size != 12
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find outdoor air temps")
-          raise()
+          raise
         end
 
         # insert as numbers
@@ -241,9 +245,9 @@ module EnergyPlus
         # Allow non Ascii comment because this is the
         # actual content of the .stat file.
         # rubocop:disable AsciiComments
-        #      Design Stat	ColdestMonth	DB996	DB990	DP996	HR_DP996	DB_DP996	DP990	HR_DP990	DB_DP990	WS004c	DB_WS004c	WS010c	DB_WS010c	WS_DB996	WD_DB996
-        #    	Units	{}	{ï¿½C}	{ï¿½C}	{ï¿½C}	{}	{ï¿½C}	{ï¿½C}	{}	{ï¿½C}	{m/s}	{ï¿½C}	{m/s}	{ï¿½C}	{m/s}	{deg}
-        #    	Heating	12	-7	-4	-13.9	1.1	-5	-9.6	1.7	-2.9	14.2	5.9	11.9	6.8	2.9	100
+        #      Design Stat  ColdestMonth  DB996  DB990  DP996  HR_DP996  DB_DP996  DP990  HR_DP990  DB_DP990  WS004c  DB_WS004c  WS010c  DB_WS010c  WS_DB996  WD_DB996
+        #      Units  {}  {ï¿½C}  {ï¿½C}  {ï¿½C}  {}  {ï¿½C}  {ï¿½C}  {}  {ï¿½C}  {m/s}  {ï¿½C}  {m/s}  {ï¿½C}  {m/s}  {deg}
+        #      Heating  12  -7  -4  -13.9  1.1  -5  -9.6  1.7  -2.9  14.2  5.9  11.9  6.8  2.9  100
         # rubocop:enable AsciiComments
         # use regex to get the temperatures
         regex = /\s*Heating(\s*\d+.*)\n/
@@ -313,9 +317,9 @@ module EnergyPlus
         # use regex to get the temperatures
         regex = /Daily Avg(.*)\n/
         match_data = text.match(regex)
-        if match_data.nil?
+       if match_data.nil?
           puts "Can't find outdoor air temps"
-          raise()
+          raise
         else
           # first match is outdoor air temps
           monthly_temps = match_data[1].strip.split(/\s+/)
@@ -323,12 +327,40 @@ module EnergyPlus
           # have to be 12 months
           if monthly_temps.size != 12
             puts "Can't find outdoor air temps"
-            raise()
+            raise
           end
 
           # insert as numbers
           monthly_temps.each { |temp| @monthly_dry_bulb << temp.to_f }
           # puts "#{@monthly_dry_bulb}"
+        end
+
+        # use regex to get undisturbed ground temps at 0.5 m depth
+        regex = /Monthly.*Calculated.*undisturbed*.*Ground.*Temperatures.*\n.*Jan.*Feb.*Mar.*Apr.*May.*Jun.*Jul.*Aug.*Sep.*Oct.*Nov.*Dec.*\n(.*)\n(.*)\n(.*)/
+        match_data = text.match(regex)
+        if match_data.nil?
+          puts "Can't find undisturbed ground temperatures"
+          raise
+        else
+          # first match is undisturbed ground temperature at 0.5 m and 4.0 m depth
+          monthly_undis_ground_temps_0p5m = match_data[1].strip.split(/\s+/)
+          monthly_undis_ground_temps_0p5m.shift
+          monthly_undis_ground_temps_0p5m.shift
+          monthly_undis_ground_temps_4p0m = match_data[3].strip.split(/\s+/)
+          monthly_undis_ground_temps_4p0m.shift
+          monthly_undis_ground_temps_4p0m.shift
+          # have to be 12 months
+          if monthly_undis_ground_temps_0p5m.size != 12
+            puts "Can't find undisturbed ground temps at 0.5 m"
+            raise
+          end
+          if monthly_undis_ground_temps_4p0m.size != 12
+            puts "Can't find undisturbed ground temps at 4.0 m"
+            raise
+          end
+          # insert as numbers
+          monthly_undis_ground_temps_0p5m.each { |temp| @monthly_undis_ground_temps_0p5m << temp.to_f }
+          monthly_undis_ground_temps_4p0m.each { |temp| @monthly_undis_ground_temps_4p0m << temp.to_f }
         end
 
         # now we are valid
@@ -354,7 +386,7 @@ module EnergyPlus
       match_data = text.match(/(Summer is |Wet Period=)(.*)/)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't Summer  / Wet months")
-        raise()
+        raise
       else
         @summer_wet_months = match_data[2].to_s.strip
       end
@@ -362,7 +394,7 @@ module EnergyPlus
       match_data = text.match(/(Winter is |Dry Period=)(.*)/)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't Winter  / Dry months")
-        raise()
+        raise
       else
         @winter_dry_months = match_data[2].to_s.strip
       end
@@ -389,7 +421,7 @@ module EnergyPlus
       match_data = text.scan(regex)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find Typical weather weeks")
-        raise()
+        raise
       else
         @typical_summer_wet_week = Date.parse("#{match_data[0][0].split(':')[0]} 2000")
         @typical_winter_dry_week = Date.parse("#{match_data[1][0].split(':')[0]} 2000")
@@ -414,7 +446,7 @@ module EnergyPlus
       match_data = text.match(regex)
       if match_data.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find Extreme hot weather week")
-        raise()
+        raise
       else
         @extreme_cold_week = Date.parse((match_data[1].split(':')[0]).to_s)
       end

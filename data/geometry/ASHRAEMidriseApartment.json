@@ -1,9 +1,9 @@
 [
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -12,10 +12,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -24,10 +24,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -36,10 +36,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -48,10 +48,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -60,10 +60,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -72,10 +72,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -84,10 +84,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -96,10 +96,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -108,10 +108,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -120,10 +120,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -132,10 +132,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -144,10 +144,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -156,10 +156,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -168,10 +168,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -180,10 +180,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -192,10 +192,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -204,10 +204,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -216,10 +216,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -228,10 +228,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -240,10 +240,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -252,10 +252,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -264,10 +264,10 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
-    "fan_type": "ConstantVolume",
+    "fan_type": "Cycling",
     "cooling_type": "Single Speed DX AC",
     "heating_type": "Gas",
     "supplemental_heating_type": "Gas",
@@ -276,7 +276,7 @@
     ]
   },
   {
-    "type": "SAC",
+    "type": "PSZ-AC",
     "operation_schedule": "ApartmentMidRise All On",
     "oa_damper_schedule": "ApartmentMidRise COMPACT HVAC-ALWAYS 1",
     "fan_type": "ConstantVolume",

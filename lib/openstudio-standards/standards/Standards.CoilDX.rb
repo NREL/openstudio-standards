@@ -1,4 +1,3 @@
-
 # A variety of DX coil methods that are the same regardless of coil type.
 # These methods are available to:
 # CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
@@ -8,6 +7,8 @@ module CoilDX
   # Finds the subcategory.  Possible choices are:
   # Single Package, Split System, PTAC, or PTHP
   #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @return [String] the coil_dx_subcategory(coil_dx)
   # @todo Add add split system vs single package to model object
   def coil_dx_subcategory(coil_dx)
@@ -35,7 +36,8 @@ module CoilDX
         # PTHP
         elsif containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           sub_category = 'PTHP'
-        end # TODO: Add other zone hvac systems
+        end
+        # @todo Add other zone hvac systems
       end
     end
 
@@ -43,7 +45,10 @@ module CoilDX
   end
 
   # Determine if it is a heat pump
-  # @return [Bool] true if it is a heat pump, false if not
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @return [Bool] returns true if it is a heat pump, false if not
   def coil_dx_heat_pump?(coil_dx)
     heat_pump = false
 
@@ -52,23 +57,36 @@ module CoilDX
         containing_comp = coil_dx.containingHVACComponent.get
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
           heat_pump = true
-        end # TODO: Add other unitary systems
+        elsif containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+          htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.heatingCoil
+          if htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized then heat_pump = true end
+        end
       elsif coil_dx.containingZoneHVACComponent.is_initialized
         containing_comp = coil_dx.containingZoneHVACComponent.get
         # PTHP
         if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           heat_pump = true
-        end # TODO: Add other zone hvac systems
+        end
+        # @todo Add other zone hvac systems
+      end
+    else
+      if !coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty? ||
+         !coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:VariableSpeed'.to_IddObjectType).empty?
+        heat_pump = true
       end
     end
 
     return heat_pump
   end
 
-  # Determine the heating type.  Possible choices are:
-  # Electric Resistance or None, All Other
+  # Determine the heating type.
+  # Possible choices are: Electric Resistance or None, All Other
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
   # @return [String] the heating type
-  def coil_dx_heating_type(coil_dx)
+  def coil_dx_heating_type(coil_dx, necb_ref_hp = false)
     htg_type = nil
 
     # If Unitary or Zone HVAC
@@ -81,7 +99,16 @@ module CoilDX
           if containing_comp.name.to_s.include? 'Minisplit'
             htg_type = 'All Other'
           end
-        end # TODO: Add other unitary systems
+        elsif containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+          htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.heatingCoil
+          supp_htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.supplementalHeatingCoil
+          if htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized || supp_htg_coil.to_CoilHeatingElectric.is_initialized
+            htg_type = 'Electric Resistance or None'
+          elsif htg_coil.to_CoilHeatingGasMultiStage.is_initialized
+            htg_type = 'All Other'
+          end
+        end
+        # @todo Add other unitary systems
       elsif coil_dx.containingZoneHVACComponent.is_initialized
         containing_comp = coil_dx.containingZoneHVACComponent.get
         # PTAC
@@ -95,8 +122,8 @@ module CoilDX
         # PTHP
         elsif containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
           htg_type = 'Electric Resistance or None'
-        end # TODO: Add other zone hvac systems
-
+        end
+        # @todo Add other zone hvac systems
       end
     end
 
@@ -131,15 +158,20 @@ module CoilDX
 
   # Finds the search criteria
   #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
   # @return [hash] has for search criteria to be used for find object
-  def coil_dx_find_search_criteria(coil_dx)
+  def coil_dx_find_search_criteria(coil_dx, necb_ref_hp = false)
     search_criteria = {}
     search_criteria['template'] = template
 
     search_criteria['cooling_type'] = case coil_dx.iddObjectType.valueName.to_s
                                       when 'OS_Coil_Cooling_DX_SingleSpeed',
                                            'OS_Coil_Cooling_DX_TwoSpeed',
-                                           'OS_Coil_Cooling_DX_MultiSpeed'
+                                           'OS_Coil_Cooling_DX_VariableSpeed',
+                                           'OS_Coil_Cooling_DX_MultiSpeed',
+                                           'OS_AirConditioner_VariableRefrigerantFlow'
                                         coil_dx.condenserType
                                       else
                                         'AirCooled'
@@ -149,7 +181,7 @@ module CoilDX
     search_criteria['subcategory'] = coil_dx_subcategory(coil_dx)
 
     # Add the heating type to the search criteria
-    htg_type = coil_dx_heating_type(coil_dx)
+    htg_type = coil_dx_heating_type(coil_dx, necb_ref_hp)
     unless htg_type.nil?
       search_criteria['heating_type'] = htg_type
     end
@@ -163,7 +195,8 @@ module CoilDX
             containing_comp = coil_dx.containingHVACComponent.get
             if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
               search_criteria['heating_type'] = nil
-            end # TODO: Add other unitary systems
+            end
+            # @todo Add other unitary systems
           end
         end
       end

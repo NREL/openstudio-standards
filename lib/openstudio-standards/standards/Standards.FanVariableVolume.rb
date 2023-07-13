@@ -1,4 +1,3 @@
-
 class Standard
   # @!group FanVariableVolume
 
@@ -6,17 +5,19 @@ class Standard
 
   # Modify the fan curve coefficients to reflect a specific type of control.
   #
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
   # @param control_type [String] valid choices are:
-  # Multi Zone VAV with discharge dampers,
-  # Multi Zone VAV with VSD and SP Setpoint Reset,
-  # Multi Zone VAV with AF or BI Riding Curve,
-  # Multi Zone VAV with AF or BI with Inlet Vanes,
-  # Multi Zone VAV with FC Riding Curve,
-  # Multi Zone VAV with FC with Inlet Vanes,
-  # Multi Zone VAV with Vane-axial with Variable Pitch Blades,
-  # Multi Zone VAV with VSD and Fixed SP Setpoint,
-  # Multi Zone VAV with VSD and Static Pressure Reset,
-  # Single Zone VAV Fan
+  #   Multi Zone VAV with discharge dampers,
+  #   Multi Zone VAV with VSD and SP Setpoint Reset,
+  #   Multi Zone VAV with AF or BI Riding Curve,
+  #   Multi Zone VAV with AF or BI with Inlet Vanes,
+  #   Multi Zone VAV with FC Riding Curve,
+  #   Multi Zone VAV with FC with Inlet Vanes,
+  #   Multi Zone VAV with Vane-axial with Variable Pitch Blades,
+  #   Multi Zone VAV with VSD and Fixed SP Setpoint,
+  #   Multi Zone VAV with VSD and Static Pressure Reset,
+  #   Single Zone VAV Fan
+  # @return [Bool] returns true if successful, false if not
   def fan_variable_volume_set_control_type(fan_variable_volume, control_type)
     # Determine the coefficients
     coeff_a = nil
@@ -106,11 +107,13 @@ class Standard
 
     # Append the control type to the fan name
     # self.setName("#{self.name} #{control_type}")
+    return true
   end
 
-  # Determines whether there is a requirement to have a
-  # VSD or some other method to reduce fan power
-  # at low part load ratios.
+  # Determines whether there is a requirement to have a VSD or some other method to reduce fan power at low part load ratios.
+  #
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
+  # @return [Bool] returns true if required, false if not
   def fan_variable_volume_part_load_fan_power_limitation?(fan_variable_volume)
     part_load_control_required = false
 
@@ -160,7 +163,7 @@ class Standard
 
   # The threhold horsepower below which part load control is not required.
   #
-  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] the fan
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
   # @return [Double] the limit, in horsepower. Return nil for no limit by default.
   def fan_variable_volume_part_load_fan_power_limitation_hp_limit(fan_variable_volume)
     hp_limit = nil # No minimum limit
@@ -169,7 +172,7 @@ class Standard
 
   # The threhold capacity below which part load control is not required.
   #
-  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] the fan
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
   # @return [Double] the limit, in Btu/hr. Return nil for no limit by default.
   def fan_variable_volume_part_load_fan_power_limitation_capacity_limit(fan_variable_volume)
     cap_limit_btu_per_hr = nil # No minimum limit
@@ -177,16 +180,17 @@ class Standard
   end
 
   # Determine if the cooling system is DX, CHW, evaporative, or a mixture.
+  #
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
   # @return [String] the cooling system type.  Possible options are:
-  # dx, chw, evaporative, mixed, unknown.
+  #   dx, chw, evaporative, mixed, unknown.
   def fan_variable_volume_cooling_system_type(fan_variable_volume)
     clg_sys_type = 'unknown'
 
     # Get the air loop this fan is connected to
     air_loop = fan_variable_volume.airLoopHVAC
-    unless air_loop.is_initialized
-      return clg_sys_type
-    end
+    return clg_sys_type unless air_loop.is_initialized
+
     air_loop = air_loop.get
 
     # Check the types of coils on the AirLoopHVAC

@@ -1,17 +1,68 @@
 class Standard
   # @!group PlantLoop
 
-  # Apply all standard required controls to the plantloop
+  # Apply all standard required controls to the plant loop
   #
-  # @param (see #economizer_required?)
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_standard_controls(plant_loop, climate_zone)
     # Supply water temperature reset
-    plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop)
+    # plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop)
+  end
+
+  # Apply sizing and controls to chilled water loop
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop
+  # @param dsgn_sup_wtr_temp [Double] design chilled water supply T
+  # @param dsgn_sup_wtr_temp_delt [Double] design chilled water supply delta T
+  # @return [Bool] returns true if successful, false if not
+  def chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
+    # chilled water loop sizing and controls
+    if dsgn_sup_wtr_temp.nil?
+      dsgn_sup_wtr_temp = 44.0
+      dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
+    else
+      dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
+    end
+    if dsgn_sup_wtr_temp_delt.nil?
+      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(10.1, 'R', 'K').get
+    else
+      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(dsgn_sup_wtr_temp_delt, 'R', 'K').get
+    end
+    chilled_water_loop.setMinimumLoopTemperature(1.0)
+    chilled_water_loop.setMaximumLoopTemperature(40.0)
+    sizing_plant = chilled_water_loop.sizingPlant
+    sizing_plant.setLoopType('Cooling')
+    sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
+    sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
+    chw_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                       dsgn_sup_wtr_temp_c,
+                                                       name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F")
+    chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, chw_temp_sch)
+    chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
+    chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
+    # @todo Yixing check the CHW Setpoint from standards
+    # @todo Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_prm_baseline_temperatures
+
+    return true
+  end
+
+  # Set configuration in model for chilled water primary/secondary loop interface
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [String] common_pipe or heat_exchanger
+  def plant_loop_set_chw_pri_sec_configuration(model)
+    pri_sec_config = 'common_pipe'
+    return pri_sec_config
   end
 
   # Determine if the plant loop is variable flow.
   # Returns true if primary and/or secondary pumps are variable speed.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if variable flow, false if not
   def plant_loop_variable_flow_system?(plant_loop)
     variable_flow = false
 
@@ -32,8 +83,13 @@ class Standard
     return variable_flow
   end
 
-  # TODO: I think it makes more sense to sense the motor efficiency right there...
-  # But actually it's completely irrelevant... you could set at 0.9 and just calculate the pressurise rise to have your 19 W/GPM or whatever
+  # apply prm baseline pump power
+  # @note I think it makes more sense to sense the motor efficiency right there...
+  #   But actually it's completely irrelevant...
+  #   you could set at 0.9 and just calculate the pressure rise to have your 19 W/GPM or whatever
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_pump_power(plant_loop)
     # Determine the pumping power per
     # flow based on loop type.
@@ -86,7 +142,7 @@ class Standard
 
       when 'Condenser'
 
-        # TODO: prm condenser loop pump power
+        # @todo prm condenser loop pump power
         pri_w_per_gpm = 19.0
 
     end
@@ -129,8 +185,9 @@ class Standard
   end
 
   # Applies the temperatures to the plant loop based on Appendix G.
-  # @param [Object]  plant_loop
-  # @return [TrueClass]
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -147,6 +204,9 @@ class Standard
   end
 
   # Applies the hot water temperatures to the plant loop based on Appendix G.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_hot_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
 
@@ -181,6 +241,9 @@ class Standard
   end
 
   # Applies the chilled water temperatures to the plant loop based on Appendix G.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_chilled_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
 
@@ -221,11 +284,15 @@ class Standard
   end
 
   # Applies the condenser water temperatures to the plant loop based on Appendix G.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_condenser_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
+    loop_type = sizing_plant.loopType
+    return true unless loop_type == 'Condenser'
 
-    # Much of the thought in this section
-    # came from @jmarrec
+    # Much of the thought in this section came from @jmarrec
 
     # Determine the design OATwb from the design days.
     # Per https://unmethours.com/question/16698/which-cooling-design-day-is-most-common-for-sizing-rooftop-units/
@@ -234,6 +301,7 @@ class Standard
     plant_loop.model.getDesignDays.sort.each do |dd|
       next unless dd.dayType == 'SummerDesignDay'
       next unless dd.name.get.to_s.include?('WB=>MDB')
+
       if dd.humidityIndicatingType == 'Wetbulb'
         summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
         summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
@@ -242,9 +310,7 @@ class Standard
       end
     end
 
-    # Use the value from the design days or
-    # 78F, the CTI rating condition, if no
-    # design day information is available.
+    # Use the value from the design days or 78F, the CTI rating condition, if no design day information is available.
     design_oat_wb_f = nil
     if summer_oat_wbs_f.size.zero?
       design_oat_wb_f = 78
@@ -252,14 +318,13 @@ class Standard
     else
       # Take worst case condition
       design_oat_wb_f = summer_oat_wbs_f.max
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "The maximum design wet bulb temperature from the Summer Design Day WB=>MDB is #{design_oat_wb_f} F")
     end
 
-    # There is an EnergyPlus model limitation
-    # that the design_oat_wb_f < 80F
-    # for cooling towers
+    # There is an EnergyPlus model limitation that the design_oat_wb_f < 80F for cooling towers
     ep_max_design_oat_wb_f = 80
     if design_oat_wb_f > ep_max_design_oat_wb_f
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, reduced design OATwb from #{design_oat_wb_f} F to E+ model max input of #{ep_max_design_oat_wb_f} F.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, reduced design OATwb from #{design_oat_wb_f.round(1)} F to E+ model max input of #{ep_max_design_oat_wb_f} F.")
       design_oat_wb_f = ep_max_design_oat_wb_f
     end
 
@@ -280,8 +345,7 @@ class Standard
     sizing_plant.setLoopDesignTemperatureDifference(range_k)
 
     # Set Cooling Tower sizing parameters.
-    # Only the variable speed cooling tower
-    # in E+ allows you to set the design temperatures.
+    # Only the variable speed cooling tower in E+ allows you to set the design temperatures.
     #
     # Per the documentation
     # http://bigladdersoftware.com/epx/docs/8-4/input-output-reference/group-condenser-equipment.html#field-design-u-factor-times-area-value
@@ -318,13 +382,24 @@ class Standard
     plant_loop.setMaximumLoopTemperature(max_temp_c)
 
     # Cooling Tower operational controls
-    # G3.1.3.11 - Tower shall be controlled to maintain a 70F
-    # LCnWT where weather permits,
+    # G3.1.3.11 - Tower shall be controlled to maintain a 70F LCnWT where weather permits,
     # floating up to leaving water at design conditions.
     float_down_to_f = 70
     float_down_to_c = OpenStudio.convert(float_down_to_f, 'F', 'C').get
-    cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(plant_loop.model)
-    cw_t_stpt_manager.setName("CW Temp Follows OATwb w/ #{approach_r} plant_loop.deltaF approach min #{float_down_to_f.round(1)} F to max #{leaving_cw_t_f.round(1)}")
+
+    cw_t_stpt_manager = nil
+    plant_loop.supplyOutletNode.setpointManagers.each do |spm|
+      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized
+        if spm.name.get.include? 'Setpoint Manager Follow OATwb'
+          cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
+        end
+      end
+    end
+    if cw_t_stpt_manager.nil?
+      cw_t_stpt_manager = OpenStudio::Model::SetpointManagerFollowOutdoorAirTemperature.new(plant_loop.model)
+      cw_t_stpt_manager.addToNode(plant_loop.supplyOutletNode)
+    end
+    cw_t_stpt_manager.setName("#{plant_loop.name} Setpoint Manager Follow OATwb with #{approach_r.round(1)}F Approach")
     cw_t_stpt_manager.setReferenceTemperatureType('OutdoorAirWetBulb')
     # At low design OATwb, it is possible to calculate
     # a maximum temperature below the minimum.  In this case,
@@ -336,13 +411,10 @@ class Standard
     cw_t_stpt_manager.setMaximumSetpointTemperature(leaving_cw_t_c)
     cw_t_stpt_manager.setMinimumSetpointTemperature(float_down_to_c)
     cw_t_stpt_manager.setOffsetTemperatureDifference(approach_k)
-    cw_t_stpt_manager.addToNode(plant_loop.supplyOutletNode)
-
     return true
   end
 
-  # Determine the performance rating method specified
-  # design condenser water temperature, approach, and range
+  # Determine the performance rating method specified design condenser water temperature, approach, and range
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] the condenser water loop
   # @param design_oat_wb_c [Double] the design OA wetbulb temperature (C)
@@ -372,8 +444,10 @@ class Standard
   end
 
   # Determine if temperature reset is required.
-  # Required if heating or cooling capacity is greater than
-  # 300,000 Btu/hr.
+  # Required if heating or cooling capacity is greater than 300,000 Btu/hr.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if required, false if not
   def plant_loop_supply_water_temperature_reset_required?(plant_loop)
     reset_required = false
 
@@ -411,10 +485,10 @@ class Standard
     return reset_required
   end
 
-  # Enable reset of hot or chilled water temperature
-  # based on outdoor air temperature.
-  # @param [Object]  plant_loop
-  # @return [TrueClass]
+  # Enable reset of hot or chilled water temperature based on outdoor air temperature.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_enable_supply_water_temperature_reset(plant_loop)
     # Get the current setpoint manager on the outlet node
     # and determine if already has temperature reset
@@ -496,18 +570,14 @@ class Standard
 
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}: cannot enable supply water temperature reset for a #{loop_type} loop.")
         return false
-
     end
-
     return true
   end
 
   # Get the total cooling capacity for the plant loop
   #
-  # @return [Double] total cooling capacity
-  #   units = Watts (W)
-  # @param [Object]  plant_loop
-  # @return [Fixnum]
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Double] total cooling capacity in watts
   def plant_loop_total_cooling_capacity(plant_loop)
     # Sum the cooling capacity for all cooling components
     # on the plant loop.
@@ -544,11 +614,10 @@ class Standard
 
   # Get the total heating capacity for the plant loop
   #
-  # @return [Double] total heating capacity
-  #   units = Watts (W)
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Double] total heating capacity in watts
   # @todo Add district heating to plant loop heating capacity
-  # @param [Object]  plant_loop
-  # @return [Object]
   def plant_loop_total_heating_capacity(plant_loop)
     # Sum the heating capacity for all heating components
     # on the plant loop.
@@ -594,7 +663,7 @@ class Standard
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of DistrictHeating #{dist_htg.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
         end
       end
-    end # End loop on plant_loop.supplyComponents
+    end
 
     total_heating_capacity_kbtu_per_hr = OpenStudio.convert(total_heating_capacity_w, 'W', 'kBtu/hr').get
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, heating capacity is #{total_heating_capacity_kbtu_per_hr.round} kBtu/hr.")
@@ -607,6 +676,9 @@ class Standard
   # count the area of all zones served by that loop.
   # If the loop serves coils inside of zone equipment,
   # count the area of the zones containing the zone equipment.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Double] floor area served in m^2
   def plant_loop_total_floor_area_served(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -669,6 +741,9 @@ class Standard
   end
 
   # Applies the pumping controls to the loop based on Appendix G.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_pumping_type(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -686,9 +761,12 @@ class Standard
   end
 
   # Applies the chilled water pumping controls to the loop based on Appendix G.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)
     # Determine the pumping type.
-    minimum_cap_tons = 300
+    minimum_cap_tons = 300.0
 
     # Determine the capacity
     cap_w = plant_loop_total_cooling_capacity(plant_loop)
@@ -740,7 +818,7 @@ class Standard
       end
     end
 
-    # Modify all the secondary pumps
+    # Modify all the secondary pumps besides constant pumps
     plant_loop.demandComponents.each do |sc|
       if sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
@@ -755,6 +833,9 @@ class Standard
   end
 
   # Applies the hot water pumping controls to the loop based on Appendix G.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] hot water loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_hot_water_pumping_type(plant_loop)
     # Determine the minimum area to determine
     # pumping type.
@@ -787,6 +868,9 @@ class Standard
   end
 
   # Applies the condenser water pumping controls to the loop based on Appendix G.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] condenser water loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_condenser_water_pumping_type(plant_loop)
     # All condenser water loops are constant flow
     control_type = 'Constant Flow'
@@ -812,6 +896,9 @@ class Standard
 
   # Splits the single boiler used for the initial sizing run
   # into multiple separate boilers based on Appendix G.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] hot water loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_boilers(plant_loop)
     # Skip non-heating plants
     return true unless plant_loop.sizingPlant.loopType == 'Heating'
@@ -837,9 +924,9 @@ class Standard
 
     # Ensure there is only 1 boiler to start
     first_boiler = nil
-    if boilers.size.zero?
-      return true
-    elsif boilers.size > 1
+    return true if boilers.size.zero?
+
+    if boilers.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{boilers.size}, cannot split up per performance rating method baseline requirements.")
     else
       first_boiler = boilers[0]
@@ -858,11 +945,11 @@ class Standard
     final_boilers = [first_boiler, second_boiler]
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, added a second boiler.")
 
-    # Set the sizing factor for all boilers evenly and Rename the boilers
+    # Rename boilers and set the sizing factor
     sizing_factor = (1.0 / final_boilers.size).round(2)
     final_boilers.each_with_index do |boiler, i|
+      boiler.setName("#{plant_loop.name} Boiler #{i + 1} of #{final_boilers.size}")
       boiler.setSizingFactor(sizing_factor)
-      boiler.setName("#{first_boiler.name} #{i + 1} of #{final_boilers.size}")
     end
 
     # Set the equipment to stage sequentially
@@ -873,7 +960,10 @@ class Standard
 
   # Splits the single chiller used for the initial sizing run
   # into multiple separate chillers based on Appendix G.
-  def plant_loop_apply_prm_number_of_chillers(plant_loop)
+  #
+  # @param plant_loop_args [Array] chilled water loop (OpenStudio::Model::PlantLoop), sizing run directory
+  # @return [Bool] returns true if successful, false if not
+  def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
 
@@ -918,9 +1008,9 @@ class Standard
 
     # Ensure there is only 1 chiller to start
     first_chiller = nil
-    if chillers.size.zero?
-      return true
-    elsif chillers.size > 1
+    return true if chillers.size.zero?
+
+    if chillers.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
     else
       first_chiller = chillers[0]
@@ -1018,6 +1108,9 @@ class Standard
 
   # Splits the single cooling tower used for the initial sizing run
   # into multiple separate cooling towers based on Appendix G.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] condenser water loop
+  # @return [Bool] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Condenser'
@@ -1045,9 +1138,9 @@ class Standard
 
     # Ensure there is only 1 cooling tower to start
     orig_twr = nil
-    if clg_twrs.size.zero?
-      return true
-    elsif clg_twrs.size > 1
+    return true if clg_twrs.size.zero?
+
+    if clg_twrs.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{clg_twrs.size} cooling towers, cannot split up per performance rating method baseline requirements.")
       return false
     else
@@ -1081,7 +1174,7 @@ class Standard
         new_twr = orig_twr.clone(plant_loop.model)
         new_twr = new_twr.to_CoolingTowerTwoSpeed.get
       elsif orig_twr.to_CoolingTowerVariableSpeed.is_initialized
-        # TODO: remove workaround after resolving
+        # @todo remove workaround after resolving
         # https://github.com/NREL/OpenStudio/issues/2212
         # Workaround is to create a new tower
         # and replicate all the properties of the first tower.
@@ -1148,12 +1241,13 @@ class Standard
 
     # Set the equipment to stage sequentially
     plant_loop.setLoadDistributionScheme('SequentialLoad')
+    return true
   end
 
   # Determines the total rated watts per GPM of the loop
   #
-  # @return [Double] rated power consumption per flow
-  #   @units Watts per GPM (W*s/m^3)
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Double] rated power consumption per flow in watts per gpm, W*s/m^3
   def plant_loop_total_rated_w_per_gpm(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -1202,7 +1296,8 @@ class Standard
 
   # find maximum_loop_flow_rate
   #
-  # @return [Double]  maximum_loop_flow_rate m^3/s
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Double] maximum loop flow rate in m^3/s
   def plant_loop_find_maximum_loop_flow_rate(plant_loop)
     # Get the maximum_loop_flow_rate
     maximum_loop_flow_rate = nil
@@ -1217,10 +1312,11 @@ class Standard
     return maximum_loop_flow_rate
   end
 
-  # Determines if the loop is a Service Water Heating loop by checking if there is a WaterUseConnection on the demand side
-  # or a WaterHeaterMixed on the supply side
+  # Determines if the loop is a Service Water Heating loop by checking if there is
+  # a WaterUseConnection on the demand side or a WaterHeaterMixed on the supply side
   #
-  # @return [Boolean] true if it's indeed a SHW loop, false otherwise
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Boolean] returns true if it is a service water heating loop, false if not
   def plant_loop_swh_loop?(plant_loop)
     serves_swh = false
     plant_loop.demandComponents.each do |comp|
@@ -1258,15 +1354,16 @@ class Standard
   # about fuel types, whether it serves both heating and service water heating,
   # the water storage volume, and the total heating capacity.
   #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] service water heating loop
   # @return [Array<Array<String>, Bool, Double, Double>] An array of:
-  # fuel types, combination_system (true/false), storage_capacity (m^3), plant_loop_total_heating_capacity(plant_loop)  (W)
+  #   fuel types, combination_system (true/false), storage_capacity (m^3), plant_loop_total_heating_capacity(plant_loop)  (W)
   def plant_loop_swh_system_type(plant_loop)
     combination_system = true
     storage_capacity = 0
     primary_fuels = []
     secondary_fuels = []
 
-    # @Todo: to work correctly, plant_loop_total_heating_capacity(plantloop)  requires to have either hardsized capacities or a sizing run.
+    # @todo to work correctly, plant_loop_total_heating_capacity(plantloop)  requires to have either hardsized capacities or a sizing run.
     primary_heating_capacity = plant_loop_total_heating_capacity(plant_loop)
     secondary_heating_capacity = 0
 
@@ -1296,7 +1393,8 @@ class Standard
             primary_fuels << component.heaterFuelType
             # And in this case we'll reuse this object
             combination_system = false
-          end # @Todo: not sure about whether it should be an elsif or not
+          end
+          # @todo not sure about whether it should be an elsif or not
           # Check the plant loop connection on the source side
           if component.secondaryPlantLoop.is_initialized
             source_plant_loop = component.secondaryPlantLoop.get
@@ -1318,7 +1416,8 @@ class Standard
             primary_fuels << component.heaterFuelType
             # And in this case we'll reuse this object
             combination_system = false
-          end # @Todo: not sure about whether it should be an elsif or not
+          end
+          # @todo not sure about whether it should be an elsif or not
           # Check the plant loop connection on the source side
           if component.secondaryPlantLoop.is_initialized
             source_plant_loop = component.secondaryPlantLoop.get
@@ -1346,7 +1445,7 @@ class Standard
       end
     end
 
-    # @Todo: decide how to handle primary and secondary stuff
+    # @todo decide how to handle primary and secondary stuff
     fuels = primary_fuels + secondary_fuels
     total_heating_capacity = primary_heating_capacity + secondary_heating_capacity
     # If the primary heating capacity is bigger than secondary, assume the secondary is just a backup and disregard it?
@@ -1356,22 +1455,25 @@ class Standard
     # end
 
     return fuels.uniq.sort, combination_system, storage_capacity, total_heating_capacity
-  end # end classify_swh_system_type
+  end
 
   # This method calculates the capacity of a plant loop by multiplying the temp difference across the loop, the maximum flow rate,
   # the fluid density, and the fluid heat capacity (currently only works with water).  This may be a little more approximate than the
   # heating and cooling capacity methods described above however is not limited to certain types of equipment and can be used for
   # condensing plant loops too.
-  def plant_loop_capacity_W_by_maxflow_and_deltaT_forwater (plant_loop)
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Double] capacity of plant loop in watts
+  def plant_loop_capacity_w_by_maxflow_and_delta_t_forwater(plant_loop)
     plantloop_maxflowrate = nil
-    if plant_loop.fluidType != "Water"
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "The fluid used in the plant loop named #{plant_loop.name.to_s} is not water.  The current version of this method only calculates the capacity of plant loops that use water.")
+    if plant_loop.fluidType != 'Water'
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "The fluid used in the plant loop named #{plant_loop.name} is not water.  The current version of this method only calculates the capacity of plant loops that use water.")
     end
     plantloop_maxflowrate = plant_loop_find_maximum_loop_flow_rate(plant_loop)
     plantloop_dt = plant_loop.sizingPlant.loopDesignTemperatureDifference.to_f
     # Plant loop capacity = temperature difference across plant loop * maximum plant loop flow rate * density of water (1000 kg/m^3) * see next line
     # Heat capacity of water (4180 J/(kg*K))
-    plantloop_capacity = plantloop_dt*plantloop_maxflowrate*1000*4180
+    plantloop_capacity = plantloop_dt * plantloop_maxflowrate * 1000.0 * 4180.0
     return plantloop_capacity
   end
 end

@@ -1,0 +1,31 @@
+{
+  "tables": {
+    "erv": {
+      "data_type": "table",
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "erv_name": "NECB_Default",
+          "application": "Existing-ERVS",
+          "HeatExchangerType": "Rotary",
+          "SensibleEffectivenessat100HeatingAirFlow": 0.5,
+          "LatentEffectivenessat100HeatingAirFlow": 0.5,
+          "SensibleEffectivenessat75HeatingAirFlow": 0.5,
+          "LatentEffectivenessat75HeatingAirFlow": 0.5,
+          "SensibleEffectivenessat100CoolingAirFlow": 0.5,
+          "LatentEffectivenessat100CoolingAirFlow": 0.5,
+          "SensibleEffectivenessat75CoolingAirFlow": 0.5,
+          "LatentEffectivenessat75CoolingAirFlow": 0.5,
+          "SupplyAirOutletTemperatureControl": true,
+          "FrostControlType": "ExhaustOnly",
+          "EconomizerLockout": true,
+          "ThresholdTemperature": -23.3,
+          "InitialDefrostTimeFraction": 0.167,
+          "RateofDefrostTimeFractionIncrease": 1.44
+        }
+      ]
+    }
+  }
+}

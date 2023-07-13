@@ -7,6 +7,7 @@ class Standard
   #   and therefore may not return perfect results.  However, it works well in most tested
   #   situations.  When it fails, it will log warnings/errors for users to see.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
   #   daylight areas will be added to the model as surfaces for visual debugging.
   #   Yellow = toplighted area, Red = primary sidelighted area,
@@ -15,7 +16,7 @@ class Standard
   #   Hash keys are: 'toplighted_area', 'primary_sidelighted_area',
   #   'secondary_sidelighted_area', 'total_window_area', 'total_skylight_area'
   # @todo add a list of valid choices for template argument
-  # TODO stop skipping non-vertical walls
+  # @todo stop skipping non-vertical walls
   def space_daylighted_areas(space, draw_daylight_areas_for_debugging = false)
     ### Begin the actual daylight area calculations ###
 
@@ -108,7 +109,7 @@ class Standard
     space.surfaces.sort.each do |surface|
       if surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall'
 
-        # TODO: stop skipping non-vertical walls
+        # @todo stop skipping non-vertical walls
         surface_normal = surface.outwardNormal
         surface_normal_z = surface_normal.z
         unless surface_normal_z.abs < 0.001
@@ -251,7 +252,8 @@ class Standard
           down_vector = OpenStudio::Vector3d.new(0, 0, -1)
           outward_normal_vector = sub_surface.outwardNormal
           rot_vector = down_vector.cross(outward_normal_vector)
-          ninety_deg_in_rad = OpenStudio.degToRad(90) # TODO: change
+          ninety_deg_in_rad = OpenStudio.degToRad(90)
+          # @todo change
           new_rotation = OpenStudio.createRotation(rot_origin, rot_vector, ninety_deg_in_rad)
           pri_sidelit_sub_polygon = new_rotation * pri_sidelit_sub_polygon
           sec_sidelit_sub_polygon = new_rotation * sec_sidelit_sub_polygon
@@ -263,10 +265,10 @@ class Standard
           # Add these polygons to the list
           pri_sidelit_polygons << pri_sidelit_sub_polygon
           sec_sidelit_polygons << sec_sidelit_sub_polygon
-        end # Next subsurface
+        end
       elsif surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'RoofCeiling'
 
-        # TODO: stop skipping non-horizontal roofs
+        # @todo stop skipping non-horizontal roofs
         surface_normal = surface.outwardNormal
         straight_upward = OpenStudio::Vector3d.new(0, 0, 1)
         unless surface_normal.to_s == straight_upward.to_s
@@ -319,7 +321,7 @@ class Standard
               min_y_val = vertex.y
             end
             # Max y value
-            if vertex.y > max_x_val
+            if vertex.y > max_y_val
               max_y_val = vertex.y
             end
           end
@@ -367,10 +369,10 @@ class Standard
 
           # Add these polygons to the list
           toplit_polygons << toplit_sub_polygon
-        end # Next subsurface
+        end
 
-      end # End if outdoor wall or roofceiling
-    end # Next surface
+      end
+    end
 
     # Set z=0 for all the polygons so that intersection will work
     toplit_polygons = space_polygons_set_z(space, toplit_polygons, 0.0)
@@ -540,13 +542,13 @@ class Standard
     return result
   end
 
-  # Determines the method used to extend the daylighted area horizontally
-  # next to a window.  If the method is 'fixed', 2 ft is added to the
-  # width of each window.  If the method is 'proportional', a distance
-  # equal to half of the head height of the window is added.  If the method is 'none',
-  # no additional width is added.
+  # Determines the method used to extend the daylighted area horizontally next to a window.
+  # If the method is 'fixed', 2 ft is added to the width of each window.
+  # If the method is 'proportional', a distance equal to half of the head height of the window is added.
+  # If the method is 'none', no additional width is added.
   # Default is none.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [String] returns 'fixed' or 'proportional'
   def space_daylighted_area_window_width(space)
     method = 'none'
@@ -554,8 +556,9 @@ class Standard
   end
 
   # Returns the sidelighting effective aperture
-  # space_sidelighting_effective_aperture(space)  = E(window area * window VT) / primary_sidelighted_area
+  # space_sidelighting_effective_aperture(space) = E(window area * window VT) / primary_sidelighted_area
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @param primary_sidelighted_area [Double] the primary sidelighted area (m^2) of the space
   # @return [Double] the unitless sidelighting effective aperture metric
   def space_sidelighting_effective_aperture(space, primary_sidelighted_area)
@@ -569,6 +572,7 @@ class Standard
     construction_name_to_vt_map = {}
     space.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall'
+
       surface.subSurfaces.sort.each do |sub_surface|
         next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && (sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'GlassDoor')
 
@@ -665,8 +669,9 @@ class Standard
   end
 
   # Returns the skylight effective aperture
-  # space_skylight_effective_aperture(space)  = E(0.85 * skylight area * skylight VT * WF) / toplighted_area
+  # space_skylight_effective_aperture(space) = E(0.85 * skylight area * skylight VT * WF) / toplighted_area
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @param toplighted_area [Double] the toplighted area (m^2) of the space
   # @return [Double] the unitless skylight effective aperture metric
   def space_skylight_effective_aperture(space, toplighted_area)
@@ -684,6 +689,7 @@ class Standard
     construction_name_to_vt_map = {}
     space.surfaces.sort.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'RoofCeiling'
+
       surface.subSurfaces.sort.each do |sub_surface|
         next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && sub_surface.subSurfaceType == 'Skylight'
 
@@ -780,19 +786,44 @@ class Standard
     return skylight_effective_aperture
   end
 
+  # Removes daylighting controls from model
+  #
+  # @param space [OpenStudio::Model::Space] OpenStudio space object
+  #
+  # @return [Boolean] Returns true if a sizing run is required
+  def space_remove_daylighting_controls(space)
+    # Retrieves daylighting control objects
+    existing_daylighting_controls = space.daylightingControls
+    unless existing_daylighting_controls.empty?
+      existing_daylighting_controls.each(&:remove)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, removed #{existing_daylighting_controls.size} existing daylight controls before adding new controls.")
+      return true
+    end
+    return false
+  end
+
+  # Default for 2013 and earlier is to Add daylighting controls (sidelighting and toplighting) per the template
+  # @param space [OpenStudio::Model::Space] the space with daylighting
+  # @param remove_existing_controls [Bool] if true, will remove existing controls then add new ones
+  # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
+  # @return [boolean] true if successful
+  def space_set_baseline_daylighting_controls(space, remove_existing = false, draw_areas_for_debug = false)
+    added = space_add_daylighting_controls(space, remove_existing, draw_areas_for_debug)
+    return added
+  end
+
   # Adds daylighting controls (sidelighting and toplighting) per the template
   # @note This method is super complicated because of all the polygon/geometry math required.
   #   and therefore may not return perfect results.  However, it works well in most tested
   #   situations.  When it fails, it will log warnings/errors for users to see.
   #
+  # @param space [OpenStudio::Model::Space] the space with daylighting
   # @param remove_existing_controls [Bool] if true, will remove existing controls then add new ones
   # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
   #   daylight areas will be added to the model as surfaces for visual debugging.
   #   Yellow = toplighted area, Red = primary sidelighted area,
   #   Blue = secondary sidelighted area, Light Blue = floor
-  # @return [Hash] returns a hash of resulting areas (m^2).
-  #   Hash keys are: 'toplighted_area', 'primary_sidelighted_area',
-  #   'secondary_sidelighted_area', 'total_window_area', 'total_skylight_area'
+  # @return [boolean] true if successful
   # @todo add a list of valid choices for template argument
   # @todo add exception for retail spaces
   # @todo add exception 2 for skylights with VT < 0.4
@@ -804,13 +835,22 @@ class Standard
   def space_add_daylighting_controls(space, remove_existing_controls, draw_daylight_areas_for_debugging = false)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "******For #{space.name}, adding daylight controls.")
 
+    # Get the space thermal zone
+    zone = space.thermalZone
+    if zone.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Space #{space.name} has no thermal zone; cannot set daylighting controls for zone.")
+    else
+      zone = zone.get
+    end
+
     # Check for existing daylighting controls
     # and remove if specified in the input
     existing_daylighting_controls = space.daylightingControls
     unless existing_daylighting_controls.empty?
       if remove_existing_controls
-        existing_daylighting_controls.each(&:remove)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, removed #{existing_daylighting_controls.size} existing daylight controls before adding new controls.")
+        space_remove_daylighting_controls(space)
+        zone.resetFractionofZoneControlledbyPrimaryDaylightingControl
+        zone.resetFractionofZoneControlledbySecondaryDaylightingControl
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}, daylight controls were already present, no additional controls added.")
         return false
@@ -821,8 +861,10 @@ class Standard
     ext_fen_area_m2 = 0
     space.surfaces.each do |surface|
       next unless surface.outsideBoundaryCondition == 'Outdoors'
+
       surface.subSurfaces.each do |sub_surface|
         next unless sub_surface.subSurfaceType == 'FixedWindow' || sub_surface.subSurfaceType == 'OperableWindow' || sub_surface.subSurfaceType == 'Skylight' || sub_surface.subSurfaceType == 'GlassDoor'
+
         ext_fen_area_m2 += sub_surface.netArea
       end
     end
@@ -833,12 +875,6 @@ class Standard
 
     areas = nil
 
-    # Get the area of the space
-    space_area_m2 = space.floorArea
-
-    # Get the LPD of the space
-    space_lpd_w_per_m2 = space.lightingPowerPerFloorArea
-
     # Get the daylighting areas
     areas = space_daylighted_areas(space, draw_daylight_areas_for_debugging)
 
@@ -847,6 +883,7 @@ class Standard
 
     # Stop here if no controls are required
     if !req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, no daylighting control is required.")
       return false
     end
 
@@ -854,13 +891,6 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, toplighting control required = #{req_top_ctrl}")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, primary sidelighting control required = #{req_pri_ctrl}")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, secondary sidelighting control required = #{req_sec_ctrl}")
-
-    # Stop here if no lighting controls are required.
-    # Do not put daylighting control points into the space.
-    if !req_top_ctrl && !req_pri_ctrl && !req_sec_ctrl
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, no daylighting control is required.")
-      return false
-    end
 
     # Record a floor in the space for later use
     floor_surface = nil
@@ -881,7 +911,7 @@ class Standard
       straight_upward = OpenStudio::Vector3d.new(0, 0, 1)
       surface_normal = surface.outwardNormal
       if surface.surfaceType == 'Wall'
-        # TODO: stop skipping non-vertical walls
+        # @todo stop skipping non-vertical walls
         unless surface_normal.z.abs < 0.001
           unless surface.subSurfaces.empty?
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Cannot currently handle non-vertical walls; skipping windows on #{surface.name} in #{space.name} for daylight sensor positioning.")
@@ -889,7 +919,7 @@ class Standard
           end
         end
       elsif surface.surfaceType == 'RoofCeiling'
-        # TODO: stop skipping non-horizontal roofs
+        # @todo stop skipping non-horizontal roofs
         unless surface_normal.to_s == straight_upward.to_s
           unless surface.subSurfaces.empty?
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Cannot currently handle non-horizontal roofs; skipping skylights on #{surface.name} in #{space.name} for daylight sensor positioning.")
@@ -902,29 +932,26 @@ class Standard
       # Find the azimuth of the facade
       facade = nil
       group = surface.planarSurfaceGroup
-      if group.is_initialized
-        group = group.get
-        site_transformation = group.buildingTransformation
-        site_vertices = site_transformation * surface.vertices
-        site_outward_normal = OpenStudio.getOutwardNormal(site_vertices)
-        if site_outward_normal.empty?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Could not compute outward normal for #{surface.name.get}")
-          next
-        end
-        site_outward_normal = site_outward_normal.get
-        north = OpenStudio::Vector3d.new(0.0, 1.0, 0.0)
-        azimuth = if site_outward_normal.x < 0.0
-                    360.0 - OpenStudio.radToDeg(OpenStudio.getAngle(site_outward_normal, north))
-                  else
-                    OpenStudio.radToDeg(OpenStudio.getAngle(site_outward_normal, north))
-                  end
-      else
-        # The surface is not in a group; should not hit, since
-        # called from Space.surfaces
+      # The surface is not in a group; should not hit, since called from Space.surfaces
+      next unless group.is_initialized
+
+      group = group.get
+      site_transformation = group.buildingTransformation
+      site_vertices = site_transformation * surface.vertices
+      site_outward_normal = OpenStudio.getOutwardNormal(site_vertices)
+      if site_outward_normal.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Could not compute outward normal for #{surface.name.get}")
         next
       end
+      site_outward_normal = site_outward_normal.get
+      north = OpenStudio::Vector3d.new(0.0, 1.0, 0.0)
+      azimuth = if site_outward_normal.x < 0.0
+                  360.0 - OpenStudio.radToDeg(OpenStudio.getAngle(site_outward_normal, north))
+                else
+                  OpenStudio.radToDeg(OpenStudio.getAngle(site_outward_normal, north))
+                end
 
-      # TODO: modify to work for buildings in the southern hemisphere?
+      # @todo modify to work for buildings in the southern hemisphere?
       if azimuth >= 315.0 || azimuth < 45.0
         facade = '4-North'
       elsif azimuth >= 45.0 && azimuth < 135.0
@@ -963,8 +990,8 @@ class Standard
         else
           windows[sub_surface] = properties
         end
-      end # next sub-surface
-    end # next surface
+      end
+    end
 
     # Determine the illuminance setpoint for the controls based on space type
     daylight_stpt_lux = 375
@@ -975,24 +1002,31 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Space #{space_type} is an unknown space type, assuming #{daylight_stpt_lux} Lux daylight setpoint")
     else
       space_type = space_type.get
-      standards_building_type = if space_type.standardsBuildingType.is_initialized
-                                  space_type.standardsBuildingType.get
-                                end
-      standards_space_type = if space_type.standardsSpaceType.is_initialized
-                               space_type.standardsSpaceType.get
-                             end
+      standards_building_type = nil
+      standards_space_type = nil
+      data = nil
+      if space_type.standardsBuildingType.is_initialized
+        standards_building_type = space_type.standardsBuildingType.get
+      end
+      if space_type.standardsSpaceType.is_initialized
+        standards_space_type = space_type.standardsSpaceType.get
+      end
 
-      # use the building type (standards_building_type) and space type (standards_space_type)
-      # as well as template to locate the space type data
-      search_criteria = {
-        'template' => template,
-        'building_type' => standards_building_type,
-        'space_type' => standards_space_type
-      }
+      unless standards_building_type.nil? || standards_space_type.nil?
+        # use the building type (standards_building_type) and space type (standards_space_type)
+        # as well as template to locate the space type data
+        search_criteria = {
+          'template' => template,
+          'building_type' => standards_building_type,
+          'space_type' => standards_space_type
+        }
+        data = model_find_object(standards_data['space_types'], search_criteria)
+      end
 
-      data = model_find_object(standards_data['space_types'], search_criteria)
-      if data.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "No data available for #{space_type.name}: #{standards_space_type} of #{standards_building_type} at #{template}, assuming a #{daylight_stpt_lux} Lux daylight setpoint!")
+      if standards_building_type.nil? || standards_space_type.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Unable to determine standards building type and standards space type for space '#{space.name}' with space type '#{space_type.name}'. Assign a standards building type and standards space type to the space type object. Defaulting to a #{daylight_stpt_lux} Lux daylight setpoint.")
+      elsif data.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Unable to find target illuminance setpoint data for space type '#{space_type.name}' with #{template} space type '#{standards_space_type}' in building type '#{standards_building_type}'. Defaulting to a #{daylight_stpt_lux} Lux daylight setpoint.")
       else
         # Read the illuminance setpoint value
         # If 'na', daylighting is not appropriate for this space type for some reason
@@ -1018,14 +1052,6 @@ class Standard
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "For #{space.name}: assuming only #{(ssa_nongeo_frac * 100).round}% of the secondary sidelit area is daylightable based on typical design practice.")
         end
       end
-    end
-
-    # Get the zone that the space is in
-    zone = space.thermalZone
-    if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Space #{space.name} has no thermal zone")
-    else
-      zone = zone.get
     end
 
     # Sort by priority; first by facade, then by area,
@@ -1062,16 +1088,6 @@ class Standard
       sensor_2_frac *= ssa_nongeo_frac unless ssa_nongeo_frac.nil?
     end
 
-    # Place the sensors and set control fractions
-    # get the zone that the space is in
-    zone = space.thermalZone
-    if zone.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', "Space #{space.name}, cannot determine daylighted areas.")
-      return false
-    else
-      zone = space.thermalZone.get
-    end
-
     # Ensure that total controlled fraction
     # is never set above 1 (100%)
     sensor_1_frac = sensor_1_frac.round(3)
@@ -1101,9 +1117,9 @@ class Standard
       sensor_1.setName("#{space.name} Daylt Sensor 1")
       sensor_1.setSpace(space)
       sensor_1.setIlluminanceSetpoint(daylight_stpt_lux)
-      sensor_1.setLightingControlType('Stepped')
-      sensor_1.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
-      sensor_1.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
+      sensor_1.setLightingControlType(space_daylighting_control_type(space))
+      sensor_1.setNumberofSteppedControlSteps(3) unless space_daylighting_control_type(space) != 'Stepped' # all sensors 3-step per design
+      sensor_1.setMinimumInputPowerFractionforContinuousDimmingControl(space_daylighting_minimum_input_power_fraction(space))
       sensor_1.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
       sensor_1.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
       sensor_1.setMaximumAllowableDiscomfortGlareIndex(22.0)
@@ -1130,8 +1146,11 @@ class Standard
       end
       sensor_1.setPosition(sensor_vertex)
 
-      # TODO: rotate sensor to face window (only needed for glare calcs)
+      # @todo rotate sensor to face window (only needed for glare calcs)
       zone.setPrimaryDaylightingControl(sensor_1)
+      if zone.fractionofZoneControlledbyPrimaryDaylightingControl + sensor_1_frac > 1
+        zone.resetFractionofZoneControlledbySecondaryDaylightingControl
+      end
       zone.setFractionofZoneControlledbyPrimaryDaylightingControl(sensor_1_frac)
     end
 
@@ -1143,9 +1162,9 @@ class Standard
       sensor_2.setName("#{space.name} Daylt Sensor 2")
       sensor_2.setSpace(space)
       sensor_2.setIlluminanceSetpoint(daylight_stpt_lux)
-      sensor_2.setLightingControlType('Stepped')
-      sensor_2.setNumberofSteppedControlSteps(3) # all sensors 3-step per design
-      sensor_2.setMinimumInputPowerFractionforContinuousDimmingControl(0.3)
+      sensor_2.setLightingControlType(space_daylighting_control_type(space))
+      sensor_2.setNumberofSteppedControlSteps(3) unless space_daylighting_control_type(space) != 'Stepped' # all sensors 3-step per design
+      sensor_2.setMinimumInputPowerFractionforContinuousDimmingControl(space_daylighting_minimum_input_power_fraction(space))
       sensor_2.setMinimumLightOutputFractionforContinuousDimmingControl(0.2)
       sensor_2.setProbabilityLightingwillbeResetWhenNeededinManualSteppedControl(1.0)
       sensor_2.setMaximumAllowableDiscomfortGlareIndex(22.0)
@@ -1172,8 +1191,11 @@ class Standard
       end
       sensor_2.setPosition(sensor_vertex)
 
-      # TODO: rotate sensor to face window (only needed for glare calcs)
+      # @todo rotate sensor to face window (only needed for glare calcs)
       zone.setSecondaryDaylightingControl(sensor_2)
+      if zone.fractionofZoneControlledbySecondaryDaylightingControl + sensor_2_frac > 1
+        zone.resetFractionofZoneControlledbyPrimaryDaylightingControl
+      end
       zone.setFractionofZoneControlledbySecondaryDaylightingControl(sensor_2_frac)
     end
 
@@ -1195,12 +1217,17 @@ class Standard
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
   end
 
-  # Determine the fraction controlled by each sensor and which
-  # window each sensor should go near.
+  # Determine the fraction controlled by each sensor and which window each sensor should go near.
   #
-  # @param space [OpenStudio::Model::Space] the space with the daylighting
+  # @param space [OpenStudio::Model::Space] space object
+  # @param areas [Hash] a hash of daylighted areas
   # @param sorted_windows [Hash] a hash of windows, sorted by priority
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
+  # @param req_top_ctrl [Bool] if toplighting controls are required
+  # @param req_pri_ctrl [Bool] if primary sidelighting controls are required
+  # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
+  # @return [Array] array of 4 items
+  #   [sensor 1 fraction, sensor 2 fraction, sensor 1 window, sensor 2 window]
   def space_daylighting_fractions_and_windows(space,
                                               areas,
                                               sorted_windows,
@@ -1216,9 +1243,9 @@ class Standard
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Set the infiltration rate for this space to include
-  # the impact of air leakage requirements in the standard.
+  # Set the infiltration rate for this space to include the impact of air leakage requirements in the standard.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] true if successful, false if not
   # @todo handle doors and vestibules
   def space_apply_infiltration_rate(space)
@@ -1313,15 +1340,16 @@ class Standard
 
   # Baseline infiltration rate
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade wall area at 75 Pa
   def space_infiltration_rate_75_pa(space)
     basic_infil_rate_cfm_per_ft2 = 1.8
     return basic_infil_rate_cfm_per_ft2
   end
 
-  # Calculate the area of the exterior walls,
-  # including the area of the windows on these walls.
+  # Calculate the area of the exterior walls, including the area of the windows on these walls.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] area in m^2
   def space_exterior_wall_and_window_area(space)
     area_m2 = 0.0
@@ -1332,6 +1360,7 @@ class Standard
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       # Skip non-walls
       next unless surface.surfaceType == 'Wall'
+
       # This surface
       area_m2 += surface.netArea
       # Subsurfaces in this surface
@@ -1343,9 +1372,10 @@ class Standard
     return area_m2
   end
 
-  # Calculate the area of the exterior walls,
+  # Calculate the area of the exterior walls, and roofs
   # including the area of the windows on these walls.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] area in m^2
   def space_exterior_wall_and_roof_and_subsurface_area(space)
     area_m2 = 0.0
@@ -1356,6 +1386,7 @@ class Standard
       next unless surface.outsideBoundaryCondition == 'Outdoors'
       # Skip non-walls
       next unless surface.surfaceType == 'Wall' || surface.surfaceType == 'RoofCeiling'
+
       # This surface
       area_m2 += surface.netArea
       # Subsurfaces in this surface
@@ -1367,13 +1398,89 @@ class Standard
     return area_m2
   end
 
-  # Determine if the space is a plenum.
-  # Assume it is a plenum if it is a supply
-  # or return plenum for an AirLoop,
-  # if it is not part of the total floor area,
-  # or if the space type name contains the
-  # word plenum.
+  # Calculate the space envelope area.
+  # According to the 90.1 definition, building envelope include:
+  # 1. "the elements of a building that separate conditioned spaces from the exterior"
+  # 2. "the elements of a building that separate conditioned space from unconditioned
+  #    space or that enclose semiheated spaces through which thermal energy may be
+  #    transferred to or from the exterior, to or from unconditioned spaces or to or
+  #    from conditioned spaces."
   #
+  # Outside boundary conditions currently supported:
+  # - Adiabatic
+  # - Surface
+  # - Outdoors
+  # - Foundation
+  # - Ground
+  # - GroundFCfactorMethod
+  # - OtherSideCoefficients
+  # - OtherSideConditionsModel
+  # - GroundSlabPreprocessorAverage
+  # - GroundSlabPreprocessorCore
+  # - GroundSlabPreprocessorPerimeter
+  # - GroundBasementPreprocessorAverageWall
+  # - GroundBasementPreprocessorAverageFloor
+  # - GroundBasementPreprocessorUpperWall
+  # - GroundBasementPreprocessorLowerWall
+  #
+  # Surface type currently supported:
+  # - Floor
+  # - Wall
+  # - RoofCeiling
+  #
+  # @param space [OpenStudio::Model::Space] OpenStudio space object
+  # @param climate_zone [String] Climate zone, used for space heating/cooling thresholds
+  #
+  # @return [Double] area in m^2
+  def space_envelope_area(space, climate_zone)
+    area_m2 = 0.0
+
+    # Get the space conditioning type
+    space_cond_type = space_conditioning_category(space)
+
+    # Loop through all surfaces in this space
+    space.surfaces.sort.each do |surface|
+      # Only account for spaces that are conditioned or semi-heated
+      next unless space_cond_type != 'Unconditioned'
+
+      surf_cnt = false
+
+      # Conditioned space OR semi-heated space <-> exterior
+      # Conditioned space OR semi-heated space <-> ground
+      if surface.outsideBoundaryCondition == 'Outdoors' ||
+         surface.isGroundSurface
+        surf_cnt = true
+      end
+
+      # Conditioned space OR semi-heated space <-> unconditioned spaces
+      unless surf_cnt
+        # TODO: add a case for 'Zone' when supported
+        if surface.outsideBoundaryCondition == 'Surface'
+          adj_space = surface.adjacentSurface.get.space.get
+          adj_space_cond_type = space_conditioning_category(adj_space)
+          surf_cnt = true unless adj_space_cond_type != 'Unconditioned'
+        end
+      end
+
+      if surf_cnt
+        # This surface
+        area_m2 += surface.netArea
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |subsurface|
+          area_m2 += subsurface.netArea
+        end
+      end
+    end
+
+    return area_m2 * space.multiplier
+  end
+
+  # Determine if the space is a plenum.
+  # Assume it is a plenum if it is a supply or return plenum for an AirLoop,
+  # if it is not part of the total floor area,
+  # or if the space type name contains the word plenum.
+  #
+  # @param space [OpenStudio::Model::Space] space object
   # return [Bool] returns true if plenum, false if not
   def space_plenum?(space)
     plenum_status = false
@@ -1388,7 +1495,7 @@ class Standard
       return plenum_status
     end
 
-    # TODO: - update to check if it has internal loads
+    # @todo update to check if it has internal loads
 
     # Check if the space type name
     # contains the word plenum.
@@ -1410,12 +1517,12 @@ class Standard
     return plenum_status
   end
 
-  # Determine if the space is residential based on the
-  # space type properties for the space.
+  # Determine if the space is residential based on the space type properties for the space.
   # For spaces with no space type, assume nonresidential.
   # For spaces that are plenums, base the decision on the space
   # type of the space below the largest floor in the plenum.
   #
+  # @param space [OpenStudio::Model::Space] space object
   # return [Bool] true if residential, false if nonresidential
   def space_residential?(space)
     is_res = false
@@ -1430,6 +1537,7 @@ class Standard
       largest_surface = nil
       space.surfaces.each do |surface|
         next unless surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Surface'
+
         if surface.grossArea > largest_floor_area
           largest_floor_area = surface.grossArea
           largest_surface = surface
@@ -1458,12 +1566,24 @@ class Standard
     if space_type.is_initialized
       space_type = space_type.get
       # Get the space type data
-      space_type_properties = space_type_get_standards_data(space_type)
-      if space_type_properties.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
-        is_res = false
+      if /prm/i !~ template
+        # This is the PRM method for 2013 and prior
+        space_type_properties = space_type_get_standards_data(space_type)
+        if space_type_properties.nil?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find space type properties for #{space_to_check.name}, assuming nonresidential.")
+          is_res = false
+        else
+          is_res = space_type_properties['is_residential'] == 'Yes'
+        end
       else
-        is_res = space_type_properties['is_residential'] == 'Yes'
+        # This is the 2019 PRM method
+        lighting_properties = interior_lighting_get_prm_data(space_type)
+        if lighting_properties.empty?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find lighting properties for #{space_to_check.name}, assuming nonresidential.")
+          is_res = false
+        else
+          is_res = lighting_properties['isresidential'].to_s == '1'
+        end
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{space_to_check.name}, assuming nonresidential.")
@@ -1473,13 +1593,19 @@ class Standard
     return is_res
   end
 
-  # Determines whether the space is conditioned per 90.1,
-  # which is based on heating and cooling loads.
+  # Determines whether the space is conditioned per 90.1, which is based on heating and cooling loads.
   #
-  # @param climate_zone [String] climate zone
+  # @param space [OpenStudio::Model::Space] space object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
-  # @todo add logic to detect indirectly-conditioned spaces
-  def space_conditioning_category(space, climate_zone)
+  # @todo add logic to detect indirectly-conditioned spaces based on air transfer
+  def space_conditioning_category(space)
+    # Return space conditioning category if already assigned as an additional properties
+    return space.additionalProperties.getFeatureAsString('space_conditioning_category').get if space.additionalProperties.hasFeature('space_conditioning_category')
+
+    # Get climate zone
+    climate_zone = model_standards_climate_zone(space.model)
+
     # Get the zone this space is inside
     zone = space.thermalZone
 
@@ -1488,18 +1614,110 @@ class Standard
       return 'Unconditioned'
     end
 
-    # Get the category from the zone
-    cond_cat = zone.get.conditioning_category(climate_zone)
+    # Return air plenums are indirectly conditioned spaces according to the
+    # 90.1-2019 Performance Rating Method Reference Manual
+    # #
+    # Additionally, Section 2 of ASHRAE 90.1 states that indirectly
+    # conditioned spaces are unconditioned spaces that are adjacent to
+    # heated or cooled spaced and provided that air from these spaces is
+    # intentionally transferred into the space at a rate exceeding 3 ach
+    # which most if not all return air plenum do.
+    space.model.getAirLoopHVACReturnPlenums.each do |return_air_plenum|
+      if return_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        # Determine if residential
+        res = thermal_zone_residential?(zone.get) ? true : false
+
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned (return air plenum).")
+        cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
+
+        return cond_cat
+      end
+    end
+    # Following the same assumptions,  we designate supply air plenums
+    # as indirectly conditioned as well
+    space.model.getAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
+      if supply_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        # Determine if residential
+        res = thermal_zone_residential?(zone.get) ? true : false
+
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned (supply air plenum).")
+        cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
+
+        return cond_cat
+      end
+    end
+
+    # Get the category from the zone, this methods does NOT detect indirectly
+    # conditioned spaces
+    cond_cat = thermal_zone_conditioning_category(zone.get, climate_zone)
+
+    # Detect indirectly conditioned spaces based on UA sum product comparison
+    if cond_cat == 'Unconditioned'
+
+      # Initialize UA sum product for surfaces adjacent to conditioned spaces
+      cond_ua = 0
+
+      # Initialize UA sum product for surfaces adjacent to unconditoned spaces,
+      # semi-heated spaces and outdoors
+      otr_ua = 0
+
+      space.surfaces.sort.each do |surface|
+        # Surfaces adjacent to other surfaces can be next to conditioned,
+        # unconditioned or semi-heated spaces
+        if surface.outsideBoundaryCondition == 'Surface'
+
+          # Retrieve adjacent space conditioning category
+          adj_space = surface.adjacentSurface.get.space.get
+          adj_zone = adj_space.thermalZone.get
+          adj_space_cond_type = thermal_zone_conditioning_category(adj_zone, climate_zone)
+
+          # adj_zone == zone.get means that the surface is adjacent to its zone
+          # This is translated by an adiabtic outside boundary condition, which are
+          # assumed to be used only if the surface is adjacent to a conditioned space
+          if adj_space_cond_type == 'ResConditioned' || adj_space_cond_type == 'NonResConditioned' || adj_zone == zone.get
+            cond_ua += surface_subsurface_ua(surface)
+          else
+            otr_ua += surface_subsurface_ua(surface)
+          end
+
+        # Adiabtic outside boundary condition are assumed to be used only if the
+        # surface is adjacent to a conditioned space
+        elsif surface.outsideBoundaryCondition == 'Adiabatic'
+
+          # If the surface is a floor and is located at the lowest floor of the
+          # building it is assumed to be adjacent to an unconditioned space
+          # (i.e. ground)
+          if surface.surfaceType == 'Floor' && surface.space.get.buildingStory == find_lowest_story(surface.model)
+            otr_ua += surface_subsurface_ua(surface)
+          else
+            cond_ua += surface_subsurface_ua(surface)
+          end
+
+        # All other outside boundary conditions are assumed to be adjacent to either:
+        # outdoors or ground and hence count towards the unconditioned UA product
+        else
+          otr_ua += surface_subsurface_ua(surface)
+        end
+      end
+
+      # Determine if residential
+      res = thermal_zone_residential?(zone.get) ? true : false
+
+      return cond_cat unless cond_ua > otr_ua
+
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned because its conditioned UA product (#{cond_ua.round} W/K) exceeds its non-conditioned UA product (#{otr_ua.round} W/K).")
+      cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
+    end
 
     return cond_cat
   end
 
-  # Determines heating status.  If the space's
-  # zone has a thermostat with a maximum heating
-  # setpoint above 5C (41F), counts as heated.
+  # Determines heating status.
+  # If the space's zone has a thermostat with a maximum heating setpoint above 5C (41F), counts as heated.
   #
   # @author Andrew Parker, Julien Marrec
-  # @return [Bool] true if heated, false if not
+  # @param space [OpenStudio::Model::Space] space object
+  # @return [Bool] returns true if heated, false if not
   def space_heated?(space)
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -1515,12 +1733,12 @@ class Standard
     return htd
   end
 
-  # Determines cooling status.  If the space's
-  # zone has a thermostat with a minimum cooling
-  # setpoint above 33C (91F), counts as cooled.
+  # Determines cooling status.
+  # If the space's zone has a thermostat with a minimum cooling setpoint above 33C (91F), counts as cooled.
   #
   # @author Andrew Parker, Julien Marrec
-  # @return [Bool] true if cooled, false if not
+  # @param space [OpenStudio::Model::Space] space object
+  # @return [Bool] returns true if cooled, false if not
   def space_cooled?(space)
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -1536,13 +1754,11 @@ class Standard
     return cld
   end
 
-  # Determine the design internal load (W) for
-  # this space without space multipliers.
-  # This include People, Lights, Electric Equipment,
-  # and Gas Equipment.  It assumes 100% of the wattage
-  # is converted to heat, and that the design peak
-  # schedule value is 1 (100%).
+  # Determine the design internal load (W) for this space without space multipliers.
+  # This include People, Lights, Electric Equipment, and Gas Equipment.
+  # It assumes 100% of the wattage is converted to heat, and that the design peak schedule value is 1 (100%).
   #
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Double] the design internal load, in W
   def space_design_internal_load(space)
     load_w = 0.0
@@ -1582,7 +1798,426 @@ class Standard
     return load_w
   end
 
+  # Create annual array of occupancy for the space: 1 = occupied, 0 = unoccupied
+  # @author Doug Maddox, PNNL
+  # @param space object
+  # @return [Double] 8760 array of the occupancy flag
+  def space_occupancy_annual_array(model, space)
+    occ_sch_values = nil
+    ppl_values = Array.new(8760, 0)
+
+    # Need to review all people objects in this space
+    space_name = space.name.get
+    space_type_name = space.spaceType.get.name.get
+    people_objs = []
+    model.getPeoples.sort.each do |people|
+      parent_obj = people.parent.get.iddObjectType.valueName.to_s
+      if parent_obj == 'OS_Space'
+        # This object is associated with a single space
+        # Check if it is the current space
+        if space_name == people.space.get.name.get
+          people_objs << people
+        end
+      elsif parent_obj == 'OS_SpaceType'
+        # This object is associated with a space type
+        # Check if it is the current space type
+        if space_type_name == people.spaceType.get.name.get
+          people_objs << people
+        end
+      end
+    end
+
+    unoccupied_threshold = air_loop_hvac_unoccupied_threshold
+    people_objs.each do |people|
+      occ_sch = people.numberofPeopleSchedule
+      if occ_sch.is_initialized
+        occ_sch_obj = occ_sch.get
+        occ_sch_values = get_8760_values_from_schedule(model, occ_sch_obj)
+        # Flag = 1 if any schedule shows occupancy for a given hour
+        if !occ_sch_values.nil?
+          (0..8759).each do |ihr|
+            ppl_values[ihr] = 1 if occ_sch_values[ihr] >= unoccupied_threshold
+          end
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
+        end
+      end
+    end
+
+    return ppl_values
+  end
+
+  # Determine the design internal gain (W) for
+  # this space without space multipliers.
+  # This includes People, Lights, Electric Equipment, and Gas Equipment.
+  # This version accounts for operating schedules
+  # and fraction lost for equipment
+  # @author Doug Maddox, PNNL
+  # @param space object
+  # @param return_noncoincident_value [boolean] if true, return value is noncoincident peak; if false, return is array off coincident load
+  # @return [Double] 8760 array of the design internal load, in W, for this space
+  def space_internal_load_annual_array(model, space, return_noncoincident_value)
+    # For each type of load, first convert schedules to 8760 arrays so coincident load can be determined
+    ppl_values = Array.new(8760, 0)
+    ltg_values = Array.new(8760, 0)
+    load_values = Array.new(8760, 0)
+    noncoincident_peak_load = 0
+    space_name = space.name.get
+    space_type_name = space.spaceType.get.name.get
+
+    # People
+    # Make list of people objects for this space
+    # Including those associated with space directly and those associated with space type
+    ppl_total = 0
+    people_objs = []
+    model.getPeoples.sort.each do |people|
+      parent_obj = people.parent.get.iddObjectType.valueName.to_s
+      if parent_obj == 'OS_Space'
+        # This object is associated with a single space
+        # Check if it is the current space
+        if space_name == people.space.get.name.get
+          people_objs << people
+        end
+      elsif parent_obj == 'OS_SpaceType'
+        # This object is associated with a space type
+        # Check if it is the current space type
+        if space_type_name == people.spaceType.get.name.get
+          people_objs << people
+        end
+      end
+    end
+
+    people_objs.each do |people|
+      w_per_person = 125 # Initial assumption
+      occ_sch_max = 1
+      act_sch = people.activityLevelSchedule
+      if people.isActivityLevelScheduleDefaulted
+        # Check default schedule set
+        unless space.spaceType.get.defaultScheduleSet.empty?
+          unless space.spaceType.get.defaultScheduleSet.get.peopleActivityLevelSchedule.empty?
+            act_sch = space.spaceType.get.defaultScheduleSet.get.peopleActivityLevelSchedule
+          end
+        end
+      end
+      if act_sch.is_initialized
+        act_sch_obj = act_sch.get
+        act_sch_values = get_8760_values_from_schedule(model, act_sch_obj)
+        if !act_sch_values.nil?
+          w_per_person = act_sch_values.max
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people activity schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
+        end
+      end
+
+      occ_sch_ruleset = nil
+      occ_sch = people.numberofPeopleSchedule
+      if people.isNumberofPeopleScheduleDefaulted
+        # Check default schedule set
+        unless space.spaceType.get.defaultScheduleSet.empty?
+          unless space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule.empty?
+            occ_sch = space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule
+          end
+        end
+      end
+      if occ_sch.is_initialized
+        occ_sch_obj = occ_sch.get
+        occ_sch_values = get_8760_values_from_schedule(model, occ_sch_obj)
+        if !occ_sch_max.nil?
+          occ_sch_max = occ_sch_values.max
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retrieve people schedule for #{space.name}.  Assuming #{w_per_person}W/person.")
+        end
+      end
+
+      num_ppl = people.getNumberOfPeople(space.floorArea)
+      ppl_total += num_ppl
+
+      act_sch_value = w_per_person
+      occ_sch_value = occ_sch_max
+      (0..8759).each do |ihr|
+        act_sch_value = act_sch_values[ihr] unless act_sch_values.nil?
+        occ_sch_value = occ_sch_values[ihr] unless occ_sch_values.nil?
+        ppl_values[ihr] += num_ppl * act_sch_value * occ_sch_value
+      end
+    end
+
+    # Make list of lights objects for this space
+    # Including those associated with space directly and those associated with space type
+    # Note: in EnergyPlus, Lights are associated with zone or zonelist
+    # In OS, they are associated with space or space type
+    light_objs = []
+    model.getLightss.sort.each do |light|
+      parent_obj = light.parent.get.iddObjectType.valueName.to_s
+      if parent_obj == 'OS_Space'
+        # This object is associated with a single space
+        # Check if it is the current space
+        if space_name == light.space.get.name.get
+          light_objs << light
+        end
+      elsif parent_obj == 'OS_SpaceType'
+        # This object is associated with a space type
+        # Check if it is the current space type
+        if space_type_name == light.spaceType.get.name.get
+          light_objs << light
+        end
+      end
+    end
+
+    light_objs.each do |light|
+      ltg_sch_ruleset = nil
+      ltg_sch = light.schedule
+      ltg_w = light.getLightingPower(space.floorArea, ppl_total)
+
+      if light.isScheduleDefaulted
+        # Check default schedule set
+        unless space.spaceType.get.defaultScheduleSet.empty?
+          unless space.spaceType.get.defaultScheduleSet.get.lightingSchedule.empty?
+            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule
+          end
+        end
+      end
+      if ltg_sch.is_initialized
+        ltg_sch_obj = ltg_sch.get
+        ltg_sch_values = get_8760_values_from_schedule(model, ltg_sch_obj)
+        if !ltg_sch_values.nil?
+          ltg_sch_max = ltg_sch_values.max
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive lighting schedule for #{space.name}.  Assuming #{ltg_w} W.")
+        end
+      end
+
+      if !ltg_sch_values.nil?
+        ltg_sch_value = 1.0
+        (0..8759).each do |ihr|
+          ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
+          ltg_values[ihr] += ltg_w * ltg_sch_value
+        end
+      end
+    end
+
+    # Luminaire Objects
+    space.spaceType.get.luminaires.each do |light|
+      ltg_sch_values = nil
+      ltg_sch = light.schedule
+      ltg_w = light.lightingPower(space.floorArea, ppl_total)
+      # not sure if above line is valid, so calculate from parts instead until above can be verified
+      ltg_w = light.getPowerPerFloorArea(space.floorArea) * space.floorArea
+      ltg_w += light.getPowerPerPerson(ppl_total) * ppl_total
+
+      if light.isScheduleDefaulted
+        # Check default schedule set
+        unless space.spaceType.get.defaultScheduleSet.empty?
+          unless space.spaceType.get.defaultScheduleSet.get.lightingSchedule.empty?
+            ltg_sch = space.spaceType.get.defaultScheduleSet.get.lightingSchedule
+          end
+        end
+      end
+      if ltg_sch.is_initialized
+        ltg_sch_obj = ltg_sch.get
+        ltg_sch_values = get_8760_values_from_schedule(model, ltg_sch_obj)
+        if !ltg_sch_values.nil?
+          ltg_sch_max = ltg_sch_values.max
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive lighting schedule for luminaires for #{space.name}.  Assuming #{ltg_w} W.")
+        end
+      end
+
+      if !ltg_sch_values.nil?
+        ltg_sch_value = 1.0
+        (0..8759).each do |ihr|
+          ltg_sch_value = ltg_sch_values[ihr] unless ltg_sch_ruleset.nil?
+          ltg_values[ihr] += ltg_w * ltg_sch_value
+        end
+      end
+    end
+
+    # Equipment Loads
+    eqp_type = 'electric equipment'
+    equips = model.getElectricEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    eqp_type = 'gas equipment'
+    equips = model.getGasEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    eqp_type = 'steam equipment'
+    equips = model.getSteamEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    eqp_type = 'hot water equipment'
+    equips = model.getHotWaterEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    eqp_type = 'other equipment'
+    equips = model.getOtherEquipments
+    load_values = space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+
+    # Add lighting and people to the load values array
+    if return_noncoincident_value
+      noncoincident_peak_load = load_values[0] + ppl_values.max + ltg_values.max
+      return noncoincident_peak_load
+    else
+      (0..8759).each do |ihr|
+        load_values[ihr] += ppl_values[ihr] + ltg_values[ihr]
+      end
+      return load_values
+    end
+  end
+
+  # Loops through a set of equipment objects of one type
+  # For each applicable equipment object, call method to get annual gain values
+  # This is useful for the Appendix G test for multizone systems
+  # to determine whether specific zones should be isolated to PSZ based on
+  # space loads that differ significantly from other zones on the multizone system
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param space [OpenStudio::Model::Space] the space
+  # @param equips [object] This is an array of equipment objects in the model
+  # @param eqp_type [String] string description of the type of equipment object
+  # @param ppl_total [Numeric] total number of people in the space
+  # @param load_values [Array] 8760 array of load values for the equipment type
+  # @param return_noncoincident_value [boolean] return a single peak value if true; return 8760 gain profile if false
+  #
+  # @return [Array] load values array; if return_noncoincident_value is true, array has only one value
+  #
+  def space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
+    space_name = space.name.get
+    space_type_name = space.spaceType.get.name.get
+    equips.sort.each do |equip|
+      parent_obj = equip.parent.get.iddObjectType.valueName.to_s
+      if parent_obj == 'OS_Space'
+        # This object is associated with a single space
+        # Check if it is the current space
+        if space_name == equip.space.get.name.get
+          euip_name = equip.name.get
+          load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
+        end
+      elsif parent_obj == 'OS_SpaceType'
+        # This object is associated with a space type
+        # Check if it is the current space type
+        if space_type_name == equip.spaceType.get.name.get
+          load_values = space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
+        end
+      end
+    end
+    return load_values
+  end
+
+  # Returns an 8760 array of load values for a specific type of load in a space.
+  # This is useful for the Appendix G test for multizone systems
+  # to determine whether specific zones should be isolated to PSZ based on
+  # space loads that differ significantly from other zones on the multizone system
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @param space [OpenStudio::Model::Space] the space
+  # @param equip [object] This can be any type of equipment object in the space
+  # @param eqp_type [String] string description of the type of equipment object
+  # @param ppl_total [Numeric] total number of people in the space
+  # @param load_values [Array] 8760 array of load values for the equipment type
+  # @param return_noncoincident_value [boolean] return a single peak value if true; return 8760 gain profile if false
+  #
+  # @return [Array] load values array; if return_noncoincident_value is true, array has only one value
+  #
+  def space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
+    # Get load schedule and load lost value depending on equipment type
+    case eqp_type
+    when 'electric equipment'
+      load_sch = equip.schedule
+      load_lost = equip.electricEquipmentDefinition.fractionLost # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless space.spaceType.get.defaultScheduleSet.empty?
+          unless space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule.empty? # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.electricEquipmentSchedule # eqp-type-specific
+          end
+        end
+      end
+    when 'gas equipment'
+      load_sch = equip.schedule
+      load_lost = equip.gasEquipmentDefinition.fractionLost # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless space.spaceType.get.defaultScheduleSet.empty?
+          unless space.spaceType.get.defaultScheduleSet.get.gasEquipmentSchedule.empty? # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.gasEquipmentSchedule # eqp-type-specific
+          end
+        end
+      end
+    when 'steam equipment'
+      load_sch = equip.schedule
+      load_lost = equip.steamEquipmentDefinition.fractionLost # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless space.spaceType.get.defaultScheduleSet.empty?
+          unless space.spaceType.get.defaultScheduleSet.get.steamEquipmentSchedule.empty? # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.steamEquipmentSchedule # eqp-type-specific
+          end
+        end
+      end
+    when 'hot water equipment'
+      load_sch = equip.schedule
+      load_lost = equip.hotWaterEquipmentDefinition.fractionLost # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless space.spaceType.get.defaultScheduleSet.empty?
+          unless space.spaceType.get.defaultScheduleSet.get.hotWaterEquipmentSchedule.empty? # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.hotWaterEquipmentSchedule # eqp-type-specific
+          end
+        end
+      end
+    when 'other equipment'
+      load_sch = equip.schedule
+      load_lost = equip.otherEquipmentDefinition.fractionLost # eqp-type-specific
+      load_w = equip.getDesignLevel(space.floorArea, ppl_total) * (1 - load_lost)
+
+      if equip.isScheduleDefaulted
+        # Check default schedule set
+        unless space.spaceType.get.defaultScheduleSet.empty?
+          unless space.spaceType.get.defaultScheduleSet.get.otherEquipmentSchedule.empty? # eqp-type-specific
+            load_sch = space.spaceType.get.defaultScheduleSet.get.otherEquipmentSchedule # eqp-type-specific
+          end
+        end
+      end
+    end
+
+    load_sch_ruleset = nil
+    if load_sch.is_initialized
+      load_sch_obj = load_sch.get
+      load_sch_values = get_8760_values_from_schedule(model, load_sch_obj)
+      if !load_sch_values.nil?
+        load_sch_max = load_sch_values.max
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Failed to retreive schedule for equipment type #{eqp_type} in space #{space.name}.  Assuming #{load_w} W.")
+      end
+    end
+
+    if return_noncoincident_value
+      load_values[0] += load_w * load_sch_values.max
+    else
+      if !load_sch_values.nil?
+        load_sch_value = 1.0
+        (0..8759).each do |ihr|
+          load_sch_value = load_sch_values[ihr]
+          load_values[ihr] += load_w * load_sch_value
+        end
+      end
+    end
+    return load_values
+  end
+
   # will return a sorted array of array of spaces and connected area (Descending)
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param same_floor [Bool] only consider spaces on the same floor
+  # @return [Hash] sorted hash with array of spaces and area
   def space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor = true)
     same_floor_spaces = []
     spaces = []
@@ -1591,6 +2226,7 @@ class Standard
       unless adj_surface.empty?
         space.model.getSpaces.sort.each do |other_space|
           next if other_space == space
+
           other_space.surfaces.each do |surf|
             if surf == adj_surface.get
               spaces << other_space
@@ -1602,8 +2238,10 @@ class Standard
     # If looking for only spaces adjacent on the same floor.
     if same_floor == true
       raise "Cannot get adjacent spaces of space #{space.name} since space not set to BuildingStory" if space.buildingStory.empty?
+
       spaces.each do |other_space|
         raise "One or more adjecent spaces to space #{space.name} is not assigned to a BuildingStory. Ensure all spaces are assigned." if space.buildingStory.empty?
+
         if other_space.buildingStory.get == space.buildingStory.get
           same_floor_spaces << other_space
         end
@@ -1614,15 +2252,17 @@ class Standard
     # now sort by areas.
     area_index = []
     array_hash = {}
-    return nil if spaces.size.zero?
+    return array_hash if spaces.size.zero?
+
     # iterate through each surface in the space
     space.surfaces.each do |surface|
       # get the adjacent surface in another space.
       adj_surface = surface.adjacentSurface
       unless adj_surface.empty?
-        # go through each of the adjeacent spaces to find the matching  surface/space.
+        # go through each of the adjacent spaces to find the matching surface/space.
         spaces.each_with_index do |other_space, index|
           next if other_space == space
+
           other_space.surfaces.each do |surf|
             if surf == adj_surface.get
               # initialize array index to zero for first time so += will work.
@@ -1639,22 +2279,24 @@ class Standard
   end
 
   # Find the space that has the most wall area touching this space.
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param same_floor [Bool] only consider spaces on the same floor
+  # @return [OpenStudio::Model::Space] space object
   def space_get_adjacent_space_with_most_shared_wall_area(space, same_floor = true)
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
   end
 
-  # todo - add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
-  # todo - ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
-
+  # @todo add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
+  # @todo ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
   # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
   # report hours of operation. Won't be a single set of values, will be a collection of rules
   # note Building, space, and spaceType can get hours of operation from schedule set, but not buildingStory
   #
   # @author David Goldwasser
-  # @param space [Space] takes space
+  # @param space [OpenStudio::Model::Space] space object
   # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
   def space_hours_of_operation(space)
-
     default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
     hours_of_operation = space.getDefaultSchedule(default_sch_type)
     if !hours_of_operation.is_initialized
@@ -1682,7 +2324,7 @@ class Standard
     unexpected_val = false
     times = hours_of_operation.defaultDaySchedule.times
     values = hours_of_operation.defaultDaySchedule.values
-    times.each_with_index do |time,i|
+    times.each_with_index do |time, i|
       if values[i] == 0 && hoo_start.nil?
         hoo_start = time.totalHours
       elsif values[i] == 1 && hoo_end.nil?
@@ -1723,8 +2365,8 @@ class Standard
     end
     rule_hash[:hoo_hours] = hoo_hours
     days_used = []
-    indices_vector.each_with_index do |profile_index,i|
-      if profile_index == -1 then days_used << i+1 end
+    indices_vector.each_with_index do |profile_index, i|
+      if profile_index == -1 then days_used << i + 1 end
     end
     rule_hash[:days_used] = days_used
     profiles[-1] = rule_hash
@@ -1738,10 +2380,10 @@ class Standard
       unexpected_val = false
       times = rule.daySchedule.times
       values = rule.daySchedule.values
-      times.each_with_index do |time,i|
+      times.each_with_index do |time, i|
         if values[i] == 0 && hoo_start.nil?
           hoo_start = time.totalHours
-        elsif values[i] == 1  && hoo_end.nil?
+        elsif values[i] == 1 && hoo_end.nil?
           hoo_end = time.totalHours
         elsif values[i] != 1 && values[i] != 0
           unexpected_val = true
@@ -1778,37 +2420,34 @@ class Standard
       end
       rule_hash[:hoo_hours] = hoo_hours
       days_used = []
-      indices_vector.each_with_index do |profile_index,i|
-        if profile_index == rule.ruleIndex then days_used << i+1 end
+      indices_vector.each_with_index do |profile_index, i|
+        if profile_index == rule.ruleIndex then days_used << i + 1 end
       end
       rule_hash[:days_used] = days_used
 
-=begin
-      # todo - delete rule details below unless end up needing to use them
-      if rule.startDate.is_initialized
-        date = rule.startDate.get
-        rule_hash[:start_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
-      else
-        rule_hash[:start_date] = nil
-      end
-      if rule.endDate.is_initialized
-        date = rule.endDate.get
-        rule_hash[:end_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
-      else
-        rule_hash[:end_date] = nil
-      end
-      rule_hash[:mon] = rule.applyMonday
-      rule_hash[:tue] = rule.applyTuesday
-      rule_hash[:wed] = rule.applyWednesday
-      rule_hash[:thu] = rule.applyThursday
-      rule_hash[:fri] = rule.applyFriday
-      rule_hash[:sat] = rule.applySaturday
-      rule_hash[:sun] = rule.applySunday
-=end
+      #       # todo - delete rule details below unless end up needing to use them
+      #       if rule.startDate.is_initialized
+      #         date = rule.startDate.get
+      #         rule_hash[:start_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+      #       else
+      #         rule_hash[:start_date] = nil
+      #       end
+      #       if rule.endDate.is_initialized
+      #         date = rule.endDate.get
+      #         rule_hash[:end_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+      #       else
+      #         rule_hash[:end_date] = nil
+      #       end
+      #       rule_hash[:mon] = rule.applyMonday
+      #       rule_hash[:tue] = rule.applyTuesday
+      #       rule_hash[:wed] = rule.applyWednesday
+      #       rule_hash[:thu] = rule.applyThursday
+      #       rule_hash[:fri] = rule.applyFriday
+      #       rule_hash[:sat] = rule.applySaturday
+      #       rule_hash[:sun] = rule.applySunday
 
       # update hash
       profiles[rule.ruleIndex] = rule_hash
-
     end
 
     return profiles
@@ -1821,7 +2460,7 @@ class Standard
   # expand hours of operation. When hours of operation do not overlap for two spaces, add logic to remove all but largest gap
   #
   # @author David Goldwasser
-  # @param space [Spaces] takes array of spaces
+  # @param spaces [Array<OpenStudio::Model::Space>] takes array of spaces
   # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
   def spaces_hours_of_operation(spaces)
     hours_of_operation_array = []
@@ -1835,7 +2474,7 @@ class Standard
       end
     end
 
-    # todo - replace this with logic to get combined hours of operation for collection of spaces.
+    # @todo replace this with logic to get combined hours of operation for collection of spaces.
     # each hours_of_operation_array is hash with key for each profile.
     # each profile has hash with keys for hoo_start, hoo_end, hoo_hours, days_used
     # my goal is to compare profiles and days used across all profiles to create new entries as necessary
@@ -1845,20 +2484,23 @@ class Standard
 
     # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Evaluating hours of operation for #{space_names.join(',')}: #{hours_of_operation_array}")
 
-    # todo - what is this getting max of, it isn't longest hours of operation, is it the most profiles?
+    # @todo what is this getting max of, it isn't longest hours of operation, is it the most profiles?
     hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
 
     return hours_of_operation
-
   end
 
   private
 
-  # A series of private methods to modify polygons.  Most are
-  # wrappers of native OpenStudio methods, but with
-  # workarounds for known issues or limitations.
+  # A series of private methods to modify polygons.
+  # Most are wrappers of native OpenStudio methods, but with workarounds for known issues or limitations.
 
   # Check the z coordinates of a polygon
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param name [String] name of polygons
+  # @return [Integer] return number of errors
   # @api private
   def space_check_z_zero(space, polygons, name)
     fails = []
@@ -1874,13 +2516,15 @@ class Standard
       end
     end
     # OpenStudio::logFree(OpenStudio::Error, "openstudio.standards.Space", "Checking z=0: #{name} is greater than or equal to #{clsss.uniq.to_s.gsub(/\[|\]/,'|')}.")
-    if errs > 0
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "***FAIL*** #{space.name} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.")
-    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Space', "***FAIL*** #{space.name} z=0 failed for #{errs} vertices in #{name}; #{fails.join(', ')}.") if errs > 0
+    return errs
   end
 
-  # A method to convert an array of arrays to
-  # an array of OpenStudio::Point3ds.
+  # A method to convert an array of arrays to an array of OpenStudio::Point3ds.
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param ruby_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @return [Array<Array>] Array of array of Point3D objects (polygons)
   # @api private
   def space_ruby_polygons_to_point3d_z_zero(space, ruby_polygons)
     # Convert the final polygons back to OpenStudio
@@ -1898,6 +2542,11 @@ class Standard
   end
 
   # A method to zero-out the z vertex of an array of polygons
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param new_z [Double] new z value in meters
+  # @return [Array<Array>] Array of array of Point3D objects (polygons)
   # @api private
   def space_polygons_set_z(space, polygons, new_z)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "### #{polygons}")
@@ -1917,7 +2566,12 @@ class Standard
   end
 
   # A method to returns the number of duplicate vertices in a polygon.
-  # TODO does not actually wor
+  # @todo does not actually work
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param ruby_polygon [Array] array of vertices (polygon)
+  # @param tol [Double] tolerance
+  # @return [Array] array of duplicates
   # @api private
   def space_find_duplicate_vertices(space, ruby_polygon, tol = 0.001)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', '***')
@@ -1939,8 +2593,14 @@ class Standard
     return duplicates
   end
 
-  # Subtracts one array of polygons from the next,
-  # returning an array of resulting polygons.
+  # Subtracts one array of polygons from the next, returning an array of resulting polygons.
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param a_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param b_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param a_name [String] name of a polygons
+  # @param b_name [String] name of b polygons
+  # @return [Array<Array>] Array of array of vertices (polygons)
   # @api private
   def space_a_polygons_minus_b_polygons(space, a_polygons, b_polygons, a_name, b_name)
     final_polygons_ruby = []
@@ -1965,7 +2625,7 @@ class Standard
         a_polygon_ruby << [vertex.x, vertex.y, vertex.z]
       end
 
-      # TODO: Skip really small polygons
+      # @todo Skip really small polygons
       # reduced_b_polygons = []
       # b_polygons.each do |b_polygon|
       # next
@@ -2008,7 +2668,7 @@ class Standard
 
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "---Remove duplicates: #{a_minus_b_polygons_ruby.size} to #{unique_a_minus_b_polygons_ruby.size}")
 
-      # TODO: bug workaround?
+      # @todo bug workaround?
       # If the result includes the a polygon, the a polygon
       # was unchanged; only include that polgon and throw away the other junk?/bug? polygons.
       # If the result does not include the a polygon, the a polygon was
@@ -2032,7 +2692,7 @@ class Standard
     # Remove duplicate polygons again
     unique_final_polygons_ruby = final_polygons_ruby.uniq
 
-    # TODO: remove this workaround
+    # @todo remove this workaround
     # Split any polygons that are joined by a line into two separate
     # polygons.  Do this by finding duplicate
     # unique_final_polygons_ruby.each do |unique_final_polygon_ruby|
@@ -2055,6 +2715,12 @@ class Standard
 
   # Wrapper to catch errors in joinAll method
   # [utilities.geometry.joinAll] <1> Expected polygons to join together
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param polygons [Array] array of vertices (polygon)
+  # @param tol [Double] tolerance
+  # @param name [String] name of polygons
+  # @return [Array<Array>] Array of array of vertices (polygons)
   # @api private
   def space_join_polygons(space, polygons, tol, name)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Joining #{name} from #{space.name}")
@@ -2090,7 +2756,7 @@ class Standard
     # Disable the log sink to prevent memory hogging
     msg_log.disable
 
-    # TODO: remove this workaround, which is tried if there
+    # @todo remove this workaround, which is tried if there
     # are any join errors.  This handles the case of polygons
     # that make an inner loop, the most common case being
     # when all 4 sides of a space have windows.
@@ -2154,6 +2820,10 @@ class Standard
   end
 
   # Gets the total area of a series of polygons
+  #
+  # @param space [OpenStudio::Model::Space] space object
+  # @param polygons [Array] array of vertices (polygon)
+  # @return [Double] area in meters
   # @api private
   def space_total_area_of_polygons(space, polygons)
     total_area_m2 = 0
@@ -2171,6 +2841,12 @@ class Standard
 
   # Returns an array of resulting polygons.
   # Assumes that a_polygons don't overlap one another, and that b_polygons don't overlap one another
+  #
+  # @param a_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param b_polygons [Array<Array>] Array of array of vertices (polygons)
+  # @param a_name [String] name of a polygons
+  # @param b_name [String] name of b polygons
+  # @return [Double] overlapping area in meters
   # @api private
   def space_area_a_polygons_overlap_b_polygons(space, a_polygons, b_polygons, a_name, b_name)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "#{a_polygons.size} #{a_name} overlaps #{b_polygons.size} #{b_name}")
@@ -2258,5 +2934,54 @@ class Standard
     end
 
     return overlap_area
+  end
+
+  # A function to check whether a space is a return / supply plenum.
+  # This function only works on spaces used as a AirLoopSupplyPlenum or AirLoopReturnPlenum
+  # @param [OpenStudio::Model::Space] space
+  # @return boolean true if it is plenum, else false.
+  def space_is_plenum(space)
+    # Get the zone this space is inside
+    zone = space.thermalZone
+    # the zone is a return air plenum
+    space.model.getAirLoopHVACReturnPlenums.each do |return_air_plenum|
+      if return_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        # Determine if residential
+        return true
+      end
+    end
+    # the zone is a supply plenum
+    space.model.getAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
+      if supply_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
+        return true
+      end
+    end
+    # None match, return false
+    return false
+  end
+
+  # Determine if a space should be modeled with an occupancy standby mode
+  #
+  # @param space [OpenStudio::Model::Space] OpenStudio Space object
+  # @return [Boolean] true if occupancy standby mode is to be modeled, false otherwise
+  def space_occupancy_standby_mode_required?(space)
+    return false
+  end
+
+  # Provide the type of daylighting control type
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # return [String] daylighting control type
+  def space_daylighting_control_type(space)
+    return 'Stepped'
+  end
+
+  # Provide the minimum input power fraction for continuous
+  # dimming daylighting control
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # return [Float] daylighting minimum input power fraction
+  def space_daylighting_minimum_input_power_fraction(space)
+    return 0.3
   end
 end

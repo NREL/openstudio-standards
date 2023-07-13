@@ -2,7 +2,7 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 
 
-class NECB_HVAC_Tests < MiniTest::Test
+class NECB_HVAC_Loop_Rules_Tests < MiniTest::Test
   # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
   # set to true to run the simulations.
@@ -74,7 +74,7 @@ class NECB_HVAC_Tests < MiniTest::Test
         end
         assert(!pump_is_constant_speed,'test_hw_loop_rules: Hot water loop pump is not variable speed')
         supply_out_node = iloop.supplyOutletNode
-        set_point_manager = supply_out_node.setpointManagerOutdoorAirReset.get
+        set_point_manager = supply_out_node.setpointManagers[0].to_SetpointManagerOutdoorAirReset.get
         necb_outdoorLowTemperature = -16.0
         diff1 = (necb_outdoorLowTemperature - set_point_manager.outdoorLowTemperature).abs / necb_outdoorLowTemperature
         necb_outdoorHighTemperature = 0.0
@@ -141,9 +141,9 @@ class NECB_HVAC_Tests < MiniTest::Test
             pump_is_constant_speed = true
           end
         end
-        assert(pump_is_constant_speed,'test_chw_loop_rules: Hot water loop pump is not constant speed')
+        assert(!pump_is_constant_speed,'test_chw_loop_rules: Chilled water loop pump is not variable speed')
         supply_out_node = iloop.supplyOutletNode
-        set_point_manager = supply_out_node.setpointManagerScheduled.get
+        set_point_manager = supply_out_node.setpointManagers[0].to_SetpointManagerScheduled.get
         setpoint_sch = set_point_manager.schedule.to_ScheduleRuleset.get
         sch_rules = setpoint_sch.scheduleRules
         necb_setpoint = 7.0
@@ -221,7 +221,7 @@ class NECB_HVAC_Tests < MiniTest::Test
         end
         assert(pump_is_constant_speed,'test_cw_loop_rules: Hot water loop pump is not constant speed')
         supply_out_node = iloop.supplyOutletNode
-        set_point_manager = supply_out_node.setpointManagerScheduled.get
+        set_point_manager = supply_out_node.setpointManagers[0].to_SetpointManagerScheduled.get
         setpoint_sch = set_point_manager.schedule.to_ScheduleRuleset.get
         sch_rules = setpoint_sch.scheduleRules
         setpoint_set_correctly = true

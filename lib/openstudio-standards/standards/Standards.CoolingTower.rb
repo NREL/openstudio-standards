@@ -1,4 +1,3 @@
-
 # A variety of cooling tower methods that are the same regardless of type.
 # These methods are available to CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, and CoolingTowerVariableSpeed
 module CoolingTower
@@ -17,7 +16,9 @@ module CoolingTower
   # rate will not (and should not)
   # exactly equal the minimum tower performance.
   #
-  # @return [Bool] true if successful, false if not
+  # @param cooling_tower [OpenStudio::Model::StraightComponent] cooling tower object, allowable types:
+  #   CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, and CoolingTowerVariableSpeed
+  # @return [Bool] returns true if successful, false if not
   def cooling_tower_apply_minimum_power_per_flow(cooling_tower)
     # Get the design water flow rate
     design_water_flow_m3_per_s = nil
@@ -43,7 +44,7 @@ module CoolingTower
     # Closed cooling towers are the fluidcooler objects.
     search_criteria['equipment_type'] = 'Open Cooling Tower'
 
-    # TODO: Standards replace this with a mechanism to store this
+    # @todo Standards replace this with a mechanism to store this
     # data in the cooling tower object itself.
     # For now, retrieve the fan type from the name
     name = cooling_tower.name.get
@@ -101,7 +102,7 @@ module CoolingTower
 
     motor_properties = model_find_object(motors, search_criteria, fan_motor_nameplate_hp)
     if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{fan_motor_nameplate_hp} hp.")
       return false
     end
 
@@ -136,12 +137,10 @@ module CoolingTower
     return true
   end
 
-  # Above this point, centrifugal fan cooling towers must meet the limits
-  # of propeller or axial cooling towers instead.
+  # Above this point, centrifugal fan cooling towers must meet the limits of propeller or axial cooling towers instead.
   #
-  # @param cooling_tower [OpenStudio::Model::CoolingTowerSingleSpeed,
-  # OpenStudio::Model::CoolingTowerTwoSpeed,
-  # OpenStudio::Model::CoolingTowerVariableSpeed] the cooling tower
+  # @param cooling_tower [OpenStudio::Model::StraightComponent] cooling tower object, allowable types:
+  #   CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, CoolingTowerVariableSpeed
   # @return [Double] the limit, in gallons per minute.  Return nil for no limit.
   def cooling_tower_apply_minimum_power_per_flow_gpm_limit(cooling_tower)
     gpm_limit = nil

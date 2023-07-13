@@ -4,8 +4,8 @@ require 'fileutils'
 begin
   Bundler.setup
 rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts 'Run `bundle install` to install missing gems'
+  warn e.message
+  warn 'Run `bundle install` to install missing gems'
   exit e.status_code
 end
 
@@ -26,7 +26,6 @@ namespace :test do
     return false
   end
 
-
   desc 'parallel_run_all_tests_locally'
   Rake::TestTask.new('parallel_run_all_tests_locally') do |t|
     # Make an empty test/reports directory
@@ -39,24 +38,8 @@ namespace :test do
     t.verbose = false
   end
 
-  desc 'parallel_run_necb_building_regression_tests'
-  Rake::TestTask.new('parallel_run_necb_building_regression_tests_locally') do |t|
-    file_list = FileList.new('test/necb/building_regression_tests/locally_run_tests.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = false
-  end
 
-  desc 'parallel_run_necb_system_tests_tests'
-  Rake::TestTask.new('parallel_run_necb_system_tests_tests_locally') do |t|
-    file_list = FileList.new('test/necb/system_tests/locally_run_tests.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = false
-  end
-
-
-# These tests only available in the CI environment
+  # These tests only available in the CI environment
   if ENV['CI'] == 'true'
 
     desc 'Run CircleCI tests'
@@ -70,6 +53,7 @@ namespace :test do
           f.each_line do |line|
             # Skip comments the CLI may have included
             next unless line.include?('.rb')
+
             # Remove whitespaces
             line = line.strip
             # Ensure the file exists
@@ -89,7 +73,6 @@ namespace :test do
       end
     end
 
-
     desc 'Summarize the test timing'
     task 'times' do |t|
       require 'nokogiri'
@@ -97,7 +80,7 @@ namespace :test do
       files_to_times = {}
       tests_to_times = {}
       Dir['test/reports/*.xml'].each do |xml|
-        doc = File.open(xml) {|f| Nokogiri::XML(f)}
+        doc = File.open(xml) { |f| Nokogiri::XML(f) }
         doc.css('testcase').each do |testcase|
           time = testcase.attr('time').to_f
           file = testcase.attr('file')
@@ -153,42 +136,57 @@ namespace :data do
   # Order matters: most general/shared must be first,
   # as data may be overwritten when parsing later spreadsheets.
   spreadsheets_ashrae = [
-      'OpenStudio_Standards-ashrae_90_1',
-      'OpenStudio_Standards-ashrae_90_1(space_types)'
+    'OpenStudio_Standards-ashrae_90_1',
+    'OpenStudio_Standards-ashrae_90_1(space_types)',
+    'OpenStudio_Standards-ashrae_90_1_prm',
+    'OpenStudio_Standards-ashrae_90_1_prm(space_types)'
   ]
 
   spreadsheets_deer = [
-      'OpenStudio_Standards-deer',
-      'OpenStudio_Standards-deer(space_types)',
+    'OpenStudio_Standards-deer',
+    'OpenStudio_Standards-deer(space_types)'
   ]
 
   spreadsheets_comstock = [
-      'OpenStudio_Standards-ashrae_90_1',
-      'OpenStudio_Standards-ashrae_90_1-ALL-comstock(space_types)',
-      'OpenStudio_Standards-deer',
-      'OpenStudio_Standards-deer-ALL-comstock(space_types)',
+    'OpenStudio_Standards-ashrae_90_1',
+    'OpenStudio_Standards-ashrae_90_1-ALL-comstock(space_types)',
+    'OpenStudio_Standards-deer',
+    'OpenStudio_Standards-deer-ALL-comstock(space_types)'
   ]
 
   spreadsheets_cbes = [
-      'OpenStudio_Standards-cbes',
-      'OpenStudio_Standards-cbes(space_types)'
+    'OpenStudio_Standards-cbes',
+    'OpenStudio_Standards-cbes(space_types)'
   ]
 
   spreadsheet_titles = spreadsheets_ashrae + spreadsheets_deer + spreadsheets_comstock + spreadsheets_cbes
   spreadsheet_titles = spreadsheet_titles.uniq
 
-  desc 'Download all OpenStudio_Standards spreadsheets from Google & export JSONs'
+  desc 'Check Google Drive configuration'
+  task 'apicheck' do
+    check_google_drive_configuration
+  end
+
+  desc 'Download OpenStudio_Standards spreadsheets from Google Drive'
+  task 'download' do
+    download_google_spreadsheets(spreadsheet_titles)
+  end
+
+  desc 'Download OpenStudio_Standards spreadsheets and generate JSONs'
   task 'update' do
     download_google_spreadsheets(spreadsheet_titles)
     export_spreadsheet_to_json(spreadsheet_titles)
   end
 
-  desc 'Export JSONs from OpenStudio_Standards'
+  desc 'Generate JSONs from OpenStudio_Standards spreadsheets'
   task 'update:manual' do
     export_spreadsheet_to_json(spreadsheet_titles)
   end
 
-
+  desc 'Export JSONs from OpenStudio_Standards to data library'
+  task 'export:jsons' do
+    export_spreadsheet_to_json(spreadsheets_ashrae, dataset_type: 'data_lib')
+  end
 end
 
 # Tasks to export libraries packaged with

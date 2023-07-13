@@ -39,7 +39,7 @@ class ASHRAE9012010 < ASHRAE901
       # Check effective sidelighted aperture
       sidelighted_effective_aperture = space_sidelighting_effective_aperture(space, areas['primary_sidelighted_area'])
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "sidelighted_effective_aperture_pri = #{sidelighted_effective_aperture}")
-      if sidelighted_effective_aperture < 0.1 and @instvarbuilding_type.nil?
+      if sidelighted_effective_aperture < 0.1 && @instvarbuilding_type.nil?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because sidelighted effective aperture less than 0.1 per 9.4.1.4 Exception b.")
         req_pri_ctrl = false
       end
@@ -91,15 +91,17 @@ class ASHRAE9012010 < ASHRAE901
     return [req_top_ctrl, req_pri_ctrl, req_sec_ctrl]
   end
 
-  # Determine the fraction controlled by each sensor and which
-  # window each sensor should go near.
+  # Determine the fraction controlled by each sensor and which window each sensor should go near.
   #
-  # @param space [OpenStudio::Model::Space] the space with the daylighting
+  # @param space [OpenStudio::Model::Space] space object
+  # @param areas [Hash] a hash of daylighted areas
   # @param sorted_windows [Hash] a hash of windows, sorted by priority
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
   # @param req_top_ctrl [Bool] if toplighting controls are required
   # @param req_pri_ctrl [Bool] if primary sidelighting controls are required
   # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
+  # @return [Array] array of 4 items
+  #   [sensor 1 fraction, sensor 2 fraction, sensor 1 window, sensor 2 window]
   def space_daylighting_fractions_and_windows(space,
                                               areas,
                                               sorted_windows,
@@ -114,6 +116,9 @@ class ASHRAE9012010 < ASHRAE901
 
     # Get the area of the space
     space_area_m2 = space.floorArea
+
+    # get the climate zone
+    climate_zone = model_standards_climate_zone(space.model)
 
     if req_top_ctrl && req_pri_ctrl
       # Sensor 1 controls toplighted area
@@ -152,7 +157,7 @@ class ASHRAE9012010 < ASHRAE901
     return [sensor_1_frac, sensor_2_frac, sensor_1_window, sensor_2_window]
   end
 
-  # Determine the base infiltration rate at 75 PA.
+  # Determine the base infiltration rate at 75 Pa.
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.

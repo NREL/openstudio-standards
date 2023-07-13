@@ -3,7 +3,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
 
 
-class TestRemoveDuplicateModelObjects < CreateDOEPrototypeBuildingTest
+class NECB_RemoveDuplicateModelObjects_Tests < CreateDOEPrototypeBuildingTest
 
   def setup()
     @file_folder = __dir__

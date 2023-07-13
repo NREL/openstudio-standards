@@ -4,7 +4,13 @@ class Standard
   include PrototypeFan
 
   # Sets the fan pressure rise based on the Prototype buildings inputs
+  #
+  # @param fan_zone_exhaust [OpenStudio::Model::FanZoneExhaust] the exhaust fan
+  # @return [Bool] returns true if successful, false if not
   def fan_zone_exhaust_apply_prototype_fan_pressure_rise(fan_zone_exhaust)
+    # Do not modify dummy exhaust fans
+    return true if fan_zone_exhaust.name.to_s.downcase.include? 'dummy'
+
     # All exhaust fans are assumed to have a pressure rise of
     # 0.5 in w.c. in the prototype building models.
     pressure_rise_in_h2o = 0.5
@@ -18,6 +24,16 @@ class Standard
     return true
   end
 
+  # creates a FanZoneExhaust from a json
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fan_json [Hash] hash of fan properties
+  # @param fan_name [String] fan name
+  # @param fan_efficiency [Double] fan efficiency
+  # @param pressure_rise [Double] fan pressure rise in Pa
+  # @param system_availability_manager_coupling_mode [String] coupling mode, options are Coupled, Decoupled
+  # @param end_use_subcategory [String] end use subcategory name
+  # @return [OpenStudio::Model::FanZoneExhaust] the exhaust fan
   def create_fan_zone_exhaust_from_json(model,
                                         fan_json,
                                         fan_name: nil,
@@ -27,9 +43,9 @@ class Standard
                                         end_use_subcategory: nil)
 
     # check values to use
-    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
-    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
-    system_availability_manager_coupling_mode = system_availability_manager_coupling_mode ? system_availability_manager_coupling_mode : fan_json['system_availability_manager_coupling_mode']
+    fan_efficiency ||= fan_json['fan_efficiency']
+    pressure_rise ||= fan_json['pressure_rise']
+    system_availability_manager_coupling_mode ||= fan_json['system_availability_manager_coupling_mode']
 
     # convert values
     pressure_rise = pressure_rise ? OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get : nil
@@ -44,6 +60,15 @@ class Standard
     return fan
   end
 
+  # creates a FanZoneExhaust
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fan_name [String] fan name
+  # @param fan_efficiency [Double] fan efficiency
+  # @param pressure_rise [Double] fan pressure rise in Pa
+  # @param system_availability_manager_coupling_mode [String] coupling mode, options are Coupled, Decoupled
+  # @param end_use_subcategory [String] end use subcategory name
+  # @return [OpenStudio::Model::FanZoneExhaust] the exhaust fan
   def create_fan_zone_exhaust(model,
                               fan_name: nil,
                               fan_efficiency: nil,
@@ -59,5 +84,4 @@ class Standard
     fan.setSystemAvailabilityManagerCouplingMode(system_availability_manager_coupling_mode) unless system_availability_manager_coupling_mode.nil?
     return fan
   end
-
 end

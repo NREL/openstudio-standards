@@ -8,7 +8,7 @@ class ASHRAE9012007 < ASHRAE901
   def model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
     sys_num = nil
 
-    # TODO: refactor: figure out this weird template switching case
+    # @todo refactor: figure out this weird template switching case
     # For a custom scenario, use the lookup method from
     # a different standard instead of the specified standard.
     # if custom == "90.1-2007 with addenda dn"

@@ -1,6 +1,12 @@
 class Standard
-  def model_add_hvac(model, building_type, climate_zone, prototype_input, epw_file)
-
+  # Adds the prototype HVAC system to the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [String] the building type
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param prototype_input [Hash] hash of prototype inputs
+  # @return [Bool] returns true if successful, false if not
+  def model_add_hvac(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
     # Get the list of HVAC systems, as defined for each building in the Prototype.building_name files
@@ -31,6 +37,22 @@ class Standard
         if model.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
+          # get num_chillers from prototype_input
+          num_chillers = prototype_input['chw_number_chillers']
+          if num_chillers.nil? || num_chillers.to_i < 1
+            num_chillers = 1
+          end
+          # update num_chillers if specified in @system_to_space_map
+          if !system['chw_number_chillers'].nil? && system['chw_number_chillers'].to_i > 0
+            num_chillers = system['chw_number_chillers']
+          end
+
+          # get number_cooling_towers if specified in @system_to_space_map
+          number_cooling_towers = 1
+          if !system['number_cooling_towers'].nil? && system['number_cooling_towers'].to_i > 0
+            number_cooling_towers = system['number_cooling_towers']
+          end
+
           condenser_water_loop = nil
           if system['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = model_add_cw_loop(model,
@@ -38,7 +60,7 @@ class Standard
                                                      cooling_tower_fan_type: 'Centrifugal',
                                                      cooling_tower_capacity_control: 'Variable Speed Fan',
                                                      number_of_cells_per_tower: 2,
-                                                     number_cooling_towers: 1)
+                                                     number_cooling_towers: number_cooling_towers.to_i)
           end
           chilled_water_loop = model_add_chw_loop(model,
                                                   cooling_fuel: 'Electricity',
@@ -48,7 +70,8 @@ class Standard
                                                   chiller_cooling_type: system['chiller_cooling_type'],
                                                   chiller_condenser_type: system['chiller_condenser_type'],
                                                   chiller_compressor_type: system['chiller_compressor_type'],
-                                                  condenser_water_loop: condenser_water_loop)
+                                                  condenser_water_loop: condenser_water_loop,
+                                                  num_chillers: num_chillers.to_i)
         end
 
         # Add the VAV
@@ -116,8 +139,19 @@ class Standard
         # Special logic to make a heat pump loop if necessary
         heat_pump_loop = nil
         if system['heating_type'] == 'Water To Air Heat Pump'
-          heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'EvaporativeFluidCooler')
+          # @note code_sections [90.1-2016_6.5.5.2.1]
+          # change highrise apartment heat rejection fan (< 5hp) from single speed to two speed evaporative fluid cooler
+          # @todo this is temporary fix, it should be applied to all heat rejection devices smaller than 5hp.
+          if system['heat_pump_loop_cooling_type'].nil?
+            hp_loop_cooling_type = 'EvaporativeFluidCooler'
+          else
+            hp_loop_cooling_type = system['heat_pump_loop_cooling_type']
+          end
+          heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: hp_loop_cooling_type)
         end
+        # if water to air heat pump is using existing chilled water loop and hot water loop as source
+        # get existing loops, and assign heat_pump_cool_loop = chilled_water_loop, heat_pump_heat_loop = hot_water_loop
+        # applicable to super tall building elevator machine room that is in the middle of the building
 
         model_add_psz_ac(model,
                          thermal_zones,
@@ -139,7 +173,7 @@ class Standard
                            model.getPlantLoopByName('Hot Water Loop').get
                          elsif building_type == 'MediumOffice'
                            nil
-						 elsif building_type == 'MediumOfficeDetailed'
+                         elsif building_type == 'MediumOfficeDetailed'
                            nil
                          else
                            model_add_hw_loop(model,
@@ -175,6 +209,10 @@ class Standard
         if model.getPlantLoopByName('Chilled Water Loop').is_initialized
           chilled_water_loop = model.getPlantLoopByName('Chilled Water Loop').get
         else
+          num_chillers = 1
+          if !system['num_chillers'].nil? && system['num_chillers'].to_i > 0
+            num_chillers = system['num_chillers'].to_i
+          end
           condenser_water_loop = nil
           if system['chiller_cooling_type'] == 'WaterCooled'
             condenser_water_loop = model_add_cw_loop(model,
@@ -182,7 +220,7 @@ class Standard
                                                      cooling_tower_fan_type: 'Centrifugal',
                                                      cooling_tower_capacity_control: 'Fan Cycling',
                                                      number_of_cells_per_tower: 2,
-                                                     number_cooling_towers: 1)
+                                                     number_cooling_towers: num_chillers)
           end
           chilled_water_loop = model_add_chw_loop(model,
                                                   cooling_fuel: 'Electricity',
@@ -192,6 +230,7 @@ class Standard
                                                   chiller_cooling_type: system['chiller_cooling_type'],
                                                   chiller_condenser_type: system['chiller_condenser_type'],
                                                   chiller_compressor_type: system['chiller_compressor_type'],
+                                                  num_chillers: num_chillers,
                                                   condenser_water_loop: condenser_water_loop)
         end
         model_add_doas_cold_supply(model,
@@ -223,22 +262,17 @@ class Standard
                            model_add_hw_loop(model, 'NaturalGas')
                          end
         # check inputs
-        doas_type = system['doas_type'] ? system['doas_type'] : 'DOASCV'
-        econo_ctrl_mthd = system['economizer_control_method'] ? system['economizer_control_method'] : 'NoEconomizer'
-        doas_control_strategy = system['doas_control_strategy'] ? system['doas_control_strategy'] : 'NeutralSupplyAir'
-        clg_dsgn_sup_air_temp = system['cooling_design_supply_air_temperature'] ? system['cooling_design_supply_air_temperature'] : 60.0
-        htg_dsgn_sup_air_temp = system['heating_design_supply_air_temperature'] ? system['heating_design_supply_air_temperature'] : 70.0
+        doas_type = system['doas_type'] || 'DOASCV'
+        econo_ctrl_mthd = system['economizer_control_method'] || 'NoEconomizer'
+        doas_control_strategy = system['doas_control_strategy'] || 'NeutralSupplyAir'
+        clg_dsgn_sup_air_temp = system['cooling_design_supply_air_temperature'] || 60.0
+        htg_dsgn_sup_air_temp = system['heating_design_supply_air_temperature'] || 70.0
 
         # for boolean input, this makes sure we get the correct input translation
         if system['include_exhaust_fan'].nil? || true?(system['include_exhaust_fan'])
           include_exhaust_fan = true
         else
           include_exhaust_fan = false
-        end
-        if system['energy_recovery'].nil? || true?(system['energy_recovery'])
-          energy_recovery = true
-        else
-          energy_recovery = false
         end
         if true?(system['demand_control_ventilation'])
           demand_control_ventilation = true
@@ -258,7 +292,6 @@ class Standard
                        fan_maximum_flow_rate: system['fan_maximum_flow_rate'],
                        econo_ctrl_mthd: econo_ctrl_mthd,
                        include_exhaust_fan: include_exhaust_fan,
-                       energy_recovery: energy_recovery,
                        demand_control_ventilation: demand_control_ventilation,
                        doas_control_strategy: doas_control_strategy,
                        clg_dsgn_sup_air_temp: clg_dsgn_sup_air_temp,
@@ -267,8 +300,12 @@ class Standard
       when 'DC' # Data Center in Large Office building
         # Retrieve the existing hot water loop or add a new one if necessary.
         hot_water_loop = model_get_or_add_hot_water_loop(model, 'NaturalGas')
-        # Retrieve the existing heat pump loop or add a new one if necessary.
-        heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity', heat_pump_loop_cooling_type: 'CoolingTowerTwoSpeed')
+
+        # Set heat pump loop cooling type to CoolingTowerTwoSpeed if not specified in system hash
+        heat_pump_loop_cooling_type = system['heat_pump_loop_cooling_type'].nil? ? 'CoolingTowerTwoSpeed' : system['heat_pump_loop_cooling_type']
+
+        heat_pump_loop = model_get_or_add_heat_pump_loop(model, 'NaturalGas', 'Electricity',
+                                                         heat_pump_loop_cooling_type: heat_pump_loop_cooling_type)
         model_add_data_center_hvac(model,
                                    thermal_zones,
                                    hot_water_loop,
@@ -456,8 +493,9 @@ class Standard
     return true
   end
 
-  # Determine the typical system type given the inputs.
+  # Determine the typical system type given the inputs
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param area_type [String] Valid choices are residential and nonresidential
   # @param delivery_type [String] Conditioning delivery type. Valid choices are air and hydronic
   # @param heating_source [String] Valid choices are Electricity, NaturalGas, DistrictHeating, DistrictAmbient
@@ -523,6 +561,11 @@ class Standard
 
   private
 
+  # returns the thermal zones served by the system
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param system [Hash] hash of system inputs
+  # @return [Array<OpenStudio::Model::ThermalZone>] system thermal zones
   def model_get_zones_from_spaces_on_system(model, system)
     # Find all zones associated with these spaces
     thermal_zones = []
@@ -544,6 +587,11 @@ class Standard
     return thermal_zones
   end
 
+  # returns the thermal zone that serves as the return plenum
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param system [Hash] hash of system inputs
+  # @return [OpenStudio::Model::ThermalZone] the return plenum thermal zone
   def model_get_return_plenum_from_system(model, system)
     # Find the zone associated with the return plenum space name
     return_plenum = nil

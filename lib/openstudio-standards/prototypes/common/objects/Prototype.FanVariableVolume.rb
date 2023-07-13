@@ -6,6 +6,9 @@ class Standard
   # Sets the fan pressure rise based on the Prototype buildings inputs
   # which are governed by the flow rate coming through the fan
   # and whether the fan lives inside a unit heater, PTAC, etc.
+  #
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
+  # @return [Bool] returns true if successful, false if not
   def fan_variable_volume_apply_prototype_fan_pressure_rise(fan_variable_volume)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
@@ -39,23 +42,7 @@ class Standard
       end
     # If the fan lives on an airloop
     elsif fan_variable_volume.airLoopHVAC.is_initialized
-      # For Data centers: the air flow rate could be huge
-      airloop_name = fan_variable_volume.airLoopHVAC.get.name.to_s
-      if airloop_name.include?('CRAC') || airloop_name.include?('CRAH')
-        pressure_rise_in_h2o = if maximum_flow_rate_cfm < 4648
-                                 4.0
-                               elsif maximum_flow_rate_cfm >= 4648 && maximum_flow_rate_cfm < 20000
-                                 5.58
-                               elsif maximum_flow_rate_cfm >= 20000 && maximum_flow_rate_cfm < 50000
-                                 8.0
-                               elsif maximum_flow_rate_cfm >= 50000 && maximum_flow_rate_cfm < 200000
-                                 12.0
-                               else
-                                 20.0
-                               end
-      else
-        pressure_rise_in_h2o = fan_variable_volume_airloop_fan_pressure_rise(fan_variable_volume)
-      end
+      pressure_rise_in_h2o = fan_variable_volume_airloop_fan_pressure_rise(fan_variable_volume)
     end
 
     # Set the fan pressure rise
@@ -67,10 +54,11 @@ class Standard
     return true
   end
 
-  # Determine the prototype fan pressure rise for a variable volume
-  # fan on an AirLoopHVAC based on the airflow of the system.
-  # @return [Double] the pressure rise (in H2O).  Defaults
-  # to the logic from ASHRAE 90.1-2004 prototypes.
+  # Determine the prototype fan pressure rise for a variable volume fan on an AirLoopHVAC based on system airflow.
+  # Defaults to the logic from ASHRAE 90.1-2004 prototypes.
+  #
+  # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
+  # @return [Double] pressure rise in inches H20
   def fan_variable_volume_airloop_fan_pressure_rise(fan_variable_volume)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
@@ -98,6 +86,23 @@ class Standard
     return pressure_rise_in_h2o
   end
 
+  # creates a variable volume fan
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fan_name [String] fan name
+  # @param fan_efficiency [Double] fan efficiency
+  # @param pressure_rise [Double] fan pressure rise in Pa
+  # @param motor_efficiency [Double] fan motor efficiency
+  # @param motor_in_airstream_fraction [Double] fraction of motor heat in airstream
+  # @param fan_power_minimum_flow_rate_input_method [String] options are Fraction, FixedFlowRate
+  # @param fan_power_minimum_flow_rate_fraction [Double] minimum flow rate fraction
+  # @param end_use_subcategory [String] end use subcategory name
+  # @param fan_power_coefficient_1 [Double] fan power coefficient 1
+  # @param fan_power_coefficient_2 [Double] fan power coefficient 2
+  # @param fan_power_coefficient_3 [Double] fan power coefficient 3
+  # @param fan_power_coefficient_4 [Double] fan power coefficient 4
+  # @param fan_power_coefficient_5 [Double] fan power coefficient 5
+  # @return [OpenStudio::Model::FanVariableVolume] variable volume fan object
   def create_fan_variable_volume(model,
                                  fan_name: nil,
                                  fan_efficiency: nil,
@@ -130,6 +135,24 @@ class Standard
     return fan
   end
 
+  # creates a variable volume fan from a json
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fan_json [Hash] hash of fan properties
+  # @param fan_name [String] fan name
+  # @param fan_efficiency [Double] fan efficiency
+  # @param pressure_rise [Double] fan pressure rise in Pa
+  # @param motor_efficiency [Double] fan motor efficiency
+  # @param motor_in_airstream_fraction [Double] fraction of motor heat in airstream
+  # @param fan_power_minimum_flow_rate_input_method [String] options are Fraction, FixedFlowRate
+  # @param fan_power_minimum_flow_rate_fraction [Double] minimum flow rate fraction
+  # @param end_use_subcategory [String] end use subcategory name
+  # @param fan_power_coefficient_1 [Double] fan power coefficient 1
+  # @param fan_power_coefficient_2 [Double] fan power coefficient 2
+  # @param fan_power_coefficient_3 [Double] fan power coefficient 3
+  # @param fan_power_coefficient_4 [Double] fan power coefficient 4
+  # @param fan_power_coefficient_5 [Double] fan power coefficient 5
+  # @return [OpenStudio::Model::FanVariableVolume] variable volume fan object
   def create_fan_variable_volume_from_json(model,
                                            fan_json,
                                            fan_name: nil,
@@ -146,24 +169,24 @@ class Standard
                                            fan_power_coefficient_4: nil,
                                            fan_power_coefficient_5: nil)
     # check values to use
-    fan_efficiency = fan_efficiency ? fan_efficiency : fan_json['fan_efficiency']
-    pressure_rise = pressure_rise ? pressure_rise : fan_json['pressure_rise']
-    motor_efficiency = motor_efficiency ? motor_efficiency : fan_json['motor_efficiency']
-    motor_in_airstream_fraction = motor_in_airstream_fraction ? motor_in_airstream_fraction : fan_json['motor_in_airstream_fraction']
-    fan_power_minimum_flow_rate_input_method = fan_power_minimum_flow_rate_input_method ? fan_power_minimum_flow_rate_input_method : fan_json['fan_power_minimum_flow_rate_input_method']
-    fan_power_minimum_flow_rate_fraction = fan_power_minimum_flow_rate_fraction ? fan_power_minimum_flow_rate_fraction : fan_json['fan_power_minimum_flow_rate_fraction']
-    fan_power_coefficient_1 = fan_power_coefficient_1 ? fan_power_coefficient_1 : fan_json['fan_power_coefficient_1']
-    fan_power_coefficient_2 = fan_power_coefficient_2 ? fan_power_coefficient_2 : fan_json['fan_power_coefficient_2']
-    fan_power_coefficient_3 = fan_power_coefficient_3 ? fan_power_coefficient_3 : fan_json['fan_power_coefficient_3']
-    fan_power_coefficient_4 = fan_power_coefficient_4 ? fan_power_coefficient_4 : fan_json['fan_power_coefficient_4']
-    fan_power_coefficient_5 = fan_power_coefficient_5 ? fan_power_coefficient_5 : fan_json['fan_power_coefficient_5']
+    fan_efficiency ||= fan_json['fan_efficiency']
+    pressure_rise ||= fan_json['pressure_rise']
+    motor_efficiency ||= fan_json['motor_efficiency']
+    motor_in_airstream_fraction ||= fan_json['motor_in_airstream_fraction']
+    fan_power_minimum_flow_rate_input_method ||= fan_json['fan_power_minimum_flow_rate_input_method']
+    fan_power_minimum_flow_rate_fraction ||= fan_json['fan_power_minimum_flow_rate_fraction']
+    fan_power_coefficient_1 ||= fan_json['fan_power_coefficient_1']
+    fan_power_coefficient_2 ||= fan_json['fan_power_coefficient_2']
+    fan_power_coefficient_3 ||= fan_json['fan_power_coefficient_3']
+    fan_power_coefficient_4 ||= fan_json['fan_power_coefficient_4']
+    fan_power_coefficient_5 ||= fan_json['fan_power_coefficient_5']
 
     # convert values
     pressure_rise_pa = OpenStudio.convert(pressure_rise, 'inH_{2}O', 'Pa').get unless pressure_rise.nil?
 
     # create fan
     fan = create_fan_variable_volume(model,
-                                     fan_name:fan_name,
+                                     fan_name: fan_name,
                                      fan_efficiency: fan_efficiency,
                                      pressure_rise: pressure_rise_pa,
                                      motor_efficiency: motor_efficiency,
@@ -178,5 +201,4 @@ class Standard
                                      fan_power_coefficient_5: fan_power_coefficient_5)
     return fan
   end
-
 end

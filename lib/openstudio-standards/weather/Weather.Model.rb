@@ -3,81 +3,132 @@ class Standard
   # water mains temperature, and set ground temperature.
   # Based on ChangeBuildingLocation measure by Nicholas Long
 
+  # A method to return an array of .epw files names mapped to each climate zone
+  #
+  # @param epw_file [String] optional epw_file name for NECB methods
+  # @return [Hash] a hash of ashrae climate zone weather file pairs
   def model_get_climate_zone_weather_file_map(epw_file = '')
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = {
-        'ASHRAE 169-2006-0A' => 'VNM_SVN_Ho.Chi.Minh-Tan.Son.Nhat.Intl.AP.489000_TMYx.epw',
-        'ASHRAE 169-2006-0B' => 'ARE_DU_Dubai.Intl.AP.411940_TMYx.epw',
-        'ASHRAE 169-2006-1A' => 'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
-        'ASHRAE 169-2006-1B' => 'SAU_RI_Riyadh.AB.404380_TMYx.epw',
-        'ASHRAE 169-2006-2A' => 'USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw',
-        'ASHRAE 169-2006-2B' => 'USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw',
-        'ASHRAE 169-2006-3A' => 'USA_TN_Memphis.Intl.AP.723340_TMY3.epw',
-        'ASHRAE 169-2006-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
-        'ASHRAE 169-2006-3C' => 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw',
-        'ASHRAE 169-2006-4A' => 'USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw',
-        'ASHRAE 169-2006-4B' => 'USA_NM_Albuquerque.Intl.AP.723650_TMY3.epw',
-        'ASHRAE 169-2006-4C' => 'USA_OR_Salem-McNary.Field.726940_TMY3.epw',
-        'ASHRAE 169-2006-5A' => 'USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw',
-        'ASHRAE 169-2006-5B' => 'USA_ID_Boise.Air.Terminal.726810_TMY3.epw',
-        'ASHRAE 169-2006-5C' => 'CAN_BC_Vancouver.718920_CWEC.epw',
-        'ASHRAE 169-2006-6A' => 'USA_VT_Burlington.Intl.AP.726170_TMY3.epw',
-        'ASHRAE 169-2006-6B' => 'USA_MT_Helena.Rgnl.AP.727720_TMY3.epw',
-        'ASHRAE 169-2006-7A' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
-        'ASHRAE 169-2006-7B' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
-        'ASHRAE 169-2006-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        'ASHRAE 169-2013-0A' => 'VNM_SVN_Ho.Chi.Minh-Tan.Son.Nhat.Intl.AP.489000_TMYx.epw',
-        'ASHRAE 169-2013-0B' => 'ARE_DU_Dubai.Intl.AP.411940_TMYx.epw',
-        'ASHRAE 169-2013-1A' => 'USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
-        'ASHRAE 169-2013-1B' => 'IND_DL_New.Delhi-Safdarjung.AP.421820_TMYx.epw',
-        'ASHRAE 169-2013-2A' => 'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
-        'ASHRAE 169-2013-2B' => 'USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw',
-        'ASHRAE 169-2013-3A' => 'USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw',
-        'ASHRAE 169-2013-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
-        'ASHRAE 169-2013-3C' => 'USA_CA_San.Deigo-Brown.Field.Muni.AP.722904_TMY3.epw',
-        'ASHRAE 169-2013-4A' => 'USA_NY_New.York-John.F.Kennedy.Intl.AP.744860_TMY3.epw',
-        'ASHRAE 169-2013-4B' => 'USA_NM_Albuquerque.Intl.Sunport.723650_TMY3.epw',
-        'ASHRAE 169-2013-4C' => 'USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3.epw',
-        'ASHRAE 169-2013-5A' => 'USA_NY_Buffalo.Niagara.Intl.AP.725280_TMY3.epw',
-        'ASHRAE 169-2013-5B' => 'USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw',
-        'ASHRAE 169-2013-5C' => 'USA_WA_Port.Angeles-William.R.Fairchild.Intl.AP.727885_TMY3.epw',
-        'ASHRAE 169-2013-6A' => 'USA_MN_Rochester.Intl.AP.726440_TMY3.epw',
-        'ASHRAE 169-2013-6B' => 'USA_MT_Great.Falls.Intl.AP.727750_TMY3.epw',
-        'ASHRAE 169-2013-7A' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
-        'ASHRAE 169-2013-7B' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
-        'ASHRAE 169-2013-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        'ASHRAE 169-2013-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
-        # For measure input
-        'NECB HDD Method' => epw_file.to_s,
-        # For testing
-        'NECB-CNEB-5'  => epw_file.to_s,
-        'NECB-CNEB-6'  => epw_file.to_s,
-        'NECB-CNEB-7a' => epw_file.to_s,
-        'NECB-CNEB-7b' => epw_file.to_s,
-        'NECB-CNEB-8'  => epw_file.to_s,
-        # For DEER
-        'CEC T24-CEC1' => 'ARCATA_725945_CZ2010.epw',
-        'CEC T24-CEC2' => 'SANTA-ROSA_724957_CZ2010.epw',
-        'CEC T24-CEC3' => 'OAKLAND_724930_CZ2010.epw',
-        'CEC T24-CEC4' => 'SAN-JOSE-REID_724946_CZ2010.epw',
-        'CEC T24-CEC5' => 'SANTA-MARIA_723940_CZ2010.epw',
-        'CEC T24-CEC6' => 'TORRANCE_722955_CZ2010.epw',
-        'CEC T24-CEC7' => 'SAN-DIEGO-LINDBERGH_722900_CZ2010.epw',
-        'CEC T24-CEC8' => 'FULLERTON_722976_CZ2010.epw',
-        'CEC T24-CEC9' => 'BURBANK-GLENDALE_722880_CZ2010.epw',
-        'CEC T24-CEC10' => 'RIVERSIDE_722869_CZ2010.epw',
-        'CEC T24-CEC11' => 'RED-BLUFF_725910_CZ2010.epw',
-        'CEC T24-CEC12' => 'SACRAMENTO-EXECUTIVE_724830_CZ2010.epw',
-        'CEC T24-CEC13' => 'FRESNO_723890_CZ2010.epw',
-        'CEC T24-CEC14' => 'PALMDALE_723820_CZ2010.epw',
-        'CEC T24-CEC15' => 'PALM-SPRINGS-INTL_722868_CZ2010.epw',
-        'CEC T24-CEC16' => 'BLUE-CANYON_725845_CZ2010.epw'
+      'ASHRAE 169-2006-0A' => 'VNM_SVN_Ho.Chi.Minh-Tan.Son.Nhat.Intl.AP.489000_TMYx.epw',
+      'ASHRAE 169-2006-0B' => 'ARE_DU_Dubai.Intl.AP.411940_TMYx.epw',
+      'ASHRAE 169-2006-1A' => 'USA_FL_Miami.Intl.AP.722020_TMY3.epw',
+      'ASHRAE 169-2006-1B' => 'SAU_RI_Riyadh.AB.404380_TMYx.epw',
+      'ASHRAE 169-2006-2A' => 'USA_TX_Houston-Bush.Intercontinental.AP.722430_TMY3.epw',
+      'ASHRAE 169-2006-2B' => 'USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.epw',
+      'ASHRAE 169-2006-3A' => 'USA_TN_Memphis.Intl.AP.723340_TMY3.epw',
+      'ASHRAE 169-2006-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
+      'ASHRAE 169-2006-3C' => 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw',
+      'ASHRAE 169-2006-4A' => 'USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw',
+      'ASHRAE 169-2006-4B' => 'USA_NM_Albuquerque.Intl.AP.723650_TMY3.epw',
+      'ASHRAE 169-2006-4C' => 'USA_OR_Salem-McNary.Field.726940_TMY3.epw',
+      'ASHRAE 169-2006-5A' => 'USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw',
+      'ASHRAE 169-2006-5B' => 'USA_ID_Boise.Air.Terminal.726810_TMY3.epw',
+      'ASHRAE 169-2006-5C' => 'CAN_BC_Vancouver.718920_CWEC.epw',
+      'ASHRAE 169-2006-6A' => 'USA_VT_Burlington.Intl.AP.726170_TMY3.epw',
+      'ASHRAE 169-2006-6B' => 'USA_MT_Helena.Rgnl.AP.727720_TMY3.epw',
+      'ASHRAE 169-2006-7A' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
+      'ASHRAE 169-2006-7B' => 'USA_MN_Duluth.Intl.AP.727450_TMY3.epw',
+      'ASHRAE 169-2006-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+      'ASHRAE 169-2006-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+      'ASHRAE 169-2013-0A' => 'VNM_SVN_Ho.Chi.Minh-Tan.Son.Nhat.Intl.AP.489000_TMYx.epw',
+      'ASHRAE 169-2013-0B' => 'ARE_DU_Dubai.Intl.AP.411940_TMYx.epw',
+      'ASHRAE 169-2013-1A' => 'USA_HI_Honolulu.Intl.AP.911820_TMY3.epw',
+      'ASHRAE 169-2013-1B' => 'IND_DL_New.Delhi-Safdarjung.AP.421820_TMYx.epw',
+      'ASHRAE 169-2013-2A' => 'USA_FL_Tampa-MacDill.AFB.747880_TMY3.epw',
+      'ASHRAE 169-2013-2B' => 'USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw',
+      'ASHRAE 169-2013-3A' => 'USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw',
+      'ASHRAE 169-2013-3B' => 'USA_TX_El.Paso.Intl.AP.722700_TMY3.epw',
+      'ASHRAE 169-2013-3C' => 'USA_CA_San.Deigo-Brown.Field.Muni.AP.722904_TMY3.epw',
+      'ASHRAE 169-2013-4A' => 'USA_NY_New.York-John.F.Kennedy.Intl.AP.744860_TMY3.epw',
+      'ASHRAE 169-2013-4B' => 'USA_NM_Albuquerque.Intl.Sunport.723650_TMY3.epw',
+      'ASHRAE 169-2013-4C' => 'USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3.epw',
+      'ASHRAE 169-2013-5A' => 'USA_NY_Buffalo.Niagara.Intl.AP.725280_TMY3.epw',
+      'ASHRAE 169-2013-5B' => 'USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw',
+      'ASHRAE 169-2013-5C' => 'USA_WA_Port.Angeles-William.R.Fairchild.Intl.AP.727885_TMY3.epw',
+      'ASHRAE 169-2013-6A' => 'USA_MN_Rochester.Intl.AP.726440_TMY3.epw',
+      'ASHRAE 169-2013-6B' => 'USA_MT_Great.Falls.Intl.AP.727750_TMY3.epw',
+      'ASHRAE 169-2013-7A' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
+      'ASHRAE 169-2013-7B' => 'USA_MN_International.Falls.Intl.AP.727470_TMY3.epw',
+      'ASHRAE 169-2013-8A' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+      'ASHRAE 169-2013-8B' => 'USA_AK_Fairbanks.Intl.AP.702610_TMY3.epw',
+      # For measure input
+      'NECB HDD Method' => epw_file.to_s,
+      # For testing
+      'NECB-CNEB-5' => epw_file.to_s,
+      'NECB-CNEB-6' => epw_file.to_s,
+      'NECB-CNEB-7a' => epw_file.to_s,
+      'NECB-CNEB-7b' => epw_file.to_s,
+      'NECB-CNEB-8' => epw_file.to_s,
+      # For DEER
+      'CEC T24-CEC1' => 'ARCATA_725945_CZ2010.epw',
+      'CEC T24-CEC2' => 'SANTA-ROSA_724957_CZ2010.epw',
+      'CEC T24-CEC3' => 'OAKLAND_724930_CZ2010.epw',
+      'CEC T24-CEC4' => 'SAN-JOSE-REID_724946_CZ2010.epw',
+      'CEC T24-CEC5' => 'SANTA-MARIA_723940_CZ2010.epw',
+      'CEC T24-CEC6' => 'TORRANCE_722955_CZ2010.epw',
+      'CEC T24-CEC7' => 'SAN-DIEGO-LINDBERGH_722900_CZ2010.epw',
+      'CEC T24-CEC8' => 'FULLERTON_722976_CZ2010.epw',
+      'CEC T24-CEC9' => 'BURBANK-GLENDALE_722880_CZ2010.epw',
+      'CEC T24-CEC10' => 'RIVERSIDE_722869_CZ2010.epw',
+      'CEC T24-CEC11' => 'RED-BLUFF_725910_CZ2010.epw',
+      'CEC T24-CEC12' => 'SACRAMENTO-EXECUTIVE_724830_CZ2010.epw',
+      'CEC T24-CEC13' => 'FRESNO_723890_CZ2010.epw',
+      'CEC T24-CEC14' => 'PALMDALE_723820_CZ2010.epw',
+      'CEC T24-CEC15' => 'PALM-SPRINGS-INTL_722868_CZ2010.epw',
+      'CEC T24-CEC16' => 'BLUE-CANYON_725845_CZ2010.epw'
     }
     return climate_zone_weather_file_map
   end
 
-  def model_add_design_days_and_weather_file(model, climate_zone, epw_file)
+  # Get absolute path of a weather file included within openstudio-standards
+  #
+  # @param weather_file_name [String] Name of a weather file include within openstudio-standards
+  # @return [String] Weather file path
+  def model_get_weather_file(weather_file_name)
+    # Define where the weather files lives
+    weather_dir = nil
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      # load weather file from embedded files
+      epw_string = load_resource_relative("../../../data/weather/#{weather_file_name}")
+      ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.ddy')}")
+      stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
+
+      # extract to local weather dir
+      weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
+      FileUtils.mkdir_p(weather_dir)
+
+      path_length = "#{weather_dir}/#{weather_file_name}".length
+      if path_length > 260
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Weather file path length #{path_length} is >260 characters and may cause issues in Windows environments.")
+      end
+      File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
+    else
+      # loaded gem from system path
+      top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+      weather_dir = File.expand_path("#{top_dir}/data/weather")
+    end
+
+    # Add Weather File
+    unless (Pathname.new weather_dir).absolute?
+      weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
+    end
+
+    weather_file = File.join(weather_dir, weather_file_name)
+
+    return weather_file
+  end
+
+  # Adds the design days and weather file for the specified climate zone
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param epw_file [String] the name of the epw file; if blank will default to epw file for the ASHRAE climate zone
+  # @return [Bool] returns true if successful, false if not
+  def model_add_design_days_and_weather_file(model, climate_zone, epw_file = '', weather_dir = nil)
     success = true
     require_relative 'Weather.stat_file'
 
@@ -100,33 +151,8 @@ class Standard
       success = false
     end
 
-    # Define where the weather files lives
-    weather_dir = nil
-    if __dir__[0] == ':' # Running from OpenStudio CLI
-      # load weather file from embedded files
-      epw_string = load_resource_relative("../../../data/weather/#{weather_file_name}")
-      ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.ddy')}")
-      stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
+    weather_file = model_get_weather_file(weather_file_name)
 
-      # extract to local weather dir
-      weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
-      puts "Extracting weather files to #{weather_dir}"
-      FileUtils.mkdir_p(weather_dir)
-      File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
-      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
-      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
-    else
-      # loaded gem from system path
-      top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-      weather_dir = File.expand_path("#{top_dir}/data/weather")
-    end
-
-    # Add Weather File
-    unless (Pathname.new weather_dir).absolute?
-      weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
-    end
-
-    weather_file = File.join(weather_dir, weather_file_name)
     epw_file = OpenStudio::EpwFile.new(weather_file)
     OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
 
@@ -168,7 +194,7 @@ class Standard
         ddy_list = /(Htg 99.6. Condns DB)|(Clg .4% Condns DB=>MWB)|(Clg 0.4% Condns DB=>MCWB)/
         if d.name.get =~ ddy_list
           model.addObject(d.clone)
-          OpenStudio::logFree(OpenStudio::Info, 'openstudio.weather.Model', "Added #{d.name} design day.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Added #{d.name} design day.")
         end
       end
       # Check to ensure that some design days were added
@@ -177,21 +203,38 @@ class Standard
       end
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .ddy file for: #{ddy_file}.")
-      puts "Could not find .ddy file for: #{ddy_file}."
       success = false
     end
 
     return success
   end
 
+  # Adds ground temperatures to the model based on a building type and climate zone lookup
+  # It will first attempt to find ground temperatures from the .stat file associated with the epw
+  # Otherwise, it will use values from the prototypes per a given template, building type, and climate zone
+  # If neither are available, it will default to a set of typical ground temperatures
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param [String] openstudio-standards building type
+  # @param [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if successful, false if not
   def model_add_ground_temperatures(model, building_type, climate_zone)
+    # Define the weather file for each climate zone
+    climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
 
-    # Get ground temperatures from stat file. Stat file is mapped via climate zone.
-    stat_file_path = File.join(File.dirname(__FILE__), "../../../data/weather/#{model_get_climate_zone_weather_file_map[climate_zone].gsub('.epw', '.stat')}")
+    # Get the weather file name from the hash
+    weather_file_name = climate_zone_weather_file_map[climate_zone]
+    if weather_file_name.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}, cannot get ground temperatures from stat file.")
+    end
 
+    # Get the path to the stat file
+    weather_file = model_get_weather_file(weather_file_name)
+
+    # Add ground temperatures via parsing of STAT file.
     ground_temperatures = []
-
-    if stat_file_path.include? '.stat'
+    stat_file_path = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.stat"
+    if File.exist? stat_file_path
       ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
       unless ground_temperatures.empty?
         # set the site ground temperature building surface
@@ -207,7 +250,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures in stat file; will use standards lookup.')
 
     # Look up ground temperatures from templates
-    ground_temp_vals = standards_lookup_table_first(table_name: 'ground_temperatures', search_criteria: {'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type})
+    ground_temp_vals = standards_lookup_table_first(table_name: 'ground_temperatures', search_criteria: { 'template' => template, 'climate_zone' => climate_zone, 'building_type' => building_type })
     if ground_temp_vals && ground_temp_vals['jan']
       ground_temp = model.getSiteGroundTemperatureBuildingSurface
       ground_temp.setJanuaryGroundTemperature(ground_temp_vals['jan'])
@@ -240,14 +283,15 @@ class Standard
     end
   end
 
-  # Gets the maximum OA dry bulb temperatures
-  # for all WinterDesignDays in the model.
+  # Returns the winter design outdoor air dry bulb temperatures in the model
   #
-  # @return [Array<Double>] an array of OA temperatures in C
-  def heating_design_outdoor_temperatures
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Array<Double>] an array of outdoor design dry bulb temperatures in degrees Celsius
+  def model_get_heating_design_outdoor_temperatures(model)
     heating_design_outdoor_temps = []
-    getDesignDays.each do |dd|
+    model.getDesignDays.each do |dd|
       next unless dd.dayType == 'WinterDesignDay'
+
       heating_design_outdoor_temps << dd.maximumDryBulbTemperature
     end
 
@@ -255,10 +299,11 @@ class Standard
   end
 
   # This function gets the average ground temperature averages, under the assumption that ground temperature
-  # lags 3 months behind the ambient dry bulb temperature. (e.g. April's ground temperature equal January's
-  # average dry bulb temperature)
+  # lags 3 months behind the ambient dry bulb temperature.
+  # (e.g. April's ground temperature equal January's average dry bulb temperature)
+  #
   # @param stat_file_path [String] path to STAT file
-  # @return [Array] a length 12 array of monthly ground temperatures, one for each month
+  # @return [Array<Double>] a length 12 array of monthly ground temperatures, one for each month
   def model_get_monthly_ground_temps_from_stat_file(stat_file_path)
     if File.exist? stat_file_path
       stat_file = EnergyPlus::StatFile.new(stat_file_path)
@@ -269,25 +314,6 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Stat file: #{stat_file_path} was not found when calculating ground temperatures.")
       return []
     end
-  end
-
-  # Helper method to retrieve the cooling design day 0.4% evaporation design wet-bulb temperature from ddy file
-  def get_wb_mcb(weather_file)
-    # Load in the ddy file based on convention that it is in
-    # the same directory and has the same basename as the epw file.
-    ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
-    if File.exist? ddy_file
-      dds = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
-      dds.getDesignDays.sort.each do |dd|
-        if dd.name.get.include? '4% Condns WB=>MDB'
-          return dd.humidityIndicatingConditionsAtMaximumDryBulb
-        end
-      end
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.weather.Model', "Could not find .ddy file for: #{ddy_file}.")
-      puts "Could not find .ddy file for: #{ddy_file}."
-    end
-    return false
   end
 end
 
@@ -316,11 +342,8 @@ module BTAP
   module Environment
     require_relative 'Weather.stat_file'
 
-    # rubocop:disable Style/MutableConstant
-    # rubocop:enable Style/MutableConstant
-
     # this method is used to populate user interfaces if needed from the hash above.
-    def self.get_canadian_weather_file_names()
+    def self.get_canadian_weather_file_names
       canadian_file_names = []
       if __dir__[0] == ':' # Running from OpenStudio CLI
         embedded_files_relative('../../../', /.*\.epw/).each do |file|
@@ -329,8 +352,8 @@ module BTAP
       else
         Dir.glob("#{File.dirname(__FILE__)}/../../../**/*.epw").each do |file|
           canadian_file_names << File.basename(file).to_s
-          puts "File.basename = #{File.basename(file)}"
-          puts "File.dirname = #{File.dirname(file)}"
+          # puts "File.basename = #{File.basename(file)}"
+          # puts "File.dirname = #{File.dirname(file)}"
         end
       end
       return canadian_file_names
@@ -356,8 +379,6 @@ module BTAP
       puts "parsed #{counter} weather files."
     end
 
-
-
     # This method will create a climate index file.
     # @author phylroy.lopez@nrcan.gc.ca
     # @param folder [String]
@@ -365,7 +386,6 @@ module BTAP
     def self.create_climate_json_file(folder = "#{File.dirname(__FILE__)}/../../../weather", output_file = 'C:/test/phylroy.csv')
       data_array = []
       File.open(output_file, 'w') do |file|
-
         BTAP::FileIO.get_find_files_from_folder_by_extension(folder, 'epw').sort.each do |wfile|
           wf = BTAP::Environment::WeatherFile.new(wfile)
           data = {}
@@ -396,12 +416,10 @@ module BTAP
           data['cooling_design_info[1]'] = wf.cooling_design_info[1]
           data['extremes_design_info[1]'] = wf.extremes_design_info[1]
           data['db990'] = wf.db990
-
         end
-        File.write(output_file,JSON.pretty_generate(data_array))
+        File.write(output_file, JSON.pretty_generate(data_array))
       end
     end
-
 
     class WeatherFile
       attr_accessor :location_name,
@@ -471,6 +489,12 @@ module BTAP
       ALBEDO = 32 # not used
       LIQUID_PRECIPITATION_DEPTH = 33
       LIQUID_PRECIPITATION_QUANTITY = 34
+      CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR = 100 # pws
+      CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR = 101 # pw
+      CALCULATED_TOTAL_MIXTURE_PRESSURE = 102 # p
+      CALCULATED_HUMIDITY_RATIO = 103 # w
+      CALCULATED_HUMIDITY_RATIO_AVG_DAILY = 104 # w averaged daily
+      CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE = 105 # difference of w_averaged_daily from base if w_averaged_daily > base
 
       # This method initializes and returns self.
       # @author phylroy.lopez@nrcan.gc.ca
@@ -524,6 +548,7 @@ module BTAP
         else
           @ddy_file = OpenStudio::EnergyPlus.loadAndTranslateIdf(@ddy_filepath).get
         end
+
         @stat_file = EnergyPlus::StatFile.new(@stat_filepath)
 
         # assign variables.
@@ -798,6 +823,179 @@ module BTAP
         FileUtils.cp(@ddy_filepath, "#{File.dirname(filename)}/#{File.basename(filename, '.epw')}.ddy")
         FileUtils.cp(@stat_filepath, "#{File.dirname(filename)}/#{File.basename(filename, '.epw')}.stat")
       end
+
+      # This method calculates annual global horizontal irradiance (GHI)
+      # @author sara.gilani@canada.ca
+      # This value has been used as 'Irradiance, Global, Annual' (IGA) (kWh/m2.yr) for PHIUS performance targets calculation.
+      def get_annual_ghi
+        sum_hourly_ghi = 0.0
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            ghi_hourly = line[GLOBAL_HORIZONTAL_RADIATION].to_f
+            sum_hourly_ghi += ghi_hourly
+          end
+        end
+        annual_ghi_kwh_per_m_sq = sum_hourly_ghi / 1000.0
+        return annual_ghi_kwh_per_m_sq
+      end
+
+      # This method calculates global horizontal irradiance on heating design day
+      # @author sara.gilani@canada.ca
+      # This value has been used as 'Irradiance, Global, at the heating design condition' (IGHL) for PHIUS performance targets calculation.
+      def get_ghi_on_heating_design_day
+        heating_design_day_number, cooling_design_day_number = get_heating_design_day_number
+        coldest_month = @heating_design_info[0].to_f
+        sum_hourly_ghi_on_heating_design_day = 0.0
+        number_of_hours_with_sunshine = 0.0
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            if line[MONTH].to_f == coldest_month && line[DAY].to_f == heating_design_day_number.to_f && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
+              sum_hourly_ghi_on_heating_design_day += line[GLOBAL_HORIZONTAL_RADIATION].to_f
+              number_of_hours_with_sunshine += 1.0
+            end
+          end
+        end
+        ghi_on_heating_design_day_w_per_m_sq = sum_hourly_ghi_on_heating_design_day / number_of_hours_with_sunshine
+        return ghi_on_heating_design_day_w_per_m_sq
+      end
+
+      # This method calculates global horizontal irradiance on cooling design day
+      # @author sara.gilani@canada.ca
+      # This value has been used as 'Irradiance, Global, at the cooling design condition' (IGHL) for PHIUS performance targets calculation.
+      def get_ghi_on_cooling_design_day
+        heating_design_day_number, cooling_design_day_number = get_heating_design_day_number
+        hottest_month = @cooling_design_info[0].to_f
+        sum_hourly_ghi_on_cooling_design_day = 0.0
+        number_of_hours_with_sunshine = 0.0
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            if line[MONTH].to_f == hottest_month && line[DAY].to_f == cooling_design_day_number.to_f && line[GLOBAL_HORIZONTAL_RADIATION].to_f > 0.0
+              sum_hourly_ghi_on_cooling_design_day += line[GLOBAL_HORIZONTAL_RADIATION].to_f
+              number_of_hours_with_sunshine += 1.0
+            end
+          end
+        end
+        ghi_on_cooling_design_day_w_per_m_sq = sum_hourly_ghi_on_cooling_design_day / number_of_hours_with_sunshine
+        return ghi_on_cooling_design_day_w_per_m_sq
+      end
+
+      # This method finds which day of the coldest/hottest month is the heating/cooling design day
+      # @author sara.gilani@canada.ca
+      def get_heating_design_day_number
+        heating_design_day_number = nil
+        cooling_design_day_number = nil
+        # which day of the coldest month is the heating design day
+        @ddy_file.getObjectsByType('OS:SizingPeriod:DesignDay'.to_IddObjectType).each do |d|
+          if d.name.to_s.include?('Htg 99.6% Condns DB')
+            idf_object = d.idfObject
+            idf_object.dataFields.each do |data_field|
+              design_day_field = idf_object.fieldComment(data_field, true)
+              if design_day_field.to_s.include?('Day of Month')
+                heating_design_day_number = idf_object.getString(data_field)
+                heating_design_day_number = heating_design_day_number.to_s
+                # puts "heating_design_day_number is #{heating_design_day_number}"
+              end
+            end
+          end
+
+          # which day of the hottest month is the cooling design day
+          if d.name.to_s.include?('Clg .4% Condns DB=>MWB')
+            idf_object = d.idfObject
+            idf_object.dataFields.each do |data_field|
+              design_day_field = idf_object.fieldComment(data_field, true)
+              if design_day_field.to_s.include?('Day of Month')
+                cooling_design_day_number = idf_object.getString(data_field)
+                cooling_design_day_number = cooling_design_day_number.to_s
+                # puts "cooling_design_day_number is #{cooling_design_day_number}"
+              end
+            end
+          end
+        end
+        return heating_design_day_number, cooling_design_day_number
+      end # def get_heating_design_day_number
+
+      # This method calculates dehumidification degree days (DDD)
+      # @author sara.gilani@canada.ca
+      # Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS
+      def calculate_humidity_ratio
+        # coefficients for the calculation of pws (Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS)
+        c1 = -5.6745359E+03
+        c2 = 6.3925247E+00
+        c3 = -9.6778430E-03
+        c4 = 6.2215701E-07
+        c5 = 2.0747825E-09
+        c6 = -9.4840240E-13
+        c7 = 4.1635019E+00
+        c8 = -5.8002206E+03
+        c9 = 1.3914993E+00
+        c10 = -4.8640239E-02
+        c11 = 4.1764768E-05
+        c12 = -1.4452093E-08
+        c13 = 6.5459673E+00
+        sum_w = 0.0
+        w_base = 0.010 # Note: this is base for the calculation of 'dehumidification degree days' (REF: Wright, L. (2019). Setting the Heating/Cooling Performance Criteria for the PHIUS 2018 Passive Building Standard. In ASHRAE Topical Conference Proceedings, pp. 399-409)
+        ddd = 0.0 # dehimudifation degree-days
+        convert_c_to_k = 273.15 # convert degree C to kelvins (k)
+
+        scan if @filearray.nil?
+        @filearray.each do |line|
+          unless line.first =~ /\D(.*)/
+            # Note: the below Step 1, 2, 3, and 4 are the steps for the calculation of humidity ratio as per ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS
+            # Step 1: calculate pws (SATURATION_PRESSURE_OF_WATER_VAPOR), [Pascal]
+            if line[DRY_BULB_TEMPERATURE].to_f <= 0.0
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = c1 / (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
+                                                                    c2 +
+                                                                    c3 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
+                                                                    c4 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**2 +
+                                                                    c5 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**3 +
+                                                                    c6 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**4 +
+                                                                    c7 * Math.log((line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k), Math.exp(1)) # 2.718281828459
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = Math.exp(1)**line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f
+            else # if line[DRY_BULB_TEMPERATURE].to_f > 0.0
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = c8 / (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
+                                                                    c9 +
+                                                                    c10 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
+                                                                    c11 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**2 +
+                                                                    c12 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**3 +
+                                                                    c13 * Math.log((line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k), Math.exp(1))
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = Math.exp(1)**line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f
+            end
+
+            # Step 2: calculate pw (PARTIAL_PRESSURE_OF_WATER_VAPOR), [Pascal]
+            # Relative Humidity (RH) = 100 * pw / pws
+            line[CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR] = line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f * line[RELATIVE_HUMIDITY].to_f / 100.0
+
+            # Step 3: calculate p (TOTAL_MIXTURE_PRESSURE), [Pascal]
+            line[CALCULATED_TOTAL_MIXTURE_PRESSURE] = line[CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR].to_f + line[ATMOSPHERIC_STATION_PRESSURE].to_f
+
+            # Step 4: calculate w (HUMIDITY_RATIO)
+            line[CALCULATED_HUMIDITY_RATIO] = 0.621945 * line[CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR].to_f / (line[CALCULATED_TOTAL_MIXTURE_PRESSURE].to_f - line[CALCULATED_PARTIAL_PRESSURE_OF_WATER_VAPOR].to_f)
+
+            #-----------------------------------------------------------------------------------------------------------
+            # calculate daily average of w AND its difference from base
+            if line[HOUR].to_f < 24.0
+              sum_w += line[CALCULATED_HUMIDITY_RATIO].to_f
+              line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY] = 0.0
+            elsif line[HOUR].to_f == 24.0
+              line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY] = (sum_w + line[CALCULATED_HUMIDITY_RATIO].to_f) / 24.0
+              if line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY].to_f > w_base
+                line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE] = line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY].to_f - w_base
+              else
+                line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE] = 0.0
+              end
+              sum_w = 0.0
+            end
+
+            ddd += line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE].to_f
+
+          end # unless line.first =~ /\D(.*)/
+        end # @filearray.each do |line|
+        # puts @filearray
+        return ddd
+      end # def calculate_humidity_ratio
     end # Environment
   end
 end

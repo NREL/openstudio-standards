@@ -10,7 +10,7 @@ class DEER
   # assign it to this surface.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
-  # @param climate_zone [String] the climate zone
+  # @param climate_zone [String] DEER climate zone
   # @param previous_construction_map [Hash] a hash where the keys are an array of inputs
   # [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   # and the values are the constructions.  If supplied, constructions will be pulled
@@ -24,10 +24,12 @@ class DEER
   def planar_surface_apply_standard_construction(planar_surface, climate_zone, previous_construction_map = {})
     # Skip surfaces not in a space
     return previous_construction_map if planar_surface.space.empty?
+
     space = planar_surface.space.get
 
     # Skip surfaces that don't have a construction
     return previous_construction_map if planar_surface.construction.empty?
+
     construction = planar_surface.construction.get
 
     # Determine if residential or nonresidential
@@ -90,6 +92,21 @@ class DEER
         end
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "Could not determine the standards fenestration type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
+        return previous_construction_map
+      end
+    # Exterior Doors
+    elsif surf_type == 'ExteriorDoor'
+      stds_type = standards_info.standardsConstructionType
+      if stds_type.is_initialized
+        stds_type = stds_type.get
+        case stds_type
+        when 'RollUp', 'Rollup', 'NonSwinging', 'Nonswinging'
+          stds_type = 'NonSwinging'
+        else
+          stds_type = 'Swinging'
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards construction type for exterior door #{planar_surface.name}.  This door will not have the standard applied.")
         return previous_construction_map
       end
     # All other surface types

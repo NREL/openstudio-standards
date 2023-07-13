@@ -54,7 +54,7 @@ class TestCoilDX < Minitest::Test
 
   end
 
-  # TODO coil cooling DX multi speed
+  # @todo coil cooling DX multi speed
 
   def test_coil_heating_dx_single_speed
     template = '90.1-2013'
@@ -100,6 +100,6 @@ class TestCoilDX < Minitest::Test
 
   end
 
-  # TODO coil heating DX multi speed
+  # @todo coil heating DX multi speed
 
 end

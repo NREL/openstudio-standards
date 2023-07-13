@@ -7,6 +7,7 @@
       "geometry_osm": "ASHRAEFullServiceRestaurant.osm",
       "hvac_json": "ASHRAE9012013FullServiceRestaurant.json",
       "chw_pumping_type": null,
+      "chw_number_chillers": null,
       "chiller_cooling_type": null,
       "chiller_condenser_type": null,
       "chiller_compressor_type": null,
@@ -25,6 +26,7 @@
       "occ_sensing_exterior_lighting_schedule": "RestaurantSitDown Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 154.01,
       "nondimming_exterior_lighting_schedule": "RestaurantSitDown Exterior_lighting_schedule_a",
+      "building_area_method_lpd": null,
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
@@ -98,7 +100,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -107,6 +110,7 @@
       "geometry_osm": "ASHRAE9012013LargeHotel.osm",
       "hvac_json": "ASHRAELargeHotel.json",
       "chw_pumping_type": "const_pri_var_sec",
+      "chw_number_chillers": null,
       "chiller_cooling_type": "AirCooled",
       "chiller_condenser_type": "WithCondenser",
       "chiller_compressor_type": null,
@@ -125,6 +129,7 @@
       "occ_sensing_exterior_lighting_schedule": "Always On",
       "nondimming_exterior_lighting_power": null,
       "nondimming_exterior_lighting_schedule": null,
+      "building_area_method_lpd": null,
       "exterior_fuel_equipment1_power": 122221.978021978,
       "exterior_fuel_equipment1_schedule": "HotelLarge BLDG_ELEVATORS",
       "exterior_fuel_equipment2_power": 375.9,
@@ -198,7 +203,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -207,6 +213,7 @@
       "geometry_osm": "ASHRAEMediumOffice.osm",
       "hvac_json": "ASHRAEMediumOffice.json",
       "chw_pumping_type": null,
+      "chw_number_chillers": null,
       "chiller_cooling_type": null,
       "chiller_condenser_type": null,
       "chiller_compressor_type": null,
@@ -225,6 +232,7 @@
       "occ_sensing_exterior_lighting_schedule": "OfficeMedium Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 623.03,
       "nondimming_exterior_lighting_schedule": "OfficeMedium Exterior_lighting_schedule_a",
+      "building_area_method_lpd": null,
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
@@ -298,7 +306,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -307,6 +316,7 @@
       "geometry_osm": "ASHRAEMidriseApartment.osm",
       "hvac_json": "ASHRAEMidriseApartment.json",
       "chw_pumping_type": null,
+      "chw_number_chillers": null,
       "chiller_cooling_type": null,
       "chiller_condenser_type": null,
       "chiller_compressor_type": null,
@@ -325,6 +335,7 @@
       "occ_sensing_exterior_lighting_schedule": null,
       "nondimming_exterior_lighting_power": 2553.0,
       "nondimming_exterior_lighting_schedule": "ApartmentMidRise Exterior_Lgt_ALWAYS_ON",
+      "building_area_method_lpd": null,
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
@@ -398,7 +409,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -407,6 +419,7 @@
       "geometry_osm": "ASHRAEQuickServiceRestaurant.osm",
       "hvac_json": "ASHRAE9012013QuickServiceRestaurant.json",
       "chw_pumping_type": null,
+      "chw_number_chillers": null,
       "chiller_cooling_type": null,
       "chiller_condenser_type": null,
       "chiller_compressor_type": null,
@@ -425,6 +438,7 @@
       "occ_sensing_exterior_lighting_schedule": "RestaurantFastFood Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 122.81,
       "nondimming_exterior_lighting_schedule": "RestaurantFastFood Exterior_lighting_schedule_a",
+      "building_area_method_lpd": null,
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
@@ -498,7 +512,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -507,6 +522,7 @@
       "geometry_osm": "ASHRAE90120102013RetailStandalone.osm",
       "hvac_json": "ASHRAE90120102013RetailStandalone.json",
       "chw_pumping_type": null,
+      "chw_number_chillers": null,
       "chiller_cooling_type": null,
       "chiller_condenser_type": null,
       "chiller_compressor_type": null,
@@ -525,6 +541,7 @@
       "occ_sensing_exterior_lighting_schedule": "RetailStandalone Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 379.58,
       "nondimming_exterior_lighting_schedule": "RetailStandalone Exterior_lighting_schedule_a",
+      "building_area_method_lpd": null,
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
@@ -598,7 +615,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     },
     {
       "template": "NREL ZNE Ready 2017",
@@ -607,6 +625,7 @@
       "geometry_osm": "ASHRAERetailStripmall.osm",
       "hvac_json": "ASHRAERetailStripmall.json",
       "chw_pumping_type": null,
+      "chw_number_chillers": null,
       "chiller_cooling_type": null,
       "chiller_condenser_type": null,
       "chiller_compressor_type": null,
@@ -625,6 +644,7 @@
       "occ_sensing_exterior_lighting_schedule": "RetailStripmall Exterior_lighting_schedule_b",
       "nondimming_exterior_lighting_power": 334.69,
       "nondimming_exterior_lighting_schedule": "RetailStripmall Exterior_lighting_schedule_a",
+      "building_area_method_lpd": null,
       "exterior_fuel_equipment1_power": null,
       "exterior_fuel_equipment1_schedule": null,
       "exterior_fuel_equipment2_power": null,
@@ -698,7 +718,8 @@
       "crac_cooling_type": null,
       "crac_fan_type": null,
       "crac_operation_schedule": null,
-      "crac_oa_damper_schedule": null
+      "crac_oa_damper_schedule": null,
+      "business_schedule": null
     }
   ]
 }

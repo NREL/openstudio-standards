@@ -2,6 +2,9 @@ class Standard
   # @!group utilities
 
   # load a model into OS & version translates, exiting and erroring if a problem is found
+  #
+  # @param model_path_string [String] file path to OpenStudio model file
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def safe_load_model(model_path_string)
     model_path = OpenStudio::Path.new(model_path_string)
     if OpenStudio.exists(model_path)
@@ -21,6 +24,9 @@ class Standard
   end
 
   # load a sql file, exiting and erroring if a problem is found
+  #
+  # @param sql_path_string [String] file path to sql file
+  # @return [OpenStudio::SqlFile] sql file associated with the model, boolean false if not found
   def safe_load_sql(sql_path_string)
     sql_path = OpenStudio::Path.new(sql_path_string)
     if OpenStudio.exists(sql_path)
@@ -32,6 +38,10 @@ class Standard
     return sql
   end
 
+  # Remove all resource objects in the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def strip_model(model)
     # remove all materials
     model.getMaterials.each(&:remove)
@@ -105,12 +115,18 @@ class Standard
   end
 
   # Remove all air loops in model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def remove_air_loops(model)
     model.getAirLoopHVACs.each(&:remove)
     return model
   end
 
   # Remove plant loops in model except those used for service hot water
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def remove_plant_loops(model)
     plant_loops = model.getPlantLoops
     plant_loops.each do |plant_loop|
@@ -128,12 +144,18 @@ class Standard
   end
 
   # Remove all plant loops in model including those used for service hot water
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def remove_all_plant_loops(model)
     model.getPlantLoops.each(&:remove)
     return model
   end
 
   # Remove VRF units
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def remove_vrf(model)
     model.getAirConditionerVariableRefrigerantFlows.each(&:remove)
     model.getZoneHVACTerminalUnitVariableRefrigerantFlows.each(&:remove)
@@ -141,6 +163,9 @@ class Standard
   end
 
   # Remove zone equipment except for exhaust fans
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def remove_zone_equipment(model)
     model.getThermalZones.each do |zone|
       zone.equipment.each do |equipment|
@@ -155,6 +180,9 @@ class Standard
   end
 
   # Remove all zone equipment including exhaust fans
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def remove_all_zone_equipment(model)
     model.getThermalZones.each do |zone|
       zone.equipment.each(&:remove)
@@ -163,6 +191,9 @@ class Standard
   end
 
   # Remove unused performance curves
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def remove_unused_curves(model)
     model.getCurves.each do |curve|
       if curve.directUseCount == 0
@@ -173,7 +204,10 @@ class Standard
   end
 
   # Remove HVAC equipment except for service hot water loops and zone exhaust fans
-  def remove_HVAC(model)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_hvac(model)
     remove_air_loops(model)
     remove_plant_loops(model)
     remove_vrf(model)
@@ -183,7 +217,10 @@ class Standard
   end
 
   # Remove all HVAC equipment including service hot water loops and zone exhaust fans
-  def remove_all_HVAC(model)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def remove_all_hvac(model)
     remove_air_loops(model)
     remove_all_plant_loops(model)
     remove_vrf(model)
@@ -225,6 +262,18 @@ class Standard
     return cop
   end
 
+  # Convert from COP to SEER
+  # @ref [References::USDOEPrototypeBuildings]
+  #
+  # @param cop [Double] COP
+  # @return [Double] Seasonal Energy Efficiency Ratio
+  def cop_to_seer_cooling_no_fan(cop)
+    delta = 0.3796**2 - 4.0 * 0.0076 * cop
+    seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
+
+    return seer
+  end
+
   # Convert from SEER to COP (with fan) for cooling coils
   # per the method specified in 90.1-2013 Appendix G
   #
@@ -235,6 +284,19 @@ class Standard
     cop = (eer / 3.413 + 0.12) / (1 - 0.12)
 
     return cop
+  end
+
+  # Convert from COP to SEER (with fan) for cooling coils
+  # per the method specified in 90.1-2013 Appendix G
+  #
+  # @param cop [Double] Coefficient of Performance (COP)
+  # @return [Double] seasonal energy efficiency ratio (SEER)
+  def cop_to_seer_cooling_with_fan(cop)
+    eer = cop_to_eer(cop)
+    delta = 1.1088**2 - 4.0 * 0.0182 * eer
+    seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
+
+    return seer
   end
 
   # Convert from COP_H to COP (no fan) for heat pump heating coils
@@ -272,18 +334,6 @@ class Standard
     cop = -0.0255 * hspf * hspf + 0.6239 * hspf
 
     return cop
-  end
-
-  # Convert from COP to SEER
-  # @ref [References::USDOEPrototypeBuildings]
-  #
-  # @param cop [Double] COP
-  # @return [Double] Seasonal Energy Efficiency Ratio
-  def cop_to_seer(cop)
-    delta = 0.3796**2 - 4.0 * 0.0076 * cop
-    seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
-
-    return seer
   end
 
   # Convert from EER to COP
@@ -393,21 +443,21 @@ class Standard
   # @param intial_pressure_pa [Double] pressure rise at which initial infiltration rate was determined in Pa
   # @param final_pressure_pa [Double] desired pressure rise to adjust infiltration rate to in Pa
   # @param infiltration_coefficient [Double] infiltration coeffiecient
+  # @return [Double] adjusted infiltration rate in m^3/s
   def adjust_infiltration_to_lower_pressure(initial_infiltration_rate_m3_per_s, intial_pressure_pa, final_pressure_pa, infiltration_coefficient = 0.65)
     adjusted_infiltration_rate_m3_per_s = initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**infiltration_coefficient
 
     return adjusted_infiltration_rate_m3_per_s
   end
 
-  # Convert the infiltration rate at a 75 Pa
-  # to an infiltration rate at the typical value for the prototype buildings
+  # Convert the infiltration rate at a 75 Pa to an infiltration rate at the typical value for the prototype buildings
   # per method described here:  http://www.pnl.gov/main/publications/external/technical_reports/PNNL-18898.pdf
   # Gowri K, DW Winiarski, and RE Jarnagin. 2009.
   # Infiltration modeling guidelines for commercial building energy analysis.
   # PNNL-18898, Pacific Northwest National Laboratory, Richland, WA.
   #
   # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
-  # @return [Double]
+  # @return [Double] adjusted infiltration rate in m^3/s
   def adjust_infiltration_to_prototype_building_conditions(initial_infiltration_rate_m3_per_s)
     # Details of these coefficients can be found in paper
     alpha = 0.22 # unitless - terrain adjustment factor
@@ -419,8 +469,6 @@ class Standard
 
     # Calculate the typical pressure - same for all building types
     final_pressure_pa = 0.5 * cs * rho * uh**2
-
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Space", "Final pressure PA = #{final_pressure_pa.round(3)} Pa.")
 
     adjusted_infiltration_rate_m3_per_s = (1.0 + alpha) * initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**n
 
@@ -466,6 +514,7 @@ class Standard
   # z = C1 + C2*x + C3*x^2 + C4*y + C5*y^2 + C6*x*y
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 6 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
@@ -474,6 +523,7 @@ class Standard
   # @param max_y [Double] the maximum value of independent variable Y that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
+  # @return [OpenStudio::Model::CurveBiquadratic] a biquadratic curve
   def create_curve_biquadratic(model, coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
     curve = OpenStudio::Model::CurveBiquadratic.new(model)
     curve.setName(crv_name)
@@ -496,6 +546,7 @@ class Standard
   # z = C1 + C2*x + C3*x^2 + C4*y + C5*y^2 + C6*x*y + C7*x^3 + C8*y^3 + C9*x^2*y + C10*x*y^2
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 10 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
@@ -504,6 +555,7 @@ class Standard
   # @param max_y [Double] the maximum value of independent variable Y that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
+  # @return [OpenStudio::Model::CurveBicubic] a bicubic curve
   def create_curve_bicubic(model, coeffs, crv_name, min_x, max_x, min_y, max_y, min_out, max_out)
     curve = OpenStudio::Model::CurveBicubic.new(model)
     curve.setName(crv_name)
@@ -530,6 +582,7 @@ class Standard
   # z = C1 + C2*x + C3*x^2
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 3 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
@@ -537,7 +590,8 @@ class Standard
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
   # @param is_dimensionless [Bool] if true, the X independent variable is considered unitless
-  # and the resulting output dependent variable is considered unitless
+  #   and the resulting output dependent variable is considered unitless
+  # @return [OpenStudio::Model::CurveQuadratic] a quadratic curve
   def create_curve_quadratic(model, coeffs, crv_name, min_x, max_x, min_out, max_out, is_dimensionless = false)
     curve = OpenStudio::Model::CurveQuadratic.new(model)
     curve.setName(crv_name)
@@ -559,14 +613,16 @@ class Standard
   # z = C1 + C2*x + C3*x^2 + C4*x^3
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 4 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
   # @param max_x [Double] the maximum value of independent variable X that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
-  def create_curve_cubic(coeffs, crv_name, min_x, max_x, min_out, max_out)
-    curve = OpenStudio::Model::CurveCubic.new(self)
+  # @return [OpenStudio::Model::CurveCubic] a cubic curve
+  def create_curve_cubic(model, coeffs, crv_name, min_x, max_x, min_out, max_out)
+    curve = OpenStudio::Model::CurveCubic.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2x(coeffs[1])
@@ -583,14 +639,16 @@ class Standard
   # z = C1 + C2*x^C3
   #
   # @author Scott Horowitz, NREL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param coeffs [Array<Double>] an array of 3 coefficients, in order
   # @param crv_name [String] the name of the curve
   # @param min_x [Double] the minimum value of independent variable X that will be used
   # @param max_x [Double] the maximum value of independent variable X that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
-  def create_curve_exponent(coeffs, crv_name, min_x, max_x, min_out, max_out)
-    curve = OpenStudio::Model::CurveExponent.new(self)
+  # @return [OpenStudio::Model::CurveExponent] an exponent curve
+  def create_curve_exponent(model, coeffs, crv_name, min_x, max_x, min_out, max_out)
+    curve = OpenStudio::Model::CurveExponent.new(model)
     curve.setName(crv_name)
     curve.setCoefficient1Constant(coeffs[0])
     curve.setCoefficient2Constant(coeffs[1])
@@ -604,6 +662,7 @@ class Standard
 
   # Gives the total R-value of the interior and exterior (if applicable)
   # film coefficients for a particular type of surface.
+  # @ref [References::ASHRAE9012010] A9.4.1 Air Films
   #
   # @param intended_surface_type [String]
   #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
@@ -614,7 +673,6 @@ class Standard
   # @param int_film [Bool] if true, interior film coefficient will be included in result
   # @param ext_film [Bool] if true, exterior film coefficient will be included in result
   # @return [Double] Returns the R-Value of the film coefficients [m^2*K/W]
-  # @ref [References::ASHRAE9012010] A9.4.1 Air Films
   def film_coefficients_r_value(intended_surface_type, int_film, ext_film)
     # Return zero if both interior and exterior are false
     return 0.0 if !int_film && !ext_film
@@ -636,10 +694,10 @@ class Standard
     case intended_surface_type
     when 'AtticFloor'
       film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside
+      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otheriwse
     when 'AtticWall', 'AtticRoof'
       film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside
+      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otherwise
     when 'DemisingFloor', 'InteriorFloor'
       film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
       film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
@@ -670,9 +728,11 @@ class Standard
 
   # Sets VAV reheat and VAV no reheat terminals on an air loop to control for outdoor air
   #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param air_loop [<OpenStudio::Model::AirLoopHVAC>] air loop to enable DCV on.
   #   Default is nil, which will apply to all air loops
-  def set_VAV_terminals_to_control_for_outdoor_air(model, air_loop: nil)
+  # @return [OpenStudio::Model::Model] OpenStudio model object
+  def model_set_vav_terminals_to_control_for_outdoor_air(model, air_loop: nil)
     vav_reheats = model.getAirTerminalSingleDuctVAVReheats
     vav_no_reheats = model.getAirTerminalSingleDuctVAVNoReheats
 
@@ -699,6 +759,9 @@ class Standard
   end
 
   # renames air loop nodes to readable values
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def rename_air_loop_nodes(model)
     # rename all hvac components on air loops
     model.getHVACComponents.sort.each do |component|
@@ -822,6 +885,9 @@ class Standard
   end
 
   # renames plant loop nodes to readable values
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::Model] OpenStudio model object
   def rename_plant_loop_nodes(model)
     # rename all hvac components on plant loops
     model.getHVACComponents.sort.each do |component|
@@ -901,10 +967,26 @@ class Standard
       plant_loop.supplyInletNode.setName("#{plant_loop_name} Supply Inlet Node")
       plant_loop.supplyOutletNode.setName("#{plant_loop_name} Supply Outlet Node")
     end
+
+    return model
+  end
+
+  # converts existing string to ems friendly string
+  #
+  # @param name [String] original name
+  # @return [String] the resulting EMS friendly string
+  def ems_friendly_name(name)
+    # replace white space and special characters with underscore
+    # \W is equivalent to [^a-zA-Z0-9_]
+    new_name = name.to_s.gsub(/\W/, '_')
+
+    # prepend ems_ in case the name starts with a number
+    new_name = 'ems_' + new_name
+
+    return new_name
   end
 
   def true?(obj)
-    obj.to_s.downcase == "true"
+    obj.to_s.downcase == 'true'
   end
-
 end

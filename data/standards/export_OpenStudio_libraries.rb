@@ -87,6 +87,8 @@ def export_openstudio_libraries
               boiler.setFuelType('NaturalGas')
             when 'Electric'
               boiler.setFuelType('Electricity')
+            when 'Propane', 'PropaneGas'
+              boiler.setFuelType('Propane')
             when 'Oil'
               boiler.setFuelType('FuelOilNo2')
           end
@@ -409,7 +411,7 @@ def export_openstudio_libraries
       end
 
       # Construction Sets, Constructions, and Materials
-      # TODO fix code to remove duplicate constructions and materials
+      # @todo fix code to remove duplicate constructions and materials
       if include_construction_sets
         puts "* Construction Sets *"
         std.standards_data['construction_sets'].each do |props|

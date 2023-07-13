@@ -1,9 +1,9 @@
-
 class Standard
   # @!group ChillerElectricEIR
 
   # Finds the search criteria
   #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [hash] has for search criteria to be used for find object
   def chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     search_criteria = {}
@@ -19,17 +19,21 @@ class Standard
 
     search_criteria['cooling_type'] = cooling_type
 
-    # TODO: Standards replace this with a mechanism to store this
+    # @todo Standards replace this with a mechanism to store this
     # data in the chiller object itself.
     # For now, retrieve the condenser type from the name
     name = chiller_electric_eir.name.get
     condenser_type = nil
     compressor_type = nil
+    absorption_type = nil
     if cooling_type == 'AirCooled'
       if name.include?('WithCondenser')
         condenser_type = 'WithCondenser'
       elsif name.include?('WithoutCondenser')
         condenser_type = 'WithoutCondenser'
+      else
+        # default to 'WithCondenser' if not an absorption chiller
+        condenser_type = 'WithCondenser' if absorption_type.nil?
       end
     elsif cooling_type == 'WaterCooled'
       if name.include?('Reciprocating')
@@ -54,6 +58,7 @@ class Standard
 
   # Finds capacity in W
   #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [Double] capacity in W to be used for find object
   def chiller_electric_eir_find_capacity(chiller_electric_eir)
     if chiller_electric_eir.referenceCapacity.is_initialized
@@ -70,14 +75,14 @@ class Standard
 
   # Finds lookup object in standards and return full load efficiency
   #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [Double] full load efficiency (COP)
   def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
-    unless capacity_w
-      return nil
-    end
+    return nil unless capacity_w
+
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
     chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
 
@@ -95,7 +100,10 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
+  # @param clg_tower_objs [Array] cooling towers, currently unused
+  # @return [Bool] returns true if successful, false if not
+  # @todo remove clg_tower_objs parameter if unused
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = standards_data['chillers']
 

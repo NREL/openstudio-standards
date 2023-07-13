@@ -3,15 +3,18 @@ class Standard
 
   # Prototype CoilHeatingWaterToAirHeatPumpEquationFit object
   # Enters in default curves for coil by type of coil
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param plant_loop [<OpenStudio::Model::PlantLoop>] the coil will be placed on the demand side of this plant loop
   # @param air_loop_node [<OpenStudio::Model::Node>] the coil will be placed on this node of the air loop
   # @param name [String] the name of the system, or nil in which case it will be defaulted
   # @param type [String] the type of coil to reference the correct curve set
   # @param cop [Double] rated heating coefficient of performance
+  # @return [OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit] the heating coil
   def create_coil_heating_water_to_air_heat_pump_equation_fit(model,
                                                               plant_loop,
                                                               air_loop_node: nil,
-                                                              name: "Water-to-Air HP Htg Coil",
+                                                              name: 'Water-to-Air HP Htg Coil',
                                                               type: nil,
                                                               cop: 4.2)
 
@@ -41,16 +44,29 @@ class Standard
     if type == 'OS default'
       # use OS default curves
     else # default curve set
-      htg_coil.setHeatingCapacityCoefficient1(0.237847462869254)
-      htg_coil.setHeatingCapacityCoefficient2(-3.35823796081626)
-      htg_coil.setHeatingCapacityCoefficient3(3.80640467406376)
-      htg_coil.setHeatingCapacityCoefficient4(0.179200417311554)
-      htg_coil.setHeatingCapacityCoefficient5(0.12860719846082)
-      htg_coil.setHeatingPowerConsumptionCoefficient1(-3.79175529243238)
-      htg_coil.setHeatingPowerConsumptionCoefficient2(3.38799239505527)
-      htg_coil.setHeatingPowerConsumptionCoefficient3(1.5022612076303)
-      htg_coil.setHeatingPowerConsumptionCoefficient4(-0.177653510577989)
-      htg_coil.setHeatingPowerConsumptionCoefficient5(-0.103079864171839)
+      if model.version < OpenStudio::VersionString.new('3.2.0')
+        htg_coil.setHeatingCapacityCoefficient1(0.237847462869254)
+        htg_coil.setHeatingCapacityCoefficient2(-3.35823796081626)
+        htg_coil.setHeatingCapacityCoefficient3(3.80640467406376)
+        htg_coil.setHeatingCapacityCoefficient4(0.179200417311554)
+        htg_coil.setHeatingCapacityCoefficient5(0.12860719846082)
+        htg_coil.setHeatingPowerConsumptionCoefficient1(-3.79175529243238)
+        htg_coil.setHeatingPowerConsumptionCoefficient2(3.38799239505527)
+        htg_coil.setHeatingPowerConsumptionCoefficient3(1.5022612076303)
+        htg_coil.setHeatingPowerConsumptionCoefficient4(-0.177653510577989)
+        htg_coil.setHeatingPowerConsumptionCoefficient5(-0.103079864171839)
+      else
+        htg_coil.heatingCapacityCurve.setCoefficient1Constant(0.237847462869254)
+        htg_coil.heatingCapacityCurve.setCoefficient2w(-3.35823796081626)
+        htg_coil.heatingCapacityCurve.setCoefficient3x(3.80640467406376)
+        htg_coil.heatingCapacityCurve.setCoefficient4y(0.179200417311554)
+        htg_coil.heatingCapacityCurve.setCoefficient5z(0.12860719846082)
+        htg_coil.heatingPowerConsumptionCurve.setCoefficient1Constant(-3.79175529243238)
+        htg_coil.heatingPowerConsumptionCurve.setCoefficient2w(3.38799239505527)
+        htg_coil.heatingPowerConsumptionCurve.setCoefficient3x(1.5022612076303)
+        htg_coil.heatingPowerConsumptionCurve.setCoefficient4y(-0.177653510577989)
+        htg_coil.heatingPowerConsumptionCurve.setCoefficient5z(-0.103079864171839)
+      end
     end
 
     return htg_coil

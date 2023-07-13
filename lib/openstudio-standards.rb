@@ -22,6 +22,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/simulation'
   require_relative 'openstudio-standards/utilities/hash'
   require_relative 'openstudio-standards/utilities/sqlfile'
+  require_relative 'openstudio-standards/utilities/schedule_translator'
+  require_relative 'openstudio-standards/utilities/array'
+  require_relative 'openstudio-standards/utilities/object_info'
 
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'
@@ -30,14 +33,17 @@ module OpenstudioStandards
   # Standards classes
   require_relative "#{stds}/standard"
   # NECB2011 Code
+  require_relative "#{stds}/necb/NECB2011/system_fuels"
   require_relative "#{stds}/necb/NECB2011/necb_2011"
   require_relative "#{stds}/necb/NECB2011/building_envelope"
   require_relative "#{stds}/necb/NECB2011/lighting"
   require_relative "#{stds}/necb/NECB2011/hvac_systems"
   require_relative "#{stds}/necb/NECB2011/autozone"
   require_relative "#{stds}/necb/NECB2011/hvac_system_1_single_speed"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_1_multi_speed"
   require_relative "#{stds}/necb/NECB2011/hvac_system_2_and_5"
   require_relative "#{stds}/necb/NECB2011/hvac_system_3_and_8_single_speed"
+  require_relative "#{stds}/necb/NECB2011/hvac_system_3_and_8_multi_speed"
   require_relative "#{stds}/necb/NECB2011/hvac_system_4"
   require_relative "#{stds}/necb/NECB2011/hvac_system_6"
   require_relative "#{stds}/necb/NECB2011/service_water_heating"
@@ -50,6 +56,10 @@ module OpenstudioStandards
   # NECB2017 Code
   require_relative "#{stds}/necb/NECB2017/necb_2017"
   require_relative "#{stds}/necb/NECB2017/hvac_systems"
+  # NECB2020 Code
+  require_relative "#{stds}/necb/NECB2020/necb_2020"
+  require_relative "#{stds}/necb/NECB2020/building_envelope"
+  require_relative "#{stds}/necb/NECB2020/service_water_heating"
 
   # BTAPPRE1980
   require_relative "#{stds}/necb/BTAPPRE1980/btap_pre1980"
@@ -65,7 +75,17 @@ module OpenstudioStandards
   # NECB QAQC
   require_relative "#{stds}/necb/NECB2011/qaqc/necb_qaqc.rb"
   require_relative "#{stds}/necb/NECB2015/qaqc/necb_2015_qaqc.rb"
-  
+  require_relative "#{stds}/necb/common/btap_data.rb"
+  require_relative "#{stds}/necb/common/btap_datapoint.rb"
+
+  # ECM development
+  require_relative "#{stds}/necb/ECMS/ecms.rb"
+  require_relative "#{stds}/necb/ECMS/erv.rb"
+  require_relative "#{stds}/necb/ECMS/hvac_systems.rb"
+  require_relative "#{stds}/necb/ECMS/nv.rb"
+  require_relative "#{stds}/necb/ECMS/pv_ground.rb"
+  require_relative "#{stds}/necb/ECMS/loads.rb"
+
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/comstock_doe_ref_pre_1980/comstock_doe_ref_pre_1980"
@@ -79,6 +99,10 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/comstock_ashrae_90_1_2010/comstock_ashrae_90_1_2010"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/comstock_ashrae_90_1_2013/comstock_ashrae_90_1_2013"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/comstock_ashrae_90_1_2016/comstock_ashrae_90_1_2016"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/comstock_ashrae_90_1_2019/comstock_ashrae_90_1_2019"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily"
 
@@ -147,8 +171,11 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Fan"
 
   # Model Objects
   require_relative "#{stds}/Standards.AirLoopHVAC"
@@ -235,6 +262,57 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.WaterHeaterMixed"
+  # 90.1-PRM Common
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Model"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Space"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirTerminalSingleDuctParallelPIUReheat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ZoneHVACComponent"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlantLoop"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanConstantVolume"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanOnOff"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanZoneExhaust"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilDX"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilCoolingDXSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilCoolingDXTwoSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilHeatingDXSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilHeatingGas"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.BoilerHotWater"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ChillerElectricEIR"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTowerVariableSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.HeatExchangerSensLat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlanarSurface"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.SpaceType"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Surface"
+
+  # 90.1-PRM-2019
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.Model"
+  # 90.1-2016
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTowerSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTowerTwoSpeed"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTowerVariableSpeed"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Space"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.ThermalZone"
+  # 90.1-2019
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerTwoSpeed"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerVariableSpeed"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Space"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.ThermalZone"
   # DOE 1980-2004
   require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.Model"
@@ -313,6 +391,10 @@ module OpenstudioStandards
   require_relative "#{proto}/common/buildings/Prototype.MediumOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.SmallOfficeDetailed"
   require_relative "#{proto}/common/buildings/Prototype.Laboratory"
+  require_relative "#{proto}/common/buildings/Prototype.College"
+  require_relative "#{proto}/common/buildings/Prototype.TallBuilding"
+  require_relative "#{proto}/common/buildings/Prototype.SuperTallBuilding"
+  require_relative "#{proto}/common/buildings/Prototype.Courthouse"
 
   # NECB Building Types
   require_relative "#{proto}/common/prototype_metaprogramming.rb"
@@ -333,6 +415,7 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingWater"
   require_relative "#{proto}/common/objects/Prototype.CoilHeatingWaterToAirHeatPumpEquationFit"
   require_relative "#{proto}/common/objects/Prototype.ControllerWaterCoil"
+  require_relative "#{proto}/common/objects/Prototype.CoolingTower"
   require_relative "#{proto}/common/objects/Prototype.radiant_system_controls"
   require_relative "#{proto}/common/objects/Prototype.Fan"
   require_relative "#{proto}/common/objects/Prototype.FanConstantVolume"
@@ -342,21 +425,26 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.HeatExchangerAirToAirSensibleAndLatent"
   require_relative "#{proto}/common/objects/Prototype.hvac_systems"
   require_relative "#{proto}/common/objects/Prototype.Model.elevators"
+  require_relative "#{proto}/common/objects/Prototype.Model.transformers"
   require_relative "#{proto}/common/objects/Prototype.Model.exterior_lights"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
   require_relative "#{proto}/common/objects/Prototype.Model.swh"
+  require_relative "#{proto}/common/objects/Prototype.Pump"
+  require_relative "#{proto}/common/objects/Prototype.PumpVariableSpeed"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
   require_relative "#{proto}/common/objects/Prototype.ServiceWaterHeating"
   require_relative "#{proto}/common/objects/Prototype.SizingSystem"
   require_relative "#{proto}/common/objects/Prototype.utilities"
   # 90.1-2004
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.PumpVariableSpeed"
   # 90.1-2007
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.FanVariableVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.PumpVariableSpeed"
   # 90.1-2010
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanOnOff"
@@ -364,6 +452,7 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Model"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.PumpVariableSpeed"
   # 90.1-2013
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanOnOff"
@@ -372,6 +461,27 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.PumpVariableSpeed"
+  # 90.1-2016
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanConstantVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanOnOff"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Model"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Model.elevators"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.hvac_systems"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.PumpVariableSpeed"
+  # 90.1-2019
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanConstantVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanOnOff"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanVariableVolume"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model.elevators"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.hvac_systems"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Pump"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.PumpVariableSpeed"
+  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Space"
   # DOE Ref 1980-2004
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.Model.elevators"
@@ -410,7 +520,7 @@ module OpenstudioStandards
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanVariableVolume"
 
   # DLM: not sure where this code should go
-  def self.get_run_env()
+  def self.get_run_env
     # blank out bundler and gem path modifications, will be re-setup by new call
     new_env = {}
     new_env['BUNDLER_ORIG_MANPATH'] = nil
@@ -426,26 +536,26 @@ module OpenstudioStandards
     new_env['GEM_HOME'] = nil
 
     # DLM: for now, ignore current bundle in case it has binary dependencies in it
-    #bundle_gemfile = ENV['BUNDLE_GEMFILE']
-    #bundle_path = ENV['BUNDLE_PATH']
-    #if bundle_gemfile.nil? || bundle_path.nil?
-      new_env['BUNDLE_GEMFILE'] = nil
-      new_env['BUNDLE_PATH'] = nil
-      new_env['BUNDLE_WITHOUT'] = nil
-    #else
-    #  new_env['BUNDLE_GEMFILE'] = bundle_gemfile
-    #  new_env['BUNDLE_PATH'] = bundle_path
-    #end
+    # bundle_gemfile = ENV['BUNDLE_GEMFILE']
+    # bundle_path = ENV['BUNDLE_PATH']
+    # if bundle_gemfile.nil? || bundle_path.nil?
+    new_env['BUNDLE_GEMFILE'] = nil
+    new_env['BUNDLE_PATH'] = nil
+    new_env['BUNDLE_WITHOUT'] = nil
+    # else
+    #   new_env['BUNDLE_GEMFILE'] = bundle_gemfile
+    #   new_env['BUNDLE_PATH'] = bundle_path
+    # end
 
     return new_env
   end
 
   def self.run_command(command)
-    stdout_str, stderr_str, status = Open3.capture3(get_run_env(), command)
+    stdout_str, stderr_str, status = Open3.capture3(get_run_env, command)
     if status.success?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.command', "Successfully ran command: '#{command}'")
-      #puts "stdout: #{stdout_str}"
-      #puts "stderr: #{stderr_str}"
+      # puts "stdout: #{stdout_str}"
+      # puts "stderr: #{stderr_str}"
       return true
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Error running command: '#{command}'")
@@ -454,9 +564,10 @@ module OpenstudioStandards
 
       # Print the ENV for debugging
       final_env = []
-      env_changes = get_run_env()
+      env_changes = get_run_env
       ENV.each do |env_var, val|
         next if env_changes.key?(env_var) && env_changes[env_var].nil?
+
         final_env << "#{env_var} = #{val}"
       end
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "command's modified ENV: \n #{final_env.join("\n")}")
@@ -464,11 +575,10 @@ module OpenstudioStandards
       # List the gems available to openstudio at this point
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" gem_list"
-      stdout_str_2, stderr_str_2, status_2 = Open3.capture3(get_run_env(), cmd)
+      stdout_str_2, stderr_str_2, status_2 = Open3.capture3(get_run_env, cmd)
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.command', "Gems available to openstudio cli according to (openstudio gem_list): \n #{stdout_str_2}")
 
       return false
     end
   end
-
 end

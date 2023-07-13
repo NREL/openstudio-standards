@@ -84,6 +84,10 @@ def unique_properties(sheet_name)
   return case sheet_name
          when 'templates', 'standards', 'climate_zone_sets', 'constructions', 'curves', 'fans'
            ['name']
+         when 'prm_constructions'
+           ['template', 'name']
+         when 'prm_exterior_lighting'
+           ['template']
          when 'materials'
            ['name', 'code_category']
          when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust'
@@ -98,6 +102,8 @@ def unique_properties(sheet_name)
            ['template', 'fluid_type', 'fuel_type', 'condensing', 'condensing_control', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'chillers'
            ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'variable_speed_drive', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+         when 'furnaces'
+           ['template', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'heat_rejection'
            ['template', 'equipment_type', 'fan_type', 'start_date', 'end_date']
          when 'water_source_heat_pumps'
@@ -126,6 +132,8 @@ def unique_properties(sheet_name)
            ['template', 'compressor_name', 'compressor_type']
          when 'economizers'
            ['template', 'climate_zone', 'data_center']
+         when 'prm_economizers'
+           ['template', 'climate_ID']
          when 'motors'
            ['template', 'number_of_poles', 'type', 'synchronous_speed', 'minimum_capacity', 'maximum_capacity']
          when 'ground_temperatures'
@@ -142,9 +150,27 @@ def unique_properties(sheet_name)
            ['template', 'building_type', 'hvac_system']
          when 'climate_zones'
            ['name', 'standard']
+         when 'energy_recovery'
+           ['template', 'climate_zone', 'under_8000_hours', 'nontransient_dwelling', 'enthalpy_recovery_ratio_design_conditions']
+         when 'space_types_lighting_control'
+           ['template', 'building_type', 'space_type']
+         when 'prm_hvac_bldg_type'
+           ['template', 'hvac_building_type']
+         when 'prm_swh_bldg_type'
+           ['template', 'swh_building_type']
+         when 'prm_wwr_bldg_type'
+           ['template', 'wwr_building_type']
+         when 'prm_baseline_hvac'
+           ['template', 'hvac_building_type', 'bldg_area_min', 'bldg_area_max', 'bldg_flrs_min', 'bldg_flrs_max']
+         when 'prm_heat_type'
+           ['template', 'hvac_building_type', 'climate_zone']
+         when 'prm_interior_lighting'
+           ['template', 'lpd_space_type']
+         when 'lpd_space_type'
+           ['template', 'lpd_space_type']
          else
            []
-         end
+        end
 end
 
 # Shortens JSON file path names to avoid Windows build errors when
@@ -175,106 +201,124 @@ def standard_directory_name_from_template(template)
   return directory_name
 end
 
-# Downloads the OpenStudio_Standards.xlsx
-# from Google Drive
-# @note This requires you to have a client_secret.json file saved in your
-# username/.credentials folder.  To get one of these files, please contact
-# andrew.parker@nrel.gov
-def download_google_spreadsheets(spreadsheet_titles)
+# checks whether your authorization credentials are set up to access the spreadsheets
+# @return [Bool] returns true if api is working, false if not
+def check_google_drive_configuration
+  require 'google_drive'
+  client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
+  unless File.exists? client_config_path
+    puts "Unable to locate client_secret.json file at #{client_config_path}."
+    return false
+  end
+  puts 'attempting to access spreadsheets...'
+  puts 'if you get an SSL error, disconnect from the VPN and try again'
+  session = GoogleDrive::Session.from_config(client_config_path)
 
-  require 'google/api_client'
-  require 'google/api_client/client_secrets'
-  require 'google/api_client/auth/installed_app'
-  require 'google/api_client/auth/storage'
-  require 'google/api_client/auth/storages/file_store'
-  require 'fileutils'
-
-  #APPLICATION_NAME = 'openstudio-standards'
-  #CLIENT_SECRETS_PATH = 'client_secret_857202529887-mlov2utaq9apq699789gh4o1f9u2eipr.apps.googleusercontent.com.json'
-
-  ##
-  # Ensure valid credentials, either by restoring from the saved credentials
-  # files or intitiating an OAuth2 authorization request via InstalledAppFlow.
-  # If authorization is required, the user's default browser will be launched
-  # to approve the request.
-  #
-  # @return [Signet::OAuth2::Client] OAuth2 credentials
-  def authorize(credentials_path, client_secret_path)
-    FileUtils.mkdir_p(File.dirname(credentials_path))
-
-    file_store = Google::APIClient::FileStore.new(credentials_path)
-    storage = Google::APIClient::Storage.new(file_store)
-    auth = storage.authorize
-
-    if auth.nil? || (auth.expired? && auth.refresh_token.nil?)
-      app_info = Google::APIClient::ClientSecrets.load(client_secret_path)
-      flow = Google::APIClient::InstalledAppFlow.new({
-                                                         :client_id => app_info.client_id,
-                                                         :client_secret => app_info.client_secret,
-                                                         :scope => 'https://www.googleapis.com/auth/drive'})
-      auth = flow.authorize(storage)
-      puts "Credentials saved to #{credentials_path}" unless auth.nil?
-    end
-    auth
+  # Gets list of remote files
+  session.files.each do |file|
+    puts file.title if file.title.include? 'OpenStudio'
   end
 
-  ##
-  # Download a file's content
-  #
-  # @param [Google::APIClient] client
-  #   Authorized client instance
-  # @param [Google::APIClient::Schema::Drive::V2::File]
-  #   Drive File instance
-  # @return
-  #   File's content if successful, nil otherwise
-  def download_xlsx_spreadsheet(client, google_spreadsheet, path)
-    file_name = google_spreadsheet.title
-    export_url = google_spreadsheet.export_links['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
-    #export_url = google_spreadsheet.export_links['text/csv']
-    if export_url
-      result = client.execute(:uri => export_url)
-      if result.status == 200
-        File.open(path, "wb") do |f|
-          f.write(result.body)
-        end
-        puts "Successfully downloaded #{file_name} to .xlsx"
-        return true
-      else
-        puts "An error occurred: #{result.data['error']['message']}"
-        return false
-      end
-    else
-      puts "#{file_name} can't be downloaded as an .xlsx file."
-      return false
-    end
-  end
-
-  # Initialize the API
-  client_secret_path = File.join(Dir.home, '.credentials', "client_secret.json")
-
-  credentials_path = File.join(Dir.home, '.credentials', "openstudio-standards-google-drive.json")
-  client = Google::APIClient.new(:application_name => 'openstudio-standards')
-  client.authorization = authorize(credentials_path, client_secret_path)
-  drive_api = client.discovered_api('drive', 'v2')
-
-  # List the 100 most recently modified files.
-  results = client.execute!(
-      :api_method => drive_api.files.list,
-      :parameters => {:maxResults => 100})
-  puts "No files found" if results.data.items.empty?
-
-  # Find the OpenStudio_Standards google spreadsheet
-  # and save it.
-  results.data.items.each do |file|
-    if spreadsheet_titles.include?(file.title)
-      puts "Found #{file.title}"
-      download_xlsx_spreadsheet(client, file, "#{File.dirname(__FILE__)}/#{file.title}.xlsx")
-    end
-  end
-
+  puts 'Spreadsheets accessed successfully'
+  return true
 end
 
-def export_spreadsheet_to_json(spreadsheet_titles)
+# Downloads the OpenStudio_Standards.xlsx from Google Drive
+# @note This requires you to have a client_secret.json file saved in your
+# username/.credentials folder.  To get one of these files, please contact
+# marley.praprost@nrel.gov
+def download_google_spreadsheets(spreadsheet_titles)
+  require 'google_drive'
+  client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
+  unless File.exists? client_config_path
+    puts "Unable to locate client_secret.json file at #{client_config_path}."
+    return false
+  end
+
+  session = GoogleDrive::Session.from_config(client_config_path)
+
+  # Gets list of remote files
+  session.files.each do |file|
+    if spreadsheet_titles.include?(file.title)
+      puts "Found #{file.title}"
+      file.export_as_file("#{File.dirname(__FILE__)}/#{file.title}.xlsx")
+      puts "Downloaded #{file.title} to #{File.dirname(__FILE__)}/#{file.title}.xlsx"
+    end
+  end
+  return true
+end
+
+def exclusion_list
+  file_path = "#{__dir__}/exclude_list.csv"
+  csv_file = CSV.read(file_path, headers:true)
+  csv_data = csv_file.map {|row| row.to_hash}
+  exclusion_array = { "os_stds" => { "worksheets" => [], "columns" => [] },
+                      "data_lib" => { "worksheets" => [], "columns" => [] } }
+  csv_file.each do |row|
+    if row['columns'] == 'all'
+      exclusion_array['os_stds']['worksheets'] << row['worksheet'] if row['exclude_from_os_stds'] == 'TRUE'
+      exclusion_array['data_lib']['worksheets'] << row['worksheet'] if row['exclude_from_data_lib'] == 'TRUE'
+    else
+      exclusion_array['os_stds']['columns'] << row['columns'] if row['exclude_from_os_stds'] == 'TRUE'
+      exclusion_array['data_lib']['columns'] << row['columns'] if row['exclude_from_data_lib'] == 'TRUE'
+    end
+  end
+  return exclusion_array
+end
+
+def parse_units(unit)
+  # useless_units = [nil, 'fraction', '%', 'COP_68F', 'COP_47F', '%/gal', 'Btu/hr/Btu/hr', 'Btu/hr/gal', 'BTU/hr/ft', 'W/BTU/h']
+  units_to_skip = [nil, 'fraction', '%', 'EER', '>23m^2', '>84m^2', '<23m^2', '<84m^2']
+  unit_parsed = nil
+  if not units_to_skip.include?(unit)
+    if unit == '%/gal'
+      unit = '1/gal'
+    end
+    unit_parsed = OpenStudio.createUnit(unit)
+    if unit_parsed.empty?
+      unit_parsed = "Not recognized by OpenStudio"
+    else
+      unit_parsed = unit_parsed.get()
+    end
+  end
+  return unit_parsed
+end
+
+# Exports spreadsheet data to data jsons, nested by the standards templates
+#
+# @param spreadsheet_titles
+# @param dataset_type [String] valid choices are 'os_stds' or 'data_lib'
+#   'os_stds' updates json files in openstudio standards, while 'data_lib' exports 90.1 jsons for the data library
+def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
+  if dataset_type == 'data_lib'
+    standards_dir = File.expand_path("#{__dir__}/../../data/standards/export")
+    skip_list = exclusion_list['data_lib']
+    skip_list['templates'] = ['DOE Ref Pre-1980',
+                              'DOE Ref 1980-2004',
+                              'NREL ZNE Ready 2017',
+                              'ZE AEDG Multifamily',
+                              'OEESC 2014',
+                              'ICC IECC 2015',
+                              'ECBC 2017',
+                              '189.1-2009']
+  else
+    standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
+    skip_list = exclusion_list['os_stds']
+    skip_list['templates'] = []
+  end
+  worksheets_to_skip = skip_list['worksheets']
+  cols_to_skip = skip_list['columns']
+  templates_to_skip = skip_list['templates']
+
+  # List of columns that are boolean
+  # (rubyXL returns 0 or 1, will translate to true/false)
+  bool_cols = []
+  bool_cols << 'hx'
+  bool_cols << 'data_center'
+  bool_cols << 'under_8000_hours'
+  bool_cols << 'nontransient_dwelling'
+  bool_cols << 'u_value_includes_interior_film_coefficient'
+  bool_cols << 'u_value_includes_exterior_film_coefficient'
 
   warnings = []
   duplicate_data = []
@@ -290,51 +334,18 @@ def export_spreadsheet_to_json(spreadsheet_titles)
 
     puts "Parsing #{xlsx_path}"
 
-    # List of worksheets to skip
-    worksheets_to_skip = []
-    worksheets_to_skip << 'templates'
-    worksheets_to_skip << 'standards'
-    worksheets_to_skip << 'ventilation'
-    worksheets_to_skip << 'occupancy'
-    worksheets_to_skip << 'interior_lighting'
-    worksheets_to_skip << 'lookups'
-    worksheets_to_skip << 'sheetmap'
-    worksheets_to_skip << 'deer_lighting_fractions'
-    worksheets_to_skip << 'window_types_and_weights'
-
-    # List of columns to skip
-    cols_to_skip = []
-    cols_to_skip << 'lookup'
-    cols_to_skip << 'lookupcolumn'
-    cols_to_skip << 'vlookupcolumn'
-    cols_to_skip << 'osm_lighting_per_person'
-    cols_to_skip << 'osm_lighting_per_area'
-    cols_to_skip << 'lighting_per_length'
-    cols_to_skip << 'exhaust_per_unit'
-    cols_to_skip << 'exhaust_fan_power_per_area'
-    cols_to_skip << 'occupancy_standard'
-    cols_to_skip << 'occupancy_primary_space_type'
-    cols_to_skip << 'occupancy_secondary_space_type'
-
-    # List of columns that are boolean
-    # (rubyXL returns 0 or 1, will translate to true/false)
-    bool_cols = []
-    bool_cols << 'hx'
-    bool_cols << 'data_center'
-    bool_cols << 'u_value_includes_interior_film_coefficient'
-    bool_cols << 'u_value_includes_exterior_film_coefficient'
-
     # Open workbook
     workbook = RubyXL::Parser.parse(xlsx_path)
+    puts "After parse workbook"
 
     # Find all the template directories that match the search criteria embedded in the spreadsheet title
-    standards_dir = File.expand_path("#{__dir__}/../../lib/openstudio-standards/standards")
     dirs = spreadsheet_title.gsub('OpenStudio_Standards-', '').gsub(/\(\w*\)/, '').split('-')
     new_dirs = []
     dirs.each { |d| d == 'ALL' ? new_dirs << '*' : new_dirs << "*#{d}*" }
     glob_string = "#{standards_dir}/#{new_dirs.join('/')}"
     puts "--spreadsheet title embedded search criteria: #{glob_string} yields:"
-    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') }
+#    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') && !f.include?('prm')}
+    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data')}
     template_dirs.each do |template_dir|
       puts "----#{template_dir}"
     end
@@ -342,6 +353,10 @@ def export_spreadsheet_to_json(spreadsheet_titles)
     # Export each tab to a hash, where the key is the sheet name
     # and the value is an array of objects
     standards_data = {}
+    list_of_sheets = []
+    list_of_names = []
+    list_of_units = []
+    list_of_OS_okay_units = []
     workbook.worksheets.each do |worksheet|
       sheet_name = worksheet.sheet_name.snake_case
 
@@ -358,7 +373,11 @@ def export_spreadsheet_to_json(spreadsheet_titles)
       header_row = 2 # Base 0
 
       # Get all data
-      all_data = worksheet.extract_data
+      # extract_data was deprecated in rubyXL
+      # inputting the method here https://github.com/weshatheleopard/rubyXL/issues/201
+      all_data = worksheet.sheet_data.rows.map { |row|
+        row.cells.map { |c| c && c.value() } unless row.nil?
+      }
 
       # Get the header row data
       header_data = all_data[header_row]
@@ -370,10 +389,16 @@ def export_spreadsheet_to_json(spreadsheet_titles)
         header = {}
         header["name"] = header_string.gsub(/\(.*\)/, '').strip.snake_case
         header_unit_parens = header_string.scan(/\(.*\)/)[0]
+        list_of_sheets << sheet_name
+        list_of_names << header_string.gsub(/\(.*\)/, '').strip.snake_case
         if header_unit_parens.nil?
           header["units"] = nil
+          list_of_units << nil
+          list_of_OS_okay_units << nil
         else
           header["units"] = header_unit_parens.gsub(/\(|\)/, '').strip
+          list_of_units << header_unit_parens.gsub(/\(|\)/, '').strip
+          list_of_OS_okay_units << parse_units(header_unit_parens.gsub(/\(|\)/, '').strip)
         end
         headers << header
       end
@@ -459,7 +484,7 @@ def export_spreadsheet_to_json(spreadsheet_titles)
           end
           new_obj['climate_zones'] = items
           objs << new_obj
-        elsif sheet_name == 'constructions'
+        elsif sheet_name == 'constructions' or sheet_name == 'prm_constructions'
           new_obj = {}
           new_obj['name'] = obj['name']
           items = []
@@ -516,6 +541,13 @@ def export_spreadsheet_to_json(spreadsheet_titles)
       standards_data[sheet_name] = objs
     end
 
+
+    filename_out = spreadsheet_title.gsub(/[()]/, '')
+    # CSV.open("metadata.csv", "wb") {|csv| headers.to_a.each {|elem| csv << elem} }
+    # list_metadata = [list_of_sheets, list_of_names, list_of_units, list_of_OS_okay_units].transpose
+    list_metadata = [list_of_sheets, list_of_names, list_of_units].transpose
+    list_metadata.insert(0, ['Sheet', 'Name', 'Unit']) # [1, 2, 2.5, 3, 4]
+    File.write("data/standards/metadata_units_#{filename_out}.csv", list_metadata.map(&:to_csv).join)
     # Check for duplicate data in space_types_* sheets
     standards_data.each_pair do |sheet_name, objs|
       skip_duplicate_check = []
@@ -591,15 +623,21 @@ def export_spreadsheet_to_json(spreadsheet_titles)
         # Write out a file for each template with the objects for that template.
         templates_to_objects.each_pair do |template, objs|
           next if template == 'Any'
+          next if templates_to_skip.include?(template)
           template_dir_name = standard_directory_name_from_template(template)
           # Sort the objects
           sorted_objs = {sheet_name => objs}.sort_by_key_updated(true) {|x, y| x.to_s <=> y.to_s}
 
           # Also check directly underneath the parent directory
-          child_dir = "#{standards_dir}/#{parent_dir}/#{template_dir_name}"
+          if /prm/.match(template_dir_name) && !/prm/.match(parent_dir)
+            child_dir = "#{standards_dir}/#{parent_dir}_prm/#{template_dir_name}"
+          else
+            child_dir = "#{standards_dir}/#{parent_dir}/#{template_dir_name}"
+          end
           additional_dirs = []
           additional_dirs << child_dir if Dir.exist?(child_dir)
           possible_template_dirs = template_dirs + additional_dirs
+          puts "Additional dir = #{child_dir}"
 
           wrote_json = false
           possible_template_dirs.each do |template_dir|

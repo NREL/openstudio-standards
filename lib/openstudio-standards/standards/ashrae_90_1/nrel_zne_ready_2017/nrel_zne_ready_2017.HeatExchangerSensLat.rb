@@ -2,7 +2,7 @@ class NRELZNEReady2017 < ASHRAE901
   # @!group HeatExchangerSensLat
 
   # Sets the minimum effectiveness of the heat exchanger
-  def heat_exchanger_air_to_air_sensible_and_latent_apply_efficiency(heat_exchanger_air_to_air_sensible_and_latent)
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_effectiveness(heat_exchanger_air_to_air_sensible_and_latent)
     # Assumed to be sensible and latent at all flow
     heat_exchanger_type = heat_exchanger_air_to_air_sensible_and_latent.heatExchangerType
 

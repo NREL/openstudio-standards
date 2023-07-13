@@ -2,12 +2,16 @@ class Standard
   # @!group HeatExchangerAirToAirSensibleAndLatent
 
   # Default fan efficiency assumption for the prm added fan power
+  #
+  # @return [Double] default fan efficiency
   def heat_exchanger_air_to_air_sensible_and_latent_prototype_default_fan_efficiency
     default_fan_efficiency = 0.5
     return default_fan_efficiency
   end
 
   # Sets the motor power to account for the extra fan energy from the increase in fan total static pressure
+  #
+  # @return [Bool] returns true if successful, false if not
   def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_nominal_electric_power(heat_exchanger_air_to_air_sensible_and_latent)
     # Get the nominal supply air flow rate
     supply_air_flow_m3_per_s = nil
@@ -69,9 +73,11 @@ class Standard
     return true
   end
 
-  # Sets the minimum effectiveness of the heat exchanger per
-  # the DOE prototype assumptions, which assume that an enthalpy wheel is used, which exceeds
-  # the 50% effectiveness minimum actually defined by 90.1.
+  # Sets the minimum effectiveness of the heat exchanger per the DOE prototype assumptions,
+  # which assume that an enthalpy wheel is used, which exceeds the 50% effectiveness minimum actually defined by 90.1.
+  #
+  # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] hx
+  # @return [Bool] returns true if successful, false if not
   def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency(heat_exchanger_air_to_air_sensible_and_latent)
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(0.7)
     heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(0.6)
@@ -84,6 +90,43 @@ class Standard
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HeatExchangerAirToAirSensibleAndLatent', "For #{heat_exchanger_air_to_air_sensible_and_latent.name}: Changed sensible and latent effectiveness to ~70% per DOE Prototype assumptions for an enthalpy wheel.")
 
+    return true
+  end
+
+  # Set sensible and latent effectiveness at 100 and 75 heating and cooling airflow;
+  # The values are calculated by using ERR, which is introduced in 90.1-2016 Addendum CE
+  #
+  # This function is only used for nontransient dwelling units (Mid-rise and High-rise Apartment)
+  # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] heat exchanger air to air sensible and latent
+  # @param enthalpy_recovery_ratio [String] enthalpy recovery ratio
+  # @param design_conditions [String] enthalpy recovery ratio design conditions: 'heating' or 'cooling'
+  # @param climate_zone [String] climate zone
+  def heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio(heat_exchanger_air_to_air_sensible_and_latent, enthalpy_recovery_ratio, design_conditions, climate_zone)
+    # Assumed to be sensible and latent at all flow
+    if enthalpy_recovery_ratio.nil?
+      full_htg_sens_eff = 0.0
+      full_htg_lat_eff = 0.0
+      part_htg_sens_eff = 0.0
+      part_htg_lat_eff = 0.0
+      full_cool_sens_eff = 0.0
+      full_cool_lat_eff = 0.0
+      part_cool_sens_eff = 0.0
+      part_cool_lat_eff = 0.0
+    else
+      enthalpy_recovery_ratio = enthalpy_recovery_ratio_design_to_typical_adjustment(enthalpy_recovery_ratio, climate_zone)
+      full_htg_sens_eff, full_htg_lat_eff, part_htg_sens_eff, part_htg_lat_eff, full_cool_sens_eff, full_cool_lat_eff, part_cool_sens_eff, part_cool_lat_eff = heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio_to_effectiveness(enthalpy_recovery_ratio, design_conditions)
+    end
+
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(full_htg_sens_eff)
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(full_htg_lat_eff)
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(part_htg_sens_eff)
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(part_htg_lat_eff)
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(full_cool_sens_eff)
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(full_cool_lat_eff)
+    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(part_cool_sens_eff)
+    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(part_cool_lat_eff)
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HeatExchangerSensLat', "For #{heat_exchanger_air_to_air_sensible_and_latent.name}: Set sensible and latent effectiveness calculated by using ERR.")
     return true
   end
 end

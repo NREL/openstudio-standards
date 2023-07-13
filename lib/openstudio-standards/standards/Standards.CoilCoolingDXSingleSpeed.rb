@@ -1,4 +1,3 @@
-
 class Standard
   # @!group CoilCoolingDXSingleSpeed
 
@@ -6,8 +5,10 @@ class Standard
 
   # Finds capacity in W
   #
+  # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
+  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
   # @return [Double] capacity in W to be used for find object
-  def coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
+  def coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed, necb_ref_hp = false)
     capacity_w = nil
     if coil_cooling_dx_single_speed.ratedTotalCoolingCapacity.is_initialized
       capacity_w = coil_cooling_dx_single_speed.ratedTotalCoolingCapacity.get
@@ -40,14 +41,16 @@ class Standard
 
   # Finds lookup object in standards and return efficiency
   #
+  # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
   # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
   # @return [Double] full load efficiency (COP)
-  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, rename = false)
-    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed)
+  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, rename = false, necb_ref_hp = false)
+    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
     sub_category = search_criteria['subcategory']
-    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
+    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed, necb_ref_hp)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -109,18 +112,18 @@ class Standard
     # If CRAC, use equations if coefficients are specified
     crac_minimum_scop = ac_props['minimum_scop']
     if sub_category == 'CRAC' && !crac_minimum_scop.nil?
-      # TABLE 6.8.1K in 90.1-2010, TABLE 6.8.1-11 in 90.1-2013
+      # TABLE 6.8.1K in 90.1-2010, TABLE 6.8.1-10 in 90.1-2019
       # cop = scop/sensible heat ratio
       if coil_cooling_dx_single_speed.ratedSensibleHeatRatio.is_initialized
         crac_sensible_heat_ratio = coil_cooling_dx_single_speed.ratedSensibleHeatRatio.get
       elsif coil_cooling_dx_single_speed.autosizedRatedSensibleHeatRatio.is_initialized
-        #Though actual inlet temperature is very high (thus basically no dehumidification),
-        #sensible heat ratio can't be pre-assigned as 1 because it should be the value at conditions defined in ASHRAE Standard 127 => 26.7 °C drybulb/19.4 °C wetbulb.
+        # Though actual inlet temperature is very high (thus basically no dehumidification),
+        # sensible heat ratio can't be pre-assigned as 1 because it should be the value at conditions defined in ASHRAE Standard 127 => 26.7 degC drybulb/19.4 degC wetbulb.
         crac_sensible_heat_ratio = coil_cooling_dx_single_speed.autosizedRatedSensibleHeatRatio.get
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoilCoolingDXSingleSpeed', 'Failed to get autosized sensible heat ratio')
       end
-      cop = crac_minimum_scop/crac_sensible_heat_ratio
+      cop = crac_minimum_scop / crac_sensible_heat_ratio
       cop = cop.round(2)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{crac_minimum_scop}SCOP #{cop}COP"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SCOP = #{crac_minimum_scop}")
@@ -168,15 +171,18 @@ class Standard
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
-  def coil_cooling_dx_single_speed_apply_efficiency_and_curves(coil_cooling_dx_single_speed, sql_db_vars_map)
+  # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
+  # @param sql_db_vars_map [Hash] hash map
+  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
+  # @return [Hash] hash of coil objects
+  def coil_cooling_dx_single_speed_apply_efficiency_and_curves(coil_cooling_dx_single_speed, sql_db_vars_map, necb_ref_hp = false)
     successfully_set_all_properties = true
 
-    # Get the search criteria
-    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed)
+    # Get the search criteria.
+    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp)
 
-    # Get the capacity
-    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
+    # Get the capacity.
+    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed, necb_ref_hp)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -244,7 +250,7 @@ class Standard
     orig_name = coil_cooling_dx_single_speed.name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, true)
+    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, true, necb_ref_hp)
 
     # Map the original name to the new name
     sql_db_vars_map[coil_cooling_dx_single_speed.name.to_s] = orig_name

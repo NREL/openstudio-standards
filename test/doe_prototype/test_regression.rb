@@ -43,10 +43,13 @@ class TestDOEPrototypesRegression < CreateDOEPrototypeBuildingTest
      '90.1-2004',
 #     '90.1-2007',
 #     '90.1-2010',
-     '90.1-2013']
+     '90.1-2013',
+     '90.1-2016',
+     '90.1-2019'
+    ]
 
   all_comp =  @building_types.product @templates, @climate_zones
-  all_comp.each do |building_type, template, climate_zone|
+  all_comp.sort.each do |building_type, template, climate_zone|
     result, msg = TestDOEPrototypesRegression.create_building(building_type, template, climate_zone, nil, true, false, false, false, 'annual', true, 'regression-')
   end
 end

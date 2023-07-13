@@ -3,13 +3,15 @@ class Standard
 
   # Adds a refrigerated case to the model.
   #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
-  # case is located, and which will be impacted by the case's thermal load.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the case is located,
+  #   and which will be impacted by the case's thermal load.
   # @param case_type [String] the case type/name. For valid choices
-  # This parameter is used also by the "Refrigeration System Lineup" tab.
-  # refer to the ""Refrigerated Cases" tab on the OpenStudio_Standards spreadsheet.
-  # @param size_category [String] size category of the building area. Valid choices
-  # are: "<35k ft2", "35k - 50k ft2", ">50k ft2"
+  #   refer to the ""Refrigerated Cases" tab on the OpenStudio_Standards spreadsheet.
+  #   This parameter is used also by the "Refrigeration System Lineup" tab.
+  # @param size_category [String] size category of the building area. Valid choices are:
+  #   "<35k ft2", "35k - 50k ft2", ">50k ft2"
+  # @return [OpenStudio::Model::RefrigerationCase] the refrigeration case
   def model_add_refrigeration_case(model, thermal_zone, case_type, size_category)
     # Get the case properties
     #
@@ -65,15 +67,6 @@ class Standard
         anti_sweat_heater_control = props['anti_sweat_heater_control']
       end
     end
-    if props['restocking_schedule']
-      if props['restocking_schedule'].downcase == 'always off'
-        restocking_sch = model.alwaysOffDiscreteSchedule
-      else
-        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
-      end
-    else
-      restocking_sch = model.alwaysOffDiscreteSchedule
-    end
     if props['fractionofantisweatheaterenergytocase']
       fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
     end
@@ -115,7 +108,9 @@ class Standard
       ref_case.setCaseAntiSweatHeaterPowerperUnitLength(anti_sweat_power)
     end
     ref_case.setFractionofAntiSweatHeaterEnergytoCase(fractionofantisweatheaterenergytocase)
-    ref_case.setFractionofLightingEnergytoCase(fraction_of_lighting_energy_to_case)
+    if props['fraction_of_lighting_energy_to_case']
+      ref_case.setFractionofLightingEnergytoCase(fraction_of_lighting_energy_to_case)
+    end
     if props['minimum_anti_sweat_heater_power_per_unit_length']
       ref_case.setMinimumAntiSweatHeaterPowerperUnitLength(minimum_anti_sweat_heater_power_per_unit_length)
     end
@@ -128,7 +123,17 @@ class Standard
     else
       ref_case.setUnderCaseHVACReturnAirFraction(0)
     end
-    ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
+    if props['restocking_schedule']
+      if props['restocking_schedule'].downcase == 'always off'
+        # restocking_sch = model.alwaysOffDiscreteSchedule
+        ref_case.resetRefrigeratedCaseRestockingSchedule
+      else
+        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
+        ref_case.setRefrigeratedCaseRestockingSchedule(restocking_sch)
+      end
+    else
+      ref_case.resetRefrigeratedCaseRestockingSchedule
+    end
 
     if props['case_category']
       ref_case_addprops = ref_case.additionalProperties
@@ -141,13 +146,17 @@ class Standard
     return ref_case
   end
 
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
-  # walkin is located, and which will be impacted by the walkin's thermal load.
-  # @param size_category [String] size category of the building area. Valid choices
-  # are: "<35k ft2", "35k - 50k ft2", ">50k ft2"
-  # @param walkin_type [String] the walkin type/name. For valid choices
-  # refer to the "Refrigerated Walkins" tab on the OpenStudio_Standards spreadsheet.
-  # This parameter is used also by the "Refrigeration System Lineup" tab.
+  # Adds a refrigerated walkin unit to the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the walkin is located,
+  #   and which will be impacted by the walkin's thermal load.
+  # @param size_category [String] size category of the building area. Valid choices are:
+  #   "<35k ft2", "35k - 50k ft2", ">50k ft2"
+  # @param walkin_type [String] the walkin type/name. For valid choices,
+  #   refer to the "Refrigerated Walkins" tab on the OpenStudio_Standards spreadsheet.
+  #   This parameter is used also by the "Refrigeration System Lineup" tab.
+  # @return [OpenStudio::Model::RefrigerationWalkIn] the walk in refrigerator
   def model_add_refrigeration_walkin(model, thermal_zone, size_category, walkin_type)
     # Get the walkin properties
     search_criteria = {
@@ -214,6 +223,8 @@ class Standard
     end
     if props['reachin_door_area']
       reachin_door_area = OpenStudio.convert(props['reachin_door_area'], 'ft^2', 'm^2').get
+    else
+      reachin_door_area = 0.0
     end
     if props['total_insulated_surface_area']
       total_insulated_surface_area = OpenStudio.convert(props['total_insulated_surface_area'], 'ft^2', 'm^2').get
@@ -231,7 +242,6 @@ class Standard
       height_of_stocking_doors = OpenStudio.convert(props['height_of_stocking_doors'], 'ft', 'm').get
     end
     lightingschedule = props['lighting_schedule']
-    restockingschedule = props['restocking_schedule']
     temperatureterminationdefrostfractiontoice = props['temperatureterminationdefrostfractiontoice']
 
     # Calculated properties
@@ -243,9 +253,6 @@ class Standard
     end
     if total_insulated_surface_area.nil?
       total_insulated_surface_area = 1.7226 * floor_surface_area + 28.653
-    end
-    if reachin_door_area.nil?
-      reachin_door_area = reachin_door_area_mult * floor_surface_area
     end
     if fan_power.nil?
       fan_power = fan_power_mult * rated_cooling_capacity
@@ -311,14 +318,24 @@ class Standard
     if props['temperatureterminationdefrostfractiontoice']
       ref_walkin.setTemperatureTerminationDefrostFractiontoIce(temperatureterminationdefrostfractiontoice)
     end
+
     if props['restocking_schedule']
-      ref_walkin.setRestockingSchedule(model_add_schedule(model, restockingschedule))
+      if props['restocking_schedule'].downcase == 'always off'
+        # restocking_sch = model.alwaysOffDiscreteSchedule
+        ref_walkin.resetRestockingSchedule
+      else
+        restocking_sch = model_add_schedule(model, props['restocking_schedule'])
+        ref_walkin.setRestockingSchedule(restocking_sch)
+      end
+    else
+      ref_walkin.resetRestockingSchedule
     end
+
     ref_walkin.setLightingSchedule(model_add_schedule(model, lightingschedule))
     ref_walkin.setZoneBoundaryStockingDoorOpeningScheduleFacingZone(model_add_schedule(model, 'door_wi_sched'))
 
     ref_walkin_addprops = ref_walkin.additionalProperties
-    ref_walkin_addprops.setFeature("motor_category", props['motor_category'] )
+    ref_walkin_addprops.setFeature('motor_category', props['motor_category'])
 
     # Add doorway protection
     if props['doorway_protection_type']
@@ -333,7 +350,10 @@ class Standard
     return ref_walkin
   end
 
-  # Adds a refrigeration compressor to the model.
+  # Adds a refrigeration compressor to the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::RefrigerationCompressor] the refrigeration compressor
   def model_add_refrigeration_compressor(model, compressor_name)
     # Get the compressor properties
     search_criteria = {
@@ -362,8 +382,9 @@ class Standard
   # Find the thermal zone that is best for adding refrigerated display cases into.
   # First, check for space types that typically have refrigeration.
   # Fall back to largest zone in the model if no typical space types are found.
-  #   # @param model [OpenStudio::Model::Model] the model
-  #   # @return [OpenStudio::Model::ThermalZone] returns a thermal zone if found, nil if not.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [OpenStudio::Model::ThermalZone] returns a thermal zone if found, nil if not.
   def model_typical_display_case_zone(model)
     # Ideally, look for one of the space types
     # that would typically have refrigeration.
@@ -372,9 +393,11 @@ class Standard
     model.getThermalZones.each do |zone|
       space_type = thermal_zone_majority_space_type(zone)
       next if space_type.empty?
+
       space_type = space_type.get
       next if space_type.standardsSpaceType.empty?
       next if space_type.standardsBuildingType.empty?
+
       stds_spc_type = space_type.standardsSpaceType.get
       stds_bldg_type = space_type.standardsBuildingType.get
       case "#{stds_bldg_type} #{stds_spc_type}"
@@ -426,7 +449,8 @@ class Standard
   # Find the thermal zone that is best for adding refrigerated walkins into.
   # First, check for space types that typically have refrigeration.
   # Fall back to largest zone in the model if no typical space types are found.
-  # @param model [OpenStudio::Model::Model] the model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [OpenStudio::Model::ThermalZone] returns a thermal zone if found, nil if not.
   def model_typical_walkin_zone(model)
     # Ideally, look for one of the space types
@@ -436,9 +460,11 @@ class Standard
     model.getThermalZones.each do |zone|
       space_type = thermal_zone_majority_space_type(zone)
       next if space_type.empty?
+
       space_type = space_type.get
       next if space_type.standardsSpaceType.empty?
       next if space_type.standardsBuildingType.empty?
+
       stds_spc_type = space_type.standardsSpaceType.get
       stds_bldg_type = space_type.standardsBuildingType.get
       case "#{stds_bldg_type} #{stds_spc_type}"
@@ -492,6 +518,10 @@ class Standard
   # compressors, and condensors.  For small stores, each case and walkin is served
   # by one compressor and one condenser.  For larger stores, all medium temp cases and walkins
   # are served by one multi-compressor rack, and all low temp cases and walkins another.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param building_type [String] building type
+  # @return [Bool] returns true if successful, false if not
   def model_add_typical_refrigeration(model, building_type)
     # Define system category and scaling factor
     floor_area_ft2 = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
@@ -805,28 +835,28 @@ class Standard
     return true
   end
 
-  # Determine the latent case credit curve to use
-  # for walkins. Defaults to values after 90.1-2007.
-  # @todo Should probably use the model_add_refrigeration_walkin
-  # and lookups from the spreadsheet instead of hard-coded values.
+  # Determine the latent case credit curve to use for walkins. Defaults to values after 90.1-2007.
+  # @todo Should probably use the model_add_refrigeration_walkin and lookups from the spreadsheet instead of hard-coded values
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if successful, false if not
   def model_walkin_freezer_latent_case_credit_curve(model)
     latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
     return latent_case_credit_curve_name
   end
 
-  # Adds a full commercial refrigeration rack, as would be found in a supermarket,
-  # to the model.
-  #
-  # @param compressor_type [String] the system temperature range.  valid choices are:
-  # Low Temp, Med Temp
-  # @param system_name [String] the name of the refrigeration system
-  # @param cases [Array<Hash>] an array of cases with keys:
-  # case_type and space_names.
-  # @param walkins [Array<Hashs>] an array of walkins with keys:
-  # walkin_type, space_names, and number_of_walkins
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the
-  # refrigeration piping is located.
+  # Adds a full commercial refrigeration rack to the model, as would be found in a supermarket
   # @todo Move refrigeration compressors to spreadsheet
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param compressor_type [String] the system temperature range
+  #   valid choices are Low Temp, Med Temp
+  # @param system_name [String] the name of the refrigeration system
+  # @param cases [Array<Hash>] an array of cases with keys: case_type and space_names
+  # @param walkins [Array<Hashs>] an array of walkins with keys:
+  #   walkin_type, space_names, and number_of_walkins
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the refrigeration piping is located
+  # @return [Bool] returns true if successful, false if not
   def model_add_refrigeration_system(model,
                                      compressor_type,
                                      system_name,
@@ -856,6 +886,7 @@ class Standard
       zone = model_get_zones_from_spaces_on_system(model, case_)[0]
       ref_case = model_add_refrigeration_case(model, zone, case_['case_type'], size_category)
       return false if ref_case.nil?
+
       ########################################
       # Defrost schedule
       defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
@@ -893,6 +924,7 @@ class Standard
         zone = model_get_zones_from_spaces_on_system(model, walkin)[0]
         ref_walkin = model_add_refrigeration_walkin(model, zone, size_category, walkin['walkin_type'])
         return false if ref_walkin.nil?
+
         ########################################
         # Defrost schedule
         defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
