@@ -2282,7 +2282,7 @@ class NECB2011 < Standard
                 end
                 attemptb = 10
               rescue
-                sleep(5)
+                sleep(30)
                 attemptb += 1
               end
             end
@@ -2290,7 +2290,7 @@ class NECB2011 < Standard
         end
         attempt = 10
       rescue
-        sleep(5)
+        sleep(30)
         attempt += 1
       end
     end
