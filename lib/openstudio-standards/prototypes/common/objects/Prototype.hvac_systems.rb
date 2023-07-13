@@ -4539,7 +4539,12 @@ class Standard
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
-  # @param radiant_lockout [Bool] True if system contains a radiant lockout
+  # @param radiant_availability_type [String] a preset that determines the availability of the radiant system
+  #   options are 'all_day', 'precool', 'afternoon_shutoff', 'occupancy'
+  #   If preset is set to 'all_day' radiant system is available 24 hours a day, 'precool' primarily operates
+  #   radiant system during night-time hours, 'afternoon_shutoff' avoids operation during peak grid demand,
+  #   and 'occupancy' operates radiant system during building occupancy hours.
+  # @param radiant_lockout [Bool] True if system contains a radiant lockout. If true, it will overwrite radiant_availability_type.
   # @param radiant_lockout_start_time [double] decimal hour of when radiant lockout starts
   #   Only used if radiant_lockout is true
   # @param radiant_lockout_end_time [double] decimal hour of when radiant lockout ends
@@ -4561,6 +4566,7 @@ class Standard
                                  control_strategy: 'proportional_control',
                                  proportional_gain: 0.3,
                                  switch_over_time: 24.0,
+                                 radiant_availability_type: 'precool',
                                  radiant_lockout: false,
                                  radiant_lockout_start_time: 12.0,
                                  radiant_lockout_end_time: 20.0)
@@ -4768,29 +4774,60 @@ class Standard
     throttling_range_f = 4.0 # 2 degF on either side of control temperature
     throttling_range_c = OpenStudio.convert(throttling_range_f, 'F', 'C').get
 
-    # create availability schedule for radiant loop
-    if radiant_lockout
-      radiant_avail_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      radiant_avail_sch.setName('Radiant System Availability Schedule')
+    # create preset availability schedule for radiant loop
+    radiant_avail_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    radiant_avail_sch.setName('Radiant System Availability Schedule')
 
+    unless radiant_lockout
+      case radiant_availability_type.downcase
+      when 'all_day'
+        start_hour = 24
+        start_minute = 0
+        end_hour = 24
+        end_minute = 0
+      when 'afternoon_shutoff'
+        start_hour = 15
+        start_minute = 0
+        end_hour = 22
+        end_minute = 0
+      when 'precool'
+        start_hour = 10
+        start_minute = 0
+        end_hour = 22
+        end_minute = 0
+      when 'occupancy'
+        start_hour = model_occ_hr_end.to_i
+        start_minute = ((model_occ_hr_end % 1) * 60).to_i
+        end_hour = model_occ_hr_start.to_i
+        end_minute = ((model_occ_hr_start % 1) * 60).to_i
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Unsupported radiant availability preset '#{radiant_availability_type}'. Defaulting to all day operation.")
+        start_hour = 24
+        start_minute = 0
+        end_hour = 24
+        end_minute = 0
+      end
+    end
+
+    # create custom availability schedule for radiant loop
+    if radiant_lockout
       start_hour = radiant_lockout_start_time.to_i
       start_minute = ((radiant_lockout_start_time % 1) * 60).to_i
       end_hour = radiant_lockout_end_time.to_i
       end_minute = ((radiant_lockout_end_time % 1) * 60).to_i
+    end
 
-      if radiant_lockout_end_time > radiant_lockout_start_time
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0) if radiant_lockout_end_time < 24
-      elsif radiant_lockout_start_time > radiant_lockout_end_time
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.0) if radiant_lockout_start_time < 24
-      else
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
-      end
+    # create availability schedules
+    if end_hour > start_hour
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0) if end_hour < 24
+    elsif start_hour > end_hour
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.0) if start_hour < 24
     else
-      radiant_avail_sch = model.alwaysOnDiscreteSchedule
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
     end
 
     # make a low temperature radiant loop for each zone
