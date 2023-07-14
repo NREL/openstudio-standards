@@ -621,7 +621,7 @@ class NECB2011 < Standard
 
   def apply_weather_data(model:, epw_file:)
     # Create full path to weather file
-    weather_files = File.join(Dir.pwd, "data/weather")
+    weather_files = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
     weather_file = File.join(weather_files, epw_file)
     # Check if the weather file exists.  If it does continue as normal, otherwise try to dowload it from the
     # canmet-energy/btap_weather repository
@@ -2241,6 +2241,9 @@ class NECB2011 < Standard
         # Download the list of weather files on the repository
         URI.open(weather_list_url) do |web_data|
           # Convert the weather file list to an array
+          if web_data.size <= 100
+            raise("Could not read #{weather_list_url}!")
+          end
           weather_files = (JSON.parse(web_data.read)).to_a
           # Check to see if the requested weather file is on the list
           zip_name = weather_files.find{ |weather_file| weather_file.match(weather_loc) }
@@ -2250,8 +2253,8 @@ class NECB2011 < Standard
             status = true
             # Define the full url of the weather zip file we want to download
             save_file_url = git_folder + zip_name
-            # Define teh local location of where the weather zip file will be saved
-            weather_dir = File.join(Dir.pwd, "data/weather")
+            # Define the local location of where the weather zip file will be saved
+            weather_dir = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
             save_file = File.join(weather_dir, zip_name)
             attemptb = 1
             # Try to download the weather file up to 5 times, waiting 5 seconds between each attempt.
@@ -2260,6 +2263,9 @@ class NECB2011 < Standard
                 puts "Beginning attempt #{attemptb} to download #{save_file_url}"
                 # Download the weather zip file from the repository
                 URI.open(save_file_url) do |file_url|
+                  if file_url.size <= 100
+                    raise("Could not read #{save_file_url}!")
+                  end
                   # Save the zip file in the /data/weather folder
                   File.open(save_file, 'wb') { |f| f.write(file_url.read) }
                   puts "Downloaded #{save_file_url} to #{save_file}"
