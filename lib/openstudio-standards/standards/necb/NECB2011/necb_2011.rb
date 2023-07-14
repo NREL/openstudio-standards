@@ -2216,7 +2216,21 @@ class NECB2011 < Standard
     future_weather_files_loc = @standards_data['constants']['future_weather_file_list']['value'].to_s
     future_git_folder = @standards_data['constants']['future_weather_folder_url']['value'].to_s
     success_flag = download_and_save_file(weather_list_url: future_weather_files_loc, weather_loc: weather_loc, git_folder: future_git_folder)
-    return if success_flag == true
+    if success_flag == true
+      # Rename the non-ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
+      # because the ASHRAE .ddy file includes sizing information not included in the regular .ddy file for future
+      # weather data files.  Unfortunately, openstudio-standards just looks for the regular .ddy file for sizing
+      # information which is why the switch is done.
+      puts "Renaming #{weather_loc}.ddy as #{weather_loc}_orig.ddy and #{weather_loc}_ASHRAE.ddy as #{weather_loc}.ddy."
+      puts "This is so that the design weather information in the #{weather_loc}_ASHRAE.ddy file is used."
+      weather_dir = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
+      orig_ddy_name = File.join(weather_dir, (weather_loc + ".ddy"))
+      ashrae_ddy_name = File.join(weather_dir, (weather_loc + "_ASHRAE.ddy"))
+      rev_ddy_name = File.join(weather_dir, (weather_loc + "_orig.ddy"))
+      FileUtils.cp(orig_ddy_name, rev_ddy_name)
+      FileUtils.cp(ashrae_ddy_name, orig_ddy_name)
+      return
+    end
     raise("Could not locate the following file in the canmet/btap_weather repository: #{epw_file}.  Please check the spelling of the file or visit https://github.com/canmet-energy/btap_weather to see if the file exists.")
   end
 
