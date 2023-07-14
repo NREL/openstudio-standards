@@ -10,7 +10,7 @@ class NECB_Download_Weather_Files_Test < Minitest::Test
   def test_weather_file_download()
 
     # File paths.
-    weather_folder = File.join(Dir.pwd, "data/weather")
+    weather_folder = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , "data/weather"))
     weather_files = [
       {
         zip_file: "CAN_ON_Wiarton-Keppel.Intl.AP.716330_CWEC2016.zip",
