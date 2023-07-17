@@ -1991,7 +1991,7 @@ class ASHRAE901PRM < Standard
     # Step 1 check orientation variations - priority 3
     fenestration_area_hash = get_model_fenestration_area_by_orientation(user_model)
     fenestration_area_hash.each do |orientation, fenestration_area|
-      OpenStudio.logFree(OpenStudio::Error, 'prm.log',
+      OpenStudio.logFree(OpenStudio::Info, 'prm.log',
                          "#{orientation} orientation has total fenestration area of #{fenestration_area} m2")
       fenestration_area_hash.each do |other_orientation, other_fenestration_area|
         next unless orientation != other_orientation
@@ -1999,7 +1999,7 @@ class ASHRAE901PRM < Standard
         variance = (other_fenestration_area - fenestration_area) / fenestration_area
         if variance.abs > 0.05
           # if greater then 0.05
-          OpenStudio.logFree(OpenStudio::Error,
+          OpenStudio.logFree(OpenStudio::Info,
                              'prm.log',
                              "#{orientation} has total fenestration area of #{fenestration_area} m2, which is higher than 5% variance compare to #{other_fenestration_area} at #{other_orientation}")
           run_orients_flag = true
