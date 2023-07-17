@@ -2236,6 +2236,7 @@ class ASHRAE901PRM < Standard
   # Calculate the window to wall ratio reduction factor
   #
   # @param multiplier [Float] multiplier of the wwr
+  # @param surface_name [String] the name of the surface
   # @param surface_wwr [Float] the surface window to wall ratio
   # @param surface_dr [Float] the surface door to wall ratio
   # @param wwr_building_type[String] building type for wwr
@@ -2245,6 +2246,7 @@ class ASHRAE901PRM < Standard
   # @param total_fene_m2 [Float] total fenestration area
   # @return [Float] reduction factor
   def model_get_wwr_reduction_ratio(multiplier,
+                                    surface_name: 'surface',
                                     surface_wwr: 0.0,
                                     surface_dr: 0.0,
                                     wwr_building_type: 'All others',
@@ -2257,10 +2259,11 @@ class ASHRAE901PRM < Standard
     if multiplier < 1.0
       # Case when reduction is required
       reduction_ratio = 1.0 - multiplier
+      OpenStudio.logFree(OpenStudio::Info, 'prm.log',
+                         "Surface #{surface_name} WWR is #{surface_wwr}. Reduce its WWR to #{surface_wwr * reduction_ratio}%")
     else
       # Case when increase is required - takes the door area into consideration.
       # The target is to increase each surface to maximum 90% WWR deduct the total door area.
-      total_dr = 0.0
       exist_max_wwr = 0.0
       if total_wall_m2 > 0 then exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2 end
       if exist_max_wwr < wwr_target
@@ -2269,6 +2272,9 @@ class ASHRAE901PRM < Standard
           # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
           # ASSUMPTION!! assume adding windows to surface with no windows will never be window_m2 + door_m2 > surface_m2.
           reduction_ratio = (wwr_target - exist_max_wwr) * total_wall_m2 / (total_wall_m2 - total_wall_with_fene_m2 - total_plenum_wall_m2) + 1.0
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log',
+                             "The max window to wall ratio is #{exist_max_wwr}, smaller than the target window to wall ratio #{wwr_target}.
+                              Surface #{surface_name} has no fenestration subsurfaces. Adding new fenestration band with WWR of #{(reduction_ratio - 1) * 100}%")
         else
           # surface has fenestration - expand it to 90% WWR or surface area minus door area, whichever is smaller.
           if (1.0 - surface_dr) < 0.9
@@ -2278,6 +2284,9 @@ class ASHRAE901PRM < Standard
           else
             reduction_ratio = 0.9 / surface_wwr
           end
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log',
+                             "The max window to wall ratio is #{exist_max_wwr}, smaller than the target window to wall ratio #{wwr_target}.
+                              Surface #{surface_name} will expand its WWR to 90%")
         end
       else
         # multiplier will be negative number thus resulting in > 1 reduction_ratio

@@ -8,7 +8,7 @@ class ASHRAE901PRM < Standard
   def surface_adjust_fenestration_in_a_surface(surface, reduction, model)
     # do nothing for cases when reduction == 1.0
     if reduction < 1.0
-      surface.subSurfaces.sort.each do |ss|
+      surface.subSurfaces.each do |ss|
         next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
 
         sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
@@ -26,7 +26,7 @@ class ASHRAE901PRM < Standard
       end
       # Save doors to a temp list
       door_list = []
-      surface.subSurfaces.sort.each do |sub|
+      surface.subSurfaces.each do |sub|
         if sub.subSurfaceType == 'Door'
           door = {}
           door['name'] = sub.name.get
@@ -37,7 +37,7 @@ class ASHRAE901PRM < Standard
       end
       # remove all existing windows and set the window to wall ratio to the calculated new WWR
       # Remove all sub-surfaces including doors
-      surface.subSurfaces.sort.each(&:remove)
+      surface.subSurfaces.each(&:remove)
       # Apply default construction to the subsurface - the standard construction will be applied later.
       surface.setWindowToWallRatio(wwr_adjusted, 0.6, true)
       # add door back.

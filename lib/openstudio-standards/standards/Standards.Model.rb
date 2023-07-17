@@ -4746,6 +4746,7 @@ class Standard
           # daylighting control isn't modeled
           surface_wwr = surface_get_wwr_of_a_surface(surface)
           red = model_get_wwr_reduction_ratio(mult,
+                                              surface_name: surface.name.get,
                                               surface_wwr: surface_wwr,
                                               surface_dr: surface_get_door_ratio_of_a_surface(surface),
                                               wwr_building_type: bat,
@@ -6946,6 +6947,7 @@ class Standard
   # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
   # @return [Float] reduction factor
   def model_get_wwr_reduction_ratio(multiplier,
+                                    surface_name: "surface",
                                     surface_wwr: 0.0,
                                     surface_dr: 0.0,
                                     wwr_building_type: 'All others',
