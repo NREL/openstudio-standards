@@ -38,15 +38,14 @@ end
 # @return the OpenStudio Object or exception raise
 def prm_get_optional_handler(component, log_dir, data_key, *remaining_keys)
   target_data = component.send(data_key)
-  OpenStudio.logFree(OpenStudio::Error, 'prm.log', "#{component.name.get} does not contain the required data key #{data_key}. Retrieve the data cause failure.")
-
   prm_raise(target_data.is_initialized,
             log_dir,
-            "Failed to retrieve data from #{component.name.get}"
+            "Failed to retrieve data: #{data_key} from #{component.name.get}"
             )
   target_data_get = target_data.get
   return remaining_keys.length == 0 ? target_data_get : prm_get_optional_handler(target_data_get, log_dir, remaining_keys[0], *remaining_keys[1...])
 end
+
 
 # PRM get an additional property from an OpenStudio object as a boolean,
 # if no such additional property, then return default value.
@@ -76,4 +75,26 @@ def get_additional_property_as_double(component, key, default = 0.0)
     OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
   end
   return value
+end
+
+# PRM get an additional property from an OpenStudio object as a string,
+# if no such additional property, then return default value.
+# @param component [OpenStudio object] the component to get the additional property from
+# @param key [String] key string
+# @param default [Boolean] the default to return when there is no matching key
+def get_additional_property_as_string(component, key, default = "")
+  value = default
+  if component.additionalProperties.getFeatureAsString(key).is_initialized
+    value = component.additionalProperties.getFeatureAsString(key).get
+  else
+    OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
+  end
+  return value
+end
+
+# Check if a component has the additional feature
+# @param component [OpenStudio] object
+# @param additional_feature_key [String] key
+def has_additional_feature(component, additional_feature_key)
+  return component.hasAdditionalProperties && component.additionalProperties.hasFeature(additional_feature_key)
 end

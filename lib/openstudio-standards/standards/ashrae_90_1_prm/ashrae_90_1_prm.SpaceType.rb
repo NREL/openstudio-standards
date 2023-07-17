@@ -442,13 +442,29 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     schedule_hash = {}
     model.getSpaces.each do |space|
       space_type = space.spaceType.get
-      if space_type.hasAdditionalProperties && space_type.additionalProperties.hasFeature('regulated_lights_name')
+      if has_additional_feature(space_type, 'regulated_lights_name')
         lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
-        ltg = space_type.model.getLightsByName(lights_name).get
+        ltg_option = space_type.model.getLightsByName(lights_name)
+        if ltg_option.is_initialized
+          ltg = ltg_option.get
+        else
+          # raise exception if we cannot find the lights in the model
+          prm_raise(false, @sizing_run_dir, "Cannot find the lights #{lights_name} in the model")
+        end
+        # this will raise exception if the ltg has no schedule assigned.
         if ltg.schedule.is_initialized
           ltg_schedule = ltg.schedule.get
-          ltg_schedule_name = ltg_schedule.name
-          occupancy_sensor_credit = space.additionalProperties.getFeatureAsDouble('occ_control_credit')
+        else
+          # case such as Attic may have light object but no light schedule assigned
+          # Eplus use default 0 so in here we raise Error but continue processing.
+          ltg_schedule = nil
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                             "schedule is not available in component #{ltg.name.get}. Skip processing")
+        end
+
+        if ltg_schedule
+          ltg_schedule_name = ltg_schedule.name.get
+          occupancy_sensor_credit = get_additional_property_as_double(space, 'occ_control_credit', 0.0)
           new_ltg_schedule_name = format("#{ltg_schedule_name}_%.4f", occupancy_sensor_credit)
           if schedule_hash.key?(new_ltg_schedule_name)
             # In this case, there is a schedule created, can retrieve the schedule object and reset in this space type
@@ -468,21 +484,21 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   end
 
   def deep_copy_schedule(new_schedule_name, schedule, adjustment_factor, model)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ScheduleRuleset', "Creating a new lighting schedule that applies occupancy sensor adjustment factor: #{adjustment_factor} based on #{schedule.name.get} schedule")
+    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Creating a new lighting schedule that applies occupancy sensor adjustment factor: #{adjustment_factor} based on #{schedule.name.get} schedule")
     ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
     ruleset.setName(new_schedule_name)
 
     # schedule types limits and default day schedule - keep the copy
-    schedule_ruleset = schedule.to_ScheduleRuleset.get
-    schedule_type_limit = schedule_ruleset.scheduleTypeLimits.get
+    schedule_ruleset = prm_get_optional_handler(schedule, @sizing_run_dir, 'to_ScheduleRuleset')
+    schedule_type_limit = prm_get_optional_handler(schedule, @sizing_run_dir, 'scheduleTypeLimits')
     default_day_schedule = schedule_ruleset.defaultDaySchedule
     default_winter_design_day_schedule = schedule_ruleset.winterDesignDaySchedule
     default_summer_design_day_schedule = schedule_ruleset.summerDesignDaySchedule
 
     schedule_ruleset.scheduleRules.each do |week_rule|
       day_rule = week_rule.daySchedule
-      start_date = week_rule.startDate.get
-      end_date = week_rule.endDate.get
+      start_date = prm_get_optional_handler(week_rule, @sizing_run_dir, 'startDate')
+      end_date = prm_get_optional_handler(week_rule, @sizing_run_dir, 'endDate')
 
       # create a new day rule - copy and apply the ajustment factor
       new_day_rule = OpenStudio::Model::ScheduleDay.new(model)
