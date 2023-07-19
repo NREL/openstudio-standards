@@ -1368,7 +1368,7 @@ class BTAPData
               WHERE ReportName='EnergyMeters'
               AND ReportForString='Entire Facility'
               AND TableName='Annual and Peak Values - Natural Gas'
-              AND RowName='Heating:Gas'
+              AND RowName='Heating:NaturalGas'
               AND ColumnName='Natural Gas Maximum Value'
               AND Units='W'"
     heating_peak_w_gas = @sqlite_file.get.execAndReturnFirstDouble(command)
