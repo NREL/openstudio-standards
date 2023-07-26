@@ -2010,7 +2010,7 @@ class ASHRAE901PRM < Standard
     unless run_all_orients
       OpenStudio.logFree(OpenStudio::Error,
                          'prm.log',
-                         "The run_all_orientation flag is set to False, update the run to a single orientation PRM generation.")
+                         'The run_all_orientation flag is set to False, update the run to a single orientation PRM generation.')
       run_orients_flag = run_all_orients
     end
     # Step 3 read user data - priority 1 - user data will override the priority 2
@@ -2087,32 +2087,35 @@ class ASHRAE901PRM < Standard
       end
     end
 
-    return false unless surfaces_with_fc_factor_boundary
+    if surfaces_with_fc_factor_boundary
+      # Remove existing FCFactor temperature profile
+      model.getSiteGroundTemperatureFCfactorMethod.remove
 
-    # Remove existing FCFactor temperature profile
-    model.getSiteGroundTemperatureFCfactorMethod.remove
+      # Get path to weather file specified in the model
+      weather_file_path = prm_get_optional_handler(model.getWeatherFile, @sizing_run_dir, 'path').to_s
 
-    # Get path to weather file specified in the model
-    weather_file_path = model.getWeatherFile.path.get.to_s
+      # Look for stat file corresponding to the weather file
+      stat_file_path = weather_file_path.sub('.epw', '.stat').to_s
+      if !File.exist? stat_file_path
+        # When the stat file corresponding with the weather file in the model is missing,
+        # use the weather file that represent the climate zone
+        climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
+        prm_raise(climate_zone_weather_file_map.key?(climate_zone),
+                  @sizing_run_dir,
+                  "Failed to find a matching climate zone #{climate_zone} from the climate zone weather files.")
+        weather_file = climate_zone_weather_file_map[climate_zone]
+        stat_file_path = model_get_weather_file(weather_file).sub('.epw', '.stat').to_s
+      end
 
-    # Look for stat file corresponding to the weather file
-    stat_file_path = weather_file_path.sub('.epw', '.stat').to_s
-    if !File.exist? stat_file_path
-      # When the stat file corresponding with the weather file in the model is missing,
-      # use the weather file that represent the climate zone
-      climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
-      weather_file = climate_zone_weather_file_map[climate_zone]
-      stat_file_path = model_get_weather_file(weather_file).sub('.epw', '.stat').to_s
+      ground_temp = OpenStudio::Model::SiteGroundTemperatureFCfactorMethod.new(model)
+      ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
+      unless ground_temperatures.empty?
+        # set the site ground temperature building surface
+        ground_temp.setAllMonthlyTemperatures(ground_temperatures)
+      end
     end
 
-    ground_temp = OpenStudio::Model::SiteGroundTemperatureFCfactorMethod.new(model)
-    ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
-    unless ground_temperatures.empty?
-      # set the site ground temperature building surface
-      ground_temp.setAllMonthlyTemperatures(ground_temperatures)
-    end
-
-    return true
+    return surfaces_with_fc_factor_boundary
   end
 
   # Generate baseline log to a specific file directory
@@ -2375,7 +2378,7 @@ class ASHRAE901PRM < Standard
       has_computer_room = false
       # First check if any space in zone has a computer room
       zn['zone'].spaces.each do |space|
-        if prm_get_optional_handler(space, @sizing_run_dir, 'spaceType','standardsSpaceType') == 'computer room'
+        if prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType') == 'computer room'
           has_computer_room = true
           break
         end
