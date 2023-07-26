@@ -441,7 +441,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # set schedule for lighting
     schedule_hash = {}
     model.getSpaces.each do |space|
-      space_type = space.spaceType.get
+      space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType')
       if has_additional_feature(space_type, 'regulated_lights_name')
         lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
         ltg_option = space_type.model.getLightsByName(lights_name)
