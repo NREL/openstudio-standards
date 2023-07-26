@@ -1778,7 +1778,7 @@ class Standard
       else
         avail_mgr = nil
       end
-    else 
+    else
       avail_mgr = air_loop.availabilityManagers[0]
     end
 
@@ -2142,7 +2142,7 @@ class Standard
       else
         avail_mgr = nil
       end
-    else 
+    else
       avail_mgr = air_loop.availabilityManagers[0]
     end
 
@@ -2764,7 +2764,7 @@ class Standard
         else
           avail_mgr = nil
         end
-      else 
+      else
         avail_mgr = air_loop.availabilityManagers[0]
       end
 
