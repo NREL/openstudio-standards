@@ -986,7 +986,6 @@ class ASHRAE901PRM < Standard
       # - No cooling coil and/or,
       # - An evaporative cooling coil
       air_loop = zone.airLoopHVAC
-
       unless air_loop.empty?
         # Iterate through all the airloops assigned to a zone
         zone.airLoopHVACs.each do |airloop|
