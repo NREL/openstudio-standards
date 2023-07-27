@@ -980,6 +980,7 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::model::Model] OpenStudio model object
   # @return zone_nmc_sys_type [Hash] Zone to nmc system type mapping
   def model_identify_non_mechanically_cooled_systems(model)
+    
     # Iterate through zones to find out if they are served by nmc systems
     model.getThermalZones.each do |zone|
       # Check if airloop has economizer and either:
