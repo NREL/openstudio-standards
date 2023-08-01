@@ -15,6 +15,38 @@ class TSPRTests < Minitest::Test
   MAX_PATH_CHAR = 1800 #linux should set to a 1800, windows should set to 200, set to 1800 when push to the repo or open PR to pass CI.
 
 
+  def test_tspr_model_base(user_model_input='tspr/model_baseline_25496.osm')
+    building_type = 'MediumOffice'
+    climate_zone = 'ASHRAE 169-2013-2A'
+    @test_dir = "#{File.dirname(__FILE__)}/output"
+    @prototype_creator = Standard.build('90.1-PRM-2019')
+    model_name = "#{building_type}-#{climate_zone}-#{user_model_input}-tsprbaseline".sub("/", "_").sub(".osm", "")
+    proto_run_dir = "#{@test_dir}/#{model_name}"
+    proto_run_dir = proto_run_dir.length > MAX_PATH_CHAR ? "#{proto_run_dir[0...MAX_PATH_CHAR]}" : proto_run_dir
+
+    # Define run directory and run name, delete existing folder if it exists
+    run_dir_baseline = "#{proto_run_dir}-Baseline"
+    if Dir.exist?(run_dir_baseline)
+      FileUtils.rm_rf(run_dir_baseline)
+    end
+
+    osm_model_path = "../../data/#{user_model_input}"
+    abs_path = File.join(File.dirname(__FILE__), osm_model_path)
+    version_translator = OpenStudio::OSVersion::VersionTranslator.new
+    model = version_translator.loadModel(abs_path)
+    model = model.get
+
+    # Create baseline model
+    model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, climate_zone,
+                                                                                  @@hvac_building_types[building_type],
+                                                                                  @@wwr_building_types[building_type],
+                                                                                  @@swh_building_types[building_type],
+                                                                                  run_dir_baseline, false, GENERATE_PRM_LOG)
+
+    # Check if baseline could be created
+    assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{climate_zone}.")
+  end
+
   def test_tspr_model_prop_base(user_model_input='tspr/model_baseline_25496.osm')
     template = '90.1-2019'
     building_type = 'MediumOffice'
