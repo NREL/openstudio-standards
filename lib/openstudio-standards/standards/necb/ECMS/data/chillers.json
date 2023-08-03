@@ -1,0 +1,44 @@
+{
+  "tables": {
+    "chillers_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "name": "NECB2020_AirCooledChiller",
+          "compressor_type": "Scroll",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "minimum_coefficient_of_performance_cooling": 2.866,
+          "capft": "AirCooled_Scroll_CAPFT_NECB2011",
+          "eirft": "AirCooled_Scroll_EIRFT_NECB2011",
+          "eirfplr": "AirCooled_Scroll_EIRFPLR_NECB2011",
+          "notes": "NECB 2020 Table 5.2.12.1.-K Air Cooled Chiller COP. Capacity in ton."
+        },
+        {
+          "name": "NECB2020_AirCooledChiller",
+          "compressor_type": "Reciprocating",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "minimum_coefficient_of_performance_cooling": 2.866,
+          "capft": "AirCooled_Reciprocating_CAPFT_NECB2011",
+          "eirft": "AirCooled_Reciprocating_EIRFT_NECB2011",
+          "eirfplr": "AirCooled_Reciprocating_EIRFPLR_NECB2011",
+          "notes": "NECB 2020 Table 5.2.12.1.-K Air Cooled Chiller COP. Capacity in ton."
+        },
+        {
+          "name": "NECB2020_AirCooledChiller",
+          "compressor_type": "Screw",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 9999.0,
+          "minimum_coefficient_of_performance_cooling": 2.866,
+          "capft": "AirCooled_Screw_CAPFT_NECB2011",
+          "eirft": "AirCooled_Screw_EIRFT_NECB2011",
+          "eirfplr": "AirCooled_Screw_EIRFPLR_NECB2011",
+          "notes": "NECB 2020 Table 5.2.12.1.-K Air Cooled Chiller COP. Capacity in ton."
+        }
+      ]
+    }
+  }
+}

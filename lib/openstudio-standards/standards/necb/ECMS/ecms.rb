@@ -72,7 +72,7 @@ class ECMS < NECB2011
                  heating_fuel: primary_heating_fuel)
   end
 
-  def apply_system_efficiencies_ecm(model:, ecm_system_name: nil)
+  def apply_system_efficiencies_ecm(model:, ecm_system_name: nil, template_standard:)
     # Do nothing if nil.
     return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default' || ecm_system_name.to_s.downcase == 'remove_airloops_add_zone_baseboards'
 
@@ -83,6 +83,6 @@ class ECMS < NECB2011
     raise("the method #{ecm_apply_eff_method_name} does not exist in the ECM class. Please verify that this should be called.") unless ecm_std.respond_to?(ecm_apply_eff_method_name)
 
     # apply system eff method.
-    ecm_std.send(ecm_apply_eff_method_name, model)
+    ecm_std.send(ecm_apply_eff_method_name, model, template_standard)
   end
 end

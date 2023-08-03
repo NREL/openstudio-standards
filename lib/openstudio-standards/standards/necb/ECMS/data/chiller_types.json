@@ -1,0 +1,25 @@
+{
+  "tables": {
+    "chiller_types_ecm": {
+      "refs": [
+        "assumption"
+      ],
+      "table": [
+        {
+          "cooling_type": "AirCooled",
+          "compressor_type": "Scroll",
+          "minimum_capacity": 0.0,
+          "maximum_capacity": 150.0,
+          "notes": "Chiller type set based on survey of major chiller manufacturers data"
+        },
+        {
+          "cooling_type": "AirCooled",
+          "compressor_type": "Rotary Screw",
+          "minimum_capacity": 150.0,
+          "maximum_capacity": 9999.0,
+          "notes": "Chiller type set based on survey of major chiller manufacturers data"
+        }
+      ]
+    }
+  }
+}
