@@ -3684,4 +3684,9 @@ class AppendixGPRMTests < Minitest::Test
     model_hash = prm_test_helper('baseline_outdoor_air', require_prototype=false, require_baseline=true)
     check_baseline_oa(model_hash['baseline'])
   end
+
+  def test_exterior_lighting
+    model_hash = prm_test_helper('exterior_lighting', require_prototype=false, require_baseline=true)
+    check_exterior_lighting(model_hash['baseline'])
+  end
 end

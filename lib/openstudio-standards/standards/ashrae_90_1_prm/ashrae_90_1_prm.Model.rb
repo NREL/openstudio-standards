@@ -709,69 +709,17 @@ class ASHRAE901PRM < Standard
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
   def model_apply_baseline_exterior_lighting(model)
-    user_ext_lights = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights'] : nil
-    return false if user_ext_lights.nil?
 
-    non_tradeable_cats = ['nontradeable_general', 'building_facades_area', 'building_facades_perim', 'automated_teller_machines_per_location', 'automated_teller_machines_per_machine', 'entries_and_gates', 'loading_areas_for_emergency_vehicles', 'drive_through_windows_and_doors', 'parking_near_24_hour_entrances', 'roadway_parking']
-    search_criteria = {
-      'template' => template
-    }
-
-    ext_ltg_baseline_values = standards_lookup_table_first(table_name: 'prm_exterior_lighting', search_criteria: search_criteria)
-
-    user_ext_lights.each do |user_data|
-      lights_name = user_data['name']
-
-      # model.getExteriorLightss.each do |exterior_lights|
-
-      if model.getExteriorLightsByName(lights_name).is_initialized
-        ext_lights_obj = model.getExteriorLightsByName(lights_name).get
-      else
-        # Report invalid name in user data
-        OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "ExteriorLights object named #{lights_name} from user data file not found in model")
-        next
-      end
-
-      # Make sure none of the categories are nontradeable and not a mix of tradeable and nontradeable
-      num_trade = 0
-      num_notrade = 0
-      ext_ltg_cats = {}
-      num_cats = user_data['num_ext_lights_subcats'].to_i
-      (1..num_cats).each do |icat|
-        cat_key = format('end_use_subcategory_%02d', icat)
-        subcat = user_data[cat_key]
-        if non_tradeable_cats.include?(subcat)
-          num_notrade += 1
-        else
-          num_trade += 1
-          meas_val_key = format('end_use_measurement_value_%02d', icat)
-          meas_val = user_data[meas_val_key]
-          ext_ltg_cats[subcat] = meas_val.to_f
-        end
-      end
-
-      # Skip this if all lights are non-tradeable
-      next if num_trade == 0
-
-      # Error if mix of tradeable and nontradeable
-      if (num_trade > 0) && (num_notrade > 0)
-        OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "ExteriorLights object named #{lights_name} from user data file has mix of tradeable and non-tradeable lighting types. All will be treated as non-tradeable.")
-        next
-      end
-
-      ext_ltg_pwr = 0
-      ext_ltg_cats.each do |cat_key, meas_val|
-        # Get baseline power for this type of exterior lighting
-        baseline_value = ext_ltg_baseline_values[cat_key].to_f
-        ext_ltg_pwr += baseline_value * meas_val
-      end
-
+    model.getExteriorLightss.each do |ext_lights_obj|
       # Update existing exterior lights object: control, schedule, power
       ext_lights_obj.setControlOption('AstronomicalClock')
       ext_lights_obj.setSchedule(model.alwaysOnDiscreteSchedule)
       ext_lights_obj.setMultiplier(1)
       ext_lights_def = ext_lights_obj.exteriorLightsDefinition
-      ext_lights_def.setDesignLevel(ext_ltg_pwr)
+      ext_ltg_pwr = get_additional_property_as_double(ext_lights_obj, 'design_level', 0.0)
+      if ext_ltg_pwr >= 0.0
+        ext_lights_def.setDesignLevel(ext_ltg_pwr)
+      end
     end
   end
 
@@ -779,20 +727,19 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   def model_add_prm_elevators(model)
     # Load elevator data from userdata csv files
-    user_elevators = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
-    return false if user_elevators.nil?
+    equipment_array = model.getElectricEquipments + model.getExteriorFuelEquipments
+    equipment_array.each do |equipment|
+      elevator_number_of_lifts = get_additional_property_as_integer(equipment, 'elevator_number_of_lifts', 0)
+      next unless elevator_number_of_lifts > 0.0
 
-    user_elevators.each do |user_elevator|
-      num_lifts = user_elevator['elevator_number_of_lifts'].to_i
-      next if num_lifts == 0
+      elevator_name = equipment.name.get
+      elevator_number_of_stories = get_additional_property_as_integer(equipment, 'elevator_number_of_stories', 0)
+      elevator_weight_of_car = get_additional_property_as_double(equipment, 'elevator_weight_of_car', 0.0)
+      elevator_rated_load = get_additional_property_as_double(equipment, 'elevator_rated_load', 0.0)
+      elevator_speed_of_car = get_additional_property_as_double(equipment, 'elevator_speed_of_car', 0.0)
+      elevator_counter_weight_of_car = get_additional_property_as_double(equipment, 'elevator_counter_weight_of_car', 0.0)
 
-      equip_name = user_elevator['name']
-      number_of_levels = user_elevator['elevator_number_of_stories'].to_i
-
-      elevator_weight_of_car = user_elevator['elevator_weight_of_car'].to_f
-      elevator_rated_load = user_elevator['elevator_rated_load'].to_f
-      elevator_speed_of_car = user_elevator['elevator_speed_of_car'].to_f
-      if number_of_levels < 5
+      if elevator_number_of_stories < 5
         # From Table G3.9.2 performance rating method baseline elevator motor
         elevator_mech_eff = 0.58
         elevator_counter_weight_of_car = 0.0
@@ -804,29 +751,23 @@ class ASHRAE901PRM < Standard
         # From Table G3.9.2 performance rating method baseline elevator motor
         elevator_mech_eff = 0.64
         # Determine the elevator counterweight
-        if user_elevator['elevator_counter_weight_of_car'].nil?
+        if elevator_counter_weight_of_car == 0.0
           # When the proposed design counterweight is not specified
           # it is determined as per Table G3.9.2
           elevator_counter_weight_of_car = elevator_weight_of_car + 0.4 * elevator_rated_load
-        else
-          elevator_counter_weight_of_car = user_elevator['elevator_counter_weight_of_car'].to_f
         end
         search_criteria = {
           'template' => template,
           'type' => 'Any'
         }
       end
-
-      elevator_motor_bhp = (elevator_weight_of_car + elevator_rated_load - elevator_counter_weight_of_car) * elevator_speed_of_car / (33000 * elevator_mech_eff)
-
-      # Lookup the minimum motor efficiency
+      elevator_motor_bhp = (elevator_weight_of_car + elevator_rated_load - elevator_counter_weight_of_car) * elevator_speed_of_car / (33000 * elevator_mech_eff) # Lookup the minimum motor efficiency
       elevator_motor_eff = standards_data['motors']
       motor_properties = model_find_object(elevator_motor_eff, search_criteria, nil, nil, nil, nil, elevator_motor_bhp)
       if motor_properties.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.elevator', "For #{equip_name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{elevator_name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{elevator_motor_bhp} hp.")
         return false
       end
-
       nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
       # Round to nearest whole HP for niceness
       if nominal_hp >= 2
@@ -837,33 +778,28 @@ class ASHRAE901PRM < Standard
       # Add 0.01 hp to avoid search errors.
       motor_properties = model_find_object(elevator_motor_eff, search_criteria, nil, nil, nil, nil, nominal_hp + 0.01)
       if motor_properties.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model', "For #{equip_name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{elevator_name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
         return false
       end
       motor_eff = motor_properties['nominal_full_load_efficiency'].to_f
-      elevator_power = num_lifts * elevator_motor_bhp * 746 / motor_eff
+      elevator_power = elevator_number_of_lifts * elevator_motor_bhp * 746 / motor_eff
 
-      # Set elevator power to either regular electric equipment object or
-      # exterior fuel equipment
-      if model.getElectricEquipmentByName(equip_name).is_initialized
-        model.getElectricEquipmentByName(equip_name).get.electricEquipmentDefinition.setDesignLevel(elevator_power)
-        elevator_space = model.getElectricEquipmentByName(equip_name).get.space.get
+      if equipment.is_a?(OpenStudio::Model::ElectricEquipment)
+        equipment.electricEquipmentDefinition.setDesignLevel(elevator_power)
+      else
+        equipment.exteriorFuelEquipmentDefinition.setDesignLevel(elevator_power)
       end
-      if model.getExteriorFuelEquipmentByName(equip_name).is_initialized
-        model.getExteriorFuelEquipmentByName(equip_name).exteriorFuelEquipmentDefinition.setDesignLevel(elevator_power)
-        elevator_space = model.getElectricEquipmentByName(equip_name).get.space.get
-      end
-
+      elevator_space = prm_get_optional_handler(equipment, @sizing_run_dir, 'space')
       # Add ventilation and lighting process loads if modeled in the proposed model
       misc_elevator_process_loads = 0.0
-      misc_elevator_process_loads += user_elevator['elevator_ventilation_cfm'].to_f * 0.33
-      misc_elevator_process_loads += user_elevator['elevator_area_ft2'].to_f * 3.14
+      misc_elevator_process_loads += get_additional_property_as_double(equipment, 'elevator_ventilation_cfm', 0.0) * 0.33
+      misc_elevator_process_loads += get_additional_property_as_double(equipment, 'elevator_area_ft2', 0.0) * 3.14
       if misc_elevator_process_loads > 0
         misc_elevator_process_loads_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
-        misc_elevator_process_loads_def.setName("#{equip_name} - Misc Process Loads - Def")
+        misc_elevator_process_loads_def.setName("#{elevator_name} - Misc Process Loads - Def")
         misc_elevator_process_loads_def.setDesignLevel(misc_elevator_process_loads)
         misc_elevator_process_loads = OpenStudio::Model::ElectricEquipment.new(misc_elevator_process_loads_def)
-        misc_elevator_process_loads.setName("#{equip_name} - Misc Process Loads")
+        misc_elevator_process_loads.setName("#{elevator_name} - Misc Process Loads")
         misc_elevator_process_loads.setEndUseSubcategory('Elevators')
         misc_elevator_process_loads.setSchedule(model.alwaysOnDiscreteSchedule)
         misc_elevator_process_loads.setSpace(elevator_space)
@@ -981,24 +917,17 @@ class ASHRAE901PRM < Standard
   # @return zone_nmc_sys_type [Hash] Zone to nmc system type mapping
   def model_identify_non_mechanically_cooled_systems(model)
     # Iterate through zones to find out if they are served by nmc systems
-    model.getThermalZones.sort.each do |zone|
+    model.getThermalZones.each do |zone|
       # Check if airloop has economizer and either:
       # - No cooling coil and/or,
       # - An evaporative cooling coil
-      air_loop = zone.airLoopHVAC
-      unless air_loop.empty?
-        # Iterate through all the airloops assigned to a zone
-        zone.airLoopHVACs.each do |airloop|
-          air_loop = air_loop.get
-          if (!air_loop_hvac_include_cooling_coil?(air_loop) &&
-            air_loop_hvac_include_evaporative_cooler?(air_loop)) ||
-             (!air_loop_hvac_include_cooling_coil?(air_loop) &&
-               air_loop_hvac_include_economizer?(air_loop))
-            air_loop.additionalProperties.setFeature('non_mechanically_cooled', true)
-            air_loop.thermalZones.each do |thermal_zone|
-              thermal_zone.additionalProperties.setFeature('non_mechanically_cooled', true)
-            end
-          end
+      zone.airLoopHVACs.each do |air_loop|
+        if (!air_loop_hvac_include_cooling_coil?(air_loop) &&
+          air_loop_hvac_include_evaporative_cooler?(air_loop)) ||
+           (!air_loop_hvac_include_cooling_coil?(air_loop) &&
+             air_loop_hvac_include_economizer?(air_loop))
+          air_loop.additionalProperties.setFeature('non_mechanically_cooled', true)
+          zone.additionalProperties.setFeature('non_mechanically_cooled', true)
         end
       end
     end
@@ -1467,6 +1396,8 @@ class ASHRAE901PRM < Standard
     handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # load user data from proposed model
     handle_airloop_user_input_data(model)
+    # exterior lighting handler
+    handle_exterior_lighting_user_input_data(model)
     # load OA data from user data
     handle_outdoor_air_user_input_data(model)
     # load air loop DOAS user data from the proposed model
@@ -1475,6 +1406,110 @@ class ASHRAE901PRM < Standard
     handle_zone_hvac_user_input_data(model)
     # load thermal zone user data from proposed model
     handle_thermal_zone_user_input_data(model)
+    # load electric equipment user data
+    handle_electric_equipment_user_input_data(model)
+  end
+
+  # A function to load exterior lighting data from user data csv files
+  # The file name is userdata_exterior_lighting.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_exterior_lighting_user_input_data(model)
+    user_data_exterior_lighting_objects = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights']: nil
+    if user_data_exterior_lighting_objects && !user_data_exterior_lighting_objects.empty?
+      non_tradeable_cats = ['nontradeable_general', 'building_facades_area', 'building_facades_perim', 'automated_teller_machines_per_location', 'automated_teller_machines_per_machine', 'entries_and_gates',
+                            'loading_areas_for_emergency_vehicles', 'drive_through_windows_and_doors', 'parking_near_24_hour_entrances', 'roadway_parking']
+
+      search_criteria = {
+        'template' => template
+      }
+
+      ext_ltg_baseline_values = standards_lookup_table_first(table_name: 'prm_exterior_lighting', search_criteria: search_criteria)
+
+      # get exterior lighting object.
+      user_data_exterior_lighting_objects.each do |user_exterior_lighting|
+        exterior_lighting = model.getExteriorLightsByName(user_exterior_lighting['name'])
+        if !exterior_lighting.is_initialized
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "The Exterior:Lighting named #{user_exterior_lighting['name']} in the userdata_exterior_lights was not found in the model, user specified data associated with it will be ignored.")
+          next
+        else
+          exterior_lighting = exterior_lighting.get
+        end
+        num_cats = user_exterior_lighting['num_ext_lights_subcats'].to_i
+        # Make sure none of the categories are nontradeable and not a mix of tradeable and nontradeable
+        num_trade = 0
+        num_notrade = 0
+        ext_ltg_cats = {}
+        (1..num_cats).each do |icat|
+          cat_key = format('end_use_subcategory_%02d', icat)
+          subcat = prm_read_user_data(user_exterior_lighting, cat_key, nil)
+          # handle the userdata missing value issue.
+          prm_raise(subcat, @sizing_run_dir, "userdata_exterior_lights is missing data #{cat_key}")
+          if non_tradeable_cats.include?(subcat)
+            num_notrade += 1
+          else
+            num_trade += 1
+            meas_val_key = format('end_use_measurement_value_%02d', icat)
+            meas_val = prm_read_user_data(user_exterior_lighting, meas_val_key, "0.0").to_f
+            unless meas_val == 0
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "End use subcategory #{subcat} has either missing measurement value or invalid measurement value, set to 0.0")
+            end
+            ext_ltg_cats[subcat] = meas_val
+          end
+        end
+
+        # skip this if all lights are non-tradeable
+        if num_trade == 0
+          exterior_lighting.additionalProperties.setFeature('design_level', 0.0)
+          next
+        end
+
+        if (num_trade > 0) && (num_notrade > 0)
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "ExteriorLights object named #{user_exterior_lighting['name']} from user data file has mix of tradeable and non-tradeable lighting types. All will be treated as non-tradeable.")
+          next
+        end
+
+        ext_ltg_pwr = 0
+        ext_ltg_cats.each do |subcat, meas_val|
+          # Get baseline power for this type of exterior lighting
+          baseline_value = ext_ltg_baseline_values[subcat].to_f
+          ext_ltg_pwr += baseline_value * meas_val
+        end
+
+        exterior_lighting.additionalProperties.setFeature('design_level', ext_ltg_pwr)
+      end
+    end
+  end
+
+  # A function to load electric equipment csv files
+  # The file name is userdata_electric_equipment.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_electric_equipment_user_input_data(model)
+    user_data_plug_load = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
+    if user_data_plug_load && !user_data_plug_load.empty?
+      user_data_plug_load.each do |user_plug_load|
+        # Process elevator data
+        num_lifts = prm_read_user_data(user_plug_load, 'elevator_number_of_lifts', 0).to_i
+        elevator_equipment_option = model.getElectricEquipmentByName(prm_read_user_data(user_plug_load, 'name'))
+        if num_lifts > 0 && elevator_equipment_option.is_initialized
+          elevator_equipment = elevator_equipment_option.get
+          elevator_equipment.additionalProperties.setFeature('elevator_number_of_lifts', num_lifts)
+          number_of_levels = prm_read_user_data(user_plug_load, 'elevator_number_of_stories', 0).to_i
+          elevator_equipment.additionalProperties.setFeature('elevator_number_of_stories', number_of_levels)
+          elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_weight_of_car', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_weight_of_car', elevator_weight_of_car)
+          elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_counter_weight_of_car', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_counter_weight_of_car', elevator_weight_of_car)
+          elevator_rated_load = prm_read_user_data(user_plug_load, 'elevator_rated_load', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_rated_load', elevator_rated_load)
+          elevator_speed_of_car = prm_read_user_data(user_plug_load, 'elevator_speed_of_car', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_speed_of_car', elevator_speed_of_car)
+          elevator_ventilation_cfm = prm_read_user_data(user_plug_load, 'elevator_ventilation_cfm', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_ventilation_cfm', elevator_ventilation_cfm)
+          elevator_area_ft2 = prm_read_user_data(user_plug_load, 'elevator_area_ft2', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_area_ft2', elevator_area_ft2)
+        end
+      end
+    end
   end
 
   # A function to load outdoor air data from user data csv files
@@ -2075,7 +2110,7 @@ class ASHRAE901PRM < Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if successful, false if not
+  # @return [Bool] returns true if surfaces is using fc factory, false if not
   def model_update_ground_temperature_profile(model, climate_zone)
     # Check if the ground temperature profile is needed
     surfaces_with_fc_factor_boundary = false
