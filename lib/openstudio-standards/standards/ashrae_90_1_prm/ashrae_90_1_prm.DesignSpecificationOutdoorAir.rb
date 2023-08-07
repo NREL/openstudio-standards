@@ -2,7 +2,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # @!group DesignSpecification:OutdoorAir
   # Sets the rules on outdoor air specifications on spaces / spaceType
 
-
   # Function applies user specified OA to the model
   # @param model [OpenStudio::Model::Model] model object
   # @return [Bool] returns true if successful, false if not

@@ -299,7 +299,7 @@ class ASHRAE9012019 < ASHRAE901
       end
 
       # guard clause to skip space with no lights
-      next if space_lights.empty? 
+      next if space_lights.empty?
 
       # if lights are defined at the space type level, clone each lights object and make it individual to the space
       new_space_lights = []

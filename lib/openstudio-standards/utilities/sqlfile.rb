@@ -412,7 +412,7 @@ Standard.class_eval do
     return heating_or_cooling_setpoint_unmet
   end
 
-   # Get the total unmet load hours during occupancy of a model that has been simulated
+  # Get the total unmet load hours during occupancy of a model that has been simulated
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Float] returns the number of total unmet load hours during occupancy in a simulated model
@@ -451,7 +451,7 @@ Standard.class_eval do
 
     return result
   end
- 
+
   # Gets the model annual energy consumption by fuel and enduse in GJ from the sql file
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object

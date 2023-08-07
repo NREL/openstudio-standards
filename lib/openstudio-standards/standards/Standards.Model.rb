@@ -3246,7 +3246,7 @@ class Standard
           skylights_frame_added = 0
           model.getSubSurfaces.each do |sub_surface|
             next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && sub_surface.subSurfaceType == 'Skylight'
-            
+
             if model.version < OpenStudio::VersionString.new('3.1.0')
               # window frame setting before https://github.com/NREL/OpenStudio/issues/2895 was fixed
               sub_surface.setString(8, frame.name.get.to_s)
@@ -6947,7 +6947,7 @@ class Standard
   # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
   # @return [Float] reduction factor
   def model_get_wwr_reduction_ratio(multiplier,
-                                    surface_name: "surface",
+                                    surface_name: 'surface',
                                     surface_wwr: 0.0,
                                     surface_dr: 0.0,
                                     wwr_building_type: 'All others',
