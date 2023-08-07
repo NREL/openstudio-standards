@@ -66,7 +66,7 @@ end
 # if no such additional property, then return default value.
 # @param component [OpenStudio object] the component to get the additional property from
 # @param key [String] key string
-# @param default [Boolean] the default to return when there is no matching key
+# @param default [Integer] the default to return when there is no matching key
 def get_additional_property_as_integer(component, key, default = 0.0)
   value = default
   if component.additionalProperties.getFeatureAsInteger(key).is_initialized
@@ -81,7 +81,7 @@ end
 # if no such additional property, then return default value.
 # @param component [OpenStudio object] the component to get the additional property from
 # @param key [String] key string
-# @param default [Boolean] the default to return when there is no matching key
+# @param default [Double] the default to return when there is no matching key
 def get_additional_property_as_double(component, key, default = 0.0)
   value = default
   if component.additionalProperties.getFeatureAsDouble(key).is_initialized
@@ -96,7 +96,7 @@ end
 # if no such additional property, then return default value.
 # @param component [OpenStudio object] the component to get the additional property from
 # @param key [String] key string
-# @param default [Boolean] the default to return when there is no matching key
+# @param default [String] the default to return when there is no matching key
 def get_additional_property_as_string(component, key, default = "")
   value = default
   if component.additionalProperties.getFeatureAsString(key).is_initialized
