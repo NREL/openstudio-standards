@@ -709,69 +709,17 @@ class ASHRAE901PRM < Standard
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
   def model_apply_baseline_exterior_lighting(model)
-    user_ext_lights = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights'] : nil
-    return false if user_ext_lights.nil?
 
-    non_tradeable_cats = ['nontradeable_general', 'building_facades_area', 'building_facades_perim', 'automated_teller_machines_per_location', 'automated_teller_machines_per_machine', 'entries_and_gates', 'loading_areas_for_emergency_vehicles', 'drive_through_windows_and_doors', 'parking_near_24_hour_entrances', 'roadway_parking']
-    search_criteria = {
-      'template' => template
-    }
-
-    ext_ltg_baseline_values = standards_lookup_table_first(table_name: 'prm_exterior_lighting', search_criteria: search_criteria)
-
-    user_ext_lights.each do |user_data|
-      lights_name = user_data['name']
-
-      # model.getExteriorLightss.each do |exterior_lights|
-
-      if model.getExteriorLightsByName(lights_name).is_initialized
-        ext_lights_obj = model.getExteriorLightsByName(lights_name).get
-      else
-        # Report invalid name in user data
-        OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "ExteriorLights object named #{lights_name} from user data file not found in model")
-        next
-      end
-
-      # Make sure none of the categories are nontradeable and not a mix of tradeable and nontradeable
-      num_trade = 0
-      num_notrade = 0
-      ext_ltg_cats = {}
-      num_cats = user_data['num_ext_lights_subcats'].to_i
-      (1..num_cats).each do |icat|
-        cat_key = format('end_use_subcategory_%02d', icat)
-        subcat = user_data[cat_key]
-        if non_tradeable_cats.include?(subcat)
-          num_notrade += 1
-        else
-          num_trade += 1
-          meas_val_key = format('end_use_measurement_value_%02d', icat)
-          meas_val = user_data[meas_val_key]
-          ext_ltg_cats[subcat] = meas_val.to_f
-        end
-      end
-
-      # Skip this if all lights are non-tradeable
-      next if num_trade == 0
-
-      # Error if mix of tradeable and nontradeable
-      if (num_trade > 0) && (num_notrade > 0)
-        OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "ExteriorLights object named #{lights_name} from user data file has mix of tradeable and non-tradeable lighting types. All will be treated as non-tradeable.")
-        next
-      end
-
-      ext_ltg_pwr = 0
-      ext_ltg_cats.each do |cat_key, meas_val|
-        # Get baseline power for this type of exterior lighting
-        baseline_value = ext_ltg_baseline_values[cat_key].to_f
-        ext_ltg_pwr += baseline_value * meas_val
-      end
-
+    model.getExteriorLightss.each do |ext_lights_obj|
       # Update existing exterior lights object: control, schedule, power
       ext_lights_obj.setControlOption('AstronomicalClock')
       ext_lights_obj.setSchedule(model.alwaysOnDiscreteSchedule)
       ext_lights_obj.setMultiplier(1)
       ext_lights_def = ext_lights_obj.exteriorLightsDefinition
-      ext_lights_def.setDesignLevel(ext_ltg_pwr)
+      ext_ltg_pwr = get_additional_property_as_double(ext_lights_obj, 'design_level', 0.0)
+      if ext_ltg_pwr >= 0.0
+        ext_lights_def.setDesignLevel(ext_ltg_pwr)
+      end
     end
   end
 
@@ -1456,6 +1404,8 @@ class ASHRAE901PRM < Standard
     handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # load user data from proposed model
     handle_airloop_user_input_data(model)
+    # exterior lighting handler
+    handle_exterior_lighting_user_input_data(model)
     # load OA data from user data
     handle_outdoor_air_user_input_data(model)
     # load air loop DOAS user data from the proposed model
@@ -1466,6 +1416,76 @@ class ASHRAE901PRM < Standard
     handle_thermal_zone_user_input_data(model)
     # load electric equipment user data
     handle_electric_equipment_user_input_data(model)
+  end
+
+  # A function to load exterior lighting data from user data csv files
+  # The file name is userdata_exterior_lighting.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_exterior_lighting_user_input_data(model)
+    user_data_exterior_lighting_objects = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights']: nil
+    if user_data_exterior_lighting_objects && !user_data_exterior_lighting_objects.empty?
+      non_tradeable_cats = ['nontradeable_general', 'building_facades_area', 'building_facades_perim', 'automated_teller_machines_per_location', 'automated_teller_machines_per_machine', 'entries_and_gates',
+                            'loading_areas_for_emergency_vehicles', 'drive_through_windows_and_doors', 'parking_near_24_hour_entrances', 'roadway_parking']
+
+      search_criteria = {
+        'template' => template
+      }
+
+      ext_ltg_baseline_values = standards_lookup_table_first(table_name: 'prm_exterior_lighting', search_criteria: search_criteria)
+
+      # get exterior lighting object.
+      user_data_exterior_lighting_objects.each do |user_exterior_lighting|
+        exterior_lighting = model.getExteriorLightsByName(user_exterior_lighting['name'])
+        if !exterior_lighting.is_initialized
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "The Exterior:Lighting named #{user_exterior_lighting['name']} in the userdata_exterior_lights was not found in the model, user specified data associated with it will be ignored.")
+          next
+        else
+          exterior_lighting = exterior_lighting.get
+        end
+        num_cats = user_exterior_lighting['num_ext_lights_subcats'].to_i
+        # Make sure none of the categories are nontradeable and not a mix of tradeable and nontradeable
+        num_trade = 0
+        num_notrade = 0
+        ext_ltg_cats = {}
+        (1..num_cats).each do |icat|
+          cat_key = format('end_use_subcategory_%02d', icat)
+          subcat = prm_read_user_data(user_exterior_lighting, cat_key, nil)
+          # handle the userdata missing value issue.
+          prm_raise(subcat, @sizing_run_dir, "userdata_exterior_lights is missing data #{cat_key}")
+          if non_tradeable_cats.include?(subcat)
+            num_notrade += 1
+          else
+            num_trade += 1
+            meas_val_key = format('end_use_measurement_value_%02d', icat)
+            meas_val = prm_read_user_data(user_exterior_lighting, meas_val_key, "0.0").to_f
+            unless meas_val == 0
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "End use subcategory #{subcat} has either missing measurement value or invalid measurement value, set to 0.0")
+            end
+            ext_ltg_cats[subcat] = meas_val
+          end
+        end
+
+        # skip this if all lights are non-tradeable
+        if num_trade == 0
+          exterior_lighting.additionalProperties.setFeature('design_level', 0.0)
+          next
+        end
+
+        if (num_trade > 0) && (num_notrade > 0)
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "ExteriorLights object named #{user_exterior_lighting['name']} from user data file has mix of tradeable and non-tradeable lighting types. All will be treated as non-tradeable.")
+          next
+        end
+
+        ext_ltg_pwr = 0
+        ext_ltg_cats.each do |subcat, meas_val|
+          # Get baseline power for this type of exterior lighting
+          baseline_value = ext_ltg_baseline_values[subcat].to_f
+          ext_ltg_pwr += baseline_value * meas_val
+        end
+
+        exterior_lighting.additionalProperties.setFeature('design_level', ext_ltg_pwr)
+      end
+    end
   end
 
   # A function to load electric equipment csv files
@@ -1499,6 +1519,7 @@ class ASHRAE901PRM < Standard
       end
     end
   end
+
   # A function to load outdoor air data from user data csv files
   # The file name is userdata_design_specification_outdoor_air.csv
   # @param [OpenStudio::Model::Model] model
