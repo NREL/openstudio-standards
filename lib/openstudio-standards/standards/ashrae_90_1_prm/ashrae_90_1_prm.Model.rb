@@ -917,25 +917,17 @@ class ASHRAE901PRM < Standard
   # @return zone_nmc_sys_type [Hash] Zone to nmc system type mapping
   def model_identify_non_mechanically_cooled_systems(model)
     # Iterate through zones to find out if they are served by nmc systems
-    model.getThermalZones.sort.each do |zone|
+    model.getThermalZones.each do |zone|
       # Check if airloop has economizer and either:
       # - No cooling coil and/or,
       # - An evaporative cooling coil
-      air_loop = zone.airLoopHVAC
-
-      unless air_loop.empty?
-        # Iterate through all the airloops assigned to a zone
-        zone.airLoopHVACs.each do |airloop|
-          air_loop = air_loop.get
-          if (!air_loop_hvac_include_cooling_coil?(air_loop) &&
-            air_loop_hvac_include_evaporative_cooler?(air_loop)) ||
-             (!air_loop_hvac_include_cooling_coil?(air_loop) &&
-               air_loop_hvac_include_economizer?(air_loop))
-            air_loop.additionalProperties.setFeature('non_mechanically_cooled', true)
-            air_loop.thermalZones.each do |thermal_zone|
-              thermal_zone.additionalProperties.setFeature('non_mechanically_cooled', true)
-            end
-          end
+      zone.airLoopHVACs.each do |air_loop|
+        if (!air_loop_hvac_include_cooling_coil?(air_loop) &&
+          air_loop_hvac_include_evaporative_cooler?(air_loop)) ||
+           (!air_loop_hvac_include_cooling_coil?(air_loop) &&
+             air_loop_hvac_include_economizer?(air_loop))
+          air_loop.additionalProperties.setFeature('non_mechanically_cooled', true)
+          zone.additionalProperties.setFeature('non_mechanically_cooled', true)
         end
       end
     end
@@ -2052,7 +2044,7 @@ class ASHRAE901PRM < Standard
     unless run_all_orients
       OpenStudio.logFree(OpenStudio::Error,
                          'prm.log',
-                         "The run_all_orientation flag is set to False, update the run to a single orientation PRM generation.")
+                         'The run_all_orientation flag is set to False, update the run to a single orientation PRM generation.')
       run_orients_flag = run_all_orients
     end
     # Step 3 read user data - priority 1 - user data will override the priority 2
@@ -2417,7 +2409,7 @@ class ASHRAE901PRM < Standard
       has_computer_room = false
       # First check if any space in zone has a computer room
       zn['zone'].spaces.each do |space|
-        if prm_get_optional_handler(space, @sizing_run_dir, 'spaceType','standardsSpaceType') == 'computer room'
+        if prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType') == 'computer room'
           has_computer_room = true
           break
         end
