@@ -717,7 +717,7 @@ class ASHRAE901PRM < Standard
       ext_lights_obj.setMultiplier(1)
       ext_lights_def = ext_lights_obj.exteriorLightsDefinition
       ext_ltg_pwr = get_additional_property_as_double(ext_lights_obj, 'design_level', 0.0)
-      if ext_ltg_pwr > 0.0
+      if ext_ltg_pwr >= 0.0
         ext_lights_def.setDesignLevel(ext_ltg_pwr)
       end
     end
@@ -727,20 +727,19 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   def model_add_prm_elevators(model)
     # Load elevator data from userdata csv files
-    user_elevators = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
-    return false if user_elevators.nil?
+    equipment_array = model.getElectricEquipments + model.getExteriorFuelEquipments
+    equipment_array.each do |equipment|
+      elevator_number_of_lifts = get_additional_property_as_integer(equipment, 'elevator_number_of_lifts', 0)
+      next unless elevator_number_of_lifts > 0.0
 
-    user_elevators.each do |user_elevator|
-      num_lifts = user_elevator['elevator_number_of_lifts'].to_i
-      next if num_lifts == 0
+      elevator_name = equipment.name.get
+      elevator_number_of_stories = get_additional_property_as_integer(equipment, 'elevator_number_of_stories', 0)
+      elevator_weight_of_car = get_additional_property_as_double(equipment, 'elevator_weight_of_car', 0.0)
+      elevator_rated_load = get_additional_property_as_double(equipment, 'elevator_rated_load', 0.0)
+      elevator_speed_of_car = get_additional_property_as_double(equipment, 'elevator_speed_of_car', 0.0)
+      elevator_counter_weight_of_car = get_additional_property_as_double(equipment, 'elevator_counter_weight_of_car', 0.0)
 
-      equip_name = user_elevator['name']
-      number_of_levels = user_elevator['elevator_number_of_stories'].to_i
-
-      elevator_weight_of_car = user_elevator['elevator_weight_of_car'].to_f
-      elevator_rated_load = user_elevator['elevator_rated_load'].to_f
-      elevator_speed_of_car = user_elevator['elevator_speed_of_car'].to_f
-      if number_of_levels < 5
+      if elevator_number_of_stories < 5
         # From Table G3.9.2 performance rating method baseline elevator motor
         elevator_mech_eff = 0.58
         elevator_counter_weight_of_car = 0.0
@@ -752,29 +751,23 @@ class ASHRAE901PRM < Standard
         # From Table G3.9.2 performance rating method baseline elevator motor
         elevator_mech_eff = 0.64
         # Determine the elevator counterweight
-        if user_elevator['elevator_counter_weight_of_car'].nil?
+        if elevator_counter_weight_of_car == 0.0
           # When the proposed design counterweight is not specified
           # it is determined as per Table G3.9.2
           elevator_counter_weight_of_car = elevator_weight_of_car + 0.4 * elevator_rated_load
-        else
-          elevator_counter_weight_of_car = user_elevator['elevator_counter_weight_of_car'].to_f
         end
         search_criteria = {
           'template' => template,
           'type' => 'Any'
         }
       end
-
-      elevator_motor_bhp = (elevator_weight_of_car + elevator_rated_load - elevator_counter_weight_of_car) * elevator_speed_of_car / (33000 * elevator_mech_eff)
-
-      # Lookup the minimum motor efficiency
+      elevator_motor_bhp = (elevator_weight_of_car + elevator_rated_load - elevator_counter_weight_of_car) * elevator_speed_of_car / (33000 * elevator_mech_eff) # Lookup the minimum motor efficiency
       elevator_motor_eff = standards_data['motors']
       motor_properties = model_find_object(elevator_motor_eff, search_criteria, nil, nil, nil, nil, elevator_motor_bhp)
       if motor_properties.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.elevator', "For #{equip_name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{elevator_name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{elevator_motor_bhp} hp.")
         return false
       end
-
       nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
       # Round to nearest whole HP for niceness
       if nominal_hp >= 2
@@ -785,33 +778,28 @@ class ASHRAE901PRM < Standard
       # Add 0.01 hp to avoid search errors.
       motor_properties = model_find_object(elevator_motor_eff, search_criteria, nil, nil, nil, nil, nominal_hp + 0.01)
       if motor_properties.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.model', "For #{equip_name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{elevator_name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
         return false
       end
       motor_eff = motor_properties['nominal_full_load_efficiency'].to_f
-      elevator_power = num_lifts * elevator_motor_bhp * 746 / motor_eff
+      elevator_power = elevator_number_of_lifts * elevator_motor_bhp * 746 / motor_eff
 
-      # Set elevator power to either regular electric equipment object or
-      # exterior fuel equipment
-      if model.getElectricEquipmentByName(equip_name).is_initialized
-        model.getElectricEquipmentByName(equip_name).get.electricEquipmentDefinition.setDesignLevel(elevator_power)
-        elevator_space = model.getElectricEquipmentByName(equip_name).get.space.get
+      if equipment.is_a?(OpenStudio::Model::ElectricEquipment)
+        equipment.electricEquipmentDefinition.setDesignLevel(elevator_power)
+      else
+        equipment.exteriorFuelEquipmentDefinition.setDesignLevel(elevator_power)
       end
-      if model.getExteriorFuelEquipmentByName(equip_name).is_initialized
-        model.getExteriorFuelEquipmentByName(equip_name).exteriorFuelEquipmentDefinition.setDesignLevel(elevator_power)
-        elevator_space = model.getElectricEquipmentByName(equip_name).get.space.get
-      end
-
+      elevator_space = prm_get_optional_handler(equipment, @sizing_run_dir, 'space')
       # Add ventilation and lighting process loads if modeled in the proposed model
       misc_elevator_process_loads = 0.0
-      misc_elevator_process_loads += user_elevator['elevator_ventilation_cfm'].to_f * 0.33
-      misc_elevator_process_loads += user_elevator['elevator_area_ft2'].to_f * 3.14
+      misc_elevator_process_loads += get_additional_property_as_double(equipment, 'elevator_ventilation_cfm', 0.0) * 0.33
+      misc_elevator_process_loads += get_additional_property_as_double(equipment, 'elevator_area_ft2', 0.0) * 3.14
       if misc_elevator_process_loads > 0
         misc_elevator_process_loads_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
-        misc_elevator_process_loads_def.setName("#{equip_name} - Misc Process Loads - Def")
+        misc_elevator_process_loads_def.setName("#{elevator_name} - Misc Process Loads - Def")
         misc_elevator_process_loads_def.setDesignLevel(misc_elevator_process_loads)
         misc_elevator_process_loads = OpenStudio::Model::ElectricEquipment.new(misc_elevator_process_loads_def)
-        misc_elevator_process_loads.setName("#{equip_name} - Misc Process Loads")
+        misc_elevator_process_loads.setName("#{elevator_name} - Misc Process Loads")
         misc_elevator_process_loads.setEndUseSubcategory('Elevators')
         misc_elevator_process_loads.setSchedule(model.alwaysOnDiscreteSchedule)
         misc_elevator_process_loads.setSpace(elevator_space)
@@ -1426,6 +1414,8 @@ class ASHRAE901PRM < Standard
     handle_zone_hvac_user_input_data(model)
     # load thermal zone user data from proposed model
     handle_thermal_zone_user_input_data(model)
+    # load electric equipment user data
+    handle_electric_equipment_user_input_data(model)
   end
 
   # A function to load exterior lighting data from user data csv files
@@ -1467,7 +1457,11 @@ class ASHRAE901PRM < Standard
           else
             num_trade += 1
             meas_val_key = format('end_use_measurement_value_%02d', icat)
-            ext_ltg_cats[subcat] = prm_read_user_data(user_exterior_lighting, meas_val_key, "0.0").to_f
+            meas_val = prm_read_user_data(user_exterior_lighting, meas_val_key, "0.0").to_f
+            unless meas_val == 0
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "End use subcategory #{subcat} has either missing measurement value or invalid measurement value, set to 0.0")
+            end
+            ext_ltg_cats[subcat] = meas_val
           end
         end
 
@@ -1490,6 +1484,38 @@ class ASHRAE901PRM < Standard
         end
 
         exterior_lighting.additionalProperties.setFeature('design_level', ext_ltg_pwr)
+      end
+    end
+  end
+
+  # A function to load electric equipment csv files
+  # The file name is userdata_electric_equipment.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_electric_equipment_user_input_data(model)
+    user_data_plug_load = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
+    if user_data_plug_load && !user_data_plug_load.empty?
+      user_data_plug_load.each do |user_plug_load|
+        # Process elevator data
+        num_lifts = prm_read_user_data(user_plug_load, 'elevator_number_of_lifts', 0).to_i
+        elevator_equipment_option = model.getElectricEquipmentByName(prm_read_user_data(user_plug_load, 'name'))
+        if num_lifts > 0 && elevator_equipment_option.is_initialized
+          elevator_equipment = elevator_equipment_option.get
+          elevator_equipment.additionalProperties.setFeature('elevator_number_of_lifts', num_lifts)
+          number_of_levels = prm_read_user_data(user_plug_load, 'elevator_number_of_stories', 0).to_i
+          elevator_equipment.additionalProperties.setFeature('elevator_number_of_stories', number_of_levels)
+          elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_weight_of_car', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_weight_of_car', elevator_weight_of_car)
+          elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_counter_weight_of_car', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_counter_weight_of_car', elevator_weight_of_car)
+          elevator_rated_load = prm_read_user_data(user_plug_load, 'elevator_rated_load', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_rated_load', elevator_rated_load)
+          elevator_speed_of_car = prm_read_user_data(user_plug_load, 'elevator_speed_of_car', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_speed_of_car', elevator_speed_of_car)
+          elevator_ventilation_cfm = prm_read_user_data(user_plug_load, 'elevator_ventilation_cfm', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_ventilation_cfm', elevator_ventilation_cfm)
+          elevator_area_ft2 = prm_read_user_data(user_plug_load, 'elevator_area_ft2', 0.0).to_f
+          elevator_equipment.additionalProperties.setFeature('elevator_area_ft2', elevator_area_ft2)
+        end
       end
     end
   end
