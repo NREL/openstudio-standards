@@ -916,7 +916,6 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::model::Model] OpenStudio model object
   # @return zone_nmc_sys_type [Hash] Zone to nmc system type mapping
   def model_identify_non_mechanically_cooled_systems(model)
-    
     # Iterate through zones to find out if they are served by nmc systems
     model.getThermalZones.each do |zone|
       # Check if airloop has economizer and either:
@@ -931,24 +930,6 @@ class ASHRAE901PRM < Standard
           zone.additionalProperties.setFeature('non_mechanically_cooled', true)
         end
       end
-
-      # air_loop = zone.airLoopHVAC
-
-      # unless air_loop.empty?
-      # Iterate through all the airloops assigned to a zone
-      #  zone.airLoopHVACs.each do |airloop|
-      #    air_loop = air_loop.get
-      #    if (!air_loop_hvac_include_cooling_coil?(air_loop) &&
-      #      air_loop_hvac_include_evaporative_cooler?(air_loop)) ||
-      #       (!air_loop_hvac_include_cooling_coil?(air_loop) &&
-      #         air_loop_hvac_include_economizer?(air_loop))
-      #      air_loop.additionalProperties.setFeature('non_mechanically_cooled', true)
-      #      air_loop.thermalZones.each do |thermal_zone|
-      #        thermal_zone.additionalProperties.setFeature('non_mechanically_cooled', true)
-      #      end
-      #    end
-      #  end
-      # end
     end
   end
 
