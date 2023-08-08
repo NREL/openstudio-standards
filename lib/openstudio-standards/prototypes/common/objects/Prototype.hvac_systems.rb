@@ -4524,7 +4524,7 @@ class Standard
   # @param use_zone_demand [Bool] when set to true, heating and cooling plant availability schedules are set
   #   using the outdoor dry-bulb temperature lockouts. If false, it creates EMS code to define availability
   #   based on zone heating and cooling load requests.
-  # @param heating_lockout [Double] hot water plant lockout in degrees Fahrenheit, default 65F
+  # @param heating_plant_lockout [Double] hot water plant lockout in degrees Fahrenheit, default 65F
   #   . Hot water plant is unavailable when outdoor drybulb is above the specified threshold.
   # @param radiant_type [String] type of radiant system, floor or ceiling, to create in zone.
   # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
@@ -4559,7 +4559,7 @@ class Standard
                                  chilled_water_loop,
                                  two_pipe_system: true,
                                  use_zone_demand: false,
-                                 heating_lockout: 65,
+                                 heating_plant_lockout: 65,
                                  radiant_type: 'floor',
                                  radiant_temperature_control_type: 'SurfaceFaceTemperature',
                                  radiant_setpoint_control_type: 'ZeroFlowPower',
@@ -4909,7 +4909,7 @@ class Standard
     if two_pipe_system
       model_two_pipe_water_plant(model, hot_water_loop, chilled_water_loop,
                                  use_zone_demand: use_zone_demand,
-                                 heating_lockout: heating_lockout)
+                                 heating_plant_lockout: heating_plant_lockout)
     end
 
     return radiant_loops
@@ -5758,11 +5758,11 @@ class Standard
   # @param use_zone_demand [Bool] when set to true, heating and cooling plant availability schedules are set
   #   using the outdoor dry-bulb temperature lockouts. If false, it creates EMS code to define availability
   #   based on zone heating and cooling load requests.
-  # @param heating_lockout [Double] hot water plant lockout in degrees Fahrenheit, default 65F
+  # @param heating_plant_lockout [Double] hot water plant lockout in degrees Fahrenheit, default 65F
   #   . Hot water plant is unavailable when outdoor drybulb is above the specified threshold.
   def model_two_pipe_water_plant(model, hot_water_loop, chilled_water_loop,
                                  use_zone_demand: false,
-                                 heating_lockout: 65)
+                                 heating_plant_lockout: 65)
 
 
       # create outdoor sensor node to be used in plant availability managers if needed
@@ -5777,7 +5777,7 @@ class Standard
         hot_water_loop_lockout_manager = OpenStudio::Model::AvailabilityManagerHighTemperatureTurnOff.new(model)
         hot_water_loop_lockout_manager.setName("#{hot_water_loop.name.get} Lockout Manager")
         hot_water_loop_lockout_manager.setSensorNode(outdoor_airnode)
-        hot_water_loop_lockout_manager.setTemperature(OpenStudio.convert(heating_lockout, 'F', 'C').get)
+        hot_water_loop_lockout_manager.setTemperature(OpenStudio.convert(heating_plant_lockout, 'F', 'C').get)
 
         # set availability manager to hot water plant
         hot_water_loop.addAvailabilityManager(hot_water_loop_lockout_manager)
@@ -5791,13 +5791,14 @@ class Standard
         chilled_water_loop_lockout_manager = OpenStudio::Model::AvailabilityManagerLowTemperatureTurnOff.new(model)
         chilled_water_loop_lockout_manager.setName("#{chilled_water_loop.name.get} Lockout Manager")
         chilled_water_loop_lockout_manager.setSensorNode(outdoor_airnode)
-        chilled_water_loop_lockout_manager.setTemperature(OpenStudio.convert(heating_lockout, 'F', 'C').get)
+        chilled_water_loop_lockout_manager.setTemperature(OpenStudio.convert(heating_plant_lockout, 'F', 'C').get)
 
         # set availability manager to hot water plant
         chilled_water_loop.addAvailabilityManager(chilled_water_loop_lockout_manager)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'A chilled water loop is required to implement availability manager, but none was provided.')
       end
+
   end
 
   # Adds a waterside economizer to the chilled water and condenser loop
