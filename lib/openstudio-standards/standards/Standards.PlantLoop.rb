@@ -1496,8 +1496,9 @@ class Standard
       case obj_type
       when 'OS_Pipe_Indoor'
         pipe = component.to_PipeIndoor.get
-      ehwn 'OS_Pipe_Outdoor'
-      pipe = component.to_PipeOutdoor.get
+      when 'OS_Pipe_Outdoor'
+        pipe = component.to_PipeOutdoor.get
+      end
 
       # Get pipe node
       node = pipe.to_StraightComponent.get.outletModelObject.get.to_Node.get
@@ -1511,7 +1512,7 @@ class Standard
       new_pipe.setName(pipe_name)
       new_pipe.addToNode(node)
       component.remove
-  end
-
+    end
   return true
+  end 
 end

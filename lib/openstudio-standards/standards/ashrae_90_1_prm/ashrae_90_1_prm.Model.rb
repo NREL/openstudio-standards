@@ -1965,7 +1965,6 @@ class ASHRAE901PRM < Standard
       else
         # Per Table G3.1 11.i, piping losses was deleted
         plant_loop_adibatic_pipes_only(plant_loop)
-        end
 
         if electric
           plant_loop.supplyComponents.each do |component|
