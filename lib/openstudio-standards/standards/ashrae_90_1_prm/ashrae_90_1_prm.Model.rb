@@ -1915,10 +1915,7 @@ class ASHRAE901PRM < Standard
 
       htg_fuels, combination_system, storage_capacity, total_heating_capacity = plant_loop_swh_system_type(plant_loop)
 
-      # htg_fuels.size == 0 shoudln't happen
-
       electric = true
-
       if htg_fuels.include?('NaturalGas') ||
          htg_fuels.include?('PropaneGas') ||
          htg_fuels.include?('FuelOilNo1') ||
@@ -1931,7 +1928,6 @@ class ASHRAE901PRM < Standard
 
       # Per Table G3.1 11.e, if the baseline system was a combination of heating and service water heating,
       # delete all heating equipment and recreate a WaterHeater:Mixed.
-
       if combination_system
         a = plant_loop.supplyComponents
         b = plant_loop.demandComponents
@@ -1968,26 +1964,7 @@ class ASHRAE901PRM < Standard
         # to electric resistance if it's electric
       else
         # Per Table G3.1 11.i, piping losses was deleted
-
-        a = plant_loop.supplyComponents
-        b = plant_loop.demandComponents
-        plantloopComponents = a += b
-        plantloopComponents.each do |component|
-          # Get the object type
-          obj_type = component.iddObjectType.valueName.to_s
-          next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
-
-          pipe = component.to_PipeIndoor.get
-          node = pipe.to_StraightComponent.get.outletModelObject.get.to_Node.get
-
-          node_name = node.name.get
-          pipe_name = pipe.name.get
-
-          # Add Pipe_Adiabatic
-          newpipe = OpenStudio::Model::PipeAdiabatic.new(model)
-          newpipe.setName(pipe_name)
-          newpipe.addToNode(node)
-          component.remove
+        plant_loop_adibatic_pipes_only(plant_loop)
         end
 
         if electric

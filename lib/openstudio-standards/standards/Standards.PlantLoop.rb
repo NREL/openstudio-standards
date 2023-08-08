@@ -1476,4 +1476,42 @@ class Standard
     plantloop_capacity = plantloop_dt * plantloop_maxflowrate * 1000.0 * 4180.0
     return plantloop_capacity
   end
+
+  # This methods replaces all indoor or outdoor pipes which model the heat transfer between the pipe and the 
+  # environement by adibatic pipes.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Bool] returns true if successful
+  def plant_loop_adibatic_pipes_only(plant_loop)
+    supply_side_components = plant_loop.supplyComponents
+    demand_side_components = plant_loop.demandComponents
+    plant_loop_components = supply_side_components += demand_side_components
+    plant_loop_components.each do |component|
+      # Get the object type
+      obj_type = component.iddObjectType.valueName.to_s
+      next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
+
+      # Get pipe object
+      pipe = nil
+      case obj_type
+      when 'OS_Pipe_Indoor'
+        pipe = component.to_PipeIndoor.get
+      ehwn 'OS_Pipe_Outdoor'
+      pipe = component.to_PipeOutdoor.get
+
+      # Get pipe node
+      node = pipe.to_StraightComponent.get.outletModelObject.get.to_Node.get
+
+      # Get pipe and node names
+      node_name = node.name.get
+      pipe_name = pipe.name.get
+
+      # Replace indoor or outdoor pipe by an adiabatic pipe
+      new_pipe = OpenStudio::Model::PipeAdiabatic.new(plant_loop.model)
+      new_pipe.setName(pipe_name)
+      new_pipe.addToNode(node)
+      component.remove
+  end
+
+  return true
 end

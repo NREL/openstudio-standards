@@ -46,8 +46,8 @@ class Standard
     model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, custom, sizing_run_dir, false, false, debug)
   end
 
-  # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
-  # based on the inputs currently in the model.
+  # Creates a Performance Rating Method (aka 90.1-Appendix G) baseline building model
+  # based on the inputs currently in the user model.
   #
   # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative compliance path for minimum standard compliance."
   # This means you can't use this method for code compliance to get a permit.
@@ -65,11 +65,14 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    # Generate proposed model from the user-provided model
+    proposed_model = model_create_prm_proposed_building(user_model)
+
     # Check proposed model unmet load hours
     if unmet_load_hours_check
-      # Run proposed model; need annual simulation to get unmet load hours
-      if model_run_simulation_and_log_errors(user_model, run_dir = "#{sizing_run_dir}/PROP")
-        umlh = model_get_unmet_load_hours(user_model)
+      # Run user model; need annual simulation to get unmet load hours
+      if model_run_simulation_and_log_errors(proposed_model, run_dir = "#{sizing_run_dir}/PROP")
+        umlh = model_get_unmet_load_hours(proposed_model)
         if umlh > 300
           OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
                              "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) wont be created.")
@@ -84,12 +87,19 @@ class Standard
                   sizing_run_dir,
                   'Simulation on proposed model failed. Baseline generation is stopped.')
       end
+    else
+      proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/PROP/in.osm"), true)
+      forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+      idf = forward_translator.translateModel(proposed_model)
+      idf_path = OpenStudio::Path.new("#{sizing_run_dir}PROP/in.idf")
+      idf.save(idf_path, true)
     end
 
     # User data process
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     bldg_type_hvac_zone_hash = {}
-    handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+    handle_user_input_data(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+
     # Define different orientation from original orientation
     # for each individual baseline models
     # Need to run proposed model sizing simulation if no sql data is available
@@ -528,6 +538,34 @@ class Standard
     end
 
     return true
+  end
+
+  # Creates a Performance Rating Method (aka 90.1-Appendix G) proposed building model
+  # based on the inputs currently in the user model.
+  #
+  # @param user_model [OpenStudio::model::Model] User specified OpenStudio model
+  # @return [OpenStudio::model::Model] returns the proposed building model corresponding to a user model
+  def model_create_prm_proposed_building(user_model)
+    # Create copy of the user model 
+    proposed_model = BTAP::FileIO.deep_copy(user_model)
+
+    # If needed, modify user model infiltration
+
+    # If needed, remove all non-adiabatic pipes of SWH loops
+    user_model.getPlantLoops.sort.each do |plant_loop|
+      # Skip non service water heating loops
+      next unless plant_loop_swh_loop?(plant_loop)
+    
+      plant_loop_adibatic_pipes_only(plant_loop)
+    end
+
+    # If needed, modify computer equipment schedule
+
+    # If needed, modify lighting power denstities in residential spaces/zones
+
+    # Save proposed model
+
+    return proposed_model
   end
 
   # Determine if there needs to be a sizing run after constructions are added
