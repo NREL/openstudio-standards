@@ -2785,7 +2785,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param standard_sch_type_limit [String] the name of a standard schedule type limit with predefined limits
-  #   options are Temperature, Humidity Ratio, Fractional, OnOff, and Activity
+  #   options are Dimensionless, Temperature, Humidity Ratio, Fractional, OnOff, and Activity
   # @param name [String] the name of the schedule type limits
   # @param lower_limit_value [double] the lower limit value for the schedule type
   # @param upper_limit_value [double] the upper limit value for the schedule type
@@ -2823,6 +2823,14 @@ class Standard
         end
       else
         case standard_sch_type_limit.downcase
+          when 'dimensionless'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName('Dimensionless')
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(1000.0)
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Dimensionless')
+
           when 'temperature'
             schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
             schedule_type_limits.setName('Temperature')
