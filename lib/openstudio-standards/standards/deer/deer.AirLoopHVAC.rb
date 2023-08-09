@@ -11,6 +11,28 @@ class DEER
     return shutoff_required
   end
 
+  # Determines the OA flow rates above which an economizer is required.
+  # Two separate rates, one for systems with an economizer and another
+  # for systems without.
+  # The small numbers here are to reflect that there is not a minimum
+  # airflow requirement in Title 24.
+  # @return [Array<Double>] [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
+  def air_loop_hvac_demand_control_ventilation_limits(air_loop_hvac)
+    min_oa_without_economizer_cfm = 0.01
+    min_oa_with_economizer_cfm = 0.01
+    return [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
+  end
+
+  # Determine if the standard has an exception for demand control ventilation
+  # when an energy recovery device is present.
+  # Unlike ASHRAE 90.1, Title 24 does not have an ERV exception to DCV.
+  # This method is a copy of what is in Standards.AirLoopHVAC.rb and ensures
+  # ERVs will not prevent DCV from being applied to DEER models.
+  def air_loop_hvac_dcv_required_when_erv(air_loop_hvac)
+    dcv_required_when_erv_present = true
+    return dcv_required_when_erv_present
+  end
+
   # Determine whether or not this system is required to have an economizer.
   # Logic inferred from MASControl3 INP files and parameters database.
   #
@@ -126,7 +148,6 @@ class DEER
 
   # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
   # Enthalpy limit is from MASControl3.
-  #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Array<Double>] [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
