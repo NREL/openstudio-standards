@@ -11,6 +11,83 @@ class DEER
     return shutoff_required
   end
 
+  # Determine whether or not this system is required to have an economizer.
+  # Logic inferred from MASControl3 INP files and parameters database.
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [Bool] returns true if an economizer is required, false if not
+  def air_loop_hvac_economizer_required?(air_loop_hvac, climate_zone)
+    economizer_required = false
+
+    # skip systems without outdoor air
+    return economizer_required unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
+    # Determine if the airloop serves any computer rooms
+    # / data centers, which changes the economizer.
+    is_dc = false
+    if air_loop_hvac_data_center_area_served(air_loop_hvac) > 0
+      is_dc = true
+    end
+
+    # Retrieve economizer limits from JSON
+    search_criteria = {
+      'template' => template,
+      'climate_zone' => climate_zone,
+      'data_center' => is_dc
+    }
+    econ_limits = model_find_object(standards_data['economizers'], search_criteria)
+    if econ_limits.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "Cannot find economizer limits for template '#{template}' and climate zone '#{climate_zone}', assuming no economizer required.")
+      return economizer_required
+    end
+
+    # Determine the minimum capacity and whether or not it is a data center
+    minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
+
+    # A big number of btu per hr as the minimum requirement if nil in spreadsheet
+    infinity_btu_per_hr = 999_999_999_999
+    minimum_capacity_btu_per_hr = infinity_btu_per_hr if minimum_capacity_btu_per_hr.nil?
+
+    # Check whether the system requires an economizer by comparing
+    # the system capacity to the minimum capacity.
+    total_cooling_capacity_w = air_loop_hvac_total_cooling_capacity(air_loop_hvac)
+    total_cooling_capacity_btu_per_hr = OpenStudio.convert(total_cooling_capacity_w, 'W', 'Btu/hr').get
+
+    # Check whether the system has chilled water cooling
+    has_chilled_water_cooling = false
+    air_loop_hvac.supplyComponents.each do |equip|
+      if equip.to_CoilCoolingWater.is_initialized
+        has_chilled_water_cooling = true
+      end
+    end
+
+    # Applicability logic from MASControl3
+    if has_chilled_water_cooling
+      # All systems with chilled water cooling get an economizer regardless of capacity
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because it has chilled water cooling.")
+      economizer_required = true
+    else
+      # DX and other systems may have a capacity limit
+      if total_cooling_capacity_btu_per_hr >= minimum_capacity_btu_per_hr
+        if is_dc
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for data centers.")
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} requires an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr exceeds the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
+        end
+        economizer_required = true
+      else
+        if is_dc
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} does not require an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr is less than the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr for data centers.")
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "#{air_loop_hvac.name} does not require an economizer because the total cooling capacity of #{total_cooling_capacity_btu_per_hr.round} Btu/hr is less than the minimum capacity of #{minimum_capacity_btu_per_hr.round} Btu/hr.")
+        end
+      end
+    end
+
+    return economizer_required
+  end
+
   # Check the economizer type currently specified in the ControllerOutdoorAir object on this air loop
   # is acceptable per the standard.  Based on the MASControl rules, it appears that
   # only NoEconomizer and FixedDryBulb are allowed.
@@ -48,6 +125,7 @@ class DEER
   end
 
   # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
+  # Enthalpy limit is from MASControl3.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
@@ -59,7 +137,7 @@ class DEER
 
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
-    return [nil, nil, nil] unless oa_sys.is_initialized # No OA system
+    return [nil, nil, nil] unless oa_sys.is_initialized
 
     oa_sys = oa_sys.get
     oa_control = oa_sys.getControllerOutdoorAir
@@ -70,29 +148,12 @@ class DEER
       return [nil, nil, nil]
     when 'FixedDryBulb'
       enthalpy_limit_btu_per_lb = 28
-      case climate_zone
-      when 'CEC T24-CEC7'
-        drybulb_limit_f = 69
-      when 'CEC T24-CEC1',
-        'CEC T24-CEC3',
-        'CEC T24-CEC5'
-        drybulb_limit_f = 70
-      when 'CEC T24-CEC6',
-        'CEC T24-CEC8',
-        'CEC T24-CEC9'
-        drybulb_limit_f = 71
-      when 'CEC T24-CEC2',
-        'CEC T24-CEC4',
-        'CEC T24-CEC10',
-        drybulb_limit_f = 73
-      when 'CEC T24-CEC11',
-        'CEC T24-CEC12',
-        'CEC T24-CEC13',
-        'CEC T24-CEC14',
-        'CEC T24-CEC15',
-        'CEC T24-CEC16'
-        drybulb_limit_f = 75
-      end
+      search_criteria = {
+        'template' => template,
+        'climate_zone' => climate_zone
+      }
+      econ_limits = model_find_object(standards_data['economizers'], search_criteria)
+      drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
     end
 
     return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
