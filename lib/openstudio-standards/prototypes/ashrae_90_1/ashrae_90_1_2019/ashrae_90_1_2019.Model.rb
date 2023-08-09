@@ -1,38 +1,6 @@
 class ASHRAE9012019 < ASHRAE901
   # @!group Model
 
-  # Determine the prototypical economizer type for the model.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [String] the economizer type.  Possible values are:
-  #   'NoEconomizer'
-  #   'FixedDryBulb'
-  #   'FixedEnthalpy'
-  #   'DifferentialDryBulb'
-  #   'DifferentialEnthalpy'
-  #   'FixedDewPointAndDryBulb'
-  #   'ElectronicEnthalpy'
-  #   'DifferentialDryBulbAndEnthalpy'
-  def model_economizer_type(model, climate_zone)
-    economizer_type = case climate_zone
-                      when 'ASHRAE 169-2006-0A',
-                          'ASHRAE 169-2006-1A',
-                          'ASHRAE 169-2006-2A',
-                          'ASHRAE 169-2006-3A',
-                          'ASHRAE 169-2006-4A',
-                          'ASHRAE 169-2013-0A',
-                          'ASHRAE 169-2013-1A',
-                          'ASHRAE 169-2013-2A',
-                          'ASHRAE 169-2013-3A',
-                          'ASHRAE 169-2013-4A'
-                        'DifferentialEnthalpy'
-                      else
-                        'DifferentialDryBulb'
-                      end
-    return economizer_type
-  end
-
   # Adjust model to comply with fenestration orientation requirements
   # @note code_sections [90.1-2013_5.5.4.5]
   #
@@ -299,7 +267,7 @@ class ASHRAE9012019 < ASHRAE901
       end
 
       # guard clause to skip space with no lights
-      next if space_lights.empty? 
+      next if space_lights.empty?
 
       # if lights are defined at the space type level, clone each lights object and make it individual to the space
       new_space_lights = []

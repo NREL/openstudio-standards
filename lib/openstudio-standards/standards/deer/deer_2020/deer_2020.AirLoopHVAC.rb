@@ -40,4 +40,14 @@ class DEER2020 < DEER
     min_oa_with_economizer_cfm = 0
     return [min_oa_without_economizer_cfm, min_oa_with_economizer_cfm]
   end
+
+  # Determine if the standard has an exception for demand control ventilation
+  # when an energy recovery device is present.
+  # Unlike ASHRAE 90.1, Title 24 does not have an ERV exception to DCV.
+  # This method is a copy of what is in Standards.AirLoopHVAC.rb and ensures
+  # ERVs will not prevent DCV from being applied to DEER models.
+  def air_loop_hvac_dcv_required_when_erv(air_loop_hvac)
+    dcv_required_when_erv_present = true
+    return dcv_required_when_erv_present
+  end
 end
