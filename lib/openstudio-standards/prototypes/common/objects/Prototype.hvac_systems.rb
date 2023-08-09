@@ -1761,7 +1761,7 @@ class Standard
       oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
     end
     controller_mv = oa_intake_controller.controllerMechanicalVentilation
-    controller_mv.setName("#{air_loop.name} Vent Controller")
+    controller_mv.setName("#{air_loop.name} Ventilation Controller")
     controller_mv.setSystemOutdoorAirMethod('ZoneSum')
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA System")
@@ -1823,7 +1823,8 @@ class Standard
         else
           terminal.setZoneMinimumAirFlowInputMethod('Constant')
         end
-        terminal.setMaximumFlowFractionDuringReheat(0.5)
+        # default to single maximum control logic
+        terminal.setDamperHeatingAction('Normal')
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
         air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
@@ -1857,12 +1858,6 @@ class Standard
         zone.setReturnPlenum(return_plenum)
       end
     end
-
-    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
-    model_system_outdoor_air_sizing_vrp_method(air_loop)
-
-    # set the damper action based on the template
-    air_loop_hvac_apply_vav_damper_action(air_loop)
 
     return air_loop
   end
@@ -2015,6 +2010,7 @@ class Standard
   # @param electric_reheat [Bool] if true electric reheat coils, if false the reheat coils served by hot_water_loop
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
   # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
+  # @param econo_ctrl_mthd [String] economizer control type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop
   def model_add_pvav(model,
                      thermal_zones,
@@ -2025,7 +2021,8 @@ class Standard
                      heating_type: nil,
                      electric_reheat: false,
                      hvac_op_sch: nil,
-                     oa_damper_sch: nil)
+                     oa_damper_sch: nil,
+                     econo_ctrl_mthd: nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding Packaged VAV for #{thermal_zones.size} zones.")
 
     # create air handler
@@ -2118,18 +2115,25 @@ class Standard
                                 name: "#{air_loop.name} Clg Coil")
     end
 
-    # Outdoor air intake system
+    # outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
-    oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    oa_intake_controller.resetMaximumFractionofOutdoorAirSchedule
     oa_intake_controller.resetEconomizerMinimumLimitDryBulbTemperature
+    unless econo_ctrl_mthd.nil?
+      oa_intake_controller.setEconomizerControlType(econo_ctrl_mthd)
+    end
+    unless oa_damper_sch.nil?
+      oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    end
+    controller_mv = oa_intake_controller.controllerMechanicalVentilation
+    controller_mv.setName("#{air_loop.name} Ventilation Controller")
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA System")
     oa_intake.addToNode(air_loop.supplyInletNode)
-    controller_mv = oa_intake_controller.controllerMechanicalVentilation
-    controller_mv.setName("#{air_loop.name} Ventilation Controller")
-    controller_mv.setAvailabilitySchedule(oa_damper_sch)
 
     # set air loop availability controls and night cycle manager, after oa system added
     air_loop.setAvailabilitySchedule(hvac_op_sch)
@@ -2177,6 +2181,8 @@ class Standard
       else
         terminal.setZoneMinimumAirFlowInputMethod('Constant')
       end
+      # default to single maximum control logic
+      terminal.setDamperHeatingAction('Normal')
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
       air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
@@ -2191,13 +2197,7 @@ class Standard
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     end
 
-    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
-    model_system_outdoor_air_sizing_vrp_method(air_loop)
-
-    # set the damper action based on the template
-    air_loop_hvac_apply_vav_damper_action(air_loop)
-
-    return true
+    return air_loop
   end
 
   # Creates a packaged VAV system with parallel fan powered boxes and adds it to the model.
@@ -2502,7 +2502,7 @@ class Standard
     # Set the damper action based on the template.
     air_loop_hvac_apply_vav_damper_action(air_loop)
 
-    return true
+    return air_loop
   end
 
   # Creates a PSZ-AC system for each zone and adds it to the model.
@@ -3249,7 +3249,7 @@ class Standard
         fan.setAvailabilitySchedule(hvac_op_sch)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Fan type '#{fan_type}' not recognized, cannot add CRAC.")
-        return []
+        return false
       end
 
       # create cooling coil
