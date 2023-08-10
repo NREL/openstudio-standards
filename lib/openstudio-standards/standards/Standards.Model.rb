@@ -554,6 +554,7 @@ class Standard
     proposed_model = BTAP::FileIO.deep_copy(user_model)
 
     # If needed, modify user model infiltration
+    model_baseline_apply_infiltration_standard(proposed_model, model_standards_climate_zone(proposed_model))
 
     # If needed, remove all non-adiabatic pipes of SWH loops
     proposed_model.getPlantLoops.sort.each do |plant_loop|

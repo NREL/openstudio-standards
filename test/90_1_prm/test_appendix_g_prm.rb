@@ -236,11 +236,13 @@ class AppendixGPRMTests < Minitest::Test
       model_proposed = OpenStudio::Model::Model.load(model_proposed_file_name)
       model_proposed = model_proposed.get
 
-      # Do sizing run for baseline model
-      sim_control = model_baseline.getSimulationControl
-      sim_control.setRunSimulationforSizingPeriods(true)
-      sim_control.setRunSimulationforWeatherFileRunPeriods(false)
-      baseline_run = @prototype_creator.model_run_simulation_and_log_errors(model_baseline, "#{model_baseline_file_name}-SR")
+      # Do sizing run for baseline and proposed model
+      [[model_baseline, "baseline"], [model_proposed, "proposed"]].each do |model, model_name|
+        sim_control = model.getSimulationControl
+        sim_control.setRunSimulationforSizingPeriods(true)
+        sim_control.setRunSimulationforWeatherFileRunPeriods(false)
+        model_run = @prototype_creator.model_run_simulation_and_log_errors(model, "#{run_dir_baseline}/#{model_name}-SR")
+      end
 
       # Add models to the hash of baseline and proposed models
       baseline_prototypes[id] = model_baseline
@@ -3535,8 +3537,9 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   def test_infiltration
-    model_hash = prm_test_helper('infiltration', require_prototype=true, require_baseline=true)
+    model_hash = prm_test_helper('infiltration', require_prototype=true, require_baseline=true, require_proposed=true)
     check_infiltration(model_hash['prototype'], model_hash['baseline'])
+    check_infiltration(model_hash['prototype'], model_hash['proposed'])
   end
 
   def test_vav_fan_curve
