@@ -87,13 +87,17 @@ class Standard
                   sizing_run_dir,
                   'Simulation on proposed model failed. Baseline generation is stopped.')
       end
-    else
-      proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/PROP/in.osm"), true)
-      forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
-      idf = forward_translator.translateModel(proposed_model)
-      idf_path = OpenStudio::Path.new("#{sizing_run_dir}PROP/in.idf")
-      idf.save(idf_path, true)
     end
+    # Make the run directory if it doesn't exist
+    unless Dir.exist?(sizing_run_dir)
+      FileUtils.mkdir_p(sizing_run_dir)
+    end
+    # Save proposed model
+    proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.osm"), true)
+    forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+    idf = forward_translator.translateModel(proposed_model)
+    idf_path = OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.idf")
+    idf.save(idf_path, true)
 
     # User data process
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
@@ -461,7 +465,7 @@ class Standard
       # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
       # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
 
-      model_status = degs > 0 ? "final_#{degs}" : 'final'
+      model_status = degs > 0 ? "baseline_final_#{degs}" : 'baseline_final'
       model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
 
       # Translate to IDF and save for debugging
@@ -552,7 +556,7 @@ class Standard
     # If needed, modify user model infiltration
 
     # If needed, remove all non-adiabatic pipes of SWH loops
-    user_model.getPlantLoops.sort.each do |plant_loop|
+    proposed_model.getPlantLoops.sort.each do |plant_loop|
       # Skip non service water heating loops
       next unless plant_loop_swh_loop?(plant_loop)
     
