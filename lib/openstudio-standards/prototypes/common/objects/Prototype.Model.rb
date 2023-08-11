@@ -44,6 +44,11 @@ Standard.class_eval do
     model_create_thermal_zones(model, @space_multiplier_map)
     model_add_design_days_and_weather_file(model, climate_zone, epw_file)
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input)
+    model.getAirLoopHVACs.each do |air_loop|
+      next unless air_loop_hvac_multizone_vav_system?(air_loop)
+      model_system_outdoor_air_sizing_vrp_method(air_loop)
+      air_loop_hvac_apply_vav_damper_action(air_loop)
+    end
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_fenestration_orientation(model, climate_zone)
     model_custom_hvac_tweaks(model, building_type, climate_zone, @prototype_input)
