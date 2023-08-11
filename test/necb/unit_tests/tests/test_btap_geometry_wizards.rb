@@ -1,7 +1,7 @@
 require_relative '../../../helpers/minitest_helper.rb'
 
 #Test Geometry Wizards
-class TestBTAPGeometryWizards < MiniTest::Test
+class TestBTAPGeometryWizards < Minitest::Test
 
   def set_up_folders()
     @file_folder = __dir__

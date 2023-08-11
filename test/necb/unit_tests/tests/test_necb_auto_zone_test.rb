@@ -1,7 +1,7 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 
-class NECB_Autozone_Tests < MiniTest::Test
+class NECB_Autozone_Tests < Minitest::Test
   BUILDINGS = [
       "FullServiceRestaurant",
       "LargeHotel",
