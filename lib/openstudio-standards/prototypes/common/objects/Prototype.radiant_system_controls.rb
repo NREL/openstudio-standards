@@ -5,6 +5,9 @@ class Standard
   # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
   # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
   #   options are 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
+  # @param use_zone_occupancy_for_control [Bool] Set to true if radiant system is to use specific zone occupancy objects
+  #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
+  #   for all radiant zones. default to true.
   # @param model_occ_hr_start [Double] Starting hour of building occupancy
   # @param model_occ_hr_end [Double] Ending hour of building occupancy
   # @todo model_occ_hr_start and model_occ_hr_end from zone occupancy schedules
@@ -12,6 +15,7 @@ class Standard
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
   def model_add_radiant_proportional_controls(model, zone, radiant_loop,
                                               radiant_temperature_control_type: 'SurfaceFaceTemperature',
+                                              use_zone_occupancy_for_control: true,
                                               model_occ_hr_start: 6.0,
                                               model_occ_hr_end: 18.0,
                                               proportional_gain: 0.3,
