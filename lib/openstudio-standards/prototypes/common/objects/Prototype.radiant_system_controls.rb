@@ -72,7 +72,7 @@ class Standard
 
     # radiant system heating control actuator
     sch_radiant_htgsetp = model_add_constant_schedule_ruleset(model,
-                                                              20,
+                                                              20.0,
                                                               name = "#{zone_name}_Sch_Radiant_HtgSetP")
     coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_htgsetp)
     cmd_hot_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_radiant_htgsetp,
@@ -172,15 +172,43 @@ class Standard
     zone_ctrl_temperature.setName("#{zone_name}_ctrl_temperature")
     zone_ctrl_temperature.setKeyName(zone.name.get)
 
-    # check for zone thermostats
+    # check for zone thermostat and replace heat/cool schedules for radiant system control
+    # if there is no zone thermostat, then create one
     zone_thermostat = zone.thermostatSetpointDualSetpoint
-    unless zone_thermostat.is_initialized
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Zone #{zone.name} does not have thermostats.")
-      return false
+
+    if zone_thermostat.is_initialized
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Replacing thermostat schedules in zone #{zone.name} for radiant system control.")
+      zone_thermostat = zone.thermostatSetpointDualSetpoint.get
+    else
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Zone #{zone.name} does not have a thermostat. Creating a thermostat for radiant system control.")
+      zone_thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
+      zone_thermostat.setName("#{zone_name}_Thermostat_DualSetpoint")
     end
-    zone_thermostat = zone.thermostatSetpointDualSetpoint.get
-    zone_clg_thermostat = zone_thermostat.coolingSetpointTemperatureSchedule.get
-    zone_htg_thermostat = zone_thermostat.heatingSetpointTemperatureSchedule.get
+
+    # create new heating and cooling schedules to be used with all radiant systems
+    zone_htg_thermostat = model.getScheduleRulesetByName("Radiant System Heating Setpoint")
+    if zone_htg_thermostat.is_initialized
+      zone_htg_thermostat = zone_htg_thermostat.get
+    else
+      zone_htg_thermostat = model_add_constant_schedule_ruleset(model,
+                                                                20.0,
+                                                                name = "Radiant System Heating Setpoint",
+                                                                sch_type_limit: "Temperature")
+    end
+
+    zone_clg_thermostat = model.getScheduleRulesetByName("Radiant System Cooling Setpoint")
+    if zone_clg_thermostat.is_initialized
+      zone_clg_thermostat = zone_clg_thermostat.get
+    else
+      zone_clg_thermostat = model_add_constant_schedule_ruleset(model,
+                                                                26.0,
+                                                                name = "Radiant System Cooling Setpoint",
+                                                                sch_type_limit: "Temperature")
+    end
+
+    # implement new heating and cooling schedules
+    zone_thermostat.setHeatingSetpointTemperatureSchedule(zone_htg_thermostat)
+    zone_thermostat.setCoolingSetpointTemperatureSchedule(zone_clg_thermostat)
 
     # Upper comfort limit for the zone. Taken from existing thermostat schedules in the zone.
     zone_upper_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
