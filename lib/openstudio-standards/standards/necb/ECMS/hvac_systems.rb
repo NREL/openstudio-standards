@@ -255,7 +255,6 @@ class ECMS
       end
     end
     max_net_vert_distance = max_vert_distance + min_vert_distance
-    max_net_vert_distance = [max_net_vert_distance, 0.000001].max
 
     return max_equiv_distance, max_net_vert_distance
   end
