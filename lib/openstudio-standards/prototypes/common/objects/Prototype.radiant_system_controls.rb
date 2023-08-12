@@ -254,6 +254,28 @@ class Standard
     zone_rad_heat_operation_trend.setName("#{zone_name}_rad_heat_operation_trend")
     zone_rad_heat_operation_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 48)
 
+    # use zone occupancy objects for radiant system control if selected
+    if use_zone_occupancy_for_control
+
+      # get annual occupancy schedule for zone
+      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone)
+      occ_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
+
+      # transform annual occupancy into 24 slices and transform
+      occ_values_2d = occ_values.each_slice(24).to_a.transpose()
+
+      # find 24-hour mean using the 365 days
+      mean_occ_values = (0..23).collect{ |hr| occ_values_2d[hr].sum() / occ_values_2d[hr].size() }
+
+      # find start and end hours that meet occupancy threshold
+      zone_occ_hr_start = mean_occ_values.index{ |n| n >= 0.25 }
+      zone_occ_hr_end = 24 - mean_occ_values.reverse().index{ |n| n >= 0.25 }
+
+    else
+      zone_occ_hr_start = model_occ_hr_start
+      zone_occ_hr_end = model_occ_hr_end
+    end
+
     #####
     # List of EMS programs to implement the proportional control for the radiant system.
     ####
@@ -264,8 +286,8 @@ class Standard
       set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
       set_constant_values_prg.setName('Set_Constant_Values')
       set_constant_values_prg_body = <<-EMS
-        SET occ_hr_start       = #{model_occ_hr_start},
-        SET occ_hr_end         = #{model_occ_hr_end},
+        SET occ_hr_start       = #{zone_occ_hr_start},
+        SET occ_hr_end         = #{zone_occ_hr_end},
         SET prp_k              = #{proportional_gain},
         SET ctrl_temp_offset   = 0.5,
         SET upper_slab_sp_lim  = 29,
