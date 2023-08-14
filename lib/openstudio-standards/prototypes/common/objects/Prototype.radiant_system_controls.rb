@@ -281,7 +281,7 @@ class Standard
     ####
 
     # Initialize global constant values used in EMS programs.
-    set_constant_values_prg = model.getEnergyManagementSystemTrendVariableByName('Set_Constant_Values')
+    set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Constant_Values')
     unless set_constant_values_prg.is_initialized
       set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
       set_constant_values_prg.setName('Set_Constant_Values')
@@ -364,7 +364,7 @@ class Standard
     # List of EMS program manager objects
     ####
 
-    initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Set_Constant_Values')
+    initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters')
     if initialize_constant_parameters.is_initialized
       initialize_constant_parameters = initialize_constant_parameters.get
     else
@@ -374,7 +374,7 @@ class Standard
       initialize_constant_parameters.addProgram(set_constant_values_prg)
     end
 
-    initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Set_Constant_Values')
+    initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters_After_Warmup')
     if initialize_constant_parameters_after_warmup.is_initialized
       initialize_constant_parameters_after_warmup = initialize_constant_parameters_after_warmup.get
     else
