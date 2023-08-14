@@ -57,7 +57,7 @@ class Standard
       sch_radiant_switchover = model_add_constant_schedule_ruleset(model,
                                                                    switch_over_time,
                                                                    name = "Radiant System Switchover",
-                                                                   sch_type_limit: "Dimensionless")
+                                                                   sch_type_limit: "fraction")
     end
 
     # set radiant system switchover schedule
@@ -284,6 +284,16 @@ class Standard
       occ_schedule_ruleset.scheduleRules.each { |item| model.removeObject(item.daySchedule.handle) }
       occ_schedule_ruleset.children.each { |item| model.removeObject(item.handle) }
       model.removeObject(occ_schedule_ruleset.handle)
+
+      if zone_occ_hr_start > zone_occ_hr_end
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
+          "Zone occupancy start hour (#{zone_occ_hr_start}) is greater than zone occupancy end hour (#{zone_occ_hr_end}) in zone #{zone.name.to_s}")
+      end
+
+      if zone_occ_hr_start == zone_occ_hr_end
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model',
+          "Zone occupancy start hour (#{zone_occ_hr_start}) is equal to zone occupancy end hour (#{zone_occ_hr_end}) in zone #{zone.name.to_s}, i.e. no occupancy")
+      end
 
     else
       zone_occ_hr_start = model_occ_hr_start
