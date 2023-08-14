@@ -267,6 +267,8 @@ def model_radiant_system_test(arguments)
   standard = Standard.build(template)
   if model_test_name.nil?
     model_test_name = 'default_radiant_controls_test_name'
+  else
+    model_test_name = model_test_name.gsub(' ', '_')
   end
   model_dir = "#{output_dir}/hvac_#{model_test_name}"
 
