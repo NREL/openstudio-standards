@@ -2,15 +2,20 @@ require_relative '../helpers/minitest_helper'
 require_relative '../helpers/hvac_system_test_helper'
 
 class TestRadiantControls < Minitest::Test
-  def test_radiant_controls
-    hvac_systems = [
-      {system_type: 'Radiant Slab with DOAS', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
-       hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR',
-       unmet_hrs_htg: 700.0, unmet_hrs_clg: 3500.0}
-    ]
-    
-    # TODO: Add additional tests and edit the test hash arguments as necessary
+  def test_default_radiant_controls
+    arguments = {system_type: 'Radiant Slab with DOAS', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
+       hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR'}
 
-    group_hvac_test(hvac_systems)
+    errs = model_radiant_system_test(arguments)
+    assert(errs.empty?, "Radiant slab system model failed with errors: #{errs}")
+  end
+
+  def test_default_radiant_ceiling
+    arguments = {system_type: 'Radiant Slab with DOAS', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
+       hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR',
+       radiant_type: 'ceiling'}
+
+    errs = model_radiant_system_test(arguments)
+    assert(errs.empty?, "Radiant slab system model failed with errors: #{errs}")
   end
 end

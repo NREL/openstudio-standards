@@ -2,7 +2,7 @@
 
 # write errors to a log file
 def log_hvac_test_errors(errs)
-  File.open("#{File.dirname(__FILE__)}/output/test_add_hvac_systems.log", 'a') do |file|
+  File.open("#{__dir__}/../os_stds_methods/output/test_add_hvac_systems.log", 'a') do |file|
     errs.each { |err| file.puts(err) }
   end
 end
@@ -27,7 +27,7 @@ def default_hvac_test_hash
                   air_loop_cooling_type: nil,
                   zone_equipment_ventilation: nil,
                   unmet_hrs_htg: 300.0,
-                  unmet_hrs_clg: 300.0,}
+                  unmet_hrs_clg: 300.0}
   return default_hash
 end
 
@@ -37,7 +37,7 @@ end
 # @param hvac_arguments [Hash] a hash
 def model_hvac_test(hvac_arguments)
   # Make the output directory if it doesn't exist
-  output_dir = File.expand_path('output', File.dirname(__FILE__))
+  output_dir = "#{__dir__}/../os_stds_methods/output"
   FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
   reset_log
@@ -206,4 +206,178 @@ def group_hvac_test(test_set)
     group_errs << errs unless errs.empty?
   end
   assert(group_errs.size == 0, group_errs.join("\n"))
+end
+
+# default hash for radiant system tests
+def default_radiant_test_hash
+  # example hash for an HVAC system type test
+  # default optional arguments should match those in model_add_low_temp_radiant
+  default_hash = {radiant_type: 'floor',
+                  radiant_temperature_control_type: 'SurfaceFaceTemperature',
+                  radiant_setpoint_control_type: 'ZeroFlowPower',
+                  include_carpet: true,
+                  carpet_thickness_in: 0.25,
+                  model_occ_hr_start: 6.0,
+                  model_occ_hr_end: 18.0,
+                  control_strategy: 'proportional_control',
+                  proportional_gain: 0.3,
+                  switch_over_time: 24.0,
+                  radiant_availability_type: 'precool',
+                  radiant_lockout: false,
+                  radiant_lockout_start_time: 12.0,
+                  radiant_lockout_end_time: 20.0}
+  return default_hash
+end
+
+def model_radiant_system_test(arguments)
+  output_dir = "#{__dir__}/../os_stds_methods/output"
+  FileUtils.mkdir output_dir unless Dir.exist? output_dir
+
+  reset_log
+  errs = []
+
+  # merge arugments with default hashes
+  hash = default_hvac_test_hash.merge(default_radiant_test_hash)
+  hash = hash.merge(arguments)
+
+  # hash arguments defaulted in default_hvac_test_hash
+  template = hash[:template]
+  model_test_name = hash[:model_test_name]
+  model_name = hash[:model_name]
+  climate_zone = hash[:climate_zone]
+  unmet_hrs_htg = hash[:unmet_hrs_htg]
+  unmet_hrs_clg = hash[:unmet_hrs_clg]
+
+  # hash arguments defined in default_radiant_test_hash
+  radiant_type = hash[:radiant_type]
+  radiant_temperature_control_type = hash[:radiant_temperature_control_type]
+  radiant_setpoint_control_type = hash[:radiant_setpoint_control_type]
+  include_carpet = hash[:include_carpet]
+  carpet_thickness_in = hash[:carpet_thickness_in]
+  model_occ_hr_start = hash[:model_occ_hr_start]
+  model_occ_hr_end = hash[:model_occ_hr_end]
+  control_strategy = hash[:control_strategy]
+  proportional_gain = hash[:proportional_gain]
+  switch_over_time = hash[:switch_over_time]
+  radiant_availability_type= hash[:radiant_availability_type]
+  radiant_lockout=  hash[:radiant_lockout]
+  radiant_lockout_start_time = hash[:radiant_lockout_start_time]
+  radiant_lockout_end_time = hash[:radiant_lockout_end_time]
+
+  standard = Standard.build(template)
+  if model_test_name.nil?
+    model_test_name = 'default_radiant_controls_test_name'
+  end
+  model_dir = "#{output_dir}/hvac_#{model_test_name}"
+
+  # Load the model if already created
+  annual_run_success = false
+  if File.exist?("#{model_dir}/AR/run/eplusout.sql")
+    puts "test: '#{model_test_name}' results already available. Not re-rerunning energy simulation."
+    model = OpenStudio::Model::Model.new
+    sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
+    model.setSqlFile(sql)
+    annual_run_success = true
+  end
+
+  # If not created, make and run annual simulation
+  unless annual_run_success
+    puts "test: '#{model_test_name}' results not available. Running energy simulation."
+    # Load the test model
+    model_path = "#{__dir__}/../os_stds_methods/models/#{model_name}.osm"
+    model = standard.safe_load_model(model_path)
+    unless model
+      raise "ERROR: unable to load model: #{model_path}. Check that it is a valid path."
+    end
+
+    # Assign a weather file
+    standard.model_add_design_days_and_weather_file(model, climate_zone, '')
+    standard.model_add_ground_temperatures(model, 'MediumOffice', climate_zone)
+
+    # create plant loops
+    zones = model.getThermalZones
+    hot_water_loop = standard.model_get_or_add_hot_water_loop(model, 'DistrictHeating', hot_water_loop_type: 'LowTemperature')
+    chilled_water_loop = standard.model_get_or_add_chilled_water_loop(model, 'DistrictCooling', chilled_water_loop_cooling_type: 'WaterCooled')
+
+    # add doas system for ventilation
+    air_loop = standard.model_add_doas(model,
+                                       zones,
+                                       hot_water_loop: hot_water_loop,
+                                       chilled_water_loop: chilled_water_loop)
+
+    unless air_loop
+      errs << "Failed to apply model_add_doas to model #{model_test_name}."
+      log_hvac_test_errors(errs)
+      log_messages_to_file("#{model_dir}/openstudio-standards.log", debug=false)
+      return errs
+    end
+
+    # add radiant system
+    radiant_loops = standard.model_add_low_temp_radiant(model,
+                                                        zones,
+                                                        hot_water_loop,
+                                                        chilled_water_loop,
+                                                        radiant_type: radiant_type,
+                                                        radiant_temperature_control_type: radiant_temperature_control_type,
+                                                        radiant_setpoint_control_type: radiant_setpoint_control_type,
+                                                        include_carpet: include_carpet,
+                                                        carpet_thickness_in: carpet_thickness_in,
+                                                        model_occ_hr_start: model_occ_hr_start,
+                                                        model_occ_hr_end: model_occ_hr_end,
+                                                        control_strategy: control_strategy,
+                                                        proportional_gain: proportional_gain,
+                                                        switch_over_time: switch_over_time,
+                                                        radiant_availability_type: radiant_availability_type,
+                                                        radiant_lockout: radiant_lockout,
+                                                        radiant_lockout_start_time: radiant_lockout_start_time,
+                                                        radiant_lockout_end_time: radiant_lockout_end_time)
+
+    unless radiant_loops
+      errs << "Failed to apply model_add_low_temp_radiant to model #{model_test_name}."
+      log_hvac_test_errors(errs)
+      log_messages_to_file("#{model_dir}/openstudio-standards.log", debug=false)
+      return errs
+    end
+
+    # Save the model
+    model.save("#{model_dir}/final.osm", true)
+
+    # Perform a sizing run
+    sizing_run_success = standard.model_run_sizing_run(model, "#{model_dir}/SR")
+    unless sizing_run_success
+      errs << "#{model_test_name} sizing run failed"
+      log_hvac_test_errors(errs)
+      log_messages_to_file("#{model_dir}/openstudio-standards.log", debug=false)
+      return errs
+    end
+
+    # Run the annual run
+    annual_run_success = standard.model_run_simulation_and_log_errors(model, "#{model_dir}/AR")
+    unless annual_run_success
+      errs << "For #{model_test_name} annual run failed" unless annual_run_success
+      log_hvac_test_errors(errs)
+      log_messages_to_file("#{model_dir}/openstudio-standards.log", debug=false)
+      return errs
+    end
+  end
+
+  # Check unmet hours
+  unmet_heating_hrs = standard.model_annual_occupied_unmet_heating_hours(model)
+  unmet_cooling_hrs = standard.model_annual_occupied_unmet_cooling_hours(model)
+  unmet_hrs = standard.model_annual_occupied_unmet_hours(model)
+  if unmet_hrs
+    if unmet_heating_hrs > unmet_hrs_htg
+      errs << "Model #{model_test_name} has #{unmet_heating_hrs.round(1)} unmet occupied heating hours, more than the expected limit of #{unmet_hrs_htg}."
+    end
+    if unmet_cooling_hrs > unmet_hrs_clg
+      errs << "Model #{model_test_name} has #{unmet_cooling_hrs.round(1)} unmet occupied cooling hours, more than the expected limit of #{unmet_hrs_clg}."
+    end
+  else
+    errs << "Could not determine unmet hours for model #{model_test_name}.  Simulation may have failed."
+  end
+  log_hvac_test_errors(errs)
+  log_messages_to_file("#{model_dir}/openstudio-standards.log", debug=false)
+
+  # @todo add checks for hvac enduse euis, ventilation unmet hours
+  return errs
 end
