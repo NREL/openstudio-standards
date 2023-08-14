@@ -82,7 +82,11 @@ def model_hvac_test(hvac_arguments)
   unless annual_run_success
     puts "test: '#{model_test_name}' results not available. Running energy simulation."
     # Load the test model
-    model = standard.safe_load_model("#{File.dirname(__FILE__)}/models/#{model_name}.osm")
+    model_path = "#{__dir__}/../os_stds_methods/models/#{model_name}.osm"
+    model = standard.safe_load_model(model_path)
+    unless model
+      raise "ERROR: unable to load model: #{model_path}. Check that it is a valid path."
+    end
 
     # Assign a weather file
     standard.model_add_design_days_and_weather_file(model, climate_zone, '')
