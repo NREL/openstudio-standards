@@ -24,7 +24,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_2_Test_NG_R_H_FPFC < MiniTest::Test
+class NECB_HVAC_System_2_Test_NG_R_H_FPFC < Minitest::Test
 
 
   #System #2

@@ -1481,12 +1481,14 @@ class Standard
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
-            model_add_pvav(model,
-                           pri_zones,
-                           system_name: system_name,
-                           hot_water_loop: hot_water_loop,
-                           chilled_water_loop: chilled_water_loop,
-                           electric_reheat: electric_reheat)
+            air_loop = model_add_pvav(model,
+                                      pri_zones,
+                                      system_name: system_name,
+                                      hot_water_loop: hot_water_loop,
+                                      chilled_water_loop: chilled_water_loop,
+                                      electric_reheat: electric_reheat)
+            model_system_outdoor_air_sizing_vrp_method(air_loop)
+            air_loop_hvac_apply_vav_damper_action(air_loop)
             model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
 
@@ -1618,15 +1620,17 @@ class Standard
             if chilled_water_loop.additionalProperties.hasFeature('secondary_loop_name')
               chilled_water_loop = model.getPlantLoopByName(chilled_water_loop.additionalProperties.getFeatureAsString('secondary_loop_name').get).get
             end
-            model_add_vav_reheat(model,
-                                 pri_zones,
-                                 system_name: system_name,
-                                 reheat_type: reheat_type,
-                                 hot_water_loop: hot_water_loop,
-                                 chilled_water_loop: chilled_water_loop,
-                                 fan_efficiency: 0.62,
-                                 fan_motor_efficiency: 0.9,
-                                 fan_pressure_rise: 4.0)
+            air_loop = model_add_vav_reheat(model,
+                                            pri_zones,
+                                            system_name: system_name,
+                                            reheat_type: reheat_type,
+                                            hot_water_loop: hot_water_loop,
+                                            chilled_water_loop: chilled_water_loop,
+                                            fan_efficiency: 0.62,
+                                            fan_motor_efficiency: 0.9,
+                                            fan_pressure_rise: 4.0)
+            model_system_outdoor_air_sizing_vrp_method(air_loop)
+            air_loop_hvac_apply_vav_damper_action(air_loop)
             model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
 
