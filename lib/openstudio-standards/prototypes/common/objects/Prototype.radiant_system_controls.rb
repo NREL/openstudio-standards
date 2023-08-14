@@ -107,20 +107,29 @@ class Standard
     # List of global variables used in EMS scripts
     ####
 
+    # assign different variable names if using zone occupancy for control
+    if use_zone_occupancy_for_control
+      zone_occ_hr_start_name = "#{zone_name}_occ_hr_start"
+      zone_occ_hr_end_name = "#{zone_name}_occ_hr_end"
+    else
+      zone_occ_hr_start_name = "occ_hr_start"
+      zone_occ_hr_end_name = "occ_hr_end"
+    end
+
     # Start of occupied time of zone. Valid from 1-24.
-    occ_hr_start = model.getEnergyManagementSystemGlobalVariableByName('occ_hr_start')
+    occ_hr_start = model.getEnergyManagementSystemGlobalVariableByName(zone_occ_hr_start_name)
     if occ_hr_start.is_initialized
       occ_hr_start = occ_hr_start.get
     else
-      occ_hr_start = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'occ_hr_start')
+      occ_hr_start = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, zone_occ_hr_start_name)
     end
 
     # End of occupied time of zone. Valid from 1-24.
-    occ_hr_end = model.getEnergyManagementSystemGlobalVariableByName('occ_hr_end')
+    occ_hr_end = model.getEnergyManagementSystemGlobalVariableByName(zone_occ_hr_end_name)
     if occ_hr_end.is_initialized
       occ_hr_end = occ_hr_end.get
     else
-      occ_hr_end = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'occ_hr_end')
+      occ_hr_end = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, zone_occ_hr_end_name)
     end
 
     # Proportional  gain constant (recommended 0.3 or less).
@@ -281,10 +290,15 @@ class Standard
     ####
 
     # Initialize global constant values used in EMS programs.
-    set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Constant_Values')
-    unless set_constant_values_prg.is_initialized
-      set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-      set_constant_values_prg.setName('Set_Constant_Values')
+    # Exclude occupancy hours variables if specific to zones
+    if use_zone_occupancy_for_control
+      set_constant_values_prg_body = <<-EMS
+        SET prp_k              = #{proportional_gain},
+        SET ctrl_temp_offset   = 0.5,
+        SET upper_slab_sp_lim  = 29,
+        SET lower_slab_sp_lim  = 19
+      EMS
+    else
       set_constant_values_prg_body = <<-EMS
         SET occ_hr_start       = #{zone_occ_hr_start},
         SET occ_hr_end         = #{zone_occ_hr_end},
@@ -293,13 +307,20 @@ class Standard
         SET upper_slab_sp_lim  = 29,
         SET lower_slab_sp_lim  = 19
       EMS
+    end
+
+    set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Constant_Values')
+    unless set_constant_values_prg.is_initialized
+      set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      set_constant_values_prg.setName('Set_Constant_Values')
       set_constant_values_prg.setBody(set_constant_values_prg_body)
     end
 
     # Initialize zone specific constant values used in EMS programs.
-    set_constant_zone_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    set_constant_zone_values_prg.setName("#{zone_name}_Set_Constant_Values")
-    set_constant_zone_values_prg_body = <<-EMS
+    if use_zone_occupancy_for_control
+      set_constant_zone_values_prg_body = <<-EMS
+      SET #{zone_occ_hr_start_name}       = #{zone_occ_hr_start},
+      SET #{zone_occ_hr_end_name}         = #{zone_occ_hr_end},
       SET #{zone_name}_max_ctrl_temp      = #{zone_name}_lower_comfort_limit,
       SET #{zone_name}_min_ctrl_temp      = #{zone_name}_upper_comfort_limit,
       SET #{zone_name}_cmd_csp_error      = 0,
@@ -307,13 +328,25 @@ class Standard
       SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_upper_comfort_limit,
       SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_lower_comfort_limit
     EMS
+    else
+      set_constant_zone_values_prg_body = <<-EMS
+      SET #{zone_name}_max_ctrl_temp      = #{zone_name}_lower_comfort_limit,
+      SET #{zone_name}_min_ctrl_temp      = #{zone_name}_upper_comfort_limit,
+      SET #{zone_name}_cmd_csp_error      = 0,
+      SET #{zone_name}_cmd_hsp_error      = 0,
+      SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_upper_comfort_limit,
+      SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_lower_comfort_limit
+    EMS
+    end
+    set_constant_zone_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    set_constant_zone_values_prg.setName("#{zone_name}_Set_Constant_Values")
     set_constant_zone_values_prg.setBody(set_constant_zone_values_prg_body)
 
     # Calculate maximum and minimum 'measured' controlled temperature in the zone
     calculate_minmax_ctrl_temp_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     calculate_minmax_ctrl_temp_prg.setName("#{zone_name}_Calculate_Extremes_In_Zone")
     calculate_minmax_ctrl_temp_prg_body = <<-EMS
-      IF ((CurrentTime >= occ_hr_start) && (CurrentTime <= occ_hr_end)),
+      IF ((CurrentTime >= #{zone_occ_hr_start_name}) && (CurrentTime <= #{zone_occ_hr_end_name})),
           IF #{zone_name}_ctrl_temperature > #{zone_name}_max_ctrl_temp,
               SET #{zone_name}_max_ctrl_temp = #{zone_name}_ctrl_temperature,
           ENDIF,
@@ -331,7 +364,7 @@ class Standard
     calculate_errors_from_comfort_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     calculate_errors_from_comfort_prg.setName("#{zone_name}_Calculate_Errors_From_Comfort")
     calculate_errors_from_comfort_prg_body = <<-EMS
-      IF (CurrentTime >= (occ_hr_end - ZoneTimeStep)) && (CurrentTime <= (occ_hr_end)),
+      IF (CurrentTime >= (#{zone_occ_hr_end_name} - ZoneTimeStep)) && (CurrentTime <= (#{zone_occ_hr_end_name})),
           SET #{zone_name}_cmd_csp_error = (#{zone_name}_upper_comfort_limit - ctrl_temp_offset) - #{zone_name}_max_ctrl_temp,
           SET #{zone_name}_cmd_hsp_error = (#{zone_name}_lower_comfort_limit + ctrl_temp_offset) - #{zone_name}_min_ctrl_temp,
       ENDIF
@@ -344,9 +377,9 @@ class Standard
     calculate_slab_ctrl_setpoint_prg_body = <<-EMS
       SET #{zone_name}_cont_cool_oper = @TrendSum #{zone_name}_rad_cool_operation_trend radiant_switch_over_time/ZoneTimeStep,
       SET #{zone_name}_cont_heat_oper = @TrendSum #{zone_name}_rad_heat_operation_trend radiant_switch_over_time/ZoneTimeStep,
-      IF (#{zone_name}_cont_cool_oper > 0) && (CurrentTime == occ_hr_end),
+      IF (#{zone_name}_cont_cool_oper > 0) && (CurrentTime == #{zone_occ_hr_end_name}),
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_csp_error*prp_k),
-      ELSEIF (#{zone_name}_cont_heat_oper > 0) && (CurrentTime == occ_hr_end),
+      ELSEIF (#{zone_name}_cont_heat_oper > 0) && (CurrentTime == #{zone_occ_hr_end_name}),
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_hsp_error*prp_k),
       ELSE,
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl,
