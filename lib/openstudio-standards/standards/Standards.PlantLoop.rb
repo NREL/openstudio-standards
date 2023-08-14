@@ -1501,7 +1501,7 @@ class Standard
       end
 
       # Get pipe node
-      node = pipe.to_StraightComponent.get.outletModelObject.get.to_Node.get
+      node = prm_get_optional_handler(pipe, @sizing_run_dir, 'to_StraightComponent', 'outletModelObject', 'to_Node')
 
       # Get pipe and node names
       node_name = node.name.get

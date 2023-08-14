@@ -1,4 +1,5 @@
 require 'csv'
+require 'date'
 
 class Standard
   attr_accessor :space_multiplier_map
@@ -195,9 +196,15 @@ class Standard
         # For PRM, it only applies lights for now.
         space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
       end
+
       # Modify the lighting schedule to handle lighting occupancy sensors
       # Modify the upper limit value of fractional schedule to avoid the fatal error caused by schedule value higher than 1
       space_type_light_sch_change(model)
+
+      # Modify electric equipment computer room schedule
+      model.getSpaces.sort.each do |space|
+        space_add_prm_computer_roomm_equipment_schedule(space)
+      end
 
       model_apply_baseline_exterior_lighting(model)
 
@@ -565,10 +572,11 @@ class Standard
     end
 
     # If needed, modify computer equipment schedule
+    proposed_model.getSpaces.each do |space|
+      space_add_prm_computer_roomm_equipment_schedule(space)
+    end
 
     # If needed, modify lighting power denstities in residential spaces/zones
-
-    # Save proposed model
 
     return proposed_model
   end

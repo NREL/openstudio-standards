@@ -605,7 +605,6 @@ class AppendixGPRMTests < Minitest::Test
   #
   # @param prototypes_base [Hash] Baseline prototypes
   def check_exterior_lighting(prototypes_base)
-
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
 
@@ -626,6 +625,19 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_computer_rooms_equipment_schedule(model_info)
+    model_info.each do |prototype, model|
+      building_type, template, climate_zone, mod = prototype
+
+      model.getSpaces.each do |space|
+        if prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType') == 'computer room'
+          space.spaceType.get.electricEquipment.each do |elec_equipment|
+            assert(elec_equipment.schedule.get.name.to_s == "ASHRAE 90.1 Appendix G - Computer Room Equipment Schedule")
+          end
+        end
+      end
+    end
+  end
 
   def check_lighting_exceptions(prototypes_base)
     prototypes_base.each do |prototype, model|
@@ -3707,4 +3719,13 @@ class AppendixGPRMTests < Minitest::Test
     model_hash = prm_test_helper('exterior_lighting', require_prototype=false, require_baseline=true)
     check_exterior_lighting(model_hash['baseline'])
   end
+
+  def test_proposed_computer_rooms
+    model_hash = prm_test_helper('proposed_computer_rooms', require_prototype=false, require_baseline=true, require_proposed=true)
+
+    check_computer_rooms_equipment_schedule(model_hash['baseline'])
+
+    check_computer_rooms_equipment_schedule(model_hash['proposed'])
+  end
+
 end
