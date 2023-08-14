@@ -814,14 +814,8 @@ class ASHRAE901PRM < Standard
     space_loads = model.getSpaceLoads
     loads = []
     space_loads.sort.each do |space_load|
-      load_type = space_load.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
-      casting_method_name = "to_#{load_type}"
-      if space_load.respond_to?(casting_method_name)
-        casted_load = space_load.public_send(casting_method_name).get
-        loads << casted_load
-      else
-        p 'Need Debug, casting method not found @JXL'
-      end
+      casted_load = model_cast_model_object(space_load)
+      loads << casted_load unless casted_load.nil?
     end
 
     load_schedule_name_hash = {

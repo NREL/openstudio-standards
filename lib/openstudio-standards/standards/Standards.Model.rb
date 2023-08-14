@@ -77,6 +77,15 @@ class Standard
                 "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
     end
 
+    # Check if proposed HVAC system is autosized
+    if model_is_hvac_autosized(user_model)
+      OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+        "The user model's HVAC system is partly autosized. Baseline and proposed model(s) won't be created.")
+#      prm_raise(false,
+#      sizing_run_dir,
+#      "The user model's HVAC system is partly autosized. Baseline and proposed model(s) won't be created.")
+    end
+
     # Generate proposed model from the user-provided model
     proposed_model = model_create_prm_proposed_building(user_model)
 
@@ -590,6 +599,48 @@ class Standard
     # If needed, modify lighting power denstities in residential spaces/zones
 
     return proposed_model
+  end
+
+  # Determine whether or not the HVAC system in a model is autosized
+  #
+  # As it is not realistic expectation to have all autosizable
+  # fields hard input, the method relies on autosizable field 
+  # of prime movers (fans, pumps) and heating/cooling devices
+  # in the models (boilers, chillers, coils)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if the HVAC system is likely autosized, false otherwise
+  def model_is_hvac_autosized(model)
+    is_hvac_autosized = false
+    model.modelObjects.each do |obj|
+      obj_type = obj.iddObjectType.valueName.to_s.downcase
+      
+      # Check if the object needs to be checked for autosizing
+      obj_to_be_checked_for_autosizing = false
+      if obj_type.include?('chiller') || obj_type.include?('boiler') || obj_type.include?('coil') || obj_type.include?('fan') || obj_type.include?('pump')
+        if !(obj_type.include?('controller'))
+          obj_to_be_checked_for_autosizing = true
+        end
+      end
+
+      # Check for autosizing
+      if obj_to_be_checked_for_autosizing
+        casted_obj = model_cast_model_object(obj)
+
+        next if casted_obj.nil?
+
+        casted_obj.methods.each do |method|
+          if method.to_s.include?('is') && method.to_s.include?('Autosized')
+            if casted_obj.public_send(method) == true
+              is_hvac_autosized = true
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The #{method.to_s.sub('is', '').sub("Autosized", "").sub(':', '')} field of the #{obj_type} named #{casted_obj.name.to_s} is autosized. It should be hard sized.")
+            end
+          end
+        end
+      end
+    end
+
+    return is_hvac_autosized
   end
 
   # Determine if there needs to be a sizing run after constructions are added
