@@ -280,6 +280,11 @@ class Standard
       zone_occ_hr_start = mean_occ_values.index{ |n| n >= 0.25 }
       zone_occ_hr_end = 24 - mean_occ_values.reverse().index{ |n| n >= 0.25 }
 
+      # remove occupancy schedule ruleset that was created
+      occ_schedule_ruleset.scheduleRules.each { |item| model.removeObject(item.daySchedule.handle) }
+      occ_schedule_ruleset.children.each { |item| model.removeObject(item.handle) }
+      model.removeObject(occ_schedule_ruleset.handle)
+
     else
       zone_occ_hr_start = model_occ_hr_start
       zone_occ_hr_end = model_occ_hr_end
