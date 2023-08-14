@@ -66,6 +66,17 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    # Perform a user model design day run only to make sure
+    # that the user model is valid, i.e. can run without major
+    # errors
+    if !model_run_sizing_run(user_model, "#{sizing_run_dir}/USER-SR")
+      OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                         "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+      prm_raise(false,
+                sizing_run_dir,
+                "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+    end
+
     # Generate proposed model from the user-provided model
     proposed_model = model_create_prm_proposed_building(user_model)
 
@@ -76,10 +87,10 @@ class Standard
         umlh = model_get_unmet_load_hours(proposed_model)
         if umlh > 300
           OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-                             "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) wont be created.")
+                             "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) won't be created.")
           prm_raise(false,
                     sizing_run_dir,
-                    'Proposed model unmet load hours exceed 300. Baseline model(s) wont be created.')
+                    "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
         end
       else
         OpenStudio.logFree(OpenStudio::Error, 'prm.log',
