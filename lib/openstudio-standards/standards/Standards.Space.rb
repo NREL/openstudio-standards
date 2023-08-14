@@ -2997,7 +2997,7 @@ class Standard
     standard_space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType').delete(' ').downcase
 
     # Check if the PRM computer room schedule is already in the model
-    schedule_name = "ASHRAE 90.1 Appendix G - Computer Room Equipment Schedule"
+    schedule_name = 'ASHRAE 90.1 Appendix G - Computer Room Equipment Schedule'
     schedule_found = model.getScheduleRulesetByName(schedule_name)
 
     # Create and assign the the electric equipment schedule
@@ -3036,6 +3036,6 @@ class Standard
       end
     end
 
-  return true
+    return true
   end
 end

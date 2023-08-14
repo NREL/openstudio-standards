@@ -709,7 +709,6 @@ class ASHRAE901PRM < Standard
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
   def model_apply_baseline_exterior_lighting(model)
-
     model.getExteriorLightss.each do |ext_lights_obj|
       # Update existing exterior lights object: control, schedule, power
       ext_lights_obj.setControlOption('AstronomicalClock')
@@ -1414,7 +1413,7 @@ class ASHRAE901PRM < Standard
   # The file name is userdata_exterior_lighting.csv
   # @param [OpenStudio::Model::Model] model
   def handle_exterior_lighting_user_input_data(model)
-    user_data_exterior_lighting_objects = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights']: nil
+    user_data_exterior_lighting_objects = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights'] : nil
     if user_data_exterior_lighting_objects && !user_data_exterior_lighting_objects.empty?
       non_tradeable_cats = ['nontradeable_general', 'building_facades_area', 'building_facades_perim', 'automated_teller_machines_per_location', 'automated_teller_machines_per_machine', 'entries_and_gates',
                             'loading_areas_for_emergency_vehicles', 'drive_through_windows_and_doors', 'parking_near_24_hour_entrances', 'roadway_parking']
@@ -1449,7 +1448,7 @@ class ASHRAE901PRM < Standard
           else
             num_trade += 1
             meas_val_key = format('end_use_measurement_value_%02d', icat)
-            meas_val = prm_read_user_data(user_exterior_lighting, meas_val_key, "0.0").to_f
+            meas_val = prm_read_user_data(user_exterior_lighting, meas_val_key, '0.0').to_f
             unless meas_val == 0
               OpenStudio.logFree(OpenStudio::Info, 'prm.log', "End use subcategory #{subcat} has either missing measurement value or invalid measurement value, set to 0.0")
             end

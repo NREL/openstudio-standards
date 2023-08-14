@@ -1477,7 +1477,7 @@ class Standard
     return plantloop_capacity
   end
 
-  # This methods replaces all indoor or outdoor pipes which model the heat transfer between the pipe and the 
+  # This methods replaces all indoor or outdoor pipes which model the heat transfer between the pipe and the
   # environement by adibatic pipes.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
@@ -1513,6 +1513,6 @@ class Standard
       new_pipe.addToNode(node)
       component.remove
     end
-  return true
-  end 
+    return true
+  end
 end

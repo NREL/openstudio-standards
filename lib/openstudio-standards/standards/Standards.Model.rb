@@ -557,7 +557,7 @@ class Standard
   # @param user_model [OpenStudio::model::Model] User specified OpenStudio model
   # @return [OpenStudio::model::Model] returns the proposed building model corresponding to a user model
   def model_create_prm_proposed_building(user_model)
-    # Create copy of the user model 
+    # Create copy of the user model
     proposed_model = BTAP::FileIO.deep_copy(user_model)
 
     # If needed, modify user model infiltration
@@ -567,7 +567,7 @@ class Standard
     proposed_model.getPlantLoops.sort.each do |plant_loop|
       # Skip non service water heating loops
       next unless plant_loop_swh_loop?(plant_loop)
-    
+
       plant_loop_adibatic_pipes_only(plant_loop)
     end
 
