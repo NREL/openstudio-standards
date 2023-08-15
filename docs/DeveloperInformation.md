@@ -85,8 +85,9 @@ As you add to/modify the code, please try to fit changes into the current struct
 
 1. Make a new branch for your changes.
 2. Modify the code on your branch.
-3. If you have data, modify the .json files and run commands to update the database, as appropriate. Historically, openstudio-standards data used a series of google spreadsheets, and is still used for non-90.1- standards. See [OpenStudio_Standards Google Spreadsheet](https://drive.google.com/drive/folders/1x7yEU4jnKw-gskLBih8IopStwl0KAMEi?usp=sharing). Contact <mailto:matthew.dahlhausen@nrel.gov> for edit access.
-4. `bundle exec rake data:update` to download the latest version of the spreadsheet from Google Drive and export the JSON files.
+3. If you have data, modify the .json files and run commands to update the database, as appropriate. Historically, openstudio-standards data used a series of google spreadsheets, and is still used for non-90.1- standards. See [OpenStudio_Standards Google Spreadsheet](https://drive.google.com/drive/folders/1x7yEU4jnKw-gskLBih8IopStwl0KAMEi?usp=sharing). Contact <mailto:matthew.dahlhausen@nrel.gov> for access.
+4. You may edit the spreadsheet or modify a copy of the data, then download the spreadsheet to the `data/standards` directory, and run `bundle exec rake data:update:manual` to update the JSONs.
+5. If you have edit access to the spreadsheets, you can use `bundle exec rake data:update` to download the latest version of the spreadsheet from Google Drive and export the JSON files.
 
 ### Test the code
 
