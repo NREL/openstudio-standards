@@ -2,25 +2,25 @@
 
 ## Setup
 
-1. Install the [latest version of OpenStudio](https://www.openstudio.net/downloads). Minimum supported version is 3.0.0.
-2. Install Ruby:
+1. Install the [latest version of OpenStudio](https://www.openstudio.net/downloads). We recommend a minimum version of OpenStudio 3.2.1.
+2. Install the Ruby version that corresponds to your OpenStudio install. See the [OpenStudio SDK Version Compatibility Matrix](https://github.com/NREL/OpenStudio/wiki/OpenStudio-SDK-Version-Compatibility-Matrix).
       1. **On Mac**:
-      2. Install Ruby 2.5.X using [rbenv](http://octopress.org/docs/setup/rbenv/) (`ruby -v` from command prompt to check installed version).
+      2. Install Ruby 2.7.2 using [rbenv](http://octopress.org/docs/setup/rbenv/) (`ruby -v` from command prompt to check installed version).
       3. **On Windows**:
-      4. Install [Ruby+Devkit 2.5.8](https://rubyinstaller.org/downloads/) (`ruby -v` from command prompt to check installed version).
+      4. Install [Ruby+Devkit 2.7.2](https://rubyinstaller.org/downloads/archives) (`ruby -v` from command prompt to check installed version).
       5. **Using BTAP development Environment**
       6. Do nothing.
 
 4. Connect Ruby to OpenStudio:
 	1. **On Mac**:
 	2. Create a file called `openstudio.rb`
-	3. Contents: `require "/Applications/openstudio-3.0.0/Ruby/openstudio.rb"`. Modify `3.0.0` to the version you installed.
+	3. Contents: `require "/Applications/openstudio-3.2.1/Ruby/openstudio.rb"`. Modify `3.2.1` to the version you installed.
 	4. Save it here: `/usr/lib/ruby/site_ruby/openstudio.rb`
 	5. **On Windows**:
 	6. Create a file called `openstudio.rb`
-	7. Contents: `require "C:/openstudio-3.0.0/Ruby/openstudio.rb"`.  Modify `3.0.0` to the version you installed.
-	8. Save it here: `C:/Ruby25-x64/lib/ruby/site_ruby/openstudio.rb`
-	9. Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby25-x64\lib\ruby\gems\2.5.0`.
+	7. Contents: `require "C:/openstudio-3.2.1/Ruby/openstudio.rb"`.  Modify `3.2.1` to the version you installed.
+	8. Save it here: `C:/Ruby27-x64/lib/ruby/site_ruby/openstudio.rb`
+	9. Start > right click Computer > Properties > Advanced system settings > Environment variables.  In the User variables section (top) add a new Variable with the name `GEM_PATH` and the Value `C:\Ruby27-x64\lib\ruby\gems\2.5.0`.
 	10. **Using BTAP development Environment**
 	11.  Do nothing.
 
@@ -81,12 +81,11 @@ This project uses [Rake](http://rake.rubyforge.org/) to run tasks from the termi
  
 ### Modify the code
 
-As you add to/modify the code, please try to fit changes into the current structure rather than bolting things on willy-nilly.  See the {file:docs/RepositoryStructure.md Repository Structure page} to see how the code is organized.  If you don't understand something or want to discuss your plan before you get started, contact <mailto:andrew.parker@nrel.gov>.
+As you add to/modify the code, please try to fit changes into the current structure rather than bolting things on willy-nilly.  See the {file:docs/RepositoryStructure.md Repository Structure page} to see how the code is organized.  If you don't understand something or want to discuss your plan before you get started, contact <mailto:matthew.dahlhausen@nrel.gov>.
 
 1. Make a new branch for your changes.
 2. Modify the code on your branch.
-3. Modify the [OpenStudio_Standards Google Spreadsheet](https://drive.google.com/drive/folders/1x7yEU4jnKw-gskLBih8IopStwl0KAMEi?usp=sharing)
- - To get edit access to this spreadsheet, contact <mailto:Marlena.Praprost@nrel.gov>.
+3. If you have data, modify the .json files and run commands to update the database, as appropriate. Historically, openstudio-standards data used a series of google spreadsheets, and is still used for non-90.1- standards. See [OpenStudio_Standards Google Spreadsheet](https://drive.google.com/drive/folders/1x7yEU4jnKw-gskLBih8IopStwl0KAMEi?usp=sharing). Contact <mailto:matthew.dahlhausen@nrel.gov> for edit access.
 4. `bundle exec rake data:update` to download the latest version of the spreadsheet from Google Drive and export the JSON files.
 
 ### Test the code
@@ -95,7 +94,7 @@ Tests prove that your code works as expected, but more importantly they help mak
 
 1. Create a new file called `test_XX.rb` in the `/test/subdirectory` directory.
 2. Put tests into your file.  See other test files for examples.
-2. `ruby test/subdirectory/test_XX.rb` Run your new test file.
+2. `ruby test/sub_directory/test_XX.rb` Run your new test file.
 3. Fix your code and make sure your tests pass.
 
 ### Document the code
@@ -110,8 +109,7 @@ Good documentation is critical.  Changes or additions without good documentation
 
 1. Commit your changes to your branch.
 2. Merge /Master into your branch and resolve any conflicts.
-2. Push your branch to GitHub.
-3. DO NOT push your code to the /Master branch!
+3. Push your branch to GitHub.
 
 ### Pull request
 
