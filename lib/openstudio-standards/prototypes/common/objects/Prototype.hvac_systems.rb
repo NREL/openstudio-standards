@@ -4523,9 +4523,9 @@ class Standard
   # @param two_pipe_system [Bool] when set to true, it convert the default 4-pipe water plant HVAC system to a 2-pipe system.
   # @param heating_plant_lockout [Double] hot water plant lockout in degrees Fahrenheit, default 65F
   #   . Hot water plant is unavailable when outdoor drybulb is above the specified threshold.
-  # @param use_zone_demand [Bool] when set to true, heating and cooling plant availability schedules are set
-  #   using the outdoor dry-bulb temperature lockouts. If false, it creates EMS code to define availability
-  #   based on zone heating and cooling load requests.
+  # @param use_zone_demand [Bool] If true, it creates EMS code to define heating and cooling plant availability
+  #   based on zone heating and cooling load requests, default to false. When set to false, heating and cooling plant
+  #   availability schedules are set using the heating outdoor dry-bulb temperature lockout defined above.
   # @param [Array<OpenStudio::Model::ThermalZone>] array of zones to dictate cooling or heating mode of water plant
   # @param radiant_type [String] type of radiant system, floor or ceiling, to create in zone.
   # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
