@@ -40,10 +40,22 @@ def prm_get_optional_handler(component, log_dir, data_key, *remaining_keys)
   target_data = component.send(data_key)
   prm_raise(target_data.is_initialized,
             log_dir,
-            "Failed to retrieve data: #{data_key} from #{component.name.get}"
+            "Failed to retrieve data: #{data_key} from #{prm_get_component_name(component)}"
             )
   target_data_get = target_data.get
   return remaining_keys.length == 0 ? target_data_get : prm_get_optional_handler(target_data_get, log_dir, remaining_keys[0], *remaining_keys[1...])
+end
+
+# This is a PRM handler to get a name from an OpenStudio object instance
+# If the object instance does not have a name, then it will return the object name.
+#
+# @param component [OpenStudio] an OpenStudio object
+def prm_get_component_name(component)
+  name = component.iddObjectType.valueName.to_s
+  if component.name.is_initialized
+    name = component.name.get
+  end
+  return name
 end
 
 

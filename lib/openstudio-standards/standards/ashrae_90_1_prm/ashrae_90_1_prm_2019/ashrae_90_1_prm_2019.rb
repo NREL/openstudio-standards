@@ -18,7 +18,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.
-  def space_infiltration_rate_75_pa
+  def prm_space_infiltration_rate_75_pa
     basic_infil_rate_cfm_per_ft2 = 1.0
     return basic_infil_rate_cfm_per_ft2
   end

@@ -128,13 +128,13 @@ class ASHRAE901PRM < Standard
     # Excerpt from the EnergyPlus Input/Output reference manual:
     #     "This model is based on work by Sherman and Grimsrud (1980)
     #     and is appropriate for smaller, residential-type buildings."
-    # Return an error if the model does use this object
+    # Raise exception if the model does use this object
     ela = 0
-    model.getSpaceInfiltrationEffectiveLeakageAreas.sort.each do |eff_la|
+    model.getSpaceInfiltrationEffectiveLeakageAreas.each do |eff_la|
       ela += 1
     end
     if ela > 0
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'The current model cannot include SpaceInfiltrationEffectiveLeakageArea. These objects cannot be used to model infiltration according to the 90.1-PRM rules.')
+      OpenStudio.logFree(OpenStudio::Warn, 'prm.log', 'The current model cannot include SpaceInfiltrationEffectiveLeakageArea. These objects will be skipped in modeling infiltration according to the 90.1-PRM rules.')
     end
 
     # Get the space building envelope area
@@ -145,21 +145,19 @@ class ASHRAE901PRM < Standard
     #    transferred to or from the exterior, to or from unconditioned spaces or to or
     #    from conditioned spaces."
     building_envelope_area_m2 = 0
-    model.getSpaces.sort.each do |space|
+    model.getSpaces.each do |space|
       building_envelope_area_m2 += space_envelope_area(space, climate_zone)
     end
-    if building_envelope_area_m2 == 0.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Calculated building envelope area is 0 m2, no infiltration will be added.')
-      return 0.0
-    end
+    prm_raise(building_envelope_area_m2 > 0.0, @sizing_run_dir, 'Calculated building envelope area is 0 m2, Please check model inputs.')
+
 
     # Calculate current model air leakage rate @ 75 Pa and report it
     curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The proposed model I_75Pa is estimated to be #{curr_tot_infil_m3_per_s_per_envelope_area} m3/s per m2 of total building envelope.")
+    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The proposed model I_75Pa is estimated to be #{curr_tot_infil_m3_per_s_per_envelope_area} m3/s per m2 of total building envelope.")
 
     # Calculate building adjusted building envelope
     # air infiltration following the 90.1 PRM rules
-    tot_infil_m3_per_s = model_adjusted_building_envelope_infiltration(model, building_envelope_area_m2)
+    tot_infil_m3_per_s = model_adjusted_building_envelope_infiltration(building_envelope_area_m2)
 
     # Find infiltration method used in the model, if any.
     #
@@ -171,12 +169,12 @@ class ASHRAE901PRM < Standard
     infil_coefficients = model_get_infiltration_coefficients(model)
 
     # Set the infiltration rate at each space
-    model.getSpaces.sort.each do |space|
+    model.getSpaces.each do |space|
       space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients)
     end
 
     # Remove infiltration rates set at the space type
-    model.getSpaceTypes.sort.each do |space_type|
+    model.getSpaceTypes.each do |space_type|
       space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
     end
 
@@ -184,13 +182,13 @@ class ASHRAE901PRM < Standard
   end
 
   # This method retrieves the type of infiltration input
-  # used in the model. If input is inconsitent, returns
+  # used in the model. If input is inconsistent, returns
   # Flow/Area
   #
   # @return [String] infiltration input type
   def model_get_infiltration_method(model)
     infil_method = nil
-    model.getSpaces.sort.each do |space|
+    model.getSpaces.each do |space|
       # Infiltration at the space level
       unless space.spaceInfiltrationDesignFlowRates.empty?
         old_infil = space.spaceInfiltrationDesignFlowRates[0]
@@ -229,7 +227,7 @@ class ASHRAE901PRM < Standard
     vel = nil
     vel_2 = nil
     infil_coeffs = [cst, temp, vel, vel_2]
-    model.getSpaces.sort.each do |space|
+    model.getSpaces.each do |space|
       # Infiltration at the space level
       unless space.spaceInfiltrationDesignFlowRates.empty?
         old_infil = space.spaceInfiltrationDesignFlowRates[0]
@@ -280,7 +278,7 @@ class ASHRAE901PRM < Standard
   # @return [Float] building model air leakage rate
   def model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
     bldg_air_leakage_rate = 0
-    model.getSpaces.sort.each do |space|
+    model.getSpaces.each do |space|
       # Infiltration at the space level
       unless space.spaceInfiltrationDesignFlowRates.empty?
         infil_obj = space.spaceInfiltrationDesignFlowRates[0]
@@ -301,6 +299,9 @@ class ASHRAE901PRM < Standard
       if space.spaceType.is_initialized
         space_type = space.spaceType.get
         unless space_type.spaceInfiltrationDesignFlowRates.empty?
+          if bldg_air_leakage_rate > 0
+            OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "A duplicated infiltration definition is found in spaceType. Verify your model inputs.")
+          end
           infil_obj = space_type.spaceInfiltrationDesignFlowRates[0]
           unless infil_obj.designFlowRate.is_initialized
             if infil_obj.flowperSpaceFloorArea.is_initialized
@@ -326,12 +327,13 @@ class ASHRAE901PRM < Standard
   # this approach uses the 90.1 PRM rules
   #
   # @return [Float] building envelope infiltration
-  def model_adjusted_building_envelope_infiltration(model, building_envelope_area_m2)
+  def model_adjusted_building_envelope_infiltration(building_envelope_area_m2)
     # Determine the total building baseline infiltration rate in cfm per ft2 of the building envelope at 75 Pa
-    basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa
+    basic_infil_rate_cfm_per_ft2 = prm_space_infiltration_rate_75_pa
 
-    # Do nothing if no infiltration
-    return 0.0 if basic_infil_rate_cfm_per_ft2.zero?
+    # Do nothing if no infiltration - this is impossible as prm_space_infiltration_rate_75_pa always return 1.0
+    # remove
+    # return 0.0 if basic_infil_rate_cfm_per_ft2.zero?
 
     # Conversion factor
     conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
