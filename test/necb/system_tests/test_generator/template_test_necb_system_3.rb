@@ -24,7 +24,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_3_Test < MiniTest::Test
+class NECB_HVAC_System_3_Test < Minitest::Test
 
   def <%=test_name %>()
     weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'

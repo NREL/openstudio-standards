@@ -356,6 +356,26 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
   require_relative "#{stds}/deer/deer.Space"
   require_relative "#{stds}/deer/deer.PlanarSurface"
+  # DEER 2003
+  require_relative "#{stds}/deer/deer_2003/deer_2003.ThermalZone"
+  # DEER 2007
+  require_relative "#{stds}/deer/deer_2007/deer_2007.ThermalZone"
+  # DEER 2011
+  require_relative "#{stds}/deer/deer_2011/deer_2011.ThermalZone"
+  # DEER 2014
+  require_relative "#{stds}/deer/deer_2014/deer_2014.Space"
+  require_relative "#{stds}/deer/deer_2014/deer_2014.ThermalZone"
+  # DEER 2015
+  require_relative "#{stds}/deer/deer_2015/deer_2015.Space"
+  require_relative "#{stds}/deer/deer_2015/deer_2015.ThermalZone"
+  # DEER 2017
+  require_relative "#{stds}/deer/deer_2017/deer_2017.Space"
+  require_relative "#{stds}/deer/deer_2017/deer_2017.ThermalZone"
+  # DEER 2020
+  require_relative "#{stds}/deer/deer_2020/deer_2020.AirLoopHVAC"
+  require_relative "#{stds}/deer/deer_2020/deer_2020.FanVariableVolume"
+  require_relative "#{stds}/deer/deer_2020/deer_2020.Space"
+  require_relative "#{stds}/deer/deer_2020/deer_2020.ThermalZone"
   # CBES Common
   require_relative "#{stds}/cbes/cbes.AirLoopHVAC"
   require_relative "#{stds}/cbes/cbes.Model"
@@ -499,7 +519,6 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.HeatExchangerAirToAirSensibleAndLatent"
-  require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
   # ZE AEDG Multifamily
