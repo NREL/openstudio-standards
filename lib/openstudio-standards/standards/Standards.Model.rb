@@ -81,9 +81,6 @@ class Standard
     if model_is_hvac_autosized(user_model)
       OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
         "The user model's HVAC system is partly autosized. Baseline and proposed model(s) won't be created.")
-#      prm_raise(false,
-#      sizing_run_dir,
-#      "The user model's HVAC system is partly autosized. Baseline and proposed model(s) won't be created.")
     end
 
     # Generate proposed model from the user-provided model
@@ -617,7 +614,7 @@ class Standard
       
       # Check if the object needs to be checked for autosizing
       obj_to_be_checked_for_autosizing = false
-      if obj_type.include?('chiller') || obj_type.include?('boiler') || obj_type.include?('coil') || obj_type.include?('fan') || obj_type.include?('pump')
+      if obj_type.include?('chiller') || obj_type.include?('boiler') || obj_type.include?('coil') || obj_type.include?('fan') || obj_type.include?('pump') || obj_type.include?('waterheater')
         if !(obj_type.include?('controller'))
           obj_to_be_checked_for_autosizing = true
         end
