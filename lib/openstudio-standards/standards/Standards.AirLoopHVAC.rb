@@ -1060,6 +1060,12 @@ class Standard
         oa_control.setEconomizerMaximumLimitDryBulbTemperature(drybulb_limit_c)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer type = #{economizer_type}, dry bulb limit = #{drybulb_limit_f}F")
       end
+      # Some templates include fixed enthalpy limits in addition to fixed dry bulb limits
+      if enthalpy_limit_btu_per_lb
+        enthalpy_limit_j_per_kg = OpenStudio.convert(enthalpy_limit_btu_per_lb, 'Btu/lb', 'J/kg').get
+        oa_control.setEconomizerMaximumLimitEnthalpy(enthalpy_limit_j_per_kg)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: additional economizer enthalpy limit = #{enthalpy_limit_btu_per_lb}Btu/lb")
+      end
     when 'FixedEnthalpy'
       if enthalpy_limit_btu_per_lb
         enthalpy_limit_j_per_kg = OpenStudio.convert(enthalpy_limit_btu_per_lb, 'Btu/lb', 'J/kg').get
@@ -2664,11 +2670,11 @@ class Standard
           if term.reheatCoil.to_CoilHeatingWater.is_initialized
             term.setDamperHeatingAction(damper_action_eplus)
             control_type_set = true
+            term.setMaximumFlowFractionDuringReheat(0.5)
           end
         else
           term.setDamperHeatingAction(damper_action_eplus)
           control_type_set = true
-          term.setMaximumFlowFractionDuringReheat(0.5)
         end
       end
     end

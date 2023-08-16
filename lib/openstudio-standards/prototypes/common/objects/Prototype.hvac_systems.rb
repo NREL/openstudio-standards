@@ -1823,7 +1823,8 @@ class Standard
         else
           terminal.setZoneMinimumAirFlowInputMethod('Constant')
         end
-        terminal.setMaximumFlowFractionDuringReheat(0.5)
+        # default to single maximum control logic
+        terminal.setDamperHeatingAction('Normal')
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
         air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
@@ -1857,12 +1858,6 @@ class Standard
         zone.setReturnPlenum(return_plenum)
       end
     end
-
-    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
-    model_system_outdoor_air_sizing_vrp_method(air_loop)
-
-    # set the damper action based on the template
-    air_loop_hvac_apply_vav_damper_action(air_loop)
 
     return air_loop
   end
@@ -2015,6 +2010,7 @@ class Standard
   # @param electric_reheat [Bool] if true electric reheat coils, if false the reheat coils served by hot_water_loop
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
   # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
+  # @param econo_ctrl_mthd [String] economizer control type
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting packaged VAV air loop
   def model_add_pvav(model,
                      thermal_zones,
@@ -2025,7 +2021,8 @@ class Standard
                      heating_type: nil,
                      electric_reheat: false,
                      hvac_op_sch: nil,
-                     oa_damper_sch: nil)
+                     oa_damper_sch: nil,
+                     econo_ctrl_mthd: nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding Packaged VAV for #{thermal_zones.size} zones.")
 
     # create air handler
@@ -2118,18 +2115,25 @@ class Standard
                                 name: "#{air_loop.name} Clg Coil")
     end
 
-    # Outdoor air intake system
+    # outdoor air intake system
     oa_intake_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
+    oa_intake_controller.setName("#{air_loop.name} OA Controller")
     oa_intake_controller.setMinimumLimitType('FixedMinimum')
     oa_intake_controller.autosizeMinimumOutdoorAirFlowRate
-    oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    oa_intake_controller.resetMaximumFractionofOutdoorAirSchedule
     oa_intake_controller.resetEconomizerMinimumLimitDryBulbTemperature
+    unless econo_ctrl_mthd.nil?
+      oa_intake_controller.setEconomizerControlType(econo_ctrl_mthd)
+    end
+    unless oa_damper_sch.nil?
+      oa_intake_controller.setMinimumOutdoorAirSchedule(oa_damper_sch)
+    end
+    controller_mv = oa_intake_controller.controllerMechanicalVentilation
+    controller_mv.setName("#{air_loop.name} Mechanical Ventilation Controller")
+    controller_mv.setSystemOutdoorAirMethod('ZoneSum')
     oa_intake = OpenStudio::Model::AirLoopHVACOutdoorAirSystem.new(model, oa_intake_controller)
     oa_intake.setName("#{air_loop.name} OA System")
     oa_intake.addToNode(air_loop.supplyInletNode)
-    controller_mv = oa_intake_controller.controllerMechanicalVentilation
-    controller_mv.setName("#{air_loop.name} Ventilation Controller")
-    controller_mv.setAvailabilitySchedule(oa_damper_sch)
 
     # set air loop availability controls and night cycle manager, after oa system added
     air_loop.setAvailabilitySchedule(hvac_op_sch)
@@ -2177,6 +2181,8 @@ class Standard
       else
         terminal.setZoneMinimumAirFlowInputMethod('Constant')
       end
+      # default to single maximum control logic
+      terminal.setDamperHeatingAction('Normal')
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
       air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
@@ -2191,13 +2197,7 @@ class Standard
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     end
 
-    # Design outdoor air calculation based on VRP if applicable (prototypes maintained by PNNL)
-    model_system_outdoor_air_sizing_vrp_method(air_loop)
-
-    # set the damper action based on the template
-    air_loop_hvac_apply_vav_damper_action(air_loop)
-
-    return true
+    return air_loop
   end
 
   # Creates a packaged VAV system with parallel fan powered boxes and adds it to the model.
@@ -2502,7 +2502,7 @@ class Standard
     # Set the damper action based on the template.
     air_loop_hvac_apply_vav_damper_action(air_loop)
 
-    return true
+    return air_loop
   end
 
   # Creates a PSZ-AC system for each zone and adds it to the model.
@@ -3249,7 +3249,7 @@ class Standard
         fan.setAvailabilitySchedule(hvac_op_sch)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Fan type '#{fan_type}' not recognized, cannot add CRAC.")
-        return []
+        return false
       end
 
       # create cooling coil
@@ -4521,6 +4521,11 @@ class Standard
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the radiant loop.
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
   # @param radiant_type [String] type of radiant system, floor or ceiling, to create in zone.
+  # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
+  #   options are 'MeanAirTemperature', 'MeanRadiantTemperature', 'OperativeTemperature', 'OutdoorDryBulbTemperature',
+  #   'OutdoorWetBulbTemperature', 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
+  # @param radiant_setpoint_control_type [String] determines the response of the radiant system at setpoint temperature
+  #   options are 'ZeroFlowPower', 'HalfFlowPower'
   # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
   # @param carpet_thickness_in [Double] thickness of carpet in inches
   # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
@@ -4533,14 +4538,13 @@ class Standard
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
-  # @param minimum_operation [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Minimum number of hours of operation for radiant system before it shuts off.
-  # @param weekend_temperature_reset [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Weekend temperature reset for slab temperature setpoint in degree Celsius.
-  # @param early_reset_out_arg [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Time at which the weekend temperature reset is removed.
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
-  # @param radiant_lockout [Bool] True if system contains a radiant lockout
+  # @param radiant_availability_type [String] a preset that determines the availability of the radiant system
+  #   options are 'all_day', 'precool', 'afternoon_shutoff', 'occupancy'
+  #   If preset is set to 'all_day' radiant system is available 24 hours a day, 'precool' primarily operates
+  #   radiant system during night-time hours, 'afternoon_shutoff' avoids operation during peak grid demand,
+  #   and 'occupancy' operates radiant system during building occupancy hours.
+  # @param radiant_lockout [Bool] True if system contains a radiant lockout. If true, it will overwrite radiant_availability_type.
   # @param radiant_lockout_start_time [double] decimal hour of when radiant lockout starts
   #   Only used if radiant_lockout is true
   # @param radiant_lockout_end_time [double] decimal hour of when radiant lockout ends
@@ -4553,16 +4557,16 @@ class Standard
                                  hot_water_loop,
                                  chilled_water_loop,
                                  radiant_type: 'floor',
+                                 radiant_temperature_control_type: 'SurfaceFaceTemperature',
+                                 radiant_setpoint_control_type: 'ZeroFlowPower',
                                  include_carpet: true,
                                  carpet_thickness_in: 0.25,
                                  model_occ_hr_start: 6.0,
                                  model_occ_hr_end: 18.0,
                                  control_strategy: 'proportional_control',
                                  proportional_gain: 0.3,
-                                 minimum_operation: 1,
-                                 weekend_temperature_reset: 2,
-                                 early_reset_out_arg: 20,
                                  switch_over_time: 24.0,
+                                 radiant_availability_type: 'precool',
                                  radiant_lockout: false,
                                  radiant_lockout_start_time: 12.0,
                                  radiant_lockout_end_time: 20.0)
@@ -4682,8 +4686,15 @@ class Standard
     radiant_interior_floor_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers)
     radiant_interior_floor_slab_construction.setName('Radiant Interior Floor Slab Construction')
     radiant_interior_floor_slab_construction.setSourcePresentAfterLayerNumber(1)
-    radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(2)
+    radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(1)
     radiant_interior_floor_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    # create reversed interior floor construction
+    rev_radiant_interior_floor_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers.reverse())
+    rev_radiant_interior_floor_slab_construction.setName('Radiant Interior Floor Slab Construction - Reversed')
+    rev_radiant_interior_floor_slab_construction.setSourcePresentAfterLayerNumber(layers.length - 1)
+    rev_radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(layers.length - 1)
+    rev_radiant_interior_floor_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     layers = []
     layers << mat_thin_carpet_tile if include_carpet
@@ -4693,8 +4704,15 @@ class Standard
     radiant_interior_ceiling_slab_construction.setName('Radiant Interior Ceiling Slab Construction')
     slab_src_loc = include_carpet ? 2 : 1
     radiant_interior_ceiling_slab_construction.setSourcePresentAfterLayerNumber(slab_src_loc)
-    radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(slab_src_loc + 1)
+    radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(slab_src_loc)
     radiant_interior_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
+
+    # create reversed interior ceiling construction
+    rev_radiant_interior_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers.reverse())
+    rev_radiant_interior_ceiling_slab_construction.setName('Radiant Interior Ceiling Slab Construction - Reversed')
+    rev_radiant_interior_ceiling_slab_construction.setSourcePresentAfterLayerNumber(layers.length - slab_src_loc)
+    rev_radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(layers.length - slab_src_loc)
+    rev_radiant_interior_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     layers = []
     layers << mat_refl_roof_membrane
@@ -4756,29 +4774,60 @@ class Standard
     throttling_range_f = 4.0 # 2 degF on either side of control temperature
     throttling_range_c = OpenStudio.convert(throttling_range_f, 'F', 'C').get
 
-    # create availability schedule for radiant loop
-    if radiant_lockout
-      radiant_avail_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      radiant_avail_sch.setName('Radiant System Availability Schedule')
+    # create preset availability schedule for radiant loop
+    radiant_avail_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+    radiant_avail_sch.setName('Radiant System Availability Schedule')
 
+    unless radiant_lockout
+      case radiant_availability_type.downcase
+      when 'all_day'
+        start_hour = 24
+        start_minute = 0
+        end_hour = 24
+        end_minute = 0
+      when 'afternoon_shutoff'
+        start_hour = 15
+        start_minute = 0
+        end_hour = 22
+        end_minute = 0
+      when 'precool'
+        start_hour = 10
+        start_minute = 0
+        end_hour = 22
+        end_minute = 0
+      when 'occupancy'
+        start_hour = model_occ_hr_end.to_i
+        start_minute = ((model_occ_hr_end % 1) * 60).to_i
+        end_hour = model_occ_hr_start.to_i
+        end_minute = ((model_occ_hr_start % 1) * 60).to_i
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Unsupported radiant availability preset '#{radiant_availability_type}'. Defaulting to all day operation.")
+        start_hour = 24
+        start_minute = 0
+        end_hour = 24
+        end_minute = 0
+      end
+    end
+
+    # create custom availability schedule for radiant loop
+    if radiant_lockout
       start_hour = radiant_lockout_start_time.to_i
       start_minute = ((radiant_lockout_start_time % 1) * 60).to_i
       end_hour = radiant_lockout_end_time.to_i
       end_minute = ((radiant_lockout_end_time % 1) * 60).to_i
+    end
 
-      if radiant_lockout_end_time > radiant_lockout_start_time
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0) if radiant_lockout_end_time < 24
-      elsif radiant_lockout_start_time > radiant_lockout_end_time
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.0) if radiant_lockout_start_time < 24
-      else
-        radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
-      end
+    # create availability schedules
+    if end_hour > start_hour
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0) if end_hour < 24
+    elsif start_hour > end_hour
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.0) if start_hour < 24
     else
-      radiant_avail_sch = model.alwaysOnDiscreteSchedule
+      radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
     end
 
     # make a low temperature radiant loop for each zone
@@ -4824,6 +4873,10 @@ class Standard
                 surface.setConstruction(radiant_exterior_slab_construction)
               else # interior floor
                 surface.setConstruction(radiant_interior_floor_slab_construction)
+
+                # also assign construciton to adjacent surface
+                adjacent_surface = surface.adjacentSurface.get
+                adjacent_surface.setConstruction(rev_radiant_interior_floor_slab_construction)
               end
             end
           elsif radiant_type == 'ceiling'
@@ -4832,6 +4885,10 @@ class Standard
                 surface.setConstruction(radiant_ceiling_slab_construction)
               else # interior ceiling
                 surface.setConstruction(radiant_interior_ceiling_slab_construction)
+
+                # also assign construciton to adjacent surface
+                adjacent_surface = surface.adjacentSurface.get
+                adjacent_surface.setConstruction(rev_radiant_interior_ceiling_slab_construction)
               end
             end
           end
@@ -4854,8 +4911,11 @@ class Standard
       radiant_loop.setNumberofCircuits('CalculateFromCircuitLength')
       radiant_loop.setCircuitLength(106.7)
 
-      # radiant loop controls
-      radiant_loop.setTemperatureControlType('MeanAirTemperature')
+      # radiant loop temperature controls
+      radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
+
+      # radiant loop setpoint temperature response
+      radiant_loop.setSetpointControlType(radiant_setpoint_control_type)
       radiant_loop.addToThermalZone(zone)
       radiant_loops << radiant_loop
 
@@ -4865,13 +4925,10 @@ class Standard
       # set radiant loop controls
       if control_strategy == 'proportional_control'
         model_add_radiant_proportional_controls(model, zone, radiant_loop,
-                                                radiant_type: radiant_type,
+                                                radiant_temperature_control_type: radiant_temperature_control_type,
                                                 model_occ_hr_start: model_occ_hr_start,
                                                 model_occ_hr_end: model_occ_hr_end,
                                                 proportional_gain: proportional_gain,
-                                                minimum_operation: minimum_operation,
-                                                weekend_temperature_reset: weekend_temperature_reset,
-                                                early_reset_out_arg: early_reset_out_arg,
                                                 switch_over_time: switch_over_time)
       end
     end

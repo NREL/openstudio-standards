@@ -1778,6 +1778,7 @@ class Standard
 
     # Not required if both limits nil
     if min_area_m2.nil? && min_area_m2_per_occ.nil?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is not required due to lack of minimum area requirements.")
       return dcv_required
     end
 
