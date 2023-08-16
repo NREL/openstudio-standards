@@ -331,10 +331,6 @@ class ASHRAE901PRM < Standard
     # Determine the total building baseline infiltration rate in cfm per ft2 of the building envelope at 75 Pa
     basic_infil_rate_cfm_per_ft2 = prm_space_infiltration_rate_75_pa
 
-    # Do nothing if no infiltration - this is impossible as prm_space_infiltration_rate_75_pa always return 1.0
-    # remove
-    # return 0.0 if basic_infil_rate_cfm_per_ft2.zero?
-
     # Conversion factor
     conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
 

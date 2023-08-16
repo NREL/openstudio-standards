@@ -23,6 +23,7 @@ end
 # @param user_data [Hash] a hash contains a user data
 # @param key [String] key string
 # @param default [Object] values assigned if the data is not available.
+# @return data [String] a string
 def prm_read_user_data(user_data, key, default = nil)
   return user_data.key?(key) && user_data[key] != nil && !user_data[key].to_s.empty? ? user_data[key] : default
 end
@@ -31,7 +32,7 @@ end
 # The handler will try to access the OpenStudio Object data key
 # And do it recursively until all the keys have been checked and final object get or raise exception
 # for non_initialized objects.
-# @param component [OpenStudio] an OpenStudio object
+# @param component [OpenStudio::Model::Component] an OpenStudio object
 # @param log_dir [string] directory to save the log
 # @param data_key [string] The data key to retrieve the data from the OpenStudio object
 # @param remaining_keys [str] Any additional keys in the path
@@ -49,7 +50,8 @@ end
 # This is a PRM handler to get a name from an OpenStudio object instance
 # If the object instance does not have a name, then it will return the object name.
 #
-# @param component [OpenStudio] an OpenStudio object
+# @param component [OpenStudio::Model:Component] an OpenStudio object
+# @return name [String] the name of the instance or object name
 def prm_get_component_name(component)
   name = component.iddObjectType.valueName.to_s
   if component.name.is_initialized
@@ -61,9 +63,10 @@ end
 
 # PRM get an additional property from an OpenStudio object as a boolean,
 # if no such additional property, then return default value.
-# @param component [OpenStudio object] the component to get the additional property from
+# @param component [OpenStudio::Model:Component] the component to get the additional property from
 # @param key [String] key string
 # @param default [Boolean] the default to return when there is no matching key
+# @return value [Boolean] boolean value
 def get_additional_property_as_boolean(component, key, default = false)
   value = default
   if component.additionalProperties.getFeatureAsBoolean(key).is_initialized
@@ -76,9 +79,10 @@ end
 
 # PRM get an additional property from an OpenStudio object as a double,
 # if no such additional property, then return default value.
-# @param component [OpenStudio object] the component to get the additional property from
+# @param component [OpenStudio::Model::Component] the component to get the additional property from
 # @param key [String] key string
 # @param default [Integer] the default to return when there is no matching key
+# @return value [Integer] Integer value
 def get_additional_property_as_integer(component, key, default = 0.0)
   value = default
   if component.additionalProperties.getFeatureAsInteger(key).is_initialized
@@ -91,9 +95,10 @@ end
 
 # PRM get an additional property from an OpenStudio object as a double,
 # if no such additional property, then return default value.
-# @param component [OpenStudio object] the component to get the additional property from
+# @param component [OpenStudio::Model::Component] the component to get the additional property from
 # @param key [String] key string
 # @param default [Double] the default to return when there is no matching key
+# @return value [Double] Double value
 def get_additional_property_as_double(component, key, default = 0.0)
   value = default
   if component.additionalProperties.getFeatureAsDouble(key).is_initialized
@@ -106,9 +111,10 @@ end
 
 # PRM get an additional property from an OpenStudio object as a string,
 # if no such additional property, then return default value.
-# @param component [OpenStudio object] the component to get the additional property from
+# @param component [OpenStudio::Model::Component] the component to get the additional property from
 # @param key [String] key string
 # @param default [String] the default to return when there is no matching key
+# @return value [String] String value
 def get_additional_property_as_string(component, key, default = "")
   value = default
   if component.additionalProperties.getFeatureAsString(key).is_initialized
@@ -120,8 +126,9 @@ def get_additional_property_as_string(component, key, default = "")
 end
 
 # Check if a component has the additional feature
-# @param component [OpenStudio] object
+# @param component [OpenStudio::Model::Component] object
 # @param additional_feature_key [String] key
+# @return value [Boolean] True has additional feature, false otherwise
 def has_additional_feature(component, additional_feature_key)
   return component.hasAdditionalProperties && component.additionalProperties.hasFeature(additional_feature_key)
 end
