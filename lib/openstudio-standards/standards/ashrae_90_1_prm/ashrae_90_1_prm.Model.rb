@@ -325,11 +325,11 @@ class ASHRAE901PRM < Standard
 
   # This method calculates the building envelope infiltration,
   # this approach uses the 90.1 PRM rules
-  #
+  # @param building_envelope_area_m2 [Double] building envelope area
   # @return [Float] building envelope infiltration
   def model_adjusted_building_envelope_infiltration(building_envelope_area_m2)
     # Determine the total building baseline infiltration rate in cfm per ft2 of the building envelope at 75 Pa
-    basic_infil_rate_cfm_per_ft2 = prm_space_infiltration_rate_75_pa
+    basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa
 
     # Conversion factor
     conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
@@ -715,7 +715,7 @@ class ASHRAE901PRM < Standard
       ext_lights_obj.setMultiplier(1)
       ext_lights_def = ext_lights_obj.exteriorLightsDefinition
       ext_ltg_pwr = get_additional_property_as_double(ext_lights_obj, 'design_level', 0.0)
-      if ext_ltg_pwr >= 0.0
+      if ext_ltg_pwr > 0.0
         ext_lights_def.setDesignLevel(ext_ltg_pwr)
       end
     end
@@ -2394,10 +2394,7 @@ class ASHRAE901PRM < Standard
     zones = model_zones_with_occ_and_fuel_type(model, 'custom')
 
     # Ensure that there is at least one conditioned zone
-    if zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
-      return []
-    end
+    prm_raise(zones.size > 0, @sizing_run_dir, 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
 
     # Consider special rules for computer rooms
     # need load of all
@@ -2429,7 +2426,7 @@ class ASHRAE901PRM < Standard
     # Make list of zone objects that contain laboratory spaces
     lab_zones = []
     has_lab_spaces = {}
-    model.getThermalZones.sort.each do |zone|
+    model.getThermalZones.each do |zone|
       # Check if this zone includes laboratory space
       zone.spaces.each do |space|
         space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType')
@@ -2465,17 +2462,16 @@ class ASHRAE901PRM < Standard
       # Take from hourly reports created during sizing run
       node_list.each do |node_name, zone_name|
         sql = model.sqlFile
-        if sql.is_initialized
-          sql = sql.get
-          query = "SELECT ReportDataDictionaryIndex FROM ReportDataDictionary WHERE KeyValue = '#{node_name}' COLLATE NOCASE"
-          val = sql.execAndReturnFirstDouble(query)
-          query = "SELECT MAX(Value) FROM ReportData WHERE ReportDataDictionaryIndex = '#{val.get}'"
-          val = sql.execAndReturnFirstDouble(query)
-          if val.is_initialized
-            result = OpenStudio::OptionalDouble.new(val.get)
-          end
-          zone_return_flow_si[zone_name] += result.to_f
-        end
+        prm_raise(sql.is_initialized, @sizing_run_dir, 'Model is missing SQL file. It is likely caused by: 1. unsuccessful simulation, 2. SQL is not set as one of the output file.')
+        sql = sql.get
+        query = "SELECT ReportDataDictionaryIndex FROM ReportDataDictionary WHERE KeyValue = '#{node_name}' COLLATE NOCASE"
+        val = sql.execAndReturnFirstDouble(query)
+        prm_raise(val.is_initialized, @sizing_run_dir, "No hourly return air flow data reported for node #{node_name}")
+        report_data_dict_index = val.get
+        query = "SELECT MAX(Value) FROM ReportData WHERE ReportDataDictionaryIndex = '#{report_data_dict_index}'"
+        val = sql.execAndReturnFirstDouble(query)
+        prm_raise(val.is_initialized, @sizing_run_dir, "No hourly return air flow data reported at report index #{report_data_dict_index}")
+        zone_return_flow_si[zone_name] += OpenStudio::OptionalDouble.new(val.get).to_f
       end
 
       # Calc ratio of Air Loop relief to sum of zone return for each air loop
@@ -2484,24 +2480,23 @@ class ASHRAE901PRM < Standard
       # For each air loop, get relief air flow and calculate lab exhaust from the central air handler
       # Take from hourly reports created during sizing run
       zone_relief_flow_si = {}
-      model.getAirLoopHVACs.sort.each do |air_loop_hvac|
+      model.getAirLoopHVACs.each do |air_loop_hvac|
         # First get relief air flow from sizing run sql file
-        relief_node = air_loop_hvac.reliefAirNode.get
+        relief_node = prm_get_optional_handler(air_loop_hvac, @sizing_run_dir, 'reliefAirNode')
         node_name = relief_node.nameString
         relief_flow_si = 0
         relief_fraction = 0
         sql = model.sqlFile
-        if sql.is_initialized
-          sql = sql.get
-          query = "SELECT ReportDataDictionaryIndex FROM ReportDataDictionary WHERE KeyValue = '#{node_name}' COLLATE NOCASE"
-          val = sql.execAndReturnFirstDouble(query)
-          query = "SELECT MAX(Value) FROM ReportData WHERE ReportDataDictionaryIndex = '#{val.get}'"
-          val = sql.execAndReturnFirstDouble(query)
-          if val.is_initialized
-            result = OpenStudio::OptionalDouble.new(val.get)
-          end
-          relief_flow_si = result.to_f
+        prm_raise(sql.is_initialized, @sizing_run_dir, 'Model is missing SQL file. It is likely caused by: 1. unsuccessful simulation, 2. SQL is not set as one of the output file.')
+        sql = sql.get
+        query = "SELECT ReportDataDictionaryIndex FROM ReportDataDictionary WHERE KeyValue = '#{node_name}' COLLATE NOCASE"
+        val = sql.execAndReturnFirstDouble(query)
+        query = "SELECT MAX(Value) FROM ReportData WHERE ReportDataDictionaryIndex = '#{val.get}'"
+        val = sql.execAndReturnFirstDouble(query)
+        if val.is_initialized
+          result = OpenStudio::OptionalDouble.new(val.get)
         end
+        relief_flow_si = result.to_f
 
         # Get total flow of zones on this air loop
         total_zone_return_si = 0
