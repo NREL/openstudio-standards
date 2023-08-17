@@ -6,31 +6,30 @@ class ASHRAE901PRM < Standard
   #
   # @return [Double] true if successful, false if not
   def space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients)
-    # get the climate zone
-    climate_zone = model_standards_climate_zone(space.model)
-
     # Calculate infiltration rate
     case infil_method.to_s
       when 'Flow/ExteriorWallArea'
         # Spread the total infiltration rate
         total_exterior_wall_area = 0
-        space.model.getSpaces.sort.each do |spc|
+        space.model.getSpaces.each do |spc|
           # Get the space conditioning type
           space_cond_type = space_conditioning_category(spc)
           total_exterior_wall_area += spc.exteriorWallArea unless space_cond_type == 'Unconditioned'
         end
+        prm_raise(total_exterior_wall_area > 0, @sizing_run_dir, 'Total exterior wall area in the model is 0. Check your model inputs')
         adj_infil_flow_ext_wall_area = tot_infil_m3_per_s / total_exterior_wall_area
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{adj_infil_flow_ext_wall_area.round(8)} m^3/s*m^2 of above grade wall area.")
+        OpenStudio.logFree(OpenStudio::Debug, 'prm.log', "For #{space.name}, adj infil = #{adj_infil_flow_ext_wall_area.round(8)} m^3/s*m^2 of above grade wall area.")
       when 'Flow/Area'
         # Spread the total infiltration rate
         total_floor_area = 0
-        space.model.getSpaces.sort.each do |spc|
+        space.model.getSpaces.each do |spc|
           # Get the space conditioning type
           space_cond_type = space_conditioning_category(spc)
           total_floor_area += spc.floorArea unless space_cond_type == 'Unconditioned' || space.exteriorArea == 0
         end
+        prm_raise(total_floor_area > 0, @sizing_run_dir, 'Sum of the floor area in exterior spaces in the model is 0. Check your model inputs')
         adj_infil_flow_area = tot_infil_m3_per_s / total_floor_area
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, adj infil = #{adj_infil_flow_area.round(8)} m^3/s*m^2 of space floor area.")
+        OpenStudio.logFree(OpenStudio::Debug, 'prm.log', "For #{space.name}, adj infil = #{adj_infil_flow_area.round(8)} m^3/s*m^2 of space floor area.")
     end
 
     # Get any infiltration schedule already assigned to this space or its space type
