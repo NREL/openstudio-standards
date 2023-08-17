@@ -229,7 +229,7 @@ class Standard
       model_add_prm_elevators(model)
 
       # Calculate infiltration as per 90.1 PRM rules
-      model_baseline_apply_infiltration_standard(model, climate_zone)
+      model_apply_standard_infiltration(model)
 
       # Apply user outdoor air specs as per 90.1 PRM rules exceptions
       model_apply_userdata_outdoor_air(model)
@@ -578,7 +578,7 @@ class Standard
     proposed_model = BTAP::FileIO.deep_copy(user_model)
 
     # If needed, modify user model infiltration
-    model_baseline_apply_infiltration_standard(proposed_model, model_standards_climate_zone(proposed_model))
+    model_apply_standard_infiltration(proposed_model)
 
     # If needed, remove all non-adiabatic pipes of SWH loops
     proposed_model.getPlantLoops.sort.each do |plant_loop|
@@ -588,12 +588,19 @@ class Standard
       plant_loop_adibatic_pipes_only(plant_loop)
     end
 
-    # If needed, modify computer equipment schedule
+    # Make proposed model space related adjustments
     proposed_model.getSpaces.each do |space|
+      # If needed, modify computer equipment schedule
       space_add_prm_computer_roomm_equipment_schedule(space)
+
+      # If needed, modify lighting power denstities in residential spaces/zones
+      # Dormitory - living quarters
+      # Dwelling units
+      # Hotel/Motel guestrooms
+      
     end
 
-    # If needed, modify lighting power denstities in residential spaces/zones
+
 
     return proposed_model
   end
@@ -2483,7 +2490,7 @@ class Standard
 
   # For backward compatibility, infiltration standard not used for 2013 and earlier
   # @return [Bool] true if successful, false if not
-  def model_baseline_apply_infiltration_standard(model, climate_zone)
+  def model_apply_standard_infiltration(model)
     return true
   end
 

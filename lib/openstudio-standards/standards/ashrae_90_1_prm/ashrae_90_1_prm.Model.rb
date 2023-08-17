@@ -119,23 +119,13 @@ class ASHRAE901PRM < Standard
     return fan_type
   end
 
-  # This method creates customized infiltration objects for each
-  # space and removes the SpaceType-level infiltration objects.
+  # Calculate the building enevelope area according to the 90.1 definition
   #
-  # @return [Bool] true if successful, false if not
-  def model_baseline_apply_infiltration_standard(model, climate_zone)
-    # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
-    # Excerpt from the EnergyPlus Input/Output reference manual:
-    #     "This model is based on work by Sherman and Grimsrud (1980)
-    #     and is appropriate for smaller, residential-type buildings."
-    # Return an error if the model does use this object
-    ela = 0
-    model.getSpaceInfiltrationEffectiveLeakageAreas.sort.each do |eff_la|
-      ela += 1
-    end
-    if ela > 0
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'The current model cannot include SpaceInfiltrationEffectiveLeakageArea. These objects cannot be used to model infiltration according to the 90.1-PRM rules.')
-    end
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Float] Building envelope area in m2
+  def model_building_envelope_area(model)
+    # Get climate zone
+    climate_zone = model_standards_climate_zone(model)
 
     # Get the space building envelope area
     # According to the 90.1 definition, building envelope include:
@@ -152,6 +142,31 @@ class ASHRAE901PRM < Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Calculated building envelope area is 0 m2, no infiltration will be added.')
       return 0.0
     end
+  
+    return building_envelope_area_m2
+  end
+
+  # This method creates customized infiltration objects for each
+  # space and removes the SpaceType-level infiltration objects.
+  #
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] true if successful, false if not
+  def model_apply_standard_infiltration(model)
+    # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
+    # Excerpt from the EnergyPlus Input/Output reference manual:
+    #     "This model is based on work by Sherman and Grimsrud (1980)
+    #     and is appropriate for smaller, residential-type buildings."
+    # Return an error if the model does use this object
+    ela = 0
+    model.getSpaceInfiltrationEffectiveLeakageAreas.sort.each do |eff_la|
+      ela += 1
+    end
+    if ela > 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'The current model cannot include SpaceInfiltrationEffectiveLeakageArea. These objects cannot be used to model infiltration according to the 90.1-PRM rules.')
+    end
+
+    # Get the space building envelope area
+    building_envelope_area_m2 = model_building_envelope_area(model)
 
     # Calculate current model air leakage rate @ 75 Pa and report it
     curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
