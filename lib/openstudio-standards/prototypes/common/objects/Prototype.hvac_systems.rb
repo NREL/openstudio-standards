@@ -5787,6 +5787,24 @@ class Standard
     return fan_type
   end
 
+  # Get the thermal zones served by radiant slab components on a plant loop
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param plant_loop [OpenStudio::Model::PlantLoop] the plant loop that serves the radiant components
+  # @param [Array<OpenStudio::Model::ThermalZone>] array of zones to dictate cooling or heating mode of water plant
+  def plant_loop_get_radiant_zones(model, plant_loop)
+    thermal_zones = []
+    plant_loop.demandComponents.each do |component|
+      next unless component.to_ZoneHVACLowTempRadiantVarFlow.is_initialized || component.to_ZoneHVACLowTempRadiantConstFlow.is_initialized
+
+      component = component.to_ZoneHVACComponent.get
+      if component.thermalZone.is_initialized
+        thermal_zones << component.thermalZone.get
+      end
+
+      return thermal_zones
+  end
+
   # Convert the default 4-pipe water plant HVAC system to a 2-pipe system
   # i.e. there can only be source heating or cooling at any one time but not
   # both for the input plant
