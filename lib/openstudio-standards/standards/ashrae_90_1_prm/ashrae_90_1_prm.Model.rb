@@ -2753,7 +2753,6 @@ class ASHRAE901PRM < Standard
     fuel_type = sys_group['fuel']
     area_ft2 = sys_group['building_area_type_ft2']
     num_stories = sys_group['stories']
-    zones = sys_group['zones']
 
     #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
@@ -2770,9 +2769,7 @@ class ASHRAE901PRM < Standard
                                 'flrs_range_group' => iStoryGroup,
                                 'area_range_group' => 1)
 
-      if !props
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
-      end
+      prm_raise(props, @sizing_run_dir, "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       if num_stories <= props['bldg_flrs_max']
         # Story Group Is found
         break
@@ -2781,7 +2778,6 @@ class ASHRAE901PRM < Standard
 
     # Next filter by floor area
     iAreaGroup = 0
-    baseine_is_found = false
     loop do
       iAreaGroup += 1
       props = model_find_object(standards_data['prm_baseline_hvac'],
@@ -2790,9 +2786,7 @@ class ASHRAE901PRM < Standard
                                 'flrs_range_group' => iStoryGroup,
                                 'area_range_group' => iAreaGroup)
 
-      if !props
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
-      end
+      prm_raise(props && iAreaGroup <= 9, @sizing_run_dir, "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       below_max = false
       above_min = false
       # check if actual building floor area is within range for this area group
@@ -2814,12 +2808,8 @@ class ASHRAE901PRM < Standard
           above_min = true
         end
       end
-      if (above_min == true) && (below_max == true)
-        baseline_is_found = true
-        break
-      end
-      if iAreaGroup > 9
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
+      if above_min && below_max
+        # break condition.
         break
       end
     end
@@ -3132,5 +3122,33 @@ class ASHRAE901PRM < Standard
       end
     end
     return true
+  end
+
+  # Determine whether heating type is fuel or electric
+  # @param hvac_building_type [String] Key for lookup of baseline system type
+  # @param climate_zone [String] full name of climate zone
+  # @return [String] fuel or electric
+  def find_prm_heat_type(hvac_building_type, climate_zone)
+    climate_code = get_climate_zone_code(climate_zone)
+    heat_type_props = model_find_object(standards_data['prm_heat_type'],
+                                        'template' => template,
+                                        'hvac_building_type' => hvac_building_type,
+                                        'climate_zone' => climate_code)
+    if !heat_type_props
+      # try again with wild card for climate
+      heat_type_props = model_find_object(standards_data['prm_heat_type'],
+                                          'template' => template,
+                                          'hvac_building_type' => hvac_building_type,
+                                          'climate_zone' => 'any')
+    end
+    if !heat_type_props
+      # try again with wild card for building type
+      heat_type_props = model_find_object(standards_data['prm_heat_type'],
+                                          'template' => template,
+                                          'hvac_building_type' => 'all others',
+                                          'climate_zone' => climate_code)
+    end
+    prm_raise(heat_type_props, @sizing_run_dir, "Could not find baseline heat type for: #{template}-#{hvac_building_type}-#{climate_zone}.")
+    return heat_type_props['heat_type']
   end
 end
