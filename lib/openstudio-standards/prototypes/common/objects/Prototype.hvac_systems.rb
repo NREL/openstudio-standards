@@ -5916,144 +5916,15 @@ class Standard
                                                                                     'Schedule Value')
         chilled_water_plant_ctrl.setName("#{chilled_water_loop_name}_availability_control")
 
-        # create container schedules to hold number of zones needing heating and cooling
-        sch_zones_needing_heating = model_add_constant_schedule_ruleset(model,
-                                                                        0,
-                                                                        name = "Zones Needing Heating Count Schedule",
-                                                                        sch_type_limit: "Dimensionless")
-
-        zone_needing_heating_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating,
-                                                                                              'Schedule:Year',
-                                                                                              'Schedule Value')
-        zone_needing_heating_actuator.setName("Zones_Needing_Heating")
-
-
-        sch_zones_needing_cooling = model_add_constant_schedule_ruleset(model,
-                                                                        0,
-                                                                        name = "Zones Needing Cooling Count Schedule",
-                                                                        sch_type_limit: "Dimensionless")
-
-
-        zone_needing_cooling_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling,
-                                                                                    'Schedule:Year',
-                                                                                    'Schedule Value')
-        zone_needing_cooling_actuator.setName("Zones_Needing_Cooling")
-
-        # create container schedules to hold ratio of zones needing heating and cooling
-        sch_zones_needing_heating_ratio = model_add_constant_schedule_ruleset(model,
-                                                                              0,
-                                                                              name = "Zones Needing Heating Ratio Schedule",
-                                                                              sch_type_limit: "Dimensionless")
-
-        zone_needing_heating_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating_ratio,
-                                                                                              'Schedule:Year',
-                                                                                              'Schedule Value')
-        zone_needing_heating_ratio_actuator.setName("Zone_Heating_Ratio")
-
-
-        sch_zones_needing_cooling_ratio = model_add_constant_schedule_ruleset(model,
-                                                                              0,
-                                                                              name = "Zones Needing Cooling Ratio Schedule",
-                                                                              sch_type_limit: "Dimensionless")
-
-
-        zone_needing_cooling_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling_ratio,
-                                                                                    'Schedule:Year',
-                                                                                    'Schedule Value')
-        zone_needing_cooling_ratio_actuator.setName("Zone_Cooling_Ratio")
-
         # set availability manager to chilled water plant
         chilled_water_loop.addAvailabilityManager(chilled_water_loop_manager)
 
-        #####
-        # Create EMS program to check comfort exceedances
-        ####
-
-        # initalize inner body for heating and cooling requests programs
-        determine_zone_cooling_needs_prg_inner_body = ''
-        determine_zone_heating_needs_prg_inner_body = ''
-
-        # create sensors needed
-        if thermal_zones.nil?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Selected zone based plant demand but thermal zones is nil.')
+        # check if zone heat and cool requests program exists, if not create it
+        determine_zone_cooling_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Cooling_Needs')
+        determine_zone_heating_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Heating_Needs')
+        unless determine_zone_cooling_needs_prg.is_initialized and determine_zone_heating_needs_prg.is_initialized
+          model_add_zone_heat_cool_requests_program(model, thermal_zones)
         end
-        thermal_zones.each do |zone|
-          # get existing 'sensors'
-          exisiting_ems_sensors = model.getEnergyManagementSystemSensors
-          exisiting_ems_sensors_names = exisiting_ems_sensors.collect{ |sensor| sensor.name.get + '-' + sensor.outputVariableOrMeterName}
-
-          # Create zone air temperature 'sensor' for the zone.
-          zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
-          zone_air_sensor_name = "#{zone_name}_ctrl_temperature"
-
-          unless exisiting_ems_sensors_names.include? zone_air_sensor_name + '-Zone Air Temperature'
-            zone_ctrl_temperature = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Air Temperature')
-            zone_ctrl_temperature.setName(zone_air_sensor_name)
-            zone_ctrl_temperature.setKeyName(zone.name.get)
-          end
-
-          # check for zone thermostats
-          zone_thermostat = zone.thermostatSetpointDualSetpoint
-          unless zone_thermostat.is_initialized
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Zone #{zone.name} does not have thermostats.")
-            return false
-          end
-
-          zone_thermostat = zone.thermostatSetpointDualSetpoint.get
-          zone_clg_thermostat = zone_thermostat.coolingSetpointTemperatureSchedule.get
-          zone_htg_thermostat = zone_thermostat.heatingSetpointTemperatureSchedule.get
-
-          # create new sensor for zone thermostat if it does not exist already
-          zone_clg_thermostat_sensor_name = "#{zone_name}_upper_comfort_limit"
-          zone_htg_thermostat_sensor_name = "#{zone_name}_lower_comfort_limit"
-
-          unless exisiting_ems_sensors_names.include? zone_clg_thermostat_sensor_name + '-Schedule Value'
-            # Upper comfort limit for the zone. Taken from existing thermostat schedules in the zone.
-            zone_upper_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-            zone_upper_comfort_limit.setName(zone_clg_thermostat_sensor_name)
-            zone_upper_comfort_limit.setKeyName(zone_clg_thermostat.name.get)
-          end
-
-          unless exisiting_ems_sensors_names.include? zone_htg_thermostat_sensor_name + '-Schedule Value'
-            # Lower comfort limit for the zone. Taken from existing thermostat schedules in the zone.
-            zone_lower_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-            zone_lower_comfort_limit.setName(zone_htg_thermostat_sensor_name)
-            zone_lower_comfort_limit.setKeyName(zone_htg_thermostat.name.get)
-          end
-
-          # create program inner body for determining zone cooling needs
-          determine_zone_cooling_needs_prg_inner_body = determine_zone_cooling_needs_prg_inner_body +
-            "IF #{zone_air_sensor_name} > #{zone_clg_thermostat_sensor_name},
-              SET Zones_Needing_Cooling = Zones_Needing_Cooling + 1,
-            ENDIF,\n"
-
-          # create program inner body for determining zone cooling needs
-          determine_zone_heating_needs_prg_inner_body = determine_zone_heating_needs_prg_inner_body +
-            "IF #{zone_air_sensor_name} < #{zone_htg_thermostat_sensor_name},
-              SET Zones_Needing_Heating = Zones_Needing_Heating + 1,
-            ENDIF,\n"
-
-        end
-
-        # create program for determining zone cooling needs
-        determine_zone_cooling_needs_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-        determine_zone_cooling_needs_prg.setName("Determine_Zone_Cooling_Needs")
-        determine_zone_cooling_needs_prg_body =
-        "SET Zones_Needing_Cooling = 0,
-          #{determine_zone_cooling_needs_prg_inner_body}
-        SET Total_Zones = #{thermal_zones.length},
-        SET Zone_Cooling_Ratio = Zones_Needing_Cooling/Total_Zones"
-        determine_zone_cooling_needs_prg.setBody(determine_zone_cooling_needs_prg_body)
-
-        # create program for determining zone heating needs
-        determine_zone_heating_needs_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-        determine_zone_heating_needs_prg.setName("Determine_Zone_Heating_Needs")
-        determine_zone_heating_needs_prg_body =
-        "SET Zones_Needing_Heating = 0,
-          #{determine_zone_heating_needs_prg_inner_body}
-        SET Total_Zones = #{thermal_zones.length},
-        SET Zone_Heating_Ratio = Zones_Needing_Heating/Total_Zones"
-        determine_zone_heating_needs_prg.setBody(determine_zone_heating_needs_prg_body)
 
         # create program to determine plant heating or cooling mode
         determine_plant_mode_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
@@ -6074,13 +5945,161 @@ class Standard
 
         # create EMS program manager objects
         programs_at_beginning_of_timestep = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-        programs_at_beginning_of_timestep.setName("Heating_Cooling_Plant_Programs_At_Beginning_Of_Timestep")
+        programs_at_beginning_of_timestep.setName("Heating_Cooling_Demand_Based_Plant_Availability_At_Beginning_Of_Timestep")
         programs_at_beginning_of_timestep.setCallingPoint('BeginTimestepBeforePredictor')
-        programs_at_beginning_of_timestep.addProgram(determine_zone_cooling_needs_prg)
-        programs_at_beginning_of_timestep.addProgram(determine_zone_heating_needs_prg)
         programs_at_beginning_of_timestep.addProgram(determine_plant_mode_prg)
 
       end
+
+  end
+
+  # Make EMS program that will compare 'measured' zone air temperatures to thermostats
+  # setpoint to determine if zone needs cooling or heating and the number of load requests.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param [Array<OpenStudio::Model::ThermalZone>] array of zones to dictate cooling or heating mode of water plant
+  def model_add_zone_heat_cool_requests_program(model, thermal_zones)
+
+    # create container schedules to hold number of zones needing heating and cooling
+    sch_zones_needing_heating = model_add_constant_schedule_ruleset(model,
+                                                                    0,
+                                                                    name = "Zones Needing Heating Count Schedule",
+                                                                    sch_type_limit: "Dimensionless")
+
+    zone_needing_heating_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating,
+                                                                                          'Schedule:Year',
+                                                                                          'Schedule Value')
+    zone_needing_heating_actuator.setName("Zones_Needing_Heating")
+
+
+    sch_zones_needing_cooling = model_add_constant_schedule_ruleset(model,
+                                                                    0,
+                                                                    name = "Zones Needing Cooling Count Schedule",
+                                                                    sch_type_limit: "Dimensionless")
+
+    zone_needing_cooling_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling,
+                                                                                'Schedule:Year',
+                                                                                'Schedule Value')
+    zone_needing_cooling_actuator.setName("Zones_Needing_Cooling")
+
+    # create container schedules to hold ratio of zones needing heating and cooling
+    sch_zones_needing_heating_ratio = model_add_constant_schedule_ruleset(model,
+                                                                          0,
+                                                                          name = "Zones Needing Heating Ratio Schedule",
+                                                                          sch_type_limit: "Dimensionless")
+
+    zone_needing_heating_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating_ratio,
+                                                                                          'Schedule:Year',
+                                                                                          'Schedule Value')
+    zone_needing_heating_ratio_actuator.setName("Zone_Heating_Ratio")
+
+
+    sch_zones_needing_cooling_ratio = model_add_constant_schedule_ruleset(model,
+                                                                          0,
+                                                                          name = "Zones Needing Cooling Ratio Schedule",
+                                                                          sch_type_limit: "Dimensionless")
+
+
+    zone_needing_cooling_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling_ratio,
+                                                                                'Schedule:Year',
+                                                                                'Schedule Value')
+    zone_needing_cooling_ratio_actuator.setName("Zone_Cooling_Ratio")
+
+    #####
+    # Create EMS program to check comfort exceedances
+    ####
+
+    # initalize inner body for heating and cooling requests programs
+    determine_zone_cooling_needs_prg_inner_body = ''
+    determine_zone_heating_needs_prg_inner_body = ''
+
+    # create sensors needed
+    if thermal_zones.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Selected zone based plant demand but thermal zones is nil.')
+    end
+    thermal_zones.each do |zone|
+      # get existing 'sensors'
+      exisiting_ems_sensors = model.getEnergyManagementSystemSensors
+      exisiting_ems_sensors_names = exisiting_ems_sensors.collect{ |sensor| sensor.name.get + '-' + sensor.outputVariableOrMeterName}
+
+      # Create zone air temperature 'sensor' for the zone.
+      zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
+      zone_air_sensor_name = "#{zone_name}_ctrl_temperature"
+
+      unless exisiting_ems_sensors_names.include? zone_air_sensor_name + '-Zone Air Temperature'
+        zone_ctrl_temperature = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Air Temperature')
+        zone_ctrl_temperature.setName(zone_air_sensor_name)
+        zone_ctrl_temperature.setKeyName(zone.name.get)
+      end
+
+      # check for zone thermostats
+      zone_thermostat = zone.thermostatSetpointDualSetpoint
+      unless zone_thermostat.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Zone #{zone.name} does not have thermostats.")
+        return false
+      end
+
+      zone_thermostat = zone.thermostatSetpointDualSetpoint.get
+      zone_clg_thermostat = zone_thermostat.coolingSetpointTemperatureSchedule.get
+      zone_htg_thermostat = zone_thermostat.heatingSetpointTemperatureSchedule.get
+
+      # create new sensor for zone thermostat if it does not exist already
+      zone_clg_thermostat_sensor_name = "#{zone_name}_upper_comfort_limit"
+      zone_htg_thermostat_sensor_name = "#{zone_name}_lower_comfort_limit"
+
+      unless exisiting_ems_sensors_names.include? zone_clg_thermostat_sensor_name + '-Schedule Value'
+        # Upper comfort limit for the zone. Taken from existing thermostat schedules in the zone.
+        zone_upper_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+        zone_upper_comfort_limit.setName(zone_clg_thermostat_sensor_name)
+        zone_upper_comfort_limit.setKeyName(zone_clg_thermostat.name.get)
+      end
+
+      unless exisiting_ems_sensors_names.include? zone_htg_thermostat_sensor_name + '-Schedule Value'
+        # Lower comfort limit for the zone. Taken from existing thermostat schedules in the zone.
+        zone_lower_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+        zone_lower_comfort_limit.setName(zone_htg_thermostat_sensor_name)
+        zone_lower_comfort_limit.setKeyName(zone_htg_thermostat.name.get)
+      end
+
+      # create program inner body for determining zone cooling needs
+      determine_zone_cooling_needs_prg_inner_body = determine_zone_cooling_needs_prg_inner_body +
+        "IF #{zone_air_sensor_name} > #{zone_clg_thermostat_sensor_name},
+          SET Zones_Needing_Cooling = Zones_Needing_Cooling + 1,
+        ENDIF,\n"
+
+      # create program inner body for determining zone cooling needs
+      determine_zone_heating_needs_prg_inner_body = determine_zone_heating_needs_prg_inner_body +
+        "IF #{zone_air_sensor_name} < #{zone_htg_thermostat_sensor_name},
+          SET Zones_Needing_Heating = Zones_Needing_Heating + 1,
+        ENDIF,\n"
+    end
+
+    # create program for determining zone cooling needs
+    determine_zone_cooling_needs_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    determine_zone_cooling_needs_prg.setName("Determine_Zone_Cooling_Needs")
+    determine_zone_cooling_needs_prg_body =
+    "SET Zones_Needing_Cooling = 0,
+      #{determine_zone_cooling_needs_prg_inner_body}
+    SET Total_Zones = #{thermal_zones.length},
+    SET Zone_Cooling_Ratio = Zones_Needing_Cooling/Total_Zones"
+    determine_zone_cooling_needs_prg.setBody(determine_zone_cooling_needs_prg_body)
+
+    # create program for determining zone heating needs
+    determine_zone_heating_needs_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    determine_zone_heating_needs_prg.setName("Determine_Zone_Heating_Needs")
+    determine_zone_heating_needs_prg_body =
+    "SET Zones_Needing_Heating = 0,
+      #{determine_zone_heating_needs_prg_inner_body}
+    SET Total_Zones = #{thermal_zones.length},
+    SET Zone_Heating_Ratio = Zones_Needing_Heating/Total_Zones"
+    determine_zone_heating_needs_prg.setBody(determine_zone_heating_needs_prg_body)
+
+    # create EMS program manager objects
+    programs_at_beginning_of_timestep = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    programs_at_beginning_of_timestep.setName("Heating_Cooling_Request_Programs_At_Beginning_Of_Timestep")
+    programs_at_beginning_of_timestep.setCallingPoint('BeginTimestepBeforePredictor')
+    programs_at_beginning_of_timestep.addProgram(determine_zone_cooling_needs_prg)
+    programs_at_beginning_of_timestep.addProgram(determine_zone_heating_needs_prg)
 
   end
 
@@ -6105,16 +6124,16 @@ class Standard
                                   use_zone_demand: false,
                                   thermal_zones: nil)
 
-    # check that all required temperature parameters are defined
-    if sp_at_oat_low.nil? and oat_low.nil? and sp_at_oat_high.nil? and oat_high.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'At least one of the required temperature parameter is nil.')
-    end
-
     # remove any existing setpoint manager on the plant water loop
     exisiting_setpoint_managers = plant_water_loop.loopTemperatureSetpointNode.setpointManagers
-    exisiting_setpoint_managers.each { |sp_mgr| sp_mgr.disconnect }
+    exisiting_setpoint_managers.each { |sp_mgr| sp_mgr.remove }
 
     unless use_zone_demand
+      # check that all required temperature parameters are defined
+      if sp_at_oat_low.nil? and oat_low.nil? and sp_at_oat_high.nil? and oat_high.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'At least one of the required temperature parameters is nil.')
+      end
+
       # create supply water temperature setpoint managers for plant based on outdoor temperature
       water_loop_setpoint_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
       water_loop_setpoint_manager.setName("#{plant_water_loop.name.get} Supply Water Temperature Control")
@@ -6127,6 +6146,121 @@ class Standard
 
     else
       # create supply water temperature setpoint managers for plant based on zone heating and cooling demand
+      # check if zone heat and cool requests program exists, if not create it
+      determine_zone_cooling_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Cooling_Needs')
+      determine_zone_heating_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Heating_Needs')
+      unless determine_zone_cooling_needs_prg.is_initialized and determine_zone_heating_needs_prg.is_initialized
+        model_add_zone_heat_cool_requests_program(model, thermal_zones)
+      end
+
+      plant_water_loop_name = plant_water_loop.name.to_s.gsub(/[ +-.]/, '_')
+      if plant_water_loop.componentType.valueName == 'Heating'
+        swt_upper_limit = sp_at_oat_low.nil? ? OpenStudio.convert(120, 'F', 'C').get : OpenStudio.convert(sp_at_oat_low, 'F', 'C').get
+        swt_lower_limit = sp_at_oat_high.nil? ? OpenStudio.convert(80, 'F', 'C').get : OpenStudio.convert(sp_at_oat_high, 'F', 'C').get
+        swt_init = OpenStudio.convert(100, 'F', 'C').get
+        zone_demand_var = "Zone_Heating_Ratio"
+        swt_inc_condition_var = "> 0.70"
+        swt_dec_condition_var = "< 0.30"
+      else
+        swt_upper_limit = sp_at_oat_low.nil? ? OpenStudio.convert(70, 'F', 'C').get : OpenStudio.convert(sp_at_oat_low, 'F', 'C').get
+        swt_lower_limit = sp_at_oat_high.nil? ? OpenStudio.convert(55, 'F', 'C').get : OpenStudio.convert(sp_at_oat_high, 'F', 'C').get
+        swt_init = OpenStudio.convert(62, 'F', 'C').get
+        zone_demand_var = "Zone_Cooling_Ratio"
+        swt_inc_condition_var = "< 0.30"
+        swt_dec_condition_var = "> 0.70"
+      end
+
+      # plant loop supply water control actuator
+      sch_plant_swt_ctrl = model_add_constant_schedule_ruleset(model,
+                                                               swt_init,
+                                                               name = "#{plant_water_loop_name}_Sch_Supply_Water_Temperature")
+
+      cmd_plant_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_plant_swt_ctrl,
+                                                                                  'Schedule:Year',
+                                                                                  'Schedule Value')
+      cmd_plant_water_ctrl.setName("#{plant_water_loop_name}_supply_water_ctrl")
+
+      # create plant loop setpoint manager
+      water_loop_setpoint_manager = OpenStudio::Model::SetpointManagerScheduled.new(model,
+                                                                                    sch_plant_swt_ctrl)
+      water_loop_setpoint_manager.setName("#{plant_water_loop.name.get} Supply Water Temperature Control")
+      water_loop_setpoint_manager.setControlVariable("Temperature")
+      water_loop_setpoint_manager.addToNode(plant_water_loop.loopTemperatureSetpointNode)
+
+      # add uninitialized variables into constant program
+      set_constant_values_prg_body = <<-EMS
+        SET #{plant_water_loop_name}_supply_water_ctrl = #{swt_init}
+      EMS
+
+      set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Plant_Constant_Values')
+      unless set_constant_values_prg.is_initialized
+        set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+        set_constant_values_prg.setName('Set_Plant_Constant_Values')
+        set_constant_values_prg.setBody(set_constant_values_prg_body)
+      else
+        set_constant_values_prg = set_constant_values_prg.get
+        set_constant_values_prg.addLine(set_constant_values_prg_body)
+      end
+
+      # program for supply water temperature control in the plot
+      determine_plant_swt_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      determine_plant_swt_prg.setName("Determine_#{plant_water_loop_name}_Supply_Water_Temperature")
+      determine_plant_swt_prg_body = <<-EMS
+        SET SWT_Increase = 1,
+        SET SWT_Decrease = 1,
+        SET SWT_upper_limit = #{swt_upper_limit},
+        SET SWT_lower_limit = #{swt_lower_limit},
+        IF #{zone_demand_var} #{swt_inc_condition_var} && (@Mod CurrentTime 1) == 0,
+          SET #{plant_water_loop_name}_supply_water_ctrl = #{plant_water_loop_name}_supply_water_ctrl + SWT_Increase,
+        ELSEIF #{zone_demand_var} #{swt_dec_condition_var} && (@Mod CurrentTime 1) == 0,
+          SET #{plant_water_loop_name}_supply_water_ctrl = #{plant_water_loop_name}_supply_water_ctrl - SWT_Decrease,
+        ELSE,
+          SET #{plant_water_loop_name}_supply_water_ctrl = #{plant_water_loop_name}_supply_water_ctrl,
+        ENDIF,
+        IF #{plant_water_loop_name}_supply_water_ctrl > SWT_upper_limit,
+          SET #{plant_water_loop_name}_supply_water_ctrl = SWT_upper_limit
+        ENDIF,
+        IF #{plant_water_loop_name}_supply_water_ctrl < SWT_lower_limit,
+          SET #{plant_water_loop_name}_supply_water_ctrl = SWT_lower_limit
+        ENDIF
+      EMS
+      determine_plant_swt_prg.setBody(determine_plant_swt_prg_body)
+
+      # create EMS program manager objects
+      programs_at_beginning_of_timestep = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      programs_at_beginning_of_timestep.setName("#{plant_water_loop_name}_Demand_Based_Supply_Water_Temperature_At_Beginning_Of_Timestep")
+      programs_at_beginning_of_timestep.setCallingPoint('BeginTimestepBeforePredictor')
+      programs_at_beginning_of_timestep.addProgram(determine_plant_swt_prg)
+
+      initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters')
+      if initialize_constant_parameters.is_initialized
+        initialize_constant_parameters = initialize_constant_parameters.get
+        # add program if it does not exist in manager
+        existing_program_names = initialize_constant_parameters.programs.collect{|prg| prg.name.get.downcase }
+        unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+          initialize_constant_parameters.addProgram(set_constant_values_prg)
+        end
+      else
+        initialize_constant_parameters = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+        initialize_constant_parameters.setName('Initialize_Constant_Parameters')
+        initialize_constant_parameters.setCallingPoint('BeginNewEnvironment')
+        initialize_constant_parameters.addProgram(set_constant_values_prg)
+      end
+
+      initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters_After_Warmup')
+      if initialize_constant_parameters_after_warmup.is_initialized
+        initialize_constant_parameters_after_warmup = initialize_constant_parameters_after_warmup.get
+        # add program if it does not exist in manager
+        existing_program_names = initialize_constant_parameters_after_warmup.programs.collect{|prg| prg.name.get.downcase }
+        unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+          initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+        end
+      else
+        initialize_constant_parameters_after_warmup = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+        initialize_constant_parameters_after_warmup.setName('Initialize_Constant_Parameters_After_Warmup')
+        initialize_constant_parameters_after_warmup.setCallingPoint('AfterNewEnvironmentWarmUpIsComplete')
+        initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+      end
     end
 
   end
