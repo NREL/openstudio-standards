@@ -577,8 +577,30 @@ class Standard
     # Create copy of the user model
     proposed_model = BTAP::FileIO.deep_copy(user_model)
 
-    # If needed, modify user model infiltration
-    model_apply_standard_infiltration(proposed_model)
+    # Get user building level data
+    building_name = proposed_model.building.get.name.get
+    user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+    user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
+    infiltration_modeled_from_field_verification_results = user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results'].to_s.downcase
+    
+    # If needed, modify user model infiltration    
+    if user_buildings
+      # Calculate total infiltration flow rate per envelope area
+      building_envelope_area_m2 = model_building_envelope_area(proposed_model)
+      curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(proposed_model, building_envelope_area_m2)
+      curr_tot_infil_cfm_per_envelope_area = OpenStudio.convert(curr_tot_infil_m3_per_s_per_envelope_area, 'm^3/s*m^2', 'cfm/ft^2').get
+    
+      # Warn users if the infiltration modeling in the user/proposed model is not based on field verification
+      # If not modeled based on field verification, it should be modeled as 0.6 cfm/ft2
+      unless infiltration_modeled_from_field_verification_results.casecmp('Yes')
+        if curr_tot_infil_cfm_per_envelope_area < 0.6
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The user model's I_75Pa is estimated to be #{curr_tot_infil_cfm_per_envelope_area} m3/s per m2 of total building envelope")
+        end
+      end
+
+      # Modify model to follow the PRM infiltration modeling method
+      model_apply_standard_infiltration(proposed_model, curr_tot_infil_cfm_per_envelope_area)
+    end
 
     # If needed, remove all non-adiabatic pipes of SWH loops
     proposed_model.getPlantLoops.sort.each do |plant_loop|
@@ -594,10 +616,22 @@ class Standard
       space_add_prm_computer_roomm_equipment_schedule(space)
 
       # If needed, modify lighting power denstities in residential spaces/zones
-      # Dormitory - living quarters
-      # Dwelling units
-      # Hotel/Motel guestrooms
-      
+      # Dormitory - living quarters : "dormitory - living quarters"
+      # Dwelling units : "apartment - hardwired"
+      # Hotel/Motel guestrooms : "guest room"
+#      standard_space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType').delete(' ').downcase
+#      user_lights = @standards_data.key?('userdata_lights') ? @standards_data['userdata_lights'] : nil
+#      if ["dormitory - living quarters", "apartment - hardwired", "guest room"].include?(standard_space_type)
+#        space.lights.each do |light|
+#          user_lights.each do |user_data|
+#            if user_data['name'].to_s.downcase == light.name.to_s && user_data['has_residential_exception'].to_s.downcase == 'yes'
+#              # as design
+#            else
+#              #max(as_design, prescribed)
+#            end
+#          end
+#        end
+#      end
     end
 
 
@@ -2490,7 +2524,7 @@ class Standard
 
   # For backward compatibility, infiltration standard not used for 2013 and earlier
   # @return [Bool] true if successful, false if not
-  def model_apply_standard_infiltration(model)
+  def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
     return true
   end
 

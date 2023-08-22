@@ -121,7 +121,6 @@ class ASHRAE901PRM < Standard
 
   # Calculate the building enevelope area according to the 90.1 definition
   #
-<<<<<<< HEAD
   # @param [OpenStudio::Model::Model] OpenStudio model object
   # @return [Float] Building envelope area in m2
   def model_building_envelope_area(model)
@@ -152,7 +151,7 @@ class ASHRAE901PRM < Standard
   #
   # @param [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] true if successful, false if not
-  def model_apply_standard_infiltration(model)
+  def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
     # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
     # Excerpt from the EnergyPlus Input/Output reference manual:
     #     "This model is based on work by Sherman and Grimsrud (1980)
@@ -168,16 +167,15 @@ class ASHRAE901PRM < Standard
 
     # Get the space building envelope area
     building_envelope_area_m2 = model_building_envelope_area(model)
-
     prm_raise(building_envelope_area_m2 > 0.0, @sizing_run_dir, 'Calculated building envelope area is 0 m2, Please check model inputs.')
 
     # Calculate current model air leakage rate @ 75 Pa and report it
     curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
-    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The proposed model I_75Pa is estimated to be #{curr_tot_infil_m3_per_s_per_envelope_area} m3/s per m2 of total building envelope.")
+    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The model's I_75Pa is estimated to be #{curr_tot_infil_m3_per_s_per_envelope_area} m3/s per m2 of total building envelope.")
 
     # Calculate building adjusted building envelope
     # air infiltration following the 90.1 PRM rules
-    tot_infil_m3_per_s = model_adjusted_building_envelope_infiltration(building_envelope_area_m2)
+    tot_infil_m3_per_s = model_adjusted_building_envelope_infiltration(building_envelope_area_m2, specific_space_infiltration_rate_75_pa)
 
     # Find infiltration method used in the model, if any.
     #
@@ -347,9 +345,13 @@ class ASHRAE901PRM < Standard
   # this approach uses the 90.1 PRM rules
   # @param building_envelope_area_m2 [Double] building envelope area
   # @return [Float] building envelope infiltration
-  def model_adjusted_building_envelope_infiltration(building_envelope_area_m2)
+  def model_adjusted_building_envelope_infiltration(building_envelope_area_m2, specific_space_infiltration_rate_75_pa = nil)
     # Determine the total building baseline infiltration rate in cfm per ft2 of the building envelope at 75 Pa
-    basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa
+    if specific_space_infiltration_rate_75_pa.nil?
+      basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa
+    else
+      basic_infil_rate_cfm_per_ft2 = specific_space_infiltration_rate_75_pa
+    end
 
     # Conversion factor
     conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
