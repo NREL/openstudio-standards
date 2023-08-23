@@ -310,8 +310,8 @@ class Standard
       set_constant_values_prg_body = <<-EMS
         SET prp_k              = #{proportional_gain},
         SET ctrl_temp_offset   = 0.5,
-        SET upper_slab_sp_lim  = 29,
-        SET lower_slab_sp_lim  = 19
+        SET upper_slab_sp_lim  = 32,
+        SET lower_slab_sp_lim  = 17
       EMS
     else
       set_constant_values_prg_body = <<-EMS
@@ -319,8 +319,8 @@ class Standard
         SET occ_hr_end         = #{zone_occ_hr_end},
         SET prp_k              = #{proportional_gain},
         SET ctrl_temp_offset   = 0.5,
-        SET upper_slab_sp_lim  = 29,
-        SET lower_slab_sp_lim  = 19
+        SET upper_slab_sp_lim  = 32,
+        SET lower_slab_sp_lim  = 17
       EMS
     end
 
@@ -340,8 +340,8 @@ class Standard
       SET #{zone_name}_min_ctrl_temp      = #{zone_name}_upper_comfort_limit,
       SET #{zone_name}_cmd_csp_error      = 0,
       SET #{zone_name}_cmd_hsp_error      = 0,
-      SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_upper_comfort_limit,
-      SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_lower_comfort_limit
+      SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_lower_comfort_limit,
+      SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_upper_comfort_limit
     EMS
     else
       set_constant_zone_values_prg_body = <<-EMS
@@ -349,8 +349,8 @@ class Standard
       SET #{zone_name}_min_ctrl_temp      = #{zone_name}_upper_comfort_limit,
       SET #{zone_name}_cmd_csp_error      = 0,
       SET #{zone_name}_cmd_hsp_error      = 0,
-      SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_upper_comfort_limit,
-      SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_lower_comfort_limit
+      SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_lower_comfort_limit,
+      SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_upper_comfort_limit
     EMS
     end
     set_constant_zone_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
@@ -392,9 +392,9 @@ class Standard
     calculate_slab_ctrl_setpoint_prg_body = <<-EMS
       SET #{zone_name}_cont_cool_oper = @TrendSum #{zone_name}_rad_cool_operation_trend radiant_switch_over_time/ZoneTimeStep,
       SET #{zone_name}_cont_heat_oper = @TrendSum #{zone_name}_rad_heat_operation_trend radiant_switch_over_time/ZoneTimeStep,
-      IF (#{zone_name}_cont_cool_oper > 0) && (CurrentTime == #{zone_occ_hr_end_name}),
+      IF ((#{zone_name}_cont_cool_oper > 0) || #{zone_name}_cmd_csp_error < 0) && (CurrentTime == #{zone_occ_hr_end_name}),
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_csp_error*prp_k),
-      ELSEIF (#{zone_name}_cont_heat_oper > 0) && (CurrentTime == #{zone_occ_hr_end_name}),
+      ELSEIF ((#{zone_name}_cont_heat_oper > 0) || #{zone_name}_cmd_hsp_error > 0) && (CurrentTime == #{zone_occ_hr_end_name}),
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_hsp_error*prp_k),
       ELSE,
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl,
