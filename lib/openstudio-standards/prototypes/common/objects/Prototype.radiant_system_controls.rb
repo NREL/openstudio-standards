@@ -309,7 +309,7 @@ class Standard
     if use_zone_occupancy_for_control
       set_constant_values_prg_body = <<-EMS
         SET prp_k              = #{proportional_gain},
-        SET ctrl_temp_offset   = 0.5,
+        SET ctrl_temp_offset   = 1.0,
         SET upper_slab_sp_lim  = 32,
         SET lower_slab_sp_lim  = 17
       EMS
@@ -318,7 +318,7 @@ class Standard
         SET occ_hr_start       = #{zone_occ_hr_start},
         SET occ_hr_end         = #{zone_occ_hr_end},
         SET prp_k              = #{proportional_gain},
-        SET ctrl_temp_offset   = 0.5,
+        SET ctrl_temp_offset   = 1.0,
         SET upper_slab_sp_lim  = 32,
         SET lower_slab_sp_lim  = 17
       EMS
