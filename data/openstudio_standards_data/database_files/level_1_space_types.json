@@ -36,7 +36,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "classroom, lecture, training",
+        "space_type_name": "classroom/lecture/training",
         "lighting_space_type_name": "classroom_lecture_training_lighting",
         "ventilation_space_type_name": "classroom_lecture_training_ventilation",
         "electric_equipment_space_type_name": "classroom_lecture_training_all_other_electric_equipment",
@@ -54,7 +54,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "conference, meeting, multipurpose",
+        "space_type_name": "conference/meeting/multipurpose",
         "lighting_space_type_name": "conference_meeting_multipurpose_lighting",
         "ventilation_space_type_name": "conference_meeting_multipurpose_ventilation",
         "electric_equipment_space_type_name": "conference_meeting_multipurpose_electric_equipment",
@@ -72,7 +72,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "copy, print",
+        "space_type_name": "copy/print",
         "lighting_space_type_name": "copy_print_lighting",
         "ventilation_space_type_name": "copy_print_ventilation",
         "electric_equipment_space_type_name": "office_enclosed_lte_250_sf_electric_equipment",
@@ -99,7 +99,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "datacenter, high ite",
+        "space_type_name": "datacenter/high ite",
         "lighting_space_type_name": "datacenterhighite_lighting",
         "ventilation_space_type_name": "datacenterhighite_ventilation",
         "electric_equipment_space_type_name": "datacenter_high_ite_equipment",
@@ -108,7 +108,7 @@
         "annotation": "to be revised"
     },
     {
-        "space_type_name": "datacenter, low ite",
+        "space_type_name": "datacenter/low ite",
         "lighting_space_type_name": "datacenterlowite_lighting",
         "ventilation_space_type_name": "datacenterlowite_ventilation",
         "electric_equipment_space_type_name": "datacenter_low_ite_equipment",
@@ -135,7 +135,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "electrical, mechanical",
+        "space_type_name": "electrical/mechanical",
         "lighting_space_type_name": "electrical_mechanical_lighting",
         "ventilation_space_type_name": "electrical_mechanical_ventilation",
         "electric_equipment_space_type_name": "electrical_mechanical_electric_equipment",
@@ -162,7 +162,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "exam, treatment",
+        "space_type_name": "exam/treatment",
         "lighting_space_type_name": "exam_treatment_lighting",
         "ventilation_space_type_name": "exam_treatment_ventilation",
         "electric_equipment_space_type_name": "exam_treatment_electric_equipment",
@@ -243,7 +243,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "laundry, washing",
+        "space_type_name": "laundry/washing",
         "lighting_space_type_name": "laundry_washing_lighting",
         "ventilation_space_type_name": "laundry_washing_ventilation",
         "electric_equipment_space_type_name": "laundry_washing_electric_equipment",
@@ -297,7 +297,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "lounge, breakroom",
+        "space_type_name": "lounge/breakroom",
         "lighting_space_type_name": "lounge_breakroom_lighting",
         "ventilation_space_type_name": "lounge_breakroom_ventilation",
         "electric_equipment_space_type_name": "lounge_breakroom_all_other_electric_equipment",
@@ -330,7 +330,7 @@
         "electric_equipment_space_type_name": "multifamily_equipment",
         "natural_gas_equipment_space_type_name": null,
         "schedule_set_name": "lounge_breakroom_all_other",
-        "annotation": "common areas in a multifamily building, NOT dwelling units; schedule to be revised"
+        "annotation": "common areas in a multifamily building/NOT dwelling units; schedule to be revised"
     },
     {
         "space_type_name": "nursery",
@@ -360,7 +360,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "office, enclosed",
+        "space_type_name": "office/enclosed",
         "lighting_space_type_name": "office_enclosed_lighting",
         "ventilation_space_type_name": "office_enclosed_ventilation",
         "electric_equipment_space_type_name": "office_enclosed_lte_250_sf_electric_equipment",
@@ -441,7 +441,7 @@
         "annotation": null
     },
     {
-        "space_type_name": "recreation, common living",
+        "space_type_name": "recreation/common living",
         "lighting_space_type_name": "recreation_common_living_lighting",
         "ventilation_space_type_name": "recreation_common_living_ventilation",
         "electric_equipment_space_type_name": "lounge_breakroom_all_other_electric_equipment",

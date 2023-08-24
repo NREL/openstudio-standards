@@ -870,7 +870,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RtS,                                    !- Standards Building Type
-  RetailSales;                            !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:SpaceType,
   {6d0a25b7-7aca-469d-9977-c6b57fcef994}, !- Handle
@@ -1218,5 +1218,5 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 

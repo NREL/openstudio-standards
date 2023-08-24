@@ -12912,7 +12912,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - OpenOffice;              !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {eb522dc0-a29a-484b-bcb5-8ff1eef34cb0}, !- Handle
@@ -12930,7 +12930,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - ClosedOffice;            !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {95b38b88-279a-4835-9d48-89da8042a72e}, !- Handle
@@ -12948,7 +12948,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - Classroom;               !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {687dbd99-171a-4640-8f08-41d2fb660847}, !- Handle
@@ -12966,7 +12966,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - Conference;              !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:Rendering:Color,
   {af24da99-6231-473d-a4ee-98e18dec0b26}, !- Handle
@@ -12984,7 +12984,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - Storage;                 !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {b88bdaea-5220-4f5f-8918-1277d0cb2bef}, !- Handle
@@ -13002,7 +13002,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - Corridor;                !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {b365ceb4-b39a-4c6e-be79-d8570755bc74}, !- Handle
@@ -13020,7 +13020,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - Dining;                  !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {b3caefa0-edb1-4409-bb19-0da21d57131f}, !- Handle
@@ -13038,7 +13038,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - Lobby;                   !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {a733da76-dbef-4059-a66c-7a259eba3233}, !- Handle
@@ -13056,7 +13056,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - Elec/MechRoom;           !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {22c28617-85f5-4120-8ce3-46c49fba1406}, !- Handle
@@ -13074,7 +13074,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - Stair;                   !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:Rendering:Color,
   {7c21f5c0-74ce-48f5-ac78-18545b8bd117}, !- Handle
@@ -13092,7 +13092,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  MediumOffice - Restroom;                !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {0aa78b18-9198-4ff7-ba83-ca611bc87c18}, !- Handle

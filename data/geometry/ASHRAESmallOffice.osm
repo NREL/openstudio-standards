@@ -1835,7 +1835,7 @@ OS:SpaceType,
   {75385b6d-b97f-430d-8c39-23fe5b927d8a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
-  WholeBuilding - Sm Office;              !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {75385b6d-b97f-430d-8c39-23fe5b927d8a}, !- Handle
@@ -1852,7 +1852,7 @@ OS:SpaceType,
   {996c5881-2074-43c3-865a-a3c1283bbb9c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
-  Attic;                                  !- Standards Space Type
+  attic;      !- Standards Space Type
 
 OS:Rendering:Color,
   {996c5881-2074-43c3-865a-a3c1283bbb9c}, !- Handle
