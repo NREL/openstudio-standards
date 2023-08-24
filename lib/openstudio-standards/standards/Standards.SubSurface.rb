@@ -265,6 +265,7 @@ class Standard
     # What is the centroid of the surface.
     new_surf_cents = []
     for i in 0..(new_surfaces.length - 1)
+      next if !new_surfaces[i].kind_of?(Array)
       new_surf_cents << BTAP::Geometry::Surfaces.surf_centroid(surf: new_surfaces[i])
     end
 
@@ -272,6 +273,7 @@ class Standard
     os_surf_points = []
     os_surf_cents = []
     for i in 0..(new_surfaces.length - 1)
+      next if !new_surfaces[i].kind_of?(Array)
       os_surf_point = []
       for j in 0..(new_surfaces[i].length - 1)
         os_surf_point << OpenStudio::Point3d.new(new_surfaces[i][j][:x].to_f, new_surfaces[i][j][:y].to_f, new_surfaces[i][j][:z].to_f)
