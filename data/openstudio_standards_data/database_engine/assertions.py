@@ -1,3 +1,6 @@
+import logging
+
+
 class OpenStudioStandardsDataException(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -10,6 +13,7 @@ class OpenStudioStandardsFormDataException(OpenStudioStandardsDataException):
 
 def assert_(b: bool, err_msg: str):
     if not b:
+        logging.getLogger("debug")
         raise OpenStudioStandardsFormDataException(err_msg)
 
 

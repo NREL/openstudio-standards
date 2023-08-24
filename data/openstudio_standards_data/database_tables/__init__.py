@@ -49,8 +49,8 @@ __all__ = [
     "level_2_lighting_space_types",
     "level_2_ventilation_space_types",
     "level_1_space_types",
-    "envelope_requirement",
     "support_constructions",
+    "envelope_requirement",
 ]
 
 
