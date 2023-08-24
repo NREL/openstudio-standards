@@ -17,7 +17,7 @@ Standard.class_eval do
     osm_name = 'in.osm'
     osw_name = 'in.osw'
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "Starting simulation here: #{run_dir}.")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Running simulation #{run_dir}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started simulation #{run_dir} at #{Time.now.strftime('%T.%L')}")
     forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
     idf = forward_translator.translateModel(model)
     idf_path = OpenStudio::Path.new("#{run_dir}/#{idf_name}")
@@ -82,7 +82,7 @@ Standard.class_eval do
 
       sql_path = OpenStudio::Path.new("#{run_dir}/EnergyPlus/eplusout.sql")
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Finished simulation #{run_dir} at #{Time.now.strftime('%T.%L')}")
 
     else # method to running simulation within measure using OpenStudio 2.x WorkflowJSON
 
@@ -113,7 +113,7 @@ Standard.class_eval do
       # Run the sizing run
       OpenstudioStandards.run_command(cmd)
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Finished simulation #{run_dir} at #{Time.now.strftime('%T.%L')}")
 
       sql_path = OpenStudio::Path.new("#{run_dir}/run/eplusout.sql")
 
