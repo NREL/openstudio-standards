@@ -553,7 +553,7 @@ class NECB2011 < Standard
     # Apply SHW Efficiency
     ecm.modify_shw_efficiency(model: model, shw_eff: shw_eff)
     # Apply daylight controls.
-    model_add_daylighting_controls(model: model, daylighting_type: daylighting_type)
+    #model_add_daylighting_controls(model: model, daylighting_type: daylighting_type)
     # Apply Chiller efficiency
     ecm.modify_chiller_efficiency(model: model, chiller_type: chiller_type)
     # Apply airloop economizer
@@ -1916,7 +1916,7 @@ class NECB2011 < Standard
         end
       end
 
-      if surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall' && surface_z_min == floor_vertices[0][0].z
+      if surface.outsideBoundaryCondition == 'Outdoors' && surface.surfaceType == 'Wall' && surface_z_min == floor_vertices[0][0].z 
 
         ##### Calculate the daylight_space depth in relation to the considered exterior wall.
         ##### To calculate daylight_space depth, first get the floor vertices which are on the opposite side of the considered exterior wall.
@@ -1928,7 +1928,6 @@ class NECB2011 < Standard
             floor_vertices_y_wall_opposite << floor_vertex.y
           end
         end
-
         ##### To calculate daylight_space depth, second calculate floor length on both sides: (1) exterior wall side, (2) on the opposite side of the exterior wall
         floor_width_wall_side = Math.sqrt((wall_vertices_x_on_floor[0] - wall_vertices_x_on_floor[1])**2 + (wall_vertices_y_on_floor[0] - wall_vertices_y_on_floor[1])**2)
         floor_width_wall_opposite = Math.sqrt((floor_vertices_x_wall_opposite[0] - floor_vertices_x_wall_opposite[1])**2 + (floor_vertices_y_wall_opposite[0] - floor_vertices_y_wall_opposite[1])**2)

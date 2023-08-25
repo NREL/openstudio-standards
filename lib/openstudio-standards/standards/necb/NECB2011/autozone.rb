@@ -332,7 +332,8 @@ class NECB2011
   def auto_zone_all_other_spaces(model)
     other_tz_array = []
     # iterate through all non wildcard spaces.
-    model.getSpaces.select { |space| !is_a_necb_dwelling_unit?(space) && !is_an_necb_wildcard_space?(space) }.each do |space|
+    model.getSpaces.select { |space| !is_a_necb_dwelling_unit?(space) && !is_an_necb_wildcard_space?(space) && 
+                                     !is_an_necb_wet_space?(space)}.each do |space|
       # skip if already assigned to a thermal zone.
       next unless space.thermalZone.empty?
 
@@ -992,7 +993,8 @@ class NECB2011
     other_spaces = model.getSpaces.select do |space|
       !is_a_necb_dwelling_unit?(space) &&
         !is_an_necb_wildcard_space?(space) &&
-        !is_an_necb_storage_space?(space)
+        !is_an_necb_storage_space?(space) &&
+          !is_an_necb_wet_space?(space)
     end
     other_spaces.each do |space|
       zones << space.thermalZone.get
