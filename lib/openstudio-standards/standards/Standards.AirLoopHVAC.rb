@@ -784,6 +784,10 @@ class Standard
         # CoilCoolingWater
       elsif sc.to_CoilCoolingWater.is_initialized
         coil = sc.to_CoilCoolingWater.get
+        # error if the design coil capacity method isn't available
+        if coil.model.version < OpenStudio::VersionString.new('3.6.0')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required CoilCoolingWater method .autosizedDesignCoilLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        end
         if coil.autosizedDesignCoilLoad.is_initialized
           # @todo Change to pull water coil nominal capacity instead of design load
           total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
@@ -827,6 +831,10 @@ class Standard
           # CoilCoolingWater
           elsif clg_coil.to_CoilCoolingWater.is_initialized
             coil = clg_coil.to_CoilCoolingWater.get
+            # error if the design coil capacity method isn't available
+            if coil.model.version < OpenStudio::VersionString.new('3.6.0')
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required CoilCoolingWater method .autosizedDesignCoilLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+            end
             if coil.autosizedDesignCoilLoad.is_initialized
               # @todo Change to pull water coil nominal capacity instead of design load
               total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
@@ -871,6 +879,10 @@ class Standard
         # CoilCoolingWater
         elsif clg_coil.to_CoilCoolingWater.is_initialized
           coil = clg_coil.to_CoilCoolingWater.get
+          # error if the design coil capacity method isn't available
+          if coil.model.version < OpenStudio::VersionString.new('3.6.0')
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required CoilCoolingWater method .autosizedDesignCoilLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          end
           if coil.autosizedDesignCoilLoad.is_initialized
             # @todo Change to pull water coil nominal capacity instead of design load
             total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
