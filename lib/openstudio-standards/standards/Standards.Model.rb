@@ -31,7 +31,7 @@ class Standard
 
   # Method used for 90.1-2016 and onward
   def model_create_prm_stable_baseline_building(model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, output_dir = Dir.pwd, unmet_load_hours_check = true, debug = false)
-    model_create_prm_any_baseline_building(model, '', climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, false, output_dir, true, unmet_load_hours_check, debug)
+    model_create_prm_any_baseline_building(model, '', climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, true, false, output_dir, true, unmet_load_hours_check, debug)
   end
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
@@ -44,7 +44,7 @@ class Standard
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
   def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, custom, sizing_run_dir, false, false, debug)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, false, custom, sizing_run_dir, false, false, debug)
   end
 
   # Creates a Performance Rating Method (aka 90.1-Appendix G) baseline building model
@@ -65,26 +65,28 @@ class Standard
   # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
-  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
-    # Perform a user model design day run only to make sure
-    # that the user model is valid, i.e. can run without major
-    # errors
-    if !model_run_sizing_run(user_model, "#{sizing_run_dir}/USER-SR")
-      OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-                         "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
-      prm_raise(false,
-                sizing_run_dir,
-                "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
-    end
+  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    if create_proposed_model
+      # Perform a user model design day run only to make sure
+      # that the user model is valid, i.e. can run without major
+      # errors
+      if !model_run_sizing_run(user_model, "#{sizing_run_dir}/USER-SR")
+        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                          "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+        prm_raise(false,
+                  sizing_run_dir,
+                  "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+      end
 
-    # Check if proposed HVAC system is autosized
-    if model_is_hvac_autosized(user_model)
-      OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-        "The user model's HVAC system is partly autosized. Baseline and proposed model(s) won't be created.")
-    end
+      # Check if proposed HVAC system is autosized
+      if model_is_hvac_autosized(user_model)
+        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+          "The user model's HVAC system is partly autosized. Baseline and proposed model(s) won't be created.")
+      end
 
-    # Generate proposed model from the user-provided model
-    proposed_model = model_create_prm_proposed_building(user_model)
+      # Generate proposed model from the user-provided model
+      proposed_model = model_create_prm_proposed_building(user_model)
+    end
 
     # Check proposed model unmet load hours
     if unmet_load_hours_check
