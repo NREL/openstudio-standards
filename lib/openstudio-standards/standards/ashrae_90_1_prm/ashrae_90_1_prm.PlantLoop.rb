@@ -90,65 +90,6 @@ class ASHRAE901PRM < Standard
     end
   end
 
-  # Get the total cooling capacity for the plant loop
-  #
-  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @param [String] sizing_run_dir
-  # @return [Double] total cooling capacity in watts
-  def plant_loop_total_cooling_capacity(plant_loop, sizing_run_dir = Dir.pwd)
-    # Sum the cooling capacity for all cooling components
-    # on the plant loop.
-    total_cooling_capacity_w = 0
-    sizing_run_ran = false
-
-    plant_loop.supplyComponents.each do |sc|
-      # ChillerElectricEIR
-      if sc.to_ChillerElectricEIR.is_initialized
-        chiller = sc.to_ChillerElectricEIR.get
-
-        # If chiller is autosized, check sizing run results. If sizing run not ran, run it first
-        if chiller.isReferenceCapacityAutosized
-          model = chiller.model
-          sizing_run_ran = model_run_sizing_run(model, "#{sizing_run_dir}/SR_cooling_plant") if !sizing_run_ran
-
-          if sizing_run_ran
-            if model.version <= OpenStudio::VersionString.new('3.2.1')
-              sizing_run_capacity = model.getAutosizedValueFromEquipmentSummary(chiller, 'Central Plant', 'Nominal Capacity', 'W').get
-            else
-              sizing_run_capacity = model.getAutosizedValueFromEquipmentSummary(chiller, 'Central Plant', 'Rated Capacity', 'W').get
-            end
-            chiller.setReferenceCapacity(sizing_run_capacity)
-            total_cooling_capacity_w += sizing_run_capacity
-          else
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of #{chiller.name} is not available due to a sizing run failure, total cooling capacity of plant loop will be incorrect when applying standard.")
-          end
-
-        elsif chiller.referenceCapacity.is_initialized
-          total_cooling_capacity_w += chiller.referenceCapacity.get
-        elsif chiller.autosizedReferenceCapacity.is_initialized
-          total_cooling_capacity_w += chiller.autosizedReferenceCapacity.get
-        else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of #{chiller.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
-        end
-        # DistrictCooling
-      elsif sc.to_DistrictCooling.is_initialized
-        dist_clg = sc.to_DistrictCooling.get
-        if dist_clg.nominalCapacity.is_initialized
-          total_cooling_capacity_w += dist_clg.nominalCapacity.get
-        elsif dist_clg.autosizedNominalCapacity.is_initialized
-          total_cooling_capacity_w += dist_clg.autosizedNominalCapacity.get
-        else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of DistrictCooling #{dist_clg.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
-        end
-      end
-    end
-
-    total_cooling_capacity_tons = OpenStudio.convert(total_cooling_capacity_w, 'W', 'ton').get
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, cooling capacity is #{total_cooling_capacity_tons.round} tons of refrigeration.")
-
-    return total_cooling_capacity_w
-  end
-
   # Splits the single chiller used for the initial sizing run
   # into multiple separate chillers based on Appendix G.
   #
