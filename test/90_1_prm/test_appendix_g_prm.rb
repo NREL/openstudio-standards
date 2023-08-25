@@ -1581,7 +1581,13 @@ class AppendixGPRMTests < Minitest::Test
       num_zones = air_loop.thermalZones.size
       if (num_zones > 1 && mz_or_sz == 'MZ') || (num_zones == 1 && mz_or_sz == 'SZ')
         # This is a multizone system, do the test
-        heat_type = model.airloop_primary_heat_type(air_loop).to_s
+
+        # error if Loop app G heating fuels method is not available
+        if air_loop.model.version < OpenStudio::VersionString.new('3.6.0')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required Loop method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        end
+
+        heat_type = air_loop.appGHeatingFuelTypes[0]
         if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
           # Heat type is electric or heat pump
           assert(heat_type == expected_elec_heat_type, "Incorrect heat type for #{air_loop.name.get}; expected #{expected_elec_heat_type}")
@@ -1909,7 +1915,13 @@ class AppendixGPRMTests < Minitest::Test
         if is_fpfc
           # Also check heat type
           equip = equip.to_ZoneHVACFourPipeFanCoil.get
-          heat_type = model.coil_heat_type(equip.heatingCoil)
+
+          # error if HVACComponent app G heating fuels method is not available
+          if equip.model.version < OpenStudio::VersionString.new('3.6.0')
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required HVACComponent method .appGHeatingFuelTypes is available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          end
+
+          heat_type = equip.heatingCoil.appGHeatingFuelTypes[0]
           if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
             assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
           else

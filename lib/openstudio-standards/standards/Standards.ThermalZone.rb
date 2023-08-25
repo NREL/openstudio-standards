@@ -605,7 +605,13 @@ class Standard
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = thermal_zone.heating_fuels
+
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
+    htg_fuels = thermal_zone.heatingFuelTypes
 
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
@@ -647,8 +653,13 @@ class Standard
     fossil = false
     electric = false
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Fossil heating
-    htg_fuels = thermal_zone.heating_fuels
+    htg_fuels = thermal_zone.heatingFuelTypes
     if htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
@@ -668,7 +679,7 @@ class Standard
 
     # Cooling fuels, for determining
     # unconditioned zones
-    clg_fuels = thermal_zone.cooling_fuels
+    clg_fuels = thermal_zone.coolingFuelTypes
 
     # Categorize
     fuel_type = nil
@@ -711,12 +722,17 @@ class Standard
   def thermal_zone_mixed_heating_fuel?(thermal_zone)
     is_mixed = false
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = thermal_zone.heating_fuels
+    htg_fuels = thermal_zone.heatingFuelTypes
 
     # Includes fossil
     fossil = false
@@ -837,9 +853,14 @@ class Standard
       end
     end
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get the zone heating and cooling fuels
-    htg_fuels = thermal_zone.heating_fuels
-    clg_fuels = thermal_zone.cooling_fuels
+    htg_fuels = thermal_zone.heatingFuelTypes
+    clg_fuels = thermal_zone.coolingFuelTypes
     is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
 
     # Infer the HVAC type
