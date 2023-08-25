@@ -4532,9 +4532,14 @@ class Standard
   #   Starting hour of building occupancy.
   # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Ending hour of building occupancy.
-  # @param control_strategy [String] name of control strategy.  Options are 'proportional_control' and 'none'.
+  # @param control_strategy [String] name of control strategy.  Options are 'proportional_control', oa_based_control,
+  #   'constant_control', and 'none'.
   #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
   #   detailed in Raftery et al. (2017), 'A new control strategy for high thermal mass radiant systems'.
+  #   If control strategy is 'slab_setpoint_oa_control', the method will apply native EnergyPlus objects/parameters
+  #   to vary slab setpoint based on outdoor weather.
+  #   If control strategy is 'constant_control', the method will apply native EnergyPlus objects/parameters to
+  #   maintain a constant slab setpoint.
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
@@ -4923,13 +4928,29 @@ class Standard
       rename_plant_loop_nodes(model)
 
       # set radiant loop controls
-      if control_strategy == 'proportional_control'
-        model_add_radiant_proportional_controls(model, zone, radiant_loop,
-                                                radiant_temperature_control_type: radiant_temperature_control_type,
-                                                model_occ_hr_start: model_occ_hr_start,
-                                                model_occ_hr_end: model_occ_hr_end,
-                                                proportional_gain: proportional_gain,
-                                                switch_over_time: switch_over_time)
+      unless control_strategy.downcase == 'none'
+        case control_strategy.downcase
+          when 'proportional_control'
+            # slab setpoint varies based on previous day zone conditions
+            model_add_radiant_proportional_controls(model, zone, radiant_loop,
+                                                    radiant_temperature_control_type: radiant_temperature_control_type,
+                                                    model_occ_hr_start: model_occ_hr_start,
+                                                    model_occ_hr_end: model_occ_hr_end,
+                                                    proportional_gain: proportional_gain,
+                                                    switch_over_time: switch_over_time)
+          when 'oa_based_control'
+            # slab setpoint varies based on outdoor weather
+            model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                            radiant_temperature_control_type: radiant_temperature_control_type,
+                                            slab_setpoint_oa_control: true,
+                                            switch_over_time: switch_over_time)
+          when 'constant_control'
+            # constant slab setpoint control
+            model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                            radiant_temperature_control_type: radiant_temperature_control_type,
+                                            slab_setpoint_oa_control: false,
+                                            switch_over_time: switch_over_time)
+          end
       end
     end
 

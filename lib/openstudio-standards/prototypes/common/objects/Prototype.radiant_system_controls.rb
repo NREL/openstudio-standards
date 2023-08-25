@@ -389,4 +389,66 @@ class Standard
     zone_min_ctrl_temp_output.setName("#{zone_name} Minimum occupied temperature in zone")
 
   end
+
+  # Native EnergyPlus objects implement a control for a single thermal zone with a radiant system.
+  # @param zone [OpenStudio::Model::ThermalZone>] zone to add radiant controls
+  # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
+  # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
+  #   options are 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
+  # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
+  def model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                       radiant_temperature_control_type: 'SurfaceFaceTemperature',
+                                       slab_setpoint_oa_control: false,
+                                       switch_over_time: 24.0)
+
+    zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
+
+    if model.version < OpenStudio::VersionString.new('3.1.1')
+      coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
+      coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
+    else
+      coil_cooling_radiant = radiant_loop.coolingCoil.get.to_CoilCoolingLowTempRadiantVarFlow.get
+      coil_heating_radiant = radiant_loop.heatingCoil.get.to_CoilHeatingLowTempRadiantVarFlow.get
+    end
+
+    #####
+    # Define radiant system parameters
+    ####
+    # set radiant system temperature and setpoint control type
+    unless ['surfacefacetemperature', 'surfaceinteriortemperature'].include? radiant_temperature_control_type.downcase
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
+        "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
+      radiant_temperature_control_type = "SurfaceFaceTemperature"
+    end
+
+    radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
+
+    # get existing switchover time schedule or create one if needed
+    sch_radiant_switchover = model.getScheduleRulesetByName("Radiant System Switchover")
+    if sch_radiant_switchover.is_initialized
+      sch_radiant_switchover = sch_radiant_switchover.get
+    else
+      sch_radiant_switchover = model_add_constant_schedule_ruleset(model,
+                                                                  switch_over_time,
+                                                                  name = "Radiant System Switchover",
+                                                                  sch_type_limit: "Dimensionless")
+    end
+
+    # set radiant system switchover schedule
+    radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover.to_Schedule.get)
+
+    # radiant system cooling control setpoint
+    slab_setpoint = 22
+    sch_radiant_clgsetp = model_add_constant_schedule_ruleset(model,
+                                                              slab_setpoint + 0.1,
+                                                              name = "#{zone_name}_Sch_Radiant_ClgSetP")
+    coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_clgsetp)
+
+    # radiant system heating control setpoint
+    sch_radiant_htgsetp = model_add_constant_schedule_ruleset(model,
+                                                              slab_setpoint,
+                                                              name = "#{zone_name}_Sch_Radiant_HtgSetP")
+    coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_htgsetp)
+  end
+
 end
