@@ -585,7 +585,11 @@ class ASHRAE9012019 < ASHRAE901
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: v_ou = #{v_ou_cfm.round} cfm.")
 
     # Retrieve the sum of the zone minimum primary airflow
-    vpz_min_sum = air_loop_hvac.autosizeSumMinimumHeatingAirFlowRates
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    else
+      vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates
+    end
 
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate

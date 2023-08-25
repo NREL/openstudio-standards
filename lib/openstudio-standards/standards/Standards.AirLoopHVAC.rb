@@ -2033,7 +2033,11 @@ class Standard
     num_zones_adj = 0
 
     # Retrieve the sum of the zone minimum primary airflow
-    vpz_min_sum = air_loop_hvac.autosizeSumMinimumHeatingAirFlowRates
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    else
+      vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates
+    end
 
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
@@ -2180,7 +2184,15 @@ class Standard
     # zone airflow are lower than the calculated system
     # outdoor air intake
     if v_ot_adj > vpz_min_sum && v_ot_adj > 0
-      mdp_adj = [v_ot_adj / air_loop_hvac.autosizeSumAirTerminalMaxAirFlowRate, 1].min
+
+      # Retrieve the sum of the zone maximum air flow rates
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumAirTerminalMaxAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      else
+        v_max = air_loop_hvac.autosizedSumAirTerminalMaxAirFlowRate
+      end
+
+      mdp_adj = [v_ot_adj / v_max, 1].min
       air_loop_hvac.thermalZones.sort.each do |zone|
         air_loop_hvac_set_minimum_damper_position(zone, mdp_adj)
       end
