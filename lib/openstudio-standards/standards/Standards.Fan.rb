@@ -348,13 +348,7 @@ module Fan
   # @return [Double] rated power consumption per flow in watters per cfm, W*min/ft^3
   def fan_rated_w_per_cfm(fan)
     # Get design power (whether autosized or hard-sized)
-    rated_power_w = fan.model.getAutosizedValueFromEquipmentSummary(fan, 'Fans', 'Rated Electric Power', 'W')
-    if rated_power_w.is_initialized
-      rated_power_w = rated_power_w.get
-    else
-      rated_power_w = fan_fanpower(fan)
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{fan.name}, could not find rated fan power from Equipment Summary. Will calculate it based on current pressure rise and total fan efficiency")
-    end
+    rated_power_w = fan_fanpower(fan)
 
     if fan.maximumFlowRate.is_initialized
       max_m3_per_s = fan.ratedFlowRate.get
