@@ -749,7 +749,8 @@ Standard.class_eval do
 
       # If the edge is parallel with the floor and in the same x-y plane as the floor, assume an intersection the
       # length of the wall edge
-      edge_vector = OpenStudio::Vector3d.new(wall_edge_p1 - wall_edge_p2)
+      intersect_vector = wall_edge_p1 - wall_edge_p2
+      edge_vector = OpenStudio::Vector3d.new(intersect_vector.x, intersect_vector.y, intersect_vector.z)
       return(edge_vector.length)
     end
 
