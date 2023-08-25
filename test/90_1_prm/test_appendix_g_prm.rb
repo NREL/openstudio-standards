@@ -1943,7 +1943,11 @@ class AppendixGPRMTests < Minitest::Test
       # Get design cooling load of computer rooms
       zone.spaces.each do |space|
         if space.spaceType.get.standardsSpaceType.get == 'computer room'
-          zone_load_w = zone.coolingDesignLoad.to_f
+          # error if zone design load methods are not available
+          if zone.model.version < OpenStudio::VersionString.new('3.6.0')
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required ThermalZone method .autosizedCoolingDesignLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          end
+          zone_load_w = zone.autosizedCoolingDesignLoad.to_f
           zone_load_w *= zone.floorArea * zone.multiplier
           zone_load = OpenStudio.convert(zone_load_w, 'W', 'Btu/hr').get
           zone_load_s += zone_load

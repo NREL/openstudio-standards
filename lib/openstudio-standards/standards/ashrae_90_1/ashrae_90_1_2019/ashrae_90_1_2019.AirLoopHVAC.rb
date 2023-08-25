@@ -586,7 +586,7 @@ class ASHRAE9012019 < ASHRAE901
 
     # Retrieve the sum of the zone minimum primary airflow
     if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
     else
       vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates
     end
@@ -605,6 +605,12 @@ class ASHRAE9012019 < ASHRAE901
       # max of heating and cooling
       # design air flow rates
       v_pz = 0.0
+
+      # error if zone autosized methods are not available
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Required ThermalZone methods .autosizedCoolingDesignAirFlowRate and .autosizedHeatingDesignAirFlowRate are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
       clg_dsn_flow = zone.autosizedCoolingDesignAirFlowRate
       if clg_dsn_flow.is_initialized
         clg_dsn_flow = clg_dsn_flow.get
@@ -612,7 +618,7 @@ class ASHRAE9012019 < ASHRAE901
           v_pz = clg_dsn_flow
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} clg_dsn_flow could not be found.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} clg_dsn_flow could not be found.")
       end
       htg_dsn_flow = zone.autosizedHeatingDesignAirFlowRate
       if htg_dsn_flow.is_initialized
@@ -621,7 +627,7 @@ class ASHRAE9012019 < ASHRAE901
           v_pz = htg_dsn_flow
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} htg_dsn_flow could not be found.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} htg_dsn_flow could not be found.")
       end
 
       # Zone ventilation efficiency calculation is computed

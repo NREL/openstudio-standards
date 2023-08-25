@@ -7112,9 +7112,14 @@ class Standard
         return_air_type = 'ducted_return_or_direct_to_unit'
       end
 
+      # error if zone design air flow rate is not available
+      if zone.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
       zone.additionalProperties.setFeature('return_air_type', return_air_type)
       zone.additionalProperties.setFeature('plenum', return_plenum) unless return_plenum.nil?
-      zone.additionalProperties.setFeature('proposed_model_zone_design_air_flow', zone.designAirFlowRate.to_f)
+      zone.additionalProperties.setFeature('proposed_model_zone_design_air_flow', zone.autosizedDesignAirFlowRate.to_f)
     end
   end
 

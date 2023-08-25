@@ -1292,16 +1292,21 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   def thermal_zone_conditioning_category(thermal_zone, climate_zone)
+    # error if zone design load methods are not available
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get the heating load
     htg_load_btu_per_ft2 = 0.0
-    htg_load_w_per_m2 = thermal_zone.heatingDesignLoad
+    htg_load_w_per_m2 = thermal_zone.autosizedHeatingDesignLoad
     if htg_load_w_per_m2.is_initialized
       htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
     end
 
     # Get the cooling load
     clg_load_btu_per_ft2 = 0.0
-    clg_load_w_per_m2 = thermal_zone.coolingDesignLoad
+    clg_load_w_per_m2 = thermal_zone.autosizedCoolingDesignLoad
     if clg_load_w_per_m2.is_initialized
       clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
     end

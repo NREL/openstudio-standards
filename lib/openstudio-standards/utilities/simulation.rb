@@ -283,7 +283,12 @@ Standard.class_eval do
     model_run_sizing_run(model, sizing_run_dir)
     model.getSpaces.each do |space|
       unless space.thermalZone.empty?
-        space_load_array << { 'space_name' => space.name, 'CoolingDesignLoad' => space.thermalZone.get.coolingDesignLoad, 'HeatingDesignLoad' => space.thermalZone.get.heatingDesignLoad }
+        # error if zone design load methods are not available
+        if space.model.version < OpenStudio::VersionString.new('3.6.0')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        end
+
+        space_load_array << { 'space_name' => space.name, 'CoolingDesignLoad' => space.thermalZone.get.autosizedCoolingDesignLoad, 'HeatingDesignLoad' => space.thermalZone.get.autosizedHeatingDesignLoad }
       end
     end
     puts space_load_array

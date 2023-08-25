@@ -2065,6 +2065,12 @@ class Standard
       # max of heating and cooling
       # design air flow rates
       v_pz = 0.0
+
+      # error if zone autosized methods are not available
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required ThermalZone method .autosizedCoolingDesignAirFlowRate and .autosizedHeatingDesignAirFlowRate are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
       clg_dsn_flow = zone.autosizedCoolingDesignAirFlowRate
       if clg_dsn_flow.is_initialized
         clg_dsn_flow = clg_dsn_flow.get
