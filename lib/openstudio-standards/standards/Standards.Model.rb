@@ -108,16 +108,18 @@ class Standard
                   'Simulation on proposed model failed. Baseline generation is stopped.')
       end
     end
-    # Make the run directory if it doesn't exist
-    unless Dir.exist?(sizing_run_dir)
-      FileUtils.mkdir_p(sizing_run_dir)
+    if create_proposed_model
+      # Make the run directory if it doesn't exist
+      unless Dir.exist?(sizing_run_dir)
+        FileUtils.mkdir_p(sizing_run_dir)
+      end
+      # Save proposed model
+      proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.osm"), true)
+      forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+      idf = forward_translator.translateModel(proposed_model)
+      idf_path = OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.idf")
+      idf.save(idf_path, true)
     end
-    # Save proposed model
-    proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.osm"), true)
-    forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
-    idf = forward_translator.translateModel(proposed_model)
-    idf_path = OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.idf")
-    idf.save(idf_path, true)
 
     # User data process
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
