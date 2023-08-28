@@ -670,8 +670,14 @@ class Standard
     # Define the minimum area for the
     # exception that allows a different
     # system type in part of the building.
-    exception_min_area_m2 = model_prm_baseline_system_group_minimum_area(model, custom)
-    exception_min_area_ft2 = OpenStudio.convert(exception_min_area_m2, 'm^2', 'ft^2').get
+    if custom == 'Xcel Energy CO EDA'
+     # Customization - Xcel EDA Program Manual 2014
+      # 3.2.1 Mechanical System Selection ii
+      exception_min_area_ft2 = 5000
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
+    else
+      exception_min_area_ft2 = 20_000
+    end
 
     # Get occupancy type, fuel type, and area information for all zones,
     # excluding unconditioned zones.
@@ -1123,18 +1129,6 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Automated baseline measure does not support use of Schedule Year')
     end
     return fan_8760
-  end
-
-  # Determines the area of the building above which point
-  # the non-dominant area type gets it's own HVAC system type.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param custom [String] custom fuel type
-  # @return [Double] the minimum area (m^2)
-  def model_prm_baseline_system_group_minimum_area(model, custom)
-    exception_min_area_ft2 = 20_000
-    exception_min_area_m2 = OpenStudio.convert(exception_min_area_ft2, 'ft^2', 'm^2').get
-    return exception_min_area_m2
   end
 
   # Determine the baseline system type given the inputs.  Logic is different for different standards.

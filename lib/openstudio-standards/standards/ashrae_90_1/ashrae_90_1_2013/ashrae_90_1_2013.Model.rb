@@ -1,21 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
   # @!group Model
 
-  # Determines the area of the building above which point
-  # the non-dominant area type gets it's own HVAC system type.
-  # @return [Double] the minimum area (m^2)
-  def model_prm_baseline_system_group_minimum_area(model, custom)
-    exception_min_area_ft2 = 20_000
-    # Customization - Xcel EDA Program Manual 2014
-    # 3.2.1 Mechanical System Selection ii
-    if custom == 'Xcel Energy CO EDA'
-      exception_min_area_ft2 = 5000
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
-    end
-    exception_min_area_m2 = OpenStudio.convert(exception_min_area_ft2, 'ft^2', 'm^2').get
-    return exception_min_area_m2
-  end
-
   # Determines which system number is used
   # for the baseline system.
   # @return [String] the system number: 1_or_2, 3_or_4,
