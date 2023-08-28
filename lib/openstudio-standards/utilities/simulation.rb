@@ -218,9 +218,7 @@ Standard.class_eval do
     # Check to see if all zones have surfaces.
     model.getThermalZones.each do |zone|
       if BTAP::Geometry::Surfaces.get_surfaces_from_thermal_zones([zone]).empty?
-        error_string = "Error: Thermal zone #{zone.name} does not contain surfaces.\n"
-        puts error_string
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Siz.Model', error_string)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Thermal zone #{zone.name} does not contain surfaces.\n")
         return false
       end
     end
