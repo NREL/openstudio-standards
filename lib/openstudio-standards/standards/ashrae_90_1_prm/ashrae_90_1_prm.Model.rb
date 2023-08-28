@@ -3141,6 +3141,7 @@ class ASHRAE901PRM < Standard
                                           'hvac_building_type' => hvac_building_type,
                                           'climate_zone' => 'any')
     end
+    
     if !heat_type_props
       # try again with wild card for building type
       heat_type_props = model_find_object(standards_data['prm_heat_type'],
