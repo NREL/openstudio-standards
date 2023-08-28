@@ -1,4 +1,4 @@
-class ASHRAE901PRM2019 < ASHRAE901PRM
+class ASHRAE901PRM < Standard
   # @!group SpaceType
 
   # Sets the selected internal loads to standards-based or typical values.
