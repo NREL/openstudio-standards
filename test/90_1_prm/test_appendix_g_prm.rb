@@ -1918,7 +1918,7 @@ class AppendixGPRMTests < Minitest::Test
 
           # error if HVACComponent app G heating fuels method is not available
           if equip.model.version < OpenStudio::VersionString.new('3.6.0')
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required HVACComponent method .appGHeatingFuelTypes is available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required HVACComponent method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
           end
 
           heat_type = equip.heatingCoil.appGHeatingFuelTypes[0]
