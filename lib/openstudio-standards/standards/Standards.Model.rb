@@ -614,28 +614,38 @@ class Standard
       plant_loop_adibatic_pipes_only(plant_loop)
     end
 
+    # TODO: Once data refactoring has been completed lookup values from the database;
+    #       For now, hard-code LPD for selected spaces. Current Standards Space Type
+    #       of OS:SpaceType is the PRM interior lighting space type. These values are
+    #       from Table 9.6.1 as required by Section G3.1.6.e.
+    proposed_lpd_residential_spaces = {
+      'dormitory - living quarters' => 0.5, # "primary_space_type": "Dormitory—Living Quarters",
+      'apartment - hardwired' => 0.6, # "primary_space_type": "Dwelling Unit"
+      'guest room' => 0.41 # "primary_space_type": "Guest Room",
+    }
+
     # Make proposed model space related adjustments
     proposed_model.getSpaces.each do |space|
       # If needed, modify computer equipment schedule
+      # Section G3.1.3.16
       space_add_prm_computer_roomm_equipment_schedule(space)
 
       # If needed, modify lighting power denstities in residential spaces/zones
-      # Dormitory - living quarters : "dormitory - living quarters"
-      # Dwelling units : "apartment - hardwired"
-      # Hotel/Motel guestrooms : "guest room"
-      #      standard_space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType').delete(' ').downcase
-      #      user_lights = @standards_data.key?('userdata_lights') ? @standards_data['userdata_lights'] : nil
-      #      if ["dormitory - living quarters", "apartment - hardwired", "guest room"].include?(standard_space_type)
-      #        space.lights.each do |light|
-      #          user_lights.each do |user_data|
-      #            if user_data['name'].to_s.downcase == light.name.to_s && user_data['has_residential_exception'].to_s.downcase == 'yes'
-      #              # as design
-      #            else
-      #              #max(as_design, prescribed)
-      #            end
-      #          end
-      #        end
-      #      end
+      # Section G3.1.6.e
+      standard_space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType').downcase
+      user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
+      if ['dormitory - living quarters', 'apartment - hardwired', 'guest room'].include?(standard_space_type)
+        user_spaces.each do |user_data|
+          if user_data['name'].to_s == space.name.to_s && user_data['has_residential_exception'].to_s.downcase != 'yes'
+            # Get LPDs
+            lpd_w_per_m2 = space.lightingPowerPerFloorArea
+            ref_space_lpd_per_ft2 = proposed_lpd_residential_spaces[standard_space_type]
+            ref_space_lpd_per_m2 = OpenStudio.convert(ref_space_lpd_per_ft2, 'W/ft^2', 'W/m^2').get
+            # Set new LPD
+            space.setLightingPowerPerFloorArea([lpd_w_per_m2, ref_space_lpd_per_m2].max)
+          end
+        end
+      end
     end
 
     return proposed_model
