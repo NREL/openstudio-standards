@@ -2047,8 +2047,10 @@ class Standard
     # Retrieve the sum of the zone minimum primary airflow
     if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    elsif air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates.is_initialized
+      vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates.get
     else
-      vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "autosizedSumMinimumHeatingAirFlowRates is not available for air loop #{air_loop_hvac}.")
     end
 
     air_loop_hvac.thermalZones.sort.each do |zone|
@@ -2206,8 +2208,10 @@ class Standard
       # Retrieve the sum of the zone maximum air flow rates
       if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumAirTerminalMaxAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      elsif air_loop_hvac.autosizedSumAirTerminalMaxAirFlowRate.is_initialized
+        v_max = air_loop_hvac.autosizedSumAirTerminalMaxAirFlowRate.get
       else
-        v_max = air_loop_hvac.autosizedSumAirTerminalMaxAirFlowRate
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "autosizedSumAirTerminalMaxAirFlowRate is not available for air loop #{air_loop_hvac}.")
       end
 
       mdp_adj = [v_ot_adj / v_max, 1].min

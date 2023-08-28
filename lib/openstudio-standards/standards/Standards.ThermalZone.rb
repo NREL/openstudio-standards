@@ -1314,7 +1314,7 @@ class Standard
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   def thermal_zone_conditioning_category(thermal_zone, climate_zone)
     # error if zone design load methods are not available
-    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
     end
 
