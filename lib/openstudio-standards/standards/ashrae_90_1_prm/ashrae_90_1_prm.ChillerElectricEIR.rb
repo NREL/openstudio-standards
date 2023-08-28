@@ -1,38 +1,6 @@
 class ASHRAE901PRM < Standard
   # @!group ChillerElectricEIR
 
-  # Finds the search criteria
-  #
-  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
-  # @return [hash] has for search criteria to be used for find object
-  def chiller_electric_eir_find_search_criteria(chiller_electric_eir)
-    search_criteria = {}
-    search_criteria['template'] = template
-
-    # In AppG prm models, all scenarios are WaterCooled for cooling type.
-    cooling_type = 'WaterCooled'
-
-    search_criteria['cooling_type'] = cooling_type
-
-    # TODO: Standards replace this with a mechanism to store this
-    # data in the chiller object itself.
-    # For now, retrieve the condenser type from the name
-    name = chiller_electric_eir.name.get
-    condenser_type = nil
-    compressor_type = nil
-    if chiller_electric_eir.additionalProperties.hasFeature('compressor_type')
-      compressor_type = chiller_electric_eir.additionalProperties.getFeatureAsString('compressor_type').get
-    end
-    unless condenser_type.nil?
-      search_criteria['condenser_type'] = condenser_type
-    end
-    unless compressor_type.nil?
-      search_criteria['compressor_type'] = compressor_type
-    end
-
-    return search_criteria
-  end
-
   # Applies the standard efficiency ratings to this object.
   #
   # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
