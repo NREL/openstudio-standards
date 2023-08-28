@@ -78,35 +78,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     return sys_num
   end
 
-  # Change the fuel type based on climate zone, depending on the standard.
-  # For 90.1-2013, fuel type is based on climate zone, not the proposed model.
-  # @return [String] the revised fuel type
-  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
-    if custom == 'Xcel Energy CO EDA'
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 rules for heating fuel type (based on proposed model) rules apply.')
-      return fuel_type
-    end
-
-    # For 90.1-2013 the fuel type is determined based on climate zone.
-    # Don't change the fuel if it purchased heating or cooling.
-    if fuel_type == 'electric' || fuel_type == 'fossil'
-      case climate_zone
-      when 'ASHRAE 169-2006-1A',
-           'ASHRAE 169-2006-2A',
-           'ASHRAE 169-2006-3A',
-           'ASHRAE 169-2013-1A',
-           'ASHRAE 169-2013-2A',
-           'ASHRAE 169-2013-3A'
-        fuel_type = 'electric'
-      else
-        fuel_type = 'fossil'
-      end
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Heating fuel is #{fuel_type} for 90.1-2013, climate zone #{climate_zone}.  This is independent of the heating fuel type in the proposed building, per G3.1.1-3.  This is different than previous versions of 90.1.")
-    end
-
-    return fuel_type
-  end
-
   # Determines the skylight to roof ratio limit for a given standard
   # 3% for 90.1-PRM-2019
   # @return [Double] the skylight to roof ratio, as a percent: 5.0 = 5%

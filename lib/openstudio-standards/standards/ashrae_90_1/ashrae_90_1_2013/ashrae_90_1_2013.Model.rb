@@ -69,13 +69,12 @@ class ASHRAE9012013 < ASHRAE901
 
   # Change the fuel type based on climate zone, depending on the standard.
   # For 90.1-2013, fuel type is based on climate zone, not the proposed model.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fuel_type [String] Valid choices are electric, fossil, fossilandelectric,
+  #   purchasedheat, purchasedcooling, purchasedheatandcooling
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the revised fuel type
-  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
-    if custom == 'Xcel Energy CO EDA'
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 rules for heating fuel type (based on proposed model) rules apply.')
-      return fuel_type
-    end
-
+  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
     # For 90.1-2013 the fuel type is determined based on climate zone.
     # Don't change the fuel if it purchased heating or cooling.
     if fuel_type == 'electric' || fuel_type == 'fossil'
