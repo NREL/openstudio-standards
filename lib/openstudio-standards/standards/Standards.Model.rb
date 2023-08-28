@@ -7201,9 +7201,12 @@ class Standard
   # @return [Bool] true if successful, false if not
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param [String] wwr_building_type window to wall ratio building type
+  # @param [Hash] hash of extra info for the wwr lookup
   # @return [Bool] returns true if successful, false if not
+  # @todo: wwr inputs may not be necessary, or may be searchable from the model
   def model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
-    model_apply_standard_constructions(model, climate_zone, wwr_building_type: nil, wwr_info: {})
+    model_apply_standard_constructions(model, climate_zone, wwr_building_type: wwr_building_type, wwr_info: wwr_info)
 
     return true
   end
