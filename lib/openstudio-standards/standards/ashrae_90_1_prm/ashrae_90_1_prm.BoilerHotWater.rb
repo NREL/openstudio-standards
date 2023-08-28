@@ -1,25 +1,6 @@
 class ASHRAE901PRM < Standard
   # @!group BoilerHotWater
 
-  # find search criteria
-  #
-  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
-  # @return [Hash] used for standards_lookup_table(model)
-  def boiler_hot_water_find_search_criteria(boiler_hot_water)
-    # Define the criteria to find the boiler properties
-    # in the hvac standards data set.
-    search_criteria = {}
-    search_criteria['template'] = template
-
-    # Get fuel type
-    search_criteria['fuel_type'] = 'Gas'
-
-    # Get the fluid type
-    search_criteria['fluid_type'] = 'Hot Water'
-
-    return search_criteria
-  end
-
   # Finds lookup object in standards and return minimum thermal efficiency
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
