@@ -33,40 +33,20 @@ class ASHRAE901PRM < Standard
     return search_criteria
   end
 
-  # Finds lookup object in standards and return full load efficiency
-  #
-  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
-  # @return [Double] full load efficiency (COP), [Double] capacity in tons, [Double] kw/ton
-  def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
-    # Get the chiller properties
-    search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
-    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
-    unless capacity_w
-      return nil
-    end
-
-    capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
-    chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
-
-    if chlr_props.nil? || !chlr_props['minimum_full_load_efficiency']
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency.")
-      return nil
-    else
-      # lookup the efficiency value
-      kw_per_ton = chlr_props['minimum_full_load_efficiency']
-      cop = kw_per_ton_to_cop(kw_per_ton)
-    end
-
-    return cop, capacity_tons, kw_per_ton
-  end
-
   # Applies the standard efficiency ratings to this object.
   #
   # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir)
+    # Get the chiller capacity
+    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
+
+    # Convert capacity to tons
+    capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
+    
     # Set the efficiency value
-    cop, capacity_tons, kw_per_ton = chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
+    cop = chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
+    kw_per_ton = cop_to_kw_per_ton(cop)
     if cop.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency, will not be set.")
       successfully_set_all_properties = false
