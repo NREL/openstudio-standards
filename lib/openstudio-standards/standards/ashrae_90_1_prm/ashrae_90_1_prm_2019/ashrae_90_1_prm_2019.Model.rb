@@ -122,14 +122,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     return fuel_type
   end
 
-  # Determines the fan type used by VAV_Reheat and VAV_PFP_Boxes systems.
-  # Variable speed fan for 90.1-2013
-  # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan
-  def model_baseline_system_vav_fan_type(model)
-    fan_type = 'Variable Speed Fan'
-    return fan_type
-  end
-
   # Determines the skylight to roof ratio limit for a given standard
   # 3% for 90.1-PRM-2019
   # @return [Double] the skylight to roof ratio, as a percent: 5.0 = 5%
