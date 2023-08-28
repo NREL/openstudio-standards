@@ -72,7 +72,7 @@ class Standard
       # errors
       if !model_run_sizing_run(user_model, "#{sizing_run_dir}/USER-SR")
         OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-                          "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+                           "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
         prm_raise(false,
                   sizing_run_dir,
                   "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
@@ -81,7 +81,7 @@ class Standard
       # Check if proposed HVAC system is autosized
       if model_is_hvac_autosized(user_model)
         OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-          "The user model's HVAC system is partly autosized. Baseline and proposed model(s) won't be created.")
+                           "The user model's HVAC system is partly autosized. Baseline and proposed model(s) won't be created.")
       end
 
       # Generate proposed model from the user-provided model
@@ -586,14 +586,14 @@ class Standard
     user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
     user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
     infiltration_modeled_from_field_verification_results = user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results'].to_s.downcase
-    
-    # If needed, modify user model infiltration    
+
+    # If needed, modify user model infiltration
     if user_buildings
       # Calculate total infiltration flow rate per envelope area
       building_envelope_area_m2 = model_building_envelope_area(proposed_model)
       curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(proposed_model, building_envelope_area_m2)
       curr_tot_infil_cfm_per_envelope_area = OpenStudio.convert(curr_tot_infil_m3_per_s_per_envelope_area, 'm^3/s*m^2', 'cfm/ft^2').get
-    
+
       # Warn users if the infiltration modeling in the user/proposed model is not based on field verification
       # If not modeled based on field verification, it should be modeled as 0.6 cfm/ft2
       unless infiltration_modeled_from_field_verification_results.casecmp('Yes')
@@ -623,22 +623,20 @@ class Standard
       # Dormitory - living quarters : "dormitory - living quarters"
       # Dwelling units : "apartment - hardwired"
       # Hotel/Motel guestrooms : "guest room"
-#      standard_space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType').delete(' ').downcase
-#      user_lights = @standards_data.key?('userdata_lights') ? @standards_data['userdata_lights'] : nil
-#      if ["dormitory - living quarters", "apartment - hardwired", "guest room"].include?(standard_space_type)
-#        space.lights.each do |light|
-#          user_lights.each do |user_data|
-#            if user_data['name'].to_s.downcase == light.name.to_s && user_data['has_residential_exception'].to_s.downcase == 'yes'
-#              # as design
-#            else
-#              #max(as_design, prescribed)
-#            end
-#          end
-#        end
-#      end
+      #      standard_space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType').delete(' ').downcase
+      #      user_lights = @standards_data.key?('userdata_lights') ? @standards_data['userdata_lights'] : nil
+      #      if ["dormitory - living quarters", "apartment - hardwired", "guest room"].include?(standard_space_type)
+      #        space.lights.each do |light|
+      #          user_lights.each do |user_data|
+      #            if user_data['name'].to_s.downcase == light.name.to_s && user_data['has_residential_exception'].to_s.downcase == 'yes'
+      #              # as design
+      #            else
+      #              #max(as_design, prescribed)
+      #            end
+      #          end
+      #        end
+      #      end
     end
-
-
 
     return proposed_model
   end
@@ -646,7 +644,7 @@ class Standard
   # Determine whether or not the HVAC system in a model is autosized
   #
   # As it is not realistic expectation to have all autosizable
-  # fields hard input, the method relies on autosizable field 
+  # fields hard input, the method relies on autosizable field
   # of prime movers (fans, pumps) and heating/cooling devices
   # in the models (boilers, chillers, coils)
   #
@@ -656,11 +654,11 @@ class Standard
     is_hvac_autosized = false
     model.modelObjects.each do |obj|
       obj_type = obj.iddObjectType.valueName.to_s.downcase
-      
+
       # Check if the object needs to be checked for autosizing
       obj_to_be_checked_for_autosizing = false
       if obj_type.include?('chiller') || obj_type.include?('boiler') || obj_type.include?('coil') || obj_type.include?('fan') || obj_type.include?('pump') || obj_type.include?('waterheater')
-        if !(obj_type.include?('controller'))
+        if !obj_type.include?('controller')
           obj_to_be_checked_for_autosizing = true
         end
       end
@@ -675,7 +673,7 @@ class Standard
           if method.to_s.include?('is') && method.to_s.include?('Autosized')
             if casted_obj.public_send(method) == true
               is_hvac_autosized = true
-              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The #{method.to_s.sub('is', '').sub("Autosized", "").sub(':', '')} field of the #{obj_type} named #{casted_obj.name.to_s} is autosized. It should be hard sized.")
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The #{method.to_s.sub('is', '').sub('Autosized', '').sub(':', '')} field of the #{obj_type} named #{casted_obj.name} is autosized. It should be hard sized.")
             end
           end
         end

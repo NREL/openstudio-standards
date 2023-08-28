@@ -17,7 +17,6 @@ class Standard
                                               proportional_gain: 0.3,
                                               switch_over_time: 24.0)
 
-
     zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
 
@@ -35,8 +34,8 @@ class Standard
     # set radiant system temperature and setpoint control type
     unless ['surfacefacetemperature', 'surfaceinteriortemperature'].include? radiant_temperature_control_type.downcase
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
-        "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
-      radiant_temperature_control_type = "SurfaceFaceTemperature"
+                         "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
+      radiant_temperature_control_type = 'SurfaceFaceTemperature'
     end
 
     radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
@@ -46,19 +45,19 @@ class Standard
     ####
 
     # get existing switchover time schedule or create one if needed
-    sch_radiant_switchover = model.getScheduleRulesetByName("Radiant System Switchover")
+    sch_radiant_switchover = model.getScheduleRulesetByName('Radiant System Switchover')
     if sch_radiant_switchover.is_initialized
       sch_radiant_switchover = sch_radiant_switchover.get
     else
       sch_radiant_switchover = model_add_constant_schedule_ruleset(model,
                                                                    switch_over_time,
-                                                                   name = "Radiant System Switchover",
-                                                                   sch_type_limit: "Dimensionless")
+                                                                   name = 'Radiant System Switchover',
+                                                                   sch_type_limit: 'Dimensionless')
     end
 
     # set radiant system switchover schedule
     radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover.to_Schedule.get)
-    
+
     # Calculated active slab heating and cooling temperature setpoint.
     # radiant system cooling control actuator
     sch_radiant_clgsetp = model_add_constant_schedule_ruleset(model,
@@ -97,7 +96,6 @@ class Standard
                                                                           'Schedule:Year',
                                                                           'Schedule Value')
     cmd_hsp_error.setName("#{zone_name}_cmd_hsp_error")
-
 
     #####
     # List of global variables used in EMS scripts
@@ -186,24 +184,24 @@ class Standard
     end
 
     # create new heating and cooling schedules to be used with all radiant systems
-    zone_htg_thermostat = model.getScheduleRulesetByName("Radiant System Heating Setpoint")
+    zone_htg_thermostat = model.getScheduleRulesetByName('Radiant System Heating Setpoint')
     if zone_htg_thermostat.is_initialized
       zone_htg_thermostat = zone_htg_thermostat.get
     else
       zone_htg_thermostat = model_add_constant_schedule_ruleset(model,
                                                                 20.0,
-                                                                name = "Radiant System Heating Setpoint",
-                                                                sch_type_limit: "Temperature")
+                                                                name = 'Radiant System Heating Setpoint',
+                                                                sch_type_limit: 'Temperature')
     end
 
-    zone_clg_thermostat = model.getScheduleRulesetByName("Radiant System Cooling Setpoint")
+    zone_clg_thermostat = model.getScheduleRulesetByName('Radiant System Cooling Setpoint')
     if zone_clg_thermostat.is_initialized
       zone_clg_thermostat = zone_clg_thermostat.get
     else
       zone_clg_thermostat = model_add_constant_schedule_ruleset(model,
                                                                 26.0,
-                                                                name = "Radiant System Cooling Setpoint",
-                                                                sch_type_limit: "Temperature")
+                                                                name = 'Radiant System Cooling Setpoint',
+                                                                sch_type_limit: 'Temperature')
     end
 
     # implement new heating and cooling schedules
@@ -230,13 +228,13 @@ class Standard
     zone_rad_heat_operation.setName("#{zone_name}_rad_heat_operation")
     zone_rad_heat_operation.setKeyName(coil_heating_radiant.to_StraightComponent.get.inletModelObject.get.name.get)
 
-    # Radiant system switchover delay time period schedule 
+    # Radiant system switchover delay time period schedule
     # used to determine if there is active hydronic cooling/heating in the radiant system.
-    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName("radiant_switch_over_time")
+    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName('radiant_switch_over_time')
 
     unless zone_rad_switch_over.is_initialized
       zone_rad_switch_over = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-      zone_rad_switch_over.setName("radiant_switch_over_time")
+      zone_rad_switch_over.setName('radiant_switch_over_time')
       zone_rad_switch_over.setKeyName(sch_radiant_switchover.name.get)
     end
 
@@ -387,6 +385,5 @@ class Standard
     zone_max_ctrl_temp_output.setName("#{zone_name} Maximum occupied temperature in zone")
     zone_min_ctrl_temp_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_min_ctrl_temp)
     zone_min_ctrl_temp_output.setName("#{zone_name} Minimum occupied temperature in zone")
-
   end
 end

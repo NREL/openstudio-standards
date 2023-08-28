@@ -141,7 +141,7 @@ class ZEAEDGMultifamily < ASHRAE901
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.
-  def space_infiltration_rate_75_pa(space=nil)
+  def space_infiltration_rate_75_pa(space = nil)
     basic_infil_rate_cfm_per_ft2 = 0.5 # Half of 90.1-2013
     return basic_infil_rate_cfm_per_ft2
   end

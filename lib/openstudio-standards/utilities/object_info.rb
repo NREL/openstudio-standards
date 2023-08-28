@@ -21,7 +21,7 @@ Standard.class_eval do
     return output_hash
   end
 
-  # This method is used to automatically cast a model 
+  # This method is used to automatically cast a model
   # object based on its IDD object type
   #
   # @param [OpenStudio::Model::ModelObject]

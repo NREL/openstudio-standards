@@ -142,7 +142,7 @@ class ASHRAE901PRM < Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Calculated building envelope area is 0 m2, no infiltration will be added.')
       return 0.0
     end
-  
+
     return building_envelope_area_m2
   end
 
@@ -318,7 +318,7 @@ class ASHRAE901PRM < Standard
         space_type = space.spaceType.get
         unless space_type.spaceInfiltrationDesignFlowRates.empty?
           if bldg_air_leakage_rate > 0
-            OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "A duplicated infiltration definition is found in spaceType. Verify your model inputs.")
+            OpenStudio.logFree(OpenStudio::Warn, 'prm.log', 'A duplicated infiltration definition is found in spaceType. Verify your model inputs.')
           end
           infil_obj = space_type.spaceInfiltrationDesignFlowRates[0]
           unless infil_obj.designFlowRate.is_initialized
@@ -2385,7 +2385,7 @@ class ASHRAE901PRM < Standard
     zones = model_zones_with_occ_and_fuel_type(model, 'custom')
 
     # Ensure that there is at least one conditioned zone
-    prm_raise(zones.size > 0, @sizing_run_dir, 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
+    prm_raise(!zones.empty?, @sizing_run_dir, 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
 
     # Consider special rules for computer rooms
     # need load of all
