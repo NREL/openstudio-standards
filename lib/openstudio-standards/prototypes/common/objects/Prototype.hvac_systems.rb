@@ -4537,7 +4537,8 @@ class Standard
   #   for all radiant zones. default to true.
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
   #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
-  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule.
+  #   Only used if use_zone_occupancy_for_control is set to true.
   # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Starting hour of building occupancy.
   # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
