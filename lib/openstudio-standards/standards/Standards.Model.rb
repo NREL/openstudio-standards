@@ -1276,37 +1276,6 @@ class Standard
     return fuel_type # Don't change fuel type for most templates
   end
 
-  # Determine whether heating type is fuel or electric
-  # @param hvac_building_type [String] Key for lookup of baseline system type
-  # @param climate_zone [String] full name of climate zone
-  # @return [String] fuel or electric
-  def find_prm_heat_type(hvac_building_type, climate_zone)
-    climate_code = get_climate_zone_code(climate_zone)
-    heat_type_props = model_find_object(standards_data['prm_heat_type'],
-                                        'template' => template,
-                                        'hvac_building_type' => hvac_building_type,
-                                        'climate_zone' => climate_code)
-    if !heat_type_props
-      # try again with wild card for climate
-      heat_type_props = model_find_object(standards_data['prm_heat_type'],
-                                          'template' => template,
-                                          'hvac_building_type' => hvac_building_type,
-                                          'climate_zone' => 'any')
-    end
-    if !heat_type_props
-      # try again with wild card for building type
-      heat_type_props = model_find_object(standards_data['prm_heat_type'],
-                                          'template' => template,
-                                          'hvac_building_type' => 'all others',
-                                          'climate_zone' => climate_code)
-    end
-    if !heat_type_props
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline heat type for: #{template}-#{hvac_building_type}-#{climate_zone}.")
-    else
-      return heat_type_props['heat_type']
-    end
-  end
-
   # Get ASHRAE ID code for climate zone
   # @param climate_zone [String] full name of climate zone
   # @return [String] ASHRAE ID code for climate zone
