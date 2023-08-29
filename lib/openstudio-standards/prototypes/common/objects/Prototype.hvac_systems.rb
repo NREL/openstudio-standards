@@ -4535,6 +4535,9 @@ class Standard
   # @param use_zone_occupancy_for_control [Bool] Set to true if radiant system is to use specific zone occupancy objects
   #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
   #   for all radiant zones. default to true.
+  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
   # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Starting hour of building occupancy.
   # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
@@ -4566,6 +4569,7 @@ class Standard
                                  carpet_thickness_in: 0.25,
                                  control_strategy: 'proportional_control',
                                  use_zone_occupancy_for_control: true,
+                                 occupied_percentage_threshold: 0.10,
                                  model_occ_hr_start: 6.0,
                                  model_occ_hr_end: 18.0,
                                  proportional_gain: 0.3,
@@ -4931,6 +4935,7 @@ class Standard
         model_add_radiant_proportional_controls(model, zone, radiant_loop,
                                                 radiant_temperature_control_type: radiant_temperature_control_type,
                                                 use_zone_occupancy_for_control: use_zone_occupancy_for_control,
+                                                occupied_percentage_threshold: occupied_percentage_threshold,
                                                 model_occ_hr_start: model_occ_hr_start,
                                                 model_occ_hr_end: model_occ_hr_end,
                                                 proportional_gain: proportional_gain,
