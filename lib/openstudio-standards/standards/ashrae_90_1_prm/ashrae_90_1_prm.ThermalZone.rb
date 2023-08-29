@@ -167,11 +167,11 @@ class ASHRAE901PRM < Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
     end
 
-    htg_fuels = zone.heatingFuelTypes
+    htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
     if htg_fuels.include?('DistrictHeating')
       zone_fuels = 'DistrictHeating'
     end
-    clg_fuels = zone.coolingFuelTypes
+    clg_fuels = zone.coolingFuelTypes.map { |f| f.valueName }
     if clg_fuels.include?('DistrictCooling')
       zone_fuels += 'DistrictCooling'
     end

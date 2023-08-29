@@ -1404,7 +1404,7 @@ class Standard
               OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
             end
 
-            secondary_fuels += source_plant_loop.heatingFuelTypes
+            secondary_fuels += source_plant_loop.heatingFuelTypes.map { |f| f.valueName }
             secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop)
           end
 
@@ -1433,7 +1433,7 @@ class Standard
               OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
             end
 
-            secondary_fuels += source_plant_loop.heatingFuelTypes
+            secondary_fuels += source_plant_loop.heatingFuelTypes.map { |f| f.valueName }
             secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop)
           end
 
@@ -1454,7 +1454,7 @@ class Standard
               OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
             end
 
-            secondary_fuels += source_plant_loop.heatingFuelTypes
+            secondary_fuels += source_plant_loop.heatingFuelTypes.map { |f| f.valueName }
             secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop)
           end
 

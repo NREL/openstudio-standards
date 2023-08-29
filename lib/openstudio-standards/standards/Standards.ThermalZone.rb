@@ -611,12 +611,15 @@ class Standard
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
     end
 
-    htg_fuels = thermal_zone.heatingFuelTypes
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
 
-    if htg_fuels.include?('NaturalGas') ||
+    if htg_fuels.include?('Gas') 
+       htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil_1') ||
        htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOil_2') ||
        htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
@@ -659,11 +662,14 @@ class Standard
     end
 
     # Fossil heating
-    htg_fuels = thermal_zone.heatingFuelTypes
-    if htg_fuels.include?('NaturalGas') ||
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+    if htg_fuels.include?('Gas') 
+       htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil_1') ||
        htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOil_2') ||
        htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
@@ -732,14 +738,17 @@ class Standard
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = thermal_zone.heatingFuelTypes
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
 
     # Includes fossil
     fossil = false
-    if htg_fuels.include?('NaturalGas') ||
+    if htg_fuels.include?('Gas') 
+       htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil_1') ||
        htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOil_2') ||
        htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
@@ -859,8 +868,8 @@ class Standard
     end
 
     # Get the zone heating and cooling fuels
-    htg_fuels = thermal_zone.heatingFuelTypes
-    clg_fuels = thermal_zone.coolingFuelTypes
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+    clg_fuels = thermal_zone.coolingFuelTypes.map { |f| f.valueName }
     is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
 
     # Infer the HVAC type

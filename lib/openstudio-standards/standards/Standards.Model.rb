@@ -872,8 +872,8 @@ class Standard
     end
 
     model.getThermalZones.sort.each do |zone|
-      all_htg_fuels += zone.heatingFuelTypes
-      all_clg_fuels += zone.coolingFuelTypes
+      all_htg_fuels += zone.heatingFuelTypes.map { |f| f.valueName }
+      all_clg_fuels += zone.coolingFuelTypes.map { |f| f.valueName }
     end
 
     purchased_heating = false
@@ -940,7 +940,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
       end
 
-      htg_fuels = zone.heatingFuelTypes
+      htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
       if htg_fuels.include?('DistrictHeating')
         has_district_hash[zone.name] = true
         has_district_hash['building'] = true
@@ -966,7 +966,8 @@ class Standard
     end
 
     zones.each do |zone|
-      if zone.heatingFuelTypes.include?('DistrictHeating')
+      htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
+      if htg_fuels.include?('DistrictHeating')
         has_district_heat = true
       end
       other_heat = thermal_zone_fossil_or_electric_type(zone, '')
