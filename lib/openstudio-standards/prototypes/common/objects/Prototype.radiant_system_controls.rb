@@ -8,14 +8,18 @@ class Standard
   # @param use_zone_occupancy_for_control [Bool] Set to true if radiant system is to use specific zone occupancy objects
   #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
   #   for all radiant zones. default to true.
-  # @param model_occ_hr_start [Double] Starting hour of building occupancy
-  # @param model_occ_hr_end [Double] Ending hour of building occupancy
+  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  # @param model_occ_hr_start [Double] Starting decimal hour of whole building occupancy
+  # @param model_occ_hr_end [Double] Ending decimal hour of whole building occupancy
   # @todo model_occ_hr_start and model_occ_hr_end from zone occupancy schedules
   # @param proportional_gain [Double] Proportional gain constant (recommended 0.3 or less).
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
   def model_add_radiant_proportional_controls(model, zone, radiant_loop,
                                               radiant_temperature_control_type: 'SurfaceFaceTemperature',
                                               use_zone_occupancy_for_control: true,
+                                              occupied_percentage_threshold: 0.10,
                                               model_occ_hr_start: 6.0,
                                               model_occ_hr_end: 18.0,
                                               proportional_gain: 0.3,
@@ -57,7 +61,7 @@ class Standard
       sch_radiant_switchover = model_add_constant_schedule_ruleset(model,
                                                                    switch_over_time,
                                                                    name = "Radiant System Switchover",
-                                                                   sch_type_limit: "fraction")
+                                                                   sch_type_limit: "Dimensionless")
     end
 
     # set radiant system switchover schedule
@@ -107,31 +111,6 @@ class Standard
     # List of global variables used in EMS scripts
     ####
 
-    # assign different variable names if using zone occupancy for control
-    if use_zone_occupancy_for_control
-      zone_occ_hr_start_name = "#{zone_name}_occ_hr_start"
-      zone_occ_hr_end_name = "#{zone_name}_occ_hr_end"
-    else
-      zone_occ_hr_start_name = "occ_hr_start"
-      zone_occ_hr_end_name = "occ_hr_end"
-    end
-
-    # Start of occupied time of zone. Valid from 1-24.
-    occ_hr_start = model.getEnergyManagementSystemGlobalVariableByName(zone_occ_hr_start_name)
-    if occ_hr_start.is_initialized
-      occ_hr_start = occ_hr_start.get
-    else
-      occ_hr_start = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, zone_occ_hr_start_name)
-    end
-
-    # End of occupied time of zone. Valid from 1-24.
-    occ_hr_end = model.getEnergyManagementSystemGlobalVariableByName(zone_occ_hr_end_name)
-    if occ_hr_end.is_initialized
-      occ_hr_end = occ_hr_end.get
-    else
-      occ_hr_end = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, zone_occ_hr_end_name)
-    end
-
     # Proportional  gain constant (recommended 0.3 or less).
     prp_k = model.getEnergyManagementSystemGlobalVariableByName('prp_k')
     if prp_k.is_initialized
@@ -162,6 +141,14 @@ class Standard
       ctrl_temp_offset = ctrl_temp_offset.get
     else
       ctrl_temp_offset = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'ctrl_temp_offset')
+    end
+
+    # Hour where slab setpoint is to be changed
+    hour_of_slab_sp_change = model.getEnergyManagementSystemGlobalVariableByName('hour_of_slab_sp_change')
+    if hour_of_slab_sp_change.is_initialized
+      hour_of_slab_sp_change = hour_of_slab_sp_change.get
+    else
+      hour_of_slab_sp_change = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'hour_of_slab_sp_change')
     end
 
     #####
@@ -267,62 +254,60 @@ class Standard
     if use_zone_occupancy_for_control
 
       # get annual occupancy schedule for zone
-      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone)
-      occ_values = schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
-
-      # transform annual occupancy into 24 slices and transform
-      occ_values_2d = occ_values.each_slice(24).to_a.transpose()
-
-      # find 24-hour mean using the 365 days
-      mean_occ_values = (0..23).collect{ |hr| occ_values_2d[hr].sum() / occ_values_2d[hr].size() }
-
-      # find start and end hours that meet occupancy threshold
-      zone_occ_hr_start = mean_occ_values.index{ |n| n >= 0.25 }
-      zone_occ_hr_end = 24 - mean_occ_values.reverse().index{ |n| n >= 0.25 }
-
-      # remove occupancy schedule ruleset that was created
-      occ_schedule_ruleset.scheduleRules.each { |item| model.removeObject(item.daySchedule.handle) }
-      occ_schedule_ruleset.children.each { |item| model.removeObject(item.handle) }
-      model.removeObject(occ_schedule_ruleset.handle)
-
-      if zone_occ_hr_start > zone_occ_hr_end
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
-          "Zone occupancy start hour (#{zone_occ_hr_start}) is greater than zone occupancy end hour (#{zone_occ_hr_end}) in zone #{zone.name.to_s}")
-      end
-
-      if zone_occ_hr_start == zone_occ_hr_end
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model',
-          "Zone occupancy start hour (#{zone_occ_hr_start}) is equal to zone occupancy end hour (#{zone_occ_hr_end}) in zone #{zone.name.to_s}, i.e. no occupancy")
-      end
-
+      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone,
+                                                                 sch_name: "#{zone.name} Radiant System Occupied Schedule",
+                                                                 occupied_percentage_threshold: occupied_percentage_threshold)
     else
-      zone_occ_hr_start = model_occ_hr_start
-      zone_occ_hr_end = model_occ_hr_end
+
+      occ_schedule_ruleset = model.getScheduleRulesetByName("Whole Building Radiant System Occupied Schedule")
+      if occ_schedule_ruleset.is_initialized
+        occ_schedule_ruleset = occ_schedule_ruleset.get
+      else
+        # create occupancy schedules
+        occ_schedule_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
+        occ_schedule_ruleset.setName("Whole Building Radiant System Occupied Schedule")
+
+        start_hour = model_occ_hr_end.to_i
+        start_minute = ((model_occ_hr_end % 1) * 60).to_i
+        end_hour = model_occ_hr_start.to_i
+        end_minute = ((model_occ_hr_start % 1) * 60).to_i
+
+        if end_hour > start_hour
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0) if end_hour < 24
+        elsif start_hour > end_hour
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.0) if start_hour < 24
+        else
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
+        end
+      end
     end
+
+    # create ems sensor for zone occupied status
+    zone_occupied_status = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+    zone_occupied_status.setName("#{zone_name}_occupied_status")
+    zone_occupied_status.setKeyName(occ_schedule_ruleset.name.get)
+
+    # Last 24 hours trend for zone occupied status
+    zone_occupied_status_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_occupied_status)
+    zone_occupied_status_trend.setName("#{zone_name}_occupied_status_trend")
+    zone_occupied_status_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 48)
 
     #####
     # List of EMS programs to implement the proportional control for the radiant system.
     ####
 
     # Initialize global constant values used in EMS programs.
-    # Exclude occupancy hours variables if specific to zones
-    if use_zone_occupancy_for_control
-      set_constant_values_prg_body = <<-EMS
-        SET prp_k              = #{proportional_gain},
-        SET ctrl_temp_offset   = 0.5,
-        SET upper_slab_sp_lim  = 29,
-        SET lower_slab_sp_lim  = 19
-      EMS
-    else
-      set_constant_values_prg_body = <<-EMS
-        SET occ_hr_start       = #{zone_occ_hr_start},
-        SET occ_hr_end         = #{zone_occ_hr_end},
-        SET prp_k              = #{proportional_gain},
-        SET ctrl_temp_offset   = 0.5,
-        SET upper_slab_sp_lim  = 29,
-        SET lower_slab_sp_lim  = 19
-      EMS
-    end
+    set_constant_values_prg_body = <<-EMS
+      SET prp_k              = #{proportional_gain},
+      SET ctrl_temp_offset   = 0.5,
+      SET upper_slab_sp_lim  = 29,
+      SET lower_slab_sp_lim  = 19,
+      SET hour_of_slab_sp_change = 18
+    EMS
 
     set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Constant_Values')
     unless set_constant_values_prg.is_initialized
@@ -332,10 +317,7 @@ class Standard
     end
 
     # Initialize zone specific constant values used in EMS programs.
-    if use_zone_occupancy_for_control
-      set_constant_zone_values_prg_body = <<-EMS
-      SET #{zone_occ_hr_start_name}       = #{zone_occ_hr_start},
-      SET #{zone_occ_hr_end_name}         = #{zone_occ_hr_end},
+    set_constant_zone_values_prg_body = <<-EMS
       SET #{zone_name}_max_ctrl_temp      = #{zone_name}_lower_comfort_limit,
       SET #{zone_name}_min_ctrl_temp      = #{zone_name}_upper_comfort_limit,
       SET #{zone_name}_cmd_csp_error      = 0,
@@ -343,16 +325,7 @@ class Standard
       SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_upper_comfort_limit,
       SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_lower_comfort_limit
     EMS
-    else
-      set_constant_zone_values_prg_body = <<-EMS
-      SET #{zone_name}_max_ctrl_temp      = #{zone_name}_lower_comfort_limit,
-      SET #{zone_name}_min_ctrl_temp      = #{zone_name}_upper_comfort_limit,
-      SET #{zone_name}_cmd_csp_error      = 0,
-      SET #{zone_name}_cmd_hsp_error      = 0,
-      SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_upper_comfort_limit,
-      SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_lower_comfort_limit
-    EMS
-    end
+
     set_constant_zone_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     set_constant_zone_values_prg.setName("#{zone_name}_Set_Constant_Values")
     set_constant_zone_values_prg.setBody(set_constant_zone_values_prg_body)
@@ -361,7 +334,7 @@ class Standard
     calculate_minmax_ctrl_temp_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     calculate_minmax_ctrl_temp_prg.setName("#{zone_name}_Calculate_Extremes_In_Zone")
     calculate_minmax_ctrl_temp_prg_body = <<-EMS
-      IF ((CurrentTime >= #{zone_occ_hr_start_name}) && (CurrentTime <= #{zone_occ_hr_end_name})),
+      IF (#{zone_name}_occupied_status == 1),
           IF #{zone_name}_ctrl_temperature > #{zone_name}_max_ctrl_temp,
               SET #{zone_name}_max_ctrl_temp = #{zone_name}_ctrl_temperature,
           ENDIF,
@@ -379,7 +352,7 @@ class Standard
     calculate_errors_from_comfort_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     calculate_errors_from_comfort_prg.setName("#{zone_name}_Calculate_Errors_From_Comfort")
     calculate_errors_from_comfort_prg_body = <<-EMS
-      IF (CurrentTime >= (#{zone_occ_hr_end_name} - ZoneTimeStep)) && (CurrentTime <= (#{zone_occ_hr_end_name})),
+      IF (CurrentTime == (hour_of_slab_sp_change - ZoneTimeStep)),
           SET #{zone_name}_cmd_csp_error = (#{zone_name}_upper_comfort_limit - ctrl_temp_offset) - #{zone_name}_max_ctrl_temp,
           SET #{zone_name}_cmd_hsp_error = (#{zone_name}_lower_comfort_limit + ctrl_temp_offset) - #{zone_name}_min_ctrl_temp,
       ENDIF
@@ -392,9 +365,10 @@ class Standard
     calculate_slab_ctrl_setpoint_prg_body = <<-EMS
       SET #{zone_name}_cont_cool_oper = @TrendSum #{zone_name}_rad_cool_operation_trend radiant_switch_over_time/ZoneTimeStep,
       SET #{zone_name}_cont_heat_oper = @TrendSum #{zone_name}_rad_heat_operation_trend radiant_switch_over_time/ZoneTimeStep,
-      IF (#{zone_name}_cont_cool_oper > 0) && (CurrentTime == #{zone_occ_hr_end_name}),
+      SET #{zone_name}_occupied_hours = @TrendSum #{zone_name}_occupied_status_trend 24/ZoneTimeStep,
+      IF (#{zone_name}_cont_cool_oper > 0) && (#{zone_name}_occupied_hours > 0) && (CurrentTime == hour_of_slab_sp_change),
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_csp_error*prp_k),
-      ELSEIF (#{zone_name}_cont_heat_oper > 0) && (CurrentTime == #{zone_occ_hr_end_name}),
+      ELSEIF (#{zone_name}_cont_heat_oper > 0) && (#{zone_name}_occupied_hours > 0) && (CurrentTime == hour_of_slab_sp_change),
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_hsp_error*prp_k),
       ELSE,
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl,
