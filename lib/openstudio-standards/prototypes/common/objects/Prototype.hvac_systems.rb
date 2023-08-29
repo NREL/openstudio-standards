@@ -4544,6 +4544,10 @@ class Standard
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
+  # @param slab_sp_at_oat_low [Double] radiant slab temperature setpoint, in F, at the outdoor high temperature.
+  # @param slab_oat_low [Double] outdoor drybulb air temperature, in F, for low radiant slab setpoint.
+  # @param slab_sp_at_oat_high [Double] radiant slab temperature setpoint, in F, at the outdoor low temperature.
+  # @param slab_oat_high [Double] outdoor drybulb air temperature, in F, for high radiant slab setpoint.
   # @param radiant_availability_type [String] a preset that determines the availability of the radiant system
   #   options are 'all_day', 'precool', 'afternoon_shutoff', 'occupancy'
   #   If preset is set to 'all_day' radiant system is available 24 hours a day, 'precool' primarily operates
@@ -4571,6 +4575,10 @@ class Standard
                                  control_strategy: 'proportional_control',
                                  proportional_gain: 0.3,
                                  switch_over_time: 24.0,
+                                 slab_sp_at_oat_low: 73,
+                                 slab_oat_low: 65,
+                                 slab_sp_at_oat_high: 68,
+                                 slab_oat_high: 80,
                                  radiant_availability_type: 'precool',
                                  radiant_lockout: false,
                                  radiant_lockout_start_time: 12.0,
@@ -4943,13 +4951,21 @@ class Standard
             model_add_radiant_basic_controls(model, zone, radiant_loop,
                                             radiant_temperature_control_type: radiant_temperature_control_type,
                                             slab_setpoint_oa_control: true,
-                                            switch_over_time: switch_over_time)
+                                            switch_over_time: switch_over_time,
+                                            slab_sp_at_oat_low: slab_sp_at_oat_low,
+                                            slab_oat_low: slab_oat_low,
+                                            slab_sp_at_oat_high: slab_sp_at_oat_high,
+                                            slab_oat_high: slab_oat_high)
           when 'constant_control'
             # constant slab setpoint control
             model_add_radiant_basic_controls(model, zone, radiant_loop,
                                             radiant_temperature_control_type: radiant_temperature_control_type,
                                             slab_setpoint_oa_control: false,
-                                            switch_over_time: switch_over_time)
+                                            switch_over_time: switch_over_time,
+                                            slab_sp_at_oat_low: slab_sp_at_oat_low,
+                                            slab_oat_low: slab_oat_low,
+                                            slab_sp_at_oat_high: slab_sp_at_oat_high,
+                                            slab_oat_high: slab_oat_high)
           end
       end
     end
