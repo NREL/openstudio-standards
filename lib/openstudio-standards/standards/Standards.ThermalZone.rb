@@ -1329,14 +1329,14 @@ class Standard
 
     # Get the heating load
     htg_load_btu_per_ft2 = 0.0
-    htg_load_w_per_m2 = thermal_zone.autosizedHeatingDesignLoad
+    htg_load_w_per_m2 = thermal_zone.autosizedHeatingDesignLoad / thermal_zone.floorArea
     if htg_load_w_per_m2.is_initialized
       htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
     end
 
     # Get the cooling load
     clg_load_btu_per_ft2 = 0.0
-    clg_load_w_per_m2 = thermal_zone.autosizedCoolingDesignLoad
+    clg_load_w_per_m2 = thermal_zone.autosizedCoolingDesignLoad / thermal_zone.floorArea
     if clg_load_w_per_m2.is_initialized
       clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
     end
