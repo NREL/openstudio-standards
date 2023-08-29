@@ -594,6 +594,10 @@ class NECB2011 < Standard
                           pv_ground_module_description: pv_ground_module_description)
     end
 
+    # Rename air loop and plant loop nodes to accommodate coming OpenStudio version
+    rename_air_loop_nodes(model)
+    rename_plant_loop_nodes(model)
+
   end
 
   def apply_loads(model:,
