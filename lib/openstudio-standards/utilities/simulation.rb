@@ -286,7 +286,17 @@ Standard.class_eval do
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
         end
 
-        space_load_array << { 'space_name' => space.name, 'CoolingDesignLoad' => space.thermalZone.get.autosizedCoolingDesignLoad, 'HeatingDesignLoad' => space.thermalZone.get.autosizedHeatingDesignLoad }
+        space_cooling_load = 0.0
+        if space.thermalZone.get.autosizedCoolingDesignLoad.is_initialized
+          space_cooling_load = space.thermalZone.get.autosizedCoolingDesignLoad.get
+        end
+
+        space_heating_load = 0.0
+        if space.thermalZone.get.autosizedHeatingDesignLoad.is_initialized
+          space_heating_load = space.thermalZone.get.autosizedHeatingDesignLoad.get
+        end
+
+        space_load_array << { 'space_name' => space.name, 'CoolingDesignLoad' => space_cooling_load, 'HeatingDesignLoad' => space_heating_load }
       end
     end
     puts space_load_array
