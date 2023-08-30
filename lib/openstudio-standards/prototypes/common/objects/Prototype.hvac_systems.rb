@@ -4957,8 +4957,7 @@ class Standard
     if two_pipe_system
       model_two_pipe_water_plant(model, hot_water_loop, chilled_water_loop,
                                  heating_plant_lockout: heating_plant_lockout,
-                                 use_zone_demand: use_zone_demand,
-                                 thermal_zones: thermal_zones)
+                                 use_zone_demand: use_zone_demand)
     end
 
 
@@ -5798,6 +5797,45 @@ class Standard
     return fan_type
   end
 
+  # Get the thermal zones served by radiant slab components on a plant loop
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param plant_loop [OpenStudio::Model::PlantLoop] the plant loop that serves the radiant components
+  # @return [Array<OpenStudio::Model::ThermalZone>] array of zones to dictate cooling or heating mode of water plant
+  def plant_loop_get_radiant_zones(model, plant_loop)
+    thermal_zones = []
+    plant_loop.demandComponents.each do |component|
+      if plant_loop.componentType.valueDescription.downcase == 'heating'
+        next unless component.to_CoilHeatingLowTempRadiantVarFlow.is_initialized || component.to_CoilHeatingLowTempRadiantConstFlow.is_initialized
+
+        # check both types of radiant systems i.e. variable flow and constant flow systems
+        radiant_coil = model.getCoilHeatingLowTempRadiantVarFlowByName(component.name.get)
+        unless radiant_coil.is_initialized
+          radiant_coil = model.getCoilHeatingLowTempRadiantConstFlowByName(component.name.get)
+        end
+      else
+        next unless component.to_CoilCoolingLowTempRadiantVarFlow.is_initialized || component.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
+
+        # check both types of radiant systems i.e. variable flow and constant flow systems
+        radiant_coil = model.getCoilCoolingLowTempRadiantVarFlowByName(component.name.get)
+        unless radiant_coil.is_initialized
+          radiant_coil = model.getCoilHeatingLowTempRadiantConstFlowByName(component.name.get)
+        end
+      end
+
+      # get corresponding radiant loop for coil
+      radiant_coil = radiant_coil.get
+      radiant_loop = radiant_coil.containingZoneHVACComponent.get
+
+      # get thermal zone
+      if radiant_loop.thermalZone.is_initialized
+        thermal_zones << radiant_loop.thermalZone.get
+      end
+    end
+
+    return thermal_zones
+  end
+
   # Convert the default 4-pipe water plant HVAC system to a 2-pipe system
   # i.e. there can only be source heating or cooling at any one time but not
   # both for the input plant
@@ -5812,11 +5850,14 @@ class Standard
   #   availability schedules are set using the heating outdoor dry-bulb temperature lockout defined above.
   def model_two_pipe_water_plant(model, hot_water_loop, chilled_water_loop,
                                  heating_plant_lockout: 65,
-                                 use_zone_demand: false,
-                                 thermal_zones: nil)
+                                 use_zone_demand: false)
 
     # get or create outdoor sensor node to be used in plant availability managers if needed
     outdoor_airnode = model.outdoorAirNode
+
+    # get thermal zones from heating and cooling plants
+    htg_thermal_zones = plant_loop_get_radiant_zones(model, hot_water_loop)
+    clg_thermal_zones = plant_loop_get_radiant_zones(model, chilled_water_loop)
 
     unless use_zone_demand
       # create availability managers based on outdoor temperature
@@ -5933,9 +5974,11 @@ class Standard
       determine_zone_heating_needs_prg_inner_body = ''
 
       # create sensors needed
-      if thermal_zones.nil?
+      if htg_thermal_zones.nil? || clg_thermal_zones.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Selected zone based plant demand but thermal zones is nil.')
       end
+
+      thermal_zones = (htg_thermal_zones + clg_thermal_zones).uniq
       thermal_zones.each do |zone|
         # get existing 'sensors'
         exisiting_ems_sensors = model.getEnergyManagementSystemSensors
@@ -5981,16 +6024,20 @@ class Standard
         end
 
         # create program inner body for determining zone cooling needs
+        if clg_thermal_zones.include? zone
         determine_zone_cooling_needs_prg_inner_body = determine_zone_cooling_needs_prg_inner_body +
           "IF #{zone_air_sensor_name} > #{zone_clg_thermostat_sensor_name},
             SET Zones_Needing_Cooling = Zones_Needing_Cooling + 1,
           ENDIF,\n"
+        end
 
         # create program inner body for determining zone cooling needs
+        if htg_thermal_zones.include? zone
         determine_zone_heating_needs_prg_inner_body = determine_zone_heating_needs_prg_inner_body +
           "IF #{zone_air_sensor_name} < #{zone_htg_thermostat_sensor_name},
             SET Zones_Needing_Heating = Zones_Needing_Heating + 1,
           ENDIF,\n"
+        end
 
       end
 
@@ -6000,7 +6047,7 @@ class Standard
       determine_zone_cooling_needs_prg_body =
       "SET Zones_Needing_Cooling = 0,
         #{determine_zone_cooling_needs_prg_inner_body}
-      SET Total_Zones = #{thermal_zones.length},
+      SET Total_Zones = #{clg_thermal_zones.length},
       SET Zone_Cooling_Ratio = Zones_Needing_Cooling/Total_Zones"
       determine_zone_cooling_needs_prg.setBody(determine_zone_cooling_needs_prg_body)
 
@@ -6010,7 +6057,7 @@ class Standard
       determine_zone_heating_needs_prg_body =
       "SET Zones_Needing_Heating = 0,
         #{determine_zone_heating_needs_prg_inner_body}
-      SET Total_Zones = #{thermal_zones.length},
+      SET Total_Zones = #{htg_thermal_zones.length},
       SET Zone_Heating_Ratio = Zones_Needing_Heating/Total_Zones"
       determine_zone_heating_needs_prg.setBody(determine_zone_heating_needs_prg_body)
 
