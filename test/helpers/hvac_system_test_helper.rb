@@ -212,7 +212,10 @@ end
 def default_radiant_test_hash
   # example hash for an HVAC system type test
   # default optional arguments should match those in model_add_low_temp_radiant
-  default_hash = {radiant_type: 'floor',
+  default_hash = {two_pipe_system: true,
+                  heating_plant_lockout: 65,
+                  use_zone_demand: false,
+                  radiant_type: 'floor',
                   radiant_temperature_control_type: 'SurfaceFaceTemperature',
                   radiant_setpoint_control_type: 'ZeroFlowPower',
                   include_carpet: true,
@@ -251,6 +254,9 @@ def model_radiant_system_test(arguments)
   unmet_hrs_clg = hash[:unmet_hrs_clg]
 
   # hash arguments defined in default_radiant_test_hash
+  two_pipe_system = hash[:two_pipe_system]
+  heating_plant_lockout = hash[:heating_plant_lockout]
+  use_zone_demand = hash[:use_zone_demand]
   radiant_type = hash[:radiant_type]
   radiant_temperature_control_type = hash[:radiant_temperature_control_type]
   radiant_setpoint_control_type = hash[:radiant_setpoint_control_type]
@@ -323,6 +329,9 @@ def model_radiant_system_test(arguments)
                                                         zones,
                                                         hot_water_loop,
                                                         chilled_water_loop,
+                                                        two_pipe_system: two_pipe_system,
+                                                        heating_plant_lockout: heating_plant_lockout,
+                                                        use_zone_demand: use_zone_demand,
                                                         radiant_type: radiant_type,
                                                         radiant_temperature_control_type: radiant_temperature_control_type,
                                                         radiant_setpoint_control_type: radiant_setpoint_control_type,

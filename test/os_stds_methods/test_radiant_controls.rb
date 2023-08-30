@@ -28,4 +28,25 @@ class TestRadiantControls < Minitest::Test
     errs = model_radiant_system_test(arguments)
     assert(errs.empty?, "Radiant slab system model failed with errors: #{errs}")
   end
+
+  def test_two_pipe_plant_based_on_oat
+    arguments = {model_test_name: 'two_pipe_plant_based_on_oat', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
+       hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR',
+       radiant_type: 'ceiling', use_zone_occupancy_for_control: false, two_pipe_system: true, heating_plant_lockout: 65, use_zone_demand: false,
+       unmet_hrs_htg: 500.0, unmet_hrs_clg: 2500.0}
+
+    errs = model_radiant_system_test(arguments)
+    assert(errs.empty?, "Radiant slab system model failed with errors: #{errs}")
+  end
+
+  def test_two_pipe_plant_based_on_zone_demand
+    arguments = {model_test_name: 'two_pipe_plant_based_on_zone', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
+       hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR',
+       radiant_type: 'ceiling', use_zone_occupancy_for_control: false, two_pipe_system: true, heating_plant_lockout: 65, use_zone_demand: true,
+       unmet_hrs_htg: 500.0, unmet_hrs_clg: 2500.0}
+
+    errs = model_radiant_system_test(arguments)
+    assert(errs.empty?, "Radiant slab system model failed with errors: #{errs}")
+  end
+
 end
