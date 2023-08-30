@@ -4528,14 +4528,21 @@ class Standard
   #   options are 'ZeroFlowPower', 'HalfFlowPower'
   # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
   # @param carpet_thickness_in [Double] thickness of carpet in inches
-  # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Starting hour of building occupancy.
-  # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Ending hour of building occupancy.
   # @param control_strategy [String] name of control strategy.  Options are 'proportional_control' and 'none'.
   #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
   #   detailed in Raftery et al. (2017), 'A new control strategy for high thermal mass radiant systems'.
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
+  # @param use_zone_occupancy_for_control [Bool] Set to true if radiant system is to use specific zone occupancy objects
+  #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
+  #   for all radiant zones. default to true.
+  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule.
+  #   Only used if use_zone_occupancy_for_control is set to true.
+  # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Starting hour of building occupancy.
+  # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Ending hour of building occupancy.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
@@ -4561,9 +4568,11 @@ class Standard
                                  radiant_setpoint_control_type: 'ZeroFlowPower',
                                  include_carpet: true,
                                  carpet_thickness_in: 0.25,
+                                 control_strategy: 'proportional_control',
+                                 use_zone_occupancy_for_control: true,
+                                 occupied_percentage_threshold: 0.10,
                                  model_occ_hr_start: 6.0,
                                  model_occ_hr_end: 18.0,
-                                 control_strategy: 'proportional_control',
                                  proportional_gain: 0.3,
                                  switch_over_time: 24.0,
                                  radiant_availability_type: 'precool',
@@ -4926,6 +4935,8 @@ class Standard
       if control_strategy == 'proportional_control'
         model_add_radiant_proportional_controls(model, zone, radiant_loop,
                                                 radiant_temperature_control_type: radiant_temperature_control_type,
+                                                use_zone_occupancy_for_control: use_zone_occupancy_for_control,
+                                                occupied_percentage_threshold: occupied_percentage_threshold,
                                                 model_occ_hr_start: model_occ_hr_start,
                                                 model_occ_hr_end: model_occ_hr_end,
                                                 proportional_gain: proportional_gain,
