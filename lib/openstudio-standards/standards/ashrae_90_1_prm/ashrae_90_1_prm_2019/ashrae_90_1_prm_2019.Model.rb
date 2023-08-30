@@ -123,7 +123,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   end
 
   # Determines the fan type used by VAV_Reheat and VAV_PFP_Boxes systems.
-  # Variable speed fan for 90.1-2013
+  # Variable speed fan for 90.1-2019
   # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan
   def model_baseline_system_vav_fan_type(model)
     fan_type = 'Variable Speed Fan'
