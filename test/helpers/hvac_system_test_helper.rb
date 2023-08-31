@@ -227,11 +227,19 @@ def default_radiant_test_hash
                   radiant_availability_type: 'precool',
                   radiant_lockout: false,
                   radiant_lockout_start_time: 12.0,
-                  radiant_lockout_end_time: 20.0}
+                  radiant_lockout_end_time: 20.0,
+                  custom_variables_output: nil}
   return default_hash
 end
 
-def model_radiant_system_test(arguments)
+# Runs an radiant system and controls
+# test given an input model name and argument values
+# Uses the default hash above called 'default_radiant_test_hash'
+#
+# @param arguments [Hash] a hash for radiant system test
+# @param return_model [Bool] set to true if simulated model
+#   is to be returned for further analysis
+def model_radiant_system_test(arguments, return_model: false)
   output_dir = "#{__dir__}/../os_stds_methods/output"
   FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
@@ -249,6 +257,7 @@ def model_radiant_system_test(arguments)
   climate_zone = hash[:climate_zone]
   unmet_hrs_htg = hash[:unmet_hrs_htg]
   unmet_hrs_clg = hash[:unmet_hrs_clg]
+  custom_variables_output = hash[:custom_variables_output]
 
   # hash arguments defined in default_radiant_test_hash
   radiant_type = hash[:radiant_type]
@@ -280,7 +289,10 @@ def model_radiant_system_test(arguments)
   annual_run_success = false
   if File.exist?("#{model_dir}/AR/run/eplusout.sql")
     puts "test: '#{model_test_name}' results already available. Not re-rerunning energy simulation."
-    model = OpenStudio::Model::Model.new
+    # Load the test model
+    model_path = "#{__dir__}/../os_stds_methods/models/#{model_name}.osm"
+    model = standard.safe_load_model(model_path)
+    # Load sql file
     sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
     model.setSqlFile(sql)
     annual_run_success = true
@@ -347,6 +359,19 @@ def model_radiant_system_test(arguments)
       return errs
     end
 
+    # add additional custom variables for analysis
+    unless custom_variables_output.nil?
+      custom_variables_output.each do |variable_info|
+        var_name = variable_info[0]
+        key_value = variable_info[1]
+        frequency = variable_info[2]
+
+        output = OpenStudio::Model::OutputVariable.new(var_name, model)
+        output.setKeyValue(key_value)
+        output.setReportingFrequency(frequency)
+      end
+    end
+
     # Save the model
     model.save("#{model_dir}/final.osm", true)
 
@@ -387,5 +412,9 @@ def model_radiant_system_test(arguments)
   log_messages_to_file("#{model_dir}/openstudio-standards.log", debug=false)
 
   # @todo add checks for hvac enduse euis, ventilation unmet hours
-  return errs
+  if return_model
+    return {model: model, errs: errs}
+  else
+    return errs
+  end
 end
