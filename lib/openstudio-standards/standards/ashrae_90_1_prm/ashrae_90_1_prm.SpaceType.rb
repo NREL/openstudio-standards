@@ -472,14 +472,14 @@ class ASHRAE901PRM < Standard
         if ltg_schedule
           ltg_schedule_name = ltg_schedule.name.get
           occupancy_sensor_credit = get_additional_property_as_double(space, 'occ_control_credit', 0.0)
-          new_ltg_schedule_name = format("#{ltg_schedule_name}_%.4f", occupancy_sensor_credit)
-          if schedule_hash.key?(new_ltg_schedule_name)
+          if schedule_hash.key?(ltg_schedule_name)
             # In this case, there is a schedule created, can retrieve the schedule object and reset in this space type
-            schedule_rule = schedule_hash[new_ltg_schedule_name]
+            schedule_rule = schedule_hash[ltg_schedule_name]
             ltg.setSchedule(schedule_rule)
           else
             # In this case, create a new schedule
             # 1. Clone the existing schedule
+            new_ltg_schedule_name = format("#{ltg_schedule_name}_%.4f", occupancy_sensor_credit)
             new_rule_set_schedule = deep_copy_schedule(new_ltg_schedule_name, ltg_schedule, occupancy_sensor_credit, model)
             if ltg.setSchedule(new_rule_set_schedule)
               schedule_hash[new_ltg_schedule_name] = new_rule_set_schedule
