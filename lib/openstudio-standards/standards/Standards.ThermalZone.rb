@@ -1332,7 +1332,7 @@ class Standard
     htg_load_w = thermal_zone.autosizedHeatingDesignLoad
     if htg_load_w.is_initialized
       htg_load_w_per_m2 = thermal_zone.autosizedHeatingDesignLoad.get / thermal_zone.floorArea
-      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
+      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2')
     end
 
     # Get the cooling load
@@ -1340,7 +1340,7 @@ class Standard
     clg_load_w = thermal_zone.autosizedCoolingDesignLoad
     if clg_load_w.is_initialized
       clg_load_w_per_m2 = thermal_zone.autosizedCoolingDesignLoad.get / thermal_zone.floorArea
-      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
+      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2')
     end
 
     # Determine the heating limit based on climate zone
