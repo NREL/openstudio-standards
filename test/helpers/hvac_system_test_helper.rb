@@ -72,7 +72,7 @@ def model_hvac_test(hvac_arguments)
   annual_run_success = false
   if File.exist?("#{model_dir}/AR/run/eplusout.sql")
     puts "test: '#{model_test_name}' results already available. Not re-rerunning energy simulation."
-    model = OpenStudio::Model::Model.new
+    model = standard.safe_load_model("#{model_dir}/final.osm")
     sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
     model.setSqlFile(sql)
     annual_run_success = true
@@ -237,8 +237,7 @@ end
 # Uses the default hash above called 'default_radiant_test_hash'
 #
 # @param arguments [Hash] a hash for radiant system test
-# @param return_model [Bool] set to true if simulated model
-#   is to be returned for further analysis
+# @return [Hash] returns a hash of a model and array of errors
 def model_radiant_system_test(arguments, return_model: false)
   output_dir = "#{__dir__}/../os_stds_methods/output"
   FileUtils.mkdir output_dir unless Dir.exist? output_dir
@@ -289,10 +288,7 @@ def model_radiant_system_test(arguments, return_model: false)
   annual_run_success = false
   if File.exist?("#{model_dir}/AR/run/eplusout.sql")
     puts "test: '#{model_test_name}' results already available. Not re-rerunning energy simulation."
-    # Load the test model
-    model_path = "#{__dir__}/../os_stds_methods/models/#{model_name}.osm"
-    model = standard.safe_load_model(model_path)
-    # Load sql file
+    model = standard.safe_load_model("#{model_dir}/final.osm")
     sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
     model.setSqlFile(sql)
     annual_run_success = true
@@ -412,9 +408,9 @@ def model_radiant_system_test(arguments, return_model: false)
   log_messages_to_file("#{model_dir}/openstudio-standards.log", debug=false)
 
   # @todo add checks for hvac enduse euis, ventilation unmet hours
-  if return_model
-    return {model: model, errs: errs}
-  else
-    return errs
-  end
+
+  results = {}
+  results['model'] = model
+  results['errs'] = errs
+  return results
 end

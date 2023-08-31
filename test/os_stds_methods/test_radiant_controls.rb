@@ -7,7 +7,8 @@ class TestRadiantControls < Minitest::Test
        hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR',
        unmet_hrs_htg: 600.0, unmet_hrs_clg: 2750.0}
 
-    errs = model_radiant_system_test(arguments)
+    test_return = model_radiant_system_test(arguments)
+    errs = test_return['errs']
     assert(errs.empty?, "Radiant slab system model failed with errors: #{errs}")
   end
 
@@ -16,7 +17,8 @@ class TestRadiantControls < Minitest::Test
        hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR',
        radiant_type: 'ceiling', unmet_hrs_htg: 500.0, unmet_hrs_clg: 1500.0}
 
-    errs = model_radiant_system_test(arguments)
+    test_return = model_radiant_system_test(arguments)
+    errs = test_return['errs']
     assert(errs.empty?, "Radiant slab system model failed with errors: #{errs}")
   end
 
@@ -25,7 +27,8 @@ class TestRadiantControls < Minitest::Test
        hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR',
        radiant_type: 'ceiling', use_zone_occupancy_for_control: false, unmet_hrs_htg: 500.0, unmet_hrs_clg: 2500.0}
 
-    errs = model_radiant_system_test(arguments)
+    test_return = model_radiant_system_test(arguments)
+    errs = test_return['errs']
     assert(errs.empty?, "Radiant slab system model failed with errors: #{errs}")
   end
 
@@ -36,9 +39,11 @@ class TestRadiantControls < Minitest::Test
        custom_variables_output: [['Zone Radiant HVAC Heating Rate', '*', 'Hourly'], ['Zone Radiant HVAC Cooling Rate', '*', 'Hourly']],
        unmet_hrs_htg: 500.0, unmet_hrs_clg: 1500.0}
 
-    model_hash = model_radiant_system_test(arguments, return_model: true)
-    # get model
-    model = model_hash[:model]
+    standard = Standard.build('90.1-2013')
+
+    test_return = model_radiant_system_test(arguments)
+    model = test_return['model']
+    errs = test_return['errs']
 
     # radiant lockout hours for precool operation
     radiant_lockout_start_time = 10.0
@@ -107,7 +112,7 @@ class TestRadiantControls < Minitest::Test
       control_errs << "Model #{arguments[:model_test_name]} has at least one incorrect availability schedule for radiant system in operation type #{arguments[:radiant_availability_type]}"
     end
 
-    errs = model_hash[:errs] + control_errs
+    errs += control_errs
     assert(errs.empty?, "Radiant slab system model failed with errors: #{errs}")
   end
 
