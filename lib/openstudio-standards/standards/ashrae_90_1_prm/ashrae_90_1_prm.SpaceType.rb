@@ -361,6 +361,7 @@ class ASHRAE901PRM < Standard
       if space_type.hasAdditionalProperties && space_type.additionalProperties.hasFeature('regulated_lights_name')
         lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
         lights_obj = space_type.model.getLightsByName(lights_name).get
+        OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Setting lighting object #{lights_obj.name.get} lighting per area to #{space_type_lighting_per_area} W/ft^2")
         lights_obj.lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
       end
     end
@@ -433,7 +434,7 @@ class ASHRAE901PRM < Standard
           new_definition = definition.clone.to_LightsDefinition.get
           new_definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
           inst.setLightsDefinition(new_definition)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
+          OpenStudio.logFree(OpenStudio::Info, 'log.prm', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
         end
       end
       space_array.push(space)
@@ -555,12 +556,13 @@ class ASHRAE901PRM < Standard
   # calculate the lighting power density per area based on space type
   # The function will calculate the LPD based on the space type (STRING)
   # It considers lighting per area, lighting per length as well as occupancy factors in the database.
-  # @param space_type [String]
+  # @param space_type [OpenStudio::Model::SpaceType]
   # @param space [OpenStudio::Model::Space]
   # @return space_lighting_per_area [Float] lighting power density in the space
   def calculate_lpd_by_space(space_type, space)
     # get interior lighting data
     space_type_properties = interior_lighting_get_prm_data(space_type)
+    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The lighting properties for space: #{space.name.get} is based on lighting_space_type: #{space_type_properties['lighting_space_type']}, primary_space_type: #{space_type_properties['primary_space_type']}, secondary_space_type: #{space_type_properties['secondary_space_type']}.")
     space_lighting_per_area = 0.0
     # Assign data
     lights_have_info = false
