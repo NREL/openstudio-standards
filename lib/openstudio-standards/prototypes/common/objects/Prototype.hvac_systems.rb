@@ -4520,6 +4520,17 @@ class Standard
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add radiant loops
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the radiant loop.
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
+  # @param plant_supply_water_temperature_control [Bool] Set to true if the plant supply water temperature
+  #   is to be controlled, default to false. Supply water temperature will vary based on outdoor air temperature
+  #   unless use_zone_demand is set to true in which it will use zone heating/cooling demand to vary temperature.
+  # @param hwsp_at_oat_low [Double] hot water plant supply water temperature setpoint, in F, at the outdoor low temperature.
+  # @param hw_oat_low [Double] outdoor drybulb air  temperature, in F, for low setpoint for hot water plant.
+  # @param hwsp_at_oat_high [Double] hot water plant supply water temperature setpoint, in F, at the outdoor high temperature.
+  # @param hw_oat_high [Double] outdoor drybulb air temperature, in F, for high setpoint for hot water plant.
+  # @param chwsp_at_oat_low [Double] chilled water plant supply water temperature setpoint, in F, at the outdoor low temperature.
+  # @param chw_oat_low [Double] outdoor drybulb air  temperature, in F, for low setpoint for chilled water plant.
+  # @param chwsp_at_oat_high [Double] chilled water plant supply water temperature setpoint, in F, at the outdoor high temperature.
+  # @param chw_oat_high [Double] outdoor drybulb air temperature, in F, for high setpoint for chilled water plant.
   # @param radiant_type [String] type of radiant system, floor or ceiling, to create in zone.
   # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
   #   options are 'MeanAirTemperature', 'MeanRadiantTemperature', 'OperativeTemperature', 'OutdoorDryBulbTemperature',
@@ -4563,6 +4574,15 @@ class Standard
                                  thermal_zones,
                                  hot_water_loop,
                                  chilled_water_loop,
+                                 plant_supply_water_temperature_control: false,
+                                 hwsp_at_oat_low: 120,
+                                 hw_oat_low: 55,
+                                 hwsp_at_oat_high: 80,
+                                 hw_oat_high: 70,
+                                 chwsp_at_oat_low: 70,
+                                 chw_oat_low: 65,
+                                 chwsp_at_oat_high: 55,
+                                 chw_oat_high: 75,
                                  radiant_type: 'floor',
                                  radiant_temperature_control_type: 'SurfaceFaceTemperature',
                                  radiant_setpoint_control_type: 'ZeroFlowPower',
@@ -4941,6 +4961,27 @@ class Standard
                                                 model_occ_hr_end: model_occ_hr_end,
                                                 proportional_gain: proportional_gain,
                                                 switch_over_time: switch_over_time)
+      end
+
+      # add supply water temperature control if enabled
+      if plant_supply_water_temperature_control
+        # add supply water temperature for heating plant loop
+        model_add_plant_swt_control(model, hot_water_loop,
+                                    sp_at_oat_low: hwsp_at_oat_low,
+                                    oat_low: hw_oat_low,
+                                    sp_at_oat_high: hwsp_at_oat_high,
+                                    oat_high: hw_oat_high,
+                                    use_zone_demand: use_zone_demand,
+                                    thermal_zones: thermal_zones)
+
+        # add supply water temperature for cooling plant loop
+        model_add_plant_swt_control(model, chilled_water_loop,
+                                    sp_at_oat_low: chwsp_at_oat_low,
+                                    oat_low: chw_oat_low,
+                                    sp_at_oat_high: chwsp_at_oat_high,
+                                    oat_high: chw_oat_high,
+                                    use_zone_demand: use_zone_demand,
+                                    thermal_zones: thermal_zones)
       end
     end
 
@@ -5778,6 +5819,51 @@ class Standard
   def model_cw_loop_cooling_tower_fan_type(model)
     fan_type = 'Variable Speed Fan'
     return fan_type
+  end
+
+  # Adds supply water temperature control on specified hot and chilled water loops.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param plant_water_loop [OpenStudio::Model::PlantLoop] plant water loop to add supply water temperature control.
+  # @param sp_at_oat_low [Double] supply water temperature setpoint, in F, at the outdoor low temperature.
+  # @param oat_low [Double] outdoor drybulb air  temperature, in F, for low setpoint.
+  # @param sp_at_oat_high [Double] supply water temperature setpoint, in F, at the outdoor high temperature.
+  # @param oat_high [Double] outdoor drybulb air temperature, in F, for high setpoint.
+  # @param use_zone_demand [Bool] when set to true, heating and cooling plant supply water temperature is based
+  #   on zone heating and coolong load requests. If false, water temperature is based on outdoor drybulb air temperature.
+  # @param [Array<OpenStudio::Model::ThermalZone>] array of zones to dictate cooling or heating mode of water plant if
+  #   use_zone_demand is set to true
+  def model_add_plant_swt_control(model, plant_water_loop,
+                                  sp_at_oat_low: nil,
+                                  oat_low: nil,
+                                  sp_at_oat_high: nil,
+                                  oat_high: nil,
+                                  use_zone_demand: false,
+                                  thermal_zones: nil)
+
+    # check that all required temperature parameters are defined
+    if sp_at_oat_low.nil? and oat_low.nil? and sp_at_oat_high.nil? and oat_high.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'At least one of the required temperature parameter is nil.')
+    end
+
+    # remove any existing setpoint manager on the plant water loop
+    exisiting_setpoint_managers = plant_water_loop.loopTemperatureSetpointNode.setpointManagers
+    exisiting_setpoint_managers.each { |sp_mgr| sp_mgr.disconnect }
+
+    unless use_zone_demand
+      # create supply water temperature setpoint managers for plant based on outdoor temperature
+      water_loop_setpoint_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
+      water_loop_setpoint_manager.setName("#{plant_water_loop.name.get} Supply Water Temperature Control")
+      water_loop_setpoint_manager.setControlVariable("Temperature")
+      water_loop_setpoint_manager.setSetpointatOutdoorLowTemperature(OpenStudio.convert(sp_at_oat_low, 'F', 'C').get)
+      water_loop_setpoint_manager.setOutdoorLowTemperature(OpenStudio.convert(oat_low, 'F', 'C').get)
+      water_loop_setpoint_manager.setSetpointatOutdoorHighTemperature(OpenStudio.convert(sp_at_oat_high, 'F', 'C').get)
+      water_loop_setpoint_manager.setOutdoorHighTemperature(OpenStudio.convert(oat_high, 'F', 'C').get)
+      water_loop_setpoint_manager.addToNode(plant_water_loop.loopTemperatureSetpointNode)
+    else
+      # create supply water temperature setpoint managers for plant based on zone heating and cooling demand
+    end
+
   end
 
   # Adds a waterside economizer to the chilled water and condenser loop
