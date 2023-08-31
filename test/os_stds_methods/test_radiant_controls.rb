@@ -33,7 +33,7 @@ class TestRadiantControls < Minitest::Test
   end
 
   def test_radiant_precool_hours_schedule
-    arguments = {model_test_name: 'test_radiant_precool_hours_schedule', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
+    arguments = {model_test_name: 'radiant_precool_hours_schedule', main_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity',
        hot_water_loop_type: 'LowTemperature', climate_zone: 'ASHRAE 169-2013-5B', model_name: 'basic_2_story_office_no_hvac_20WWR',
        radiant_type: 'ceiling', use_zone_occupancy_for_control: false, radiant_availability_type: 'precool',
        custom_variables_output: [['Zone Radiant HVAC Heating Rate', '*', 'Hourly'], ['Zone Radiant HVAC Cooling Rate', '*', 'Hourly']],
@@ -110,6 +110,39 @@ class TestRadiantControls < Minitest::Test
 
     unless correct_schedule.all?
       control_errs << "Model #{arguments[:model_test_name]} has at least one incorrect availability schedule for radiant system in operation type #{arguments[:radiant_availability_type]}"
+    end
+
+    # get each radiant loop operation and test that it stays off during defined lockout hours
+
+    # get simualtion results
+    sql = standard.model_get_sql_file(model)
+    ann_env_pd = standard.model_get_weather_run_period(model)
+
+    radiant_loops.each do |radiant_loop|
+
+      radiant_htg = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Radiant HVAC Heating Rate', radiant_loop.name.get)
+      radiant_clg = sql.timeSeries(ann_env_pd, 'Hourly', 'Zone Radiant HVAC Cooling Rate', radiant_loop.name.get)
+
+      if radiant_htg.empty? || radiant_clg.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find heating/cooling timeseries for radiant loop '#{radiant_loop.name.get}'")
+      end
+
+      # verify that heating and cooling does not activate during radiant lockout hours
+      radiant_loop_htg_vector = radiant_htg.get.values.collect{ |val| val}
+      radiant_loop_clg_vector = radiant_clg.get.values.collect{ |val| val}
+      sim_times = radiant_htg.get.dateTimes.collect{ |tm| tm.time.hours + tm.time.minutes.fdiv(60) }
+
+      sim_time_OFF_index = sim_times.each_index.select{|idx| time_OFF.include? sim_times[idx]}
+      htg_during_time_OFF = sim_time_OFF_index.collect{|idx| radiant_loop_htg_vector[idx]}
+      clg_during_time_OFF = sim_time_OFF_index.collect{|idx| radiant_loop_clg_vector[idx]}
+
+      if htg_during_time_OFF.sum() > 0
+        control_errs << "Model #{arguments[:model_test_name]} does heating in radiant loop #{radiant_loop.name.get} during lockout hours"
+      end
+
+      if clg_during_time_OFF.sum() > 0
+        control_errs << "Model #{arguments[:model_test_name]} does cooling in radiant loop #{radiant_loop.name.get} during lockout hours"
+      end
     end
 
     errs += control_errs
