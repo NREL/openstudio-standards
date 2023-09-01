@@ -114,7 +114,7 @@ class ASHRAE901PRM < Standard
     end
 
     # Determine the capacity of the loop
-    cap_w = plant_loop_total_cooling_capacity(plant_loop, sizing_run_dir)
+    cap_w = plant_loop_total_cooling_capacity(plant_loop)
     cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
     if cap_tons <= 300
       num_chillers = 1

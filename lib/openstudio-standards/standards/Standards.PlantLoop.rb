@@ -593,7 +593,7 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of #{chiller.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
         end
-        # DistrictCooling
+      # DistrictCooling
       elsif sc.to_DistrictCooling.is_initialized
         dist_clg = sc.to_DistrictCooling.get
         if dist_clg.nominalCapacity.is_initialized
