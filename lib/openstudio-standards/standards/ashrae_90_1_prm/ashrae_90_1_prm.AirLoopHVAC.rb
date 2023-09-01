@@ -92,7 +92,7 @@ class ASHRAE901PRM < Standard
   end
 
   # Determine if the system is a multizone VAV system
-  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [Bool] Returns true if required, false if not.
   def air_loop_hvac_multizone_vav_system?(air_loop_hvac)
     return true if air_loop_hvac.name.to_s.include?('Sys5') || air_loop_hvac.name.to_s.include?('Sys6') || air_loop_hvac.name.to_s.include?('Sys7') || air_loop_hvac.name.to_s.include?('Sys8')
@@ -415,6 +415,7 @@ class ASHRAE901PRM < Standard
   # Determine the allowable fan system brake horsepower
   # Per Section G3.1.2.9
   #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC]
   # @return [Double] allowable fan system brake horsepower
   #   units = horsepower
   def air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac)

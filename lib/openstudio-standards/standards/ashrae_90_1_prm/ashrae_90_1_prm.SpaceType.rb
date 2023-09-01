@@ -171,6 +171,9 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # Apply power equipment to space type
+  # This is utility function for applying user data to space type.
+  # @param space_type [OpenStudio::Model:SpaceType]
   def space_type_apply_power_equipment(space_type)
     # save schedules in a hash in case it is needed for new electric equipment
     power_schedule_hash = {}
@@ -340,7 +343,10 @@ class ASHRAE901PRM < Standard
     end
   end
 
-  # Function to tset LPD on default space type
+  # Function to test LPD on default space type. The function assigns lighting power density to an light object.
+  # @param space_type [OpenStudio::Model::SpaceType]
+  # @param user_spaces [Hash]
+  # @param user_spacetypes [Hash]
   def set_lpd_on_space_type(space_type, user_spaces, user_spacetypes)
     if has_multi_lpd_values_space_type(space_type)
       # If multiple LPD value exist - then enforce space-space_type one on one relationship
@@ -364,9 +370,10 @@ class ASHRAE901PRM < Standard
   # This function is used when there are user space data available or
   # the spaces under space type has lighting per length value which may cause multiple
   # lighting power densities under one space_type.
-  # @param user_spaces hash data contained in the user space
-  # @param user_spacetypes hash data contained in the user spacetypes
-  # @param space_type OpenStudio::Model::SpaceType object
+  # @param user_spaces [Hash] hash data contained in the user space
+  # @param user_spacetypes [Hash] hash data contained in the user spacetypes
+  # @param space_type [OpenStudio::Model::SpaceType] object
+  # @return space_array [Array] List of Spaces [OpenStudio::Model::Space]
   def space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
     space_lighting_per_area_hash = {}
     # first priority - user_space data
@@ -550,6 +557,7 @@ class ASHRAE901PRM < Standard
   # It considers lighting per area, lighting per length as well as occupancy factors in the database.
   # @param space_type [String]
   # @param space [OpenStudio::Model::Space]
+  # @return space_lighting_per_area [Float] lighting power density in the space
   def calculate_lpd_by_space(space_type, space)
     # get interior lighting data
     space_type_properties = interior_lighting_get_prm_data(space_type)
@@ -583,6 +591,8 @@ class ASHRAE901PRM < Standard
   end
 
   # Function checks whether the user data contains lighting data
+  # @param user_space_data [Hash] space data extracted from user csv.
+  # @return has_user_lpd_values [Boolean] True if there are user lpd values, False otherwise.
   def has_user_lpd_values(user_space_data)
     user_space_data.each do |user_data|
       if user_data.key?('num_std_ltg_types') && user_data['num_std_ltg_types'].to_f > 0
@@ -594,6 +604,8 @@ class ASHRAE901PRM < Standard
 
   # Function checks whether there are multi lpd values in the space type
   # multi-lpd value means there are multiple spaces and the lighting_per_length > 0
+  # @param space_type [OpenStudio::Model::SpaceType]
+  # @return has_multi-lpd_values_space_type [Boolean]
   def has_multi_lpd_values_space_type(space_type)
     space_type_properties = interior_lighting_get_prm_data(space_type)
     lighting_per_length = space_type_properties['w/ft'].to_f
@@ -603,6 +615,9 @@ class ASHRAE901PRM < Standard
   # Function checks whether there are multi lpd values in the space type from user's data
   # The sum of each space fraction in the user_data is assumed to be 1.0
   # multi-lpd value means lighting per area > 0 and lighting_per_length > 0
+  # @param user_data [Hash] user data from the user csv
+  # @param space_type [OpenStudio::Model::SpaceType]
+  # @return has_multi_lpd_values [Boolean]
   def has_multi_lpd_values_user_data(user_data, space_type)
     num_std_ltg_types = user_data['num_std_ltg_types'].to_i
     std_ltg_index = 0 # loop index
@@ -630,6 +645,7 @@ class ASHRAE901PRM < Standard
   # The sum of each space fraction in the user_data is assumed to be 1.0
   # @param user_data [Hash] user data from the user csv
   # @param space [OpenStudio::Model::Space]
+  # @return space_lighting_per_area [Float]
   def calculate_lpd_from_userdata(user_data, space)
     num_std_ltg_types = user_data['num_std_ltg_types'].to_i
     space_lighting_per_area = 0.0
