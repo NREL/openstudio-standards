@@ -55,6 +55,7 @@ class Standard
       }
       interior_lighting_properties = model_find_object(standards_data['prm_interior_lighting'], search_criteria)
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SpaceType', "Interior Lighting PRM properties lookup failed: #{search_criteria}")
+      interior_lighting_properties = {}
     end
 
     return interior_lighting_properties
