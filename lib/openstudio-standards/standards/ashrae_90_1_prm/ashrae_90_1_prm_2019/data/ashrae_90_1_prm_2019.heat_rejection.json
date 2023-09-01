@@ -3,7 +3,7 @@
     {
       "template": "90.1-PRM-2019",
       "equipment_type": "Open Cooling Tower",
-      "fan_type": "Axial",
+      "fan_type": "Propeller or Axial",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance": 38.2,
