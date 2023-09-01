@@ -579,6 +579,8 @@ class ASHRAE901PRM < Standard
     types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
     types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
     types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+    types_to_modify << ['Outdoors', 'ExteriorWindow', 'Any Vertical Glazing']
+    types_to_modify << ['Outdoors', 'GlassDoor', 'Any Vertical Glazing']
     types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
     types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
 
