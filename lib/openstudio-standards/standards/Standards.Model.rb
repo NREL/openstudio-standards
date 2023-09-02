@@ -670,8 +670,14 @@ class Standard
     # Define the minimum area for the
     # exception that allows a different
     # system type in part of the building.
-    exception_min_area_m2 = model_prm_baseline_system_group_minimum_area(model, custom)
-    exception_min_area_ft2 = OpenStudio.convert(exception_min_area_m2, 'm^2', 'ft^2').get
+    if custom == 'Xcel Energy CO EDA'
+     # Customization - Xcel EDA Program Manual 2014
+      # 3.2.1 Mechanical System Selection ii
+      exception_min_area_ft2 = 5000
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
+    else
+      exception_min_area_ft2 = 20_000
+    end
 
     # Get occupancy type, fuel type, and area information for all zones,
     # excluding unconditioned zones.
@@ -1144,18 +1150,6 @@ class Standard
     return fan_8760
   end
 
-  # Determines the area of the building above which point
-  # the non-dominant area type gets it's own HVAC system type.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param custom [String] custom fuel type
-  # @return [Double] the minimum area (m^2)
-  def model_prm_baseline_system_group_minimum_area(model, custom)
-    exception_min_area_ft2 = 20_000
-    exception_min_area_m2 = OpenStudio.convert(exception_min_area_ft2, 'ft^2', 'm^2').get
-    return exception_min_area_m2
-  end
-
   # Determine the baseline system type given the inputs.  Logic is different for different standards.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
@@ -1173,14 +1167,19 @@ class Standard
     area_ft2 = sys_group['area_ft2']
     num_stories = sys_group['stories']
 
-    #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
+    # [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
 
     # Get the row from TableG3.1.1A
     sys_num = model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
 
     # Modify the fuel type if called for by the standard
-    fuel_type = model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom)
+    if custom == 'Xcel Energy CO EDA'
+      # fuel type remains unchanged
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 rules for heating fuel type (based on proposed model) rules apply.')
+    else
+      fuel_type = model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
+    end
 
     # Define the lookup by row and by fuel type
     sys_lookup = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
@@ -1280,10 +1279,10 @@ class Standard
   # @param fuel_type [String] Valid choices are electric, fossil, fossilandelectric,
   #   purchasedheat, purchasedcooling, purchasedheatandcooling
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @param custom [String] custom fuel type
   # @return [String] the revised fuel type
-  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
-    return fuel_type # Don't change fuel type for most templates
+  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
+    # Don't change fuel type for most templates
+    return fuel_type
   end
 
   # Determine whether heating type is fuel or electric

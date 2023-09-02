@@ -1,21 +1,6 @@
 class ASHRAE9012013 < ASHRAE901
   # @!group Model
 
-  # Determines the area of the building above which point
-  # the non-dominant area type gets it's own HVAC system type.
-  # @return [Double] the minimum area (m^2)
-  def model_prm_baseline_system_group_minimum_area(model, custom)
-    exception_min_area_ft2 = 20_000
-    # Customization - Xcel EDA Program Manual 2014
-    # 3.2.1 Mechanical System Selection ii
-    if custom == 'Xcel Energy CO EDA'
-      exception_min_area_ft2 = 5000
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
-    end
-    exception_min_area_m2 = OpenStudio.convert(exception_min_area_ft2, 'ft^2', 'm^2').get
-    return exception_min_area_m2
-  end
-
   # Determines which system number is used
   # for the baseline system.
   # @return [String] the system number: 1_or_2, 3_or_4,
@@ -84,13 +69,12 @@ class ASHRAE9012013 < ASHRAE901
 
   # Change the fuel type based on climate zone, depending on the standard.
   # For 90.1-2013, fuel type is based on climate zone, not the proposed model.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fuel_type [String] Valid choices are electric, fossil, fossilandelectric,
+  #   purchasedheat, purchasedcooling, purchasedheatandcooling
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the revised fuel type
-  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
-    if custom == 'Xcel Energy CO EDA'
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 rules for heating fuel type (based on proposed model) rules apply.')
-      return fuel_type
-    end
-
+  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
     # For 90.1-2013 the fuel type is determined based on climate zone.
     # Don't change the fuel if it purchased heating or cooling.
     if fuel_type == 'electric' || fuel_type == 'fossil'
