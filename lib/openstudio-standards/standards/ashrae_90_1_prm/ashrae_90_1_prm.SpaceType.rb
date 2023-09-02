@@ -611,6 +611,7 @@ class ASHRAE901PRM < Standard
   def has_multi_lpd_values_space_type(space_type)
     space_type_properties = interior_lighting_get_prm_data(space_type)
     lighting_per_length = space_type_properties['w/ft'].to_f
+    
     return space_type.spaces.size > 1 && lighting_per_length > 0
   end
 
