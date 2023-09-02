@@ -2308,7 +2308,7 @@ class ASHRAE901PRM < Standard
       end
       if has_computer_room
         # Collect load for entire zone
-        if zn.model.version < OpenStudio::VersionString.new('3.6.0')
+        if zn['zone'].model.version < OpenStudio::VersionString.new('3.6.0')
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.Model', "Required ThermalZone method .autosizedCoolingDesignLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
         end
         zone_load_w = zn['zone'].autosizedCoolingDesignLoad.get
