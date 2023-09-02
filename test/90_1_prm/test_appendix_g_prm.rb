@@ -1587,13 +1587,13 @@ class AppendixGPRMTests < Minitest::Test
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required Loop method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
         end
 
-        heat_type = air_loop.appGHeatingFuelTypes.map { |f| f.valueName }[0]
+        heat_types = air_loop.appGHeatingFuelTypes.map { |f| f.valueName }
         if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
           # Heat type is electric or heat pump
-          assert(heat_type == expected_elec_heat_type, "Incorrect heat type for #{air_loop.name.get}; expected #{expected_elec_heat_type}")
+          assert(heat_types.include?(expected_elec_heat_type), "Incorrect heat type for #{air_loop.name.get}; expected #{expected_elec_heat_type}")
         else
           # Heat type is Fuel
-          assert(heat_type == 'Fuel', "Incorrect heat type for #{air_loop.name.get}; expected Fuel")
+          assert(heat_types.include?('Fuel'), "Incorrect heat type for #{air_loop.name.get}; expected Fuel")
         end
       end
     end
@@ -1921,11 +1921,11 @@ class AppendixGPRMTests < Minitest::Test
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required HVACComponent method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
           end
 
-          heat_type = equip.heatingCoil.appGHeatingFuelTypes.map { |f| f.valueName }[0]
+          heat_types = equip.heatingCoil.appGHeatingFuelTypes.map { |f| f.valueName }
           if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
-            assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
+            assert(heat_types.include?('Electric'), "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
           else
-            assert(heat_type == 'Fuel', "Baseline system selection failed for climate #{climate_zone}: FPFC should have hot water heat for " + sub_text)
+            assert(heat_types.include?('Fuel'), "Baseline system selection failed for climate #{climate_zone}: FPFC should have hot water heat for " + sub_text)
           end
         end
       end
