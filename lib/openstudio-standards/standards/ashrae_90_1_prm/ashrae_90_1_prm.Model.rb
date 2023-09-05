@@ -112,7 +112,7 @@ class ASHRAE901PRM < Standard
   end
 
   # Determines the fan type used by VAV_Reheat and VAV_PFP_Boxes systems.
-  # Variable speed fan for 90.1-2013
+  # Variable speed fan for 90.1-2019
   # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan
   def model_baseline_system_vav_fan_type(model)
     fan_type = 'Variable Speed Fan'
@@ -121,7 +121,8 @@ class ASHRAE901PRM < Standard
 
   # This method creates customized infiltration objects for each
   # space and removes the SpaceType-level infiltration objects.
-  #
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @param climate_zone [String] climate zone
   # @return [Bool] true if successful, false if not
   def model_baseline_apply_infiltration_standard(model, climate_zone)
     # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
@@ -184,7 +185,7 @@ class ASHRAE901PRM < Standard
   # This method retrieves the type of infiltration input
   # used in the model. If input is inconsistent, returns
   # Flow/Area
-  #
+  # @param model [OpenStudio::Model::Model] openstudio model
   # @return [String] infiltration input type
   def model_get_infiltration_method(model)
     infil_method = nil
@@ -219,7 +220,7 @@ class ASHRAE901PRM < Standard
   # This method retrieves the infiltration coefficients
   # used in the model. If input is inconsitent, returns
   # [0, 0, 0.224, 0] as per PRM user manual
-  #
+  # @param model [OpenStudio::Model::Model] Openstudio model
   # @return [String] infiltration input type
   def model_get_infiltration_coefficients(model)
     cst = nil
@@ -347,9 +348,10 @@ class ASHRAE901PRM < Standard
 
   # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
-  # @return [Bool] true if successful, false if not
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param wwr_building_type [String] building type used for defining window to wall ratio, e.g. 'Office > 50,000 sq ft'
+  # @param wwr_info [Hash] A map that maps each building area type to its correspondent wwr.
   # @return [Bool] returns true if successful, false if not
   def model_apply_standard_constructions(model, climate_zone, wwr_building_type: nil, wwr_info: {})
     types_to_modify = []
@@ -501,7 +503,7 @@ class ASHRAE901PRM < Standard
   # Clone the existing constructions and set their intended surface type and standards construction type per the PRM.
   # For some standards, this will involve making modifications.  For others, it will not.
   #
-  # 90.1-2007, 90.1-2010, 90.1-2013
+  # 90.1-2019
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
   def model_apply_prm_construction_types(model)
@@ -628,6 +630,7 @@ class ASHRAE901PRM < Standard
   # Reduces the SRR to the values specified by the PRM. SRR reduction will be done by shrinking vertices toward the centroid.
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @return [Boolean] True if success
   def model_apply_prm_baseline_skylight_to_roof_ratio(model)
     # Loop through all spaces in the model, and
     # per the 90.1-2019 PRM User Manual, only
@@ -910,13 +913,12 @@ class ASHRAE901PRM < Standard
   end
 
   # Identifies non mechanically cooled ("nmc") systems, if applicable
-  #
+  # and add a flag to the zone's and air loop's additional properties.
   # TODO: Zone-level evaporative cooler is not currently supported by
   #       by OpenStudio, will need to be added to the method when
   #       supported.
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
-  # @return zone_nmc_sys_type [Hash] Zone to nmc system type mapping
   def model_identify_non_mechanically_cooled_systems(model)
     # Iterate through zones to find out if they are served by nmc systems
     model.getThermalZones.each do |zone|
@@ -976,6 +978,7 @@ class ASHRAE901PRM < Standard
   # Applies the HVAC parts of the template to all objects in the model using the the template specified in the model.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
   # @param sql_db_vars_map [Hash] hash map
   # @return [Bool] returns true if successful, false if not
@@ -1077,6 +1080,12 @@ class ASHRAE901PRM < Standard
     return true
   end
 
+  # This function returns the cooling dx coil efficiency and curve coefficient in a Hashmap.
+  #
+  # @param cooling_coil [OpenStudio::Model::ModeObject]
+  # @param sql_db_vars_map [Hash] hash map
+  # @param sys_type [String] baseline system type string
+  # @return sql_db_vars_map [Hash]
   def set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
     if cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
       # single speed coil
@@ -1091,6 +1100,12 @@ class ASHRAE901PRM < Standard
     return sql_db_vars_map
   end
 
+  # This function returns the heating dx coil efficiency and curve coefficient in a Hashmap.
+  #
+  # @param heating_coil [OpenStudio::Model::ModeObject]
+  # @param sql_db_vars_map [Hash] hash map
+  # @param sys_type [String] baseline system type string
+  # @return sql_db_vars_map [Hash] the hashmap contains the heating efficiency and curve coefficient for the heating_coil
   def set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
     if heating_coil.to_CoilHeatingDXSingleSpeed.is_initialized
       # single speed coil
@@ -1161,6 +1176,7 @@ class ASHRAE901PRM < Standard
   #
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio model
+  # @return [Boolean] true if successful.
   def model_mark_zone_dcv_existence(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       next unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
@@ -1390,7 +1406,7 @@ class ASHRAE901PRM < Standard
   # @param [String] default_wwr_building_type
   # @param [String] default_swh_building_type
   # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
-  # @return True
+  # @return [Boolean] True if successful.
   def handle_user_input_data(model, climate_zone, sizing_run_dir, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # Set sizing run directory
     @sizing_run_dir = sizing_run_dir
@@ -1410,6 +1426,7 @@ class ASHRAE901PRM < Standard
     handle_thermal_zone_user_input_data(model)
     # load electric equipment user data
     handle_electric_equipment_user_input_data(model)
+    return true
   end
 
   # A function to load exterior lighting data from user data csv files
@@ -2020,8 +2037,9 @@ class ASHRAE901PRM < Standard
   # 2. Method user input.
   # 3. User data override.
   #
-  # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
-  # @param [OpenStudio::Model::Model] OpenStudio model
+  # @param run_all_orients [Boolean] user inputs to indicate whether it is required to run all orientations
+  # @param user_model [OpenStudio::Model::Model] OpenStudio model
+  # @return run_orient_flag [Boolean] True if run all orientation is required, false otherwise
   def run_all_orientations(run_all_orients, user_model)
     run_orients_flag = false
     # Step 1 check orientation variations - priority 3
@@ -2065,6 +2083,12 @@ class ASHRAE901PRM < Standard
     return run_orients_flag
   end
 
+
+  # Function that extract the total fenestration area from a model by orientations.
+  # Orientation is identified as N (North), S (South), E (East), W (West)
+  #
+  # @param user_model [OpenStudio::Model::Model]
+  # @return fenestration_area_hash [Hash] Hash map that contains the total area of fenestration at each orientation (N, S, E, W)
   def get_model_fenestration_area_by_orientation(user_model)
     # First index is wall, second index is window
     fenestration_area_hash = {

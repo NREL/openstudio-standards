@@ -1,10 +1,15 @@
 class ASHRAE901PRM < Standard
   # @!group Space
 
-  # Set the infiltration rate for this space to include
-  # the impact of air leakage requirements in the standard.
+  # Set the infiltration rate for this space to include the impact of air leakage requirements in the standard.
   #
-  # @return [Double] true if successful, false if not
+  # @param space [OpenStudio::Model::Space] space object
+  # @param tot_infil_m3_per_s [Float] total infiltration in m3/s
+  # @param infil_method [String] infiltration method
+  # @param infil_coefficients [Array] Array of 4 items
+  #       [Constant Term Coefficient, Temperature Term Coefficient,
+  #         Velocity Term Coefficient, Velocity Squared Term Coefficient]
+  # @return [Boolean] true if successful.
   def space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients)
     # Calculate infiltration rate
     case infil_method.to_s
