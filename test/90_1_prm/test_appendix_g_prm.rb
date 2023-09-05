@@ -3591,8 +3591,8 @@ class AppendixGPRMTests < Minitest::Test
 
   def test_infiltration
     model_hash = prm_test_helper('infiltration', require_prototype=true, require_baseline=false, require_proposed=true)
-    check_infiltration(model_hash['prototype'], model_hash['baseline'], 'baseline')
-#    check_infiltration(model_hash['prototype'], model_hash['proposed'], 'proposed') TODO reactivate when the source of randomness in results has been identified
+    # check_infiltration(model_hash['prototype'], model_hash['baseline'], 'baseline')
+   check_infiltration(model_hash['prototype'], model_hash['proposed'], 'proposed')
   end
 
   def test_vav_fan_curve

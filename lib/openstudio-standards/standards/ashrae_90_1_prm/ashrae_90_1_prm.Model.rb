@@ -299,7 +299,15 @@ class ASHRAE901PRM < Standard
     model.getSpaces.each do |space|
       # Infiltration at the space level
       unless space.spaceInfiltrationDesignFlowRates.empty?
-        infil_obj = space.spaceInfiltrationDesignFlowRates[0]
+        infil_obj = nil
+        # assuming the infiltration to look for has name of space name + " Infiltration".
+        # This is to avoid picking up door infiltration objects and alike.
+        space.spaceInfiltrationDesignFlowRates.each do |space_infil|
+          if space_infil.name.to_s.strip.casecmp?("#{space.name.to_s.strip} Infiltration")
+            infil_obj = space_infil
+            break
+          end
+        end
         unless infil_obj.designFlowRate.is_initialized
           if infil_obj.flowperSpaceFloorArea.is_initialized
             bldg_air_leakage_rate += infil_obj.flowperSpaceFloorArea.get * space.floorArea
@@ -2903,7 +2911,7 @@ class ASHRAE901PRM < Standard
     else
       fan_sch_limits = fan_sch_limits.get
     end
-    sch_name = system_name + ' ' + 'fan schedule'
+    sch_name = "#{system_name} fan schedule"
     make_ruleset_sched_from_8760(model, fan_8760, sch_name, fan_sch_limits)
 
     air_loop = model.getAirLoopHVACByName(system_name).get
