@@ -3,6 +3,7 @@ os_stds_methods/test_service_water_heating.rb
 os_stds_methods/test_daylighting_controls.rb
 os_stds_methods/test_space_type.rb
 os_stds_methods/test_misc.rb
+os_stds_methods/test_radiant_controls.rb
 
 90_1_prm/test_prm_baseline_bldg.rb
 90_1_prm/test_prm_baseline_bldg4.rb
@@ -103,6 +104,7 @@ necb/unit_tests/tests/test_ecm_scaling_loads.rb
 necb/unit_tests/tests/test_insuite_central_doas.rb
 necb/unit_tests/tests/test_necb_reference_heatpump_rules.rb
 necb/unit_tests/tests/test_ecm_hs14_cgshp_fancoils.rb
+necb/unit_tests/tests/test_necb_weather_file_download.rb
 
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_hydronic_fpfc.rb
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_dx_fpfc.rb
