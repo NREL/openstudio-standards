@@ -2043,7 +2043,7 @@ class NECB2011
     clg_coil = add_onespeed_DX_coil(model, always_on)
 
     # Set up PTAC constant volume supply fan
-    fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+    fan = OpenStudio::Model::FanOnOff.new(model)
     fan.setPressureRise(640)
 
     # This method will seem like an error in number of args..but this is due to swig voodoo.
@@ -2053,6 +2053,7 @@ class NECB2011
                                                                          htg_coil,
                                                                          clg_coil)
     ptac.setName("#{zone.name} PTAC")
+    ptac.setSupplyAirFanOperatingModeSchedule(always_off)
     if zero_outdoor_air
       ptac.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded 1.0e-5
       ptac.setOutdoorAirFlowRateDuringCoolingOperation(1.0e-5)
