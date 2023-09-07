@@ -212,9 +212,9 @@ end
 def default_radiant_test_hash
   # example hash for an HVAC system type test
   # default optional arguments should match those in model_add_low_temp_radiant
-  default_hash = {two_pipe_system: true,
-                  heating_plant_lockout: 65,
-                  use_zone_demand: false,
+  default_hash = {two_pipe_system: false,
+                  two_pipe_control_strategy: 'outdoor_air_lockout',
+                  two_pipe_lockout_temperature: 65.0,
                   radiant_type: 'floor',
                   radiant_temperature_control_type: 'SurfaceFaceTemperature',
                   radiant_setpoint_control_type: 'ZeroFlowPower',
@@ -255,8 +255,8 @@ def model_radiant_system_test(arguments)
 
   # hash arguments defined in default_radiant_test_hash
   two_pipe_system = hash[:two_pipe_system]
-  heating_plant_lockout = hash[:heating_plant_lockout]
-  use_zone_demand = hash[:use_zone_demand]
+  two_pipe_control_strategy = hash[:two_pipe_control_strategy]
+  two_pipe_lockout_temperature = hash[:two_pipe_lockout_temperature]
   radiant_type = hash[:radiant_type]
   radiant_temperature_control_type = hash[:radiant_temperature_control_type]
   radiant_setpoint_control_type = hash[:radiant_setpoint_control_type]
@@ -330,8 +330,8 @@ def model_radiant_system_test(arguments)
                                                         hot_water_loop,
                                                         chilled_water_loop,
                                                         two_pipe_system: two_pipe_system,
-                                                        heating_plant_lockout: heating_plant_lockout,
-                                                        use_zone_demand: use_zone_demand,
+                                                        two_pipe_control_strategy: two_pipe_control_strategy,
+                                                        two_pipe_lockout_temperature: two_pipe_lockout_temperature,
                                                         radiant_type: radiant_type,
                                                         radiant_temperature_control_type: radiant_temperature_control_type,
                                                         radiant_setpoint_control_type: radiant_setpoint_control_type,
