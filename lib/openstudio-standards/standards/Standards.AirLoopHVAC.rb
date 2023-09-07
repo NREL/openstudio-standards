@@ -784,6 +784,10 @@ class Standard
         # CoilCoolingWater
       elsif sc.to_CoilCoolingWater.is_initialized
         coil = sc.to_CoilCoolingWater.get
+        # error if the design coil capacity method isn't available
+        if coil.model.version < OpenStudio::VersionString.new('3.6.0')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required CoilCoolingWater method .autosizedDesignCoilLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        end
         if coil.autosizedDesignCoilLoad.is_initialized
           # @todo Change to pull water coil nominal capacity instead of design load
           total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
@@ -827,6 +831,10 @@ class Standard
           # CoilCoolingWater
           elsif clg_coil.to_CoilCoolingWater.is_initialized
             coil = clg_coil.to_CoilCoolingWater.get
+            # error if the design coil capacity method isn't available
+            if coil.model.version < OpenStudio::VersionString.new('3.6.0')
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required CoilCoolingWater method .autosizedDesignCoilLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+            end
             if coil.autosizedDesignCoilLoad.is_initialized
               # @todo Change to pull water coil nominal capacity instead of design load
               total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
@@ -871,6 +879,10 @@ class Standard
         # CoilCoolingWater
         elsif clg_coil.to_CoilCoolingWater.is_initialized
           coil = clg_coil.to_CoilCoolingWater.get
+          # error if the design coil capacity method isn't available
+          if coil.model.version < OpenStudio::VersionString.new('3.6.0')
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required CoilCoolingWater method .autosizedDesignCoilLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          end
           if coil.autosizedDesignCoilLoad.is_initialized
             # @todo Change to pull water coil nominal capacity instead of design load
             total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
@@ -2033,7 +2045,13 @@ class Standard
     num_zones_adj = 0
 
     # Retrieve the sum of the zone minimum primary airflow
-    vpz_min_sum = air_loop_hvac.autosizeSumMinimumHeatingAirFlowRates
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    elsif air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates.is_initialized
+      vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates.get
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "autosizedSumMinimumHeatingAirFlowRates is not available for air loop #{air_loop_hvac}.")
+    end
 
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
@@ -2049,6 +2067,12 @@ class Standard
       # max of heating and cooling
       # design air flow rates
       v_pz = 0.0
+
+      # error if zone autosized methods are not available
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required ThermalZone method .autosizedCoolingDesignAirFlowRate and .autosizedHeatingDesignAirFlowRate are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
       clg_dsn_flow = zone.autosizedCoolingDesignAirFlowRate
       if clg_dsn_flow.is_initialized
         clg_dsn_flow = clg_dsn_flow.get
@@ -2180,7 +2204,17 @@ class Standard
     # zone airflow are lower than the calculated system
     # outdoor air intake
     if v_ot_adj > vpz_min_sum && v_ot_adj > 0
-      mdp_adj = [v_ot_adj / air_loop_hvac.autosizeSumAirTerminalMaxAirFlowRate, 1].min
+
+      # Retrieve the sum of the zone maximum air flow rates
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumAirTerminalMaxAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      elsif air_loop_hvac.autosizedSumAirTerminalMaxAirFlowRate.is_initialized
+        v_max = air_loop_hvac.autosizedSumAirTerminalMaxAirFlowRate.get
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "autosizedSumAirTerminalMaxAirFlowRate is not available for air loop #{air_loop_hvac}.")
+      end
+
+      mdp_adj = [v_ot_adj / v_max, 1].min
       air_loop_hvac.thermalZones.sort.each do |zone|
         air_loop_hvac_set_minimum_damper_position(zone, mdp_adj)
       end

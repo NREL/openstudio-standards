@@ -871,9 +871,15 @@ class Standard
     # fuels in the entire baseline building are changed for the purposes of HVAC system assignment
     all_htg_fuels = []
     all_clg_fuels = []
+
+    # error if HVACComponent heating fuels method is not available
+    if model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     model.getThermalZones.sort.each do |zone|
-      all_htg_fuels += zone.heating_fuels
-      all_clg_fuels += zone.cooling_fuels
+      all_htg_fuels += zone.heatingFuelTypes.map { |f| f.valueName }
+      all_clg_fuels += zone.coolingFuelTypes.map { |f| f.valueName }
     end
 
     purchased_heating = false
@@ -934,7 +940,13 @@ class Standard
     has_district_hash = {}
     model.getThermalZones.sort.each do |zone|
       has_district_hash['building'] = false
-      htg_fuels = zone.heating_fuels
+
+      # error if HVACComponent heating fuels method is not available
+      if model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
+      htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
       if htg_fuels.include?('DistrictHeating')
         has_district_hash[zone.name] = true
         has_district_hash['building'] = true
@@ -953,8 +965,15 @@ class Standard
     has_district_heat = false
     has_fuel_heat = false
     has_elec_heat = false
+
+    # error if HVACComponent heating fuels method is not available
+    if model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     zones.each do |zone|
-      if zone.heating_fuels.include?('DistrictHeating')
+      htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
+      if htg_fuels.include?('DistrictHeating')
         has_district_heat = true
       end
       other_heat = thermal_zone_fossil_or_electric_type(zone, '')
@@ -7111,9 +7130,14 @@ class Standard
         return_air_type = 'ducted_return_or_direct_to_unit'
       end
 
+      # error if zone design air flow rate is not available
+      if zone.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
       zone.additionalProperties.setFeature('return_air_type', return_air_type)
       zone.additionalProperties.setFeature('plenum', return_plenum) unless return_plenum.nil?
-      zone.additionalProperties.setFeature('proposed_model_zone_design_air_flow', zone.designAirFlowRate.to_f)
+      zone.additionalProperties.setFeature('proposed_model_zone_design_air_flow', zone.autosizedDesignAirFlowRate.to_f)
     end
   end
 

@@ -193,8 +193,14 @@ class NECB2011
     @stored_space_cooling_sizing_loads = {}
     model.getSpaces.sort.each do |space|
       space_type = space.spaceType.get.standardsSpaceType.get
-      @stored_space_heating_sizing_loads[space] = space_type == '- undefined -' ? 0.0 : space.thermalZone.get.heatingDesignLoad.get
-      @stored_space_cooling_sizing_loads[space] = space_type == '- undefined -' ? 0.0 : space.thermalZone.get.coolingDesignLoad.get
+
+      # error if zone design load methods are not available
+      if space.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.autozone', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
+      @stored_space_heating_sizing_loads[space] = space_type == '- undefined -' ? 0.0 : space.thermalZone.get.autosizedHeatingDesignLoad.get / space.floorArea
+      @stored_space_cooling_sizing_loads[space] = space_type == '- undefined -' ? 0.0 : space.thermalZone.get.autosizedCoolingDesignLoad.get / space.floorArea
     end
   end
 

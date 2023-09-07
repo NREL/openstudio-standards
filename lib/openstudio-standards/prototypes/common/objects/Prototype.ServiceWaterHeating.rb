@@ -206,7 +206,7 @@ class Standard
     # Assign a quantity to the water heater if it represents multiple water heaters
     if number_water_heaters > 1
       water_heater.setName("#{number_water_heaters}X #{(water_heater_vol_gal / number_water_heaters).round}gal #{water_heater_fuel} Water Heater - #{(water_heater_capacity_kbtu_per_hr / number_water_heaters).round}kBtu/hr")
-      water_heater.set_component_quantity(number_water_heaters)
+      water_heater.additionalProperties.setFeature('component_quantity', number_water_heaters)
     else
       water_heater.setName("#{water_heater_vol_gal.round}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
     end
@@ -1163,7 +1163,14 @@ class Standard
       next unless sc.to_WaterHeaterMixed.is_initialized
 
       water_heater = sc.to_WaterHeaterMixed.get
-      comp_qty = water_heater.component_quantity
+
+      # get number of water heaters
+      if water_heater.additionalProperties.getFeatureAsInteger('component_quantity').is_initialized
+        comp_qty = water_heater.additionalProperties.getFeatureAsInteger('component_quantity').get
+      else
+        comp_qty = 1
+      end
+
       if comp_qty > 1
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Piping length has been multiplied by #{comp_qty}X because #{water_heater.name} represents #{comp_qty} pieces of equipment.")
         pipe_length_ft *= comp_qty

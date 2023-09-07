@@ -5,9 +5,6 @@ require_relative 'openstudio-standards/version'
 module OpenstudioStandards
   require 'json' # Used to load standards JSON files
 
-  # HVAC sizing
-  require_relative 'openstudio-standards/hvac_sizing/Siz.Model'
-
   # Weather data
   require_relative 'openstudio-standards/weather/Weather.Model'
 
