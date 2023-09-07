@@ -2340,7 +2340,7 @@ class AppendixGPRMTests < Minitest::Test
         temperature_highlimit_target = 23.89
         air_loop_name = air_loop.name.get
         baseline_system_type = air_loop.additionalProperties.getFeatureAsString("baseline_system_type")
-        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_basement_ZN_6 ZN PSZ-VAV' ,'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
+        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_top_ZN_6 ZN PSZ-VAV', 'DataCenter_basement_ZN_6 ZN PSZ-VAV', 'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
           economizer_activated_target = true
         end
 
