@@ -29,7 +29,7 @@
         },
         {
           "name": "NECB2020_AirCooledChiller",
-          "compressor_type": "Screw",
+          "compressor_type": "Rotary Screw",
           "minimum_capacity": 0.0,
           "maximum_capacity": 9999.0,
           "minimum_coefficient_of_performance_cooling": 2.866,

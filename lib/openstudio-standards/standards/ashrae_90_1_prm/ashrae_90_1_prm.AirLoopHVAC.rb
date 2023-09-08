@@ -100,17 +100,6 @@ class ASHRAE901PRM < Standard
     return false
   end
 
-  # Determine if multizone vav optimization is required.
-  # Not required for stable baseline.
-  #
-  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
-  def air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
-    multizone_opt_required = false
-    return multizone_opt_required
-  end
-
   # Determine whether the VAV damper control is single maximum or dual maximum control.
   # Defaults to Single Maximum for stable baseline.
   #
