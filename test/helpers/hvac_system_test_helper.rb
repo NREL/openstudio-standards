@@ -217,9 +217,11 @@ def default_radiant_test_hash
                   radiant_setpoint_control_type: 'ZeroFlowPower',
                   include_carpet: true,
                   carpet_thickness_in: 0.25,
-                  model_occ_hr_start: 6.0,
-                  model_occ_hr_end: 18.0,
                   control_strategy: 'proportional_control',
+                  use_zone_occupancy_for_control: true,
+                  occupied_percentage_threshold: 0.10,
+                  model_occ_hr_start: 6.0,
+                  model_occ_hr_end: 18.0,                  
                   proportional_gain: 0.3,
                   switch_over_time: 24.0,
                   radiant_availability_type: 'precool',
@@ -254,6 +256,8 @@ def model_radiant_system_test(arguments)
   radiant_setpoint_control_type = hash[:radiant_setpoint_control_type]
   include_carpet = hash[:include_carpet]
   carpet_thickness_in = hash[:carpet_thickness_in]
+  use_zone_occupancy_for_control = hash[:use_zone_occupancy_for_control]
+  occupied_percentage_threshold = hash[:occupied_percentage_threshold]
   model_occ_hr_start = hash[:model_occ_hr_start]
   model_occ_hr_end = hash[:model_occ_hr_end]
   control_strategy = hash[:control_strategy]
@@ -324,6 +328,8 @@ def model_radiant_system_test(arguments)
                                                         radiant_setpoint_control_type: radiant_setpoint_control_type,
                                                         include_carpet: include_carpet,
                                                         carpet_thickness_in: carpet_thickness_in,
+                                                        use_zone_occupancy_for_control: use_zone_occupancy_for_control,
+                                                        occupied_percentage_threshold: occupied_percentage_threshold,
                                                         model_occ_hr_start: model_occ_hr_start,
                                                         model_occ_hr_end: model_occ_hr_end,
                                                         control_strategy: control_strategy,

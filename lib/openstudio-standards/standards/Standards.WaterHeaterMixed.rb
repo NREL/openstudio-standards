@@ -17,6 +17,13 @@ class Standard
       end
     end
 
+    # get number of water heaters
+    if water_heater_mixed.additionalProperties.getFeatureAsInteger('component_quantity').is_initialized
+      comp_qty = water_heater_mixed.additionalProperties.getFeatureAsInteger('component_quantity').get
+    else
+      comp_qty = 1
+    end
+
     # Get the capacity of the water heater
     # @todo add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
@@ -25,7 +32,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find capacity, standard will not be applied.")
       return false
     else
-      capacity_w = capacity_w.get / water_heater_mixed.component_quantity
+      capacity_w = capacity_w.get / comp_qty
     end
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
@@ -37,7 +44,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volume, standard will not be applied.")
       return false
     else
-      volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / water_heater_mixed.component_quantity
+      volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / comp_qty
     end
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
 
