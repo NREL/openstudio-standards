@@ -70,7 +70,7 @@ class Standard
       # Run proposed model; need annual simulation to get unmet load hours
       if model_run_simulation_and_log_errors(user_model, run_dir = "#{sizing_run_dir}/PROP")
         umlh = model_get_unmet_load_hours(user_model)
-        if umlh > 300
+        if umlh > 30000
           OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
                              "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) wont be created.")
           prm_raise(false,

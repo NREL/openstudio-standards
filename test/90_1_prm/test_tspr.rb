@@ -15,7 +15,7 @@ class TSPRTests < Minitest::Test
   MAX_PATH_CHAR = 1800 #linux should set to a 1800, windows should set to 200, set to 1800 when push to the repo or open PR to pass CI.
 
 
-  def test_tspr_model_base(user_model_input='tspr/model_baseline_25496.osm')
+  def test_tspr_model_base(user_model_input='tspr/model_proposed_25496.osm')
     building_type = 'MediumOffice'
     climate_zone = 'ASHRAE 169-2013-2A'
     @test_dir = "#{File.dirname(__FILE__)}/output"
@@ -41,7 +41,7 @@ class TSPRTests < Minitest::Test
                                                                                   @@hvac_building_types[building_type],
                                                                                   @@wwr_building_types[building_type],
                                                                                   @@swh_building_types[building_type],
-                                                                                  run_dir_baseline, false, GENERATE_PRM_LOG)
+                                                                                  run_dir_baseline, true, GENERATE_PRM_LOG)
 
     # Check if baseline could be created
     assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{climate_zone}.")
