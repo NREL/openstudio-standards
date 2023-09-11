@@ -100,17 +100,6 @@ class ASHRAE901PRM < Standard
     return false
   end
 
-  # Determine if multizone vav optimization is required.
-  # Not required for stable baseline.
-  #
-  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
-  def air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
-    multizone_opt_required = false
-    return multizone_opt_required
-  end
-
   # Determine whether the VAV damper control is single maximum or dual maximum control.
   # Defaults to Single Maximum for stable baseline.
   #
@@ -263,7 +252,12 @@ class ASHRAE901PRM < Standard
       # individual zone air flow
       air_loop_total_zone_design_airflow = 0
       air_loop_hvac.thermalZones.sort.each do |zone|
-        zone_air_flow = zone.designAirFlowRate.to_f
+        # error if zone design air flow rate is not available
+        if zone.model.version < OpenStudio::VersionString.new('3.6.0')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', "Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        end
+
+        zone_air_flow = zone.autosizedDesignAirFlowRate.to_f
         air_loop_total_zone_design_airflow += zone_air_flow
         # Fractions variables are actually power at that point
         supply_fan_power_fraction += zone_air_flow * zone.additionalProperties.getFeatureAsDouble('supply_fan_w').get
