@@ -1104,6 +1104,19 @@ class ASHRAE901PRM < Standard
     return sql_db_vars_map
   end
 
+  # Template method for evaluate DCV requirements in the user model
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  # @return boolean true if works.
+  def model_evaluate_dcv_requirements(model)
+    model_mark_zone_dcv_existence(model)
+    model_add_dcv_user_exception_properties(model)
+    model_add_dcv_requirement_properties(model)
+    model_add_apxg_dcv_properties(model)
+    model_raise_user_model_dcv_errors(model)
+    return true
+  end
+
   # Template method for adding a setpoint manager for a coil control logic to a heating coil.
   # ASHRAE 90.1-2019 Appendix G.
   #
@@ -1185,7 +1198,7 @@ class ASHRAE901PRM < Standard
           end
         end
 
-        if zone_dcv == true
+        if zone_dcv
           thermal_zone.additionalProperties.setFeature('zone DCV implemented in user model', true)
         end
       end
