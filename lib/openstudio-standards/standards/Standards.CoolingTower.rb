@@ -18,7 +18,7 @@ module CoolingTower
   #
   # @param cooling_tower [OpenStudio::Model::StraightComponent] cooling tower object, allowable types:
   #   CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, and CoolingTowerVariableSpeed
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def cooling_tower_apply_minimum_power_per_flow(cooling_tower)
     # Get the design water flow rate
     design_water_flow_m3_per_s = nil

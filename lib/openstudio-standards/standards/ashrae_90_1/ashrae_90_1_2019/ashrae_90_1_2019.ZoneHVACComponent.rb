@@ -6,7 +6,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @ref [References::ASHRAE9012019] 6.4.3.9
   # @param zone_hvac_component [OpenStudio::Model::ZoneHVACComponent] zone hvac component
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def zone_hvac_component_vestibule_heating_control_required?(zone_hvac_component)
     # Ensure that the equipment is assigned to a thermal zone
     if zone_hvac_component.thermalZone.empty?
@@ -26,7 +26,7 @@ class ASHRAE9012019 < ASHRAE901
   # fan during the occupant standby mode hours
   #
   # @param zone_hvac_component OpenStudio zonal equipment object
-  # @retrun [Boolean] true if sucessful, false otherwise
+  # @return [Boolean] true if sucessful, false otherwise
   def zone_hvac_model_standby_mode_occupancy_control(zone_hvac_component)
     # Ensure that the equipment is assigned to a thermal zone
     if zone_hvac_component.thermalZone.empty?

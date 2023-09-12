@@ -49,9 +49,9 @@
 #   #argument model(s). This is handy for quickly viewing changes to the file during
 #   #runtime for debugging and QA.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model1 [OpenStudio::model::Model] A model object.
-#   #@param model2 [OpenStudio::model::Model] A model object.
-#   #@param model3 [OpenStudio::model::Model] A model object.
+#   #@param model1 [OpenStudio::Model::Model] A model object.
+#   #@param model2 [OpenStudio::Model::Model] A model object.
+#   #@param model3 [OpenStudio::Model::Model] A model object.
 #   def self.kdiff3_model_osm(model1, model2, model3 = "")
 #     Dir::mkdir("C:\\kdiff_test") unless File.exists?("C:\\kdiff_test")
 #     model1.save(OpenStudio::Path.new("c:\\kdiff_test\\diffA.osm"))
@@ -71,9 +71,9 @@
 #   #argument model(s). This is handy for quickly viewing changes to the file during
 #   #runtime for debugging and QA.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model1 [OpenStudio::model::Model] A model object.
-#   #@param model2 [OpenStudio::model::Model] A model object.
-#   #@param model3 [OpenStudio::model::Model] A model object.
+#   #@param model1 [OpenStudio::Model::Model] A model object.
+#   #@param model2 [OpenStudio::Model::Model] A model object.
+#   #@param model3 [OpenStudio::Model::Model] A model object.
 #   def self.kdiff3_model_idf(model1, model2, model3 = "")
 #     Dir::mkdir("C:\\kdiff_test") unless File.exists?("C:\\kdiff_test")
 #

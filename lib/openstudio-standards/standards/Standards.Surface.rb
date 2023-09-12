@@ -89,7 +89,7 @@ class Standard
   # @param sill_height_m [Double] sill height in meters
   # @param window_height_m [Double] window height in meters
   # @param fdwr [Double] fdwr
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def surface_replace_existing_subsurfaces_with_centered_subsurface(model, sill_height_m, window_height_m, fdwr)
     vertical_surfaces = find_exposed_conditioned_vertical_surfaces(model)
     vertical_surfaces.each do |vertical_surface|
@@ -381,9 +381,8 @@ class Standard
 
   # Returns the surface and subsurface UA product
   #
-  # @param [OpenStudio::Model::Surface] OpenStudio model surface object
-  #
-  # @retrun [Double] UA product in W/K
+  # @param surface [OpenStudio::Model::Surface] OpenStudio model surface object
+  # @return [Double] UA product in W/K
   def surface_subsurface_ua(surface)
     # Compute the surface UA product
     if surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod' && surface.construction.is_initialized
@@ -507,7 +506,7 @@ class Standard
   # @param surface [OpenStudio::Model:Surface] openstudio surface object
   # @param reduction [Float] ratio of adjustments
   # @param model [OpenStudio::Model::Model] openstudio model
-  # @return [Bool] return true if successful, false if not
+  # @return [Boolean] return true if successful, false if not
   def surface_adjust_fenestration_in_a_surface(surface, reduction, model)
     # Subsurfaces in this surface
     # Default case only handles reduction

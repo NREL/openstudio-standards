@@ -5,7 +5,7 @@ class ASHRAE9012004 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
 

@@ -27,7 +27,7 @@
 #
 #       #This method removes all costs from model
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@param runner [String]
 #       def self.remove_all_costs(model,runner = nil)
 #         #Remove all cost items.
@@ -39,11 +39,11 @@
 #
 #       #This method will add the costs.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@param name [String]
 #       #@param cost [Float]
 #       #@param unittype [String]
-#       #return cost_object [OpenStudio::model::Model] A model object
+#       #return cost_object [OpenStudio::Model::Model] A model object
 #       def self.object_cost(model,name,cost,unittype)
 #         unless cost.nil? or cost == 0.0
 #           #add total construction cost if used in place of each construction.
@@ -57,7 +57,7 @@
 #
 #       #This method will add the cost per building.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@param name [String]
 #       #@param cost [Float]
 #       #@param runner [Float]
@@ -73,7 +73,7 @@
 #
 #       #This method will add the cost per total area.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@param name [String]
 #       #@param cost [Float]
 #       #@param runner [Float]
@@ -89,7 +89,7 @@
 #
 #       #This method will set the ecm envelope.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@param library_file_path [String]
 #       #@param default_construction_set_name [String]
 #       #@param ext_wall_rsi [Float]
@@ -259,7 +259,7 @@
 #
 #       #This method will set the ecm infiltration.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@param infiltration_design_flow_rate [Float]
 #       #@param infiltration_flow_per_space [Float]
 #       #@param infiltration_flow_per_exterior_area [Float]
@@ -321,7 +321,7 @@
 #
 #       #This method will set the ecm fans.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_fans( model )
 #         measure_values =
@@ -413,7 +413,7 @@
 #
 #       #This method will set the ecm pumps.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_pumps( model )
 #         measure_values =
@@ -508,7 +508,7 @@
 #
 #       #This method will set the ecm cooling COP.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       def ecm_cooling_cop( model )
 #         log = ""
 #         measure_values =[
@@ -551,7 +551,7 @@
 #
 #       #This method will set the ecm economizers.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_economizers( model )
 #
@@ -582,7 +582,7 @@
 #       end
 #       #This method will set the ecm sizing.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] table
 #       def ecm_sizing( model)
 #         measure_values =[
@@ -616,7 +616,7 @@
 #
 #       #This method will set the ecm domestic hot water.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_dhw( model )
 #         log = "shw_setpoint_sched,shw_heater_fuel_type,shw_thermal_eff\n"
@@ -646,7 +646,7 @@
 #
 #       #This method will set the ecm chotwater boilers.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] table
 #       def ecm_hotwater_boilers( model )
 #         measure_values = [
@@ -762,7 +762,7 @@
 #
 #       #This method will set the ecm dcv.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_dcv( model )
 #         log = ""
@@ -779,7 +779,7 @@
 #
 #       #This method will set the ecm heating and cooling setpoints.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_heating_cooling_setpoints(model)
 #
@@ -833,7 +833,7 @@
 #
 #       #This method will set the ecm erv.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_erv( model )
 #         log = ""
@@ -907,7 +907,7 @@
 #
 #       #This method will set the ecm cexhaust fans.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_exhaust_fans( model )
 #         log = ""
@@ -928,7 +928,7 @@
 #
 #       #This method will set the ecm lighting.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_lighting( model )
 #         log = ""
@@ -955,7 +955,7 @@
 #
 #       #This method will set the ecm temperature setback.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_plugs( model )
 #         log = ""
@@ -986,7 +986,7 @@
 #
 #       #This method will set the ecm cold deck reset control.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_cold_deck_reset_control( model )
 #         log = ""
@@ -1042,7 +1042,7 @@
 #
 #       #This method will reset the sat ecm.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_sat_reset( model )
 #         log = ""
@@ -1082,7 +1082,7 @@
 #
 #       #This method will set the ecm temperature setback.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@return [String] log
 #       def ecm_temp_setback( model )
 #         log = ""

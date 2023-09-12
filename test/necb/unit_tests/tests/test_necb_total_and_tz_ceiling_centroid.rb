@@ -20,7 +20,7 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
     @top_output_folder = "#{@test_folder}/output/"
   end
 
-  # @return [Bool] true if successful.
+  # @return [Boolean] true if successful.
   def test_ceiling_centroid()
     output_array = []
     climate_zone = 'none'

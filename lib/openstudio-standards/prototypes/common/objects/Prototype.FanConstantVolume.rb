@@ -7,7 +7,7 @@ class Standard
   # and whether the fan lives inside a unit heater, PTAC, etc.
   #
   # @param fan_constant_volume [OpenStudio::Model::FanConstantVolume] constant volume fan object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
     # Don't modify unit heater fans
     return true if fan_constant_volume.name.to_s.include?('UnitHeater Fan')

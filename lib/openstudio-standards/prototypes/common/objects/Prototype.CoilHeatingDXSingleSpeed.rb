@@ -200,7 +200,7 @@ class Standard
   # sets defrost curve limits
   #
   # @param htg_coil [OpenStudio::Model::CoilHeatingDXSingleSpeed] a DX heating coil
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(htg_coil)
     return false unless htg_coil.defrostEnergyInputRatioFunctionofTemperatureCurve.is_initialized
 

@@ -6,7 +6,7 @@
 # @param model_true [OpenStudio::Model::Model] the "true" model
 # @param model_compare [OpenStudio::Model::Model] the model to be
 # compared to the "true" model
-# @param look_for_renamed_objects [Bool] if true, objects that have no match based
+# @param look_for_renamed_objects [Boolean] if true, objects that have no match based
 # on name alone will be compared with all objects of the same type on a field-by-field basis.
 # This finds objects that have been renamed but are otherwise
 # identical between models, but significantly slows down the comparison.
@@ -331,7 +331,7 @@ end
 # This method is recursive because after it finds that some objects have been renamed, it needs to re-compare
 # all remaining unmatched objects because they might have been unmatched due to having fields
 # referencing renamed object names be different.
-# @param look_for_renamed_objects [Bool] if true, objects that have no match based
+# @param look_for_renamed_objects [Boolean] if true, objects that have no match based
 # on name alone will be compared with all objects of the same type in the model_compare
 # on a field-by-field basis.  This finds objects that have been renamed but are otherwise
 # identical between models, but has a significant speed penalty.

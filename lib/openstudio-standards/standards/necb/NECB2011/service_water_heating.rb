@@ -99,7 +99,7 @@ class NECB2011
   # Per PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
   # Appendix A: Service Water Heating
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
     # Get the capacity of the water heater
     # TODO add capability to pull autosized water heater capacity

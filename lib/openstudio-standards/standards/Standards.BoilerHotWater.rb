@@ -74,7 +74,7 @@ class Standard
   # Finds lookup object in standards and return minimum thermal efficiency
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
-  # @param rename [Bool] if true, rename the boiler to include the new capacity and efficiency
+  # @param rename [Boolean] if true, rename the boiler to include the new capacity and efficiency
   # @return [Double] minimum thermal efficiency
   def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, rename = false)
     # Get the boiler properties
@@ -131,7 +131,7 @@ class Standard
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def boiler_hot_water_apply_efficiency_and_curves(boiler_hot_water)
     successfully_set_all_properties = false
 

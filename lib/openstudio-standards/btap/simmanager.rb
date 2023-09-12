@@ -70,7 +70,7 @@
 #     #This method will run the simulation. You must provide a folder where you wish
 #     #to run the simulation, and if not previously defined, the weather file. This will delete and recreate the folder provided to ensure that it is clean.
 #     #@author Phylroy A. Lopez
-#     #@param model [OpenStudio::model::Model] A model object
+#     #@param model [OpenStudio::Model::Model] A model object
 #     #@param folder_name [String] a simple string of the simulation folder path, remember to escape the slashes..(i.e. // not / )
 #     #@param epw_path [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )
 #     #@return [OpenStudio::Model::Model] the OpenStudio model object (self reference).
@@ -219,7 +219,7 @@
 #
 #       #This method adds the model to the folder.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@param folder [String]
 #       #@return [String] self
 #       def addModel(model, folder = @analysisFolder  )
@@ -670,7 +670,7 @@
 #       #This method copies report files to a single folder for convenience.
 #       #@author phylroy.lopez@nrcan.gc.ca
 #       #@param run_name [String]
-#       #@return [OpenStudio::model::Model] A model object
+#       #@return [OpenStudio::Model::Model] A model object
 #       def processResults(run_name)
 #         #make sql folder
 #         Dir.mkdir(@outdir.to_s+"\\sqlresults") unless File.exists?(@outdir.to_s+"\\sqlresults")
@@ -723,7 +723,7 @@
 #
 #       #This method will fix underheated hours
 #       #@author Phylroy A. Lopez
-#       #@param model [OpenStudio::model::Model] A model object
+#       #@param model [OpenStudio::Model::Model] A model object
 #       #@param folder_name [String] a simple string of the simulation folder path, remember to escape the slashes..(i.e. // not / )
 #       #@param epw_path [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )
 #       def fix_underheated_hours(model,epw_path,folder_name = "c:/temp/")
