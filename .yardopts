@@ -16,6 +16,7 @@ lib/openstudio-standards/prototypes/**/*.rb
 lib/openstudio-standards/utilities/**/*.rb
 lib/openstudio-standards/weather/**/*.rb
 lib/openstudio-standards/refs/references.rb
+lib/openstudio-standards/schedules/*.rb
 -
 docs/Home.md
 docs/UserQuickStartGuide.md

@@ -1,10 +1,9 @@
 require_relative '../helpers/minitest_helper'
-require_relative '../../lib/openstudio-standards/schedules/create'
-require_relative '../../lib/openstudio-standards/schedules/information'
 
 class TestSchedulesModify < Minitest::Test
-  include OpenstudioStandards::Schedules::Create
-  include OpenstudioStandards::Schedules::Information
+  def setup
+    @sch = OpenstudioStandards::Schedules
+  end
   
   def test_schedule_ruleset_min_max
     model = OpenStudio::Model::Model.new
@@ -14,8 +13,8 @@ class TestSchedulesModify < Minitest::Test
       'summerTimeValuePairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
       'defaultTimeValuePairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
     }
-    schedule = model_create_simple_schedule(model, test_options)
-    result = schedule_ruleset_min_max(schedule)
+    schedule = @sch.model_create_simple_schedule(model, test_options)
+    result = @sch.schedule_ruleset_min_max(schedule)
     assert(result['min'] == 6.0)
     assert(result['max'] == 14.0)
   end
@@ -28,8 +27,8 @@ class TestSchedulesModify < Minitest::Test
       'summerTimeValuePairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
       'defaultTimeValuePairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
     }
-    schedule = model_create_simple_schedule(model, test_options)
-    result = schedule_ruleset_timeseries(schedule)
+    schedule = @sch.model_create_simple_schedule(model, test_options)
+    result = @sch.schedule_ruleset_timeseries(schedule)
     assert(result.class.to_s == 'OpenStudio::TimeSeries')
     assert(result.values.length == (8760*2 - 365))
   end

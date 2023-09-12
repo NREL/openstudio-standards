@@ -5,6 +5,11 @@ require_relative 'openstudio-standards/version'
 module OpenstudioStandards
   require 'json' # Used to load standards JSON files
 
+  # Load Modules
+  require_relative 'openstudio-standards/schedules/create'
+  require_relative 'openstudio-standards/schedules/modify'
+  require_relative 'openstudio-standards/schedules/information'
+
   # Weather data
   require_relative 'openstudio-standards/weather/Weather.Model'
 
