@@ -153,7 +153,7 @@ module OpenstudioStandards
     # create a new schedule using absolute velocity of existing schedule
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
-    # @param schedule [OpenStudio::Model::ScheduleRuleset] OpenStudio ruleset schedule object
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ruleset schedule object
     # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @todo fix velocity so it isn't fraction change per step, but per hour
     #   (I need to count hours between times and divide value by this)
@@ -237,7 +237,7 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param schedule_weights_hash [Hash] Array of hashes of {OpenStudio::Model::ScheduleRuleset, Double}
-    # @sch_name [String] Optional name of new schedule
+    # @param sch_name [String] Optional name of new schedule
     # @return [Hash] Hash of {OpenStudio::Model::ScheduleRuleset, Double}
     #   with the OpenStudio ScheduleRuleset object and the total denominator
     # @todo apply weights to schedule rules as well, not just winter, summer, and default profile
