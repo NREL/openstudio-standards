@@ -314,6 +314,8 @@ class Standard
       set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
       set_constant_values_prg.setName('Set_Constant_Values')
       set_constant_values_prg.setBody(set_constant_values_prg_body)
+    else
+      set_constant_values_prg = set_constant_values_prg.get
     end
 
     # Initialize zone specific constant values used in EMS programs.
@@ -389,6 +391,11 @@ class Standard
     initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters')
     if initialize_constant_parameters.is_initialized
       initialize_constant_parameters = initialize_constant_parameters.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters.programs.collect{|prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters.setName('Initialize_Constant_Parameters')
@@ -399,6 +406,11 @@ class Standard
     initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters_After_Warmup')
     if initialize_constant_parameters_after_warmup.is_initialized
       initialize_constant_parameters_after_warmup = initialize_constant_parameters_after_warmup.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters_after_warmup.programs.collect{|prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters_after_warmup = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters_after_warmup.setName('Initialize_Constant_Parameters_After_Warmup')

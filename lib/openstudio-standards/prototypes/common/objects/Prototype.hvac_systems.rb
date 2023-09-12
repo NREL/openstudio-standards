@@ -4645,12 +4645,12 @@ end
   #      Requires thermal_zones defined.
   # @param two_pipe_lockout_temperature [Double] hot water plant lockout in degrees Fahrenheit, default 65F.
   #   Hot water plant is unavailable when outdoor drybulb is above the specified threshold.
-  # @param use_zone_demand [Bool] If true, it creates EMS code to define heating and cooling plant availability
-  #   based on zone heating and cooling load requests, default to false. When set to false, heating and cooling plant
-  #   availability schedules are set using the heating outdoor dry-bulb temperature lockout defined above.
   # @param plant_supply_water_temperature_control [Bool] Set to true if the plant supply water temperature
-  #   is to be controlled, default to false. Supply water temperature will vary based on outdoor air temperature
-  #   unless use_zone_demand is set to true in which it will use zone heating/cooling demand to vary temperature.
+  #   is to be controlled else it is held constant, default to false.
+  # @param plant_supply_water_control_strategy [String] Method to determine how to control the plant's supply water temperature (swt).
+  #   'outdoor_air' - The plant's swt will be proportional to the outdoor air based on the next 4 parameters.
+  #   'zone_demand' - The plant's swt will be determined by preponderance of zone demand.
+  #     Requires thermal_zone defined.
   # @param hwsp_at_oat_low [Double] hot water plant supply water temperature setpoint, in F, at the outdoor low temperature.
   # @param hw_oat_low [Double] outdoor drybulb air  temperature, in F, for low setpoint for hot water plant.
   # @param hwsp_at_oat_high [Double] hot water plant supply water temperature setpoint, in F, at the outdoor high temperature.
@@ -4706,6 +4706,7 @@ end
                                  two_pipe_control_strategy: 'outdoor_air_lockout',
                                  two_pipe_lockout_temperature: 65.0,
                                  plant_supply_water_temperature_control: false,
+                                 plant_supply_water_control_strategy: 'outdoor_air',
                                  hwsp_at_oat_low: 120,
                                  hw_oat_low: 55,
                                  hwsp_at_oat_high: 80,
@@ -4999,6 +5000,27 @@ end
                           thermal_zones: thermal_zones)
     end
 
+    # add supply water temperature control if enabled
+    if plant_supply_water_temperature_control
+      # add supply water temperature for heating plant loop
+      model_add_plant_swt_control(model, hot_water_loop,
+                                  control_strategy: plant_supply_water_control_strategy,
+                                  sp_at_oat_low: hwsp_at_oat_low,
+                                  oat_low: hw_oat_low,
+                                  sp_at_oat_high: hwsp_at_oat_high,
+                                  oat_high: hw_oat_high,
+                                  thermal_zones: thermal_zones)
+
+      # add supply water temperature for cooling plant loop
+      model_add_plant_swt_control(model, chilled_water_loop,
+                                  control_strategy: plant_supply_water_control_strategy,
+                                  sp_at_oat_low: chwsp_at_oat_low,
+                                  oat_low: chw_oat_low,
+                                  sp_at_oat_high: chwsp_at_oat_high,
+                                  oat_high: chw_oat_high,
+                                  thermal_zones: thermal_zones)
+    end
+
     # make a low temperature radiant loop for each zone
     radiant_loops = []
     thermal_zones.each do |zone|
@@ -5102,29 +5124,7 @@ end
                                                 proportional_gain: proportional_gain,
                                                 switch_over_time: switch_over_time)
       end
-
-      # add supply water temperature control if enabled
-      if plant_supply_water_temperature_control
-        # add supply water temperature for heating plant loop
-        model_add_plant_swt_control(model, hot_water_loop,
-                                    sp_at_oat_low: hwsp_at_oat_low,
-                                    oat_low: hw_oat_low,
-                                    sp_at_oat_high: hwsp_at_oat_high,
-                                    oat_high: hw_oat_high,
-                                    use_zone_demand: use_zone_demand,
-                                    thermal_zones: thermal_zones)
-
-        # add supply water temperature for cooling plant loop
-        model_add_plant_swt_control(model, chilled_water_loop,
-                                    sp_at_oat_low: chwsp_at_oat_low,
-                                    oat_low: chw_oat_low,
-                                    sp_at_oat_high: chwsp_at_oat_high,
-                                    oat_high: chw_oat_high,
-                                    use_zone_demand: use_zone_demand,
-                                    thermal_zones: thermal_zones)
-      end
     end
-
     return radiant_loops
   end
 
@@ -5961,25 +5961,26 @@ end
     return fan_type
   end
 
-  # Adds supply water temperature control on specified hot and chilled water loops.
+  # Adds supply water temperature control on specified plant water loops.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param plant_water_loop [OpenStudio::Model::PlantLoop] plant water loop to add supply water temperature control.
+  # @param control_strategy [String] Method to determine how to control the plant's supply water temperature (swt).
+  #   'outdoor_air' - The plant's swt will be proportional to the outdoor air based on the next 4 parameters.
+  #   'zone_demand' - The plant's swt will be determined by preponderance of zone demand.
+  #     Requires thermal_zone defined.
   # @param sp_at_oat_low [Double] supply water temperature setpoint, in F, at the outdoor low temperature.
   # @param oat_low [Double] outdoor drybulb air  temperature, in F, for low setpoint.
   # @param sp_at_oat_high [Double] supply water temperature setpoint, in F, at the outdoor high temperature.
   # @param oat_high [Double] outdoor drybulb air temperature, in F, for high setpoint.
-  # @param use_zone_demand [Bool] when set to true, heating and cooling plant supply water temperature is based
-  #   on zone heating and coolong load requests. If false, water temperature is based on outdoor drybulb air temperature.
-  # @param [Array<OpenStudio::Model::ThermalZone>] array of zones to dictate cooling or heating mode of water plant if
-  #   use_zone_demand is set to true
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones
   def model_add_plant_swt_control(model, plant_water_loop,
+                                  control_strategy: 'outdoor_air',
                                   sp_at_oat_low: nil,
                                   oat_low: nil,
                                   sp_at_oat_high: nil,
                                   oat_high: nil,
-                                  use_zone_demand: false,
-                                  thermal_zones: nil)
+                                  thermal_zones: [])
 
     # check that all required temperature parameters are defined
     if sp_at_oat_low.nil? and oat_low.nil? and sp_at_oat_high.nil? and oat_high.nil?
@@ -5990,7 +5991,7 @@ end
     exisiting_setpoint_managers = plant_water_loop.loopTemperatureSetpointNode.setpointManagers
     exisiting_setpoint_managers.each { |sp_mgr| sp_mgr.disconnect }
 
-    unless use_zone_demand
+    if control_strategy == 'outdoor_air'
       # create supply water temperature setpoint managers for plant based on outdoor temperature
       water_loop_setpoint_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
       water_loop_setpoint_manager.setName("#{plant_water_loop.name.get} Supply Water Temperature Control")
@@ -6002,6 +6003,122 @@ end
       water_loop_setpoint_manager.addToNode(plant_water_loop.loopTemperatureSetpointNode)
     else
       # create supply water temperature setpoint managers for plant based on zone heating and cooling demand
+      # check if zone heat and cool requests program exists, if not create it
+      determine_zone_cooling_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Cooling_Needs')
+      determine_zone_heating_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Heating_Needs')
+      unless determine_zone_cooling_needs_prg.is_initialized and determine_zone_heating_needs_prg.is_initialized
+        model_add_zone_heat_cool_request_count_program(model, thermal_zones)
+      end
+
+      plant_water_loop_name = ems_friendly_name(plant_water_loop.name)
+
+      if plant_water_loop.componentType.valueName == 'Heating'
+        swt_upper_limit = sp_at_oat_low.nil? ? OpenStudio.convert(120, 'F', 'C').get : OpenStudio.convert(sp_at_oat_low, 'F', 'C').get
+        swt_lower_limit = sp_at_oat_high.nil? ? OpenStudio.convert(80, 'F', 'C').get : OpenStudio.convert(sp_at_oat_high, 'F', 'C').get
+        swt_init = OpenStudio.convert(100, 'F', 'C').get
+        zone_demand_var = "Zone_Heating_Ratio"
+        swt_inc_condition_var = "> 0.70"
+        swt_dec_condition_var = "< 0.30"
+      else
+        swt_upper_limit = sp_at_oat_low.nil? ? OpenStudio.convert(70, 'F', 'C').get : OpenStudio.convert(sp_at_oat_low, 'F', 'C').get
+        swt_lower_limit = sp_at_oat_high.nil? ? OpenStudio.convert(55, 'F', 'C').get : OpenStudio.convert(sp_at_oat_high, 'F', 'C').get
+        swt_init = OpenStudio.convert(62, 'F', 'C').get
+        zone_demand_var = "Zone_Cooling_Ratio"
+        swt_inc_condition_var = "< 0.30"
+        swt_dec_condition_var = "> 0.70"
+      end
+
+      # plant loop supply water control actuator
+      sch_plant_swt_ctrl = model_add_constant_schedule_ruleset(model,
+                                                               swt_init,
+                                                               name = "#{plant_water_loop_name}_Sch_Supply_Water_Temperature")
+
+      cmd_plant_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_plant_swt_ctrl,
+                                                                                  'Schedule:Year',
+                                                                                  'Schedule Value')
+      cmd_plant_water_ctrl.setName("#{plant_water_loop_name}_supply_water_ctrl")
+
+      # create plant loop setpoint manager
+      water_loop_setpoint_manager = OpenStudio::Model::SetpointManagerScheduled.new(model,
+                                                                                    sch_plant_swt_ctrl)
+      water_loop_setpoint_manager.setName("#{plant_water_loop.name.get} Supply Water Temperature Control")
+      water_loop_setpoint_manager.setControlVariable("Temperature")
+      water_loop_setpoint_manager.addToNode(plant_water_loop.loopTemperatureSetpointNode)
+
+      # add uninitialized variables into constant program
+      set_constant_values_prg_body = <<-EMS
+        SET #{plant_water_loop_name}_supply_water_ctrl = #{swt_init}
+      EMS
+
+      set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Plant_Constant_Values')
+      unless set_constant_values_prg.is_initialized
+        set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+        set_constant_values_prg.setName('Set_Plant_Constant_Values')
+        set_constant_values_prg.setBody(set_constant_values_prg_body)
+      else
+        set_constant_values_prg = set_constant_values_prg.get
+        set_constant_values_prg.addLine(set_constant_values_prg_body)
+      end
+
+      # program for supply water temperature control in the plot
+      determine_plant_swt_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      determine_plant_swt_prg.setName("Determine_#{plant_water_loop_name}_Supply_Water_Temperature")
+      determine_plant_swt_prg_body = <<-EMS
+        SET SWT_Increase = 1,
+        SET SWT_Decrease = 1,
+        SET SWT_upper_limit = #{swt_upper_limit},
+        SET SWT_lower_limit = #{swt_lower_limit},
+        IF #{zone_demand_var} #{swt_inc_condition_var} && (@Mod CurrentTime 1) == 0,
+          SET #{plant_water_loop_name}_supply_water_ctrl = #{plant_water_loop_name}_supply_water_ctrl + SWT_Increase,
+        ELSEIF #{zone_demand_var} #{swt_dec_condition_var} && (@Mod CurrentTime 1) == 0,
+          SET #{plant_water_loop_name}_supply_water_ctrl = #{plant_water_loop_name}_supply_water_ctrl - SWT_Decrease,
+        ELSE,
+          SET #{plant_water_loop_name}_supply_water_ctrl = #{plant_water_loop_name}_supply_water_ctrl,
+        ENDIF,
+        IF #{plant_water_loop_name}_supply_water_ctrl > SWT_upper_limit,
+          SET #{plant_water_loop_name}_supply_water_ctrl = SWT_upper_limit
+        ENDIF,
+        IF #{plant_water_loop_name}_supply_water_ctrl < SWT_lower_limit,
+          SET #{plant_water_loop_name}_supply_water_ctrl = SWT_lower_limit
+        ENDIF
+      EMS
+      determine_plant_swt_prg.setBody(determine_plant_swt_prg_body)
+
+      # create EMS program manager objects
+      programs_at_beginning_of_timestep = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      programs_at_beginning_of_timestep.setName("#{plant_water_loop_name}_Demand_Based_Supply_Water_Temperature_At_Beginning_Of_Timestep")
+      programs_at_beginning_of_timestep.setCallingPoint('BeginTimestepBeforePredictor')
+      programs_at_beginning_of_timestep.addProgram(determine_plant_swt_prg)
+
+      initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters')
+      if initialize_constant_parameters.is_initialized
+        initialize_constant_parameters = initialize_constant_parameters.get
+        # add program if it does not exist in manager
+        existing_program_names = initialize_constant_parameters.programs.collect{|prg| prg.name.get.downcase }
+        unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+          initialize_constant_parameters.addProgram(set_constant_values_prg)
+        end
+      else
+        initialize_constant_parameters = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+        initialize_constant_parameters.setName('Initialize_Constant_Parameters')
+        initialize_constant_parameters.setCallingPoint('BeginNewEnvironment')
+        initialize_constant_parameters.addProgram(set_constant_values_prg)
+      end
+
+      initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters_After_Warmup')
+      if initialize_constant_parameters_after_warmup.is_initialized
+        initialize_constant_parameters_after_warmup = initialize_constant_parameters_after_warmup.get
+        # add program if it does not exist in manager
+        existing_program_names = initialize_constant_parameters_after_warmup.programs.collect{|prg| prg.name.get.downcase }
+        unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+          initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+        end
+      else
+        initialize_constant_parameters_after_warmup = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+        initialize_constant_parameters_after_warmup.setName('Initialize_Constant_Parameters_After_Warmup')
+        initialize_constant_parameters_after_warmup.setCallingPoint('AfterNewEnvironmentWarmUpIsComplete')
+        initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+      end
     end
 
   end
