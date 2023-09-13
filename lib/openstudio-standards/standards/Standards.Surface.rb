@@ -506,7 +506,7 @@ class Standard
   # @param surface [OpenStudio::Model:Surface] openstudio surface object
   # @param reduction [Float] ratio of adjustments
   # @param model [OpenStudio::Model::Model] openstudio model
-  # @return [Boolean] return true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def surface_adjust_fenestration_in_a_surface(surface, reduction, model)
     # Subsurfaces in this surface
     # Default case only handles reduction

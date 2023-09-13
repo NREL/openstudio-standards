@@ -2237,7 +2237,7 @@ class ASHRAE901PRM < Standard
   # @param residual_ratio [Float] the ratio of residual surfaces among the total wall surface area with no fenestrations
   # @param space [OpenStudio::Model:Space] a space
   # @param model [OpenStudio::Model::Model] openstudio model
-  # @return [Boolean] return true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_readjust_surface_wwr(residual_ratio, space, model)
     # In this loop, we will focus on the surfaces with newly added a fenestration.
     space.surfaces.sort.each do |surface|
