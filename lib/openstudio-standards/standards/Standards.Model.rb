@@ -7068,7 +7068,7 @@ class Standard
   # Identify the return air type associated with each thermal zone
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [String] return air type
+  # @return [Boolean] returns true if successful, false if not
   def model_identify_return_air_type(model)
     # air-loop based system
     model.getThermalZones.each do |zone|
@@ -7147,7 +7147,7 @@ class Standard
       zone.additionalProperties.setFeature('plenum', return_plenum) unless return_plenum.nil?
       zone.additionalProperties.setFeature('proposed_model_zone_design_air_flow', zone.autosizedDesignAirFlowRate.to_f)
     end
-    return return_air_type
+    return true
   end
 
   # Determine the baseline return air type associated with each zone
