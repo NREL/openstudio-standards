@@ -584,11 +584,13 @@ class Standard
     # Get user building level data
     building_name = proposed_model.building.get.name.get
     user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
-    user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
-    infiltration_modeled_from_field_verification_results = user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results'].to_s.downcase
+    user_buildings = !user_buildings.empty? ? @standards_data['userdata_building'] : nil
 
     # If needed, modify user model infiltration
     if user_buildings
+      user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
+      infiltration_modeled_from_field_verification_results = user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results'].to_s.downcase
+
       # Calculate total infiltration flow rate per envelope area
       building_envelope_area_m2 = model_building_envelope_area(proposed_model)
       curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(proposed_model, building_envelope_area_m2)

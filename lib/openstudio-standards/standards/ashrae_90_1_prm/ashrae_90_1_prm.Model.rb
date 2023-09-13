@@ -286,6 +286,33 @@ class ASHRAE901PRM < Standard
     return infil_coeffs
   end
 
+  # This methods calculate the air leakage rate of a space
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # @return [Float] Space air leakage rate
+  def model_get_space_air_leakage(space)
+    space_air_leakage = 0
+    space_multipler = space.multiplier
+    # Infiltration at the space level
+    unless space.spaceInfiltrationDesignFlowRates.empty?
+      space.spaceInfiltrationDesignFlowRates.each do |infil_obj|
+        unless infil_obj.designFlowRate.is_initialized
+          if infil_obj.flowperSpaceFloorArea.is_initialized
+            space_air_leakage += infil_obj.flowperSpaceFloorArea.get * space.floorArea * space_multipler
+          elsif infil_obj.flowperExteriorSurfaceArea.is_initialized
+            space_air_leakage += infil_obj.flowperExteriorSurfaceArea.get * space.exteriorArea * space_multipler
+          elsif infil_obj.flowperExteriorWallArea.is_initialized
+            space_air_leakage += infil_obj.flowperExteriorWallArea.get * space.exteriorWallArea * space_multipler
+          elsif infil_obj.airChangesperHour.is_initialized
+            space_air_leakage += infil_obj.airChangesperHour.get * space.volume * space_multipler / 3600
+          end
+        end
+      end
+    end
+
+    return space_air_leakage
+  end
+
   # This methods calculate the current model air leakage rate @ 75 Pa.
   # It assumes that the model follows the PRM methods, see G3.1.1.4
   # in 90.1-2019 for reference.
@@ -297,52 +324,9 @@ class ASHRAE901PRM < Standard
   def model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
     bldg_air_leakage_rate = 0
     model.getSpaces.each do |space|
-      # Infiltration at the space level
-      unless space.spaceInfiltrationDesignFlowRates.empty?
-        infil_obj = nil
-        # assuming the infiltration to look for has name of space name + " Infiltration".
-        # This is to avoid picking up door infiltration objects and alike.
-        space.spaceInfiltrationDesignFlowRates.each do |space_infil|
-          if space_infil.name.to_s.strip.casecmp?("#{space.name.to_s.strip} Infiltration")
-            infil_obj = space_infil
-            break
-          end
-        end
-        unless infil_obj.designFlowRate.is_initialized
-          if infil_obj.flowperSpaceFloorArea.is_initialized
-            bldg_air_leakage_rate += infil_obj.flowperSpaceFloorArea.get * space.floorArea
-          elsif infil_obj.flowperExteriorSurfaceArea.is_initialized
-            bldg_air_leakage_rate += infil_obj.flowperExteriorSurfaceArea.get * space.exteriorArea
-          elsif infil_obj.flowperExteriorWallArea.is_initialized
-            bldg_air_leakage_rate += infil_obj.flowperExteriorWallArea.get * space.exteriorWallArea
-          elsif infil_obj.airChangesperHour.is_initialized
-            bldg_air_leakage_rate += infil_obj.airChangesperHour.get * space.volume / 3600
-          end
-        end
-      end
-
-      # Infiltration at the space type level
-      if space.spaceType.is_initialized
-        space_type = space.spaceType.get
-        unless space_type.spaceInfiltrationDesignFlowRates.empty?
-          if bldg_air_leakage_rate > 0
-            OpenStudio.logFree(OpenStudio::Warn, 'prm.log', 'A duplicated infiltration definition is found in spaceType. Verify your model inputs.')
-          end
-          infil_obj = space_type.spaceInfiltrationDesignFlowRates[0]
-          unless infil_obj.designFlowRate.is_initialized
-            if infil_obj.flowperSpaceFloorArea.is_initialized
-              bldg_air_leakage_rate += infil_obj.flowperSpaceFloorArea.get * space.floorArea
-            elsif infil_obj.flowperExteriorSurfaceArea.is_initialized
-              bldg_air_leakage_rate += infil_obj.flowperExteriorSurfaceArea.get * space.exteriorArea
-            elsif infil_obj.flowperExteriorWallArea.is_initialized
-              bldg_air_leakage_rate += infil_obj.flowperExteriorWallArea.get * space.exteriorWallArea
-            elsif infil_obj.airChangesperHour.is_initialized
-              bldg_air_leakage_rate += infil_obj.airChangesperHour.get * space.volume / 3600
-            end
-          end
-        end
-      end
+      bldg_air_leakage_rate += model_get_space_air_leakage(space)
     end
+
     # adjust_infiltration_to_prototype_building_conditions(1) corresponds
     # to the 0.112 shown in G3.1.1.4
     curr_tot_infil_m3_per_s_per_envelope_area = bldg_air_leakage_rate / adjust_infiltration_to_prototype_building_conditions(1) / building_envelope_area_m2

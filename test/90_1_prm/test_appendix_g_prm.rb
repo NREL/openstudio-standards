@@ -1424,7 +1424,7 @@ class AppendixGPRMTests < Minitest::Test
         if building_type == "SmallOffice"
           infil_rate = 0.22
         elsif building_type == "LargeHotel"
-          infil_rate = 0.20
+          infil_rate = 0.50
         elsif building_type == "Warehouse"
           infil_rate = 0.61
         end
@@ -3590,9 +3590,9 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   def test_infiltration
-    model_hash = prm_test_helper('infiltration', require_prototype=true, require_baseline=false, require_proposed=true)
-    # check_infiltration(model_hash['prototype'], model_hash['baseline'], 'baseline')
-   check_infiltration(model_hash['prototype'], model_hash['proposed'], 'proposed')
+    model_hash = prm_test_helper('infiltration', require_prototype=true, require_baseline=true, require_proposed=true)
+    check_infiltration(model_hash['prototype'], model_hash['baseline'], 'baseline')
+    check_infiltration(model_hash['prototype'], model_hash['proposed'], 'proposed')
   end
 
   def test_vav_fan_curve

@@ -14,7 +14,7 @@ class ASHRAE901PRM < Standard
         space.model.getSpaces.each do |spc|
           # Get the space conditioning type
           space_cond_type = space_conditioning_category(spc)
-          total_exterior_wall_area += spc.exteriorWallArea unless space_cond_type == 'Unconditioned'
+          total_exterior_wall_area += spc.exteriorWallArea * spc.multiplier unless space_cond_type == 'Unconditioned'
         end
         prm_raise(total_exterior_wall_area > 0, @sizing_run_dir, 'Total exterior wall area in the model is 0. Check your model inputs')
         adj_infil_flow_ext_wall_area = tot_infil_m3_per_s / total_exterior_wall_area
@@ -25,7 +25,7 @@ class ASHRAE901PRM < Standard
         space.model.getSpaces.each do |spc|
           # Get the space conditioning type
           space_cond_type = space_conditioning_category(spc)
-          total_floor_area += spc.floorArea unless space_cond_type == 'Unconditioned' || space.exteriorArea == 0
+          total_floor_area += spc.floorArea * spc.multipler unless space_cond_type == 'Unconditioned' || space.exteriorArea == 0
         end
         prm_raise(total_floor_area > 0, @sizing_run_dir, 'Sum of the floor area in exterior spaces in the model is 0. Check your model inputs')
         adj_infil_flow_area = tot_infil_m3_per_s / total_floor_area
