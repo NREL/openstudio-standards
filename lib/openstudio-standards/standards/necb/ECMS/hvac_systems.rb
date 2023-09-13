@@ -1513,8 +1513,8 @@ class ECMS
             # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
             dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
             if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
-            # clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
-            # htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
+            clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
+            htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
             # assign COPs
             search_criteria = {}
             search_criteria['name'] = pthp_eqpt_name
