@@ -6,12 +6,16 @@ class TestCreateTypical < Minitest::Test
   end
 
   def test_typical_building_from_model
-    std = Standard.build('90.1-2013')
-    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../data/geometry/ASHRAEPrimarySchool.osm")
+    # load model and set up weather file
     template = '90.1-2013'
     climate_zone = 'ASHRAE 169-2013-4A'
+    std = Standard.build(template)
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../data/geometry/ASHRAEPrimarySchool.osm")
+    std.model_add_design_days_and_weather_file(model, climate_zone)
+
+    # apply create typical
     starting_size = model.getModelObjects.size
-    result = @create.typical_building_from_model(model, '90.1-2013', climate_zone: climate_zone)
+    result = @create.typical_building_from_model(model, template, climate_zone: climate_zone)
     ending_size = model.getModelObjects.size
     assert(result)
     assert(starting_size < ending_size)

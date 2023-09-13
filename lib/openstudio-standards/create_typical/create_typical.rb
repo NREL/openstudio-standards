@@ -78,7 +78,8 @@ module OpenstudioStandards
                                          remove_objects: true)
 
       # report initial condition of model
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "The building started with #{model.getModelObjects.size} objects.")
+      initial_object_size = model.getModelObjects.size
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "The building started with #{initial_object_size} objects.")
 
       # create a new standard class
       standard = Standard.build(template)
@@ -719,7 +720,7 @@ module OpenstudioStandards
       # remove everything but spaces, zones, and stub space types (extend as needed for additional objects, may make bool arg for this)
       if remove_objects
         model.purgeUnusedResourceObjects
-        objects_after_cleanup = initial_objects - model.getModelObjects.size
+        objects_after_cleanup = initial_object_size - model.getModelObjects.size
         if objects_after_cleanup > 0
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Removing #{objects_after_cleanup} objects from model")
         end
