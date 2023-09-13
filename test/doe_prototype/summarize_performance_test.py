@@ -1,4 +1,4 @@
-#%% setup
+# %% setup
 import sqlite3, os
 
 inputPath = "output/"
@@ -67,7 +67,14 @@ building_types = [
     "LargeOfficeDetailed",
 ]
 
-code_versions = ["90.1-2004", "90.1-2007", "90.1-2010", "90.1-2013", "90.1-2016", "90.1-2019"]
+code_versions = [
+    "90.1-2004",
+    "90.1-2007",
+    "90.1-2010",
+    "90.1-2013",
+    "90.1-2016",
+    "90.1-2019",
+]
 
 climate_zones = [
     "ASHRAE 169-2013-0A",
@@ -93,7 +100,7 @@ climate_zones = [
     "ASHRAE 169-2013-8B",
 ]
 
-#%% write header
+# %% write header
 
 output = open(outputFilePath, "w")
 headers = "Building Type,Template,Climate Zone"
@@ -102,7 +109,7 @@ for end_use in end_uses:
         headers = headers + "," + end_use + "|" + fuel
 output.write(headers + "\n")
 
-#%% read write results data
+# %% read write results data
 for building_type in building_types:
     for code_version in code_versions:
         for climate_zone in climate_zones:
