@@ -6,9 +6,21 @@ module OpenstudioStandards
   require 'json' # Used to load standards JSON files
 
   # Load Modules
+
+  # Geometry Module
+  require_relative 'openstudio-standards/geometry/create'
+  require_relative 'openstudio-standards/geometry/modify'
+  require_relative 'openstudio-standards/geometry/information'
+
+  # Schedules Module
   require_relative 'openstudio-standards/schedules/create'
   require_relative 'openstudio-standards/schedules/modify'
   require_relative 'openstudio-standards/schedules/information'
+
+  # CreateTypical Module
+  require_relative 'openstudio-standards/create_typical/enumerations'
+  require_relative 'openstudio-standards/create_typical/space_type_ratios'
+  require_relative 'openstudio-standards/create_typical/create_typical'
 
   # Weather data
   require_relative 'openstudio-standards/weather/Weather.Model'
