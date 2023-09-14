@@ -236,10 +236,9 @@ module OpenstudioStandards
     # merge multiple schedules into one using load or other value to weight each schedules influence on the merge
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
-    # @param schedule_weights_hash [Hash] Array of hashes of {OpenStudio::Model::ScheduleRuleset, Double}
+    # @param schedule_weights_hash [Hash] Hash of OpenStudio::Model::ScheduleRuleset, Double
     # @param sch_name [String] Optional name of new schedule
-    # @return [Hash] Hash of {OpenStudio::Model::ScheduleRuleset, Double}
-    #   with the OpenStudio ScheduleRuleset object and the total denominator
+    # @return [Hash] Hash of merged schedule and the total denominator
     # @todo apply weights to schedule rules as well, not just winter, summer, and default profile
     def self.model_create_weighted_merge_schedules(model, schedule_weights_hash, sch_name: 'Merged Schedule')
       # get denominator for weight
