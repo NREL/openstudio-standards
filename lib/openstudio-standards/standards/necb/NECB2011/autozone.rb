@@ -4,7 +4,7 @@ class NECB2011
   # e.g. (Prototype.secondary_school.rb) file.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_create_thermal_zones(model, space_multiplier_map = nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
     space_multiplier_map = {} if space_multiplier_map.nil?
@@ -801,7 +801,7 @@ class NECB2011
   end
 
   # This model determines the dominant NECB schedule type
-  # @param model [OpenStudio::model::Model] A model object
+  # @param model [OpenStudio::Model::Model] A model object
   # return s.each [String]
   def determine_dominant_necb_schedule_type(model)
     return determine_dominant_schedule(model.getSpaces)

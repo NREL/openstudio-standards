@@ -4,7 +4,7 @@ class Standard
   # Finds the search criteria
   #
   # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
-  # @return [hash] has for search criteria to be used for find object
+  # @return [Hash] has for search criteria to be used for find object
   def chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     search_criteria = {}
     search_criteria['template'] = template
@@ -108,7 +108,7 @@ class Standard
   #
   # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @param clg_tower_objs [Array] cooling towers, currently unused
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo remove clg_tower_objs parameter if unused
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = standards_data['chillers']

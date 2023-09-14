@@ -2,7 +2,7 @@ class BTAPPRE1980
   # Check if ERV is required on this airloop.
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
     # Do not apply ERV to BTAPPRE1980 buildings.
     erv_required = false
@@ -11,7 +11,7 @@ class BTAPPRE1980
 
   # Applies the standard efficiency ratings and typical performance curves to this object from MNECB Supplement 5.4.8.3.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = standards_data['chillers']
 

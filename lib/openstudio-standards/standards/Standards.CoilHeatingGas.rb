@@ -4,7 +4,7 @@ class Standard
   # Applies the standard efficiency ratings to CoilHeatingGas.
   #
   # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def coil_heating_gas_apply_efficiency_and_curves(coil_heating_gas)
     successfully_set_all_properties = false
     # Initialize search criteria

@@ -9,7 +9,7 @@ class NECB2011
 
   # NECB does not change damper positions
   #
-  # return [Bool] returns true if successful, false if not
+  # return [Boolean] returns true if successful, false if not
   def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac)
     # Do not change anything.
     return true
@@ -18,7 +18,7 @@ class NECB2011
   # Determine whether or not this system
   # is required to have an economizer.
   #
-  # @return [Bool] returns true if an economizer is required, false if not
+  # @return [Boolean] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac)
     economizer_required = false
 
@@ -86,7 +86,7 @@ class NECB2011
   # @note this method assumes you previously checked that an economizer is required at all
   #   via #economizer_required?
   # @param (see #economizer_required?)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_loop_hvac_apply_economizer_integration(air_loop_hvac, climate_zone)
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
@@ -105,7 +105,7 @@ class NECB2011
   # Check if ERV is required on this airloop.
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
     # ERV Not Applicable for AHUs that serve
@@ -283,7 +283,7 @@ class NECB2011
   # Will be a rotary-type HX
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac, climate = nil)
     # Get the oa system
@@ -401,7 +401,7 @@ class NECB2011
   # required for this air loop.
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for
   #   systems that serve multifamily, parking garage, warehouse
   def air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac, climate_zone)
@@ -413,7 +413,7 @@ class NECB2011
   # Set the VAV damper control to single maximum or
   # dual maximum control depending on the standard.
   #
-  # @return [Bool] Returns true if successful, false if not
+  # @return [Boolean] Returns true if successful, false if not
   # @todo see if this impacts the sizing run.
   def air_loop_hvac_apply_vav_damper_action(air_loop_hvac)
     damper_action = 'Single Maximum'
@@ -462,7 +462,7 @@ class NECB2011
 
   # NECB has no single zone air loop control requirements
   #
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: No special economizer controls were modeled.")
     return true
@@ -470,7 +470,7 @@ class NECB2011
 
   # NECB doesn't require static pressure reset.
   #
-  # return [Bool] returns true if static pressure reset is required, false if not
+  # return [Boolean] returns true if static pressure reset is required, false if not
   def air_loop_hvac_static_pressure_reset_required?(air_loop_hvac, has_ddc)
     # static pressure reset not required
     sp_reset_required = false
@@ -490,7 +490,7 @@ class NECB2011
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def boiler_hot_water_apply_efficiency_and_curves(boiler_hot_water)
     successfully_set_all_properties = false
 
@@ -592,7 +592,7 @@ class NECB2011
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -808,7 +808,7 @@ class NECB2011
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def coil_heating_gas_apply_efficiency_and_curves(coil_heating_gas)
     successfully_set_all_properties = true
 
@@ -849,7 +849,7 @@ class NECB2011
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def coil_cooling_dx_multi_speed_apply_efficiency_and_curves(coil_cooling_dx_multi_speed, sql_db_vars_map)
     successfully_set_all_properties = true
     model = coil_cooling_dx_multi_speed.model
@@ -1097,7 +1097,7 @@ class NECB2011
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage)
     successfully_set_all_properties = true
     model = coil_heating_gas_multi_stage.model
@@ -1467,7 +1467,7 @@ class NECB2011
   # Does not account for System requirements like ERV, economizer, etc.
   # Those are accounted for in the AirLoopHVAC method of the same name.
   #
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for 90.1-2013
   #   for cells, sickrooms, labs, barbers, salons, and bowling alleys
   def thermal_zone_demand_control_ventilation_required?(thermal_zone, climate_zone)
@@ -2384,7 +2384,7 @@ class NECB2011
   # heating type rules need to be flexible to account for 
   # 1.  DX htg/cooling + gas supplement htg
   # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem  
-  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
+  # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def coil_dx_heating_type(coil_dx, necb_reference_hp = false)
     supp_htg_type = nil
 

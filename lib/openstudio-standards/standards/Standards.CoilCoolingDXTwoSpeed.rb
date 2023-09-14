@@ -24,7 +24,7 @@ class Standard
   # Finds lookup object in standards and return efficiency
   #
   # @param coil_cooling_dx_two_speed [OpenStudio::Model::CoilCoolingDXTwoSpeed] coil cooling dx two speed object
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, rename = false)
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed)

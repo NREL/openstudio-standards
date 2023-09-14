@@ -93,7 +93,7 @@
 #
 #       #This method will do an analysis of the opaque surface conductance sensitivity and returns a string model array.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+#       #@param model [OpenStudio::Model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
 #       #@param choice [String] description
 #       #@return [modelArray<String>]
 #       def self.opaque_surface_conductance_sensitivity_analysis(model,choice )
@@ -191,7 +191,7 @@
 #
 #       #This method performs a wall sensitivity analysis and returns a string model array.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+#       #@param model [OpenStudio::Model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
 #       #@param folder_name [String]
 #       #@param values<Fixnum>
 #       #@return [modelArray<String>]
@@ -213,7 +213,7 @@
 #
 #       #This method performs a roof sensitivity analysis and returns a string model array.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+#       #@param model_in [OpenStudio::Model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
 #       #@param folder_name [String]
 #       #@param values<Fixnum>
 #       #@return [modelArray<String>]
@@ -249,7 +249,7 @@
 #
 #       #This method performs a glazing solar transmittance sensitivity analysis and returns a model array.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+#       #@param model_in [OpenStudio::Model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
 #       #@param folder_name [String]
 #       #@param values<Fixnum>
 #       #@return [modelArray<String>]
@@ -270,7 +270,7 @@
 #
 #       #This method performs an rvalue sensitivity analysis and returns a model array.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+#       #@param model_in [OpenStudio::Model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
 #       #@param folder_name [String]
 #       #@param values<Fixnum>
 #       #@return [modelArray<String>]
@@ -291,7 +291,7 @@
 #
 #       #This method performs a full sensitivity analysis on the wall, roof, solar-trans,window,and ground surfaces.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+#       #@param model [OpenStudio::Model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
 #       #@param parent_folder [String]
 #       def self.full_sensitivity_analysis(model, parent_folder)
 #         self.wall_rvalue_sensitivity_model_analysis(model, (parent_folder + "/wall-r"))
@@ -304,7 +304,7 @@
 #
 #       #This method performs a full analysis (elimination and Sensitivity).
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model [OpenStudio::model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+#       #@param model [OpenStudio::Model::Model] A model object   {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
 #       #@param folder [String]
 #       def self.full_analysis(model, folder)
 #         FileUtils.rm_rf(folder)
@@ -318,7 +318,7 @@
 #
 #       #This method performs an elimination analysis ( OA, H&C setpoints,infiltration,occupancy,lighting,plug_loads,gas_equipment, hotwater, steam, other) and returns a model array.
 #       #@author phylroy.lopez@nrcan.gc.ca
-#       #@param model_in [OpenStudio::model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
+#       #@param model_in [OpenStudio::Model::Model] A model object {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
 #       #@param folder_name [String]
 #       #@return [modelArray<String>]
 #       def self.full_elimination_analysis(model_in, folder_name)

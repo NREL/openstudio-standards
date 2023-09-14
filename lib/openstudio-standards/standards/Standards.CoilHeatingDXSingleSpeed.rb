@@ -6,7 +6,7 @@ class Standard
   # Finds capacity in W.  This is the cooling capacity of the paired DX cooling coil.
   #
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
-  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
+  # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [Double] capacity in W to be used for find object
   def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_ref_hp = false)
     capacity_w = nil
@@ -104,8 +104,8 @@ class Standard
   # Finds lookup object in standards and return efficiency
   #
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
-  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
+  # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [Double] full load efficiency (COP)
   def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false, necb_ref_hp = false)
     # find ac properties
@@ -181,7 +181,7 @@ class Standard
   #
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
   # @param sql_db_vars_map [Hash] hash map
-  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
+  # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [Hash] hash of coil objects
   def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map, necb_ref_hp = false)
     successfully_set_all_properties = true
