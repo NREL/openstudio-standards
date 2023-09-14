@@ -670,8 +670,14 @@ class Standard
     # Define the minimum area for the
     # exception that allows a different
     # system type in part of the building.
-    exception_min_area_m2 = model_prm_baseline_system_group_minimum_area(model, custom)
-    exception_min_area_ft2 = OpenStudio.convert(exception_min_area_m2, 'm^2', 'ft^2').get
+    if custom == 'Xcel Energy CO EDA'
+     # Customization - Xcel EDA Program Manual 2014
+      # 3.2.1 Mechanical System Selection ii
+      exception_min_area_ft2 = 5000
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
+    else
+      exception_min_area_ft2 = 20_000
+    end
 
     # Get occupancy type, fuel type, and area information for all zones,
     # excluding unconditioned zones.
@@ -865,9 +871,15 @@ class Standard
     # fuels in the entire baseline building are changed for the purposes of HVAC system assignment
     all_htg_fuels = []
     all_clg_fuels = []
+
+    # error if HVACComponent heating fuels method is not available
+    if model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     model.getThermalZones.sort.each do |zone|
-      all_htg_fuels += zone.heating_fuels
-      all_clg_fuels += zone.cooling_fuels
+      all_htg_fuels += zone.heatingFuelTypes.map { |f| f.valueName }
+      all_clg_fuels += zone.coolingFuelTypes.map { |f| f.valueName }
     end
 
     purchased_heating = false
@@ -928,7 +940,13 @@ class Standard
     has_district_hash = {}
     model.getThermalZones.sort.each do |zone|
       has_district_hash['building'] = false
-      htg_fuels = zone.heating_fuels
+
+      # error if HVACComponent heating fuels method is not available
+      if model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
+      htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
       if htg_fuels.include?('DistrictHeating')
         has_district_hash[zone.name] = true
         has_district_hash['building'] = true
@@ -947,8 +965,15 @@ class Standard
     has_district_heat = false
     has_fuel_heat = false
     has_elec_heat = false
+
+    # error if HVACComponent heating fuels method is not available
+    if model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     zones.each do |zone|
-      if zone.heating_fuels.include?('DistrictHeating')
+      htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
+      if htg_fuels.include?('DistrictHeating')
         has_district_heat = true
       end
       other_heat = thermal_zone_fossil_or_electric_type(zone, '')
@@ -1125,18 +1150,6 @@ class Standard
     return fan_8760
   end
 
-  # Determines the area of the building above which point
-  # the non-dominant area type gets it's own HVAC system type.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param custom [String] custom fuel type
-  # @return [Double] the minimum area (m^2)
-  def model_prm_baseline_system_group_minimum_area(model, custom)
-    exception_min_area_ft2 = 20_000
-    exception_min_area_m2 = OpenStudio.convert(exception_min_area_ft2, 'ft^2', 'm^2').get
-    return exception_min_area_m2
-  end
-
   # Determine the baseline system type given the inputs.  Logic is different for different standards.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
@@ -1154,14 +1167,19 @@ class Standard
     area_ft2 = sys_group['area_ft2']
     num_stories = sys_group['stories']
 
-    #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
+    # [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
 
     # Get the row from TableG3.1.1A
     sys_num = model_prm_baseline_system_number(model, climate_zone, area_type, fuel_type, area_ft2, num_stories, custom)
 
     # Modify the fuel type if called for by the standard
-    fuel_type = model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom)
+    if custom == 'Xcel Energy CO EDA'
+      # fuel type remains unchanged
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 rules for heating fuel type (based on proposed model) rules apply.')
+    else
+      fuel_type = model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
+    end
 
     # Define the lookup by row and by fuel type
     sys_lookup = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
@@ -1261,10 +1279,10 @@ class Standard
   # @param fuel_type [String] Valid choices are electric, fossil, fossilandelectric,
   #   purchasedheat, purchasedcooling, purchasedheatandcooling
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @param custom [String] custom fuel type
   # @return [String] the revised fuel type
-  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
-    return fuel_type # Don't change fuel type for most templates
+  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
+    # Don't change fuel type for most templates
+    return fuel_type
   end
 
   # Determine whether heating type is fuel or electric
@@ -1481,12 +1499,14 @@ class Standard
           # If and only if there are primary zones to attach to the loop
           # counter example: floor with only one elevator machine room that get classified as sec_zones
           unless pri_zones.empty?
-            model_add_pvav(model,
-                           pri_zones,
-                           system_name: system_name,
-                           hot_water_loop: hot_water_loop,
-                           chilled_water_loop: chilled_water_loop,
-                           electric_reheat: electric_reheat)
+            air_loop = model_add_pvav(model,
+                                      pri_zones,
+                                      system_name: system_name,
+                                      hot_water_loop: hot_water_loop,
+                                      chilled_water_loop: chilled_water_loop,
+                                      electric_reheat: electric_reheat)
+            model_system_outdoor_air_sizing_vrp_method(air_loop)
+            air_loop_hvac_apply_vav_damper_action(air_loop)
             model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
 
@@ -1618,15 +1638,17 @@ class Standard
             if chilled_water_loop.additionalProperties.hasFeature('secondary_loop_name')
               chilled_water_loop = model.getPlantLoopByName(chilled_water_loop.additionalProperties.getFeatureAsString('secondary_loop_name').get).get
             end
-            model_add_vav_reheat(model,
-                                 pri_zones,
-                                 system_name: system_name,
-                                 reheat_type: reheat_type,
-                                 hot_water_loop: hot_water_loop,
-                                 chilled_water_loop: chilled_water_loop,
-                                 fan_efficiency: 0.62,
-                                 fan_motor_efficiency: 0.9,
-                                 fan_pressure_rise: 4.0)
+            air_loop = model_add_vav_reheat(model,
+                                            pri_zones,
+                                            system_name: system_name,
+                                            reheat_type: reheat_type,
+                                            hot_water_loop: hot_water_loop,
+                                            chilled_water_loop: chilled_water_loop,
+                                            fan_efficiency: 0.62,
+                                            fan_motor_efficiency: 0.9,
+                                            fan_pressure_rise: 4.0)
+            model_system_outdoor_air_sizing_vrp_method(air_loop)
+            air_loop_hvac_apply_vav_damper_action(air_loop)
             model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
           end
 
@@ -7108,9 +7130,14 @@ class Standard
         return_air_type = 'ducted_return_or_direct_to_unit'
       end
 
+      # error if zone design air flow rate is not available
+      if zone.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
       zone.additionalProperties.setFeature('return_air_type', return_air_type)
       zone.additionalProperties.setFeature('plenum', return_plenum) unless return_plenum.nil?
-      zone.additionalProperties.setFeature('proposed_model_zone_design_air_flow', zone.designAirFlowRate.to_f)
+      zone.additionalProperties.setFeature('proposed_model_zone_design_air_flow', zone.autosizedDesignAirFlowRate.to_f)
     end
   end
 

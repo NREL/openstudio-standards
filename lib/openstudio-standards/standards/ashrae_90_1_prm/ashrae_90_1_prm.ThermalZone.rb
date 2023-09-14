@@ -7,8 +7,14 @@ class ASHRAE901PRM < Standard
   # @param thermal_zone
   def thermal_zone_get_fan_power_limitations(thermal_zone, is_energy_recovery_required)
     fan_pwr_adjustment_in_wc = 0
+
+    # error if zone design air flow rate is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ThermalZone', "Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get autosized zone design supply air flow rate
-    dsn_zone_air_flow_m3_per_s = thermal_zone.designAirFlowRate.to_f
+    dsn_zone_air_flow_m3_per_s = thermal_zone.autosizedDesignAirFlowRate.to_f
     dsn_zone_air_flow_cfm = OpenStudio.convert(dsn_zone_air_flow_m3_per_s, 'm^3/s', 'cfm').get
 
     # Retrieve credits from zone additional features
@@ -155,11 +161,17 @@ class ASHRAE901PRM < Standard
   # @return [string] with applicable DistrictHeating and/or DistrictCooling
   def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
     zone_fuels = ''
-    htg_fuels = zone.heating_fuels
+
+    # error if HVACComponent heating fuels method is not available
+    if zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
+    htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
     if htg_fuels.include?('DistrictHeating')
       zone_fuels = 'DistrictHeating'
     end
-    clg_fuels = zone.cooling_fuels
+    clg_fuels = zone.coolingFuelTypes.map { |f| f.valueName }
     if clg_fuels.include?('DistrictCooling')
       zone_fuels += 'DistrictCooling'
     end

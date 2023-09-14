@@ -605,12 +605,21 @@ class Standard
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = thermal_zone.heating_fuels
 
-    if htg_fuels.include?('NaturalGas') ||
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+
+    if htg_fuels.include?('Gas') 
+       htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil_1') ||
        htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOil_2') ||
        htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
@@ -647,12 +656,20 @@ class Standard
     fossil = false
     electric = false
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Fossil heating
-    htg_fuels = thermal_zone.heating_fuels
-    if htg_fuels.include?('NaturalGas') ||
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+    if htg_fuels.include?('Gas') 
+       htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil_1') ||
        htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOil_2') ||
        htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
@@ -668,7 +685,7 @@ class Standard
 
     # Cooling fuels, for determining
     # unconditioned zones
-    clg_fuels = thermal_zone.cooling_fuels
+    clg_fuels = thermal_zone.coolingFuelTypes
 
     # Categorize
     fuel_type = nil
@@ -711,19 +728,27 @@ class Standard
   def thermal_zone_mixed_heating_fuel?(thermal_zone)
     is_mixed = false
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = thermal_zone.heating_fuels
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
 
     # Includes fossil
     fossil = false
-    if htg_fuels.include?('NaturalGas') ||
+    if htg_fuels.include?('Gas') 
+       htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil_1') ||
        htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOil_2') ||
        htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
@@ -837,9 +862,14 @@ class Standard
       end
     end
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get the zone heating and cooling fuels
-    htg_fuels = thermal_zone.heating_fuels
-    clg_fuels = thermal_zone.cooling_fuels
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+    clg_fuels = thermal_zone.coolingFuelTypes.map { |f| f.valueName }
     is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
 
     # Infer the HVAC type
@@ -1292,18 +1322,25 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   def thermal_zone_conditioning_category(thermal_zone, climate_zone)
+    # error if zone design load methods are not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get the heating load
     htg_load_btu_per_ft2 = 0.0
-    htg_load_w_per_m2 = thermal_zone.heatingDesignLoad
-    if htg_load_w_per_m2.is_initialized
-      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
+    htg_load_w = thermal_zone.autosizedHeatingDesignLoad
+    if htg_load_w.is_initialized
+      htg_load_w_per_m2 = thermal_zone.autosizedHeatingDesignLoad.get / thermal_zone.floorArea
+      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2, 'W/m^2', 'Btu/hr*ft^2').get
     end
 
     # Get the cooling load
     clg_load_btu_per_ft2 = 0.0
-    clg_load_w_per_m2 = thermal_zone.coolingDesignLoad
-    if clg_load_w_per_m2.is_initialized
-      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
+    clg_load_w = thermal_zone.autosizedCoolingDesignLoad
+    if clg_load_w.is_initialized
+      clg_load_w_per_m2 = thermal_zone.autosizedCoolingDesignLoad.get / thermal_zone.floorArea
+      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2, 'W/m^2', 'Btu/hr*ft^2').get
     end
 
     # Determine the heating limit based on climate zone

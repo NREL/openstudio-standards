@@ -36,14 +36,20 @@ class Standard
         condenser_type = 'WithCondenser' if absorption_type.nil?
       end
     elsif cooling_type == 'WaterCooled'
-      if name.include?('Reciprocating')
-        compressor_type = 'Reciprocating'
-      elsif name.include?('Rotary Screw')
-        compressor_type = 'Rotary Screw'
-      elsif name.include?('Scroll')
-        compressor_type = 'Scroll'
-      elsif name.include?('Centrifugal')
-        compressor_type = 'Centrifugal'
+      # use the chiller additional properties compressor type if defined
+      if chiller_electric_eir.additionalProperties.hasFeature('compressor_type')
+        compressor_type = chiller_electric_eir.additionalProperties.getFeatureAsString('compressor_type').get
+      else
+        # try to lookup by chiller name
+        if name.include?('Reciprocating')
+          compressor_type = 'Reciprocating'
+        elsif name.include?('Rotary Screw')
+          compressor_type = 'Rotary Screw'
+        elsif name.include?('Scroll')
+          compressor_type = 'Scroll'
+        elsif name.include?('Centrifugal')
+          compressor_type = 'Centrifugal'
+        end
       end
     end
     unless condenser_type.nil?
