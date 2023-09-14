@@ -1,10 +1,9 @@
 # Methods to create available inputs for typical models
 module OpenstudioStandards
   module CreateTypical
-
     # create hash of space types and generic ratios of building floor area.
     # some building type and template combination are incompatible
-    # 
+    #
     # @param building_type [String] standard building type
     # @param template [String] standard template
     # @param whole_building [Boolean] use a whole building space type for Office types

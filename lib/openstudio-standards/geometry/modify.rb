@@ -2,6 +2,5 @@
 module OpenstudioStandards
   module Geometry
     # @!group Modify
-
   end
 end

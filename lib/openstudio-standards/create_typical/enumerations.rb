@@ -260,15 +260,14 @@ module OpenstudioStandards
     # @param extra [String] extra climate zone to append to list
     # @return [OpenStudio::StringVector] array of available climate zones as strings
     def self.get_climate_zones(extended = false, extra = nil)
-
       # get climate_zones
-      if extended && extra != nil
+      if extended && !extra.nil?
         doe = get_doe_climate_zones(true, extra)
         deer = get_deer_climate_zones(true, nil)
       elsif extended
         doe = get_doe_climate_zones(true, nil)
         deer = get_deer_climate_zones(true, nil)
-      elsif extra != nil
+      elsif !extra.nil?
         doe = get_doe_climate_zones(false, extra)
         deer = get_deer_climate_zones(false, nil)
       else

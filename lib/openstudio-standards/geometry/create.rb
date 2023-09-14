@@ -245,6 +245,7 @@ module OpenstudioStandards
         effective_stories_counter = 1
         stories_flat.each do |hash|
           next if hash[:story_type] != 'Mid'
+
           if footprint_counter == 0
             string = 'Mid'
           else
@@ -337,12 +338,14 @@ module OpenstudioStandards
           fixed = false
           vertices.each do |vertex|
             next if fixed
+
             if array.include?(vertex)
               # create a new set of vertices
               new_vertices = OpenStudio::Point3dVector.new
               array_b = []
               surface.vertices.each do |vertex_b|
                 next if array_b.include?(vertex_b)
+
                 new_vertices << vertex_b
                 array_b << vertex_b
               end
@@ -378,6 +381,7 @@ module OpenstudioStandards
 
             surfaces_b.each do |surface_b|
               next if surface_a == surface_b # dont' test against same surface
+
               if surface_a.equalVertices(surface_b)
                 runner.registerWarning("#{surface_a.name} and #{surface_b.name} in #{space.name} have duplicate geometry, removing #{surface_b.name}.")
                 surface_b.remove
@@ -460,11 +464,14 @@ module OpenstudioStandards
       if bar_hash[:num_stories_below_grade] > 0
         model.getBuildingStorys.sort.each do |story|
           next if !story.name.to_s.include?('Story B')
+
           story.spaces.sort.each do |space|
             next if !new_spaces.include?(space)
+
             space.surfaces.sort.each do |surface|
               next if surface.surfaceType != 'Wall'
               next if surface.outsideBoundaryCondition != 'Outdoors'
+
               surface.setOutsideBoundaryCondition('Ground')
             end
           end
@@ -474,7 +481,7 @@ module OpenstudioStandards
       # set wall boundary condtions to adiabatic if using make_mid_story_surfaces_adiabatic prior to windows being made
       if bar_hash[:make_mid_story_surfaces_adiabatic]
 
-        runner.registerInfo("Finding non-exterior walls and setting boundary condition to adiabatic")
+        runner.registerInfo('Finding non-exterior walls and setting boundary condition to adiabatic')
 
         # need to organize by story incase top story is partial story
         # should also be only for a single bar
@@ -484,16 +491,15 @@ module OpenstudioStandards
         # gather new spaces by story
         new_spaces.each do |space|
           story = space.buildingStory.get
-            if story_bounding.has_key?(story)
-              story_bounding[story][:spaces] << space
-            else
-              story_bounding[story] = {:spaces => [space]}
-            end
+          if story_bounding.key?(story)
+            story_bounding[story][:spaces] << space
+          else
+            story_bounding[story] = { spaces: [space] }
+          end
         end
 
         # get bounding box for each story
-        story_bounding.each do |story,v|
-
+        story_bounding.each do |story, v|
           # get bounding_box
           bounding_box = OpenStudio::BoundingBox.new
           v[:spaces].each do |space|
@@ -511,8 +517,9 @@ module OpenstudioStandards
           # todo - may need to look at aidiabiatc constructions in downstream measure. Some may be exterior party wall others may be interior walls
           v[:spaces].each do |space|
             space.surfaces.each do |space_surface|
-              next if not space_surface.surfaceType == "Wall"
-              next if space_surface.outsideBoundaryCondition == "Surface" # if if found a match leave it alone, don't change to adiabiatc
+              next if space_surface.surfaceType != 'Wall'
+              next if space_surface.outsideBoundaryCondition == 'Surface' # if if found a match leave it alone, don't change to adiabiatc
+
               surface_bounding_box = OpenStudio::BoundingBox.new
               surface_bounding_box.addPoints(space.transformation * space_surface.vertices)
               surface_on_outside = false
@@ -527,7 +534,7 @@ module OpenstudioStandards
 
               # change if not exterior
               if !surface_on_outside
-                space_surface.setOutsideBoundaryCondition("Adiabatic")
+                space_surface.setOutsideBoundaryCondition('Adiabatic')
                 missed_match_count += 1
               end
             end
@@ -544,6 +551,7 @@ module OpenstudioStandards
       sorted_stories = {}
       new_spaces.each do |space|
         next if !space.buildingStory.is_initialized
+
         story = space.buildingStory.get
         if !sorted_stories.key?(name.to_s)
           sorted_stories[story.name.to_s] = story
@@ -579,6 +587,7 @@ module OpenstudioStandards
 
         story.spaces.each do |space|
           next if !new_spaces.include?(space)
+
           space.surfaces. each do |surface|
             # set floor to adiabatic if requited
             if adiabatic_floor && surface.surfaceType == 'Floor'
@@ -693,20 +702,20 @@ module OpenstudioStandards
       bar_hash[:building_wwr_s] = args['wwr']
       bar_hash[:building_wwr_e] = args['wwr']
       bar_hash[:building_wwr_w] = args['wwr']
-  
+
       # round up non integer stoires to next integer
       num_stories_round_up = num_stories.ceil
       runner.registerInfo("Making bar with length of #{OpenStudio.toNeatString(OpenStudio.convert(length, 'm', 'ft').get, 0, true)} ft and width of #{OpenStudio.toNeatString(OpenStudio.convert(width, 'm', 'ft').get, 0, true)} ft")
-  
+
       # party_walls_array to be used by orientation specific or fractional party wall values
       party_walls_array = [] # this is an array of arrays, where each entry is effective building story with array of directions
-  
+
       if args['party_wall_stories_north'] + args['party_wall_stories_south'] + args['party_wall_stories_east'] + args['party_wall_stories_west'] > 0
-  
+
         # loop through effective number of stories add orientation specific party walls per user arguments
         num_stories_round_up.times do |i|
           test_value = i + 1 - bar_hash[:num_stories_below_grade]
-  
+
           array = []
           if args['party_wall_stories_north'] >= test_value
             array << 'north'
@@ -720,23 +729,23 @@ module OpenstudioStandards
           if args['party_wall_stories_west'] >= test_value
             array << 'west'
           end
-  
+
           # populate party_wall_array for this story
           party_walls_array << array
         end
       end
-  
+
       # calculate party walls if using party_wall_fraction method
       if args['party_wall_fraction'] > 0 && !party_walls_array.empty?
         runner.registerWarning('Both orientation and fractional party wall values arguments were populated, will ignore fractional party wall input')
       elsif args['party_wall_fraction'] > 0
-  
+
         # orientation of long and short side of building will vary based on building rotation
-  
+
         # full story ext wall area
         typical_length_facade_area = length * floor_height_si
         typical_width_facade_area = width * floor_height_si
-  
+
         # top story ext wall area, may be partial story
         partial_story_multiplier = (1.0 - args['num_stories_above_grade'].ceil + args['num_stories_above_grade'])
         area_multiplier = partial_story_multiplier
@@ -745,10 +754,10 @@ module OpenstudioStandards
         top_story_width = width * edge_multiplier
         top_story_length_facade_area = top_story_length * floor_height_si
         top_story_width_facade_area = top_story_width * floor_height_si
-  
+
         total_exterior_wall_area = 2 * (length + width) * (args['num_stories_above_grade'].ceil - 1.0) * floor_height_si + 2 * (top_story_length + top_story_width) * floor_height_si
         target_party_wall_area = total_exterior_wall_area * args['party_wall_fraction']
-  
+
         width_counter = 0
         width_area = 0.0
         facade_area = typical_width_facade_area
@@ -759,13 +768,13 @@ module OpenstudioStandards
           else
             facade_area = typical_width_facade_area
           end
-  
+
           width_counter += 1
           width_area += facade_area
-  
+
         end
         width_area_remainder = target_party_wall_area - width_area
-  
+
         length_counter = 0
         length_area = 0.0
         facade_area = typical_length_facade_area
@@ -776,18 +785,18 @@ module OpenstudioStandards
           else
             facade_area = typical_length_facade_area
           end
-  
+
           length_counter += 1
           length_area += facade_area
         end
         length_area_remainder = target_party_wall_area - length_area
-  
+
         # get rotation and best fit to adjust orientation for fraction party wall
         rotation = args['building_rotation'] % 360.0 # should result in value between 0 and 360
         card_dir_array = [0.0, 90.0, 180.0, 270.0, 360.0]
         # reverse array to properly handle 45, 135, 225, and 315
         best_fit = card_dir_array.reverse.min_by { |x| (x.to_f - rotation).abs }
-  
+
         if ![90.0, 270.0].include? best_fit
           width_card_dir = ['east', 'west']
           length_card_dir = ['north', 'south']
@@ -795,10 +804,10 @@ module OpenstudioStandards
           width_card_dir = ['north', 'south']
           length_card_dir = ['east', 'west']
         end
-  
+
         # if dont' find enough on short sides
         if width_area_remainder <= typical_length_facade_area
-  
+
           num_stories_round_up.times do |i|
             if i + 1 <= args['num_stories_below_grade']
               party_walls_array << []
@@ -814,9 +823,9 @@ module OpenstudioStandards
               party_walls_array << []
             end
           end
-  
+
         else # use long sides instead
-  
+
           num_stories_round_up.times do |i|
             if i + 1 <= args['num_stories_below_grade']
               party_walls_array << []
@@ -832,13 +841,13 @@ module OpenstudioStandards
               party_walls_array << []
             end
           end
-  
+
         end
-  
+
         # TODO: - currently won't go past making two opposing sets of walls party walls. Info and registerValue are after create_bar in measure.rb
-  
+
       end
-  
+
       # populate bar hash with story information
       bar_hash[:stories] = {}
       num_stories_round_up.times do |i|
@@ -847,21 +856,21 @@ module OpenstudioStandards
         else
           party_walls = party_walls_array[i]
         end
-  
+
         # add below_partial_story
         if num_stories.ceil > num_stories && i == num_stories_round_up - 2
           below_partial_story = true
         else
           below_partial_story = false
         end
-  
+
         # bottom_story_ground_exposed_floor and top_story_exterior_exposed_roof already setup as bool
         bar_hash[:stories]["key #{i}"] = { story_party_walls: party_walls, story_min_multiplier: 1, story_included_in_building_area: true, below_partial_story: below_partial_story, bottom_story_ground_exposed_floor: args['bottom_story_ground_exposed_floor'], top_story_exterior_exposed_roof: args['top_story_exterior_exposed_roof'] }
       end
-  
+
       # create bar
       new_spaces = create_bar(runner, model, bar_hash, args['story_multiplier'])
-  
+
       # check expect roof and wall area
       target_footprint = bar_hash[:length] * bar_hash[:width]
       ground_floor_area = 0.0
@@ -879,7 +888,7 @@ module OpenstudioStandards
       if ground_floor_area > target_footprint + 0.001 || roof_area > target_footprint + 0.001
         # runner.registerError("Ground exposed floor or Roof area is larger than footprint, likely inter-floor surface matching and intersection error.")
         # return false
-  
+
         # not providing adiabatic work around when top story is partial story.
         if args['num_stories_above_grade'].to_f != args['num_stories_above_grade'].ceil
           runner.registerError('Ground exposed floor or Roof area is larger than footprint, likely inter-floor surface matching and intersection error.')
@@ -891,10 +900,10 @@ module OpenstudioStandards
       else
         match_error = false
       end
-  
+
       # TODO: - should be able to remove this fix after OpenStudio intersection issue is fixed. At that time turn the above message into an error with return false after it
       if match_error
-  
+
         # identify z value of top and bottom story
         bottom_story = nil
         top_story = nil
@@ -912,13 +921,14 @@ module OpenstudioStandards
             top_story = nom_z
           end
         end
-  
+
         # change boundary condition and intersection as needed.
         new_spaces.each do |space|
           if space.buildingStory.get.nominalZCoordinate.get > bottom_story
             # change floors
             space.surfaces.each do |surface|
               next if !(surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground')
+
               surface.setOutsideBoundaryCondition('Adiabatic')
             end
           end
@@ -926,20 +936,20 @@ module OpenstudioStandards
             # change ceilings
             space.surfaces.each do |surface|
               next if !(surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Outdoors')
+
               surface.setOutsideBoundaryCondition('Adiabatic')
             end
           end
         end
       end
     end
-  
+
     # bar_arg_check_setup
     def self.bar_arg_check_setup(model, runner, user_arguments, building_type_ratios = true)
-  
       # assign the user inputs to variables
       args = OsLib_HelperMethods.createRunVariables(runner, model, user_arguments, arguments(model))
       if !args then return false end
-  
+
       # add in arguments that may not be passed in
       if !args.key?('double_loaded_corridor')
         args['double_loaded_corridor'] = 'None' # use None when not in measure building type data may not contain this
@@ -947,11 +957,12 @@ module OpenstudioStandards
       if !args.key?('perim_mult')
         args['perim_mult'] = 1.0 # will not make two bars for extended perimeter
       end
-  
+
       # lookup and replace argument values from upstream measures
       if args['use_upstream_args'] == true
         args.each do |arg, value|
           next if arg == 'use_upstream_args' # this argument should not be changed
+
           value_from_osw = OsLib_HelperMethods.check_upstream_measure_for_arg(runner, arg)
           if !value_from_osw.empty?
             runner.registerInfo("Replacing argument named #{arg} from current measure with a value of #{value_from_osw[:value]} from #{value_from_osw[:measure_name]}.")
@@ -969,7 +980,7 @@ module OpenstudioStandards
           end
         end
       end
-  
+
       # check expected values of double arguments
       fraction_args = ['wwr', 'party_wall_fraction']
       if building_type_ratios
@@ -978,10 +989,10 @@ module OpenstudioStandards
         fraction_args << 'bldg_type_d_fract_bldg_area'
       end
       fraction = OsLib_HelperMethods.checkDoubleAndIntegerArguments(runner, user_arguments, 'min' => 0.0, 'max' => 1.0, 'min_eq_bool' => true, 'max_eq_bool' => true, 'arg_array' => fraction_args)
-  
+
       one_or_greater_args = ['num_stories_above_grade']
       one_or_greater = OsLib_HelperMethods.checkDoubleAndIntegerArguments(runner, user_arguments, 'min' => 1.0, 'max' => nil, 'min_eq_bool' => true, 'max_eq_bool' => false, 'arg_array' => one_or_greater_args)
-  
+
       non_neg_args = ['num_stories_below_grade',
                       'floor_height',
                       'ns_to_ew_ratio',
@@ -993,37 +1004,35 @@ module OpenstudioStandards
                       'single_floor_area',
                       'bar_width']
       non_neg = OsLib_HelperMethods.checkDoubleAndIntegerArguments(runner, user_arguments, 'min' => 0.0, 'max' => nil, 'min_eq_bool' => true, 'max_eq_bool' => false, 'arg_array' => non_neg_args)
-  
+
       # return false if any errors fail
       if !fraction then return false end
       return false if !one_or_greater
       return false if !non_neg
-  
+
       return args
-  
     end
-  
+
     # bar_from_building_type_ratios
     # used for varieties of measures that create bar from building type ratios
     def self.bar_from_building_type_ratios(model, runner, user_arguments)
-  
       # prep arguments
-      args = bar_arg_check_setup(model,runner,user_arguments)
+      args = bar_arg_check_setup(model, runner, user_arguments)
       if !args then return false end
-  
+
       # check that sum of fractions for b,c, and d is less than 1.0 (so something is left for primary building type)
       bldg_type_a_fract_bldg_area = 1.0 - args['bldg_type_b_fract_bldg_area'] - args['bldg_type_c_fract_bldg_area'] - args['bldg_type_d_fract_bldg_area']
       if bldg_type_a_fract_bldg_area <= 0.0
         runner.registerError('Primary Building Type fraction of floor area must be greater than 0. Please lower one or more of the fractions for Building Type B-D.')
         return false
       end
-  
+
       # Make the standard applier
       standard = Standard.build((args['template']).to_s)
-  
+
       # report initial condition of model
       runner.registerInitialCondition("The building started with #{model.getSpaces.size} spaces.")
-  
+
       # determine of ns_ew needs to be mirrored
       mirror_ns_ew = false
       rotation = model.getBuilding.northAxis
@@ -1032,26 +1041,26 @@ module OpenstudioStandards
       elsif rotation > 45.0 && rotation < 135.0
         mirror_ns_ew = true
       end
-  
+
       # remove non-resource objects not removed by removing the building
       remove_non_resource_objects(runner, model)
-  
+
       # rename building to infer template in downstream measure
       name_array = [args['template'], args['bldg_type_a']]
       if args['bldg_type_b_fract_bldg_area'] > 0 then name_array << args['bldg_type_b'] end
       if args['bldg_type_c_fract_bldg_area'] > 0 then name_array << args['bldg_type_c'] end
       if args['bldg_type_d_fract_bldg_area'] > 0 then name_array << args['bldg_type_d'] end
       model.getBuilding.setName(name_array.join('|').to_s)
-  
+
       # hash to whole building type data
       building_type_hash = {}
-  
+
       # gather data for bldg_type_a
       building_type_hash[args['bldg_type_a']] = {}
       building_type_hash[args['bldg_type_a']][:frac_bldg_area] = bldg_type_a_fract_bldg_area
       # building_type_hash[args['bldg_type_a']][:num_units] = args['bldg_type_a_num_units']
       building_type_hash[args['bldg_type_a']][:space_types] = get_space_types_from_building_type(args['bldg_type_a'], args['template'], true)
-  
+
       # gather data for bldg_type_b
       if args['bldg_type_b_fract_bldg_area'] > 0
         building_type_hash[args['bldg_type_b']] = {}
@@ -1059,7 +1068,7 @@ module OpenstudioStandards
         # building_type_hash[args['bldg_type_b']][:num_units] = args['bldg_type_b_num_units']
         building_type_hash[args['bldg_type_b']][:space_types] = get_space_types_from_building_type(args['bldg_type_b'], args['template'], true)
       end
-  
+
       # gather data for bldg_type_c
       if args['bldg_type_c_fract_bldg_area'] > 0
         building_type_hash[args['bldg_type_c']] = {}
@@ -1067,7 +1076,7 @@ module OpenstudioStandards
         # building_type_hash[args['bldg_type_c']][:num_units] = args['bldg_type_c_num_units']
         building_type_hash[args['bldg_type_c']][:space_types] = get_space_types_from_building_type(args['bldg_type_c'], args['template'], true)
       end
-  
+
       # gather data for bldg_type_d
       if args['bldg_type_d_fract_bldg_area'] > 0
         building_type_hash[args['bldg_type_d']] = {}
@@ -1075,39 +1084,37 @@ module OpenstudioStandards
         # building_type_hash[args['bldg_type_d']][:num_units] = args['bldg_type_d_num_units']
         building_type_hash[args['bldg_type_d']][:space_types] = get_space_types_from_building_type(args['bldg_type_d'], args['template'], true)
       end
-  
+
       # call bar_from_building_space_type_ratios to generate bar
       bar_from_space_type_ratios(model, runner, user_arguments, args, building_type_hash)
-  
+
       return true
-  
     end
-  
+
     # bar_from_space_type_ratios
     # used for varieties of measures that create bar from space type or building type ratios
     # args and building_type_hash should both be nil or neither shoould be nill
     def self.bar_from_space_type_ratios(model, runner, user_arguments, args = nil, building_type_hash = nil)
-  
       # do not setup arguments if they were already passed in to this method
       if args.nil?
         # prep arguments
-        args = bar_arg_check_setup(model,runner,user_arguments,false) # false stops it from checking args on used in bar_from_building_type_ratios
+        args = bar_arg_check_setup(model, runner, user_arguments, false) # false stops it from checking args on used in bar_from_building_type_ratios
         if !args then return false end
-  
+
         # process arg into hash
         space_type_hash_name = {}
         args['space_type_hash_string'][0..-1].split(/, /).each { |entry| entryMap = entry.split(/=>/); value_str = entryMap[1]; space_type_hash_name[entryMap[0].strip[0..-1].to_s] = value_str.nil? ? '' : value_str.strip[0..-1].to_f }
-  
+
         # create building type hasn from space type ratios
         building_type_hash = {}
         building_type_fraction_of_building = 0.0
-        space_type_hash_name.each do |building_space_type,ratio|
-          building_type = building_space_type.split("|")[0].strip
-          space_type = building_space_type.split("|")[1].strip
-  
+        space_type_hash_name.each do |building_space_type, ratio|
+          building_type = building_space_type.split('|')[0].strip
+          space_type = building_space_type.split('|')[1].strip
+
           # harvest height and circ info from get_space_types_from_building_type(building_type, template, whole_building = true)
-          building_type_lookup_info = get_space_types_from_building_type(building_type,args['template'])
-          if building_type_lookup_info.size == 0
+          building_type_lookup_info = get_space_types_from_building_type(building_type, args['template'])
+          if building_type_lookup_info.empty?
             runner.registerWarning("#{building_type} looks like an invalid building type for #{args['template']}")
           end
           space_type_info_hash = {}
@@ -1124,7 +1131,7 @@ module OpenstudioStandards
           else
             runner.registerWarning("#{space_type} looks like an invalid space type for #{building_type}")
           end
-  
+
           # extend harvested data with custom ratios from space type ratio string argument.
           if building_type_hash.key?(building_type)
             building_type_hash[building_type][:frac_bldg_area] += ratio
@@ -1140,52 +1147,52 @@ module OpenstudioStandards
           end
           building_type_fraction_of_building += ratio
         end
-  
+
         # identify primary building type for building form defaults
         primary_building_type = building_type_hash.keys.first # update to choose building with highest ratio
-        runner.registerInfo("Creating bar with space type ratio proided as argument.")
+        runner.registerInfo('Creating bar with space type ratio proided as argument.')
         runner.registerInfo("Using building type from first ratio #{primary_building_type} as the primary building type. This is used for building form defaults.")
-  
-        # todo - confirm if this will get normalized up/down later of if I should fix or stop here instead of just a warning
+
+        # TODO: - confirm if this will get normalized up/down later of if I should fix or stop here instead of just a warning
         if building_type_fraction_of_building > 1.0
           runner.registerWarning("Sum of Space Type Ratio of #{building_type_fraction_of_building} is greater than the expected value of 1.0")
         elsif building_type_fraction_of_building < 1.0
           runner.registerWarning("Sum of Space Type Ratio of #{building_type_fraction_of_building} is less than the expected value of 1.0")
         end
-  
+
       else # else is used when bar_from_building_type_ratio is used
-  
+
         # if aspect ratio, story height or wwr have argument value of 0 then use smart building type defaults
         primary_building_type = args['bldg_type_a']
-        runner.registerInfo("Creating bar space type ratios by building type based on ratios from prototype models.")
+        runner.registerInfo('Creating bar space type ratios by building type based on ratios from prototype models.')
         runner.registerInfo("#{primary_building_type} will be used for building form defaults.")
-  
+
       end
-  
+
       # get defaults for the primary building type
       building_form_defaults = building_form_defaults(primary_building_type)
-  
+
       # store list of defaulted items
       defaulted_args = []
-  
+
       if args['ns_to_ew_ratio'] == 0.0
         args['ns_to_ew_ratio'] = building_form_defaults[:aspect_ratio]
         runner.registerInfo("0.0 value for aspect ratio will be replaced with smart default for #{primary_building_type} of #{building_form_defaults[:aspect_ratio]}.")
       end
-  
+
       if args['perim_mult'] == 0.0
         # if this is not defined then use default of 1.0
-        if !building_form_defaults.has_key?(:perim_mult)
+        if !building_form_defaults.key?(:perim_mult)
           args['perim_mult'] = 1.0
         else
           args['perim_mult'] = building_form_defaults[:perim_mult]
         end
         runner.registerInfo("0.0 value for minimum perimeter multiplier will be replaced with smart default for #{primary_building_type} of #{building_form_defaults[:perim_mult]}.")
       elsif args['perim_mult'] < 1.0
-        runner.registerError("Other than the smart default value of 0, the minimum perimeter multiplier should be equal to 1.0 or greater.")
+        runner.registerError('Other than the smart default value of 0, the minimum perimeter multiplier should be equal to 1.0 or greater.')
         return false
       end
-  
+
       if args['floor_height'] == 0.0
         args['floor_height'] = building_form_defaults[:typical_story]
         runner.registerInfo("0.0 value for floor height will be replaced with smart default for #{primary_building_type} of #{building_form_defaults[:typical_story]}.")
@@ -1196,13 +1203,13 @@ module OpenstudioStandards
         args['wwr'] = building_form_defaults[:wwr]
         runner.registerInfo("0.0 value for window to wall ratio will be replaced with smart default for #{primary_building_type} of #{building_form_defaults[:wwr]}.")
       end
-  
+
       # Make the standard applier
-      standard = Standard.build("#{args['template']}")
-  
+      standard = Standard.build((args['template']).to_s)
+
       # report initial condition of model
       runner.registerInitialCondition("The building started with #{model.getSpaces.size} spaces.")
-  
+
       # determine of ns_ew needs to be mirrored
       mirror_ns_ew = false
       rotation = model.getBuilding.northAxis
@@ -1211,54 +1218,54 @@ module OpenstudioStandards
       elsif rotation > 45.0 && rotation < 135.0
         mirror_ns_ew = true
       end
-  
+
       # remove non-resource objects not removed by removing the building
       remove_non_resource_objects(runner, model)
-  
+
       # creating space types for requested building types
       building_type_hash.each do |building_type, building_type_hash|
         runner.registerInfo("Creating Space Types for #{building_type}.")
-  
+
         # mapping building_type name is needed for a few methods
         building_type = standard.model_get_lookup_name(building_type)
-  
+
         # create space_type_map from array
         sum_of_ratios = 0.0
         building_type_hash[:space_types] = building_type_hash[:space_types].sort_by { |k, v| v[:ratio] }.to_h
         building_type_hash[:space_types].each do |space_type_name, hash|
           next if hash[:space_type_gen] == false # space types like undeveloped and basement are skipped.
-  
+
           # create space type
           space_type = OpenStudio::Model::SpaceType.new(model)
           space_type.setStandardsBuildingType(building_type)
           space_type.setStandardsSpaceType(space_type_name)
           space_type.setName("#{building_type} #{space_type_name}")
-  
+
           # set color
           test = standard.space_type_apply_rendering_color(space_type) # this uses openstudio-standards
           if !test
             # TODO: - once fixed in standards un-comment this
             # runner.registerWarning("Could not find color for #{args['template']} #{space_type.name}")
           end
-  
+
           # extend hash to hold new space type object
           hash[:space_type] = space_type
-  
+
           # add to sum_of_ratios counter for adjustment multiplier
           sum_of_ratios += hash[:ratio]
         end
-  
+
         # store multiplier needed to adjust sum of ratios to equal 1.0
         building_type_hash[:ratio_adjustment_multiplier] = 1.0 / sum_of_ratios
       end
-  
+
       # calculate length and with of bar
       total_bldg_floor_area_si = OpenStudio.convert(args['total_bldg_floor_area'], 'ft^2', 'm^2').get
       single_floor_area_si = OpenStudio.convert(args['single_floor_area'], 'ft^2', 'm^2').get
-  
+
       # store number of stories
       num_stories = args['num_stories_below_grade'] + args['num_stories_above_grade']
-  
+
       # handle user-assigned single floor plate size condition
       if args['single_floor_area'] > 0.0
         footprint_si = single_floor_area_si
@@ -1272,7 +1279,7 @@ module OpenstudioStandards
       else
         footprint_si = nil
       end
-  
+
       # populate space_types_hash
       space_types_hash = {}
       multi_height_space_types_hash = {}
@@ -1282,7 +1289,7 @@ module OpenstudioStandards
       end
       building_type_hash.each do |building_type, building_type_hash|
         if args['double_loaded_corridor'] == 'Primary Space Type'
-  
+
           # see if building type has circulation space type, if so then merge that along with default space type into hash key in place of space type
           default_st = nil
           circ_st = nil
@@ -1290,11 +1297,11 @@ module OpenstudioStandards
             if hash[:default] then default_st = space_type_name end
             if hash[:circ] then circ_st = space_type_name end
           end
-  
+
           # update building hash
           if !default_st.nil? && !circ_st.nil?
             runner.registerInfo("Combining #{default_st} and #{circ_st} into a group representing a double loaded corridor")
-  
+
             # add new item
             building_type_hash[:space_types]['Double Loaded Corridor'] = {}
             double_loaded_st = building_type_hash[:space_types]['Double Loaded Corridor']
@@ -1309,20 +1316,20 @@ module OpenstudioStandards
             double_loaded_st[:children][:default] = building_type_hash[:space_types][default_st]
             double_loaded_st[:children][:circ] = building_type_hash[:space_types][circ_st]
             double_loaded_st[:orig_ratio] = 0.0
-  
+
             # zero out ratios from old item (don't delete because I still want the space types made)
             building_type_hash[:space_types][default_st][:ratio] = 0.0
             building_type_hash[:space_types][circ_st][:ratio] = 0.0
           end
         end
-  
+
         building_type_hash[:space_types].each do |space_type_name, hash|
           next if hash[:space_type_gen] == false
-  
+
           space_type = hash[:space_type]
           ratio_of_bldg_total = hash[:ratio] * building_type_hash[:ratio_adjustment_multiplier] * building_type_hash[:frac_bldg_area]
           final_floor_area = ratio_of_bldg_total * total_bldg_floor_area_si # I think I can just pass ratio but passing in area is cleaner
-  
+
           # only add custom height space if 0 is used for floor_height
           if defaulted_args.include?('floor_height') && hash.key?(:story_height) && args['custom_height_bar']
             multi_height_space_types_hash[space_type] = { floor_area: final_floor_area, space_type: space_type, story_height: hash[:story_height] }
@@ -1344,13 +1351,13 @@ module OpenstudioStandards
           end
         end
       end
-  
+
       # resort if not sorted by building type
       if args['space_type_sort_logic'] == 'Size'
         # added code to convert to hash. I use sort_by 3 other times, but those seem to be working fine as is now.
         space_types_hash = Hash[space_types_hash.sort_by { |k, v| v[:floor_area] }]
       end
-  
+
       # calculate targets for testing
       target_areas = {} # used for checks
       target_areas_cust_height = 0.0
@@ -1370,7 +1377,7 @@ module OpenstudioStandards
           target_areas_cust_height += v[:floor_area]
         end
       end
-  
+
       # gather inputs
       if footprint_si.nil?
         footprint_si = (total_bldg_floor_area_si - target_areas_cust_height) / num_stories.to_f
@@ -1378,7 +1385,7 @@ module OpenstudioStandards
       floor_height_si = OpenStudio.convert(args['floor_height'], 'ft', 'm').get
       min_allow_size = OpenStudio.convert(15.0, 'ft', 'm').get
       specified_bar_width_si = OpenStudio.convert(args['bar_width'], 'ft', 'm').get
-  
+
       # set custom width
       if specified_bar_width_si > 0
         runner.registerInfo('Ignoring perimeter multiplier argument when non zero width argument is used')
@@ -1401,12 +1408,12 @@ module OpenstudioStandards
         # TODO: - update tests that hit this warning
         runner.registerWarning('Ignoring perimeter multiplier for bar that represents custom height spaces.')
       end
-  
+
       # check if dual bar is needed
       dual_bar = false
       if specified_bar_width_si > 0.0 && args['bar_division_method'] == 'Multiple Space Types - Individual Stories Sliced'
         if length / width != args['ns_to_ew_ratio']
-  
+
           if args['ns_to_ew_ratio'] >= 1.0 && args['ns_to_ew_ratio'] > length / width
             runner.registerWarning("Can't meet target aspect ratio of #{args['ns_to_ew_ratio']}, Lowering it to #{length / width} ")
             args['ns_to_ew_ratio'] = length / width
@@ -1435,7 +1442,7 @@ module OpenstudioStandards
       elsif args['perim_mult'] > 1.0
         runner.registerWarning("You selected a perimeter multiplier greater than 1.0 but didn't select a bar division method that supports this. The value for this argument will be ignored by the measure")
       end
-  
+
       # calculations for dual bar, which later will be setup to run create_bar twice
       if dual_bar
         min_perim = 2 * width + 2 * length
@@ -1445,12 +1452,12 @@ module OpenstudioStandards
         dual_bar_calc_approach = nil # stretched, adiabatic_ends_bar_b, dual_bar
         runner.registerInfo("Minimum rectangle is #{OpenStudio.toNeatString(OpenStudio.convert(length, 'm', 'ft').get, 0, true)} ft x #{OpenStudio.toNeatString(OpenStudio.convert(width, 'm', 'ft').get, 0, true)} ft with an area of #{OpenStudio.toNeatString(OpenStudio.convert(length * width, 'm^2', 'ft^2').get, 0, true)} ft^2. Perimeter is #{OpenStudio.toNeatString(OpenStudio.convert(min_perim, 'm', 'ft').get, 0, true)} ft.")
         runner.registerInfo("Target dual bar perimeter is #{OpenStudio.toNeatString(OpenStudio.convert(target_perim, 'm', 'ft').get, 0, true)} ft.")
-  
+
         # determine which of the three paths to hit target perimeter multiplier are possible
         # A use dual bar non adiabatic
         # B use dual bar adiabatic
         # C use stretched bar (requires model to miss ns/ew ratio)
-  
+
         # custom quadratic equation to solve two bars with common width 2l^2 - p*l + 4a = 0
         if target_perim**2 - 32 * footprint_si > 0
           if specified_bar_width_si > 0
@@ -1461,7 +1468,7 @@ module OpenstudioStandards
             dual_double_end_length = 0.25 * (target_perim + Math.sqrt(target_perim**2 - 32 * footprint_si))
             dual_double_end_width = footprint_si / dual_double_end_length
           end
-  
+
           # now that stretched  bar is made, determine where to split it and rotate
           bar_a_length = (args['ns_to_ew_ratio'] * (dual_double_end_length + dual_double_end_width) - dual_double_end_width) / (1 + args['ns_to_ew_ratio'])
           bar_b_length = dual_double_end_length - bar_a_length
@@ -1472,7 +1479,7 @@ module OpenstudioStandards
           bar_a_length = 0
           bar_b_length = 0
         end
-  
+
         if bar_a_length >= min_allow_size && bar_b_length >= min_allow_size
           dual_bar_calc_approach = 'dual_bar'
         else
@@ -1505,40 +1512,40 @@ module OpenstudioStandards
             dual_bar_calc_approach = 'stretched'
           end
         end
-  
+
         # apply prescribed approach for stretched or dual bar
         if dual_bar_calc_approach == 'dual_bar'
           runner.registerInfo("Stretched  #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_length, 'm', 'ft').get, 0, true)} ft x #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_width, 'm', 'ft').get, 0, true)} ft rectangle has an area of #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_length * dual_double_end_width, 'm^2', 'ft^2').get, 0, true)} ft^2. When split in two the perimeter will be #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_length * 2 + dual_double_end_width * 4, 'm', 'ft').get, 0, true)} ft")
           if (target_area - dual_double_end_length * dual_double_end_width).abs > tol_testing || (target_perim - (dual_double_end_length * 2 + dual_double_end_width * 4)).abs > tol_testing
             runner.registerWarning('Unexpected values for dual rectangle.')
           end
-  
+
           runner.registerInfo("For stretched split bar, to match target ns/ew aspect ratio #{OpenStudio.toNeatString(OpenStudio.convert(bar_a_length, 'm', 'ft').get, 0, true)} ft of bar should be horizontal, with #{OpenStudio.toNeatString(OpenStudio.convert(bar_b_length, 'm', 'ft').get, 0, true)} ft turned 90 degrees. Combined area is #{OpenStudio.toNeatString(OpenStudio.convert(area_a + area_b, 'm^2', 'ft^2').get, 0, true)} ft^2. Combined perimeter is #{OpenStudio.toNeatString(OpenStudio.convert(bar_a_length * 2 + bar_b_length * 2 + dual_double_end_width * 4, 'm', 'ft').get, 0, true)} ft")
           if (target_area - (area_a + area_b)).abs > tol_testing || (target_perim - (bar_a_length * 2 + bar_b_length * 2 + dual_double_end_width * 4)).abs > tol_testing
             runner.registerWarning('Unexpected values for rotated dual rectangle')
           end
         elsif dual_bar_calc_approach == 'adiabatic_ends_bar_b'
           runner.registerInfo("Can't hit target perimeter with two rectangles, need to make two ends adiabatic")
-  
+
           runner.registerInfo("For dual bar with adiabatic ends on bar b, to reach target aspect ratio #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_bar_a_length, 'm', 'ft').get, 0, true)} ft of bar should be north/south, with #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_bar_b_length, 'm', 'ft').get, 0, true)} ft turned 90 degrees. Combined area is #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_area_a + adiabatic_area_b, 'm^2', 'ft^2').get, 0, true)} ft^2}. Combined perimeter is #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_bar_a_length * 2 + adiabatic_bar_b_length * 2 + adiabatic_dual_double_end_width * 2, 'm', 'ft').get, 0, true)} ft")
           if (target_area - (adiabatic_area_a + adiabatic_area_b)).abs > tol_testing || (target_perim - (adiabatic_bar_a_length * 2 + adiabatic_bar_b_length * 2 + adiabatic_dual_double_end_width * 2)).abs > tol_testing
             runner.registerWarning('Unexpected values for rotated dual rectangle adiabatic ends bar b')
           end
         else # stretched bar
           dual_bar = false
-  
+
           stretched_length = 0.25 * (target_perim + Math.sqrt(target_perim**2 - 16 * footprint_si))
           stretched_width = footprint_si / stretched_length
           if (target_area - stretched_length * stretched_width).abs > tol_testing || (target_perim - (stretched_length + stretched_width) * 2) > tol_testing
             runner.registerWarning('Unexpected values for single stretched')
           end
-  
+
           width = stretched_width
           length = stretched_length
           runner.registerInfo("Creating a dual bar to match the target minimum perimeter multiplier at the given aspect ratio would result in a bar with edge shorter than #{OpenStudio.toNeatString(OpenStudio.convert(min_allow_size, 'm', 'ft').get, 0, true)} ft. Will create a single stretched bar instead that hits the target perimeter with a slightly different ns/ew aspect ratio.")
         end
       end
-  
+
       bars = {}
       bars['primary'] = {}
       if dual_bar
@@ -1579,14 +1586,14 @@ module OpenstudioStandards
         pri_sec_min_area = 0.0001 # m^2
         space_types_hash.each do |k, v|
           space_type_left = v[:floor_area]
-  
+
           # do not go to next space type until this one is evaulate, which may span stories
           until space_type_left == 0.0 || story_counter >= num_stories
-  
+
             # use secondary footprint if any left
             if secondary_footprint_counter > 0.0
               hash_area = [space_type_left, secondary_footprint_counter].min
-  
+
               # confirm that the part of space type use or what is left is greater than min allowed value
               projected_space_type_left = space_type_left - hash_area
               test_a = hash_area >= pri_sec_min_area
@@ -1611,7 +1618,7 @@ module OpenstudioStandards
                 runner.registerInfo("Shifting space types between bars to avoid sliver of #{k.name}.")
               end
             end
-  
+
             # remove space if entirely used up by secondary bar
             if space_types_hash[k][:floor_area] <= pri_sec_tol
               space_types_hash.delete(k)
@@ -1622,7 +1629,7 @@ module OpenstudioStandards
               footprint_counter -= hash_area_pri
               space_type_left -= hash_area_pri
             end
-  
+
             # reset counter when full
             if footprint_counter <= pri_sec_tol && secondary_footprint_counter <= pri_sec_tol
               # check if this is partial top floor
@@ -1638,13 +1645,13 @@ module OpenstudioStandards
           end
         end
       end
-  
+
       # setup bar_hash and run create_bar
       bars['primary'][:space_types_hash] = space_types_hash
       bars['primary'][:args] = args
       v = bars['primary']
       bar_hash_setup_run(runner, model, v[:args], v[:length], v[:width], v[:floor_height_si], v[:center_of_footprint], v[:space_types_hash], v[:num_stories])
-  
+
       # store offset value for multiple bars
       if args.key?('bar_sep_dist_mult') && args['bar_sep_dist_mult'] > 0.0
         offset_val = num_stories.ceil * floor_height_si * args['bar_sep_dist_mult']
@@ -1654,7 +1661,7 @@ module OpenstudioStandards
       else
         offset_val = num_stories.ceil * floor_height_si * 10.0
       end
-  
+
       if dual_bar
         args2 = args.clone
         bars['secondary'] = {}
@@ -1690,13 +1697,13 @@ module OpenstudioStandards
           bars['secondary'][:center_of_footprint] = OpenStudio::Point3d.new(bar_a_length * 0.5 + dual_double_end_width * 0.5 + offset_val, bar_b_length * 0.5 + dual_double_end_width * 0.5 + offset_val, 0.0)
         end
         bars['secondary'][:args] = args2
-  
+
         # setup bar_hash and run create_bar
         v = bars['secondary']
         bar_hash_setup_run(runner, model, v[:args], v[:length], v[:width], v[:floor_height_si], v[:center_of_footprint], v[:space_types_hash], v[:num_stories])
-  
+
       end
-  
+
       # future development (up against primary bar run intersection and surface matching after add all bars, avoid interior windows)
       # I could loop through each space type and give them unique height but for now will just take largest height and make bar of that height, which is fine for prototypes
       if !multi_height_space_types_hash.empty?
@@ -1712,17 +1719,17 @@ module OpenstudioStandards
         if args['party_wall_stories_east'] + args['party_wall_stories_west'] + args['party_wall_stories_south'] + args['party_wall_stories_north'] > 0.0
           runner.registerWarning('Ignorning party wall inputs for custom height bar')
         end
-  
+
         # disable party walls
         args3['party_wall_stories_east'] = 0
         args3['party_wall_stories_west'] = 0
         args3['party_wall_stories_south'] = 0
         args3['party_wall_stories_north'] = 0
-  
+
         # setup stories
         args3['num_stories_below_grade'] = 0
         args3['num_stories_above_grade'] = 1
-  
+
         bars['custom_height'][:floor_height_si] = floor_height_si # can make use of this when breaking out multi-height spaces
         bars['custom_height'][:num_stories] = num_stories
         bars['custom_height'][:center_of_footprint] = OpenStudio::Point3d.new(bars['primary'][:length] * -0.5 - length_cust_height * 0.5 - offset_val, 0.0, 0.0)
@@ -1730,28 +1737,28 @@ module OpenstudioStandards
         bars['custom_height'][:num_stories] = 1
         bars['custom_height'][:space_types_hash] = multi_height_space_types_hash
         bars['custom_height'][:args] = args3
-  
+
         v = bars['custom_height']
         bar_hash_setup_run(runner, model, v[:args], v[:length], v[:width], v[:floor_height_si], v[:center_of_footprint], v[:space_types_hash], v[:num_stories])
       end
-  
+
       # diagnostic log
       sum_actual = 0.0
       sum_target = 0.0
       throw_error = false
-  
+
       # check expected floor areas against actual
       model.getSpaceTypes.sort.each do |space_type|
         next if !target_areas.key? space_type # space type in model not part of building type(s), maybe issue warning
-  
+
         # convert to IP
         actual_ip = OpenStudio.convert(space_type.floorArea, 'm^2', 'ft^2').get
         target_ip = OpenStudio.convert(target_areas[space_type], 'm^2', 'ft^2').get
         sum_actual += actual_ip
         sum_target += target_ip
-  
+
         if (space_type.floorArea - target_areas[space_type]).abs >= 1.0
-  
+
           if !args['bar_division_method'].include? 'Single Space Type'
             runner.registerError("#{space_type.name} doesn't have the expected floor area (actual #{OpenStudio.toNeatString(actual_ip, 0, true)} ft^2, target #{OpenStudio.toNeatString(target_ip, 0, true)} ft^2)")
             throw_error = true
@@ -1759,16 +1766,16 @@ module OpenstudioStandards
             # will see this if use Single Space type division method on multi-use building or single building type without whole building space type
             runner.registerWarning("#{space_type.name} doesn't have the expected floor area (actual #{OpenStudio.toNeatString(actual_ip, 0, true)} ft^2, target #{OpenStudio.toNeatString(target_ip, 0, true)} ft^2)")
           end
-  
+
         end
       end
-  
+
       # report summary then throw error
       if throw_error
         runner.registerError("Sum of actual floor area is #{sum_actual} ft^2, sum of target floor area is #{sum_target}.")
         return false
       end
-  
+
       # check party wall fraction by looping through surfaces
       if args['party_wall_fraction'] > 0
         actual_ext_wall_area = model.getBuilding.exteriorWallArea
@@ -1776,13 +1783,14 @@ module OpenstudioStandards
         model.getSurfaces.sort.each do |surface|
           next if surface.outsideBoundaryCondition != 'Adiabatic'
           next if surface.surfaceType != 'Wall'
+
           actual_party_wall_area += surface.grossArea * surface.space.get.multiplier
         end
         actual_party_wall_fraction = actual_party_wall_area / (actual_party_wall_area + actual_ext_wall_area)
         runner.registerInfo("Target party wall fraction is #{args['party_wall_fraction']}. Realized fraction is #{actual_party_wall_fraction.round(2)}")
         runner.registerValue('party_wall_fraction_actual', actual_party_wall_fraction)
       end
-  
+
       # check ns/ew aspect ratio (harder to check when party walls are added)
       wall_and_window_by_orientation = OsLib_Geometry.getExteriorWindowAndWllAreaByOrientation(model, model.getSpaces)
       wall_ns = (wall_and_window_by_orientation['northWall'] + wall_and_window_by_orientation['southWall'])
@@ -1795,7 +1803,7 @@ module OpenstudioStandards
       # for now using perimeter of ground floor and average story area (building area / num_stories)
       runner.registerValue('floor_area_to_perim_ratio', model.getBuilding.floorArea / (OsLib_Geometry.calculate_perimeter(model) * num_stories))
       runner.registerValue('bar_width_output', OpenStudio.convert(bars['primary'][:width], 'm', 'ft').get, 'ft')
-  
+
       if args['party_wall_fraction'] > 0 || args['party_wall_stories_north'] > 0 || args['party_wall_stories_south'] > 0 || args['party_wall_stories_east'] > 0 || args['party_wall_stories_west'] > 0
         runner.registerInfo('Target facade area by orientation not validated when party walls are applied')
       elsif args['num_stories_above_grade'] != args['num_stories_above_grade'].ceil
@@ -1807,7 +1815,7 @@ module OpenstudioStandards
       elsif args['bar_width'] > 0
         runner.registerInfo('Target facade area by orientation not validated when a dedicated custom bar width is defined')
       else
-  
+
         # adjust length versus width based on building rotation
         if mirror_ns_ew
           wall_target_ns_ip = 2 * OpenStudio.convert(width, 'm', 'ft').get * args['perim_mult'] * args['num_stories_above_grade'] * args['floor_height']
@@ -1829,7 +1837,7 @@ module OpenstudioStandards
           return false
         end
       end
-  
+
       # test for excessive exterior roof area (indication of problem with intersection and or surface matching)
       ext_roof_area = model.getBuilding.exteriorSurfaceArea - model.getBuilding.exteriorWallArea
       expected_roof_area = args['total_bldg_floor_area'] / (args['num_stories_above_grade'] + args['num_stories_below_grade']).to_f
@@ -1837,19 +1845,18 @@ module OpenstudioStandards
         runner.registerError('Roof area larger than expected, may indicate problem with inter-floor surface intersection or matching.')
         return false
       end
-  
+
       # set building rotation
       initial_rotation = model.getBuilding.northAxis
       if args['building_rotation'] != initial_rotation
         model.getBuilding.setNorthAxis(args['building_rotation'])
         runner.registerInfo("Set Building Rotation to #{model.getBuilding.northAxis}. Rotation altered after geometry generation is completed, as a result party wall orientation and aspect ratio may not reflect input values.")
       end
-  
+
       # report final condition of model
       runner.registerFinalCondition("The building finished with #{model.getSpaces.size} spaces.")
-  
+
       return true
     end
-
   end
 end
