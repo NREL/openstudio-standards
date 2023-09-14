@@ -3,7 +3,7 @@ class ASHRAE9012010 < ASHRAE901
 
   # Determine the prototypical economizer type for the model.
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the economizer type.  Possible values are:
   # 'NoEconomizer'

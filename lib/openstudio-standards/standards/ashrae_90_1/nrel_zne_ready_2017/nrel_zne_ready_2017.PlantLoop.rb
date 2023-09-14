@@ -4,7 +4,7 @@ class NRELZNEReady2017 < ASHRAE901
   # Applies the chilled water pumping controls to the loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)
     pri_control_type = 'VSD DP Reset'
     sec_control_type = 'VSD DP Reset'

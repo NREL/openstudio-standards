@@ -201,8 +201,8 @@ class Standard
 
   # Get appropriate construction object based on type of surface or subsurface
   # @author: Doug Maddox, PNNL
-  # @param: surface_category [string] type of surface: this is not an OpenStudio string
-  # @param: surface_type [string] SubSurfaceType: this is an OpenStudio string
+  # @param: surface_category [String type of surface: this is not an OpenStudio string
+  # @param: surface_type [String SubSurfaceType: this is an OpenStudio string
   # @param: cons_set [object] DefaultSubSurfaceConstructions object
   # @return: [object] Construction object
   def get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)

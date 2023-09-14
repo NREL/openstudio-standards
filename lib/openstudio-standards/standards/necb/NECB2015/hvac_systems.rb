@@ -1,7 +1,7 @@
 class NECB2015
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = standards_data['chillers']
 

@@ -2121,7 +2121,7 @@ module BTAP
     end
 
     # This method will scale the model
-    # @param model [OpenStudio::Model::Model] the model object.
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param x [Float] x scalar multiplier.
     # @param y [Float] y scalar multiplier.
     # @param z [Float] z scalar multiplier.
@@ -2165,7 +2165,7 @@ module BTAP
 
 
     # This method will rotate the model
-    # @param model [OpenStudio::Model::Model] the model object.
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param degrees [Float] rotation value
     # @return [OpenStudio::Model::Model] the model object.
     def self.rotate_model(model, degrees)

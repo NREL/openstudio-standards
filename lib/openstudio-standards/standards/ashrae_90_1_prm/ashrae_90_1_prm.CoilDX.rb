@@ -49,7 +49,7 @@ module ASHRAEPRMCoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object
   # @param capacity [Double] capacity in btu/hr
   # @param sys_type [String] HVAC system type
-  # @return [hash] has for search criteria to be used for find object
+  # @return [Hash] has for search criteria to be used for find object
   def coil_dx_find_search_criteria(coil_dx, capacity, sys_type)
     search_criteria = {}
     search_criteria['template'] = template

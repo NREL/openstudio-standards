@@ -929,7 +929,7 @@ class NECB2011 < Standard
   # @param model [OpenStudio::Model::Model] an OpenStudio model
   # @param tbd_option [String] BTAP/TBD option
   #
-  # @return [Bool] true if successful, e.g. no errors, compliant if uprated
+  # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
 
   ##
   # (Optionally) uprates, then derates, envelope surface constructions due to
@@ -939,12 +939,12 @@ class NECB2011 < Standard
   #
   # @param model [OpenStudio::Model::Model] an OpenStudio model
   # @param tbd_option [String] BTAP/TBD option
-  # @param tbd_interpolate [Bool] true if TBD interpolates between costed Uo
+  # @param tbd_interpolate [Boolean] true if TBD interpolates between costed Uo
   # @param wall_U [Double] wall conductance in W/m2.K (nil by default)
   # @param floor_U [Double] floor conductance in W/m2.K (nil by default)
   # @param roof_U [Double] roof conductance in W/m2.K (nil by default)
   #
-  # @return [Bool] true if successful, e.g. no errors, compliant if uprated
+  # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
   def apply_thermal_bridging(model: nil,
                              tbd_option: 'none',
                              tbd_interpolate: false,
@@ -986,8 +986,7 @@ class NECB2011 < Standard
     true
   end
 
-
-  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
+  # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     raise('validation of model failed.') unless validate_initial_model(model)
 
@@ -1022,7 +1021,7 @@ class NECB2011 < Standard
   #
   # @param min_occ_pct [Double] the fractional value below which
   # the system will be considered unoccupied.
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
     # Set the system to night cycle
     air_loop_hvac.setNightCycleControlType('CycleOnAny')
@@ -1204,7 +1203,7 @@ class NECB2011 < Standard
     return true
   end
 
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def set_occ_sensor_spacetypes(model, space_type_map)
     building_type = 'Space Function'
     space_type_map.each do |space_type_name, space_names|
@@ -1862,7 +1861,7 @@ class NECB2011 < Standard
   # Some loads are governed by the standard, others are typical values
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_loads(model, lights_type, lights_scale)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
