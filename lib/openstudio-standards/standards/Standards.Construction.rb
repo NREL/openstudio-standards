@@ -12,11 +12,11 @@ class Standard
   #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
-  # @param target_includes_int_film_coefficients [Bool] if true, subtracts off standard film interior coefficients from your
+  # @param target_includes_int_film_coefficients [Boolean] if true, subtracts off standard film interior coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @param target_includes_ext_film_coefficients [Bool] if true, subtracts off standard exterior film coefficients from your
+  # @param target_includes_ext_film_coefficients [Boolean] if true, subtracts off standard exterior film coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo Put in Phlyroy's logic for inferring the insulation layer of a construction
   def construction_set_u_value(construction, target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
@@ -134,11 +134,11 @@ class Standard
   #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
-  # @param target_includes_int_film_coefficients [Bool] if true, subtracts off standard film interior coefficients from your
+  # @param target_includes_int_film_coefficients [Boolean] if true, subtracts off standard film interior coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @param target_includes_ext_film_coefficients [Bool] if true, subtracts off standard exterior film coefficients from your
+  # @param target_includes_ext_film_coefficients [Boolean] if true, subtracts off standard exterior film coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_glazing_u_value(construction, target_u_value_ip, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
 
@@ -219,7 +219,7 @@ class Standard
   #
   # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_shgc [Double] Solar Heat Gain Coefficient
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_glazing_shgc(construction, target_shgc)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting SHGC for #{construction.name}.")
 
@@ -244,7 +244,7 @@ class Standard
   # as indicated by having a single layer of type SimpleGlazing.
   #
   # @param construction [OpenStudio::Model::Construction] construction object
-  # @return [Bool] returns true if it is a simple glazing, false if not
+  # @return [Boolean] returns true if it is a simple glazing, false if not
   def construction_simple_glazing?(construction)
     # Not simple if more than 1 layer
     if construction.layers.length > 1
@@ -269,7 +269,7 @@ class Standard
   # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_f_factor_ip [Double] F-Factor
   # @param insulation_layer_name [String] The name of the insulation layer in this construction
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_slab_f_factor(construction, target_f_factor_ip, insulation_layer_name = nil)
     # Regression from table A6.3 unheated, fully insulated slab
     r_value_ip = 1.0248 * target_f_factor_ip**-2.186
@@ -289,7 +289,7 @@ class Standard
   # @param construction [OpenStudio::Model::FFactorGroundFloorConstruction] OpenStudio F-factor construction object
   # @param target_f_factor_ip [Float] Targeted F-Factor in IP units
   # @param surface [OpenStudio::Model::Surface] OpenStudio surface object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
     # Get space associated with surface
     space = surface.space.get
@@ -325,7 +325,7 @@ class Standard
   # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_c_factor_ip [Double] C-Factor
   # @param insulation_layer_name [String] The name of the insulation layer in this construction
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_underground_wall_c_factor(construction, target_c_factor_ip, insulation_layer_name = nil)
     # Regression from table A4.2 continuous exterior insulation
     r_value_ip = 0.775 * target_c_factor_ip**-1.067
@@ -345,7 +345,7 @@ class Standard
   # @param construction [OpenStudio::Model::CFactorUndergroundWallConstruction] OpenStudio C-factor construction object
   # @param target_c_factor_ip [Float] Targeted C-Factor in IP units
   # @param surface [OpenStudio::Model::Surface] OpenStudio surface object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
     # Get space associated with surface
     space = surface.space.get
@@ -529,8 +529,7 @@ class Standard
   # Calculate the fenestration U-Factor base on the glass, frame,
   # and divider performance and area calculated by EnergyPlus.
   #
-  # @param [OpenStudio:Model:Construction] OpenStudio Construction object
-  #
+  # @param construction [OpenStudio:Model:Construction] OpenStudio Construction object
   # @return [Double] the U-Factor in W/m^2*K
   def construction_calculated_fenestration_u_factor_w_frame(construction)
     construction_name = construction.name.get.to_s
@@ -684,7 +683,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param values [Hash] has of values
-  # @param is_percentage [Bool] toggle is percentage
+  # @param is_percentage [Boolean] toggle is percentage
   # @return [Hash] json information
   def change_construction_properties_in_model(model, values, is_percentage = false)
     # puts JSON.pretty_generate(values)
@@ -746,8 +745,8 @@ class Standard
   # @param conductance [Double] conductance value in SI
   # @param shgc [Double] solar heat gain coefficient value, unitless
   # @param tvis [Double] visible transmittance
-  # @param is_percentage [Bool] toggle is percentage
-  # @return [Bool] returns true if successful, false if not
+  # @param is_percentage [Boolean] toggle is percentage
+  # @return [Boolean] returns true if successful, false if not
   def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil, is_percentage = false)
     # If user has no changes...do nothing and return true.
     return true if conductance.nil? && shgc.nil? && tvis.nil?
@@ -877,7 +876,7 @@ class Standard
   #
   # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_tvis [Double] Visible Transmittance
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_glazing_tvis(construction, target_tvis)
     if target_tvis >= 1.0
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Can only set the Tvis can only be set to less than 1.0. #{target_tvis} is greater than 1.0")

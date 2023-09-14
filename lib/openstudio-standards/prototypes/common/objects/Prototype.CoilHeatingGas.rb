@@ -61,7 +61,7 @@ class Standard
   # Defaults to making no changes.
   #
   # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] a gas heating coil
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def coil_heating_gas_apply_prototype_efficiency(coil_heating_gas)
     # do nothing
     return true

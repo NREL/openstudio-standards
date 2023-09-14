@@ -295,7 +295,7 @@ class NECB2011
   # modifications.  For others, it will not.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
 
   def apply_standard_construction_properties(model:,
                                              runner: nil,
@@ -465,9 +465,8 @@ class NECB2011
   # individual space type, this construction set will be created and applied
   # to this space type, overriding the whole-building construction set.
   #
-  # @param building_type [String] the type of building
-  # @param climate_zone [String] the name of the climate zone the building is in
-  # @return [Bool] returns true if successful, false if not
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] returns true if successful, false if not
   def model_add_constructions(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
 

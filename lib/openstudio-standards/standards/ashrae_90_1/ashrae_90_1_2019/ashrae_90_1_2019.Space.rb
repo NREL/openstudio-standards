@@ -102,9 +102,9 @@ class ASHRAE9012019 < ASHRAE901
   # @param areas [Hash] a hash of daylighted areas
   # @param sorted_windows [Hash] a hash of windows, sorted by priority
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
-  # @param req_top_ctrl [Bool] if toplighting controls are required
-  # @param req_pri_ctrl [Bool] if primary sidelighting controls are required
-  # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
+  # @param req_top_ctrl [Boolean] if toplighting controls are required
+  # @param req_pri_ctrl [Boolean] if primary sidelighting controls are required
+  # @param req_sec_ctrl [Boolean] if secondary sidelighting controls are required
   # @return [Array] array of 4 items
   #   [sensor 1 fraction, sensor 2 fraction, sensor 1 window, sensor 2 window]
   def space_daylighting_fractions_and_windows(space,
@@ -192,7 +192,7 @@ class ASHRAE9012019 < ASHRAE901
 
   # Provide the type of daylighting control type
   #
-  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # @param space [OpenStudio::Model::Space] OpenStudio Space object
   # return [String] daylighting control type
   def space_daylighting_control_type(space)
     return 'ContinuousOff'
@@ -201,7 +201,7 @@ class ASHRAE9012019 < ASHRAE901
   # Provide the minimum input power fraction for continuous
   # dimming daylighting control
   #
-  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # @param space [OpenStudio::Model::Space] OpenStudio Space object
   # return [Float] daylighting minimum input power fraction
   def space_daylighting_minimum_input_power_fraction(space)
     return 0.2

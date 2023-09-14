@@ -914,7 +914,7 @@ module BTAP
 
       # Creates ScheduleVariableInterval from TimeSeries
       # @author david.goldwasser@nrel.gov
-      # @param model [OpenStudio::model::Model] A model object
+      # @param model [OpenStudio::Model::Model] A model object
       # @param time_series [OpenStudio::TimeSeries] A TimeSeries object
       # @return [OpenStudio::Model::ScheduleInterval] An interval schedule
       def self.create_schedule_variable_interval_from_time_series(model, time_series)

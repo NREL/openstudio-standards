@@ -4,7 +4,7 @@ class ASHRAE901PRM < Standard
   # Applies the standard efficiency ratings to this object.
   #
   # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir)
     # Get the chiller capacity
     capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)

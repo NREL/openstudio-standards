@@ -5,7 +5,7 @@ class ASHRAE901PRM < Standard
   # (Fan coils, Unit Heaters, PTACs, PTHPs, VRF Terminals, WSHPs, ERVs)
   # based on the W/cfm specified in the standard.
   #
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac_component)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.ashrae_90_1_prm.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")
 

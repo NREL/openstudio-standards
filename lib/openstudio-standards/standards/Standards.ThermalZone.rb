@@ -96,7 +96,7 @@ class Standard
   # Convert total minimum OA requirement to a per-area value.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def thermal_zone_convert_oa_req_to_per_area(thermal_zone)
     # For each space in the zone, convert
     # all design OA to per-area
@@ -561,7 +561,7 @@ class Standard
   # In the event that they are equal, it will be assumed nonresidential.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # return [Bool] true if residential, false if nonresidential
+  # return [Boolean] true if residential, false if nonresidential
   def thermal_zone_residential?(thermal_zone)
     # Determine the respective areas
     res_area_m2 = 0
@@ -591,7 +591,7 @@ class Standard
   # This is as-defined by 90.1 Appendix G.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] true if Fossil Fuel, Fossil/Electric Hybrid, and Purchased Heat zone,
+  # @return [Boolean] true if Fossil Fuel, Fossil/Electric Hybrid, and Purchased Heat zone,
   #   false if Electric or Other.
   # @todo It's not doing it properly right now.
   #   If you have a zone with a VRF + a DOAS (via an ATU SingleDUct Uncontrolled)
@@ -635,10 +635,10 @@ class Standard
   end
 
   # for 2013 and prior, baseline fuel = proposed fuel
-  # @param themal_zone
-  # @return [string] with applicable DistrictHeating and/or DistrictCooling
-  def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
-    zone_fuels = thermal_zone_fossil_or_electric_type(zone, '')
+  # @param thermal_zone
+  # @return [String with applicable DistrictHeating and/or DistrictCooling
+  def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(thermal_zone)
+    zone_fuels = thermal_zone_fossil_or_electric_type(thermal_zone, '')
     return zone_fuels
   end
 
@@ -724,7 +724,7 @@ class Standard
   # Determine if the thermal zone is Fossil/Purchased Heat/Electric Hybrid
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] true if mixed Fossil/Electric Hybrid, and Purchased Heat zone, false if not
+  # @return [Boolean] true if mixed Fossil/Electric Hybrid, and Purchased Heat zone, false if not
   def thermal_zone_mixed_heating_fuel?(thermal_zone)
     is_mixed = false
 
@@ -974,7 +974,7 @@ class Standard
   #
   # @author Andrew Parker, Julien Marrec
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if heated, false if not
+  # @return [Boolean] returns true if heated, false if not
   def thermal_zone_heated?(thermal_zone)
     temp_f = 41
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
@@ -1124,7 +1124,7 @@ class Standard
   #
   # @author Andrew Parker, Julien Marrec
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if cooled, false if not
+  # @return [Boolean] returns true if cooled, false if not
   def thermal_zone_cooled?(thermal_zone)
     temp_f = 91
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
@@ -1265,7 +1265,7 @@ class Standard
   # Determine if the thermal zone is a plenum based on whether a majority of the spaces in the zone are plenums or not.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if majority plenum, false if not
+  # @return [Boolean] returns true if majority plenum, false if not
   def thermal_zone_plenum?(thermal_zone)
     plenum_status = false
 
@@ -1291,7 +1291,7 @@ class Standard
   # Zone must be less than 200 ft^2 and also have an infiltration object specified using Flow/Zone.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if vestibule, false if not
+  # @return [Boolean] returns true if vestibule, false if not
   def thermal_zone_vestibule?(thermal_zone)
     is_vest = false
 
@@ -1560,7 +1560,7 @@ class Standard
   # This value determines zone air flows, which will be summed during system design airflow calculation.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def thermal_zone_apply_prm_baseline_supply_temperatures(thermal_zone)
     # Skip spaces that aren't heated or cooled
     return true unless thermal_zone_heated?(thermal_zone) || thermal_zone_cooled?(thermal_zone)
@@ -1590,7 +1590,7 @@ class Standard
   # or cooled by thermal_zone_cooled?() and thermal_zone_heated?()
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def thermal_zone_add_unconditioned_thermostat(thermal_zone)
     # Heated to 0F (below thermal_zone_heated?(thermal_zone)  threshold)
     htg_t_f = 0
@@ -1804,7 +1804,7 @@ class Standard
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] Returns true if required, false if not
+  # @return [Boolean] Returns true if required, false if not
   # @todo Add exception logic for 90.1-2013
   #   for cells, sickrooms, labs, barbers, salons, and bowling alleys
   def thermal_zone_demand_control_ventilation_required?(thermal_zone, climate_zone)
@@ -2002,7 +2002,7 @@ class Standard
   # returns adjacent zones that share a wall with the zone
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @param same_floor [Bool] only valid option for now is true
+  # @param same_floor [Boolean] only valid option for now is true
   # @return [Array<OpenStudio::Model::ThermalZone>] array of adjacent thermal zones
   def thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone, same_floor = true)
     adjacent_zones = []
@@ -2026,16 +2026,16 @@ class Standard
   # returns true if DCV is required for exhaust fan for specified tempate
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if DCV is required for exhaust fan for specified template, false if not
+  # @return [Boolean] returns true if DCV is required for exhaust fan for specified template, false if not
   def thermal_zone_exhaust_fan_dcv_required?(thermal_zone); end
 
   # Add DCV to exhaust fan and if requsted to related objects
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @param change_related_objects [Bool] change related objects
+  # @param change_related_objects [Boolean] change related objects
   # @param zone_mixing_objects [Array<OpenStudio::Model::ZoneMixing>] array of zone mixing objects
   # @param transfer_air_source_zones [Array<OpenStudio::Model::ThermalZone>] array thermal zones that transfer air
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo this method is currently empty
   def thermal_zone_add_exhaust_fan_dcv(thermal_zone, change_related_objects = true, zone_mixing_objects = [], transfer_air_source_zones = [])
     # set flow fraction schedule for all zone exhaust fans and then set zone mixing schedule to the intersection of exhaust availability and exhaust fractional schedule

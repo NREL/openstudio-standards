@@ -19,7 +19,7 @@ class Standard
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param coil_heating_gas_multi_stage [OpenStudio::Model::CoilHeatingGasMultiStage] coil heating gas multi stage object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage)
     successfully_set_all_properties = true
 
