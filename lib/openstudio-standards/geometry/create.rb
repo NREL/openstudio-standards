@@ -422,18 +422,16 @@ module OpenstudioStandards
                 spaces_temp = OpenStudio::Model::SpaceVector.new
                 spaces_temp << space_a
                 spaces_temp << space_b
-                # attempt to intersect and match walls on a story, but later secondary match will look for missted matches and turn them to adiabaitc
+
                 # intersect and sort
                 OpenStudio::Model.intersectSurfaces(spaces_temp)
                 OpenStudio::Model.matchSurfaces(spaces_temp)
               end
             end
-            runner.registerInfo("Intersecting and matching surfaces in story #{story.name}, this will create additional geometry. Diagnstoic intersection and matching done a in paris of spaces.")
+            runner.registerInfo("Intersecting and matching surfaces in story #{story.name}, this will create additional geometry.")
           end
         end
-
       else
-
         if !(bar_hash[:make_mid_story_surfaces_adiabatic])
           # intersect surfaces
           # (when bottom floor has many space types and one above doesn't will end up with heavily subdivided floor. Maybe use adiabatic and don't intersect floor/ceilings)
@@ -449,7 +447,7 @@ module OpenstudioStandards
             story.spaces.sort.each do |space|
               story_spaces << space
             end
-            # attempt to intersect and match walls on a story, but later secondary match will look for missted matches and turn them to adiabaitc
+
             # intersect and sort
             OpenStudio::Model.intersectSurfaces(story_spaces)
             OpenStudio::Model.matchSurfaces(story_spaces)
@@ -544,7 +542,6 @@ module OpenstudioStandards
         if missed_match_count > 0
           runner.registerInfo("#{missed_match_count} surfaces that were exterior appear to be interior walls and had boundary condition chagned to adiabiatic.")
         end
-
       end
 
       # sort stories (by name for now but need better way)
@@ -1802,7 +1799,7 @@ module OpenstudioStandards
       runner.registerValue('ew_wall_area_ip', wall_ew_ip, 'ft^2')
       # for now using perimeter of ground floor and average story area (building area / num_stories)
       runner.registerValue('floor_area_to_perim_ratio', model.getBuilding.floorArea / (OsLib_Geometry.calculate_perimeter(model) * num_stories))
-      runner.registerValue('bar_width_output', OpenStudio.convert(bars['primary'][:width], 'm', 'ft').get, 'ft')
+      runner.registerValue('bar_width', OpenStudio.convert(bars['primary'][:width], 'm', 'ft').get, 'ft')
 
       if args['party_wall_fraction'] > 0 || args['party_wall_stories_north'] > 0 || args['party_wall_stories_south'] > 0 || args['party_wall_stories_east'] > 0 || args['party_wall_stories_west'] > 0
         runner.registerInfo('Target facade area by orientation not validated when party walls are applied')

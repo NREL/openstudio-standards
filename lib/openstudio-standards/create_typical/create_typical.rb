@@ -23,6 +23,8 @@ module OpenstudioStandards
     # @param exterior_lighting_zone [String] The exterior lighting zone for exterior lighting allowance.
     #   Options are '0 - Undeveloped Areas Parks', '1 - Developed Areas Parks', '2 - Neighborhood', '3 - All Other Areas', '4 - High Activity'
     # @param add_constructions [Boolean] Create and apply default construction set
+    # @param wall_construction_type [String] wall construction type.
+    #  Options are 'Inferred', 'Mass', 'Metal Building', 'WoodFramed', 'SteelFramed'
     # @param add_space_type_loads [Boolean] Populate existing standards space types in the model with internal loads
     # @param add_daylighting_controls [Boolean] Add daylighting controls
     # @param add_elevators [Boolean] Apply elevators directly to a space in the model instead of to a space type
@@ -56,6 +58,7 @@ module OpenstudioStandards
                                          kitchen_makeup: 'Adjacent',
                                          exterior_lighting_zone: '3 - All Other Areas',
                                          add_constructions: true,
+                                         wall_construction_type: 'Inferred',
                                          add_space_type_loads: true,
                                          add_daylighting_controls: true,
                                          add_elevators: true,
@@ -262,6 +265,15 @@ module OpenstudioStandards
       lookup_building_type = standard.model_get_lookup_name(primary_bldg_type)
       model.getBuilding.setStandardsBuildingType(primary_bldg_type)
 
+      # set FC factor constructions before adding other constructions
+      standard.model_set_below_grade_wall_constructions(model, lookup_building_type, climate_zone)
+      standard.model_set_floor_constructions(model, lookup_building_type, climate_zone)
+      if model.getFFactorGroundFloorConstructions.empty?
+        OpenStudio.logFree(OpenStudio::Info, 'Unable to determine FC factor value to use. Using default ground construction instead.')
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'Set FC factor constructions for slab and below grade walls.')
+      end
+
       # make construction set and apply to building
       if add_constructions
 
@@ -280,12 +292,54 @@ module OpenstudioStandards
         bldg_def_const_set = standard.model_add_construction_set(model, climate_zone, lookup_building_type, nil, is_residential)
         if bldg_def_const_set.is_initialized
           bldg_def_const_set = bldg_def_const_set.get
-          if is_residential then bldg_def_const_set.setName("Res #{bldg_def_const_set.name}") end
+          if is_residential == 'Yes'
+            bldg_def_const_set.setName("Res #{bldg_def_const_set.name}")
+          end
           model.getBuilding.setDefaultConstructionSet(bldg_def_const_set)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding default construction set named #{bldg_def_const_set.name}")
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "Could not create default construction set for the building type #{lookup_building_type} in climate zone #{climate_zone}.")
           return false
+        end
+
+        # Replace the construction of exterior walls with user-specified wall construction type
+        unless wall_construction_type == 'Inferred'
+          # Check that a default exterior construction set is defined
+          if bldg_def_const_set.defaultExteriorSurfaceConstructions.empty?
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', 'Default construction set has no default exterior surface constructions.')
+            return false
+          end
+          ext_surf_consts = bldg_def_const_set.defaultExteriorSurfaceConstructions.get
+
+          # Check that a default exterior wall is defined
+          if ext_surf_consts.wallConstruction.empty?
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', 'Default construction set has no default exterior wall construction.')
+            return false
+          end
+          old_construction = ext_surf_consts.wallConstruction.get
+          standards_info = old_construction.standardsInformation
+
+          # Get the old wall construction type
+          if standards_info.standardsConstructionType.empty?
+            old_wall_construction_type = 'Not defined'
+          else
+            old_wall_construction_type = standards_info.standardsConstructionType.get
+          end
+
+          # Modify the default wall construction if different from measure input
+          if old_wall_construction_type == wall_construction_type
+            # Don’t modify if the default matches the user-specified wall construction type
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Exterior wall construction type #{wall_construction_type} is the default for this building type.")
+          else
+            climate_zone_set = standard.model_find_climate_zone_set(model, climate_zone)
+            new_construction = standard.model_find_and_add_construction(model,
+                                                                        climate_zone_set,
+                                                                        'ExteriorWall',
+                                                                        wall_construction_type,
+                                                                        occ_type)
+            ext_surf_consts.setWallConstruction(new_construction)
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Set exterior wall construction to #{new_construction.name}, replacing building type default #{old_construction.name}.")
+          end
         end
 
         # Replace the construction of any outdoor-facing "AtticFloor" surfaces
@@ -408,7 +462,7 @@ module OpenstudioStandards
 
         # remove water use equipment and water use connections
         if remove_objects
-          # TODO: - remove plant loops used for service water heating
+          # @todo remove plant loops used for service water heating
           model.getWaterUseEquipments.each(&:remove)
           model.getWaterUseConnectionss.each(&:remove)
         end
@@ -465,7 +519,7 @@ module OpenstudioStandards
 
         # add daylight controls, need to perform a sizing run for 2010
         if template == '90.1-2010' || template == 'ComStock 90.1-2010'
-          if standard.model_run_sizing_run(model, "#{Dir.pwd}/SRvt") == false
+          if standard.model_run_sizing_run(model, "#{Dir.pwd}/create_typical_building_from_model_SR0") == false
             return false
           end
         end
@@ -580,11 +634,11 @@ module OpenstudioStandards
                           end
 
             # group zones
-            bldg_zone_lists = standard.model_group_zones_by_story(model, sys_group['zones'])
+            story_zone_lists = standard.model_group_zones_by_story(model, sys_group['zones'])
 
             # On each story, add the primary system to the primary zones
             # and add the secondary system to any zones that are different.
-            bldg_zone_lists.each do |story_group|
+            story_zone_lists.each do |story_group|
               # Differentiate primary and secondary zones, based on
               # operating hours and internal loads (same as 90.1 PRM)
               pri_sec_zone_lists = standard.model_differentiate_primary_secondary_thermal_zones(model, story_group)
@@ -625,11 +679,11 @@ module OpenstudioStandards
           sys_groups = standard.model_group_zones_by_type(model, OpenStudio.convert(20_000, 'ft^2', 'm^2').get)
           sys_groups.each do |sys_group|
             # group zones
-            bldg_zone_groups = standard.model_group_zones_by_story(model, sys_group['zones'])
+            story_zone_groups = standard.model_group_zones_by_story(model, sys_group['zones'])
 
             # Add the user specified HVAC system for each story.
             # Single-zone systems will get one per zone.
-            bldg_zone_groups.each do |zones|
+            story_zone_groups.each do |zones|
               unless model.add_cbecs_hvac_system(standard, hvac_system_type, zones)
                 OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
                 return false
@@ -645,7 +699,7 @@ module OpenstudioStandards
         op_sch = standard.model_infer_hours_of_operation_building(model)
 
         # Convert existing schedules in the model to parametric schedules based on current hours of operation
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Generating parametric schedules from ruleset schedules using #{hoo_var_method} variable method for hours of operation fromula.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Generating parametric schedules from ruleset schedules using #{hoo_var_method} variable method for hours of operation formula.")
         standard.model_setup_parametric_schedules(model, hoo_var_method: hoo_var_method)
 
         # Create start and end times from start time and duration supplied
@@ -692,7 +746,7 @@ module OpenstudioStandards
           standard.model_apply_prm_sizing_parameters(model)
 
           # Perform a sizing run
-          if standard.model_run_sizing_run(model, "#{Dir.pwd}/SR1") == false
+          if standard.model_run_sizing_run(model, "#{Dir.pwd}/create_typical_building_from_model_SR1") == false
             return false
           end
 
@@ -742,10 +796,15 @@ module OpenstudioStandards
       # change night cycling control to "Thermostat" cycling and increase thermostat tolerance to 1.99999
       manager_night_cycles = model.getAvailabilityManagerNightCycles
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Changing thermostat tollerance to 1.99999 for #{manager_night_cycles.size} night cycle manager objects.")
-
       manager_night_cycles.each do |night_cycle|
         night_cycle.setThermostatTolerance(1.9999)
         night_cycle.setCyclingRunTimeControlType('Thermostat')
+      end
+
+      # disable HVAC Sizing Simulation for Sizing Periods, not used for the type of PlantLoop sizing used in ComStock
+      if model.version >= OpenStudio::VersionString.new('3.0.0')
+        sim_control = model.getSimulationControl
+        sim_control.setDoHVACSizingSimulationforSizingPeriodsNoFail(false)
       end
 
       # report final condition of model
@@ -803,6 +862,11 @@ module OpenstudioStandards
 
       # mapping building_type name is needed for a few methods
       lookup_building_type = standard.model_get_lookup_name(building_type)
+
+      # remap small medium and large office to office
+      if building_type.include?('Office')
+        building_type = 'Office'
+      end
 
       # get array of new space types
       space_types_new = []

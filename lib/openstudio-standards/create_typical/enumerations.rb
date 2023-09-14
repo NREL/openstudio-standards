@@ -160,6 +160,17 @@ module OpenstudioStandards
         array << 'DEER 2075'
       end
 
+      array << 'ComStock DEER Pre-1975'
+      array << 'ComStock DEER 1985'
+      array << 'ComStock DEER 1996'
+      array << 'ComStock DEER 2003'
+      array << 'ComStock DEER 2007'
+      array << 'ComStock DEER 2011'
+      array << 'ComStock DEER 2014'
+      array << 'ComStock DEER 2015'
+      array << 'ComStock DEER 2017'
+      array << 'ComStock DEER 2020'
+
       return array
     end
 
