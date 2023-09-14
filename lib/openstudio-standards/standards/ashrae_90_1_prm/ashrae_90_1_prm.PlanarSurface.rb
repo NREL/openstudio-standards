@@ -13,6 +13,9 @@ class ASHRAE901PRM < Standard
   #   [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   #   and the values are the constructions.  If supplied, constructions will be pulled
   #   from this hash if already created to avoid creating duplicate constructions.
+  # @param wwr_building_type [String | Nil] building type that identifies the prescribed window to wall ratio
+  # @param wwr_info [Hash] A map that maps the building area type to window to wall ratio
+  # @param surface_category [String] surface category e.g., 'ExteriorSubSurface'
   # @return [Hash] returns a hash where the key is an array of inputs
   #   [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   #   and the value is the newly created construction.

@@ -48,7 +48,13 @@ class Standard
     interior_lighting_properties = model_find_object(standards_data['prm_interior_lighting'], search_criteria)
 
     if interior_lighting_properties.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Interior lighting PRM properties lookup failed: #{search_criteria}.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Interior lighting PRM properties lookup failed: #{search_criteria}. Trying to search with primary_space_type. It is highly recommended to update the standard space type to one of the lighting types listed in: https://pnnl.github.io/BEM-for-PRM/user_guide/model_requirements/standards_space_type/")
+      search_criteria = {
+        'template' => template,
+        'primary_space_type' => standards_space_type
+      }
+      interior_lighting_properties = model_find_object(standards_data['prm_interior_lighting'], search_criteria)
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SpaceType', "Interior Lighting PRM properties lookup failed: #{search_criteria}")
       interior_lighting_properties = {}
     end
 

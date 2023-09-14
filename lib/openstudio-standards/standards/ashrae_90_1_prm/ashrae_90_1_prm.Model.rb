@@ -1,21 +1,6 @@
 class ASHRAE901PRM < Standard
   # @!group Model
 
-  # Determines the area of the building above which point
-  # the non-dominant area type gets it's own HVAC system type.
-  # @return [Double] the minimum area (m^2)
-  def model_prm_baseline_system_group_minimum_area(model, custom)
-    exception_min_area_ft2 = 20_000
-    # Customization - Xcel EDA Program Manual 2014
-    # 3.2.1 Mechanical System Selection ii
-    if custom == 'Xcel Energy CO EDA'
-      exception_min_area_ft2 = 5000
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
-    end
-    exception_min_area_m2 = OpenStudio.convert(exception_min_area_ft2, 'ft^2', 'm^2').get
-    return exception_min_area_m2
-  end
-
   # Determines which system number is used
   # for the baseline system.
   # @return [String] the system number: 1_or_2, 3_or_4,
@@ -84,13 +69,12 @@ class ASHRAE901PRM < Standard
 
   # Change the fuel type based on climate zone, depending on the standard.
   # For 90.1-2013, fuel type is based on climate zone, not the proposed model.
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param fuel_type [String] Valid choices are electric, fossil, fossilandelectric,
+  #   purchasedheat, purchasedcooling, purchasedheatandcooling
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the revised fuel type
-  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone, custom = nil)
-    if custom == 'Xcel Energy CO EDA'
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', 'Custom; per Xcel EDA Program Manual 2014 Table 3.2.2 Baseline HVAC System Types, the 90.1-2010 rules for heating fuel type (based on proposed model) rules apply.')
-      return fuel_type
-    end
-
+  def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
     # For 90.1-2013 the fuel type is determined based on climate zone.
     # Don't change the fuel if it purchased heating or cooling.
     if fuel_type == 'electric' || fuel_type == 'fossil'
@@ -112,7 +96,7 @@ class ASHRAE901PRM < Standard
   end
 
   # Determines the fan type used by VAV_Reheat and VAV_PFP_Boxes systems.
-  # Variable speed fan for 90.1-2013
+  # Variable speed fan for 90.1-2019
   # @return [String] the fan type: TwoSpeed Fan, Variable Speed Fan
   def model_baseline_system_vav_fan_type(model)
     fan_type = 'Variable Speed Fan'
@@ -148,15 +132,15 @@ class ASHRAE901PRM < Standard
 
   # This method creates customized infiltration objects for each
   # space and removes the SpaceType-level infiltration objects.
-  #
-  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @param specific_space_infiltration_rate_75_pa [Float] space infiltration rate at a pressure differential of 75 Pa
   # @return [Bool] true if successful, false if not
   def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
     # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
     # Excerpt from the EnergyPlus Input/Output reference manual:
     #     "This model is based on work by Sherman and Grimsrud (1980)
     #     and is appropriate for smaller, residential-type buildings."
-    # Return an error if the model does use this object
+    # Raise exception if the model does use this object
     ela = 0
     model.getSpaceInfiltrationEffectiveLeakageAreas.sort.each do |eff_la|
       ela += 1
@@ -202,7 +186,7 @@ class ASHRAE901PRM < Standard
   # This method retrieves the type of infiltration input
   # used in the model. If input is inconsistent, returns
   # Flow/Area
-  #
+  # @param model [OpenStudio::Model::Model] openstudio model
   # @return [String] infiltration input type
   def model_get_infiltration_method(model)
     infil_method = nil
@@ -237,7 +221,7 @@ class ASHRAE901PRM < Standard
   # This method retrieves the infiltration coefficients
   # used in the model. If input is inconsitent, returns
   # [0, 0, 0.224, 0] as per PRM user manual
-  #
+  # @param model [OpenStudio::Model::Model] Openstudio model
   # @return [String] infiltration input type
   def model_get_infiltration_coefficients(model)
     cst = nil
@@ -361,9 +345,10 @@ class ASHRAE901PRM < Standard
 
   # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
-  # @return [Bool] true if successful, false if not
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @param wwr_building_type [String] building type used for defining window to wall ratio, e.g. 'Office > 50,000 sq ft'
+  # @param wwr_info [Hash] A map that maps each building area type to its correspondent wwr.
   # @return [Bool] returns true if successful, false if not
   def model_apply_standard_constructions(model, climate_zone, wwr_building_type: nil, wwr_info: {})
     types_to_modify = []
@@ -515,7 +500,7 @@ class ASHRAE901PRM < Standard
   # Clone the existing constructions and set their intended surface type and standards construction type per the PRM.
   # For some standards, this will involve making modifications.  For others, it will not.
   #
-  # 90.1-2007, 90.1-2010, 90.1-2013
+  # 90.1-2019
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Bool] returns true if successful, false if not
   def model_apply_prm_construction_types(model)
@@ -593,6 +578,10 @@ class ASHRAE901PRM < Standard
     types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
     types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
     types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+    types_to_modify << ['Outdoors', 'ExteriorWindow', 'Any Vertical Glazing']
+    types_to_modify << ['Outdoors', 'GlassDoor', 'Any Vertical Glazing']
+    types_to_modify << ['Outdoors', 'ExteriorDoor', 'NonSwinging']
+    types_to_modify << ['Outdoors', 'ExteriorDoor', 'Swinging']
     types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
     types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
 
@@ -638,6 +627,7 @@ class ASHRAE901PRM < Standard
   # Reduces the SRR to the values specified by the PRM. SRR reduction will be done by shrinking vertices toward the centroid.
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @return [Boolean] True if success
   def model_apply_prm_baseline_skylight_to_roof_ratio(model)
     # Loop through all spaces in the model, and
     # per the 90.1-2019 PRM User Manual, only
@@ -913,13 +903,12 @@ class ASHRAE901PRM < Standard
   end
 
   # Identifies non mechanically cooled ("nmc") systems, if applicable
-  #
+  # and add a flag to the zone's and air loop's additional properties.
   # TODO: Zone-level evaporative cooler is not currently supported by
   #       by OpenStudio, will need to be added to the method when
   #       supported.
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
-  # @return zone_nmc_sys_type [Hash] Zone to nmc system type mapping
   def model_identify_non_mechanically_cooled_systems(model)
     # Iterate through zones to find out if they are served by nmc systems
     model.getThermalZones.each do |zone|
@@ -979,6 +968,7 @@ class ASHRAE901PRM < Standard
   # Applies the HVAC parts of the template to all objects in the model using the the template specified in the model.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param apply_controls [Bool] toggle whether to apply air loop and plant loop controls
   # @param sql_db_vars_map [Hash] hash map
   # @return [Bool] returns true if successful, false if not
@@ -1080,6 +1070,12 @@ class ASHRAE901PRM < Standard
     return true
   end
 
+  # This function returns the cooling dx coil efficiency and curve coefficient in a Hashmap.
+  #
+  # @param cooling_coil [OpenStudio::Model::ModeObject]
+  # @param sql_db_vars_map [Hash] hash map
+  # @param sys_type [String] baseline system type string
+  # @return sql_db_vars_map [Hash]
   def set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
     if cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
       # single speed coil
@@ -1094,6 +1090,12 @@ class ASHRAE901PRM < Standard
     return sql_db_vars_map
   end
 
+  # This function returns the heating dx coil efficiency and curve coefficient in a Hashmap.
+  #
+  # @param heating_coil [OpenStudio::Model::ModeObject]
+  # @param sql_db_vars_map [Hash] hash map
+  # @param sys_type [String] baseline system type string
+  # @return sql_db_vars_map [Hash] the hashmap contains the heating efficiency and curve coefficient for the heating_coil
   def set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
     if heating_coil.to_CoilHeatingDXSingleSpeed.is_initialized
       # single speed coil
@@ -1164,6 +1166,7 @@ class ASHRAE901PRM < Standard
   #
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio model
+  # @return [Boolean] true if successful.
   def model_mark_zone_dcv_existence(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       next unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
@@ -1393,7 +1396,7 @@ class ASHRAE901PRM < Standard
   # @param [String] default_wwr_building_type
   # @param [String] default_swh_building_type
   # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
-  # @return True
+  # @return [Boolean] True if successful.
   def handle_user_input_data(model, climate_zone, sizing_run_dir, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # Set sizing run directory
     @sizing_run_dir = sizing_run_dir
@@ -1413,6 +1416,7 @@ class ASHRAE901PRM < Standard
     handle_thermal_zone_user_input_data(model)
     # load electric equipment user data
     handle_electric_equipment_user_input_data(model)
+    return true
   end
 
   # A function to load exterior lighting data from user data csv files
@@ -1999,8 +2003,9 @@ class ASHRAE901PRM < Standard
   # 2. Method user input.
   # 3. User data override.
   #
-  # @param [Boolean] run_all_orients: user inputs to indicate whether it is required to run all orientations
-  # @param [OpenStudio::Model::Model] OpenStudio model
+  # @param run_all_orients [Boolean] user inputs to indicate whether it is required to run all orientations
+  # @param user_model [OpenStudio::Model::Model] OpenStudio model
+  # @return run_orient_flag [Boolean] True if run all orientation is required, false otherwise
   def run_all_orientations(run_all_orients, user_model)
     run_orients_flag = false
     # Step 1 check orientation variations - priority 3
@@ -2044,6 +2049,12 @@ class ASHRAE901PRM < Standard
     return run_orients_flag
   end
 
+
+  # Function that extract the total fenestration area from a model by orientations.
+  # Orientation is identified as N (North), S (South), E (East), W (West)
+  #
+  # @param user_model [OpenStudio::Model::Model]
+  # @return fenestration_area_hash [Hash] Hash map that contains the total area of fenestration at each orientation (N, S, E, W)
   def get_model_fenestration_area_by_orientation(user_model)
     # First index is wall, second index is window
     fenestration_area_hash = {
@@ -2736,7 +2747,6 @@ class ASHRAE901PRM < Standard
     fuel_type = sys_group['fuel']
     area_ft2 = sys_group['building_area_type_ft2']
     num_stories = sys_group['stories']
-    zones = sys_group['zones']
 
     #             [type, central_heating_fuel, zone_heating_fuel, cooling_fuel]
     system_type = [nil, nil, nil, nil]
@@ -2753,9 +2763,7 @@ class ASHRAE901PRM < Standard
                                 'flrs_range_group' => iStoryGroup,
                                 'area_range_group' => 1)
 
-      if !props
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
-      end
+      prm_raise(props, @sizing_run_dir, "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       if num_stories <= props['bldg_flrs_max']
         # Story Group Is found
         break
@@ -2764,7 +2772,6 @@ class ASHRAE901PRM < Standard
 
     # Next filter by floor area
     iAreaGroup = 0
-    baseine_is_found = false
     loop do
       iAreaGroup += 1
       props = model_find_object(standards_data['prm_baseline_hvac'],
@@ -2773,9 +2780,7 @@ class ASHRAE901PRM < Standard
                                 'flrs_range_group' => iStoryGroup,
                                 'area_range_group' => iAreaGroup)
 
-      if !props
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
-      end
+      prm_raise(props && iAreaGroup <= 9, @sizing_run_dir, "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       below_max = false
       above_min = false
       # check if actual building floor area is within range for this area group
@@ -2797,12 +2802,8 @@ class ASHRAE901PRM < Standard
           above_min = true
         end
       end
-      if (above_min == true) && (below_max == true)
-        baseline_is_found = true
-        break
-      end
-      if iAreaGroup > 9
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline HVAC type for: #{template}-#{area_type}.")
+      if above_min && below_max
+        # break condition.
         break
       end
     end
@@ -3115,5 +3116,34 @@ class ASHRAE901PRM < Standard
       end
     end
     return true
+  end
+
+  # Determine whether heating type is fuel or electric
+  # @param hvac_building_type [String] Key for lookup of baseline system type
+  # @param climate_zone [String] full name of climate zone
+  # @return [String] fuel or electric
+  def find_prm_heat_type(hvac_building_type, climate_zone)
+    climate_code = get_climate_zone_code(climate_zone)
+    heat_type_props = model_find_object(standards_data['prm_heat_type'],
+                                        'template' => template,
+                                        'hvac_building_type' => hvac_building_type,
+                                        'climate_zone' => climate_code)
+    if !heat_type_props
+      # try again with wild card for climate
+      heat_type_props = model_find_object(standards_data['prm_heat_type'],
+                                          'template' => template,
+                                          'hvac_building_type' => hvac_building_type,
+                                          'climate_zone' => 'any')
+    end
+    
+    if !heat_type_props
+      # try again with wild card for building type
+      heat_type_props = model_find_object(standards_data['prm_heat_type'],
+                                          'template' => template,
+                                          'hvac_building_type' => 'all others',
+                                          'climate_zone' => climate_code)
+    end
+    prm_raise(heat_type_props, @sizing_run_dir, "Could not find baseline heat type for: #{template}-#{hvac_building_type}-#{climate_zone}.")
+    return heat_type_props['heat_type']
   end
 end

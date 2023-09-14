@@ -1368,7 +1368,7 @@ class BTAPData
               WHERE ReportName='EnergyMeters'
               AND ReportForString='Entire Facility'
               AND TableName='Annual and Peak Values - Natural Gas'
-              AND RowName='Heating:Gas'
+              AND RowName='Heating:NaturalGas'
               AND ColumnName='Natural Gas Maximum Value'
               AND Units='W'"
     heating_peak_w_gas = @sqlite_file.get.execAndReturnFirstDouble(command)
@@ -1423,10 +1423,14 @@ class BTAPData
       data["energy_eui_#{row['name'].downcase}_gj_per_m_sq"] = energy_columns.inject(0) { |sum, tuple| sum += tuple[1] } / @conditioned_floor_area_m_sq
     end
     data['energy_eui_total_gj_per_m_sq'] = 0.0
-    ['natural_gas_GJ', 'electricity_GJ', 'district_cooling_GJ', 'district_heating_GJ', 'additional_fuel_GJ'].each do |column|
+    ['natural_gas_GJ', 'electricity_GJ', 'additional_fuel_GJ'].each do |column|
       data["energy_eui_#{column.downcase}_per_m_sq"] = table.inject(0) { |sum, row| sum + (row[column].nil? ? 0.0 : row[column]) } / @conditioned_floor_area_m_sq
       data['energy_eui_total_gj_per_m_sq'] += data["energy_eui_#{column.downcase}_per_m_sq"] unless data["energy_eui_#{column.downcase}_per_m_sq"].nil?
     end
+    ['district_cooling_GJ', 'district_heating_GJ'].each do |column|
+      data["energy_eui_#{column.downcase}_per_m_sq"] = table.inject(0) { |sum, row| sum + (row[column].nil? ? 0.0 : row[column]) } / @conditioned_floor_area_m_sq
+    end
+
     # Get total and net site energy use intensity
     # Note: 'Total Site Energy' is the "gross" energy used by a building.
     # Note: 'Net Site Energy' is the final energy used by the building after considering any on-site energy generation (e.g. PV).
