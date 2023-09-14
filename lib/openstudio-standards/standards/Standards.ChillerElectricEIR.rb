@@ -4,7 +4,7 @@ class Standard
   # Finds the search criteria
   #
   # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
-  # @return [hash] has for search criteria to be used for find object
+  # @return [Hash] has for search criteria to be used for find object
   def chiller_electric_eir_find_search_criteria(chiller_electric_eir)
     search_criteria = {}
     search_criteria['template'] = template
@@ -36,14 +36,20 @@ class Standard
         condenser_type = 'WithCondenser' if absorption_type.nil?
       end
     elsif cooling_type == 'WaterCooled'
-      if name.include?('Reciprocating')
-        compressor_type = 'Reciprocating'
-      elsif name.include?('Rotary Screw')
-        compressor_type = 'Rotary Screw'
-      elsif name.include?('Scroll')
-        compressor_type = 'Scroll'
-      elsif name.include?('Centrifugal')
-        compressor_type = 'Centrifugal'
+      # use the chiller additional properties compressor type if defined
+      if chiller_electric_eir.additionalProperties.hasFeature('compressor_type')
+        compressor_type = chiller_electric_eir.additionalProperties.getFeatureAsString('compressor_type').get
+      else
+        # try to lookup by chiller name
+        if name.include?('Reciprocating')
+          compressor_type = 'Reciprocating'
+        elsif name.include?('Rotary Screw')
+          compressor_type = 'Rotary Screw'
+        elsif name.include?('Scroll')
+          compressor_type = 'Scroll'
+        elsif name.include?('Centrifugal')
+          compressor_type = 'Centrifugal'
+        end
       end
     end
     unless condenser_type.nil?
@@ -102,7 +108,7 @@ class Standard
   #
   # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
   # @param clg_tower_objs [Array] cooling towers, currently unused
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo remove clg_tower_objs parameter if unused
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = standards_data['chillers']

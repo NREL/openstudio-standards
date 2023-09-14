@@ -202,7 +202,7 @@ def standard_directory_name_from_template(template)
 end
 
 # checks whether your authorization credentials are set up to access the spreadsheets
-# @return [Bool] returns true if api is working, false if not
+# @return [Boolean] returns true if api is working, false if not
 def check_google_drive_configuration
   require 'google_drive'
   client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")

@@ -54,8 +54,8 @@ class ScheduleTranslator
   end
 
   # Convert from scheduleCompact to scheduleRuleset
-  # @Author Nicholas Long and Andrew Parker, NREL
-  # @Return ScheduleRuleset object
+  # @author Nicholas Long and Andrew Parker, NREL
+  # @return ScheduleRuleset object
   def convert_schedule_compact_to_schedule_ruleset
     @sched_name = @os_schedule.getString(1).get
     @sched_name = "#{@name_prefix} #{@sched_name}" unless @name_prefix.nil?

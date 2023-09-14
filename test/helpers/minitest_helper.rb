@@ -31,6 +31,8 @@ if ENV['CI'] == 'true'
   puts "Saving test results to #{Minitest::Ci.report_dir}"
 end
 require 'minitest/reporters'
+require 'minitest/reporters/base_reporter'
+require 'minitest/reporters/spec_reporter'
 
 require 'openstudio'
 require 'openstudio/measure/ShowRunnerOutput'

@@ -1,7 +1,7 @@
 class NECB2015
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = standards_data['chillers']
 
@@ -36,7 +36,24 @@ class NECB2015
     # Convert capacity to tons
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
+    # Get chiller compressor type if needed
+    chiller_types = ['reciprocating','scroll','rotary screw','centrifugal']
+    chiller_name_has_type = chiller_types.any? {|type| chiller_electric_eir.name.to_s.downcase.include? type}
+    unless chiller_name_has_type
+      chlr_type_search_criteria = {}
+      chlr_type_search_criteria['cooling_type'] = cooling_type
+      chlr_types_table = @standards_data['chiller_types']
+      chlr_type_props = model_find_object(chlr_types_table, chlr_type_search_criteria, capacity_tons)
+      unless chlr_type_props
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller types information")
+        successfully_set_all_properties = false
+        return successfully_set_all_properties
+      end
+      compressor_type = chlr_type_props['compressor_type']
+      chiller_electric_eir.setName(chiller_electric_eir.name.to_s + ' ' + compressor_type)
+    end
     # Get the chiller properties
+    search_criteria['compressor_type'] = compressor_type
     chlr_table = @standards_data['chillers']
     chlr_props = model_find_object(chlr_table, search_criteria, capacity_tons, Date.today)
     unless chlr_props

@@ -19,11 +19,12 @@ class NECB_Weather_Tests < Minitest::Test
   # This is not for compliance, but for archetype development. This will compare
   # to values in an excel/csv file stored in the weather folder.
   # NECB2011 8.4.2.3
-  # @return [Bool] true if successful.
+  # @return [Boolean] true if successful.
   def test_weather_reading()
     #todo Must deal with ground temperatures..They are currently not correct for NECB.
     test_results = File.join(@test_results_folder,'weather_test_results.json')
     expected_results = File.join(@expected_results_folder,'weather_expected_results.json')
+    expected_results_download = File.join(@expected_results_folder,'weather_expected_results_download.json')
     weather_file_folder = File.join(@root_folder,'data','weather')
     puts weather_file_folder
     BTAP::Environment::create_climate_json_file(
@@ -31,7 +32,15 @@ class NECB_Weather_Tests < Minitest::Test
         test_results
     )
 
+    # If the test_necb_weather_file_download.rb test is run before this test then this test will read additional weather
+    # files changing the test result output file and causing this test to fail.  Adding two sets of test results.  One
+    # that include the download test results and another that does not include the download test results.
     test = FileUtils.compare_file(expected_results, test_results)
-    assert(test, "Weather output from test does not match what is expected. Compare #{expected_results} with #{test_results}")
+    if test
+      assert(test, "Weather output from test does not match what is expected. Compare #{expected_results} with #{test_results}")
+    else
+      test = FileUtils.compare_file(expected_results_download, test_results)
+      assert(test, "Weather output from test does not match what is expected. Compare #{expected_results_download} with #{test_results}")
+    end
   end
 end

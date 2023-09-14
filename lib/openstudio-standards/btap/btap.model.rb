@@ -472,7 +472,7 @@
 #
 #   #This method will set the infiltration magnitude.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param self [OpenStudio::model::Model] A model object
+#   #@param self [OpenStudio::Model::Model] A model object
 #   #@param setDesignFlowRate [Float]
 #   #@param setFlowperSpaceFloorArea [Float]
 #   #@param setFlowperExteriorSurfaceArea [Float]
@@ -509,7 +509,7 @@
 #
 #   #This method will scale people loads schedule.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   #@param a_coef [Float]
 #   #@param b_coef [Float]
 #   #@param c_coef [Float]
@@ -528,7 +528,7 @@
 #
 #   #This method will scale lighting loads.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   #@param factor [Float]
 #   def scale_lighting_loads(factor)
 #     self.getLightss.sort.each do |item|
@@ -538,7 +538,7 @@
 #
 #   #This method will scale lighting loads schedule.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   #@param a_coef [Float]
 #   #@param b_coef [Float]
 #   #@param c_coef [Float]
@@ -557,7 +557,7 @@
 #
 #   #This method will scale electrical loads.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   #@param factor [Float]
 #   def scale_electrical_loads(model, factor)
 #     self.getElectricEquipments.sort.each do |item|
@@ -567,7 +567,7 @@
 #
 #   #This method will scale electrical loads schedule.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   #@param a_coef [Float]
 #   #@param b_coef [Float]
 #   #@param c_coef [Float]
@@ -585,7 +585,7 @@
 #
 #   #This method will scale Outdoor Air loads.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   #@param factor [Float]
 #   def scale_oa_loads(factor)
 #     self.getDesignSpecificationOutdoorAirs.sort.each do |oa_def|
@@ -598,7 +598,7 @@
 #
 #   #This method will scale infiltration loads.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   #@param factor [Float]
 #   def scale_inflitration_loads(factor)
 #     self.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration_load|
@@ -612,7 +612,7 @@
 #   # Elimination Methods
 #   #This method removes people loads from the model.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   def eliminate_all_people_loads()
 #     self.getPeoples.sort.each {|people| people.remove}
 #     self.getPeopleDefinitions.sort.each {|people| people.remove}
@@ -621,7 +621,7 @@
 #
 #   #This method removes light loads from model.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   def eliminate_all_lighting_loads()
 #     self.getLightss.sort.each {|item| item.remove}
 #     self.getLightsDefinitions.sort.each {|item| item.remove}
@@ -630,7 +630,7 @@
 #
 #   #This method removes elec loads from model.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   def eliminate_all_electric_loads()
 #     self.getElectricEquipments.sort.each {|item| item.remove}
 #     self.getElectricEquipmentDefinitions.sort.each {|item| item.remove}
@@ -639,7 +639,7 @@
 #
 #   #This method removes all design specification OA from model.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   def eliminate_all_design_specification_outdoor_air()
 #     self.getDesignSpecificationOutdoorAirs.sort.each {|item| item.remove}
 #     return self
@@ -647,7 +647,7 @@
 #
 #   #This method removes infiltration from model..
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   def eliminate_all_space_infiltration_design_flow_rates()
 #     self.getSpaceInfiltrationDesignFlowRates.sort.each {|item| item.remove}
 #     return self
@@ -655,7 +655,7 @@
 #
 #   #This method removes all space loads from model.
 #   #@author phylroy.lopez@nrcan.gc.ca
-#   #@param model [OpenStudio::model::Model] A model object
+#   #@param model [OpenStudio::Model::Model] A model object
 #   def eliminate_all_loads()
 #     conductance = 0.200
 #

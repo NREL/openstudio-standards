@@ -575,7 +575,7 @@ module Baseline9012013
 
     prm_maj_sec = 'G3.1.1 Baseline HVAC System Type'
 
-    # get model objects, could use zone.heating_fuels
+    # get model objects, could use zone.heatinFuelTypes or zone.appGHeatingFuelTypes
     prop_dist_htgs = prop_model.getDistrictHeatings
     prop_dist_clgs = prop_model.getDistrictCoolings
     base_dist_htgs = base_model.getDistrictHeatings

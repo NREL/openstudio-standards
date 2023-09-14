@@ -33,8 +33,8 @@ end
 # Intended use is for storing fan schedules to hash of ZoneName:SchedArray so schedules
 # can be saved when HVAC objects are deleted
 # @author Doug Maddox, PNNL
-# @param [object] model
-# @param [Object] schedule_ruleset
+# @param model [OpenStudio::Model::Model] OpenStudio model object
+# @param schedule_constant [OpenStudio::Model::ScheduleConstant] schedule
 # @return [Array<Double>] Array of sequential hourly values for year + 24 hours at end for holiday
 def get_8760_values_from_schedule_constant(model, schedule_constant)
   yd = model.getYearDescription

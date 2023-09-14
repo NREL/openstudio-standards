@@ -14,7 +14,7 @@ class Baseline9012013TestBldg4 < Minitest::Test
     failure_array = []
 
     lpd_test_hash = {}
-    lpd_test_hash["Parking Level 1B ParkingLot"] = {"LPD" => 0.19,"Space_Type" => "Parking"} #Interior parking lot is currently not an available space type.
+    lpd_test_hash["Parking Level 1B ParkingLot"] = {"LPD" => 0.04,"Space_Type" => "Parking"} #Interior parking lot is currently not an available space type.
     lpd_test_hash["Parking Level 1B IDF 1B05"] = {"LPD" => 1.11,"Space_Type" => "IT_Room"}
     lpd_test_hash["IndoorPracticeField"] = {"LPD" => 0.72,"Space_Type" => "Gym"}
 
