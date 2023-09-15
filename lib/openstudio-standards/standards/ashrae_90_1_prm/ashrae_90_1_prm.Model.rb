@@ -1430,68 +1430,67 @@ class ASHRAE901PRM < Standard
   # The file name is userdata_exterior_lighting.csv
   # @param [OpenStudio::Model::Model] model
   def handle_exterior_lighting_user_input_data(model)
-    user_data_exterior_lighting_objects = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights']: nil
-    if user_data_exterior_lighting_objects && !user_data_exterior_lighting_objects.empty?
-      non_tradeable_cats = ['nontradeable_general', 'building_facades_area', 'building_facades_perim', 'automated_teller_machines_per_location', 'automated_teller_machines_per_machine', 'entries_and_gates',
-                            'loading_areas_for_emergency_vehicles', 'drive_through_windows_and_doors', 'parking_near_24_hour_entrances', 'roadway_parking']
+    user_data_exterior_lighting_objects = get_userdata(UserDataFiles::EXTERIOR_LIGHTS)
 
-      search_criteria = {
-        'template' => template
-      }
+    search_criteria = {
+      'template' => template
+    }
+    ext_ltg_baseline_values = standards_lookup_table_first(table_name: 'prm_exterior_lighting', search_criteria: search_criteria)
 
-      ext_ltg_baseline_values = standards_lookup_table_first(table_name: 'prm_exterior_lighting', search_criteria: search_criteria)
+    model.getExteriorLightss.each do |exterior_light|
+      if user_data_exterior_lighting_objects
+        user_data_updated = false
+        # get exterior lighting object.
+        user_data_exterior_lighting_objects.each do |user_exterior_lighting|
+          next unless UserData.compare(exterior_light.name.get, user_exterior_lighting['name'])
 
-      # get exterior lighting object.
-      user_data_exterior_lighting_objects.each do |user_exterior_lighting|
-        exterior_lighting = model.getExteriorLightsByName(user_exterior_lighting['name'])
-        if !exterior_lighting.is_initialized
-          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "The Exterior:Lighting named #{user_exterior_lighting['name']} in the userdata_exterior_lights was not found in the model, user specified data associated with it will be ignored.")
-          next
-        else
-          exterior_lighting = exterior_lighting.get
-        end
-        num_cats = user_exterior_lighting['num_ext_lights_subcats'].to_i
-        # Make sure none of the categories are nontradeable and not a mix of tradeable and nontradeable
-        num_trade = 0
-        num_notrade = 0
-        ext_ltg_cats = {}
-        (1..num_cats).each do |icat|
-          cat_key = format('end_use_subcategory_%02d', icat)
-          subcat = prm_read_user_data(user_exterior_lighting, cat_key, nil)
-          # handle the userdata missing value issue.
-          prm_raise(subcat, @sizing_run_dir, "userdata_exterior_lights is missing data #{cat_key}")
-          if non_tradeable_cats.include?(subcat)
-            num_notrade += 1
-          else
-            num_trade += 1
-            meas_val_key = format('end_use_measurement_value_%02d', icat)
-            meas_val = prm_read_user_data(user_exterior_lighting, meas_val_key, "0.0").to_f
-            unless meas_val == 0
-              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "End use subcategory #{subcat} has either missing measurement value or invalid measurement value, set to 0.0")
+          num_cats = prm_read_user_data(user_exterior_lighting, 'num_ext_lights_subcats', '0').to_i
+          # Make sure none of the categories are nontradeable and not a mix of tradeable and nontradeable
+          num_trade = 0
+          num_notrade = 0
+          ext_ltg_cats = {}
+          (1..num_cats).each do |icat|
+            cat_key = format('end_use_subcategory_%02d', icat)
+            # validated
+            subcat = user_exterior_lighting[cat_key]
+            # handle the userdata missing value issue.
+            if UserDataNonTradableLightsCategory.matched_any?(subcat)
+              num_notrade += 1
+            else
+              num_trade += 1
+              meas_val_key = format('end_use_measurement_value_%02d', icat)
+              meas_val = prm_read_user_data(user_exterior_lighting, meas_val_key, '0.0').to_f
+              unless meas_val == 0
+                OpenStudio.logFree(OpenStudio::Info, 'prm.log', "End use subcategory #{subcat} has either missing measurement value or invalid measurement value, set to 0.0")
+              end
+              ext_ltg_cats[subcat] = meas_val
             end
-            ext_ltg_cats[subcat] = meas_val
           end
-        end
 
-        # skip this if all lights are non-tradeable
-        if num_trade == 0
-          exterior_lighting.additionalProperties.setFeature('design_level', 0.0)
-          next
-        end
+          # skip this if all lights are non-tradeable
+          if num_trade == 0
+            exterior_light.additionalProperties.setFeature('design_level', 0.0)
+            next
+          end
 
-        if (num_trade > 0) && (num_notrade > 0)
-          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "ExteriorLights object named #{user_exterior_lighting['name']} from user data file has mix of tradeable and non-tradeable lighting types. All will be treated as non-tradeable.")
-          next
-        end
+          if (num_trade > 0) && (num_notrade > 0)
+            OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "ExteriorLights object named #{user_exterior_lighting['name']} from user data file has a mix of tradeable and non-tradeable lighting types. All will be treated as non-tradeable.")
+            next
+          end
 
-        ext_ltg_pwr = 0
-        ext_ltg_cats.each do |subcat, meas_val|
-          # Get baseline power for this type of exterior lighting
-          baseline_value = ext_ltg_baseline_values[subcat].to_f
-          ext_ltg_pwr += baseline_value * meas_val
-        end
+          ext_ltg_pwr = 0
+          ext_ltg_cats.each do |subcat, meas_val|
+            # Get baseline power for this type of exterior lighting
+            baseline_value = ext_ltg_baseline_values[subcat].to_f
+            ext_ltg_pwr += baseline_value * meas_val
+          end
 
-        exterior_lighting.additionalProperties.setFeature('design_level', ext_ltg_pwr)
+          exterior_light.additionalProperties.setFeature('design_level', ext_ltg_pwr)
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Exterior Lights name #{exterior_light.name.get} was not found in user data file: #{UserDataFiles::EXTERIOR_LIGHTS}; No user data applied.")
+        end
       end
     end
   end
@@ -1500,29 +1499,36 @@ class ASHRAE901PRM < Standard
   # The file name is userdata_electric_equipment.csv
   # @param [OpenStudio::Model::Model] model
   def handle_electric_equipment_user_input_data(model)
-    user_data_plug_load = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
-    if user_data_plug_load && !user_data_plug_load.empty?
-      user_data_plug_load.each do |user_plug_load|
-        # Process elevator data
-        num_lifts = prm_read_user_data(user_plug_load, 'elevator_number_of_lifts', 0).to_i
-        elevator_equipment_option = model.getElectricEquipmentByName(prm_read_user_data(user_plug_load, 'name'))
-        if num_lifts > 0 && elevator_equipment_option.is_initialized
-          elevator_equipment = elevator_equipment_option.get
-          elevator_equipment.additionalProperties.setFeature('elevator_number_of_lifts', num_lifts)
-          number_of_levels = prm_read_user_data(user_plug_load, 'elevator_number_of_stories', 0).to_i
-          elevator_equipment.additionalProperties.setFeature('elevator_number_of_stories', number_of_levels)
-          elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_weight_of_car', 0.0).to_f
-          elevator_equipment.additionalProperties.setFeature('elevator_weight_of_car', elevator_weight_of_car)
-          elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_counter_weight_of_car', 0.0).to_f
-          elevator_equipment.additionalProperties.setFeature('elevator_counter_weight_of_car', elevator_weight_of_car)
-          elevator_rated_load = prm_read_user_data(user_plug_load, 'elevator_rated_load', 0.0).to_f
-          elevator_equipment.additionalProperties.setFeature('elevator_rated_load', elevator_rated_load)
-          elevator_speed_of_car = prm_read_user_data(user_plug_load, 'elevator_speed_of_car', 0.0).to_f
-          elevator_equipment.additionalProperties.setFeature('elevator_speed_of_car', elevator_speed_of_car)
-          elevator_ventilation_cfm = prm_read_user_data(user_plug_load, 'elevator_ventilation_cfm', 0.0).to_f
-          elevator_equipment.additionalProperties.setFeature('elevator_ventilation_cfm', elevator_ventilation_cfm)
-          elevator_area_ft2 = prm_read_user_data(user_plug_load, 'elevator_area_ft2', 0.0).to_f
-          elevator_equipment.additionalProperties.setFeature('elevator_area_ft2', elevator_area_ft2)
+    user_data_plug_load = get_userdata(UserDataFiles::ELECTRIC_EQUIPMENT)
+    model.getElectricEquipments.each do |elevator_equipment|
+      if user_data_plug_load
+        user_data_updated = false
+        user_data_plug_load.each do |user_plug_load|
+          next unless UserData.compare(elevator_equipment.name.get, user_plug_load['name'])
+
+          num_lifts = prm_read_user_data(user_plug_load, 'elevator_number_of_lifts', 0).to_i
+          if num_lifts > 0
+            elevator_equipment.additionalProperties.setFeature('elevator_number_of_lifts', num_lifts)
+            number_of_levels = prm_read_user_data(user_plug_load, 'elevator_number_of_stories', 0).to_i
+            elevator_equipment.additionalProperties.setFeature('elevator_number_of_stories', number_of_levels)
+            elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_weight_of_car', 0.0).to_f
+            elevator_equipment.additionalProperties.setFeature('elevator_weight_of_car', elevator_weight_of_car)
+            elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_counter_weight_of_car', 0.0).to_f
+            elevator_equipment.additionalProperties.setFeature('elevator_counter_weight_of_car', elevator_weight_of_car)
+            elevator_rated_load = prm_read_user_data(user_plug_load, 'elevator_rated_load', 0.0).to_f
+            elevator_equipment.additionalProperties.setFeature('elevator_rated_load', elevator_rated_load)
+            elevator_speed_of_car = prm_read_user_data(user_plug_load, 'elevator_speed_of_car', 0.0).to_f
+            elevator_equipment.additionalProperties.setFeature('elevator_speed_of_car', elevator_speed_of_car)
+            elevator_ventilation_cfm = prm_read_user_data(user_plug_load, 'elevator_ventilation_cfm', 0.0).to_f
+            elevator_equipment.additionalProperties.setFeature('elevator_ventilation_cfm', elevator_ventilation_cfm)
+            elevator_area_ft2 = prm_read_user_data(user_plug_load, 'elevator_area_ft2', 0.0).to_f
+            elevator_equipment.additionalProperties.setFeature('elevator_area_ft2', elevator_area_ft2)
+          end
+          user_data_updated = true
+        end
+
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Electric equipment name #{elevator_equipment.name.get} was not found in user data file: #{UserDataFiles::ELECTRIC_EQUIPMENT}; No user data applied.")
         end
       end
     end
@@ -1532,93 +1538,85 @@ class ASHRAE901PRM < Standard
   # The file name is userdata_design_specification_outdoor_air.csv
   # @param [OpenStudio::Model::Model] model
   def handle_outdoor_air_user_input_data(model)
-    user_data_oas = @standards_data.key?('userdata_design_specification_outdoor_air') ? @standards_data['userdata_design_specification_outdoor_air'] : nil
-    if user_data_oas && !user_data_oas.empty?
-      # get design specification outdoor air object.
-      user_data_oas.each do |user_oa|
-        zone_oa = model.getDesignSpecificationOutdoorAirByName(user_oa['name'])
-        if !zone_oa.is_initialized
-          OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "The DesignSpecification:OutdoorAir named #{user_oa['name']} in the userdata_design_specification_outdoor_air was not found in the model, user specified data associated with it will be ignored.")
-          next
-        else
-          zone_oa = zone_oa.get
-        end
-        # Todo this will need to update with a function to handle nil, none or empty string.
-        user_oa.keys.each do |info_key|
-          if info_key == 'name'
-            zone_oa.additionalProperties.setFeature('has_user_data', true)
-          else
-            # this will capture the invalid string to 0.0, need to add note
-            OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Add user provided outdoor air field: #{info_key}, value: #{user_oa[info_key].to_f} to DesignSpecification:OutdoorAir #{zone_oa.name.get} ")
-            zone_oa.additionalProperties.setFeature(info_key, user_oa[info_key].to_f)
+    user_data_oas = get_userdata(UserDataFiles::DESIGN_SPECIFICATION_OUTDOOR_AIR)
+    model.getDesignSpecificationOutdoorAirs.each do |zone_oa|
+      if user_data_oas
+        user_data_updated = false
+        user_data_oas.each do |user_oa|
+          next unless UserData.compare(zone_oa.name.get, user_oa['name'])
+
+          user_oa.keys.each do |info_key|
+            if info_key == 'name'
+              zone_oa.additionalProperties.setFeature('has_user_data', true)
+            else
+              # this will capture the invalid string to 0.0, need to add note
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Add user provided outdoor air field: #{info_key}, value: #{user_oa[info_key].to_f} to DesignSpecification:OutdoorAir #{zone_oa.name.get} ")
+              zone_oa.additionalProperties.setFeature(info_key, user_oa[info_key].to_f)
+            end
           end
+          user_data_updated = true
+        end
+
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Zone outdoor air name #{zone_oa.name.get} was not found in user data file: #{UserDataFiles::DESIGN_SPECIFICATION_OUTDOOR_AIR}; No user data applied.")
         end
       end
     end
   end
 
   # A function to load airloop data from userdata csv files
+  # The function works with validated user data only.
+  #
   # @param [OpenStudio::Model::Model] OpenStudio model object
   def handle_airloop_user_input_data(model)
     # ============================Process airloop info ============================================
-    user_airloops = @standards_data.key?('userdata_airloop_hvac') ? @standards_data['userdata_airloop_hvac'] : nil
+    user_airloops = get_userdata(UserDataFiles::AIRLOOP_HVAC)
     model.getAirLoopHVACs.each do |air_loop|
-      air_loop_name = air_loop.name.get
-      if user_airloops && user_airloops.length > 1
+      if user_airloops
+        user_data_updated = false
         user_airloops.each do |user_airloop|
-          if air_loop_name == user_airloop['name']
+          next unless UserData.compare(air_loop.name.get, user_airloop['name'])
+
+          air_loop.thermalZones.each do |thermal_zone|
             # gas phase air cleaning is system base - add proposed hvac system name to zones
-            economizer_exception_for_gas_phase_air_cleaning = prm_read_user_data(user_airloop, 'economizer_exception_for_gas_phase_air_cleaning', 'no')
-            if economizer_exception_for_gas_phase_air_cleaning.downcase == 'yes'
-              air_loop.thermalZones.each do |thermal_zone|
-                thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', air_loop_name)
-              end
-            end
-            economizer_exception_for_open_refrigerated_cases = prm_read_user_data(user_airloop, 'economizer_exception_for_open_refrigerated_cases', 'no')
-            # Open refrigerated cases is zone based - add yes or no to zones
-            if economizer_exception_for_open_refrigerated_cases.downcase == 'yes'
-              air_loop.thermalZones.each do |thermal_zone|
-                thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', 'yes')
-              end
-            end
-            # Fan power credits, exhaust air energy recovery
+            economizer_exception_for_gas_phase_air_cleaning = user_airloop['economizer_exception_for_gas_phase_air_cleaning']
+            economizer_exception_for_open_refrigerated_cases = user_airloop['economizer_exception_for_open_refrigerated_cases']
             user_airloop.keys.each do |info_key|
-              # Fan power credits
-              if info_key.include?('fan_power_credit')
-                if !user_airloop[info_key].to_s.empty?
-                  if info_key.include?('has_')
-                    if user_airloop[info_key].downcase == 'yes'
-                      air_loop.thermalZones.each do |thermal_zone|
-                        if thermal_zone.additionalProperties.hasFeature(info_key)
-                          current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
-                          thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
-                        else
-                          thermal_zone.additionalProperties.setFeature(info_key, 1.0)
-                        end
-                      end
-                    end
-                  else
-                    air_loop.thermalZones.each do |thermal_zones|
-                      if thermal_zone.additionalProperties.hasFeature(info_key)
-                        current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
-                        thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop[info_key])
-                      else
-                        thermal_zone.additionalProperties.setFeature(info_key, user_airloop[info_key])
-                      end
-                    end
-                  end
-                end
+              if info_key.include?('has_fan_power_credit') && UserData.compare(user_airloop[info_key], UserDataBoolean::TRUE)
+                current_value = get_additional_property_as_double(thermal_zone, info_key, 0.0)
+                thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
+              elsif info_key.include?('fan_power_credit')
+                # Case 2: user provided value
+                fan_power_credit = prm_read_user_data(user_airloop, info_key, '0.0').to_f
+                current_value = get_additional_property_as_double(thermal_zone, info_key, 0.0)
+                thermal_zone.additionalProperties.setFeature(info_key, current_value + fan_power_credit)
               end
+
               # Exhaust air energy recovery
-              if info_key.include?('exhaust_energy_recovery_exception') && !user_airloop[info_key].to_s.empty?
-                if user_airloop[info_key].downcase == 'yes'
-                  air_loop.thermalZones.each do |thermal_zone|
-                    thermal_zone.additionalProperties.setFeature(info_key, 'yes')
-                  end
+              if info_key.include?('exhaust_energy_recovery_exception')
+                if UserData.compare(user_airloop[info_key], UserDataBoolean::TRUE)
+                  thermal_zone.additionalProperties.setFeature(info_key, true)
+                else
+                  thermal_zone.additionalProperties.setFeature(info_key, false)
                 end
               end
+            end
+            if UserData.compare(economizer_exception_for_gas_phase_air_cleaning, UserDataBoolean::TRUE)
+              thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', true)
+            else
+              thermal_zone.additionalProperties.setFeature('economizer_exception_for_gas_phase_air_cleaning', false)
+            end
+
+            if UserData.compare(economizer_exception_for_open_refrigerated_cases, UserDataBoolean::TRUE)
+              thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases',true)
+            else
+              thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', false)
             end
           end
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Air loop name #{air_loop.name.get} was not found in user data file: #{UserDataFiles::AIRLOOP_HVAC}; No user data applied.")
         end
       end
     end
@@ -1628,53 +1626,36 @@ class ASHRAE901PRM < Standard
   # @param [OpenStudio::Model::Model] OpenStudio model object
   def handle_airloop_doas_user_input_data(model)
     # Get user data
-    user_airloop_doass = @standards_data.key?('userdata_airloop_hvac_doas') ? @standards_data['userdata_airloop_hvac_doas'] : nil
+    user_airloop_doass = get_userdata(UserDataFiles::AIRLOOP_HVAC_DOAS)
+    model.getAirLoopHVACDedicatedOutdoorAirSystems.each do |air_loop_doas|
+      if user_airloop_doass
+        user_data_updated = false
+        user_airloop_doass.each do |user_airloop_doas|
+          next unless UserData.compare(user_airloop_doas['name'], air_loop_doas.name.get)
 
-    # Parse user data
-    if user_airloop_doass && user_airloop_doass.length >= 1
-      user_airloop_doass.each do |user_airloop_doas|
-        # Get AirLoopHVACDedicatedOutdoorAirSystem
-        air_loop_doas = model.getAirLoopHVACDedicatedOutdoorAirSystemByName(user_airloop_doas['name'])
-        if !air_loop_doas.is_initialized
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_prm.Model', "The AirLoopHVACDedicatedOutdoorAirSystem named #{user_airloop_doass['name']} mentioned in the userdata_airloop_hvac_doas was not found in the model, user specified data associated with it will be ignored.")
-          next
-        else
-          air_loop_doas = air_loop_doas.get
-        end
-
-        # Parse fan power credits data
-        user_airloop_doas.keys.each do |info_key|
-          if info_key.include?('fan_power_credit')
-            if !user_airloop_doas[info_key].to_s.empty?
-              # Case 1: Yes/no
-              if info_key.include?('has_')
-                if user_airloop_doas[info_key].downcase == 'yes'
-                  air_loop_doas.airLoops.each do |air_loop|
-                    air_loop.thermalZones.each do |thermal_zone|
-                      if thermal_zone.additionalProperties.hasFeature(info_key)
-                        current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
-                        thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
-                      else
-                        thermal_zone.additionalProperties.setFeature(info_key, 1.0)
-                      end
-                    end
-                  end
+          # Parse fan power credits data
+          user_airloop_doas.keys.each do |info_key|
+            if info_key.include?('has_fan_power_credit') && UserDataBoolean.compare(user_airloop_doas[info_key], UserDataBoolean::TRUE)
+              air_loop_doas.airLoops.each do |air_loop|
+                air_loop.thermalZones.each do |thermal_zone|
+                  current_value = get_additional_property_as_double(thermal_zone, info_key, 0.0)
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
                 end
-              else
-                # Case 2: user provided value
-                air_loop_doas.airLoops.each do |air_loop|
-                  air_loop.thermalZones.each do |thermal_zones|
-                    if thermal_zone.additionalProperties.hasFeature(info_key)
-                      current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
-                      thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop_doas[info_key])
-                    else
-                      thermal_zone.additionalProperties.setFeature(info_key, user_airloop_doas[info_key])
-                    end
-                  end
+              end
+            elsif info_key.include?('fan_power_credit')
+              # Case 2: user provided value
+              air_loop_doas.airLoops.each do |air_loop|
+                air_loop.thermalZones.each do |thermal_zone|
+                  current_value = get_additional_property_as_double(thermal_zone, info_key, 0.0)
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop_doas[info_key])
                 end
               end
             end
           end
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Air Loop DOAS name #{air_loop_doas.name.get} was not found in user data file: #{UserDataFiles::AIRLOOP_HVAC_DOAS}; No user data applied.")
         end
       end
     end
@@ -1683,16 +1664,22 @@ class ASHRAE901PRM < Standard
   # A function to load thermal zone data from userdata csv files
   # @param [OpenStudio::Model::Model] OpenStudio model object
   def handle_thermal_zone_user_input_data(model)
+    userdata_thermal_zones = get_userdata(UserDataFiles::THERMAL_ZONE)
     model.getThermalZones.each do |thermal_zone|
       nightcycle_exception = false
-      if standards_data.key?('userdata_thermal_zone')
-        standards_data['userdata_thermal_zone'].each do |row|
-          next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
+      if userdata_thermal_zones
+        user_data_updated = false
+        userdata_thermal_zones.each do |row|
+          next unless UserData.compare(row['name'], thermal_zone.name.get)
 
-          if row['has_health_safety_night_cycle_exception'].to_s.upcase.strip == 'TRUE'
+          if UserData.compare(row['has_health_safety_night_cycle_exception'], UserDataBoolean::TRUE)
             nightcycle_exception = true
             break
           end
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Thermal Zone name #{thermal_zone.name.get} was not found in user data file: #{UserDataFiles::THERMAL_ZONE}.")
         end
       end
       if nightcycle_exception
@@ -1727,11 +1714,11 @@ class ASHRAE901PRM < Standard
   # @return True
   def handle_multi_building_area_types(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # Construct the user_building hashmap
-    user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+    user_buildings = get_userdata(UserDataFiles::BUILDING)
 
     # Build up a hvac_building_type : thermal zone hash map
     # =============================HVAC user data process===========================================
-    user_thermal_zones = @standards_data.key?('userdata_thermal_zone') ? @standards_data['userdata_thermal_zone'] : nil
+    user_thermal_zones = get_userdata(UserDataFiles::THERMAL_ZONE)
     # First construct hvac building type -> thermal Zone hash and hvac building type -> floor area
     bldg_type_zone_hash = {}
     bldg_type_zone_area_hash = {}
@@ -1744,8 +1731,8 @@ class ASHRAE901PRM < Standard
 
       # Check for Second hierarchy
       hvac_building_type = nil
-      if user_thermal_zones && user_thermal_zones.length >= 1
-        user_thermal_zone_index = user_thermal_zones.index { |user_thermal_zone| user_thermal_zone['name'] == thermal_zone.name.get }
+      if user_thermal_zones
+        user_thermal_zone_index = user_thermal_zones.index { |user_thermal_zone| UserData.compare(user_thermal_zone['name'], thermal_zone.name.get) }
         # make sure the thermal zone has assigned a building_type_for_hvac
         unless user_thermal_zone_index.nil? || user_thermal_zones[user_thermal_zone_index]['building_type_for_hvac'].nil?
           # Only thermal zone in the user data and have building_type_for_hvac data will be assigned.
@@ -1753,9 +1740,9 @@ class ASHRAE901PRM < Standard
         end
       end
       # Second hierarchy does not apply, check Third hierarchy
-      if hvac_building_type.nil? && user_buildings && user_buildings.length >= 1
-        building_name = thermal_zone.model.building.get.name.get
-        user_building_index = user_buildings.index { |user_building| user_building['name'] == building_name }
+      if hvac_building_type.nil? && user_buildings
+        building_name = prm_get_optional_handler(thermal_zone.model, @sizing_run_dir, 'building', 'name')
+        user_building_index = user_buildings.index { |user_building| UserData.compare(user_building['name'], building_name) }
         unless user_building_index.nil? || user_buildings[user_building_index]['building_type_for_hvac'].nil?
           # Only thermal zone in the buildings user data and have building_type_for_hvac data will be assigned.
           hvac_building_type = user_buildings[user_building_index]['building_type_for_hvac']
@@ -1819,12 +1806,12 @@ class ASHRAE901PRM < Standard
           if OpenStudio.convert(total_floor_area, 'm^2', 'ft^2').get <= 40000
             # Building is smaller than 40k sqft, it could only have one hvac_building_type, reset all the thermal zones.
             bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The building floor area is less than 40,000 square foot. Thermal zones under hvac building type #{bldg_type} is reset to #{hvac_bldg_type_with_max_floor}")
+            OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The building floor area is less than 40,000 square foot. Thermal zones under hvac building type #{bldg_type} is reset to #{hvac_bldg_type_with_max_floor}")
           else
             if OpenStudio.convert(bldg_type_zone_area_hash[bldg_type], 'm^2', 'ft^2').get < 20000
               # in this case, all thermal zones shall be categorized as the primary hvac_building_type
               bldg_type_hvac_zone_hash[hvac_bldg_type_with_max_floor].push(*bldg_type_zone)
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The floor area in hvac building type #{bldg_type} is less than 20,000 square foot. Thermal zones under this hvac building type is reset to #{hvac_bldg_type_with_max_floor}")
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The floor area in hvac building type #{bldg_type} is less than 20,000 square foot. Thermal zones under this hvac building type is reset to #{hvac_bldg_type_with_max_floor}")
             else
               bldg_type_hvac_zone_hash[bldg_type] = bldg_type_zone
             end
@@ -1841,14 +1828,14 @@ class ASHRAE901PRM < Standard
     end
 
     # =============================SPACE user data process===========================================
-    user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
+    user_spaces = get_userdata(UserDataFiles::SPACE)
     model.getSpaces.each do |space|
       type_for_wwr = nil
       # Check for 2nd level hierarchy
-      if user_spaces && user_spaces.length >= 1
+      if user_spaces
         user_spaces.each do |user_space|
           unless user_space['building_type_for_wwr'].nil?
-            if space.name.get == user_space['name']
+            if UserData.compare(space.name.get, user_space['name'])
               type_for_wwr = user_space['building_type_for_wwr']
             end
           end
@@ -1857,11 +1844,11 @@ class ASHRAE901PRM < Standard
 
       if type_for_wwr.nil?
         # 2nd Hierarchy does not apply, check for 3rd level hierarchy
-        building_name = space.model.building.get.name.get
-        if user_buildings && user_buildings.length >= 1
+        building_name = prm_get_optional_handler(space.model, @sizing_run_dir, 'building', 'name')
+        if user_buildings
           user_buildings.each do |user_building|
             unless user_building['building_type_for_wwr'].nil?
-              if user_building['name'] == building_name
+              if UserData.compare(user_building['name'], building_name)
                 type_for_wwr = user_building['building_type_for_wwr']
               end
             end
@@ -1877,14 +1864,14 @@ class ASHRAE901PRM < Standard
       space.additionalProperties.setFeature('building_type_for_wwr', type_for_wwr)
     end
     # =============================SWH user data process===========================================
-    user_wateruse_equipments = @standards_data.key?('userdata_wateruse_equipment') ? @standards_data['userdata_wateruse_equipment'] : nil
+    user_wateruse_equipments = get_userdata(UserDataFiles::WATERUSE_EQUIPMENT)
     model.getWaterUseEquipments.each do |wateruse_equipment|
       type_for_swh = nil
       # Check for 2nd hierarchy
-      if user_wateruse_equipments && user_wateruse_equipments.length >= 1
+      if user_wateruse_equipments
         user_wateruse_equipments.each do |user_wateruse_equipment|
           unless user_wateruse_equipment['building_type_for_swh'].nil?
-            if wateruse_equipment.name.get == user_wateruse_equipment['name']
+            if UserData.compare(wateruse_equipment.name.get, user_wateruse_equipment['name'])
               type_for_swh = user_wateruse_equipment['building_type_for_swh']
             end
           end
@@ -1894,11 +1881,11 @@ class ASHRAE901PRM < Standard
       if type_for_swh.nil?
         # 2nd hierarchy does not apply, check for 3rd hierarchy
         # get space building type
-        building_name = wateruse_equipment.model.building.get.name.get
-        if user_buildings && user_buildings.length >= 1
+        building_name = prm_get_optional_handler(wateruse_equipment.model, @sizing_run_dir, 'building', 'name')
+        if user_buildings
           user_buildings.each do |user_building|
             unless user_building['building_type_for_swh'].nil?
-              if user_building['name'] == building_name
+              if UserData.compare(user_building['name'], building_name)
                 type_for_swh = user_building['building_type_for_swh']
               end
             end
@@ -1922,7 +1909,7 @@ class ASHRAE901PRM < Standard
   # @param building_type [String] the building type
   # @return [Bool] returns true if successful, false if not
   def model_apply_baseline_swh_loops(model, building_type)
-    model.getPlantLoops.sort.each do |plant_loop|
+    model.getPlantLoops.each do |plant_loop|
       # Skip non service water heating loops
       next unless plant_loop_swh_loop?(plant_loop)
 
@@ -3177,4 +3164,19 @@ class ASHRAE901PRM < Standard
     prm_raise(heat_type_props, @sizing_run_dir, "Could not find baseline heat type for: #{template}-#{hvac_building_type}-#{climate_zone}.")
     return heat_type_props['heat_type']
   end
+
+  private
+
+  # Check if the PRM process uses user data. The function returns a hash when
+  # 1. There is a matching user data
+  # 2. The matching user data is not nil saved in the @standards_data
+  # 3. The matching user data hash is not empty
+  # The function returns nil if none of the above matched.
+  #
+  # @param user_data_csv [String] the name of the user data csv file
+  # @return user_data [hash | nil] Returns hash or nil.
+  def get_userdata(user_data_csv)
+    return @standards_data.key?(user_data_csv) && @standards_data[user_data_csv].length >= 1 ? @standards_data[user_data_csv] : nil
+  end
+
 end
