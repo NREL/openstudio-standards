@@ -81,7 +81,7 @@ class Standard
       # Check if proposed HVAC system is autosized
       if model_is_hvac_autosized(user_model)
         OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-                           "The user model's HVAC system is partly autosized. Baseline and proposed model(s) won't be created.")
+                           "The user model's HVAC system is partly autosized.")
       end
 
       # Generate proposed model from the user-provided model
