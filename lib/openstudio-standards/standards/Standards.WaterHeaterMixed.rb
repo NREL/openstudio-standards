@@ -7,7 +7,7 @@ class Standard
   # Appendix A: Service Water Heating
   #
   # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
     # @todo remove this once workaround for HPWHs is removed
     if water_heater_mixed.partLoadFactorCurve.is_initialized
@@ -208,7 +208,7 @@ class Standard
   #
   # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
   # @param building_type [String] the building type
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, building_type)
     # baseline is same as proposed per Table G3.1 item 11.b
     return true # Do nothing

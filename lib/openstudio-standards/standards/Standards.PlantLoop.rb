@@ -5,7 +5,7 @@ class Standard
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_standard_controls(plant_loop, climate_zone)
     # Supply water temperature reset
     # plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop)
@@ -17,7 +17,7 @@ class Standard
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop
   # @param dsgn_sup_wtr_temp [Double] design chilled water supply T
   # @param dsgn_sup_wtr_temp_delt [Double] design chilled water supply delta T
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
     # chilled water loop sizing and controls
     if dsgn_sup_wtr_temp.nil?
@@ -62,7 +62,7 @@ class Standard
   # Returns true if primary and/or secondary pumps are variable speed.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if variable flow, false if not
+  # @return [Boolean] returns true if variable flow, false if not
   def plant_loop_variable_flow_system?(plant_loop)
     variable_flow = false
 
@@ -89,7 +89,7 @@ class Standard
   #   you could set at 0.9 and just calculate the pressure rise to have your 19 W/GPM or whatever
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_pump_power(plant_loop)
     # Determine the pumping power per
     # flow based on loop type.
@@ -187,7 +187,7 @@ class Standard
   # Applies the temperatures to the plant loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -206,7 +206,7 @@ class Standard
   # Applies the hot water temperatures to the plant loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_hot_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
 
@@ -243,7 +243,7 @@ class Standard
   # Applies the chilled water temperatures to the plant loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_chilled_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
 
@@ -286,7 +286,7 @@ class Standard
   # Applies the condenser water temperatures to the plant loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_condenser_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -447,7 +447,7 @@ class Standard
   # Required if heating or cooling capacity is greater than 300,000 Btu/hr.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def plant_loop_supply_water_temperature_reset_required?(plant_loop)
     reset_required = false
 
@@ -488,7 +488,7 @@ class Standard
   # Enable reset of hot or chilled water temperature based on outdoor air temperature.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_enable_supply_water_temperature_reset(plant_loop)
     # Get the current setpoint manager on the outlet node
     # and determine if already has temperature reset
@@ -743,7 +743,7 @@ class Standard
   # Applies the pumping controls to the loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_pumping_type(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -763,7 +763,7 @@ class Standard
   # Applies the chilled water pumping controls to the loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)
     # Determine the pumping type.
     minimum_cap_tons = 300.0
@@ -835,7 +835,7 @@ class Standard
   # Applies the hot water pumping controls to the loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] hot water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_hot_water_pumping_type(plant_loop)
     # Determine the minimum area to determine
     # pumping type.
@@ -870,7 +870,7 @@ class Standard
   # Applies the condenser water pumping controls to the loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] condenser water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_condenser_water_pumping_type(plant_loop)
     # All condenser water loops are constant flow
     control_type = 'Constant Flow'
@@ -898,7 +898,7 @@ class Standard
   # into multiple separate boilers based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] hot water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_boilers(plant_loop)
     # Skip non-heating plants
     return true unless plant_loop.sizingPlant.loopType == 'Heating'
@@ -961,8 +961,9 @@ class Standard
   # Splits the single chiller used for the initial sizing run
   # into multiple separate chillers based on Appendix G.
   #
-  # @param plant_loop_args [Array] chilled water loop (OpenStudio::Model::PlantLoop), sizing run directory
-  # @return [Bool] returns true if successful, false if not
+  # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
+  # @param sizing_run_dir [String] sizing run directory
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
@@ -1110,7 +1111,7 @@ class Standard
   # into multiple separate cooling towers based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] condenser water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Condenser'

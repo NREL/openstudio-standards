@@ -5,7 +5,7 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param run_dir [String] file path location for the annual run, defaults to 'Run' in the current directory
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_run_simulation_and_log_errors(model, run_dir = "#{Dir.pwd}/Run")
     # Make the directory if it doesn't exist
     unless Dir.exist?(run_dir)
@@ -183,7 +183,7 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param sizing_run_dir [String] file path location for the sizing run, defaults to 'SR' in the current directory
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_run_sizing_run(model, sizing_run_dir = "#{Dir.pwd}/SR")
     # Change the simulation to only run the sizing days
     sim_control = model.getSimulationControl
@@ -213,7 +213,7 @@ Standard.class_eval do
   # Method to check if all zones have surfaces. This is required to run a simulation.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_do_all_zones_have_surfaces?(model)
     # Check to see if all zones have surfaces.
     model.getThermalZones.each do |zone|

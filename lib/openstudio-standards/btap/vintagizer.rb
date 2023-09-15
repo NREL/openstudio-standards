@@ -24,7 +24,7 @@ class Vintagizer
   
   #This method loads Vintage database information.
   #@author phylroy.lopez@nrcan.gc.ca
-  #@param model [OpenStudio::model::Model] A model object
+  #@param model [OpenStudio::Model::Model] A model object
   #@param file [String] 
   #@param selectionHash [???] 
   def initialize(model,file,selectionHash)

@@ -1214,7 +1214,7 @@ end
   # @param min_frac_oa_sch [String] name of the minimum fraction of outdoor air schedule, default is always on
   # @param fan_maximum_flow_rate [Double] fan maximum flow rate in cfm, default is autosize
   # @param econo_ctrl_mthd [String] economizer control type, default is Fixed Dry Bulb
-  # @param energy_recovery [Bool] if true, an ERV will be added to the system
+  # @param energy_recovery [Boolean] if true, an ERV will be added to the system
   # @param doas_control_strategy [String] DOAS control strategy
   # @param clg_dsgn_sup_air_temp [Double] design cooling supply air temperature in degrees Fahrenheit, default 65F
   # @param htg_dsgn_sup_air_temp [Double] design heating supply air temperature in degrees Fahrenheit, default 75F
@@ -1446,7 +1446,7 @@ end
   # @param fan_maximum_flow_rate [Double] fan maximum flow rate in cfm, default is autosize
   # @param econo_ctrl_mthd [String] economizer control type, default is Fixed Dry Bulb
   #   If enabled, the DOAS will be sized for twice the ventilation minimum to allow economizing
-  # @param include_exhaust_fan [Bool] if true, include an exhaust fan
+  # @param include_exhaust_fan [Boolean] if true, include an exhaust fan
   # @param clg_dsgn_sup_air_temp [Double] design cooling supply air temperature in degrees Fahrenheit, default 65F
   # @param htg_dsgn_sup_air_temp [Double] design heating supply air temperature in degrees Fahrenheit, default 75F
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting DOAS air loop
@@ -2124,7 +2124,7 @@ end
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coils to. If nil, will be DX cooling
   # @param heating_type [String] main heating coil fuel type
   #   valid choices are NaturalGas, Electricity, Water, or nil (defaults to NaturalGas)
-  # @param electric_reheat [Bool] if true electric reheat coils, if false the reheat coils served by hot_water_loop
+  # @param electric_reheat [Boolean] if true electric reheat coils, if false the reheat coils served by hot_water_loop
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
   # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
   # @param econo_ctrl_mthd [String] economizer control type
@@ -3092,7 +3092,7 @@ end
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param space [OpenStudio::Model::Space] which space to assign the data center loads to
   # @param dc_watts_per_area [Double] data center load, in W/m^2
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_data_center_load(model, space, dc_watts_per_area)
     # create data center load
     data_center_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -3116,7 +3116,7 @@ end
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
   # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
-  # @param main_data_center [Bool] whether or not this is the main data center in the building.
+  # @param main_data_center [Boolean] whether or not this is the main data center in the building.
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting air loops
   def model_add_data_center_hvac(model,
                                  thermal_zones,
@@ -3486,7 +3486,7 @@ end
   # Creates a CRAH system for larger size data center and adds it to the model.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param chilled_water_loop [string]
+  # @param chilled_water_loop [String
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
@@ -3923,7 +3923,7 @@ end
   # @param heating_type [String] valid choices are NaturalGas, Electricity, Water, nil (no heat)
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating coil to. Set to nil for heating types besides water
   # @param fan_type [String] valid choices are ConstantVolume, Cycling
-  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  # @param ventilation [Boolean] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an array of the resulting PTACs
   def model_add_ptac(model,
@@ -4042,7 +4042,7 @@ end
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param fan_type [String] valid choices are ConstantVolume, Cycling
-  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  # @param ventilation [Boolean] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an array of the resulting PTACs.
   def model_add_pthp(model,
@@ -4493,7 +4493,7 @@ end
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units
-  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  # @param ventilation [Boolean] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow>] array of vrf units.
   def model_add_vrf(model,
@@ -4553,7 +4553,7 @@ end
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the fan coils.
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the fan coils.
   #   If nil, a zero-capacity, electric heating coil set to Always-Off will be included in the unit.
-  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  # @param ventilation [Boolean] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @param capacity_control_method [String] Capacity control method for the fan coil. Options are ConstantFanVariableFlow,
   #   CyclingFan, VariableFanVariableFlow, and VariableFanConstantFlow.  If VariableFan, the fan will be VariableVolume.
@@ -4637,11 +4637,11 @@ end
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add radiant loops
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the radiant loop.
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
-  # @param two_pipe_system [Bool] when set to true, it converts the default 4-pipe water plant HVAC system to a 2-pipe system.
+  # @param two_pipe_system [Boolean] when set to true, it converts the default 4-pipe water plant HVAC system to a 2-pipe system.
   # @param two_pipe_control_strategy [String] Method to determine whether the loop is in heating or cooling mode
-  #   'outdoor_air_lockout' - The system will be in heating below the lockout_temperature variable, 
-  #      and cooling above the lockout_temperature. Requires the lockout_temperature variable.
-  #   'zone_demand' - Heating or cooling determined by preponderance of zone demand.
+  #   'outdoor_air_lockout' - The system will be in heating below the two_pipe_lockout_temperature variable, 
+  #      and cooling above the two_pipe_lockout_temperature. Requires the two_pipe_lockout_temperature variable.
+  #   'zone_demand' - Create EMS code to determine heating or cooling mode based on zone heating or cooling load requests.
   #      Requires thermal_zones defined.
   # @param two_pipe_lockout_temperature [Double] hot water plant lockout in degrees Fahrenheit, default 65F.
   #   Hot water plant is unavailable when outdoor drybulb is above the specified threshold.
@@ -4665,13 +4665,13 @@ end
   #   'OutdoorWetBulbTemperature', 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
   # @param radiant_setpoint_control_type [String] determines the response of the radiant system at setpoint temperature
   #   options are 'ZeroFlowPower', 'HalfFlowPower'
-  # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
+  # @param include_carpet [Boolean] boolean to include thin carpet tile over radiant slab, default to true
   # @param carpet_thickness_in [Double] thickness of carpet in inches
   # @param control_strategy [String] name of control strategy.  Options are 'proportional_control' and 'none'.
   #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
   #   detailed in Raftery et al. (2017), 'A new control strategy for high thermal mass radiant systems'.
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
-  # @param use_zone_occupancy_for_control [Bool] Set to true if radiant system is to use specific zone occupancy objects
+  # @param use_zone_occupancy_for_control [Boolean] Set to true if radiant system is to use specific zone occupancy objects
   #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
   #   for all radiant zones. default to true.
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
@@ -4690,7 +4690,7 @@ end
   #   If preset is set to 'all_day' radiant system is available 24 hours a day, 'precool' primarily operates
   #   radiant system during night-time hours, 'afternoon_shutoff' avoids operation during peak grid demand,
   #   and 'occupancy' operates radiant system during building occupancy hours.
-  # @param radiant_lockout [Bool] True if system contains a radiant lockout. If true, it will overwrite radiant_availability_type.
+  # @param radiant_lockout [Boolean] True if system contains a radiant lockout. If true, it will overwrite radiant_availability_type.
   # @param radiant_lockout_start_time [double] decimal hour of when radiant lockout starts
   #   Only used if radiant_lockout is true
   # @param radiant_lockout_end_time [double] decimal hour of when radiant lockout ends
@@ -5188,9 +5188,9 @@ end
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
-  # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
-  # @param cooling [Bool] if true, the unit will include a DX cooling coil
-  # @param ventilation [Bool] if true, the unit will include an OA intake
+  # @param heating [Boolean] if true, the unit will include a NaturalGas heating coil
+  # @param cooling [Boolean] if true, the unit will include a DX cooling coil
+  # @param ventilation [Boolean] if true, the unit will include an OA intake
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] and array of air loops representing the furnaces
   def model_add_furnace_central_ac(model,
                                    thermal_zones,
@@ -5319,9 +5319,9 @@ end
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
-  # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
-  # @param cooling [Bool] if true, the unit will include a DX cooling coil
-  # @param ventilation [Bool] if true, the unit will include an OA intake
+  # @param heating [Boolean] if true, the unit will include a NaturalGas heating coil
+  # @param cooling [Boolean] if true, the unit will include a DX cooling coil
+  # @param ventilation [Boolean] if true, the unit will include an OA intake
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] and array of air loops representing the heat pumps
   def model_add_central_air_source_heat_pump(model,
                                              thermal_zones,
@@ -5460,7 +5460,7 @@ end
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones served by heat pumps
   # @param condenser_loop [OpenStudio::Model::PlantLoop] the condenser loop for the heat pumps  #
-  # @param ventilation [Bool] if true, ventilation will be supplied through the unit.
+  # @param ventilation [Boolean] if true, ventilation will be supplied through the unit.
   #   If false, no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACWaterToAirHeatPump>] an array of heat pumps
   def model_add_water_source_hp(model,
@@ -6274,7 +6274,7 @@ end
   # Adds a waterside economizer to the chilled water and condenser loop
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param integrated [Bool] when set to true, models an integrated waterside economizer
+  # @param integrated [Boolean] when set to true, models an integrated waterside economizer
   #   Integrated: in series with chillers, can run simultaneously with chillers
   #   Non-Integrated: in parallel with chillers, chillers locked out during operation
   def model_add_waterside_economizer(model, chilled_water_loop, condenser_water_loop,
@@ -6534,12 +6534,12 @@ end
   #   EvaporativeFluidCooler, EvaporativeFluidCoolerSingleSpeed, EvaporativeFluidCoolerTwoSpeed
   # @param air_loop_heating_type [String] type of heating coil serving main air loop, options are Gas, DX, or Water
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
-  # @param zone_equipment_ventilation [Bool] toggle whether to include outdoor air ventilation on zone equipment
+  # @param zone_equipment_ventilation [Boolean] toggle whether to include outdoor air ventilation on zone equipment
   #   including as fan coil units, VRF terminals, or water source heat pumps.
   # @param fan_coil_capacity_control_method [String] Only applicable to Fan Coil system type.
   #   Capacity control method for the fan coil. Options are ConstantFanVariableFlow, CyclingFan, VariableFanVariableFlow,
   #   and VariableFanConstantFlow.  If VariableFan, the fan will be VariableVolume.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_hvac_system(model,
                             system_type,
                             main_heat_fuel,

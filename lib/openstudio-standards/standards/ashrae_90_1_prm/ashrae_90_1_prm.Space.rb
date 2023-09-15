@@ -96,9 +96,9 @@ class ASHRAE901PRM < Standard
 
   # For stable baseline, remove all daylighting controls (sidelighting and toplighting)
   # @param space [OpenStudio::Model::Space] the space with daylighting
-  # @param remove_existing_controls [Bool] if true, will remove existing controls then add new ones
-  # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
-  # @return [boolean] true if successful
+  # @param remove_existing [Boolean] if true, will remove existing controls then add new ones
+  # @param draw_areas_for_debug [Boolean] If this argument is set to true,
+  # @return [Boolean] true if successful
   def space_set_baseline_daylighting_controls(space, remove_existing = false, draw_areas_for_debug = false)
     removed = space_remove_daylighting_controls(space)
     return removed

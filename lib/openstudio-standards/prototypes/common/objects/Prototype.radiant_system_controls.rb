@@ -5,7 +5,7 @@ class Standard
   # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
   # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
   #   options are 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
-  # @param use_zone_occupancy_for_control [Bool] Set to true if radiant system is to use specific zone occupancy objects
+  # @param use_zone_occupancy_for_control [Boolean] Set to true if radiant system is to use specific zone occupancy objects
   #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
   #   for all radiant zones. default to true.
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied

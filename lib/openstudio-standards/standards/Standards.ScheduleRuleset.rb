@@ -415,8 +415,8 @@ class Standard
   # @author David Goldwasser
   # @param schedule [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   # @param ramp_frequency [Double] ramp frequency in minutes
-  # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
-  # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
+  # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
+  # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
   # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   def schedule_apply_parametric_inputs(schedule, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs = nil)
     # Check if parametric inputs were supplied and generate them if not
@@ -611,7 +611,7 @@ class Standard
   # @param sat_end_time [OpenStudio::Time] Saturday end time.  If greater than 24:00, hours of operation will wrap over midnight.
   # @param sun_start_time [OpenStudio::Time] Sunday start time.  If nil, no change will be made to this day.
   # @param sun_end_time [OpenStudio::Time] Sunday end time.  If greater than 24:00, hours of operation will wrap over midnight.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def schedule_ruleset_set_hours_of_operation(schedule_ruleset, wkdy_start_time: nil, wkdy_end_time: nil, sat_start_time: nil, sat_end_time: nil, sun_start_time: nil, sun_end_time: nil)
     # Default day is assumed to represent weekdays
     if wkdy_start_time && wkdy_end_time
@@ -645,9 +645,9 @@ class Standard
   #
   # Return Array of weekday values from Array of all day values
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param values [Array] hourly time-series values of all days
-  # @param value_includes_holiday [Bool] whether the input values include a day of holiday at the end of the array
+  # @param value_includes_holiday [Boolean] whether the input values include a day of holiday at the end of the array
   #
   # @return [Array] hourly time-series values in weekdays
   #
@@ -1186,8 +1186,8 @@ class Standard
   # @param val_flr [Double] value floor
   # @param val_clg [Double] value ceiling
   # @param ramp_frequency [Double] ramp frequency in minutes
-  # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
-  # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
+  # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
+  # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
   # @return [OpenStudio::Model::ScheduleDay] schedule day
   # @api private
   def process_hrs_of_operation_hash(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
