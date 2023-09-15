@@ -103,24 +103,13 @@ class ASHRAE901PRM < Standard
     return fan_type
   end
 
-  # This method creates customized infiltration objects for each
-  # space and removes the SpaceType-level infiltration objects.
-  # @param model [OpenStudio::Model::Model] openstudio model
-  # @param climate_zone [String] climate zone
-  # @return [Bool] true if successful, false if not
-  def model_baseline_apply_infiltration_standard(model, climate_zone)
-    # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
-    # Excerpt from the EnergyPlus Input/Output reference manual:
-    #     "This model is based on work by Sherman and Grimsrud (1980)
-    #     and is appropriate for smaller, residential-type buildings."
-    # Raise exception if the model does use this object
-    ela = 0
-    model.getSpaceInfiltrationEffectiveLeakageAreas.each do |eff_la|
-      ela += 1
-    end
-    if ela > 0
-      OpenStudio.logFree(OpenStudio::Warn, 'prm.log', 'The current model cannot include SpaceInfiltrationEffectiveLeakageArea. These objects will be skipped in modeling infiltration according to the 90.1-PRM rules.')
-    end
+  # Calculate the building enevelope area according to the 90.1 definition
+  #
+  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Float] Building envelope area in m2
+  def model_building_envelope_area(model)
+    # Get climate zone
+    climate_zone = model_standards_climate_zone(model)
 
     # Get the space building envelope area
     # According to the 90.1 definition, building envelope include:
@@ -133,16 +122,44 @@ class ASHRAE901PRM < Standard
     model.getSpaces.each do |space|
       building_envelope_area_m2 += space_envelope_area(space, climate_zone)
     end
-    prm_raise(building_envelope_area_m2 > 0.0, @sizing_run_dir, 'Calculated building envelope area is 0 m2, Please check model inputs.')
+    if building_envelope_area_m2 == 0.0
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Calculated building envelope area is 0 m2, no infiltration will be added.')
+      return 0.0
+    end
 
+    return building_envelope_area_m2
+  end
+
+  # This method creates customized infiltration objects for each
+  # space and removes the SpaceType-level infiltration objects.
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @param specific_space_infiltration_rate_75_pa [Float] space infiltration rate at a pressure differential of 75 Pa
+  # @return [Bool] true if successful, false if not
+  def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
+    # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
+    # Excerpt from the EnergyPlus Input/Output reference manual:
+    #     "This model is based on work by Sherman and Grimsrud (1980)
+    #     and is appropriate for smaller, residential-type buildings."
+    # Raise exception if the model does use this object
+    ela = 0
+    model.getSpaceInfiltrationEffectiveLeakageAreas.sort.each do |eff_la|
+      ela += 1
+    end
+    if ela > 0
+      OpenStudio.logFree(OpenStudio::Warn, 'prm.log', 'The current model cannot include SpaceInfiltrationEffectiveLeakageArea. These objects will be skipped in modeling infiltration according to the 90.1-PRM rules.')
+    end
+
+    # Get the space building envelope area
+    building_envelope_area_m2 = model_building_envelope_area(model)
+    prm_raise(building_envelope_area_m2 > 0.0, @sizing_run_dir, 'Calculated building envelope area is 0 m2, Please check model inputs.')
 
     # Calculate current model air leakage rate @ 75 Pa and report it
     curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
-    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The proposed model I_75Pa is estimated to be #{curr_tot_infil_m3_per_s_per_envelope_area} m3/s per m2 of total building envelope.")
+    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The model's I_75Pa is estimated to be #{curr_tot_infil_m3_per_s_per_envelope_area} m3/s per m2 of total building envelope.")
 
     # Calculate building adjusted building envelope
     # air infiltration following the 90.1 PRM rules
-    tot_infil_m3_per_s = model_adjusted_building_envelope_infiltration(building_envelope_area_m2)
+    tot_infil_m3_per_s = model_adjusted_building_envelope_infiltration(building_envelope_area_m2, specific_space_infiltration_rate_75_pa)
 
     # Find infiltration method used in the model, if any.
     #
@@ -253,6 +270,33 @@ class ASHRAE901PRM < Standard
     return infil_coeffs
   end
 
+  # This methods calculate the air leakage rate of a space
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # @return [Float] Space air leakage rate
+  def model_get_space_air_leakage(space)
+    space_air_leakage = 0
+    space_multipler = space.multiplier
+    # Infiltration at the space level
+    unless space.spaceInfiltrationDesignFlowRates.empty?
+      space.spaceInfiltrationDesignFlowRates.each do |infil_obj|
+        unless infil_obj.designFlowRate.is_initialized
+          if infil_obj.flowperSpaceFloorArea.is_initialized
+            space_air_leakage += infil_obj.flowperSpaceFloorArea.get * space.floorArea * space_multipler
+          elsif infil_obj.flowperExteriorSurfaceArea.is_initialized
+            space_air_leakage += infil_obj.flowperExteriorSurfaceArea.get * space.exteriorArea * space_multipler
+          elsif infil_obj.flowperExteriorWallArea.is_initialized
+            space_air_leakage += infil_obj.flowperExteriorWallArea.get * space.exteriorWallArea * space_multipler
+          elsif infil_obj.airChangesperHour.is_initialized
+            space_air_leakage += infil_obj.airChangesperHour.get * space.volume * space_multipler / 3600
+          end
+        end
+      end
+    end
+
+    return space_air_leakage
+  end
+
   # This methods calculate the current model air leakage rate @ 75 Pa.
   # It assumes that the model follows the PRM methods, see G3.1.1.4
   # in 90.1-2019 for reference.
@@ -264,44 +308,9 @@ class ASHRAE901PRM < Standard
   def model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
     bldg_air_leakage_rate = 0
     model.getSpaces.each do |space|
-      # Infiltration at the space level
-      unless space.spaceInfiltrationDesignFlowRates.empty?
-        infil_obj = space.spaceInfiltrationDesignFlowRates[0]
-        unless infil_obj.designFlowRate.is_initialized
-          if infil_obj.flowperSpaceFloorArea.is_initialized
-            bldg_air_leakage_rate += infil_obj.flowperSpaceFloorArea.get * space.floorArea
-          elsif infil_obj.flowperExteriorSurfaceArea.is_initialized
-            bldg_air_leakage_rate += infil_obj.flowperExteriorSurfaceArea.get * space.exteriorArea
-          elsif infil_obj.flowperExteriorWallArea.is_initialized
-            bldg_air_leakage_rate += infil_obj.flowperExteriorWallArea.get * space.exteriorWallArea
-          elsif infil_obj.airChangesperHour.is_initialized
-            bldg_air_leakage_rate += infil_obj.airChangesperHour.get * space.volume / 3600
-          end
-        end
-      end
-
-      # Infiltration at the space type level
-      if space.spaceType.is_initialized
-        space_type = space.spaceType.get
-        unless space_type.spaceInfiltrationDesignFlowRates.empty?
-          if bldg_air_leakage_rate > 0
-            OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "A duplicated infiltration definition is found in spaceType. Verify your model inputs.")
-          end
-          infil_obj = space_type.spaceInfiltrationDesignFlowRates[0]
-          unless infil_obj.designFlowRate.is_initialized
-            if infil_obj.flowperSpaceFloorArea.is_initialized
-              bldg_air_leakage_rate += infil_obj.flowperSpaceFloorArea.get * space.floorArea
-            elsif infil_obj.flowperExteriorSurfaceArea.is_initialized
-              bldg_air_leakage_rate += infil_obj.flowperExteriorSurfaceArea.get * space.exteriorArea
-            elsif infil_obj.flowperExteriorWallArea.is_initialized
-              bldg_air_leakage_rate += infil_obj.flowperExteriorWallArea.get * space.exteriorWallArea
-            elsif infil_obj.airChangesperHour.is_initialized
-              bldg_air_leakage_rate += infil_obj.airChangesperHour.get * space.volume / 3600
-            end
-          end
-        end
-      end
+      bldg_air_leakage_rate += model_get_space_air_leakage(space)
     end
+
     # adjust_infiltration_to_prototype_building_conditions(1) corresponds
     # to the 0.112 shown in G3.1.1.4
     curr_tot_infil_m3_per_s_per_envelope_area = bldg_air_leakage_rate / adjust_infiltration_to_prototype_building_conditions(1) / building_envelope_area_m2
@@ -312,9 +321,13 @@ class ASHRAE901PRM < Standard
   # this approach uses the 90.1 PRM rules
   # @param building_envelope_area_m2 [Double] building envelope area
   # @return [Float] building envelope infiltration
-  def model_adjusted_building_envelope_infiltration(building_envelope_area_m2)
+  def model_adjusted_building_envelope_infiltration(building_envelope_area_m2, specific_space_infiltration_rate_75_pa = nil)
     # Determine the total building baseline infiltration rate in cfm per ft2 of the building envelope at 75 Pa
-    basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa
+    if specific_space_infiltration_rate_75_pa.nil?
+      basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa
+    else
+      basic_infil_rate_cfm_per_ft2 = specific_space_infiltration_rate_75_pa
+    end
 
     # Conversion factor
     conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
@@ -698,7 +711,6 @@ class ASHRAE901PRM < Standard
   #
   # @param model [OpenStudio::model::Model] OpenStudio model object
   def model_apply_baseline_exterior_lighting(model)
-
     model.getExteriorLightss.each do |ext_lights_obj|
       # Update existing exterior lights object: control, schedule, power
       ext_lights_obj.setControlOption('AstronomicalClock')
@@ -804,14 +816,8 @@ class ASHRAE901PRM < Standard
     space_loads = model.getSpaceLoads
     loads = []
     space_loads.sort.each do |space_load|
-      load_type = space_load.iddObjectType.valueName.sub('OS_', '').strip.sub('_', '')
-      casting_method_name = "to_#{load_type}"
-      if space_load.respond_to?(casting_method_name)
-        casted_load = space_load.public_send(casting_method_name).get
-        loads << casted_load
-      else
-        p 'Need Debug, casting method not found @JXL'
-      end
+      casted_load = model_cast_model_object(space_load)
+      loads << casted_load unless casted_load.nil?
     end
 
     load_schedule_name_hash = {
@@ -1417,7 +1423,7 @@ class ASHRAE901PRM < Standard
   # The file name is userdata_exterior_lighting.csv
   # @param [OpenStudio::Model::Model] model
   def handle_exterior_lighting_user_input_data(model)
-    user_data_exterior_lighting_objects = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights']: nil
+    user_data_exterior_lighting_objects = @standards_data.key?('userdata_exterior_lights') ? @standards_data['userdata_exterior_lights'] : nil
     if user_data_exterior_lighting_objects && !user_data_exterior_lighting_objects.empty?
       non_tradeable_cats = ['nontradeable_general', 'building_facades_area', 'building_facades_perim', 'automated_teller_machines_per_location', 'automated_teller_machines_per_machine', 'entries_and_gates',
                             'loading_areas_for_emergency_vehicles', 'drive_through_windows_and_doors', 'parking_near_24_hour_entrances', 'roadway_parking']
@@ -1452,7 +1458,7 @@ class ASHRAE901PRM < Standard
           else
             num_trade += 1
             meas_val_key = format('end_use_measurement_value_%02d', icat)
-            meas_val = prm_read_user_data(user_exterior_lighting, meas_val_key, "0.0").to_f
+            meas_val = prm_read_user_data(user_exterior_lighting, meas_val_key, '0.0').to_f
             unless meas_val == 0
               OpenStudio.logFree(OpenStudio::Info, 'prm.log', "End use subcategory #{subcat} has either missing measurement value or invalid measurement value, set to 0.0")
             end
@@ -1918,10 +1924,7 @@ class ASHRAE901PRM < Standard
 
       htg_fuels, combination_system, storage_capacity, total_heating_capacity = plant_loop_swh_system_type(plant_loop)
 
-      # htg_fuels.size == 0 shoudln't happen
-
       electric = true
-
       if htg_fuels.include?('NaturalGas') ||
          htg_fuels.include?('PropaneGas') ||
          htg_fuels.include?('FuelOilNo1') ||
@@ -1934,7 +1937,6 @@ class ASHRAE901PRM < Standard
 
       # Per Table G3.1 11.e, if the baseline system was a combination of heating and service water heating,
       # delete all heating equipment and recreate a WaterHeater:Mixed.
-
       if combination_system
         a = plant_loop.supplyComponents
         b = plant_loop.demandComponents
@@ -1971,27 +1973,7 @@ class ASHRAE901PRM < Standard
         # to electric resistance if it's electric
       else
         # Per Table G3.1 11.i, piping losses was deleted
-
-        a = plant_loop.supplyComponents
-        b = plant_loop.demandComponents
-        plantloopComponents = a += b
-        plantloopComponents.each do |component|
-          # Get the object type
-          obj_type = component.iddObjectType.valueName.to_s
-          next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
-
-          pipe = component.to_PipeIndoor.get
-          node = pipe.to_StraightComponent.get.outletModelObject.get.to_Node.get
-
-          node_name = node.name.get
-          pipe_name = pipe.name.get
-
-          # Add Pipe_Adiabatic
-          newpipe = OpenStudio::Model::PipeAdiabatic.new(model)
-          newpipe.setName(pipe_name)
-          newpipe.addToNode(node)
-          component.remove
-        end
+        plant_loop_adiabatic_pipes_only(plant_loop)
 
         if electric
           plant_loop.supplyComponents.each do |component|
@@ -2406,7 +2388,7 @@ class ASHRAE901PRM < Standard
     zones = model_zones_with_occ_and_fuel_type(model, 'custom')
 
     # Ensure that there is at least one conditioned zone
-    prm_raise(zones.size > 0, @sizing_run_dir, 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
+    prm_raise(!zones.empty?, @sizing_run_dir, 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
 
     # Consider special rules for computer rooms
     # need load of all
@@ -2914,7 +2896,7 @@ class ASHRAE901PRM < Standard
     else
       fan_sch_limits = fan_sch_limits.get
     end
-    sch_name = system_name + ' ' + 'fan schedule'
+    sch_name = "#{system_name} fan schedule"
     make_ruleset_sched_from_8760(model, fan_8760, sch_name, fan_sch_limits)
 
     air_loop = model.getAirLoopHVACByName(system_name).get

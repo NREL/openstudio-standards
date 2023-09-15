@@ -1,4 +1,5 @@
 require 'csv'
+require 'date'
 
 class Standard
   attr_accessor :space_multiplier_map
@@ -30,7 +31,7 @@ class Standard
 
   # Method used for 90.1-2016 and onward
   def model_create_prm_stable_baseline_building(model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, output_dir = Dir.pwd, unmet_load_hours_check = true, debug = false)
-    model_create_prm_any_baseline_building(model, '', climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, false, output_dir, true, unmet_load_hours_check, debug)
+    model_create_prm_any_baseline_building(model, '', climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, true, false, output_dir, true, unmet_load_hours_check, debug)
   end
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
@@ -43,11 +44,11 @@ class Standard
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
   def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, custom, sizing_run_dir, false, false, debug)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, false, custom, sizing_run_dir, false, false, debug)
   end
 
-  # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
-  # based on the inputs currently in the model.
+  # Creates a Performance Rating Method (aka 90.1-Appendix G) baseline building model
+  # based on the inputs currently in the user model.
   #
   # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative compliance path for minimum standard compliance."
   # This means you can't use this method for code compliance to get a permit.
@@ -64,18 +65,40 @@ class Standard
   # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Bool] returns true if successful, false if not
-  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    if create_proposed_model
+      # Perform a user model design day run only to make sure
+      # that the user model is valid, i.e. can run without major
+      # errors
+      if !model_run_sizing_run(user_model, "#{sizing_run_dir}/USER-SR")
+        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                           "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+        prm_raise(false,
+                  sizing_run_dir,
+                  "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+      end
+
+      # Check if proposed HVAC system is autosized
+      if model_is_hvac_autosized(user_model)
+        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                           "The user model's HVAC system is partly autosized.")
+      end
+
+      # Generate proposed model from the user-provided model
+      proposed_model = model_create_prm_proposed_building(user_model)
+    end
+
     # Check proposed model unmet load hours
     if unmet_load_hours_check
-      # Run proposed model; need annual simulation to get unmet load hours
-      if model_run_simulation_and_log_errors(user_model, run_dir = "#{sizing_run_dir}/PROP")
-        umlh = model_get_unmet_load_hours(user_model)
+      # Run user model; need annual simulation to get unmet load hours
+      if model_run_simulation_and_log_errors(proposed_model, run_dir = "#{sizing_run_dir}/PROP")
+        umlh = model_get_unmet_load_hours(proposed_model)
         if umlh > 300
           OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-                             "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) wont be created.")
+                             "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) won't be created.")
           prm_raise(false,
                     sizing_run_dir,
-                    'Proposed model unmet load hours exceed 300. Baseline model(s) wont be created.')
+                    "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
         end
       else
         OpenStudio.logFree(OpenStudio::Error, 'prm.log',
@@ -85,11 +108,24 @@ class Standard
                   'Simulation on proposed model failed. Baseline generation is stopped.')
       end
     end
+    if create_proposed_model
+      # Make the run directory if it doesn't exist
+      unless Dir.exist?(sizing_run_dir)
+        FileUtils.mkdir_p(sizing_run_dir)
+      end
+      # Save proposed model
+      proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.osm"), true)
+      forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+      idf = forward_translator.translateModel(proposed_model)
+      idf_path = OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.idf")
+      idf.save(idf_path, true)
+    end
 
     # User data process
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     bldg_type_hvac_zone_hash = {}
     handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+
     # Define different orientation from original orientation
     # for each individual baseline models
     # Need to run proposed model sizing simulation if no sql data is available
@@ -181,9 +217,15 @@ class Standard
         # For PRM, it only applies lights for now.
         space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
       end
+
       # Modify the lighting schedule to handle lighting occupancy sensors
       # Modify the upper limit value of fractional schedule to avoid the fatal error caused by schedule value higher than 1
       space_type_light_sch_change(model)
+
+      # Modify electric equipment computer room schedule
+      model.getSpaces.sort.each do |space|
+        space_add_prm_computer_roomm_equipment_schedule(space)
+      end
 
       model_apply_baseline_exterior_lighting(model)
 
@@ -191,7 +233,7 @@ class Standard
       model_add_prm_elevators(model)
 
       # Calculate infiltration as per 90.1 PRM rules
-      model_baseline_apply_infiltration_standard(model, climate_zone)
+      model_apply_standard_infiltration(model)
 
       # Apply user outdoor air specs as per 90.1 PRM rules exceptions
       model_apply_userdata_outdoor_air(model)
@@ -451,7 +493,7 @@ class Standard
       # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
       # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
 
-      model_status = degs > 0 ? "final_#{degs}" : 'final'
+      model_status = degs > 0 ? "baseline_final_#{degs}" : 'baseline_final'
       model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
 
       # Translate to IDF and save for debugging
@@ -528,6 +570,129 @@ class Standard
     end
 
     return true
+  end
+
+  # Creates a Performance Rating Method (aka 90.1-Appendix G) proposed building model
+  # based on the inputs currently in the user model.
+  #
+  # @param user_model [OpenStudio::model::Model] User specified OpenStudio model
+  # @return [OpenStudio::model::Model] returns the proposed building model corresponding to a user model
+  def model_create_prm_proposed_building(user_model)
+    # Create copy of the user model
+    proposed_model = BTAP::FileIO.deep_copy(user_model)
+
+    # Get user building level data
+    building_name = proposed_model.building.get.name.get
+    user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+    user_buildings = !user_buildings.empty? ? @standards_data['userdata_building'] : nil
+
+    # If needed, modify user model infiltration
+    if user_buildings
+      user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
+      infiltration_modeled_from_field_verification_results = user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results'].to_s.downcase
+
+      # Calculate total infiltration flow rate per envelope area
+      building_envelope_area_m2 = model_building_envelope_area(proposed_model)
+      curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(proposed_model, building_envelope_area_m2)
+      curr_tot_infil_cfm_per_envelope_area = OpenStudio.convert(curr_tot_infil_m3_per_s_per_envelope_area, 'm^3/s*m^2', 'cfm/ft^2').get
+
+      # Warn users if the infiltration modeling in the user/proposed model is not based on field verification
+      # If not modeled based on field verification, it should be modeled as 0.6 cfm/ft2
+      unless infiltration_modeled_from_field_verification_results.casecmp('Yes')
+        if curr_tot_infil_cfm_per_envelope_area < 0.6
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The user model's I_75Pa is estimated to be #{curr_tot_infil_cfm_per_envelope_area} m3/s per m2 of total building envelope")
+        end
+      end
+
+      # Modify model to follow the PRM infiltration modeling method
+      model_apply_standard_infiltration(proposed_model, curr_tot_infil_cfm_per_envelope_area)
+    end
+
+    # If needed, remove all non-adiabatic pipes of SWH loops
+    proposed_model.getPlantLoops.sort.each do |plant_loop|
+      # Skip non service water heating loops
+      next unless plant_loop_swh_loop?(plant_loop)
+
+      plant_loop_adiabatic_pipes_only(plant_loop)
+    end
+
+    # TODO: Once data refactoring has been completed lookup values from the database;
+    #       For now, hard-code LPD for selected spaces. Current Standards Space Type
+    #       of OS:SpaceType is the PRM interior lighting space type. These values are
+    #       from Table 9.6.1 as required by Section G3.1.6.e.
+    proposed_lpd_residential_spaces = {
+      'dormitory - living quarters' => 0.5, # "primary_space_type": "Dormitory—Living Quarters",
+      'apartment - hardwired' => 0.6, # "primary_space_type": "Dwelling Unit"
+      'guest room' => 0.41 # "primary_space_type": "Guest Room",
+    }
+
+    # Make proposed model space related adjustments
+    proposed_model.getSpaces.each do |space|
+      # If needed, modify computer equipment schedule
+      # Section G3.1.3.16
+      space_add_prm_computer_roomm_equipment_schedule(space)
+
+      # If needed, modify lighting power denstities in residential spaces/zones
+      # Section G3.1.6.e
+      standard_space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType').downcase
+      user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
+      if ['dormitory - living quarters', 'apartment - hardwired', 'guest room'].include?(standard_space_type)
+        user_spaces.each do |user_data|
+          if user_data['name'].to_s == space.name.to_s && user_data['has_residential_exception'].to_s.downcase != 'yes'
+            # Get LPDs
+            lpd_w_per_m2 = space.lightingPowerPerFloorArea
+            ref_space_lpd_per_ft2 = proposed_lpd_residential_spaces[standard_space_type]
+            ref_space_lpd_per_m2 = OpenStudio.convert(ref_space_lpd_per_ft2, 'W/ft^2', 'W/m^2').get
+            # Set new LPD
+            space.setLightingPowerPerFloorArea([lpd_w_per_m2, ref_space_lpd_per_m2].max)
+          end
+        end
+      end
+    end
+
+    return proposed_model
+  end
+
+  # Determine whether or not the HVAC system in a model is autosized
+  #
+  # As it is not realistic expectation to have all autosizable
+  # fields hard input, the method relies on autosizable field
+  # of prime movers (fans, pumps) and heating/cooling devices
+  # in the models (boilers, chillers, coils)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Bool] returns true if the HVAC system is likely autosized, false otherwise
+  def model_is_hvac_autosized(model)
+    is_hvac_autosized = false
+    model.modelObjects.each do |obj|
+      obj_type = obj.iddObjectType.valueName.to_s.downcase
+
+      # Check if the object needs to be checked for autosizing
+      obj_to_be_checked_for_autosizing = false
+      if obj_type.include?('chiller') || obj_type.include?('boiler') || obj_type.include?('coil') || obj_type.include?('fan') || obj_type.include?('pump') || obj_type.include?('waterheater')
+        if !obj_type.include?('controller')
+          obj_to_be_checked_for_autosizing = true
+        end
+      end
+
+      # Check for autosizing
+      if obj_to_be_checked_for_autosizing
+        casted_obj = model_cast_model_object(obj)
+
+        next if casted_obj.nil?
+
+        casted_obj.methods.each do |method|
+          if method.to_s.include?('is') && method.to_s.include?('Autosized')
+            if casted_obj.public_send(method) == true
+              is_hvac_autosized = true
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The #{method.to_s.sub('is', '').sub('Autosized', '').sub(':', '')} field of the #{obj_type} named #{casted_obj.name} is autosized. It should be hard sized.")
+            end
+          end
+        end
+      end
+    end
+
+    return is_hvac_autosized
   end
 
   # Determine if there needs to be a sizing run after constructions are added
@@ -2341,7 +2506,7 @@ class Standard
 
   # For backward compatibility, infiltration standard not used for 2013 and earlier
   # @return [Bool] true if successful, false if not
-  def model_baseline_apply_infiltration_standard(model, climate_zone)
+  def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
     return true
   end
 

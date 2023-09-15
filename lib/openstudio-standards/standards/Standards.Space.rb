@@ -2984,4 +2984,12 @@ class Standard
   def space_daylighting_minimum_input_power_fraction(space)
     return 0.3
   end
+
+  # Create and assign PRM computer room electric equipment schedule
+  #
+  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # @return [Bool] returns true if successful, false if not
+  def space_add_prm_computer_roomm_equipment_schedule(space)
+    return true
+  end
 end
