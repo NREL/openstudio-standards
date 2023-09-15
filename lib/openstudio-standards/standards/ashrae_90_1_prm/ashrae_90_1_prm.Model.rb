@@ -1973,7 +1973,7 @@ class ASHRAE901PRM < Standard
         # to electric resistance if it's electric
       else
         # Per Table G3.1 11.i, piping losses was deleted
-        plant_loop_adibatic_pipes_only(plant_loop)
+        plant_loop_adiabatic_pipes_only(plant_loop)
 
         if electric
           plant_loop.supplyComponents.each do |component|

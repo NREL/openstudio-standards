@@ -613,7 +613,7 @@ class Standard
       # Skip non service water heating loops
       next unless plant_loop_swh_loop?(plant_loop)
 
-      plant_loop_adibatic_pipes_only(plant_loop)
+      plant_loop_adiabatic_pipes_only(plant_loop)
     end
 
     # TODO: Once data refactoring has been completed lookup values from the database;

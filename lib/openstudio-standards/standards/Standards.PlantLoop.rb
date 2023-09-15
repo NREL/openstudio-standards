@@ -1478,11 +1478,11 @@ class Standard
   end
 
   # This methods replaces all indoor or outdoor pipes which model the heat transfer between the pipe and the
-  # environement by adibatic pipes.
+  # environement by adiabatic pipes.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
   # @return [Bool] returns true if successful
-  def plant_loop_adibatic_pipes_only(plant_loop)
+  def plant_loop_adiabatic_pipes_only(plant_loop)
     supply_side_components = plant_loop.supplyComponents
     demand_side_components = plant_loop.demandComponents
     plant_loop_components = supply_side_components += demand_side_components
