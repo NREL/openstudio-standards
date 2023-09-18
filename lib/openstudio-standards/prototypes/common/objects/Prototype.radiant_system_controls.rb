@@ -25,7 +25,6 @@ class Standard
                                               proportional_gain: 0.3,
                                               switch_over_time: 24.0)
 
-
     zone_name = ems_friendly_name(zone.name)
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
 
@@ -43,8 +42,8 @@ class Standard
     # set radiant system temperature and setpoint control type
     unless ['surfacefacetemperature', 'surfaceinteriortemperature'].include? radiant_temperature_control_type.downcase
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
-        "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
-      radiant_temperature_control_type = "SurfaceFaceTemperature"
+                         "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
+      radiant_temperature_control_type = 'SurfaceFaceTemperature'
     end
 
     radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
@@ -54,19 +53,19 @@ class Standard
     ####
 
     # get existing switchover time schedule or create one if needed
-    sch_radiant_switchover = model.getScheduleRulesetByName("Radiant System Switchover")
+    sch_radiant_switchover = model.getScheduleRulesetByName('Radiant System Switchover')
     if sch_radiant_switchover.is_initialized
       sch_radiant_switchover = sch_radiant_switchover.get
     else
       sch_radiant_switchover = model_add_constant_schedule_ruleset(model,
                                                                    switch_over_time,
-                                                                   name = "Radiant System Switchover",
-                                                                   sch_type_limit: "Dimensionless")
+                                                                   name = 'Radiant System Switchover',
+                                                                   sch_type_limit: 'Dimensionless')
     end
 
     # set radiant system switchover schedule
     radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover.to_Schedule.get)
-    
+
     # Calculated active slab heating and cooling temperature setpoint.
     # radiant system cooling control actuator
     sch_radiant_clgsetp = model_add_constant_schedule_ruleset(model,
@@ -105,7 +104,6 @@ class Standard
                                                                           'Schedule:Year',
                                                                           'Schedule Value')
     cmd_hsp_error.setName("#{zone_name}_cmd_hsp_error")
-
 
     #####
     # List of global variables used in EMS scripts
@@ -186,24 +184,24 @@ class Standard
     end
 
     # create new heating and cooling schedules to be used with all radiant systems
-    zone_htg_thermostat = model.getScheduleRulesetByName("Radiant System Heating Setpoint")
+    zone_htg_thermostat = model.getScheduleRulesetByName('Radiant System Heating Setpoint')
     if zone_htg_thermostat.is_initialized
       zone_htg_thermostat = zone_htg_thermostat.get
     else
       zone_htg_thermostat = model_add_constant_schedule_ruleset(model,
                                                                 20.0,
-                                                                name = "Radiant System Heating Setpoint",
-                                                                sch_type_limit: "Temperature")
+                                                                name = 'Radiant System Heating Setpoint',
+                                                                sch_type_limit: 'Temperature')
     end
 
-    zone_clg_thermostat = model.getScheduleRulesetByName("Radiant System Cooling Setpoint")
+    zone_clg_thermostat = model.getScheduleRulesetByName('Radiant System Cooling Setpoint')
     if zone_clg_thermostat.is_initialized
       zone_clg_thermostat = zone_clg_thermostat.get
     else
       zone_clg_thermostat = model_add_constant_schedule_ruleset(model,
                                                                 26.0,
-                                                                name = "Radiant System Cooling Setpoint",
-                                                                sch_type_limit: "Temperature")
+                                                                name = 'Radiant System Cooling Setpoint',
+                                                                sch_type_limit: 'Temperature')
     end
 
     # implement new heating and cooling schedules
@@ -230,13 +228,13 @@ class Standard
     zone_rad_heat_operation.setName("#{zone_name}_rad_heat_operation")
     zone_rad_heat_operation.setKeyName(coil_heating_radiant.to_StraightComponent.get.inletModelObject.get.name.get)
 
-    # Radiant system switchover delay time period schedule 
+    # Radiant system switchover delay time period schedule
     # used to determine if there is active hydronic cooling/heating in the radiant system.
-    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName("radiant_switch_over_time")
+    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName('radiant_switch_over_time')
 
     unless zone_rad_switch_over.is_initialized
       zone_rad_switch_over = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-      zone_rad_switch_over.setName("radiant_switch_over_time")
+      zone_rad_switch_over.setName('radiant_switch_over_time')
       zone_rad_switch_over.setKeyName(sch_radiant_switchover.name.get)
     end
 
@@ -259,13 +257,13 @@ class Standard
                                                                  occupied_percentage_threshold: occupied_percentage_threshold)
     else
 
-      occ_schedule_ruleset = model.getScheduleRulesetByName("Whole Building Radiant System Occupied Schedule")
+      occ_schedule_ruleset = model.getScheduleRulesetByName('Whole Building Radiant System Occupied Schedule')
       if occ_schedule_ruleset.is_initialized
         occ_schedule_ruleset = occ_schedule_ruleset.get
       else
         # create occupancy schedules
         occ_schedule_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
-        occ_schedule_ruleset.setName("Whole Building Radiant System Occupied Schedule")
+        occ_schedule_ruleset.setName('Whole Building Radiant System Occupied Schedule')
 
         start_hour = model_occ_hr_end.to_i
         start_minute = ((model_occ_hr_end % 1) * 60).to_i
@@ -310,7 +308,9 @@ class Standard
     EMS
 
     set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Constant_Values')
-    unless set_constant_values_prg.is_initialized
+    if set_constant_values_prg.is_initialized
+      set_constant_values_prg = set_constant_values_prg.get
+    else
       set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
       set_constant_values_prg.setName('Set_Constant_Values')
       set_constant_values_prg.setBody(set_constant_values_prg_body)
@@ -389,6 +389,11 @@ class Standard
     initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters')
     if initialize_constant_parameters.is_initialized
       initialize_constant_parameters = initialize_constant_parameters.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters.programs.collect { |prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters.setName('Initialize_Constant_Parameters')
@@ -399,6 +404,11 @@ class Standard
     initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters_After_Warmup')
     if initialize_constant_parameters_after_warmup.is_initialized
       initialize_constant_parameters_after_warmup = initialize_constant_parameters_after_warmup.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters_after_warmup.programs.collect { |prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters_after_warmup = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters_after_warmup.setName('Initialize_Constant_Parameters_After_Warmup')
@@ -435,6 +445,5 @@ class Standard
     zone_max_ctrl_temp_output.setName("#{zone_name} Maximum occupied temperature in zone")
     zone_min_ctrl_temp_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_min_ctrl_temp)
     zone_min_ctrl_temp_output.setName("#{zone_name} Minimum occupied temperature in zone")
-
   end
 end
