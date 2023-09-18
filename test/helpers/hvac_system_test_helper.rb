@@ -216,7 +216,7 @@ def default_radiant_test_hash
                   two_pipe_control_strategy: 'outdoor_air_lockout',
                   two_pipe_lockout_temperature: 65.0,
                   plant_supply_water_temperature_control: false,
-                  plant_supply_water_control_strategy: 'outdoor_air',
+                  plant_supply_water_temperature_control_strategy: 'outdoor_air',
                   hwsp_at_oat_low: 120,
                   hw_oat_low: 55,
                   hwsp_at_oat_high: 80,
@@ -268,7 +268,7 @@ def model_radiant_system_test(arguments)
   two_pipe_control_strategy = hash[:two_pipe_control_strategy]
   two_pipe_lockout_temperature = hash[:two_pipe_lockout_temperature]
   plant_supply_water_temperature_control = hash[:plant_supply_water_temperature_control]
-  plant_supply_water_control_strategy = hash[:plant_supply_water_control_strategy]
+  plant_supply_water_temperature_control_strategy = hash[:plant_supply_water_temperature_control_strategy]
   hwsp_at_oat_low = hash[:hwsp_at_oat_low]
   hw_oat_low = hash[:hw_oat_low]
   hwsp_at_oat_high = hash[:hwsp_at_oat_high]
@@ -353,7 +353,7 @@ def model_radiant_system_test(arguments)
                                                         two_pipe_control_strategy: two_pipe_control_strategy,
                                                         two_pipe_lockout_temperature: two_pipe_lockout_temperature,
                                                         plant_supply_water_temperature_control: plant_supply_water_temperature_control,
-                                                        plant_supply_water_control_strategy: plant_supply_water_control_strategy,
+                                                        plant_supply_water_temperature_control_strategy: plant_supply_water_temperature_control_strategy,
                                                         hwsp_at_oat_low: hwsp_at_oat_low,
                                                         hw_oat_low: hw_oat_low,
                                                         hwsp_at_oat_high: hwsp_at_oat_high,
