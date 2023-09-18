@@ -11,7 +11,7 @@ class DEER2017 < DEER
   def thermal_zone_demand_control_ventilation_limits(thermal_zone)
     min_area_ft2 = 150
     min_ft2_per_occ = 40
-    
+
     # Convert to SI
     min_area_m2 = OpenStudio.convert(min_area_ft2, 'ft^2', 'm^2').get
     min_m2_per_occ = OpenStudio.convert(min_ft2_per_occ, 'ft^2', 'm^2').get
@@ -19,4 +19,3 @@ class DEER2017 < DEER
     return [min_area_m2, min_m2_per_occ]
   end
 end
-  

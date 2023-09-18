@@ -38,7 +38,6 @@ namespace :test do
     t.verbose = false
   end
 
-
   # These tests only available in the CI environment
   if ENV['CI'] == 'true'
 

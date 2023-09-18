@@ -103,7 +103,7 @@ Standard.class_eval do
 
       # 'touch' the weather file - for some odd reason this fixes the simulation not running issue we had on openstudio-server.
       # Removed for until further investigation completed.
-      #FileUtils.touch("#{run_dir}/#{epw_name}")
+      # FileUtils.touch("#{run_dir}/#{epw_name}")
 
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
@@ -283,7 +283,7 @@ Standard.class_eval do
       unless space.thermalZone.empty?
         # error if zone design load methods are not available
         if space.model.version < OpenStudio::VersionString.new('3.6.0')
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', 'Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
         end
 
         space_cooling_load = 0.0

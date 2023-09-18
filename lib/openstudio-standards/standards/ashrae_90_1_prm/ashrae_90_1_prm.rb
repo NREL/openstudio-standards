@@ -30,7 +30,7 @@ class ASHRAE901PRM < Standard
       csv_file_name = File.basename(csv_full_name, File.extname(csv_full_name))
       json_objs[csv_file_name] = json_rows
     end
-    
+
     # Read all valid files in user_data_folder and load into json array
     unless user_data_path == ''
       user_data_validation_outcome = true
