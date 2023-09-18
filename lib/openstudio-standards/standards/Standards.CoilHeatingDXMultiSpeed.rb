@@ -4,7 +4,7 @@ class Standard
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param coil_heating_dx_multi_speed [OpenStudio::Model::CoilHeatingDXMultiSpeed] coil heating dx multi speed object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def coil_heating_dx_multi_speed_apply_efficiency_and_curves(coil_heating_dx_multi_speed, sql_db_vars_map)
     successfully_set_all_properties = true
 

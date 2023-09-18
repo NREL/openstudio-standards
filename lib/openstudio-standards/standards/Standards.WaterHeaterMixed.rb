@@ -7,7 +7,7 @@ class Standard
   # Appendix A: Service Water Heating
   #
   # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
     # @todo remove this once workaround for HPWHs is removed
     if water_heater_mixed.partLoadFactorCurve.is_initialized
@@ -15,6 +15,13 @@ class Standard
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, the workaround for HPWHs has been applied, efficiency will not be changed.")
         return true
       end
+    end
+
+    # get number of water heaters
+    if water_heater_mixed.additionalProperties.getFeatureAsInteger('component_quantity').is_initialized
+      comp_qty = water_heater_mixed.additionalProperties.getFeatureAsInteger('component_quantity').get
+    else
+      comp_qty = 1
     end
 
     # Get the capacity of the water heater
@@ -25,7 +32,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find capacity, standard will not be applied.")
       return false
     else
-      capacity_w = capacity_w.get / water_heater_mixed.component_quantity
+      capacity_w = capacity_w.get / comp_qty
     end
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
@@ -37,7 +44,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volume, standard will not be applied.")
       return false
     else
-      volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / water_heater_mixed.component_quantity
+      volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / comp_qty
     end
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
 
@@ -201,7 +208,7 @@ class Standard
   #
   # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
   # @param building_type [String] the building type
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, building_type)
     # baseline is same as proposed per Table G3.1 item 11.b
     return true # Do nothing

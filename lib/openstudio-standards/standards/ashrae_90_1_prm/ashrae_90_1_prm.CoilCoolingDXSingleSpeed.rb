@@ -82,7 +82,7 @@ class ASHRAE901PRM < Standard
   #
   # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
   # @param sys_type [String] HVAC system type
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, sys_type, rename = false)
     # find properties

@@ -48,10 +48,6 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     end
 
-
-    # Output fan rated w per cfm for each fan
-    model.output_fan_report("#{sizing_run_dir}/fan_report.csv")
-
     sql = model.sqlFile
 
     if sql.is_initialized

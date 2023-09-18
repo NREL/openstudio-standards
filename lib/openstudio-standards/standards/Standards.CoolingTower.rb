@@ -18,7 +18,7 @@ module CoolingTower
   #
   # @param cooling_tower [OpenStudio::Model::StraightComponent] cooling tower object, allowable types:
   #   CoolingTowerSingleSpeed, CoolingTowerTwoSpeed, and CoolingTowerVariableSpeed
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def cooling_tower_apply_minimum_power_per_flow(cooling_tower)
     # Get the design water flow rate
     design_water_flow_m3_per_s = nil
@@ -51,11 +51,11 @@ module CoolingTower
     fan_type = nil
     if name.include?('Centrifugal')
       fan_type = 'Centrifugal'
-    elsif name.include?('Propeller or Axial')
+    elsif name.include?('Propeller') || name.include?('Axial')
       fan_type = 'Propeller or Axial'
-    end
-    unless fan_type.nil?
-      search_criteria['fan_type'] = fan_type
+    else
+      fan_type = 'Propeller or Axial'
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "#{cooling_tower.name} fan type is not discernible from the name. Defaulting to Propeller or Axial.")
     end
 
     # Limit on Centrifugal Fan
@@ -65,13 +65,13 @@ module CoolingTower
       if gpm_limit
         if design_water_flow_gpm >= gpm_limit
           fan_type = 'Propeller or Axial'
-          search_criteria['fan_type'] = fan_type
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, the design flow rate of #{design_water_flow_gpm.round} gpm is higher than the limit of #{gpm_limit.round} gpm for open centrifugal towers.  This tower must meet the minimum performance of #{fan_type} instead.")
         end
       end
     end
 
     # Get the cooling tower properties
+    search_criteria['fan_type'] = fan_type
     ct_props = model_find_object(heat_rejection, search_criteria)
     unless ct_props
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, cannot find heat rejection properties, cannot apply standard efficiencies or curves.")

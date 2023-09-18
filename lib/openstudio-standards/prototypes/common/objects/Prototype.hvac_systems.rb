@@ -1084,6 +1084,123 @@ class Standard
     return ambient_loop
   end
 
+  # Model a 2-pipe plant loop, where the loop is either in heating or cooling.
+  # For sizing reasons, this method keeps separate hot water and chilled water loops,
+  # and connects them together with a common inverse schedule.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop
+  # @param control_strategy [String] Method to determine whether the loop is in heating or cooling mode
+  #   'outdoor_air_lockout' - The system will be in heating below the lockout_temperature variable,
+  #      and cooling above the lockout_temperature. Requires the lockout_temperature variable.
+  #   'zone_demand' - Heating or cooling determined by preponderance of zone demand.
+  #      Requires thermal_zones defined.
+  # @param lockout_temperature [Double] lockout temperature in degrees Fahrenheit, default 65F.
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones
+  # @return [OpenStudio::Model::ScheduleRuleset]
+  def model_two_pipe_loop(model,
+                          hot_water_loop,
+                          chilled_water_loop,
+                          control_strategy: 'outdoor_air_lockout',
+                          lockout_temperature: 65.0,
+                          thermal_zones: [])
+
+    if control_strategy == 'outdoor_air_lockout'
+      # get or create outdoor sensor node to be used in plant availability managers if needed
+      outdoor_airnode = model.outdoorAirNode
+
+      # create availability managers based on outdoor temperature
+      # create hot water plant availability manager
+      hot_water_loop_lockout_manager = OpenStudio::Model::AvailabilityManagerHighTemperatureTurnOff.new(model)
+      hot_water_loop_lockout_manager.setName("#{hot_water_loop.name} Lockout Manager")
+      hot_water_loop_lockout_manager.setSensorNode(outdoor_airnode)
+      hot_water_loop_lockout_manager.setTemperature(OpenStudio.convert(lockout_temperature, 'F', 'C').get)
+
+      # set availability manager to hot water plant
+      hot_water_loop.addAvailabilityManager(hot_water_loop_lockout_manager)
+
+      # create chilled water plant availability manager
+      chilled_water_loop_lockout_manager = OpenStudio::Model::AvailabilityManagerLowTemperatureTurnOff.new(model)
+      chilled_water_loop_lockout_manager.setName("#{chilled_water_loop.name} Lockout Manager")
+      chilled_water_loop_lockout_manager.setSensorNode(outdoor_airnode)
+      chilled_water_loop_lockout_manager.setTemperature(OpenStudio.convert(lockout_temperature, 'F', 'C').get)
+
+      # set availability manager to hot water plant
+      chilled_water_loop.addAvailabilityManager(chilled_water_loop_lockout_manager)
+    else
+      # create availability managers based on zone heating and cooling demand
+      hot_water_loop_name = ems_friendly_name(hot_water_loop.name)
+      chilled_water_loop_name = ems_friendly_name(chilled_water_loop.name)
+
+      # create hot water plant availability schedule managers and create an EMS acuator
+      sch_hot_water_availability = model_add_constant_schedule_ruleset(model,
+                                                                       0,
+                                                                       name = "#{hot_water_loop.name} Availability Schedule",
+                                                                       sch_type_limit: 'OnOff')
+
+      hot_water_loop_manager = OpenStudio::Model::AvailabilityManagerScheduled.new(model)
+      hot_water_loop_manager.setName("#{hot_water_loop.name} Availability Manager")
+      hot_water_loop_manager.setSchedule(sch_hot_water_availability)
+
+      hot_water_plant_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_hot_water_availability,
+                                                                                   'Schedule:Year',
+                                                                                   'Schedule Value')
+      hot_water_plant_ctrl.setName("#{hot_water_loop_name}_availability_control")
+
+      # set availability manager to hot water plant
+      hot_water_loop.addAvailabilityManager(hot_water_loop_manager)
+
+      # create chilled water plant availability schedule managers and create an EMS acuator
+      sch_chilled_water_availability = model_add_constant_schedule_ruleset(model,
+                                                                           0,
+                                                                           name = "#{chilled_water_loop.name} Availability Schedule",
+                                                                           sch_type_limit: 'OnOff')
+
+      chilled_water_loop_manager = OpenStudio::Model::AvailabilityManagerScheduled.new(model)
+      chilled_water_loop_manager.setName("#{chilled_water_loop.name} Availability Manager")
+      chilled_water_loop_manager.setSchedule(sch_chilled_water_availability)
+
+      chilled_water_plant_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_chilled_water_availability,
+                                                                                       'Schedule:Year',
+                                                                                       'Schedule Value')
+      chilled_water_plant_ctrl.setName("#{chilled_water_loop_name}_availability_control")
+
+      # set availability manager to chilled water plant
+      chilled_water_loop.addAvailabilityManager(chilled_water_loop_manager)
+
+      # check if zone heat and cool requests program exists, if not create it
+      determine_zone_cooling_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Cooling_Needs')
+      determine_zone_heating_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Heating_Needs')
+      unless determine_zone_cooling_needs_prg.is_initialized && determine_zone_heating_needs_prg.is_initialized
+        model_add_zone_heat_cool_request_count_program(model, thermal_zones)
+      end
+
+      # create program to determine plant heating or cooling mode
+      determine_plant_mode_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      determine_plant_mode_prg.setName('Determine_Heating_Cooling_Plant_Mode')
+      determine_plant_mode_prg_body = <<-EMS
+      IF Zone_Heating_Ratio > 0.5,
+        SET #{hot_water_loop_name}_availability_control = 1,
+        SET #{chilled_water_loop_name}_availability_control = 0,
+      ELSEIF Zone_Cooling_Ratio > 0.5,
+        SET #{hot_water_loop_name}_availability_control = 0,
+        SET #{chilled_water_loop_name}_availability_control = 1,
+      ELSE,
+        SET #{hot_water_loop_name}_availability_control = #{hot_water_loop_name}_availability_control,
+        SET #{chilled_water_loop_name}_availability_control = #{chilled_water_loop_name}_availability_control,
+      ENDIF
+      EMS
+      determine_plant_mode_prg.setBody(determine_plant_mode_prg_body)
+
+      # create EMS program manager objects
+      programs_at_beginning_of_timestep = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      programs_at_beginning_of_timestep.setName('Heating_Cooling_Demand_Based_Plant_Availability_At_Beginning_Of_Timestep')
+      programs_at_beginning_of_timestep.setCallingPoint('BeginTimestepBeforePredictor')
+      programs_at_beginning_of_timestep.addProgram(determine_plant_mode_prg)
+    end
+  end
+
   # Creates a DOAS system with cold supply and terminal units for each zone.
   # This is the default DOAS system for DOE prototype buildings. Use model_add_doas for other DOAS systems.
   #
@@ -1097,7 +1214,7 @@ class Standard
   # @param min_frac_oa_sch [String] name of the minimum fraction of outdoor air schedule, default is always on
   # @param fan_maximum_flow_rate [Double] fan maximum flow rate in cfm, default is autosize
   # @param econo_ctrl_mthd [String] economizer control type, default is Fixed Dry Bulb
-  # @param energy_recovery [Bool] if true, an ERV will be added to the system
+  # @param energy_recovery [Boolean] if true, an ERV will be added to the system
   # @param doas_control_strategy [String] DOAS control strategy
   # @param clg_dsgn_sup_air_temp [Double] design cooling supply air temperature in degrees Fahrenheit, default 65F
   # @param htg_dsgn_sup_air_temp [Double] design heating supply air temperature in degrees Fahrenheit, default 75F
@@ -1329,7 +1446,7 @@ class Standard
   # @param fan_maximum_flow_rate [Double] fan maximum flow rate in cfm, default is autosize
   # @param econo_ctrl_mthd [String] economizer control type, default is Fixed Dry Bulb
   #   If enabled, the DOAS will be sized for twice the ventilation minimum to allow economizing
-  # @param include_exhaust_fan [Bool] if true, include an exhaust fan
+  # @param include_exhaust_fan [Boolean] if true, include an exhaust fan
   # @param clg_dsgn_sup_air_temp [Double] design cooling supply air temperature in degrees Fahrenheit, default 65F
   # @param htg_dsgn_sup_air_temp [Double] design heating supply air temperature in degrees Fahrenheit, default 75F
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting DOAS air loop
@@ -1778,7 +1895,7 @@ class Standard
       else
         avail_mgr = nil
       end
-    else 
+    else
       avail_mgr = air_loop.availabilityManagers[0]
     end
 
@@ -2007,7 +2124,7 @@ class Standard
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coils to. If nil, will be DX cooling
   # @param heating_type [String] main heating coil fuel type
   #   valid choices are NaturalGas, Electricity, Water, or nil (defaults to NaturalGas)
-  # @param electric_reheat [Bool] if true electric reheat coils, if false the reheat coils served by hot_water_loop
+  # @param electric_reheat [Boolean] if true electric reheat coils, if false the reheat coils served by hot_water_loop
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
   # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
   # @param econo_ctrl_mthd [String] economizer control type
@@ -2146,7 +2263,7 @@ class Standard
       else
         avail_mgr = nil
       end
-    else 
+    else
       avail_mgr = air_loop.availabilityManagers[0]
     end
 
@@ -2764,7 +2881,7 @@ class Standard
         else
           avail_mgr = nil
         end
-      else 
+      else
         avail_mgr = air_loop.availabilityManagers[0]
       end
 
@@ -2975,7 +3092,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param space [OpenStudio::Model::Space] which space to assign the data center loads to
   # @param dc_watts_per_area [Double] data center load, in W/m^2
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_data_center_load(model, space, dc_watts_per_area)
     # create data center load
     data_center_definition = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -2999,7 +3116,7 @@ class Standard
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
   # @param oa_damper_sch [String] name of the oa damper schedule or nil in which case will be defaulted to always open
-  # @param main_data_center [Bool] whether or not this is the main data center in the building.
+  # @param main_data_center [Boolean] whether or not this is the main data center in the building.
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] an array of the resulting air loops
   def model_add_data_center_hvac(model,
                                  thermal_zones,
@@ -3369,7 +3486,7 @@ class Standard
   # Creates a CRAH system for larger size data center and adds it to the model.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param chilled_water_loop [string]
+  # @param chilled_water_loop [String
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param thermal_zones [String] zones to connect to this system
   # @param hvac_op_sch [String] name of the HVAC operation schedule
@@ -3806,7 +3923,7 @@ class Standard
   # @param heating_type [String] valid choices are NaturalGas, Electricity, Water, nil (no heat)
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating coil to. Set to nil for heating types besides water
   # @param fan_type [String] valid choices are ConstantVolume, Cycling
-  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  # @param ventilation [Boolean] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an array of the resulting PTACs
   def model_add_ptac(model,
@@ -3925,7 +4042,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to connect to this system
   # @param fan_type [String] valid choices are ConstantVolume, Cycling
-  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  # @param ventilation [Boolean] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner>] an array of the resulting PTACs.
   def model_add_pthp(model,
@@ -4376,7 +4493,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units
-  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  # @param ventilation [Boolean] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACTerminalUnitVariableRefrigerantFlow>] array of vrf units.
   def model_add_vrf(model,
@@ -4436,7 +4553,7 @@ class Standard
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the fan coils.
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the fan coils.
   #   If nil, a zero-capacity, electric heating coil set to Always-Off will be included in the unit.
-  # @param ventilation [Bool] If true, ventilation will be supplied through the unit.  If false,
+  # @param ventilation [Boolean] If true, ventilation will be supplied through the unit.  If false,
   #   no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @param capacity_control_method [String] Capacity control method for the fan coil. Options are ConstantFanVariableFlow,
   #   CyclingFan, VariableFanVariableFlow, and VariableFanConstantFlow.  If VariableFan, the fan will be VariableVolume.
@@ -4520,27 +4637,61 @@ class Standard
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add radiant loops
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] the hot water loop that serves the radiant loop.
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] the chilled water loop that serves the radiant loop.
+  # @param two_pipe_system [Boolean] when set to true, it converts the default 4-pipe water plant HVAC system to a 2-pipe system.
+  # @param two_pipe_control_strategy [String] Method to determine whether the loop is in heating or cooling mode
+  #   'outdoor_air_lockout' - The system will be in heating below the two_pipe_lockout_temperature variable,
+  #      and cooling above the two_pipe_lockout_temperature. Requires the two_pipe_lockout_temperature variable.
+  #   'zone_demand' - Create EMS code to determine heating or cooling mode based on zone heating or cooling load requests.
+  #      Requires thermal_zones defined.
+  # @param two_pipe_lockout_temperature [Double] hot water plant lockout in degrees Fahrenheit, default 65F.
+  #   Hot water plant is unavailable when outdoor drybulb is above the specified threshold.
+  # @param plant_supply_water_temperature_control [Bool] Set to true if the plant supply water temperature
+  #   is to be controlled else it is held constant, default to false.
+  # @param plant_supply_water_temperature_control_strategy [String] Method to determine how to control the plant's supply water temperature.
+  #   'outdoor_air' - Set the supply water temperature based on the outdoor air temperature.
+  #   'zone_demand' - Set the supply water temperature based on the preponderance of zone demand.
+  #     Requires thermal_zone defined.
+  # @param hwsp_at_oat_low [Double] hot water plant supply water temperature setpoint, in F, at the outdoor low temperature.
+  #   Requires
+  # @param hw_oat_low [Double] outdoor drybulb air  temperature, in F, for low setpoint for hot water plant.
+  # @param hwsp_at_oat_high [Double] hot water plant supply water temperature setpoint, in F, at the outdoor high temperature.
+  # @param hw_oat_high [Double] outdoor drybulb air temperature, in F, for high setpoint for hot water plant.
+  # @param chwsp_at_oat_low [Double] chilled water plant supply water temperature setpoint, in F, at the outdoor low temperature.
+  # @param chw_oat_low [Double] outdoor drybulb air  temperature, in F, for low setpoint for chilled water plant.
+  # @param chwsp_at_oat_high [Double] chilled water plant supply water temperature setpoint, in F, at the outdoor high temperature.
+  # @param chw_oat_high [Double] outdoor drybulb air temperature, in F, for high setpoint for chilled water plant.
   # @param radiant_type [String] type of radiant system, floor or ceiling, to create in zone.
   # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
   #   options are 'MeanAirTemperature', 'MeanRadiantTemperature', 'OperativeTemperature', 'OutdoorDryBulbTemperature',
   #   'OutdoorWetBulbTemperature', 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
   # @param radiant_setpoint_control_type [String] determines the response of the radiant system at setpoint temperature
   #   options are 'ZeroFlowPower', 'HalfFlowPower'
-  # @param include_carpet [Bool] boolean to include thin carpet tile over radiant slab, default to true
+  # @param include_carpet [Boolean] boolean to include thin carpet tile over radiant slab, default to true
   # @param carpet_thickness_in [Double] thickness of carpet in inches
   # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Starting hour of building occupancy.
   # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Ending hour of building occupancy.
-  # @param control_strategy [String] name of control strategy.  Options are 'proportional_control', oa_based_control,
+  # @param control_strategy [String] name of control strategy.  Options are 'proportional_control', 'oa_based_control',
   #   'constant_control', and 'none'.
   #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
   #   detailed in Raftery et al. (2017), 'A new control strategy for high thermal mass radiant systems'.
-  #   If control strategy is 'slab_setpoint_oa_control', the method will apply native EnergyPlus objects/parameters
+  #   If control strategy is 'oa_based_control', the method will apply native EnergyPlus objects/parameters
   #   to vary slab setpoint based on outdoor weather.
   #   If control strategy is 'constant_control', the method will apply native EnergyPlus objects/parameters to
   #   maintain a constant slab setpoint.
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
+  # @param use_zone_occupancy_for_control [Boolean] Set to true if radiant system is to use specific zone occupancy objects
+  #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
+  #   for all radiant zones. default to true.
+  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule.
+  #   Only used if use_zone_occupancy_for_control is set to true.
+  # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Starting hour of building occupancy.
+  # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
+  #   Ending hour of building occupancy.
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
@@ -4553,7 +4704,7 @@ class Standard
   #   If preset is set to 'all_day' radiant system is available 24 hours a day, 'precool' primarily operates
   #   radiant system during night-time hours, 'afternoon_shutoff' avoids operation during peak grid demand,
   #   and 'occupancy' operates radiant system during building occupancy hours.
-  # @param radiant_lockout [Bool] True if system contains a radiant lockout. If true, it will overwrite radiant_availability_type.
+  # @param radiant_lockout [Boolean] True if system contains a radiant lockout. If true, it will overwrite radiant_availability_type.
   # @param radiant_lockout_start_time [double] decimal hour of when radiant lockout starts
   #   Only used if radiant_lockout is true
   # @param radiant_lockout_end_time [double] decimal hour of when radiant lockout ends
@@ -4565,14 +4716,29 @@ class Standard
                                  thermal_zones,
                                  hot_water_loop,
                                  chilled_water_loop,
+                                 two_pipe_system: false,
+                                 two_pipe_control_strategy: 'outdoor_air_lockout',
+                                 two_pipe_lockout_temperature: 65.0,
+                                 plant_supply_water_temperature_control: false,
+                                 plant_supply_water_temperature_control_strategy: 'outdoor_air',
+                                 hwsp_at_oat_low: 120.0,
+                                 hw_oat_low: 55.0,
+                                 hwsp_at_oat_high: 80.0,
+                                 hw_oat_high: 70.0,
+                                 chwsp_at_oat_low: 70.0,
+                                 chw_oat_low: 65.0,
+                                 chwsp_at_oat_high: 55.0,
+                                 chw_oat_high: 75.0,
                                  radiant_type: 'floor',
                                  radiant_temperature_control_type: 'SurfaceFaceTemperature',
                                  radiant_setpoint_control_type: 'ZeroFlowPower',
                                  include_carpet: true,
                                  carpet_thickness_in: 0.25,
+                                 control_strategy: 'proportional_control',
+                                 use_zone_occupancy_for_control: true,
+                                 occupied_percentage_threshold: 0.10,
                                  model_occ_hr_start: 6.0,
                                  model_occ_hr_end: 18.0,
-                                 control_strategy: 'proportional_control',
                                  proportional_gain: 0.3,
                                  switch_over_time: 24.0,
                                  slab_sp_at_oat_low: 73,
@@ -4703,7 +4869,7 @@ class Standard
     radiant_interior_floor_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     # create reversed interior floor construction
-    rev_radiant_interior_floor_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers.reverse())
+    rev_radiant_interior_floor_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers.reverse)
     rev_radiant_interior_floor_slab_construction.setName('Radiant Interior Floor Slab Construction - Reversed')
     rev_radiant_interior_floor_slab_construction.setSourcePresentAfterLayerNumber(layers.length - 1)
     rev_radiant_interior_floor_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(layers.length - 1)
@@ -4721,7 +4887,7 @@ class Standard
     radiant_interior_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     # create reversed interior ceiling construction
-    rev_radiant_interior_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers.reverse())
+    rev_radiant_interior_ceiling_slab_construction = OpenStudio::Model::ConstructionWithInternalSource.new(layers.reverse)
     rev_radiant_interior_ceiling_slab_construction.setName('Radiant Interior Ceiling Slab Construction - Reversed')
     rev_radiant_interior_ceiling_slab_construction.setSourcePresentAfterLayerNumber(layers.length - slab_src_loc)
     rev_radiant_interior_ceiling_slab_construction.setTemperatureCalculationRequestedAfterLayerNumber(layers.length - slab_src_loc)
@@ -4739,7 +4905,7 @@ class Standard
     radiant_ceiling_slab_construction.setTubeSpacing(0.2286) # 9 inches
 
     # adjust hot and chilled water loop temperatures and set new setpoint schedules
-    radiant_htg_dsgn_sup_wtr_temp_delt_r = 10
+    radiant_htg_dsgn_sup_wtr_temp_delt_r = 10.0
     radiant_htg_dsgn_sup_wtr_temp_c = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_f, 'F', 'C').get
     radiant_htg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
     hot_water_loop.sizingPlant.setDesignLoopExitTemperature(radiant_htg_dsgn_sup_wtr_temp_c)
@@ -4843,6 +5009,35 @@ class Standard
       radiant_avail_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
     end
 
+    # convert to a two-pipe system if required
+    if two_pipe_system
+      model_two_pipe_loop(model, hot_water_loop, chilled_water_loop,
+                          control_strategy: two_pipe_control_strategy,
+                          lockout_temperature: two_pipe_lockout_temperature,
+                          thermal_zones: thermal_zones)
+    end
+
+    # add supply water temperature control if enabled
+    if plant_supply_water_temperature_control
+      # add supply water temperature for heating plant loop
+      model_add_plant_supply_water_temperature_control(model, hot_water_loop,
+                                                       control_strategy: plant_supply_water_temperature_control_strategy,
+                                                       sp_at_oat_low: hwsp_at_oat_low,
+                                                       oat_low: hw_oat_low,
+                                                       sp_at_oat_high: hwsp_at_oat_high,
+                                                       oat_high: hw_oat_high,
+                                                       thermal_zones: thermal_zones)
+
+      # add supply water temperature for cooling plant loop
+      model_add_plant_supply_water_temperature_control(model, chilled_water_loop,
+                                                       control_strategy: plant_supply_water_temperature_control_strategy,
+                                                       sp_at_oat_low: chwsp_at_oat_low,
+                                                       oat_low: chw_oat_low,
+                                                       sp_at_oat_high: chwsp_at_oat_high,
+                                                       oat_high: chw_oat_high,
+                                                       thermal_zones: thermal_zones)
+    end
+
     # make a low temperature radiant loop for each zone
     radiant_loops = []
     thermal_zones.each do |zone|
@@ -4938,38 +5133,38 @@ class Standard
       # set radiant loop controls
       unless control_strategy.downcase == 'none'
         case control_strategy.downcase
-          when 'proportional_control'
-            # slab setpoint varies based on previous day zone conditions
-            model_add_radiant_proportional_controls(model, zone, radiant_loop,
-                                                    radiant_temperature_control_type: radiant_temperature_control_type,
-                                                    model_occ_hr_start: model_occ_hr_start,
-                                                    model_occ_hr_end: model_occ_hr_end,
-                                                    proportional_gain: proportional_gain,
-                                                    switch_over_time: switch_over_time)
-          when 'oa_based_control'
-            # slab setpoint varies based on outdoor weather
-            model_add_radiant_basic_controls(model, zone, radiant_loop,
-                                            radiant_temperature_control_type: radiant_temperature_control_type,
-                                            slab_setpoint_oa_control: true,
-                                            switch_over_time: switch_over_time,
-                                            slab_sp_at_oat_low: slab_sp_at_oat_low,
-                                            slab_oat_low: slab_oat_low,
-                                            slab_sp_at_oat_high: slab_sp_at_oat_high,
-                                            slab_oat_high: slab_oat_high)
-          when 'constant_control'
-            # constant slab setpoint control
-            model_add_radiant_basic_controls(model, zone, radiant_loop,
-                                            radiant_temperature_control_type: radiant_temperature_control_type,
-                                            slab_setpoint_oa_control: false,
-                                            switch_over_time: switch_over_time,
-                                            slab_sp_at_oat_low: slab_sp_at_oat_low,
-                                            slab_oat_low: slab_oat_low,
-                                            slab_sp_at_oat_high: slab_sp_at_oat_high,
-                                            slab_oat_high: slab_oat_high)
-          end
+        when 'proportional_control'
+          # slab setpoint varies based on previous day zone conditions
+          model_add_radiant_proportional_controls(model, zone, radiant_loop,
+                                                  radiant_temperature_control_type: radiant_temperature_control_type,
+                                                  use_zone_occupancy_for_control: use_zone_occupancy_for_control,
+                                                  occupied_percentage_threshold: occupied_percentage_threshold,
+                                                  model_occ_hr_start: model_occ_hr_start,
+                                                  model_occ_hr_end: model_occ_hr_end,
+                                                  proportional_gain: proportional_gain,
+                                                  switch_over_time: switch_over_time)
+        when 'oa_based_control'
+          # slab setpoint varies based on outdoor weather
+          model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                           radiant_temperature_control_type: radiant_temperature_control_type,
+                                           slab_setpoint_oa_control: true,
+                                           switch_over_time: switch_over_time,
+                                           slab_sp_at_oat_low: slab_sp_at_oat_low,
+                                           slab_oat_low: slab_oat_low,
+                                           slab_sp_at_oat_high: slab_sp_at_oat_high,
+                                           slab_oat_high: slab_oat_high)
+        when 'constant_control'
+          # constant slab setpoint control
+          model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                           radiant_temperature_control_type: radiant_temperature_control_type,
+                                           slab_setpoint_oa_control: false,
+                                           switch_over_time: switch_over_time,
+                                           slab_sp_at_oat_low: slab_sp_at_oat_low,
+                                           slab_oat_low: slab_oat_low,
+                                           slab_sp_at_oat_high: slab_sp_at_oat_high,
+                                           slab_oat_high: slab_oat_high)
+        end
       end
-    end
-
     return radiant_loops
   end
 
@@ -5033,9 +5228,9 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
-  # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
-  # @param cooling [Bool] if true, the unit will include a DX cooling coil
-  # @param ventilation [Bool] if true, the unit will include an OA intake
+  # @param heating [Boolean] if true, the unit will include a NaturalGas heating coil
+  # @param cooling [Boolean] if true, the unit will include a DX cooling coil
+  # @param ventilation [Boolean] if true, the unit will include an OA intake
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] and array of air loops representing the furnaces
   def model_add_furnace_central_ac(model,
                                    thermal_zones,
@@ -5164,9 +5359,9 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to add fan coil units to.
-  # @param heating [Bool] if true, the unit will include a NaturalGas heating coil
-  # @param cooling [Bool] if true, the unit will include a DX cooling coil
-  # @param ventilation [Bool] if true, the unit will include an OA intake
+  # @param heating [Boolean] if true, the unit will include a NaturalGas heating coil
+  # @param cooling [Boolean] if true, the unit will include a DX cooling coil
+  # @param ventilation [Boolean] if true, the unit will include an OA intake
   # @return [Array<OpenStudio::Model::AirLoopHVAC>] and array of air loops representing the heat pumps
   def model_add_central_air_source_heat_pump(model,
                                              thermal_zones,
@@ -5305,7 +5500,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones served by heat pumps
   # @param condenser_loop [OpenStudio::Model::PlantLoop] the condenser loop for the heat pumps  #
-  # @param ventilation [Bool] if true, ventilation will be supplied through the unit.
+  # @param ventilation [Boolean] if true, ventilation will be supplied through the unit.
   #   If false, no ventilation will be supplied through the unit, with the expectation that it will be provided by a DOAS or separate system.
   # @return [Array<OpenStudio::Model::ZoneHVACWaterToAirHeatPump>] an array of heat pumps
   def model_add_water_source_hp(model,
@@ -5806,10 +6001,315 @@ class Standard
     return fan_type
   end
 
+  # Adds supply water temperature control on specified plant water loops.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param plant_water_loop [OpenStudio::Model::PlantLoop] plant water loop to add supply water temperature control.
+  # @param control_strategy [String] Method to determine how to control the plant's supply water temperature (swt).
+  #   'outdoor_air' - The plant's swt will be proportional to the outdoor air based on the next 4 parameters.
+  #   'zone_demand' - The plant's swt will be determined by preponderance of zone demand.
+  #     Requires thermal_zone defined.
+  # @param sp_at_oat_low [Double] supply water temperature setpoint, in F, at the outdoor low temperature.
+  # @param oat_low [Double] outdoor drybulb air  temperature, in F, for low setpoint.
+  # @param sp_at_oat_high [Double] supply water temperature setpoint, in F, at the outdoor high temperature.
+  # @param oat_high [Double] outdoor drybulb air temperature, in F, for high setpoint.
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones
+  def model_add_plant_supply_water_temperature_control(model, plant_water_loop,
+                                                       control_strategy: 'outdoor_air',
+                                                       sp_at_oat_low: nil,
+                                                       oat_low: nil,
+                                                       sp_at_oat_high: nil,
+                                                       oat_high: nil,
+                                                       thermal_zones: [])
+
+    # check that all required temperature parameters are defined
+    if sp_at_oat_low.nil? && oat_low.nil? && sp_at_oat_high.nil? && oat_high.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'At least one of the required temperature parameter is nil.')
+    end
+
+    # remove any existing setpoint manager on the plant water loop
+    exisiting_setpoint_managers = plant_water_loop.loopTemperatureSetpointNode.setpointManagers
+    exisiting_setpoint_managers.each(&:disconnect)
+
+    if control_strategy == 'outdoor_air'
+      # create supply water temperature setpoint managers for plant based on outdoor temperature
+      water_loop_setpoint_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
+      water_loop_setpoint_manager.setName("#{plant_water_loop.name.get} Supply Water Temperature Control")
+      water_loop_setpoint_manager.setControlVariable('Temperature')
+      water_loop_setpoint_manager.setSetpointatOutdoorLowTemperature(OpenStudio.convert(sp_at_oat_low, 'F', 'C').get)
+      water_loop_setpoint_manager.setOutdoorLowTemperature(OpenStudio.convert(oat_low, 'F', 'C').get)
+      water_loop_setpoint_manager.setSetpointatOutdoorHighTemperature(OpenStudio.convert(sp_at_oat_high, 'F', 'C').get)
+      water_loop_setpoint_manager.setOutdoorHighTemperature(OpenStudio.convert(oat_high, 'F', 'C').get)
+      water_loop_setpoint_manager.addToNode(plant_water_loop.loopTemperatureSetpointNode)
+    else
+      # create supply water temperature setpoint managers for plant based on zone heating and cooling demand
+      # check if zone heat and cool requests program exists, if not create it
+      determine_zone_cooling_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Cooling_Needs')
+      determine_zone_heating_needs_prg = model.getEnergyManagementSystemProgramByName('Determine_Zone_Heating_Needs')
+      unless determine_zone_cooling_needs_prg.is_initialized && determine_zone_heating_needs_prg.is_initialized
+        model_add_zone_heat_cool_request_count_program(model, thermal_zones)
+      end
+
+      plant_water_loop_name = ems_friendly_name(plant_water_loop.name)
+
+      if plant_water_loop.componentType.valueName == 'Heating'
+        swt_upper_limit = sp_at_oat_low.nil? ? OpenStudio.convert(120, 'F', 'C').get : OpenStudio.convert(sp_at_oat_low, 'F', 'C').get
+        swt_lower_limit = sp_at_oat_high.nil? ? OpenStudio.convert(80, 'F', 'C').get : OpenStudio.convert(sp_at_oat_high, 'F', 'C').get
+        swt_init = OpenStudio.convert(100, 'F', 'C').get
+        zone_demand_var = 'Zone_Heating_Ratio'
+        swt_inc_condition_var = '> 0.70'
+        swt_dec_condition_var = '< 0.30'
+      else
+        swt_upper_limit = sp_at_oat_low.nil? ? OpenStudio.convert(70, 'F', 'C').get : OpenStudio.convert(sp_at_oat_low, 'F', 'C').get
+        swt_lower_limit = sp_at_oat_high.nil? ? OpenStudio.convert(55, 'F', 'C').get : OpenStudio.convert(sp_at_oat_high, 'F', 'C').get
+        swt_init = OpenStudio.convert(62, 'F', 'C').get
+        zone_demand_var = 'Zone_Cooling_Ratio'
+        swt_inc_condition_var = '< 0.30'
+        swt_dec_condition_var = '> 0.70'
+      end
+
+      # plant loop supply water control actuator
+      sch_plant_swt_ctrl = model_add_constant_schedule_ruleset(model,
+                                                               swt_init,
+                                                               name = "#{plant_water_loop_name}_Sch_Supply_Water_Temperature")
+
+      cmd_plant_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_plant_swt_ctrl,
+                                                                                   'Schedule:Year',
+                                                                                   'Schedule Value')
+      cmd_plant_water_ctrl.setName("#{plant_water_loop_name}_supply_water_ctrl")
+
+      # create plant loop setpoint manager
+      water_loop_setpoint_manager = OpenStudio::Model::SetpointManagerScheduled.new(model,
+                                                                                    sch_plant_swt_ctrl)
+      water_loop_setpoint_manager.setName("#{plant_water_loop.name.get} Supply Water Temperature Control")
+      water_loop_setpoint_manager.setControlVariable('Temperature')
+      water_loop_setpoint_manager.addToNode(plant_water_loop.loopTemperatureSetpointNode)
+
+      # add uninitialized variables into constant program
+      set_constant_values_prg_body = <<-EMS
+        SET #{plant_water_loop_name}_supply_water_ctrl = #{swt_init}
+      EMS
+
+      set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Plant_Constant_Values')
+      if set_constant_values_prg.is_initialized
+        set_constant_values_prg = set_constant_values_prg.get
+        set_constant_values_prg.addLine(set_constant_values_prg_body)
+      else
+        set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+        set_constant_values_prg.setName('Set_Plant_Constant_Values')
+        set_constant_values_prg.setBody(set_constant_values_prg_body)
+      end
+
+      # program for supply water temperature control in the plot
+      determine_plant_swt_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+      determine_plant_swt_prg.setName("Determine_#{plant_water_loop_name}_Supply_Water_Temperature")
+      determine_plant_swt_prg_body = <<-EMS
+        SET SWT_Increase = 1,
+        SET SWT_Decrease = 1,
+        SET SWT_upper_limit = #{swt_upper_limit},
+        SET SWT_lower_limit = #{swt_lower_limit},
+        IF #{zone_demand_var} #{swt_inc_condition_var} && (@Mod CurrentTime 1) == 0,
+          SET #{plant_water_loop_name}_supply_water_ctrl = #{plant_water_loop_name}_supply_water_ctrl + SWT_Increase,
+        ELSEIF #{zone_demand_var} #{swt_dec_condition_var} && (@Mod CurrentTime 1) == 0,
+          SET #{plant_water_loop_name}_supply_water_ctrl = #{plant_water_loop_name}_supply_water_ctrl - SWT_Decrease,
+        ELSE,
+          SET #{plant_water_loop_name}_supply_water_ctrl = #{plant_water_loop_name}_supply_water_ctrl,
+        ENDIF,
+        IF #{plant_water_loop_name}_supply_water_ctrl > SWT_upper_limit,
+          SET #{plant_water_loop_name}_supply_water_ctrl = SWT_upper_limit
+        ENDIF,
+        IF #{plant_water_loop_name}_supply_water_ctrl < SWT_lower_limit,
+          SET #{plant_water_loop_name}_supply_water_ctrl = SWT_lower_limit
+        ENDIF
+      EMS
+      determine_plant_swt_prg.setBody(determine_plant_swt_prg_body)
+
+      # create EMS program manager objects
+      programs_at_beginning_of_timestep = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+      programs_at_beginning_of_timestep.setName("#{plant_water_loop_name}_Demand_Based_Supply_Water_Temperature_At_Beginning_Of_Timestep")
+      programs_at_beginning_of_timestep.setCallingPoint('BeginTimestepBeforePredictor')
+      programs_at_beginning_of_timestep.addProgram(determine_plant_swt_prg)
+
+      initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters')
+      if initialize_constant_parameters.is_initialized
+        initialize_constant_parameters = initialize_constant_parameters.get
+        # add program if it does not exist in manager
+        existing_program_names = initialize_constant_parameters.programs.collect { |prg| prg.name.get.downcase }
+        unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+          initialize_constant_parameters.addProgram(set_constant_values_prg)
+        end
+      else
+        initialize_constant_parameters = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+        initialize_constant_parameters.setName('Initialize_Constant_Parameters')
+        initialize_constant_parameters.setCallingPoint('BeginNewEnvironment')
+        initialize_constant_parameters.addProgram(set_constant_values_prg)
+      end
+
+      initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters_After_Warmup')
+      if initialize_constant_parameters_after_warmup.is_initialized
+        initialize_constant_parameters_after_warmup = initialize_constant_parameters_after_warmup.get
+        # add program if it does not exist in manager
+        existing_program_names = initialize_constant_parameters_after_warmup.programs.collect { |prg| prg.name.get.downcase }
+        unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+          initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+        end
+      else
+        initialize_constant_parameters_after_warmup = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+        initialize_constant_parameters_after_warmup.setName('Initialize_Constant_Parameters_After_Warmup')
+        initialize_constant_parameters_after_warmup.setCallingPoint('AfterNewEnvironmentWarmUpIsComplete')
+        initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+      end
+    end
+  end
+
+  # Make EMS program that will compare 'measured' zone air temperatures to thermostats
+  # setpoint to determine if zone needs cooling or heating. Program will output the total
+  # zones needing heating and cooling and the their ratio using the total number of zones.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to dictate cooling or heating mode of water plant
+  def model_add_zone_heat_cool_request_count_program(model, thermal_zones)
+    # create container schedules to hold number of zones needing heating and cooling
+    sch_zones_needing_heating = model_add_constant_schedule_ruleset(model,
+                                                                    0,
+                                                                    name = 'Zones Needing Heating Count Schedule',
+                                                                    sch_type_limit: 'Dimensionless')
+
+    zone_needing_heating_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating,
+                                                                                          'Schedule:Year',
+                                                                                          'Schedule Value')
+    zone_needing_heating_actuator.setName('Zones_Needing_Heating')
+
+    sch_zones_needing_cooling = model_add_constant_schedule_ruleset(model,
+                                                                    0,
+                                                                    name = 'Zones Needing Cooling Count Schedule',
+                                                                    sch_type_limit: 'Dimensionless')
+
+    zone_needing_cooling_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling,
+                                                                                          'Schedule:Year',
+                                                                                          'Schedule Value')
+    zone_needing_cooling_actuator.setName('Zones_Needing_Cooling')
+
+    # create container schedules to hold ratio of zones needing heating and cooling
+    sch_zones_needing_heating_ratio = model_add_constant_schedule_ruleset(model,
+                                                                          0,
+                                                                          name = 'Zones Needing Heating Ratio Schedule',
+                                                                          sch_type_limit: 'Dimensionless')
+
+    zone_needing_heating_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating_ratio,
+                                                                                                'Schedule:Year',
+                                                                                                'Schedule Value')
+    zone_needing_heating_ratio_actuator.setName('Zone_Heating_Ratio')
+
+    sch_zones_needing_cooling_ratio = model_add_constant_schedule_ruleset(model,
+                                                                          0,
+                                                                          name = 'Zones Needing Cooling Ratio Schedule',
+                                                                          sch_type_limit: 'Dimensionless')
+
+    zone_needing_cooling_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling_ratio,
+                                                                                                'Schedule:Year',
+                                                                                                'Schedule Value')
+    zone_needing_cooling_ratio_actuator.setName('Zone_Cooling_Ratio')
+
+    #####
+    # Create EMS program to check comfort exceedances
+    ####
+
+    # initalize inner body for heating and cooling requests programs
+    determine_zone_cooling_needs_prg_inner_body = ''
+    determine_zone_heating_needs_prg_inner_body = ''
+
+    thermal_zones.each do |zone|
+      # get existing 'sensors'
+      exisiting_ems_sensors = model.getEnergyManagementSystemSensors
+      exisiting_ems_sensors_names = exisiting_ems_sensors.collect { |sensor| sensor.name.get + '-' + sensor.outputVariableOrMeterName }
+
+      # Create zone air temperature 'sensor' for the zone.
+      zone_name = ems_friendly_name(zone.name)
+      zone_air_sensor_name = "#{zone_name}_ctrl_temperature"
+
+      unless exisiting_ems_sensors_names.include? zone_air_sensor_name + '-Zone Air Temperature'
+        zone_ctrl_temperature = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Air Temperature')
+        zone_ctrl_temperature.setName(zone_air_sensor_name)
+        zone_ctrl_temperature.setKeyName(zone.name.get)
+      end
+
+      # check for zone thermostats
+      zone_thermostat = zone.thermostatSetpointDualSetpoint
+      unless zone_thermostat.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Zone #{zone.name} does not have thermostats.")
+        return false
+      end
+
+      zone_thermostat = zone.thermostatSetpointDualSetpoint.get
+      zone_clg_thermostat = zone_thermostat.coolingSetpointTemperatureSchedule.get
+      zone_htg_thermostat = zone_thermostat.heatingSetpointTemperatureSchedule.get
+
+      # create new sensor for zone thermostat if it does not exist already
+      zone_clg_thermostat_sensor_name = "#{zone_name}_upper_comfort_limit"
+      zone_htg_thermostat_sensor_name = "#{zone_name}_lower_comfort_limit"
+
+      unless exisiting_ems_sensors_names.include? zone_clg_thermostat_sensor_name + '-Schedule Value'
+        # Upper comfort limit for the zone. Taken from existing thermostat schedules in the zone.
+        zone_upper_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+        zone_upper_comfort_limit.setName(zone_clg_thermostat_sensor_name)
+        zone_upper_comfort_limit.setKeyName(zone_clg_thermostat.name.get)
+      end
+
+      unless exisiting_ems_sensors_names.include? zone_htg_thermostat_sensor_name + '-Schedule Value'
+        # Lower comfort limit for the zone. Taken from existing thermostat schedules in the zone.
+        zone_lower_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+        zone_lower_comfort_limit.setName(zone_htg_thermostat_sensor_name)
+        zone_lower_comfort_limit.setKeyName(zone_htg_thermostat.name.get)
+      end
+
+      # create program inner body for determining zone cooling needs
+      if thermal_zones.include? zone
+        determine_zone_cooling_needs_prg_inner_body += "IF #{zone_air_sensor_name} > #{zone_clg_thermostat_sensor_name},
+                                                        SET Zones_Needing_Cooling = Zones_Needing_Cooling + 1,
+                                                      ENDIF,\n"
+      end
+
+      # create program inner body for determining zone cooling needs
+      if thermal_zones.include? zone
+        determine_zone_heating_needs_prg_inner_body += "IF #{zone_air_sensor_name} < #{zone_htg_thermostat_sensor_name},
+                                                        SET Zones_Needing_Heating = Zones_Needing_Heating + 1,
+                                                      ENDIF,\n"
+      end
+    end
+
+    # create program for determining zone cooling needs
+    determine_zone_cooling_needs_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    determine_zone_cooling_needs_prg.setName('Determine_Zone_Cooling_Needs')
+    determine_zone_cooling_needs_prg_body =
+      "SET Zones_Needing_Cooling = 0,
+        #{determine_zone_cooling_needs_prg_inner_body}
+      SET Total_Zones = #{thermal_zones.length},
+      SET Zone_Cooling_Ratio = Zones_Needing_Cooling/Total_Zones"
+    determine_zone_cooling_needs_prg.setBody(determine_zone_cooling_needs_prg_body)
+
+    # create program for determining zone heating needs
+    determine_zone_heating_needs_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    determine_zone_heating_needs_prg.setName('Determine_Zone_Heating_Needs')
+    determine_zone_heating_needs_prg_body =
+      "SET Zones_Needing_Heating = 0,
+        #{determine_zone_heating_needs_prg_inner_body}
+      SET Total_Zones = #{thermal_zones.length},
+      SET Zone_Heating_Ratio = Zones_Needing_Heating/Total_Zones"
+    determine_zone_heating_needs_prg.setBody(determine_zone_heating_needs_prg_body)
+
+    # create EMS program manager objects
+    programs_at_beginning_of_timestep = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    programs_at_beginning_of_timestep.setName('Heating_Cooling_Request_Programs_At_End_Of_Timestep')
+    programs_at_beginning_of_timestep.setCallingPoint('EndOfZoneTimestepAfterZoneReporting')
+    programs_at_beginning_of_timestep.addProgram(determine_zone_cooling_needs_prg)
+    programs_at_beginning_of_timestep.addProgram(determine_zone_heating_needs_prg)
+  end
+
   # Adds a waterside economizer to the chilled water and condenser loop
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param integrated [Bool] when set to true, models an integrated waterside economizer
+  # @param integrated [Boolean] when set to true, models an integrated waterside economizer
   #   Integrated: in series with chillers, can run simultaneously with chillers
   #   Non-Integrated: in parallel with chillers, chillers locked out during operation
   def model_add_waterside_economizer(model, chilled_water_loop, condenser_water_loop,
@@ -6069,12 +6569,12 @@ class Standard
   #   EvaporativeFluidCooler, EvaporativeFluidCoolerSingleSpeed, EvaporativeFluidCoolerTwoSpeed
   # @param air_loop_heating_type [String] type of heating coil serving main air loop, options are Gas, DX, or Water
   # @param air_loop_cooling_type [String] type of cooling coil serving main air loop, options are DX or Water
-  # @param zone_equipment_ventilation [Bool] toggle whether to include outdoor air ventilation on zone equipment
+  # @param zone_equipment_ventilation [Boolean] toggle whether to include outdoor air ventilation on zone equipment
   #   including as fan coil units, VRF terminals, or water source heat pumps.
   # @param fan_coil_capacity_control_method [String] Only applicable to Fan Coil system type.
   #   Capacity control method for the fan coil. Options are ConstantFanVariableFlow, CyclingFan, VariableFanVariableFlow,
   #   and VariableFanConstantFlow.  If VariableFan, the fan will be VariableVolume.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_hvac_system(model,
                             system_type,
                             main_heat_fuel,

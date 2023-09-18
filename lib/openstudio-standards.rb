@@ -5,8 +5,22 @@ require_relative 'openstudio-standards/version'
 module OpenstudioStandards
   require 'json' # Used to load standards JSON files
 
-  # HVAC sizing
-  require_relative 'openstudio-standards/hvac_sizing/Siz.Model'
+  # Load Modules
+
+  # Geometry Module
+  require_relative 'openstudio-standards/geometry/create'
+  require_relative 'openstudio-standards/geometry/modify'
+  require_relative 'openstudio-standards/geometry/information'
+
+  # Schedules Module
+  require_relative 'openstudio-standards/schedules/create'
+  require_relative 'openstudio-standards/schedules/modify'
+  require_relative 'openstudio-standards/schedules/information'
+
+  # CreateTypical Module
+  require_relative 'openstudio-standards/create_typical/enumerations'
+  require_relative 'openstudio-standards/create_typical/space_type_ratios'
+  require_relative 'openstudio-standards/create_typical/create_typical'
 
   # Weather data
   require_relative 'openstudio-standards/weather/Weather.Model'
@@ -282,8 +296,6 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilHeatingGas"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.BoilerHotWater"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ChillerElectricEIR"
-  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTower"
-  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.HeatExchangerSensLat"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlanarSurface"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"

@@ -1,6 +1,9 @@
 # This class holds methods that apply NECB2011 rules.
 # @ref [References::NECB2011]
 class NECB2011 < Standard
+  require 'zip'
+  require 'open-uri'
+
   @template = new.class.name
   register_standard(@template)
   attr_reader :tbd
@@ -591,6 +594,10 @@ class NECB2011 < Standard
                           pv_ground_module_description: pv_ground_module_description)
     end
 
+    # Rename air loop and plant loop nodes to accommodate coming OpenStudio version
+    rename_air_loop_nodes(model)
+    rename_plant_loop_nodes(model)
+
   end
 
   def apply_loads(model:,
@@ -617,6 +624,14 @@ class NECB2011 < Standard
   end
 
   def apply_weather_data(model:, epw_file:)
+    # Create full path to weather file
+    weather_files = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
+    weather_file = File.join(weather_files, epw_file)
+    # Check if the weather file exists.  If it does continue as normal, otherwise try to dowload it from the
+    # canmet-energy/btap_weather repository
+    unless File.exist?(weather_file)
+      get_weather_file_from_repo(epw_file: epw_file)
+    end
     climate_zone = 'NECB HDD Method'
     # Fix EMS references. Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)
@@ -914,7 +929,7 @@ class NECB2011 < Standard
   # @param model [OpenStudio::Model::Model] an OpenStudio model
   # @param tbd_option [String] BTAP/TBD option
   #
-  # @return [Bool] true if successful, e.g. no errors, compliant if uprated
+  # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
 
   ##
   # (Optionally) uprates, then derates, envelope surface constructions due to
@@ -924,12 +939,12 @@ class NECB2011 < Standard
   #
   # @param model [OpenStudio::Model::Model] an OpenStudio model
   # @param tbd_option [String] BTAP/TBD option
-  # @param tbd_interpolate [Bool] true if TBD interpolates between costed Uo
+  # @param tbd_interpolate [Boolean] true if TBD interpolates between costed Uo
   # @param wall_U [Double] wall conductance in W/m2.K (nil by default)
   # @param floor_U [Double] floor conductance in W/m2.K (nil by default)
   # @param roof_U [Double] roof conductance in W/m2.K (nil by default)
   #
-  # @return [Bool] true if successful, e.g. no errors, compliant if uprated
+  # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
   def apply_thermal_bridging(model: nil,
                              tbd_option: 'none',
                              tbd_interpolate: false,
@@ -971,8 +986,7 @@ class NECB2011 < Standard
     true
   end
 
-
-  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
+  # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     raise('validation of model failed.') unless validate_initial_model(model)
 
@@ -1007,7 +1021,7 @@ class NECB2011 < Standard
   #
   # @param min_occ_pct [Double] the fractional value below which
   # the system will be considered unoccupied.
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
     # Set the system to night cycle
     air_loop_hvac.setNightCycleControlType('CycleOnAny')
@@ -1189,7 +1203,7 @@ class NECB2011 < Standard
     return true
   end
 
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def set_occ_sensor_spacetypes(model, space_type_map)
     building_type = 'Space Function'
     space_type_map.each do |space_type_name, space_names|
@@ -1847,7 +1861,7 @@ class NECB2011 < Standard
   # Some loads are governed by the standard, others are typical values
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_loads(model, lights_type, lights_scale)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
@@ -2183,6 +2197,127 @@ class NECB2011 < Standard
       end
     end
     return model
+  end
+
+  # This method handles looking for the epw_file in the https://github.com/canmet-energy/btap_weather repository.  It
+  # checks for the epw_file in the historical data first.  If it is not there then it looks in the future weather data.
+  # If it is not there either, it throws an error.
+  # epw_file (String):  The name of the epw file.  The different weather files all share the same name as the epw file,
+  #                     only the extension changes.
+  def get_weather_file_from_repo(epw_file:)
+    # Get just the weather file name without the extension
+    weather_loc = epw_file[0..-5]
+    # Get the url of the file containing the historical weather data file names in the repository and the repository
+    # folder containing the files
+    historic_weather_files_loc = @standards_data['constants']['historic_weather_file_list']['value'].to_s
+    historic_git_folder = @standards_data['constants']['historic_weather_folder_url']['value'].to_s
+    # Get the files from the repository
+    success_flag = download_and_save_file(weather_list_url: historic_weather_files_loc, weather_loc: weather_loc, git_folder: historic_git_folder)
+    return if success_flag == true
+    # If the file could not be found in the historical data look for it with the future weather data.
+    puts "Could not find #{epw_file} in historical weather data files, looking in future weather data files."
+    future_weather_files_loc = @standards_data['constants']['future_weather_file_list']['value'].to_s
+    future_git_folder = @standards_data['constants']['future_weather_folder_url']['value'].to_s
+    success_flag = download_and_save_file(weather_list_url: future_weather_files_loc, weather_loc: weather_loc, git_folder: future_git_folder)
+    if success_flag == true
+      # Rename the non-ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
+      # because the ASHRAE .ddy file includes sizing information not included in the regular .ddy file for future
+      # weather data files.  Unfortunately, openstudio-standards just looks for the regular .ddy file for sizing
+      # information which is why the switch is done.
+      puts "Renaming #{weather_loc}.ddy as #{weather_loc}_orig.ddy and #{weather_loc}_ASHRAE.ddy as #{weather_loc}.ddy."
+      puts "This is so that the design weather information in the #{weather_loc}_ASHRAE.ddy file is used."
+      weather_dir = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
+      orig_ddy_name = File.join(weather_dir, (weather_loc + ".ddy"))
+      ashrae_ddy_name = File.join(weather_dir, (weather_loc + "_ASHRAE.ddy"))
+      rev_ddy_name = File.join(weather_dir, (weather_loc + "_orig.ddy"))
+      FileUtils.cp(orig_ddy_name, rev_ddy_name)
+      FileUtils.cp(ashrae_ddy_name, orig_ddy_name)
+      return
+    end
+    raise("Could not locate the following file in the canmet/btap_weather repository: #{epw_file}.  Please check the spelling of the file or visit https://github.com/canmet-energy/btap_weather to see if the file exists.")
+  end
+
+  # This method actually looks for and downloads the zip file from the https://github.com/canmet-energy/btap_weather
+  # repository.  The repository contains json files containing the names of all of the weather data zip files of a given
+  # type (either historic weather files or future weather files).  This json is checked first to make sure that the file
+  # is in the repository.  If it is, the method downloads the zip file and extracts the data all to the
+  # openstudio-standards weather file folder.
+
+  # Arguments:
+  # weather_list_url (string): the web address of the json file containing the list of weather files on the repository
+  # weather_loc (string): the name of the epw file we are looking for without the .epw extension
+  # git_folder (string): the url of the folder containing the weather files.  As of 2023-07-07 this this is either the
+  #                      url of the historical weather data folder or the future weather data folder.
+  def download_and_save_file(weather_list_url:, weather_loc:, git_folder:)
+    status = false
+    attempt = 1
+    # Try to download the list of weather files 5 times, waiting 5 seconds between each attempt.
+    until attempt > 5
+      begin
+        puts "Beginning attempt #{attempt} to download #{weather_list_url}"
+        # Download the list of weather files on the repository
+        URI.open(weather_list_url) do |web_data|
+          # Convert the weather file list to an array
+          if web_data.size <= 100
+            raise("Could not read #{weather_list_url}!")
+          end
+          weather_files = (JSON.parse(web_data.read)).to_a
+          # Check to see if the requested weather file is on the list
+          zip_name = weather_files.find{ |weather_file| weather_file.match(weather_loc) }
+          # If the weather file is on the list proceed, otherwise report that it could not be found
+          unless zip_name.nil?
+            # Found the weather file on the list
+            status = true
+            # Define the full url of the weather zip file we want to download
+            save_file_url = git_folder + zip_name
+            # Define the local location of where the weather zip file will be saved
+            weather_dir = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
+            save_file = File.join(weather_dir, zip_name)
+            attemptb = 1
+            # Try to download the weather file up to 5 times, waiting 5 seconds between each attempt.
+            until attemptb > 5
+              begin
+                puts "Beginning attempt #{attemptb} to download #{save_file_url}"
+                # Download the weather zip file from the repository
+                URI.open(save_file_url) do |file_url|
+                  if file_url.size <= 100
+                    raise("Could not read #{save_file_url}!")
+                  end
+                  # Save the zip file in the /data/weather folder
+                  File.open(save_file, 'wb') { |f| f.write(file_url.read) }
+                  puts "Downloaded #{save_file_url} to #{save_file}"
+                  # Extract the individual weother files from the zip file
+                  Zip::File.open(save_file) do |zip_file|
+                    puts "Expanding #{save_file}"
+                    # Cycle through each file in the zip file
+                    zip_file.each do |entry|
+                      # Define the location of where the file will be saved locally
+                      curr_save_file = File.join(weather_dir, entry.name.to_s)
+                      puts "Extracting #{entry.name} to #{curr_save_file}"
+                      # entry.extract # This was required before but now it isn't.  I'm confused so am saving this comment to
+                      # remind me if there are ploblems later
+                      # Read the data from the file
+                      content = entry.get_input_stream.read
+                      # Save the data locally
+                      File.open(curr_save_file, 'wb') { |save_f| save_f.write(content) }
+                    end
+                  end
+                end
+                attemptb = 10
+              rescue
+                sleep(30)
+                attemptb += 1
+              end
+            end
+          end
+        end
+        attempt = 10
+      rescue
+        sleep(30)
+        attempt += 1
+      end
+    end
+    return status
   end
 
 end

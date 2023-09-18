@@ -5,20 +5,27 @@ class Standard
   # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
   # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
   #   options are 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
-  # @param model_occ_hr_start [Double] Starting hour of building occupancy
-  # @param model_occ_hr_end [Double] Ending hour of building occupancy
+  # @param use_zone_occupancy_for_control [Boolean] Set to true if radiant system is to use specific zone occupancy objects
+  #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
+  #   for all radiant zones. default to true.
+  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
+  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
+  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
+  # @param model_occ_hr_start [Double] Starting decimal hour of whole building occupancy
+  # @param model_occ_hr_end [Double] Ending decimal hour of whole building occupancy
   # @todo model_occ_hr_start and model_occ_hr_end from zone occupancy schedules
   # @param proportional_gain [Double] Proportional gain constant (recommended 0.3 or less).
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
   def model_add_radiant_proportional_controls(model, zone, radiant_loop,
                                               radiant_temperature_control_type: 'SurfaceFaceTemperature',
+                                              use_zone_occupancy_for_control: true,
+                                              occupied_percentage_threshold: 0.10,
                                               model_occ_hr_start: 6.0,
                                               model_occ_hr_end: 18.0,
                                               proportional_gain: 0.3,
                                               switch_over_time: 24.0)
 
-
-    zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
+    zone_name = ems_friendly_name(zone.name)
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
 
     if model.version < OpenStudio::VersionString.new('3.1.1')
@@ -35,8 +42,8 @@ class Standard
     # set radiant system temperature and setpoint control type
     unless ['surfacefacetemperature', 'surfaceinteriortemperature'].include? radiant_temperature_control_type.downcase
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
-        "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
-      radiant_temperature_control_type = "SurfaceFaceTemperature"
+                         "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
+      radiant_temperature_control_type = 'SurfaceFaceTemperature'
     end
 
     radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
@@ -46,19 +53,19 @@ class Standard
     ####
 
     # get existing switchover time schedule or create one if needed
-    sch_radiant_switchover = model.getScheduleRulesetByName("Radiant System Switchover")
+    sch_radiant_switchover = model.getScheduleRulesetByName('Radiant System Switchover')
     if sch_radiant_switchover.is_initialized
       sch_radiant_switchover = sch_radiant_switchover.get
     else
       sch_radiant_switchover = model_add_constant_schedule_ruleset(model,
                                                                    switch_over_time,
-                                                                   name = "Radiant System Switchover",
-                                                                   sch_type_limit: "Dimensionless")
+                                                                   name = 'Radiant System Switchover',
+                                                                   sch_type_limit: 'Dimensionless')
     end
 
     # set radiant system switchover schedule
     radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover.to_Schedule.get)
-    
+
     # Calculated active slab heating and cooling temperature setpoint.
     # radiant system cooling control actuator
     sch_radiant_clgsetp = model_add_constant_schedule_ruleset(model,
@@ -98,26 +105,9 @@ class Standard
                                                                           'Schedule Value')
     cmd_hsp_error.setName("#{zone_name}_cmd_hsp_error")
 
-
     #####
     # List of global variables used in EMS scripts
     ####
-
-    # Start of occupied time of zone. Valid from 1-24.
-    occ_hr_start = model.getEnergyManagementSystemGlobalVariableByName('occ_hr_start')
-    if occ_hr_start.is_initialized
-      occ_hr_start = occ_hr_start.get
-    else
-      occ_hr_start = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'occ_hr_start')
-    end
-
-    # End of occupied time of zone. Valid from 1-24.
-    occ_hr_end = model.getEnergyManagementSystemGlobalVariableByName('occ_hr_end')
-    if occ_hr_end.is_initialized
-      occ_hr_end = occ_hr_end.get
-    else
-      occ_hr_end = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'occ_hr_end')
-    end
 
     # Proportional  gain constant (recommended 0.3 or less).
     prp_k = model.getEnergyManagementSystemGlobalVariableByName('prp_k')
@@ -149,6 +139,14 @@ class Standard
       ctrl_temp_offset = ctrl_temp_offset.get
     else
       ctrl_temp_offset = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'ctrl_temp_offset')
+    end
+
+    # Hour where slab setpoint is to be changed
+    hour_of_slab_sp_change = model.getEnergyManagementSystemGlobalVariableByName('hour_of_slab_sp_change')
+    if hour_of_slab_sp_change.is_initialized
+      hour_of_slab_sp_change = hour_of_slab_sp_change.get
+    else
+      hour_of_slab_sp_change = OpenStudio::Model::EnergyManagementSystemGlobalVariable.new(model, 'hour_of_slab_sp_change')
     end
 
     #####
@@ -186,24 +184,24 @@ class Standard
     end
 
     # create new heating and cooling schedules to be used with all radiant systems
-    zone_htg_thermostat = model.getScheduleRulesetByName("Radiant System Heating Setpoint")
+    zone_htg_thermostat = model.getScheduleRulesetByName('Radiant System Heating Setpoint')
     if zone_htg_thermostat.is_initialized
       zone_htg_thermostat = zone_htg_thermostat.get
     else
       zone_htg_thermostat = model_add_constant_schedule_ruleset(model,
                                                                 20.0,
-                                                                name = "Radiant System Heating Setpoint",
-                                                                sch_type_limit: "Temperature")
+                                                                name = 'Radiant System Heating Setpoint',
+                                                                sch_type_limit: 'Temperature')
     end
 
-    zone_clg_thermostat = model.getScheduleRulesetByName("Radiant System Cooling Setpoint")
+    zone_clg_thermostat = model.getScheduleRulesetByName('Radiant System Cooling Setpoint')
     if zone_clg_thermostat.is_initialized
       zone_clg_thermostat = zone_clg_thermostat.get
     else
       zone_clg_thermostat = model_add_constant_schedule_ruleset(model,
                                                                 26.0,
-                                                                name = "Radiant System Cooling Setpoint",
-                                                                sch_type_limit: "Temperature")
+                                                                name = 'Radiant System Cooling Setpoint',
+                                                                sch_type_limit: 'Temperature')
     end
 
     # implement new heating and cooling schedules
@@ -230,13 +228,13 @@ class Standard
     zone_rad_heat_operation.setName("#{zone_name}_rad_heat_operation")
     zone_rad_heat_operation.setKeyName(coil_heating_radiant.to_StraightComponent.get.inletModelObject.get.name.get)
 
-    # Radiant system switchover delay time period schedule 
+    # Radiant system switchover delay time period schedule
     # used to determine if there is active hydronic cooling/heating in the radiant system.
-    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName("radiant_switch_over_time")
+    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName('radiant_switch_over_time')
 
     unless zone_rad_switch_over.is_initialized
       zone_rad_switch_over = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-      zone_rad_switch_over.setName("radiant_switch_over_time")
+      zone_rad_switch_over.setName('radiant_switch_over_time')
       zone_rad_switch_over.setKeyName(sch_radiant_switchover.name.get)
     end
 
@@ -250,29 +248,75 @@ class Standard
     zone_rad_heat_operation_trend.setName("#{zone_name}_rad_heat_operation_trend")
     zone_rad_heat_operation_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 48)
 
+    # use zone occupancy objects for radiant system control if selected
+    if use_zone_occupancy_for_control
+
+      # get annual occupancy schedule for zone
+      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone,
+                                                                 sch_name: "#{zone.name} Radiant System Occupied Schedule",
+                                                                 occupied_percentage_threshold: occupied_percentage_threshold)
+    else
+
+      occ_schedule_ruleset = model.getScheduleRulesetByName('Whole Building Radiant System Occupied Schedule')
+      if occ_schedule_ruleset.is_initialized
+        occ_schedule_ruleset = occ_schedule_ruleset.get
+      else
+        # create occupancy schedules
+        occ_schedule_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
+        occ_schedule_ruleset.setName('Whole Building Radiant System Occupied Schedule')
+
+        start_hour = model_occ_hr_end.to_i
+        start_minute = ((model_occ_hr_end % 1) * 60).to_i
+        end_hour = model_occ_hr_start.to_i
+        end_minute = ((model_occ_hr_start % 1) * 60).to_i
+
+        if end_hour > start_hour
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0) if end_hour < 24
+        elsif start_hour > end_hour
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, end_hour, end_minute, 0), 0.0)
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, start_hour, start_minute, 0), 1.0)
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.0) if start_hour < 24
+        else
+          occ_schedule_ruleset.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
+        end
+      end
+    end
+
+    # create ems sensor for zone occupied status
+    zone_occupied_status = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
+    zone_occupied_status.setName("#{zone_name}_occupied_status")
+    zone_occupied_status.setKeyName(occ_schedule_ruleset.name.get)
+
+    # Last 24 hours trend for zone occupied status
+    zone_occupied_status_trend = OpenStudio::Model::EnergyManagementSystemTrendVariable.new(model, zone_occupied_status)
+    zone_occupied_status_trend.setName("#{zone_name}_occupied_status_trend")
+    zone_occupied_status_trend.setNumberOfTimestepsToBeLogged(zone_timestep * 48)
+
     #####
     # List of EMS programs to implement the proportional control for the radiant system.
     ####
 
     # Initialize global constant values used in EMS programs.
-    set_constant_values_prg = model.getEnergyManagementSystemTrendVariableByName('Set_Constant_Values')
-    unless set_constant_values_prg.is_initialized
+    set_constant_values_prg_body = <<-EMS
+      SET prp_k              = #{proportional_gain},
+      SET ctrl_temp_offset   = 0.5,
+      SET upper_slab_sp_lim  = 29,
+      SET lower_slab_sp_lim  = 19,
+      SET hour_of_slab_sp_change = 18
+    EMS
+
+    set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Constant_Values')
+    if set_constant_values_prg.is_initialized
+      set_constant_values_prg = set_constant_values_prg.get
+    else
       set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
       set_constant_values_prg.setName('Set_Constant_Values')
-      set_constant_values_prg_body = <<-EMS
-        SET occ_hr_start       = #{model_occ_hr_start},
-        SET occ_hr_end         = #{model_occ_hr_end},
-        SET prp_k              = #{proportional_gain},
-        SET ctrl_temp_offset   = 0.5,
-        SET upper_slab_sp_lim  = 29,
-        SET lower_slab_sp_lim  = 19
-      EMS
       set_constant_values_prg.setBody(set_constant_values_prg_body)
     end
 
     # Initialize zone specific constant values used in EMS programs.
-    set_constant_zone_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    set_constant_zone_values_prg.setName("#{zone_name}_Set_Constant_Values")
     set_constant_zone_values_prg_body = <<-EMS
       SET #{zone_name}_max_ctrl_temp      = #{zone_name}_lower_comfort_limit,
       SET #{zone_name}_min_ctrl_temp      = #{zone_name}_upper_comfort_limit,
@@ -281,13 +325,16 @@ class Standard
       SET #{zone_name}_cmd_cold_water_ctrl = #{zone_name}_upper_comfort_limit,
       SET #{zone_name}_cmd_hot_water_ctrl  = #{zone_name}_lower_comfort_limit
     EMS
+
+    set_constant_zone_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    set_constant_zone_values_prg.setName("#{zone_name}_Set_Constant_Values")
     set_constant_zone_values_prg.setBody(set_constant_zone_values_prg_body)
 
     # Calculate maximum and minimum 'measured' controlled temperature in the zone
     calculate_minmax_ctrl_temp_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     calculate_minmax_ctrl_temp_prg.setName("#{zone_name}_Calculate_Extremes_In_Zone")
     calculate_minmax_ctrl_temp_prg_body = <<-EMS
-      IF ((CurrentTime >= occ_hr_start) && (CurrentTime <= occ_hr_end)),
+      IF (#{zone_name}_occupied_status == 1),
           IF #{zone_name}_ctrl_temperature > #{zone_name}_max_ctrl_temp,
               SET #{zone_name}_max_ctrl_temp = #{zone_name}_ctrl_temperature,
           ENDIF,
@@ -305,7 +352,7 @@ class Standard
     calculate_errors_from_comfort_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     calculate_errors_from_comfort_prg.setName("#{zone_name}_Calculate_Errors_From_Comfort")
     calculate_errors_from_comfort_prg_body = <<-EMS
-      IF (CurrentTime >= (occ_hr_end - ZoneTimeStep)) && (CurrentTime <= (occ_hr_end)),
+      IF (CurrentTime == (hour_of_slab_sp_change - ZoneTimeStep)),
           SET #{zone_name}_cmd_csp_error = (#{zone_name}_upper_comfort_limit - ctrl_temp_offset) - #{zone_name}_max_ctrl_temp,
           SET #{zone_name}_cmd_hsp_error = (#{zone_name}_lower_comfort_limit + ctrl_temp_offset) - #{zone_name}_min_ctrl_temp,
       ENDIF
@@ -318,9 +365,10 @@ class Standard
     calculate_slab_ctrl_setpoint_prg_body = <<-EMS
       SET #{zone_name}_cont_cool_oper = @TrendSum #{zone_name}_rad_cool_operation_trend radiant_switch_over_time/ZoneTimeStep,
       SET #{zone_name}_cont_heat_oper = @TrendSum #{zone_name}_rad_heat_operation_trend radiant_switch_over_time/ZoneTimeStep,
-      IF (#{zone_name}_cont_cool_oper > 0) && (CurrentTime == occ_hr_end),
+      SET #{zone_name}_occupied_hours = @TrendSum #{zone_name}_occupied_status_trend 24/ZoneTimeStep,
+      IF (#{zone_name}_cont_cool_oper > 0) && (#{zone_name}_occupied_hours > 0) && (CurrentTime == hour_of_slab_sp_change),
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_csp_error*prp_k),
-      ELSEIF (#{zone_name}_cont_heat_oper > 0) && (CurrentTime == occ_hr_end),
+      ELSEIF (#{zone_name}_cont_heat_oper > 0) && (#{zone_name}_occupied_hours > 0) && (CurrentTime == hour_of_slab_sp_change),
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl + (#{zone_name}_cmd_hsp_error*prp_k),
       ELSE,
         SET #{zone_name}_cmd_hot_water_ctrl = #{zone_name}_cmd_hot_water_ctrl,
@@ -338,9 +386,14 @@ class Standard
     # List of EMS program manager objects
     ####
 
-    initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Set_Constant_Values')
+    initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters')
     if initialize_constant_parameters.is_initialized
       initialize_constant_parameters = initialize_constant_parameters.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters.programs.collect { |prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters.setName('Initialize_Constant_Parameters')
@@ -348,9 +401,14 @@ class Standard
       initialize_constant_parameters.addProgram(set_constant_values_prg)
     end
 
-    initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Set_Constant_Values')
+    initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters_After_Warmup')
     if initialize_constant_parameters_after_warmup.is_initialized
       initialize_constant_parameters_after_warmup = initialize_constant_parameters_after_warmup.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters_after_warmup.programs.collect { |prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters_after_warmup = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters_after_warmup.setName('Initialize_Constant_Parameters_After_Warmup')
@@ -387,7 +445,6 @@ class Standard
     zone_max_ctrl_temp_output.setName("#{zone_name} Maximum occupied temperature in zone")
     zone_min_ctrl_temp_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_min_ctrl_temp)
     zone_min_ctrl_temp_output.setName("#{zone_name} Minimum occupied temperature in zone")
-
   end
 
   # Native EnergyPlus objects implement a control for a single thermal zone with a radiant system.

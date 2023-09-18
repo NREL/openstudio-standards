@@ -212,14 +212,29 @@ end
 def default_radiant_test_hash
   # example hash for an HVAC system type test
   # default optional arguments should match those in model_add_low_temp_radiant
-  default_hash = {radiant_type: 'floor',
+  default_hash = {two_pipe_system: false,
+                  two_pipe_control_strategy: 'outdoor_air_lockout',
+                  two_pipe_lockout_temperature: 65.0,
+                  plant_supply_water_temperature_control: false,
+                  plant_supply_water_temperature_control_strategy: 'outdoor_air',
+                  hwsp_at_oat_low: 120,
+                  hw_oat_low: 55,
+                  hwsp_at_oat_high: 80,
+                  hw_oat_high: 70,
+                  chwsp_at_oat_low: 70,
+                  chw_oat_low: 65,
+                  chwsp_at_oat_high: 55,
+                  chw_oat_high: 75,
+                  radiant_type: 'floor',
                   radiant_temperature_control_type: 'SurfaceFaceTemperature',
                   radiant_setpoint_control_type: 'ZeroFlowPower',
                   include_carpet: true,
                   carpet_thickness_in: 0.25,
-                  model_occ_hr_start: 6.0,
-                  model_occ_hr_end: 18.0,
                   control_strategy: 'proportional_control',
+                  use_zone_occupancy_for_control: true,
+                  occupied_percentage_threshold: 0.10,
+                  model_occ_hr_start: 6.0,
+                  model_occ_hr_end: 18.0,                  
                   proportional_gain: 0.3,
                   switch_over_time: 24.0,
                   radiant_availability_type: 'precool',
@@ -249,11 +264,26 @@ def model_radiant_system_test(arguments)
   unmet_hrs_clg = hash[:unmet_hrs_clg]
 
   # hash arguments defined in default_radiant_test_hash
+  two_pipe_system = hash[:two_pipe_system]
+  two_pipe_control_strategy = hash[:two_pipe_control_strategy]
+  two_pipe_lockout_temperature = hash[:two_pipe_lockout_temperature]
+  plant_supply_water_temperature_control = hash[:plant_supply_water_temperature_control]
+  plant_supply_water_temperature_control_strategy = hash[:plant_supply_water_temperature_control_strategy]
+  hwsp_at_oat_low = hash[:hwsp_at_oat_low]
+  hw_oat_low = hash[:hw_oat_low]
+  hwsp_at_oat_high = hash[:hwsp_at_oat_high]
+  hw_oat_high = hash[:hw_oat_high]
+  chwsp_at_oat_low = hash[:chwsp_at_oat_low]
+  chw_oat_low = hash[:chw_oat_low]
+  chwsp_at_oat_high = hash[:chwsp_at_oat_high]
+  chw_oat_high = hash[:chw_oat_high]
   radiant_type = hash[:radiant_type]
   radiant_temperature_control_type = hash[:radiant_temperature_control_type]
   radiant_setpoint_control_type = hash[:radiant_setpoint_control_type]
   include_carpet = hash[:include_carpet]
   carpet_thickness_in = hash[:carpet_thickness_in]
+  use_zone_occupancy_for_control = hash[:use_zone_occupancy_for_control]
+  occupied_percentage_threshold = hash[:occupied_percentage_threshold]
   model_occ_hr_start = hash[:model_occ_hr_start]
   model_occ_hr_end = hash[:model_occ_hr_end]
   control_strategy = hash[:control_strategy]
@@ -319,11 +349,26 @@ def model_radiant_system_test(arguments)
                                                         zones,
                                                         hot_water_loop,
                                                         chilled_water_loop,
+                                                        two_pipe_system: two_pipe_system,
+                                                        two_pipe_control_strategy: two_pipe_control_strategy,
+                                                        two_pipe_lockout_temperature: two_pipe_lockout_temperature,
+                                                        plant_supply_water_temperature_control: plant_supply_water_temperature_control,
+                                                        plant_supply_water_temperature_control_strategy: plant_supply_water_temperature_control_strategy,
+                                                        hwsp_at_oat_low: hwsp_at_oat_low,
+                                                        hw_oat_low: hw_oat_low,
+                                                        hwsp_at_oat_high: hwsp_at_oat_high,
+                                                        hw_oat_high: hw_oat_high,
+                                                        chwsp_at_oat_low: chwsp_at_oat_low,
+                                                        chw_oat_low: chw_oat_low,
+                                                        chwsp_at_oat_high: chwsp_at_oat_high,
+                                                        chw_oat_high: chw_oat_high,
                                                         radiant_type: radiant_type,
                                                         radiant_temperature_control_type: radiant_temperature_control_type,
                                                         radiant_setpoint_control_type: radiant_setpoint_control_type,
                                                         include_carpet: include_carpet,
                                                         carpet_thickness_in: carpet_thickness_in,
+                                                        use_zone_occupancy_for_control: use_zone_occupancy_for_control,
+                                                        occupied_percentage_threshold: occupied_percentage_threshold,
                                                         model_occ_hr_start: model_occ_hr_start,
                                                         model_occ_hr_end: model_occ_hr_end,
                                                         control_strategy: control_strategy,

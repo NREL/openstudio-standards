@@ -23,31 +23,11 @@ class ASHRAE901PRM < Standard
     return search_criteria
   end
 
-  # find furnace capacity
-  #
-  # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
-  # @return [Double] capacity in W to be used for find object
-  def coil_heating_gas_find_capacity(coil_heating_gas)
-    # Get the coil capacity
-    capacity_w = nil
-    if coil_heating_gas.nominalCapacity.is_initialized
-      capacity_w = coil_heating_gas.nominalCapacity.get
-    elsif coil_heating_gas.autosizedNominalCapacity.is_initialized
-      capacity_w = coil_heating_gas.autosizedNominalCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingGas', "For #{coil_heating_gas.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
-    end
-
-    return capacity_w
-  end
-
   # Finds lookup object in standards and return minimum thermal efficiency
   #
   # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
   # @param sys_type [String] HVAC system type
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] minimum thermal efficiency
   def coil_heating_gas_standard_minimum_thermal_efficiency(coil_heating_gas, sys_type, rename = false)
     # Get the coil properties

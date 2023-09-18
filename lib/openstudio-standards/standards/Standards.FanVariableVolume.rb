@@ -17,7 +17,7 @@ class Standard
   #   Multi Zone VAV with VSD and Fixed SP Setpoint,
   #   Multi Zone VAV with VSD and Static Pressure Reset,
   #   Single Zone VAV Fan
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fan_variable_volume_set_control_type(fan_variable_volume, control_type)
     # Determine the coefficients
     coeff_a = nil
@@ -113,7 +113,7 @@ class Standard
   # Determines whether there is a requirement to have a VSD or some other method to reduce fan power at low part load ratios.
   #
   # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def fan_variable_volume_part_load_fan_power_limitation?(fan_variable_volume)
     part_load_control_required = false
 
