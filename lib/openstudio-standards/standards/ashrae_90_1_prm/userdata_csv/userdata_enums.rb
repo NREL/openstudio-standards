@@ -42,6 +42,45 @@ class UserDataHVACBldgType < UserData
   UNCONDITIONED = 'unconditioned'.freeze
 end
 
+class UserDataSHWBldgType < UserData
+  WORKSHOP = 'Workshop'.freeze
+  WAREHOUSE = 'Warehouse'.freeze
+  TRANSPORTATION = 'Transportation'.freeze
+  TOWN_HALL = 'Town hall'.freeze
+  SPORT_ARENA = 'Sport arena'.freeze
+  SCHOOL_UNIVERSITY = 'School/university'.freeze
+  RETAIL = 'Retail'.freeze
+  RELIGIOUS_FACILITY = 'Religious facility'.freeze
+  POST_OFFICE = 'Post office'.freeze
+  POLICE_STATION = 'Police station'.freeze
+  PERFORMING_ARTS_THEATER = 'Performing arts theater'.freeze
+  PENITENTIARY = 'Penitentiary'.freeze
+  PARKING_GARAGE = 'Parking garage'.freeze
+  OFFICE = 'Office'.freeze
+  MUSEUM = 'Museum'.freeze
+  MULTIFAMILY = 'Multifamily'.freeze
+  MOTION_PICTURE_THEATHER = 'Motion picture theater'.freeze
+  MOTEL = 'Motel'.freeze
+  MANUFACTURING_FACILITY = 'Manufacturing_facility'.freeze
+  LIBRARY = 'Library'.freeze
+  HOTEL = 'Hotel'.freeze
+  HOSPITAL_OUTPATIENT_SURGERY = 'Hospital and outpatient surgery center'.freeze
+  HEALTH_CARE_CLINIC = 'Health-care clinic'.freeze
+  GYMNASIUM = 'Gymnasium'.freeze
+  GROCERY_STORE = 'Grocery store'.freeze
+  FIRE_STATION = 'Fire station'.freeze
+  EXERCISE_CENTER = 'Exercise center'.freeze
+  DORMITORY = 'Domitory'.freeze
+  DINING_FAMILY = 'Dining:Family'.freeze
+  DINING_CAFETERIA = 'Dining: Cafeteria/fast food'.freeze
+  DINING_BAR = 'Dining: Bar lounge/leisure'.freeze
+  COURTHOUSE = 'Courthouse'.freeze
+  CONVENTION_CENTER = 'Convention center'.freeze
+  CONVENTION_STORE = 'Convention store'.freeze
+  AUTOMOTIVE_FACILITY = 'Automotive facility'.freeze
+  ALL_OTHER = 'All others'.freeze
+end
+
 class UserDataNonTradableLightsCategory < UserData
   GENERAL = 'nontradeable_general'.freeze
   BUILDING_FACADE_AREA = 'building_facades_area'.freeze
@@ -75,7 +114,7 @@ class UserDataWWRBldgType < UserData
 end
 
 class UserDataFiles < UserData
-  AIRLOOP_HVAC = 'userdata_airloop_hvac.csv'.freeze
+  AIRLOOP_HVAC = 'userdata_airloop_hvac'.freeze
   AIRLOOP_HVAC_DOAS = 'userdata_airloop_hvac_doas'.freeze
   BUILDING = 'userdata_building'.freeze
   DESIGN_SPECIFICATION_OUTDOOR_AIR = 'userdata_design_specification_outdoor_air'.freeze
@@ -88,7 +127,7 @@ class UserDataFiles < UserData
   THERMAL_ZONE = 'userdata_thermal_zone'.freeze
   WATERUSE_CONNECTIONS = 'userdata_wateruse_connections'.freeze
   WATERUSE_EQUIPMENT = 'userdata_wateruse_equipment'.freeze
-  WATERUSE_EQUIPMENT_DEFINITION = 'userdata_equipment_definition'.freeze
+  WATERUSE_EQUIPMENT_DEFINITION = 'userdata_wateruse_equipment_definition'.freeze
   ZONE_HVAC = 'userdata_zone_hvac'.freeze
   ZONE_INFILTRATION = 'userdata_zone_infiltration'.freeze
 end

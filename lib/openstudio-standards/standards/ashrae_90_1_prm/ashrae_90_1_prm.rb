@@ -30,7 +30,7 @@ class ASHRAE901PRM < Standard
       json_rows = []
       csv_file_name = File.basename(csv_full_name, File.extname(csv_full_name))
       unless UserDataFiles.matched_any?(csv_file_name)
-        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "user data file: #{csv_full_name} is not a valid file name. See the full list of acceptable file names in https://pnnl.github.io/BEM-for-PRM/user_guide/add_compliance_data/")
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "user data file: #{csv_file_name} is not a valid file name. See the full list of acceptable file names in https://pnnl.github.io/BEM-for-PRM/user_guide/add_compliance_data/")
       end
       json_objs[csv_file_name] = json_rows
     end
@@ -125,6 +125,8 @@ class ASHRAE901PRM < Standard
   def user_data_validation(object_name, user_data)
     # 1. Check user_spacetype and user_space LPD total % = 1.0
     case object_name
+    when UserDataFiles::BUILDING
+      return check_userdata_building(object_name, user_data)
     when UserDataFiles::SPACE, UserDataFiles::SPACETYPE
       return check_userdata_space_and_spacetype(object_name, user_data)
     when UserDataFiles::ELECTRIC_EQUIPMENT
@@ -144,6 +146,42 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  def check_userdata_building(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |user_building|
+      name = prm_read_user_data(user_building, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: building name is missing or empty. Building user data has not validated.")
+        return false
+      end
+
+      building_type_for_hvac = prm_read_user_data(user_building, 'building_type_for_hvac')
+      unless building_type_for_hvac.nil? || UserDataHVACBldgType.matched_any?(building_type_for_hvac)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Unknown building type #{building_type_for_hvac} for prescribed HVAC system type. For full list of the building type, see: https://pnnl.github.io/BEM-for-PRM/user_guide/prm_api_ref/baseline_generation_api/#--default_hvac_bldg_type")
+        userdata_valid = false
+      end
+
+      building_type_for_wwr = prm_read_user_data(user_building, 'building_type_for_wwr')
+      unless building_type_for_wwr.nil? || UserDataWWRBldgType.matched_any?(building_type_for_wwr)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Unknown building type #{building_type_for_hvac} for prescribed window-to-wall ratio. For full list of the building type, see: https://pnnl.github.io/BEM-for-PRM/user_guide/prm_api_ref/baseline_generation_api/#--default_wwr_bldg_type")
+        userdata_valid = false
+      end
+
+      building_type_for_swh = prm_read_user_data(user_building, 'building_type_for_swh')
+      unless building_type_for_swh.nil? || UserDataSHWBldgType.matched_any?(building_type_for_swh)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Unknown building type #{building_type_for_hvac} for prescribed service hot water system. For full list of the building type, see: https://pnnl.github.io/BEM-for-PRM/user_guide/prm_api_ref/baseline_generation_api/#--default_swh_bldg_type")
+        userdata_valid = false
+      end
+
+      is_exempt_from_rotations = prm_read_user_data(user_building, 'is_exempt_from_rotations')
+      unless is_exempt_from_rotations.nil? || UserDataBoolean.matched_any?(is_exempt_from_rotations)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Building name #{name}, is_exempt_from_rotations shall be either True or False. Got #{is_exempt_from_rotations}.")
+        userdata_valid = false
+      end
+    end
+    return userdata_valid
+  end
+
   def check_userdata_thermal_zone(object_name, user_data)
     userdata_valid = true
     user_data.each do |user_thermal_zone|
@@ -152,8 +190,8 @@ class ASHRAE901PRM < Standard
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: thermal zone name is missing or empty. Thermal zone user data has not validated.")
         return false
       end
-      has_health_safety_night_cycle_exception = prm_read_user_data(user_thermal_zone, 'has_health_safety_night_cycle_exception')
-      unless UserDataBoolean.matched_any?(has_health_safety_night_cycle_exception)
+      has_health_safety_night_cycle_exception = prm_read_user_data(user_thermal_zone, 'has_health_safety_night_cycle_exception', UserDataBoolean::FALSE)
+      unless has_health_safety_night_cycle_exception.nil? || UserDataBoolean.matched_any?(has_health_safety_night_cycle_exception)
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Thermal zone name #{name}, has_health_safety_night_cycle_exception shall be either True or False. Got #{has_health_safety_night_cycle_exception}")
         userdata_valid = false
       end
@@ -178,15 +216,21 @@ class ASHRAE901PRM < Standard
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_airloop, info_key)
-          unless UserDataBoolean.matched_any?(has_fan_power_credit)
+          unless has_fan_power_credit.nil? || UserDataBoolean.matched_any?(has_fan_power_credit)
             OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be either True or False. Got #{has_fan_power_credit}.")
+            userdata_valid = false
+          end
+        elsif info_key.include?('fan_power_credit')
+          fan_power_credit = prm_read_user_data(user_airloop, info_key)
+          unless fan_power_credit.nil? || Float(fan_power_credit, exception: false)
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be a numeric value. Got #{fan_power_credit}.")
             userdata_valid = false
           end
         end
         # Exhaust air energy recovery
         if info_key.include?('exhaust_energy_recovery_exception')
           exhaust_energy_recovery_exception = prm_read_user_data(user_airloop, info_key)
-          unless UserDataBoolean.matched_any?(exhaust_energy_recovery_exception)
+          unless exhaust_energy_recovery_exception.nil? || UserDataBoolean.matched_any?(exhaust_energy_recovery_exception)
             OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be either True or False. Got #{has_fan_power_credit}.")
             userdata_valid = false
           end
@@ -208,6 +252,30 @@ class ASHRAE901PRM < Standard
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: air loop name is missing or empty. Air loop user data has not validated.")
         return false
       end
+
+      outdoor_airflow_per_person = prm_read_user_data(user_oa, 'outdoor_airflow_per_person')
+      unless outdoor_airflow_per_person.nil? || Float(outdoor_airflow_per_person, exception: false)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Design outdoor air name #{name}, outdoor_airflow_per_person shall be a numeric value. Got #{outdoor_airflow_per_person}.")
+        userdata_valid = false
+      end
+
+      outdoor_airflow_per_floor_area = prm_read_user_data(user_oa, 'outdoor_airflow_per_floor_area')
+      unless outdoor_airflow_per_floor_area.nil? || Float(outdoor_airflow_per_floor_area, exception: false)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Design outdoor air name #{name}, outdoor_airflow_per_floor_area shall be a numeric value. Got #{outdoor_airflow_per_floor_area}.")
+        userdata_valid = false
+      end
+
+      outdoor_air_flowrate = prm_read_user_data(user_oa, 'outdoor_air_flowrate')
+      unless outdoor_air_flowrate.nil? || Float(outdoor_air_flowrate, exception: false)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Design outdoor air name #{name}, outdoor_air_flowrate shall be a numeric value. Got #{outdoor_air_flowrate}.")
+        userdata_valid = false
+      end
+
+      outdoor_air_flow_air_changes_per_hour = prm_read_user_data(user_oa, 'outdoor_air_flow_air_changes_per_hour')
+      unless outdoor_air_flow_air_changes_per_hour.nil? || Float(outdoor_air_flow_air_changes_per_hour, exception: false)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Design outdoor air name #{name}, outdoor_air_flow_air_changes_per_hour shall be a numeric value. Got #{outdoor_air_flow_air_changes_per_hour}.")
+        userdata_valid = false
+      end
     end
     return userdata_valid
   end
@@ -225,14 +293,14 @@ class ASHRAE901PRM < Standard
         return false
       end
       # gas phase air cleaning is system base - add proposed hvac system name to zones
-      economizer_exception_for_gas_phase_air_cleaning = prm_read_user_data(user_airloop, 'economizer_exception_for_gas_phase_air_cleaning')
-      unless UserDataBoolean.matched_any?(economizer_exception_for_gas_phase_air_cleaning)
+      economizer_exception_for_gas_phase_air_cleaning = prm_read_user_data(user_airloop, 'economizer_exception_for_gas_phase_air_cleaning', UserDataBoolean::FALSE)
+      unless economizer_exception_for_gas_phase_air_cleaning.nil? || UserDataBoolean.matched_any?(economizer_exception_for_gas_phase_air_cleaning)
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, economizer_exception_for_gas_phase_air_cleaning shall be either True or False. Got #{economizer_exception_for_gas_phase_air_cleaning}")
         userdata_valid = false
       end
 
-      economizer_exception_for_open_refrigerated_cases = prm_read_user_data(user_airloop, 'economizer_exception_for_open_refrigerated_cases')
-      unless UserDataBoolean.matched_any?(economizer_exception_for_open_refrigerated_cases)
+      economizer_exception_for_open_refrigerated_cases = prm_read_user_data(user_airloop, 'economizer_exception_for_open_refrigerated_cases', UserDataBoolean::FALSE)
+      unless economizer_exception_for_open_refrigerated_cases.nil? || UserDataBoolean.matched_any?(economizer_exception_for_open_refrigerated_cases)
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, economizer_exception_for_open_refrigerated_cases shall be either True or False. Got #{economizer_exception_for_open_refrigerated_cases}")
         userdata_valid = false
       end
@@ -242,15 +310,21 @@ class ASHRAE901PRM < Standard
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_airloop, info_key)
-          unless UserDataBoolean.matched_any?(has_fan_power_credit)
+          unless has_fan_power_credit.nil? || UserDataBoolean.matched_any?(has_fan_power_credit)
             OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be either True or False. Got #{has_fan_power_credit}.")
+            userdata_valid = false
+          end
+        elsif info_key.include?('fan_power_credit')
+          fan_power_credit = prm_read_user_data(user_airloop, info_key)
+          unless fan_power_credit.nil? || Float(fan_power_credit, exception: false)
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be a numeric value. Got #{fan_power_credit}.")
             userdata_valid = false
           end
         end
         # Exhaust air energy recovery
         if info_key.include?('exhaust_energy_recovery_exception')
           exhaust_energy_recovery_exception = prm_read_user_data(user_airloop, info_key)
-          unless UserDataBoolean.matched_any?(exhaust_energy_recovery_exception)
+          unless exhaust_energy_recovery_exception.nil? || UserDataBoolean.matched_any?(exhaust_energy_recovery_exception)
             OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be either True or False. Got #{has_fan_power_credit}.")
             userdata_valid = false
           end
@@ -297,74 +371,62 @@ class ASHRAE901PRM < Standard
   def check_userdata_electric_equipment(object_name, user_data)
     userdata_valid = true
     user_data.each do |electric_row|
-      if electric_row['motor_horsepower'].nil? || electric_row['motor_efficiency'].nil? || electric_row['motor_is_exempt'].nil?
-        unless electric_row['motor_horsepower'].nil? && electric_row['motor_efficiency'].nil? && electric_row['motor_is_exempt'].nil?
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: One or more motor data are not available for electric equipment #{electric_row['name']}. motor_horsepower: #{electric_row['motor_horsepower']}; motor_efficiency: #{electric_row['motor_efficiency']}; motor_is_exempt: #{electric_row['motor_is_exempt']}")
-        end
-      else
-        # check for data type
-        if prm_read_user_data(electric_row, 'motor_horsepower', 0.0) == 0.0
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Motor #{electric_row['name']}'s horsepower data is either 0.0 or unavailable. Check the inputs.")
-        end
-        if prm_read_user_data(electric_row, 'motor_efficiency', 0.0) == 0.0
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Motor #{electric_row['name']}'s efficiency data is either 0.0 or unavailable. Check the inputs.")
-        end
-        motor_is_exempt = prm_read_user_data(electric_row, 'motor_is_exempt')
-        if UserDataBoolean.matched_any?(motor_is_exempt)
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Motor #{electric_row['name']} is exempt data should be either Yes or No. But get data #{electric_row['motor_is_exempt']}")
-        end
+      # check for data type
+      # unless fan_power_credit.nil? || Float(fan_power_credit, exception: false)
+      motor_horsepower = prm_read_user_data(electric_row, 'motor_horsepower')
+      unless motor_horsepower.nil? || Float(motor_horsepower, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Motor #{electric_row['name']}'s horsepower data is either 0.0 or unavailable. Check the inputs.")
+      end
+      motor_efficiency = prm_read_user_data(electric_row, 'motor_efficiency')
+      unless motor_efficiency.nil? || Float(motor_efficiency, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Motor #{electric_row['name']}'s efficiency data is either 0.0 or unavailable. Check the inputs.")
+      end
+      motor_is_exempt = prm_read_user_data(electric_row, 'motor_is_exempt')
+      unless motor_is_exempt.nil? || UserDataBoolean.matched_any?(motor_is_exempt)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Motor #{electric_row['name']} is exempt data should be either Yes or No. But get data #{electric_row['motor_is_exempt']}")
       end
       # We may need to do the same for refrigeration and elevator?
       # Check elevator
-      if electric_row['elevator_weight_of_car'].nil? || electric_row['elevator_rated_load'].nil? || electric_row['elevator_counter_weight_of_car'].nil? || electric_row['elevator_speed_of_car'].nil? || electric_row['elevator_number_of_stories'].nil?
-        if electric_row['elevator_weight_of_car'].nil? && electric_row['elevator_rated_load'].nil? && electric_row['elevator_counter_weight_of_car'].nil? && electric_row['elevator_speed_of_car'].nil? && electric_row['elevator_number_of_stories'].nil?
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: One or more elevator data is not available for electric equipment #{electric_row['name']}. elevator_weight_of_car: #{electric_row['elevator_weight_of_car']}; elevator_rated_load: #{electric_row['elevator_rated_load']}; elevator_counter_weight_of_car: #{electric_row['elevator_counter_weight_of_car']}; elevator_speed_of_car: #{electric_row['elevator_speed_of_car']}; elevator_number_of_stories: #{electric_row['elevator_number_of_stories']}")
-        end
-      else
-        # check for data type
-        if prm_read_user_data(electric_row, 'elevator_weight_of_car', '0.0').to_f == 0.0
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s weight of car data is either 0.0 or unavailable. Check the inputs.")
-        end
-        if prm_read_user_data(electric_row, 'elevator_rated_load', '0.0').to_f == 0.0
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s rated load data is either 0.0 or unavailable. Check the inputs.")
-        end
-        if prm_read_user_data(electric_row, 'elevator_counter_weight_of_car', '0.0').to_f == 0.0
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s counter weight of car data is either 0.0 or unavailable. Check the inputs.")
-        end
-        if prm_read_user_data(electric_row, 'elevator_speed_of_car', '0.0').to_f == 0.0
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s speed of car data is either 0.0 or unavailable. Check the inputs.")
-        end
-        if prm_read_user_data(electric_row, 'elevator_number_of_stories', '0').to_i > 1
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s serves number of stories data is either smaller or equal to 1 or unavailable. Check the inputs.")
-        end
+      elevator_weight_of_car = prm_read_user_data(electric_row, 'elevator_weight_of_car')
+      unless elevator_weight_of_car.nil? || Float(elevator_weight_of_car, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s weight of car data is either 0.0 or unavailable. Check the inputs.")
+      end
+      elevator_rated_load = prm_read_user_data(electric_row, 'elevator_rated_load')
+      unless elevator_rated_load.nil? || Float(elevator_rated_load, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s rated load data is either 0.0 or unavailable. Check the inputs.")
+      end
+      elevator_counter_weight_of_car = prm_read_user_data(electric_row, 'elevator_counter_weight_of_car')
+      unless elevator_counter_weight_of_car.nil? || Float(elevator_counter_weight_of_car, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s counter weight of car data is either 0.0 or unavailable. Check the inputs.")
+      end
+      elevator_speed_of_car = prm_read_user_data(electric_row, 'elevator_speed_of_car')
+      unless elevator_speed_of_car.nil? || Float(elevator_speed_of_car, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s speed of car data is either 0.0 or unavailable. Check the inputs.")
+      end
+      elevator_number_of_stories = prm_read_user_data(electric_row, 'elevator_number_of_stories')
+      unless elevator_number_of_stories.nil? || Integer(elevator_number_of_stories, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Elevator #{electric_row['name']}'s serves number of stories data is either smaller or equal to 1 or unavailable. Check the inputs.")
       end
       # Check refrigeration
-      if electric_row['refrigeration_equipment_class'].nil? || electric_row['refrigeration_equipment_volume'].nil? || electric_row['refrigeration_equipment_total_display_area'].nil?
-        if electric_row['refrigeration_equipment_class'].nil? && electric_row['refrigeration_equipment_volume'].nil? && electric_row['refrigeration_equipment_total_display_area'].nil?
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: One or more refrigeration data is not available for electric equipment #{electric_row['name']}. refrigeration_equipment_class: #{electric_row['refrigeration_equipment_class']}; refrigeration_equipment_volume: #{electric_row['refrigeration_equipment_volume']}; refrigeration_equipment_total_display_area: #{electric_row['refrigeration_equipment_total_display_area']}")
-        end
-      else
-        # Check data type
-        # The equipment class shall be verified at the implementation level
-        if prm_read_user_data(electric_row, 'refrigeration_equipment_volume', '0.0').to_f == 0.0
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Refrigeration #{electric_row['name']}'s equipment volume data is either 0.0 or unavailable. Check the inputs.")
-        end
-        if prm_read_user_data(electric_row, 'refrigeration_equipment_total_display_area', '0.0').to_f == 0.0
-          userdata_valid = false
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Refrigeration #{electric_row['name']}'s total display area data is either 0.0 or unavailable. Check the inputs.")
-        end
+      # Check data type
+      # The equipment class shall be verified at the implementation level
+      refrigeration_equipment_volume = prm_read_user_data(electric_row, 'refrigeration_equipment_volume')
+      unless refrigeration_equipment_volume.nil? || Float(refrigeration_equipment_volume, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Refrigeration #{electric_row['name']}'s equipment volume data is either 0.0 or unavailable. Check the inputs.")
+      end
+      refrigeration_equipment_total_display_area = prm_read_user_data(electric_row, 'refrigeration_equipment_total_display_area')
+      unless refrigeration_equipment_total_display_area.nil? || Float(refrigeration_equipment_total_display_area, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Refrigeration #{electric_row['name']}'s total display area data is either 0.0 or unavailable. Check the inputs.")
       end
     end
     return userdata_valid
@@ -379,8 +441,8 @@ class ASHRAE901PRM < Standard
   def check_userdata_space_and_spacetype(object_name, user_data)
     userdata_valid = true
     user_data.each do |row|
-      building_type_for_wwr = prm_read_user_data(row, 'building_type_for_wwr', nil)
-      if building_type_for_wwr && !UserDataWWRBldgType.matched_any?(building_type_for_wwr)
+      building_type_for_wwr = prm_read_user_data(row, 'building_type_for_wwr')
+      unless building_type_for_wwr.nil? || UserDataWWRBldgType.matched_any?(building_type_for_wwr)
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Unknown building type #{building_type_for_wwr} for prescribed window to wall ratio. For full list of the building type, see: https://pnnl.github.io/BEM-for-PRM/user_guide/prm_api_ref/baseline_generation_api/#--default_wwr_bldg_type")
         userdata_valid = false
       end

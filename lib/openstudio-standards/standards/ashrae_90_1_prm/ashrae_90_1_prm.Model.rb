@@ -1512,22 +1512,22 @@ class ASHRAE901PRM < Standard
         user_data_plug_load.each do |user_plug_load|
           next unless UserData.compare(elevator_equipment.name.get, user_plug_load['name'])
 
-          num_lifts = prm_read_user_data(user_plug_load, 'elevator_number_of_lifts', 0).to_i
+          num_lifts = prm_read_user_data(user_plug_load, 'elevator_number_of_lifts', '0').to_i
           if num_lifts > 0
             elevator_equipment.additionalProperties.setFeature('elevator_number_of_lifts', num_lifts)
-            number_of_levels = prm_read_user_data(user_plug_load, 'elevator_number_of_stories', 0).to_i
+            number_of_levels = prm_read_user_data(user_plug_load, 'elevator_number_of_stories', '0').to_i
             elevator_equipment.additionalProperties.setFeature('elevator_number_of_stories', number_of_levels)
-            elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_weight_of_car', 0.0).to_f
+            elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_weight_of_car', '0.0').to_f
             elevator_equipment.additionalProperties.setFeature('elevator_weight_of_car', elevator_weight_of_car)
-            elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_counter_weight_of_car', 0.0).to_f
+            elevator_weight_of_car = prm_read_user_data(user_plug_load, 'elevator_counter_weight_of_car', '0.0').to_f
             elevator_equipment.additionalProperties.setFeature('elevator_counter_weight_of_car', elevator_weight_of_car)
-            elevator_rated_load = prm_read_user_data(user_plug_load, 'elevator_rated_load', 0.0).to_f
+            elevator_rated_load = prm_read_user_data(user_plug_load, 'elevator_rated_load', '0.0').to_f
             elevator_equipment.additionalProperties.setFeature('elevator_rated_load', elevator_rated_load)
-            elevator_speed_of_car = prm_read_user_data(user_plug_load, 'elevator_speed_of_car', 0.0).to_f
+            elevator_speed_of_car = prm_read_user_data(user_plug_load, 'elevator_speed_of_car', '0.0').to_f
             elevator_equipment.additionalProperties.setFeature('elevator_speed_of_car', elevator_speed_of_car)
-            elevator_ventilation_cfm = prm_read_user_data(user_plug_load, 'elevator_ventilation_cfm', 0.0).to_f
+            elevator_ventilation_cfm = prm_read_user_data(user_plug_load, 'elevator_ventilation_cfm', '0.0').to_f
             elevator_equipment.additionalProperties.setFeature('elevator_ventilation_cfm', elevator_ventilation_cfm)
-            elevator_area_ft2 = prm_read_user_data(user_plug_load, 'elevator_area_ft2', 0.0).to_f
+            elevator_area_ft2 = prm_read_user_data(user_plug_load, 'elevator_area_ft2', '0.0').to_f
             elevator_equipment.additionalProperties.setFeature('elevator_area_ft2', elevator_area_ft2)
           end
           user_data_updated = true
@@ -1653,7 +1653,7 @@ class ASHRAE901PRM < Standard
               air_loop_doas.airLoops.each do |air_loop|
                 air_loop.thermalZones.each do |thermal_zone|
                   current_value = get_additional_property_as_double(thermal_zone, info_key, 0.0)
-                  thermal_zone.additionalProperties.setFeature(info_key, current_value + user_airloop_doas[info_key])
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + prm_read_user_data(user_airloop_doas, info_key, '0.0').to_f)
                 end
               end
             end
@@ -2043,7 +2043,8 @@ class ASHRAE901PRM < Standard
         OpenStudio.logFree(OpenStudio::Error,
                            'prm.log',
                            "User data in the userdata_building.csv indicate building #{building_name} is exempted from rotation. Update the run to a single orientation PRM generation.")
-        run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations'].casecmp('No') == 0
+        # TODO need to use user data enums later.
+        run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations'].casecmp('False') == 0
       end
     end
     return run_orients_flag
