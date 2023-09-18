@@ -4668,10 +4668,6 @@ class Standard
   #   options are 'ZeroFlowPower', 'HalfFlowPower'
   # @param include_carpet [Boolean] boolean to include thin carpet tile over radiant slab, default to true
   # @param carpet_thickness_in [Double] thickness of carpet in inches
-  # @param model_occ_hr_start [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Starting hour of building occupancy.
-  # @param model_occ_hr_end [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
-  #   Ending hour of building occupancy.
   # @param control_strategy [String] name of control strategy.  Options are 'proportional_control', 'oa_based_control',
   #   'constant_control', and 'none'.
   #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
@@ -5131,40 +5127,41 @@ class Standard
       rename_plant_loop_nodes(model)
 
       # set radiant loop controls
-      unless control_strategy.downcase == 'none'
-        case control_strategy.downcase
-        when 'proportional_control'
-          # slab setpoint varies based on previous day zone conditions
-          model_add_radiant_proportional_controls(model, zone, radiant_loop,
-                                                  radiant_temperature_control_type: radiant_temperature_control_type,
-                                                  use_zone_occupancy_for_control: use_zone_occupancy_for_control,
-                                                  occupied_percentage_threshold: occupied_percentage_threshold,
-                                                  model_occ_hr_start: model_occ_hr_start,
-                                                  model_occ_hr_end: model_occ_hr_end,
-                                                  proportional_gain: proportional_gain,
-                                                  switch_over_time: switch_over_time)
-        when 'oa_based_control'
-          # slab setpoint varies based on outdoor weather
-          model_add_radiant_basic_controls(model, zone, radiant_loop,
-                                           radiant_temperature_control_type: radiant_temperature_control_type,
-                                           slab_setpoint_oa_control: true,
-                                           switch_over_time: switch_over_time,
-                                           slab_sp_at_oat_low: slab_sp_at_oat_low,
-                                           slab_oat_low: slab_oat_low,
-                                           slab_sp_at_oat_high: slab_sp_at_oat_high,
-                                           slab_oat_high: slab_oat_high)
-        when 'constant_control'
-          # constant slab setpoint control
-          model_add_radiant_basic_controls(model, zone, radiant_loop,
-                                           radiant_temperature_control_type: radiant_temperature_control_type,
-                                           slab_setpoint_oa_control: false,
-                                           switch_over_time: switch_over_time,
-                                           slab_sp_at_oat_low: slab_sp_at_oat_low,
-                                           slab_oat_low: slab_oat_low,
-                                           slab_sp_at_oat_high: slab_sp_at_oat_high,
-                                           slab_oat_high: slab_oat_high)
-        end
+      case control_strategy.downcase
+      when 'proportional_control'
+        # slab setpoint varies based on previous day zone conditions
+        model_add_radiant_proportional_controls(model, zone, radiant_loop,
+                                                radiant_temperature_control_type: radiant_temperature_control_type,
+                                                use_zone_occupancy_for_control: use_zone_occupancy_for_control,
+                                                occupied_percentage_threshold: occupied_percentage_threshold,
+                                                model_occ_hr_start: model_occ_hr_start,
+                                                model_occ_hr_end: model_occ_hr_end,
+                                                proportional_gain: proportional_gain,
+                                                switch_over_time: switch_over_time)
+      when 'oa_based_control'
+        # slab setpoint varies based on outdoor weather
+        model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                         radiant_temperature_control_type: radiant_temperature_control_type,
+                                         slab_setpoint_oa_control: true,
+                                         switch_over_time: switch_over_time,
+                                         slab_sp_at_oat_low: slab_sp_at_oat_low,
+                                         slab_oat_low: slab_oat_low,
+                                         slab_sp_at_oat_high: slab_sp_at_oat_high,
+                                         slab_oat_high: slab_oat_high)
+      when 'constant_control'
+        # constant slab setpoint control
+        model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                         radiant_temperature_control_type: radiant_temperature_control_type,
+                                         slab_setpoint_oa_control: false,
+                                         switch_over_time: switch_over_time,
+                                         slab_sp_at_oat_low: slab_sp_at_oat_low,
+                                         slab_oat_low: slab_oat_low,
+                                         slab_sp_at_oat_high: slab_sp_at_oat_high,
+                                         slab_oat_high: slab_oat_high)
+      else
+        # 'none'; use energyplus default controls
       end
+    end
     return radiant_loops
   end
 

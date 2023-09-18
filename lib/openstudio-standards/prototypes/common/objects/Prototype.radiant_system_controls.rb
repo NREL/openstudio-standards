@@ -483,51 +483,38 @@ class Standard
     # set radiant system temperature and setpoint control type
     unless ['surfacefacetemperature', 'surfaceinteriortemperature'].include? radiant_temperature_control_type.downcase
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
-        "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
-      radiant_temperature_control_type = "SurfaceFaceTemperature"
+                         "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
+      radiant_temperature_control_type = 'SurfaceFaceTemperature'
     end
 
     radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
 
     # get existing switchover time schedule or create one if needed
-    sch_radiant_switchover = model.getScheduleRulesetByName("Radiant System Switchover")
+    sch_radiant_switchover = model.getScheduleRulesetByName('Radiant System Switchover')
     if sch_radiant_switchover.is_initialized
       sch_radiant_switchover = sch_radiant_switchover.get
     else
       sch_radiant_switchover = model_add_constant_schedule_ruleset(model,
-                                                                  switch_over_time,
-                                                                  name = "Radiant System Switchover",
-                                                                  sch_type_limit: "Dimensionless")
+                                                                   switch_over_time,
+                                                                   name = 'Radiant System Switchover',
+                                                                   sch_type_limit: 'Dimensionless')
     end
 
     # set radiant system switchover schedule
     radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover.to_Schedule.get)
 
-    unless slab_setpoint_oa_control
-      # radiant system cooling control setpoint
-      slab_setpoint = 22
-      sch_radiant_clgsetp = model_add_constant_schedule_ruleset(model,
-                                                                slab_setpoint + 0.1,
-                                                                name = "#{zone_name}_Sch_Radiant_ClgSetP")
-      coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_clgsetp)
-
-      # radiant system heating control setpoint
-      sch_radiant_htgsetp = model_add_constant_schedule_ruleset(model,
-                                                                slab_setpoint,
-                                                                name = "#{zone_name}_Sch_Radiant_HtgSetP")
-      coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_htgsetp)
-    else
+    if slab_setpoint_oa_control
       # get weather file from model
       weather_file = model.getWeatherFile
       if weather_file.initialized
         # get annual outdoor dry bulb temperature
-        annual_oat = weather_file.file.get.data.collect{ |dat| dat.dryBulbTemperature.get }
+        annual_oat = weather_file.file.get.data.collect { |dat| dat.dryBulbTemperature.get }
 
-        #calculate a nhrs rolling average from annual outdoor dry bulb temperature
+        # calculate a nhrs rolling average from annual outdoor dry bulb temperature
         nhrs = 24
-        last_nhrs_oat_in_year = annual_oat.last(nhrs-1)
+        last_nhrs_oat_in_year = annual_oat.last(nhrs - 1)
         combined_oat = last_nhrs_oat_in_year + annual_oat
-        oat_rolling_average = combined_oat.each_cons(nhrs).map{ |e| e.reduce(&:+).fdiv(nhrs).round(2) }
+        oat_rolling_average = combined_oat.each_cons(nhrs).map { |e| e.reduce(&:+).fdiv(nhrs).round(2) }
 
         # use rolling average to calculate slab setpoint temperature
 
@@ -542,11 +529,11 @@ class Standard
         slope_den = slab_oat_high_si - slab_oat_low_si
         sp_and_oat_slope = slope_num.fdiv(slope_den).round(4)
 
-        slab_setpoint = oat_rolling_average.map { |e| (slab_sp_at_oat_low_si + ((e - slab_oat_low_si)*sp_and_oat_slope)).round(1) }
+        slab_setpoint = oat_rolling_average.map { |e| (slab_sp_at_oat_low_si + ((e - slab_oat_low_si) * sp_and_oat_slope)).round(1) }
 
         # input upper limits on slab setpoint
-        slab_sp_upper_limit = [slab_sp_at_oat_high_si, slab_sp_at_oat_low_si].max()
-        slab_sp_lower_limit = [slab_sp_at_oat_high_si, slab_sp_at_oat_low_si].min()
+        slab_sp_upper_limit = [slab_sp_at_oat_high_si, slab_sp_at_oat_low_si].max
+        slab_sp_lower_limit = [slab_sp_at_oat_high_si, slab_sp_at_oat_low_si].min
         slab_setpoint.map! { |e| e > slab_sp_upper_limit ? slab_sp_upper_limit.round(1) : e }
 
         # input lower limits on slab setpoint
@@ -555,7 +542,7 @@ class Standard
         # create ruleset for slab setpoint
         sch_radiant_slab_setp = model_add_8760_schedule_ruleset(model, slab_setpoint, 'Sch_Radiant_SlabSetP_Based_On_Rolling_Mean_OAT',
                                                                 sch_type_limit: 'Temperature',
-                                                                default_value: 0.5*(slab_sp_at_oat_high_si + slab_sp_at_oat_low_si),
+                                                                default_value: 0.5 * (slab_sp_at_oat_high_si + slab_sp_at_oat_low_si),
                                                                 winter_value: slab_sp_upper_limit,
                                                                 summer_value: slab_sp_lower_limit)
 
@@ -563,9 +550,21 @@ class Standard
         coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_slab_setp)
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
-          "Model does not have a weather file associated with it. Define to implement slab setpoint based on outdoor weather.")
+                           'Model does not have a weather file associated with it. Define to implement slab setpoint based on outdoor weather.')
       end
+    else
+      # radiant system cooling control setpoint
+      slab_setpoint = 22
+      sch_radiant_clgsetp = model_add_constant_schedule_ruleset(model,
+                                                                slab_setpoint + 0.1,
+                                                                name = "#{zone_name}_Sch_Radiant_ClgSetP")
+      coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_clgsetp)
+
+      # radiant system heating control setpoint
+      sch_radiant_htgsetp = model_add_constant_schedule_ruleset(model,
+                                                                slab_setpoint,
+                                                                name = "#{zone_name}_Sch_Radiant_HtgSetP")
+      coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_htgsetp)
     end
   end
-
 end
