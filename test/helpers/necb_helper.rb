@@ -1,5 +1,6 @@
 # Additional methods for NECB tests
 require 'fileutils'
+require 'pathname'
 
 module NecbHelper
   # Hold an array of the instantiated standards (to save recreating them all the time).
@@ -83,6 +84,7 @@ module NecbHelper
     climate_zone = 'NECB'
 
     # Instantiate the required version of standards.
+    puts "*** Passed standard #{template}"
     standard = get_standard(template)
     puts "### Using standard #{standard.template}"
 
@@ -136,13 +138,18 @@ module NecbHelper
       same = true
       fe = File.open(expected_results_file, 'rb') 
       ft = File.open(test_results_file, 'rb')
+      comp_lines_str = ""
       fe.each.zip(ft.each).each do |le, lt|
         le=le.gsub /(\r$|\n$)/,''
         lt=lt.gsub /(\r$|\n$)/,''
+        comp_lines_str = "  Expected line: #{le}\n  Test res line: #{lt}"
         same = le.eql?(lt)
         break if !same
       end
-      assert(same, "#{msg} #{self.class.ancestors[0]}. Compare #{expected_results_file} with #{test_results_file}. File contents differ!")
+      expected_results_file_path=Pathname.new(expected_results_file).cleanpath
+      test_results_file_path=Pathname.new(test_results_file).cleanpath
+      comp_files_str="  Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
+      assert(same, "#{msg} #{self.class.ancestors[0]}.\n#{comp_files_str}\n#{comp_lines_str}")
     #end
   end
 end
