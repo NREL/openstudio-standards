@@ -254,7 +254,7 @@ class ASHRAE901PRM < Standard
       air_loop_hvac.thermalZones.sort.each do |zone|
         # error if zone design air flow rate is not available
         if zone.model.version < OpenStudio::VersionString.new('3.6.0')
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', "Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', 'Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
         end
 
         zone_air_flow = zone.autosizedDesignAirFlowRate.to_f

@@ -46,6 +46,7 @@ Standard.class_eval do
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model.getAirLoopHVACs.each do |air_loop|
       next unless air_loop_hvac_multizone_vav_system?(air_loop)
+
       model_system_outdoor_air_sizing_vrp_method(air_loop)
       air_loop_hvac_apply_vav_damper_action(air_loop)
     end

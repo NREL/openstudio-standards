@@ -11,7 +11,7 @@ class ASHRAE901PRM < Standard
 
     # Convert capacity to tons
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
-    
+
     # Set the efficiency value
     cop = chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     kw_per_ton = cop_to_kw_per_ton(cop)
