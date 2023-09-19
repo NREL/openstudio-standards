@@ -123,6 +123,7 @@ class Standard
 
     # User data process
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
+    # TODO - move this portion to the top of the function
     bldg_type_hvac_zone_hash = {}
     handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
 
@@ -580,7 +581,6 @@ class Standard
     # Get user building level data
     building_name = proposed_model.building.get.name.get
     user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
-    user_buildings = !user_buildings.empty? ? @standards_data['userdata_building'] : nil
 
     # If needed, modify user model infiltration
     if user_buildings
