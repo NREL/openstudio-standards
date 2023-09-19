@@ -47,7 +47,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
       efficiency_type['NaturalGas'] = []
       efficiency_type['FuelOilNo2'] = []
 
-      # read the file for the expected boiler efficiency values for different fuels and equipment capacity ranges
+      # Read the file for the expected boiler efficiency values for different fuels and equipment capacity ranges.
       CSV.foreach(boiler_expected_result_file, headers: true) do |data|
         fuel_type_min_cap[data['Fuel']] << data['Min Capacity (Btu per hr)']
         fuel_type_max_cap[data['Fuel']] << data['Max Capacity (Btu per hr)']
@@ -61,7 +61,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
       end
 
       # Use the expected boiler efficiency data to generate suitable equipment capacities for the test to cover all
-      # the relevant equipment capacity ranges
+      # the relevant equipment capacity ranges.
       fuel_type_cap = {}
       fuel_type_min_cap.each do |fuel, cap|
         unless fuel_type_cap.key? fuel then
@@ -87,7 +87,8 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
       boiler_fueltypes.each do |boiler_fueltype|
         fuel_type_cap[boiler_fueltype].each do |boiler_cap|
           name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
-          puts "***************************************#{name}*******************************************************\n"
+          name.gsub! /\s/, '_'
+          puts "***************#{name}***************\n"
           model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
           BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -99,13 +100,15 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
                                                          mau_heating_coil_type: mau_heating_coil_type,
                                                          baseboard_type: baseboard_type,
                                                          hw_loop: hw_loop)
-          # Save the model after btap hvac.
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
+          
+          # Set the boiler capacity.
           model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
-          # Run the measure.
-          run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+          # Run the measure and save the model.
+          run_the_measure(model: model, template: template, test_name: name) if PERFORM_STANDARDS
+          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
+          # Recover the thermal efficiency set in the measure for checking below.
           model.getBoilerHotWaters.each do |iboiler|
             if iboiler.nominalCapacity.to_f > 1
               actual_boiler_thermal_eff[boiler_fueltype] << iboiler.nominalThermalEfficiency
@@ -115,7 +118,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
         end
       end
 
-      # Generate table of test boiler efficiencies
+      # Generate table of test boiler efficiencies.
       actual_boiler_eff = {}
       actual_boiler_eff['Electricity'] = []
       actual_boiler_eff['NaturalGas'] = []
@@ -178,7 +181,8 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
     template = 'NECB2011'
     test_boiler_cap.each do |boiler_cap|
       name = "#{template}_sys1_Boiler-#{boiler_fueltype}_boiler_cap-#{boiler_cap}watts_HeatingCoilType#-#{heating_coil_type}_Baseboard-#{baseboard_type}"
-      puts "***************************************#{name}*******************************************************\n"
+      name.gsub! /\s/, '_'
+      puts "***************#{name}***************\n"
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -195,8 +199,8 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+      # Run the measure.
+      run_the_measure(model: model, template: template, test_name: name) if PERFORM_STANDARDS
 
       boilers = model.getBoilerHotWaters
       # check that there are two boilers in the model
@@ -264,7 +268,8 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = "#{template}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
-    puts "***************************************#{name}*******************************************************\n"
+    name.gsub! /\s/, '_'
+    puts "***************#{name}***************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
     standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -277,8 +282,8 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
     # Save the model after btap hvac.
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    # Run the measure.
+    run_the_measure(model: model, template: template, test_name: name) if PERFORM_STANDARDS
 
     boilers = model.getBoilerHotWaters
     boiler_curve = boilers[0].normalizedBoilerEfficiencyCurve.get.to_CurveCubic.get
@@ -319,7 +324,8 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
       boiler_cap = 1500000
       standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"].each do |cust_eff_test|
         name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{cust_eff_test["name"].to_s}"
-        puts "***************************************#{name}*******************************************************\n"
+        name.gsub! /\s/, '_'
+        puts "***************#{name}***************\n"
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -336,7 +342,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
         model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
         # Run the measure.
-        run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+        run_the_measure(model: model, template: template, test_name: name) if PERFORM_STANDARDS
 
         # Customize the efficiency.
         standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: cust_eff_test)
