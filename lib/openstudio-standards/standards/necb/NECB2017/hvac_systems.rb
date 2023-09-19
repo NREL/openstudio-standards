@@ -1,7 +1,7 @@
 class NECB2017
   # Check if ERV is required on this airloop.
   #
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
     erv_required = nil
 

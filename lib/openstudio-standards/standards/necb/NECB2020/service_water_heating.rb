@@ -5,7 +5,7 @@ class NECB2020
   # Per PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
   # Appendix A: Service Water Heating
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   #
   # NECB2020 uses a different procedure calculate gas water heater efficiencies (compared to previous NECB)
   #

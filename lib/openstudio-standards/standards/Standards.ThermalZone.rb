@@ -96,7 +96,7 @@ class Standard
   # Convert total minimum OA requirement to a per-area value.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def thermal_zone_convert_oa_req_to_per_area(thermal_zone)
     # For each space in the zone, convert
     # all design OA to per-area
@@ -561,7 +561,7 @@ class Standard
   # In the event that they are equal, it will be assumed nonresidential.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # return [Bool] true if residential, false if nonresidential
+  # return [Boolean] true if residential, false if nonresidential
   def thermal_zone_residential?(thermal_zone)
     # Determine the respective areas
     res_area_m2 = 0
@@ -591,7 +591,7 @@ class Standard
   # This is as-defined by 90.1 Appendix G.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] true if Fossil Fuel, Fossil/Electric Hybrid, and Purchased Heat zone,
+  # @return [Boolean] true if Fossil Fuel, Fossil/Electric Hybrid, and Purchased Heat zone,
   #   false if Electric or Other.
   # @todo It's not doing it properly right now.
   #   If you have a zone with a VRF + a DOAS (via an ATU SingleDUct Uncontrolled)
@@ -605,17 +605,26 @@ class Standard
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = thermal_zone.heating_fuels
 
-    if htg_fuels.include?('NaturalGas') ||
-       htg_fuels.include?('Propane') ||
-       htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOilNo1') ||
-       htg_fuels.include?('FuelOilNo2') ||
-       htg_fuels.include?('Coal') ||
-       htg_fuels.include?('Diesel') ||
-       htg_fuels.include?('Gasoline') ||
-       htg_fuels.include?('DistrictHeating')
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+    end
+
+    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
+
+    if htg_fuels.include?('Gas')
+      htg_fuels.include?('NaturalGas') ||
+        htg_fuels.include?('Propane') ||
+        htg_fuels.include?('PropaneGas') ||
+        htg_fuels.include?('FuelOil_1') ||
+        htg_fuels.include?('FuelOilNo1') ||
+        htg_fuels.include?('FuelOil_2') ||
+        htg_fuels.include?('FuelOilNo2') ||
+        htg_fuels.include?('Coal') ||
+        htg_fuels.include?('Diesel') ||
+        htg_fuels.include?('Gasoline') ||
+        htg_fuels.include?('DistrictHeating')
 
       is_fossil = true
     end
@@ -626,10 +635,10 @@ class Standard
   end
 
   # for 2013 and prior, baseline fuel = proposed fuel
-  # @param themal_zone
-  # @return [string] with applicable DistrictHeating and/or DistrictCooling
-  def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
-    zone_fuels = thermal_zone_fossil_or_electric_type(zone, '')
+  # @param thermal_zone
+  # @return [String with applicable DistrictHeating and/or DistrictCooling
+  def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(thermal_zone)
+    zone_fuels = thermal_zone_fossil_or_electric_type(thermal_zone, '')
     return zone_fuels
   end
 
@@ -647,17 +656,25 @@ class Standard
     fossil = false
     electric = false
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+    end
+
     # Fossil heating
-    htg_fuels = thermal_zone.heating_fuels
-    if htg_fuels.include?('NaturalGas') ||
-       htg_fuels.include?('Propane') ||
-       htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOilNo1') ||
-       htg_fuels.include?('FuelOilNo2') ||
-       htg_fuels.include?('Coal') ||
-       htg_fuels.include?('Diesel') ||
-       htg_fuels.include?('Gasoline') ||
-       htg_fuels.include?('DistrictHeating')
+    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
+    if htg_fuels.include?('Gas')
+      htg_fuels.include?('NaturalGas') ||
+        htg_fuels.include?('Propane') ||
+        htg_fuels.include?('PropaneGas') ||
+        htg_fuels.include?('FuelOil_1') ||
+        htg_fuels.include?('FuelOilNo1') ||
+        htg_fuels.include?('FuelOil_2') ||
+        htg_fuels.include?('FuelOilNo2') ||
+        htg_fuels.include?('Coal') ||
+        htg_fuels.include?('Diesel') ||
+        htg_fuels.include?('Gasoline') ||
+        htg_fuels.include?('DistrictHeating')
       fossil = true
     end
 
@@ -668,7 +685,7 @@ class Standard
 
     # Cooling fuels, for determining
     # unconditioned zones
-    clg_fuels = thermal_zone.cooling_fuels
+    clg_fuels = thermal_zone.coolingFuelTypes
 
     # Categorize
     fuel_type = nil
@@ -707,27 +724,35 @@ class Standard
   # Determine if the thermal zone is Fossil/Purchased Heat/Electric Hybrid
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] true if mixed Fossil/Electric Hybrid, and Purchased Heat zone, false if not
+  # @return [Boolean] true if mixed Fossil/Electric Hybrid, and Purchased Heat zone, false if not
   def thermal_zone_mixed_heating_fuel?(thermal_zone)
     is_mixed = false
+
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+    end
 
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = thermal_zone.heating_fuels
+    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
 
     # Includes fossil
     fossil = false
-    if htg_fuels.include?('NaturalGas') ||
-       htg_fuels.include?('Propane') ||
-       htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOilNo1') ||
-       htg_fuels.include?('FuelOilNo2') ||
-       htg_fuels.include?('Coal') ||
-       htg_fuels.include?('Diesel') ||
-       htg_fuels.include?('Gasoline')
+    if htg_fuels.include?('Gas')
+      htg_fuels.include?('NaturalGas') ||
+        htg_fuels.include?('Propane') ||
+        htg_fuels.include?('PropaneGas') ||
+        htg_fuels.include?('FuelOil_1') ||
+        htg_fuels.include?('FuelOilNo1') ||
+        htg_fuels.include?('FuelOil_2') ||
+        htg_fuels.include?('FuelOilNo2') ||
+        htg_fuels.include?('Coal') ||
+        htg_fuels.include?('Diesel') ||
+        htg_fuels.include?('Gasoline')
 
       fossil = true
     end
@@ -837,9 +862,14 @@ class Standard
       end
     end
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+    end
+
     # Get the zone heating and cooling fuels
-    htg_fuels = thermal_zone.heating_fuels
-    clg_fuels = thermal_zone.cooling_fuels
+    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
+    clg_fuels = thermal_zone.coolingFuelTypes.map(&:valueName)
     is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
 
     # Infer the HVAC type
@@ -944,7 +974,7 @@ class Standard
   #
   # @author Andrew Parker, Julien Marrec
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if heated, false if not
+  # @return [Boolean] returns true if heated, false if not
   def thermal_zone_heated?(thermal_zone)
     temp_f = 41
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
@@ -1094,7 +1124,7 @@ class Standard
   #
   # @author Andrew Parker, Julien Marrec
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if cooled, false if not
+  # @return [Boolean] returns true if cooled, false if not
   def thermal_zone_cooled?(thermal_zone)
     temp_f = 91
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
@@ -1235,7 +1265,7 @@ class Standard
   # Determine if the thermal zone is a plenum based on whether a majority of the spaces in the zone are plenums or not.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if majority plenum, false if not
+  # @return [Boolean] returns true if majority plenum, false if not
   def thermal_zone_plenum?(thermal_zone)
     plenum_status = false
 
@@ -1261,7 +1291,7 @@ class Standard
   # Zone must be less than 200 ft^2 and also have an infiltration object specified using Flow/Zone.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if vestibule, false if not
+  # @return [Boolean] returns true if vestibule, false if not
   def thermal_zone_vestibule?(thermal_zone)
     is_vest = false
 
@@ -1292,18 +1322,25 @@ class Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   def thermal_zone_conditioning_category(thermal_zone, climate_zone)
+    # error if zone design load methods are not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+    end
+
     # Get the heating load
     htg_load_btu_per_ft2 = 0.0
-    htg_load_w_per_m2 = thermal_zone.heatingDesignLoad
-    if htg_load_w_per_m2.is_initialized
-      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
+    htg_load_w = thermal_zone.autosizedHeatingDesignLoad
+    if htg_load_w.is_initialized
+      htg_load_w_per_m2 = thermal_zone.autosizedHeatingDesignLoad.get / thermal_zone.floorArea
+      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2, 'W/m^2', 'Btu/hr*ft^2').get
     end
 
     # Get the cooling load
     clg_load_btu_per_ft2 = 0.0
-    clg_load_w_per_m2 = thermal_zone.coolingDesignLoad
-    if clg_load_w_per_m2.is_initialized
-      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
+    clg_load_w = thermal_zone.autosizedCoolingDesignLoad
+    if clg_load_w.is_initialized
+      clg_load_w_per_m2 = thermal_zone.autosizedCoolingDesignLoad.get / thermal_zone.floorArea
+      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2, 'W/m^2', 'Btu/hr*ft^2').get
     end
 
     # Determine the heating limit based on climate zone
@@ -1523,7 +1560,7 @@ class Standard
   # This value determines zone air flows, which will be summed during system design airflow calculation.
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def thermal_zone_apply_prm_baseline_supply_temperatures(thermal_zone)
     # Skip spaces that aren't heated or cooled
     return true unless thermal_zone_heated?(thermal_zone) || thermal_zone_cooled?(thermal_zone)
@@ -1553,7 +1590,7 @@ class Standard
   # or cooled by thermal_zone_cooled?() and thermal_zone_heated?()
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def thermal_zone_add_unconditioned_thermostat(thermal_zone)
     # Heated to 0F (below thermal_zone_heated?(thermal_zone)  threshold)
     htg_t_f = 0
@@ -1767,7 +1804,7 @@ class Standard
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] Returns true if required, false if not
+  # @return [Boolean] Returns true if required, false if not
   # @todo Add exception logic for 90.1-2013
   #   for cells, sickrooms, labs, barbers, salons, and bowling alleys
   def thermal_zone_demand_control_ventilation_required?(thermal_zone, climate_zone)
@@ -1965,7 +2002,7 @@ class Standard
   # returns adjacent zones that share a wall with the zone
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @param same_floor [Bool] only valid option for now is true
+  # @param same_floor [Boolean] only valid option for now is true
   # @return [Array<OpenStudio::Model::ThermalZone>] array of adjacent thermal zones
   def thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone, same_floor = true)
     adjacent_zones = []
@@ -1989,16 +2026,16 @@ class Standard
   # returns true if DCV is required for exhaust fan for specified tempate
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Bool] returns true if DCV is required for exhaust fan for specified template, false if not
+  # @return [Boolean] returns true if DCV is required for exhaust fan for specified template, false if not
   def thermal_zone_exhaust_fan_dcv_required?(thermal_zone); end
 
   # Add DCV to exhaust fan and if requsted to related objects
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @param change_related_objects [Bool] change related objects
+  # @param change_related_objects [Boolean] change related objects
   # @param zone_mixing_objects [Array<OpenStudio::Model::ZoneMixing>] array of zone mixing objects
   # @param transfer_air_source_zones [Array<OpenStudio::Model::ThermalZone>] array thermal zones that transfer air
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo this method is currently empty
   def thermal_zone_add_exhaust_fan_dcv(thermal_zone, change_related_objects = true, zone_mixing_objects = [], transfer_air_source_zones = [])
     # set flow fraction schedule for all zone exhaust fans and then set zone mixing schedule to the intersection of exhaust availability and exhaust fractional schedule

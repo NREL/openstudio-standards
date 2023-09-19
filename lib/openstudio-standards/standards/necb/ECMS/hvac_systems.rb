@@ -3336,7 +3336,7 @@ class ECMS
   # If an efficiency is set but is not between 0.01 and 1.0 it returns an error.  Otherwise, it looks for mixed water
   # heaters.  If it finds any it then calls the reset_shw_efficiency method which resets the the shw efficiency and the
   # part load curve. It also renames the shw tank with the following pattern:
-  # {valume}Gal {eff_name} Water Heater - {Capacity}kBtu/hr {efficiency} Therm Eff
+  #   {volume}Gal {eff_name} Water Heater - {Capacity}kBtu/hr {efficiency} Therm Eff
   def modify_shw_efficiency(model:, shw_eff: nil)
     return if shw_eff.nil?
 
@@ -3381,7 +3381,7 @@ class ECMS
   # This method sets the efficiency of the shw heater to whatever is entered in eff["efficiency"].  It then looks for the
   # "part_load_curve" value in the curves.json file.  If it does not find one it returns an error.  If it finds one it
   # resets the part load curve to whatever was found.  It then renames the shw tank according to the following pattern:
-  # {valume}Gal {eff_name} Water Heater - {Capacity}kBtu/hr {efficiency} Therm Eff
+  #   {volume}Gal {eff_name} Water Heater - {Capacity}kBtu/hr {efficiency} Therm Eff
   def reset_shw_efficiency(model:, component:, eff:)
     return if component.heaterFuelType.to_s.upcase == 'ELECTRICITY'
 

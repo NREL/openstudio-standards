@@ -5,7 +5,7 @@ class Standard
   #
   # @param condenser_loop [<OpenStudio::Model::PlantLoop>] a condenser loop served by a cooling tower
   # @param design_wet_bulb_c [Double] the outdoor design wetbulb conditions in degrees Celsius
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def prototype_apply_condenser_water_temperatures(condenser_loop,
                                                    design_wet_bulb_c: nil)
     sizing_plant = condenser_loop.sizingPlant

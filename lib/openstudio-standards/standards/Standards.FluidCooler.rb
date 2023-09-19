@@ -21,7 +21,7 @@ class Standard
   # @param equipment_type [String] heat rejection equipment type enumeration used for lookup query,
   #   options are 'Closed Cooling Tower', modeled as an EvaporativeFluidCooler,
   #   or 'Dry Cooler', modeled as a FluidCooler
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fluid_cooler_apply_minimum_power_per_flow(fluid_cooler, equipment_type: 'Closed Cooling Tower')
     # Get the design water flow rate
     if fluid_cooler.designWaterFlowRate.is_initialized

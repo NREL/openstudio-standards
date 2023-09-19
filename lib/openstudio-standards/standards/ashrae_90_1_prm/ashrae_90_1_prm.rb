@@ -17,9 +17,9 @@ class ASHRAE901PRM < Standard
   # Convert user data csv files to json format and save to project folder
   # Method will create the json_folder in the project_path
   # @author Doug Maddox, PNNL
-  # @param user_data_folder [string] path to folder containing csv files
-  # @param project_folder [string] path to project folder
-  # @return [string] path to json files
+  # @param user_data_path [String path to folder containing csv files
+  # @param project_path [String path to project folder
+  # @return [String] path to json files
   def convert_userdata_csv_to_json(user_data_path, project_path)
     # Get list of possible files from lib\openstudio-standards\standards\ashrae_90_1_prm\userdata_csv
     stds_dir = __dir__
@@ -85,7 +85,7 @@ class ASHRAE901PRM < Standard
   # Load user data from project folder into standards database data structure
   # Each user data object type is a new item in the @standards_data hash
   # @author Doug Maddox, PNNL
-  # @param json_path [string] path to folder containing json files
+  # @param json_path [String path to folder containing json files
   def load_userdata_to_standards_database(json_path)
     files = Dir.glob("#{json_path}/*.json").select { |e| File.file? e }
     files.each do |file|

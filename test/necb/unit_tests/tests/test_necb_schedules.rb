@@ -20,7 +20,7 @@ class NECB_Schedules_Tests < Minitest::Test
     
   # Tests to ensure that the NECB default schedules are being defined correctly.
   # This is not for compliance, but for archetype development. 
-  # @return [Bool] true if successful. 
+  # @return [Boolean] true if successful. 
   def test_schedule_type_defaults()
     #Create new model for testing. 
     @model = OpenStudio::Model::Model.new
