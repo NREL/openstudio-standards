@@ -386,7 +386,7 @@ class ASHRAE901PRM < Standard
       motor_is_exempt = prm_read_user_data(electric_row, 'motor_is_exempt')
       unless motor_is_exempt.nil? || UserDataBoolean.matched_any?(motor_is_exempt)
         userdata_valid = false
-        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Motor #{electric_row['name']} is exempt data should be either Yes or No. But get data #{electric_row['motor_is_exempt']}")
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: Motor #{electric_row['name']} is exempt data should be either True or False. But get data #{electric_row['motor_is_exempt']}")
       end
       # We may need to do the same for refrigeration and elevator?
       # Check elevator

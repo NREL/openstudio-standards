@@ -158,6 +158,7 @@ class ASHRAE901PRM < Standard
     # Check if the plug load represents a motor (check if motorhorsepower exist), if so, record the motor HP and efficiency.
     if !user_equip_data['motor_horsepower'].nil?
       # Pre-processing will ensure these three user data are added correctly (float, float, boolean)
+      # TODO move this part to user data processing.
       power_equipment.additionalProperties.setFeature('motor_horsepower', user_equip_data['motor_horsepower'].to_f)
       power_equipment.additionalProperties.setFeature('motor_efficiency', user_equip_data['motor_efficiency'].to_f)
       power_equipment.additionalProperties.setFeature('motor_is_exempt', user_equip_data['motor_is_exempt'])
@@ -177,6 +178,7 @@ class ASHRAE901PRM < Standard
   def space_type_apply_power_equipment(space_type)
     # save schedules in a hash in case it is needed for new electric equipment
     power_schedule_hash = {}
+    # TODO move this part to user data processing
     user_electric_equipment_data = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
     user_gas_equipment_data = @standards_data.key?('userdata_gas_equipment') ? @standards_data['userdata_gas_equipment'] : nil
     if user_electric_equipment_data && user_electric_equipment_data.length >= 1
