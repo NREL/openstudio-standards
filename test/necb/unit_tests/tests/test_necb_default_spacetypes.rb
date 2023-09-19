@@ -227,7 +227,7 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         output << "#{swh_watts_per_person.round(0)},"
         header_output << "SWH Fraction Schedule,"
         output << "#{swh__fraction_schedule},"
-        header_output << "SSWHHW Temperature Setpoint Schedule Values (C),"
+        header_output << "SWH Temperature Setpoint Schedule Values (C),"
         output << "#{swh_target_temperature_schedule},"
           
   
