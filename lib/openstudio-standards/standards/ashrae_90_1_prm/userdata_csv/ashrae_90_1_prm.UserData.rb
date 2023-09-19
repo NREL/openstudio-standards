@@ -1,7 +1,10 @@
 class UserDataCSV
-  def initialize(model, file_name, save_dir)
+  # Abstract class for writing user data template from user model.
+  #
+  # @param model [OpenStudio::Model::Model]
+  #
+  def initialize(model, save_dir)
     @model = model
-    @file_name = file_name
     @component_name = nil
     unless Dir.exist?(save_dir)
       raise ArgumentError "Saving directory #{save_dir} does not exist!"
@@ -9,6 +12,7 @@ class UserDataCSV
     @save_dir = save_dir
     @components = nil
     @headers = nil
+    @file_name = nil
   end
 
   # method to write csv files
@@ -58,22 +62,39 @@ class UserDataCSV
   end
 
   # Method to load OpenStudio component list from the model and save to @Component
-  # This method is an abstract method for overridng.
   # subclass shall determine what data group to extract from a modle.
   # @return [Array] array of OpenStudio components.
   def load_component
-    raise NotImplementedError, 'Method to load OpenStudio component should be implemented in class'
+    return @model.public_send("get#{@component_name}")
   end
 end
 
 class UserDataCSVAirLoopHVAC < UserDataCSV
-  def initialize(model, file_name, save_dir)
+  # user data userdata_airloop_hvac
+  def initialize(model, save_dir)
     super
     @component_name = 'AirLoopHVACs'
+    @file_name = UserDataFiles::AIRLOOP_HVAC
   end
 
+  def write_default_rows
+    # TODO we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataCSVBuilding < UserDataCSV
+  # user data userdata_airloop_hvac
+  def initialize(model, save_dir)
+    super
+    @component_name = 'Building'
+    @file_name = UserDataFiles::BUILDING
+  end
+
+  private
+
   def load_component
-    return @model.getAirLoopHVACs
+    return [@model.public_send("get#{@component_name}")]
   end
 
   def write_default_rows
