@@ -4668,9 +4668,14 @@ class Standard
   #   options are 'ZeroFlowPower', 'HalfFlowPower'
   # @param include_carpet [Boolean] boolean to include thin carpet tile over radiant slab, default to true
   # @param carpet_thickness_in [Double] thickness of carpet in inches
-  # @param control_strategy [String] name of control strategy.  Options are 'proportional_control' and 'none'.
+  # @param control_strategy [String] name of control strategy.  Options are 'proportional_control', 'oa_based_control',
+  #   'constant_control', and 'none'.
   #   If control strategy is 'proportional_control', the method will apply the CBE radiant control sequences
   #   detailed in Raftery et al. (2017), 'A new control strategy for high thermal mass radiant systems'.
+  #   If control strategy is 'oa_based_control', the method will apply native EnergyPlus objects/parameters
+  #   to vary slab setpoint based on outdoor weather.
+  #   If control strategy is 'constant_control', the method will apply native EnergyPlus objects/parameters to
+  #   maintain a constant slab setpoint.
   #   Otherwise no control strategy will be applied and the radiant system will assume the EnergyPlus default controls.
   # @param use_zone_occupancy_for_control [Boolean] Set to true if radiant system is to use specific zone occupancy objects
   #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
@@ -4686,6 +4691,10 @@ class Standard
   # @param proportional_gain [Double] (Optional) Only applies if control_strategy is 'proportional_control'.
   #   Proportional gain constant (recommended 0.3 or less).
   # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
+  # @param slab_sp_at_oat_low [Double] radiant slab temperature setpoint, in F, at the outdoor high temperature.
+  # @param slab_oat_low [Double] outdoor drybulb air temperature, in F, for low radiant slab setpoint.
+  # @param slab_sp_at_oat_high [Double] radiant slab temperature setpoint, in F, at the outdoor low temperature.
+  # @param slab_oat_high [Double] outdoor drybulb air temperature, in F, for high radiant slab setpoint.
   # @param radiant_availability_type [String] a preset that determines the availability of the radiant system
   #   options are 'all_day', 'precool', 'afternoon_shutoff', 'occupancy'
   #   If preset is set to 'all_day' radiant system is available 24 hours a day, 'precool' primarily operates
@@ -4728,6 +4737,10 @@ class Standard
                                  model_occ_hr_end: 18.0,
                                  proportional_gain: 0.3,
                                  switch_over_time: 24.0,
+                                 slab_sp_at_oat_low: 73,
+                                 slab_oat_low: 65,
+                                 slab_sp_at_oat_high: 68,
+                                 slab_oat_high: 80,
                                  radiant_availability_type: 'precool',
                                  radiant_lockout: false,
                                  radiant_lockout_start_time: 12.0,
@@ -5114,7 +5127,9 @@ class Standard
       rename_plant_loop_nodes(model)
 
       # set radiant loop controls
-      if control_strategy == 'proportional_control'
+      case control_strategy.downcase
+      when 'proportional_control'
+        # slab setpoint varies based on previous day zone conditions
         model_add_radiant_proportional_controls(model, zone, radiant_loop,
                                                 radiant_temperature_control_type: radiant_temperature_control_type,
                                                 use_zone_occupancy_for_control: use_zone_occupancy_for_control,
@@ -5123,6 +5138,28 @@ class Standard
                                                 model_occ_hr_end: model_occ_hr_end,
                                                 proportional_gain: proportional_gain,
                                                 switch_over_time: switch_over_time)
+      when 'oa_based_control'
+        # slab setpoint varies based on outdoor weather
+        model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                         radiant_temperature_control_type: radiant_temperature_control_type,
+                                         slab_setpoint_oa_control: true,
+                                         switch_over_time: switch_over_time,
+                                         slab_sp_at_oat_low: slab_sp_at_oat_low,
+                                         slab_oat_low: slab_oat_low,
+                                         slab_sp_at_oat_high: slab_sp_at_oat_high,
+                                         slab_oat_high: slab_oat_high)
+      when 'constant_control'
+        # constant slab setpoint control
+        model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                         radiant_temperature_control_type: radiant_temperature_control_type,
+                                         slab_setpoint_oa_control: false,
+                                         switch_over_time: switch_over_time,
+                                         slab_sp_at_oat_low: slab_sp_at_oat_low,
+                                         slab_oat_low: slab_oat_low,
+                                         slab_sp_at_oat_high: slab_sp_at_oat_high,
+                                         slab_oat_high: slab_oat_high)
+      else
+        # 'none'; use energyplus default controls
       end
     end
     return radiant_loops
