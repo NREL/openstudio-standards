@@ -2,7 +2,7 @@ class UserDataCSV
   # Abstract class for writing user data template from user model.
   #
   # @param model [OpenStudio::Model::Model]
-  #
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     @model = model
     @component_name = nil
@@ -76,6 +76,8 @@ end
 
 class UserDataCSVAirLoopHVAC < UserDataCSV
   # user data userdata_airloop_hvac
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
     @component_name = 'AirLoopHVACs'
@@ -90,6 +92,8 @@ end
 
 class UserDataCSVBuilding < UserDataCSV
   # user data userdata_building
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
     @component_name = 'Building'
@@ -110,6 +114,8 @@ end
 
 class UserDataCSVSpace < UserDataCSV
   # user data userdata_space
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
     @component_name = 'Spaces'
@@ -126,6 +132,8 @@ end
 
 class UserDataCSVSpaceTypes < UserDataCSV
   # user data userdata_spacetypes
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
     @component_name = 'SpaceTypes'
@@ -142,6 +150,8 @@ end
 
 class UserDataCSVAirLoopHVACDOAS < UserDataCSV
   # user data userdata_airloop_hvac_doas
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
     @component_name = 'AirLoopHVACDedicatedOutdoorAirSystems'
@@ -156,6 +166,8 @@ end
 
 class UserDataCSVExteriorLights < UserDataCSV
   # user data userdata_airloop_hvac_doas
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
     @component_name = 'ExteriorLightss'
@@ -170,6 +182,8 @@ end
 
 class UserDataCSVThermalZone < UserDataCSV
   # user data userdata_thermal_zone
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
     @component_name = 'ThermalZones'
@@ -184,6 +198,8 @@ end
 
 class UserDataCSVElectricEquipment < UserDataCSV
   # user data userdata_electric_equipment
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
     @component_name = 'ElectricEquipments'
@@ -197,7 +213,9 @@ class UserDataCSVElectricEquipment < UserDataCSV
 end
 
 class UserDataCSVOutdoorAir < UserDataCSV
-  # user data userdata_thermal_zone
+  # user data userdata_design_specification_outdoor_air
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
     @component_name = 'DesignSpecificationOutdoorAirs'
