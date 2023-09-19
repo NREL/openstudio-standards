@@ -499,8 +499,8 @@ class AppendixGPRMTests < Minitest::Test
                "motor_horsepower data is missing or incorrect. The motor_horsepower for test case 3 shall be 10.0")
         assert(base_electric_equipment_ap.hasFeature('motor_efficiency') && base_electric_equipment_ap.getFeatureAsDouble('motor_efficiency').get == 0.72,
                "motor_efficiency data is missing or incorrect. The motor_efficiency for test case 3 shall be 0.72")
-        assert(base_electric_equipment_ap.hasFeature('motor_is_exempt') && base_electric_equipment_ap.getFeatureAsString('motor_is_exempt').get == 'No',
-               "motor_is_exempt data is missing or incorrect. The motor_is_exempt for test case 3 shall be No")
+        assert(base_electric_equipment_ap.hasFeature('motor_is_exempt') && base_electric_equipment_ap.getFeatureAsString('motor_is_exempt').get == 'False',
+               "motor_is_exempt data is missing or incorrect. The motor_is_exempt for test case 3 shall be False")
       elsif base_user_data_dir == 'userdata_pe_04'
         baseline_equipments = baseline_model.getElectricEquipments
         baseline_equipments.each do |equipment|

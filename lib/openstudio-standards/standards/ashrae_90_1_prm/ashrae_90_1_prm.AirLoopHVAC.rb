@@ -746,28 +746,27 @@ class ASHRAE901PRM < Standard
 
         # Exception 2 - System exhausting toxic fumes
         if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_toxic_fumes_etc').get == 'yes'
-            return nil
+          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
           end
         end
 
         # Exception 3 - Commercial kitchen hoods
         if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_type1_kitchen_hoods').get == 'yes'
+          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
             return nil
           end
         end
 
         # Exception 6 - Distributed exhaust
         if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_type_distributed_exhaust').get == 'yes'
+          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
             return nil
           end
         end
 
         # Exception 7 - Dehumidification
         if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery').get == 'yes'
+          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
             return nil
           end
         end

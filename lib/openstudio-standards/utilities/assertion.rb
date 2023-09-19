@@ -25,7 +25,7 @@ end
 # @param default [Object] values assigned if the data is not available.
 # @return data [String] a string
 def prm_read_user_data(user_data, key, default = nil)
-  return user_data.key?(key) && user_data[key] != nil && !user_data[key].to_s.empty? ? user_data[key] : default
+  return user_data.key?(key) && !user_data[key].nil? && !user_data[key].to_s.empty? ? user_data[key] : default
 end
 
 # This is a PRM handler function handles the .get from an optional object
@@ -53,6 +53,8 @@ end
 # @param component [OpenStudio::Model:Component] an OpenStudio object
 # @return name [String] the name of the instance or object name
 def prm_get_component_name(component)
+  return 'Model' if component.is_a?(OpenStudio::Model::Model)
+
   name = component.iddObjectType.valueName.to_s
   if component.name.is_initialized
     name = component.name.get

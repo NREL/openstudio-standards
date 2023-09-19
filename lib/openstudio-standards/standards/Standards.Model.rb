@@ -307,11 +307,7 @@ class Standard
       end
 
       # Compute and marke DCV related information before deleting proposed model HVAC systems
-      model_mark_zone_dcv_existence(model)
-      model_add_dcv_user_exception_properties(model)
-      model_add_dcv_requirement_properties(model)
-      model_add_apxg_dcv_properties(model)
-      model_raise_user_model_dcv_errors(model)
+      model_evaluate_dcv_requirements(model)
 
       # Remove all HVAC from model, excluding service water heating
       model_remove_prm_hvac(model)
@@ -7131,11 +7127,11 @@ class Standard
     return true
   end
 
-  # Template method for adding zone additional property "zone DCV implemented in user model"
+  # Template method for evaluate DCV requirements in the user model
   #
-  # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio model
-  def model_mark_zone_dcv_existence(model)
+  # @return boolean true if works.
+  def model_evaluate_dcv_requirements(model)
     return true
   end
 
@@ -7146,39 +7142,6 @@ class Standard
   # @param [OpenStudio::Model::Model] OpenStudio model
   def run_all_orientations(run_all_orients, user_model)
     return run_all_orients
-  end
-
-  # Template method for reading user data and adding to zone additional properties
-  #
-  # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio model
-  def model_add_dcv_user_exception_properties(model)
-    return true
-  end
-
-  # Template method for raising user model DCV warning and errors
-  #
-  # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio model
-  def model_raise_user_model_dcv_errors(model)
-    return true
-  end
-
-  # Template method for adding zone additional property "airloop dcv required by 901" and "zone dcv required by 901"
-  #
-  # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio model
-  def model_add_dcv_requirement_properties(model)
-    return true
-  end
-
-  # Template method for checking if zones in the baseline model should have DCV based on 90.1 2019 G3.1.2.5.
-  # Zone additional property 'apxg no need to have DCV' added
-  #
-  # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio model
-  def model_add_apxg_dcv_properties(model)
-    return true
   end
 
   # Template method for setting DCV in baseline HVAC system if required
