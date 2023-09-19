@@ -87,7 +87,6 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
       boiler_fueltypes.each do |boiler_fueltype|
         fuel_type_cap[boiler_fueltype].each do |boiler_cap|
           name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
-          name.gsub! /\s/, '_'
           puts "***************#{name}***************\n"
           model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
           BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
@@ -181,7 +180,6 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
     template = 'NECB2011'
     test_boiler_cap.each do |boiler_cap|
       name = "#{template}_sys1_Boiler-#{boiler_fueltype}_boiler_cap-#{boiler_cap}watts_HeatingCoilType#-#{heating_coil_type}_Baseboard-#{baseboard_type}"
-      name.gsub! /\s/, '_'
       puts "***************#{name}***************\n"
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
@@ -268,7 +266,6 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
     # save baseline
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     name = "#{template}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
-    name.gsub! /\s/, '_'
     puts "***************#{name}***************\n"
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
@@ -304,7 +301,7 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
 
   # Test to validate the custom boiler thermal efficiencies applied against expected values stored in the file:
   # 'compliance_boiler_custom_efficiencies_expected_results.json
-  def test_NECB2011_custom_efficiency
+  def test_custom_efficiency
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
@@ -324,7 +321,6 @@ class NECB_HVAC_Boiler_Tests < MiniTest::Test
       boiler_cap = 1500000
       standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"].each do |cust_eff_test|
         name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{cust_eff_test["name"].to_s}"
-        name.gsub! /\s/, '_'
         puts "***************#{name}***************\n"
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
