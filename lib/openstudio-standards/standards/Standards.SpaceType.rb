@@ -587,7 +587,7 @@ class Standard
   # Modify the lighting schedules for Appendix G PRM for 2016 and later
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] returns true if successful, false if not 
+  # @return [Boolean] returns true if successful, false if not
   def space_type_light_sch_change(model)
     return true
   end

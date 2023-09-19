@@ -492,7 +492,7 @@ class ASHRAE901PRM < Standard
   # Clone the existing constructions and set their intended surface type and standards construction type per the PRM.
   # For some standards, this will involve making modifications.  For others, it will not.
   #   90.1-2007, 90.1-2010, 90.1-2013
-  # 
+  #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] returns true if successful, false if not
   def model_apply_prm_construction_types(model)
@@ -2314,7 +2314,7 @@ class ASHRAE901PRM < Standard
       if has_computer_room
         # Collect load for entire zone
         if zn['zone'].model.version < OpenStudio::VersionString.new('3.6.0')
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.Model', "Required ThermalZone method .autosizedCoolingDesignLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.Model', 'Required ThermalZone method .autosizedCoolingDesignLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
         end
         zone_load_w = zn['zone'].autosizedCoolingDesignLoad.get
         zone_load_w *= zn['zone'].floorArea * zn['zone'].multiplier
