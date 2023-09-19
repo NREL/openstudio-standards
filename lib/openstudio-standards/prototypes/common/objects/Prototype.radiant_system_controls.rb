@@ -540,11 +540,10 @@ class Standard
         slab_setpoint.map! { |e| e < slab_sp_lower_limit ? slab_sp_lower_limit.round(1) : e }
 
         # create ruleset for slab setpoint
-        sch_radiant_slab_setp = model_add_8760_schedule_ruleset(model, slab_setpoint, 'Sch_Radiant_SlabSetP_Based_On_Rolling_Mean_OAT',
-                                                                sch_type_limit: 'Temperature',
-                                                                default_value: 0.5 * (slab_sp_at_oat_high_si + slab_sp_at_oat_low_si),
-                                                                winter_value: slab_sp_upper_limit,
-                                                                summer_value: slab_sp_lower_limit)
+        sch_type_limits_obj = model_add_schedule_type_limits(model, standard_sch_type_limit: 'Temperature')
+        sch_radiant_slab_setp = make_ruleset_sched_from_8760(model, slab_setpoint,
+                                                             'Sch_Radiant_SlabSetP_Based_On_Rolling_Mean_OAT',
+                                                             sch_type_limits_obj)
 
         coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_slab_setp)
         coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_slab_setp)
