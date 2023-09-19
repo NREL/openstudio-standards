@@ -14,14 +14,14 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
 
   # Test to validate the chiller COP generated against expected values stored in the file:
   # 'compliance_chiller_cop_expected_results.csv
-  def test_NECB2011_chiller_cop
+  def test_chiller_cop
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
 
-    chiller_expected_result_file = File.join( @expected_results_folder, 'compliance_chiller_cop_expected_results.csv')
+    expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
 
     # Initialize hashes for storing expected chiller cop data from file.
     chiller_type_min_cap = {}
@@ -35,16 +35,16 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
     chiller_type_max_cap['Scroll'] = []
     chiller_type_max_cap['Centrifugal'] = []
 
-    # read the file for the cutoff min and max capacities for various chiller types
-    CSV.foreach(chiller_expected_result_file, headers: true) do |data|
+    # Read the file for the cutoff min and max capacities for various chiller types.
+    CSV.foreach(expected_result_file, headers: true) do |data|
       chiller_type_min_cap[data['Type']] << data['Min Capacity (Btu per hr)']
       chiller_type_max_cap[data['Type']] << data['Max Capacity (Btu per hr)']
     end
 
     # Use the expected chiller cop data to generate suitable equipment capacities for the test to cover all
-    # the relevant equipment capacity ranges
+    # the relevant equipment capacity ranges.
     # This implementation assumed a max of 3 capacity intervals for chillers where in reality only one range is needed
-    # for NECB2011
+    # for NECB2011.
     chiller_type_cap = {}
     chiller_type_cap['Rotary Screw'] = []
     chiller_type_cap['Reciprocating'] = []
@@ -69,7 +69,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
       end
     end
 
-    # Generate the osm files for all relevant cases to generate the test data for system 2
+    # Generate the osm files for all relevant cases to generate the test data for system 2.
     actual_chiller_cop = {}
     actual_chiller_cop['Rotary Screw'] = []
     actual_chiller_cop['Reciprocating'] = []
@@ -81,12 +81,13 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
     mua_cooling_type = 'Hydronic'
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
+    
+    # Save baseline.
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     chiller_types.each do |chiller_type|
       chiller_type_cap[chiller_type].each do |chiller_cap|
         name = "sys2_ChillerType~#{chiller_type}_Chiller_cap~#{chiller_cap}watts"
-        puts "***************************************#{name}*******************************************************\n"
+        puts "***************#{name}***************\n"
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -116,18 +117,18 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
       end
 
       # Write actual results file.
-      test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_chiller_cop_test_results.csv")
-      File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text.chomp) }
+      #test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_chiller_cop_test_results.csv")
+      #File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text.chomp) }
       
       # Test that the values are correct by doing a file compare.
-      expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
+      #expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
 
       # Check if test results match expected.
-      msg = "Chiller COP test results do not match expected in test"
-      file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
+      #msg = "Chiller COP test results do not match expected in test"
+      #file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
     end
 
-    # Generate table of test chiller cop
+    # Generate table of test chiller cop.
     chiller_types.each do |type|
       for int in 0..chiller_type_cap[type].size - 1
         output_line_text = "#{type},#{chiller_type_min_cap[type][int]},#{chiller_type_max_cap[type][int]},#{actual_chiller_cop[type][int]}\n"
@@ -135,11 +136,9 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
       end
     end
 
-    # Write actual results file
-    test_result_file = File.join(@test_results_folder, 'compliance_chiller_cop_test_results.csv')
+    # Write actual results file.
+    test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_chiller_cop_test_results.csv")
     File.open(test_result_file, 'w') {|f| f.write(chiller_res_file_output_text.chomp)}
-    # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(@expected_results_folder, 'compliance_chiller_cop_expected_results.csv')
 
     # Check if test results match expected.
     msg = "Chiller COP test results do not match what is expected in test"
@@ -150,7 +149,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
   # NECB2011 rule for number of chillers is:
   # "if capacity <= 2100 kW ---> one chiller
   # if capacity > 2100 kW ---> 2 chillers with half the capacity each"
-  def test_NECB2011_number_of_chillers
+  def test_number_of_chillers
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
@@ -159,7 +158,8 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
 
     first_cutoff_chlr_cap = 2100000.0
     tol = 1.0e-3
-    # Generate the osm files for all relevant cases to generate the test data for system 6
+
+    # Generate the osm files for all relevant cases to generate the test data for system 6.
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     chiller_types = ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
@@ -168,12 +168,13 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
     test_chiller_cap = [1000000.0, 3000000.0]
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
+    
+    # Save baseline.
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     chiller_types.each do |chiller_type|
       test_chiller_cap.each do |chiller_cap|
         name = "sys6_ChillerType_#{chiller_type}~Chiller_cap~#{chiller_cap}watts"
-        puts "***************************************#{name}*******************************************************\n"
+        puts "***************#{name}***************\n"
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -186,6 +187,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
                                                                             chiller_type: chiller_type,
                                                                             fan_type: fan_type,
                                                                             hw_loop: hw_loop)
+        
         # Save the model after btap hvac.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
         model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
@@ -194,7 +196,8 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
         run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
 
         chillers = model.getChillerElectricEIRs
-        # check that there are two chillers in the model
+        
+        # Check that there are two chillers in the model.
         num_of_chillers_is_correct = false
         if chillers.size == 2 then
           num_of_chillers_is_correct = true
@@ -207,7 +210,8 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
         else
           this_is_the_second_cap_range = true
         end
-        # compare chiller capacities to expected values
+        
+        # Compare chiller capacities to expected values.
         chillers.each do |ichiller|
           if ichiller.name.to_s.include? 'Primary Chiller'
             chiller_cap_is_correct = false
@@ -239,18 +243,18 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
   end
 
   # Test to validate the chiller performance curves
-  def test_NECB2011_chiller_curves
+  def test_chiller_curves
     output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
 
-    chiller_expected_result_file = File.join(@expected_results_folder, 'compliance_chiller_curves_expected_results.csv')
+    expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_curves_expected_results.csv")
     chiller_curve_names = {}
     chiller_curve_names['Scroll'] = []
     chiller_curve_names['Reciprocating'] = []
     chiller_curve_names['Rotary Screw'] = []
     chiller_curve_names['Centrifugal'] = []
-    CSV.foreach(chiller_expected_result_file, headers: true) do |data|
+    CSV.foreach(expected_result_file, headers: true) do |data|
       chiller_curve_names[data['Chiller Type']] << data['Curve Name']
     end
     # Generate the osm files for all relevant cases to generate the test data for system 5
@@ -264,7 +268,7 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
     BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     chiller_types.each do |chiller_type|
       name = "sys5_ChillerType_#{chiller_type}"
-      puts "***************************************#{name}*******************************************************\n"
+      puts "***************#{name}***************\n"
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -301,11 +305,9 @@ class NECB_HVAC_Chiller_Test < MiniTest::Test
               "#{'%.5E' % chiller_eir_plr_curve.coefficient3xPOW2},#{'%.5E' % chiller_eir_plr_curve.minimumValueofx},#{'%.5E' % chiller_eir_plr_curve.maximumValueofx}\n"
     end
 
-    # Write actual results file
-    test_result_file = File.join(@test_results_folder, 'compliance_chiller_curves_test_results.csv')
+    # Write actual results file.
+    test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_chiller_curves_test_results.csv")
     File.open(test_result_file, 'w') {|f| f.write(chiller_res_file_output_text.chomp)}
-    # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(@expected_results_folder, 'compliance_chiller_curves_expected_results.csv')
 
     # Check if test results match expected.
     msg = "Chiller performance curve coeffs test results do not match expected in test"
