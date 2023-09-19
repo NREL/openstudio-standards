@@ -15,6 +15,11 @@ class UserDataCSV
     @file_name = nil
   end
 
+  # getter function to get file name
+  def file_name
+    @file_name
+  end
+
   # method to write csv files
   # this method controls the workflow for generating a user data file.
   # @return [Boolean] True for success, false otherwise
@@ -84,7 +89,7 @@ class UserDataCSVAirLoopHVAC < UserDataCSV
 end
 
 class UserDataCSVBuilding < UserDataCSV
-  # user data userdata_airloop_hvac
+  # user data userdata_building
   def initialize(model, save_dir)
     super
     @component_name = 'Building'
@@ -103,3 +108,104 @@ class UserDataCSVBuilding < UserDataCSV
   end
 end
 
+class UserDataCSVSpace < UserDataCSV
+  # user data userdata_space
+  def initialize(model, save_dir)
+    super
+    @component_name = 'Spaces'
+    @file_name = UserDataFiles::SPACE
+  end
+
+  private
+
+  def write_default_rows
+    # TODO we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataCSVSpaceTypes < UserDataCSV
+  # user data userdata_spacetypes
+  def initialize(model, save_dir)
+    super
+    @component_name = 'SpaceTypes'
+    @file_name = UserDataFiles::SPACETYPE
+  end
+
+  private
+
+  def write_default_rows
+    # TODO we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataCSVAirLoopHVACDOAS < UserDataCSV
+  # user data userdata_airloop_hvac_doas
+  def initialize(model, save_dir)
+    super
+    @component_name = 'AirLoopHVACDedicatedOutdoorAirSystems'
+    @file_name = UserDataFiles::AIRLOOP_HVAC_DOAS
+  end
+
+  def write_default_rows
+    # TODO we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataCSVExteriorLights < UserDataCSV
+  # user data userdata_airloop_hvac_doas
+  def initialize(model, save_dir)
+    super
+    @component_name = 'ExteriorLightss'
+    @file_name = UserDataFiles::EXTERIOR_LIGHTS
+  end
+
+  def write_default_rows
+    # TODO we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataCSVThermalZone < UserDataCSV
+  # user data userdata_thermal_zone
+  def initialize(model, save_dir)
+    super
+    @component_name = 'ThermalZones'
+    @file_name = UserDataFiles::THERMAL_ZONE
+  end
+
+  def write_default_rows
+    # TODO we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataCSVElectricEquipment < UserDataCSV
+  # user data userdata_electric_equipment
+  def initialize(model, save_dir)
+    super
+    @component_name = 'ElectricEquipments'
+    @file_name = UserDataFiles::ELECTRIC_EQUIPMENT
+  end
+
+  def write_default_rows
+    # TODO we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataCSVOutdoorAir < UserDataCSV
+  # user data userdata_thermal_zone
+  def initialize(model, save_dir)
+    super
+    @component_name = 'DesignSpecificationOutdoorAirs'
+    @file_name = UserDataFiles::DESIGN_SPECIFICATION_OUTDOOR_AIR
+  end
+
+  def write_default_rows
+    # TODO we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
