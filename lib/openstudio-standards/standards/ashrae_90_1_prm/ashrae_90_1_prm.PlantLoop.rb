@@ -338,7 +338,6 @@ class ASHRAE901PRM < Standard
   # @param dsgn_sup_wtr_temp_delt [Double] design chilled water supply delta T
   # @return [Boolean] returns true if successful, false if not
   def chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
-
     design_chilled_water_temperature = 44 # Loop design chilled water temperature (F)
     design_chilled_water_temperature_delta = 10.1 # Loop design chilled water temperature  (deltaF)
     chw_outdoor_temperature_high = 80 # Chilled water temperature reset at high outdoor air temperature (F)
@@ -348,7 +347,7 @@ class ASHRAE901PRM < Standard
     chiller_chw_low_temp_limit = 36 # Chiller leaving chilled water lower temperature limit (F)
     chiller_chw_cond_temp = 95 # Chiller entering condenser fluid temperature (F)
     primary_pump_power = 9 # primary pump power (W/gpm)
- 
+
     if dsgn_sup_wtr_temp.nil?
       dsgn_sup_wtr_temp_c = OpenStudio.convert(design_chilled_water_temperature, 'F', 'C').get
     else
@@ -392,5 +391,4 @@ class ASHRAE901PRM < Standard
     pri_sec_config = 'heat_exchanger'
     return pri_sec_config
   end
-
 end

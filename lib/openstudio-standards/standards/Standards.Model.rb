@@ -668,7 +668,7 @@ class Standard
     # exception that allows a different
     # system type in part of the building.
     if custom == 'Xcel Energy CO EDA'
-     # Customization - Xcel EDA Program Manual 2014
+      # Customization - Xcel EDA Program Manual 2014
       # 3.2.1 Mechanical System Selection ii
       exception_min_area_ft2 = 5000
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Customization; per Xcel EDA Program Manual 2014 3.2.1 Mechanical System Selection ii, minimum area for non-predominant conditions reduced to #{exception_min_area_ft2} ft2.")
@@ -871,12 +871,12 @@ class Standard
 
     # error if HVACComponent heating fuels method is not available
     if model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', 'Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
     model.getThermalZones.sort.each do |zone|
-      all_htg_fuels += zone.heatingFuelTypes.map { |f| f.valueName }
-      all_clg_fuels += zone.coolingFuelTypes.map { |f| f.valueName }
+      all_htg_fuels += zone.heatingFuelTypes.map(&:valueName)
+      all_clg_fuels += zone.coolingFuelTypes.map(&:valueName)
     end
 
     purchased_heating = false
@@ -940,10 +940,10 @@ class Standard
 
       # error if HVACComponent heating fuels method is not available
       if model.version < OpenStudio::VersionString.new('3.6.0')
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
       end
 
-      htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
+      htg_fuels = zone.heatingFuelTypes.map(&:valueName)
       if htg_fuels.include?('DistrictHeating')
         has_district_hash[zone.name] = true
         has_district_hash['building'] = true
@@ -965,11 +965,11 @@ class Standard
 
     # error if HVACComponent heating fuels method is not available
     if model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
     zones.each do |zone|
-      htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
+      htg_fuels = zone.heatingFuelTypes.map(&:valueName)
       if htg_fuels.include?('DistrictHeating')
         has_district_heat = true
       end
@@ -3379,7 +3379,7 @@ class Standard
           skylights_frame_added = 0
           model.getSubSurfaces.each do |sub_surface|
             next unless sub_surface.outsideBoundaryCondition == 'Outdoors' && sub_surface.subSurfaceType == 'Skylight'
-            
+
             if model.version < OpenStudio::VersionString.new('3.1.0')
               # window frame setting before https://github.com/NREL/OpenStudio/issues/2895 was fixed
               sub_surface.setString(8, frame.name.get.to_s)
@@ -7253,7 +7253,7 @@ class Standard
 
       # error if zone design air flow rate is not available
       if zone.model.version < OpenStudio::VersionString.new('3.6.0')
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', "Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', 'Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
       end
 
       zone.additionalProperties.setFeature('return_air_type', return_air_type)
