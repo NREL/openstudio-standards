@@ -44,7 +44,7 @@ class NECB_PVground_Tests < Minitest::Test
     # 'Warehouse'
     ]
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
-    @primary_heating_fuels = ['DefaultFuel']
+    @primary_heating_fuels = ['NaturalGas']
 
     @pv_ground_types = ['add_pv_ground']
     pv_ground_total_area_pv_panels_m2 = 'NECB_Default'

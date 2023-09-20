@@ -28,9 +28,9 @@ class NECB_DCV_Tests < Minitest::Test
     @building_types = [     #test for 'FullServiceRestaurant' and 'Hospital'
         'FullServiceRestaurant',
         # 'HighriseApartment',
-        'Hospital'#,
+        # 'Hospital',
         # 'LargeHotel',
-        # 'LargeOffice',
+        'LargeOffice',
         # 'MediumOffice',
         # 'MidriseApartment',
         # 'Outpatient',
@@ -42,7 +42,7 @@ class NECB_DCV_Tests < Minitest::Test
         # 'Warehouse'
     ]
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
-    @primary_heating_fuels = ['DefaultFuel']
+    @primary_heating_fuels = ['NaturalGas']
     @dcv_types = ['Occupancy_based_DCV', 'CO2_based_DCV'] #['No_DCV'] #['NECB_Default']
     @lighting_types = ['NECB_Default'] #LED  #NECB_Default
 

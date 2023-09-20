@@ -24,7 +24,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_4_Test < MiniTest::Test
+class NECB_HVAC_System_4_Test < Minitest::Test
 
   def <%=test_name %>()
     vintage = ['NECB2011']

@@ -1,0 +1,43 @@
+{
+  "furnaces": [
+    {
+      "template": "90.1-PRM-2019",
+      "fuel_type": "Gas",
+      "subcategory": "Furnace",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 225000.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": 0.78,
+      "minimum_thermal_efficiency": 0.8,
+      "minimum_combustion_efficiency": null,
+      "notes": "Table G3.5.5"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "fuel_type": "Gas",
+      "subcategory": "Unit Heater",
+      "minimum_capacity": 0.0,
+      "maximum_capacity": 9999999999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": 0.8,
+      "notes": "Table G3.5.5"
+    },
+    {
+      "template": "90.1-PRM-2019",
+      "fuel_type": "Gas",
+      "subcategory": "Furnace",
+      "minimum_capacity": 225000.0,
+      "maximum_capacity": 9999999999.0,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_annual_fuel_utilization_efficiency": null,
+      "minimum_thermal_efficiency": null,
+      "minimum_combustion_efficiency": 0.8,
+      "notes": "Table G3.5.5"
+    }
+  ]
+}

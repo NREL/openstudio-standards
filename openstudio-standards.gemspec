@@ -5,7 +5,7 @@ require 'openstudio-standards/version'
 Gem::Specification.new do |spec|
   spec.name          = 'openstudio-standards'
   spec.version       = OpenstudioStandards::VERSION
-  spec.authors       = ['Andrew Parker', 'Yixing Chen', 'Mark Adams', 'Kaiyu Sun', 'Mini Maholtra', 'David Goldwasser', 'Phylroy Lopez', 'Maria Mottillo', 'Kamel Haddad', 'Julien Marrec', 'Matt Leach', 'Matt Steen', 'Eric Ringold', 'Daniel Macumber', 'Matthew Dahlhausen', 'Jian Zhang', 'Doug Maddox', 'Yunyang Ye', 'Xuechen (Jerry) Lei', 'Juan Gonzalez Matamoros', 'Jeremy Lerond']
+  spec.authors       = ['Andrew Parker', 'Yixing Chen', 'Mark Adams', 'Kaiyu Sun', 'Mini Maholtra', 'David Goldwasser', 'Phylroy Lopez', 'Maria Mottillo', 'Kamel Haddad', 'Julien Marrec', 'Matt Leach', 'Matt Steen', 'Eric Ringold', 'Daniel Macumber', 'Matthew Dahlhausen', 'Jian Zhang', 'Doug Maddox', 'Yunyang Ye', 'Xuechen (Jerry) Lei', 'Juan Gonzalez Matamoros', 'Jeremy Lerond', 'Carlos Duarte']
   spec.email         = ['andrew.parker@nrel.gov']
   spec.homepage = 'http://openstudio.net'
   spec.summary = 'Creates DOE Prototype building models and transforms proposed OpenStudio models to baseline OpenStudio models.'
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir['License.txt', 'lib/**/*', 'data/**/*']
   # spec.test_files = Dir['test/**/*']
   spec.require_paths = ['lib']
-  spec.add_development_dependency 'minitest-reporters'
+  spec.add_development_dependency 'minitest-reporters', '1.6.1'
   spec.add_development_dependency 'minitest-parallel_fork'
   spec.add_development_dependency 'ruby-progressbar'
   if RUBY_VERSION < '2.3'
@@ -47,7 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'aes', '0.5.0'
   spec.add_development_dependency 'roo', '2.7.1'
   spec.add_development_dependency 'openstudio-api-stubs'
-  spec.add_development_dependency 'tbd', '~> 3'
+  spec.add_runtime_dependency 'tbd', '~> 3'
   spec.add_development_dependency 'aws-sdk-s3'
   spec.add_development_dependency 'git-revision'
 end

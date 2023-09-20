@@ -3,7 +3,7 @@ require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
 #Test Geometry Wizards
-class TestBTAPGeometryWizards < MiniTest::Test
+class TestBTAPGeometryWizards < Minitest::Test
 
   # Set to true to run the standards in the test.
   #PERFORM_STANDARDS = true

@@ -38,21 +38,6 @@ namespace :test do
     t.verbose = false
   end
 
-  desc 'parallel_run_necb_building_regression_tests'
-  Rake::TestTask.new('parallel_run_necb_building_regression_tests_locally') do |t|
-    file_list = FileList.new('test/necb/building_regression_tests/locally_run_tests.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = false
-  end
-
-  desc 'parallel_run_necb_system_tests_tests'
-  Rake::TestTask.new('parallel_run_necb_system_tests_tests_locally') do |t|
-    file_list = FileList.new('test/necb/system_tests/locally_run_tests.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = false
-  end
 
   # These tests only available in the CI environment
   if ENV['CI'] == 'true'
@@ -152,7 +137,9 @@ namespace :data do
   # as data may be overwritten when parsing later spreadsheets.
   spreadsheets_ashrae = [
     'OpenStudio_Standards-ashrae_90_1',
-    'OpenStudio_Standards-ashrae_90_1(space_types)'
+    'OpenStudio_Standards-ashrae_90_1(space_types)',
+    'OpenStudio_Standards-ashrae_90_1_prm',
+    'OpenStudio_Standards-ashrae_90_1_prm(space_types)'
   ]
 
   spreadsheets_deer = [

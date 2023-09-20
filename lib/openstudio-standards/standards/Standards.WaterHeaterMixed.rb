@@ -17,6 +17,13 @@ class Standard
       end
     end
 
+    # get number of water heaters
+    if water_heater_mixed.additionalProperties.getFeatureAsInteger('component_quantity').is_initialized
+      comp_qty = water_heater_mixed.additionalProperties.getFeatureAsInteger('component_quantity').get
+    else
+      comp_qty = 1
+    end
+
     # Get the capacity of the water heater
     # @todo add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
@@ -25,7 +32,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find capacity, standard will not be applied.")
       return false
     else
-      capacity_w = capacity_w.get / water_heater_mixed.component_quantity
+      capacity_w = capacity_w.get / comp_qty
     end
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
@@ -37,7 +44,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volume, standard will not be applied.")
       return false
     else
-      volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / water_heater_mixed.component_quantity
+      volume_m3 = @instvarbuilding_type == 'MidriseApartment' ? volume_m3.get / 23 : volume_m3.get / comp_qty
     end
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
 
@@ -169,15 +176,15 @@ class Standard
     end
 
     # Convert to SI
-    ua_btu_per_hr_per_c = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, skin-loss UA = #{ua_btu_per_hr_per_c} W/K.")
+    ua_w_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, skin-loss UA = #{ua_w_per_k} W/K.")
 
     # Set the water heater properties
     # Efficiency
     water_heater_mixed.setHeaterThermalEfficiency(water_heater_eff)
     # Skin loss
-    water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
-    water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
+    water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_w_per_k)
+    water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_w_per_k)
     # @todo Parasitic loss (pilot light)
     # PNNL document says pilot lights were removed, but IDFs
     # still have the on/off cycle parasitic fuel consumptions filled in
@@ -190,7 +197,7 @@ class Standard
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr-R")
 
     return true
   end

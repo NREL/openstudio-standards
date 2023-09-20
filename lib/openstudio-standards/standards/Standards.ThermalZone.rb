@@ -605,12 +605,21 @@ class Standard
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = thermal_zone.heating_fuels
 
-    if htg_fuels.include?('NaturalGas') ||
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+
+    if htg_fuels.include?('Gas') 
+       htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil_1') ||
        htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOil_2') ||
        htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
@@ -623,6 +632,14 @@ class Standard
     # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating fuels = #{htg_fuels.join(', ')}; thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)  = #{is_fossil}.")
 
     return is_fossil
+  end
+
+  # for 2013 and prior, baseline fuel = proposed fuel
+  # @param themal_zone
+  # @return [string] with applicable DistrictHeating and/or DistrictCooling
+  def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
+    zone_fuels = thermal_zone_fossil_or_electric_type(zone, '')
+    return zone_fuels
   end
 
   # Determine if the thermal zone's fuel type category.
@@ -639,12 +656,20 @@ class Standard
     fossil = false
     electric = false
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Fossil heating
-    htg_fuels = thermal_zone.heating_fuels
-    if htg_fuels.include?('NaturalGas') ||
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+    if htg_fuels.include?('Gas') 
+       htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil_1') ||
        htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOil_2') ||
        htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
@@ -660,7 +685,7 @@ class Standard
 
     # Cooling fuels, for determining
     # unconditioned zones
-    clg_fuels = thermal_zone.cooling_fuels
+    clg_fuels = thermal_zone.coolingFuelTypes
 
     # Categorize
     fuel_type = nil
@@ -703,19 +728,27 @@ class Standard
   def thermal_zone_mixed_heating_fuel?(thermal_zone)
     is_mixed = false
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
     # Coal, Diesel, Gasoline, DistrictHeating,
     # and SolarEnergy.
-    htg_fuels = thermal_zone.heating_fuels
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
 
     # Includes fossil
     fossil = false
-    if htg_fuels.include?('NaturalGas') ||
+    if htg_fuels.include?('Gas') 
+       htg_fuels.include?('NaturalGas') ||
        htg_fuels.include?('Propane') ||
        htg_fuels.include?('PropaneGas') ||
+       htg_fuels.include?('FuelOil_1') ||
        htg_fuels.include?('FuelOilNo1') ||
+       htg_fuels.include?('FuelOil_2') ||
        htg_fuels.include?('FuelOilNo2') ||
        htg_fuels.include?('Coal') ||
        htg_fuels.include?('Diesel') ||
@@ -829,9 +862,14 @@ class Standard
       end
     end
 
+    # error if HVACComponent heating fuels method is not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get the zone heating and cooling fuels
-    htg_fuels = thermal_zone.heating_fuels
-    clg_fuels = thermal_zone.cooling_fuels
+    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+    clg_fuels = thermal_zone.coolingFuelTypes.map { |f| f.valueName }
     is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
 
     # Infer the HVAC type
@@ -972,7 +1010,7 @@ class Standard
         end
       elsif equip.to_ZoneHVACLowTemperatureRadiantElectric.is_initialized
         equip = equip.to_ZoneHVACLowTemperatureRadiantElectric.get
-        htg_sch = equip.heatingSetpointTemperatureSchedule.get
+        htg_sch = equip.heatingSetpointTemperatureSchedule
       elsif equip.to_ZoneHVACLowTempRadiantConstFlow.is_initialized
         equip = equip.to_ZoneHVACLowTempRadiantConstFlow.get
         htg_coil = equip.heatingCoil
@@ -1217,6 +1255,8 @@ class Standard
           end
         end
       end
+    elsif tstat.to_ThermostatSetpointSingleHeating
+      cld = false
     end
 
     return cld
@@ -1273,81 +1313,81 @@ class Standard
   end
 
   # Determines whether the zone is conditioned per 90.1, which is based on heating and cooling loads.
+  # Logic to detect indirectly-conditioned spaces cannot be implemented
+  # as part of this measure as it would need to call itself.
+  # It is implemented as part of space_conditioning_category().
+  # TODO: Add addendum db rules to 90.1-2019 for 90.1-2022 (use stable baseline value for zones designated as semiheated using proposed sizing run)
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
-  # @todo add logic to detect indirectly-conditioned spaces
   def thermal_zone_conditioning_category(thermal_zone, climate_zone)
+    # error if zone design load methods are not available
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    end
+
     # Get the heating load
     htg_load_btu_per_ft2 = 0.0
-    htg_load_w_per_m2 = thermal_zone.heatingDesignLoad
-    if htg_load_w_per_m2.is_initialized
-      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
+    htg_load_w = thermal_zone.autosizedHeatingDesignLoad
+    if htg_load_w.is_initialized
+      htg_load_w_per_m2 = thermal_zone.autosizedHeatingDesignLoad.get / thermal_zone.floorArea
+      htg_load_btu_per_ft2 = OpenStudio.convert(htg_load_w_per_m2, 'W/m^2', 'Btu/hr*ft^2').get
     end
 
     # Get the cooling load
     clg_load_btu_per_ft2 = 0.0
-    clg_load_w_per_m2 = thermal_zone.coolingDesignLoad
-    if clg_load_w_per_m2.is_initialized
-      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2.get, 'W/m^2', 'Btu/hr*ft^2').get
+    clg_load_w = thermal_zone.autosizedCoolingDesignLoad
+    if clg_load_w.is_initialized
+      clg_load_w_per_m2 = thermal_zone.autosizedCoolingDesignLoad.get / thermal_zone.floorArea
+      clg_load_btu_per_ft2 = OpenStudio.convert(clg_load_w_per_m2, 'W/m^2', 'Btu/hr*ft^2').get
     end
 
     # Determine the heating limit based on climate zone
     # From Table 3.1 Heated Space Criteria
     htg_lim_btu_per_ft2 = 0.0
-    case climate_zone
-    when 'ASHRAE 169-2006-0A',
-        'ASHRAE 169-2006-0B',
-        'ASHRAE 169-2006-1A',
-        'ASHRAE 169-2006-1B',
-        'ASHRAE 169-2006-2A',
-        'ASHRAE 169-2006-2B',
-        'ASHRAE 169-2013-0A',
-        'ASHRAE 169-2013-0B',
-        'ASHRAE 169-2013-1A',
-        'ASHRAE 169-2013-1B',
-        'ASHRAE 169-2013-2A',
-        'ASHRAE 169-2013-2B'
+    climate_zone_code = climate_zone.split('-')[-1]
+    if ['0A', '0B', '1A', '1B', '2A', '2B'].include? climate_zone_code
       htg_lim_btu_per_ft2 = 5
-    when 'ASHRAE 169-2006-3A',
-        'ASHRAE 169-2006-3B',
-        'ASHRAE 169-2006-3C',
-        'ASHRAE 169-2013-3A',
-        'ASHRAE 169-2013-3B',
-        'ASHRAE 169-2013-3C'
+      stable_htg_lim_btu_per_ft2 = 5
+    elsif ['3A', '3B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 9
+      stable_htg_lim_btu_per_ft2 = 10
+    elsif climate_zone_code == '3C'
+      htg_lim_btu_per_ft2 = 7
+      stable_htg_lim_btu_per_ft2 = 10
+    elsif ['4A', '4B'].include? climate_zone_code
       htg_lim_btu_per_ft2 = 10
-    when 'ASHRAE 169-2006-4A',
-        'ASHRAE 169-2006-4B',
-        'ASHRAE 169-2006-4C',
-        'ASHRAE 169-2006-5A',
-        'ASHRAE 169-2006-5B',
-        'ASHRAE 169-2006-5C',
-        'ASHRAE 169-2013-4A',
-        'ASHRAE 169-2013-4B',
-        'ASHRAE 169-2013-4C',
-        'ASHRAE 169-2013-5A',
-        'ASHRAE 169-2013-5B',
-        'ASHRAE 169-2013-5C'
-      htg_lim_btu_per_ft2 = 15
-    when 'ASHRAE 169-2006-6A',
-        'ASHRAE 169-2006-6B',
-        'ASHRAE 169-2006-7A',
-        'ASHRAE 169-2006-7B',
-        'ASHRAE 169-2013-6A',
-        'ASHRAE 169-2013-6B',
-        'ASHRAE 169-2013-7A',
-        'ASHRAE 169-2013-7B'
-      htg_lim_btu_per_ft2 = 20
-    when 'ASHRAE 169-2006-8A',
-        'ASHRAE 169-2006-8B',
-        'ASHRAE 169-2013-8A',
-        'ASHRAE 169-2013-8B'
-      htg_lim_btu_per_ft2 = 25
+      stable_htg_lim_btu_per_ft2 = 15
+    elsif climate_zone_code == '4C'
+      htg_lim_btu_per_ft2 = 8
+      stable_htg_lim_btu_per_ft2 = 15
+    elsif ['5A', '5B', '5C'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 12
+      stable_htg_lim_btu_per_ft2 = 15
+    elsif ['6A', '6B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 14
+      stable_htg_lim_btu_per_ft2 = 20
+    elsif ['7A', '7B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 16
+      stable_htg_lim_btu_per_ft2 = 20
+    elsif ['8A', '8B'].include? climate_zone_code
+      htg_lim_btu_per_ft2 = 19
+      stable_htg_lim_btu_per_ft2 = 25
+    end
+
+    # for older code versions use stable baseline value as primary target
+    if ['90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013'].include? template
+      htg_lim_btu_per_ft2 = stable_htg_lim_btu_per_ft2
     end
 
     # Cooling limit is climate-independent
-    clg_lim_btu_per_ft2 = 5
+    case template
+    when '90.1-2016', '90.1-PRM-2019'
+      clg_lim_btu_per_ft2 = 3.4
+    else
+      clg_lim_btu_per_ft2 = 5
+    end
 
     # Semiheated limit is climate-independent
     semihtd_lim_btu_per_ft2 = 3.4
@@ -1388,6 +1428,11 @@ class Standard
   # @return [Double] the design heating supply temperature, in degrees Celsius
   # @todo Exception: 17F delta-T for labs
   def thermal_zone_prm_baseline_heating_design_supply_temperature(thermal_zone)
+    unit_heater_sup_temp = thermal_zone_prm_unitheater_design_supply_temperature(thermal_zone)
+    unless unit_heater_sup_temp.nil?
+      return unit_heater_sup_temp
+    end
+
     setpoint_c = nil
 
     # Setpoint schedule
@@ -1431,6 +1476,12 @@ class Standard
 
     # Add 20F delta-T
     delta_t_r = 20
+
+    new_delta_t = thermal_zone_prm_lab_delta_t(thermal_zone)
+    unless new_delta_t.nil?
+      delta_t_r = new_delta_t
+    end
+
     delta_t_k = OpenStudio.convert(delta_t_r, 'R', 'K').get
 
     sat_c = setpoint_c + delta_t_k # Add for heating
@@ -1488,6 +1539,16 @@ class Standard
 
     # Subtract 20F delta-T
     delta_t_r = 20
+    if /prm/i =~ template # avoid affecting previous PRM tests
+      # For labs, substract 17 delta-T; otherwise, substract 20 delta-T
+      thermal_zone.spaces.each do |space|
+        space_std_type = space.spaceType.get.standardsSpaceType.get
+        if space_std_type == 'laboratory'
+          delta_t_r = 17
+        end
+      end
+    end
+
     delta_t_k = OpenStudio.convert(delta_t_r, 'R', 'K').get
 
     sat_c = setpoint_c - delta_t_k # Subtract for cooling
@@ -1570,6 +1631,93 @@ class Standard
     end
 
     return load_w
+  end
+
+  # Determine the peak internal load (W) for
+  # this zone without space multipliers.
+  # This includes People, Lights, and all equipment types
+  # in all spaces in this zone.
+  # @author Doug Maddox, PNNL
+  # @return [Double] the design internal load, in W
+  def thermal_zone_peak_internal_load(model, thermal_zone, use_noncoincident_value: true)
+    load_w = 0.0
+    load_hrs_sum = Array.new(8760, 0)
+
+    if !use_noncoincident_value
+      # Get array of coincident internal gain
+      thermal_zone.spaces.each do |space|
+        load_hrs = space_internal_load_annual_array(model, space, use_noncoincident_value)
+        (0..8759).each do |ihr|
+          load_hrs_sum[ihr] += load_hrs[ihr]
+        end
+      end
+      load_w = load_hrs_sum.max
+    else
+      # Get the non-coincident sum of peak internal gains
+      thermal_zone.spaces.each do |space|
+        load_w += space_internal_load_annual_array(model, space, use_noncoincident_value)
+      end
+    end
+
+    return load_w
+  end
+
+  # This is the operating hours for calulating EFLH which is used for determining whether a zone
+  # should be included in a multizone system or isolated to a separate PSZ system
+  # Based on the occupancy schedule for that zone
+  # @author Doug Maddox, PNNL
+  # @return [Array] 8760 array with 1 = operating, 0 = not operating
+  def thermal_zone_get_annual_operating_hours(model, zone, zone_fan_sched)
+    zone_ppl_sch = Array.new(8760, 0)     # merged people schedule for zone
+    zone_op_sch = Array.new(8760, 0)      # intersection of fan and people scheds
+
+    unoccupied_threshold = air_loop_hvac_unoccupied_threshold
+    # Need composite occupant schedule for spaces in the zone
+    zone.spaces.each do |space|
+      space_ppl_sch = space_occupancy_annual_array(model, space)
+      # If any space is occupied, make zone occupied
+      (0..8759).each do |ihr|
+        zone_ppl_sch[ihr] = 1 if space_ppl_sch[ihr] > 0
+      end
+    end
+
+    zone_op_sch = zone_ppl_sch
+
+    return zone_op_sch
+  end
+
+  # This is the EFLH for determining whether a zone should be included in a multizone system
+  # or isolated to a separate PSZ system
+  # Based on the intersection of the fan schedule for that zone and the occupancy schedule for that zone
+  # @author Doug Maddox, PNNL
+  # @return [Double] the design internal load, in W
+  def thermal_zone_occupancy_eflh(zone, zone_op_sch)
+    eflhs = [] # weekly array of eflh values
+
+    # Convert 8760 array to weekly eflh values
+    hr_of_yr = -1
+    (0..51).each do |iweek|
+      eflh = 0
+      (0..6).each do |iday|
+        (0..23).each do |ihr|
+          hr_of_yr += 1
+          eflh += zone_op_sch[hr_of_yr]
+        end
+      end
+      eflhs << eflh
+    end
+
+    # Choose the most used weekly schedule as the representative eflh
+    # This is the statistical mode of the array of values
+    eflh_mode_list = eflhs.mode
+
+    if eflh_mode_list.size > 1
+      # Mode is an array of multiple values, take the largest value
+      eflh = eflh_mode_list.max
+    else
+      eflh = eflh_mode_list[0]
+    end
+    return eflh
   end
 
   # Returns the space type that represents a majority of the floor area.
@@ -1667,6 +1815,7 @@ class Standard
 
     # Not required if both limits nil
     if min_area_m2.nil? && min_area_m2_per_occ.nil?
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: DCV is not required due to lack of minimum area requirements.")
       return dcv_required
     end
 
@@ -1889,12 +2038,49 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   # @todo this method is currently empty
   def thermal_zone_add_exhaust_fan_dcv(thermal_zone, change_related_objects = true, zone_mixing_objects = [], transfer_air_source_zones = [])
-
     # set flow fraction schedule for all zone exhaust fans and then set zone mixing schedule to the intersection of exhaust availability and exhaust fractional schedule
 
     # are there associated zone mixing or dummy exhaust objects that need to change when this changes?
     # How are these objects identified?
     # If this is run directly after thermal_zone_add_exhaust(thermal_zone)  it will return a hash where each key is an exhaust object and hash is a hash of related zone mixing and dummy exhaust from the source zone
     return true
+  end
+
+  # Specify supply air temperature setpoint for unit heaters based on 90.1 Appendix G G3.1.2.8.2 (implementation in PRM subclass)
+  def thermal_zone_prm_unitheater_design_supply_temperature(thermal_zone)
+    return nil
+  end
+
+  # Specify supply to room delta for laboratory spaces based on 90.1 Appendix G Exception to G3.1.2.8.1 (implementation in PRM subclass)
+  def thermal_zone_prm_lab_delta_t(thermal_zone)
+    return nil
+  end
+
+  # Determine the number of unmet load hours during occupancy for a thermal zone
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+  # @param umlh_type [String] Type of unmet load hours, either 'Cooling' or 'Heating'
+  def thermal_zone_get_unmet_load_hours(thermal_zone, umlh_type)
+    umlh = OpenStudio::OptionalDouble.new
+    sql = thermal_zone.model.sqlFile
+    if sql.is_initialized
+      sql = sql.get
+      query = "SELECT Value
+              FROM tabulardatawithstrings
+              WHERE ReportName='SystemSummary'
+              AND ReportForString='Entire Facility'
+              AND TableName='Time Setpoint Not Met'
+              AND ColumnName='During Occupied #{umlh_type.capitalize}'
+              AND RowName='#{thermal_zone.name.to_s.upcase}'
+              AND Units='hr'"
+      val = sql.execAndReturnFirstDouble(query)
+      if val.is_initialized
+        umlh = OpenStudio::OptionalDouble.new(val.get)
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return umlh.to_f
   end
 end

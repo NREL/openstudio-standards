@@ -44,7 +44,7 @@ class NECB_scaling_loads_Tests < Minitest::Test
     @epw_files = [
         'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
     ]
-    @primary_heating_fuels = ['DefaultFuel']
+    @primary_heating_fuels = ['NaturalGas']
 
     @loads_scales = [
         0.0,

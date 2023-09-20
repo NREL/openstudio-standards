@@ -2,7 +2,8 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
-class NECB_HVAC_Ref_Heat_Pump_Tests < MiniTest::Test
+
+class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
 
   # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
@@ -12,7 +13,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < MiniTest::Test
     define_std_ranges
   end
 
-#Tests to confirm heat pump rules from NECB 8.4.4.13
+  #Tests to confirm heat pump rules from NECB 8.4.4.13
 
   # Check if rated heating capacity of the HP is 50% of cooling capacity at -8.3C
   # NOTE: The DXCOOL-NECB2011-REF-CAPFT curve has a temperature limit of 13C, standards
@@ -744,8 +745,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < MiniTest::Test
   end
 
 
-# Test HP cooling set to zone peak load without oversizing
-def test_ref_heatpump_sizing_factor
+  # Test HP cooling set to zone peak load without oversizing
+  def test_ref_heatpump_sizing_factor
 
   # Set up remaining parameters for test.
   output_folder = method_output_folder(__method__)
@@ -831,8 +832,8 @@ def test_ref_heatpump_sizing_factor
 end
 
 # Test for correct supplemental heating
- # Test heating coil to check if it turns off at <-10C
- def test_ref_heatpump_heating_low_temp
+# Test heating coil to check if it turns off at <-10C
+def test_ref_heatpump_heating_low_temp
 
   # Set up remaining parameters for test.
   output_folder = method_output_folder(__method__)

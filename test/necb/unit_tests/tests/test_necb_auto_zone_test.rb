@@ -4,7 +4,7 @@ require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
 
-class NECB_Autozone_Tests < MiniTest::Test
+class NECB_Autozone_Tests < Minitest::Test
 
   # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
@@ -16,7 +16,6 @@ class NECB_Autozone_Tests < MiniTest::Test
     @epw_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
     @template = 'NECB2011'
   end
-
 
   # Metacode to create tests dynamically for each archetype.
   define_std_ranges
@@ -41,7 +40,8 @@ class NECB_Autozone_Tests < MiniTest::Test
     model = standard.model_create_prototype_model(epw_file: @epw_file,
                                                   sizing_run_dir: File.join(output_folder, building_type, 'sizing'),
                                                   template: @template,
-                                                  building_type: building_type)
+                                                  building_type: building_type,
+                                                  primary_heating_fuel: 'NaturalGas')
 
 
     puts "Writing Output #{outfile}"

@@ -21,9 +21,9 @@ class NECB2011
   # @return [Bool] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac)
     economizer_required = false
-    
+
     # need a better way to determine if an economizer is needed.
-    return economizer_required if ((air_loop_hvac.name.to_s.include? 'Outpatient F1' ) || 
+    return economizer_required if ((air_loop_hvac.name.to_s.include? 'Outpatient F1' ) ||
                                    (air_loop_hvac.sizingSystem.typeofLoadtoSizeOn.to_s == "VentilationRequirement"))
 
     # A big number of btu per hr as the minimum requirement
@@ -42,7 +42,7 @@ class NECB2011
 
     # puts air_loop_hvac.name.to_s
     # Design Supply Air Flow Rate: This method below reads the value from the sql file.
-    dsafr_m3_per_s = air_loop_hvac.model.getAutosizedValue(air_loop_hvac, 'Design Supply Air Flow Rate', 'm3/s')
+    dsafr_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate
     min_dsafr_l_per_s = 1500
     unless dsafr_m3_per_s.empty?
       dsafr_l_per_s = dsafr_m3_per_s.get * 1000
@@ -504,21 +504,29 @@ class NECB2011
     capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
 
     # Check if secondary and/or modulating boiler required
-    if capacity_w / 1000.0 >= 352.0
-      if boiler_hot_water.name.to_s.include?('Primary Boiler')
-        boiler_capacity = capacity_w
-        boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
-        boiler_hot_water.setMinimumPartLoadRatio(0.25)
-      elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-        boiler_capacity = 0.001
-      end
-    elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
-      boiler_capacity = capacity_w / 2
-    elsif (capacity_w / 1000.0) <= 176.0
-      if boiler_hot_water.name.to_s.include?('Primary Boiler')
-        boiler_capacity = capacity_w
-      elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-        boiler_capacity = 0.001
+    # If boiler names include 'Primary Boiler' or 'Secondary Boiler' then NECB rules are applied
+    boiler_capacity = capacity_w
+    if boiler_hot_water.name.to_s.include?('Primary Boiler') || boiler_hot_water.name.to_s.include?('Secondary Boiler')
+      if capacity_w / 1000.0 >= 352.0
+        if boiler_hot_water.name.to_s.include?('Primary Boiler')
+          boiler_capacity = capacity_w
+          boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
+          boiler_hot_water.setMinimumPartLoadRatio(0.25)
+        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+          boiler_capacity = 0.001
+        end
+      elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
+        boiler_capacity = capacity_w / 2
+      elsif (capacity_w / 1000.0) <= 176.0
+        if boiler_hot_water.name.to_s.include?('Primary Boiler')
+          if capacity_w <= 1.0
+            boiler_capacity = 1.0
+          else
+            boiler_capacity = capacity_w
+          end
+        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+          boiler_capacity = 0.001
+        end
       end
     end
     boiler_hot_water.setNominalCapacity(boiler_capacity)
@@ -586,8 +594,6 @@ class NECB2011
   #
   # @return [Bool] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
-    chillers = standards_data['chillers']
-
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
@@ -602,21 +608,42 @@ class NECB2011
     chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
     chiller_electric_eir.setMinimumPartLoadRatio(0.25)
     chiller_electric_eir.setMinimumUnloadingRatio(0.25)
-    if (capacity_w / 1000.0) < 2100.0
-      if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
-        chiller_capacity = capacity_w
-      elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
-        chiller_capacity = 0.001
+    chiller_capacity = capacity_w
+    # If the chiller name includes 'Primary' or 'Secondary' then apply NECB rules
+    if (chiller_electric_eir.name.to_s.include? 'Primary') || (chiller_electric_eir.name.to_s.include? 'Secondary')
+      if (capacity_w / 1000.0) < 2100.0
+        if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
+          chiller_capacity = capacity_w
+        elsif chiller_electric_eir.name.to_s.include? 'Secondary Chiller'
+          chiller_capacity = 0.001
+        end
+      else
+        chiller_capacity = capacity_w / 2.0 
       end
-    else
-      chiller_capacity = capacity_w / 2.0
     end
     chiller_electric_eir.setReferenceCapacity(chiller_capacity)
 
     # Convert capacity to tons
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
+    # Get chiller compressor type if needed
+    chiller_types = ['reciprocating','scroll','rotary screw','centrifugal']
+    chiller_name_has_type = chiller_types.any? {|type| chiller_electric_eir.name.to_s.downcase.include? type}
+    unless chiller_name_has_type
+      chlr_type_search_criteria = {}
+      chlr_type_search_criteria['cooling_type'] = cooling_type
+      chlr_types_table = @standards_data['chiller_types']
+      chlr_type_props = model_find_object(chlr_types_table, chlr_type_search_criteria, capacity_tons)
+      unless chlr_type_props
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller type information")
+        successfully_set_all_properties = false
+        return successfully_set_all_properties
+      end
+      compressor_type = chlr_type_props['compressor_type']
+      chiller_electric_eir.setName(chiller_electric_eir.name.to_s + ' ' + compressor_type)
+    end
     # Get the chiller properties
+    search_criteria['compressor_type'] = compressor_type
     chlr_table = @standards_data['chillers']
     chlr_props = model_find_object(chlr_table, search_criteria, capacity_tons, Date.today)
     unless chlr_props
@@ -1048,6 +1075,7 @@ class NECB2011
     heat_pump_avail_sch_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, heat_pump_avail_sch_var)
     updated_heat_pump_avail_sch = OpenStudio::Model::ScheduleConstant.new(model)
     multi_speed_heat_pump.setAvailabilitySchedule(updated_heat_pump_avail_sch)
+    # This method will seem like an error in number of args..but this is due to swig voodoo.
     heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, 'Schedule:Constant', 'Schedule Value')
     heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
     heat_pump_avail_sch_prog.setName("#{multi_speed_heat_pump.name.to_s.gsub(/[ +-.]/, '_')} Availability Schedule Program by Line")
@@ -1653,9 +1681,9 @@ class NECB2011
     chiller2 = OpenStudio::Model::ChillerElectricEIR.new(model)
     chiller1.setCondenserType('WaterCooled')
     chiller2.setCondenserType('WaterCooled')
-    chiller1_name = "Primary Chiller WaterCooled #{chiller_type}"
+    chiller1_name = "Primary Chiller WaterCooled #{chiller_type}".strip
     chiller1.setName(chiller1_name)
-    chiller2_name = "Secondary Chiller WaterCooled #{chiller_type}"
+    chiller2_name = "Secondary Chiller WaterCooled #{chiller_type}".strip
     chiller2.setName(chiller2_name)
 
     chiller_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
@@ -1690,7 +1718,10 @@ class NECB2011
     cw_sizing_plant.setDesignLoopExitTemperature(29.0)
     cw_sizing_plant.setLoopDesignTemperatureDifference(6.0)
 
-    cw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+    # Note: pump of 'Condenser water loop' has been changed to the variable one as the constant one caused fatal errors for LargeOffice-Montreal-NaturalGas for some ECMs and inputs.
+    # Fatal error was: 'Plant temperatures are getting far too cold, check controls and relative loads and capacities'.
+    # Note that the variable speed pump has been already used for 'Hot Water Loop' and 'Chilled Water Loop'.
+    cw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
 
     clg_tower = OpenStudio::Model::CoolingTowerSingleSpeed.new(model)
 
@@ -2012,15 +2043,17 @@ class NECB2011
     clg_coil = add_onespeed_DX_coil(model, always_on)
 
     # Set up PTAC constant volume supply fan
-    fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+    fan = OpenStudio::Model::FanOnOff.new(model)
     fan.setPressureRise(640)
 
+    # This method will seem like an error in number of args..but this is due to swig voodoo.
     ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model,
                                                                          always_on,
                                                                          fan,
                                                                          htg_coil,
                                                                          clg_coil)
     ptac.setName("#{zone.name} PTAC")
+    ptac.setSupplyAirFanOperatingModeSchedule(always_off)
     if zero_outdoor_air
       ptac.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded 1.0e-5
       ptac.setOutdoorAirFlowRateDuringCoolingOperation(1.0e-5)
@@ -2051,7 +2084,11 @@ class NECB2011
     air_loop_sizing.setCentralHeatingDesignSupplyAirTemperature(system_data[:CentralHeatingDesignSupplyAirTemperature]) unless system_data[:CentralHeatingDesignSupplyAirTemperature].nil?
     air_loop_sizing.setAllOutdoorAirinCooling(system_data[:AllOutdoorAirinCooling]) unless system_data[:AllOutdoorAirinCooling].nil?
     air_loop_sizing.setAllOutdoorAirinHeating(system_data[:AllOutdoorAirinHeating]) unless system_data[:AllOutdoorAirinHeating].nil?
-    air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    if model.version < OpenStudio::VersionString.new('2.7.0')
+      air_loop_sizing.setMinimumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    else
+      air_loop_sizing.setCentralHeatingMaximumSystemAirFlowRatio(system_data[:MinimumSystemAirFlowRatio]) unless system_data[:MinimumSystemAirFlowRatio].nil?
+    end
     return mau_air_loop
   end
 
@@ -2410,13 +2447,33 @@ class NECB2011
           puts "num_of_supp_coils #{num_of_supp_coils}"
           return supp_htg_type = 'Electric Resistance or None' 
         end
-
-
-
       end
     end
+  end
 
-
-  
+  # Sets the capacity of the reheat coil based on the minimum flow fraction, and the maximum flow rate.
+  #
+  # @param air_terminal_single_duct_vav_reheat [OpenStudio::Model::AirTerminalSingleDuctVAVReheat] the air terminal object
+  # @return [Bool] returns true if successful, false if not
+  def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
+    flow_rate_fraction = 0.0
+    if air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction.is_initialized
+      flow_rate_fraction = air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirTerminalSingleDuctVAVReheat', \
+      "Minimum flow fraction is not defined for terminal device #{air_terminal_single_duct_vav_reheat.name}")
+      return false
+    end
+    cap = 1.2 * 1000.0 * flow_rate_fraction * air_terminal_single_duct_vav_reheat.autosizedMaximumAirFlowRate.to_f * (43.0 - 13.0)
+    if air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingElectric.is_initialized
+      reheat_coil = air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingElectric.get
+      reheat_coil.setNominalCapacity(cap)
+    elsif air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.is_initialized
+      reheat_coil = air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.get
+      reheat_coil.setPerformanceInputMethod('NominalCapacity')
+      reheat_coil.setRatedCapacity(cap)
+    end
+    air_terminal_single_duct_vav_reheat.setMaximumReheatAirTemperature(43.0)
+    return true
   end
 end

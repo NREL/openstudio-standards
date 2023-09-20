@@ -81,6 +81,47 @@ class Standard
     return climate_zone_weather_file_map
   end
 
+  # Get absolute path of a weather file included within openstudio-standards
+  #
+  # @param weather_file_name [String] Name of a weather file include within openstudio-standards
+  # @return [String] Weather file path
+  def model_get_weather_file(weather_file_name)
+    # Define where the weather files lives
+    weather_dir = nil
+    if __dir__[0] == ':' # Running from OpenStudio CLI
+      # load weather file from embedded files
+      epw_string = load_resource_relative("../../../data/weather/#{weather_file_name}")
+      ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.ddy')}")
+      stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
+
+      # extract to local weather dir
+      weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
+      FileUtils.mkdir_p(weather_dir)
+
+      path_length = "#{weather_dir}/#{weather_file_name}".length
+      if path_length > 260
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Weather file path length #{path_length} is >260 characters and may cause issues in Windows environments.")
+      end
+      File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
+      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
+    else
+      # loaded gem from system path
+      top_dir = File.expand_path('../../..', File.dirname(__FILE__))
+      weather_dir = File.expand_path("#{top_dir}/data/weather")
+    end
+
+    # Add Weather File
+    unless (Pathname.new weather_dir).absolute?
+      weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
+    end
+
+    weather_file = File.join(weather_dir, weather_file_name)
+
+    return weather_file
+  end
+
   # Adds the design days and weather file for the specified climate zone
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -110,34 +151,8 @@ class Standard
       success = false
     end
 
-    # Define where the weather files lives
-    if weather_dir.nil?
-      if __dir__[0] == ':' # Running from OpenStudio CLI
-        # load weather file from embedded files
-        epw_string = load_resource_relative("../../../data/weather/#{weather_file_name}")
-        ddy_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.ddy')}")
-        stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
+    weather_file = model_get_weather_file(weather_file_name)
 
-        # extract to local weather dir
-        weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
-        FileUtils.mkdir_p(weather_dir)
-        File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
-        File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
-        File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
-      else
-        # loaded gem from system path
-        top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-        weather_dir = File.expand_path("#{top_dir}/data/weather")
-      end
-    end
-
-    # Add Weather File
-    unless (Pathname.new weather_dir).absolute?
-      weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
-    end
-
-    weather_file = File.join(weather_dir, weather_file_name)
     epw_file = OpenStudio::EpwFile.new(weather_file)
     OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
 
@@ -213,30 +228,8 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}, cannot get ground temperatures from stat file.")
     end
 
-    # Define where the weather files lives
-    weather_dir = nil
-    if __dir__[0] == ':' # Running from OpenStudio CLI
-      # load stat file from embedded files
-      stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
-
-      # extract to local weather dir
-      weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting stat file from OpenStudio CLI to #{weather_dir}")
-      FileUtils.mkdir_p(weather_dir)
-      File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
-    else
-      # loaded gem from system path
-      top_dir = File.expand_path('../../..', File.dirname(__FILE__))
-      weather_dir = File.expand_path("#{top_dir}/data/weather")
-    end
-
-    # Expand the weather directory path
-    unless (Pathname.new weather_dir).absolute?
-      weather_dir = File.expand_path(File.join(File.dirname(__FILE__), weather_dir))
-    end
-
     # Get the path to the stat file
-    weather_file = File.join(weather_dir, weather_file_name)
+    weather_file = model_get_weather_file(weather_file_name)
 
     # Add ground temperatures via parsing of STAT file.
     ground_temperatures = []
@@ -348,7 +341,6 @@ end
 module BTAP
   module Environment
     require_relative 'Weather.stat_file'
-    # rubocop:enable Style/MutableConstant
 
     # this method is used to populate user interfaces if needed from the hash above.
     def self.get_canadian_weather_file_names
@@ -923,7 +915,7 @@ module BTAP
           end
         end
         return heating_design_day_number, cooling_design_day_number
-      end #def get_heating_design_day_number
+      end # def get_heating_design_day_number
 
       # This method calculates dehumidification degree days (DDD)
       # @author sara.gilani@canada.ca
@@ -961,7 +953,7 @@ module BTAP
                                                                     c5 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**3 +
                                                                     c6 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**4 +
                                                                     c7 * Math.log((line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k), Math.exp(1)) # 2.718281828459
-              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = (Math.exp(1))**(line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f)
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = Math.exp(1)**line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f
             else # if line[DRY_BULB_TEMPERATURE].to_f > 0.0
               line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = c8 / (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k) +
                                                                     c9 +
@@ -969,7 +961,7 @@ module BTAP
                                                                     c11 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**2 +
                                                                     c12 * (line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k)**3 +
                                                                     c13 * Math.log((line[DRY_BULB_TEMPERATURE].to_f + convert_c_to_k), Math.exp(1))
-              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = (Math.exp(1))**(line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f)
+              line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR] = Math.exp(1)**line[CALCULATED_SATURATION_PRESSURE_OF_WATER_VAPOR].to_f
             end
 
             # Step 2: calculate pw (PARTIAL_PRESSURE_OF_WATER_VAPOR), [Pascal]
@@ -1004,7 +996,6 @@ module BTAP
         # puts @filearray
         return ddd
       end # def calculate_humidity_ratio
-
     end # Environment
   end
 end

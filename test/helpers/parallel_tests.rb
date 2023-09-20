@@ -4,13 +4,7 @@ require 'fileutils'
 require 'parallel'
 require 'open3'
 
-ProcessorsUsed = (Parallel.processor_count - 20).floor
-if ProcessorsUsed < 0 
-  ProcessorsUsed = (Parallel.processor_count - 1).floor
-end
-
-
-
+ProcessorsUsed = (Parallel.processor_count - 1).floor
 
 class String
   # colorization
@@ -43,7 +37,6 @@ class String
   end
 end
 
-
 def write_results(result, test_file, test_name)
   test_file_output = File.join(@test_output_folder, "#{File.basename(test_file)}_#{test_name}_test_output.json")
   File.delete(test_file_output) if File.exist?(test_file_output)
@@ -62,7 +55,6 @@ def write_results(result, test_file, test_name)
                   "std_err" => result[1].split(/\r?\n/)
               }
     }
-
 
     #puts test_file_output
     File.open(test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
@@ -157,7 +149,7 @@ class ParallelTests
         timings_json[file_name.to_s]['total'] = timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
       end
     end
-    #File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') {|file| file.puts(JSON.pretty_generate(timings_json.sort {|a, z| a <=> z}.to_h))}
+    # File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') {|file| file.puts(JSON.pretty_generate(timings_json.sort {|a, z| a <=> z}.to_h))}
     return did_all_tests_pass
   end
 end

@@ -11,6 +11,53 @@ class Standard
     # plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop)
   end
 
+  # Apply sizing and controls to chilled water loop
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop
+  # @param dsgn_sup_wtr_temp [Double] design chilled water supply T
+  # @param dsgn_sup_wtr_temp_delt [Double] design chilled water supply delta T
+  # @return [Bool] returns true if successful, false if not
+  def chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
+    # chilled water loop sizing and controls
+    if dsgn_sup_wtr_temp.nil?
+      dsgn_sup_wtr_temp = 44.0
+      dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
+    else
+      dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
+    end
+    if dsgn_sup_wtr_temp_delt.nil?
+      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(10.1, 'R', 'K').get
+    else
+      dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(dsgn_sup_wtr_temp_delt, 'R', 'K').get
+    end
+    chilled_water_loop.setMinimumLoopTemperature(1.0)
+    chilled_water_loop.setMaximumLoopTemperature(40.0)
+    sizing_plant = chilled_water_loop.sizingPlant
+    sizing_plant.setLoopType('Cooling')
+    sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
+    sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
+    chw_temp_sch = model_add_constant_schedule_ruleset(model,
+                                                       dsgn_sup_wtr_temp_c,
+                                                       name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F")
+    chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, chw_temp_sch)
+    chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
+    chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
+    # @todo Yixing check the CHW Setpoint from standards
+    # @todo Should be a OutdoorAirReset, see the changes I've made in Standards.PlantLoop.apply_prm_baseline_temperatures
+
+    return true
+  end
+
+  # Set configuration in model for chilled water primary/secondary loop interface
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [String] common_pipe or heat_exchanger
+  def plant_loop_set_chw_pri_sec_configuration(model)
+    pri_sec_config = 'common_pipe'
+    return pri_sec_config
+  end
+
   # Determine if the plant loop is variable flow.
   # Returns true if primary and/or secondary pumps are variable speed.
   #
@@ -546,7 +593,7 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of #{chiller.name} is not available, total cooling capacity of plant loop will be incorrect when applying standard.")
         end
-        # DistrictCooling
+      # DistrictCooling
       elsif sc.to_DistrictCooling.is_initialized
         dist_clg = sc.to_DistrictCooling.get
         if dist_clg.nominalCapacity.is_initialized
@@ -771,7 +818,7 @@ class Standard
       end
     end
 
-    # Modify all the secondary pumps
+    # Modify all the secondary pumps besides constant pumps
     plant_loop.demandComponents.each do |sc|
       if sc.to_PumpVariableSpeed.is_initialized
         pump = sc.to_PumpVariableSpeed.get
@@ -898,11 +945,11 @@ class Standard
     final_boilers = [first_boiler, second_boiler]
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, added a second boiler.")
 
-    # Set the sizing factor for all boilers evenly and Rename the boilers
+    # Rename boilers and set the sizing factor
     sizing_factor = (1.0 / final_boilers.size).round(2)
     final_boilers.each_with_index do |boiler, i|
+      boiler.setName("#{plant_loop.name} Boiler #{i + 1} of #{final_boilers.size}")
       boiler.setSizingFactor(sizing_factor)
-      boiler.setName("#{first_boiler.name} #{i + 1} of #{final_boilers.size}")
     end
 
     # Set the equipment to stage sequentially
@@ -914,9 +961,9 @@ class Standard
   # Splits the single chiller used for the initial sizing run
   # into multiple separate chillers based on Appendix G.
   #
-  # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
+  # @param plant_loop_args [Array] chilled water loop (OpenStudio::Model::PlantLoop), sizing run directory
   # @return [Bool] returns true if successful, false if not
-  def plant_loop_apply_prm_number_of_chillers(plant_loop)
+  def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
 
@@ -1351,7 +1398,13 @@ class Standard
           # Check the plant loop connection on the source side
           if component.secondaryPlantLoop.is_initialized
             source_plant_loop = component.secondaryPlantLoop.get
-            secondary_fuels += plant_loop.model.plant_loop_heating_fuels(source_plant_loop)
+
+            # error if Loop heating fuels method is not available
+            if component.model.version < OpenStudio::VersionString.new('3.6.0')
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+            end
+
+            secondary_fuels += source_plant_loop.heatingFuelTypes.map { |f| f.valueName }
             secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop)
           end
 
@@ -1374,7 +1427,13 @@ class Standard
           # Check the plant loop connection on the source side
           if component.secondaryPlantLoop.is_initialized
             source_plant_loop = component.secondaryPlantLoop.get
-            secondary_fuels += plant_loop.model.plant_loop_heating_fuels(source_plant_loop)
+
+            # error if Loop heating fuels method is not available
+            if component.model.version < OpenStudio::VersionString.new('3.6.0')
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+            end
+
+            secondary_fuels += source_plant_loop.heatingFuelTypes.map { |f| f.valueName }
             secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop)
           end
 
@@ -1389,7 +1448,13 @@ class Standard
           cooling_hx_control_types.each(&:downcase!)
           if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
             source_plant_loop = hx.secondaryPlantLoop.get
-            secondary_fuels += plant_loop.model.plant_loop_heating_fuels(source_plant_loop)
+
+            # error if Loop heating fuels method is not available
+            if component.model.version < OpenStudio::VersionString.new('3.6.0')
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+            end
+
+            secondary_fuels += source_plant_loop.heatingFuelTypes.map { |f| f.valueName }
             secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop)
           end
 

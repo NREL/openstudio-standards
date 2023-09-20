@@ -4,9 +4,9 @@ require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
 
-class NECB_HVAC_Unitary_Tests < MiniTest::Test
+class NECB_HVAC_Unitary_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
+  # set to true to run the standards in the test.
   PERFORM_STANDARDS = true
 
   def setup()

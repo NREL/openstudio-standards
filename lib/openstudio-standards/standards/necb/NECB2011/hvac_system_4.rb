@@ -134,6 +134,7 @@ class NECB2011
       else #hot water coils is an option in the future
         raise('Invalid fuel type selected for heat pump supplemental coil')
       end
+      # This method will seem like an error in number of args..but this is due to swig voodoo.
       air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model, always_on, fan, htg_coil, clg_coil, supplemental_htg_coil)
       air_to_air_heatpump.setName("#{control_zone.name} ASHP")
       air_to_air_heatpump.setControllingZone(control_zone)

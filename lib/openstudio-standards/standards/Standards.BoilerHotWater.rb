@@ -53,9 +53,28 @@ class Standard
     return capacity_w
   end
 
+  # Find design water flow rate in m^3/s
+  #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @return [Double] design water flow rate in m^3/s
+  def boiler_hot_water_find_design_water_flow_rate(boiler_hot_water)
+    design_water_flow_rate_m3_per_s = nil
+    if boiler_hot_water.designWaterFlowRate.is_initialized
+      design_water_flow_rate_m3_per_s = boiler_hot_water.designWaterFlowRate.get
+    elsif boiler_hot_water.autosizedDesignWaterFlowRate.is_initialized
+      design_water_flow_rate_m3_per_s = boiler_hot_water.autosizedDesignWaterFlowRate.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name} design water flow rate is not available.")
+      return false
+    end
+
+    return design_water_flow_rate_m3_per_s
+  end
+
   # Finds lookup object in standards and return minimum thermal efficiency
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @param rename [Bool] if true, rename the boiler to include the new capacity and efficiency
   # @return [Double] minimum thermal efficiency
   def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, rename = false)
     # Get the boiler properties

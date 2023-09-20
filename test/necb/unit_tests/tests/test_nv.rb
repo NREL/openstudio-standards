@@ -44,7 +44,7 @@ class NECB_nv_Tests < Minitest::Test
     # 'Warehouse' #
     ]
     @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
-    @primary_heating_fuels = ['DefaultFuel']
+    @primary_heating_fuels = ['NaturalGas']
     @nv_types = ['add_nv']
 
     nv_opening_fraction = 'NECB_Default'

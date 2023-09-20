@@ -2,17 +2,259 @@
   "economizers": [
     {
       "template": "DEER 1985",
-      "climate_zone": "Any",
+      "climate_zone": "CEC T24-CEC1",
       "data_center": false,
       "capacity_limit": null,
-      "notes": "From MASControl2"
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
+      "notes": "Applicability from MASControl3"
     },
     {
       "template": "DEER 1985",
-      "climate_zone": "Any",
+      "climate_zone": "CEC T24-CEC1",
       "data_center": true,
       "capacity_limit": null,
-      "notes": "From MASControl2"
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC10",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 73.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC10",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 73.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC11",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC11",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC12",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC12",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC13",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC13",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC14",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC14",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC15",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC15",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC16",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC16",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 75.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC2",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 73.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC2",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 73.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC3",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC3",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC4",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 73.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC4",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 73.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC5",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC5",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 70.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC6",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 71.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC6",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 71.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC7",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 69.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC7",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 69.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC8",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 71.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC8",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 71.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC9",
+      "data_center": false,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 71.0,
+      "notes": "Applicability from MASControl3"
+    },
+    {
+      "template": "DEER 1985",
+      "climate_zone": "CEC T24-CEC9",
+      "data_center": true,
+      "capacity_limit": null,
+      "fixed_dry_bulb_high_limit_shutoff_temp": 71.0,
+      "notes": "Applicability from MASControl3"
     }
   ]
 }

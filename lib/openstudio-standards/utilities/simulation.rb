@@ -17,7 +17,7 @@ Standard.class_eval do
     osm_name = 'in.osm'
     osw_name = 'in.osw'
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', "Starting simulation here: #{run_dir}.")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Running simulation #{run_dir}.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started simulation #{run_dir} at #{Time.now.strftime('%T.%L')}")
     forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
     idf = forward_translator.translateModel(model)
     idf_path = OpenStudio::Path.new("#{run_dir}/#{idf_name}")
@@ -82,7 +82,7 @@ Standard.class_eval do
 
       sql_path = OpenStudio::Path.new("#{run_dir}/EnergyPlus/eplusout.sql")
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Finished simulation #{run_dir} at #{Time.now.strftime('%T.%L')}")
 
     else # method to running simulation within measure using OpenStudio 2.x WorkflowJSON
 
@@ -103,7 +103,7 @@ Standard.class_eval do
 
       # 'touch' the weather file - for some odd reason this fixes the simulation not running issue we had on openstudio-server.
       # Removed for until further investigation completed.
-      # FileUtils.touch("#{run_dir}/#{epw_name}")
+      #FileUtils.touch("#{run_dir}/#{epw_name}")
 
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
@@ -113,7 +113,7 @@ Standard.class_eval do
       # Run the sizing run
       OpenstudioStandards.run_command(cmd)
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished run.')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Finished simulation #{run_dir} at #{Time.now.strftime('%T.%L')}")
 
       sql_path = OpenStudio::Path.new("#{run_dir}/run/eplusout.sql")
 
@@ -218,9 +218,7 @@ Standard.class_eval do
     # Check to see if all zones have surfaces.
     model.getThermalZones.each do |zone|
       if BTAP::Geometry::Surfaces.get_surfaces_from_thermal_zones([zone]).empty?
-        error_string = "Error: Thermal zone #{zone.name} does not contain surfaces.\n"
-        puts error_string
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Siz.Model', error_string)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Thermal zone #{zone.name} does not contain surfaces.\n")
         return false
       end
     end
@@ -283,7 +281,22 @@ Standard.class_eval do
     model_run_sizing_run(model, sizing_run_dir)
     model.getSpaces.each do |space|
       unless space.thermalZone.empty?
-        space_load_array << { 'space_name' => space.name, 'CoolingDesignLoad' => space.thermalZone.get.coolingDesignLoad, 'HeatingDesignLoad' => space.thermalZone.get.heatingDesignLoad }
+        # error if zone design load methods are not available
+        if space.model.version < OpenStudio::VersionString.new('3.6.0')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        end
+
+        space_cooling_load = 0.0
+        if space.thermalZone.get.autosizedCoolingDesignLoad.is_initialized
+          space_cooling_load = space.thermalZone.get.autosizedCoolingDesignLoad.get
+        end
+
+        space_heating_load = 0.0
+        if space.thermalZone.get.autosizedHeatingDesignLoad.is_initialized
+          space_heating_load = space.thermalZone.get.autosizedHeatingDesignLoad.get
+        end
+
+        space_load_array << { 'space_name' => space.name, 'CoolingDesignLoad' => space_cooling_load, 'HeatingDesignLoad' => space_heating_load }
       end
     end
     puts space_load_array

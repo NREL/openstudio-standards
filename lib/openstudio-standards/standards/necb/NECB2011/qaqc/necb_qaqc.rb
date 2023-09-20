@@ -200,8 +200,7 @@ class NECB2011
     outdoor_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Floor')
     outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
 
-    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Ground')
-    ground_surfaces += BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, 'Foundation')
+    ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     ground_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Wall')
     ground_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'RoofCeiling')
     ground_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Floor')
@@ -836,7 +835,7 @@ class NECB2011
           air_loop_info[:cooling_coils][:dx_single_speed] << coil
           single_speed = supply_comp.to_CoilCoolingDXSingleSpeed.get
           coil[:name] = single_speed.name.get
-          coil[:cop] = single_speed.ratedCOP.get
+          coil[:cop] = single_speed.ratedCOP.to_f
           coil[:nominal_total_capacity_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
         end
@@ -845,8 +844,8 @@ class NECB2011
           air_loop_info[:cooling_coils][:dx_two_speed] << coil
           two_speed = supply_comp.to_CoilCoolingDXTwoSpeed.get
           coil[:name] = two_speed.name.get
-          coil[:cop_low] = two_speed.ratedLowSpeedCOP.get
-          coil[:cop_high] = two_speed.ratedHighSpeedCOP.get
+          coil[:cop_low] = two_speed.ratedLowSpeedCOP.to_f
+          coil[:cop_high] = two_speed.ratedHighSpeedCOP.to_f
           coil[:nominal_total_capacity_w] = model.sqlFile.get.execAndReturnFirstDouble("SELECT Value FROM TabularDataWithStrings WHERE ReportName='EquipmentSummary' AND ReportForString='Entire Facility' AND TableName='Cooling Coils' AND ColumnName='Nominal Total Capacity' AND RowName='#{coil[:name].upcase}' ")
           coil[:nominal_total_capacity_w] = validate_optional(coil[:nominal_total_capacity_w], model, -1.0)
         end
@@ -1713,7 +1712,7 @@ class NECB2011
   # This method will run the HRV compliance for a single air loop
   #
   # @param qaqc [:hash] Hash that contains the base data with qaqc keys
-  # @param model [:OS:Model] Openstudio Model
+  # @param model [:OS:Model] OpenStudio Model
   # @param  air_loop_info [:hash]  single air_loop object from the qaqc hash
   def necb_hrv_compliance_for_single_airloop(qaqc, model, air_loop_info)
     # HRV check

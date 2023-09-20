@@ -75,7 +75,8 @@ class Standard
           plr_req = fan_variable_volume_part_load_fan_power_limitation?(fan)
           # Part Load Fan Pressure Control
           if plr_req
-            fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with VSD and SP Setpoint Reset')
+            vsd_curve_type = air_loop_hvac_set_vsd_curve_type
+            fan_variable_volume_set_control_type(fan, vsd_curve_type)
           # No Part Load Fan Pressure Control
           else
             fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with discharge dampers')
@@ -194,6 +195,12 @@ class Standard
     # Economizers
     if air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, climate_zone)
       air_loop_hvac_apply_prm_baseline_economizer(air_loop_hvac, climate_zone)
+    else
+      # Make sure if economizer is not required then the OA controller should have No Economizer
+      oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
+      if oa_sys.is_initialized
+        oa_sys.get.getControllerOutdoorAir.setEconomizerControlType('NoEconomizer')
+      end
     end
 
     # Multizone VAV Systems
@@ -216,7 +223,8 @@ class Standard
     end
 
     # Unoccupied shutdown
-    air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac)
+    occ_threshold = air_loop_hvac_unoccupied_threshold
+    air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, occ_threshold)
 
     return true
   end
@@ -236,14 +244,14 @@ class Standard
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_cfm = 0
-    if air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
-      dsn_air_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
-      dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
-    else
+    if air_loop_hvac.designSupplyAirFlowRate.is_initialized
       dsn_air_flow_m3_per_s = air_loop_hvac.designSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
+    elsif air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
+      dsn_air_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
+      dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
     end
     # Optimum start per 6.4.3.3.3, only required if > 10,000 cfm
     cfm_limit = 10_000
@@ -307,11 +315,27 @@ class Standard
       htg_sch = htg_clg_sch[0]
       clg_sch = htg_clg_sch[1]
 
+      if htg_sch.to_ScheduleConstant.is_initialized
+        htg_sch_type = 'Schedule:Constant'
+      elsif htg_sch.to_ScheduleCompact.is_initialized
+        htg_sch_type = 'Schedule:Compact'
+      else
+        htg_sch_type = 'Schedule:Year'
+      end
+
+      if clg_sch.to_ScheduleCompact.is_initialized
+        clg_sch_type = 'Schedule:Constant'
+      elsif clg_sch.to_ScheduleCompact.is_initialized
+        clg_sch_type = 'Schedule:Compact'
+      else
+        clg_sch_type = 'Schedule:Year'
+      end
+
       # Actuators
-      htg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(htg_sch, 'Schedule:Year', 'Schedule Value')
+      htg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(htg_sch, htg_sch_type, 'Schedule Value')
       htg_sch_act.setName("#{loop_name_clean}HtgSch#{i}")
 
-      clg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(clg_sch, 'Schedule:Year', 'Schedule Value')
+      clg_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(clg_sch, clg_sch_type, 'Schedule Value')
       clg_sch_act.setName("#{loop_name_clean}ClgSch#{i}")
 
       # Programs
@@ -347,6 +371,12 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Optimum start control enabled.")
 
     return true
+  end
+
+  # Set default fan curve to be VSD with static pressure reset
+  # @return [string] name of appropriate curve for this code version
+  def air_loop_hvac_set_vsd_curve_type
+    return 'Multi Zone VAV with VSD and SP Setpoint Reset'
   end
 
   # Calculate and apply the performance rating method baseline fan power to this air loop.
@@ -404,14 +434,14 @@ class Standard
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_cfm = 0
-    if air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
-      dsn_air_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
-      dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
-    else
+    if air_loop_hvac.designSupplyAirFlowRate.is_initialized
       dsn_air_flow_m3_per_s = air_loop_hvac.designSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
+    elsif air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
+      dsn_air_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
+      dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
     end
 
     # @todo determine the presence of MERV filters and other stuff
@@ -462,14 +492,14 @@ class Standard
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
     dsn_air_flow_cfm = 0
-    if air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
-      dsn_air_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
-      dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
-    else
+    if air_loop_hvac.designSupplyAirFlowRate.is_initialized
       dsn_air_flow_m3_per_s = air_loop_hvac.designSupplyAirFlowRate.get
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Hard sized Design Supply Air Flow Rate.")
+    elsif air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
+      dsn_air_flow_m3_per_s = air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
+      dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
     end
 
     # Get the fan limitation pressure drop adjustment bhp
@@ -690,14 +720,14 @@ class Standard
 
       # Get design supply air flow rate (whether autosized or hard-sized)
       dsn_air_flow_m3_per_s = 0
-      if fan.autosizedDesignSupplyAirFlowRate.is_initialized
-        dsn_air_flow_m3_per_s = fan.autosizedDesignSupplyAirFlowRate.get
-        dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
-      else
+      if fan.designSupplyAirFlowRate.is_initialized
         dsn_air_flow_m3_per_s = fan.designSupplyAirFlowRate.get
         dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = User entered Design Supply Air Flow Rate.")
+      elsif fan.autosizedDesignSupplyAirFlowRate.is_initialized
+        dsn_air_flow_m3_per_s = fan.autosizedDesignSupplyAirFlowRate.get
+        dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "* #{dsn_air_flow_cfm.round} cfm = Autosized Design Supply Air Flow Rate.")
       end
 
       # Determine the fan pressure rise that will result in the target bhp
@@ -754,6 +784,10 @@ class Standard
         # CoilCoolingWater
       elsif sc.to_CoilCoolingWater.is_initialized
         coil = sc.to_CoilCoolingWater.get
+        # error if the design coil capacity method isn't available
+        if coil.model.version < OpenStudio::VersionString.new('3.6.0')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required CoilCoolingWater method .autosizedDesignCoilLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        end
         if coil.autosizedDesignCoilLoad.is_initialized
           # @todo Change to pull water coil nominal capacity instead of design load
           total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
@@ -797,6 +831,10 @@ class Standard
           # CoilCoolingWater
           elsif clg_coil.to_CoilCoolingWater.is_initialized
             coil = clg_coil.to_CoilCoolingWater.get
+            # error if the design coil capacity method isn't available
+            if coil.model.version < OpenStudio::VersionString.new('3.6.0')
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required CoilCoolingWater method .autosizedDesignCoilLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+            end
             if coil.autosizedDesignCoilLoad.is_initialized
               # @todo Change to pull water coil nominal capacity instead of design load
               total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
@@ -841,6 +879,10 @@ class Standard
         # CoilCoolingWater
         elsif clg_coil.to_CoilCoolingWater.is_initialized
           coil = clg_coil.to_CoilCoolingWater.get
+          # error if the design coil capacity method isn't available
+          if coil.model.version < OpenStudio::VersionString.new('3.6.0')
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required CoilCoolingWater method .autosizedDesignCoilLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          end
           if coil.autosizedDesignCoilLoad.is_initialized
             # @todo Change to pull water coil nominal capacity instead of design load
             total_cooling_capacity_w += coil.autosizedDesignCoilLoad.get
@@ -1030,6 +1072,12 @@ class Standard
         oa_control.setEconomizerMaximumLimitDryBulbTemperature(drybulb_limit_c)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Economizer type = #{economizer_type}, dry bulb limit = #{drybulb_limit_f}F")
       end
+      # Some templates include fixed enthalpy limits in addition to fixed dry bulb limits
+      if enthalpy_limit_btu_per_lb
+        enthalpy_limit_j_per_kg = OpenStudio.convert(enthalpy_limit_btu_per_lb, 'Btu/lb', 'J/kg').get
+        oa_control.setEconomizerMaximumLimitEnthalpy(enthalpy_limit_j_per_kg)
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: additional economizer enthalpy limit = #{enthalpy_limit_btu_per_lb}Btu/lb")
+      end
     when 'FixedEnthalpy'
       if enthalpy_limit_btu_per_lb
         enthalpy_limit_j_per_kg = OpenStudio.convert(enthalpy_limit_btu_per_lb, 'Btu/lb', 'J/kg').get
@@ -1128,12 +1176,88 @@ class Standard
   # Determine if the airloop includes hydronic cooling coils
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @return [Bool] returns true if hydronic coolings coils are included on the airloop
+  # @return [Bool] returns true if hydronic cooling coils are included on the airloop
   def air_loop_hvac_include_hydronic_cooling_coil?(air_loop_hvac)
     air_loop_hvac.supplyComponents.each do |comp|
       return true if comp.to_CoilCoolingWater.is_initialized
     end
     return false
+  end
+
+  # Determine if the airloop includes cooling coils
+  #
+  # @return [Bool] returns true if cooling coils are included on the airloop
+  def air_loop_hvac_include_cooling_coil?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_CoilCoolingWater.is_initialized
+      return true if comp.to_CoilCoolingWater.is_initialized
+      return true if comp.to_CoilCoolingCooledBeam.is_initialized
+      return true if comp.to_CoilCoolingDXMultiSpeed.is_initialized
+      return true if comp.to_CoilCoolingDXSingleSpeed.is_initialized
+      return true if comp.to_CoilCoolingDXTwoSpeed.is_initialized
+      return true if comp.to_CoilCoolingDXTwoStageWithHumidityControlMode.is_initialized
+      return true if comp.to_CoilCoolingDXVariableRefrigerantFlow.is_initialized
+      return true if comp.to_CoilCoolingDXVariableSpeed.is_initialized
+      return true if comp.to_CoilCoolingFourPipeBeam.is_initialized
+      return true if comp.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
+      return true if comp.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
+      return true if comp.to_CoilCoolingWater.is_initialized
+      return true if comp.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+      return true if comp.to_CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit.is_initialized
+
+      if comp.to_AirLoopHVACUnitarySystem.is_initialized
+        unitary_system = comp.to_AirLoopHVACUnitarySystem.get
+        if unitary_system.coolingCoil.is_initialized
+          cooling_coil = unitary_system.coolingCoil.get
+          return true if cooling_coil.to_CoilCoolingWater.is_initialized
+          return true if cooling_coil.to_CoilCoolingWater.is_initialized
+          return true if cooling_coil.to_CoilCoolingCooledBeam.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXMultiSpeed.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXTwoSpeed.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXTwoStageWithHumidityControlMode.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXVariableRefrigerantFlow.is_initialized
+          return true if cooling_coil.to_CoilCoolingDXVariableSpeed.is_initialized
+          return true if cooling_coil.to_CoilCoolingFourPipeBeam.is_initialized
+          return true if cooling_coil.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
+          return true if cooling_coil.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
+          return true if cooling_coil.to_CoilCoolingWater.is_initialized
+          return true if cooling_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+          return true if cooling_coil.to_CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit.is_initialized
+        end
+      end
+    end
+    return false
+  end
+
+  # Determine if the airloop includes evaporative coolers
+  #
+  # @return [Bool] returns true if evaporative coolers are included on the airloop
+  def air_loop_hvac_include_evaporative_cooler?(air_loop_hvac)
+    air_loop_hvac.supplyComponents.each do |comp|
+      return true if comp.to_EvaporativeCoolerDirectResearchSpecial.is_initialized
+      return true if comp.to_EvaporativeCoolerIndirectResearchSpecial.is_initialized
+    end
+    return false
+  end
+
+  # Determine if the airloop includes an air-economizer
+  #
+  # @return [Bool] returns true if the airloop has an air-economizer
+  def air_loop_hvac_include_economizer?(air_loop_hvac)
+    return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
+    # Get OA system
+    air_loop_hvac_oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+
+    # Get OA controller
+    air_loop_hvac_oa_controller = air_loop_hvac_oa_system.getControllerOutdoorAir
+
+    # Get economizer type
+    economizer_type = air_loop_hvac_oa_controller.getEconomizerControlType.to_s
+    return false if economizer_type == 'NoEconomizer'
+
+    return true
   end
 
   # Determine if the airloop includes WSHP cooling coils
@@ -1805,7 +1929,11 @@ class Standard
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
       controller_oa = oa_system.getControllerOutdoorAir
       controller_mv = controller_oa.controllerMechanicalVentilation
-      controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.3.0')
+        controller_mv.setSystemOutdoorAirMethod('VentilationRateProcedure')
+      else
+        controller_mv.setSystemOutdoorAirMethod('Standard62.1VentilationRateProcedureWithLimit')
+      end
       # Change the min flow rate in the controller outdoor air
       controller_oa.setMinimumOutdoorAirFlowRate(0.0)
     else
@@ -1832,6 +1960,16 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, cannot disable multizone vav optimization because the system has no OA intake.")
       return false
     end
+  end
+
+  # Determine minimum ventilation efficiency for zones.
+  # This is used to decrease the overall system minimum OA flow rate
+  # such that a few zones do not drive the overall system OA flow rate too
+  # high.
+  def air_loop_hvac_minimum_zone_ventilation_efficiency(air_loop_hvac)
+    min_ventilation_efficiency = 0.6
+
+    return min_ventilation_efficiency
   end
 
   # Set the minimum VAV damper positions.
@@ -1886,10 +2024,10 @@ class Standard
     # System primary airflow rate (whether autosized or hard-sized)
     v_ps = 0.0
 
-    v_ps = if air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
-             air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
-           else
+    v_ps = if air_loop_hvac.designSupplyAirFlowRate.is_initialized
              air_loop_hvac.designSupplyAirFlowRate.get
+           elsif air_loop_hvac.autosizedDesignSupplyAirFlowRate.is_initialized
+             air_loop_hvac.autosizedDesignSupplyAirFlowRate.get
            end
     v_ps_cfm = OpenStudio.convert(v_ps, 'm^3/s', 'cfm').get
 
@@ -1907,7 +2045,13 @@ class Standard
     num_zones_adj = 0
 
     # Retrieve the sum of the zone minimum primary airflow
-    vpz_min_sum = air_loop_hvac.autosizeSumMinimumHeatingAirFlowRates
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    elsif air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates.is_initialized
+      vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates.get
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "autosizedSumMinimumHeatingAirFlowRates is not available for air loop #{air_loop_hvac}.")
+    end
 
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
@@ -1923,6 +2067,12 @@ class Standard
       # max of heating and cooling
       # design air flow rates
       v_pz = 0.0
+
+      # error if zone autosized methods are not available
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required ThermalZone method .autosizedCoolingDesignAirFlowRate and .autosizedHeatingDesignAirFlowRate are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      end
+
       clg_dsn_flow = zone.autosizedCoolingDesignAirFlowRate
       if clg_dsn_flow.is_initialized
         clg_dsn_flow = clg_dsn_flow.get
@@ -2054,7 +2204,17 @@ class Standard
     # zone airflow are lower than the calculated system
     # outdoor air intake
     if v_ot_adj > vpz_min_sum && v_ot_adj > 0
-      mdp_adj = [v_ot_adj / air_loop_hvac.autosizeSumAirTerminalMaxAirFlowRate, 1].min
+
+      # Retrieve the sum of the zone maximum air flow rates
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumAirTerminalMaxAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      elsif air_loop_hvac.autosizedSumAirTerminalMaxAirFlowRate.is_initialized
+        v_max = air_loop_hvac.autosizedSumAirTerminalMaxAirFlowRate.get
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.AirLoopHVAC', "autosizedSumAirTerminalMaxAirFlowRate is not available for air loop #{air_loop_hvac}.")
+      end
+
+      mdp_adj = [v_ot_adj / v_max, 1].min
       air_loop_hvac.thermalZones.sort.each do |zone|
         air_loop_hvac_set_minimum_damper_position(zone, mdp_adj)
       end
@@ -2544,11 +2704,11 @@ class Standard
           if term.reheatCoil.to_CoilHeatingWater.is_initialized
             term.setDamperHeatingAction(damper_action_eplus)
             control_type_set = true
+            term.setMaximumFlowFractionDuringReheat(0.5)
           end
         else
           term.setDamperHeatingAction(damper_action_eplus)
           control_type_set = true
-          term.setMaximumFlowFractionDuringReheat(0.5)
         end
       end
     end
@@ -3159,11 +3319,26 @@ class Standard
     return 0.15
   end
 
+  # Determine if the air loop serves parallel PIU air terminals
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  def air_loop_hvac_has_parallel_piu_air_terminals?(air_loop_hvac)
+    has_parallel_piu_terminals = false
+    air_loop_hvac.thermalZones.each do |zone|
+      zone.equipment.each do |equipment|
+        # Get the object type
+        obj_type = equipment.iddObjectType.valueName.to_s
+        if obj_type == 'OS_AirTerminal_SingleDuct_ParallelPIU_Reheat'
+          return true
+        end
+      end
+    end
+
+    return has_parallel_piu_terminals
+  end
+
   # Shut off the system during unoccupied periods.
   # During these times, systems will cycle on briefly if temperature drifts below setpoint.
-  # For systems with fan-powered terminals, the whole system (not just the terminal fans) will cycle on.
-  # Terminal-only night cycling is not used because the terminals cannot provide cooling,
-  # so terminal-only night cycling leads to excessive unmet cooling hours during unoccupied periods.
   # If the system already has a schedule other than Always-On, no change will be made.
   # If the system has an Always-On schedule assigned, a new schedule will be created.
   # In this case, occupied is defined as the total percent occupancy for the loop for all zones served.
@@ -3173,7 +3348,37 @@ class Standard
   # @return [Bool] returns true if successful, false if not
   def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
     # Set the system to night cycle
+    # The fan of a parallel PIU terminal are set to only cycle during heating operation
+    # This is achieved using the CycleOnAnyCoolingOrHeatingZone; During cooling operation
+    # the load is met by running the central system which stays off during heating
+    # operation
     air_loop_hvac.setNightCycleControlType('CycleOnAny')
+    if air_loop_hvac_has_parallel_piu_air_terminals?(air_loop_hvac)
+      avail_mgrs = air_loop_hvac.availabilityManagers
+      if !avail_mgrs.nil?
+        avail_mgrs.each do |avail_mgr|
+          if avail_mgr.to_AvailabilityManagerNightCycle.is_initialized
+            avail_mgr_nc = avail_mgr.to_AvailabilityManagerNightCycle.get
+            avail_mgr_nc.setControlType('CycleOnAnyCoolingOrHeatingZone')
+            zones = air_loop_hvac.thermalZones
+            avail_mgr_nc.setCoolingControlThermalZones(zones)
+            avail_mgr_nc.setHeatingZoneFansOnlyThermalZones(zones)
+          end
+        end
+      end
+    end
+
+    model = air_loop_hvac.model
+    # Check if schedule was stored in an additionalProperties field of the air loop
+    air_loop_name = air_loop_hvac.name
+    if air_loop_hvac.hasAdditionalProperties
+      if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
+        fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
+        fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
+        air_loop_hvac.setAvailabilitySchedule(fan_sched)
+        return true
+      end
+    end
 
     # Check if already using a schedule other than always on
     avail_sch = air_loop_hvac.availabilitySchedule
@@ -3534,6 +3739,118 @@ class Standard
     return dx_clg
   end
 
+  # Get return fan power for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return [Float] Fan power
+  def air_loop_hvac_get_return_fan_power(air_loop)
+    return_fan_power = 0
+
+    if air_loop.returnFan.is_initialized
+      # Get return fan
+      fan = air_loop.returnFan.get
+
+      # Get fan object
+      if fan.to_FanConstantVolume.is_initialized
+        fan = fan.to_FanConstantVolume.get
+      elsif fan.to_FanVariableVolume.is_initialized
+        fan = fan.to_FanVariableVolume.get
+      elsif fan.to_FanOnOff.is_initialized
+        fan = fan.to_FanOnOff.get
+      end
+
+      # Get fan power
+      return_fan_power += fan_fanpower(fan)
+    end
+
+    return return_fan_power
+  end
+
+  # Get supply fan power for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return [Float] Fan power
+  def air_loop_hvac_get_supply_fan_power(air_loop)
+    supply_fan_power = 0
+
+    # Get fan
+    fan = air_loop_hvac_get_supply_fan(air_loop)
+
+    if !fan.nil?
+      # Get fan power
+      supply_fan_power += fan_fanpower(fan)
+    end
+
+    return supply_fan_power
+  end
+
+  # Get supply fan for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return fan
+  def air_loop_hvac_get_supply_fan(air_loop)
+    fan = nil
+    if air_loop.supplyFan.is_initialized
+      # Get return fan
+      fan = air_loop.supplyFan.get
+
+      # Get fan object
+      if fan.to_FanConstantVolume.is_initialized
+        fan = fan.to_FanConstantVolume.get
+      elsif fan.to_FanVariableVolume.is_initialized
+        fan = fan.to_FanVariableVolume.get
+      elsif fan.to_FanOnOff.is_initialized
+        fan = fan.to_FanOnOff.get
+      end
+
+    else
+      air_loop.supplyComponents.each do |comp|
+        if comp.to_AirLoopHVACUnitarySystem.is_initialized
+          fan = comp.to_AirLoopHVACUnitarySystem.get.supplyFan
+          next if fan.empty?
+
+          # Get fan object
+          fan = fan.get
+          if fan.to_FanConstantVolume.is_initialized
+            fan = fan.to_FanConstantVolume.get
+          elsif fan.to_FanVariableVolume.is_initialized
+            fan = fan.to_FanVariableVolume.get
+          elsif fan.to_FanOnOff.is_initialized
+            fan = fan.to_FanOnOff.get
+          end
+        end
+      end
+    end
+    return fan
+  end
+
+  # Get relief fan power for airloop
+  #
+  # @param model [OpenStudio::model::AirLoopHVAC] AirLoopHVAC object
+  # @return [Float] Fan power
+  def air_loop_hvac_get_relief_fan_power(air_loop)
+    relief_fan_power = 0
+
+    if air_loop.reliefFan.is_initialized
+      # Get return fan
+      fan = air_loop.reliefFan.get
+
+      # Get fan object
+      if fan.to_FanConstantVolume.is_initialized
+        fan = fan.to_FanConstantVolume.get
+      elsif fan.to_FanVariableVolume.is_initialized
+        fan = fan.to_FanVariableVolume.get
+      elsif fan.to_FanOnOff.is_initialized
+        fan = fan.to_FanOnOff.get
+      end
+
+      # Get fan power
+      relief_fan_power += fan_fanpower(fan)
+    end
+
+    return relief_fan_power
+  end
+
   # Add occupant standby controls to air loop
   # When the thermostat schedule is setup or setback
   # the ventilation is shutoff. Currently this is done
@@ -3583,5 +3900,31 @@ class Standard
       end
     end
     return simple_transfer_air
+  end
+
+  # Get the return air plenum zone object for an air loop, if it exists
+  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @return [OpenStudio::Model::ThermalZone] OpenStudio thermal zone object of the return air plenum zone
+  #                                          when an air loop uses a return air plenum, nil otherwise
+  def air_loop_hvac_return_air_plenum(air_loop_hvac)
+    # Get return air node
+    return_air_node = air_loop_hvac.demandOutletNode
+
+    # Check if node is connected to a return plenum object
+    air_loop_hvac.model.getAirLoopHVACReturnPlenums.each do |return_plenum|
+      air_loop_hvac.model.getAirLoopHVACZoneMixers.each do |zone_air_mixer|
+        inlets = zone_air_mixer.inletModelObjects
+        inlets.each do |inlet|
+          if inlet.to_Node.get == return_plenum.outletModelObject.get.to_Node.get
+            if zone_air_mixer.outletModelObject.get.to_Node.get == return_air_node
+              return return_plenum.thermalZone.get
+            end
+          end
+        end
+      end
+    end
+
+    return nil
   end
 end

@@ -25,10 +25,13 @@ coverage/
 /spec/reports/
 /test/reports
 /test/necb/data/*test_results.csv
-/test/necb/building_regression_tests/expected_results/*_test_result.idf
-/test/necb/building_regression_tests/expected_results/*_test_result.osm
-/test/necb/unit_tests/expected_results/*_test_results.csv
-/test/necb/unit_tests/expected_results/*_test_results.json
+/test/necb/*/expected_results/*_test_results.csv
+/test/necb/*/expected_results/*_test_results.json
+/test/necb/*/expected_results/*_test_result.idf
+/test/necb/*/expected_results/*_test_result.osm
+/test/necb/*/expected_results/*_diffs.json
+/test/necb/*/tests/before.osm
+/test/necb/*/tests/after.osm
 
 # auto generated CI files
 /test/ci_test_files/models

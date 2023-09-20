@@ -43,10 +43,10 @@ module Fan
   def fan_adjust_pressure_rise_to_meet_fan_power(fan, target_fan_power)
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
-    dsn_air_flow_m3_per_s = if fan.autosizedMaximumFlowRate.is_initialized
-                              fan.autosizedMaximumFlowRate.get
-                            else
+    dsn_air_flow_m3_per_s = if fan.maximumFlowRate.is_initialized
                               fan.maximumFlowRate.get
+                            elsif fan.autosizedMaximumFlowRate.is_initialized
+                              fan.autosizedMaximumFlowRate.get
                             end
 
     # Get the current fan power
@@ -73,13 +73,12 @@ module Fan
     return true
   end
 
-  # Determines the fan power (W) based on flow rate,
-  # pressure rise, and total fan efficiency(impeller eff * motor eff)
+  # Determines the design fan flow (m3/s)
   #
   # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
   #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
-  # @return [Double] fan power in watts
-  def fan_fanpower(fan)
+  # @return [Double] design fan flow
+  def fan_design_air_flow(fan)
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = if fan.to_FanZoneExhaust.empty?
                               if fan.maximumFlowRate.is_initialized
@@ -95,8 +94,17 @@ module Fan
                               else
                                 OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "The maximum flow rate for exhaust fan '#{fan.name}' was not specified.")
                               end
-                            end
+    end
+    return dsn_air_flow_m3_per_s
+  end
 
+  # Determines the fan power (W) based on
+  # flow rate, pressure rise, and total fan efficiency(impeller eff * motor eff)
+  #
+  # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
+  #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
+  # @return [Double] fan power in watts
+  def fan_fanpower(fan)
     # Get the total fan efficiency,
     # which in E+ includes both motor and
     # impeller efficiency.
@@ -106,7 +114,7 @@ module Fan
     pressure_rise_pa = fan.pressureRise
 
     # Calculate the fan power (W)
-    fan_power_w = pressure_rise_pa * dsn_air_flow_m3_per_s / fan_total_eff
+    fan_power_w = pressure_rise_pa * fan_design_air_flow(fan) / fan_total_eff
 
     return fan_power_w
   end
@@ -340,18 +348,12 @@ module Fan
   # @return [Double] rated power consumption per flow in watters per cfm, W*min/ft^3
   def fan_rated_w_per_cfm(fan)
     # Get design power (whether autosized or hard-sized)
-    rated_power_w = fan.model.getAutosizedValueFromEquipmentSummary(fan, 'Fans', 'Rated Electric Power', 'W')
-    if rated_power_w.is_initialized
-      rated_power_w = rated_power_w.get
-    else
-      rated_power_w = fan_fanpower(fan)
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{fan.name}, could not find rated fan power from Equipment Summary. Will calculate it based on current pressure rise and total fan efficiency")
-    end
+    rated_power_w = fan_fanpower(fan)
 
-    if fan.autosizedMaximumFlowRate.is_initialized
-      max_m3_per_s = fan.autosizedMaximumFlowRate.get
-    elsif fan.maximumFlowRate.is_initialized
+    if fan.maximumFlowRate.is_initialized
       max_m3_per_s = fan.ratedFlowRate.get
+    elsif fan.autosizedMaximumFlowRate.is_initialized
+      max_m3_per_s = fan.autosizedMaximumFlowRate.get
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find fan Maximum Flow Rate, cannot determine w per cfm correctly.")
       return false

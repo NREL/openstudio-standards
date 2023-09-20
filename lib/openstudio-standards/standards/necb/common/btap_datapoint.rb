@@ -169,7 +169,9 @@ class BTAPDatapoint
                                        output_meters: @options[:output_meters],
                                        airloop_economizer_type: @options[:airloop_economizer_type],
                                        shw_scale: @options[:shw_scale],
-                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option])
+                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
+                                       tbd_option: @options[:tbd_option]
+                                       )
       end
 
       # Save model to to disk.
@@ -224,7 +226,7 @@ class BTAPDatapoint
         model.setSqlFile(sql)
 
         @cost_result = nil
-        if @options[:enable_costing] == true
+        if defined?(BTAPCosting)
           # Perform costing
           costing = BTAPCosting.new
           costing.load_database
@@ -390,7 +392,16 @@ class BTAPDatapoint
         FROM ReportDataDictionary
         WHERE ReportDataDictionaryIndex == #{rdd_index}
       "
-      key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      # In some cases KeyValue has a value and sometimes it does not.  In some cases KeyValue is null.  If the command
+      # below is run and KeyValue is null then the command fails and returns an error.  The fix below assumes that if
+      # the command below fails it is because KeyValue is null.  In that case the "key_value" variable is set to a
+      # blank.
+      begin
+        key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+      rescue StandardError => bang
+        key_value = ""
+      end
 
       #Get Units
       query = "
