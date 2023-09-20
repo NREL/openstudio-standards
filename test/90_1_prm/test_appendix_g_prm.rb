@@ -2014,7 +2014,7 @@ class AppendixGPRMTests < Minitest::Test
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required ThermalZone method .autosizedCoolingDesignLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
           end
           zone_load_w = zone.autosizedCoolingDesignLoad.get
-          zone_load_w *= zone.floorArea * zone.multiplier
+          zone_load_w *= zone.multiplier
           zone_load = OpenStudio.convert(zone_load_w, 'W', 'Btu/hr').get
           zone_load_s += zone_load
           if zone_load >= 600000
