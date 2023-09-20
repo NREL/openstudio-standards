@@ -2413,7 +2413,7 @@ class ASHRAE901PRM < Standard
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.Model', 'Required ThermalZone method .autosizedCoolingDesignLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
         end
         zone_load_w = zn['zone'].autosizedCoolingDesignLoad.get
-        zone_load_w *= zn['zone'].floorArea * zn['zone'].multiplier
+        zone_load_w *= zn['zone'].multiplier
         zone_load = OpenStudio.convert(zone_load_w, 'W', 'Btu/hr').get
       end
       comp_room_loads[zn['zone'].name.get] = zone_load
