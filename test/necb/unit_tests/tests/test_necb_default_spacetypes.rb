@@ -24,16 +24,17 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
     output_folder = method_output_folder(__method__)
 
     #Create new model for testing. 
-    @model = OpenStudio::Model::Model.new
+    model = OpenStudio::Model::Model.new
     #Create only above ground geometry (Used for infiltration tests) 
     length = 100.0; width = 100.0 ; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8 ; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-    BTAP::Geometry::Wizards::create_shape_rectangle(@model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
+    BTAP::Geometry::Wizards::create_shape_rectangle(model,length, width, num_above_ground_floors,num_under_ground_floors, floor_to_floor_height, plenum_height,perimeter_zone_depth, initial_height )
 
     header_output = ""
     output = ""
     
     #Iterate through all templates/spacetypes/buildingtypes. 
-    @Templates.each do |template|
+    #@Templates.each do |template|
+    ['NECB2011', 'NECB2015', 'BTAPPRE1980'].each do |template|
       
       # Set applicable standard.
       standard = get_standard(template)
@@ -47,23 +48,23 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         header_output = ""
         
         # Create a space type.
-        st = OpenStudio::Model::SpaceType.new(@model)
+        st = OpenStudio::Model::SpaceType.new(model)
         st.setStandardsBuildingType(space_type_properties['building_type'])
         st.setStandardsSpaceType(space_type_properties['space_type'])
         st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
         standard.space_type_apply_rendering_color(st)
-        standard.model_add_loads(@model, 'NECB_Default', 1.0)
+        standard.model_add_loads(model, 'NECB_Default', 1.0)
 
         # Set all spaces to spacetype.
-        @model.getSpaces.each do |space|
+        model.getSpaces.each do |space|
           space.setSpaceType(st)
         end
 
         # Add Infiltration rates to the space objects themselves. 
-        standard.model_apply_infiltration_standard(@model)
+        standard.model_apply_infiltration_standard(model)
 
         # Get handle for space. 
-        space = @model.getSpaces[0]
+        space = model.getSpaces[0]
         space_area = space.floorArea #m2
 
         # Lights.
@@ -128,13 +129,13 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         assert( other_equip_power.size <= 1 , "#{other_equip_power.size} other equipment definitions given. Expecting <= 1." ) 
             
         # Equipment - SWH.
-        swh_loop = OpenStudio::Model::PlantLoop.new(@model)
+        swh_loop = OpenStudio::Model::PlantLoop.new(model)
         swh_peak_flow_per_area = []
         swh_heating_target_temperature = []
         swh__schedule = ""
         area_per_occ = 0.0
         area_per_occ = 1/total_occ_dens[0].to_f unless total_occ_dens[0].nil?
-        water_fixture = standard.model_add_swh_end_uses_by_space(@model, swh_loop, space)
+        water_fixture = standard.model_add_swh_end_uses_by_space(model, swh_loop, space)
         if water_fixture.nil?
           swh_watts_per_person = 0.0
           swh__fraction_schedule = 0.0
