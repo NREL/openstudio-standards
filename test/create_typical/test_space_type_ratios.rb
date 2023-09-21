@@ -7,16 +7,13 @@ class TestCreateTypicalSpaceTypeRatios < Minitest::Test
 
   def test_get_space_types_from_building_type
     building_type = 'PrimarySchool'
-    template = '90.1-2013'
-    result = @create.get_space_types_from_building_type(building_type, template)
+    result = @create.get_space_types_from_building_type(building_type, template: '90.1-2013')
 
     building_type = 'MediumOffice'
-    template = '90.1-2013'
-    result = @create.get_space_types_from_building_type(building_type, template, whole_building = true)
+    result = @create.get_space_types_from_building_type(building_type, template: '90.1-2013', whole_building: true)
 
     building_type = 'Casa Bonita'
-    template = '90.1-2013'
-    result = @create.get_space_types_from_building_type(building_type, template)
+    result = @create.get_space_types_from_building_type(building_type, template: '90.1-2013')
     assert(result == false)
   end
 end

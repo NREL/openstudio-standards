@@ -10,7 +10,9 @@ module OpenstudioStandards
     # @return [Hash] hash of space types
     # @todo this method will be replaced with space type specific edits
     # @todo enable each building type and template combination
-    def self.get_space_types_from_building_type(building_type, template, whole_building = true)
+    def self.get_space_types_from_building_type(building_type,
+                                                template: nil,
+                                                whole_building: true)
       hash = {}
 
       # DOE Prototypes
