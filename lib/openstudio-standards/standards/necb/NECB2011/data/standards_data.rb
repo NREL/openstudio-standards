@@ -115,7 +115,7 @@ class StandardsData
   # desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
-  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param table_name [String] table name
   # @param search_criteria [Hash] hash of search criteria
   # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
   #   the objects will only be returned if the specified capacity is between
@@ -247,7 +247,7 @@ class StandardsData
   # the minimum_capacity and maximum_capacity values.
   #
   #
-  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param table_name [String] table name
   # @param search_criteria [Hash] hash of search criteria
   # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
   #   the objects will only be returned if the specified capacity is between

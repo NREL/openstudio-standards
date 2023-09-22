@@ -589,7 +589,7 @@ class Standard
   # @param max_x [Double] the maximum value of independent variable X that will be used
   # @param min_out [Double] the minimum value of dependent variable Z
   # @param max_out [Double] the maximum value of dependent variable Z
-  # @param is_dimensionless [Bool] if true, the X independent variable is considered unitless
+  # @param is_dimensionless [Boolean] if true, the X independent variable is considered unitless
   #   and the resulting output dependent variable is considered unitless
   # @return [OpenStudio::Model::CurveQuadratic] a quadratic curve
   def create_curve_quadratic(model, coeffs, crv_name, min_x, max_x, min_out, max_out, is_dimensionless = false)
@@ -670,8 +670,8 @@ class Standard
   #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
-  # @param int_film [Bool] if true, interior film coefficient will be included in result
-  # @param ext_film [Bool] if true, exterior film coefficient will be included in result
+  # @param int_film [Boolean] if true, interior film coefficient will be included in result
+  # @param ext_film [Boolean] if true, exterior film coefficient will be included in result
   # @return [Double] Returns the R-Value of the film coefficients [m^2*K/W]
   def film_coefficients_r_value(intended_surface_type, int_film, ext_film)
     # Return zero if both interior and exterior are false

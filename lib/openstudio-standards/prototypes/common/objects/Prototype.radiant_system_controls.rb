@@ -5,7 +5,7 @@ class Standard
   # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
   # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
   #   options are 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
-  # @param use_zone_occupancy_for_control [Bool] Set to true if radiant system is to use specific zone occupancy objects
+  # @param use_zone_occupancy_for_control [Boolean] Set to true if radiant system is to use specific zone occupancy objects
   #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
   #   for all radiant zones. default to true.
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
@@ -24,7 +24,6 @@ class Standard
                                               model_occ_hr_end: 18.0,
                                               proportional_gain: 0.3,
                                               switch_over_time: 24.0)
-
 
     zone_name = ems_friendly_name(zone.name)
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
@@ -258,13 +257,13 @@ class Standard
                                                                  occupied_percentage_threshold: occupied_percentage_threshold)
     else
 
-      occ_schedule_ruleset = model.getScheduleRulesetByName("Whole Building Radiant System Occupied Schedule")
+      occ_schedule_ruleset = model.getScheduleRulesetByName('Whole Building Radiant System Occupied Schedule')
       if occ_schedule_ruleset.is_initialized
         occ_schedule_ruleset = occ_schedule_ruleset.get
       else
         # create occupancy schedules
         occ_schedule_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
-        occ_schedule_ruleset.setName("Whole Building Radiant System Occupied Schedule")
+        occ_schedule_ruleset.setName('Whole Building Radiant System Occupied Schedule')
 
         start_hour = model_occ_hr_end.to_i
         start_minute = ((model_occ_hr_end % 1) * 60).to_i
@@ -309,7 +308,9 @@ class Standard
     EMS
 
     set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Constant_Values')
-    unless set_constant_values_prg.is_initialized
+    if set_constant_values_prg.is_initialized
+      set_constant_values_prg = set_constant_values_prg.get
+    else
       set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
       set_constant_values_prg.setName('Set_Constant_Values')
       set_constant_values_prg.setBody(set_constant_values_prg_body)
@@ -388,6 +389,11 @@ class Standard
     initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters')
     if initialize_constant_parameters.is_initialized
       initialize_constant_parameters = initialize_constant_parameters.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters.programs.collect { |prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters.setName('Initialize_Constant_Parameters')
@@ -398,6 +404,11 @@ class Standard
     initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters_After_Warmup')
     if initialize_constant_parameters_after_warmup.is_initialized
       initialize_constant_parameters_after_warmup = initialize_constant_parameters_after_warmup.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters_after_warmup.programs.collect { |prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters_after_warmup = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters_after_warmup.setName('Initialize_Constant_Parameters_After_Warmup')

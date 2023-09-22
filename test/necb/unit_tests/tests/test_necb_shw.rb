@@ -23,7 +23,7 @@ class NECB_SHW_tests < Minitest::Test
     @top_output_folder = "#{@test_folder}/output/"
   end
 
-  # @return [Bool] true if successful. 
+  # @return [Boolean] true if successful. 
   def test_shw_test()
     output_array = []
     climate_zone = 'none'

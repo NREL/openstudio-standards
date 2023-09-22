@@ -108,7 +108,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   # test will set up  
   # for all HDDs 
   # NECB2011 8.4.4.1
-  # @return [Bool] true if successful. 
+  # @return [Boolean] true if successful. 
   def test_necb_hdd_envelope_rules()
 
 

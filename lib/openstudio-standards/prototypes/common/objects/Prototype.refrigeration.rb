@@ -521,7 +521,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [String] building type
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_typical_refrigeration(model, building_type)
     # Define system category and scaling factor
     floor_area_ft2 = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
@@ -839,7 +839,7 @@ class Standard
   # @todo Should probably use the model_add_refrigeration_walkin and lookups from the spreadsheet instead of hard-coded values
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_walkin_freezer_latent_case_credit_curve(model)
     latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
     return latent_case_credit_curve_name
@@ -856,7 +856,7 @@ class Standard
   # @param walkins [Array<Hashs>] an array of walkins with keys:
   #   walkin_type, space_names, and number_of_walkins
   # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the refrigeration piping is located
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_refrigeration_system(model,
                                      compressor_type,
                                      system_name,

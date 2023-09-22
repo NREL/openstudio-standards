@@ -4,8 +4,8 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param exterior_lighting_zone_number [Integer] exterior lighting zone number, 0-4
   # @param onsite_parking_fraction [Double] onsite parking fraction, 0-1
-  # @param add_base_site_allowance [Bool] whether to include the base site allowance
-  # @param use_model_for_entries_and_canopies [Bool] use building geometry for number of entries and canopy size
+  # @param add_base_site_allowance [Boolean] whether to include the base site allowance
+  # @param use_model_for_entries_and_canopies [Boolean] use building geometry for number of entries and canopy size
   # @return [Hash] a hash of OpenStudio::Model::ExteriorLights objects
   # @todo would be nice to add argument for some building types (SmallHotel, MidriseApartment, PrimarySchool, SecondarySchool, RetailStripmall) if it has interior or exterior circulation.
   def model_add_typical_exterior_lights(model, exterior_lighting_zone_number, onsite_parking_fraction = 1.0, add_base_site_allowance = false, use_model_for_entries_and_canopies = false)
@@ -286,8 +286,8 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param space_type_hash [Hash] hash of space types
-  # @param use_model_for_entries_and_canopies [Bool] use building geometry for number of entries and canopy size
-  # @return [hash] hash of exterior lighting value types and building type and model specific values
+  # @param use_model_for_entries_and_canopies [Boolean] use building geometry for number of entries and canopy size
+  # @return [Hhash] hash of exterior lighting value types and building type and model specific values
   # @todo add code in to determine number of entries and canopy area from model geoemtry
   # @todo come up with better logic for entry widths
   def model_create_exterior_lighting_area_length_count_hash(model, space_type_hash, use_model_for_entries_and_canopies)

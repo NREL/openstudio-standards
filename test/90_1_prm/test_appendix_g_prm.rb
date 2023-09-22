@@ -897,7 +897,7 @@ class AppendixGPRMTests < Minitest::Test
   #
   # this check uses very similar code to the one that implements this requirement
   #
-  # @param model [OpenStudio::model::Model] openstudio model object
+  # @param model [OpenStudio::Model::Model] openstudio model object
   # @param building_type [String]  building type
   # @param template [String] template name
   # @param climate_zone [<Type>] climate zone name
@@ -1635,13 +1635,19 @@ class AppendixGPRMTests < Minitest::Test
       num_zones = air_loop.thermalZones.size
       if (num_zones > 1 && mz_or_sz == 'MZ') || (num_zones == 1 && mz_or_sz == 'SZ')
         # This is a multizone system, do the test
-        heat_type = model.airloop_primary_heat_type(air_loop).to_s
+
+        # error if Loop app G heating fuels method is not available
+        if air_loop.model.version < OpenStudio::VersionString.new('3.6.0')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required Loop method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        end
+
+        heat_types = air_loop.appGHeatingFuelTypes.map { |f| f.valueName }
         if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
           # Heat type is electric or heat pump
-          assert(heat_type == expected_elec_heat_type, "Incorrect heat type for #{air_loop.name.get}; expected #{expected_elec_heat_type}")
+          assert(heat_types.include?(expected_elec_heat_type), "Incorrect heat type for #{air_loop.name.get}; expected #{expected_elec_heat_type}")
         else
           # Heat type is Fuel
-          assert(heat_type == 'Fuel', "Incorrect heat type for #{air_loop.name.get}; expected Fuel")
+          assert(heat_types.include?('Fuel'), "Incorrect heat type for #{air_loop.name.get}; expected Fuel")
         end
       end
     end
@@ -1963,11 +1969,17 @@ class AppendixGPRMTests < Minitest::Test
         if is_fpfc
           # Also check heat type
           equip = equip.to_ZoneHVACFourPipeFanCoil.get
-          heat_type = model.coil_heat_type(equip.heatingCoil)
+
+          # error if HVACComponent app G heating fuels method is not available
+          if equip.model.version < OpenStudio::VersionString.new('3.6.0')
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required HVACComponent method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          end
+
+          heat_types = equip.heatingCoil.appGHeatingFuelTypes.map { |f| f.valueName }
           if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
-            assert(heat_type == 'Electric', "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
+            assert(heat_types.include?('Electric'), "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
           else
-            assert(heat_type == 'Fuel', "Baseline system selection failed for climate #{climate_zone}: FPFC should have hot water heat for " + sub_text)
+            assert(heat_types.include?('Fuel'), "Baseline system selection failed for climate #{climate_zone}: FPFC should have hot water heat for " + sub_text)
           end
         end
       end
@@ -1989,7 +2001,7 @@ class AppendixGPRMTests < Minitest::Test
 
   # Check if baseline system type is a single-zone system with variable-air-volume fan
   #
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   def check_cmp_dtctr_system_type(model)
     zone_load_s = 0
     # Individual zone load check
@@ -1997,8 +2009,12 @@ class AppendixGPRMTests < Minitest::Test
       # Get design cooling load of computer rooms
       zone.spaces.each do |space|
         if space.spaceType.get.standardsSpaceType.get == 'computer room'
-          zone_load_w = zone.coolingDesignLoad.to_f
-          zone_load_w *= zone.floorArea * zone.multiplier
+          # error if zone design load methods are not available
+          if zone.model.version < OpenStudio::VersionString.new('3.6.0')
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required ThermalZone method .autosizedCoolingDesignLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          end
+          zone_load_w = zone.autosizedCoolingDesignLoad.get
+          zone_load_w *= zone.multiplier
           zone_load = OpenStudio.convert(zone_load_w, 'W', 'Btu/hr').get
           zone_load_s += zone_load
           if zone_load >= 600000
@@ -2378,7 +2394,7 @@ class AppendixGPRMTests < Minitest::Test
         temperature_highlimit_target = 23.89
         air_loop_name = air_loop.name.get
         baseline_system_type = air_loop.additionalProperties.getFeatureAsString("baseline_system_type")
-        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_basement_ZN_6 ZN PSZ-VAV' ,'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
+        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_top_ZN_6 ZN PSZ-VAV', 'DataCenter_basement_ZN_6 ZN PSZ-VAV', 'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
           economizer_activated_target = true
         end
 
@@ -2629,7 +2645,7 @@ class AppendixGPRMTests < Minitest::Test
   # Placeholder method to indicate that we want to check unmet
   # load hours
   #
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param arguments [Array] Not used
   def unmet_load_hours(model, arguments)
     return model
@@ -2637,7 +2653,7 @@ class AppendixGPRMTests < Minitest::Test
 
   # Multiply the zone outdoor air flow rate per area
   #
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param arguments [Array] Multiplier
   def mult_oa_per_area(model, arguments)
     # Get multiplier
@@ -2653,7 +2669,7 @@ class AppendixGPRMTests < Minitest::Test
 
   # Add a AirLoopHVACDedicatedOutdoorAirSystem in the model
   #
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param arguments [Array] Not used
   def add_ahu_doas(model, arguments)
     # Create new objects
@@ -2675,7 +2691,7 @@ class AppendixGPRMTests < Minitest::Test
   # Change cooling thermostat to 24C
   # This is used to converted a heated only zone to heated and cooled
   #
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param arguments [Array] Not used
   def change_clg_therm(model, arguments)
     std = Standard.build("90.1-2019")
@@ -2769,7 +2785,7 @@ class AppendixGPRMTests < Minitest::Test
 
   # Change (medium) office space types to computer room
   #
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param arguments [Array] Not used
   def convert_spaces_to_cmp_rms(model, arguments)
     convert_spaces_from_to(model, ['OfficeWholeBuilding - Md Office', 'computer room'])
@@ -2810,7 +2826,7 @@ class AppendixGPRMTests < Minitest::Test
   # Change fenestration area in a model
   # This function will remove the fenestration in all orientations and add new windows by defined WWR
   #
-  # @param [OpenStudio::Model::Model] model
+  # @param model [OpenStudio::Model::Model] model
   # @param [Float] window to wall ratio
   def change_wwr_model(model, arguments)
     target_wwr_north = arguments[0]
@@ -2888,7 +2904,7 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Remove transformer from model
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param arguments [Array] List of arguments
   def remove_transformer(model, arguments)
     model.getElectricLoadCenterTransformers.each(&:remove)
@@ -2896,7 +2912,7 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Increase the size of the skylights in a model
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param arguments [Array] List of arguments
   def increase_skylight_size(model, arguments)
     mult = arguments[0]
@@ -2926,9 +2942,9 @@ class AppendixGPRMTests < Minitest::Test
 
   # Applies a multipler to increase the design cooling load of datacenters
   #
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param epd_multiplier [Array] EPD multiplier
-  # @returns [OpenStudio::model::Model]
+  # @returns [OpenStudio::Model::Model]
   def increase_computer_rooms_epd(model, epd_multiplier)
     model.getThermalZones.each do |zone|
       zone.spaces.each do |space|
@@ -2944,9 +2960,9 @@ class AppendixGPRMTests < Minitest::Test
 
   # Change equipment power density of a specific zone in a model to a specific value
   # @author Doug Maddox, PNNL
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param params [Array] zone_name, new equipment power density
-  # @return [OpenStudio::model::Model]
+  # @return [OpenStudio::Model::Model]
   def change_zone_epd(model, params)
     zone_name = params[0]
     new_epd = params[1]
@@ -2978,9 +2994,9 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Remove cooling coil from air loops in model
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param params [Array] zone_name, new equipment power density
-  # @return [OpenStudio::model::Model]
+  # @return [OpenStudio::Model::Model]
   def remove_cooling_coils(model, params)
     model.getAirLoopHVACs.each do |air_loop|
       air_loop.supplyComponents.each do |supply_comp|
@@ -3003,9 +3019,9 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   # Add return and relief fans to air loops
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param params [Array] zone_name, new equipment power density
-  # @return [OpenStudio::model::Model]
+  # @return [OpenStudio::Model::Model]
   def return_relief_fan(model, params)
     std = Standard.build('90.1-PRM-2019')
     model.getAirLoopHVACs.each do |air_loop|
@@ -3046,9 +3062,9 @@ class AppendixGPRMTests < Minitest::Test
   # Add people object to a specific zone with a long occupancy schedule
   # for testing 40 EFLH check of zones that differ for multizone systems
   # @author Doug Maddox, PNNL
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param params [Array] zone_name, new equipment power density
-  # @return [OpenStudio::model::Model]
+  # @return [OpenStudio::Model::Model]
   def change_to_long_occ_sch(model, params)
     zone_name = params[0]
     # Create new long schedule for occupancy for each space in the zone

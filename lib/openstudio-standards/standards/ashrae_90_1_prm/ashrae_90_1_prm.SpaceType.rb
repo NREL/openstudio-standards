@@ -9,16 +9,16 @@ class ASHRAE901PRM < Standard
   # loads directly assigned to spaces.  This method skips plenums.
   #
   # @param space_type [OpenStudio::Model::SpaceType] space type object
-  # @param set_people [Bool] if true, set the people density.
+  # @param set_people [Boolean] if true, set the people density.
   #   Also, assign reasonable clothing, air velocity, and work efficiency inputs
   #   to allow reasonable thermal comfort metrics to be calculated.
-  # @param set_lights [Bool] if true, set the lighting density, lighting fraction
+  # @param set_lights [Boolean] if true, set the lighting density, lighting fraction
   #   to return air, fraction radiant, and fraction visible.
-  # @param set_electric_equipment [Bool] if true, set the electric equipment density
-  # @param set_gas_equipment [Bool] if true, set the gas equipment density
-  # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
-  # @param set_infiltration [Bool] if true, set the infiltration rates
-  # @return [Bool] returns true if successful, false if not
+  # @param set_electric_equipment [Boolean] if true, set the electric equipment density
+  # @param set_gas_equipment [Boolean] if true, set the gas equipment density
+  # @param set_ventilation [Boolean] if true, set the ventilation rates (per-person and per-area)
+  # @param set_infiltration [Boolean] if true, set the infiltration rates
+  # @return [Boolean] returns true if successful, false if not
   def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     # Skip plenums
     # Check if the space type name
@@ -276,7 +276,7 @@ class ASHRAE901PRM < Standard
   # This function works with both electric equipment and gas equipment and applies the ruleset on power equipment
   # The function process user data including the fraction of controlled receptacles and receptacle power savings.
   #
-  # @parma power_equipment [OpenStudio::Model::ElectricEquipment] or [OpenStudio::Model:GasEquipment]
+  # @param power_equipment [OpenStudio::Model::ElectricEquipment] or [OpenStudio::Model:GasEquipment]
   # @param user_power_equipment [Hash] user data for the power equipment
   # @param schedule_hash [Hash] power equipment operation schedules in a hash
   # @param space_type [OpenStudio::Model:SpaceType] space type

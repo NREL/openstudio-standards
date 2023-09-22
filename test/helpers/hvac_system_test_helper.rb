@@ -212,7 +212,20 @@ end
 def default_radiant_test_hash
   # example hash for an HVAC system type test
   # default optional arguments should match those in model_add_low_temp_radiant
-  default_hash = {radiant_type: 'floor',
+  default_hash = {two_pipe_system: false,
+                  two_pipe_control_strategy: 'outdoor_air_lockout',
+                  two_pipe_lockout_temperature: 65.0,
+                  plant_supply_water_temperature_control: false,
+                  plant_supply_water_temperature_control_strategy: 'outdoor_air',
+                  hwsp_at_oat_low: 120,
+                  hw_oat_low: 55,
+                  hwsp_at_oat_high: 80,
+                  hw_oat_high: 70,
+                  chwsp_at_oat_low: 70,
+                  chw_oat_low: 65,
+                  chwsp_at_oat_high: 55,
+                  chw_oat_high: 75,
+                  radiant_type: 'floor',
                   radiant_temperature_control_type: 'SurfaceFaceTemperature',
                   radiant_setpoint_control_type: 'ZeroFlowPower',
                   include_carpet: true,
@@ -251,6 +264,19 @@ def model_radiant_system_test(arguments)
   unmet_hrs_clg = hash[:unmet_hrs_clg]
 
   # hash arguments defined in default_radiant_test_hash
+  two_pipe_system = hash[:two_pipe_system]
+  two_pipe_control_strategy = hash[:two_pipe_control_strategy]
+  two_pipe_lockout_temperature = hash[:two_pipe_lockout_temperature]
+  plant_supply_water_temperature_control = hash[:plant_supply_water_temperature_control]
+  plant_supply_water_temperature_control_strategy = hash[:plant_supply_water_temperature_control_strategy]
+  hwsp_at_oat_low = hash[:hwsp_at_oat_low]
+  hw_oat_low = hash[:hw_oat_low]
+  hwsp_at_oat_high = hash[:hwsp_at_oat_high]
+  hw_oat_high = hash[:hw_oat_high]
+  chwsp_at_oat_low = hash[:chwsp_at_oat_low]
+  chw_oat_low = hash[:chw_oat_low]
+  chwsp_at_oat_high = hash[:chwsp_at_oat_high]
+  chw_oat_high = hash[:chw_oat_high]
   radiant_type = hash[:radiant_type]
   radiant_temperature_control_type = hash[:radiant_temperature_control_type]
   radiant_setpoint_control_type = hash[:radiant_setpoint_control_type]
@@ -323,6 +349,19 @@ def model_radiant_system_test(arguments)
                                                         zones,
                                                         hot_water_loop,
                                                         chilled_water_loop,
+                                                        two_pipe_system: two_pipe_system,
+                                                        two_pipe_control_strategy: two_pipe_control_strategy,
+                                                        two_pipe_lockout_temperature: two_pipe_lockout_temperature,
+                                                        plant_supply_water_temperature_control: plant_supply_water_temperature_control,
+                                                        plant_supply_water_temperature_control_strategy: plant_supply_water_temperature_control_strategy,
+                                                        hwsp_at_oat_low: hwsp_at_oat_low,
+                                                        hw_oat_low: hw_oat_low,
+                                                        hwsp_at_oat_high: hwsp_at_oat_high,
+                                                        hw_oat_high: hw_oat_high,
+                                                        chwsp_at_oat_low: chwsp_at_oat_low,
+                                                        chw_oat_low: chw_oat_low,
+                                                        chwsp_at_oat_high: chwsp_at_oat_high,
+                                                        chw_oat_high: chw_oat_high,
                                                         radiant_type: radiant_type,
                                                         radiant_temperature_control_type: radiant_temperature_control_type,
                                                         radiant_setpoint_control_type: radiant_setpoint_control_type,
