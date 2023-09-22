@@ -106,7 +106,7 @@ class ASHRAE901PRM < Standard
 
   # Calculate the building envelope area according to the 90.1 definition
   #
-  # @param [OpenStudio::Model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Float] Building envelope area in m2
   def model_building_envelope_area(model)
     # Get climate zone
@@ -272,7 +272,7 @@ class ASHRAE901PRM < Standard
 
   # This methods calculate the air leakage rate of a space
   #
-  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # @param space [OpenStudio::Model::Space] OpenStudio Space object
   # @return [Float] Space air leakage rate
   def model_get_space_air_leakage(space)
     space_air_leakage = 0
@@ -2051,7 +2051,6 @@ class ASHRAE901PRM < Standard
   # Function that extract the total fenestration area from a model by orientations.
   # Orientation is identified as N (North), S (South), E (East), W (West)
   #
-  # @param user_model [OpenStudio::Model::Model]
   # @param user_model [OpenStudio::Model::Model] OpenStudio model
   # @return fenestration_area_hash [Hash] Hash map that contains the total area of fenestration at each orientation (N, S, E, W)
   def get_model_fenestration_area_by_orientation(user_model)

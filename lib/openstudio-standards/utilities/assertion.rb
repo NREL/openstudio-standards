@@ -8,7 +8,6 @@ end
 # Before raise the exception, the method will generate the prm.log for debugging
 # @param bool [Boolean, Object] an object for truthy evaluation
 # @param log_dir [String] log file directory
-# @param log_msg [String] message add to the log
 # @param err_msg [String] message raise the exception
 def prm_raise(bool, log_dir, err_msg)
   unless bool

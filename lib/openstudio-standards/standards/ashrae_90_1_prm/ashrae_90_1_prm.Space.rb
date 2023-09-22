@@ -110,7 +110,7 @@ class ASHRAE901PRM < Standard
 
   # Create and assign PRM computer room electric equipment schedule
   #
-  # @param [OpenStudio::Model::Space] OpenStudio Space object
+  # @param space [OpenStudio::Model::Space] OpenStudio Space object
   # @return [Bool] returns true if successful, false if not
   def space_add_prm_computer_roomm_equipment_schedule(space)
     # Get proposed or baseline model
