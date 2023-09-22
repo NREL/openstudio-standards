@@ -304,6 +304,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Surface"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.DesignSpecificationOutdoorAir"
   require_relative "#{stds}/ashrae_90_1_prm/userdata_csv/userdata_enums.rb"
+  require_relative "#{stds}/ashrae_90_1_prm/userdata_csv/ashrae_90_1_prm.UserData"
 
   # 90.1-PRM-2019
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"

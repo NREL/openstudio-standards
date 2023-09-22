@@ -2393,7 +2393,6 @@ class ASHRAE901PRM < Standard
 
     # Consider special rules for computer rooms
     # need load of all
-
     # Get cooling load of all computer rooms to establish system types
     comp_room_loads = {}
     bldg_comp_room_load = 0

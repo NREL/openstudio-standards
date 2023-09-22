@@ -587,6 +587,7 @@ class Standard
       if user_building_index && user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results']
         infiltration_modeled_from_field_verification_results = user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results'].to_s.downcase
       end
+
       # Calculate total infiltration flow rate per envelope area
       building_envelope_area_m2 = model_building_envelope_area(proposed_model)
       curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(proposed_model, building_envelope_area_m2)
@@ -594,7 +595,7 @@ class Standard
 
       # Warn users if the infiltration modeling in the user/proposed model is not based on field verification
       # If not modeled based on field verification, it should be modeled as 0.6 cfm/ft2
-      unless infiltration_modeled_from_field_verification_results.casecmp('Yes')
+      unless infiltration_modeled_from_field_verification_results.casecmp('true')
         if curr_tot_infil_cfm_per_envelope_area < 0.6
           OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The user model's I_75Pa is estimated to be #{curr_tot_infil_cfm_per_envelope_area} m3/s per m2 of total building envelope")
         end

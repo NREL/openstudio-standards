@@ -14,6 +14,34 @@ class ASHRAE901PRM < Standard
     super([__dir__] + data_directories)
   end
 
+  # Method to generate user data from a user model and save the csvs to the user_data_path
+  # This method can generate one user data csv based on the matching name or a full set of user data if
+  # leave it as nil
+  # @param user_model [OpenStudio::Model::Model] OpenStudio model object
+  # @param user_data_path [String] data path
+  # @param user_data_file [String] the name of the user data file.
+  def generate_userdata_to_csv(user_model, user_data_path, user_data_file = nil)
+    user_data_list = [UserDataCSVAirLoopHVAC.new(user_model, user_data_path),
+                      UserDataCSVBuilding.new(user_model, user_data_path),
+                      UserDataCSVSpace.new(user_model, user_data_path),
+                      UserDataCSVSpaceTypes.new(user_model, user_data_path),
+                      UserDataCSVAirLoopHVACDOAS.new(user_model, user_data_path),
+                      UserDataCSVExteriorLights.new(user_model, user_data_path),
+                      UserDataCSVThermalZone.new(user_model, user_data_path),
+                      UserDataCSVElectricEquipment.new(user_model, user_data_path),
+                      UserDataCSVOutdoorAir.new(user_model, user_data_path)]
+
+    if user_data_file.nil?
+      user_data_list.each {|user_data| user_data.write_csv}
+    else
+      user_data_list.each do |user_data|
+        if user_data.file_name == user_data_file
+          user_data.write_csv
+        end
+      end
+    end
+  end
+
   # Convert user data csv files to json format and save to project folder
   # Method will create the json_folder in the project_path
   # @author Doug Maddox, PNNL
