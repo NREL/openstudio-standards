@@ -222,7 +222,7 @@ class Standard
 
       # Modify electric equipment computer room schedule
       model.getSpaces.sort.each do |space|
-        space_add_prm_computer_roomm_equipment_schedule(space)
+        space_add_prm_computer_room_equipment_schedule(space)
       end
 
       model_apply_baseline_exterior_lighting(model)
@@ -627,7 +627,7 @@ class Standard
     proposed_model.getSpaces.each do |space|
       # If needed, modify computer equipment schedule
       # Section G3.1.3.16
-      space_add_prm_computer_roomm_equipment_schedule(space)
+      space_add_prm_computer_room_equipment_schedule(space)
 
       # If needed, modify lighting power denstities in residential spaces/zones
       # Section G3.1.6.e

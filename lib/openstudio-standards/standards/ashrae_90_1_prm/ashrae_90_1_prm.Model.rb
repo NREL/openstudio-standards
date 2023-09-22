@@ -903,7 +903,7 @@ class ASHRAE901PRM < Standard
 
   # Identifies non mechanically cooled ("nmc") systems, if applicable
   # and add a flag to the zone's and air loop's additional properties.
-  # TODO: Zone-level evaporative cooler is not currently supported by
+  # @todo: Zone-level evaporative cooler is not currently supported by
   #       by OpenStudio, will need to be added to the method when
   #       supported.
   #
@@ -988,7 +988,7 @@ class ASHRAE901PRM < Standard
     # Zone HVAC Controls
     model.getZoneHVACComponents.sort.each { |obj| zone_hvac_component_apply_standard_controls(obj) }
 
-    # TODO: The fan and pump efficiency will be done by another task.
+    # @todo: The fan and pump efficiency will be done by another task.
     # Fans
     # model.getFanVariableVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
     # model.getFanConstantVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
@@ -1073,7 +1073,7 @@ class ASHRAE901PRM < Standard
   # @param cooling_coil [OpenStudio::Model::ModeObject]
   # @param sql_db_vars_map [Hash] hash map
   # @param sys_type [String] baseline system type string
-  # @return sql_db_vars_map [Hash]
+  # @return [Hash] sql_db_vars_map
   def set_coil_cooling_efficiency_and_curves(cooling_coil, sql_db_vars_map, sys_type)
     if cooling_coil.to_CoilCoolingDXSingleSpeed.is_initialized
       # single speed coil
@@ -1093,7 +1093,7 @@ class ASHRAE901PRM < Standard
   # @param heating_coil [OpenStudio::Model::ModeObject]
   # @param sql_db_vars_map [Hash] hash map
   # @param sys_type [String] baseline system type string
-  # @return sql_db_vars_map [Hash] the hashmap contains the heating efficiency and curve coefficient for the heating_coil
+  # @return [Hash] the hashmap contains the heating efficiency and curve coefficient for the heating_coil
   def set_coil_heating_efficiency_and_curves(heating_coil, sql_db_vars_map, sys_type)
     if heating_coil.to_CoilHeatingDXSingleSpeed.is_initialized
       # single speed coil
@@ -1321,7 +1321,7 @@ class ASHRAE901PRM < Standard
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio model
   def model_raise_user_model_dcv_errors(model)
-    # TODO: JXL add log msgs to PRM logger
+    # @todo: JXL add log msgs to PRM logger
     model.getThermalZones.each do |thermal_zone|
       if thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get &&
          (!thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get ||
@@ -2003,7 +2003,7 @@ class ASHRAE901PRM < Standard
   #
   # @param run_all_orients [Boolean] user inputs to indicate whether it is required to run all orientations
   # @param user_model [OpenStudio::Model::Model] OpenStudio model
-  # @return run_orient_flag [Boolean] True if run all orientation is required, false otherwise
+  # @return [Boolean] True if run all orientation is required, false otherwise
   def run_all_orientations(run_all_orients, user_model)
     run_orients_flag = false
     # Step 1 check orientation variations - priority 3
@@ -2041,7 +2041,7 @@ class ASHRAE901PRM < Standard
         OpenStudio.logFree(OpenStudio::Error,
                            'prm.log',
                            "User data in the userdata_building.csv indicate building #{building_name} is exempted from rotation. Update the run to a single orientation PRM generation.")
-        # TODO need to use user data enums later.
+        # @todo need to use user data enums later.
         run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations'].casecmp('False') == 0
       end
     end
@@ -2052,7 +2052,7 @@ class ASHRAE901PRM < Standard
   # Orientation is identified as N (North), S (South), E (East), W (West)
   #
   # @param user_model [OpenStudio::Model::Model] OpenStudio model
-  # @return fenestration_area_hash [Hash] Hash map that contains the total area of fenestration at each orientation (N, S, E, W)
+  # @return [Hash] Hash map that contains the total area of fenestration at each orientation (N, S, E, W)
   def get_model_fenestration_area_by_orientation(user_model)
     # First index is wall, second index is window
     fenestration_area_hash = {
@@ -3158,7 +3158,7 @@ class ASHRAE901PRM < Standard
   # The function returns nil if none of the above matched.
   #
   # @param user_data_csv [String] the name of the user data csv file
-  # @return user_data [hash | nil] Returns hash or nil.
+  # @return [hash | nil] Returns hash or nil.
   def get_userdata(user_data_csv)
     return @standards_data.key?(user_data_csv) && @standards_data[user_data_csv].length >= 1 ? @standards_data[user_data_csv] : nil
   end

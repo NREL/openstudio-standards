@@ -158,7 +158,7 @@ class ASHRAE901PRM < Standard
     # Check if the plug load represents a motor (check if motorhorsepower exist), if so, record the motor HP and efficiency.
     if !user_equip_data['motor_horsepower'].nil?
       # Pre-processing will ensure these three user data are added correctly (float, float, boolean)
-      # TODO move this part to user data processing.
+      # @todo move this part to user data processing.
       power_equipment.additionalProperties.setFeature('motor_horsepower', user_equip_data['motor_horsepower'].to_f)
       power_equipment.additionalProperties.setFeature('motor_efficiency', user_equip_data['motor_efficiency'].to_f)
       power_equipment.additionalProperties.setFeature('motor_is_exempt', user_equip_data['motor_is_exempt'])
@@ -178,7 +178,7 @@ class ASHRAE901PRM < Standard
   def space_type_apply_power_equipment(space_type)
     # save schedules in a hash in case it is needed for new electric equipment
     power_schedule_hash = {}
-    # TODO move this part to user data processing
+    # @todo move this part to user data processing
     user_electric_equipment_data = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
     user_gas_equipment_data = @standards_data.key?('userdata_gas_equipment') ? @standards_data['userdata_gas_equipment'] : nil
     if user_electric_equipment_data && user_electric_equipment_data.length >= 1
@@ -212,7 +212,7 @@ class ASHRAE901PRM < Standard
   #
   # @param user_spacetypes [Hash] spacetype user data
   # @param user_spaces [Hash] space user data
-  # @param space_array [OpenStudio::Model:Space] list of spaces need for process
+  # @param space_array [Array OpenStudio::Model:Space] list of spaces need for process
   def space_to_space_type_apply_power_equipment(user_spacetypes, user_spaces, space_array)
     # Step 1: Set electric / gas equipment
     # save schedules in a hash in case it is needed for new electric equipment
@@ -376,7 +376,7 @@ class ASHRAE901PRM < Standard
   # @param user_spaces [Hash] hash data contained in the user space
   # @param user_spacetypes [Hash] hash data contained in the user spacetypes
   # @param space_type [OpenStudio::Model::SpaceType] object
-  # @return space_array [Array] List of Spaces [OpenStudio::Model::Space]
+  # @return [ArrayOpenStudio::Model::Space] List of Spaces
   def space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
     space_lighting_per_area_hash = {}
     # first priority - user_space data
@@ -452,7 +452,7 @@ class ASHRAE901PRM < Standard
     schedule_hash = {}
     model.getSpaces.each do |space|
       space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType')
-      if has_additional_feature(space_type, 'regulated_lights_name')
+      if space_type.hasAdditionalProperties && space_type.additionalProperties.hasFeature('regulated_lights_name')
         lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
         ltg_option = space_type.model.getLightsByName(lights_name)
         if ltg_option.is_initialized
@@ -560,7 +560,7 @@ class ASHRAE901PRM < Standard
   # It considers lighting per area, lighting per length as well as occupancy factors in the database.
   # @param space_type [OpenStudio::Model::SpaceType]
   # @param space [OpenStudio::Model::Space]
-  # @return space_lighting_per_area [Float] lighting power density in the space
+  # @return [Float] lighting power density in the space
   def calculate_lpd_by_space(space_type, space)
     # get interior lighting data
     space_type_properties = interior_lighting_get_prm_data(space_type)
@@ -596,7 +596,7 @@ class ASHRAE901PRM < Standard
 
   # Function checks whether the user data contains lighting data
   # @param user_space_data [Hash] space data extracted from user csv.
-  # @return has_user_lpd_values [Boolean] True if there are user lpd values, False otherwise.
+  # @return [Boolean] True if there are user lpd values, False otherwise.
   def has_user_lpd_values(user_space_data)
     user_space_data.each do |user_data|
       if user_data.key?('num_std_ltg_types') && user_data['num_std_ltg_types'].to_f > 0
@@ -609,7 +609,7 @@ class ASHRAE901PRM < Standard
   # Function checks whether there are multi lpd values in the space type
   # multi-lpd value means there are multiple spaces and the lighting_per_length > 0
   # @param space_type [OpenStudio::Model::SpaceType]
-  # @return has_multi-lpd_values_space_type [Boolean]
+  # @return [Boolean] True if there is lighting power defined by w/ft, False otherwise.
   def has_multi_lpd_values_space_type(space_type)
     space_type_properties = interior_lighting_get_prm_data(space_type)
     lighting_per_length = space_type_properties['w/ft'].to_f
@@ -622,7 +622,7 @@ class ASHRAE901PRM < Standard
   # multi-lpd value means lighting per area > 0 and lighting_per_length > 0
   # @param user_data [Hash] user data from the user csv
   # @param space_type [OpenStudio::Model::SpaceType]
-  # @return has_multi_lpd_values [Boolean]
+  # @return [Boolean]
   def has_multi_lpd_values_user_data(user_data, space_type)
     num_std_ltg_types = user_data['num_std_ltg_types'].to_i
     std_ltg_index = 0 # loop index
@@ -650,7 +650,7 @@ class ASHRAE901PRM < Standard
   # The sum of each space fraction in the user_data is assumed to be 1.0
   # @param user_data [Hash] user data from the user csv
   # @param space [OpenStudio::Model::Space]
-  # @return space_lighting_per_area [Float]
+  # @return [Float]
   def calculate_lpd_from_userdata(user_data, space)
     num_std_ltg_types = user_data['num_std_ltg_types'].to_i
     space_lighting_per_area = 0.0

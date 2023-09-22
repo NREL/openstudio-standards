@@ -39,7 +39,7 @@ class ASHRAE901PRM < Standard
 
     # Get any infiltration schedule already assigned to this space or its space type
     # If not, the always on schedule will be applied.
-    # TODO-PRM: Infiltration schedules should be based on HVAC operation
+    # @todo -PRM: Infiltration schedules should be based on HVAC operation
     infil_sch = nil
     unless space.spaceInfiltrationDesignFlowRates.empty?
       old_infil = space.spaceInfiltrationDesignFlowRates[0]
@@ -112,7 +112,7 @@ class ASHRAE901PRM < Standard
   #
   # @param space [OpenStudio::Model::Space] OpenStudio Space object
   # @return [Bool] returns true if successful, false if not
-  def space_add_prm_computer_roomm_equipment_schedule(space)
+  def space_add_prm_computer_room_equipment_schedule(space)
     # Get proposed or baseline model
     model = space.model
 

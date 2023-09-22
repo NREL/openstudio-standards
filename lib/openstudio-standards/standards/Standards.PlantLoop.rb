@@ -1508,7 +1508,7 @@ class Standard
     plant_loop_components.each do |component|
       # Get the object type
       obj_type = component.iddObjectType.valueName.to_s
-      next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
+      next unless ['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
 
       # Get pipe object
       pipe = nil

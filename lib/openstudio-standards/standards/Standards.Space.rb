@@ -2988,7 +2988,7 @@ class Standard
   #
   # @param space [OpenStudio::Model::Space] OpenStudio Space object
   # @return [Boolean] returns true if successful, false if not
-  def space_add_prm_computer_roomm_equipment_schedule(space)
+  def space_add_prm_computer_room_equipment_schedule(space)
     return true
   end
 end

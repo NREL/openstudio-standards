@@ -85,7 +85,7 @@ class UserDataCSVAirLoopHVAC < UserDataCSV
   end
 
   def write_default_rows
-    # TODO we can do more here but right now, keep everything unchecked.
+    # @todo we can do more here but right now, keep everything unchecked.
     return Array.new(@headers.length - 1, '')
   end
 end
@@ -107,7 +107,7 @@ class UserDataCSVBuilding < UserDataCSV
   end
 
   def write_default_rows
-    # TODO we can do more here but right now, keep everything unchecked.
+    # @todo we can do more here but right now, keep everything unchecked.
     return Array.new(@headers.length - 1, '')
   end
 end
@@ -125,7 +125,7 @@ class UserDataCSVSpace < UserDataCSV
   private
 
   def write_default_rows
-    # TODO we can do more here but right now, keep everything unchecked.
+    # @todo we can do more here but right now, keep everything unchecked.
     return Array.new(@headers.length - 1, '')
   end
 end
@@ -143,7 +143,7 @@ class UserDataCSVSpaceTypes < UserDataCSV
   private
 
   def write_default_rows
-    # TODO we can do more here but right now, keep everything unchecked.
+    # @todo we can do more here but right now, keep everything unchecked.
     return Array.new(@headers.length - 1, '')
   end
 end
@@ -159,7 +159,7 @@ class UserDataCSVAirLoopHVACDOAS < UserDataCSV
   end
 
   def write_default_rows
-    # TODO we can do more here but right now, keep everything unchecked.
+    # @todo we can do more here but right now, keep everything unchecked.
     return Array.new(@headers.length - 1, '')
   end
 end
@@ -175,7 +175,7 @@ class UserDataCSVExteriorLights < UserDataCSV
   end
 
   def write_default_rows
-    # TODO we can do more here but right now, keep everything unchecked.
+    # @todo we can do more here but right now, keep everything unchecked.
     return Array.new(@headers.length - 1, '')
   end
 end
@@ -191,7 +191,7 @@ class UserDataCSVThermalZone < UserDataCSV
   end
 
   def write_default_rows
-    # TODO we can do more here but right now, keep everything unchecked.
+    # @todo we can do more here but right now, keep everything unchecked.
     return Array.new(@headers.length - 1, '')
   end
 end
@@ -207,7 +207,7 @@ class UserDataCSVElectricEquipment < UserDataCSV
   end
 
   def write_default_rows
-    # TODO we can do more here but right now, keep everything unchecked.
+    # @todo we can do more here but right now, keep everything unchecked.
     return Array.new(@headers.length - 1, '')
   end
 end
@@ -223,7 +223,7 @@ class UserDataCSVOutdoorAir < UserDataCSV
   end
 
   def write_default_rows
-    # TODO we can do more here but right now, keep everything unchecked.
+    # @todo we can do more here but right now, keep everything unchecked.
     return Array.new(@headers.length - 1, '')
   end
 end

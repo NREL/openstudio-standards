@@ -22,7 +22,7 @@ end
 # @param user_data [Hash] a hash contains a user data
 # @param key [String] key string
 # @param default [Object] values assigned if the data is not available.
-# @return data [String] a string
+# @return [String] a string
 def prm_read_user_data(user_data, key, default = nil)
   return user_data.key?(key) && !user_data[key].nil? && !user_data[key].to_s.empty? ? user_data[key] : default
 end
@@ -35,7 +35,7 @@ end
 # @param log_dir [string] directory to save the log
 # @param data_key [string] The data key to retrieve the data from the OpenStudio object
 # @param remaining_keys [str] Any additional keys in the path
-# @return the OpenStudio Object or exception raise
+# @return [OpenStudio::Model::Component] the OpenStudio Object or exception raise
 def prm_get_optional_handler(component, log_dir, data_key, *remaining_keys)
   target_data = component.send(data_key)
   prm_raise(target_data.is_initialized,
@@ -50,7 +50,7 @@ end
 # If the object instance does not have a name, then it will return the object name.
 #
 # @param component [OpenStudio::Model:Component] an OpenStudio object
-# @return name [String] the name of the instance or object name
+# @return [String] the name of the instance or object name
 def prm_get_component_name(component)
   return 'Model' if component.is_a?(OpenStudio::Model::Model)
 
@@ -67,13 +67,13 @@ end
 # @param component [OpenStudio::Model:Component] the component to get the additional property from
 # @param key [String] key string
 # @param default [Boolean] the default to return when there is no matching key
-# @return value [Boolean] boolean value
+# @return [Boolean] boolean value
 def get_additional_property_as_boolean(component, key, default = false)
   value = default
   if component.additionalProperties.getFeatureAsBoolean(key).is_initialized
     value = component.additionalProperties.getFeatureAsBoolean(key).get
   else
-    OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.additionalproperties', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
   end
   return value
 end
@@ -83,13 +83,13 @@ end
 # @param component [OpenStudio::Model::Component] the component to get the additional property from
 # @param key [String] key string
 # @param default [Integer] the default to return when there is no matching key
-# @return value [Integer] Integer value
+# @return [Integer] Integer value
 def get_additional_property_as_integer(component, key, default = 0.0)
   value = default
   if component.additionalProperties.getFeatureAsInteger(key).is_initialized
     value = component.additionalProperties.getFeatureAsInteger(key).get
   else
-    OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.additionalproperties', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
   end
   return value
 end
@@ -99,13 +99,13 @@ end
 # @param component [OpenStudio::Model::Component] the component to get the additional property from
 # @param key [String] key string
 # @param default [Double] the default to return when there is no matching key
-# @return value [Double] Double value
+# @return [Double] Double value
 def get_additional_property_as_double(component, key, default = 0.0)
   value = default
   if component.additionalProperties.getFeatureAsDouble(key).is_initialized
     value = component.additionalProperties.getFeatureAsDouble(key).get
   else
-    OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.additionalproperties', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
   end
   return value
 end
@@ -115,21 +115,14 @@ end
 # @param component [OpenStudio::Model::Component] the component to get the additional property from
 # @param key [String] key string
 # @param default [String] the default to return when there is no matching key
-# @return value [String] String value
+# @return [String] String value
 def get_additional_property_as_string(component, key, default = "")
   value = default
   if component.additionalProperties.getFeatureAsString(key).is_initialized
     value = component.additionalProperties.getFeatureAsString(key).get
   else
-    OpenStudio.logFree(OpenStudio::Warn, 'prm.log', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.additionalproperties', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
   end
   return value
 end
 
-# Check if a component has the additional feature
-# @param component [OpenStudio::Model::Component] object
-# @param additional_feature_key [String] key
-# @return value [Boolean] True has additional feature, false otherwise
-def has_additional_feature(component, additional_feature_key)
-  return component.hasAdditionalProperties && component.additionalProperties.hasFeature(additional_feature_key)
-end
