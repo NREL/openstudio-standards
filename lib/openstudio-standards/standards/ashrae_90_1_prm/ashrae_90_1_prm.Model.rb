@@ -2099,7 +2099,7 @@ class ASHRAE901PRM < Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Boolean] returns true if successful, false if not
+  # @return [Boolean] surfaces_with_fc_factor_boundary, returns true if successful, false if not
   def model_update_ground_temperature_profile(model, climate_zone)
     # Check if the ground temperature profile is needed
     surfaces_with_fc_factor_boundary = false
@@ -2262,25 +2262,25 @@ class ASHRAE901PRM < Standard
   # Calculate the window to wall ratio reduction factor
   #
   # @param multiplier [Float] multiplier of the wwr
-  # @param surface_name [String] the name of the surface
-  # @param surface_wwr [Float] the surface window to wall ratio
-  # @param surface_dr [Float] the surface door to wall ratio
+  # @param surface [OpenStudio::Model:Surface] the surface object
   # @param wwr_building_type[String] building type for wwr
   # @param wwr_target [Float] target window to wall ratio
   # @param total_wall_m2 [Float] total wall area of the category in m2.
   # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
   # @param total_fene_m2 [Float] total fenestration area
   # @return [Float] reduction factor
-  def model_get_wwr_reduction_ratio(multiplier,
-                                    surface_name: 'surface',
-                                    surface_wwr: 0.0,
-                                    surface_dr: 0.0,
+  def surface_get_wwr_reduction_ratio(multiplier,
+                                    surface,
                                     wwr_building_type: 'All others',
                                     wwr_target: nil,
                                     total_wall_m2: 0.0, # prevent 0.0 division
                                     total_wall_with_fene_m2: 0.0,
                                     total_fene_m2: 0.0,
                                     total_plenum_wall_m2: 0.0)
+
+    surface_name = surface.name.get
+    surface_wwr = surface_get_wwr_of_a_surface(surface)
+    surface_dr = surface_get_door_ratio_of_a_surface(surface)
 
     if multiplier < 1.0
       # Case when reduction is required

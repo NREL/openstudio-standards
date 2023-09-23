@@ -4905,11 +4905,8 @@ class Standard
           # reduce toward centroid.
           #
           # daylighting control isn't modeled
-          surface_wwr = surface_get_wwr_of_a_surface(surface)
-          red = model_get_wwr_reduction_ratio(mult,
-                                              surface_name: surface.name.get,
-                                              surface_wwr: surface_wwr,
-                                              surface_dr: surface_get_door_ratio_of_a_surface(surface),
+          red = surface_get_wwr_reduction_ratio(mult,
+                                              surface,
                                               wwr_building_type: bat,
                                               wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
                                               total_wall_m2: total_wall_area,
@@ -7099,19 +7096,15 @@ class Standard
   # Calculate the window to wall ratio reduction factor
   #
   # @param multiplier [Float] multiplier of the wwr
-  # @param surface_wwr [Float] the surface window to wall ratio
-  # @param surface_dr [Float] the surface door to wall ratio
-  # @param wwr_building_type[String] building type for wwr
+  # @param surface [OpenStudio::Model:Surface] the surface object
   # @param wwr_target [Float] target window to wall ratio
   # @param total_wall_m2 [Float] total wall area of the category in m2.
   # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
   # @param total_fene_m2 [Float] total fenestration area
   # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
   # @return [Float] reduction factor
-  def model_get_wwr_reduction_ratio(multiplier,
-                                    surface_name: 'surface',
-                                    surface_wwr: 0.0,
-                                    surface_dr: 0.0,
+  def surface_get_wwr_reduction_ratio(multiplier,
+                                    surface,
                                     wwr_building_type: 'All others',
                                     wwr_target: 0.0,
                                     total_wall_m2: 0.0,

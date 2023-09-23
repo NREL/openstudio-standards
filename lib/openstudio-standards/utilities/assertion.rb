@@ -73,7 +73,7 @@ def get_additional_property_as_boolean(component, key, default = false)
   if component.additionalProperties.getFeatureAsBoolean(key).is_initialized
     value = component.additionalProperties.getFeatureAsBoolean(key).get
   else
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.additionalproperties', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.utilities', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
   end
   return value
 end
@@ -89,7 +89,7 @@ def get_additional_property_as_integer(component, key, default = 0.0)
   if component.additionalProperties.getFeatureAsInteger(key).is_initialized
     value = component.additionalProperties.getFeatureAsInteger(key).get
   else
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.additionalproperties', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.utilities', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
   end
   return value
 end
@@ -105,7 +105,7 @@ def get_additional_property_as_double(component, key, default = 0.0)
   if component.additionalProperties.getFeatureAsDouble(key).is_initialized
     value = component.additionalProperties.getFeatureAsDouble(key).get
   else
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.additionalproperties', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.utilities', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
   end
   return value
 end
@@ -121,7 +121,7 @@ def get_additional_property_as_string(component, key, default = "")
   if component.additionalProperties.getFeatureAsString(key).is_initialized
     value = component.additionalProperties.getFeatureAsString(key).get
   else
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.additionalproperties', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
+    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.utilities', "Cannot find the #{key} in component: #{component.name.get}, default value #{default} is used.")
   end
   return value
 end
