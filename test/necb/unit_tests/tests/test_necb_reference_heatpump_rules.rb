@@ -88,10 +88,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 hw_loop: hw_loop)
           end
 
-          # Save the model after btap hvac.
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-          # Set cooling capacity
+          # Set cooling capacity.
           dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
           cap = 25000
           dx_clg_coils.each do |coil|
@@ -100,9 +97,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
             coil.setRatedAirFlowRate(flow_rate)
           end
 
-
-          # Run the measure.
-          run_the_measure(model: model, test_name: name, template: template, necb_ref_hp: true) if PERFORM_STANDARDS
+          # Run sizing.
+          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
 
           # Non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -276,11 +272,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 baseboard_type: baseboard_type,
                 hw_loop: hw_loop)
           end
-          # Save the model after btap hvac.
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-          # Run the measure.
-          run_the_measure(model: model, test_name: name, template: template, necb_ref_hp: true) if PERFORM_STANDARDS
+          
+          # Run sizing.
+          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
 
           # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -379,11 +373,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 baseboard_type: baseboard_type,
                 hw_loop: hw_loop)
           end
-          # Save the model after btap hvac.
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-          # Run the measure.
-          run_the_measure(model: model, test_name: name, template: template, necb_ref_hp: true) if PERFORM_STANDARDS
+          
+          # Run sizing.
+          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
 
           #get expected cooling values
           cooling_curve_expected_result_file = File.join(@expected_results_folder, "necb2011_reference_heatpump_cooling_curves_expected_results.csv")
@@ -812,11 +804,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               baseboard_type: baseboard_type,
               hw_loop: hw_loop)
         end
-        # Save the model after btap hvac.
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-        # Run the measure.
-        run_the_measure(model: model, test_name: name, template: template, necb_ref_hp: true) if PERFORM_STANDARDS
+        
+        # Run sizing.
+        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
 
         no_over_sizing = true
         model.getThermalZones.each do |zone|
@@ -901,11 +891,8 @@ def test_ref_heatpump_heating_low_temp
               hw_loop: hw_loop)
         end
 
-        # Save the model after btap hvac.
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-        # Run the measure.
-        run_the_measure(model: model, test_name: name, template: template, necb_ref_hp: true) if PERFORM_STANDARDS
+        # Run sizing.
+        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
 
         # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
         unless sys_number == 'sys6'

@@ -28,6 +28,9 @@ class NECB_2015PumpPower_Test < Minitest::Test
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
+    template = 'NECB2015'
+    standard = get_standard(template)
+    save_intermediate_models = false
 
     tol = 1.0e-3
     # Generate the osm files for all relevant cases to generate the test data for system 6
@@ -37,18 +40,17 @@ class NECB_2015PumpPower_Test < Minitest::Test
     heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     chiller_cap = 1000000.0
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    template = 'NECB2015'
-    standard = get_standard(template)
+
     clgtowerFanPowerFr = 0.013
     chiller_types.each do |chiller_type|
-      name = "sys6_#{template}_ChillerType_#{chiller_type}~#{chiller_cap}watts"
-      puts "***************************************#{name}*******************************************************\n"
+      name = "sys6_#{template}_ChillerType_#{chiller_type}-#{chiller_cap}watts"
+      name.gsub!(/\s+/, "-")
+      puts "***************#{name}***************\n"
+
+      # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
@@ -60,12 +62,10 @@ class NECB_2015PumpPower_Test < Minitest::Test
           chiller_type: chiller_type,
           fan_type: fan_type,
           hw_loop: hw_loop)
-      # Save the model after btap hvac.
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
 
-      # Run the measure.
-      run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+      # Run sizing.
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
       # Apply the NECB 2015 pump power rules to the model.
       standard.apply_maximum_loop_pump_power(model)

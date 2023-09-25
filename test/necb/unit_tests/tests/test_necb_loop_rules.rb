@@ -21,6 +21,7 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
     output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
+    save_intermediate_models = false
 
     # Generate the osm files for all relevant cases to generate the test data for system 6
     boiler_fueltype = 'NaturalGas'
@@ -28,12 +29,16 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
     chiller_type = 'Scroll'
     heating_coil_type = 'Electric'
     fan_type = 'AF_or_BI_rdg_fancurve'
+    
+    name = "sys6"
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    name = "sys6"
-    puts "***************************************#{name}*******************************************************\n"
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
@@ -44,11 +49,9 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
                                                                         chiller_type: chiller_type,
                                                                         fan_type: fan_type,
                                                                         hw_loop: hw_loop)
-    # Save the model after btap hvac.
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-    # Run the measure.
-    run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+    
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     tol = 1.0e-3
     loops = model.getPlantLoops
@@ -92,17 +95,22 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
     output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
+    save_intermediate_models = false
 
     # Generate the osm files for all relevant cases to generate the test data for system 2
     boiler_fueltype = 'Electricity'
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'DX'
+
+    name = "sys2_chw"
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    name = "sys2"
-    puts "***************************************#{name}*******************************************************\n"
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
@@ -112,11 +120,9 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
                                      fan_coil_type: 'FPFC',
                                      mau_cooling_type: mua_cooling_type,
                                      hw_loop: hw_loop)
-    # Save the model after btap hvac.
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-    # Run the measure.
-    run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+    
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     loops = model.getPlantLoops
     tol = 1.0e-3
@@ -163,17 +169,22 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
     output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
+    save_intermediate_models = false
 
-    # Generate the osm files for all relevant cases to generate the test data for system 2
+    # Generate the osm files for all relevant cases to generate the test data for system 2.
     boiler_fueltype = 'Electricity'
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'DX'
+    
+    name = "sys2_cw"
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    name = "sys2"
-    puts "***************************************#{name}*******************************************************\n"
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
@@ -183,11 +194,9 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
                                      fan_coil_type: 'FPFC',
                                      mau_cooling_type: mua_cooling_type,
                                      hw_loop: hw_loop)
-    # Save the model after btap hvac.
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-    # Run the measure.
-    run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     loops = model.getPlantLoops
     tol = 1.0e-3

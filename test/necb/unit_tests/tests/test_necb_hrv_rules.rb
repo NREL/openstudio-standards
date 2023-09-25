@@ -21,16 +21,18 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     output_folder = method_output_folder
     template = 'NECB2011'
     standard = Standard.build(template)
+    save_intermediate_models = false
  
-    # Generate the osm files for all relevant cases to generate the test data
+    name = "hrv"
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    name = "hrv"
-    puts "***************************************#{name}*******************************************************\n"
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
-    # Add hvac system
+    # Add HVAC system.
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
@@ -45,7 +47,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                                                                                                 new_auto_zoner: false)
     systems = model.getAirLoopHVACs
 
-    # increase default outdoor air requirement so that some of the systems in the project would require an HRV
+    # Increase default outdoor air requirement so that some of the systems in the project would require an HRV.
     for isys in 0..0
       zones = systems[isys].thermalZones
       zones.each do |izone|
@@ -58,9 +60,8 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       end
     end
 
-
-    # Run the measure.
-    run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     systems = model.getAirLoopHVACs
     tol = 1.0e-5

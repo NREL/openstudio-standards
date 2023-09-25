@@ -19,9 +19,11 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
+    save_intermediate_models = false
 
     #templates = ['NECB2011', 'NECB2015', 'NECB2020', 'BTAPPRE1980']
     templates = ['NECB2020']
+
     templates.each do |template|
       heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
       standard = get_standard(template)
@@ -53,15 +55,17 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
       boiler_fueltype = 'Electricity'
       baseboard_type = 'Hot Water'
       heating_coil_type = 'DX'
-      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      # save baseline
-      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+      
       test_caps.each do |cap|
-        name = "#{template}_sys3_HtgDXCoilCap~#{cap}kW"
-        puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
+        name = "#{template}_sys3_HtgDXCoilCap-#{cap}kW"
+        name.gsub!(/\s+/, "-")
+        puts "***************#{name}***************\n"
+
+        # Load model and set climate file.
+        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
         standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -71,9 +75,7 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
                                                                                                     baseboard_type: baseboard_type,
                                                                                                     hw_loop: hw_loop,
                                                                                                     new_auto_zoner: false)
-        # Save the model after btap hvac.
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
+        
         dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
         dx_clg_coils.each do |coil|
           coil.setRatedTotalCoolingCapacity(cap * 1000)
@@ -81,8 +83,8 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
           coil.setRatedAirFlowRate(flow_rate)
         end
 
-        # Run the measure.
-        run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+        # Run sizing.
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
         actual_heatpump_cop << model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
       end
 
@@ -120,6 +122,7 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
     output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
+    save_intermediate_models = false
 
     heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
     heatpump_curve_names = []
@@ -131,12 +134,16 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
+    
+    name = "sys3"
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    name = "sys3"
-    puts "***************************************#{name}*******************************************************\n"
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+            
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
     standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -146,11 +153,9 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
                                                                                                 baseboard_type: baseboard_type,
                                                                                                 hw_loop: hw_loop,
                                                                                                 new_auto_zoner: false)
-    # Save the model after btap hvac.
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     dx_units = model.getCoilHeatingDXSingleSpeeds
     heatpump_cap_ft_curve = dx_units[0].totalHeatingCapacityFunctionofTemperatureCurve.to_CurveCubic.get
