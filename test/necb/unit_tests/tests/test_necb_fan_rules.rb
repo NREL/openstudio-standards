@@ -21,6 +21,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
     output_folder = method_output_folder(__method__)
     template = "NECB2011"
     standard = get_standard(template)
+    save_intermediate_models = false
 
     vavfan_expected_result_file = File.join(@expected_results_folder, 'compliance_vavfan_curves_expected_results.csv')
     vavfan_curve_names = []
@@ -35,17 +36,19 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
     heating_coil_type = 'Electric'
     vavfan_type = 'AF_or_BI_rdg_fancurve'
     vavfan_caps = [5000.0, 10000.0, 30000.0]
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     fan_index = 1
     tol = 1.0e-3
+
     vavfan_caps.each do |cap|
-      name = "sys6_vavfancap~#{cap}watts"
-      puts "***************************************#{name}*******************************************************\n"
-      model = BTAP::FileIO::load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
+      name = "sys6_vavfancap-#{cap}watts"
+      name.gsub!(/\s+/, "-")
+      puts "***************#{name}***************\n"
+
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -56,8 +59,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
                                                                                    chiller_type: chiller_type,
                                                                                    fan_type: vavfan_type,
                                                                                    hw_loop: hw_loop)
-      # Save the model after btap hvac.
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
+      
       vavfans = model.getFanVariableVolumes
       vavfans.each do |ifan|
         if ifan.name.to_s.include?('Supply')
@@ -70,8 +72,8 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
         ifan.setMaximumFlowRate(flow_rate)
       end
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+      # Run sizing.
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
       vavfans = model.getFanVariableVolumes
       vavfans.each do |ifan|
@@ -126,24 +128,29 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
     file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
-  # Test to validate constant volume fan pressure rise and total efficiency
+  # Test to validate constant volume fan pressure rise and total efficiency.
   def test_NECB2011_const_vol_fan_rules
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
     template = "NECB2011"
     standard = get_standard(template)
+    save_intermediate_models = false
 
     boiler_fueltype = 'NaturalGas'
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
+
+    name = 'sys1'
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    name = 'sys1'
-    puts "***************************************#{name}*******************************************************\n"
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
     standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -153,11 +160,9 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
                                                             mau_heating_coil_type: mau_heating_coil_type,
                                                             baseboard_type: baseboard_type,
                                                             hw_loop: hw_loop)
-    # Save the model after btap hvac.
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     fans = model.getFanConstantVolumes
     tol = 1.0e-3
