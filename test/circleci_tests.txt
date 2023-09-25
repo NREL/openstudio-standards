@@ -84,8 +84,8 @@ necb/unit_tests/tests/test_insuite_central_doas.rb
 necb/unit_tests/tests/test_led_lighting.rb
 necb/unit_tests/tests/test_necb_airloop_sizing_parameters.rb
 necb/unit_tests/tests/test_necb_auto_zone_test.rb
-#necb/unit_tests/tests/test_necb_boiler_rules.rb
-#necb/unit_tests/tests/test_necb_chiller_rules.rb
+necb/unit_tests/tests/test_necb_boiler_rules.rb
+necb/unit_tests/tests/test_necb_chiller_rules.rb
 necb/unit_tests/tests/test_necb_constructions_fdwr.rb
 necb/unit_tests/tests/test_necb_coolingtower_rules.rb
 necb/unit_tests/tests/test_necb_default_spacetypes.rb
@@ -94,11 +94,11 @@ necb/unit_tests/tests/test_necb_fan_rules.rb
 necb/unit_tests/tests/test_necb_furnace_rules.rb
 necb/unit_tests/tests/test_necb_heatpump_rules.rb
 necb/unit_tests/tests/test_necb_hrv_rules.rb
-#necb/unit_tests/tests/test_necb_loop_rules.rb
+necb/unit_tests/tests/test_necb_loop_rules.rb
 necb/unit_tests/tests/test_necb_pumppower_rules.rb
 #necb/unit_tests/tests/test_necb_qaqc_single.rb
 necb/unit_tests/tests/test_necb_reference_heatpump_rules.rb
-#necb/unit_tests/tests/test_necb_schedules.rb
+necb/unit_tests/tests/test_necb_schedules.rb
 necb/unit_tests/tests/test_necb_shw.rb
 necb/unit_tests/tests/test_necb_space_types_default_constructions_set.rb
 necb/unit_tests/tests/test_necb_total_and_tz_ceiling_centroid.rb
