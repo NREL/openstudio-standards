@@ -23,13 +23,13 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
     templates = ['NECB2011', 'NECB2020']
-    standard = get_standard(template)
+    save_intermediate_models = false
 
     templates.each do |template|
-      standard = Standard.build(template)
+      standard = get_standard(template)
       expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
 
-      # Initialize hashes for storing expected chiller cop data from file
+      # Initialize hashes for storing expected chiller cop data from file.
       chiller_type_min_cap = {}
       chiller_type_min_cap['Rotary Screw'] = []
       chiller_type_min_cap['Reciprocating'] = []
@@ -41,8 +41,8 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       chiller_type_max_cap['Scroll'] = []
       chiller_type_max_cap['Centrifugal'] = []
 
-      # read the file for the cutoff min and max capacities for various chiller types
-      CSV.foreach(chiller_expected_result_file, headers: true) do |data|
+      # Read the file for the cutoff min and max capacities for various chiller types.
+      CSV.foreach(expected_result_file, headers: true) do |data|
         chiller_type_min_cap[data['Type']] << data['Min Capacity (Btu per hr)']
         chiller_type_max_cap[data['Type']] << data['Max Capacity (Btu per hr)']
       end
@@ -81,16 +81,18 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       boiler_fueltype = 'Electricity'
       chiller_types = ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
       mua_cooling_type = 'Hydronic'
-      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      # save baseline
-      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+      
       chiller_types.each do |chiller_type|
         chiller_type_cap[chiller_type].each do |chiller_cap|
-          name = "#{template}_sys2_ChillerType~#{chiller_type}_Chiller_cap~#{chiller_cap}watts"
-          puts "***************************************#{name}*******************************************************\n"
+          name = "#{template}_sys2_ChillerType-#{chiller_type}_Chiller_cap-#{chiller_cap}watts"
+          name.gsub!(/\s+/, "-")
+          puts "***************#{name}***************\n"
+
+          # Load model and set climate file.
           model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/../resources/5ZoneNoHVAC.osm")
           BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
+          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
           standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -100,15 +102,11 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
                                            fan_coil_type: 'FPFC',
                                            mau_cooling_type: mua_cooling_type,
                                            hw_loop: hw_loop)
+          model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
 
-          # Save the model after btap hvac.
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-          model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
-          # run the standards
-          result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-          # Save the model
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-          assert_equal(true, result, "Failure in Standards for #{name}")
+          # Run sizing.
+          run_sizing(model: model,  template: template, test_name: name,save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+          
           model.getChillerElectricEIRs.each do |ichiller|
             if ichiller.referenceCapacity.to_f > 1
               actual_chiller_cop[chiller_type] << ichiller.referenceCOP.round(3)
@@ -146,6 +144,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
+    save_intermediate_models = false
 
     first_cutoff_chlr_cap = 2100000.0
     tol = 1.0e-3
@@ -157,17 +156,18 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     test_chiller_cap = [1000000.0, 3000000.0]
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    
-    # Save baseline.
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+
     chiller_types.each do |chiller_type|
       test_chiller_cap.each do |chiller_cap|
-        name = "sys6_ChillerType_#{chiller_type}~Chiller_cap~#{chiller_cap}watts"
+        name = "sys6_ChillerType_#{chiller_type}-Chiller_cap-#{chiller_cap}watts"
+        name.gsub!(/\s+/, "-")
         puts "***************#{name}***************\n"
+
+        # Load model and set climate file.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
         standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -178,13 +178,10 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
                                                                             chiller_type: chiller_type,
                                                                             fan_type: fan_type,
                                                                             hw_loop: hw_loop)
-        
-        # Save the model after btap hvac.
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
         model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
 
         # Run the standards.
-        run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
         
         # Check that there are two chillers in the model.
         chillers = model.getChillerElectricEIRs
@@ -234,9 +231,12 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
   # Test to validate the chiller performance curves.
   def test_chiller_curves
+
+    # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
+    save_intermediate_models = false
 
     expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_curves_expected_results.csv")
 
@@ -248,20 +248,22 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     CSV.foreach(expected_result_file, headers: true) do |data|
       chiller_curve_names[data['Chiller Type']] << data['Curve Name']
     end
-    # Generate the osm files for all relevant cases to generate the test data for system 5
+
+    # Generate the osm files for all relevant cases to generate the test data for system 5.
     chiller_res_file_output_text = "Chiller Type,Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,coeff5,coeff6,min_x,max_x,min_y,max_y\n"
     boiler_fueltype = 'NaturalGas'
     chiller_types = ['Scroll', 'Reciprocating', 'Rotary Screw', 'Centrifugal']
     mua_cooling_type = 'Hydronic'
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+    
     chiller_types.each do |chiller_type|
       name = "sys5_ChillerType_#{chiller_type}"
+      name.gsub!(/\s+/, "-")
       puts "***************#{name}***************\n"
+
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -271,11 +273,9 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
                                        fan_coil_type: 'FPFC',
                                        mau_cooling_type: mua_cooling_type,
                                        hw_loop: hw_loop)
-      # Save the model after btap hvac.
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-      # Run the standards.
-      run_the_measure(model: model, test_name: name, template: template) if PERFORM_STANDARDS
+      
+      # Run sizing.
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
       chillers = model.getChillerElectricEIRs
       chiller_cap_ft_curve = chillers[0].coolingCapacityFunctionOfTemperature.to_CurveBiquadratic.get
