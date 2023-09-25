@@ -27,9 +27,6 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
   ]
 
-  # Set Compliance vintage.
-  Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980', 'BTAP1980TO2010']
-
   # Create scaffolding to create a model with windows, then reset to appropriate values.
   # Will require large windows and constructions that have high U-values.    
   def create_base_model()
@@ -110,14 +107,15 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   def test_necb_hdd_envelope_rules()
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder
+    output_folder = method_output_folder(__method__)
 
-    #Create report string. 
+    # Create report string. 
     @json_test_output = {}
 
-    #Iterate through the vintage templates 'NECB2011', etc..
-    Templates.each do |template|
+    # Iterate through the vintage templates 'NECB2011', etc..
+    @AllTemplates.each do |template|
       @json_test_output[template] = {}
+
       #Iterate through the weather files.
       NECB_epw_files_for_cdn_climate_zones.each do |weather_file|
         create_base_model()
@@ -136,7 +134,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         st.setName("#{template}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
         standard.space_type_apply_rendering_color(st)
         standard.model_add_loads(@model, 'NECB_Default', 1.0)
-        #Now loop through each space and assign the spacetype.
+
+        # Now loop through each space and assign the spacetype.
         @model.getSpaces.each do |space|
           space.setSpaceType(st)
         end
@@ -151,10 +150,10 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         standard.apply_envelope(model: @model)
         standard.apply_fdwr_srr_daylighting(model: @model)
 
-        #Store hdd for classifing results.
+        # Store hdd for classifing results.
         @hdd = standard.get_necb_hdd18(@model)
 		
-        #Set the infiltration rate at each space
+        # Set the infiltration rate at each space.
         @model.getSpaces.sort.each do |space|
           standard.space_apply_infiltration_rate(space)
         end
@@ -175,26 +174,26 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         ground_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor")
 
         # Determine the weighted average conductances by surface type. 
-        ## exterior surfaces
+        ## exterior surfaces.
         outdoor_walls_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_walls)
         outdoor_roofs_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_roofs)
         outdoor_floors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_floors)
-        ## Ground surfaces
+        ## Ground surfaces.
         ground_walls_average_conductances = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_walls)
         ground_roofs_average_conductances = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_roofs)
         ground_floors_average_conductances = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_floors)
-        ## Sub surfaces
+        ## Sub surfaces.
         windows_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(windows)
         windows_average_shgc = BTAP::Geometry::Surfaces::get_weighted_average_surface_shgc(windows)
         skylights_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(skylights)
         doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(doors)
         overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
 
-        # SRR and FDWR
+        # SRR and FDWR.
         srr_info = standard.find_exposed_conditioned_roof_surfaces(@model)
         fdwr_info = standard.find_exposed_conditioned_vertical_surfaces(@model)
 
-        #Output conductances
+        # Output conductances.
         def roundOrNA(data, figs = 4)
           if data == 'NA'
             return data
@@ -224,6 +223,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'] = {}
         sorted_spaces.each do |space|
           assert(space.spaceInfiltrationDesignFlowRates.size <= 1, "There should be no more than one infiltration object per space in the reference/budget building#{space.spaceInfiltrationDesignFlowRates}")
+          
           # If space rightfully does not have an infiltration rate (no exterior surfaces) output an NA. 
           if space.spaceInfiltrationDesignFlowRates.size == 0
             @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'][space.name] = "NA,"
