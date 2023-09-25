@@ -22,6 +22,7 @@ begin
     output_folder = method_output_folder
     template="NECB2011"
     standard = get_standard(template)
+    save_intermediate_models = false
 
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
@@ -29,13 +30,15 @@ begin
     heating_coil_type = 'Electric'
     vavfan_type = 'AF_or_BI_rdg_fancurve'
 
-    # save baseline
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     tol = 1.0e-3
     name = 'sys6'
-    puts "***************************************#{name}*******************************************************\n"
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
@@ -48,11 +51,9 @@ begin
       chiller_type: chiller_type,
       fan_type: vavfan_type,
       hw_loop: hw_loop)
-    # Save the model after btap hvac.
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     airloops = model.getAirLoopHVACs
     airloops.each do |iloop|
@@ -118,19 +119,22 @@ begin
     output_folder = method_output_folder
     template="NECB2011"
     standard = get_standard(template)
+    save_intermediate_models = false
 
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+    
     tol = 1.0e-3
     name = 'sys3'
-    puts "***************************************#{name}*******************************************************\n"
-    model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/../resources/5ZoneNoHVAC.osm")
-    BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule	
     standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
@@ -141,11 +145,9 @@ begin
       baseboard_type: baseboard_type,
       hw_loop: hw_loop,
       new_auto_zoner: false)
-    # Save the model after btap hvac.
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-            # Run the measure.
-            run_the_measure(model: model, test_name: name) if PERFORM_STANDARDS
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     airloops = model.getAirLoopHVACs
     airloops.each do |iloop|
@@ -175,6 +177,7 @@ begin
         heating_sizing_temp_diff_set_correctly = true
         if diff > tol then heating_sizing_temp_diff_set_correctly = false end
         assert(heating_sizing_temp_diff_set_correctly, "test_airloop_sizing_rules_heatpump: Heating sizing supply temperature difference does not match necb requirement #{name}")
+        
         diff = (heating_sizing_temp_diff.to_f - necb_heating_sizing_temp_diff).abs / necb_heating_sizing_temp_diff
         cooling_sizing_temp_diff_set_correctly = true
         if diff > tol then cooling_sizing_temp_diff_set_correctly = false end
