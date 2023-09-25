@@ -4918,7 +4918,7 @@ class Standard
             # surface with fenestration to its maximum but adjusted by door areas when need to add windows in surfaces no fenestration
             # turn negative to positive to get the correct adjustment factor.
             red = -red
-            residual_fene += (0.9 - red * surface_wwr) * surface.grossArea
+            residual_fene += (0.9 - red * surface_get_wwr_of_a_surface(surface)) * surface.grossArea
           end
           surface_adjust_fenestration_in_a_surface(surface, red, model)
         end
