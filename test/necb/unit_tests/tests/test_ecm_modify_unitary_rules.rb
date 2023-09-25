@@ -21,26 +21,25 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder
+    templates = ['NECB2015'] #list of templates
+    save_intermediate_models = false
 
-    # Generate the osm files for all relevant cases to generate the test data for system 3
+    # Generate the osm files for all relevant cases to generate the test data for system 3.
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
     unitary_heating_types = ['Electric Resistance', 'All Other']
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
     unitary_ecms = ['Carrier WeatherExpert','Lennox Model L Ultra High Efficiency']
-    templates = ['NECB2015'] #list of templates
     num_cap_intv = {'Carrier WeatherExpert' => 4,'Lennox Model L Ultra High Efficiency' => 12}
     speeds = ['single']
+    
     templates.each do |template|
       unitary_ecms.each do |unitary_ecm|
         unitary_expected_result_file = File.join(@expected_results_folder, "ecm_modify_unitary_#{unitary_ecm.downcase.gsub(' ','_')}_expected_results.csv")
         standard = get_standard(template)
         ecm = get_standard('ECMS')
         unitary_res_file_output_text = "Heating Type,Min Capacity (W),Max Capacity (W),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER),Coefficient of Performance (COP)\n"
-        # Initialize hashes for storing expected unitary efficiency data from file
+        
+        # Initialize hashes for storing expected unitary efficiency data from file.
         heating_type_min_cap = {}
         heating_type_min_cap['Electric Resistance'] = []
         heating_type_min_cap['All Other'] = []
@@ -51,7 +50,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
         efficiency_type['Electric Resistance'] = []
         efficiency_type['All Other'] = []
 
-        # read the file for the expected unitary efficiency values for different heating types and equipment capacity ranges
+        # Read the file for the expected unitary efficiency values for different heating types and equipment capacity ranges.
         CSV.foreach(unitary_expected_result_file, headers: true) do |data|
           heating_type_min_cap[data['Heating Type']] << data['Min Capacity (W)']
           heating_type_max_cap[data['Heating Type']] << data['Max Capacity (W)']
@@ -65,7 +64,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
         end
 
         # Use the expected unitary efficiency data to generate suitable equipment capacities for the test to cover all
-        # the relevant equipment capacity ranges
+        # the relevant equipment capacity ranges.
         heating_type_cap = {}
         heating_type_min_cap.each do |heating_type, cap|
           unless heating_type_cap.key? heating_type then
@@ -89,9 +88,14 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
             end
             heating_type_cap[heating_type].each do |unitary_cap|
               name = "#{unitary_ecm.delete(' ')}_sys3_MuaHtgCoilType~#{heating_coil_type}_Speed~#{speed}_UnitaryCap~#{unitary_cap}watts"
-              puts "***************************************#{name}*******************************************************\n"
+              name.gsub!(/\s+/, "-")
+              puts "***************#{name}***************\n"
+    
+              # Load model and set climate file.
               model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
               BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+              BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+              
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
               always_on = model.alwaysOnDiscreteSchedule
               standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -109,13 +113,11 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
                   dxcoil.setRatedAirFlowRate(flow_rate)
                 end
               end
-              # Save the model after btap hvac.
-              BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
-            # Run the measure.
+              
+              # Run sizing.
               sql_db_vars_map = {}
               ecm.modify_unitary_cop(model: model, unitary_cop: "#{unitary_ecm}", sizing_done: false, sql_db_vars_map: sql_db_vars_map)
-            run_the_measure(model: model, test_name: name, sql_db_vars_map: sql_db_vars_map) if PERFORM_STANDARDS
+              run_sizing(model: model, template: template, test_name: name, sql_db_vars_map: sql_db_vars_map, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
               ecm.modify_unitary_cop(model: model, unitary_cop: "#{unitary_ecm}", sizing_done: true, sql_db_vars_map: sql_db_vars_map)
 
               case speed
