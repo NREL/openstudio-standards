@@ -549,7 +549,7 @@ class ASHRAE901PRM < Standard
   # Get the air loop HVAC design outdoor air flow rate by reading Standard 62.1 Summary from the sizing sql
   # @author Xuechen (Jerry) Lei, PNNL
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @return [Float] Design outdoor air flow rate (m^3/s)
+  # @return [Double] Design outdoor air flow rate (m^3/s)
   def get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
     return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
 

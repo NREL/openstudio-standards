@@ -32,7 +32,7 @@ class ASHRAE901PRM < Standard
                       UserDataCSVOutdoorAir.new(user_model, user_data_path)]
 
     if user_data_file.nil?
-      user_data_list.each {|user_data| user_data.write_csv}
+      user_data_list.each(&:write_csv)
     else
       user_data_list.each do |user_data|
         if user_data.file_name == user_data_file

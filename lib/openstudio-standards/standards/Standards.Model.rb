@@ -61,7 +61,7 @@ class Standard
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
   # @param debug [Boolean] If true, will report out more detailed debugging output
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
     if create_proposed_model
       # Perform a user model design day run only to make sure
@@ -582,7 +582,7 @@ class Standard
     # If needed, modify user model infiltration
     if user_buildings
       user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
-      # TODO Move the user data processing section
+      # TODO: Move the user data processing section
       infiltration_modeled_from_field_verification_results = 'false'
       if user_building_index && user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results']
         infiltration_modeled_from_field_verification_results = user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results'].to_s.downcase
@@ -658,7 +658,7 @@ class Standard
   # in the models (boilers, chillers, coils)
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if the HVAC system is likely autosized, false otherwise
+  # @return [Boolean] returns true if the HVAC system is likely autosized, false otherwise
   def model_is_hvac_autosized(model)
     is_hvac_autosized = false
     model.modelObjects.each do |obj|
@@ -2521,7 +2521,8 @@ class Standard
   end
 
   # For backward compatibility, infiltration standard not used for 2013 and earlier
-  # @return [Bool] true if successful, false if not
+  #
+  # @return [Boolean] true if successful, false if not
   def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
     return true
   end
@@ -4906,19 +4907,20 @@ class Standard
           #
           # daylighting control isn't modeled
           red = surface_get_wwr_reduction_ratio(mult,
-                                              surface,
-                                              wwr_building_type: bat,
-                                              wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
-                                              total_wall_m2: total_wall_area,
-                                              total_wall_with_fene_m2: total_wall_with_fene_area,
-                                              total_fene_m2: total_fene_area,
-                                              total_plenum_wall_m2: total_plenum_wall_area)
+                                                surface,
+                                                wwr_building_type: bat,
+                                                wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
+                                                total_wall_m2: total_wall_area,
+                                                total_wall_with_fene_m2: total_wall_with_fene_area,
+                                                total_fene_m2: total_fene_area,
+                                                total_plenum_wall_m2: total_plenum_wall_area)
 
           if red < 0.0
             # surface with fenestration to its maximum but adjusted by door areas when need to add windows in surfaces no fenestration
             # turn negative to positive to get the correct adjustment factor.
             red = -red
-            residual_fene += (0.9 - red * surface_get_wwr_of_a_surface(surface)) * surface.grossArea
+            surface_wwr = surface_get_wwr(surface)
+            residual_fene += (0.9 - red * surface_wwr) * surface.grossArea
           end
           surface_adjust_fenestration_in_a_surface(surface, red, model)
         end
@@ -6321,7 +6323,7 @@ class Standard
   end
 
   # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
-  # @param wwr_limit [Float] return wwr_limit
+  # @param wwr_limit [Double] window to wall ratio limit
   # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
   # @return [Boolean] True, require adjustment, false not require adjustment.
   def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
@@ -6336,7 +6338,7 @@ class Standard
   #
   # @param bat [String] building area type category
   # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
-  # @return [Float] return adjusted wwr_limit
+  # @return [Double] return adjusted wwr_limit
   def model_get_bat_wwr_target(bat, wwr_list)
     return 40.0
   end
@@ -6346,7 +6348,7 @@ class Standard
   # This function shall only be called if the maximum WWR value for surfaces with fenestration is lower than 90% due to
   # accommodating the total door surface areas
   #
-  # @param residual_ratio [Float] the ratio of residual surfaces among the total wall surface area with no fenestrations
+  # @param residual_ratio [Double] the ratio of residual surfaces among the total wall surface area with no fenestrations
   # @param space [OpenStudio::Model:Space] a space
   # @param model [OpenStudio::Model::Model] openstudio model
   # @return [Boolean] returns true if successful, false if not
@@ -7095,22 +7097,22 @@ class Standard
 
   # Calculate the window to wall ratio reduction factor
   #
-  # @param multiplier [Float] multiplier of the wwr
-  # @param surface [OpenStudio::Model:Surface] the surface object
-  # @param wwr_target [Float] target window to wall ratio
-  # @param total_wall_m2 [Float] total wall area of the category in m2.
-  # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
-  # @param total_fene_m2 [Float] total fenestration area
-  # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
-  # @return [Float] reduction factor
+  # @param multiplier [Double] multiplier of the wwr
+  # @param surface [OpenStudio::Model:Surface] OpenStudio Surface object
+  # @param wwr_target [Double] target window to wall ratio
+  # @param total_wall_m2 [Double] total wall area of the category in m2.
+  # @param total_wall_with_fene_m2 [Double] total wall area of the category with fenestrations in m2.
+  # @param total_fene_m2 [Double] total fenestration area
+  # @param total_plenum_wall_m2 [Double] total sqaure meter of a plenum
+  # @return [Double] reduction factor
   def surface_get_wwr_reduction_ratio(multiplier,
-                                    surface,
-                                    wwr_building_type: 'All others',
-                                    wwr_target: 0.0,
-                                    total_wall_m2: 0.0,
-                                    total_wall_with_fene_m2: 0.0,
-                                    total_fene_m2: 0.0,
-                                    total_plenum_wall_m2: 0.0)
+                                      surface,
+                                      wwr_building_type: 'All others',
+                                      wwr_target: 0.0,
+                                      total_wall_m2: 0.0,
+                                      total_wall_with_fene_m2: 0.0,
+                                      total_fene_m2: 0.0,
+                                      total_plenum_wall_m2: 0.0)
     return 1.0 - multiplier
   end
 
@@ -7125,7 +7127,7 @@ class Standard
   # @param [String] default_wwr_building_type
   # @param [String] default_swh_building_type
   # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
-  # @return True
+  # @return [Boolean] returns true
   def handle_user_input_data(model, climate_zone, sizing_run_dir, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     return true
   end
@@ -7144,7 +7146,7 @@ class Standard
   # Template method for evaluate DCV requirements in the user model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model
-  # @return boolean true if works.
+  # @return [Boolean] returns true if successful, false if not
   def model_evaluate_dcv_requirements(model)
     return true
   end
@@ -7320,8 +7322,8 @@ class Standard
   # Add reporting tolerances. Default values are based on the suggestions from the PRM-RM.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio Model
-  # @param heating_tolerance_deg_f [Float] Tolerance for time heating setpoint not met in degree F
-  # @param cooling_tolerance_deg_f [Float] Tolerance for time cooling setpoint not met in degree F
+  # @param heating_tolerance_deg_f [Double] Tolerance for time heating setpoint not met in degree F
+  # @param cooling_tolerance_deg_f [Double] Tolerance for time cooling setpoint not met in degree F
   # @return [Boolean] returns true if successful, false if not
   def model_add_reporting_tolerances(model, heating_tolerance_deg_f: 1.0, cooling_tolerance_deg_f: 1.0)
     reporting_tolerances = model.getOutputControlReportingTolerances
@@ -7335,7 +7337,6 @@ class Standard
 
   # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
-  # @return [Boolean] true if successful, false if not
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Boolean] returns true if successful, false if not

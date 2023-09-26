@@ -4,7 +4,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
   # Function applies user specified OA to the model
   # @param model [OpenStudio::Model::Model] model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_apply_userdata_outdoor_air(model)
     # Step 1: Create a hash that maps design_spec_oa to a list of spaces
     # Also create a map that maps each design_spec_oa name to design_spec_oa.

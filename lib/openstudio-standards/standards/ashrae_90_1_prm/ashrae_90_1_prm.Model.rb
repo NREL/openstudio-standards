@@ -107,7 +107,7 @@ class ASHRAE901PRM < Standard
   # Calculate the building envelope area according to the 90.1 definition
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Float] Building envelope area in m2
+  # @return [Double] Building envelope area in m2
   def model_building_envelope_area(model)
     # Get climate zone
     climate_zone = model_standards_climate_zone(model)
@@ -133,8 +133,8 @@ class ASHRAE901PRM < Standard
   # This method creates customized infiltration objects for each
   # space and removes the SpaceType-level infiltration objects.
   # @param model [OpenStudio::Model::Model] openstudio model
-  # @param specific_space_infiltration_rate_75_pa [Float] space infiltration rate at a pressure differential of 75 Pa
-  # @return [Bool] true if successful, false if not
+  # @param specific_space_infiltration_rate_75_pa [Double] space infiltration rate at a pressure differential of 75 Pa
+  # @return [Boolean] true if successful, false if not
   def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
     # Model shouldn't use SpaceInfiltrationEffectiveLeakageArea
     # Excerpt from the EnergyPlus Input/Output reference manual:
@@ -273,7 +273,7 @@ class ASHRAE901PRM < Standard
   # This methods calculate the air leakage rate of a space
   #
   # @param space [OpenStudio::Model::Space] OpenStudio Space object
-  # @return [Float] Space air leakage rate
+  # @return [Double] Space air leakage rate
   def model_get_space_air_leakage(space)
     space_air_leakage = 0
     space_multipler = space.multiplier
@@ -303,7 +303,7 @@ class ASHRAE901PRM < Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio Model object
   # @param building_envelope_area_m2 [Double] Building envelope area as per 90.1 in m^2
-  # @return [Float] building model air leakage rate
+  # @return [Double] building model air leakage rate
   def model_current_building_envelope_infiltration_at_75pa(model, building_envelope_area_m2)
     bldg_air_leakage_rate = 0
     model.getSpaces.each do |space|
@@ -321,7 +321,7 @@ class ASHRAE901PRM < Standard
   #
   # @param building_envelope_area_m2 [Double] Building envelope area as per 90.1 in m^2
   # @param specific_space_infiltration_rate_75_pa [Double] Specific space infiltration rate at 75 pa
-  # @return [Float] building envelope infiltration
+  # @return [Double] building envelope infiltration
   def model_adjusted_building_envelope_infiltration(building_envelope_area_m2, specific_space_infiltration_rate_75_pa = nil)
     # Determine the total building baseline infiltration rate in cfm per ft2 of the building envelope at 75 Pa
     if specific_space_infiltration_rate_75_pa.nil?
@@ -350,7 +350,7 @@ class ASHRAE901PRM < Standard
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param wwr_building_type [String] building type used for defining window to wall ratio, e.g. 'Office > 50,000 sq ft'
   # @param wwr_info [Hash] A map that maps each building area type to its correspondent wwr.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_apply_standard_constructions(model, climate_zone, wwr_building_type: nil, wwr_info: {})
     types_to_modify = []
 
@@ -627,7 +627,7 @@ class ASHRAE901PRM < Standard
   # Reduces the SRR to the values specified by the PRM. SRR reduction will be done by shrinking vertices toward the centroid.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] True if success
+  # @return [Boolean] returns true if successful, false if not
   def model_apply_prm_baseline_skylight_to_roof_ratio(model)
     # Loop through all spaces in the model, and
     # per the 90.1-2019 PRM User Manual, only
@@ -1111,7 +1111,7 @@ class ASHRAE901PRM < Standard
   # Template method for evaluate DCV requirements in the user model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model
-  # @return boolean true if works.
+  # @return [Boolean] returns true if successful, false if not
   def model_evaluate_dcv_requirements(model)
     model_mark_zone_dcv_existence(model)
     model_add_dcv_user_exception_properties(model)
@@ -1127,7 +1127,7 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model
   # @param thermal_zones Array([OpenStudio::Model::ThermalZone]) thermal zone array
   # @param coil [OpenStudio::Model::StraightComponent] heating coil
-  # @return [Boolean] true
+  # @return [Boolean] returns true if successful, false if not
   def model_set_central_preheat_coil_spm(model, thermal_zones, coil)
     # search for the highest zone setpoint temperature
     max_heat_setpoint = 0.0
@@ -1177,7 +1177,7 @@ class ASHRAE901PRM < Standard
   #
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio model
-  # @return [Boolean] true if successful.
+  # @return [Boolean] returns true if successful, false if not
   def model_mark_zone_dcv_existence(model)
     model.getAirLoopHVACs.each do |air_loop_hvac|
       next unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
@@ -1407,7 +1407,7 @@ class ASHRAE901PRM < Standard
   # @param [String] default_wwr_building_type
   # @param [String] default_swh_building_type
   # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
-  # @return [Boolean] True if successful.
+  # @return [Boolean] returns true if successful, false if not
   def handle_user_input_data(model, climate_zone, sizing_run_dir, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     # Set sizing run directory
     @sizing_run_dir = sizing_run_dir
@@ -1612,7 +1612,7 @@ class ASHRAE901PRM < Standard
             end
 
             if UserData.compare(economizer_exception_for_open_refrigerated_cases, UserDataBoolean::TRUE)
-              thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases',true)
+              thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', true)
             else
               thermal_zone.additionalProperties.setFeature('economizer_exception_for_open_refrigerated_cases', false)
             end
@@ -1938,8 +1938,8 @@ class ASHRAE901PRM < Standard
       if combination_system
         a = plant_loop.supplyComponents
         b = plant_loop.demandComponents
-        plantloopComponents = a += b
-        plantloopComponents.each do |component|
+        plantloop_components = a += b
+        plantloop_components.each do |component|
           # Get the object type
           obj_type = component.iddObjectType.valueName.to_s
           next if ['OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'].include?(obj_type)
@@ -2223,7 +2223,7 @@ class ASHRAE901PRM < Standard
   end
 
   # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
-  # @param wwr_limit [Float] return wwr_limit
+  # @param wwr_limit [Double] window to wall ratio limit
   # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
   # @return [Boolean] True, require adjustment, false not require adjustment
   def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
@@ -2235,7 +2235,7 @@ class ASHRAE901PRM < Standard
   #
   # @param bat [String] building category
   # @param wwr_list [Array] list of zone conditioning category-based WWR - residential, nonresidential and semiheated
-  # @return [Float] return adjusted wwr_limit
+  # @return [Double] return adjusted wwr_limit
   def model_get_bat_wwr_target(bat, wwr_list)
     wwr_limit = 40.0
     # Lookup WWR target from stable baseline table
@@ -2261,26 +2261,26 @@ class ASHRAE901PRM < Standard
 
   # Calculate the window to wall ratio reduction factor
   #
-  # @param multiplier [Float] multiplier of the wwr
+  # @param multiplier [Double] multiplier of the wwr
   # @param surface [OpenStudio::Model:Surface] the surface object
   # @param wwr_building_type[String] building type for wwr
-  # @param wwr_target [Float] target window to wall ratio
-  # @param total_wall_m2 [Float] total wall area of the category in m2.
-  # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
-  # @param total_fene_m2 [Float] total fenestration area
-  # @return [Float] reduction factor
+  # @param wwr_target [Double] target window to wall ratio
+  # @param total_wall_m2 [Double] total wall area of the category in m2.
+  # @param total_wall_with_fene_m2 [Double] total wall area of the category with fenestrations in m2.
+  # @param total_fene_m2 [Double] total fenestration area
+  # @return [Double] reduction factor
   def surface_get_wwr_reduction_ratio(multiplier,
-                                    surface,
-                                    wwr_building_type: 'All others',
-                                    wwr_target: nil,
-                                    total_wall_m2: 0.0, # prevent 0.0 division
-                                    total_wall_with_fene_m2: 0.0,
-                                    total_fene_m2: 0.0,
-                                    total_plenum_wall_m2: 0.0)
+                                      surface,
+                                      wwr_building_type: 'All others',
+                                      wwr_target: nil,
+                                      total_wall_m2: 0.0, # prevent 0.0 division
+                                      total_wall_with_fene_m2: 0.0,
+                                      total_fene_m2: 0.0,
+                                      total_plenum_wall_m2: 0.0)
 
     surface_name = surface.name.get
-    surface_wwr = surface_get_wwr_of_a_surface(surface)
-    surface_dr = surface_get_door_ratio_of_a_surface(surface)
+    surface_wwr = surface_get_wwr(surface)
+    surface_dr = surface_get_door_ratio(surface)
 
     if multiplier < 1.0
       # Case when reduction is required
@@ -2332,7 +2332,7 @@ class ASHRAE901PRM < Standard
   # This function shall only be called if the maximum WWR value for surfaces with fenestration is lower than 90% due to
   # accommodating the total door surface areas
   #
-  # @param residual_ratio [Float] the ratio of residual surfaces among the total wall surface area with no fenestrations
+  # @param residual_ratio [Double] the ratio of residual surfaces among the total wall surface area with no fenestrations
   # @param space [OpenStudio::Model:Space] a space
   # @param model [OpenStudio::Model::Model] openstudio model
   # @return [Boolean] returns true if successful, false if not
@@ -2755,14 +2755,14 @@ class ASHRAE901PRM < Standard
 
     # Find matching record from prm baseline hvac table
     # First filter by number of stories
-    iStoryGroup = 0
+    i_story_group = 0
     props = {}
     0.upto(9) do |i|
-      iStoryGroup += 1
+      i_story_group += 1
       props = model_find_object(standards_data['prm_baseline_hvac'],
                                 'template' => template,
                                 'hvac_building_type' => area_type,
-                                'flrs_range_group' => iStoryGroup,
+                                'flrs_range_group' => i_story_group,
                                 'area_range_group' => 1)
 
       prm_raise(props, @sizing_run_dir, "Could not find baseline HVAC type for: #{template}-#{area_type}.")
@@ -2773,16 +2773,16 @@ class ASHRAE901PRM < Standard
     end
 
     # Next filter by floor area
-    iAreaGroup = 0
+    i_area_group = 0
     loop do
-      iAreaGroup += 1
+      i_area_group += 1
       props = model_find_object(standards_data['prm_baseline_hvac'],
                                 'template' => template,
                                 'hvac_building_type' => area_type,
-                                'flrs_range_group' => iStoryGroup,
-                                'area_range_group' => iAreaGroup)
+                                'flrs_range_group' => i_story_group,
+                                'area_range_group' => i_area_group)
 
-      prm_raise(props && iAreaGroup <= 9, @sizing_run_dir, "Could not find baseline HVAC type for: #{template}-#{area_type}.")
+      prm_raise(props && i_area_group <= 9, @sizing_run_dir, "Could not find baseline HVAC type for: #{template}-#{area_type}.")
       below_max = false
       above_min = false
       # check if actual building floor area is within range for this area group
@@ -3090,7 +3090,7 @@ class ASHRAE901PRM < Standard
   # to account for recent model changes
   # @author Doug Maddox, PNNL
   # @param model
-  # @return [Boolean] true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_refine_size_dependent_values(model, sizing_run_dir)
     # Final sizing run before refining size-dependent values
     if model_run_sizing_run(model, "#{sizing_run_dir}/SR3") == false
@@ -3137,7 +3137,7 @@ class ASHRAE901PRM < Standard
                                           'hvac_building_type' => hvac_building_type,
                                           'climate_zone' => 'any')
     end
-    
+
     if !heat_type_props
       # try again with wild card for building type
       heat_type_props = model_find_object(standards_data['prm_heat_type'],
@@ -3162,5 +3162,4 @@ class ASHRAE901PRM < Standard
   def get_userdata(user_data_csv)
     return @standards_data.key?(user_data_csv) && @standards_data[user_data_csv].length >= 1 ? @standards_data[user_data_csv] : nil
   end
-
 end

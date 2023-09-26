@@ -1,5 +1,4 @@
 class UserData
-
   # Static method that retrieves the function constant values in a list
   def self.get_constant_values
     return constants.map(&method(:const_get))
@@ -25,7 +24,6 @@ class UserData
     return one && another && !one.empty? && !another.empty? && one.downcase.strip == another.downcase.strip
   end
 end
-
 
 class UserDataBoolean < UserData
   TRUE = 'true'.freeze

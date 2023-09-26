@@ -2,7 +2,7 @@ class ASHRAE901PRM < Standard
   # Adjust the fenestration area to the values specified by the reduction value in a surface
   #
   # @param surface [OpenStudio::Model:Surface] openstudio surface object
-  # @param reduction [Float] ratio of adjustments
+  # @param reduction [Double] ratio of adjustments
   # @param model [OpenStudio::Model::Model] openstudio model
   # @return [Boolean] returns true if successful, false if not
   def surface_adjust_fenestration_in_a_surface(surface, reduction, model)
@@ -15,7 +15,7 @@ class ASHRAE901PRM < Standard
       end
     elsif reduction > 1.0
       # case increase the window
-      surface_wwr = surface_get_wwr_of_a_surface(surface)
+      surface_wwr = surface_get_wwr(surface)
       if surface_wwr == 0.0
         # In this case, we are adding fenestration
         wwr_adjusted = reduction - 1.0

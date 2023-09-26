@@ -109,8 +109,8 @@ module Baseline9012013
         if (heat_delta - 20).abs > 0.1
           heat_delta_bad << "#{zone.name} Htg delta =#{heat_delta}"
         end
-      end # if !tstat
-    end #model.get
+      end
+    end
     assert_equal(cool_delta_bad.size, 0, "Cooling supply air to room air temperature difference is not 20F for zones #{cool_delta_bad.sort.join("\n")}.")
     assert_equal(heat_delta_bad.size, 0, "Heating supply air to room air temperature difference is not 20F for zones #{heat_delta_bad.sort.join("\n")}.")
 

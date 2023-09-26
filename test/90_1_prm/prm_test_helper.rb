@@ -2821,7 +2821,7 @@ class AppendixGPRMTests < Minitest::Test
   # This function will remove the fenestration in all orientations and add new windows by defined WWR
   #
   # @param model [OpenStudio::Model::Model] model
-  # @param [Float] window to wall ratio
+  # @param [Double] window to wall ratio
   def change_wwr_model(model, arguments)
     target_wwr_north = arguments[0]
     target_wwr_south = arguments[1]
@@ -3520,8 +3520,8 @@ class AppendixGPRMTests < Minitest::Test
         existing_pipe_insulation = ''
         a = plant_loop.supplyComponents
         b = plant_loop.demandComponents
-        plantloopComponents = a += b
-        plantloopComponents.each do |component|
+        plantloop_components = a += b
+        plantloop_components.each do |component|
           # Get the object type
           obj_type = component.iddObjectType.valueName.to_s
           next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)

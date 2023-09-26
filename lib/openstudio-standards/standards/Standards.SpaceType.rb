@@ -529,14 +529,14 @@ class Standard
       else
         lighting_per_area_hash = {}
         multiple_lpd_value_check = true
-        space_type.spaces.each do |space|
+        space_type.spaces.each do |space_type_space|
           # Space height
-          space_volume = space.volume
-          space_area = space.floorArea
+          space_volume = space_type_space.volume
+          space_area = space_type_space.floorArea
           space_height = space_volume / space_area
           # New lpd values
           lighting_per_area_new = lighting_per_area + lighting_per_length * space_height
-          lighting_per_area_hash[space.name.to_s] = lighting_per_area_new
+          lighting_per_area_hash[space_type_space.name.to_s] = lighting_per_area_new
         end
       end
     end
@@ -571,10 +571,10 @@ class Standard
           end
         end
       else
-        space_type.spaces.each do |space|
+        space_type.spaces.each do |space_type_space|
           new_space_type = space_type.clone.to_SpaceType.get
-          space.setSpaceType(new_space_type)
-          lighting_per_area = lighting_per_area_hash[space.name.to_s]
+          space_type_space.setSpaceType(new_space_type)
+          lighting_per_area = lighting_per_area_hash[space_type_space.name.to_s]
           new_space_type.lights.sort.each do |inst|
             definition = inst.lightsDefinition
             unless lighting_per_area.zero?

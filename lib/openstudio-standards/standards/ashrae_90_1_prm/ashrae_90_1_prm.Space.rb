@@ -9,7 +9,7 @@ class ASHRAE901PRM < Standard
   # @param infil_coefficients [Array] Array of 4 items
   #       [Constant Term Coefficient, Temperature Term Coefficient,
   #         Velocity Term Coefficient, Velocity Squared Term Coefficient]
-  # @return [Boolean] true if successful.
+  # @return [Boolean] returns true if successful, false if not
   def space_apply_infiltration_rate(space, tot_infil_m3_per_s, infil_method, infil_coefficients)
     # Calculate infiltration rate
     case infil_method.to_s
@@ -102,7 +102,7 @@ class ASHRAE901PRM < Standard
   # @param space [OpenStudio::Model::Space] the space with daylighting
   # @param remove_existing [Boolean] if true, will remove existing controls then add new ones
   # @param draw_areas_for_debug [Boolean] If this argument is set to true,
-  # @return [Boolean] true if successful
+  # @return [Boolean] returns true if successful, false if not
   def space_set_baseline_daylighting_controls(space, remove_existing = false, draw_areas_for_debug = false)
     removed = space_remove_daylighting_controls(space)
     return removed
@@ -111,7 +111,7 @@ class ASHRAE901PRM < Standard
   # Create and assign PRM computer room electric equipment schedule
   #
   # @param space [OpenStudio::Model::Space] OpenStudio Space object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def space_add_prm_computer_room_equipment_schedule(space)
     # Get proposed or baseline model
     model = space.model

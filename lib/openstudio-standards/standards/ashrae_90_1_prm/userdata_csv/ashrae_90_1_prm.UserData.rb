@@ -9,6 +9,7 @@ class UserDataCSV
     unless Dir.exist?(save_dir)
       raise ArgumentError "Saving directory #{save_dir} does not exist!"
     end
+
     @save_dir = save_dir
     @components = nil
     @headers = nil
@@ -16,9 +17,7 @@ class UserDataCSV
   end
 
   # getter function to get file name
-  def file_name
-    @file_name
-  end
+  attr_reader :file_name
 
   # method to write csv files
   # this method controls the workflow for generating a user data file.
@@ -52,7 +51,7 @@ class UserDataCSV
   # Load header from pre-defined user data files.
   # This method loads the user data file from the list.
   #
-  # @return [Boolean] true if success, false otherwise.
+  # @return [Boolean] returns true if successful, false if not
   def load_header
     userdata_dir = __dir__
     src_csv_dir = "#{userdata_dir}/*.csv"

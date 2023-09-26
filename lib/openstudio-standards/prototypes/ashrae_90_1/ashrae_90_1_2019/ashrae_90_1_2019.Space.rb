@@ -36,7 +36,7 @@ class ASHRAE9012019 < ASHRAE901
   # Modify thermostat schedule to account for a thermostat setback/up
   #
   # @param thermostat [OpenStudio::Model::ThermostatSetpointDualSetpoint] OpenStudio ThermostatSetpointDualSetpoint object
-  # @return [Boolean] true if success
+  # @return [Boolean] returns true if successful, false if not
   def space_occupancy_standby_mode(thermostat)
     htg_sch = thermostat.getHeatingSchedule.get
     clg_sch = thermostat.getCoolingSchedule.get
