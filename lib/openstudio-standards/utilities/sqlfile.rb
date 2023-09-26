@@ -415,7 +415,7 @@ Standard.class_eval do
   # Get the total unmet load hours during occupancy of a model that has been simulated
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Float] returns the number of total unmet load hours during occupancy in a simulated model
+  # @return [Double] returns the number of total unmet load hours during occupancy in a simulated model
   def model_get_unmet_load_hours(model)
     result = OpenStudio::OptionalDouble.new
     sql = model.sqlFile

@@ -17,8 +17,8 @@ module OpenstudioStandards
 
         # gather profiles
         profiles = []
-        defaultProfile = schedule.defaultDaySchedule
-        profiles << defaultProfile
+        default_profile = schedule.defaultDaySchedule
+        profiles << default_profile
         rules = schedule.scheduleRules
         rules.each do |rule|
           profiles << rule.daySchedule

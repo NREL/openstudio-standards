@@ -92,7 +92,7 @@ class ASHRAE901PRM < Standard
   end
 
   # Determine if the system is a multizone VAV system
-  #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @return [Boolean] Returns true if required, false if not.
   def air_loop_hvac_multizone_vav_system?(air_loop_hvac)
     return true if air_loop_hvac.name.to_s.include?('Sys5') || air_loop_hvac.name.to_s.include?('Sys6') || air_loop_hvac.name.to_s.include?('Sys7') || air_loop_hvac.name.to_s.include?('Sys8')
@@ -409,6 +409,7 @@ class ASHRAE901PRM < Standard
   # Determine the allowable fan system brake horsepower
   # Per Section G3.1.2.9
   #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC]
   # @return [Double] allowable fan system brake horsepower
   #   units = horsepower
   def air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac)
@@ -548,7 +549,7 @@ class ASHRAE901PRM < Standard
   # Get the air loop HVAC design outdoor air flow rate by reading Standard 62.1 Summary from the sizing sql
   # @author Xuechen (Jerry) Lei, PNNL
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @return [Float] Design outdoor air flow rate (m^3/s)
+  # @return [Double] Design outdoor air flow rate (m^3/s)
   def get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
     return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
 
@@ -750,28 +751,27 @@ class ASHRAE901PRM < Standard
 
         # Exception 2 - System exhausting toxic fumes
         if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_toxic_fumes_etc').get == 'yes'
-            return nil
+          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
           end
         end
 
         # Exception 3 - Commercial kitchen hoods
         if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_type1_kitchen_hoods').get == 'yes'
+          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
             return nil
           end
         end
 
         # Exception 6 - Distributed exhaust
         if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_type_distributed_exhaust').get == 'yes'
+          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
             return nil
           end
         end
 
         # Exception 7 - Dehumidification
         if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery').get == 'yes'
+          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
             return nil
           end
         end

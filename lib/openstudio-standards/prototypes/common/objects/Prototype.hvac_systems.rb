@@ -2992,7 +2992,6 @@ class Standard
       when 'Water'
         htg_coil = create_coil_heating_water(model,
                                              hot_water_loop,
-                                             air_loop_node: air_loop.supplyOutletNode,
                                              name: "#{air_loop.name} Water Htg Coil")
       else
         # Zero-capacity, always-off electric heating coil

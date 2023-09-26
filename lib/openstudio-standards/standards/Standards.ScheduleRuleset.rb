@@ -394,13 +394,13 @@ class Standard
       end
 
       # get values for new default profile
-      new_default_daySchedule = rule_vector[new_default_index].daySchedule
-      new_default_daySchedule_values = new_default_daySchedule.values
-      new_default_daySchedule_times = new_default_daySchedule.times
+      new_default_day_schedule = rule_vector[new_default_index].daySchedule
+      new_default_day_schedule_values = new_default_day_schedule.values
+      new_default_day_schedule_times = new_default_day_schedule.times
 
       # update values and times for default profile
-      for i in 0..(new_default_daySchedule_values.size - 1)
-        old_default_schedule_day.addValue(new_default_daySchedule_times[i], new_default_daySchedule_values[i])
+      for i in 0..(new_default_day_schedule_values.size - 1)
+        old_default_schedule_day.addValue(new_default_day_schedule_times[i], new_default_day_schedule_values[i])
       end
 
       # remove rule object that has become the default. Also try to remove the ScheduleDay

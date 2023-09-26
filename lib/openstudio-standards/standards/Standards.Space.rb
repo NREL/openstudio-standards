@@ -806,7 +806,7 @@ class Standard
   # @param space [OpenStudio::Model::Space] the space with daylighting
   # @param remove_existing [Boolean] if true, will remove existing controls then add new ones
   # @param draw_areas_for_debug [Boolean] If this argument is set to true,
-  # @return [Boolean] true if successful
+  # @return [Boolean] returns true if successful, false if not
   def space_set_baseline_daylighting_controls(space, remove_existing = false, draw_areas_for_debug = false)
     added = space_add_daylighting_controls(space, remove_existing, draw_areas_for_debug)
     return added
@@ -823,7 +823,7 @@ class Standard
   #   daylight areas will be added to the model as surfaces for visual debugging.
   #   Yellow = toplighted area, Red = primary sidelighted area,
   #   Blue = secondary sidelighted area, Light Blue = floor
-  # @return [Boolean] true if successful
+  # @return [Boolean] returns true if successful, false if not
   # @todo add a list of valid choices for template argument
   # @todo add exception for retail spaces
   # @todo add exception 2 for skylights with VT < 0.4
@@ -1342,7 +1342,7 @@ class Standard
   #
   # @param space [OpenStudio::Model::Space] space object
   # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade wall area at 75 Pa
-  def space_infiltration_rate_75_pa(space)
+  def space_infiltration_rate_75_pa(space = nil)
     basic_infil_rate_cfm_per_ft2 = 1.8
     return basic_infil_rate_cfm_per_ft2
   end
@@ -2979,8 +2979,16 @@ class Standard
   # dimming daylighting control
   #
   # @param space [OpenStudio::Model::Space] OpenStudio Space object
-  # @return [Float] daylighting minimum input power fraction
+  # @return [Double] daylighting minimum input power fraction
   def space_daylighting_minimum_input_power_fraction(space)
     return 0.3
+  end
+
+  # Create and assign PRM computer room electric equipment schedule
+  #
+  # @param space [OpenStudio::Model::Space] OpenStudio Space object
+  # @return [Boolean] returns true if successful, false if not
+  def space_add_prm_computer_room_equipment_schedule(space)
+    return true
   end
 end

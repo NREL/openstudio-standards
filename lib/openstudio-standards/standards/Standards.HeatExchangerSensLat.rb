@@ -46,9 +46,9 @@ class Standard
   # climate zones a 50% ERR at typical condition leads a ERR > 50%,
   # the ERR is thus scaled down.
   #
-  # @param enthalpy_recovery_ratio [float] Enthalpy Recovery Ratio (ERR)
+  # @param enthalpy_recovery_ratio [Double] Enthalpy Recovery Ratio (ERR)
   # @param climate_zone [String] climate zone
-  # @return [float] adjusted ERR
+  # @return [Double] adjusted ERR
   def enthalpy_recovery_ratio_design_to_typical_adjustment(enthalpy_recovery_ratio, climate_zone)
     if climate_zone.include? '2B'
       enthalpy_recovery_ratio /= 0.65 / 0.55
