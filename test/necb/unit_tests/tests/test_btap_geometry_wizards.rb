@@ -38,8 +38,6 @@ class TestBTAPGeometryWizards < Minitest::Test
                                                             perimeter_zone_depth = 4.57,
                                                             initial_height = 0.0)
 
-
-
             # Test the model is correctly defined.
             # Floor area.
             correct_floor_area = (length * width * (storys + underground_storys)).round(2)
@@ -119,8 +117,6 @@ class TestBTAPGeometryWizards < Minitest::Test
                                                           floor_to_floor_height = 3.8,
                                                           plenum_height = 1.0,
                                                           perimeter_zone_depth = 1.0)
-
-
 
           # Test the model is correctly defined.
           # Floor area.
@@ -202,7 +198,6 @@ class TestBTAPGeometryWizards < Minitest::Test
                                                   plenum_height = 1.0,
                                                   perimeter_zone_depth = 4.57)
 
-
           # Test the model is correctly defined.
           # Floor area.
           correct_floor_area = (length * width * storys * 5.0 / 9.0).round(2)
@@ -267,82 +262,79 @@ class TestBTAPGeometryWizards < Minitest::Test
       [20, 80].each do |width|
         [1, 5].each do |storys|
 
-            caseDescription = "length(#{length}), width(#{width}), storys(#{storys})"
+          caseDescription = "length(#{length}), width(#{width}), storys(#{storys})"
 
-            # Create a new model object.
-            model = OpenStudio::Model::Model.new
+          # Create a new model object.
+          model = OpenStudio::Model::Model.new
 
-            # Create a Tshape model
-            BTAP::Geometry::Wizards::create_shape_t(model,
-                                                    length = length,
-                                                    width = width,
-                                                    upper_end_width = width / 3.0,
-                                                    lower_end_length = length / 3.0,
-                                                    left_end_offset = 10.0,
-                                                    num_floors = storys,
-                                                    floor_to_floor_height = 3.8,
-                                                    plenum_height = 1.0,
-                                                    perimeter_zone_depth = 1.0)
+          # Create a Tshape model
+          BTAP::Geometry::Wizards::create_shape_t(model,
+                              length = length,
+                              width = width,
+                              upper_end_width = width / 3.0,
+                              lower_end_length = length / 3.0,
+                              left_end_offset = 10.0,
+                              num_floors = storys,
+                              floor_to_floor_height = 3.8,
+                              plenum_height = 1.0,
+                              perimeter_zone_depth = 1.0)
 
+          # Test the model is correctly defined.
+          # Floor area.
+          correct_floor_area = (length * width * 5.0 / 9.0 * (storys)).round(2)
+          msg = "floor area for case: #{caseDescription}"
+          assert_in_delta(correct_floor_area, model.getBuilding.floorArea.to_f.round(2), 0.1, msg)
 
+          # Get the exterior walls and check boundary conditions and areas.
+          extWalls = model.getBuilding.exteriorWalls
+          number_of_ext_walls = 8 * storys
+          msg = "number of above grade exterior walls for case: #{caseDescription}"
+          assert_equal(number_of_ext_walls, extWalls.count, msg)
 
-
-            # Test the model is correctly defined.
-            # Floor area.
-            correct_floor_area = (length * width * 5.0 / 9.0 * (storys)).round(2)
-            msg = "floor area for case: #{caseDescription}"
-            assert_in_delta(correct_floor_area, model.getBuilding.floorArea.to_f.round(2), 0.1, msg)
-
-            # Get the exterior walls and check boundary conditions and areas.
-            extWalls = model.getBuilding.exteriorWalls
-            number_of_ext_walls = 8 * storys
-            msg = "number of above grade exterior walls for case: #{caseDescription}"
-            assert_equal(number_of_ext_walls, extWalls.count, msg)
-
-            ext_wall_area = 0.0
-            extWalls.each do |wall|
-              msg = "wall boundary condition for case: #{caseDescription}"
-              assert_equal('Outdoors', wall.outsideBoundaryCondition.to_s, msg)
-              ext_wall_area += wall.netArea
-            end
-            correct_ext_wall_area = (3.8 * (length + width) * 2 * storys).round(2)
-            msg = "total exterior wall area for case: #{caseDescription}"
-            assert_in_delta(correct_ext_wall_area, ext_wall_area.round(2), 0.1, msg)
-
-            # Get the roof surfaces and check boundary conditions and areas.
-            roofs = model.getBuilding.roofs
-            number_of_roofs = 10
-            msg = "number of roof surfaces for case: #{caseDescription}"
-            assert_equal(number_of_roofs, roofs.count, msg)
-            roof_area = 0.0
-            roofs.each do |roof|
-              msg = "roof boundary condition for case: #{caseDescription}"
-              assert_equal('Outdoors', roof.outsideBoundaryCondition.to_s, msg)
-              roof_area += roof.netArea
-            end
-            correct_roof_area = (length * width * 5.0 / 9.0).round(2)
-            msg = "total roof area for case: #{caseDescription}"
-            assert_in_delta(correct_roof_area, roof_area.round(2), 0.1, msg)
-
-            # Total exterior area.
-            msg = "total exterior surface area for case: #{caseDescription}"
-            assert_in_delta((correct_ext_wall_area + correct_roof_area).to_f.round(2), model.getBuilding.exteriorSurfaceArea.to_f.round(2), 0.1, msg)
-
-            # Ground connections
-            ground_area = 0.0
-            model.getBuilding.spaces.each do |space|
-              space.surfaces.each do |surface|
-                ground_area += surface.netArea if surface.outsideBoundaryCondition == "Ground"
-              end
-            end
-            correct_ground_area = (length * width * 5.0 / 9.0).round(2)
-            msg = "total ground area for case: #{caseDescription}"
-            assert_in_delta(correct_ground_area, ground_area.round(2), 0.1, msg)
-
+          ext_wall_area = 0.0
+          extWalls.each do |wall|
+            msg = "wall boundary condition for case: #{caseDescription}"
+            assert_equal('Outdoors', wall.outsideBoundaryCondition.to_s, msg)
+            ext_wall_area += wall.netArea
           end
+          correct_ext_wall_area = (3.8 * (length + width) * 2 * storys).round(2)
+          msg = "total exterior wall area for case: #{caseDescription}"
+          assert_in_delta(correct_ext_wall_area, ext_wall_area.round(2), 0.1, msg)
+
+          # Get the roof surfaces and check boundary conditions and areas.
+          roofs = model.getBuilding.roofs
+          number_of_roofs = 10
+          msg = "number of roof surfaces for case: #{caseDescription}"
+          assert_equal(number_of_roofs, roofs.count, msg)
+          roof_area = 0.0
+          roofs.each do |roof|
+            msg = "roof boundary condition for case: #{caseDescription}"
+            assert_equal('Outdoors', roof.outsideBoundaryCondition.to_s, msg)
+            roof_area += roof.netArea
+          end
+          correct_roof_area = (length * width * 5.0 / 9.0).round(2)
+          msg = "total roof area for case: #{caseDescription}"
+          assert_in_delta(correct_roof_area, roof_area.round(2), 0.1, msg)
+
+          # Total exterior area.
+          msg = "total exterior surface area for case: #{caseDescription}"
+          assert_in_delta((correct_ext_wall_area + correct_roof_area).to_f.round(2), model.getBuilding.exteriorSurfaceArea.to_f.round(2), 0.1, msg)
+
+          # Ground connections
+          ground_area = 0.0
+          model.getBuilding.spaces.each do |space|
+            space.surfaces.each do |surface|
+            ground_area += surface.netArea if surface.outsideBoundaryCondition == "Ground"
+            end
+          end
+          correct_ground_area = (length * width * 5.0 / 9.0).round(2)
+          msg = "total ground area for case: #{caseDescription}"
+          assert_in_delta(correct_ground_area, ground_area.round(2), 0.1, msg)
+
         end
       end
-     end
+    end
+  end
 
   # Loop through a range of geometry options and check floor areas and boundary conditions sucessfully set
   def test_geometry_Hshape
@@ -370,8 +362,6 @@ class TestBTAPGeometryWizards < Minitest::Test
                                                   floor_to_floor_height = 3.8,
                                                   plenum_height = 1,
                                                   perimeter_zone_depth = 0.2)
-
-
 
           # Test the model is correctly defined.
           # Floor area.
@@ -455,9 +445,6 @@ class TestBTAPGeometryWizards < Minitest::Test
                                                   floor_to_floor_height = 3.8,
                                                   plenum_height = 1.0,
                                                   perimeter_zone_depth = 0.2)
-
-
-
 
           # Test the model is correctly defined.
           # Floor area.

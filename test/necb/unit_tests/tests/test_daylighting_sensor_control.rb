@@ -167,7 +167,6 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
 
                     ##### Calculate "Daylighted Area Under Skylights" AND "Skylight Effective Aperture"
                     daylight_spaces.sort.each do |daylight_space|
-                      skylight_area = 0.0
                       skylight_area_weighted_vt_handle = 0.0
                       skylight_area_weighted_vt = 0.0
                       skylight_area_sum = 0.0

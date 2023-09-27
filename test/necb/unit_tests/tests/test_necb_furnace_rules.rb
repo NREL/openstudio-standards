@@ -78,7 +78,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       end
       stage_types.each do |stage_type|
         index = 0
-        n_stages = 0
+        #n_stages = 0
         actual_furnace_thermal_eff = {}
         actual_furnace_thermal_eff['Electric'] = []
         actual_furnace_thermal_eff['NaturalGas'] = []

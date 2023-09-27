@@ -22,7 +22,6 @@ class NECB_SHW_tests < Minitest::Test
   # @return [Bool] true if successful. 
   def test_shw_test()
     output_array = []
-    climate_zone = 'none'
 
     #get shw efficiency measure data from ECMS class shw_set.json
     ecm_standard = get_standard("ECMS")
@@ -83,8 +82,8 @@ class NECB_SHW_tests < Minitest::Test
 		  #Apply the water heater mixed efficiencies
 		  model.getWaterHeaterMixeds.sort.each { |obj| standard.water_heater_mixed_apply_efficiency(obj) }
 
-          # Apply measure info if gas
-          apply_shw_ecm = false
+          # Apply measure info if gas.
+          #apply_shw_ecm = false
           model.getWaterHeaterMixeds.sort.each do |waterheater_test|
             if waterheater_test.heaterFuelType == "NaturalGas"
               shw_ecms.each do |shw_ecm|

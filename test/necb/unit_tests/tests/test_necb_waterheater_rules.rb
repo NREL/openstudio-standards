@@ -161,7 +161,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         # Get standard water tank efficiency and standby losses.
         actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
         shw_units = model.getWaterHeaterMixeds
-        actual_shw_tank_vol = shw_units[0].tankVolume.to_f
+        #actual_shw_tank_vol = shw_units[0].tankVolume.to_f
         actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
         actual_oncycle_ua = shw_units[0].onCycleLossCoefficienttoAmbientTemperature.to_f
         vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get
@@ -196,8 +196,8 @@ class NECB_SWH_Additional_Tests < Minitest::Test
     end
   end
 
-   # Test to validate efficiency and standby losses of electric SWH heater (NECB 2020).
-   def test_NECB2020_swh_elec_efficiency_standby_losses
+  # Test to validate efficiency and standby losses of electric SWH heater (NECB 2020).
+  def test_NECB2020_swh_elec_efficiency_standby_losses
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
@@ -265,10 +265,10 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         # Get standard water tank efficiency and standby losses.
         actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
         shw_units = model.getWaterHeaterMixeds
-        actual_shw_tank_vol = shw_units[0].tankVolume.to_f
+        #actual_shw_tank_vol = shw_units[0].tankVolume.to_f
         actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
         actual_oncycle_ua = shw_units[0].onCycleLossCoefficienttoAmbientTemperature.to_f
-        vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get
+        #vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get
         if icap < 12.0
           expected_eff = 1.0
           if ivol <= 270.0
@@ -370,7 +370,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
       ivol = (shw_units[0].tankVolume.get.to_f)*1000.0 # Litres
       puts "ivol #{ivol} L"
       actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
-      actual_shw_tank_vol = shw_units[0].tankVolume.to_f
+      #actual_shw_tank_vol = shw_units[0].tankVolume.to_f
       actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
       actual_oncycle_ua = shw_units[0].onCycleLossCoefficienttoAmbientTemperature.to_f
       vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get

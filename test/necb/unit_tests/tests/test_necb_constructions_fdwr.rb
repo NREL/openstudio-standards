@@ -116,14 +116,13 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     @AllTemplates.each do |template|
       @json_test_output[template] = {}
 
-      #Iterate through the weather files.
+      # Iterate through the weather files.
       NECB_epw_files_for_cdn_climate_zones.each do |weather_file|
         create_base_model()
 
-        #Create a space type and assign to all spaces.. This is done because the FWDR is only applied to conditions spaces.. So we need conditioning data.
+        # Create a space type and assign to all spaces.. This is done because the FWDR is only applied to conditioned spaces.. So we need conditioning data.
         building_type = "Office"
         space_type = "WholeBuilding"
-        climate_zone = 'NECB HDD Method'
         standard = get_standard(template)
 
         table = standard.standards_data['tables']['space_types']['table']
@@ -187,7 +186,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         windows_average_shgc = BTAP::Geometry::Surfaces::get_weighted_average_surface_shgc(windows)
         skylights_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(skylights)
         doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(doors)
-        overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
+        #overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
 
         # SRR and FDWR.
         srr_info = standard.find_exposed_conditioned_roof_surfaces(@model)
