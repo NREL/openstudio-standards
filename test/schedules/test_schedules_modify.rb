@@ -14,12 +14,12 @@ class TestSchedulesModify < Minitest::Test
     schedule = @sch.model_create_simple_schedule(model, test_options)
     @sch.schedule_ruleset_simple_value_adjust(schedule, 0.5)
     assert(schedule.to_ScheduleRuleset.is_initialized)
-    schedule_max = @sch.schedule_ruleset_min_max(schedule)['max']
+    schedule_max = @sch.schedule_ruleset_get_min_max(schedule)['max']
     assert(schedule_max == 1.5)
 
     @sch.schedule_ruleset_simple_value_adjust(schedule, 0.5, 'Sum')
     assert(schedule.to_ScheduleRuleset.is_initialized)
-    schedule_max = @sch.schedule_ruleset_min_max(schedule)['max']
+    schedule_max = @sch.schedule_ruleset_get_min_max(schedule)['max']
     assert(schedule_max == 2.0)
   end
 
@@ -35,7 +35,7 @@ class TestSchedulesModify < Minitest::Test
     fail_value = 2.0
     floor_value = 0.1
     @sch.schedule_ruleset_conditional_adjust_value(schedule, test_value, pass_value, fail_value, floor_value)
-    schedule_max = @sch.schedule_ruleset_min_max(schedule)['max']
+    schedule_max = @sch.schedule_ruleset_get_min_max(schedule)['max']
     assert(schedule_max == 8.0)
   end
 

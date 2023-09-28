@@ -6,11 +6,11 @@ module OpenstudioStandards
 
     # add general schedule_min_max(schedule) method and merge with other methods
 
-    # returns the schedule ruleset minimum and maximum values
+    # returns the ScheduleRuleset minimum and maximum values
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [Hash] returns as hash with 'min' and 'max' values
-    def self.schedule_ruleset_min_max(schedule_ruleset)
+    def self.schedule_ruleset_get_min_max(schedule_ruleset)
       # validate schedule
       if schedule_ruleset.to_ScheduleRuleset.is_initialized
         schedule = schedule_ruleset.to_ScheduleRuleset.get
@@ -49,11 +49,11 @@ module OpenstudioStandards
       return result
     end
 
-    # create TimeSeries from ScheduleRuleset
+    # create OpenStudio TimeSeries object from ScheduleRuleset values
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [OpenStudio::TimeSeries] OpenStudio TimeSeries object of schedule values
-    def self.schedule_ruleset_timeseries(schedule_ruleset)
+    def self.schedule_ruleset_get_timeseries(schedule_ruleset)
       yd = schedule_ruleset.model.getYearDescription
       start_date = yd.makeDate(1, 1)
       end_date = yd.makeDate(12, 31)
