@@ -46,7 +46,7 @@ module OpenstudioStandards
     # @param unmet_hours_tolerance_r [Double] Thermostat setpoint tolerance for unmet hours in degrees Rankine
     # @param remove_objects [Boolean] Clean model of non-geometry objects. Only removes the same objects types as those added to the model.
     # @return [Boolean] returns true if successful, false if not
-    def self.typical_building_from_model(model,
+    def self.create_typical_building_from_model(model,
                                          template,
                                          climate_zone: 'Lookup From Model',
                                          add_hvac: true,

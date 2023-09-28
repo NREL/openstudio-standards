@@ -5,7 +5,7 @@ class TestCreateTypical < Minitest::Test
     @create = OpenstudioStandards::CreateTypical
   end
 
-  def test_typical_building_from_model
+  def test_create_typical_building_from_model
     # load model and set up weather file
     template = '90.1-2013'
     climate_zone = 'ASHRAE 169-2013-4A'
@@ -15,7 +15,7 @@ class TestCreateTypical < Minitest::Test
 
     # apply create typical
     starting_size = model.getModelObjects.size
-    result = @create.typical_building_from_model(model, template, climate_zone: climate_zone)
+    result = @create.create_typical_building_from_model(model, template, climate_zone: climate_zone)
     ending_size = model.getModelObjects.size
     assert(result)
     assert(starting_size < ending_size)
