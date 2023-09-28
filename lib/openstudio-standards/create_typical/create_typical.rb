@@ -47,38 +47,38 @@ module OpenstudioStandards
     # @param remove_objects [Boolean] Clean model of non-geometry objects. Only removes the same objects types as those added to the model.
     # @return [Boolean] returns true if successful, false if not
     def self.create_typical_building_from_model(model,
-                                         template,
-                                         climate_zone: 'Lookup From Model',
-                                         add_hvac: true,
-                                         hvac_system_type: 'Inferred',
-                                         hvac_delivery_type: 'Forced Air',
-                                         heating_fuel: 'NaturalGas',
-                                         service_water_heating_fuel: 'NaturalGas',
-                                         cooling_fuel: 'Electricity',
-                                         kitchen_makeup: 'Adjacent',
-                                         exterior_lighting_zone: '3 - All Other Areas',
-                                         add_constructions: true,
-                                         wall_construction_type: 'Inferred',
-                                         add_space_type_loads: true,
-                                         add_daylighting_controls: true,
-                                         add_elevators: true,
-                                         add_internal_mass: true,
-                                         add_exterior_lights: true,
-                                         onsite_parking_fraction: 1.0,
-                                         add_exhaust: true,
-                                         add_swh: true,
-                                         add_thermostat: true,
-                                         add_refrigeration: true,
-                                         modify_wkdy_op_hrs: false,
-                                         wkdy_op_hrs_start_time: 8.0,
-                                         wkdy_op_hrs_duration: 8.0,
-                                         modify_wknd_op_hrs: false,
-                                         wknd_op_hrs_start_time: 8.0,
-                                         wknd_op_hrs_duration: 8.0,
-                                         hoo_var_method: 'hours',
-                                         enable_dst: true,
-                                         unmet_hours_tolerance_r: 1.0,
-                                         remove_objects: true)
+                                                template,
+                                                climate_zone: 'Lookup From Model',
+                                                add_hvac: true,
+                                                hvac_system_type: 'Inferred',
+                                                hvac_delivery_type: 'Forced Air',
+                                                heating_fuel: 'NaturalGas',
+                                                service_water_heating_fuel: 'NaturalGas',
+                                                cooling_fuel: 'Electricity',
+                                                kitchen_makeup: 'Adjacent',
+                                                exterior_lighting_zone: '3 - All Other Areas',
+                                                add_constructions: true,
+                                                wall_construction_type: 'Inferred',
+                                                add_space_type_loads: true,
+                                                add_daylighting_controls: true,
+                                                add_elevators: true,
+                                                add_internal_mass: true,
+                                                add_exterior_lights: true,
+                                                onsite_parking_fraction: 1.0,
+                                                add_exhaust: true,
+                                                add_swh: true,
+                                                add_thermostat: true,
+                                                add_refrigeration: true,
+                                                modify_wkdy_op_hrs: false,
+                                                wkdy_op_hrs_start_time: 8.0,
+                                                wkdy_op_hrs_duration: 8.0,
+                                                modify_wknd_op_hrs: false,
+                                                wknd_op_hrs_start_time: 8.0,
+                                                wknd_op_hrs_duration: 8.0,
+                                                hoo_var_method: 'hours',
+                                                enable_dst: true,
+                                                unmet_hours_tolerance_r: 1.0,
+                                                remove_objects: true)
 
       # report initial condition of model
       initial_object_size = model.getModelObjects.size
@@ -328,7 +328,7 @@ module OpenstudioStandards
 
           # Modify the default wall construction if different from measure input
           if old_wall_construction_type == wall_construction_type
-            # Don’t modify if the default matches the user-specified wall construction type
+            # Don't modify if the default matches the user-specified wall construction type
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Exterior wall construction type #{wall_construction_type} is the default for this building type.")
           else
             climate_zone_set = standard.model_find_climate_zone_set(model, climate_zone)
@@ -625,13 +625,13 @@ module OpenstudioStandards
 
             # Infer the secondary system type for multizone systems
             sec_sys_type = case sys_type
-                          when 'PVAV Reheat', 'VAV Reheat'
-                            'PSZ-AC'
-                          when 'PVAV PFP Boxes', 'VAV PFP Boxes'
-                            'PSZ-HP'
-                          else
-                            sys_type # same as primary system type
-                          end
+                           when 'PVAV Reheat', 'VAV Reheat'
+                             'PSZ-AC'
+                           when 'PVAV PFP Boxes', 'VAV PFP Boxes'
+                             'PSZ-HP'
+                           else
+                             sys_type # same as primary system type
+                           end
 
             # group zones
             story_zone_lists = standard.model_group_zones_by_story(model, sys_group['zones'])
