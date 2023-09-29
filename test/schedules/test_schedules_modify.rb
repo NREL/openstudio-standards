@@ -9,7 +9,7 @@ class TestSchedulesModify < Minitest::Test
     model = OpenStudio::Model::Model.new
     test_options = {
       'name' => 'Simple Schedule',
-      'defaultTimeValuePairs' => { 8.0 => 0.0, 16.0 => 3.0, 24.0 => 0.0 }
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 3.0, 24.0 => 0.0 }
     }
     schedule = @sch.model_create_simple_schedule(model, test_options)
     @sch.schedule_ruleset_simple_value_adjust(schedule, 0.5)
@@ -27,7 +27,7 @@ class TestSchedulesModify < Minitest::Test
     model = OpenStudio::Model::Model.new
     test_options = {
       'name' => 'Simple Schedule',
-      'defaultTimeValuePairs' => { 8.0 => 0.0, 12 => 2.0, 16.0 => 4.0, 24.0 => 0.0 }
+      'default_time_value_pairs' => { 8.0 => 0.0, 12 => 2.0, 16.0 => 4.0, 24.0 => 0.0 }
     }
     schedule = @sch.model_create_simple_schedule(model, test_options)
     test_value = 3.0
@@ -43,7 +43,7 @@ class TestSchedulesModify < Minitest::Test
     model = OpenStudio::Model::Model.new
     test_options = {
       'name' => 'Simple Schedule',
-      'defaultTimeValuePairs' => { 8.0 => 0.0, 16.0 => 3.0, 24.0 => 0.0 }
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 3.0, 24.0 => 0.0 }
     }
     schedule = @sch.model_create_simple_schedule(model, test_options)
     hhmm_before = 1400
@@ -57,7 +57,7 @@ class TestSchedulesModify < Minitest::Test
     model = OpenStudio::Model::Model.new
     test_options = {
       'name' => 'Simple Schedule',
-      'defaultTimeValuePairs' => { 8.0 => 0.0, 16.0 => 3.0, 24.0 => 0.0 }
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 3.0, 24.0 => 0.0 }
     }
     schedule = @sch.model_create_simple_schedule(model, test_options)
     basic_shift = { 'shift_hoo' => 2.0 }

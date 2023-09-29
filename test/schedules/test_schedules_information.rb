@@ -9,9 +9,9 @@ class TestSchedulesModify < Minitest::Test
     model = OpenStudio::Model::Model.new
     test_options = {
       'name' => 'Simple Schedule',
-      'winterTimeValuePairs' => { 8.0 => 4.0, 16.0 => 12.0, 24.0 => 5.0 },
-      'summerTimeValuePairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
-      'defaultTimeValuePairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
+      'winter_time_value_pairs' => { 8.0 => 4.0, 16.0 => 12.0, 24.0 => 5.0 },
+      'summer_time_value_pairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
+      'default_time_value_pairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
     }
     schedule = @sch.model_create_simple_schedule(model, test_options)
     result = @sch.schedule_ruleset_get_min_max(schedule)
@@ -23,9 +23,9 @@ class TestSchedulesModify < Minitest::Test
     model = OpenStudio::Model::Model.new
     test_options = {
       'name' => 'Simple Schedule',
-      'winterTimeValuePairs' => { 8.0 => 4.0, 16.0 => 12.0, 24.0 => 5.0 },
-      'summerTimeValuePairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
-      'defaultTimeValuePairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
+      'winter_time_value_pairs' => { 8.0 => 4.0, 16.0 => 12.0, 24.0 => 5.0 },
+      'summer_time_value_pairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
+      'default_time_value_pairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
     }
     schedule = @sch.model_create_simple_schedule(model, test_options)
     result = @sch.schedule_ruleset_get_timeseries(schedule)
