@@ -10,9 +10,9 @@ module OpenstudioStandards
     # @param perimeter [Double] perimeter
     # @return [Double] aspect ratio
     def self.aspect_ratio(area, perimeter)
-      l = 0.25 * (perimeter + Math.sqrt(p**2 - 16 * area))
-      w = 0.25 * (perimeter - Math.sqrt(p**2 - 16 * area))
-      aspect_ratio = l / w
+      length = 0.25 * (perimeter + Math.sqrt(perimeter**2 - 16 * area))
+      width = 0.25 * (perimeter - Math.sqrt(perimeter**2 - 16 * area))
+      aspect_ratio = length / width
 
       return aspect_ratio
     end
@@ -349,7 +349,7 @@ module OpenstudioStandards
             ext_window_area += sub_surface.grossArea * sub_surface.multiplier * zone_multiplier
           end
 
-          absolute_azimuth = OpenStudio.convert(s.azimuth, 'rad', 'deg').get + s.space.get.directionofRelativenorth + model.getBuilding.northAxis
+          absolute_azimuth = OpenStudio.convert(s.azimuth, 'rad', 'deg').get + s.space.get.directionofRelativeNorth + model.getBuilding.northAxis
           absolute_azimuth -= 360.0 until absolute_azimuth < 360.0
 
           # add to exterior wall counter if north or south

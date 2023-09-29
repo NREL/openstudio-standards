@@ -837,7 +837,7 @@ module OpenstudioStandards
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "The building started with #{starting_space_types.size} space types and #{starting_construction_sets.size} construction sets.")
 
       # lookup space types for specified building type (false indicates not to use whole building type only)
-      space_type_hash = OpenstudioStandards::CreateTypical.get_space_types_from_building_type(building_type, template, false)
+      space_type_hash = OpenstudioStandards::CreateTypical.get_space_types_from_building_type(building_type, template: template, whole_building: false)
       if space_type_hash == false
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "#{building_type} is an unexpected building type.")
         return false

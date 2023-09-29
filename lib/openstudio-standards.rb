@@ -9,6 +9,7 @@ module OpenstudioStandards
 
   # Geometry Module
   require_relative 'openstudio-standards/geometry/create'
+  require_relative 'openstudio-standards/geometry/create_bar'
   require_relative 'openstudio-standards/geometry/modify'
   require_relative 'openstudio-standards/geometry/information'
 

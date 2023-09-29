@@ -299,7 +299,7 @@ module OpenstudioStandards
         end
 
         # creating footprint for story
-        footprints << OpenstudioStandards::Geometry::Create.make_sliced_bar_simple_polygons(space_types_local_count, length, width, footprint_origin_point)
+        footprints << OpenstudioStandards::Geometry.make_sliced_bar_simple_polygons(space_types_local_count, length, width, footprint_origin_point)
       end
       return footprints
     end
@@ -702,7 +702,7 @@ module OpenstudioStandards
           }
 
           # make space
-          space = OpenstudioStandards::Geometry::Create.make_space_from_polygon(model, space_data[:polygon].first, space_data[:polygon], options)
+          space = OpenstudioStandards::Geometry.make_space_from_polygon(model, space_data[:polygon].first, space_data[:polygon], options)
           new_spaces << space
 
           # set z origin to proper position
