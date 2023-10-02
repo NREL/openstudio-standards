@@ -272,7 +272,7 @@ class ASHRAE901PRM < Standard
 
       has_district_heating = false
       plant_loop.supplyComponents.each do |sc|
-        if sc.to_DistrictHeating.is_initialized
+        if sc.iddObjectType.valueName.to_s.include? 'DistrictHeating'
           has_district_heating = true
         end
       end

@@ -1041,8 +1041,13 @@ class ECMS
     htg_eqpt = nil
     case loop_htg_eqpt_type.downcase
     when "district_heating"
-     htg_eqpt = OpenStudio::Model::DistrictHeating.new(model)
-     htg_eqpt.setName("DistrictHeating")
+      if model.version < OpenStudio::VersionString.new('3.7.0')
+        htg_eqpt = OpenStudio::Model::DistrictHeating.new(model)
+      else
+        htg_eqpt = OpenStudio::Model::DistrictHeatingWater.new(model)
+      end
+      htg_eqpt.setName("DistrictHeating")
+    
     when "heatpump_watertowater_equationfit"
       htg_eqpt = OpenStudio::Model::HeatPumpWaterToWaterEquationFitHeating.new(model)
       htg_eqpt.setName("HeatPumpWaterToWaterEquationFitHeating")
@@ -1105,7 +1110,11 @@ class ECMS
       heat_rej_eqpt = OpenStudio::Model::GroundHeatExchangerVertical.new(model)
       heat_rej_eqpt.setName("GroundHeatExchangerVertical")
     when "district_heating"
-      heat_rej_eqpt = OpenStudio::Model::DistrictHeating.new(model)
+      if model.version < OpenStudio::VersionString.new('3.7.0')
+        heat_rej_eqpt = OpenStudio::Model::DistrictHeating.new(model)
+      else
+        heat_rej_eqpt = OpenStudio::Model::DistrictHeatingWater.new(model)
+      end
       heat_rej_eqpt.setName("DistrictHeating")
     when "district_cooling"
       heat_rej_eqpt = OpenStudio::Model::DistrictCooling.new(model)
@@ -2012,8 +2021,16 @@ class ECMS
     ghx_loops = cw_loops.select {|loop| loop.name.to_s.downcase.include? 'glhx'}
     return if ghx_loops.empty?
     ghx_loop = ghx_loops[0]
-    dist_htg_eqpts = ghx_loop.supplyComponents.select {|comp| comp.to_DistrictHeating.is_initialized}
-    dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeating.get if !dist_htg_eqpts.empty?
+    dist_htg_eqpts = ghx_loop.supplyComponents.select {|comp| comp.sc.iddObjectType.valueName.to_s.include? 'DistrictHeating'}
+    if !dist_htg_eqpts.empty?
+      case dist_htg_eqpts[0].iddObjectType.valueName.to_s
+      when 'OS_DistrictHeating'
+        dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeating.get
+      when 'OS_DistrictHeatingWater'
+        dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeatingWater.get
+      when 'OS_DistrictHeatingSteam'
+        dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeatingSteam.get
+      end
     dist_clg_eqpts = ghx_loop.supplyComponents.select {|comp| comp.to_DistrictCooling.is_initialized}
     dist_clg_eqpt = dist_clg_eqpts[0].to_DistrictCooling.get if !dist_clg_eqpts.empty?
     raise("set_cond_loop_district_cap: condenser loop doesn't have a district heating and district cooling objects") if dist_htg_eqpts.empty? || dist_clg_eqpts.empty?

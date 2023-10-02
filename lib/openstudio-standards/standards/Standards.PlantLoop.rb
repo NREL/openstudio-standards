@@ -104,7 +104,7 @@ class Standard
 
         has_district_heating = false
         plant_loop.supplyComponents.each do |sc|
-          if sc.to_DistrictHeating.is_initialized
+          if sc.iddObjectType.valueName.to_s.include? 'DistrictHeating'
             has_district_heating = true
           end
         end
@@ -623,8 +623,8 @@ class Standard
     # on the plant loop.
     total_heating_capacity_w = 0
     plant_loop.supplyComponents.each do |sc|
-      # BoilerHotWater
       if sc.to_BoilerHotWater.is_initialized
+        # BoilerHotWater
         boiler = sc.to_BoilerHotWater.get
         if boiler.nominalCapacity.is_initialized
           total_heating_capacity_w += boiler.nominalCapacity.get
@@ -633,8 +633,8 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of Boiler:HotWater ' #{boiler.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
         end
-        # WaterHeater:Mixed
       elsif sc.to_WaterHeaterMixed.is_initialized
+        # WaterHeater:Mixed
         water_heater = sc.to_WaterHeaterMixed.get
         if water_heater.heaterMaximumCapacity.is_initialized
           total_heating_capacity_w += water_heater.heaterMaximumCapacity.get
@@ -643,8 +643,8 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of WaterHeater:Mixed #{water_heater.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
         end
-        # WaterHeater:Stratified
       elsif sc.to_WaterHeaterStratified.is_initialized
+        # WaterHeater:Stratified
         water_heater = sc.to_WaterHeaterStratified.get
         if water_heater.heater1Capacity.is_initialized
           total_heating_capacity_w += water_heater.heater1Capacity.get
@@ -652,9 +652,16 @@ class Standard
         if water_heater.heater2Capacity.is_initialized
           total_heating_capacity_w += water_heater.heater2Capacity.get
         end
+      elsif sc.iddObjectType.valueName.to_s.include? 'DistrictHeating'
         # DistrictHeating
-      elsif sc.to_DistrictHeating.is_initialized
-        dist_htg = sc.to_DistrictHeating.get
+        case sc.iddObjectType.valueName.to_s
+        when 'OS_DistrictHeating'
+          dist_htg = sc.to_DistrictHeating.get
+        when 'OS_DistrictHeatingWater'
+          dist_htg = sc.to_DistrictHeatingWater.get
+        when 'OS_DistrictHeatingSteam'
+          dist_htg = sc.to_DistrictHeatingSteam.get
+        end
         if dist_htg.nominalCapacity.is_initialized
           total_heating_capacity_w += dist_htg.nominalCapacity.get
         elsif dist_htg.autosizedNominalCapacity.is_initialized
@@ -1373,7 +1380,7 @@ class Standard
       obj_type = component.iddObjectType.valueName.to_s
 
       case obj_type
-        when 'OS_DistrictHeating'
+        when 'OS_DistrictHeating', 'OS_DistrictHeatingWater', 'OS_DistrictHeatingSteam'
           primary_fuels << 'DistrictHeating'
           combination_system = false
         when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
