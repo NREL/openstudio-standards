@@ -1539,7 +1539,7 @@ class Standard
           heating_type = 'Gas'
           # if district heating
           hot_water_loop = nil
-          if main_heat_fuel.include? 'DistrictHeating'
+          if main_heat_fuel.include?('DistrictHeating')
             heating_type = 'Water'
             hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                                model.getPlantLoopByName('Hot Water Loop').get
@@ -1870,7 +1870,7 @@ class Standard
         unless zones.empty?
           # If district heating
           hot_water_loop = nil
-          if main_heat_fuel.include? 'DistrictHeating'
+          if main_heat_fuel.include?('DistrictHeating')
             hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                                model.getPlantLoopByName('Hot Water Loop').get
                              else
@@ -1899,7 +1899,7 @@ class Standard
       when 'SZ_CV' # System 12 (gas or district heat) or System 13 (electric resistance heat)
         unless zones.empty?
           hot_water_loop = nil
-          if zone_heat_fuel.include? 'DistrictHeating' || zone_heat_fuel == 'NaturalGas'
+          if zone_heat_fuel.include?('DistrictHeating') || zone_heat_fuel == 'NaturalGas'
             heating_type = 'Water'
             hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                                model.getPlantLoopByName('Hot Water Loop').get

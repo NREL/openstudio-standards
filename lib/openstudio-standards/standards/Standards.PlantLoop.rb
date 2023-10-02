@@ -104,7 +104,7 @@ class Standard
 
         has_district_heating = false
         plant_loop.supplyComponents.each do |sc|
-          if sc.iddObjectType.valueName.to_s.include? 'DistrictHeating'
+          if sc.iddObjectType.valueName.to_s.include?('DistrictHeating')
             has_district_heating = true
           end
         end
@@ -652,7 +652,7 @@ class Standard
         if water_heater.heater2Capacity.is_initialized
           total_heating_capacity_w += water_heater.heater2Capacity.get
         end
-      elsif sc.iddObjectType.valueName.to_s.include? 'DistrictHeating'
+      elsif sc.iddObjectType.valueName.to_s.include?('DistrictHeating')
         # DistrictHeating
         case sc.iddObjectType.valueName.to_s
         when 'OS_DistrictHeating'

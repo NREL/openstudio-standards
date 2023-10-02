@@ -4236,7 +4236,7 @@ class Standard
         htg_coil = create_coil_heating_electric(model,
                                                 name: "#{zone.name} UnitHeater Electric Htg Coil",
                                                 schedule: hvac_op_sch)
-      elsif heating_type.include? 'DistrictHeating' && !hot_water_loop.nil?
+      elsif heating_type.include?('DistrictHeating') && !hot_water_loop.nil?
         # control temperature for hot water loop
         if rated_inlet_water_temperature.nil?
           rated_inlet_water_temperature_c = OpenStudio.convert(180.0, 'F', 'C').get
@@ -7038,7 +7038,7 @@ class Standard
                                fan_pressure_rise: 4.0)
 
     when 'Water Source Heat Pumps'
-      if main_heat_fuel.include? 'DistrictHeating' && cool_fuel == 'DistrictCooling'
+      if main_heat_fuel.include?('DistrictHeating') && cool_fuel == 'DistrictCooling'
         condenser_loop = model_get_or_add_ambient_water_loop(model)
       elsif main_heat_fuel == 'AmbientLoop' && cool_fuel == 'AmbientLoop'
         condenser_loop = model_get_or_add_ambient_water_loop(model)

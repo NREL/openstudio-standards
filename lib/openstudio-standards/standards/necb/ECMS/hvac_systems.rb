@@ -2018,10 +2018,10 @@ class ECMS
     # maximum district cooling rate on the summer design day.
 
     cw_loops = model.getPlantLoops.select{|loop| loop.sizingPlant.loopType.to_s.downcase == 'condenser'}
-    ghx_loops = cw_loops.select {|loop| loop.name.to_s.downcase.include? 'glhx'}
+    ghx_loops = cw_loops.select { |loop| loop.name.to_s.downcase.include? 'glhx' }
     return if ghx_loops.empty?
     ghx_loop = ghx_loops[0]
-    dist_htg_eqpts = ghx_loop.supplyComponents.select {|comp| comp.sc.iddObjectType.valueName.to_s.include? 'DistrictHeating'}
+    dist_htg_eqpts = ghx_loop.supplyComponents.select { |comp| comp.sc.iddObjectType.valueName.to_s.include?('DistrictHeating') }
     if !dist_htg_eqpts.empty?
       case dist_htg_eqpts[0].iddObjectType.valueName.to_s
       when 'OS_DistrictHeating'
@@ -2031,6 +2031,7 @@ class ECMS
       when 'OS_DistrictHeatingSteam'
         dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeatingSteam.get
       end
+    end
     dist_clg_eqpts = ghx_loop.supplyComponents.select {|comp| comp.to_DistrictCooling.is_initialized}
     dist_clg_eqpt = dist_clg_eqpts[0].to_DistrictCooling.get if !dist_clg_eqpts.empty?
     raise("set_cond_loop_district_cap: condenser loop doesn't have a district heating and district cooling objects") if dist_htg_eqpts.empty? || dist_clg_eqpts.empty?
