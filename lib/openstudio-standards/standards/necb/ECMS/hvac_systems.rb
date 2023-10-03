@@ -2021,7 +2021,7 @@ class ECMS
     ghx_loops = cw_loops.select { |loop| loop.name.to_s.downcase.include? 'glhx' }
     return if ghx_loops.empty?
     ghx_loop = ghx_loops[0]
-    dist_htg_eqpts = ghx_loop.supplyComponents.select { |comp| comp.sc.iddObjectType.valueName.to_s.include?('DistrictHeating') }
+    dist_htg_eqpts = ghx_loop.supplyComponents.select { |comp| comp.iddObjectType.valueName.to_s.include?('DistrictHeating') }
     if !dist_htg_eqpts.empty?
       case dist_htg_eqpts[0].iddObjectType.valueName.to_s
       when 'OS_DistrictHeating'
