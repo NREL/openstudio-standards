@@ -13,9 +13,9 @@ module OpenstudioStandards
     # @param hvac_delivery_type [String] HVAC delivery type, how the system delivers heating or cooling to zones.
     #   Options are 'Forced Air' or 'Hydronic'.
     # @param heating_fuel [String] The primary HVAC heating fuel type.
-    #   Options are 'Electricity', 'NaturalGas', 'DistrictHeating', 'DistrictAmbient'
+    #   Options are 'Electricity', 'NaturalGas', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam', 'DistrictAmbient'
     # @param service_water_heating_fuel [String] The primary service water heating fuel type.
-    #   Options are 'Inferred', 'Electricity', 'NaturalGas', 'DistrictHeating', 'HeatPump'
+    #   Options are 'Inferred', 'Electricity', 'NaturalGas', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam', 'HeatPump'
     # @param cooling_fuel [String] The primary HVAC cooling fuel type
     #   Options are 'Electricity', 'DistrictCooling', 'DistrictAmbient'
     # @param kitchen_makeup [String] Source of makeup air for kitchen exhaust
@@ -269,9 +269,9 @@ module OpenstudioStandards
       standard.model_set_below_grade_wall_constructions(model, lookup_building_type, climate_zone)
       standard.model_set_floor_constructions(model, lookup_building_type, climate_zone)
       if model.getFFactorGroundFloorConstructions.empty?
-        OpenStudio.logFree(OpenStudio::Info, 'Unable to determine FC factor value to use. Using default ground construction instead.')
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', 'Unable to determine FC factor value to use. Using default ground construction instead.')
       else
-        OpenStudio.logFree(OpenStudio::Info, 'Set FC factor constructions for slab and below grade walls.')
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', 'Set FC factor constructions for slab and below grade walls.')
       end
 
       # make construction set and apply to building
@@ -469,7 +469,7 @@ module OpenstudioStandards
 
         # Infer the SWH type
         if service_water_heating_fuel == 'Inferred'
-          if heating_fuel == 'NaturalGas' || heating_fuel == 'DistrictHeating'
+          if heating_fuel == 'NaturalGas' || heating_fuel.include?('DistrictHeating')
             # If building has gas service, probably uses natural gas for SWH
             service_water_heating_fuel = 'NaturalGas'
           elsif heating_fuel == 'Electricity'

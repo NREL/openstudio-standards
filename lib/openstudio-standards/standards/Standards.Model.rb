@@ -1057,7 +1057,7 @@ class Standard
     purchased_cooling = false
 
     # Purchased heating
-    if all_htg_fuels.include?('DistrictHeating')
+    if all_htg_fuels.include?('DistrictHeating') || all_htg_fuels.include?('DistrictHeatingWater') || all_htg_fuels.include?('DistrictHeatingSteam')
       purchased_heating = true
     end
 
@@ -1118,7 +1118,7 @@ class Standard
       end
 
       htg_fuels = zone.heatingFuelTypes.map(&:valueName)
-      if htg_fuels.include?('DistrictHeating')
+      if htg_fuels.include?('DistrictHeating') || htg_fuels.include?('DistrictHeatingWater') || htg_fuels.include?('DistrictHeatingSteam')
         has_district_hash[zone.name] = true
         has_district_hash['building'] = true
       else
@@ -1144,7 +1144,7 @@ class Standard
 
     zones.each do |zone|
       htg_fuels = zone.heatingFuelTypes.map(&:valueName)
-      if htg_fuels.include?('DistrictHeating')
+      if htg_fuels.include?('DistrictHeating') || htg_fuels.include?('DistrictHeatingWater') || htg_fuels.include?('DistrictHeatingSteam')
         has_district_heat = true
       end
       other_heat = thermal_zone_fossil_or_electric_type(zone, '')
@@ -1499,8 +1499,8 @@ class Standard
   # @param system_type [String] The system type.  Valid choices are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat,
   #   PVAV_PFP_Boxes, VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace,
   #   which are also returned by the method OpenStudio::Model::Model.prm_baseline_system_type.
-  # @param main_heat_fuel [String] main heating fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
-  # @param zone_heat_fuel [String] zone heating/reheat fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
+  # @param main_heat_fuel [String] main heating fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam
+  # @param zone_heat_fuel [String] zone heating/reheat fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam
   # @param cool_fuel [String] cooling fuel.  Valid choices are Electricity, DistrictCooling
   # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
   # @return [Boolean] returns true if successful, false if not
@@ -1539,7 +1539,7 @@ class Standard
           heating_type = 'Gas'
           # if district heating
           hot_water_loop = nil
-          if main_heat_fuel == 'DistrictHeating'
+          if main_heat_fuel.include?('DistrictHeating')
             heating_type = 'Water'
             hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                                model.getPlantLoopByName('Hot Water Loop').get
@@ -1870,7 +1870,7 @@ class Standard
         unless zones.empty?
           # If district heating
           hot_water_loop = nil
-          if main_heat_fuel == 'DistrictHeating'
+          if main_heat_fuel.include?('DistrictHeating')
             hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                                model.getPlantLoopByName('Hot Water Loop').get
                              else
@@ -1899,7 +1899,7 @@ class Standard
       when 'SZ_CV' # System 12 (gas or district heat) or System 13 (electric resistance heat)
         unless zones.empty?
           hot_water_loop = nil
-          if zone_heat_fuel == 'DistrictHeating' || zone_heat_fuel == 'NaturalGas'
+          if zone_heat_fuel.include?('DistrictHeating') || zone_heat_fuel == 'NaturalGas'
             heating_type = 'Water'
             hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                                model.getPlantLoopByName('Hot Water Loop').get
