@@ -538,21 +538,6 @@ module OpenstudioStandards
         standard.model_add_typical_refrigeration(model, primary_bldg_type)
       end
 
-      # add internal mass
-      if add_internal_mass
-
-        if remove_objects
-          model.getSpaceLoads.sort.each do |instance|
-            next unless instance.to_InternalMass.is_initialized
-
-            instance.remove
-          end
-        end
-
-        # add internal mass to conditioned spaces; needs to happen after thermostats are applied
-        standard.model_add_internal_mass(model, primary_bldg_type)
-      end
-
       # @todo add slab modeling and slab insulation
       # @todo fuel customization for cooking and laundry
       # works by switching some fraction of electric loads to gas if requested (assuming base load is electric)
@@ -589,6 +574,21 @@ module OpenstudioStandards
         end
       end
 
+      # add internal mass
+      if add_internal_mass
+
+        if remove_objects
+          model.getSpaceLoads.sort.each do |instance|
+            next unless instance.to_InternalMass.is_initialized
+
+            instance.remove
+          end
+        end
+
+        # add internal mass to conditioned spaces; needs to happen after thermostats are applied
+        standard.model_add_internal_mass(model, primary_bldg_type)
+      end
+      
       # add hvac system
       if add_hvac
 
