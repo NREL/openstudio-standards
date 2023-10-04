@@ -101,7 +101,7 @@ def create_openstudio_standards_space_data_json(
         space_type_name = space_type_infos["space_type_name"]
         if not space_type_name in space_type_names:
             space_type_names.append(space_type_name)
-            lighting_space_type_name = space_type_infos["lighting_space_type_name"]
+            lighting_space_type_name = space_type_infos["LS.lighting_space_type_name"]
             space_type_data = {"template": template, "space_type": space_type_name}
 
             # Get lighting space type data
@@ -131,7 +131,7 @@ def create_openstudio_standards_space_data_json(
             )[0]
 
             space_lpd = float(lighting_records["lighting_power_density"])
-            space_lpd_unit = lighting_records["unit"]
+            space_lpd_unit = lighting_records["lighting_power_density_unit"]
             if space_lpd_unit.lower() == "w/ft2":
                 space_type_data["lighting_per_area"] = space_lpd
                 space_type_data["lighting_per_height"] = 0.0
@@ -168,7 +168,7 @@ def create_openstudio_standards_space_data_json(
 
             # Get equipment space type data
             electric_equipment_space_type_name = space_type_infos[
-                "electric_equipment_space_type_name"
+                "ES.electric_equipment_space_type_name"
             ]
             electric_equipment_space_type_data = fetch_records_from_table_by_key_values(
                 conn,
@@ -202,7 +202,7 @@ def create_openstudio_standards_space_data_json(
                     space_type_data[f] = 0.0
 
             natural_gas_equipment_space_type_name = space_type_infos[
-                "natural_gas_equipment_space_type_name"
+                "EGS.natural_gas_equipment_space_type_name"
             ]
             natural_gas_equipment_space_type_data = fetch_records_from_table_by_key_values(
                 conn,
@@ -236,7 +236,7 @@ def create_openstudio_standards_space_data_json(
 
             # Get ventilation and occupancy space type data
             ventilation_space_type_name = space_type_infos[
-                "ventilation_space_type_name"
+                "VS.ventilation_space_type_name"
             ]
             ventilation_space_type_data = fetch_records_from_table_by_key_values(
                 conn,
