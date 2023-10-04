@@ -19,6 +19,7 @@ lib/openstudio-standards/refs/references.rb
 lib/openstudio-standards/schedules/**/*.rb
 lib/openstudio-standards/geometry/**/*.rb
 lib/openstudio-standards/create_typical/**/*.rb
+lib/openstudio-standards/hvac/**/*.rb
 
 -
 docs/Home.md

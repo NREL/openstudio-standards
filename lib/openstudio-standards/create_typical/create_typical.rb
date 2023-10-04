@@ -684,8 +684,8 @@ module OpenstudioStandards
             # Add the user specified HVAC system for each story.
             # Single-zone systems will get one per zone.
             story_zone_groups.each do |zones|
-              unless model.add_cbecs_hvac_system(standard, hvac_system_type, zones)
-                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
+              unless OpenstudioStandards::HVAC.add_cbecs_hvac_system(model, standard, hvac_system_type, zones)
+                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against cbecs_hvac.rb in the HVAC module for valid HVAC system type names.")
                 return false
               end
             end

@@ -18,6 +18,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/schedules/modify'
   require_relative 'openstudio-standards/schedules/information'
 
+  # HVAC Module
+  require_relative 'openstudio-standards/hvac/cbecs_hvac'
+
   # CreateTypical Module
   require_relative 'openstudio-standards/create_typical/enumerations'
   require_relative 'openstudio-standards/create_typical/space_type_ratios'
