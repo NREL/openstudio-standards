@@ -17,7 +17,7 @@ report_path = "#{run_dir}/report.html"
 class NECB_QAQC_Single_Test < CreateDOEPrototypeBuildingTest
 
   def test_single_qaqc()
-       test_name = "#{info['building']}_#{info['epw']}"
+      test_name = "#{info['building']}_#{info['epw']}"
       puts info
       puts "creating #{test_name}"
       unless File.exist?(run_dir(test_name, info))

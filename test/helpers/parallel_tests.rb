@@ -114,7 +114,7 @@ class ParallelTests
     end
 
     puts "Running #{test_files_and_test_names.size} tests from #{@full_file_list.size} tests suites in parallel using #{processors} of #{Parallel.processor_count} available cpus."
-    puts "To increase or decrease the ProcessorsUsed, please edit the test/test_run_all_locally.rb file."
+    puts "To increase or decrease the ProcessorsUsed, please edit the test/helpers/parallel_tests.rb file."
     timings_json = Hash.new()
     Parallel.each(test_files_and_test_names, in_threads: (processors),progress: "Progress :") do |test_file_test_name|
       test_file = test_file_test_name[0]

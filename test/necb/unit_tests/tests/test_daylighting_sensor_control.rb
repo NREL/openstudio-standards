@@ -1,8 +1,20 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
+# *** Needs a re-write to use std paths etc ***
 
 class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
+
+  # Set to true to run the standards in the test.
+  PERFORM_STANDARDS = true
+
+  def setup()
+    define_folders(__dir__)
+    define_std_ranges
+  end
 
   def test_daylighting_sensor_control()
 
@@ -155,7 +167,6 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
 
                     ##### Calculate "Daylighted Area Under Skylights" AND "Skylight Effective Aperture"
                     daylight_spaces.sort.each do |daylight_space|
-                      skylight_area = 0.0
                       skylight_area_weighted_vt_handle = 0.0
                       skylight_area_weighted_vt = 0.0
                       skylight_area_sum = 0.0
