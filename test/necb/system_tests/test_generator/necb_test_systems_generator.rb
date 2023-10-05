@@ -17,7 +17,7 @@ class String
 end
 
 class GeneratorNECBRegressionTests
-  # default loation circleci_tests.txt file when run on
+  # default loation ci_tests.txt file when run on
 
   def initialize()
     @file_out_dir = File.absolute_path(File.join(__dir__,'..','tests'))
