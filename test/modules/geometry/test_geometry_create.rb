@@ -1,4 +1,4 @@
-require_relative '../helpers/minitest_helper'
+require_relative '../../helpers/minitest_helper'
 
 class TestGeometryCreate < Minitest::Test
   def setup
