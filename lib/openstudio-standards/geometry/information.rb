@@ -168,7 +168,7 @@ module OpenstudioStandards
 
           edge_hash.each do |k2, v2|
             test_boundary_cond = false
-            next if !tested_wall_boundary_condition.include?(v2[3]) # method arg takes multiple conditions
+            next if !exterior_boundary_conditions.include?(v2[3]) # method arg takes multiple conditions
             next if v2[4] != 'Wall'
 
             # see if edges have same geometry
