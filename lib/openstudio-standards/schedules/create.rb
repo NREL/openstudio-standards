@@ -50,7 +50,7 @@ module OpenstudioStandards
       # All Days
       default_day = sch_ruleset.defaultDaySchedule
       default_day.setName("#{sch_ruleset.name} Schedule Week Day")
-      options['defaultTimeValuePairs'].each do |k, v|
+      options['default_time_value_pairs'].each do |k, v|
         hour = k.truncate
         min = ((k - hour) * 60).to_i
         default_day.addValue(OpenStudio::Time.new(0, hour, min, 0), v)
