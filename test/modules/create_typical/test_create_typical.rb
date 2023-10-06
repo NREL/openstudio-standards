@@ -10,7 +10,7 @@ class TestCreateTypical < Minitest::Test
     template = '90.1-2013'
     climate_zone = 'ASHRAE 169-2013-4A'
     std = Standard.build(template)
-    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../data/geometry/ASHRAEPrimarySchool.osm")
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAEPrimarySchool.osm")
     std.model_add_design_days_and_weather_file(model, climate_zone)
 
     # apply create typical

@@ -8,7 +8,7 @@ class TestGeometryCreate < Minitest::Test
     template = '90.1-2013'
     climate_zone = 'ASHRAE 169-2013-4A'
     std = Standard.build(template)
-    @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../data/geometry/ASHRAEPrimarySchool.osm")
+    @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAEPrimarySchool.osm")
   end
 
   def test_space_create_point_at_center_of_floor

@@ -269,9 +269,9 @@ module OpenstudioStandards
       standard.model_set_below_grade_wall_constructions(model, lookup_building_type, climate_zone)
       standard.model_set_floor_constructions(model, lookup_building_type, climate_zone)
       if model.getFFactorGroundFloorConstructions.empty?
-        OpenStudio.logFree(OpenStudio::Info, 'Unable to determine FC factor value to use. Using default ground construction instead.')
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', 'Unable to determine FC factor value to use. Using default ground construction instead.')
       else
-        OpenStudio.logFree(OpenStudio::Info, 'Set FC factor constructions for slab and below grade walls.')
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', 'Set FC factor constructions for slab and below grade walls.')
       end
 
       # make construction set and apply to building
