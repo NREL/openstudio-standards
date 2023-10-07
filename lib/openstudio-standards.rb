@@ -32,6 +32,17 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/create_typical/create_typical'
   require_relative 'openstudio-standards/create_typical/space_type_blend'
 
+  # QAQC Module
+  require_relative 'openstudio-standards/qaqc/calibration'
+  require_relative 'openstudio-standards/qaqc/envelope'
+  require_relative 'openstudio-standards/qaqc/eui'
+  require_relative 'openstudio-standards/qaqc/hvac'
+  require_relative 'openstudio-standards/qaqc/internal_loads'
+  require_relative 'openstudio-standards/qaqc/schedules'
+  require_relative 'openstudio-standards/qaqc/service_water_heating'
+  require_relative 'openstudio-standards/qaqc/weather_files'
+  require_relative 'openstudio-standards/qaqc/zone_conditions'
+
   # Weather data
   require_relative 'openstudio-standards/weather/Weather.Model'
 
