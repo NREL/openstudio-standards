@@ -71,140 +71,140 @@ module OpenstudioStandards
       when 'DOAS with fan coil chiller with boiler'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil chiller with central air source heat pump'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'AirSourceHeatPump', znht = nil, cl = 'Electricity', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'AirSourceHeatPump', znht = nil, cl = 'Electricity', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil chiller with district hot water'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'DistrictHeating', znht = nil, cl = 'Electricity', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'DistrictHeating', znht = nil, cl = 'Electricity', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil chiller with baseboard electric'
         standard.model_add_hvac_system(model, 'DOAS', ht = nil, znht = nil, cl = 'Electricity', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_zones)
 
       when 'DOAS with fan coil chiller with gas unit heaters'
         standard.model_add_hvac_system(model, 'DOAS', ht = nil, znht = nil, cl = 'Electricity', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
 
       when 'DOAS with fan coil chiller with no heat'
         standard.model_add_hvac_system(model, 'DOAS', ht = nil, znht = nil, cl = 'Electricity', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil air-cooled chiller with boiler'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled',
-                                      zone_equipment_ventilation: false)
+                                       chilled_water_loop_cooling_type: 'AirCooled',
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil air-cooled chiller with central air source heat pump'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'AirSourceHeatPump', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'AirSourceHeatPump', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled',
-                                      zone_equipment_ventilation: false)
+                                       chilled_water_loop_cooling_type: 'AirCooled',
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil air-cooled chiller with district hot water'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'DistrictHeating', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'DistrictHeating', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled',
-                                      zone_equipment_ventilation: false)
+                                       chilled_water_loop_cooling_type: 'AirCooled',
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil air-cooled chiller with baseboard electric'
         standard.model_add_hvac_system(model, 'DOAS', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled',
-                                      zone_equipment_ventilation: false)
+                                       chilled_water_loop_cooling_type: 'AirCooled',
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_zones)
 
       when 'DOAS with fan coil air-cooled chiller with gas unit heaters'
         standard.model_add_hvac_system(model, 'DOAS', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled',
-                                      zone_equipment_ventilation: false)
+                                       chilled_water_loop_cooling_type: 'AirCooled',
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
 
       when 'DOAS with fan coil air-cooled chiller with no heat'
         standard.model_add_hvac_system(model, 'DOAS', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled',
-                                      zone_equipment_ventilation: false)
+                                       chilled_water_loop_cooling_type: 'AirCooled',
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil district chilled water with boiler'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'NaturalGas', znht = nil, cl = 'DistrictCooling', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'NaturalGas', znht = nil, cl = 'DistrictCooling', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil district chilled water with central air source heat pump'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'AirSourceHeatPump', znht = nil, cl = 'DistrictCooling', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'AirSourceHeatPump', znht = nil, cl = 'DistrictCooling', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil district chilled water with district hot water'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'DistrictHeating', znht = nil, cl = 'DistrictCooling', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'DistrictHeating', znht = nil, cl = 'DistrictCooling', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with fan coil district chilled water with baseboard electric'
         standard.model_add_hvac_system(model, 'DOAS', ht = nil, znht = nil, cl = 'DistrictCooling', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'DistrictCooling', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_zones)
 
       when 'DOAS with fan coil district chilled water with gas unit heaters'
         standard.model_add_hvac_system(model, 'DOAS', ht = nil, znht = nil, cl = 'DistrictCooling', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'DistrictCooling', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
 
       when 'DOAS with fan coil district chilled water with no heat'
         standard.model_add_hvac_system(model, 'DOAS', ht = nil, znht = nil, cl = 'DistrictCooling', zones)
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'DistrictCooling', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with VRF'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'Electricity', znht = nil, cl = 'Electricity', zones,
-                                      air_loop_heating_type: 'DX',
-                                      air_loop_cooling_type: 'DX')
+                                       air_loop_heating_type: 'DX',
+                                       air_loop_cooling_type: 'DX')
         standard.model_add_hvac_system(model, 'VRF', ht = 'Electricity', znht = nil, cl = 'Electricity', zones)
 
       when 'DOAS with water source heat pumps fluid cooler with boiler'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones)
         standard.model_add_hvac_system(model, 'Water Source Heat Pumps', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      heat_pump_loop_cooling_type: 'FluidCooler',
-                                      zone_equipment_ventilation: false)
+                                       heat_pump_loop_cooling_type: 'FluidCooler',
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with water source heat pumps cooling tower with boiler'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones)
         standard.model_add_hvac_system(model, 'Water Source Heat Pumps', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      heat_pump_loop_cooling_type: 'CoolingTower',
-                                      zone_equipment_ventilation: false)
+                                       heat_pump_loop_cooling_type: 'CoolingTower',
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with water source heat pumps with ground source heat pump'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'Electricity', znht = nil, cl = 'Electricity', zones,
-                                      air_loop_heating_type: 'DX',
-                                      air_loop_cooling_type: 'DX')
+                                       air_loop_heating_type: 'DX',
+                                       air_loop_cooling_type: 'DX')
         standard.model_add_hvac_system(model, 'Ground Source Heat Pumps', ht = 'Electricity', znht = nil, cl = 'Electricity', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       when 'DOAS with water source heat pumps district chilled water with district hot water'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'DistrictHeating', znht = nil, cl = 'DistrictCooling', zones)
         standard.model_add_hvac_system(model, 'Water Source Heat Pumps', ht = 'DistrictHeating', znht = nil, cl = 'DistrictCooling', zones,
-                                      zone_equipment_ventilation: false)
+                                       zone_equipment_ventilation: false)
 
       # ventilation provided by zone fan coil unit in fan coil systems
       when 'Fan coil chiller with boiler'
@@ -229,29 +229,29 @@ module OpenstudioStandards
 
       when 'Fan coil air-cooled chiller with boiler'
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
 
       when 'Fan coil air-cooled chiller with central air source heat pump'
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'AirSourceHeatPump', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
 
       when 'Fan coil air-cooled chiller with district hot water'
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'DistrictHeating', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
 
       when 'Fan coil air-cooled chiller with baseboard electric'
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_zones)
 
       when 'Fan coil air-cooled chiller with gas unit heaters'
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
 
       when 'Fan coil air-cooled chiller with no heat'
         standard.model_add_hvac_system(model, 'Fan Coil', ht = nil, znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
 
       when 'Fan coil district chilled water with boiler'
         standard.model_add_hvac_system(model, 'Fan Coil', ht = 'NaturalGas', znht = nil, cl = 'DistrictCooling', zones)
@@ -500,37 +500,37 @@ module OpenstudioStandards
 
       when 'VAV air-cooled chiller with gas boiler reheat'
         standard.model_add_hvac_system(model, 'VAV Reheat', ht = 'NaturalGas', znht = 'NaturalGas', cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
 
       when 'VAV air-cooled chiller with central air source heat pump reheat'
         standard.model_add_hvac_system(model, 'VAV Reheat', ht = 'AirSourceHeatPump', znht = 'AirSourceHeatPump', cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
 
       when 'VAV air-cooled chiller with district hot water reheat'
         standard.model_add_hvac_system(model, 'VAV Reheat', ht = 'DistrictHeating', znht = 'DistrictHeating', cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
 
       when 'VAV air-cooled chiller with PFP boxes'
         standard.model_add_hvac_system(model, 'VAV PFP Boxes', ht = 'NaturalGas', znht = 'NaturalGas', cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
 
       when 'VAV air-cooled chiller with gas coil reheat'
         standard.model_add_hvac_system(model, 'VAV Gas Reheat', ht = 'NaturalGas', ht = 'NaturalGas', cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
 
       when 'VAV air-cooled chiller with no reheat with baseboard electric'
         standard.model_add_hvac_system(model, 'VAV No Reheat', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_zones)
 
       when 'VAV air-cooled chiller with no reheat with gas unit heaters'
         standard.model_add_hvac_system(model, 'VAV No Reheat', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
 
       when 'VAV air-cooled chiller with no reheat with zone heat pump'
         standard.model_add_hvac_system(model, 'VAV No Reheat', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      chilled_water_loop_cooling_type: 'AirCooled')
+                                       chilled_water_loop_cooling_type: 'AirCooled')
         # Using PTHP to represent zone heat pump to limit to one airloop per thermal zone.
         standard.model_add_hvac_system(model, 'PTHP', ht = 'Electricity', znht = nil, cl = 'Electricity', zones)
 
@@ -567,11 +567,11 @@ module OpenstudioStandards
 
       when 'Water source heat pumps fluid cooler with boiler'
         standard.model_add_hvac_system(model, 'Water Source Heat Pumps', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      heat_pump_loop_cooling_type: 'FluidCooler')
+                                       heat_pump_loop_cooling_type: 'FluidCooler')
 
       when 'Water source heat pumps cooling tower with boiler'
         standard.model_add_hvac_system(model, 'Water Source Heat Pumps', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones,
-                                      heat_pump_loop_cooling_type: 'CoolingTower')
+                                       heat_pump_loop_cooling_type: 'CoolingTower')
 
       when 'Water source heat pumps with ground source heat pump'
         standard.model_add_hvac_system(model, 'Ground Source Heat Pumps', ht = 'Electricity', znht = nil, cl = 'Electricity', zones)

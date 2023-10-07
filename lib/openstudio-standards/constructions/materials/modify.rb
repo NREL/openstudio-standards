@@ -15,7 +15,7 @@ module OpenstudioStandards
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.constructions.materials', "Object #{opaque_material} cannot be cast as an OpaqueMaterial object.")
           return false
         end
-        
+
         # edit insulation material
         material = opaque_material.to_OpaqueMaterial.get
         if material.to_MasslessOpaqueMaterial.is_initialized
@@ -64,7 +64,7 @@ module OpenstudioStandards
         material.setThermalAbsorptance(thermal_absorptance) unless thermal_absorptance.nil?
         material.setSolarAbsorptance(solar_absorptance) unless solar_absorptance.nil?
         material.setVisibleAbsorptance(visible_absorptance) unless visible_absorptance.nil?
-        
+
         return material.to_OpaqueMaterial.get
       end
     end

@@ -7,7 +7,7 @@ module OpenstudioStandards
     # On a scale of 0 to 100, standard black is 0, and standard white is 100.
     # The calculation derived from ASTM E1980 assuming medium wind speed.
     #
-    # @param [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
     # @return [Double] The solar reflectance value
     def self.construction_get_solar_reflectance_index(construction)
       exposed_material = construction.to_LayeredConstruction.get.getLayer(0)

@@ -147,6 +147,7 @@ module OpenstudioStandards
         collection_totals[:volume] = 0.0
         space_array.each do |space|
           next if !space.partofTotalFloorArea
+
           collection_totals[:floor_area] += space.floorArea * space.multiplier
           collection_totals[:num_people] += space.numberOfPeople * space.multiplier
           collection_totals[:ext_surface_area] += space.exteriorArea * space.multiplier
@@ -164,6 +165,7 @@ module OpenstudioStandards
         largest_space_type_ratio = 0.00
         space_types.each do |space_type|
           next if space_type.floorArea == 0
+
           space_type_totals = {}
           space_type_totals[:floor_area] = 0.0
           space_type_totals[:num_people] = 0.0
@@ -173,6 +175,7 @@ module OpenstudioStandards
           # loop through spaces so I can skip if not included in floor area
           space_type.spaces.each do |space|
             next if !space.partofTotalFloorArea
+
             space_type_totals[:floor_area] += space.floorArea * space.multiplier
             space_type_totals[:num_people] += space.numberOfPeople * space.multiplier
             space_type_totals[:ext_surface_area] += space.exteriorArea * space.multiplier
@@ -214,6 +217,7 @@ module OpenstudioStandards
           model.getSpaces.sort.each do |space|
             if space.spaceType.empty?
               next if !space.partofTotalFloorArea
+
               no_space_type_area_counter += space.floorArea * space.multiplier
             end
           end
@@ -227,6 +231,7 @@ module OpenstudioStandards
         space_hash = {}
         space_array.each do |space|
           next if !space.partofTotalFloorArea
+
           space_loads_hash = OpenstudioStandards::CreateTypical.space_or_space_type_gather_internal_loads(space)
           space_totals = {}
           space_totals[:floor_area] = space.floorArea * space.multiplier
@@ -318,6 +323,7 @@ module OpenstudioStandards
           # remove all space type assignments, except for spaces not included in building area.
           space_type.spaces.each do |space|
             next if !space.partofTotalFloorArea
+
             space.resetSpaceType
           end
 
@@ -368,6 +374,7 @@ module OpenstudioStandards
           # populate blended space type with space loads
           space_load_instances = OpenstudioStandards::CreateTypical.blend_internal_loads(model, space, blended_space_type, ratios, collection_floor_area, space_hash)
           next if space_load_instances.empty?
+
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Blending space #{space.name}. Floor area ratio is #{(hash[:totals][:floor_area] / collection_totals[:floor_area]).round(3)}. People ratio is #{(hash[:totals][:num_people] / collection_totals[:num_people]).round(3)}")
         end
 

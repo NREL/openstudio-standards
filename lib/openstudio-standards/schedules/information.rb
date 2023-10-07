@@ -82,6 +82,7 @@ module OpenstudioStandards
       # Ensure that this is a ScheduleRuleset
       schedule_ruleset = schedule_ruleset.to_ScheduleRuleset
       return [nil, nil] if schedule_ruleset.empty?
+
       schedule_ruleset = schedule_ruleset.get
 
       # Define the start and end date
@@ -139,6 +140,7 @@ module OpenstudioStandards
       start_time = nil
       values.each_with_index do |val, i|
         break if i == values.size - 1 # Stop if we reach end of array
+
         if val == start_val && values[i + 1] > start_val
           start_time = times[i]
           break

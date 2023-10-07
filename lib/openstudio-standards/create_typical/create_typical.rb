@@ -588,7 +588,7 @@ module OpenstudioStandards
         # add internal mass to conditioned spaces; needs to happen after thermostats are applied
         standard.model_add_internal_mass(model, primary_bldg_type)
       end
-      
+
       # add hvac system
       if add_hvac
 

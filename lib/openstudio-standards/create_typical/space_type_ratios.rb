@@ -199,7 +199,7 @@ module OpenstudioStandards
           hash['Bulk'] = { ratio: 1.0, space_type_gen: true, default: true }
         when 'warehouse_fine100'
           hash['Fine'] = { ratio: 1.0, space_type_gen: true, default: true }
-        when  'warehouse_bulk80'
+        when 'warehouse_bulk80'
           hash['Bulk'] = { ratio: 0.80, space_type_gen: true, default: true }
           hash['Fine'] = { ratio: 0.151, space_type_gen: true, default: false }
           hash['Office'] = { ratio: 0.0490, space_type_gen: true, default: false, wwr: 0.71, story_height: 14.0 }
