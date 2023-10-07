@@ -107,7 +107,7 @@ class ASHRAE901PRM < Standard
     row.each do |sub_array|
       new_array << sub_array.collect { |e| e ? e.strip : e }
     end
-    # TODO: Future expansion can added to here.
+    # @todo Future expansion can added to here.
     # Convert the 2d array to hash
     return new_array.to_h
   end

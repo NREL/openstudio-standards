@@ -1039,7 +1039,7 @@ def necb_2011_qaqc(qaqc, model)
     end
   end
 
-  #*TODO*
+  # @todo ?
   necb_section_name = "NECB2011-5.2.10.1"
   qaqc[:air_loops].each do |air_loop_info|
     unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0

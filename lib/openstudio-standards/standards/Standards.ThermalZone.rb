@@ -1316,7 +1316,7 @@ class Standard
   # Logic to detect indirectly-conditioned spaces cannot be implemented
   # as part of this measure as it would need to call itself.
   # It is implemented as part of space_conditioning_category().
-  # TODO: Add addendum db rules to 90.1-2019 for 90.1-2022 (use stable baseline value for zones designated as semiheated using proposed sizing run)
+  # @todo Add addendum db rules to 90.1-2019 for 90.1-2022 (use stable baseline value for zones designated as semiheated using proposed sizing run)
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'

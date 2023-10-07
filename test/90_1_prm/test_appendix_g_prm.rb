@@ -184,7 +184,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Disable Under Case HVAC Return Air Fraction for refrigerated cases
       # Since current tests result in ZoneHVAC systems for zones with refrigeration for large hotel
-      # TODO: remove this when we have multiple HVAC building types available
+      # @todo remove this when we have multiple HVAC building types available
       # since PSZ will be the typical baseline system for those zones with that in place
       model.getRefrigerationCases.sort.each do |refg_case|
         if !refg_case.isUnderCaseHVACReturnAirFractionDefaulted
@@ -390,7 +390,7 @@ class AppendixGPRMTests < Minitest::Test
   #
   # @param prototypes_base [Hash] Baseline prototypes
   #
-  # TODO: Add residential and semi-heated spaces lookup
+  # @todo Add residential and semi-heated spaces lookup
   def check_envelope(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
       building_type, template, climate_zone, user_data_dir, mod = prototype
@@ -1598,7 +1598,7 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
 
-    # TODO: Also check zone equipment
+    # @todo Also check zone equipment
     # if mz_or_sz == 'PTU' || mz_or_sz == 'SZ'
     # end
   end
@@ -2009,7 +2009,7 @@ class AppendixGPRMTests < Minitest::Test
         wwr_goal = 100 * @@wwr_values[building_type].to_f
         assert(wwr_baseline > wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be greater than the WWR goal #{wwr_goal}")
       end
-      # TODO adding more tests to check if zones are assigned correctly
+      # @todo adding more tests to check if zones are assigned correctly
       if building_type == 'LargeHotel'
         model_baseline.getThermalZones.each do |thermal_zone|
           thermal_zone_name = thermal_zone.name.get

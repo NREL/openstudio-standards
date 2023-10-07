@@ -50,7 +50,8 @@ class Standard
       when 'Floor'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['slab_on_grade']
       end
-    when 'TODO Surface'
+    when 'Surface'
+      # @todo edit
       case surface_type
       when 'Floor'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['floor_over_unconditioned']

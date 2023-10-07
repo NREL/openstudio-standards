@@ -660,7 +660,7 @@ module Baseline9012013
     chiller_num = chillers.size
 
     # get baseline peak cooling laod
-    base_peak_clg_si = 'TODO' # get from sql
+    base_peak_clg_si = '' # @todo get from sql
     base_peak_clg_ip = 200 # OpenStudio.convert(base_peak_clg_si, 'W', 'tons').get
 
     chiller_cap = []
@@ -674,7 +674,7 @@ module Baseline9012013
       elsif base_peak_clg_ip >= 600
         assert(chiller_num >= 2, "#{prm_maj_sec}: number of chillers")
         chillers.each do |c|
-          #TODO get size
+          # @todo get size
 
         end
       end

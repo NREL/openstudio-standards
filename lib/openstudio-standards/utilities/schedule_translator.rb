@@ -59,7 +59,8 @@ class ScheduleTranslator
   def convert_schedule_compact_to_schedule_ruleset
     @sched_name = @os_schedule.getString(1).get
     @sched_name = "#{@name_prefix} #{@sched_name}" unless @name_prefix.nil?
-    @sched_type = @os_schedule.scheduleTypeLimits.get # TODO: - will fail if no limits set in source schedule
+    # @todo will fail if no limits set in source schedule
+    @sched_type = @os_schedule.scheduleTypeLimits.get
 
     # puts "Translating #{@sched_name}"
 
@@ -169,7 +170,7 @@ class ScheduleTranslator
         os_schedule_rule.setEndDate(osdate_end)
 
         # create os day model
-        # TODO break this out as a method
+        # @todo break this out as a method
         if fr[:daytype].include?('monday') || fr[:daytype].include?('alldays') || fr[:daytype].include?('weekdays')
           os_schedule_rule.setApplyMonday(true)
           coverage[:mon] = true

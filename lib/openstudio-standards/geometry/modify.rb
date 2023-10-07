@@ -36,7 +36,8 @@ module OpenstudioStandards
         end
 
         # set vertices to new vertices
-        surface.setVertices(new_vertices) # TODO: check if this was made, and issue warning if it was not. Could happen if resulting surface not planer.
+        # @todo check if this was made, and issue warning if it was not. Could happen if resulting surface not planer.
+        surface.setVertices(new_vertices)
 
         count += 1 if flag
       end

@@ -1359,7 +1359,7 @@ class NECB2011 < Standard
       daylighted_area_under_skylights_hash = {}
       skylight_effective_aperture_hash = {}
 
-      ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011. #TODO: consider removing overlapped sidelighted area
+      ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011. # @todo consider removing overlapped sidelighted area
       daylight_spaces.sort.each do |daylight_space|
         primary_sidelighted_area = 0.0
         area_weighted_vt_handle = 0.0
@@ -1672,7 +1672,7 @@ class NECB2011 < Standard
   end # END model_add_daylighting_controls(model:, daylighting_type:)
 
   ##### Define ScheduleTypeLimits for Any_Number_ppm
-  ##### TODO: (upon other BTAP tasks) This function can be added to btap/schedules.rb > module StandardScheduleTypeLimits
+  ##### @todo (upon other BTAP tasks) This function can be added to btap/schedules.rb > module StandardScheduleTypeLimits
   def get_any_number_ppm(model)
     name = 'Any_Number_ppm'
     any_number_ppm_schedule_type_limits = model.getScheduleTypeLimitsByName(name)
@@ -1692,7 +1692,7 @@ class NECB2011 < Standard
     return if dcv_type == 'NECB_Defualt'
 
     if dcv_type == 'Occupancy_based_DCV' || dcv_type == 'CO2_based_DCV'
-      # TODO: IMPORTANT: (upon other BTAP tasks) Set a value for the "Outdoor Air Flow per Person" field of the "OS:DesignSpecification:OutdoorAir" object
+      # @todo IMPORTANT: (upon other BTAP tasks) Set a value for the "Outdoor Air Flow per Person" field of the "OS:DesignSpecification:OutdoorAir" object
       # Note: The "Outdoor Air Flow per Person" field is required for occupancy-based DCV.
       # Note: The "Outdoor Air Flow per Person" values should be based on ASHRAE 62.1: Article 6.2.2.1.
       # Note: The "Outdoor Air Flow per Person" should be entered for "ventilation_per_person" in "lib/openstudio-standards/standards/necb/NECB2011/data/space_types.json"
@@ -1829,17 +1829,17 @@ class NECB2011 < Standard
 
     # ##### Since Atrium's LPD for LED lighting depends on atrium's height, the height of the atrium (if applicable) should be found.
     standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
-    if standards_space_type.include? 'Atrium' # TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
+    if standards_space_type.include? 'Atrium' # @todo Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
       puts "#{standards_space_type} - has atrium" # space_type.name.to_s
       # Get the max height for the spacetype.
       max_space_height_for_spacetype = get_max_space_height_for_space_type(space_type: space_type)
-      if max_space_height_for_spacetype < 12.0 # TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining' with the threshold of 5.0 m for space_height.
-        # TODO: Regarding the below equations, identify which version of ASHRAE 90.1 was used in NECB2015.
+      if max_space_height_for_spacetype < 12.0 # @todo Note that since none of the archetypes has Atrium, this was tested for 'Dining' with the threshold of 5.0 m for space_height.
+        # @todo Regarding the below equations, identify which version of ASHRAE 90.1 was used in NECB2015.
         atrium_lpd_eq_smaller_12_intercept = 0
         atrium_lpd_eq_smaller_12_slope = 1.06
         atrium_lpd_eq_larger_12_intercept = 4.3
         atrium_lpd_eq_larger_12_slope = 1.06
-        lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_smaller_12_intercept + atrium_lpd_eq_smaller_12_slope * 12.0) * 0.092903 # W/ft2 TODO: Note that for NECB2011, a constant LPD is used for atrium based on NECB2015's equations. NECB2011's threshold for height is 13.0 m.
+        lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_smaller_12_intercept + atrium_lpd_eq_smaller_12_slope * 12.0) * 0.092903 # W/ft2 @todo Note that for NECB2011, a constant LPD is used for atrium based on NECB2015's equations. NECB2011's threshold for height is 13.0 m.
       elsif max_space_height_for_spacetype >= 12.0 && max_space_height_for_spacetype < 13.0
         lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_larger_12_intercept + atrium_lpd_eq_larger_12_slope * 12.5) * 0.092903 # W/ft2
       else # i.e. space_height >= 13.0
