@@ -1,6 +1,6 @@
 require_relative '../../helpers/minitest_helper'
 
-class TestConstructions < Minitest::Test
+class TestConstructionsMaterials < Minitest::Test
   def setup
     @materials = OpenstudioStandards::Constructions::Materials
   end

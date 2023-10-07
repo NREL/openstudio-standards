@@ -1,6 +1,6 @@
 require_relative '../../helpers/minitest_helper'
 
-class TestCreateTypicalSpaceTypeRatios < Minitest::Test
+class TestCreateTypicalSpaceTypeBlend < Minitest::Test
   def setup
     @create = OpenstudioStandards::CreateTypical
 
