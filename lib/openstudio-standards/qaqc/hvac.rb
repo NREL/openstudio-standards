@@ -27,25 +27,26 @@ module OpenstudioStandards
         return results
       end
 
-      # get the weather file run period (as opposed to design day run period)
-      ann_env_pd = nil
-      @sql.availableEnvPeriods.each do |env_pd|
-        env_type = @sql.environmentType(env_pd)
-        if env_type.is_initialized
-          if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
-            ann_env_pd = env_pd
-            break
+      begin
+        # get the weather file run period (as opposed to design day run period)
+        ann_env_pd = nil
+        @sql = @model.sqlFile.get
+        @sql.availableEnvPeriods.each do |env_pd|
+          env_type = @sql.environmentType(env_pd)
+          if env_type.is_initialized
+            if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
+              ann_env_pd = env_pd
+              break
+            end
           end
         end
-      end
 
-      # only try to get the annual timeseries if an annual simulation was run
-      if ann_env_pd.nil?
-        check_elems << OpenStudio::Attribute.new('flag', 'Cannot find the annual simulation run period, cannot check equipment part load ratios.')
-        return check_elems
-      end
+        # only try to get the annual timeseries if an annual simulation was run
+        if ann_env_pd.nil?
+          check_elems << OpenStudio::Attribute.new('flag', 'Cannot find the annual simulation run period, cannot check equipment part load ratios.')
+          return check_elems
+        end
 
-      begin
         @model.getAirLoopHVACs.sort.each do |air_loop|
           supply_outlet_node_name = air_loop.supplyOutletNode.name.to_s
           design_cooling_sat = air_loop.sizingSystem.centralCoolingDesignSupplyAirTemperature
@@ -117,19 +118,19 @@ module OpenstudioStandards
               # if this zone has a reheat terminal, get the reheat temp for comparison
               reheat_op_f = nil
               reheat_zone = false
-              zone.equipment.each do |equip|
-                obj_type = equip.iddObjectType.valueName.to_s
+              zone.equipment.each do |equipment|
+                obj_type = equipment.iddObjectType.valueName.to_s
                 case obj_type
                 when 'OS_AirTerminal_SingleDuct_ConstantVolume_Reheat'
-                  term = equip.to_AirTerminalSingleDuctConstantVolumeReheat.get
+                  term = equipment.to_AirTerminalSingleDuctConstantVolumeReheat.get
                   reheat_op_f = OpenStudio.convert(term.maximumReheatAirTemperature, 'C', 'F').get
                   reheat_zone = true
                 when 'OS_AirTerminal_SingleDuct_VAV_HeatAndCool_Reheat'
-                  term = equip.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
+                  term = equipment.to_AirTerminalSingleDuctVAVHeatAndCoolReheat.get
                   reheat_op_f = OpenStudio.convert(term.maximumReheatAirTemperature, 'C', 'F').get
                   reheat_zone = true
                 when 'OS_AirTerminal_SingleDuct_VAV_Reheat'
-                  term = equip.to_AirTerminalSingleDuctVAVReheat.get
+                  term = equipment.to_AirTerminalSingleDuctVAVReheat.get
                   reheat_op_f = OpenStudio.convert(term.maximumReheatAirTemperature, 'C', 'F').get
                   reheat_zone = true
                 when 'OS_AirTerminal_SingleDuct_ParallelPIU_Reheat'
@@ -1239,25 +1240,25 @@ module OpenstudioStandards
         return results
       end
 
-      # get the weather file run period (as opposed to design day run period)
-      ann_env_pd = nil
-      @sql.availableEnvPeriods.each do |env_pd|
-        env_type = @sql.environmentType(env_pd)
-        if env_type.is_initialized
-          if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
-            ann_env_pd = env_pd
-            break
+      begin
+        # get the weather file run period (as opposed to design day run period)
+        ann_env_pd = nil
+        @sql.availableEnvPeriods.each do |env_pd|
+          env_type = @sql.environmentType(env_pd)
+          if env_type.is_initialized
+            if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
+              ann_env_pd = env_pd
+              break
+            end
           end
         end
-      end
 
-      # only try to get the annual timeseries if an annual simulation was run
-      if ann_env_pd.nil?
-        check_elems << OpenStudio::Attribute.new('flag', 'Cannot find the annual simulation run period, cannot check equipment part load ratios.')
-        return check_elems
-      end
+        # only try to get the annual timeseries if an annual simulation was run
+        if ann_env_pd.nil?
+          check_elems << OpenStudio::Attribute.new('flag', 'Cannot find the annual simulation run period, cannot check equipment part load ratios.')
+          return check_elems
+        end
 
-      begin
         # Check each plant loop in the model
         @model.getPlantLoops.sort.each do |plant_loop|
           supply_outlet_node_name = plant_loop.supplyOutletNode.name.to_s
@@ -1578,6 +1579,351 @@ module OpenstudioStandards
 
             end
 
+          end
+        end
+      rescue StandardError => e
+        # brief description of ruby error
+        check_elems << OpenStudio::Attribute.new('flag', "Error prevented QAQC check from running (#{e}).")
+
+        # backtrace of ruby error for diagnostic use
+        if @error_backtrace then check_elems << OpenStudio::Attribute.new('flag', e.backtrace.join("\n").to_s) end
+      end
+
+      # add check_elms to new attribute
+      check_elem = OpenStudio::Attribute.new('check', check_elems)
+
+      return check_elem
+    end
+
+    # Bin the hourly part load ratios into 10% bins
+    #
+    # @param hourly_part_load_ratios
+    # @return [Array<Integer>] Array of 11 integers for each bin
+    def self.hourly_part_load_ratio_bins(hourly_part_load_ratios)
+      bins = Array.new(11, 0)
+      hourly_part_load_ratios.each do |plr|
+        if plr <= 0
+          bins[0] += 1
+        elsif plr > 0 && plr <= 0.1
+          bins[1] += 1
+        elsif plr > 0.1 && plr <= 0.2
+          bins[2] += 1
+        elsif plr > 0.2 && plr <= 0.3
+          bins[3] += 1
+        elsif plr > 0.3 && plr <= 0.4
+          bins[4] += 1
+        elsif plr > 0.4 && plr <= 0.5
+          bins[5] += 1
+        elsif plr > 0.5 && plr <= 0.6
+          bins[6] += 1
+        elsif plr > 0.6 && plr <= 0.7
+          bins[7] += 1
+        elsif plr > 0.7 && plr <= 0.8
+          bins[8] += 1
+        elsif plr > 0.8 && plr <= 0.9
+          bins[9] += 1
+        elsif plr > 0.9 # add over-100% PLRs to final bin
+          bins[10] += 1
+        end
+      end
+
+      # Convert bins from hour counts to % of operating hours.
+      bins.each_with_index do |bin, i|
+        bins[i] = bins[i] * 1.0 / hourly_part_load_ratios.size
+      end
+
+      return bins
+    end
+
+    # Checks part loads ratios for a piece of equipment using the part load timeseries
+    #
+    # @param sql [OpenStudio::SqlFile] OpenStudio SqlFile
+    # @param ann_env_pd [String] EnvPeriod, typically 'WeatherRunPeriod'
+    # @param time_step [String] timestep, typically 'Hourly'
+    # @param variable_name [String] part load ratio variable name
+    # @param equipment [OpenStudio::Model::ModelObject] OpenStudio ModelObject, usually an HVACComponent
+    # @param design_power [Double] equipment design power, typically in watts
+    # @param units [String] design_power units, typically 'W', default ''
+    # @param expect_low_plr [Boolean] toggle for whether to expect very low part load ratios and not report a message if found
+    # @return [String] string with error message, or nil if none
+    def self.hvac_equipment_part_load_ratio_message(sql, ann_env_pd, time_step, variable_name, equipment, design_power, units: '', expect_low_plr: false)
+      msg = nil
+      key_value = equipment.name.get.to_s.upcase # must be in all caps
+      ts = sql.timeSeries(ann_env_pd, time_step, variable_name, key_value)
+      if ts.empty?
+        msg = "Warning: #{variable_name} Timeseries not found for #{key_value}."
+        return msg
+      end
+
+      if design_power.zero?
+        return msg
+      end
+
+      # Convert to array
+      ts = ts.get.values
+      plrs = []
+      for i in 0..(ts.size - 1)
+        plrs << ts[i] / design_power.to_f
+      end
+
+      # Bin part load ratios
+      bins = OpenstudioStandards::HVAC.hourly_part_load_ratio_bins(plrs)
+      frac_hrs_above_90 = bins[10]
+      frac_hrs_above_80 = frac_hrs_above_90 + bins[9]
+      frac_hrs_above_70 = frac_hrs_above_80 + bins[8]
+      frac_hrs_above_60 = frac_hrs_above_70 + bins[7]
+      frac_hrs_above_50 = frac_hrs_above_60 + bins[6]
+      frac_hrs_zero = bins[0]
+
+      pretty_bins = bins.map { |x| (x * 100).round(2) }
+
+      # Check top-end part load ratio bins
+      if expect_low_plr
+        msg = "Warning: For #{equipment.name} with design size #{design_power.round(2)} #{units} is expected to have a low part load ratio. Bins of PLR [0%,0%-10%,...]: #{pretty_bins}."
+      elsif frac_hrs_zero == 1.0
+        msg = "Warning: For #{equipment.name}, all hrs are zero; equipment never runs."
+      elsif frac_hrs_above_50 < 0.01
+        msg = "Major Error: For #{equipment.name} with design size #{design_power.round(2)} #{units}, #{(frac_hrs_above_50 * 100).round(2)}% of hrs are above 50% part load.  This indicates significantly oversized equipment.  Bins of PLR [0%,0%-10%,...]: #{pretty_bins}."
+      elsif frac_hrs_above_60 < 0.01
+        msg = "Minor Error: For #{equipment.name} with design size #{design_power.round(2)} #{units}, #{(frac_hrs_above_60 * 100).round(2)}% of hrs are above 60% part load.  This indicates significantly oversized equipment. Bins of PLR [0%,0%-10%,...]: #{pretty_bins}."
+      elsif frac_hrs_above_80 < 0.01
+        msg = "Warning: For #{equipment.name} with design size #{design_power.round(2)} #{units}, #{(frac_hrs_above_80 * 100).round(2)}% of hrs are above 80% part load.  This indicates oversized equipment. Bins of PLR [0%,0%-10%,...]: #{pretty_bins}."
+      elsif frac_hrs_above_90 > 0.05
+        msg = "Warning: For #{equipment.name} with design size #{design_power.round(2)} #{units}, #{(frac_hrs_above_90 * 100).round(2)}% of hrs are above 90% part load.  This indicates undersized equipment. Bins of PLR [0%,0%-10%,...]: #{pretty_bins}."
+      elsif frac_hrs_above_90 > 0.1
+        msg = "Minor Error: For #{equipment.name} with design size #{design_power.round(2)} #{units}, #{(frac_hrs_above_90 * 100).round(2)}% of hrs are above 90% part load.  This indicates significantly undersized equipment. Bins of PLR [0%,0%-10%,...]: #{pretty_bins}."
+      elsif frac_hrs_above_90 > 0.2
+        msg = "Major Error: For #{equipment.name} with design size #{design_power.round(2)} #{units}, #{(frac_hrs_above_90 * 100).round(2)}% of hrs are above 90% part load.  This indicates significantly undersized equipment. Bins of PLR [0%,0%-10%,...]: #{pretty_bins}."
+      end
+      return msg
+    end
+
+    # Check primary heating and cooling equipment part load ratios to find equipment that is significantly oversized or undersized.
+    #
+    # @param category [String] category to bin this check into
+    # @param name_only [Boolean] If true, only return the name of this check
+    # @return [OpenStudio::Attribute] OpenStudio Attribute object containing check results
+    def self.check_hvac_equipment_part_load_ratios(category, name_only: false)
+      # summary of the check
+      check_elems = OpenStudio::AttributeVector.new
+      check_elems << OpenStudio::Attribute.new('name', 'Part Load')
+      check_elems << OpenStudio::Attribute.new('category', category)
+      check_elems << OpenStudio::Attribute.new('description', 'Check that equipment operates at reasonable part load ranges.')
+
+      # stop here if only name is requested this is used to populate display name for arguments
+      if name_only == true
+        results = []
+        check_elems.each do |elem|
+          results << elem.valueAsString
+        end
+        return results
+      end
+
+      begin
+        # Establish limits for % of operating hrs expected above 90% part load
+        expected_pct_hrs_above_90 = 0.1
+
+        # get the weather file run period (as opposed to design day run period)
+        ann_env_pd = nil
+        @sql.availableEnvPeriods.each do |env_pd|
+          env_type = @sql.environmentType(env_pd)
+          if env_type.is_initialized
+            if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
+              ann_env_pd = env_pd
+              break
+            end
+          end
+        end
+
+        # only try to get the annual timeseries if an annual simulation was run
+        if ann_env_pd.nil?
+          check_elems << OpenStudio::Attribute.new('flag', 'Cannot find the annual simulation run period, cannot check equipment part load ratios.')
+          return check_elem
+        end
+
+        # Boilers
+        @model.getBoilerHotWaters.sort.each do |boiler|
+          msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Boiler Part Load Ratio', boiler, 1.0)
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # Chillers
+        @model.getChillerElectricEIRs.sort.each do |chiller|
+          msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Chiller Part Load Ratio', chiller, 1.0)
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # Cooling Towers (Single Speed)
+        @model.getCoolingTowerSingleSpeeds.sort.each do |cooling_tower|
+          # Get the design fan power
+          if cooling_tower.fanPoweratDesignAirFlowRate.is_initialized
+            design_power = cooling_tower.fanPoweratDesignAirFlowRate.get
+          elsif cooling_tower.autosizedFanPoweratDesignAirFlowRate.is_initialized
+            design_power = cooling_tower.autosizedFanPoweratDesignAirFlowRate.get
+          else
+            check_elems << OpenStudio::Attribute.new('flag', "Could not determine peak power for #{cooling_tower.name}, cannot check part load ratios.")
+            next
+          end
+
+          msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Cooling Tower Fan Electric Power', cooling_tower, design_power, units: 'W')
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # Cooling Towers (Two Speed)
+        @model.getCoolingTowerTwoSpeeds.sort.each do |cooling_tower|
+          # Get the design fan power
+          if cooling_tower.highFanSpeedFanPower.is_initialized
+            design_power = cooling_tower.highFanSpeedFanPower.get
+          elsif cooling_tower.autosizedHighFanSpeedFanPower.is_initialized
+            design_power = cooling_tower.autosizedHighFanSpeedFanPower.get
+          else
+            check_elems << OpenStudio::Attribute.new('flag', "Could not determine peak power for #{cooling_tower.name}, cannot check part load ratios.")
+            next
+          end
+
+          msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Cooling Tower Fan Electric Power', cooling_tower, design_power, units: 'W')
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # Cooling Towers (Variable Speed)
+        @model.getCoolingTowerVariableSpeeds.sort.each do |cooling_tower|
+          # Get the design fan power
+          if cooling_tower.designFanPower.is_initialized
+            design_power = cooling_tower.designFanPower.get
+          elsif cooling_tower.autosizedDesignFanPower.is_initialized
+            design_power = cooling_tower.autosizedDesignFanPower.get
+          else
+            check_elems << OpenStudio::Attribute.new('flag', "Could not determine peak power for #{cooling_tower.name}, cannot check part load ratios.")
+            next
+          end
+
+          msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Cooling Tower Fan Electric Power', cooling_tower, design_power, units: 'W')
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # DX Cooling Coils (Single Speed)
+        @model.getCoilCoolingDXSingleSpeeds.sort.each do |dx_coil|
+          # Get the design coil capacity
+          if dx_coil.ratedTotalCoolingCapacity.is_initialized
+            design_power = dx_coil.ratedTotalCoolingCapacity.get
+          elsif dx_coil.autosizedRatedTotalCoolingCapacity.is_initialized
+            design_power = dx_coil.autosizedRatedTotalCoolingCapacity.get
+          else
+            check_elems << OpenStudio::Attribute.new('flag', "Could not determine capacity for #{dx_coil.name}, cannot check part load ratios.")
+            next
+          end
+
+          msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Cooling Coil Total Cooling Rate', dx_coil, design_power, units: 'W')
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # DX Cooling Coils (Two Speed)
+        @model.getCoilCoolingDXTwoSpeeds.sort.each do |dx_coil|
+          # Get the design coil capacity
+          if dx_coil.ratedHighSpeedTotalCoolingCapacity.is_initialized
+            design_power = dx_coil.ratedHighSpeedTotalCoolingCapacity.get
+          elsif dx_coil.autosizedRatedHighSpeedTotalCoolingCapacity.is_initialized
+            design_power = dx_coil.autosizedRatedHighSpeedTotalCoolingCapacity.get
+          else
+            check_elems << OpenStudio::Attribute.new('flag', "Could not determine capacity for #{dx_coil.name}, cannot check part load ratios.")
+            next
+          end
+
+          msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Cooling Coil Total Cooling Rate', dx_coil, design_power, units: 'W')
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # DX Cooling Coils (Variable Speed)
+        @model.getCoilCoolingDXVariableSpeeds.sort.each do |dx_coil|
+          # Get the design coil capacity
+          if dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
+            design_power = dx_coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.get
+          elsif dx_coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
+            design_power = dx_coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.get
+          else
+            check_elems << OpenStudio::Attribute.new('flag', "Could not determine capacity for #{dx_coil.name}, cannot check part load ratios.")
+            next
+          end
+
+          msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Cooling Coil Total Cooling Rate', dx_coil, design_power, units: 'W')
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # Gas Heating Coils
+        @model.getCoilHeatingGass.sort.each do |gas_coil|
+          # Get the design coil capacity
+          if gas_coil.nominalCapacity.is_initialized
+            design_power = gas_coil.nominalCapacity.get
+          elsif gas_coil.autosizedNominalCapacity.is_initialized
+            design_power = gas_coil.autosizedNominalCapacity.get
+          else
+            check_elems << OpenStudio::Attribute.new('flag', "Could not determine capacity for #{gas_coil.name}, cannot check part load ratios.")
+            next
+          end
+
+          if (gas_coil.name.to_s.include? 'Backup') || (gas_coil.name.to_s.include? 'Supplemental')
+            msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Heating Coil Heating Rate', gas_coil, design_power, units: 'W', expect_low_plr: true)
+          else
+            msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Heating Coil Heating Rate', gas_coil, design_power, units: 'W')
+          end
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # Electric Heating Coils
+        @model.getCoilHeatingElectrics.sort.each do |electric_coil|
+          # Get the design coil capacity
+          if electric_coil.nominalCapacity.is_initialized
+            design_power = electric_coil.nominalCapacity.get
+          elsif electric_coil.autosizedNominalCapacity.is_initialized
+            design_power = electric_coil.autosizedNominalCapacity.get
+          else
+            check_elems << OpenStudio::Attribute.new('flag', "Could not determine capacity for #{electric_coil.name}, cannot check part load ratios.")
+            next
+          end
+
+          if (electric_coil.name.to_s.include? 'Backup') || (electric_coil.name.to_s.include? 'Supplemental')
+            msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Heating Coil Heating Rate', electric_coil, design_power, units: 'W', expect_low_plr: true)
+          else
+            msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Heating Coil Heating Rate', electric_coil, design_power, units: 'W')
+          end
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
+          end
+        end
+
+        # DX Heating Coils (Single Speed)
+        @model.getCoilHeatingDXSingleSpeeds.sort.each do |dx_coil|
+          # Get the design coil capacity
+          if dx_coil.ratedTotalHeatingCapacity.is_initialized
+            design_power = dx_coil.ratedTotalHeatingCapacity.get
+          elsif dx_coil.autosizedRatedTotalHeatingCapacity.is_initialized
+            design_power = dx_coil.autosizedRatedTotalHeatingCapacity.get
+          else
+            check_elems << OpenStudio::Attribute.new('flag', "Could not determine capacity for #{dx_coil.name}, cannot check part load ratios.")
+            next
+          end
+
+          msg = OpenstudioStandards::HVAC.hvac_equipment_part_load_ratio_message(@sql, ann_env_pd, 'Hourly', 'Heating Coil Heating Rate', dx_coil, design_power, units: 'W')
+          unless msg.nil?
+            check_elems << OpenStudio::Attribute.new('flag', msg)
           end
         end
       rescue StandardError => e
