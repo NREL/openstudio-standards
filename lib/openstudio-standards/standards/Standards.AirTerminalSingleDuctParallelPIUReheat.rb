@@ -72,7 +72,7 @@ class Standard
   # means that the secondary fan will be on when the primary air
   # flow is at the minimum flow fraction.
   #
-  # @return [Float] returns nil or a float representing the fraction
+  # @return [Double] returns nil or a float representing the fraction
   def air_terminal_single_duct_parallel_piu_reheat_fan_on_flow_fraction
     return nil
   end

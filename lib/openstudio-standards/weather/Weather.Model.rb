@@ -915,7 +915,7 @@ module BTAP
           end
         end
         return heating_design_day_number, cooling_design_day_number
-      end # def get_heating_design_day_number
+      end
 
       # This method calculates dehumidification degree days (DDD)
       # @author sara.gilani@canada.ca
@@ -991,11 +991,10 @@ module BTAP
 
             ddd += line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE].to_f
 
-          end # unless line.first =~ /\D(.*)/
-        end # @filearray.each do |line|
-        # puts @filearray
+          end
+        end
         return ddd
-      end # def calculate_humidity_ratio
-    end # Environment
+      end
+    end
   end
 end

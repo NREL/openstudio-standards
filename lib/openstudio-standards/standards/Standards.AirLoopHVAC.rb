@@ -3742,7 +3742,7 @@ class Standard
   # Get return fan power for airloop
   #
   # @param air_loop [OpenStudio::Model::AirLoopHVAC] AirLoopHVAC object
-  # @return [Float] Fan power
+  # @return [Double] Fan power
   def air_loop_hvac_get_return_fan_power(air_loop)
     return_fan_power = 0
 
@@ -3769,7 +3769,7 @@ class Standard
   # Get supply fan power for airloop
   #
   # @param air_loop [OpenStudio::Model::AirLoopHVAC] AirLoopHVAC object
-  # @return [Float] Fan power
+  # @return [Double] Fan power
   def air_loop_hvac_get_supply_fan_power(air_loop)
     supply_fan_power = 0
 
@@ -3827,7 +3827,7 @@ class Standard
   # Get relief fan power for airloop
   #
   # @param air_loop [OpenStudio::Model::AirLoopHVAC] AirLoopHVAC object
-  # @return [Float] Fan power
+  # @return [Double] Fan power
   def air_loop_hvac_get_relief_fan_power(air_loop)
     relief_fan_power = 0
 

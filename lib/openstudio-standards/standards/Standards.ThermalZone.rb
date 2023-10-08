@@ -603,8 +603,8 @@ class Standard
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
-    # Coal, Diesel, Gasoline, DistrictHeating,
-    # and SolarEnergy.
+    # Coal, Diesel, Gasoline, SolarEnergy,
+    # DistrictHeating, DistrictHeatingWater, and DistrictHeatingSteam.
 
     # error if HVACComponent heating fuels method is not available
     if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
@@ -624,7 +624,9 @@ class Standard
         htg_fuels.include?('Coal') ||
         htg_fuels.include?('Diesel') ||
         htg_fuels.include?('Gasoline') ||
-        htg_fuels.include?('DistrictHeating')
+        htg_fuels.include?('DistrictHeating') ||
+        htg_fuels.include?('DistrictHeatingWater') ||
+        htg_fuels.include?('DistrictHeatingSteam')
 
       is_fossil = true
     end
@@ -674,7 +676,9 @@ class Standard
         htg_fuels.include?('Coal') ||
         htg_fuels.include?('Diesel') ||
         htg_fuels.include?('Gasoline') ||
-        htg_fuels.include?('DistrictHeating')
+        htg_fuels.include?('DistrictHeating') ||
+        htg_fuels.include?('DistrictHeatingWater') ||
+        htg_fuels.include?('DistrictHeatingSteam')
       fossil = true
     end
 
@@ -736,8 +740,8 @@ class Standard
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
-    # Coal, Diesel, Gasoline, DistrictHeating,
-    # and SolarEnergy.
+    # Coal, Diesel, Gasoline, SolarEnergy,
+    # DistrictHeating, DistrictHeatingWater, and DistrictHeatingSteam.
     htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
 
     # Includes fossil
@@ -758,7 +762,8 @@ class Standard
     end
 
     # Electric and fossil and district
-    if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating') && fossil
+    has_district_heating = (htg_fuels.include?('DistrictHeating') || htg_fuels.include?('DistrictHeatingWater') || htg_fuels.include?('DistrictHeatingSteam'))
+    if htg_fuels.include?('Electricity') && has_district_heating && fossil
       is_mixed = true
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity, fossil, and district.")
     end
@@ -770,13 +775,13 @@ class Standard
     end
 
     # Electric and district
-    if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating')
+    if htg_fuels.include?('Electricity') && has_district_heating
       is_mixed = true
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity and district.")
     end
 
     # Fossil and district
-    if fossil && htg_fuels.include?('DistrictHeating')
+    if fossil && has_district_heating
       is_mixed = true
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed fossil and district.")
     end

@@ -13,6 +13,9 @@ class ASHRAE901PRM < Standard
   #   [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   #   and the values are the constructions.  If supplied, constructions will be pulled
   #   from this hash if already created to avoid creating duplicate constructions.
+  # @param wwr_building_type [String | Nil] building type that identifies the prescribed window to wall ratio
+  # @param wwr_info [Hash] A map that maps the building area type to window to wall ratio
+  # @param surface_category [String] surface category e.g., 'ExteriorSubSurface'
   # @return [Hash] returns a hash where the key is an array of inputs
   #   [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   #   and the value is the newly created construction.
@@ -54,8 +57,11 @@ class ASHRAE901PRM < Standard
         cons_set = space.model.building.get.defaultConstructionSet.get
         construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
-
-      return previous_construction_map if construction.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log',
+                         "Surface #{planar_surface.name.get} does not have a construction. Failed to find defaultConstructionSet for #{planar_surface.name.get}. Add a construction for the surface or add a defaultConstructionSet to Space #{space.name.get} or SpaceType #{space_type.name.get}.")
+      prm_raise(construction,
+                @sizing_run_dir,
+                "Failed to find defaultConstructionSet for #{planar_surface.name.get}. Check inputs.")
     end
 
     # Determine if residential or nonresidential
