@@ -970,13 +970,12 @@ module OpenstudioStandards
           model.getBuilding.setName("#{building_type} #{template} #{os_climate_zone}")
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Renaming building to #{model.getBuilding.name}")
         end
-
       end
 
       # reporting final condition of model
-      finishing_spaceTypes = model.getSpaceTypes.sort
-      finishing_constructionSets = model.getDefaultConstructionSets.sort
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "The building finished with #{finishing_spaceTypes.size} space types and #{finishing_constructionSets.size} construction sets.")
+      finishing_space_types = model.getSpaceTypes.sort
+      finishing_construction_sets = model.getDefaultConstructionSets.sort
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "The building finished with #{finishing_space_types.size} space types and #{finishing_construction_sets.size} construction sets.")
 
       return true
     end

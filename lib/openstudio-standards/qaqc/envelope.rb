@@ -22,7 +22,7 @@ module OpenstudioStandards
         check_elems << OpenStudio::Attribute.new('description', "Check envelope against Table R402.1.2 and R402.1.4 in #{dislay_standard} Residential Provisions.")
       elsif target_standard.include?('90.1-2013')
         display_standard = "ASHRAE #{target_standard}"
-        check_elems << OpenStudio::Attribute.new('description', "Check envelope against #{display_standard} Table 5.5.2, Table G2.1.5 b,c,d,e, Section 5.5.3.1.1a. Roof reflectance of 55%, wall relfectance of 30%.")
+        check_elems << OpenStudio::Attribute.new('description', "Check envelope against #{display_standard} Table 5.5.2, Table G2.1.5 b,c,d,e, Section 5.5.3.1.1a. Roof reflectance of 55%, wall reflectance of 30%.")
       else
         # @todo could add more elsifs if want to dsiplay tables and sections for additional 90.1 standards
         if target_standard.include?('90.1')
