@@ -55,6 +55,20 @@ class TestQAQC < Minitest::Test
     assert(@sql.connectionOpen)
     @model.setSqlFile(@sql)
 
+    # check that the annual run completed and is accessible
+    ann_env_pd = nil
+    @sql = @model.sqlFile.get
+    @sql.availableEnvPeriods.each do |env_pd|
+      env_type = @sql.environmentType(env_pd)
+      if env_type.is_initialized
+        if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
+          ann_env_pd = env_pd
+          break
+        end
+      end
+    end
+    assert(ann_env_pd)
+
     # collect attributes
     check_elems = OpenStudio::AttributeVector.new
 
