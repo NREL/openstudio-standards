@@ -42,6 +42,8 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/qaqc/service_water_heating'
   require_relative 'openstudio-standards/qaqc/weather_files'
   require_relative 'openstudio-standards/qaqc/zone_conditions'
+  require_relative 'openstudio-standards/qaqc/make_results'
+  require_relative 'openstudio-standards/qaqc/reporting'
 
   # Weather data
   require_relative 'openstudio-standards/weather/Weather.Model'
