@@ -1,5 +1,4 @@
-# Methods to get information about model geometry
-# Many of these methods may be moved to core OpenStudio
+# Methods to add daylighting to a space
 module OpenstudioStandards
   module Daylighting
     # @!group Space

@@ -9,10 +9,10 @@ module OpenstudioStandards
     # require 'erb'
     #
     # @param html_in_path [String] HTML input path
-    # @param sections [Array] sections from make_sections_from_check_attributes
+    # @param sections [Array] sections from create_sections_from_check_attributes
     # @param name [String] the name that a user will see
     # @return [String] HTML output path
-    def self.make_qaqc_html(html_in_path, sections, name)
+    def self.create_qaqc_html(html_in_path, sections, name)
       # read in template
       if File.exist?(html_in_path)
         html_in_path = html_in_path
@@ -50,7 +50,7 @@ module OpenstudioStandards
     #
     # @param check_elems [OpenStudio::AttributeVector.new] vector of check elements
     # @return [Array] Array of HTML sections
-    def self.make_sections_from_check_attributes(check_elems)
+    def self.create_sections_from_check_attributes(check_elems)
       # developer notes
       # method below is custom version of standard OpenStudio results methods. It passes an array of sections vs. a single section.
       # It doesn't use the model or SQL file. It just gets data form OpenStudio attributes passed in

@@ -34,4 +34,26 @@ class TestGeometryCreateBar < Minitest::Test
     result = @geo.create_bar_from_building_type_ratios(model, args)
     assert(result)
   end
+
+  def test_create_bar_from_building_type_ratios_division_methods
+    model = OpenStudio::Model::Model.new
+
+    args = {
+      :bldg_type_a => 'LargeOffice',
+      :bldg_type_b => 'Warehouse',
+      :bldg_type_a_fract_bldg_area => 0.7,
+      :bldg_type_b_fract_bldg_area => 0.3,
+    }
+    args[:bar_division_method] = 'Multiple Space Types - Simple Sliced'
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+    assert(result)
+
+    args[:bar_division_method] = 'Multiple Space Types - Individual Stories Sliced'
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+    assert(result)
+
+    args[:bar_division_method] = 'Single Space Type - Core and Perimeter'
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+    assert(result)
+  end
 end

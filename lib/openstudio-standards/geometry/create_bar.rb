@@ -111,7 +111,7 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @return [Hash] An Hash with key OpenStudio BuildingStory objects and their minimum z value
-    def model_sort_building_stories_and_get_min_multiplier(model)
+    def self.model_sort_building_stories_and_get_min_multiplier(model)
       sorted_building_stories = {}
       # loop through stories
       model.getBuildingStorys.sort.each do |story|
