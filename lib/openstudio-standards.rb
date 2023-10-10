@@ -18,6 +18,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/constructions/modify'
   require_relative 'openstudio-standards/constructions/materials/modify'
 
+  # Daylighting Module
+  require_relative 'openstudio-standards/daylighting/space'
+
   # Schedules Module
   require_relative 'openstudio-standards/schedules/create'
   require_relative 'openstudio-standards/schedules/modify'

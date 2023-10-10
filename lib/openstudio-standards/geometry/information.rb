@@ -78,7 +78,7 @@ module OpenstudioStandards
     # Get the total floor area of selected spaces
     #
     # @param spaces [Array<OpenStudio::Model::Space>] array of Space objects
-    # @param multiplier [Boolean] account for space multiplier, defaults to true
+    # @param multiplier [Boolean] account for space multiplier
     # @return [Double] total floor area of spaces in square meters
     def self.spaces_get_floor_area(spaces, multiplier: true)
       total_area = 0.0
@@ -92,7 +92,7 @@ module OpenstudioStandards
     # Get the total exterior area of selected spaces
     #
     # @param spaces [Array<OpenStudio::Model::Space>] array of Space objects
-    # @param multiplier [Boolean] account for space multiplier, defaults to true
+    # @param multiplier [Boolean] account for space multiplier
     # @return [Double] total exterior area of spaces in square meters
     def self.spaces_get_exterior_area(spaces, multiplier: true)
       total_area = 0.0
@@ -106,7 +106,7 @@ module OpenstudioStandards
     # Get the total exterior wall area of selected spaces
     #
     # @param spaces [Array<OpenStudio::Model::Space>] array of Space objects
-    # @param multiplier [Boolean] account for space multiplier, defaults to true
+    # @param multiplier [Boolean] account for space multiplier
     # @return [Double] total exterior wall area of spaces in square meters
     def self.spaces_get_exterior_wall_area(spaces, multiplier: true)
       total_area = 0.0
@@ -126,7 +126,6 @@ module OpenstudioStandards
     # @param story [OpenStudio::Model::BuildingStory]
     # @param multiplier_adjustment [Double] Adjust the calculated perimeter to account for zone multipliers. The value represents the story_multiplier which reduces the adjustment by that factor over the full zone multiplier.
     # @param exterior_boundary_conditions [Array<String>] Array of strings of exterior boundary conditions.
-    #   Defaults to ['Outdoors', 'Ground'].
     # @param bounding_box [OpenStudio::BoundingBox] bounding box to determine which spaces are included
     # @todo this doesn't catch walls that are split that sit above floor surfaces that are not (e.g. main corridoor in secondary school model)
     # @todo also odd with multi-height spaces

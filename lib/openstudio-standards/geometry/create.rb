@@ -310,8 +310,7 @@ module OpenstudioStandards
     # @param space_types [Array<Hash>] Array of hashes with the space type and floor area
     # @param length [Double] length of building in meters
     # @param width [Double] width of building in meters
-    # @param footprint_origin_point [OpenStudio::Point3d] Optional OpenStudio Point3d object for the new origin.
-    #  Defaults to 0,0,0.
+    # @param footprint_origin_point [OpenStudio::Point3d] Optional OpenStudio Point3d object for the new origin
     # @param perimeter_zone_depth [Double] Optional perimeter zone depth in meters
     # @return [Hash] Hash of point vectors that define the space geometry for each direction
     def self.create_sliced_bar_simple_polygons(space_types, length, width,
@@ -702,7 +701,7 @@ module OpenstudioStandards
           }
 
           # make space
-          space = OpenstudioStandards::Geometry.make_space_from_polygon(model, space_data[:polygon].first, space_data[:polygon], options)
+          space = OpenstudioStandards::Geometry.create_space_from_polygon(model, space_data[:polygon].first, space_data[:polygon], options)
           new_spaces << space
 
           # set z origin to proper position
@@ -748,7 +747,7 @@ module OpenstudioStandards
     # @option options [Integer] :thermal_zone_multiplier the thermal zone multiplier, defaults to 1.
     # @option options [Double] :floor_to_floor_height floor to floor height in meters, defaults to 10 ft.
     # @return [OpenStudio::Model::Space] OpenStudio Space object
-    def self.make_space_from_polygon(model, space_origin, point_3d_vector, options = {})
+    def self.create_space_from_polygon(model, space_origin, point_3d_vector, options = {})
       # set defaults to use if user inputs not passed in
       defaults = {
         'name' => nil,
