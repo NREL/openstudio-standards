@@ -925,6 +925,7 @@ class ECMS
     when 'ptac_electric_off'
       zone_eqpt = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model, always_on, zone_fan, zone_htg_eqpt, zone_clg_eqpt)
       zone_eqpt.setName('ZoneHVACPackagedTerminalAirConditioner')
+      zone_eqpt.setSupplyAirFanOperatingModeSchedule(always_off)
       if zone_vent_off
         zone_eqpt.setOutdoorAirFlowRateDuringCoolingOperation(1.0e-6)
         zone_eqpt.setOutdoorAirFlowRateDuringHeatingOperation(1.0e-6)
@@ -1178,7 +1179,7 @@ class ECMS
     sys_info['sys_htg_eqpt_type'] = 'coil_electric'
     sys_info['sys_supp_htg_eqpt_type'] = 'none'
     sys_info['sys_clg_eqpt_type'] = 'coil_dx'
-    if zones.size == 1
+    if (zones.size == 1) || (sys_info['sys_abbr'] == 'sys_4')
       sys_info['sys_setpoint_mgr_type'] = 'single_zone_reheat'
       sys_info['sys_setpoint_mgr_type'] = 'scheduled' if system_doas_flags[sys_name.to_s]
       sys_info['sys_supp_fan_type'] = 'constant_volume'
@@ -1247,7 +1248,7 @@ class ECMS
         sys_ret_fan_type: sys_info['sys_ret_fan_type'],
         sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type']
       )
-      # Appy performance curves
+      # Apply performance curves
       eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
       coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
       coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
@@ -1255,7 +1256,7 @@ class ECMS
       if sys_info['sys_vent_type'] == 'doas'
         zone_htg_eqpt_type = 'ptac_electric_off'
         zone_clg_eqpt_type = 'ptac_electric_off'
-        zone_fan_type = 'constant_volume'
+        zone_fan_type = 'on_off'
       else
         zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
         zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
