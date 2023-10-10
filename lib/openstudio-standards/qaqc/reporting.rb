@@ -9,12 +9,10 @@ module OpenstudioStandards
     # require 'erb'
     #
     # @param html_in_path [String] HTML input path
-    # @param web_asset_path [String] 
     # @param sections [Array] sections from make_sections_from_check_attributes
     # @param name [String] the name that a user will see
     # @return [String] HTML output path
-    def self.make_qaqc_html(html_in_path, web_asset_path, sections, name)
- 
+    def self.make_qaqc_html(html_in_path, sections, name)
       # read in template
       if File.exist?(html_in_path)
         html_in_path = html_in_path
@@ -29,7 +27,7 @@ module OpenstudioStandards
       # configure template with variable values
       # instance variables for erb
       @sections = sections
-      @name = name     
+      @name = name
       renderer = ERB.new(html_in)
       html_out = renderer.result(binding)
 
