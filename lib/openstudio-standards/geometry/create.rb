@@ -76,9 +76,9 @@ module OpenstudioStandards
     # @param footprint_origin_point [OpenStudio::Point3d] Optional OpenStudio Point3d object for the new origin
     # @param perimeter_zone_depth [Double] Optional perimeter zone depth in meters
     # @return [Hash] Hash of point vectors that define the space geometry for each direction
-    def self.make_core_and_perimeter_polygons(length, width,
-                                              footprint_origin_point = OpenStudio::Point3d.new(0.0, 0.0, 0.0),
-                                              perimeter_zone_depth = OpenStudio.convert(15.0, 'ft', 'm').get)
+    def self.create_core_and_perimeter_polygons(length, width,
+                                                footprint_origin_point = OpenStudio::Point3d.new(0.0, 0.0, 0.0),
+                                                perimeter_zone_depth = OpenStudio.convert(15.0, 'ft', 'm').get)
       # key is name, value is a hash, one item of which is polygon. Another could be space type.
       hash_of_point_vectors = {}
 
@@ -172,7 +172,7 @@ module OpenstudioStandards
     # @param footprint_origin_point [OpenStudio::Point3d] OpenStudio Point3d object for the new origin
     # @param story_hash [Hash] A hash of building story information including space origin z value and space height
     # @return [Hash] Hash of point vectors that define the space geometry for each direction
-    def self.make_sliced_bar_multi_polygons(space_types, length, width, footprint_origin_point, story_hash)
+    def self.create_sliced_bar_multi_polygons(space_types, length, width, footprint_origin_point, story_hash)
       # total building floor area to calculate ratios from space type floor areas
       total_floor_area = 0.0
       target_per_space_type = {}
@@ -299,7 +299,7 @@ module OpenstudioStandards
         end
 
         # creating footprint for story
-        footprints << OpenstudioStandards::Geometry.make_sliced_bar_simple_polygons(space_types_local_count, length, width, footprint_origin_point)
+        footprints << OpenstudioStandards::Geometry.create_sliced_bar_simple_polygons(space_types_local_count, length, width, footprint_origin_point)
       end
       return footprints
     end
@@ -314,9 +314,9 @@ module OpenstudioStandards
     #  Defaults to 0,0,0.
     # @param perimeter_zone_depth [Double] Optional perimeter zone depth in meters
     # @return [Hash] Hash of point vectors that define the space geometry for each direction
-    def self.make_sliced_bar_simple_polygons(space_types, length, width,
-                                             footprint_origin_point = OpenStudio::Point3d.new(0.0, 0.0, 0.0),
-                                             perimeter_zone_depth = OpenStudio.convert(15.0, 'ft', 'm').get)
+    def self.create_sliced_bar_simple_polygons(space_types, length, width,
+                                               footprint_origin_point = OpenStudio::Point3d.new(0.0, 0.0, 0.0),
+                                               perimeter_zone_depth = OpenStudio.convert(15.0, 'ft', 'm').get)
       hash_of_point_vectors = {} # key is name, value is a hash, one item of which is polygon. Another could be space type
 
       reverse_slice = false
@@ -606,7 +606,7 @@ module OpenstudioStandards
       return hash_of_point_vectors
     end
 
-    # take diagram made by make_core_and_perimeter_polygons and make multi-story building
+    # take diagram made by create_core_and_perimeter_polygons and make multi-story building
     # @todo add option to create shading surfaces when using multiplier. Mainly important for non rectangular buildings where self shading would be an issue.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -617,9 +617,9 @@ module OpenstudioStandards
     # @param story_hash [Hash] A hash of building story information including space origin z value and space height
     #  If blank, this method will default to using information in the story_hash.
     # @return [Array<OpenStudio::Model::Space>] Array of OpenStudio Space objects
-    def self.make_spaces_from_polygons(model, footprints, typical_story_height, effective_num_stories,
-                                       footprint_origin_point = OpenStudio::Point3d.new(0.0, 0.0, 0.0),
-                                       story_hash = {})
+    def self.create_spaces_from_polygons(model, footprints, typical_story_height, effective_num_stories,
+                                         footprint_origin_point = OpenStudio::Point3d.new(0.0, 0.0, 0.0),
+                                         story_hash = {})
       # default story hash is for three stories with mid-story multiplier, but user can pass in custom versions
       if story_hash.empty?
         if effective_num_stories > 2

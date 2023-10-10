@@ -554,7 +554,7 @@ module OpenstudioStandards
             length = bar_hash[:length]
             width = bar_hash[:width]
           end
-          footprints << OpenstudioStandards::Geometry.make_sliced_bar_simple_polygons(bar_hash[:space_types], length, width, bar_hash[:center_of_footprint])
+          footprints << OpenstudioStandards::Geometry.create_sliced_bar_simple_polygons(bar_hash[:space_types], length, width, bar_hash[:center_of_footprint])
         end
 
       elsif bar_hash[:bar_division_method] == 'Multiple Space Types - Individual Stories Sliced'
@@ -567,7 +567,7 @@ module OpenstudioStandards
           end
         end
 
-        footprints = OpenstudioStandards::Geometry.make_sliced_bar_multi_polygons(bar_hash[:space_types], bar_hash[:length], bar_hash[:width], bar_hash[:center_of_footprint], story_hash)
+        footprints = OpenstudioStandards::Geometry.create_sliced_bar_multi_polygons(bar_hash[:space_types], bar_hash[:length], bar_hash[:width], bar_hash[:center_of_footprint], story_hash)
 
       else
         footprints = []
@@ -583,7 +583,7 @@ module OpenstudioStandards
             width = bar_hash[:width]
           end
           # perimeter defaults to 15 ft
-          footprints << OpenstudioStandards::Geometry.make_core_and_perimeter_polygons(length, width, bar_hash[:center_of_footprint])
+          footprints << OpenstudioStandards::Geometry.create_core_and_perimeter_polygons(length, width, bar_hash[:center_of_footprint])
         end
 
         # set primary space type to building default space type
@@ -595,7 +595,7 @@ module OpenstudioStandards
       end
 
       # make spaces from polygons
-      new_spaces = OpenstudioStandards::Geometry.make_spaces_from_polygons(model, footprints, bar_hash[:floor_height], bar_hash[:num_stories], bar_hash[:center_of_footprint], story_hash)
+      new_spaces = OpenstudioStandards::Geometry.create_spaces_from_polygons(model, footprints, bar_hash[:floor_height], bar_hash[:num_stories], bar_hash[:center_of_footprint], story_hash)
 
       # put all of the spaces in the model into a vector for intersection and surface matching
       spaces = OpenStudio::Model::SpaceVector.new
