@@ -1582,7 +1582,7 @@ class ECMS
       if sys_info['sys_vent_type'] == 'doas'
         zone_htg_eqpt_type = 'ptac_electric_off'
         zone_clg_eqpt_type = 'ptac_electric_off'
-        zone_fan_type = 'constant_volume'
+        zone_fan_type = 'on_off'
       else
         zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
         zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
