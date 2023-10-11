@@ -1,4 +1,4 @@
-require_relative '../helpers/minitest_helper'
+require_relative '../../helpers/minitest_helper'
 
 class TestSchedulesCreate < Minitest::Test
   def setup
@@ -9,9 +9,9 @@ class TestSchedulesCreate < Minitest::Test
     model = OpenStudio::Model::Model.new
     test_options = {
       'name' => 'Test Create Simple',
-      'winterTimeValuePairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
-      'summerTimeValuePairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
-      'defaultTimeValuePairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 }
+      'winter_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'summer_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 }
     }
     schedule = @sch.model_create_simple_schedule(model, test_options)
     assert(schedule.to_ScheduleRuleset.is_initialized)
@@ -38,7 +38,7 @@ class TestSchedulesCreate < Minitest::Test
     model = OpenStudio::Model::Model.new
     test_options = {
       'name' => 'Test Create Rate Of Change',
-      'defaultTimeValuePairs' => { 4.0 => 0.0, 6.0 => 6.0, 8.0 => 15.0, 16 => 7.0, 24 => 0.0 }
+      'default_time_value_pairs' => { 4.0 => 0.0, 6.0 => 6.0, 8.0 => 15.0, 16 => 7.0, 24 => 0.0 }
     }
     input_schedule = @sch.model_create_simple_schedule(model, test_options)
     output_schedule = @sch.model_create_schedule_from_rate_of_change(model, input_schedule)
@@ -49,13 +49,13 @@ class TestSchedulesCreate < Minitest::Test
     model = OpenStudio::Model::Model.new
     schedule1_options = {
       'name' => 'Schedule1',
-      'defaultTimeValuePairs' => { 8.0 => 0.0, 16.0 => 10.0, 24.0 => 0.0 }
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 10.0, 24.0 => 0.0 }
     }
     schedule1 = @sch.model_create_simple_schedule(model, schedule1_options)
 
     schedule2_options = {
       'name' => 'Schedule2',
-      'defaultTimeValuePairs' => { 8.0 => 0.0, 16.0 => 20.0, 24.0 => 0.0 }
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 20.0, 24.0 => 0.0 }
     }
     schedule2 = @sch.model_create_simple_schedule(model, schedule2_options)
 

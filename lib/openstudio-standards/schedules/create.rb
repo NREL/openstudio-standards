@@ -11,9 +11,9 @@ module OpenstudioStandards
     def self.model_create_simple_schedule(model, options = {})
       defaults = {
         'name' => nil,
-        'winterTimeValuePairs' => { 24.0 => 0.0 },
-        'summerTimeValuePairs' => { 24.0 => 1.0 },
-        'defaultTimeValuePairs' => { 24.0 => 1.0 }
+        'winter_time_value_pairs' => { 24.0 => 0.0 },
+        'summer_time_value_pairs' => { 24.0 => 1.0 },
+        'default_time_value_pairs' => { 24.0 => 1.0 }
       }
 
       # merge user inputs with defaults
@@ -30,7 +30,7 @@ module OpenstudioStandards
       sch_ruleset.setWinterDesignDaySchedule(winter_dsn_day)
       winter_dsn_day = sch_ruleset.winterDesignDaySchedule
       winter_dsn_day.setName("#{sch_ruleset.name} Winter Design Day")
-      options['winterTimeValuePairs'].each do |k, v|
+      options['winter_time_value_pairs'].each do |k, v|
         hour = k.truncate
         min = ((k - hour) * 60).to_i
         winter_dsn_day.addValue(OpenStudio::Time.new(0, hour, min, 0), v)
@@ -41,7 +41,7 @@ module OpenstudioStandards
       sch_ruleset.setSummerDesignDaySchedule(summer_dsn_day)
       summer_dsn_day = sch_ruleset.summerDesignDaySchedule
       summer_dsn_day.setName("#{sch_ruleset.name} Summer Design Day")
-      options['summerTimeValuePairs'].each do |k, v|
+      options['summer_time_value_pairs'].each do |k, v|
         hour = k.truncate
         min = ((k - hour) * 60).to_i
         summer_dsn_day.addValue(OpenStudio::Time.new(0, hour, min, 0), v)
@@ -50,7 +50,7 @@ module OpenstudioStandards
       # All Days
       default_day = sch_ruleset.defaultDaySchedule
       default_day.setName("#{sch_ruleset.name} Schedule Week Day")
-      options['defaultTimeValuePairs'].each do |k, v|
+      options['default_time_value_pairs'].each do |k, v|
         hour = k.truncate
         min = ((k - hour) * 60).to_i
         default_day.addValue(OpenStudio::Time.new(0, hour, min, 0), v)

@@ -125,7 +125,7 @@ class StandardsData
   #   rules = model_find_objects(self, standards_data['schedules'], {'name'=>schedule_name})
   #   if rules.size == 0
   #     OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-  #     return false #TODO change to return empty optional schedule:ruleset?
+  #     return false # @todo change to return empty optional schedule:ruleset?
   #   end
   def model_find_objects(table_name: , search_criteria: {}, capacity:nil)
     #    matching_objects = hash_of_objects.clone

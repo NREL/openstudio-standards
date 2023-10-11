@@ -46,39 +46,39 @@ module OpenstudioStandards
     # @param unmet_hours_tolerance_r [Double] Thermostat setpoint tolerance for unmet hours in degrees Rankine
     # @param remove_objects [Boolean] Clean model of non-geometry objects. Only removes the same objects types as those added to the model.
     # @return [Boolean] returns true if successful, false if not
-    def self.typical_building_from_model(model,
-                                         template,
-                                         climate_zone: 'Lookup From Model',
-                                         add_hvac: true,
-                                         hvac_system_type: 'Inferred',
-                                         hvac_delivery_type: 'Forced Air',
-                                         heating_fuel: 'NaturalGas',
-                                         service_water_heating_fuel: 'NaturalGas',
-                                         cooling_fuel: 'Electricity',
-                                         kitchen_makeup: 'Adjacent',
-                                         exterior_lighting_zone: '3 - All Other Areas',
-                                         add_constructions: true,
-                                         wall_construction_type: 'Inferred',
-                                         add_space_type_loads: true,
-                                         add_daylighting_controls: true,
-                                         add_elevators: true,
-                                         add_internal_mass: true,
-                                         add_exterior_lights: true,
-                                         onsite_parking_fraction: 1.0,
-                                         add_exhaust: true,
-                                         add_swh: true,
-                                         add_thermostat: true,
-                                         add_refrigeration: true,
-                                         modify_wkdy_op_hrs: false,
-                                         wkdy_op_hrs_start_time: 8.0,
-                                         wkdy_op_hrs_duration: 8.0,
-                                         modify_wknd_op_hrs: false,
-                                         wknd_op_hrs_start_time: 8.0,
-                                         wknd_op_hrs_duration: 8.0,
-                                         hoo_var_method: 'hours',
-                                         enable_dst: true,
-                                         unmet_hours_tolerance_r: 1.0,
-                                         remove_objects: true)
+    def self.create_typical_building_from_model(model,
+                                                template,
+                                                climate_zone: 'Lookup From Model',
+                                                add_hvac: true,
+                                                hvac_system_type: 'Inferred',
+                                                hvac_delivery_type: 'Forced Air',
+                                                heating_fuel: 'NaturalGas',
+                                                service_water_heating_fuel: 'NaturalGas',
+                                                cooling_fuel: 'Electricity',
+                                                kitchen_makeup: 'Adjacent',
+                                                exterior_lighting_zone: '3 - All Other Areas',
+                                                add_constructions: true,
+                                                wall_construction_type: 'Inferred',
+                                                add_space_type_loads: true,
+                                                add_daylighting_controls: true,
+                                                add_elevators: true,
+                                                add_internal_mass: true,
+                                                add_exterior_lights: true,
+                                                onsite_parking_fraction: 1.0,
+                                                add_exhaust: true,
+                                                add_swh: true,
+                                                add_thermostat: true,
+                                                add_refrigeration: true,
+                                                modify_wkdy_op_hrs: false,
+                                                wkdy_op_hrs_start_time: 8.0,
+                                                wkdy_op_hrs_duration: 8.0,
+                                                modify_wknd_op_hrs: false,
+                                                wknd_op_hrs_start_time: 8.0,
+                                                wknd_op_hrs_duration: 8.0,
+                                                hoo_var_method: 'hours',
+                                                enable_dst: true,
+                                                unmet_hours_tolerance_r: 1.0,
+                                                remove_objects: true)
 
       # report initial condition of model
       initial_object_size = model.getModelObjects.size
@@ -328,7 +328,7 @@ module OpenstudioStandards
 
           # Modify the default wall construction if different from measure input
           if old_wall_construction_type == wall_construction_type
-            # Don’t modify if the default matches the user-specified wall construction type
+            # Don't modify if the default matches the user-specified wall construction type
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Exterior wall construction type #{wall_construction_type} is the default for this building type.")
           else
             climate_zone_set = standard.model_find_climate_zone_set(model, climate_zone)
@@ -538,21 +538,6 @@ module OpenstudioStandards
         standard.model_add_typical_refrigeration(model, primary_bldg_type)
       end
 
-      # add internal mass
-      if add_internal_mass
-
-        if remove_objects
-          model.getSpaceLoads.sort.each do |instance|
-            next unless instance.to_InternalMass.is_initialized
-
-            instance.remove
-          end
-        end
-
-        # add internal mass to conditioned spaces; needs to happen after thermostats are applied
-        standard.model_add_internal_mass(model, primary_bldg_type)
-      end
-
       # @todo add slab modeling and slab insulation
       # @todo fuel customization for cooking and laundry
       # works by switching some fraction of electric loads to gas if requested (assuming base load is electric)
@@ -587,6 +572,21 @@ module OpenstudioStandards
             end
           end
         end
+      end
+
+      # add internal mass
+      if add_internal_mass
+
+        if remove_objects
+          model.getSpaceLoads.sort.each do |instance|
+            next unless instance.to_InternalMass.is_initialized
+
+            instance.remove
+          end
+        end
+
+        # add internal mass to conditioned spaces; needs to happen after thermostats are applied
+        standard.model_add_internal_mass(model, primary_bldg_type)
       end
 
       # add hvac system
@@ -625,13 +625,13 @@ module OpenstudioStandards
 
             # Infer the secondary system type for multizone systems
             sec_sys_type = case sys_type
-                          when 'PVAV Reheat', 'VAV Reheat'
-                            'PSZ-AC'
-                          when 'PVAV PFP Boxes', 'VAV PFP Boxes'
-                            'PSZ-HP'
-                          else
-                            sys_type # same as primary system type
-                          end
+                           when 'PVAV Reheat', 'VAV Reheat'
+                             'PSZ-AC'
+                           when 'PVAV PFP Boxes', 'VAV PFP Boxes'
+                             'PSZ-HP'
+                           else
+                             sys_type # same as primary system type
+                           end
 
             # group zones
             story_zone_lists = standard.model_group_zones_by_story(model, sys_group['zones'])
@@ -684,8 +684,8 @@ module OpenstudioStandards
             # Add the user specified HVAC system for each story.
             # Single-zone systems will get one per zone.
             story_zone_groups.each do |zones|
-              unless model.add_cbecs_hvac_system(standard, hvac_system_type, zones)
-                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
+              unless OpenstudioStandards::HVAC.add_cbecs_hvac_system(model, standard, hvac_system_type, zones)
+                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against cbecs_hvac.rb in the HVAC module for valid HVAC system type names.")
                 return false
               end
             end
@@ -763,21 +763,6 @@ module OpenstudioStandards
         end
       end
 
-      # add internal mass
-      if add_internal_mass
-
-        if remove_objects
-          model.getSpaceLoads.sort.each do |instance|
-            next unless instance.to_InternalMass.is_initialized
-
-            instance.remove
-          end
-        end
-
-        # add internal mass to conditioned spaces; needs to happen after thermostats are applied
-        standard.model_add_internal_mass(model, primary_bldg_type)
-      end
-
       # set unmet hours tolerance
       unmet_hrs_tol_k = OpenStudio.convert(unmet_hours_tolerance_r, 'R', 'K').get
       tolerances = model.getOutputControlReportingTolerances
@@ -837,7 +822,7 @@ module OpenstudioStandards
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "The building started with #{starting_space_types.size} space types and #{starting_construction_sets.size} construction sets.")
 
       # lookup space types for specified building type (false indicates not to use whole building type only)
-      space_type_hash = OpenstudioStandards::CreateTypical.get_space_types_from_building_type(building_type, template, false)
+      space_type_hash = OpenstudioStandards::CreateTypical.get_space_types_from_building_type(building_type, template: template, whole_building: false)
       if space_type_hash == false
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "#{building_type} is an unexpected building type.")
         return false
@@ -985,13 +970,12 @@ module OpenstudioStandards
           model.getBuilding.setName("#{building_type} #{template} #{os_climate_zone}")
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Renaming building to #{model.getBuilding.name}")
         end
-
       end
 
       # reporting final condition of model
-      finishing_spaceTypes = model.getSpaceTypes.sort
-      finishing_constructionSets = model.getDefaultConstructionSets.sort
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "The building finished with #{finishing_spaceTypes.size} space types and #{finishing_constructionSets.size} construction sets.")
+      finishing_space_types = model.getSpaceTypes.sort
+      finishing_construction_sets = model.getDefaultConstructionSets.sort
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "The building finished with #{finishing_space_types.size} space types and #{finishing_construction_sets.size} construction sets.")
 
       return true
     end

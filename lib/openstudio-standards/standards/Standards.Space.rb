@@ -1454,7 +1454,7 @@ class Standard
 
       # Conditioned space OR semi-heated space <-> unconditioned spaces
       unless surf_cnt
-        # TODO: add a case for 'Zone' when supported
+        # @todo add a case for 'Zone' when supported
         if surface.outsideBoundaryCondition == 'Surface'
           adj_space = surface.adjacentSurface.get.space.get
           adj_space_cond_type = space_conditioning_category(adj_space)
