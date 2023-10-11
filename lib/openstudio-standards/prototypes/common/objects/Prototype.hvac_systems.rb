@@ -24,7 +24,8 @@ class Standard
   # Creates a hot water loop with a boiler, district heating, or a water-to-water heat pump and adds it to the model.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2, DistrictHeating, HeatPump
+  # @param boiler_fuel_type [String] valid choices are Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
+  #   DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam, HeatPump
   # @param ambient_loop [OpenStudio::Model::PlantLoop] The condenser loop for the heat pump. Only used when boiler_fuel_type is HeatPump.
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param dsgn_sup_wtr_temp [Double] design supply water temperature in degrees Fahrenheit, default 180F
@@ -106,6 +107,15 @@ class Standard
     hw_pump.setPumpControlType('Intermittent')
     hw_pump.addToNode(hot_water_loop.supplyInletNode)
 
+    # switch statement to handle district heating name change
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      if boiler_fuel_type == 'DistrictHeatingWater' || boiler_fuel_type == 'DistrictHeatingSteam'
+        boiler_fuel_type = 'DistrictHeating'
+      end
+    else
+      boiler_fuel_type = 'DistrictHeatingWater' if boiler_fuel_type == 'DistrictHeating'
+    end
+
     # create boiler and add to loop
     case boiler_fuel_type
       # District Heating
@@ -114,8 +124,18 @@ class Standard
         district_heat.setName("#{hot_water_loop.name} District Heating")
         district_heat.autosizeNominalCapacity
         hot_water_loop.addSupplyBranchForComponent(district_heat)
-      # Ambient Loop
+      when 'DistrictHeatingWater'
+        district_heat = OpenStudio::Model::DistrictHeatingWater.new(model)
+        district_heat.setName("#{hot_water_loop.name} District Heating")
+        district_heat.autosizeNominalCapacity
+        hot_water_loop.addSupplyBranchForComponent(district_heat)
+      when 'DistrictHeatingSteam'
+        district_heat = OpenStudio::Model::DistrictHeatingSteam.new(model)
+        district_heat.setName("#{hot_water_loop.name} District Heating")
+        district_heat.autosizeNominalCapacity
+        hot_water_loop.addSupplyBranchForComponent(district_heat)
       when 'HeatPump', 'AmbientLoop'
+        # Ambient Loop
         water_to_water_hp = OpenStudio::Model::HeatPumpWaterToWaterEquationFitHeating.new(model)
         water_to_water_hp.setName("#{hot_water_loop.name} Water to Water Heat Pump")
         hot_water_loop.addSupplyBranchForComponent(water_to_water_hp)
@@ -844,10 +864,31 @@ class Standard
     heating_equipment_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
     heating_equipment_stpt_manager.setLowSetpointSchedule(hp_low_temp_sch)
 
+    # switch statement to handle district heating name change
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      if heating_fuel == 'DistrictHeatingWater' || heating_fuel == 'DistrictHeatingSteam'
+        heating_fuel = 'DistrictHeating'
+      end
+    else
+      heating_fuel = 'DistrictHeatingWater' if heating_fuel == 'DistrictHeating'
+    end
+
     # create heating equipment and add to the loop
     case heating_fuel
     when 'DistrictHeating'
       heating_equipment = OpenStudio::Model::DistrictHeating.new(model)
+      heating_equipment.setName("#{heat_pump_water_loop.name} District Heating")
+      heating_equipment.autosizeNominalCapacity
+      heat_pump_water_loop.addSupplyBranchForComponent(heating_equipment)
+      heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Heating Scheduled Dual Setpoint")
+    when 'DistrictHeatingWater'
+      heating_equipment = OpenStudio::Model::DistrictHeatingWater.new(model)
+      heating_equipment.setName("#{heat_pump_water_loop.name} District Heating")
+      heating_equipment.autosizeNominalCapacity
+      heat_pump_water_loop.addSupplyBranchForComponent(heating_equipment)
+      heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Heating Scheduled Dual Setpoint")
+    when 'DistrictHeatingSteam'
+      heating_equipment = OpenStudio::Model::DistrictHeatingSteam.new(model)
       heating_equipment.setName("#{heat_pump_water_loop.name} District Heating")
       heating_equipment.autosizeNominalCapacity
       heat_pump_water_loop.addSupplyBranchForComponent(heating_equipment)
@@ -1056,7 +1097,11 @@ class Standard
     ambient_loop.addSupplyBranchForComponent(district_cooling)
 
     # heating
-    district_heating = OpenStudio::Model::DistrictHeating.new(model)
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      district_heating = OpenStudio::Model::DistrictHeating.new(model)
+    else
+      district_heating = OpenStudio::Model::DistrictHeatingWater.new(model)
+    end
     district_heating.setNominalCapacity(1_000_000_000_000) # large number; no autosizing
     ambient_loop.addSupplyBranchForComponent(district_heating)
 
@@ -1739,7 +1784,7 @@ class Standard
   # @param system_name [String] the name of the system, or nil in which case it will be defaulted
   # @param return_plenum [OpenStudio::Model::ThermalZone] the zone to attach as the supply plenum, or nil, in which case no return plenum will be used
   # @param heating_type [String] main heating coil fuel type
-  #   valid choices are NaturalGas, Gas, Electricity, HeatPump, DistrictHeating, or nil (defaults to NaturalGas)
+  #   valid choices are NaturalGas, Gas, Electricity, HeatPump, DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam, or nil (defaults to NaturalGas)
   # @param reheat_type [String] valid options are NaturalGas, Gas, Electricity, Water, nil (no heat)
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect heating and reheat coils to
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop to connect cooling coil to
@@ -4129,7 +4174,7 @@ class Standard
   # @param hvac_op_sch [String] name of the HVAC operation schedule or nil in which case will be defaulted to always on
   # @param fan_control_type [String] valid choices are OnOff, ConstantVolume, VariableVolume
   # @param fan_pressure_rise [Double] fan pressure rise, inH2O
-  # @param heating_type [String] valid choices are NaturalGas, Gas, Electricity, Electric, DistrictHeating
+  # @param heating_type [String] valid choices are NaturalGas, Gas, Electricity, Electric, DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam
   # @param hot_water_loop [OpenStudio::Model::PlantLoop] hot water loop to connect to the heating coil
   # @param rated_inlet_water_temperature [Double] rated inlet water temperature in degrees Fahrenheit, default is 180F
   # @param rated_outlet_water_temperature [Double] rated outlet water temperature in degrees Fahrenheit, default is 160F
@@ -4191,7 +4236,7 @@ class Standard
         htg_coil = create_coil_heating_electric(model,
                                                 name: "#{zone.name} UnitHeater Electric Htg Coil",
                                                 schedule: hvac_op_sch)
-      elsif heating_type == 'DistrictHeating' && !hot_water_loop.nil?
+      elsif heating_type.include?('DistrictHeating') && !hot_water_loop.nil?
         # control temperature for hot water loop
         if rated_inlet_water_temperature.nil?
           rated_inlet_water_temperature_c = OpenStudio.convert(180.0, 'F', 'C').get
@@ -6454,7 +6499,7 @@ class Standard
   # Get the existing hot water loop in the model or add a new one if there isn't one already.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating
+  # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam
   # @param hot_water_loop_type [String] Archetype for hot water loops
   #   HighTemperature (180F supply) or LowTemperature (120F supply)
   def model_get_or_add_hot_water_loop(model, heat_fuel,
@@ -6526,7 +6571,7 @@ class Standard
   # Get the existing heat pump loop in the model or add a new one if there isn't one already.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating
+  # @param heat_fuel [String] the heating fuel. Valid choices are NaturalGas, Electricity, DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam
   # @param cool_fuel [String] the cooling fuel. Valid choices are Electricity and DistrictCooling.
   # @param heat_pump_loop_cooling_type [String] the type of cooling equipment if not DistrictCooling.
   #   Valid options are:
@@ -6600,7 +6645,7 @@ class Standard
     case system_type
     when 'PTAC'
       case main_heat_fuel
-      when 'NaturalGas', 'DistrictHeating'
+      when 'NaturalGas', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam'
         heating_type = 'Water'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
@@ -6642,7 +6687,7 @@ class Standard
         else
           hot_water_loop = nil
         end
-      when 'DistrictHeating'
+      when 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam'
         heating_type = 'Water'
         supplemental_heating_type = 'Electricity'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
@@ -6711,7 +6756,7 @@ class Standard
 
     when 'Fan Coil'
       case main_heat_fuel
-      when 'NaturalGas', 'DistrictHeating', 'Electricity'
+      when 'NaturalGas', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam', 'Electricity'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
       when 'AirSourceHeatPump'
@@ -6738,7 +6783,7 @@ class Standard
 
     when 'Radiant Slab'
       case main_heat_fuel
-      when 'NaturalGas', 'DistrictHeating', 'Electricity'
+      when 'NaturalGas', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam', 'Electricity'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
       when 'AirSourceHeatPump'
@@ -6763,7 +6808,7 @@ class Standard
 
     when 'Baseboards'
       case main_heat_fuel
-      when 'NaturalGas', 'DistrictHeating'
+      when 'NaturalGas', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam'
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
       when 'AirSourceHeatPump'
@@ -6841,7 +6886,7 @@ class Standard
 
     when 'VAV Reheat'
       case main_heat_fuel
-      when 'NaturalGas', 'Gas', 'HeatPump', 'DistrictHeating'
+      when 'NaturalGas', 'Gas', 'HeatPump', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam'
         heating_type = main_heat_fuel
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
@@ -6888,7 +6933,7 @@ class Standard
 
     when 'VAV No Reheat'
       case main_heat_fuel
-      when 'NaturalGas', 'Gas', 'HeatPump', 'DistrictHeating'
+      when 'NaturalGas', 'Gas', 'HeatPump', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam'
         heating_type = main_heat_fuel
         hot_water_loop = model_get_or_add_hot_water_loop(model, main_heat_fuel,
                                                          hot_water_loop_type: hot_water_loop_type)
@@ -6993,7 +7038,7 @@ class Standard
                                fan_pressure_rise: 4.0)
 
     when 'Water Source Heat Pumps'
-      if main_heat_fuel == 'DistrictHeating' && cool_fuel == 'DistrictCooling'
+      if main_heat_fuel.include?('DistrictHeating') && cool_fuel == 'DistrictCooling'
         condenser_loop = model_get_or_add_ambient_water_loop(model)
       elsif main_heat_fuel == 'AmbientLoop' && cool_fuel == 'AmbientLoop'
         condenser_loop = model_get_or_add_ambient_water_loop(model)
