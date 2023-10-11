@@ -11,7 +11,7 @@ class TestSchedulesModify < Minitest::Test
       'name' => 'Simple Schedule',
       'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 3.0, 24.0 => 0.0 }
     }
-    schedule = @sch.model_create_simple_schedule(model, test_options)
+    schedule = @sch.create_simple_schedule(model, test_options)
     @sch.schedule_ruleset_simple_value_adjust(schedule, 0.5)
     assert(schedule.to_ScheduleRuleset.is_initialized)
     schedule_max = @sch.schedule_ruleset_get_min_max(schedule)['max']
@@ -29,7 +29,7 @@ class TestSchedulesModify < Minitest::Test
       'name' => 'Simple Schedule',
       'default_time_value_pairs' => { 8.0 => 0.0, 12 => 2.0, 16.0 => 4.0, 24.0 => 0.0 }
     }
-    schedule = @sch.model_create_simple_schedule(model, test_options)
+    schedule = @sch.create_simple_schedule(model, test_options)
     test_value = 3.0
     pass_value = 1.5
     fail_value = 2.0
@@ -45,7 +45,7 @@ class TestSchedulesModify < Minitest::Test
       'name' => 'Simple Schedule',
       'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 3.0, 24.0 => 0.0 }
     }
-    schedule = @sch.model_create_simple_schedule(model, test_options)
+    schedule = @sch.create_simple_schedule(model, test_options)
     hhmm_before = 1400
     hhmm_after = 2030
     inside_value = 2.0
@@ -59,7 +59,7 @@ class TestSchedulesModify < Minitest::Test
       'name' => 'Simple Schedule',
       'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 3.0, 24.0 => 0.0 }
     }
-    schedule = @sch.model_create_simple_schedule(model, test_options)
+    schedule = @sch.create_simple_schedule(model, test_options)
     basic_shift = { 'shift_hoo' => 2.0 }
     @sch.schedule_ruleset_adjust_hours_of_operation(schedule, basic_shift)
   end

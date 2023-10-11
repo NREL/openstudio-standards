@@ -13,7 +13,7 @@ class TestSchedulesInformation < Minitest::Test
       'summer_time_value_pairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
       'default_time_value_pairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
     }
-    schedule = @sch.model_create_simple_schedule(model, test_options)
+    schedule = @sch.create_simple_schedule(model, test_options)
     result = @sch.schedule_ruleset_get_min_max(schedule)
     assert(result['min'] == 6.0)
     assert(result['max'] == 14.0)
@@ -27,7 +27,7 @@ class TestSchedulesInformation < Minitest::Test
       'summer_time_value_pairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
       'default_time_value_pairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
     }
-    schedule = @sch.model_create_simple_schedule(model, test_options)
+    schedule = @sch.create_simple_schedule(model, test_options)
     result = @sch.schedule_ruleset_get_start_and_end_times(schedule)
     assert(result['start_time'].hours == 8)
     assert(result['end_time'].hours == 16)
@@ -41,7 +41,7 @@ class TestSchedulesInformation < Minitest::Test
       'summer_time_value_pairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
       'default_time_value_pairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
     }
-    schedule = @sch.model_create_simple_schedule(model, test_options)
+    schedule = @sch.create_simple_schedule(model, test_options)
     result = @sch.schedule_ruleset_get_timeseries(schedule)
     assert(result.class.to_s == 'OpenStudio::TimeSeries')
     assert(result.values.length == (8760*2 - 365))
