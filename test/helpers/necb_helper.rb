@@ -1,8 +1,24 @@
 # Additional methods for NECB tests
 require 'fileutils'
 require 'pathname'
-#require 'json'
-#require 'hashdiff'
+require 'json'
+require 'hashdiff'
+
+# Add significant digits capability to float amd integer class to tidy up reporting.
+class Float
+  def signif(digits=4)
+    return 0 if self.zero?
+    return self if self < 0.0
+    self.round(-(Math.log10(self).ceil - digits))
+  end
+end
+class Integer
+  def signif(digits=4)
+    return 0 if self.zero?
+    return self if self < 0
+    self.round(-(Math.log10(self).ceil - digits)).to_i
+  end
+end
 
 module NecbHelper
   # Hold an array of the instantiated standards (to save recreating them all the time).
@@ -66,7 +82,6 @@ module NecbHelper
     return standard
   end
 
-
   # Standard method to run sizing for NECB testing. Parameters:
   #   model - the model object to be operated on
   #   template - version of NECB to use
@@ -92,21 +107,22 @@ module NecbHelper
     # Instantiate the required version of standards.
     standard = get_standard(template)
 
-    # Define output folders.
-    test_method_name = self.class.ancestors[0].to_s.downcase
-    sizing_dir = File.join(@top_output_folder, test_method_name, test_name, 'sizing')
-    models_dir = File.join(@top_output_folder, test_method_name, test_name)
+    # Define output folder.
+    test_class_name = self.class.ancestors[0].to_s.downcase
+    test_method_name = caller_locations.first.base_label
+    output_dir = File.join(@top_output_folder, test_class_name, test_method_name, test_name)
+    puts "****************** #{output_dir}"
 
-    # Make a directory to run the sizing run in.
-    unless Dir.exist? sizing_dir
-      FileUtils.mkdir_p(sizing_dir)
+    # Check output_dir exists, if not create.
+    unless Dir.exist? output_dir
+      FileUtils.mkdir_p(output_dir)
     end
 
     # Save model before sizing.
-    BTAP::FileIO.save_osm(model, "#{models_dir}/pre-sizing.osm") if save_model_versions
+    BTAP::FileIO.save_osm(model, "#{output_dir}/pre-sizing.osm") if save_model_versions
 
     # Perform first sizing run.
-    sizing_folder = "#{sizing_dir}/SR1"
+    sizing_folder = "#{output_dir}/SR1"
     if standard.model_run_sizing_run(model, sizing_folder) == false
       puts "could not find sizing run #{sizing_folder}"
       assert(false, "Failure in sizing run wile running test: #{self.class.ancestors[0]}")
@@ -129,11 +145,11 @@ module NecbHelper
     if second_run
       
       # Save model before sizing run 2.
-      BTAP::FileIO.save_osm(model, "#{models_dir}/pre-sizing2.osm") if save_model_versions
+      BTAP::FileIO.save_osm(model, "#{output_dir}/pre-sizing2.osm") if save_model_versions
 
       # Do another sizing run after applying the hvac assumptions and efficiency standards 
       #  to properly apply the pump rules.
-      sizing_folder = "#{sizing_dir}/SR2"
+      sizing_folder = "#{output_dir}/SR2"
       if standard.model_run_sizing_run(model, sizing_folder) == false
         puts "could not find sizing run #{sizing_folder}"
         assert(false, "Failure in sizing run wile running test: #{self.class.ancestors[0]}")
@@ -143,15 +159,40 @@ module NecbHelper
     end
 
     # Save model after sizing.
-    BTAP::FileIO.save_osm(model, "#{models_dir}/post-sizing.osm") if save_model_versions
+    BTAP::FileIO.save_osm(model, "#{output_dir}/post-sizing.osm") if save_model_versions
   end
 
   # Check if two files are identical with some added smarts
   # (used in place of simple ruby methods)
   def file_compare(expected_results_file:, test_results_file:, msg: "Files do not match", type: nil)
   
-    #if type == "fred" # Place holder for other file compare options. So far just defined the default behaviour.
-    #else
+    if type == "json_data" 
+
+      # Compare two json classes.
+      diff = Hashdiff.best_diff(expected_results_file, test_results_file, delimiter: '::')
+      error_msg = ""
+      if !diff.nil?
+        diff.each do |e|
+          if e[0]=="-"
+            if e[2].nil? 
+              error_msg << "test results missing #{e[1]}.\n"
+            else
+              error_msg << "test results missing #{e[2]} in #{e[1]}.\n"
+            end
+          elsif e[0]=="~"
+            error_msg << "test results differ in #{e[1]}:\n  Expected: #{e[2]}\n      Test: #{e[3]}\n"
+          elsif e[0]=="+"
+            if e[2].nil? || e[2].to_s == "{}"
+              error_msg << "expected results missing #{e[1]}.\n"
+            else
+              error_msg << "expected results missing #{e[2]} in #{e[1]}.\n"
+            end
+          end
+        end
+      end
+      puts error_msg
+    else
+
       # Open files and compare the line by line. Remove line endings before checking strings (this can be an issue when running in docker).
       same = true
       fe = File.open(expected_results_file, 'rb') 
@@ -172,6 +213,6 @@ module NecbHelper
       test_results_file_path=Pathname.new(test_results_file).cleanpath
       comp_files_str="  Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
       assert(same, "#{msg} #{self.class.ancestors[0]}.\n#{comp_files_str}\n#{comp_lines_str}")
-    #end
+    end
   end
 end
