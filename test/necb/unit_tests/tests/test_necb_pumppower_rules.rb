@@ -6,9 +6,6 @@ include(NecbHelper)
 
 class NECB_2015PumpPower_Test < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -65,7 +62,7 @@ class NECB_2015PumpPower_Test < Minitest::Test
       model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
 
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
       # Apply the NECB 2015 pump power rules to the model.
       standard.apply_maximum_loop_pump_power(model)

@@ -6,9 +6,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -73,7 +70,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
       end
 
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
       vavfans = model.getFanVariableVolumes
       vavfans.each do |ifan|
@@ -162,7 +159,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
                                                             hw_loop: hw_loop)
     
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     fans = model.getFanConstantVolumes
     tol = 1.0e-3

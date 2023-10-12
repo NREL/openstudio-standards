@@ -6,9 +6,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Unitary_Tests < Minitest::Test
 
-  # set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -117,7 +114,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
               # Run sizing.
               sql_db_vars_map = {}
               ecm.modify_unitary_cop(model: model, unitary_cop: "#{unitary_ecm}", sizing_done: false, sql_db_vars_map: sql_db_vars_map)
-              run_sizing(model: model, template: template, test_name: name, sql_db_vars_map: sql_db_vars_map, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+              run_sizing(model: model, template: template, test_name: name, sql_db_vars_map: sql_db_vars_map, save_model_versions: save_intermediate_models)
               ecm.modify_unitary_cop(model: model, unitary_cop: "#{unitary_ecm}", sizing_done: true, sql_db_vars_map: sql_db_vars_map)
 
               case speed

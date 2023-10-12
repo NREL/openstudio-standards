@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -84,7 +81,7 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
         end
 
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
         actual_heatpump_cop << model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
       end
 
@@ -155,7 +152,7 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
                                                                                                 new_auto_zoner: false)
     
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     dx_units = model.getCoilHeatingDXSingleSpeeds
     heatpump_cap_ft_curve = dx_units[0].totalHeatingCapacityFunctionofTemperatureCurve.to_CurveCubic.get

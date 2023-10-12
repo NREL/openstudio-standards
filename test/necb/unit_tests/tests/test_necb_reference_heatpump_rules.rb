@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -98,7 +95,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           end
 
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
           # Non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -274,7 +271,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           end
           
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
           # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -375,7 +372,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           end
           
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
           #get expected cooling values
           cooling_curve_expected_result_file = File.join(@expected_results_folder, "necb2011_reference_heatpump_cooling_curves_expected_results.csv")
@@ -806,7 +803,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         end
         
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
         no_over_sizing = true
         model.getThermalZones.each do |zone|
@@ -892,7 +889,7 @@ def test_ref_heatpump_heating_low_temp
         end
 
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
         # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
         unless sys_number == 'sys6'

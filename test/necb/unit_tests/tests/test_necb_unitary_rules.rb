@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Unitary_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -118,7 +115,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
             BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
             # Run the measure.
-            run_sizing(model: model, test_name: name, template: template, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+            run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
             case speed
             when 'single'
@@ -203,7 +200,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
                                      hw_loop: hw_loop)
    
     # Run sizing.
-    run_sizing(model: model, test_name: name, template: template, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     dx_units = model.getCoilCoolingDXSingleSpeeds
     unitary_cap_ft_curve = dx_units[0].totalCoolingCapacityFunctionOfTemperatureCurve.to_CurveBiquadratic.get

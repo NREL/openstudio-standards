@@ -6,9 +6,6 @@ include(NecbHelper)
 
 class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -53,7 +50,7 @@ begin
       hw_loop: hw_loop)
     
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     airloops = model.getAirLoopHVACs
     airloops.each do |iloop|
@@ -147,7 +144,7 @@ begin
       new_auto_zoner: false)
 
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     airloops = model.getAirLoopHVACs
     airloops.each do |iloop|

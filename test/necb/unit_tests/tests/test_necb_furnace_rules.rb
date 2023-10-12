@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Furnace_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -131,7 +128,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
             end
 
             # Run sizing.
-            run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+            run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
           
             if stage_type == 'single'
               if heating_coil_type == 'NaturalGas'
@@ -240,7 +237,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       end
       
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
       if stage_type == 'single'
         furnace_curve = model.getCoilHeatingGass[0].partLoadFractionCorrelationCurve.get.to_CurveCubic.get
@@ -306,7 +303,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       model.getCoilHeatingGasMultiStages.each { |coil| coil.stages.last.setNominalCapacity(cap) }
 
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
           
       actual_num_stages = model.getCoilHeatingGasMultiStages[0].stages.size
       assert(actual_num_stages == num_stages_needed[cap], "The actual number of stages for capacity #{cap} W is not #{num_stages_needed[cap]}")
