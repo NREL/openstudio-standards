@@ -1796,6 +1796,8 @@ class Standard
   # @param min_sys_airflow_ratio [Double] minimum system airflow ratio
   # @param vav_sizing_option [String] air system sizing option, Coincident or NonCoincident
   # @param econo_ctrl_mthd [String] economizer control type
+  # @param sizing_mthd [String] method for assigning zone and system sizing inputs
+  #   valid choices are PRM, standard
   # @return [OpenStudio::Model::AirLoopHVAC] the resulting VAV air loop
   def model_add_vav_reheat(model,
                            thermal_zones,
@@ -1812,7 +1814,8 @@ class Standard
                            fan_pressure_rise: 4.0,
                            min_sys_airflow_ratio: 0.3,
                            vav_sizing_option: 'Coincident',
-                           econo_ctrl_mthd: nil)
+                           econo_ctrl_mthd: nil,
+                           sizing_mthd: 'PRM')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding VAV system for #{thermal_zones.size} zones.")
 
     # create air handler
@@ -1835,9 +1838,67 @@ class Standard
       oa_damper_sch = model_add_schedule(model, oa_damper_sch)
     end
 
-    # default design temperatures and settings used across all air loops
+    # get standard design temps
     dsgn_temps = standard_design_sizing_temperatures
-    sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
+
+    # set sizing temps - zone first, necessary to set PRM system sizing
+    case sizing_mthd
+    when 'standard'
+      # set zone sizing first
+      if reheat_type.nil?
+        thermal_zones.each do |zone|
+          sizing_zone = zone.sizingZone
+          sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+        end
+      else
+        thermal_zones.each do |zone|
+          sizing_zone = zone.sizingZone
+          sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+          sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
+          sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+          sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
+        end
+      end
+      # set system sizing
+
+
+    when 'PRM'
+      thermal_zones.each{|zone| thermal_zone_apply_prm_baseline_supply_temperatures(zone)}
+
+      
+    
+    end
+  
+    # system design temperatures
+    if sizing_mthd == 'PRM'
+      # Get the design heating and cooling SAT information
+      # for all zones served by the system.
+      htg_setpts_c = []
+      clg_setpts_c = []
+      thermal_zones.each do |zone|
+        sizing_zone = zone.sizingZone
+        htg_setpts_c << sizing_zone.zoneHeatingDesignSupplyAirTemperature
+        clg_setpts_c << sizing_zone.zoneCoolingDesignSupplyAirTemperature
+      end
+
+      # Cooling SAT set to minimum zone cooling design SAT
+      dsgn_temps['clg_dsgn_sup_air_temp_c'] = clg_setpts_c.min
+
+      # If the system has terminal reheat,
+      # heating SAT is set to the same value as cooling SAT
+      # and the terminals are expected to do the heating.
+      # If not, heating SAT set to maximum zone heating design SAT.
+      dsgn_temps['htg_dsgn_sup_air_temp_c'] = if !reheat_type.nil?
+                                                clg_setpts_c.min
+                                              else
+                                                htg_setpts_c.max
+                                              end
+    end
+    
+    # update dsgn_temps with PRM values
+    sizing_system = adjust_sizing_system(air_loop, dsgn_temps, sizing_option: vav_sizing_option)
+
     if !min_sys_airflow_ratio.nil?
       if model.version < OpenStudio::VersionString.new('2.7.0')
         sizing_system.setMinimumSystemAirFlowRatio(min_sys_airflow_ratio)
@@ -1845,7 +1906,7 @@ class Standard
         sizing_system.setCentralHeatingMaximumSystemAirFlowRatio(min_sys_airflow_ratio)
       end
     end
-    sizing_system.setSizingOption(vav_sizing_option) unless vav_sizing_option.nil?
+
     unless hot_water_loop.nil?
       hw_temp_c = hot_water_loop.sizingPlant.designLoopExitTemperature
       hw_delta_t_k = hot_water_loop.sizingPlant.loopDesignTemperatureDifference
@@ -1987,16 +2048,16 @@ class Standard
         end
         # default to single maximum control logic
         terminal.setDamperHeatingAction('Normal')
-        terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
+        #terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
         air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
         # zone sizing
-        sizing_zone = zone.sizingZone
-        sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
-        sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
-        sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
-        sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
+        # sizing_zone = zone.sizingZone
+        # sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+        # sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
+        # sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+        # sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       else
         # no reheat
         # create vav terminal
@@ -2011,10 +2072,12 @@ class Standard
         air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
 
         # zone sizing
-        sizing_zone = zone.sizingZone
-        sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
-        sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
+        # sizing_zone = zone.sizingZone
+        # sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+        # sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       end
+
+
 
       unless return_plenum.nil?
         zone.setReturnPlenum(return_plenum)
