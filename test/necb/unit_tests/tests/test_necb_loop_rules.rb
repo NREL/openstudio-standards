@@ -88,7 +88,7 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
     end
   end
 
-  # Test to validate chilled water loop rules
+  # Test to validate chilled water and condensate water loop rules
   def test_chw_loop_rules
 
     # Set up remaining parameters for test.
@@ -157,51 +157,7 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
           end
         end
         assert(setpoint_set_correctly, "test_chw_loop_rules: Loop supply temperature schedule does not match necb requirement #{name}")
-        pars_set_correlctly = true
-      end
-    end
-  end
-  
-  # Test to validate condenser loop rules
-  def test_NECB2011_cw_loop_rules
-
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    template = 'NECB2011'
-    standard = get_standard(template)
-    save_intermediate_models = false
-
-    # Generate the osm files for all relevant cases to generate the test data for system 2.
-    boiler_fueltype = 'Electricity'
-    chiller_type = 'Centrifugal'
-    mua_cooling_type = 'DX'
-    
-    name = "sys2_cw"
-    name.gsub!(/\s+/, "-")
-    puts "***************#{name}***************\n"
-
-    # Load model and set climate file.
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-
-    hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys2_FPFC_sys5_TPFC(model: model,
-                                     zones: model.getThermalZones,
-                                     chiller_type: chiller_type,
-                                     fan_coil_type: 'FPFC',
-                                     mau_cooling_type: mua_cooling_type,
-                                     hw_loop: hw_loop)
-
-    # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-
-    loops = model.getPlantLoops
-    tol = 1.0e-3
-    loops.each do |iloop|
-      if iloop.name.to_s == 'Condenser Water Loop'
+      elsif iloop.name.to_s == 'Condenser Water Loop'
         necb_deltaT = 6.0
         deltaT = iloop.sizingPlant.loopDesignTemperatureDifference
         diff = (necb_deltaT - deltaT).abs / necb_deltaT
@@ -239,5 +195,4 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
       end
     end
   end
-  
 end
