@@ -1,0 +1,158 @@
+{
+  "NECB2011": {
+    "cases": {
+      "reference": "Reference required",
+      "case_100.0kW": {
+        "name": "Sys1_100000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 100.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      },
+      "case_200.0kW": {
+        "name": "Sys1_200000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 200.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 100.0
+      },
+      "case_400.0kW": {
+        "name": "Sys1_400000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 400.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 400.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      }
+    }
+  },
+  "NECB2015": {
+    "cases": {
+      "reference": "Reference required",
+      "case_100.0kW": {
+        "name": "Sys1_100000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 100.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      },
+      "case_200.0kW": {
+        "name": "Sys1_200000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 200.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 100.0
+      },
+      "case_400.0kW": {
+        "name": "Sys1_400000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 400.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 400.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      }
+    }
+  },
+  "NECB2017": {
+    "cases": {
+      "reference": "Reference required",
+      "case_100.0kW": {
+        "name": "Sys1_100000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 100.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      },
+      "case_200.0kW": {
+        "name": "Sys1_200000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 200.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 100.0
+      },
+      "case_400.0kW": {
+        "name": "Sys1_400000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 400.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 400.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      }
+    }
+  },
+  "NECB2020": {
+    "cases": {
+      "reference": "Reference required",
+      "case_100.0kW": {
+        "name": "Sys1_100000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 100.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      },
+      "case_200.0kW": {
+        "name": "Sys1_200000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 200.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 100.0
+      },
+      "case_400.0kW": {
+        "name": "Sys1_400000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 400.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 400.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      }
+    }
+  },
+  "BTAPPRE1980": {
+    "cases": {
+      "reference": "Reference required",
+      "case_100.0kW": {
+        "name": "Sys1_100000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 100.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      },
+      "case_200.0kW": {
+        "name": "Sys1_200000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 200.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 100.0
+      },
+      "case_400.0kW": {
+        "name": "Sys1_400000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 400.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 400.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      }
+    }
+  },
+  "BTAP1980TO2010": {
+    "cases": {
+      "reference": "Reference required",
+      "case_100.0kW": {
+        "name": "Sys1_100000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 100.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      },
+      "case_200.0kW": {
+        "name": "Sys1_200000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 200.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 100.0,
+        "secondary_boiler_capacity_kW": 100.0
+      },
+      "case_400.0kW": {
+        "name": "Sys1_400000kW_NaturalGas_boiler_HeatingCoilType-Electric_Baseboard-Hot-Water",
+        "tested_capacity_kW": 400.0,
+        "number_of_boilers": 2,
+        "primary_boiler_capacity_kW": 400.0,
+        "secondary_boiler_capacity_kW": 1.0e-06
+      }
+    }
+  }
+}
