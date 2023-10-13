@@ -129,6 +129,24 @@ class Standard
         end
         clg_coil.setCoolingPowerConsumptionCurve(cooling_power_consumption_curve)
       end
+
+      # part load fraction correlation curve added as a required curve in OS v3.7.0
+      if model.version > OpenStudio::VersionString.new('3.6.1')
+        if model.getCurveByName('Water to Air Heat Pump Part Load Fraction Correlation Curve').is_initialized
+          part_load_correlation_curve = model.getCurveByName('Water to Air Heat Pump Part Load Fraction Correlation Curve').get
+          part_load_correlation_curve = part_load_correlation_curve.to_CurveLinear.get
+        else
+          part_load_correlation_curve = OpenStudio::Model::CurveLinear.new(model)
+          part_load_correlation_curve.setName('Water to Air Heat Pump Part Load Fraction Correlation Curve')
+          part_load_correlation_curve.setCoefficient1Constant(0.833746458696111)
+          part_load_correlation_curve.setCoefficient2x(0.166253541303889)
+          part_load_correlation_curve.setMinimumValueofx(0)
+          part_load_correlation_curve.setMaximumValueofx(1)
+          part_load_correlation_curve.setMinimumCurveOutput(0)
+          part_load_correlation_curve.setMaximumCurveOutput(1)
+        end
+        clg_coil.setPartLoadFractionCorrelationCurve(part_load_correlation_curve)
+      end
     end
 
     return clg_coil
