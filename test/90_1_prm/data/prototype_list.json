@@ -186,7 +186,7 @@
     ],
     "proposed_model_residential_lpd": [
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_res_ltg", [["remove_transformer", []], ["reduce_lpd" , []]]]
-    ]
+    ],
     "pump_power_check": [
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test",[["remove_transformer", []]]]
     ],
