@@ -59,7 +59,6 @@ module OpenstudioStandards
       # code in get_space_types_from_building_type is used to override building wwr with space type specific wwr
       hash['Warehouse'] = { aspect_ratio: 2.2, wwr: 0.0, typical_story: 28.0, perim_mult: 1.0 }
 
-      hash['QuickServiceRestaurant'] = { aspect_ratio: 1.0, wwr: 0.14, typical_story: 10.0, perim_mult: 1.0 }
       hash['FullServiceRestaurant'] = { aspect_ratio: 1.0, wwr: 0.18, typical_story: 10.0, perim_mult: 1.0 }
       hash['QuickServiceRestaurant'] = { aspect_ratio: 1.0, wwr: 0.18, typical_story: 10.0, perim_mult: 1.0 }
       hash['MidriseApartment'] = { aspect_ratio: 2.75, wwr: 0.15, typical_story: 10.0, perim_mult: 1.0 }
