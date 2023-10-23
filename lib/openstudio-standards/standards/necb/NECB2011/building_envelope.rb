@@ -56,7 +56,7 @@ class NECB2011
       end
 
       # Determine the space category
-      # zTODO This should really use the heating/cooling loads
+      # @todo This should really use the heating/cooling loads
       # from the proposed building.  However, in an attempt
       # to avoid another sizing run just for this purpose,
       # conditioned status is based on heating/cooling

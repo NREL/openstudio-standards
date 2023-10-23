@@ -903,9 +903,8 @@ class ASHRAE901PRM < Standard
 
   # Identifies non mechanically cooled ("nmc") systems, if applicable
   # and add a flag to the zone's and air loop's additional properties.
-  # @todo: Zone-level evaporative cooler is not currently supported by
-  #       by OpenStudio, will need to be added to the method when
-  #       supported.
+  # @todo Zone-level evaporative cooler is not currently supported
+  # by OpenStudio, will need to be added to the method when supported.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Hash] Zone to nmc system type mapping
@@ -988,7 +987,7 @@ class ASHRAE901PRM < Standard
     # Zone HVAC Controls
     model.getZoneHVACComponents.sort.each { |obj| zone_hvac_component_apply_standard_controls(obj) }
 
-    # @todo: The fan and pump efficiency will be done by another task.
+    # @todo The fan and pump efficiency will be done by another task.
     # Fans
     # model.getFanVariableVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
     # model.getFanConstantVolumes.sort.each { |obj| fan_apply_standard_minimum_motor_efficiency(obj, fan_brake_horsepower(obj)) }
@@ -1320,8 +1319,8 @@ class ASHRAE901PRM < Standard
   #
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio model
+  # @todo JXL add log msgs to PRM logger
   def model_raise_user_model_dcv_errors(model)
-    # @todo: JXL add log msgs to PRM logger
     model.getThermalZones.each do |thermal_zone|
       if thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get &&
          (!thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get ||

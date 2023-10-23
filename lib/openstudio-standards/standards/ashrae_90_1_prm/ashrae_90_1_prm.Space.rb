@@ -39,7 +39,7 @@ class ASHRAE901PRM < Standard
 
     # Get any infiltration schedule already assigned to this space or its space type
     # If not, the always on schedule will be applied.
-    # @todo -PRM: Infiltration schedules should be based on HVAC operation
+    # @todo Infiltration schedules should be based on HVAC operation
     infil_sch = nil
     unless space.spaceInfiltrationDesignFlowRates.empty?
       old_infil = space.spaceInfiltrationDesignFlowRates[0]

@@ -721,7 +721,7 @@ class Standard
       day_schedule_holiday = schedule_ruleset.to_ScheduleRuleset.get.defaultDaySchedule
     end
     # Currently holidaySchedule is not working in SDK in ScheduleRuleset object
-    # TODO: enable the following lines when holidaySchedule is available
+    # @todo enable the following lines when holidaySchedule is available
     # if !schedule_ruleset.isHolidayScheduleDefaulted
     #   day_schedule = schedule_ruleset.to_ScheduleRuleset.get.holidaySchedule
     # else
@@ -974,7 +974,7 @@ class Standard
       end
 
       # Last day in values array is the holiday schedule
-      # TODO: add holiday schedule when implemented in OpenStudio SDK
+      # @todo add holiday schedule when implemented in OpenStudio SDK
     end
 
     # Need to handle design days

@@ -1178,7 +1178,7 @@ class Standard
       fan_schedule_8760 = []
       # Check for availability managers
       # Assume only AvailabilityManagerScheduled will control fan schedule
-      # TODO: also check AvailabilityManagerScheduledOn
+      # @todo also check AvailabilityManagerScheduledOn
       avail_mgrs = air_loop_hvac.availabilityManagers
       # if avail_mgrs.is_initialized
       if !avail_mgrs.nil?
@@ -1295,7 +1295,7 @@ class Standard
   # Array will include extra 24 values for leap year
   # Array will also include extra 24 values at end for holiday day type
   # @author: Doug Maddox, PNNL
-  # @TODO: consider moving this to Standards.Schedule.rb
+  # @todo consider moving this to Standards.Schedule.rb
   # @param: model [Object]
   # @param: fan_schedule [Object]
   # @return: [Array<String>] annual hourly values from schedule
@@ -1314,7 +1314,7 @@ class Standard
       fan_schedule_ruleset = sch_translator.convert_schedule_compact_to_schedule_ruleset
       fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule_ruleset)
     when 'OS_Schedule_Year'
-      # TODO: add function for ScheduleYear
+      # @todo add function for ScheduleYear
       # fan_8760 = get_8760_values_from_schedule_year(model, fan_schedule)
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Automated baseline measure does not support use of Schedule Year')
     end
@@ -4755,7 +4755,7 @@ class Standard
         # based on sizing run results
         cat = space_conditioning_category(space)
       else
-        # TODO: This should really use the heating/cooling loads from the proposed building.
+        # @todo This should really use the heating/cooling loads from the proposed building.
         # However, in an attempt to avoid another sizing run just for this purpose,
         # conditioned status is based on heating/cooling setpoints.
         # If heated-only, will be assumed Semiheated.
@@ -7036,7 +7036,7 @@ class Standard
 
   # Utility function that returns the min and max value in a design day schedule.
   #
-  # TODO: move this to Standards.Schedule.rb
+  # @todo move this to Standards.Schedule.rb
   # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
   # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
   # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.

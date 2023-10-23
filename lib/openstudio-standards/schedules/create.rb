@@ -8,12 +8,12 @@ module OpenstudioStandards
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param options [Hash] Hash of name and time value pairs
     # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
-    def self.model_create_simple_schedule(model, options = {})
+    def self.create_simple_schedule(model, options = {})
       defaults = {
         'name' => nil,
-        'winterTimeValuePairs' => { 24.0 => 0.0 },
-        'summerTimeValuePairs' => { 24.0 => 1.0 },
-        'defaultTimeValuePairs' => { 24.0 => 1.0 }
+        'winter_time_value_pairs' => { 24.0 => 0.0 },
+        'summer_time_value_pairs' => { 24.0 => 1.0 },
+        'default_time_value_pairs' => { 24.0 => 1.0 }
       }
 
       # merge user inputs with defaults
@@ -30,7 +30,7 @@ module OpenstudioStandards
       sch_ruleset.setWinterDesignDaySchedule(winter_dsn_day)
       winter_dsn_day = sch_ruleset.winterDesignDaySchedule
       winter_dsn_day.setName("#{sch_ruleset.name} Winter Design Day")
-      options['winterTimeValuePairs'].each do |k, v|
+      options['winter_time_value_pairs'].each do |k, v|
         hour = k.truncate
         min = ((k - hour) * 60).to_i
         winter_dsn_day.addValue(OpenStudio::Time.new(0, hour, min, 0), v)
@@ -41,7 +41,7 @@ module OpenstudioStandards
       sch_ruleset.setSummerDesignDaySchedule(summer_dsn_day)
       summer_dsn_day = sch_ruleset.summerDesignDaySchedule
       summer_dsn_day.setName("#{sch_ruleset.name} Summer Design Day")
-      options['summerTimeValuePairs'].each do |k, v|
+      options['summer_time_value_pairs'].each do |k, v|
         hour = k.truncate
         min = ((k - hour) * 60).to_i
         summer_dsn_day.addValue(OpenStudio::Time.new(0, hour, min, 0), v)
@@ -50,7 +50,7 @@ module OpenstudioStandards
       # All Days
       default_day = sch_ruleset.defaultDaySchedule
       default_day.setName("#{sch_ruleset.name} Schedule Week Day")
-      options['defaultTimeValuePairs'].each do |k, v|
+      options['default_time_value_pairs'].each do |k, v|
         hour = k.truncate
         min = ((k - hour) * 60).to_i
         default_day.addValue(OpenStudio::Time.new(0, hour, min, 0), v)
@@ -64,7 +64,7 @@ module OpenstudioStandards
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param options [Hash] Hash of name and time value pairs
     # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ruleset schedule object
-    def self.model_create_complex_schedule(model, options = {})
+    def self.create_complex_schedule(model, options = {})
       defaults = {
         'name' => nil,
         'default_day' => ['always_on', [24.0, 1.0]]
@@ -157,7 +157,7 @@ module OpenstudioStandards
     # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @todo fix velocity so it isn't fraction change per step, but per hour
     #   (I need to count hours between times and divide value by this)
-    def self.model_create_schedule_from_rate_of_change(model, schedule_ruleset)
+    def self.create_schedule_from_rate_of_change(model, schedule_ruleset)
       # clone source schedule
       new_schedule = schedule_ruleset.clone(model)
       new_schedule.setName("#{schedule_ruleset.name} - Rate of Change")
@@ -240,7 +240,7 @@ module OpenstudioStandards
     # @param sch_name [String] Optional name of new schedule
     # @return [Hash] Hash of merged schedule and the total denominator
     # @todo apply weights to schedule rules as well, not just winter, summer, and default profile
-    def self.model_create_weighted_merge_schedules(model, schedule_weights_hash, sch_name: 'Merged Schedule')
+    def self.create_weighted_merge_schedules(model, schedule_weights_hash, sch_name: 'Merged Schedule')
       # get denominator for weight
       denominator = 0.0
       schedule_weights_hash.each do |schedule, weight|

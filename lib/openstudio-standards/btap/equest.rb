@@ -2335,7 +2335,7 @@
 #           translation = transformation.translation
 #           euler_angles = transformation.eulerAngles
 #           new_translation = OpenStudio::Vector3d.new(translation.x * x_scale, translation.y * y_scale, translation.z * z_scale)
-#           #TODO these might be in the wrong order
+#           # @todo these might be in the wrong order
 #           new_transformation = OpenStudio::createRotation(euler_angles) * OpenStudio::createTranslation(new_translation)
 #           surface_group.setTransformation(new_transformation)
 #         end

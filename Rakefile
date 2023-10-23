@@ -12,17 +12,17 @@ end
 require 'rake/testtask'
 namespace :test do
   full_file_list = nil
-  if File.exist?('test/circleci_tests.txt')
+  if File.exist?('test/ci_tests.txt')
     # load test files from file.
-    full_file_list = FileList.new(File.readlines('test/circleci_tests.txt'))
+    full_file_list = FileList.new(File.readlines('test/ci_tests.txt'))
     # Select only .rb files that exist
     full_file_list.select! { |item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}")) }
     full_file_list.map! { |item| File.absolute_path("test/#{item.strip}") }
-    File.open('test/circleci_tests.json', 'w') do |f|
+    File.open('test/ci_tests.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_file_list.to_a))
     end
   else
-    puts 'Could not find list of files to test at test/circleci_tests.txt'
+    puts 'Could not find list of files to test at test/ci_tests.txt'
     return false
   end
 

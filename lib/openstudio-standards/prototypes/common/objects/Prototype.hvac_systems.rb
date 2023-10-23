@@ -2884,9 +2884,15 @@ class Standard
         unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
         unitary_system.setName("#{air_loop.name} Unitary HP")
         unitary_system.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
-        unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
-        unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
-        unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+        if model.version < OpenStudio::VersionString.new('3.7.0')
+          unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
+          unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
+          unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+        else
+          unitary_system.autosizeSupplyAirFlowRateDuringCoolingOperation
+          unitary_system.autosizeSupplyAirFlowRateDuringHeatingOperation
+          unitary_system.autosizeSupplyAirFlowRateWhenNoCoolingorHeatingisRequired
+        end
       when 'Single Speed Heat Pump'
         unitary_system.setMaximumOutdoorDryBulbTemperatureforSupplementalHeaterOperation(OpenStudio.convert(40.0, 'F', 'C').get)
         unitary_system.setName("#{air_loop.name} Unitary HP")
@@ -3095,13 +3101,23 @@ class Standard
       unitary_system.setControllingZoneorThermostatLocation(zone)
       unitary_system.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       unitary_system.setFanPlacement('BlowThrough')
-      unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
-      unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
-      if minimum_volume_setpoint.nil?
-        unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+      if model.version < OpenStudio::VersionString.new('3.7.0')
+        unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
+        unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
+        if minimum_volume_setpoint.nil?
+          unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+        else
+          unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('FractionOfAutosizedCoolingValue')
+          unitary_system.setFractionofAutosizedDesignCoolingSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(minimum_volume_setpoint)
+        end
       else
-        unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('FractionOfAutosizedCoolingValue')
-        unitary_system.setFractionofAutosizedDesignCoolingSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(minimum_volume_setpoint)
+        unitary_system.autosizeSupplyAirFlowRateDuringCoolingOperation
+        unitary_system.autosizeSupplyAirFlowRateDuringHeatingOperation
+        if minimum_volume_setpoint.nil?
+          unitary_system.autosizeSupplyAirFlowRateWhenNoCoolingorHeatingisRequired
+        else
+          unitary_system.setFractionofAutosizedDesignCoolingSupplyAirFlowRateWhenNoCoolingorHeatingisRequired(minimum_volume_setpoint)
+        end
       end
       unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOnDiscreteSchedule)
       unitary_system.addToNode(air_loop.supplyInletNode)
@@ -4452,9 +4468,15 @@ class Standard
       unitary_system.setControllingZoneorThermostatLocation(zone)
       unitary_system.setMaximumSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       unitary_system.setFanPlacement('BlowThrough')
-      unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
-      unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
-      unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+      if model.version < OpenStudio::VersionString.new('3.7.0')
+        unitary_system.setSupplyAirFlowRateMethodDuringCoolingOperation('SupplyAirFlowRate')
+        unitary_system.setSupplyAirFlowRateMethodDuringHeatingOperation('SupplyAirFlowRate')
+        unitary_system.setSupplyAirFlowRateMethodWhenNoCoolingorHeatingisRequired('SupplyAirFlowRate')
+      else
+        unitary_system.autosizeSupplyAirFlowRateDuringCoolingOperation
+        unitary_system.autosizeSupplyAirFlowRateDuringHeatingOperation
+        unitary_system.autosizeSupplyAirFlowRateWhenNoCoolingorHeatingisRequired
+      end
       unitary_system.setSupplyAirFanOperatingModeSchedule(model.alwaysOffDiscreteSchedule)
       unitary_system.addToNode(air_loop.supplyInletNode)
 
