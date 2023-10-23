@@ -29,7 +29,10 @@ class ASHRAE901PRM < Standard
                       UserDataCSVExteriorLights.new(user_model, user_data_path),
                       UserDataCSVThermalZone.new(user_model, user_data_path),
                       UserDataCSVElectricEquipment.new(user_model, user_data_path),
-                      UserDataCSVOutdoorAir.new(user_model, user_data_path)]
+                      UserDataCSVOutdoorAir.new(user_model, user_data_path),
+                      UserDataWaterUseConnection.new(user_model, user_data_path),
+                      UserDataWaterUseEquipment.new(user_model, user_data_path),
+                      UserDataWaterUseEquipmentDefinition.new(user_model, user_data_path)]
 
     if user_data_file.nil?
       user_data_list.each(&:write_csv)
@@ -169,6 +172,12 @@ class ASHRAE901PRM < Standard
       return check_userdata_airloop_hvac_doas(object_name, user_data)
     when UserDataFiles::THERMAL_ZONE
       return check_userdata_thermal_zone(object_name, user_data)
+    when UserDataFiles::WATERUSE_CONNECTIONS
+      return check_userdata_wateruse_connections(object_name, user_data)
+    when UserDataFiles::WATERUSE_EQUIPMENT
+      return check_userdata_wateruse_equipment(object_name, user_data)
+    when UserDataFiles::WATERUSE_EQUIPMENT_DEFINITION
+      return check_userdata_wateruse_equipment_definition(object_name, user_data)
     else
       return true
     end
@@ -487,6 +496,73 @@ class ASHRAE901PRM < Standard
           OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data #{object_name}: The fraction of user defined lighting types in Space/SpaceType: #{row['name']} does not add up to 1.0. The calculated fraction is #{total_ltg_percent}.")
           userdata_valid = false
         end
+      end
+    end
+    return userdata_valid
+  end
+
+  # Check for incorrect data in water use connections
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_wateruse_connections(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |row|
+      name = prm_read_user_data(row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: water use connection name is missing or empty. user data is not validated.")
+        return false
+      end
+    end
+    return userdata_valid
+  end
+
+  # Check for incorrect data in water use equipment
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_wateruse_equipment(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |row|
+      name = prm_read_user_data(row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: water use equipment name is missing or empty. user data is not validated.")
+        return false
+      end
+
+      building_swh_type = prm_read_user_data(row, 'building_type_swh', nil)
+      # gas phase air cleaning is system base - add proposed hvac system name to zones
+      unless building_swh_type.nil? || UserDataSHWBldgType.matched_any?(building_swh_type)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, water equipment name #{name}, building_type_swh shall be one of the string listed in https://pnnl.github.io/BEM-for-PRM/user_guide/prm_api_ref/baseline_generation_api/#--default_swh_bldg_type. Got #{building_swh_type}")
+        userdata_valid = false
+      end
+    end
+    return userdata_valid
+  end
+
+  # Check for incorrect data in water use equipment definition
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_wateruse_equipment_definition(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |row|
+      name = prm_read_user_data(row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: water use equipment name is missing or empty. user data is not validated.")
+        return false
+      end
+      # check for data type
+      peak_flow_rate = prm_read_user_data(row, 'peak_flow_rate', nil)
+      unless peak_flow_rate.nil? || Float(peak_flow_rate, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: water use equipment definition #{name}'s peak flow rate shall be a float, Got #{peak_flow_rate}.")
       end
     end
     return userdata_valid

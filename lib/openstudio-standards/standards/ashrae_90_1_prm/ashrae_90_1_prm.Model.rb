@@ -1426,7 +1426,117 @@ class ASHRAE901PRM < Standard
     handle_thermal_zone_user_input_data(model)
     # load electric equipment user data
     handle_electric_equipment_user_input_data(model)
+    # load water use connection user data
+    handle_wateruse_connections_user_input_data(model)
+    # load water use equipment user data
+    handle_wateruse_equipment_user_input_data(model)
+    # load water use equipment definition user data
+    handle_wateruse_equipment_definition_user_input_data(model)
     return true
+  end
+
+  # A function to load water use equipment definition from user data csv files
+  # The file name is userdata_wateruse_equipment_definition.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_wateruse_equipment_definition_user_input_data(model)
+    user_data_wateruse_equipment_definition = get_userdata(UserDataFiles::WATERUSE_EQUIPMENT_DEFINITION)
+    model.getWaterUseEquipmentDefinitions.each do |wateruse_equipment|
+      if user_data_wateruse_equipment_definition
+        user_data_updated = false
+        user_data_wateruse_equipment_definition.each do |user_wateruse|
+          next unless UserData.compare(wateruse_equipment.name.get, user_wateruse['name'])
+
+          peak_flow_rate = prm_read_user_data(user_wateruse, 'peak_flow_rate', nil)
+          if peak_flow_rate
+            wateruse_equipment.additionalProperties.setFeature('peak_flow_rate', peak_flow_rate)
+          end
+
+          flow_rate_fraction_schedule_name = prm_read_user_data(user_wateruse, 'flow_rate_fraction_schedule', '')
+          # verify the schedule exist in the model
+          prm_raise(model.getScheduleRulesetByName(flow_rate_fraction_schedule_name) ||
+                      model.getScheduleCompactByName(flow_rate_fraction_schedule_name) ||
+                      model.getScheduleConstantByName(flow_rate_fraction_schedule_name),
+                    @sizing_run_dir,
+                    "Cannot find #{flow_rate_fraction_schedule_name} in the model. Note, such schedule shall be one of the following type: RuleSet, Compact and Constant")
+          wateruse_equipment.additionalProperties.setFeature('flow_rate_fraction_schedule', flow_rate_fraction_schedule_name)
+
+          target_temperature_schedule_name = prm_read_user_data(user_wateruse, 'target_temperature_schedule', '')
+          # verify the schedule exist in the model
+          prm_raise(model.getScheduleRulesetByName(target_temperature_schedule_name) ||
+                      model.getScheduleCompactByName(target_temperature_schedule_name) ||
+                      model.getScheduleConstantByName(target_temperature_schedule_name),
+                    @sizing_run_dir,
+                    "Cannot find #{target_temperature_schedule_name} in the model. Note, such schedule shall be one of the following type: RuleSet, Compact and Constant")
+          wateruse_equipment.additionalProperties.setFeature('target_temperature_schedule', target_temperature_schedule_name)
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "WaterUseConnections name #{wateruse_equipment.name.get} was not found in user data file: #{UserDataFiles::WATERUSE_EQUIPMENT_DEFINITION}; No user data applied.")
+        end
+      end
+    end
+  end
+
+  # A function to load water use equipment from user data csv files
+  # The file name is userdata_wateruse_equipment.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_wateruse_equipment_user_input_data(model)
+    user_data_wateruse_equipment = get_userdata(UserDataFiles::WATERUSE_EQUIPMENT)
+    model.getWaterUseEquipments.each do |wateruse_equipment|
+      if user_data_wateruse_equipment
+        user_data_updated = false
+        user_data_wateruse_equipment.each do |user_wateruse|
+          next unless UserData.compare(wateruse_equipment.name.get, user_wateruse['name'])
+
+          building_type_swh = prm_read_user_data(user_wateruse, 'building_type_swh', nil)
+          if building_type_swh
+            wateruse_equipment.additionalProperties.setFeature('building_type_swh', building_type_swh)
+          end
+          user_data_updated = true
+        end
+
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "WaterUseEquipment name #{wateruse_equipment.name.get} was not found in user data file: #{UserDataFiles::WATERUSE_EQUIPMENT}; No user data applied.")
+        end
+      end
+    end
+  end
+
+  # A function to load water use connections schedules from user data csv files
+  # The file name is userdata_wateruse_connections.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_wateruse_connections_user_input_data(model)
+    user_data_wateruse_connections = get_userdata(UserDataFiles::WATERUSE_CONNECTIONS)
+    model.getWaterUseConnectionss.each do |wateruse_connections|
+      if user_data_wateruse_connections
+        user_data_updated = false
+        user_data_wateruse_connections.each do |user_wateruse|
+          next unless UserData.compare(wateruse_connections.name.get, user_wateruse['name'])
+
+          hot_water_supply_temperature_schedule_name = prm_read_user_data(user_wateruse, 'hot_water_supply_temperature_schedule', '')
+          # verify the schedule exist in the model
+          prm_raise(model.getScheduleRulesetByName(hot_water_supply_temperature_schedule_name) ||
+                      model.getScheduleCompactByName(hot_water_supply_temperature_schedule_name) ||
+                      model.getScheduleConstantByName(hot_water_supply_temperature_schedule_name),
+                    @sizing_run_dir,
+                    "Cannot find #{hot_water_supply_temperature_schedule_name} in the model. Note, such schedule shall be one of the following type: RuleSet, Compact and Constant")
+          wateruse_connections.additionalProperties.setFeature('hot_water_supply_temperature_schedule', hot_water_supply_temperature_schedule_name)
+
+          cold_water_supply_temperature_schedule_name = prm_read_user_data(user_wateruse, 'cold_water_supply_temperature_schedule', '')
+          # verify the schedule exist in the model
+          prm_raise(model.getScheduleRulesetByName(cold_water_supply_temperature_schedule_name) ||
+                      model.getScheduleCompactByName(cold_water_supply_temperature_schedule_name) ||
+                      model.getScheduleConstantByName(cold_water_supply_temperature_schedule_name),
+                    @sizing_run_dir,
+                    "Cannot find #{cold_water_supply_temperature_schedule_name} in the model. Note, such schedule shall be one of the following type: RuleSet, Compact and Constant")
+          wateruse_connections.additionalProperties.setFeature('cold_water_supply_temperature_schedule', cold_water_supply_temperature_schedule_name)
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "WaterUseConnections name #{wateruse_connections.name.get} was not found in user data file: #{UserDataFiles::WATERUSE_CONNECTIONS}; No user data applied.")
+        end
+      end
+    end
   end
 
   # A function to load exterior lighting data from user data csv files

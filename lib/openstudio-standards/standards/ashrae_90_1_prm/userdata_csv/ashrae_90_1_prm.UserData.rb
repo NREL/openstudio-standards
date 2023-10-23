@@ -226,3 +226,51 @@ class UserDataCSVOutdoorAir < UserDataCSV
     return Array.new(@headers.length - 1, '')
   end
 end
+
+class UserDataWaterUseConnection < UserDataCSV
+  # user data userdata_wateruse_connections
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
+  def initialize(model, save_dir)
+    super
+    @component_name = 'WaterUseConnections'
+    @file_name = UserDataFiles::WATERUSE_CONNECTIONS
+  end
+
+  def write_default_rows
+    # @todo we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataWaterUseEquipment < UserDataCSV
+  # user data userdata_wateruse_equipment
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
+  def initialize(model, save_dir)
+    super
+    @component_name = 'WaterUseEquipment'
+    @file_name = UserDataFiles::WATERUSE_EQUIPMENT
+  end
+
+  def write_default_rows
+    # @todo we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataWaterUseEquipmentDefinition < UserDataCSV
+  # user data userdata_wateruse_equipment
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
+  def initialize(model, save_dir)
+    super
+    @component_name = 'WaterUseEquipmentDefinition'
+    @file_name = UserDataFiles::WATERUSE_EQUIPMENT_DEFINITION
+  end
+
+  def write_default_rows
+    # @todo we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
