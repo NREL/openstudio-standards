@@ -412,10 +412,10 @@ Standard.class_eval do
     return heating_or_cooling_setpoint_unmet
   end
 
-   # Get the total unmet load hours during occupancy of a model that has been simulated
+  # Get the total unmet load hours during occupancy of a model that has been simulated
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Float] returns the number of total unmet load hours during occupancy in a simulated model
+  # @return [Double] returns the number of total unmet load hours during occupancy in a simulated model
   def model_get_unmet_load_hours(model)
     result = OpenStudio::OptionalDouble.new
     sql = model.sqlFile
@@ -451,7 +451,7 @@ Standard.class_eval do
 
     return result
   end
- 
+
   # Gets the model annual energy consumption by fuel and enduse in GJ from the sql file
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -556,8 +556,13 @@ Standard.class_eval do
     energy_values = {}
 
     # List of all fuel types, based on Table 5.1 of EnergyPlus' Input Output Reference manual
-    fuel_types = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling',
-                  'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      fuel_types = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling',
+                    'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+    else
+      fuel_types = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'DistrictCooling',
+                    'DistrictHeatingWater', 'DistrictHeatingSteam', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+    end
 
     # List of all end uses, based on Table 5.3 of EnergyPlus' Input Output Reference manual
     end_uses = ['InteriorLights', 'ExteriorLights', 'InteriorEquipment', 'ExteriorEquipment', 'Fans', 'Pumps', 'Heating', 'Cooling', 'HeatRejection', 'Humidifier',

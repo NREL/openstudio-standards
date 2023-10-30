@@ -624,7 +624,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.ServiceWaterHeating', "Unsupported schedule type for HPWH setpoint schedule #{swh_temp_sch.name}.")
         return false
       end
-      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch,schedule_type, 'Schedule Value')
+      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch, schedule_type, 'Schedule Value')
       hpwhschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_HPWHSchedOverride")
 
       # create actuator for lower heating element in water tank

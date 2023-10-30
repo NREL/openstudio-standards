@@ -46,6 +46,7 @@ Standard.class_eval do
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model.getAirLoopHVACs.each do |air_loop|
       next unless air_loop_hvac_multizone_vav_system?(air_loop)
+
       model_system_outdoor_air_sizing_vrp_method(air_loop)
       air_loop_hvac_apply_vav_damper_action(air_loop)
     end
@@ -2612,7 +2613,7 @@ Standard.class_eval do
   # Metal coiling door code minimum infiltration rate at 75 Pa
   #
   # @param [String] Climate zone
-  # @return [Float] Minimum infiltration rate for metal coiling doors
+  # @return [Double] Minimum infiltration rate for metal coiling doors
   def model_door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
     case climate_zone
       when 'ASHRAE 169-2006-7A',
@@ -2628,7 +2629,7 @@ Standard.class_eval do
   # Metal rollup door code minimum infiltration rate at 75 Pa
   #
   # @param [String] Climate zone
-  # @return [Float] Minimum infiltration rate for metal coiling doors
+  # @return [Double] Minimum infiltration rate for metal coiling doors
   def model_door_infil_flow_rate_rollup_cfm_ft2(climate_zone)
     return 0.4
   end
@@ -2636,7 +2637,7 @@ Standard.class_eval do
   # Open door infiltration rate at 75 Pa
   #
   # @param [String] Climate zone
-  # @return [Float] Open door infiltration rate
+  # @return [Double] Open door infiltration rate
   def model_door_infil_flow_rate_open_cfm_ft2(climate_zone)
     return 9.7875
   end
@@ -2823,7 +2824,7 @@ Standard.class_eval do
   # Add transfer to prototype for spaces that require it
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] true if successful, false otherwise
+  # @return [Boolean] returns true if successful, false if not
   def model_add_transfer_air(model)
     # Do not add transfer air if not required
     return true unless model_transfer_air_required?(model)
@@ -2963,7 +2964,7 @@ Standard.class_eval do
   # Modify thermostat schedule to account for a thermostat setback/up
   #
   # @param thermostat [OpenStudio::Model::ThermostatSetpointDualSetpoint] OpenStudio ThermostatSetpointDualSetpoint object
-  # @return [Boolean] true if success
+  # @return [Boolean] returns true if successful, false if not
   def space_occupancy_standby_mode(thermostat)
     return false
   end

@@ -317,7 +317,7 @@ module EnergyPlus
         # use regex to get the temperatures
         regex = /Daily Avg(.*)\n/
         match_data = text.match(regex)
-       if match_data.nil?
+        if match_data.nil?
           puts "Can't find outdoor air temps"
           raise
         else
@@ -332,8 +332,8 @@ module EnergyPlus
 
           # insert as numbers
           monthly_temps.each { |temp| @monthly_dry_bulb << temp.to_f }
-          # puts "#{@monthly_dry_bulb}"
-        end
+           # puts "#{@monthly_dry_bulb}"
+         end
 
         # use regex to get undisturbed ground temps at 0.5 m depth
         regex = /Monthly.*Calculated.*undisturbed*.*Ground.*Temperatures.*\n.*Jan.*Feb.*Mar.*Apr.*May.*Jun.*Jul.*Aug.*Sep.*Oct.*Nov.*Dec.*\n(.*)\n(.*)\n(.*)/

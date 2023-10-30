@@ -19,6 +19,10 @@ lib/openstudio-standards/refs/references.rb
 lib/openstudio-standards/schedules/**/*.rb
 lib/openstudio-standards/geometry/**/*.rb
 lib/openstudio-standards/create_typical/**/*.rb
+lib/openstudio-standards/hvac/**/*.rb
+lib/openstudio-standards/constructions/**/*.rb
+lib/openstudio-standards/daylighting/**/*.rb
+lib/openstudio-standards/qaqc/**/*.rb
 
 -
 docs/Home.md
@@ -27,5 +31,4 @@ docs/Features.md
 docs/DeveloperInformation.md
 docs/RepositoryStructure.md
 docs/CodeArchitecture.md
-License.txt
-LGPL-2.1
+LICENSE.md

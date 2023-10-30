@@ -603,28 +603,30 @@ class Standard
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
-    # Coal, Diesel, Gasoline, DistrictHeating,
-    # and SolarEnergy.
+    # Coal, Diesel, Gasoline, SolarEnergy,
+    # DistrictHeating, DistrictHeatingWater, and DistrictHeatingSteam.
 
     # error if HVACComponent heating fuels method is not available
     if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
-    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
 
-    if htg_fuels.include?('Gas') 
-       htg_fuels.include?('NaturalGas') ||
-       htg_fuels.include?('Propane') ||
-       htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOil_1') ||
-       htg_fuels.include?('FuelOilNo1') ||
-       htg_fuels.include?('FuelOil_2') ||
-       htg_fuels.include?('FuelOilNo2') ||
-       htg_fuels.include?('Coal') ||
-       htg_fuels.include?('Diesel') ||
-       htg_fuels.include?('Gasoline') ||
-       htg_fuels.include?('DistrictHeating')
+    if htg_fuels.include?('Gas')
+      htg_fuels.include?('NaturalGas') ||
+        htg_fuels.include?('Propane') ||
+        htg_fuels.include?('PropaneGas') ||
+        htg_fuels.include?('FuelOil_1') ||
+        htg_fuels.include?('FuelOilNo1') ||
+        htg_fuels.include?('FuelOil_2') ||
+        htg_fuels.include?('FuelOilNo2') ||
+        htg_fuels.include?('Coal') ||
+        htg_fuels.include?('Diesel') ||
+        htg_fuels.include?('Gasoline') ||
+        htg_fuels.include?('DistrictHeating') ||
+        htg_fuels.include?('DistrictHeatingWater') ||
+        htg_fuels.include?('DistrictHeatingSteam')
 
       is_fossil = true
     end
@@ -658,23 +660,25 @@ class Standard
 
     # error if HVACComponent heating fuels method is not available
     if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
     # Fossil heating
-    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
-    if htg_fuels.include?('Gas') 
-       htg_fuels.include?('NaturalGas') ||
-       htg_fuels.include?('Propane') ||
-       htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOil_1') ||
-       htg_fuels.include?('FuelOilNo1') ||
-       htg_fuels.include?('FuelOil_2') ||
-       htg_fuels.include?('FuelOilNo2') ||
-       htg_fuels.include?('Coal') ||
-       htg_fuels.include?('Diesel') ||
-       htg_fuels.include?('Gasoline') ||
-       htg_fuels.include?('DistrictHeating')
+    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
+    if htg_fuels.include?('Gas')
+      htg_fuels.include?('NaturalGas') ||
+        htg_fuels.include?('Propane') ||
+        htg_fuels.include?('PropaneGas') ||
+        htg_fuels.include?('FuelOil_1') ||
+        htg_fuels.include?('FuelOilNo1') ||
+        htg_fuels.include?('FuelOil_2') ||
+        htg_fuels.include?('FuelOilNo2') ||
+        htg_fuels.include?('Coal') ||
+        htg_fuels.include?('Diesel') ||
+        htg_fuels.include?('Gasoline') ||
+        htg_fuels.include?('DistrictHeating') ||
+        htg_fuels.include?('DistrictHeatingWater') ||
+        htg_fuels.include?('DistrictHeatingSteam')
       fossil = true
     end
 
@@ -730,35 +734,36 @@ class Standard
 
     # error if HVACComponent heating fuels method is not available
     if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
     # Get an array of the heating fuels
     # used by the zone.  Possible values are
     # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
-    # Coal, Diesel, Gasoline, DistrictHeating,
-    # and SolarEnergy.
-    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
+    # Coal, Diesel, Gasoline, SolarEnergy,
+    # DistrictHeating, DistrictHeatingWater, and DistrictHeatingSteam.
+    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
 
     # Includes fossil
     fossil = false
-    if htg_fuels.include?('Gas') 
-       htg_fuels.include?('NaturalGas') ||
-       htg_fuels.include?('Propane') ||
-       htg_fuels.include?('PropaneGas') ||
-       htg_fuels.include?('FuelOil_1') ||
-       htg_fuels.include?('FuelOilNo1') ||
-       htg_fuels.include?('FuelOil_2') ||
-       htg_fuels.include?('FuelOilNo2') ||
-       htg_fuels.include?('Coal') ||
-       htg_fuels.include?('Diesel') ||
-       htg_fuels.include?('Gasoline')
+    if htg_fuels.include?('Gas')
+      htg_fuels.include?('NaturalGas') ||
+        htg_fuels.include?('Propane') ||
+        htg_fuels.include?('PropaneGas') ||
+        htg_fuels.include?('FuelOil_1') ||
+        htg_fuels.include?('FuelOilNo1') ||
+        htg_fuels.include?('FuelOil_2') ||
+        htg_fuels.include?('FuelOilNo2') ||
+        htg_fuels.include?('Coal') ||
+        htg_fuels.include?('Diesel') ||
+        htg_fuels.include?('Gasoline')
 
       fossil = true
     end
 
     # Electric and fossil and district
-    if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating') && fossil
+    has_district_heating = (htg_fuels.include?('DistrictHeating') || htg_fuels.include?('DistrictHeatingWater') || htg_fuels.include?('DistrictHeatingSteam'))
+    if htg_fuels.include?('Electricity') && has_district_heating && fossil
       is_mixed = true
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity, fossil, and district.")
     end
@@ -770,13 +775,13 @@ class Standard
     end
 
     # Electric and district
-    if htg_fuels.include?('Electricity') && htg_fuels.include?('DistrictHeating')
+    if htg_fuels.include?('Electricity') && has_district_heating
       is_mixed = true
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity and district.")
     end
 
     # Fossil and district
-    if fossil && htg_fuels.include?('DistrictHeating')
+    if fossil && has_district_heating
       is_mixed = true
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed fossil and district.")
     end
@@ -864,12 +869,12 @@ class Standard
 
     # error if HVACComponent heating fuels method is not available
     if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
     # Get the zone heating and cooling fuels
-    htg_fuels = thermal_zone.heatingFuelTypes.map { |f| f.valueName }
-    clg_fuels = thermal_zone.coolingFuelTypes.map { |f| f.valueName }
+    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
+    clg_fuels = thermal_zone.coolingFuelTypes.map(&:valueName)
     is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
 
     # Infer the HVAC type
@@ -1316,7 +1321,7 @@ class Standard
   # Logic to detect indirectly-conditioned spaces cannot be implemented
   # as part of this measure as it would need to call itself.
   # It is implemented as part of space_conditioning_category().
-  # TODO: Add addendum db rules to 90.1-2019 for 90.1-2022 (use stable baseline value for zones designated as semiheated using proposed sizing run)
+  # @todo Add addendum db rules to 90.1-2019 for 90.1-2022 (use stable baseline value for zones designated as semiheated using proposed sizing run)
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
@@ -1324,7 +1329,7 @@ class Standard
   def thermal_zone_conditioning_category(thermal_zone, climate_zone)
     # error if zone design load methods are not available
     if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
     # Get the heating load

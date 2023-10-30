@@ -586,7 +586,7 @@ class ASHRAE9012019 < ASHRAE901
 
     # Retrieve the sum of the zone minimum primary airflow
     if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', 'Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     else
       vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates
     end
@@ -608,7 +608,7 @@ class ASHRAE9012019 < ASHRAE901
 
       # error if zone autosized methods are not available
       if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Required ThermalZone methods .autosizedCoolingDesignAirFlowRate and .autosizedHeatingDesignAirFlowRate are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', 'Required ThermalZone methods .autosizedCoolingDesignAirFlowRate and .autosizedHeatingDesignAirFlowRate are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
       end
 
       clg_dsn_flow = zone.autosizedCoolingDesignAirFlowRate

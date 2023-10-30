@@ -247,7 +247,7 @@ module OpenstudioStandards
         if rule.applySaturday && rule.applySaturday == options['sat'] then alter_rule = true end
         if rule.applySunday && rule.applySunday == options['sun'] then alter_rule = true end
 
-        # TODO: - add in logic to warn user about conflicts where a single rule has conflicting tests
+        # @todo add in logic to warn user about conflicts where a single rule has conflicting tests
 
         if alter_rule
           profiles << day_sch
