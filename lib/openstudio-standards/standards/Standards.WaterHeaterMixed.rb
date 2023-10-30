@@ -85,29 +85,21 @@ class Standard
       base_ef = wh_props['energy_factor_base']
       vol_drt = wh_props['energy_factor_volume_derate']
       ef = base_ef - (vol_drt * volume_gal)
-      # Calculate the skin loss coefficient (UA)
-      # differently depending on the fuel type
-      if fuel_type == 'Electricity'
-        # Fixed water heater efficiency per PNNL
-        water_heater_eff = 1.0
-        ua_btu_per_hr_per_f = (41_094 * (1 / ef - 1)) / (24 * 67.5)
-      elsif fuel_type == 'NaturalGas'
-        # Fixed water heater thermal efficiency per PNNL
-        water_heater_eff = 0.82
-        # Calculate the Recovery Efficiency (RE)
-        # based on a fixed capacity of 75,000 Btu/hr
-        # and a fixed volume of 40 gallons by solving
-        # this system of equations:
-        # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
-        # 0.82 = (ua*67.5+cap*re)/cap
-        # Solutions to the system of equations were determined
-        # for discrete values of EF and modeled using a regression
-        re = -0.1137 * ef**2 + 0.1997 * ef + 0.731
-        # Calculate the skin loss coefficient (UA)
-        # Input capacity is assumed to be the output capacity
-        # divided by a burner efficiency of 80%
-        ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 0.8 / 67.5
+      water_heater_eff, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef)
+      # Two booster water heaters
+      ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
+    end
+
+    if (wh_props['uniform_energy_factor_base'] && wh_props['uniform_energy_factor_volume_allowance']) || wh_props['uniform_energy_factor']
+      if wh_props['uniform_energy_factor']
+        uef = wh_props['uniform_energy_factor']
+      else
+        base_uef = wh_props['uniform_energy_factor_base']
+        vol_drt = wh_props['uniform_energy_factor_volume_allowance']
+        uef = base_uef - (vol_drt * volume_gal)
       end
+      ef = water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr)
+      water_heater_eff, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef)
       # Two booster water heaters
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
@@ -234,5 +226,79 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     return capacity_btu_per_hr
+  end
+
+  # Convert UEF to EF
+  #
+  # @param fuel_type [String] water heater fuel type
+  # @param uef [Float] water heater UEF
+  # @param capacity_btu_per_hr [Float] water heater capacity
+  # @return [Float] returns EF, energy factor
+  def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr)
+    sub_type = nil
+    capacity_w = OpenStudio.convert(capacity_w, 'Btu/hr', 'W').get
+    # source: https://energycodeace.com/site/custom/public/reference-ace-2019/index.html#!Documents/52residentialwaterheatingequipment.htm
+    if fuel_type == 'NaturalGas' && capacity_btu_per_hr <= 75_000 && (volume_gal >= 20 && volume_gal <= 100)
+      sub_type = 'consumer_storage'
+    elsif fuel_type == 'Electricity' && capacity_w <= 12_000 && (volume_gal >= 20 && volume_gal <= 120)
+      sub_type = 'consumer_storage'
+    elsif fuel_type == 'NaturalGas' && capacity_btu_per_hr < 105_000 && volume_gal < 120
+      sub_type = 'residential_duty'
+    elsif fuel_type == 'Oil' && capacity_btu_per_hr < 140_000 && volume_gal < 120
+      sub_type = 'residential_duty'
+    elsif fuel_type == 'Electricity' && capacity_w < 58_600 && volume_gal <= 2
+      sub_type = 'residential_duty'
+    elsif volume_gal <= 2
+      sub_type = 'instantenous'
+    end
+    
+    # source: RESNET, https://www.resnet.us/wp-content/uploads/RESNET-EF-Calculator-2017.xlsx
+    if sub_type.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "No sub type identified for #{water_heater_mixed.name}, EF = UEF is assumed.")
+      return uef
+    elsif sub_type == 'consumer_storage' && fuel_type == 'NaturalGas'
+      return 0.9066 * uef + 0.0711
+    elsif sub_type == 'consumer_storage' && fuel_type == 'Electricity'
+      return 2.44029 * uef - 1.28444
+    elsif sub_type == 'residential_duty' && (fuel_type == 'NaturalGas' || fuel_type == 'Oil')
+      return 1.005 * uef + 0.0019
+    elsif sub_type == 'residential_duty' && fuel_type == 'Electricity'
+      return 1.0219 * uef - 0.0025
+    elsif sub_type == 'instantenous'
+      return uef
+    end
+  end
+
+  # Convert EF to Thermal Efficiency and storage tank UA
+  #
+  # @param fuel_type [String] water heater fuel type
+  # @param ef [Float] water heater EF, energy factor
+  # @return [Array] returns water heater thermal efficiency and storage tank UA
+  def water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef)
+    # Calculate the skin loss coefficient (UA)
+    # differently depending on the fuel type
+    if fuel_type == 'Electricity'
+      # Fixed water heater efficiency per PNNL
+      water_heater_eff = 1.0
+      ua_btu_per_hr_per_f = (41_094 * (1 / ef - 1)) / (24 * 67.5)
+    elsif fuel_type == 'NaturalGas'
+      # Fixed water heater thermal efficiency per PNNL
+      water_heater_eff = 0.82
+      # Calculate the Recovery Efficiency (RE)
+      # based on a fixed capacity of 75,000 Btu/hr
+      # and a fixed volume of 40 gallons by solving
+      # this system of equations:
+      # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
+      # 0.82 = (ua*67.5+cap*re)/cap
+      # Solutions to the system of equations were determined
+      # for discrete values of EF and modeled using a regression
+      re = -0.1137 * ef**2 + 0.1997 * ef + 0.731
+      # Calculate the skin loss coefficient (UA)
+      # Input capacity is assumed to be the output capacity
+      # divided by a burner efficiency of 80%
+      ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 0.8 / 67.5
+    end
+
+    return water_heater_eff, ua_btu_per_hr_per_f
   end
 end
