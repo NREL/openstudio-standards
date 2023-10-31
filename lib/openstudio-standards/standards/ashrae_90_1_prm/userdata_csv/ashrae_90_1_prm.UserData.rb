@@ -89,6 +89,22 @@ class UserDataCSVAirLoopHVAC < UserDataCSV
   end
 end
 
+class UserDataLights < UserDataCSV
+  # user data userdata_lights
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
+  def initialize(model, save_dir)
+    super
+    @component_name = 'Lights'
+    @file_name = UserDataFiles::LIGHTS
+  end
+
+  def write_default_rows
+    # @todo we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
 class UserDataCSVBuilding < UserDataCSV
   # user data userdata_building
   # @param model [OpenStudio::Model::Model]

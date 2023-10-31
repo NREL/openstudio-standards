@@ -1416,6 +1416,8 @@ class ASHRAE901PRM < Standard
     handle_airloop_user_input_data(model)
     # exterior lighting handler
     handle_exterior_lighting_user_input_data(model)
+    # load lights data from user data
+    handle_lights_user_input_data(model)
     # load OA data from user data
     handle_outdoor_air_user_input_data(model)
     # load air loop DOAS user data from the proposed model
@@ -1433,6 +1435,45 @@ class ASHRAE901PRM < Standard
     # load water use equipment definition user data
     handle_wateruse_equipment_definition_user_input_data(model)
     return true
+  end
+
+  # A function to load lights from user data csv files
+  # The file name is userdata_lights.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_lights_user_input_data(model)
+    user_lights = get_userdata(UserDataFiles::LIGHTS)
+    model.getLightss.each do |light|
+      if user_lights
+        user_data_updated = false
+        user_lights.each do |user_light|
+          next unless UserData.compare(light.name.get, user_light['name'])
+
+          has_retail_display_exception = prm_read_user_data(user_light, 'has_retail_display_exception')
+          if has_retail_display_exception
+            light.additionalProperties.setFeature('has_retail_display_exception', true)
+          else
+            light.additionalProperties.setFeature('has_retail_display_exception', false)
+          end
+
+          has_unregulated_exception = prm_read_user_data(user_light, 'has_unregulated_exception')
+          if has_unregulated_exception
+            light.additionalProperties.setFeature('has_unregulated_exception', true)
+          else
+            light.additionalProperties.setFeature('has_unregulated_exception', false)
+          end
+
+          unregulated_category = prm_read_user_data(user_light, 'unregulated_category')
+          if unregulated_category
+            light.additionalProperties.setFeature('unregulated_category', unregulated_category)
+          end
+
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "WaterUseConnections name #{light.name.get} was not found in user data file: #{UserDataFiles::LIGHTS}; No user data applied.")
+        end
+      end
+    end
   end
 
   # A function to load water use equipment definition from user data csv files

@@ -162,6 +162,8 @@ class ASHRAE901PRM < Standard
       return check_userdata_space_and_spacetype(object_name, user_data)
     when UserDataFiles::ELECTRIC_EQUIPMENT
       return check_userdata_electric_equipment(object_name, user_data)
+    when UserDataFiles::LIGHTS
+      return check_userdata_lights(object_name, user_data)
     when UserDataFiles::EXTERIOR_LIGHTS
       return check_userdata_exterior_lighting(object_name, user_data)
     when UserDataFiles::AIRLOOP_HVAC
@@ -181,6 +183,31 @@ class ASHRAE901PRM < Standard
     else
       return true
     end
+  end
+
+  def check_userdata_lights(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |user_light|
+      name = prm_read_user_data(user_light, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: lights name is missing or empty. Lights user data has not validated.")
+        return false
+      end
+
+      has_retail_display_exception = prm_read_user_data(user_light, 'has_retail_display_exception')
+      unless has_retail_display_exception.nil? || UserDataBoolean.matched_any?(has_retail_display_exception)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Lights name #{name}, has_retail_display_exception shall be either True or False. Got #{has_retail_display_exception}")
+        userdata_valid = false
+      end
+
+      has_unregulated_exception = prm_read_user_data(user_light, 'has_unregulated_exception')
+      unless has_unregulated_exception.nil? || UserDataBoolean.matched_any?(has_unregulated_exception)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Lights name #{name}, has_unregulated_exception shall be either True or False. Got #{has_unregulated_exception}")
+        userdata_valid = false
+      end
+    end
+    # do we need to regulate the unregulated_category?
+    return userdata_valid
   end
 
   def check_userdata_building(object_name, user_data)
@@ -227,7 +254,7 @@ class ASHRAE901PRM < Standard
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: thermal zone name is missing or empty. Thermal zone user data has not validated.")
         return false
       end
-      has_health_safety_night_cycle_exception = prm_read_user_data(user_thermal_zone, 'has_health_safety_night_cycle_exception', UserDataBoolean::FALSE)
+      has_health_safety_night_cycle_exception = prm_read_user_data(user_thermal_zone, 'has_health_safety_night_cycle_exception')
       unless has_health_safety_night_cycle_exception.nil? || UserDataBoolean.matched_any?(has_health_safety_night_cycle_exception)
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Thermal zone name #{name}, has_health_safety_night_cycle_exception shall be either True or False. Got #{has_health_safety_night_cycle_exception}")
         userdata_valid = false
