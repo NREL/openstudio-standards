@@ -6743,7 +6743,7 @@ OS:SpaceType,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Handle
@@ -6760,7 +6760,7 @@ OS:SpaceType,
   {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Lobby;                                  !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Handle
@@ -6777,7 +6777,7 @@ OS:SpaceType,
   {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Gym;                                    !- Standards Space Type
+  exercise area;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Handle
@@ -6794,7 +6794,7 @@ OS:SpaceType,
   {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Mechanical;                             !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Handle
@@ -6811,7 +6811,7 @@ OS:SpaceType,
   {13d8edca-f17b-4a9f-8402-de08ca4175c3}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Cafeteria;                              !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {13d8edca-f17b-4a9f-8402-de08ca4175c3}, !- Handle
@@ -6828,7 +6828,7 @@ OS:SpaceType,
   {4b81ad58-3059-4888-a5f0-4667974bbc33}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:Rendering:Color,
   {4b81ad58-3059-4888-a5f0-4667974bbc33}, !- Handle
@@ -6845,7 +6845,7 @@ OS:SpaceType,
   {5f90fb4b-00a3-4f7c-9da6-bb0d2f6c8dbd}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Restroom;                               !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5f90fb4b-00a3-4f7c-9da6-bb0d2f6c8dbd}, !- Handle
@@ -6862,7 +6862,7 @@ OS:SpaceType,
   {35d16a43-528e-4bb0-b366-0307cf03d08b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {35d16a43-528e-4bb0-b366-0307cf03d08b}, !- Handle
@@ -6879,7 +6879,7 @@ OS:SpaceType,
   {b33dba6b-b3dc-431f-999e-546c9d49159b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Classroom;                              !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {b33dba6b-b3dc-431f-999e-546c9d49159b}, !- Handle
@@ -6896,7 +6896,7 @@ OS:SpaceType,
   {5523923f-6128-48f7-b361-279399792ff5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  ComputerRoom;                           !- Standards Space Type
+  datacenter/low ite;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5523923f-6128-48f7-b361-279399792ff5}, !- Handle
@@ -6913,7 +6913,7 @@ OS:SpaceType,
   {b36531a2-a0fd-4d78-a02d-531890427a29}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  Library;                                !- Standards Space Type
+  library;      !- Standards Space Type
 
 OS:Rendering:Color,
   {b36531a2-a0fd-4d78-a02d-531890427a29}, !- Handle

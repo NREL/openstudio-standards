@@ -53546,7 +53546,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  BreakRoom;                              !- Standards Space Type
+  lounge/breakroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {a99fbfdd-6a6a-4cb9-a24f-ff27257f3a3b}, !- Handle
@@ -53564,7 +53564,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Classroom;                              !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f1eab6fb-aa05-4c20-9395-0bf12df146cf}, !- Handle
@@ -53582,7 +53582,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  ClosedOffice;                           !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {721ae511-bead-4e67-8004-7e3334db1dd4}, !- Handle
@@ -53600,7 +53600,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Conference;                             !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:Rendering:Color,
   {02c4dbfa-74fb-4d4d-b5cf-c85588d7ad53}, !- Handle
@@ -53618,7 +53618,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {9805d1ae-1386-4e30-a44c-bdb043a89648}, !- Handle
@@ -53636,7 +53636,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {2186a831-c25c-4d41-9f41-a20aa1ffe4a2}, !- Handle
@@ -53654,7 +53654,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Elec/MechRoom;                          !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {aed30921-95d3-4cf4-8198-2924f8292104}, !- Handle
@@ -53672,7 +53672,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   HighriseApartment,                      !- Standards Building Type
-  Apartment;                              !- Standards Space Type
+  multifamily;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3ecee402-6715-4f2a-847c-63bf638b72a3}, !- Handle
@@ -53690,7 +53690,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   HighriseApartment,                      !- Standards Building Type
-  Apartment_topfloor_NS;                  !- Standards Space Type
+  multifamily;      !- Standards Space Type
 
 OS:Rendering:Color,
   {69411813-fc1f-4c31-8b9b-680b77598148}, !- Handle
@@ -53708,7 +53708,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   HighriseApartment,                      !- Standards Building Type
-  Apartment_topfloor_WE;                  !- Standards Space Type
+  multifamily;      !- Standards Space Type
 
 OS:Rendering:Color,
   {66536b4a-3c8e-4bb4-a5f3-55d8b91b7a49}, !- Handle
@@ -53726,7 +53726,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   HighriseApartment,                      !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f3bc2016-e866-485f-8706-be9ba1de2282}, !- Handle
@@ -53744,7 +53744,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   HighriseApartment,                      !- Standards Building Type
-  Corridor_topfloor;                      !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {0a21be3d-7a35-49b0-a93d-5caa36faf7d2}, !- Handle
@@ -53762,7 +53762,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   HighriseApartment,                      !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {168ea72d-afdd-4fee-b308-11e921238057}, !- Handle
@@ -53780,7 +53780,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Banquet;                                !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3bc8220e-b2a5-4a46-8548-923c31729f80}, !- Handle
@@ -53798,7 +53798,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Basement;                               !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1038c37d-83a1-4830-aa53-7f2a00779ec9}, !- Handle
@@ -53816,7 +53816,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Cafe;                                   !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1315d0b3-7596-4000-a78c-7413534b5ca9}, !- Handle
@@ -53834,7 +53834,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {35c7c7cd-87c7-4182-ae7d-c5f1ea40e082}, !- Handle
@@ -53852,7 +53852,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Corridor2;                              !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {0e2cd06d-c4e7-45de-8e69-c609e8b6d948}, !- Handle
@@ -53870,7 +53870,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  GuestRoom;                              !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3a43ac69-07b5-471c-a6e1-4eddbeebeb49}, !- Handle
@@ -53888,7 +53888,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  GuestRoom2;                             !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {769a71e1-10ad-480e-b496-2f2476cc14d6}, !- Handle
@@ -53906,7 +53906,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  GuestRoom3;                             !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {25e39bbb-2a0c-41d3-84ac-80a22cd86c0b}, !- Handle
@@ -53924,7 +53924,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  GuestRoom4;                             !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {a76c32e6-36e5-46a8-870b-2b3403339b4b}, !- Handle
@@ -53942,7 +53942,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:Rendering:Color,
   {cb97d509-e3b1-44ab-83b2-39eed93787a3}, !- Handle
@@ -53960,7 +53960,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Laundry;                                !- Standards Space Type
+  laundry/washing;      !- Standards Space Type
 
 OS:Rendering:Color,
   {c010d79c-a7ac-405c-a300-979fe838255a}, !- Handle
@@ -53978,7 +53978,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Lobby;                                  !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {247a06a2-be2b-49a7-9bc2-b21fa590cf12}, !- Handle
@@ -53996,7 +53996,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Mechanical;                             !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {543eae17-9690-4086-9888-bf8f2d595180}, !- Handle
@@ -54014,7 +54014,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Retail;                                 !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {872549cc-4b99-4ea6-9a4f-8c63f791dd92}, !- Handle
@@ -54032,7 +54032,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Retail2;                                !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {2971b0b5-04b0-4856-9b0f-124855a7767a}, !- Handle
@@ -54050,7 +54050,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  Storage;                                !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {6727ccc7-9b68-44a3-ab41-93024d9d8f05}, !- Handle
@@ -54068,7 +54068,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Lobby;                                  !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5684d140-5496-4929-9e87-ab91443692e0}, !- Handle
@@ -54086,7 +54086,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  OfficeLarge Data Center;                !- Standards Space Type
+  datacenter/low ite;      !- Standards Space Type
 
 OS:Rendering:Color,
   {2d5a9384-1064-4c3c-8ae0-07feaf150bbf}, !- Handle
@@ -54104,7 +54104,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  OfficeLarge Main Data Center;           !- Standards Space Type
+  datacenter/high ite;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1b972ab7-e3ff-48b5-a672-114babd55d3b}, !- Handle
@@ -54122,7 +54122,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  OpenOffice;                             !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {9d2bb677-f12d-4a27-a7f8-671c69b291cf}, !- Handle
@@ -54140,7 +54140,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Restroom;                               !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {99cb542a-f008-415c-ad2d-3c818cc8db56}, !- Handle
@@ -54158,7 +54158,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Retail,                                 !- Standards Building Type
-  Back_Space;                             !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {732b9c7e-256a-45b5-a319-96cc8df64ff5}, !- Handle
@@ -54176,7 +54176,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Retail,                                 !- Standards Building Type
-  Entry;                                  !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {c3043cfa-a430-45c5-8654-6b526cbb2572}, !- Handle
@@ -54194,7 +54194,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Retail,                                 !- Standards Building Type
-  Point_of_Sale;                          !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {ebccfa9c-24ab-46aa-a119-14f592992abb}, !- Handle
@@ -54212,7 +54212,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Retail,                                 !- Standards Building Type
-  Retail;                                 !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {2c4c39dd-b88c-44b5-baa4-79165acd285b}, !- Handle
@@ -54230,7 +54230,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Stair;                                  !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:Rendering:Color,
   {690343ea-e8e7-4b88-9416-c727a8dc4788}, !- Handle
@@ -54249,7 +54249,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Storage;                                !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {ca9b786d-a652-4cd2-adf9-251fc6d36172}, !- Handle
@@ -54267,7 +54267,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Elevator Lobby;                         !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:SpaceType,
   {b2e624ed-a317-422f-ba4d-4962369d8dd3}, !- Handle
@@ -54278,7 +54278,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Elevator Shaft;                         !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:SpaceType,
   {e694b972-a4b9-4ab3-b6c1-18f9400b519b}, !- Handle
@@ -54289,7 +54289,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Elevator Machine Room;                  !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:SpaceType,
   {7e9b8a3b-4b69-4d4b-bf02-27411dba32d7}, !- Handle
@@ -54300,7 +54300,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Main Electrical;                        !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:SpaceType,
   {51f0eb91-cf0d-4fd2-a124-bc06023cb3c2}, !- Handle
@@ -54311,7 +54311,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Main Mechanical;                        !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:SpaceType,
   {3392663f-5b41-4f47-943b-1bdb7b548066}, !- Handle
@@ -54322,7 +54322,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  GuestRoom5;                             !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:SpaceType,
   {7229485b-f545-4a3f-a5ff-376f6c8edc53}, !- Handle
@@ -54333,7 +54333,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  GuestRoom6;                             !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:SpaceType,
   {aaa9dd7b-fcc7-42f6-a8c3-e75500577a25}, !- Handle
@@ -54344,7 +54344,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeHotel,                             !- Standards Building Type
-  GuestRoom7;                             !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:BuildingStory,
   {9ad0fb37-ca9c-4e39-a80d-14fc8f7086d1}, !- Handle

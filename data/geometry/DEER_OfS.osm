@@ -2565,7 +2565,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   OfS,                                    !- Standards Building Type
-  Hall;                                   !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:SpaceType,
   {032dd457-2f82-4a6c-a2aa-dfa0ab50ab5f}, !- Handle
@@ -2575,7 +2575,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   OfS,                                    !- Standards Building Type
-  OfficeSmall;                            !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:ThermalZone,
   {7768453a-9003-4d27-a8e2-20e33cf43975}, !- Handle
@@ -4225,5 +4225,5 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 

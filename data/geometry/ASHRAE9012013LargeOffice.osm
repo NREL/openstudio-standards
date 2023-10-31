@@ -5635,7 +5635,7 @@ OS:SpaceType,
   {deec795f-0d5a-406a-9bf7-2a38ae96582c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
-  WholeBuilding - Lg Office;              !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {deec795f-0d5a-406a-9bf7-2a38ae96582c}, !- Handle
@@ -5652,7 +5652,7 @@ OS:SpaceType,
   {1662bc3b-58b7-4cf1-b5dd-0ccf3b1c396e}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
-  OfficeLarge Data Center;                !- Standards Space Type
+  datacenter/low ite;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1662bc3b-58b7-4cf1-b5dd-0ccf3b1c396e}, !- Handle
@@ -5669,7 +5669,7 @@ OS:SpaceType,
   {dfeef457-6cd1-40dc-aa16-7b1cfcb585e1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
-  OfficeLarge Main Data Center;           !- Standards Space Type
+  datacenter/high ite;      !- Standards Space Type
 
 OS:Rendering:Color,
   {dfeef457-6cd1-40dc-aa16-7b1cfcb585e1}, !- Handle
@@ -5686,7 +5686,7 @@ OS:SpaceType,
   {387f9c00-f772-4224-8c40-35c5c7b8a609}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
-  WholeBuilding - Lg Office-basement;     !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {387f9c00-f772-4224-8c40-35c5c7b8a609}, !- Handle
@@ -5703,7 +5703,7 @@ OS:SpaceType,
   {43c42105-e066-449e-a862-707906c42529}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Office,                                 !- Standards Building Type
-  WholeBuilding - Lg Office-others;       !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {43c42105-e066-449e-a862-707906c42529}, !- Handle
@@ -5720,7 +5720,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 
 OS:SubSurface,
   {a165c732-31bf-48a6-a413-d61dc5ff3d07}, !- Handle

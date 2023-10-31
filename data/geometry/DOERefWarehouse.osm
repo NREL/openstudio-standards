@@ -1235,7 +1235,7 @@ OS:SpaceType,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Warehouse,                              !- Standards Building Type
-  Bulk;                                   !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Handle
@@ -1252,7 +1252,7 @@ OS:SpaceType,
   {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Warehouse,                              !- Standards Building Type
-  Fine;                                   !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Handle
@@ -1269,7 +1269,7 @@ OS:SpaceType,
   {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Warehouse,                              !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Handle

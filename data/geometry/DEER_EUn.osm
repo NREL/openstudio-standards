@@ -7490,7 +7490,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   EUn,                                    !- Standards Building Type
-  Classroom;                              !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:SpaceType,
   {30170ce0-7a8a-49d4-a92c-d20369b09fef}, !- Handle
@@ -7510,7 +7510,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   EUn,                                    !- Standards Building Type
-  CorridorStairway;                       !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:SpaceType,
   {98c85a4e-8a54-414b-b506-c9d7507043d2}, !- Handle
@@ -7520,7 +7520,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   EUn,                                    !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:SpaceType,
   {d6ac571e-fa4d-48d6-a87d-866a666081f7}, !- Handle
@@ -7540,7 +7540,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   EUn,                                    !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:SpaceType,
   {06bf9451-c5aa-4155-8f50-cb58b16cab7c}, !- Handle
@@ -7550,7 +7550,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   EUn,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:SpaceType,
   {901d7b24-357d-423f-bb59-8f3b0a0d4507}, !- Handle
@@ -12080,7 +12080,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 
 OS:Surface,
   {08ce47da-92c2-4770-ab64-36241dcb4678}, !- Handle

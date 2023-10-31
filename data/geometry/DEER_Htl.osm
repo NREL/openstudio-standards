@@ -8480,7 +8480,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Htl,                                    !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:SpaceType,
   {556c6347-b7be-4a7a-bf80-da065b46a276}, !- Handle
@@ -8510,7 +8510,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Htl,                                    !- Standards Building Type
-  HotelLobby;                             !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:SpaceType,
   {8ae54457-9b5a-4a33-baec-e1b5cb6be1d2}, !- Handle
@@ -8520,7 +8520,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Htl,                                    !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:SpaceType,
   {a7a55c46-7fa1-4f7f-9312-17cbc6a6fbc9}, !- Handle
@@ -8530,7 +8530,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Htl,                                    !- Standards Building Type
-  Laundry;                                !- Standards Space Type
+  laundry/washing;      !- Standards Space Type
 
 OS:SpaceType,
   {7cd40050-b4be-4fea-a59e-0b26c9b32814}, !- Handle
@@ -8540,7 +8540,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Htl,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:ThermalZone,
   {ad360f49-bd6e-4b31-b97a-eeaaadd39dc1}, !- Handle
@@ -12486,7 +12486,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 
 OS:Surface,
   {0c966c7c-86db-4c05-baac-f645b184d925}, !- Handle
