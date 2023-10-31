@@ -89,13 +89,45 @@ class UserDataCSVAirLoopHVAC < UserDataCSV
   end
 end
 
-class UserDataLights < UserDataCSV
+class UserDataCSVGasEquipment < UserDataCSV
+  # user data userdata_gas_equipment
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
+  def initialize(model, save_dir)
+    super
+    @component_name = 'GasEquipments'
+    @file_name = UserDataFiles::GAS_EQUIPMENT
+  end
+
+  def write_default_rows
+    # @todo we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataCSVZoneHvac < UserDataCSV
+  # user data userdata_zone_hvac
+  # @param model [OpenStudio::Model::Model]
+  # @param save_dir [String] directory to save user data files
+  def initialize(model, save_dir)
+    super
+    @component_name = 'ZoneHVAC'
+    @file_name = UserDataFiles::ZONE_HVAC
+  end
+
+  def write_default_rows
+    # @todo we can do more here but right now, keep everything unchecked.
+    return Array.new(@headers.length - 1, '')
+  end
+end
+
+class UserDataCSVLights < UserDataCSV
   # user data userdata_lights
   # @param model [OpenStudio::Model::Model]
   # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
-    @component_name = 'Lights'
+    @component_name = 'Lightss'
     @file_name = UserDataFiles::LIGHTS
   end
 
@@ -265,7 +297,7 @@ class UserDataWaterUseEquipment < UserDataCSV
   # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
-    @component_name = 'WaterUseEquipment'
+    @component_name = 'WaterUseEquipments'
     @file_name = UserDataFiles::WATERUSE_EQUIPMENT
   end
 
@@ -281,7 +313,7 @@ class UserDataWaterUseEquipmentDefinition < UserDataCSV
   # @param save_dir [String] directory to save user data files
   def initialize(model, save_dir)
     super
-    @component_name = 'WaterUseEquipmentDefinition'
+    @component_name = 'WaterUseEquipmentDefinitions'
     @file_name = UserDataFiles::WATERUSE_EQUIPMENT_DEFINITION
   end
 

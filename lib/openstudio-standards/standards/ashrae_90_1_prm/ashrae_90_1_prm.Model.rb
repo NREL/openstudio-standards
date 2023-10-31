@@ -1428,6 +1428,8 @@ class ASHRAE901PRM < Standard
     handle_thermal_zone_user_input_data(model)
     # load electric equipment user data
     handle_electric_equipment_user_input_data(model)
+    # load gas equipment user data
+    handle_gas_equipment_user_input_data(model)
     # load water use connection user data
     handle_wateruse_connections_user_input_data(model)
     # load water use equipment user data
@@ -1448,14 +1450,14 @@ class ASHRAE901PRM < Standard
         user_lights.each do |user_light|
           next unless UserData.compare(light.name.get, user_light['name'])
 
-          has_retail_display_exception = prm_read_user_data(user_light, 'has_retail_display_exception')
+          has_retail_display_exception = prm_read_user_data(user_light, 'has_retail_display_exception', false)
           if has_retail_display_exception
             light.additionalProperties.setFeature('has_retail_display_exception', true)
           else
             light.additionalProperties.setFeature('has_retail_display_exception', false)
           end
 
-          has_unregulated_exception = prm_read_user_data(user_light, 'has_unregulated_exception')
+          has_unregulated_exception = prm_read_user_data(user_light, 'has_unregulated_exception', false)
           if has_unregulated_exception
             light.additionalProperties.setFeature('has_unregulated_exception', true)
           else
@@ -1660,6 +1662,12 @@ class ASHRAE901PRM < Standard
         user_data_plug_load.each do |user_plug_load|
           next unless UserData.compare(elevator_equipment.name.get, user_plug_load['name'])
 
+          fraction_of_controlled_receptacles = prm_read_user_data(user_plug_load, 'fraction_of_controlled_receptacles', '0.0').to_f
+          elevator_equipment.additionalProperties.setFeature('fraction_of_controlled_receptacles', fraction_of_controlled_receptacles)
+
+          receptacle_power_savings = prm_read_user_data(user_plug_load, 'receptacle_power_savings', '0.0').to_f
+          elevator_equipment.additionalProperties.setFeature('receptacle_power_savings', receptacle_power_savings)
+
           num_lifts = prm_read_user_data(user_plug_load, 'elevator_number_of_lifts', '0').to_i
           if num_lifts > 0
             elevator_equipment.additionalProperties.setFeature('elevator_number_of_lifts', num_lifts)
@@ -1683,6 +1691,33 @@ class ASHRAE901PRM < Standard
 
         unless user_data_updated
           OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Electric equipment name #{elevator_equipment.name.get} was not found in user data file: #{UserDataFiles::ELECTRIC_EQUIPMENT}; No user data applied.")
+        end
+      end
+    end
+  end
+
+  # A function to load gas equipment csv files
+  # The file name is userdata_gas_equipment.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_gas_equipment_user_input_data(model)
+    user_data_gas_equipment = get_userdata(UserDataFiles::GAS_EQUIPMENT)
+    model.getGasEquipments.each do |gas_equipment|
+      if user_data_gas_equipment
+        user_data_updated = false
+        user_data_gas_equipment.each do |user_gas_equipment|
+          next unless UserData.compare(gas_equipment.name.get, user_gas_equipment['name'])
+
+          fraction_of_controlled_receptacles = prm_read_user_data(user_gas_equipment, 'fraction_of_controlled_receptacles', '0.0').to_f
+          prm_raise(fraction_of_controlled_receptacles > 1.0, 'The fraction of all controlled receptacles cannot be higher than 1.0')
+          gas_equipment.additionalProperties.setFeature('fraction_of_controlled_receptacles', fraction_of_controlled_receptacles)
+
+          receptacle_power_savings = prm_read_user_data(user_gas_equipment, 'receptacle_power_savings', '0.0').to_f
+          gas_equipment.additionalProperties.setFeature('receptacle_power_savings', receptacle_power_savings)
+          user_data_updated = true
+        end
+
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Gas equipment name #{gas_equipment.name.get} was not found in user data file: #{UserDataFiles::GAS_EQUIPMENT}; No user data applied.")
         end
       end
     end

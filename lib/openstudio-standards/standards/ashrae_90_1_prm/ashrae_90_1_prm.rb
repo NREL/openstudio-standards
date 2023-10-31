@@ -27,8 +27,10 @@ class ASHRAE901PRM < Standard
                       UserDataCSVSpaceTypes.new(user_model, user_data_path),
                       UserDataCSVAirLoopHVACDOAS.new(user_model, user_data_path),
                       UserDataCSVExteriorLights.new(user_model, user_data_path),
+                      UserDataCSVLights.new(user_model, user_data_path),
                       UserDataCSVThermalZone.new(user_model, user_data_path),
                       UserDataCSVElectricEquipment.new(user_model, user_data_path),
+                      UserDataCSVGasEquipment.new(user_model, user_data_path),
                       UserDataCSVOutdoorAir.new(user_model, user_data_path),
                       UserDataWaterUseConnection.new(user_model, user_data_path),
                       UserDataWaterUseEquipment.new(user_model, user_data_path),
@@ -162,6 +164,8 @@ class ASHRAE901PRM < Standard
       return check_userdata_space_and_spacetype(object_name, user_data)
     when UserDataFiles::ELECTRIC_EQUIPMENT
       return check_userdata_electric_equipment(object_name, user_data)
+    when UserDataFiles::GAS_EQUIPMENT
+      return check_userdata_gas_equipment(object_name, user_data)
     when UserDataFiles::LIGHTS
       return check_userdata_lights(object_name, user_data)
     when UserDataFiles::EXTERIOR_LIGHTS
@@ -185,6 +189,10 @@ class ASHRAE901PRM < Standard
     end
   end
 
+  # Check for incorrect data in [UserDataFiles::LIGHTS]
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+  # @return [Boolean] true if data is valid, false if error found
   def check_userdata_lights(object_name, user_data)
     userdata_valid = true
     user_data.each do |user_light|
@@ -210,6 +218,10 @@ class ASHRAE901PRM < Standard
     return userdata_valid
   end
 
+  # Check for incorrect data in [UserDataFiles::BUILDING]
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+  # @return [Boolean] true if data is valid, false if error found
   def check_userdata_building(object_name, user_data)
     userdata_valid = true
     user_data.each do |user_building|
@@ -246,6 +258,10 @@ class ASHRAE901PRM < Standard
     return userdata_valid
   end
 
+  # Check for incorrect data in [UserDataFiles::THERMAL_ZONE]
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+  # @return [Boolean] true if data is valid, false if error found
   def check_userdata_thermal_zone(object_name, user_data)
     userdata_valid = true
     user_data.each do |user_thermal_zone|
@@ -426,6 +442,35 @@ class ASHRAE901PRM < Standard
     return userdata_valid
   end
 
+  # Check for incorrect data in gas equipment user data
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_gas_equipment(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |gas_row|
+      name = prm_read_user_data(gas_row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: gas equipoment name is missing or empty. Gas equipment user data has not validated.")
+        return false
+      end
+      # check for fractions
+      fraction_of_controlled_receptacles = prm_read_user_data(gas_row, 'fraction_of_controlled_receptacles')
+      unless fraction_of_controlled_receptacles.nil? || Float(fraction_of_controlled_receptacles, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: gas equipment definition #{name}'s fraction of controlled receptacles shall be a float, Got #{fraction_of_controlled_receptacles}.")
+      end
+      receptacle_power_savings = prm_read_user_data(gas_row, 'receptacle_power_savings')
+      unless receptacle_power_savings.nil? || Float(receptacle_power_savings, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: gas equipment definition #{name}'s receptacle power savings shall be a float, Got #{receptacle_power_savings}.")
+      end
+    end
+    return userdata_valid
+  end
+
   # Check for incorrect data in electric equipment user data
 
   # @param object_name [String] name of user data csv file to check
@@ -435,6 +480,22 @@ class ASHRAE901PRM < Standard
   def check_userdata_electric_equipment(object_name, user_data)
     userdata_valid = true
     user_data.each do |electric_row|
+      name = prm_read_user_data(electric_row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: electric equipoment name is missing or empty. Electric equipment user data has not validated.")
+        return false
+      end
+      # check for fractions
+      fraction_of_controlled_receptacles = prm_read_user_data(electric_row, 'fraction_of_controlled_receptacles')
+      unless fraction_of_controlled_receptacles.nil? || Float(fraction_of_controlled_receptacles, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: electric equipment definition #{name}'s fraction of controlled receptacles shall be a float, Got #{fraction_of_controlled_receptacles}.")
+      end
+      receptacle_power_savings = prm_read_user_data(electric_row, 'receptacle_power_savings')
+      unless receptacle_power_savings.nil? || Float(receptacle_power_savings, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: electric equipment definition #{name}'s receptacle power savings shall be a float, Got #{receptacle_power_savings}.")
+      end
       # check for data type
       # unless fan_power_credit.nil? || Float(fan_power_credit, exception: false)
       motor_horsepower = prm_read_user_data(electric_row, 'motor_horsepower')
