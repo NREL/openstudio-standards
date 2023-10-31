@@ -176,6 +176,8 @@ class ASHRAE901PRM < Standard
       return check_userdata_outdoor_air(object_name, user_data)
     when UserDataFiles::AIRLOOP_HVAC_DOAS
       return check_userdata_airloop_hvac_doas(object_name, user_data)
+    when UserDataFiles::ZONE_HVAC
+      return check_userdata_zone_hvac(object_name, user_data)
     when UserDataFiles::THERMAL_ZONE
       return check_userdata_thermal_zone(object_name, user_data)
     when UserDataFiles::WATERUSE_CONNECTIONS
@@ -279,6 +281,47 @@ class ASHRAE901PRM < Standard
     return userdata_valid
   end
 
+  # Check for incorrect data in [UserDataFiles::ZONE_HVAC]
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_zone_hvac(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |user_zone_hvac|
+      name = prm_read_user_data(user_zone_hvac, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: zone HVAC name is missing or empty. Zone HVAC user data has not validated.")
+        return false
+      end
+      # Fan power credits, exhaust air energy recovery
+      user_zone_hvac.keys.each do |info_key|
+        # Fan power credits
+        if info_key.include?('has_fan_power_credit')
+          has_fan_power_credit = prm_read_user_data(user_zone_hvac, info_key)
+          unless has_fan_power_credit.nil? || UserDataBoolean.matched_any?(has_fan_power_credit)
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, zone HVAC name #{name}, #{info_key} shall be either True or False. Got #{has_fan_power_credit}.")
+            userdata_valid = false
+          end
+        elsif info_key.include?('fan_power_credit')
+          fan_power_credit = prm_read_user_data(user_zone_hvac, info_key)
+          unless fan_power_credit.nil? || Float(fan_power_credit, exception: false)
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, zone HVAC name #{name}, #{info_key} shall be a numeric value. Got #{fan_power_credit}.")
+            userdata_valid = false
+          end
+        end
+        # Exhaust air energy recovery
+        if info_key.include?('exhaust_energy_recovery_exception')
+          exhaust_energy_recovery_exception = prm_read_user_data(user_zone_hvac, info_key)
+          unless exhaust_energy_recovery_exception.nil? || UserDataBoolean.matched_any?(exhaust_energy_recovery_exception)
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, zone HVAC name #{name}, #{info_key} shall be either True or False. Got #{exhaust_energy_recovery_exception}.")
+            userdata_valid = false
+          end
+        end
+      end
+    end
+    return userdata_valid
+  end
+
   # Check for incorrect data in [UserDataFiles::AIRLOOP_HVAC_DOAS]
   # @param object_name [String] name of user data csv file to check
   # @param user_data [Hash] hash of data from user data csv file
@@ -311,7 +354,7 @@ class ASHRAE901PRM < Standard
         if info_key.include?('exhaust_energy_recovery_exception')
           exhaust_energy_recovery_exception = prm_read_user_data(user_airloop, info_key)
           unless exhaust_energy_recovery_exception.nil? || UserDataBoolean.matched_any?(exhaust_energy_recovery_exception)
-            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be either True or False. Got #{has_fan_power_credit}.")
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be either True or False. Got #{exhaust_energy_recovery_exception}.")
             userdata_valid = false
           end
         end
