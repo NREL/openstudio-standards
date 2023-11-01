@@ -1930,7 +1930,7 @@ class ASHRAE901PRM < Standard
             break
           end
         end
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "A #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} (as specified in the user zone HVAC data) could not be found in the model.")
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "A #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} (as specified in the user zone HVAC data) could not be found in the model.")
       end
 
       if zone_hvac_eqp.thermalZone.is_initialized
