@@ -85,7 +85,7 @@ class Standard
       base_ef = wh_props['energy_factor_base']
       vol_drt = wh_props['energy_factor_volume_derate']
       ef = base_ef - (vol_drt * volume_gal)
-      water_heater_eff, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef)
+      water_heater_eff, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef, capacity_btu_per_hr)
       # Two booster water heaters
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
@@ -99,7 +99,7 @@ class Standard
         uef = base_uef - (vol_drt * volume_gal)
       end
       ef = water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr)
-      water_heater_eff, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef)
+      water_heater_eff, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef, capacity_btu_per_hr)
       # Two booster water heaters
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
@@ -273,8 +273,9 @@ class Standard
   #
   # @param fuel_type [String] water heater fuel type
   # @param ef [Float] water heater EF, energy factor
+  # @param capacity_btu_per_hr [Float] water heater capacity in Btu/h
   # @return [Array] returns water heater thermal efficiency and storage tank UA
-  def water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef)
+  def water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef, capacity_btu_per_hr)
     # Calculate the skin loss coefficient (UA)
     # differently depending on the fuel type
     if fuel_type == 'Electricity'
