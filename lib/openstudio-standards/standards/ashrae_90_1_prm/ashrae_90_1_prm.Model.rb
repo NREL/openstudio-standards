@@ -1538,7 +1538,6 @@ class ASHRAE901PRM < Standard
         OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Building type swh found in #{UserDataFiles::WATERUSE_EQUIPMENT} for building #{building_name}, set default building type swh to #{default_type}")
       end
     end
-
     model.getWaterUseEquipments.each do |wateruse_equipment|
       user_data_updated = false
       if user_data_wateruse_equipment
