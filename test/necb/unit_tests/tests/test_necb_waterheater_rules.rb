@@ -1,45 +1,45 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 
-class NECB_SHW_Additional_Tests < Minitest::Test
-  # set to true to run the standards in the test.
+class NECB_SWH_Additional_Tests < Minitest::Test
+
+  # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
-  # set to true to run the simulations.
-  FULL_SIMULATIONS = false
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '../../../')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
+  # Test to validate part-load performance curve of gas fired swh heater.
+  def test_NECB2011_swh_curves
 
-  # Test to validate part-load performance curve of gas fired shw heater (NECB 2011)
-  def test_NECB2011_shw_curves
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    shw_expected_result_file = File.join(@expected_results_folder, 'compliance_shw_curves_expected_results.csv')
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    template="NECB2011"
+    standard = get_standard(template)
+    save_intermediate_models = false
+
+    expected_result_file = File.join(@expected_results_folder, 'compliance_shw_curves_expected_results.csv')
     shw_curve_names = []
-    CSV.foreach(shw_expected_result_file, headers: true) do |data|
+    CSV.foreach(expected_result_file, headers: true) do |data|
       shw_curve_names << data['Curve Name']
     end
-    standard = Standard.build('NECB2011')
  
     # Generate the osm files for all relevant cases to generate the test data
     shw_res_file_output_text = "Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+    name = "swh_curves"
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    name = "shw"
-    puts "***************************************#{name}*******************************************************\n"
-    # add shw loop
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
+    # Add SWH loop.
     prototype_input = {}
     prototype_input['main_water_heater_volume'] = 100.0
     prototype_input['main_service_water_temperature'] = 60.0
@@ -58,7 +58,8 @@ class NECB_SHW_Additional_Tests < Minitest::Test
                         prototype_input['main_water_heater_volume'],
                         prototype_input['main_water_heater_fuel'],
                         prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
-    # add hvac system
+    
+    # Add hvac system.
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
@@ -71,50 +72,52 @@ class NECB_SHW_Additional_Tests < Minitest::Test
                                                                                                 baseboard_type: baseboard_type,
                                                                                                 hw_loop: hw_loop,
                                                                                                 new_auto_zoner: false)
-    # run the standards
-    result = run_the_measure(model, "#{output_folder}/#{name}/sizing","NECB2011")
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_shw_curves: Failure in Standards for #{name}")
-    # extract standards generated part-load performance curve
+
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+
+    # Extract standards generated part-load performance curve.
     shw_units = model.getWaterHeaterMixeds
     shw_plfvsplr_curve = shw_units[0].partLoadFactorCurve.get
     shw_res_file_output_text +=
         "#{shw_curve_names[0]},cubic,#{'%.5E' % shw_plfvsplr_curve.coefficient1Constant},#{'%.5E' % shw_plfvsplr_curve.coefficient2x}," +
         "#{'%.5E' % shw_plfvsplr_curve.coefficient3xPOW2},#{'%.5E' % shw_plfvsplr_curve.coefficient4xPOW3},#{'%.5E' % shw_plfvsplr_curve.minimumValueofx}," +
         "#{'%.5E' % shw_plfvsplr_curve.maximumValueofx}\n"
-    # Write actual results file
+
+    # Write actual results file.
     test_result_file = File.join(@test_results_folder, 'compliance_shw_curves_test_results.csv')
     File.open(test_result_file, 'w') { |f| f.write(shw_res_file_output_text.chomp) }
-    # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(@expected_results_folder, 'compliance_shw_curves_expected_results.csv')
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-    assert(b_result,
-    "SHW performance curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+    # Check if test results match expected.
+    msg = "SWH performance curve coeffs test results do not match expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
-  # Test to validate efficiency and standby losses of electric shw heater (NECB 2011)
-  def test_NECB2011_shw_elec_efficiency_standby_losses
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2011')
+  # Test to validate efficiency and standby losses of electric shw heater (NECB 2011).
+  def test_NECB2011_swh_elec_efficiency_standby_losses
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    template="NECB2011"
+    standard = get_standard(template)
+    save_intermediate_models = false
  
-    # test tank capacities and volumes (liters)
+    # Test tank capacities and volumes (liters).
     test_caps = [10.0,20.0]
     test_vols = [200.0,300.0]
-    # Generate the osm files for all relevant cases to generate the test data
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+    
     test_caps.each do |icap|
       test_vols.each do |ivol|
-        name = "shw_cap~#{icap}kW~vol~#{ivol}liters"
-        puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+        name = "shw_cap-#{icap}kW-vol-#{ivol}liters-2011"
+        name.gsub!(/\s+/, "-")
+        puts "***************#{name}***************\n"
+    
+        # Load model and set climate file.
+        model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-        # add shw loop
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
+        # Add SWH loop.
         prototype_input = {}
         prototype_input['main_water_heater_volume'] = 100.0
         prototype_input['main_service_water_temperature'] = 60.0
@@ -133,7 +136,8 @@ class NECB_SHW_Additional_Tests < Minitest::Test
                             prototype_input['main_water_heater_volume'],
                             prototype_input['main_water_heater_fuel'],
                             prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
-        # add hvac system
+        
+        # Add hvac system.
         boiler_fueltype = 'Electricity'
         baseboard_type = 'Hot Water'
         heating_coil_type = 'DX'
@@ -146,19 +150,18 @@ class NECB_SHW_Additional_Tests < Minitest::Test
                                                                                                     baseboard_type: baseboard_type,
                                                                                                     hw_loop: hw_loop,
                                                                                                     new_auto_zoner: false)
-        # set volume and capacity of water tank
+        # Set volume and capacity of water tank.
         shw_units = model.getWaterHeaterMixeds
         shw_units[0].setHeaterMaximumCapacity(1000.0*icap)
         shw_units[0].setTankVolume(ivol/1000.0)
-        # run the standards
-        result = run_the_measure(model, "#{output_folder}/#{name}/sizing","NECB2011")
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "test_shw_curves: Failure in Standards for #{name}")
-        # get standard water tank efficiency and standby losses
+
+        # Run sizing.
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+
+        # Get standard water tank efficiency and standby losses.
         actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
         shw_units = model.getWaterHeaterMixeds
-        actual_shw_tank_vol = shw_units[0].tankVolume.to_f
+        #actual_shw_tank_vol = shw_units[0].tankVolume.to_f
         actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
         actual_oncycle_ua = shw_units[0].onCycleLossCoefficienttoAmbientTemperature.to_f
         vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get
@@ -193,28 +196,31 @@ class NECB_SHW_Additional_Tests < Minitest::Test
     end
   end
 
-   # Test to validate efficiency and standby losses of electric shw heater (NECB 2020)
-   def test_NECB2020_shw_elec_efficiency_standby_losses
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2020')
+  # Test to validate efficiency and standby losses of electric SWH heater (NECB 2020).
+  def test_NECB2020_swh_elec_efficiency_standby_losses
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    template='NECB2020'
+    standard = get_standard(template)
+    save_intermediate_models = false
  
-    # test tank capacities and volumes (liters)
+    # Test tank capacities and volumes (liters).
     test_caps = [10.0,20.0]
     test_vols = [200.0,300.0]
-    # Generate the osm files for all relevant cases to generate the test data
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+    
     test_caps.each do |icap|
       test_vols.each do |ivol|
-        name = "shw_cap~#{icap}kW~vol~#{ivol}liters"
-        puts "***************************************#{name}*******************************************************\n"
-        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+        name = "shw_cap-#{icap}kW-vol-#{ivol}liters-2020"
+        name.gsub!(/\s+/, "-")
+        puts "***************#{name}***************\n"
+    
+        # Load model and set climate file.
+        model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
         BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-        # add shw loop
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+        
+        # add SWH loop.
         prototype_input = {}
         prototype_input['main_water_heater_volume'] = 100.0
         prototype_input['main_service_water_temperature'] = 60.0
@@ -233,7 +239,8 @@ class NECB_SHW_Additional_Tests < Minitest::Test
                             prototype_input['main_water_heater_volume'],
                             prototype_input['main_water_heater_fuel'],
                             prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
-        # add hvac system
+        
+        # Add hvac system.
         boiler_fueltype = 'Electricity'
         baseboard_type = 'Hot Water'
         heating_coil_type = 'DX'
@@ -246,22 +253,22 @@ class NECB_SHW_Additional_Tests < Minitest::Test
                                                                                                     baseboard_type: baseboard_type,
                                                                                                     hw_loop: hw_loop,
                                                                                                     new_auto_zoner: false)
-        # set volume and capacity of water tank
+        
+        # Set volume and capacity of water tank.
         shw_units = model.getWaterHeaterMixeds
         shw_units[0].setHeaterMaximumCapacity(1000.0*icap)
         shw_units[0].setTankVolume(ivol/1000.0)
-        # run the standards
-        result = run_the_measure(model, "#{output_folder}/#{name}/sizing","NECB2020")
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "test_shw_curves: Failure in Standards for #{name}")
-        # get standard water tank efficiency and standby losses
+        
+        # Run sizing.
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+       
+        # Get standard water tank efficiency and standby losses.
         actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
         shw_units = model.getWaterHeaterMixeds
-        actual_shw_tank_vol = shw_units[0].tankVolume.to_f
+        #actual_shw_tank_vol = shw_units[0].tankVolume.to_f
         actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
         actual_oncycle_ua = shw_units[0].onCycleLossCoefficienttoAmbientTemperature.to_f
-        vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get
+        #vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get
         if icap < 12.0
           expected_eff = 1.0
           if ivol <= 270.0
@@ -294,29 +301,31 @@ class NECB_SHW_Additional_Tests < Minitest::Test
     end
   end 
 
-  # Test to validate efficiency and standby losses of GAS shw heater (NECB 2022)
-  def test_NECB2020_shw_gas_efficiency_standby_losses
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2020')
+  # Test to validate efficiency and standby losses of GAS shw heater (NECB 2020)
+  def test_NECB2020_swh_gas_efficiency_standby_losses
+    
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    template='NECB2020'
+    standard = get_standard(template)
+    save_intermediate_models = false
  
-    # test space types - SHW demand depends on space type + space area
+    # Test space types - SWH demand depends on space type + space area.
     test_spacetypes = ["Office enclosed <= 25 m2", "Health care facility operating room", "Museum general exhibition area", "Conference/Meeting/Multi-purpose room", \
     "Warehouse storage area medium to bulky palletized items", "Transportation facility baggage/carousel area", "Audience seating area permanent - gymnasium",\
     "Computer/Server room-sch-C", "Gymnasium/Fitness centre playing area", "Retail facility mall concourse"]
-    # Generate the osm files for all relevant cases to generate the test data
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC5Storeys.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
    
     test_spacetypes.each do |test_spacetype|
       name = "shw_for_#{test_spacetype}"
-      puts "***************************************#{name}*******************************************************\n"
-      model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC5Storeys.osm"))
+      name.gsub!(/\s+/, "-")
+      puts "***************#{name}***************\n"
+  
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC5Storeys.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      #Set spacetype
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      
+      # Set spacetype.
       model.getSpaces.each do |space|
         st = OpenStudio::Model::SpaceType.new(model)
         st.setStandardsBuildingType("Space Function")
@@ -324,7 +333,8 @@ class NECB_SHW_Additional_Tests < Minitest::Test
         st.setName("#{"Space Function"} #{test_spacetype}")
         space.setSpaceType(st)
       end
-      # add shw loop
+
+      # Add SWH loop.
       prototype_input = {}
       prototype_input['main_water_heater_volume'] = 100.0
       prototype_input['main_service_water_temperature'] = 60.0
@@ -334,7 +344,8 @@ class NECB_SHW_Additional_Tests < Minitest::Test
       prototype_input['main_water_heater_fuel'] = 'NaturalGas'
       prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
       standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel', shw_scale: 1.0)
-      # add hvac system
+      
+      # Add HVAC system.
       boiler_fueltype = 'NaturalGas'
       baseboard_type = 'Hot Water'
       heating_coil_type = 'DX'
@@ -348,12 +359,10 @@ class NECB_SHW_Additional_Tests < Minitest::Test
                                                                                                   hw_loop: hw_loop,
                                                                                                   new_auto_zoner: false)
 
-      # run the standards
-      result = run_the_measure(model, "#{output_folder}/#{name}/sizing", "NECB2020")
-      # Save the model
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "test_shw_curves: Failure in Standards for #{name}")
-      # get standard water tank efficiency and standby losses
+      # Run sizing.
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+
+      # Get standard water tank efficiency and standby losses.
       shw_units = model.getWaterHeaterMixeds
       puts "shw_units[0] #{shw_units[0]}"
       icap = (shw_units[0].heaterMaximumCapacity.get.to_f)/1000.0 # kW
@@ -361,7 +370,7 @@ class NECB_SHW_Additional_Tests < Minitest::Test
       ivol = (shw_units[0].tankVolume.get.to_f)*1000.0 # Litres
       puts "ivol #{ivol} L"
       actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
-      actual_shw_tank_vol = shw_units[0].tankVolume.to_f
+      #actual_shw_tank_vol = shw_units[0].tankVolume.to_f
       actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
       actual_oncycle_ua = shw_units[0].onCycleLossCoefficienttoAmbientTemperature.to_f
       vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get
@@ -371,15 +380,15 @@ class NECB_SHW_Additional_Tests < Minitest::Test
         # 2a. Set water heater thermal efficiency (burner efficiency), calc UEF, then UA (skin loss) OR
         # 2b. Calc SL, then UA (skin loss), followed by water heater thermal efficiency (burner efficiency)
       
-      # Calc FHR
+      # Calc FHR.
       tank_param = standard.auto_size_shw_capacity(model:model, shw_scale: 'NECB_Default')
       fhr_L_per_hr = (tank_param['loop_peak_flow_rate_SI']) * 3600000
       puts "Calculate UA   ========================================== "
       puts "fhr_L_per_hr #{fhr_L_per_hr} L/hr"
       puts "icap #{icap} kW"
       puts "ivol #{ivol} L; (=#{vol_gal} gal)"
-      # select UA and burner efficiency estimation method based on tank volume and heating capacity
-
+      
+      # Select UA and burner efficiency estimation method based on tank volume and heating capacity.
       if icap <= 22 and ivol >= 76 and ivol < 208
         uef = 1
         volume_drawn_m3 = 0
@@ -488,7 +497,7 @@ class NECB_SHW_Additional_Tests < Minitest::Test
         puts "ua_w_per_k else #{ua_w_per_k}"
       end
 
-      # Check accuracy of parameters
+      # Check accuracy of parameters.
       rel_tol = 5.0e-3 # 0.5% tolerance is enough given - CSA P.3 - 15 sensor accuracy (e.g. water temp: +/- 0.1C, volume: +/- 2% of total volume,)
       abs_tol = 0.2
 
@@ -521,55 +530,4 @@ class NECB_SHW_Additional_Tests < Minitest::Test
     end
   end
 
-  
-  def run_simulations(output_folder)
-    if FULL_SIMULATIONS == true
-      file_array = []
-      BTAP::FileIO.get_find_files_from_folder_by_extension(output_folder, '.osm').each do |file|
-        # skip any sizing.osm file.
-        unless file.to_s.include? 'sizing.osm'
-          file_array << file
-        end
-      end
-      BTAP::SimManager.simulate_files(output_folder, file_array)
-      BTAP::Reporting.get_all_annual_results_from_runmanger_by_files(output_folder, file_array)
-
-      are_there_no_severe_errors = File.zero?("#{output_folder}/failed simulations.txt")
-      assert_equal(true, are_there_no_severe_errors, "Simulations had severe errors. Check #{output_folder}/failed simulations.txt")
-    end
-  end
-
-  def run_the_measure(model, sizing_dir, building_vintage)
-    if PERFORM_STANDARDS
-      building_type = 'NECB'
-      climate_zone = 'NECB'
-      standard = Standard.build(building_vintage)
-      
-      # Make a directory to run the sizing run in
-      unless Dir.exist? sizing_dir
-        FileUtils.mkdir_p(sizing_dir)
-      end
-
-      # Perform a sizing run
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun1"
-        raise("could not find sizing run #{sizing_dir}/SizingRun1")
-        return false
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun1"
-      end
-
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-      # need to set prototype assumptions so that HRV added
-      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-      # Apply the HVAC efficiency standard
-      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-
-      return true
-    end
-  end
 end

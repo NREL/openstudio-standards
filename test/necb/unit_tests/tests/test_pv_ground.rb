@@ -1,6 +1,10 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+#require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
+# *** This test needs a significant re-write to make use of standard naming and paths ***
 
 class NECB_PVground_Tests < Minitest::Test
 

@@ -1,6 +1,10 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
+# *** Needs a re-write to use std paths etc ***
 
 
 #This test will check that the ERVs are added and the assignment from the erv.json library works.
