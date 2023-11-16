@@ -3160,7 +3160,6 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param material_name [String] name of the material
   # @return [OpenStudio::Model::Material] material object
-  # @todo make return an OptionalMaterial
   def model_add_material(model, material_name)
     # First check model and return material if it already exists
     model.getMaterials.sort.each do |material|
@@ -3170,19 +3169,32 @@ class Standard
       end
     end
 
-    # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding material: #{material_name}")
-
     # Get the object data
-    data = model_find_object(standards_data['materials'], 'name' => material_name)
-    unless data
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
-      return false
-      # @todo change to return empty optional material
+    if material_name.include?('Simple Glazing')
+      material_type = 'SimpleGlazing'
+      # default values
+      u_factor = 1.23
+      shgc = 0.61
+      vt = 0.81
+      material_name.split.each_with_index do |item, i|
+        if item == 'U'
+          u_factor = material_name[i + 1].to_f
+        elsif item == 'SHGC'
+          shgc = material_name[i + 1].to_f
+        elsif item == 'VT'
+          vt = material_name[i + 1].to_f
+        end
+      end
+    else
+      data = model_find_object(standards_data['materials'], 'name' => material_name)
+      unless data
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
+        return OpenStudio::Model::OptionalMaterial.new(model)
+      end
+      material_type = data['material_type']
     end
 
     material = nil
-    material_type = data['material_type']
-
     if material_type == 'StandardOpaqueMaterial'
       material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
       material.setName(material_name)
@@ -3222,9 +3234,9 @@ class Standard
       material = OpenStudio::Model::SimpleGlazing.new(model)
       material.setName(material_name)
 
-      material.setUFactor(OpenStudio.convert(data['u_factor'].to_f, 'Btu/hr*ft^2*R', 'W/m^2*K').get)
-      material.setSolarHeatGainCoefficient(data['solar_heat_gain_coefficient'].to_f)
-      material.setVisibleTransmittance(data['visible_transmittance'].to_f)
+      material.setUFactor(OpenStudio.convert(u_factor.to_f, 'Btu/hr*ft^2*R', 'W/m^2*K').get)
+      material.setSolarHeatGainCoefficient(shgc.to_f)
+      material.setVisibleTransmittance(vt.to_f)
 
     elsif material_type == 'StandardGlazing'
       material = OpenStudio::Model::StandardGlazing.new(model)
