@@ -1283,11 +1283,11 @@ class NECB2011
   # @todo Add fan type to data model and modify this method
   def fan_baseline_impeller_efficiency(fan)
     # Assume that the fan efficiency is 65% for normal fans
-    # TODO add fan type to fan data model
+    # @todo add fan type to fan data model
     # and infer impeller efficiency from that?
     # or do we always assume a certain type of
     # fan impeller for the baseline system?
-    # TODO check COMNET and T24 ACM and PNNL 90.1 doc
+    # @todo check COMNET and T24 ACM and PNNL 90.1 doc
     fan_impeller_eff = 0.65
 
     return fan_impeller_eff
@@ -1615,13 +1615,13 @@ class NECB2011
     hw_loop.setName('Hot Water Loop')
     sizing_plant = hw_loop.sizingPlant
     sizing_plant.setLoopType('Heating')
-    sizing_plant.setDesignLoopExitTemperature(82.0) # TODO: units
+    sizing_plant.setDesignLoopExitTemperature(82.0) #@todo units
     sizing_plant.setLoopDesignTemperatureDifference(16.0)
 
     # pump (set to variable speed for now till fix to run away plant temperature is found)
     # pump = OpenStudio::Model::PumpConstantSpeed.new(model)
     pump = OpenStudio::Model::PumpVariableSpeed.new(model)
-    # TODO: the keyword "setPumpFlowRateSchedule" does not seem to work. A message
+    # @todo the keyword "setPumpFlowRateSchedule" does not seem to work. A message
     # was sent to NREL to let them know about this. Once there is a fix for this,
     # use the proper pump schedule depending on whether we have two-pipe or four-pipe
     # fan coils.
@@ -2093,7 +2093,7 @@ class NECB2011
   end
 
   def create_heating_cooling_on_off_availability_schedule(model)
-    # TODO: Create a feature to derive start and end heating and cooling seasons from weather file.
+    # @todo Create a feature to derive start and end heating and cooling seasons from weather file.
     avail_data = [{ start_month: 1, start_day: 1, end_month: 6, end_day: 30, htg_value: 1, clg_value: 0 },
                   { start_month: 7, start_day: 1, end_month: 10, end_day: 31, htg_value: 0, clg_value: 1 },
                   { start_month: 11, start_day: 1, end_month: 12, end_day: 31, htg_value: 1, clg_value: 0 }]

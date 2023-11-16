@@ -272,7 +272,7 @@ class ASHRAE901PRM < Standard
 
       has_district_heating = false
       plant_loop.supplyComponents.each do |sc|
-        if sc.to_DistrictHeating.is_initialized
+        if sc.iddObjectType.valueName.to_s.include?('DistrictHeating')
           has_district_heating = true
         end
       end
@@ -366,17 +366,17 @@ class ASHRAE901PRM < Standard
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
     # Use OA reset setpoint manager
-    outdoor_low_temperature_C = OpenStudio.convert(chw_outdoor_temperature_low, 'F', 'C').get.round(1)
-    outdoor_high_temperature_C = OpenStudio.convert(chw_outdoor_temperature_high, 'F', 'C').get.round(1)
-    setpoint_temperature_outdoor_high_C = OpenStudio.convert(chw_outdoor_high_setpoint, 'F', 'C').get.round(1)
-    setpoint_temperature_outdoor_low_C = OpenStudio.convert(chw_outdoor_low_setpoint, 'F', 'C').get.round(1)
+    outdoor_low_temperature_c = OpenStudio.convert(chw_outdoor_temperature_low, 'F', 'C').get.round(1)
+    outdoor_high_temperature_c = OpenStudio.convert(chw_outdoor_temperature_high, 'F', 'C').get.round(1)
+    setpoint_temperature_outdoor_high_c = OpenStudio.convert(chw_outdoor_high_setpoint, 'F', 'C').get.round(1)
+    setpoint_temperature_outdoor_low_c = OpenStudio.convert(chw_outdoor_low_setpoint, 'F', 'C').get.round(1)
 
     chw_stpt_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
     chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
-    chw_stpt_manager.setOutdoorHighTemperature(outdoor_high_temperature_C) # Degrees Celsius
-    chw_stpt_manager.setSetpointatOutdoorHighTemperature(setpoint_temperature_outdoor_high_C) # Degrees Celsius
-    chw_stpt_manager.setOutdoorLowTemperature(outdoor_low_temperature_C) # Degrees Celsius
-    chw_stpt_manager.setSetpointatOutdoorLowTemperature(setpoint_temperature_outdoor_low_C) # Degrees Celsius
+    chw_stpt_manager.setOutdoorHighTemperature(outdoor_high_temperature_c) # Degrees Celsius
+    chw_stpt_manager.setSetpointatOutdoorHighTemperature(setpoint_temperature_outdoor_high_c) # Degrees Celsius
+    chw_stpt_manager.setOutdoorLowTemperature(outdoor_low_temperature_c) # Degrees Celsius
+    chw_stpt_manager.setSetpointatOutdoorLowTemperature(setpoint_temperature_outdoor_low_c) # Degrees Celsius
     chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
 
     return true

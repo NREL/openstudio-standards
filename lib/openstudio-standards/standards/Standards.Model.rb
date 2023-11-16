@@ -1,4 +1,5 @@
 require 'csv'
+require 'date'
 
 class Standard
   attr_accessor :space_multiplier_map
@@ -27,7 +28,7 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Boolean] returns true if successful, false if not
   def model_create_prm_stable_baseline_building(model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, output_dir = Dir.pwd, unmet_load_hours_check = true, debug = false)
-    model_create_prm_any_baseline_building(model, '', climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, false, output_dir, true, unmet_load_hours_check, debug)
+    model_create_prm_any_baseline_building(model, '', climate_zone, hvac_building_type, wwr_building_type, swh_building_type, true, true, false, output_dir, true, unmet_load_hours_check, debug)
   end
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
@@ -40,11 +41,11 @@ class Standard
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] if true, will report out more detailed debugging output
   def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, custom, sizing_run_dir, false, false, debug)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, false, custom, sizing_run_dir, false, false, debug)
   end
 
-  # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
-  # based on the inputs currently in the model.
+  # Creates a Performance Rating Method (aka 90.1-Appendix G) baseline building model
+  # based on the inputs currently in the user model.
   #
   # @note Per 90.1, the Performance Rating Method "does NOT offer an alternative compliance path for minimum standard compliance."
   # This means you can't use this method for code compliance to get a permit.
@@ -61,26 +62,68 @@ class Standard
   # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Boolean] returns true if successful, false if not
-  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    if create_proposed_model
+      # Perform a user model design day run only to make sure
+      # that the user model is valid, i.e. can run without major
+      # errors
+      if !model_run_sizing_run(user_model, "#{sizing_run_dir}/USER-SR")
+        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                           "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+        prm_raise(false,
+                  sizing_run_dir,
+                  "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+      end
+
+      # Check if proposed HVAC system is autosized
+      if model_is_hvac_autosized(user_model)
+        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                           "The user model's HVAC system is partly autosized.")
+      end
+
+      # Generate proposed model from the user-provided model
+      proposed_model = model_create_prm_proposed_building(user_model)
+    end
+
     # Check proposed model unmet load hours
     if unmet_load_hours_check
-      # Run proposed model; need annual simulation to get unmet load hours
-      if model_run_simulation_and_log_errors(user_model, run_dir = "#{sizing_run_dir}/PROP")
-        umlh = model_get_unmet_load_hours(user_model)
+      # Run user model; need annual simulation to get unmet load hours
+      if model_run_simulation_and_log_errors(proposed_model, run_dir = "#{sizing_run_dir}/PROP")
+        umlh = model_get_unmet_load_hours(proposed_model)
         if umlh > 300
-          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
-          raise "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created."
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                             "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) won't be created.")
+          prm_raise(false,
+                    sizing_run_dir,
+                    "Proposed model unmet load hours exceed 300. Baseline model(s) won't be created.")
         end
       else
-        OpenStudio.logFree(OpenStudio::Error, 'prm.log', 'Simulation failed. Check the model to make sure no severe errors.')
-        raise 'Simulation on proposed model failed. Baseline generation is stopped.'
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log',
+                           'Simulation failed. Check the model to make sure no severe errors.')
+        prm_raise(false,
+                  sizing_run_dir,
+                  'Simulation on proposed model failed. Baseline generation is stopped.')
       end
+    end
+    if create_proposed_model
+      # Make the run directory if it doesn't exist
+      unless Dir.exist?(sizing_run_dir)
+        FileUtils.mkdir_p(sizing_run_dir)
+      end
+      # Save proposed model
+      proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.osm"), true)
+      forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
+      idf = forward_translator.translateModel(proposed_model)
+      idf_path = OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.idf")
+      idf.save(idf_path, true)
     end
 
     # User data process
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
+    # TODO - move this portion to the top of the function
     bldg_type_hvac_zone_hash = {}
-    handle_user_input_data(user_model, climate_zone, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+    handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+
     # Define different orientation from original orientation
     # for each individual baseline models
     # Need to run proposed model sizing simulation if no sql data is available
@@ -172,9 +215,15 @@ class Standard
         # For PRM, it only applies lights for now.
         space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
       end
+
       # Modify the lighting schedule to handle lighting occupancy sensors
       # Modify the upper limit value of fractional schedule to avoid the fatal error caused by schedule value higher than 1
       space_type_light_sch_change(model)
+
+      # Modify electric equipment computer room schedule
+      model.getSpaces.sort.each do |space|
+        space_add_prm_computer_room_equipment_schedule(space)
+      end
 
       model_apply_baseline_exterior_lighting(model)
 
@@ -182,7 +231,10 @@ class Standard
       model_add_prm_elevators(model)
 
       # Calculate infiltration as per 90.1 PRM rules
-      model_baseline_apply_infiltration_standard(model, climate_zone)
+      model_apply_standard_infiltration(model)
+
+      # Apply user outdoor air specs as per 90.1 PRM rules exceptions
+      model_apply_userdata_outdoor_air(model)
 
       # If any of the lights are missing schedules, assign an always-off schedule to those lights.
       # This is assumed to be the user's intent in the proposed model.
@@ -253,11 +305,7 @@ class Standard
       end
 
       # Compute and marke DCV related information before deleting proposed model HVAC systems
-      model_mark_zone_dcv_existence(model)
-      model_add_dcv_user_exception_properties(model)
-      model_add_dcv_requirement_properties(model)
-      model_add_apxg_dcv_properties(model)
-      model_raise_user_model_dcv_errors(model)
+      model_evaluate_dcv_requirements(model)
 
       # Remove all HVAC from model, excluding service water heating
       model_remove_prm_hvac(model)
@@ -439,7 +487,7 @@ class Standard
       # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
       # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
 
-      model_status = degs > 0 ? "final_#{degs}" : 'final'
+      model_status = degs > 0 ? "baseline_final_#{degs}" : 'baseline_final'
       model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
 
       # Translate to IDF and save for debugging
@@ -516,6 +564,132 @@ class Standard
     end
 
     return true
+  end
+
+  # Creates a Performance Rating Method (aka 90.1-Appendix G) proposed building model
+  # based on the inputs currently in the user model.
+  #
+  # @param user_model [OpenStudio::model::Model] User specified OpenStudio model
+  # @return [OpenStudio::model::Model] returns the proposed building model corresponding to a user model
+  def model_create_prm_proposed_building(user_model)
+    # Create copy of the user model
+    proposed_model = BTAP::FileIO.deep_copy(user_model)
+
+    # Get user building level data
+    building_name = proposed_model.building.get.name.get
+    user_buildings = @standards_data.key?('userdata_building') ? @standards_data['userdata_building'] : nil
+
+    # If needed, modify user model infiltration
+    if user_buildings
+      user_building_index = user_buildings.index { |user_building| building_name.include? user_building['name'] }
+      # TODO: Move the user data processing section
+      infiltration_modeled_from_field_verification_results = 'false'
+      if user_building_index && user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results']
+        infiltration_modeled_from_field_verification_results = user_buildings[user_building_index]['infiltration_modeled_from_field_verification_results'].to_s.downcase
+      end
+
+      # Calculate total infiltration flow rate per envelope area
+      building_envelope_area_m2 = model_building_envelope_area(proposed_model)
+      curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(proposed_model, building_envelope_area_m2)
+      curr_tot_infil_cfm_per_envelope_area = OpenStudio.convert(curr_tot_infil_m3_per_s_per_envelope_area, 'm^3/s*m^2', 'cfm/ft^2').get
+
+      # Warn users if the infiltration modeling in the user/proposed model is not based on field verification
+      # If not modeled based on field verification, it should be modeled as 0.6 cfm/ft2
+      unless infiltration_modeled_from_field_verification_results.casecmp('true')
+        if curr_tot_infil_cfm_per_envelope_area < 0.6
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The user model's I_75Pa is estimated to be #{curr_tot_infil_cfm_per_envelope_area} m3/s per m2 of total building envelope")
+        end
+      end
+
+      # Modify model to follow the PRM infiltration modeling method
+      model_apply_standard_infiltration(proposed_model, curr_tot_infil_cfm_per_envelope_area)
+    end
+
+    # If needed, remove all non-adiabatic pipes of SWH loops
+    proposed_model.getPlantLoops.sort.each do |plant_loop|
+      # Skip non service water heating loops
+      next unless plant_loop_swh_loop?(plant_loop)
+
+      plant_loop_adiabatic_pipes_only(plant_loop)
+    end
+
+    # TODO: Once data refactoring has been completed lookup values from the database;
+    #       For now, hard-code LPD for selected spaces. Current Standards Space Type
+    #       of OS:SpaceType is the PRM interior lighting space type. These values are
+    #       from Table 9.6.1 as required by Section G3.1.6.e.
+    proposed_lpd_residential_spaces = {
+      'dormitory - living quarters' => 0.5, # "primary_space_type": "Dormitory—Living Quarters",
+      'apartment - hardwired' => 0.6, # "primary_space_type": "Dwelling Unit"
+      'guest room' => 0.41 # "primary_space_type": "Guest Room",
+    }
+
+    # Make proposed model space related adjustments
+    proposed_model.getSpaces.each do |space|
+      # If needed, modify computer equipment schedule
+      # Section G3.1.3.16
+      space_add_prm_computer_room_equipment_schedule(space)
+
+      # If needed, modify lighting power denstities in residential spaces/zones
+      # Section G3.1.6.e
+      standard_space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType').downcase
+      user_spaces = @standards_data.key?('userdata_space') ? @standards_data['userdata_space'] : nil
+      if ['dormitory - living quarters', 'apartment - hardwired', 'guest room'].include?(standard_space_type)
+        user_spaces.each do |user_data|
+          if user_data['name'].to_s == space.name.to_s && user_data['has_residential_exception'].to_s.downcase != 'yes'
+            # Get LPDs
+            lpd_w_per_m2 = space.lightingPowerPerFloorArea
+            ref_space_lpd_per_ft2 = proposed_lpd_residential_spaces[standard_space_type]
+            ref_space_lpd_per_m2 = OpenStudio.convert(ref_space_lpd_per_ft2, 'W/ft^2', 'W/m^2').get
+            # Set new LPD
+            space.setLightingPowerPerFloorArea([lpd_w_per_m2, ref_space_lpd_per_m2].max)
+          end
+        end
+      end
+    end
+
+    return proposed_model
+  end
+
+  # Determine whether or not the HVAC system in a model is autosized
+  #
+  # As it is not realistic expectation to have all autosizable
+  # fields hard input, the method relies on autosizable field
+  # of prime movers (fans, pumps) and heating/cooling devices
+  # in the models (boilers, chillers, coils)
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] returns true if the HVAC system is likely autosized, false otherwise
+  def model_is_hvac_autosized(model)
+    is_hvac_autosized = false
+    model.modelObjects.each do |obj|
+      obj_type = obj.iddObjectType.valueName.to_s.downcase
+
+      # Check if the object needs to be checked for autosizing
+      obj_to_be_checked_for_autosizing = false
+      if obj_type.include?('chiller') || obj_type.include?('boiler') || obj_type.include?('coil') || obj_type.include?('fan') || obj_type.include?('pump') || obj_type.include?('waterheater')
+        if !obj_type.include?('controller')
+          obj_to_be_checked_for_autosizing = true
+        end
+      end
+
+      # Check for autosizing
+      if obj_to_be_checked_for_autosizing
+        casted_obj = model_cast_model_object(obj)
+
+        next if casted_obj.nil?
+
+        casted_obj.methods.each do |method|
+          if method.to_s.include?('is') && method.to_s.include?('Autosized')
+            if casted_obj.public_send(method) == true
+              is_hvac_autosized = true
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The #{method.to_s.sub('is', '').sub('Autosized', '').sub(':', '')} field of the #{obj_type} named #{casted_obj.name} is autosized. It should be hard sized.")
+            end
+          end
+        end
+      end
+    end
+
+    return is_hvac_autosized
   end
 
   # Determine if there needs to be a sizing run after constructions are added
@@ -883,7 +1057,7 @@ class Standard
     purchased_cooling = false
 
     # Purchased heating
-    if all_htg_fuels.include?('DistrictHeating')
+    if all_htg_fuels.include?('DistrictHeating') || all_htg_fuels.include?('DistrictHeatingWater') || all_htg_fuels.include?('DistrictHeatingSteam')
       purchased_heating = true
     end
 
@@ -944,7 +1118,7 @@ class Standard
       end
 
       htg_fuels = zone.heatingFuelTypes.map(&:valueName)
-      if htg_fuels.include?('DistrictHeating')
+      if htg_fuels.include?('DistrictHeating') || htg_fuels.include?('DistrictHeatingWater') || htg_fuels.include?('DistrictHeatingSteam')
         has_district_hash[zone.name] = true
         has_district_hash['building'] = true
       else
@@ -970,7 +1144,7 @@ class Standard
 
     zones.each do |zone|
       htg_fuels = zone.heatingFuelTypes.map(&:valueName)
-      if htg_fuels.include?('DistrictHeating')
+      if htg_fuels.include?('DistrictHeating') || htg_fuels.include?('DistrictHeatingWater') || htg_fuels.include?('DistrictHeatingSteam')
         has_district_heat = true
       end
       other_heat = thermal_zone_fossil_or_electric_type(zone, '')
@@ -1004,7 +1178,7 @@ class Standard
       fan_schedule_8760 = []
       # Check for availability managers
       # Assume only AvailabilityManagerScheduled will control fan schedule
-      # TODO: also check AvailabilityManagerScheduledOn
+      # @todo also check AvailabilityManagerScheduledOn
       avail_mgrs = air_loop_hvac.availabilityManagers
       # if avail_mgrs.is_initialized
       if !avail_mgrs.nil?
@@ -1121,7 +1295,7 @@ class Standard
   # Array will include extra 24 values for leap year
   # Array will also include extra 24 values at end for holiday day type
   # @author: Doug Maddox, PNNL
-  # @TODO: consider moving this to Standards.Schedule.rb
+  # @todo consider moving this to Standards.Schedule.rb
   # @param: model [Object]
   # @param: fan_schedule [Object]
   # @return: [Array<String>] annual hourly values from schedule
@@ -1140,7 +1314,7 @@ class Standard
       fan_schedule_ruleset = sch_translator.convert_schedule_compact_to_schedule_ruleset
       fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule_ruleset)
     when 'OS_Schedule_Year'
-      # TODO: add function for ScheduleYear
+      # @todo add function for ScheduleYear
       # fan_8760 = get_8760_values_from_schedule_year(model, fan_schedule)
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Automated baseline measure does not support use of Schedule Year')
     end
@@ -1282,37 +1456,6 @@ class Standard
     return fuel_type
   end
 
-  # Determine whether heating type is fuel or electric
-  # @param hvac_building_type [String] Key for lookup of baseline system type
-  # @param climate_zone [String] full name of climate zone
-  # @return [String] fuel or electric
-  def find_prm_heat_type(hvac_building_type, climate_zone)
-    climate_code = get_climate_zone_code(climate_zone)
-    heat_type_props = model_find_object(standards_data['prm_heat_type'],
-                                        'template' => template,
-                                        'hvac_building_type' => hvac_building_type,
-                                        'climate_zone' => climate_code)
-    if !heat_type_props
-      # try again with wild card for climate
-      heat_type_props = model_find_object(standards_data['prm_heat_type'],
-                                          'template' => template,
-                                          'hvac_building_type' => hvac_building_type,
-                                          'climate_zone' => 'any')
-    end
-    if !heat_type_props
-      # try again with wild card for building type
-      heat_type_props = model_find_object(standards_data['prm_heat_type'],
-                                          'template' => template,
-                                          'hvac_building_type' => 'all others',
-                                          'climate_zone' => climate_code)
-    end
-    if !heat_type_props
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find baseline heat type for: #{template}-#{hvac_building_type}-#{climate_zone}.")
-    else
-      return heat_type_props['heat_type']
-    end
-  end
-
   # Get ASHRAE ID code for climate zone
   # @param climate_zone [String] full name of climate zone
   # @return [String] ASHRAE ID code for climate zone
@@ -1356,8 +1499,8 @@ class Standard
   # @param system_type [String] The system type.  Valid choices are PTHP, PTAC, PSZ_AC, PSZ_HP, PVAV_Reheat,
   #   PVAV_PFP_Boxes, VAV_Reheat, VAV_PFP_Boxes, Gas_Furnace, Electric_Furnace,
   #   which are also returned by the method OpenStudio::Model::Model.prm_baseline_system_type.
-  # @param main_heat_fuel [String] main heating fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
-  # @param zone_heat_fuel [String] zone heating/reheat fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating
+  # @param main_heat_fuel [String] main heating fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam
+  # @param zone_heat_fuel [String] zone heating/reheat fuel.  Valid choices are Electricity, NaturalGas, DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam
   # @param cool_fuel [String] cooling fuel.  Valid choices are Electricity, DistrictCooling
   # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
   # @return [Boolean] returns true if successful, false if not
@@ -1396,7 +1539,7 @@ class Standard
           heating_type = 'Gas'
           # if district heating
           hot_water_loop = nil
-          if main_heat_fuel == 'DistrictHeating'
+          if main_heat_fuel.include?('DistrictHeating')
             heating_type = 'Water'
             hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                                model.getPlantLoopByName('Hot Water Loop').get
@@ -1727,7 +1870,7 @@ class Standard
         unless zones.empty?
           # If district heating
           hot_water_loop = nil
-          if main_heat_fuel == 'DistrictHeating'
+          if main_heat_fuel.include?('DistrictHeating')
             hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                                model.getPlantLoopByName('Hot Water Loop').get
                              else
@@ -1756,7 +1899,7 @@ class Standard
       when 'SZ_CV' # System 12 (gas or district heat) or System 13 (electric resistance heat)
         unless zones.empty?
           hot_water_loop = nil
-          if zone_heat_fuel == 'DistrictHeating' || zone_heat_fuel == 'NaturalGas'
+          if zone_heat_fuel.include?('DistrictHeating') || zone_heat_fuel == 'NaturalGas'
             heating_type = 'Water'
             hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                                model.getPlantLoopByName('Hot Water Loop').get
@@ -2379,9 +2522,8 @@ class Standard
 
   # For backward compatibility, infiltration standard not used for 2013 and earlier
   #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Boolean] true if successful, false if not
-  def model_baseline_apply_infiltration_standard(model, climate_zone)
+  def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
     return true
   end
 
@@ -4613,7 +4755,7 @@ class Standard
         # based on sizing run results
         cat = space_conditioning_category(space)
       else
-        # TODO: This should really use the heating/cooling loads from the proposed building.
+        # @todo This should really use the heating/cooling loads from the proposed building.
         # However, in an attempt to avoid another sizing run just for this purpose,
         # conditioned status is based on heating/cooling setpoints.
         # If heated-only, will be assumed Semiheated.
@@ -4764,21 +4906,20 @@ class Standard
           # reduce toward centroid.
           #
           # daylighting control isn't modeled
-          surface_wwr = surface_get_wwr_of_a_surface(surface)
-          red = model_get_wwr_reduction_ratio(mult,
-                                              surface_wwr: surface_wwr,
-                                              surface_dr: surface_get_door_ratio_of_a_surface(surface),
-                                              wwr_building_type: bat,
-                                              wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
-                                              total_wall_m2: total_wall_area,
-                                              total_wall_with_fene_m2: total_wall_with_fene_area,
-                                              total_fene_m2: total_fene_area,
-                                              total_plenum_wall_m2: total_plenum_wall_area)
+          red = surface_get_wwr_reduction_ratio(mult,
+                                                surface,
+                                                wwr_building_type: bat,
+                                                wwr_target: wwr_lim / 100, # divide by 100 to revise it to decimals
+                                                total_wall_m2: total_wall_area,
+                                                total_wall_with_fene_m2: total_wall_with_fene_area,
+                                                total_fene_m2: total_fene_area,
+                                                total_plenum_wall_m2: total_plenum_wall_area)
 
           if red < 0.0
             # surface with fenestration to its maximum but adjusted by door areas when need to add windows in surfaces no fenestration
             # turn negative to positive to get the correct adjustment factor.
             red = -red
+            surface_wwr = surface_get_wwr(surface)
             residual_fene += (0.9 - red * surface_wwr) * surface.grossArea
           end
           surface_adjust_fenestration_in_a_surface(surface, red, model)
@@ -6177,8 +6318,12 @@ class Standard
 
   private
 
+  def model_apply_userdata_outdoor_air(model)
+    return true
+  end
+
   # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
-  # @param wwr_limit [Float] return wwr_limit
+  # @param wwr_limit [Double] window to wall ratio limit
   # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
   # @return [Boolean] True, require adjustment, false not require adjustment.
   def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
@@ -6193,7 +6338,7 @@ class Standard
   #
   # @param bat [String] building area type category
   # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
-  # @return [Float] return adjusted wwr_limit
+  # @return [Double] return adjusted wwr_limit
   def model_get_bat_wwr_target(bat, wwr_list)
     return 40.0
   end
@@ -6203,7 +6348,7 @@ class Standard
   # This function shall only be called if the maximum WWR value for surfaces with fenestration is lower than 90% due to
   # accommodating the total door surface areas
   #
-  # @param residual_ratio [Float] the ratio of residual surfaces among the total wall surface area with no fenestrations
+  # @param residual_ratio [Double] the ratio of residual surfaces among the total wall surface area with no fenestrations
   # @param space [OpenStudio::Model:Space] a space
   # @param model [OpenStudio::Model::Model] openstudio model
   # @return [Boolean] returns true if successful, false if not
@@ -6891,7 +7036,7 @@ class Standard
 
   # Utility function that returns the min and max value in a design day schedule.
   #
-  # TODO: move this to Standards.Schedule.rb
+  # @todo move this to Standards.Schedule.rb
   # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
   # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
   # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.
@@ -6952,25 +7097,22 @@ class Standard
 
   # Calculate the window to wall ratio reduction factor
   #
-  # @param multiplier [Float] multiplier of the wwr
-  # @param surface_wwr [Float] the surface window to wall ratio
-  # @param surface_dr [Float] the surface door to wall ratio
-  # @param wwr_building_type[String] building type for wwr
-  # @param wwr_target [Float] target window to wall ratio
-  # @param total_wall_m2 [Float] total wall area of the category in m2.
-  # @param total_wall_with_fene_m2 [Float] total wall area of the category with fenestrations in m2.
-  # @param total_fene_m2 [Float] total fenestration area
-  # @param total_plenum_wall_m2 [Float] total sqaure meter of a plenum
-  # @return [Float] reduction factor
-  def model_get_wwr_reduction_ratio(multiplier,
-                                    surface_wwr: 0.0,
-                                    surface_dr: 0.0,
-                                    wwr_building_type: 'All others',
-                                    wwr_target: 0.0,
-                                    total_wall_m2: 0.0,
-                                    total_wall_with_fene_m2: 0.0,
-                                    total_fene_m2: 0.0,
-                                    total_plenum_wall_m2: 0.0)
+  # @param multiplier [Double] multiplier of the wwr
+  # @param surface [OpenStudio::Model:Surface] OpenStudio Surface object
+  # @param wwr_target [Double] target window to wall ratio
+  # @param total_wall_m2 [Double] total wall area of the category in m2.
+  # @param total_wall_with_fene_m2 [Double] total wall area of the category with fenestrations in m2.
+  # @param total_fene_m2 [Double] total fenestration area
+  # @param total_plenum_wall_m2 [Double] total sqaure meter of a plenum
+  # @return [Double] reduction factor
+  def surface_get_wwr_reduction_ratio(multiplier,
+                                      surface,
+                                      wwr_building_type: 'All others',
+                                      wwr_target: 0.0,
+                                      total_wall_m2: 0.0,
+                                      total_wall_with_fene_m2: 0.0,
+                                      total_fene_m2: 0.0,
+                                      total_plenum_wall_m2: 0.0)
     return 1.0 - multiplier
   end
 
@@ -6980,12 +7122,13 @@ class Standard
   # 2. data from measure and OpenStudio interface
   # @param [OpenStudio:model:Model] model
   # @param [String] climate_zone
+  # @param [String] sizing_run_dir
   # @param [String] default_hvac_building_type
   # @param [String] default_wwr_building_type
   # @param [String] default_swh_building_type
   # @param [Hash] bldg_type_hvac_zone_hash A hash maps building type for hvac to a list of thermal zones
-  # @return [Boolean] returns true if successful, false if not
-  def handle_user_input_data(model, climate_zone, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
+  # @return [Boolean] returns true
+  def handle_user_input_data(model, climate_zone, sizing_run_dir, default_hvac_building_type, default_wwr_building_type, default_swh_building_type, bldg_type_hvac_zone_hash)
     return true
   end
 
@@ -7000,12 +7143,11 @@ class Standard
     return true
   end
 
-  # Template method for adding zone additional property "zone DCV implemented in user model"
+  # Template method for evaluate DCV requirements in the user model
   #
-  # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio model
   # @return [Boolean] returns true if successful, false if not
-  def model_mark_zone_dcv_existence(model)
+  def model_evaluate_dcv_requirements(model)
     return true
   end
 
@@ -7017,43 +7159,6 @@ class Standard
   # @return [Boolean] return True if all orientation need to be run, False if not
   def run_all_orientations(run_all_orients, user_model)
     return run_all_orients
-  end
-
-  # Template method for reading user data and adding to zone additional properties
-  #
-  # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio model
-  # @return [Boolean] returns true if successful, false if not
-  def model_add_dcv_user_exception_properties(model)
-    return true
-  end
-
-  # Template method for raising user model DCV warning and errors
-  #
-  # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio model
-  # @return [Boolean] returns true if successful, false if not
-  def model_raise_user_model_dcv_errors(model)
-    return true
-  end
-
-  # Template method for adding zone additional property "airloop dcv required by 901" and "zone dcv required by 901"
-  #
-  # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio model
-  # @return [Boolean] returns true if successful, false if not
-  def model_add_dcv_requirement_properties(model)
-    return true
-  end
-
-  # Template method for checking if zones in the baseline model should have DCV based on 90.1 2019 G3.1.2.5.
-  # Zone additional property 'apxg no need to have DCV' added
-  #
-  # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::Model::Model] OpenStudio model
-  # @return [Boolean] returns true if successful, false if not
-  def model_add_apxg_dcv_properties(model)
-    return true
   end
 
   # Template method for setting DCV in baseline HVAC system if required
@@ -7217,8 +7322,8 @@ class Standard
   # Add reporting tolerances. Default values are based on the suggestions from the PRM-RM.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio Model
-  # @param heating_tolerance_deg_f [Float] Tolerance for time heating setpoint not met in degree F
-  # @param cooling_tolerance_deg_f [Float] Tolerance for time cooling setpoint not met in degree F
+  # @param heating_tolerance_deg_f [Double] Tolerance for time heating setpoint not met in degree F
+  # @param cooling_tolerance_deg_f [Double] Tolerance for time cooling setpoint not met in degree F
   # @return [Boolean] returns true if successful, false if not
   def model_add_reporting_tolerances(model, heating_tolerance_deg_f: 1.0, cooling_tolerance_deg_f: 1.0)
     reporting_tolerances = model.getOutputControlReportingTolerances
@@ -7232,7 +7337,6 @@ class Standard
 
   # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
   #
-  # @return [Boolean] true if successful, false if not
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [Boolean] returns true if successful, false if not

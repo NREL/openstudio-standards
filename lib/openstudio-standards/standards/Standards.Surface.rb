@@ -50,7 +50,8 @@ class Standard
       when 'Floor'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['slab_on_grade']
       end
-    when 'TODO Surface'
+    when 'Surface'
+      # @todo edit
       case surface_type
       when 'Floor'
         infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['floor_over_unconditioned']
@@ -488,9 +489,9 @@ class Standard
 
   # Calculate the wwr of a surface
   #
-  # @param surface [OpenStudio::Model::Surface]
-  # @return [Float] window to wall ratio of a surface
-  def surface_get_wwr_of_a_surface(surface)
+  # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
+  # @return [Double] window to wall ratio of a surface
+  def surface_get_wwr(surface)
     surface_area = surface.grossArea
     surface_fene_area = 0.0
     surface.subSurfaces.sort.each do |ss|
@@ -504,7 +505,7 @@ class Standard
   # Adjust the fenestration area to the values specified by the reduction value in a surface
   #
   # @param surface [OpenStudio::Model:Surface] openstudio surface object
-  # @param reduction [Float] ratio of adjustments
+  # @param reduction [Double] ratio of adjustments
   # @param model [OpenStudio::Model::Model] openstudio model
   # @return [Boolean] returns true if successful, false if not
   def surface_adjust_fenestration_in_a_surface(surface, reduction, model)
@@ -526,9 +527,9 @@ class Standard
 
   # Calculate the door ratio of a surface
   #
-  # @param surface [OpenStudio::Model::Surface]
-  # @return [Float] window to wall ratio of a surface
-  def surface_get_door_ratio_of_a_surface(surface)
+  # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
+  # @return [Double] window to wall ratio of a surface
+  def surface_get_door_ratio(surface)
     surface_area = surface.grossArea
     surface_door_area = 0.0
     surface.subSurfaces.sort.each do |ss|

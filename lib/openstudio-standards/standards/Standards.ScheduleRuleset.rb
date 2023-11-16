@@ -394,13 +394,13 @@ class Standard
       end
 
       # get values for new default profile
-      new_default_daySchedule = rule_vector[new_default_index].daySchedule
-      new_default_daySchedule_values = new_default_daySchedule.values
-      new_default_daySchedule_times = new_default_daySchedule.times
+      new_default_day_schedule = rule_vector[new_default_index].daySchedule
+      new_default_day_schedule_values = new_default_day_schedule.values
+      new_default_day_schedule_times = new_default_day_schedule.times
 
       # update values and times for default profile
-      for i in 0..(new_default_daySchedule_values.size - 1)
-        old_default_schedule_day.addValue(new_default_daySchedule_times[i], new_default_daySchedule_values[i])
+      for i in 0..(new_default_day_schedule_values.size - 1)
+        old_default_schedule_day.addValue(new_default_day_schedule_times[i], new_default_day_schedule_values[i])
       end
 
       # remove rule object that has become the default. Also try to remove the ScheduleDay
@@ -721,7 +721,7 @@ class Standard
       day_schedule_holiday = schedule_ruleset.to_ScheduleRuleset.get.defaultDaySchedule
     end
     # Currently holidaySchedule is not working in SDK in ScheduleRuleset object
-    # TODO: enable the following lines when holidaySchedule is available
+    # @todo enable the following lines when holidaySchedule is available
     # if !schedule_ruleset.isHolidayScheduleDefaulted
     #   day_schedule = schedule_ruleset.to_ScheduleRuleset.get.holidaySchedule
     # else
@@ -974,7 +974,7 @@ class Standard
       end
 
       # Last day in values array is the holiday schedule
-      # TODO: add holiday schedule when implemented in OpenStudio SDK
+      # @todo add holiday schedule when implemented in OpenStudio SDK
     end
 
     # Need to handle design days
@@ -1404,7 +1404,7 @@ class Standard
     # @todo apply secondary logic
 
     # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
-    sch_day.setInterpolatetoTimestep(true)
+    # sch_day.setInterpolatetoTimestep(true)
 
     return sch_day
   end

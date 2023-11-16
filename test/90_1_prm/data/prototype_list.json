@@ -213,5 +213,14 @@
     "elevators": [
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_elevator_offmed", [["remove_transformer", []]]],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_elevator_offmed_hydraulic", [["remove_transformer", []]]]
+    ],
+    "baseline_outdoor_air": [
+        ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_oa_01", [["remove_transformer", []]]]
+    ],
+    "computer_rooms_equipment_schedule": [
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]]
+    ],
+    "proposed_model_residential_lpd": [
+        ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_res_ltg", [["remove_transformer", []], ["reduce_lpd" , []]]]
     ]
 }
