@@ -1534,7 +1534,7 @@ class ASHRAE901PRM < Standard
       user_building_index = user_data_building.index { |user_building| UserData.compare(user_building['name'], building_name) }
       unless user_building_index.nil? || prm_read_user_data(user_data_building[user_building_index], 'building_type_swh', nil)
         # Only thermal zone in the buildings user data and have building_type_for_hvac data will be assigned.
-        default_type = prm_read_user_data(user_data_building[user_building_index], 'building_type_swh', nil)
+        default_type = prm_read_user_data(user_data_building[user_building_index], 'building_type_swh', default_type)
         OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Building type swh found in #{UserDataFiles::WATERUSE_EQUIPMENT} for building #{building_name}, set default building type swh to #{default_type}")
       end
     end
