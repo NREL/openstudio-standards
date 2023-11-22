@@ -47,7 +47,7 @@ class BTAPData
     @btap_data.merge!(building_costing_data(cost_result)) unless cost_result.nil?
     @btap_data.merge!(climate_data)
     @btap_data.merge!(service_water_heating_data)
-    @btap_data.merge!(energy_eui_data)
+    @btap_data.merge!(energy_eui_data(model)) #Sara
     @btap_data.merge!(energy_peak_data)
     @btap_data.merge!(utility(model))
     @btap_data.merge!(unmet_hours(model))
@@ -1400,7 +1400,7 @@ class BTAPData
     return data
   end
 
-  def energy_eui_data
+  def energy_eui_data(model)
     data = {}
     # default to zero to start.
     ['energy_eui_fans_gj_per_m_sq',
@@ -1416,7 +1416,9 @@ class BTAPData
     table = get_sql_table_to_json(@model, 'AnnualBuildingUtilityPerformanceSummary', 'Entire Facility', 'End Uses')['table']
     # Get rid of totals and averages rows.. I want just the
     table.delete_if { |row| !!(row['name'] =~ /Total|Average/) }
+    puts table
     table.each do |row|
+      puts "row is #{row}" #Sara
       # skip name and water_m3 columns
       energy_columns = row.select { |k, v| (k != 'name') && (k != 'water_m3') }
       # Store eui by use name.
@@ -1424,12 +1426,32 @@ class BTAPData
     end
     data['energy_eui_total_gj_per_m_sq'] = 0.0
     ['natural_gas_GJ', 'electricity_GJ', 'additional_fuel_GJ'].each do |column|
+      puts "column is #{column}" #Sara
       data["energy_eui_#{column.downcase}_per_m_sq"] = table.inject(0) { |sum, row| sum + (row[column].nil? ? 0.0 : row[column]) } / @conditioned_floor_area_m_sq
       data['energy_eui_total_gj_per_m_sq'] += data["energy_eui_#{column.downcase}_per_m_sq"] unless data["energy_eui_#{column.downcase}_per_m_sq"].nil?
     end
-    ['district_cooling_GJ', 'district_heating_GJ'].each do |column|
-      data["energy_eui_#{column.downcase}_per_m_sq"] = table.inject(0) { |sum, row| sum + (row[column].nil? ? 0.0 : row[column]) } / @conditioned_floor_area_m_sq
+    #Sara
+    plant_loops = model.getPlantLoops
+    model_has_how_many_GSHP = 0.0
+    plant_loops.each do |plantloop|
+      puts "plantloop name is #{plantloop}"
+      if plantloop.name.to_s.upcase.include? "GLHX"
+        puts "does not have GLHX"
+        model_has_how_many_GSHP += 1.0
+      end
     end
+    puts "model_has_how_many_GSHP is #{model_has_how_many_GSHP}"
+    if model_has_how_many_GSHP < 1.0
+      puts "Sara"
+      ['district_cooling_GJ', 'district_heating_GJ'].each do |column|
+        puts "column is #{column}"  #Sara
+        data["energy_eui_#{column.downcase}_per_m_sq"] = table.inject(0) { |sum, row| sum + (row[column].nil? ? 0.0 : row[column]) } / @conditioned_floor_area_m_sq
+      end
+    end
+    puts "energy_eui_cooling_gj_per_m_sq is #{data['energy_eui_cooling_gj_per_m_sq']}"
+
+
+
 
     # Get total and net site energy use intensity
     # Note: 'Total Site Energy' is the "gross" energy used by a building.
