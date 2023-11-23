@@ -1440,7 +1440,8 @@ class BTAPData
       data['energy_eui_total_gj_per_m_sq'] += data["energy_eui_#{column.downcase}_per_m_sq"] unless data["energy_eui_#{column.downcase}_per_m_sq"].nil?
     end
 
-    # if the HVAC of the model is GSHP, district heating and cooling must be removed from EUIs for heating and cooling and total EUI
+    # If the HVAC of the model is GSHP, district heating and cooling must be removed from EUIs for heating and cooling and total EUI
+    # NOTE: it has been assumed that if a model has GSHP, that is the only HVAC type in the model. This assumption means that any district heating/cooling in the model is related to GSHP.
     if model_has_how_many_GSHP > 0.0
       data['energy_eui_heating_gj_per_m_sq'] -= data['energy_eui_district_heating_gj_per_m_sq']
       data['energy_eui_cooling_gj_per_m_sq'] -= data['energy_eui_district_cooling_gj_per_m_sq']
