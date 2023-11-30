@@ -249,7 +249,7 @@ class Standard
     elsif fuel_type == 'Electricity' && capacity_w < 58_600 && volume_gal <= 2
       sub_type = 'residential_duty'
     elsif volume_gal <= 2
-      sub_type = 'instantenous'
+      sub_type = 'instantaneous'
     end
 
     return sub_type

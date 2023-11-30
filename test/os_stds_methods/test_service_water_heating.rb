@@ -85,7 +85,7 @@ class TestServiceWaterHeating < Minitest::Test
     std = Standard.build('90.1-2019')
 
     # Gas water heaters
-    assert(std.water_heater_determine_sub_type('NaturalGas', 74000, 5).nil?)
+    assert(std.water_heater_determine_sub_type('NaturalGas', 74000, 5) == "residential_duty")
     assert(std.water_heater_determine_sub_type('NaturalGas', 74000, 20) == "consumer_storage")
     assert(std.water_heater_determine_sub_type('NaturalGas', 76000, 5) == "residential_duty")
 
