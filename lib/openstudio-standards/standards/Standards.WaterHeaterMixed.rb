@@ -98,7 +98,7 @@ class Standard
         vol_drt = wh_props['uniform_energy_factor_volume_allowance']
         uef = base_uef - (vol_drt * volume_gal)
       end
-      ef = water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr)
+      ef = water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr, volume_gal)
       water_heater_eff, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef, capacity_btu_per_hr)
       # Two booster water heaters
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
@@ -234,9 +234,9 @@ class Standard
   # @param uef [Float] water heater UEF
   # @param capacity_btu_per_hr [Float] water heater capacity
   # @return [Float] returns EF, energy factor
-  def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr)
+  def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr, volume_gal)
     sub_type = nil
-    capacity_w = OpenStudio.convert(capacity_w, 'Btu/hr', 'W').get
+    capacity_w = OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get
     # source: https://energycodeace.com/site/custom/public/reference-ace-2019/index.html#!Documents/52residentialwaterheatingequipment.htm
     if fuel_type == 'NaturalGas' && capacity_btu_per_hr <= 75_000 && (volume_gal >= 20 && volume_gal <= 100)
       sub_type = 'consumer_storage'
@@ -265,6 +265,9 @@ class Standard
     elsif sub_type == 'residential_duty' && fuel_type == 'Electricity'
       return 1.0219 * uef - 0.0025
     elsif sub_type == 'instantenous'
+      return uef
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.WaterHeaterMixed', "Invalid sub_type for #{water_heater_mixed.name}, EF = UEF is assumed.")
       return uef
     end
   end
