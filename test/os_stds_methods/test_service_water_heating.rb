@@ -80,4 +80,27 @@ class TestServiceWaterHeating < Minitest::Test
     # run the model to make sure it applies correctly
     # model.save("output/#{test_name}_out.osm", true)
   end
+
+  def test_water_heater_sub_type
+    std = Standard.build('90.1-2019')
+
+    # Gas water heaters
+    assert(std.water_heater_determine_sub_type('NaturalGas', 74000, 5).nil?)
+    assert(std.water_heater_determine_sub_type('NaturalGas', 74000, 20) == "consumer_storage")
+    assert(std.water_heater_determine_sub_type('NaturalGas', 76000, 5) == "residential_duty")
+
+    # Electricity water heaters
+    assert(std.water_heater_determine_sub_type('Electricity', 74000, 5).nil?)
+    assert(std.water_heater_determine_sub_type('Electricity', 74000, 2) == "residential_duty")
+    assert(std.water_heater_determine_sub_type('Electricity', 300000, 2) == "instantaneous")
+  end
+
+  def test_uef_to_ef()
+    std = Standard.build('90.1-2019')
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('Electricity', 1, 1, 1).nil?)
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('Electricity', 1, 300000, 2) == 1)
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('Electricity', 0, 74000, 2) == -0.0025)
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('NaturalGas', 0, 76000, 5) == -1.2844)
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('NaturalGas', 0, 74000, 20) == 0.0711)
+  end
 end

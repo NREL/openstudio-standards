@@ -228,13 +228,13 @@ class Standard
     return capacity_btu_per_hr
   end
 
-  # Convert UEF to EF
+  # Get water heater sub type
   #
   # @param fuel_type [String] water heater fuel type
-  # @param uef [Float] water heater UEF
   # @param capacity_btu_per_hr [Float] water heater capacity
-  # @return [Float] returns EF, energy factor
-  def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr, volume_gal)
+  # @param volume_gal [Float] water heater storage volume in gallons
+  # @return [String] returns water heater sub type
+  def water_heater_determine_sub_type(fuel_type, capacity_btu_per_hr, volume_gal)
     sub_type = nil
     capacity_w = OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get
     # source: https://energycodeace.com/site/custom/public/reference-ace-2019/index.html#!Documents/52residentialwaterheatingequipment.htm
@@ -251,7 +251,21 @@ class Standard
     elsif volume_gal <= 2
       sub_type = 'instantenous'
     end
-    
+
+    return sub_type
+  end
+
+  # Convert UEF to EF
+  #
+  # @param fuel_type [String] water heater fuel type
+  # @param uef [Float] water heater UEF
+  # @param capacity_btu_per_hr [Float] water heater capacity
+  # @param volume_gal [Float] water heater storage volume in gallons
+  # @return [Float] returns EF, energy factor
+  def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr, volume_gal)
+    # Get water heater sub type
+    sub_type = water_heater_determine_sub_type(capacity_btu_per_hr, volume_gal)
+
     # source: RESNET, https://www.resnet.us/wp-content/uploads/RESNET-EF-Calculator-2017.xlsx
     if sub_type.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "No sub type identified for #{water_heater_mixed.name}, EF = UEF is assumed.")
@@ -259,12 +273,12 @@ class Standard
     elsif sub_type == 'consumer_storage' && fuel_type == 'NaturalGas'
       return 0.9066 * uef + 0.0711
     elsif sub_type == 'consumer_storage' && fuel_type == 'Electricity'
-      return 2.44029 * uef - 1.28444
+      return 2.44029 * uef - 1.2844
     elsif sub_type == 'residential_duty' && (fuel_type == 'NaturalGas' || fuel_type == 'Oil')
       return 1.005 * uef + 0.0019
     elsif sub_type == 'residential_duty' && fuel_type == 'Electricity'
       return 1.0219 * uef - 0.0025
-    elsif sub_type == 'instantenous'
+    elsif sub_type == 'instantaneous'
       return uef
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.WaterHeaterMixed', "Invalid sub_type for #{water_heater_mixed.name}, EF = UEF is assumed.")
