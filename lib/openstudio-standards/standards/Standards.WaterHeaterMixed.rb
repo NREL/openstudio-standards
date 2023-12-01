@@ -264,7 +264,7 @@ class Standard
   # @return [Float] returns EF, energy factor
   def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr, volume_gal)
     # Get water heater sub type
-    sub_type = water_heater_determine_sub_type(capacity_btu_per_hr, volume_gal)
+    sub_type = water_heater_determine_sub_type(fuel_type, capacity_btu_per_hr, volume_gal)
 
     # source: RESNET, https://www.resnet.us/wp-content/uploads/RESNET-EF-Calculator-2017.xlsx
     if sub_type.nil?
