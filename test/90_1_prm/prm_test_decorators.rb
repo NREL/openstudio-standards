@@ -1,5 +1,4 @@
 class AppendixGPRMTests < Minitest::Test
-
   # Add exhaust fan object to each lab zone in model
   # @param model
   def add_exhaust_fan_per_lab_zone(model)
@@ -62,7 +61,7 @@ class AppendixGPRMTests < Minitest::Test
           if sub.subSurfaceType == 'Door'
             door = {}
             door['name'] = sub.name.get
-            door['vertices'] = sub.vertices()
+            door['vertices'] = sub.vertices
             door['construction'] = sub.construction.get
             door_list << door
           else
@@ -77,7 +76,7 @@ class AppendixGPRMTests < Minitest::Test
         elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
           helper_add_window_to_wwr_with_door(target_wwr_north, ss, orig_construction, door_list, model)
         elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135 &&
-          helper_add_window_to_wwr_with_door(target_wwr_east, ss, orig_construction, door_list, model)
+              helper_add_window_to_wwr_with_door(target_wwr_east, ss, orig_construction, door_list, model)
         elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
           helper_add_window_to_wwr_with_door(target_wwr_south, ss, orig_construction, door_list, model)
         elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315 && target_wwr_west > 0.0
@@ -324,7 +323,7 @@ class AppendixGPRMTests < Minitest::Test
     model.getThermalZones.each do |zone|
       zone.spaces.each do |space|
         if space.spaceType.get.standardsSpaceType.get.to_s.downcase.include?('data center') ||
-          space.spaceType.get.standardsSpaceType.get.to_s.downcase.include?('computer room')
+           space.spaceType.get.standardsSpaceType.get.to_s.downcase.include?('computer room')
           elec_eqp = space.spaceType.get.electricEquipment
           elec_eqp[0].setMultiplier(epd_multiplier[0])
         end
@@ -406,14 +405,13 @@ class AppendixGPRMTests < Minitest::Test
   # return [OpenStudio::Model::Model] OpenStudio model object
   def change_weather_file(model, arguments)
     # Define new weather file
-    weather_file = File.join(@@json_dir, "USA_VA_Arlington-Ronald.Reagan.Washington.Natl.AP.724050_TMY3.epw")
+    weather_file = File.join(@@json_dir, 'USA_VA_Arlington-Ronald.Reagan.Washington.Natl.AP.724050_TMY3.epw')
     epw_file = OpenStudio::EpwFile.new(weather_file)
 
     # Assign new weather file
     OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
 
     return model
-
   end
 
   # Change cooling thermostat to 24C
@@ -422,11 +420,11 @@ class AppendixGPRMTests < Minitest::Test
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param arguments [Array] Not used
   def change_clg_therm(model, arguments)
-    std = Standard.build("90.1-2019")
+    std = Standard.build('90.1-2019')
     thermal_zone = model.getThermalZoneByName(arguments[0]).get
     tstat = thermal_zone.thermostat.get
     tstat = tstat.to_ThermostatSetpointDualSetpoint.get
-    tstat.setCoolingSetpointTemperatureSchedule(std.model_add_constant_schedule_ruleset(model, 24, name = "#{thermal_zone.name.to_s} Cooling Schedule."))
+    tstat.setCoolingSetpointTemperatureSchedule(std.model_add_constant_schedule_ruleset(model, 24, name = "#{thermal_zone.name} Cooling Schedule."))
 
     return model
   end
@@ -503,7 +501,6 @@ class AppendixGPRMTests < Minitest::Test
     arguments
     return model
   end
-
 
   def enable_airloop_dcv(model, arguments)
     # arguments contains a list of air loop names to enable dcv

@@ -1,5 +1,4 @@
 class AppendixGPRMTests < Minitest::Test
-
   #
   # this checks the PRM baseline sizing requirement of supply air temperature delta T
   #
@@ -257,10 +256,10 @@ class AppendixGPRMTests < Minitest::Test
 
         # error if Loop app G heating fuels method is not available
         if air_loop.model.version < OpenStudio::VersionString.new('3.6.0')
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required Loop method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', 'Required Loop method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
         end
 
-        heat_types = air_loop.appGHeatingFuelTypes.map { |f| f.valueName }
+        heat_types = air_loop.appGHeatingFuelTypes.map(&:valueName)
         if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
           # Heat type is electric or heat pump
           assert(heat_types.include?(expected_elec_heat_type), "Incorrect heat type for #{air_loop.name.get}; expected #{expected_elec_heat_type}")
@@ -324,9 +323,9 @@ class AppendixGPRMTests < Minitest::Test
           model.getAirLoopHVACUnitarySystems.each do |unit_system|
             # Check if airloop includes a unitary system with constant volume fan single speed DX cooling coil
             zone_system_check = true if unit_system.controllingZoneorThermostatLocation.get.name.to_s == zone.name.to_s &&
-              unit_system.controlType == 'Load' &&
-              unit_system.coolingCoil.get.to_CoilCoolingDXSingleSpeed.is_initialized &&
-              unit_system.supplyFan.get.to_FanOnOff.is_initialized
+                                        unit_system.controlType == 'Load' &&
+                                        unit_system.coolingCoil.get.to_CoilCoolingDXSingleSpeed.is_initialized &&
+                                        unit_system.supplyFan.get.to_FanOnOff.is_initialized
           end
           return zone_system_check
         end
@@ -591,10 +590,10 @@ class AppendixGPRMTests < Minitest::Test
 
           # error if HVACComponent app G heating fuels method is not available
           if equip.model.version < OpenStudio::VersionString.new('3.6.0')
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required HVACComponent method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', 'Required HVACComponent method .appGHeatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
           end
 
-          heat_types = equip.heatingCoil.appGHeatingFuelTypes.map { |f| f.valueName }
+          heat_types = equip.heatingCoil.appGHeatingFuelTypes.map(&:valueName)
           if climate_zone =~ /0A|0B|1A|1B|2A|2B|3A/
             assert(heat_types.include?('Electric'), "Baseline system selection failed for climate #{climate_zone}: FPFC should have electric heat for " + sub_text)
           else
@@ -630,7 +629,7 @@ class AppendixGPRMTests < Minitest::Test
         if space.spaceType.get.standardsSpaceType.get == 'computer room'
           # error if zone design load methods are not available
           if zone.model.version < OpenStudio::VersionString.new('3.6.0')
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', "Required ThermalZone method .autosizedCoolingDesignLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.test_appendix_g_prm', 'Required ThermalZone method .autosizedCoolingDesignLoad is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
           end
           zone_load_w = zone.autosizedCoolingDesignLoad.get
           zone_load_w *= zone.multiplier
@@ -665,8 +664,8 @@ class AppendixGPRMTests < Minitest::Test
     model.getAirLoopHVACUnitarySystems.each do |unit_system|
       # Check if the system is system 11 by checking if the load control type is SingleZoneVAV
       zone_system_check = true if unit_system.controllingZoneorThermostatLocation.get.name.to_s == zone.name.to_s &&
-        unit_system.controlType == 'SingleZoneVAV' &&
-        unit_system.coolingCoil.get.to_CoilCoolingWater.is_initialized
+                                  unit_system.controlType == 'SingleZoneVAV' &&
+                                  unit_system.coolingCoil.get.to_CoilCoolingWater.is_initialized
     end
     return zone_system_check
   end

@@ -1,7 +1,6 @@
 require_relative './prm_check_helpers'
 
 class AppendixGPRMTests < Minitest::Test
-
   # Check baseline outdoor air setting
   # @param prototypes_base [Hash] Baseline prototypes
   def check_baseline_oa(prototypes_base)
@@ -24,7 +23,7 @@ class AppendixGPRMTests < Minitest::Test
       model_baseline_file_name_90 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}-Baseline/baseline_final_90.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/baseline_final_90.osm"
       model_baseline_file_name_180 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}-Baseline/baseline_final_180.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/baseline_final_180.osm"
       model_baseline_file_name_270 = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}-Baseline/baseline_final_270.osm" : "#{building_type}-#{template}-#{climate_zone}-#{user_data_dir}-#{mod.flatten.join('_') unless mod.empty?}-Baseline/baseline_final_270.osm"
-      rotated = File.exist?("#{@test_dir}/#{model_baseline_file_name}") && File.exist?("#{@test_dir}/#{model_baseline_file_name_90}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_180}") &&  File.exist?("#{@test_dir}/#{model_baseline_file_name_270}")
+      rotated = File.exist?("#{@test_dir}/#{model_baseline_file_name}") && File.exist?("#{@test_dir}/#{model_baseline_file_name_90}") && File.exist?("#{@test_dir}/#{model_baseline_file_name_180}") && File.exist?("#{@test_dir}/#{model_baseline_file_name_270}")
 
       if mod.empty?
         # test case 1 - rotation
@@ -45,7 +44,7 @@ class AppendixGPRMTests < Minitest::Test
       model.getSpaces.each do |space|
         if prm_get_optional_handler(space, @sizing_run_dir, 'spaceType', 'standardsSpaceType') == 'computer room'
           space.spaceType.get.electricEquipment.each do |elec_equipment|
-            assert(elec_equipment.schedule.get.name.to_s == "ASHRAE 90.1 Appendix G - Computer Room Equipment Schedule")
+            assert(elec_equipment.schedule.get.name.to_s == 'ASHRAE 90.1 Appendix G - Computer Room Equipment Schedule')
           end
         end
       end
@@ -245,8 +244,8 @@ class AppendixGPRMTests < Minitest::Test
         economizer_activated_target = false
         temperature_highlimit_target = 23.89
         air_loop_name = air_loop.name.get
-        baseline_system_type = air_loop.additionalProperties.getFeatureAsString("baseline_system_type")
-        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_top_ZN_6 ZN PSZ-VAV', 'DataCenter_basement_ZN_6 ZN PSZ-VAV', 'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) and climate_zone.end_with?("2B")
+        baseline_system_type = air_loop.additionalProperties.getFeatureAsString('baseline_system_type')
+        if ['Building Story 3 VAV_PFP_Boxes (Sys8)', 'DataCenter_top_ZN_6 ZN PSZ-VAV', 'DataCenter_basement_ZN_6 ZN PSZ-VAV', 'Basement Story 0 VAV_PFP_Boxes (Sys8)'].include?(air_loop_name) && climate_zone.end_with?('2B')
           economizer_activated_target = true
         end
 
@@ -362,7 +361,7 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, user_data_dir, mod = prototype
       hxs = model.getHeatExchangerAirToAirSensibleAndLatents
-      if hxs.length > 0
+      if !hxs.empty?
         assert(false, "The baseline model for #{building_type}-#{template}-#{climate_zone} should not contain ERVs.") unless user_data_dir == 'userdata_default_test'
         hxs.each do |hx|
           if climate_zone.include?('4A')
@@ -393,11 +392,11 @@ class AppendixGPRMTests < Minitest::Test
       if building_type == 'RetailStandalone'
         model.getExteriorLightss.each do |exterior_lights|
           ext_lights_def = exterior_lights.exteriorLightsDefinition
-          if exterior_lights.name.get == "NonDimming Exterior Lights Def"
+          if exterior_lights.name.get == 'NonDimming Exterior Lights Def'
             design_power = ext_lights_def.designLevel.round(0)
-            assert( design_power == 700, "The exterior lighting for 'NonDimming Exterior Lights Def' in #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 700.")
+            assert(design_power == 700, "The exterior lighting for 'NonDimming Exterior Lights Def' in #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 700.")
           end
-          if exterior_lights.name.get == "Occ Sensing Exterior Lights Def"
+          if exterior_lights.name.get == 'Occ Sensing Exterior Lights Def'
             design_power = ext_lights_def.designLevel.round(0)
             assert(design_power == 4328, "The exterior lighting for 'Occ Sensing Exterior Lights Def' #{building_type}-#{template} has incorrect power. Found: #{design_power}; expected 4328.")
           end
@@ -421,7 +420,7 @@ class AppendixGPRMTests < Minitest::Test
           fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
           fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
           fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-          assert(fan_bhp_ip.round(4) == 0.0017, "Fan power for #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0017.")
+          assert(fan_bhp_ip.round(4) == 0.0017, "Fan power for #{fan.name} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0017.")
         end
       end
 
@@ -431,7 +430,7 @@ class AppendixGPRMTests < Minitest::Test
             fan_power_si = std.fan_fanpower(fan) / std.fan_design_air_flow(fan)
             fan_power_ip = fan_power_si / OpenStudio.convert(1, 'm^3/s', 'cfm').get
             fan_bhp_ip = fan_power_ip * fan.motorEfficiency / 746.0
-            assert(fan_bhp_ip.round(4) == 0.0012, "Fan power for  #{fan.name.to_s} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0012.")
+            assert(fan_bhp_ip.round(4) == 0.0012, "Fan power for  #{fan.name} fan in #{building_type} #{template} #{climate_zone} #{mod} is #{fan_bhp_ip.round(4)} instead of 0.0012.")
           end
         end
       end
@@ -509,7 +508,7 @@ class AppendixGPRMTests < Minitest::Test
 
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       @bldg_type_alt_now = @bldg_type_alt[prototype]
-      if ['0A', '0B', '1A', '1B', '2A', '2B', '3A'].include?(climate_zone.sub("ASHRAE 169-2013-", ""))
+      if ['0A', '0B', '1A', '1B', '2A', '2B', '3A'].include?(climate_zone.sub('ASHRAE 169-2013-', ''))
         energy_type = 'Electric'
       else
         energy_type = 'Fuel'
@@ -636,7 +635,7 @@ class AppendixGPRMTests < Minitest::Test
     # cooling: CoilCoolingDXSingleSpeed
     # heating: CoilHeatingWater
     # hash = {capacity:cop}
-    capacity_cop_cool = {100000=>3.1}
+    capacity_cop_cool = { 100000 => 3.1 }
     capacity_cop_cool.each do |key_cool, value_cool|
       std = Standard.build('90.1-PRM-2019')
       prototypes_base.each do |prototype, model_base|
@@ -679,8 +678,8 @@ class AppendixGPRMTests < Minitest::Test
     # cooling: CoilCoolingDXSingleSpeed
     # heating: CoilHeatingDXSingleSpeed
     # hash = {capacity:cop}
-    capacity_cop_cool = {100000=>3.1}
-    capacity_eff_heat = {100000=>3.1}
+    capacity_cop_cool = { 100000 => 3.1 }
+    capacity_eff_heat = { 100000 => 3.1 }
     capacity_cop_cool.each do |key_cool, value_cool|
       capacity_eff_heat.each do |key_heat, value_heat|
         std = Standard.build('90.1-PRM-2019')
@@ -722,10 +721,10 @@ class AppendixGPRMTests < Minitest::Test
     # cooling: CoilCoolingDXSingleSpeed
     # heating: CoilHeatingGas
     # hash = {capacity:cop}
-    capacity_cop_cool = {10000=>3.0,
-                         300000=>3.5}
-    capacity_cop_heat = {10000=>0.8,
-                         300000=>0.793}
+    capacity_cop_cool = { 10000 => 3.0,
+                          300000 => 3.5 }
+    capacity_cop_heat = { 10000 => 0.8,
+                          300000 => 0.793 }
     capacity_cop_cool.each do |key_cool, value_cool|
       capacity_cop_heat.each do |key_heat, value_heat|
         std = Standard.build('90.1-PRM-2019')
@@ -775,10 +774,10 @@ class AppendixGPRMTests < Minitest::Test
     # cooling: CoilCoolingDXSingleSpeed
     # heating: CoilHeatingDXSingleSpeed
     # hash = {capacity:cop}
-    capacity_cop_cool = {10000=>3.0,
-                         300000=>3.1}
-    capacity_cop_heat = {10000=>3.4,
-                         300000=>3.4}
+    capacity_cop_cool = { 10000 => 3.0,
+                          300000 => 3.1 }
+    capacity_cop_heat = { 10000 => 3.4,
+                          300000 => 3.4 }
     capacity_cop_cool.each do |key_cool, value_cool|
       capacity_cop_heat.each do |key_heat, value_heat|
         std = Standard.build('90.1-PRM-2019')
@@ -807,16 +806,16 @@ class AppendixGPRMTests < Minitest::Test
     # cooling: CoilCoolingDXTwoSpeed
     # heating: Boiler
     # hash = {capacity:cop}
-    capacity_cop_cool = {10000=>3.0,
-                         300000=>3.5}
-    boiler_capacity_eff = {100000=>0.8,
-                           1000000=>0.75}
+    capacity_cop_cool = { 10000 => 3.0,
+                          300000 => 3.5 }
+    boiler_capacity_eff = { 100000 => 0.8,
+                            1000000 => 0.75 }
     capacity_cop_cool.each do |key_cool, value_cool|
       boiler_capacity_eff.each do |key_heat, value_heat|
         std = Standard.build('90.1-PRM-2019')
         prototypes_base.each do |prototype, model_base|
           building_type, template, climate_zone, user_data_dir, mod = prototype
-          if building_type == 'MediumOffice' && template == "90.1-2013" && climate_zone == 'ASHRAE 169-2013-8A'
+          if building_type == 'MediumOffice' && template == '90.1-2013' && climate_zone == 'ASHRAE 169-2013-8A'
             # Create a deep copy of the proposed model
             model_pvav_reheat = BTAP::FileIO.deep_copy(model_base)
             capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
@@ -841,14 +840,14 @@ class AppendixGPRMTests < Minitest::Test
     # cooling: CoilCoolingDXTwoSpeed
     # heating: CoilHeatingElectric
     # hash = {capacity:cop}
-    capacity_cop_cool = {10000=>3.0,
-                         300000=>3.5}
+    capacity_cop_cool = { 10000 => 3.0,
+                          300000 => 3.5 }
     capacity_cop_cool.each do |key_cool, value_cool|
       boiler_capacity_eff.each do |key_heat, value_heat|
         std = Standard.build('90.1-PRM-2019')
         prototypes_base.each do |prototype, model_base|
           building_type, template, climate_zone, user_data_dir, mod = prototype
-          if building_type == 'MediumOffice' && template == "90.1-2013" && climate_zone == 'ASHRAE 169-2013-2A'
+          if building_type == 'MediumOffice' && template == '90.1-2013' && climate_zone == 'ASHRAE 169-2013-2A'
             # Create a deep copy of the proposed model
             model_pvav_pfp_boxes = BTAP::FileIO.deep_copy(model_base)
             capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
@@ -868,10 +867,10 @@ class AppendixGPRMTests < Minitest::Test
     # cooling: Chiller/CoolingTower
     # heating: Boiler
     # hash = {capacity:cop}
-    chiller_capacity_eff = {100=>0.79,
-                            200=>0.718}
-    boiler_capacity_eff = {100000=>0.8,
-                           1000000=>0.75}
+    chiller_capacity_eff = { 100 => 0.79,
+                             200 => 0.718 }
+    boiler_capacity_eff = { 100000 => 0.8,
+                            1000000 => 0.75 }
     chiller_capacity_eff.each do |key_cool, value_cool|
       boiler_capacity_eff.each do |key_heat, value_heat|
         std = Standard.build('90.1-PRM-2019')
@@ -921,8 +920,8 @@ class AppendixGPRMTests < Minitest::Test
     # cooling: Chiller/CoolingTower
     # heating: Boiler
     # hash = {capacity:cop}
-    chiller_capacity_eff = {100=>0.703,
-                            200=>0.634}
+    chiller_capacity_eff = { 100 => 0.703,
+                             200 => 0.634 }
     chiller_capacity_eff.each do |key_cool, value_cool|
       std = Standard.build('90.1-PRM-2019')
       prototypes_base.each do |prototype, model_base|
@@ -943,7 +942,7 @@ class AppendixGPRMTests < Minitest::Test
     # No.9 Gas_Furnace
     # heating: CoilHeatingGas
     # hash = {capacity:cop}
-    capacity_cop_heat = {10000=>0.793}
+    capacity_cop_heat = { 10000 => 0.793 }
     capacity_cop_heat.each do |key_heat, value_heat|
       std = Standard.build('90.1-PRM-2019')
       prototypes_base.each do |prototype, model_base|
@@ -1149,11 +1148,11 @@ class AppendixGPRMTests < Minitest::Test
       if baseline_or_proposed == 'baseline'
         infil_rate = 1.0
       else
-        if building_type == "SmallOffice"
+        if building_type == 'SmallOffice'
           infil_rate = 0.22
-        elsif building_type == "LargeHotel"
+        elsif building_type == 'LargeHotel'
           infil_rate = 0.50
-        elsif building_type == "Warehouse"
+        elsif building_type == 'Warehouse'
           infil_rate = 0.61
         end
       end
@@ -1196,34 +1195,33 @@ class AppendixGPRMTests < Minitest::Test
           lights_def = lights.lightsDefinition
           actual_w_area = lights_def.wattsperSpaceFloorArea.to_f
           # Check if non-regulated lights objects have been removed
-          if lights.name.get == "StripMall Strip mall - type 1 Additional Lights"
+          if lights.name.get == 'StripMall Strip mall - type 1 Additional Lights'
             found_obj_1 = true
           end
-          if lights.name.get == "StripMall Strip mall - type 2 Additional Lights"
+          if lights.name.get == 'StripMall Strip mall - type 2 Additional Lights'
             found_obj_2 = true
           end
 
           # Check power level of regulated lights objects
-          if lights.name.get == "StripMall Strip mall - type 1 Lights"
+          if lights.name.get == 'StripMall Strip mall - type 1 Lights'
             expected_w_area = 16.1458656250646
-            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+            assert(expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
           end
-          if lights.name.get == "StripMall Strip mall - type 1 Lights"
+          if lights.name.get == 'StripMall Strip mall - type 1 Lights'
             expected_w_area = 16.1458656250646
-            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+            assert(expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
           end
-          if lights.name.get == "StripMall Strip mall - type 2 Lights"
+          if lights.name.get == 'StripMall Strip mall - type 2 Lights'
             expected_w_area = 16.1458656250646
-            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+            assert(expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
           end
-          if lights.name.get == "StripMall Strip mall - type 3 Lights"
+          if lights.name.get == 'StripMall Strip mall - type 3 Lights'
             expected_w_area = 16.1458656250646
-            assert( expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
+            assert(expected_w_area.round(3) == actual_w_area.round(3), "The incorrect lighting power for #{lights.name.get} in #{building_type}-#{template}.")
           end
-
         end
-        assert( found_obj_1 == true, "The retail display lighting exception user data for in #{building_type}-#{template} has failed to preserve the lights object.")
-        assert( found_obj_2 == true, "The unregulated lighting exception user data for in #{building_type}-#{template} has failed to preserve the lights object.")
+        assert(found_obj_1 == true, "The retail display lighting exception user data for in #{building_type}-#{template} has failed to preserve the lights object.")
+        assert(found_obj_2 == true, "The unregulated lighting exception user data for in #{building_type}-#{template} has failed to preserve the lights object.")
       end
     end
   end
@@ -1376,10 +1374,10 @@ class AppendixGPRMTests < Minitest::Test
       else
         if user_data_dir == 'userdata_lpd_01'
           space_name_to_lpd_target = {}
-          space_name_to_lpd_target['Attic'] =15.06948107
-          space_name_to_lpd_target['Perimeter_ZN_2'] =14.83267494
-          space_name_to_lpd_target['Perimeter_ZN_1'] =15.26323154
-          space_name_to_lpd_target['Perimeter_ZN_4'] =12.91669806
+          space_name_to_lpd_target['Attic'] = 15.06948107
+          space_name_to_lpd_target['Perimeter_ZN_2'] = 14.83267494
+          space_name_to_lpd_target['Perimeter_ZN_1'] = 15.26323154
+          space_name_to_lpd_target['Perimeter_ZN_4'] = 12.91669806
 
           model_baseline.getSpaces.each do |space|
             space_name = space.name.get
@@ -1424,7 +1422,7 @@ class AppendixGPRMTests < Minitest::Test
         wwr_goal = 100 * @@wwr_values[building_type].to_f
         assert(wwr_baseline > wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be greater than the WWR goal #{wwr_goal}")
       end
-      # TODO adding more tests to check if zones are assigned correctly
+      # TODO: adding more tests to check if zones are assigned correctly
       if building_type == 'LargeHotel'
         model_baseline.getThermalZones.each do |thermal_zone|
           thermal_zone_name = thermal_zone.name.get
@@ -1458,7 +1456,7 @@ class AppendixGPRMTests < Minitest::Test
         thermal_zone = model.getThermalZoneByName('Core_bottom ZN').get
         air_loop = thermal_zone.airLoopHVAC.get
         fan_schedule_name = air_loop.availabilitySchedule.name.get
-        assert(fan_schedule_name.include?("Always"), "Night cycle exception failed for #{building_type}-#{template}.")
+        assert(fan_schedule_name.include?('Always'), "Night cycle exception failed for #{building_type}-#{template}.")
       end
     end
   end
@@ -1593,7 +1591,7 @@ class AppendixGPRMTests < Minitest::Test
               coil = sc.to_CoilCoolingDXSingleSpeed.get
               cop = coil.ratedCOP.to_f
               diff = (cop - 3.0).abs
-              assert(diff < 0.1,"Cooling COP for the #{building_type}, #{template}, #{climate_zone} model is incorrect. Expected: 3.0, got: #{cop}.")
+              assert(diff < 0.1, "Cooling COP for the #{building_type}, #{template}, #{climate_zone} model is incorrect. Expected: 3.0, got: #{cop}.")
             end
           end
         end
@@ -1626,11 +1624,11 @@ class AppendixGPRMTests < Minitest::Test
         base_electric_equipment = baseline_model.getElectricEquipments[0]
         base_electric_equipment_ap = base_electric_equipment.additionalProperties
         assert(base_electric_equipment_ap.hasFeature('motor_horsepower') && base_electric_equipment_ap.getFeatureAsDouble('motor_horsepower').get == 10.0,
-               "motor_horsepower data is missing or incorrect. The motor_horsepower for test case 3 shall be 10.0")
+               'motor_horsepower data is missing or incorrect. The motor_horsepower for test case 3 shall be 10.0')
         assert(base_electric_equipment_ap.hasFeature('motor_efficiency') && base_electric_equipment_ap.getFeatureAsDouble('motor_efficiency').get == 0.72,
-               "motor_efficiency data is missing or incorrect. The motor_efficiency for test case 3 shall be 0.72")
+               'motor_efficiency data is missing or incorrect. The motor_efficiency for test case 3 shall be 0.72')
         assert(base_electric_equipment_ap.hasFeature('motor_is_exempt') && base_electric_equipment_ap.getFeatureAsString('motor_is_exempt').get == 'False',
-               "motor_is_exempt data is missing or incorrect. The motor_is_exempt for test case 3 shall be False")
+               'motor_is_exempt data is missing or incorrect. The motor_is_exempt for test case 3 shall be False')
       elsif base_user_data_dir == 'userdata_pe_04'
         baseline_equipments = baseline_model.getElectricEquipments
         baseline_equipments.each do |equipment|
@@ -1663,6 +1661,7 @@ class AppendixGPRMTests < Minitest::Test
           # Get the object type
           obj_type = component.iddObjectType.valueName.to_s
           next if !['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
+
           existing_pipe_insulation = component.name.get
         end
         assert(existing_pipe_insulation.empty?, "The baseline model for the #{building_type}-#{template} in #{climate_zone} has no pipe insulation.")
@@ -1672,9 +1671,8 @@ class AppendixGPRMTests < Minitest::Test
 
   # Check if the hvac baseline system from 5 to 13 has the HW and CHW reset control
   # Expected outcome
-  #@param prototypes_base[Hash] Baseline prototypes
+  # @param prototypes_base[Hash] Baseline prototypes
   def check_hw_chw_reset(prototypes_base)
-
     # check if the numbers are correct
     chw_low_temp = 15.5
     chw_low_temp_reset = 12.2
@@ -1689,16 +1687,17 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, user_data_dir, mode = prototype
 
       if baseline_model.getPlantLoops.empty?
-        assert(building_type != "SmallOffice", "No Plant Loop found in the baseline model #{building_type}, #{template}, #{climate_zone}, failure to generate plant loop")
+        assert(building_type != 'SmallOffice', "No Plant Loop found in the baseline model #{building_type}, #{template}, #{climate_zone}, failure to generate plant loop")
       end
 
       # first check if the baseline_model has water loops or not (SHW is not included)
       baseline_model.getPlantLoops.sort.each do |plant_loop|
         # Skip the SWH loops
         next if Standard.new.plant_loop_swh_loop?(plant_loop)
+
         baseline_model.getSetpointManagerOutdoorAirResets.each do |oa_reset|
           name = oa_reset.name.to_s
-          if name.end_with?("CHW Temp Reset")
+          if name.end_with?('CHW Temp Reset')
             low_temp = oa_reset.outdoorLowTemperature
             assert(((low_temp - chw_low_temp).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The outdoor low temperature for the loop #{name} shall be #{chw_low_temp}, but this value is #{low_temp}")
             low_temp_reset = oa_reset.setpointatOutdoorLowTemperature
@@ -1707,7 +1706,7 @@ class AppendixGPRMTests < Minitest::Test
             assert(((high_temp - chw_high_temp).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The outdoor high temperature for the loop #{name} shall be #{chw_high_temp}, but this value is #{high_temp}")
             high_temp_reset = oa_reset.setpointatOutdoorHighTemperature
             assert(((high_temp_reset - chw_high_temp_reset).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The setpoint at outdoor high temperature for the loop #{name} shall be #{chw_high_temp_reset}, but this value is #{high_temp_reset}")
-          elsif name.end_with?("HW Temp Reset")
+          elsif name.end_with?('HW Temp Reset')
             low_temp = oa_reset.outdoorLowTemperature
             assert(((low_temp - hw_low_temp).abs < 0.1), "Baseline #{building_type}, #{template}, #{climate_zone} has incorrect temperature reset value. The outdoor low temperature for the loop #{name} shall be #{hw_low_temp}, but this value is #{low_temp}")
             low_temp_reset = oa_reset.setpointatOutdoorLowTemperature
@@ -1763,12 +1762,12 @@ class AppendixGPRMTests < Minitest::Test
                 # Get SPM
                 spm_s = spm.to_SetpointManagerScheduled.get
                 schedule_name = spm_s.schedule.name.to_s
-                setpoint_temp_str = schedule_name.split("-")[-1].strip
+                setpoint_temp_str = schedule_name.split('-')[-1].strip
                 # remove the F unit
                 setpoint_temp = setpoint_temp_str[0, -1].to_f
-                assert((setpoint_temp-50).abs > 1, "The scheduled temperature is not equal to 50F, instead it is #{setpoint_temp}F")
+                assert((setpoint_temp - 50).abs > 1, "The scheduled temperature is not equal to 50F, instead it is #{setpoint_temp}F")
               else
-                assert(false, "The sepoint manager for preheat coil is not setpointManager:Scheduled.")
+                assert(false, 'The sepoint manager for preheat coil is not setpointManager:Scheduled.')
               end
             end
           end
@@ -1783,7 +1782,7 @@ class AppendixGPRMTests < Minitest::Test
 
       space = model.getSpaceByName('Room_1_Flr_3').get
       lpd_w_per_m2 = space.lightingPowerPerFloorArea
-      assert(lpd_w_per_m2 == 2) #2
+      assert(lpd_w_per_m2 == 2) # 2
 
       space = model.getSpaceByName('Room_4_Mult19_Flr_3').get
       lpd_w_per_m2 = space.lightingPowerPerFloorArea
@@ -1792,7 +1791,6 @@ class AppendixGPRMTests < Minitest::Test
       space = model.getSpaceByName('Room_3_Mult9_Flr_6').get
       lpd_w_per_m2 = space.lightingPowerPerFloorArea
       assert(lpd_w_per_m2.round(2) == 9.80)
-
     end
   end
 
@@ -1804,14 +1802,15 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, mod = prototype
 
       if building_type == 'LargeOffice'
-        assert(model.getAirLoopHVACReturnPlenums.length == 3, "The expected return air plenums in the large office baseline model have not been created.")
+        assert(model.getAirLoopHVACReturnPlenums.length == 3, 'The expected return air plenums in the large office baseline model have not been created.')
       end
 
       if building_type == 'PrimarySchool'
-        assert(model.getAirLoopHVACReturnPlenums.length == 0, "Return air plenums are being modeled in the primary school baseline model, they are not expected.")
+        assert(model.getAirLoopHVACReturnPlenums.empty?, 'Return air plenums are being modeled in the primary school baseline model, they are not expected.')
       end
     end
   end
+
   # Check if SAT requirements for system 5 through 8 are implemented
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -1825,9 +1824,9 @@ class AppendixGPRMTests < Minitest::Test
       model_baseline.getAirLoopHVACs.each do |airloop|
         # Baseline system type identified based on airloop HVAC name
         if airloop.name.to_s.include?('Sys5') ||
-          airloop.name.to_s.include?('Sys6') ||
-          airloop.name.to_s.include?('Sys7') ||
-          airloop.name.to_s.include?('Sys8')
+           airloop.name.to_s.include?('Sys6') ||
+           airloop.name.to_s.include?('Sys7') ||
+           airloop.name.to_s.include?('Sys8')
           # Get all SPM assigned to supply outlet node of the airloop
           spms = airloop.supplyOutletNode.setpointManagers
           spm_check = false
@@ -1915,29 +1914,30 @@ class AppendixGPRMTests < Minitest::Test
         # check fan curves
         # Skip single-zone VAV fans
         next if supply_fan.airLoopHVAC.get.thermalZones.size == 1
+
         # coefficient 1
         if supply_fan.fanPowerCoefficient1.is_initialized
           expected_coefficient = 0.0013
           coefficient = supply_fan.fanPowerCoefficient1.get
-          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+          assert(((coefficient - expected_coefficient) / expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
         end
         # coefficient 2
         if supply_fan.fanPowerCoefficient2.is_initialized
           expected_coefficient = 0.1470
           coefficient = supply_fan.fanPowerCoefficient2.get
-          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+          assert(((coefficient - expected_coefficient) / expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
         end
         # coefficient 3
         if supply_fan.fanPowerCoefficient4.is_initialized
           expected_coefficient = 0.9506
           coefficient = supply_fan.fanPowerCoefficient3.get
-          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+          assert(((coefficient - expected_coefficient) / expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
         end
         # coefficient 4
         if supply_fan.fanPowerCoefficient4.is_initialized
           expected_coefficient = -0.0998
           coefficient = supply_fan.fanPowerCoefficient4.get
-          assert(((coefficient - expected_coefficient)/expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
+          assert(((coefficient - expected_coefficient) / expected_coefficient).abs < 0.01, "Expected Coefficient 1 for #{supply_fan_name} to be equal to #{expected_coefficient}; found #{coefficient} instead")
         end
         # coefficient 5
         if supply_fan.fanPowerCoefficient5.is_initialized
@@ -1965,13 +1965,13 @@ class AppendixGPRMTests < Minitest::Test
               vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
               expected_mdp = [zone_oa / vav_terminal.autosizedMaximumAirFlowRate.get, 0.3].max.round(2)
               actual_mdp = vav_terminal.constantMinimumAirFlowFraction.get.round(2)
-              assert(expected_mdp == actual_mdp , "Minimum MDP for #{building_type} for #{template} in #{climate_zone} should be #{expected_mdp} but #{actual_mdp} is used in the model.")
+              assert(expected_mdp == actual_mdp, "Minimum MDP for #{building_type} for #{template} in #{climate_zone} should be #{expected_mdp} but #{actual_mdp} is used in the model.")
             elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
               zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
               fp_vav_terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
               expected_prim_frac = [zone_oa / fp_vav_terminal.autosizedMaximumPrimaryAirFlowRate.get, 0.3].max.round(2)
               actual_prim_frac = fp_vav_terminal.minimumPrimaryAirFlowFraction.get
-              assert(expected_prim_frac == actual_prim_frac , "Minimum primary air flow fraction for #{building_type} for #{template} in #{climate_zone} should be #{expected_prim_frac} but #{actual_prim_frac} is used in the model.")
+              assert(expected_prim_frac == actual_prim_frac, "Minimum primary air flow fraction for #{building_type} for #{template} in #{climate_zone} should be #{expected_prim_frac} but #{actual_prim_frac} is used in the model.")
             end
           end
         end
@@ -1996,9 +1996,9 @@ class AppendixGPRMTests < Minitest::Test
       # Check WWR against expected WWR
       wwr_goal = 100 * @@wwr_values[building_type].to_f
       if building_type == 'MidriseApartment' && climate_zone == 'ASHRAE 169-2013-3A'
-        assert(((wwr_baseline - 40.0)/40.0).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+        assert(((wwr_baseline - 40.0) / 40.0).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
       else
-        assert(((wwr_baseline - wwr_goal)/wwr_goal).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
+        assert(((wwr_baseline - wwr_goal) / wwr_goal).abs < 0.01, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be #{wwr_goal}.")
       end
     end
   end

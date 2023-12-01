@@ -14,9 +14,9 @@ class AppendixGPRMTests < Minitest::Test
   # Global variable to ...
   # Make sure to turn it to false so CI will not fail for time out.
   GENERATE_PRM_LOG = false
-  MAX_PATH_CHAR = 1800 #linux should set to a 1800, windows should set to 200, set to 1800 when push to the repo or open PR to pass CI.
+  MAX_PATH_CHAR = 1800 # linux should set to a 1800, windows should set to 200, set to 1800 when push to the repo or open PR to pass CI.
 
-  def prm_test_helper(test_string, require_prototype=true, require_baseline=true, require_proposed=false)
+  def prm_test_helper(test_string, require_prototype = true, require_baseline = true, require_proposed = false)
     # Get list of unique prototypes
     prototypes_to_generate = get_prototype_to_generate(test_string, @@prototype_list)
     # Generate all unique prototypes
@@ -61,7 +61,6 @@ class AppendixGPRMTests < Minitest::Test
       climate_zone_code = climate_zone.split('-')[-1]
       assert(building_type != 'LargeOffice' || ['0A', '0B', '1A', '1B', '2A', '2B'].include?(climate_zone_code), "Baseline model cannot be generated for #{building_type} in climate zone: #{climate_zone}. Due to a known problem with sizing of heating system for data center (which has zero heating load), the large office model fails in mild to cold climates (CZ 3 and higher). Use climate zone 0, 1 or 2 instead")
 
-
       # Concatenate modifier functions and arguments
       mod_str = mod.flatten.join('_') unless mod.empty?
 
@@ -78,7 +77,7 @@ class AppendixGPRMTests < Minitest::Test
       # if it does, remove it and re-create it.
       model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}-#{mod_str}"
       run_dir = "#{@test_dir}/#{model_name}"
-      run_dir = run_dir.length > MAX_PATH_CHAR ? "#{run_dir[0...MAX_PATH_CHAR]}" : run_dir
+      run_dir = run_dir.length > MAX_PATH_CHAR ? (run_dir[0...MAX_PATH_CHAR]).to_s : run_dir
       if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       else
@@ -147,9 +146,9 @@ class AppendixGPRMTests < Minitest::Test
       # user data JSON files will be created in sub-folder inside @test_dir
       model_name = mod.empty? ? "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}" : "#{building_type}-#{template}-#{climate_zone}-#{test_string}-#{user_data_dir}-#{mod_str}"
       proto_run_dir = "#{@test_dir}/#{model_name}"
-      proto_run_dir = proto_run_dir.length > MAX_PATH_CHAR ? "#{proto_run_dir[0...MAX_PATH_CHAR]}" : proto_run_dir
+      proto_run_dir = proto_run_dir.length > MAX_PATH_CHAR ? (proto_run_dir[0...MAX_PATH_CHAR]).to_s : proto_run_dir
 
-      if not user_data_dir == 'no_user_data'
+      if user_data_dir != 'no_user_data'
         json_path = @prototype_creator.convert_userdata_csv_to_json("#{@@json_dir}/#{user_data_dir}", proto_run_dir)
         @prototype_creator.load_userdata_to_standards_database(json_path)
       end
@@ -207,7 +206,7 @@ class AppendixGPRMTests < Minitest::Test
         hvac_building_type = @bldg_type_alt[id_prototype_mapping[id]]
       end
 
-      unmet_load_hours = (mod_str == 'unmet_load_hours') ? true : false
+      unmet_load_hours = mod_str == 'unmet_load_hours'
 
       # Create baseline model
       model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, climate_zone,
@@ -216,13 +215,12 @@ class AppendixGPRMTests < Minitest::Test
                                                                                     @@swh_building_types[building_type],
                                                                                     run_dir_baseline, false, GENERATE_PRM_LOG)
 
-
       # Check if baseline model could be created
       assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")
 
       # Check if proposed model was also generated
       model_proposed_file_name = "#{run_dir_baseline}/proposed_final.osm"
-      assert(File.exist?("#{model_proposed_file_name}"), "Proposed model could not be generate for #{building_type}, #{template}, #{climate_zone}.")
+      assert(File.exist?(model_proposed_file_name.to_s), "Proposed model could not be generate for #{building_type}, #{template}, #{climate_zone}.")
 
       # Load newly generated baseline and proposed model
       @test_dir = "#{File.dirname(__FILE__)}/output"
@@ -233,7 +231,7 @@ class AppendixGPRMTests < Minitest::Test
       model_proposed = model_proposed.get
 
       # Do sizing run for baseline and proposed model
-      [[model_baseline, "baseline"], [model_proposed, "proposed"]].each do |model, model_name|
+      [[model_baseline, 'baseline'], [model_proposed, 'proposed']].each do |model, model_name|
         sim_control = model.getSimulationControl
         sim_control.setRunSimulationforSizingPeriods(true)
         sim_control.setRunSimulationforWeatherFileRunPeriods(false)
