@@ -273,9 +273,9 @@ class Standard
     elsif sub_type == 'consumer_storage' && fuel_type == 'NaturalGas'
       return 0.9066 * uef + 0.0711
     elsif sub_type == 'consumer_storage' && fuel_type == 'Electricity'
-      return 2.44029 * uef - 1.2844
+      return 2.4029 * uef - 1.2844
     elsif sub_type == 'residential_duty' && (fuel_type == 'NaturalGas' || fuel_type == 'Oil')
-      return 1.005 * uef + 0.0019
+      return 1.0005 * uef + 0.0019
     elsif sub_type == 'residential_duty' && fuel_type == 'Electricity'
       return 1.0219 * uef - 0.0025
     elsif sub_type == 'instantaneous'
