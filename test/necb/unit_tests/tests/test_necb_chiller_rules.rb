@@ -24,9 +24,25 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     output_folder = method_output_folder(__method__)
     templates = ['NECB2011', 'NECB2020']
     save_intermediate_models = false
+    
+    # Initialize test results hash.
+    test_results = {}
 
     templates.each do |template|
+      
+      # Create empty entry for the test cases results and copy over the reference.
+      template_cases_results = {}
+      begin
+        template_cases_results[:reference] = expected_results[template.to_sym][:reference]
+      rescue NoMethodError => error
+        test_results[template.to_sym] = {}
+        # puts "Probably triggered by the template not existing in the expected results set. Continue and report at end.\n#{error.message}"
+        next
+      end
+      
+      # Load template/standard.
       standard = get_standard(template)
+
       expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
 
       # Initialize hashes for storing expected chiller cop data from file.
@@ -83,37 +99,70 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       mua_cooling_type = 'Hydronic'
       
       chiller_types.each do |chiller_type|
+
+        # Create empty entry this test case results.
+        individual_case_results = {}
+
+        # Loop through the individual test cases.
+        #test_cases = expected_results[template.to_sym][fueltype.to_sym]
+        #next if test_cases.nil?
+        #test_cases.each do |key, test_case|
+
+          # Define local variables.
+          #case_name = key.to_s
+          #fueltype = fueltype.to_s
+          #boiler_cap = test_case[:tested_capacity_kW]
+          #efficiency_metric = test_case[:efficiency_metric]
+
         chiller_type_cap[chiller_type].each do |chiller_cap|
           name = "#{template}_sys2_ChillerType-#{chiller_type}_Chiller_cap-#{chiller_cap}watts"
           name.gsub!(/\s+/, "-")
           puts "***************#{name}***************\n"
 
-          # Load model and set climate file.
-          model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/../resources/5ZoneNoHVAC.osm")
-          BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+          # Wrap test in begin/rescue/ensure.
+          begin
+            # Load model and set climate file.
+            model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/../resources/5ZoneNoHVAC.osm")
+            BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
+            BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
-          hw_loop = OpenStudio::Model::PlantLoop.new(model)
-          always_on = model.alwaysOnDiscreteSchedule
-          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
-          standard.add_sys2_FPFC_sys5_TPFC(model: model,
-                                           zones: model.getThermalZones,
-                                           chiller_type: chiller_type,
-                                           fan_coil_type: 'FPFC',
-                                           mau_cooling_type: mua_cooling_type,
-                                           hw_loop: hw_loop)
-          model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
+            hw_loop = OpenStudio::Model::PlantLoop.new(model)
+            always_on = model.alwaysOnDiscreteSchedule
+            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+            standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                            zones: model.getThermalZones,
+                                            chiller_type: chiller_type,
+                                            fan_coil_type: 'FPFC',
+                                            mau_cooling_type: mua_cooling_type,
+                                            hw_loop: hw_loop)
+            model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
 
-          # Run sizing.
-          run_sizing(model: model,  template: template, test_name: name,save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-          
+            # Run sizing.
+            run_sizing(model: model,  template: template, test_name: name,save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+          rescue => error
+            puts "Something went wrong! #{error.message}"
+          end
+
+          # Recover the COP for testing below.
           model.getChillerElectricEIRs.each do |ichiller|
             if ichiller.referenceCapacity.to_f > 1
               actual_chiller_cop[chiller_type] << ichiller.referenceCOP.round(3)
+              cop=ichiller.referenceCOP
               break
             end
           end
+
+          # Add this test case to results.
+          individual_case_results[case_name.to_sym] = {
+            name: name,
+            tested_capacity_kW: chiller_cap.signif,
+            chiller_type: chiller_type,
+            COP: cop.signif(3)
+          }
         end
+
+        # Add this test case to results hash.
+        template_cases_results[fueltype.to_sym] = individual_case_results
       end
 
       # Generate table of test chiller cop
@@ -131,7 +180,18 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       # Check if test results match expected.
       msg = "Chiller COP test results do not match what is expected in test"
       file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
+
+      # Add results for this template to the results hash.
+      test_results[template.to_sym] = template_cases_results
     end
+
+    # Write test results.
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
+
+    # Check if test results match expected.
+    msg = "Boiler efficiencies test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
   end
 
   # Test to validate the number of chillers used and their capacities depending on total cooling capacity.
@@ -142,8 +202,6 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
-    template = 'NECB2011'
-    standard = get_standard(template)
     save_intermediate_models = false
 
     first_cutoff_chlr_cap = 2100000.0
@@ -156,77 +214,152 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     test_chiller_cap = [1000000.0, 3000000.0]
+    
+    # Read expected results. This is used to set the tested cases as the parameters change depending on the
+    # fuel type and boiler size.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    #expected_results = JSON.parse(File.read(file_name), {symbolize_names: true})
+    expected_results = {}
 
-    chiller_types.each do |chiller_type|
-      test_chiller_cap.each do |chiller_cap|
-        name = "sys6_ChillerType_#{chiller_type}-Chiller_cap-#{chiller_cap}watts"
-        name.gsub!(/\s+/, "-")
-        puts "***************#{name}***************\n"
+    # Initialize test results hash.
+    test_results = {}
+    
+    # Loop through the templates rather than using those defined in the file (this way we identify if any are missing).
+    @AllTemplates.each do |template|
+      
+      # Create empty entry for the test cases results and copy over the reference.
+      template_cases_results = {}
+      begin
+        template_cases_results[:reference] = expected_results[template.to_sym][:reference]
+      rescue NoMethodError => error
+        template_cases_results[:reference] = "Reference required"
+        test_results[template.to_sym] = template_cases_results
+        puts "ERROR: #{error.message}\n -> This was probably triggered by the template not existing in the expected results set. Continue and report at end."
+      end
 
-        # Load model and set climate file.
-        model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      # Load template/standard.
+      standard = get_standard(template)
 
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
-        standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
-                                                                            zones: model.getThermalZones,
-                                                                            heating_coil_type: heating_coil_type,
-                                                                            baseboard_type: baseboard_type,
-                                                                            chiller_type: chiller_type,
-                                                                            fan_type: fan_type,
-                                                                            hw_loop: hw_loop)
-        model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
+      chiller_types.each do |chiller_type|
 
-        # Run the standards.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-        
-        # Check that there are two chillers in the model.
-        chillers = model.getChillerElectricEIRs
-        num_of_chillers_is_correct = false
-        if chillers.size == 2 then
-          num_of_chillers_is_correct = true
-        end
-        assert(num_of_chillers_is_correct, 'Number of chillers is not 2 in test #{self.class}.')
-        this_is_the_first_cap_range = false
-        this_is_the_second_cap_range = false
-        if chiller_cap < first_cutoff_chlr_cap
-          this_is_the_first_cap_range = true
-        else
-          this_is_the_second_cap_range = true
-        end
-        
-        # Compare chiller capacities to expected values.
-        chillers.each do |ichiller|
-          if ichiller.name.to_s.include? 'Primary Chiller'
-            chiller_cap_is_correct = false
-            if this_is_the_first_cap_range
-              cap_diff = (chiller_cap - ichiller.referenceCapacity.to_f).abs / chiller_cap
-            elsif this_is_the_second_cap_range
-              cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs / (0.5 * chiller_cap)
-            end
-            if cap_diff < tol then
-              chiller_cap_is_correct = true
-            end
-            assert(chiller_cap_is_correct, 'Primary chiller capacity is not correct in test #{self.class}.')
+        # Create empty entry this test case results.
+        individual_case_results = {}
+
+        # Loop through the individual test cases.
+        #test_cases = expected_results[template.to_sym][fueltype.to_sym]
+        #next if test_cases.nil?
+        #test_cases.each do |key, test_case|
+
+          # Define local variables.
+          #case_name = key.to_s
+          #fueltype = fueltype.to_s
+          #boiler_cap = test_case[:tested_capacity_kW]
+          #efficiency_metric = test_case[:efficiency_metric]
+
+        test_chiller_cap.each do |chiller_cap|
+          name = "sys6_ChillerType_#{chiller_type}-Chiller_cap-#{chiller_cap}watts"
+          name.gsub!(/\s+/, "-")
+          puts "***************#{name}***************\n"
+
+          # Wrap test in begin/rescue/ensure.
+          begin
+
+            # Load model and set climate file.
+            model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
+            BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+            BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
+            hw_loop = OpenStudio::Model::PlantLoop.new(model)
+            always_on = model.alwaysOnDiscreteSchedule
+            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+            standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
+                                                                                zones: model.getThermalZones,
+                                                                                heating_coil_type: heating_coil_type,
+                                                                                baseboard_type: baseboard_type,
+                                                                                chiller_type: chiller_type,
+                                                                                fan_type: fan_type,
+                                                                                hw_loop: hw_loop)
+            model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
+
+            # Run the standards.
+            run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+          rescue => error
+            puts "Something went wrong! #{error.message}"
           end
-          if ichiller.name.to_s.include? 'Secondary Chiller'
-            chiller_cap_is_correct = false
-            if this_is_the_first_cap_range
-              cap_diff = (ichiller.referenceCapacity.to_f - 0.001).abs
-            elsif this_is_the_second_cap_range
-              cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs / (0.5 * chiller_cap)
-            end
-            if cap_diff < tol then
-              chiller_cap_is_correct = true
-            end
-            assert(chiller_cap_is_correct, 'Secondary chiller capacity is not correct in test #{self.class}.')
+
+          # Check that there are two chillers in the model.
+          chillers = model.getChillerElectricEIRs
+          num_of_chillers_is_correct = false
+          if chillers.size == 2 then
+            num_of_chillers_is_correct = true
           end
+          assert(num_of_chillers_is_correct, 'Number of chillers is not 2 in test #{self.class}.')
+          this_is_the_first_cap_range = false
+          this_is_the_second_cap_range = false
+          if chiller_cap < first_cutoff_chlr_cap
+            this_is_the_first_cap_range = true
+          else
+            this_is_the_second_cap_range = true
+          end
+          
+          # Compare chiller capacities to expected values.
+          chillers.each do |ichiller|
+            if ichiller.name.to_s.include? 'Primary Chiller'
+              chiller_cap_is_correct = false
+              if this_is_the_first_cap_range
+                cap_diff = (chiller_cap - ichiller.referenceCapacity.to_f).abs / chiller_cap
+              elsif this_is_the_second_cap_range
+                cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs / (0.5 * chiller_cap)
+              end
+              if cap_diff < tol then
+                chiller_cap_is_correct = true
+              end
+              assert(chiller_cap_is_correct, 'Primary chiller capacity is not correct in test #{self.class}.')
+            end
+            if ichiller.name.to_s.include? 'Secondary Chiller'
+              chiller_cap_is_correct = false
+              if this_is_the_first_cap_range
+                cap_diff = (ichiller.referenceCapacity.to_f - 0.001).abs
+              elsif this_is_the_second_cap_range
+                cap_diff = (0.5 * chiller_cap - ichiller.referenceCapacity.to_f).abs / (0.5 * chiller_cap)
+              end
+              if cap_diff < tol then
+                chiller_cap_is_correct = true
+              end
+              assert(chiller_cap_is_correct, 'Secondary chiller capacity is not correct in test #{self.class}.')
+            end
+          end
+          
+        #rescue NoMethodError => error
+        #  test_results[template.to_sym][fueltype.to_sym] = {}
+        #  puts "Probably triggered by the template not existing in the expected results set. Continue and report at end.\n#{error.message}"
+          #end
+          # Add this test case to results.
+          case_name = "case_#{(chiller_cap/1000.0).signif}kW"
+          template_cases_results[case_name.to_sym] = {
+            name: name,
+            tested_capacity_kW: (chiller_cap/1000.0).signif, # Still in W
+            number_of_chillers: chillers.size,
+            primary_chiller_capacity_kW: (primary_chiller_capacity/1000.0).signif, # Still in W
+            secondary_chiller_capacity_kW: (secondary_chiller_capacity/1000.0).signif # Still in W
+          }
         end
+
+        # Add results for this template to the results hash.
+        cases_results = {}
+        cases_results[:cases] = template_cases_results
+        test_results[template.to_sym] = cases_results
       end
     end
+
+    # Write test results.
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
+
+    # Check if test results match expected.
+    msg = "Number of chillers and capacity test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
   end
 
   # Test to validate the chiller performance curves.

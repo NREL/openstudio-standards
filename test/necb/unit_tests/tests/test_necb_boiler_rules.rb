@@ -171,8 +171,6 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     baseboard_type = 'Hot Water'
     heating_coil_type = 'Electric'
     test_boiler_cap = [100000.0, 200000.0, 400000.0]
-    template = 'NECB2011' # Do we need other vintages?
-    standard = get_standard(template)
     
     # Read expected results. This is used to set the tested cases as the parameters change depending on the
     # fuel type and boiler size.
@@ -209,29 +207,34 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
         name.gsub!(/\s+/, "-")
         puts "*************** #{long_name} ***************\n"
 
-        # Load model and set climate file.
-        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}/baseline.osm") if save_intermediate_models
+        # Wrap test in begin/rescue/ensure.
+        begin
+          
+          # Load model and set climate file.
+          model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}/baseline.osm") if save_intermediate_models
 
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
-        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
-            model: model,
-            zones: model.getThermalZones,
-            heating_coil_type: heating_coil_type,
-            baseboard_type: baseboard_type,
-            hw_loop: hw_loop,
-            new_auto_zoner: false)
-        model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
+          hw_loop = OpenStudio::Model::PlantLoop.new(model)
+          always_on = model.alwaysOnDiscreteSchedule
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+          standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
+              model: model,
+              zones: model.getThermalZones,
+              heating_coil_type: heating_coil_type,
+              baseboard_type: baseboard_type,
+              hw_loop: hw_loop,
+              new_auto_zoner: false)
+          model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
-        # Run sizing. Is this required?
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-
-        boilers = model.getBoilerHotWaters
+          # Run sizing. Is this required?
+          run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+        rescue => error
+          puts "Something went wrong! #{error.message}"
+        end
         
         # Check that there are two boilers in the model. BTAP sets the second boiler to 0.001 W if the rules say only one boiler required.
+        boilers = model.getBoilerHotWaters
         num_of_boilers_is_correct = false
         if boilers.size == 2 then
           num_of_boilers_is_correct = true
