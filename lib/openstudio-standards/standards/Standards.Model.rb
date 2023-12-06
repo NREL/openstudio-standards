@@ -315,7 +315,7 @@ class Standard
 
       # Modify the service water heating loops per the baseline rules
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
-      model_apply_baseline_swh_loops(model, building_type)
+      #       model_apply_baseline_swh_loops(model, swh_building_type)
 
       # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
@@ -2568,7 +2568,7 @@ class Standard
   #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false
   #   end
-  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
+  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, volume = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
     matching_objects = []
     if hash_of_objects.is_a?(Hash) && hash_of_objects.key?('table')
       hash_of_objects = hash_of_objects['table']
@@ -2619,6 +2619,31 @@ class Standard
         matching_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
       else
         matching_objects = matching_capacity_objects
+      end
+    end
+
+    # If volume was specified, narrow down the matching objects
+    unless volume.nil?
+      # Skip objects that don't have fields for minimum_storage and maximum_storage
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_storage') || !object.key?('maximum_storage') }
+
+      # Skip objects that don't have values specified for minimum_storage and maximum_storage
+      matching_objects = matching_objects.reject { |object| object['minimum_storage'].nil? || object['maximum_storage'].nil? }
+
+      # Round up if volume is an integer
+      if volume == volume.round
+        volume += (volume * 0.01)
+      end
+      # Skip objects whose the minimum volume is below or maximum volume above the specified volume
+      matching_volume_objects = matching_objects.reject { |object| volume.to_f <= object['minimum_storage'].to_f || volume.to_f > object['maximum_storage'].to_f }
+
+      # If no object was found, round the volume down in case the number fell between the limits in the json file.
+      if matching_volume_objects.size.zero?
+        volume *= 0.99
+        # Skip objects whose minimum volume is below or maximum volume above the specified volume
+        matching_objects = matching_objects.reject { |object| volume.to_f <= object['minimum_storage'].to_f || volume.to_f > object['maximum_storage'].to_f }
+      else
+        matching_objects = matching_volume_objects
       end
     end
 
@@ -2711,9 +2736,8 @@ class Standard
   #   'type' => 'Enclosed',
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, capacity: 2.5)
-  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
-    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors, fan_motor_bhp)
-
+  def model_find_object(hash_of_objects, search_criteria, capacity = nil, volume = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
+    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, volume, date, area, num_floors, fan_motor_bhp)
     # Check the number of matching objects found
     if matching_objects.size.zero?
       desired_object = nil
@@ -2724,7 +2748,6 @@ class Standard
       desired_object = matching_objects[0]
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned #{matching_objects.size} results, the first one will be returned. Called from #{caller(0)[1]}. \n Search criteria: \n #{search_criteria}, capacity = #{capacity} \n  All results: \n #{matching_objects.join("\n")}")
     end
-
     return desired_object
   end
 
@@ -6459,7 +6482,6 @@ class Standard
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       water_heater_mixed_apply_prm_baseline_fuel_type(water_heater, building_type)
     end
-
     return true
   end
 
