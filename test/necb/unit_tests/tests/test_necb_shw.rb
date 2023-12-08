@@ -17,7 +17,7 @@ class NECB_SHW_tests < Minitest::Test
   end
 
   # Additional constant ranges.
-  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
+  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_NT_Yellowknife.AP.719360_CWEC2016.epw']
 
   # @return [Bool] true if successful. 
   def test_shw_test()
