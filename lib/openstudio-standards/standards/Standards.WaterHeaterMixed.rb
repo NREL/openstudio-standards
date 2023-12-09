@@ -67,13 +67,13 @@ class Standard
     # Calculate the water heater efficiency and
     # skin loss coefficient (UA) using different methods,
     # depending on the metrics specified by the standard
-    water_heater_eff = nil
+    water_heater_efficiency = nil
     ua_btu_per_hr_per_f = nil
 
     # Rarely specified by thermal efficiency alone
     if wh_props['thermal_efficiency'] && !wh_props['standby_loss_capacity_allowance']
-      et = wh_props['thermal_efficiency']
-      water_heater_eff = et
+      thermal_efficiency = wh_props['thermal_efficiency']
+      water_heater_efficiency = thermal_efficiency
       # Fixed UA
       ua_btu_per_hr_per_f = 11.37
     end
@@ -82,24 +82,24 @@ class Standard
     # and small natural gas water heaters
     if wh_props['energy_factor_base'] && wh_props['energy_factor_volume_derate']
       # Calculate the energy factor (EF)
-      base_ef = wh_props['energy_factor_base']
+      base_energy_factor = wh_props['energy_factor_base']
       vol_drt = wh_props['energy_factor_volume_derate']
-      ef = base_ef - (vol_drt * volume_gal)
-      water_heater_eff, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef, capacity_btu_per_hr)
+      energy_factor = base_energy_factor - (vol_drt * volume_gal)
+      water_heater_efficiency, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, energy_factor, capacity_btu_per_hr)
       # Two booster water heaters
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
 
     if (wh_props['uniform_energy_factor_base'] && wh_props['uniform_energy_factor_volume_allowance']) || wh_props['uniform_energy_factor']
       if wh_props['uniform_energy_factor']
-        uef = wh_props['uniform_energy_factor']
+        uniform_energy_factor = wh_props['uniform_energy_factor']
       else
-        base_uef = wh_props['uniform_energy_factor_base']
+        base_uniform_energy_factor = wh_props['uniform_energy_factor_base']
         vol_drt = wh_props['uniform_energy_factor_volume_allowance']
-        uef = base_uef - (vol_drt * volume_gal)
+        uniform_energy_factor = base_uniform_energy_factor - (vol_drt * volume_gal)
       end
-      ef = water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr, volume_gal)
-      water_heater_eff, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef, capacity_btu_per_hr)
+      energy_factor = water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
+      water_heater_efficiency, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, energy_factor, capacity_btu_per_hr)
       # Two booster water heaters
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
@@ -107,7 +107,7 @@ class Standard
     # Typically specified this way for large electric water heaters
     if wh_props['standby_loss_base'] && wh_props['standby_loss_volume_allowance']
       # Fixed water heater efficiency per PNNL
-      water_heater_eff = 1.0
+      water_heater_efficiency = 1.0
       # Calculate the max allowable standby loss (SL)
       sl_base = wh_props['standby_loss_base']
       sl_drt = wh_props['standby_loss_volume_allowance']
@@ -120,7 +120,7 @@ class Standard
     # Typically specified this way for newer large electric water heaters
     if wh_props['hourly_loss_base'] && wh_props['hourly_loss_volume_allowance']
       # Fixed water heater efficiency per PNNL
-      water_heater_eff = 1.0
+      water_heater_efficiency = 1.0
       # Calculate the percent loss per hr
       hr_loss_base = wh_props['hourly_loss_base']
       hr_loss_allow = wh_props['hourly_loss_volume_allowance']
@@ -153,11 +153,11 @@ class Standard
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
       # Calculate water heater efficiency
-      water_heater_eff = (ua_btu_per_hr_per_f * 70 + p_on * et) / p_on
+      water_heater_efficiency = (ua_btu_per_hr_per_f * 70 + p_on * et) / p_on
     end
 
     # Ensure that efficiency and UA were both set\
-    if water_heater_eff.nil?
+    if water_heater_efficiency.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot calculate efficiency, cannot apply efficiency standard.")
       return false
     end
@@ -173,7 +173,7 @@ class Standard
 
     # Set the water heater properties
     # Efficiency
-    water_heater_mixed.setHeaterThermalEfficiency(water_heater_eff)
+    water_heater_mixed.setHeaterThermalEfficiency(water_heater_efficiency)
     # Skin loss
     water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_w_per_k)
     water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_w_per_k)
@@ -188,8 +188,8 @@ class Standard
     water_heater_mixed.setOffCycleParasiticHeatFractiontoTank(0)
 
     # Append the name with standards information
-    water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr-R")
+    water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_efficiency.round(3)} Therm Eff")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_efficiency.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr-R")
 
     return true
   end
@@ -255,53 +255,53 @@ class Standard
     return sub_type
   end
 
-  # Convert UEF to EF
+  # Convert Uniform Energy Factor (UEF) to Energy Factor (EF)
   #
   # @param fuel_type [String] water heater fuel type
-  # @param uef [Float] water heater UEF
+  # @param uniform_energy_factor [Float] water heater Uniform Energy Factor (UEF)
   # @param capacity_btu_per_hr [Float] water heater capacity
   # @param volume_gal [Float] water heater storage volume in gallons
-  # @return [Float] returns EF, energy factor
-  def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uef, capacity_btu_per_hr, volume_gal)
+  # @return [Float] returns Energy Factor (EF)
+  def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
     # Get water heater sub type
     sub_type = water_heater_determine_sub_type(fuel_type, capacity_btu_per_hr, volume_gal)
 
     # source: RESNET, https://www.resnet.us/wp-content/uploads/RESNET-EF-Calculator-2017.xlsx
     if sub_type.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "No sub type identified for #{water_heater_mixed.name}, EF = UEF is assumed.")
-      return uef
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "No sub type identified for #{water_heater_mixed.name}, Energy Factor (EF) = Uniform Energy Factor (UEF) is assumed.")
+      return uniform_energy_factor
     elsif sub_type == 'consumer_storage' && fuel_type == 'NaturalGas'
-      return 0.9066 * uef + 0.0711
+      return 0.9066 * uniform_energy_factor + 0.0711
     elsif sub_type == 'consumer_storage' && fuel_type == 'Electricity'
-      return 2.4029 * uef - 1.2844
+      return 2.4029 * uniform_energy_factor - 1.2844
     elsif sub_type == 'residential_duty' && (fuel_type == 'NaturalGas' || fuel_type == 'Oil')
-      return 1.0005 * uef + 0.0019
+      return 1.0005 * uniform_energy_factor + 0.0019
     elsif sub_type == 'residential_duty' && fuel_type == 'Electricity'
-      return 1.0219 * uef - 0.0025
+      return 1.0219 * uniform_energy_factor - 0.0025
     elsif sub_type == 'instantaneous'
-      return uef
+      return uniform_energy_factor
     else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.WaterHeaterMixed', "Invalid sub_type for #{water_heater_mixed.name}, EF = UEF is assumed.")
-      return uef
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.WaterHeaterMixed', "Invalid sub_type for #{water_heater_mixed.name}, Energy Factor (EF) = Uniform Energy Factor (UEF) is assumed.")
+      return uniform_energy_factor
     end
   end
 
-  # Convert EF to Thermal Efficiency and storage tank UA
+  # Convert Energy Factor (EF) to Thermal Efficiency and storage tank UA
   #
   # @param fuel_type [String] water heater fuel type
-  # @param ef [Float] water heater EF, energy factor
+  # @param energy_factor [Float] water heater Energy Factor (EF)
   # @param capacity_btu_per_hr [Float] water heater capacity in Btu/h
   # @return [Array] returns water heater thermal efficiency and storage tank UA
-  def water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, ef, capacity_btu_per_hr)
+  def water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, energy_factor, capacity_btu_per_hr)
     # Calculate the skin loss coefficient (UA)
     # differently depending on the fuel type
     if fuel_type == 'Electricity'
       # Fixed water heater efficiency per PNNL
-      water_heater_eff = 1.0
-      ua_btu_per_hr_per_f = (41_094 * (1 / ef - 1)) / (24 * 67.5)
+      water_heater_efficiency = 1.0
+      ua_btu_per_hr_per_f = (41_094 * (1 / energy_factor - 1)) / (24 * 67.5)
     elsif fuel_type == 'NaturalGas'
       # Fixed water heater thermal efficiency per PNNL
-      water_heater_eff = 0.82
+      water_heater_efficiency = 0.82
       # Calculate the Recovery Efficiency (RE)
       # based on a fixed capacity of 75,000 Btu/hr
       # and a fixed volume of 40 gallons by solving
@@ -309,14 +309,14 @@ class Standard
       # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
       # 0.82 = (ua*67.5+cap*re)/cap
       # Solutions to the system of equations were determined
-      # for discrete values of EF and modeled using a regression
-      re = -0.1137 * ef**2 + 0.1997 * ef + 0.731
+      # for discrete values of Energy Factor (EF) and modeled using a regression
+      recovery_efficiency = -0.1137 * energy_factor**2 + 0.1997 * energy_factor + 0.731
       # Calculate the skin loss coefficient (UA)
       # Input capacity is assumed to be the output capacity
       # divided by a burner efficiency of 80%
-      ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 0.8 / 67.5
+      ua_btu_per_hr_per_f = (water_heater_efficiency - recovery_efficiency) * capacity_btu_per_hr / 0.8 / 67.5
     end
 
-    return water_heater_eff, ua_btu_per_hr_per_f
+    return water_heater_efficiency, ua_btu_per_hr_per_f
   end
 end
