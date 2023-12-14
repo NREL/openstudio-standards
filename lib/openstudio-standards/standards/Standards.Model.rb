@@ -2568,7 +2568,7 @@ class Standard
   #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false
   #   end
-  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, volume = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
+  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil, volume = nil)
     matching_objects = []
     if hash_of_objects.is_a?(Hash) && hash_of_objects.key?('table')
       hash_of_objects = hash_of_objects['table']
@@ -2736,8 +2736,8 @@ class Standard
   #   'type' => 'Enclosed',
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, capacity: 2.5)
-  def model_find_object(hash_of_objects, search_criteria, capacity = nil, volume = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
-    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, volume, date, area, num_floors, fan_motor_bhp)
+  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil, volume = nil)
+    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors, fan_motor_bhp, volume)
     # Check the number of matching objects found
     if matching_objects.size.zero?
       desired_object = nil
