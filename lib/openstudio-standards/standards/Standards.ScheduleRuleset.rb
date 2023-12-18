@@ -151,43 +151,6 @@ class Standard
     return { 'min' => min, 'max' => max }
   end
 
-  # Returns the min and max value for this schedule.
-  # It doesn't evaluate design days only run-period conditions
-  #
-  # @author David Goldwasser, NREL.
-  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  # @return [Hash] Hash has two keys, min and max.
-  def schedule_ruleset_annual_min_max_value(schedule_ruleset)
-    # gather profiles
-    profiles = []
-    profiles << schedule_ruleset.defaultDaySchedule
-    rules = schedule_ruleset.scheduleRules
-    rules.each do |rule|
-      profiles << rule.daySchedule
-    end
-
-    # test profiles
-    min = nil
-    max = nil
-    profiles.each do |profile|
-      profile.values.each do |value|
-        if min.nil?
-          min = value
-        else
-          min = value if min > value
-        end
-        if max.nil?
-          max = value
-        else
-          max = value if max < value
-        end
-      end
-    end
-    result = { 'min' => min, 'max' => max }
-
-    return result
-  end
-
   # Returns the total number of hours where the schedule is greater than the specified value.
   #
   # @author Andrew Parker, NREL.

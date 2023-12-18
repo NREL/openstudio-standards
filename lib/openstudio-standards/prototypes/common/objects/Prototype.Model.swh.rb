@@ -544,7 +544,7 @@ class Standard
       water_use_equip_sch = water_use_equip_sch.get
       if water_use_equip_sch.to_ScheduleRuleset.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get
-        max_sch_value = schedule_ruleset_annual_min_max_value(water_use_equip_sch)['max']
+        max_sch_value = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(water_use_equip_sch)['max']
       elsif water_use_equip_sch.to_ScheduleConstant.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleConstant.get
         max_sch_value = schedule_constant_annual_min_max_value(water_use_equip_sch)['max']

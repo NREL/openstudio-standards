@@ -1769,7 +1769,7 @@ class Standard
       if act_sch.is_initialized
         if act_sch.get.to_ScheduleRuleset.is_initialized
           act_sch = act_sch.get.to_ScheduleRuleset.get
-          w_per_person = schedule_ruleset_annual_min_max_value(act_sch)['max']
+          w_per_person = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(act_sch)['max']
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
         end

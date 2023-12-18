@@ -236,7 +236,7 @@ class Standard
     if threshold_calc_method == 'normalized_annual_range'
       # run this method without threshold to get annual min and max
       temp_merged = spaces_get_occupancy_schedule(spaces)
-      tem_min_max = schedule_ruleset_annual_min_max_value(temp_merged)
+      tem_min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(temp_merged)
       annual_normalized_tol = tem_min_max['min'] + (tem_min_max['max'] - tem_min_max['min']) * occupied_percentage_threshold
       temp_merged.remove
     end
@@ -1048,7 +1048,7 @@ class Standard
       # Get the setpoint from the schedule
       if htg_sch.to_ScheduleRuleset.is_initialized
         htg_sch = htg_sch.to_ScheduleRuleset.get
-        max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+        max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(htg_sch)['max']
         if max_c > temp_c
           htd = true
         end
@@ -1084,7 +1084,7 @@ class Standard
         htg_sch = htg_sch.get
         if htg_sch.to_ScheduleRuleset.is_initialized
           htg_sch = htg_sch.to_ScheduleRuleset.get
-          max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+          max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(htg_sch)['max']
           if max_c > temp_c
             htd = true
           end
@@ -1112,7 +1112,7 @@ class Standard
         htg_sch = htg_sch.get
         if htg_sch.to_ScheduleRuleset.is_initialized
           htg_sch = htg_sch.to_ScheduleRuleset.get
-          max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+          max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(htg_sch)['max']
           if max_c > temp_c
             htd = true
           end
@@ -1190,7 +1190,7 @@ class Standard
       # Get the setpoint from the schedule
       if clg_sch.to_ScheduleRuleset.is_initialized
         clg_sch = clg_sch.to_ScheduleRuleset.get
-        min_c = schedule_ruleset_annual_min_max_value(clg_sch)['min']
+        min_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(clg_sch)['min']
         if min_c < temp_c
           cld = true
         end
@@ -1226,7 +1226,7 @@ class Standard
         clg_sch = clg_sch.get
         if clg_sch.to_ScheduleRuleset.is_initialized
           clg_sch = clg_sch.to_ScheduleRuleset.get
-          min_c = schedule_ruleset_annual_min_max_value(clg_sch)['min']
+          min_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(clg_sch)['min']
           if min_c < temp_c
             cld = true
           end
@@ -1254,7 +1254,7 @@ class Standard
         clg_sch = clg_sch.get
         if clg_sch.to_ScheduleRuleset.is_initialized
           clg_sch = clg_sch.to_ScheduleRuleset.get
-          min_c = schedule_ruleset_annual_min_max_value(clg_sch)['min']
+          min_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(clg_sch)['min']
           if min_c < temp_c
             cld = true
           end
@@ -1449,7 +1449,7 @@ class Standard
         setpoint_sch = setpoint_sch.get
         if setpoint_sch.to_ScheduleRuleset.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
-          setpoint_c = schedule_ruleset_annual_min_max_value(setpoint_sch)['max']
+          setpoint_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(setpoint_sch)['max']
         elsif setpoint_sch.to_ScheduleConstant.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleConstant.get
           setpoint_c = schedule_constant_annual_min_max_value(setpoint_sch)['max']
@@ -1512,7 +1512,7 @@ class Standard
         setpoint_sch = setpoint_sch.get
         if setpoint_sch.to_ScheduleRuleset.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleRuleset.get
-          setpoint_c = schedule_ruleset_annual_min_max_value(setpoint_sch)['min']
+          setpoint_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(setpoint_sch)['min']
         elsif setpoint_sch.to_ScheduleConstant.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleConstant.get
           setpoint_c = schedule_constant_annual_min_max_value(setpoint_sch)['min']
@@ -1973,7 +1973,7 @@ class Standard
         zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_exhaust_schedule)
 
         # use max value of balanced exhaust fraction schedule for maximum flow rate
-        max_sch_val = schedule_ruleset_annual_min_max_value(balanced_exhaust_schedule)['max']
+        max_sch_val = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(balanced_exhaust_schedule)['max']
         transfer_air_zone_mixing_si = maximum_flow_rate_si * max_sch_val
 
         # add dummy exhaust fan to a transfer_air_source_zones

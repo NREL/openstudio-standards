@@ -6,7 +6,8 @@ module OpenstudioStandards
 
     # add general schedule_min_max(schedule) method and merge with other methods
 
-    # returns the ScheduleRuleset minimum and maximum values
+    # returns the ScheduleRuleset minimum and maximum values encountered during the run-period.
+    # This method does not include summer and winter design day values.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [Hash] returns as hash with 'min' and 'max' values
@@ -40,7 +41,7 @@ module OpenstudioStandards
             end
           end
         end
-        result = { 'min' => min, 'max' => max } # this doesn't include summer and winter design day
+        result = { 'min' => min, 'max' => max }
       else
         result = nil
       end

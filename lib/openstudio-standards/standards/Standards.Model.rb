@@ -6709,7 +6709,7 @@ class Standard
     end
 
     # gather and store data for scheduleRuleset
-    min_max = schedule_ruleset_annual_min_max_value(sch)
+    min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(sch)
     ruleset_hash = { floor: min_max['min'], ceiling: min_max['max'], target: load_inst, hoo_inputs: hours_of_operation }
     parametric_inputs[sch] = ruleset_hash
 

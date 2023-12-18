@@ -104,7 +104,7 @@ module OpenstudioStandards
               clg_sch = thermostat.coolingSetpointTemperatureSchedule.get
               schedule_values = nil
               if clg_sch.to_ScheduleRuleset.is_initialized
-                schedule_values = std.schedule_ruleset_annual_min_max_value(clg_sch.to_ScheduleRuleset.get)
+                schedule_values = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(clg_sch.to_ScheduleRuleset.get)
               elsif clg_sch.to_ScheduleConstant.is_initialized
                 schedule_values = std.schedule_constant_annual_min_max_value(clg_sch.to_ScheduleConstant.get)
               end

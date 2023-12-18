@@ -708,7 +708,7 @@ class ASHRAE901PRM < Standard
             htg_sch = htg_sch.get
             if htg_sch.to_ScheduleRuleset.is_initialized
               htg_sch = htg_sch.to_ScheduleRuleset.get
-              max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end
@@ -736,7 +736,7 @@ class ASHRAE901PRM < Standard
             htg_sch = htg_sch.get
             if htg_sch.to_ScheduleRuleset.is_initialized
               htg_sch = htg_sch.to_ScheduleRuleset.get
-              max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end

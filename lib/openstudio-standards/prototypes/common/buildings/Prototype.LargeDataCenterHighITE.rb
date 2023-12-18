@@ -147,10 +147,10 @@ module LargeDataCenterHighITE
       #   supply_temp_diff_sch = it_equip.supplyTemperatureDifferenceSchedule.get
       #   if supply_temp_diff_sch.to_ScheduleRuleset.is_initialized
       #     # use the largest supply approach temperature schedule if multiple IT equips are using different schedules
-      #     if schedule_ruleset_annual_min_max_value(supply_temp_diff_sch)['max'] <= supply_temp_diff_max
+      #     if OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(supply_temp_diff_sch)['max'] <= supply_temp_diff_max
       #       next
       #     else
-      #       supply_temp_diff_max = schedule_ruleset_annual_min_max_value(supply_temp_diff_sch)['max']
+      #       supply_temp_diff_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(supply_temp_diff_sch)['max']
       #       supply_temp_diff_sch = supply_temp_diff_sch.to_ScheduleRuleset.get
       #       supply_temp_sch = supply_temp_diff_sch.clone(model).to_ScheduleRuleset.get
       #       supply_temp_sch.setName('AHU Supply Temp Sch updated')
