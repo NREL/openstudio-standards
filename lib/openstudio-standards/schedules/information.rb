@@ -90,7 +90,7 @@ module OpenstudioStandards
 
       # Error if no values were found
       if vals.size.zero?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleCompact', "Could not find any value in #{schedule_compact.name} when determining min and max.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Could not find any value in #{schedule_compact.name} when determining min and max.")
         result = { 'min' => nil, 'max' => nil }
         return result
       end
@@ -100,7 +100,50 @@ module OpenstudioStandards
       return result
     end
 
-    # returns the ScheduleRuleset minimum and maximum values encountered during the run-period.
+    # Returns the ScheduleCompact minimum and maximum values during the winter or summer design day
+    #
+    # @param schedule_constant [OpenStudio::Model::ScheduleCompact] OpenStudio ScheduleCompact object
+    # @param type [String] 'winter' for the winter design day, 'summer' for the summer design day
+    # return [Hash] returns a hash with 'min' and 'max' values
+    def self.schedule_compact_get_design_day_min_max(schedule_compact, type = 'winter')
+      vals = []
+      design_day_flag = false
+      prev_str = ''
+      schedule_compact.extensibleGroups.each do |eg|
+        if design_day_flag && prev_str.include?('until')
+          val = eg.getDouble(0)
+          if val.is_initialized
+            vals << val.get
+          end
+        end
+
+        str = eg.getString(0)
+        if str.is_initialized
+          prev_str = str.get.downcase
+          if prev_str.include?('for:')
+            # Process a new day schedule, turn the flag off.
+            design_day_flag = false
+            # in the same line, if there is design day label and matches the type, turn the flag back on.
+            if prev_str.include?(type) || prev_str.include?('alldays')
+              design_day_flag = true
+            end
+          end
+        end
+      end
+
+      # Error if no values were found
+      if vals.size.zero?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Could not find any value in #{schedule_compact.name} design day schedule when determining min and max.")
+        result = { 'min' => nil, 'max' => nil }
+        return result
+      end
+
+      result = { 'min' => vals.min, 'max' => vals.max }
+
+      return result
+    end
+
+    # Returns the ScheduleRuleset minimum and maximum values encountered during the run-period.
     # This method does not include summer and winter design day values.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object

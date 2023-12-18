@@ -258,7 +258,6 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.Pump"
   require_relative "#{stds}/Standards.PumpConstantSpeed"
   require_relative "#{stds}/Standards.PumpVariableSpeed"
-  require_relative "#{stds}/Standards.ScheduleCompact"
   require_relative "#{stds}/Standards.ScheduleRuleset"
   require_relative "#{stds}/Standards.Space"
   require_relative "#{stds}/Standards.SpaceType"

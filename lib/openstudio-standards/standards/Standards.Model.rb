@@ -7052,7 +7052,7 @@ class Standard
         setpoint_min_max = OpenstudioStandards::Schedules.schedule_constant_get_min_max(schedule)
       elsif schedule.to_ScheduleCompact.is_initialized
         schedule = schedule.to_ScheduleCompact.get
-        setpoint_min_max = schedule_compact_design_day_min_max_value(schedule, type)
+        setpoint_min_max = OpenstudioStandards::Schedules.schedule_compact_get_design_day_min_max(schedule, type)
       end
       return setpoint_min_max
     end
