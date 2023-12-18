@@ -19,7 +19,7 @@ class TestAnnualMinMaxValue < Minitest::Test
 
     # get min and max for both schedules
     annual_min_max_value_ruleset = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(schedule_ruleset)
-    annual_min_max_value_constant = standard.schedule_constant_annual_min_max_value(schedule_constant)
+    annual_min_max_value_constant = OpenstudioStandards::Schedules.schedule_constant_get_min_max(schedule_constant)
 
     # test ruleset and constant schedule
     assert(annual_min_max_value_ruleset['min'] == 0.05)

@@ -7049,7 +7049,7 @@ class Standard
       elsif schedule.to_ScheduleConstant.is_initialized
         schedule = schedule.to_ScheduleConstant.get
         # for constant schedule, there is only one value, so the annual should be equal to design condition.
-        setpoint_min_max = schedule_constant_annual_min_max_value(schedule)
+        setpoint_min_max = OpenstudioStandards::Schedules.schedule_constant_get_min_max(schedule)
       elsif schedule.to_ScheduleCompact.is_initialized
         schedule = schedule.to_ScheduleCompact.get
         setpoint_min_max = schedule_compact_design_day_min_max_value(schedule, type)

@@ -4,7 +4,16 @@ class TestSchedulesInformation < Minitest::Test
   def setup
     @sch = OpenstudioStandards::Schedules
   end
-  
+
+  def test_schedule_constant_get_min_max
+    model = OpenStudio::Model::Model.new
+    schedule = OpenStudio::Model::ScheduleConstant.new(model)
+    schedule.setValue(42.0)
+    result = @sch.schedule_constant_get_min_max(schedule)
+    assert(result['min'] == 42.0)
+    assert(result['max'] == 42.0)
+  end
+
   def test_schedule_ruleset_get_min_max
     model = OpenStudio::Model::Model.new
     test_options = {

@@ -6,6 +6,17 @@ module OpenstudioStandards
 
     # add general schedule_min_max(schedule) method and merge with other methods
 
+    # returns the ScheduleConstant minimum and maximum values encountered during the run-period.
+    # This method does not include summer and winter design day values.
+    #
+    # @param schedule_constant [OpenStudio::Model::ScheduleConstant] OpenStudio ScheduleConstant object
+    # return [Hash] returns as hash with 'min' and 'max' values
+    def self.schedule_constant_get_min_max(schedule_constant)
+      result = { 'min' => schedule_constant.value, 'max' => schedule_constant.value }
+
+      return result
+    end
+
     # returns the ScheduleRuleset minimum and maximum values encountered during the run-period.
     # This method does not include summer and winter design day values.
     #
