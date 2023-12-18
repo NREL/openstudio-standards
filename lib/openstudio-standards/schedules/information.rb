@@ -17,6 +17,34 @@ module OpenstudioStandards
       return result
     end
 
+    # Returns the equivalent full load hours (EFLH) for a ScheduleConstant.
+    # For example, an always-on fractional schedule
+    # (always 1.0, 24/7, 365) would return a value of 8760
+    # and (always 1.0, 24/7, 365) would return a value of 8784.
+    #
+    # @param schedule_constant [OpenStudio::Model::ScheduleConstant] OpenStudio ScheduleConstant object
+    # return [Double] The total equivalent full load hours for this schedule
+    def self.schedule_constant_get_equivalent_full_load_hours(schedule_constant)
+      hours = 8760
+      hours += 24 if schedule_constant.model.getYearDescription.isLeapYear
+      eflh = schedule_constant.value * hours
+
+      return eflh
+    end
+
+    # Returns an array of hourly values from a ScheduleConstant object
+    # Will return 8760 values, and 8784 for leap years.
+    #
+    # @param schedule_constant [OpenStudio::Model::ScheduleConstant] OpenStudio ScheduleConstant object
+    # @return [Array<Double>] Array of hourly values for the year
+    def self.schedule_constant_get_hourly_values(schedule_constant)
+      hours = 8760
+      hours += 24 if schedule_constant.model.getYearDescription.isLeapYear
+      values = Array.new(hours) { schedule_constant.value }
+
+      return values
+    end
+
     # returns the ScheduleRuleset minimum and maximum values encountered during the run-period.
     # This method does not include summer and winter design day values.
     #

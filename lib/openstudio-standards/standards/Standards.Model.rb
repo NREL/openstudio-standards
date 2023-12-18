@@ -1307,7 +1307,7 @@ class Standard
       fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule)
     when 'OS_Schedule_Constant'
       fan_schedule_constant = fan_schedule.to_ScheduleConstant.get
-      fan_8760 = get_8760_values_from_schedule_constant(model, fan_schedule_constant)
+      fan_8760 = OpenstudioStandards::Schedules.schedule_constant_get_hourly_values(fan_schedule_constant)
     when 'OS_Schedule_Compact'
       # First convert to ScheduleRuleset
       sch_translator = ScheduleTranslator.new(model, fan_schedule)
@@ -2193,7 +2193,7 @@ class Standard
             end
           elsif lights_sch.to_ScheduleConstant.is_initialized
             lights_sch = lights_sch.to_ScheduleConstant.get
-            full_load_hrs = schedule_constant_annual_equivalent_full_load_hrs(lights_sch)
+            full_load_hrs = OpenstudioStandards::Schedules.schedule_constant_get_equivalent_full_load_hours(lights_sch)
             if full_load_hrs > 0
               ann_op_hrs = full_load_hrs
               break # Stop after the first schedule with more than 0 hrs

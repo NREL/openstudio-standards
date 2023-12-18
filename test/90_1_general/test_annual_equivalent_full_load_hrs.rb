@@ -19,7 +19,7 @@ class TestAnnualEquivalentFullLoadHrs < Minitest::Test
 
     # get annual_equivalent_full_load_hrs for both schedules
     ann_eqiv_ruleset = standard.schedule_ruleset_annual_equivalent_full_load_hrs(schedule_ruleset) 
-    ann_eqiv_constant = standard.schedule_constant_annual_equivalent_full_load_hrs(schedule_constant) 
+    ann_eqiv_constant = standard.OpenstudioStandards::Schedules.schedule_constant_get_equivalent_full_load_hours(schedule_constant) 
 
     # test ruleset and constant schedule
     assert(ann_eqiv_ruleset == 2948.5)

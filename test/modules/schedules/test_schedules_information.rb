@@ -14,6 +14,32 @@ class TestSchedulesInformation < Minitest::Test
     assert(result['max'] == 42.0)
   end
 
+  def test_schedule_constant_get_equivalent_full_load_hours
+    model = OpenStudio::Model::Model.new
+    schedule = OpenStudio::Model::ScheduleConstant.new(model)
+    schedule.setValue(42.0)
+    result = @sch.schedule_constant_get_equivalent_full_load_hours(schedule)
+    assert(result == 42.0 * 8760)
+
+    model.getYearDescription.setCalendarYear(2020)
+    result = @sch.schedule_constant_get_equivalent_full_load_hours(schedule)
+    assert(result == 42.0 * 8784)
+  end
+
+  def test_schedule_constant_get_hourly_values
+    model = OpenStudio::Model::Model.new
+    schedule = OpenStudio::Model::ScheduleConstant.new(model)
+    schedule.setValue(42.0)
+    result = @sch.schedule_constant_get_hourly_values(schedule)
+    assert(result.class.to_s == 'Array')
+    assert(result.size == 8760)
+
+    model.getYearDescription.setCalendarYear(2020)
+    result = @sch.schedule_constant_get_hourly_values(schedule)
+    assert(result.class.to_s == 'Array')
+    assert(result.size == 8784)
+  end
+
   def test_schedule_ruleset_get_min_max
     model = OpenStudio::Model::Model.new
     test_options = {

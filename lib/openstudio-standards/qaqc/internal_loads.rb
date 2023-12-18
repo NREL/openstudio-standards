@@ -549,7 +549,7 @@ module OpenstudioStandards
       if schedule_inst.to_ScheduleRuleset.is_initialized
         inst_hrs = std.schedule_ruleset_annual_equivalent_full_load_hrs(schedule_inst.to_ScheduleRuleset.get)
       elsif schedule_inst.to_ScheduleConstant.is_initialized
-        inst_hrs = std.schedule_constant_annual_equivalent_full_load_hrs(schedule_inst.to_ScheduleConstant.get)
+        inst_hrs = OpenstudioStandards::Schedules.schedule_constant_get_equivalent_full_load_hours(schedule_inst.to_ScheduleConstant.get)
       else
         return OpenStudio::Attribute.new('flag', "#{schedule_inst.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
       end

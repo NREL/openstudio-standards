@@ -52,7 +52,7 @@ module OpenstudioStandards
             if schedule_inst.to_ScheduleRuleset.is_initialized
               annual_equiv_flow_rate = std.schedule_ruleset_annual_equivalent_full_load_hrs(schedule_inst.to_ScheduleRuleset.get)
             elsif schedule_inst.to_ScheduleConstant.is_initialized
-              annual_equiv_flow_rate = std.schedule_constant_annual_equivalent_full_load_hrs(schedule_inst.to_ScheduleConstant.get)
+              annual_equiv_flow_rate = OpenstudioStandards::Schedules.schedule_constant_get_equivalent_full_load_hours(schedule_inst.to_ScheduleConstant.get)
             else
               check_elems << OpenStudio::Attribute.new('flag', "#{schedule_inst.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
               next
@@ -116,7 +116,7 @@ module OpenstudioStandards
                   if inst_schedule.to_ScheduleRuleset.is_initialized
                     annual_equiv_flow_rate = std.schedule_ruleset_annual_equivalent_full_load_hrs(inst_schedule.to_ScheduleRuleset.get)
                   elsif inst_schedule.to_ScheduleConstant.is_initialized
-                    annual_equiv_flow_rate = std.schedule_constant_annual_equivalent_full_load_hrs(inst_schedule.to_ScheduleConstant.get)
+                    annual_equiv_flow_rate = OpenstudioStandards::Schedules.schedule_constant_get_equivalent_full_load_hours(inst_schedule.to_ScheduleConstant.get)
                   else
                     check_elems << OpenStudio::Attribute.new('flag', "#{inst_schedule.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
                     annual_equiv_flow_rate = 0.0
@@ -214,7 +214,7 @@ module OpenstudioStandards
                   if inst_schedule.to_ScheduleRuleset.is_initialized
                     annual_equiv_flow_rate = std.schedule_ruleset_annual_equivalent_full_load_hrs(inst_schedule.to_ScheduleRuleset.get)
                   elsif inst_schedule.to_ScheduleConstant.is_initialized
-                    annual_equiv_flow_rate = std.schedule_constant_annual_equivalent_full_load_hrs(inst_schedule.to_ScheduleConstant.get)
+                    annual_equiv_flow_rate = OpenstudioStandards::Schedules.schedule_constant_get_equivalent_full_load_hours(inst_schedule.to_ScheduleConstant.get)
                   else
                     check_elems << OpenStudio::Attribute.new('flag', "#{inst_schedule.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
                     annual_equiv_flow_rate = 0.0
