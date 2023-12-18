@@ -1060,7 +1060,7 @@ class Standard
         end
       elsif htg_sch.to_ScheduleCompact.is_initialized
         htg_sch = htg_sch.to_ScheduleCompact.get
-        max_c = schedule_compact_annual_min_max_value(htg_sch)['max']
+        max_c = OpenstudioStandards::Schedules.schedule_compact_get_min_max(htg_sch)['max']
         if max_c > temp_c
           htd = true
         end
@@ -1096,7 +1096,7 @@ class Standard
           end
         elsif htg_sch.to_ScheduleCompact.is_initialized
           htg_sch = htg_sch.to_ScheduleCompact.get
-          max_c = schedule_compact_annual_min_max_value(htg_sch)['max']
+          max_c = OpenstudioStandards::Schedules.schedule_compact_get_min_max(htg_sch)['max']
           if max_c > temp_c
             htd = true
           end
@@ -1202,7 +1202,7 @@ class Standard
         end
       elsif clg_sch.to_ScheduleCompact.is_initialized
         clg_sch = clg_sch.to_ScheduleCompact.get
-        min_c = schedule_compact_annual_min_max_value(clg_sch)['min']
+        min_c = OpenstudioStandards::Schedules.schedule_compact_get_min_max(clg_sch)['min']
         if min_c < temp_c
           cld = true
         end
@@ -1238,7 +1238,7 @@ class Standard
           end
         elsif clg_sch.to_ScheduleCompact.is_initialized
           clg_sch = clg_sch.to_ScheduleCompact.get
-          min_c = schedule_compact_annual_min_max_value(clg_sch)['min']
+          min_c = OpenstudioStandards::Schedules.schedule_compact_get_min_max(clg_sch)['min']
           if min_c < temp_c
             cld = true
           end
@@ -1455,7 +1455,7 @@ class Standard
           setpoint_c = OpenstudioStandards::Schedules.schedule_constant_get_min_max(setpoint_sch)['max']
         elsif setpoint_sch.to_ScheduleCompact.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleCompact.get
-          setpoint_c = schedule_compact_annual_min_max_value(setpoint_sch)['max']
+          setpoint_c = OpenstudioStandards::Schedules.schedule_compact_get_min_max(setpoint_sch)['max']
         end
       end
     end
@@ -1518,7 +1518,7 @@ class Standard
           setpoint_c = OpenstudioStandards::Schedules.schedule_constant_get_min_max(setpoint_sch)['min']
         elsif setpoint_sch.to_ScheduleCompact.is_initialized
           setpoint_sch = setpoint_sch.to_ScheduleCompact.get
-          setpoint_c = schedule_compact_annual_min_max_value(setpoint_sch)['min']
+          setpoint_c = OpenstudioStandards::Schedules.schedule_compact_get_min_max(setpoint_sch)['min']
         end
       end
     end

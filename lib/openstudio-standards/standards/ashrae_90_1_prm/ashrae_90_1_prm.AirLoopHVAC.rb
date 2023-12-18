@@ -720,7 +720,7 @@ class ASHRAE901PRM < Standard
               end
             elsif htg_sch.to_ScheduleCompact.is_initialized
               htg_sch = htg_sch.to_ScheduleCompact.get
-              max_c = schedule_compact_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_compact_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end

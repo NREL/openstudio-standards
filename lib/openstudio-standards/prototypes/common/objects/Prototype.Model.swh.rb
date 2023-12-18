@@ -550,7 +550,7 @@ class Standard
         max_sch_value = OpenstudioStandards::Schedules.schedule_constant_get_min_max(water_use_equip_sch)['max']
       elsif water_use_equip_sch.to_ScheduleCompact.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleCompact.get
-        max_sch_value = schedule_compact_annual_min_max_value(water_use_equip_sch)['max']
+        max_sch_value = OpenstudioStandards::Schedules.schedule_compact_get_min_max(water_use_equip_sch)['max']
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The peak flow rate fraction for #{water_use_equip_sch.name} could not be determined, assuming 1 for water heater sizing purposes.")
         max_sch_value = 1.0

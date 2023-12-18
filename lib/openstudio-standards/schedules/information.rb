@@ -4,13 +4,35 @@ module OpenstudioStandards
   module Schedules
     # @!group Information
 
-    # add general schedule_min_max(schedule) method and merge with other methods
+    # Returns the Schedule minimum and maximum values encountered during the run-period.
+    # This method does not include summer and winter design day values.
+    #
+    # @param schedule [OpenStudio::Model::Schedule] OpenStudio Schedule object
+    # return [Hash] returns a hash with 'min' and 'max' values
+    def self.schedule_get_min_max(schedule)
+      case schedule.iddObjectType.valueName.to_s
+      when 'OS_Schedule_Ruleset'
+        schedule = schedule.to_ScheduleRuleset.get
+        result = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(schedule)
+      when 'OS_Schedule_Constant'
+        schedule = schedule.to_ScheduleConstant.get
+        result = OpenstudioStandards::Schedules.schedule_constant_get_min_max(schedule)
+      when 'OS_Schedule_Compact'
+        schedule = schedule.to_ScheduleCompact.get
+        result = OpenstudioStandards::Schedules.schedule_compact_get_min_max(schedule)
+      when 'OS_Schedule_Year'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_min_max does not yet support ScheduleYear.')
+        result = { 'min' => nil, 'max' => nil }
+      end
 
-    # returns the ScheduleConstant minimum and maximum values encountered during the run-period.
+      return result
+    end
+
+    # Returns the ScheduleConstant minimum and maximum values encountered during the run-period.
     # This method does not include summer and winter design day values.
     #
     # @param schedule_constant [OpenStudio::Model::ScheduleConstant] OpenStudio ScheduleConstant object
-    # return [Hash] returns as hash with 'min' and 'max' values
+    # return [Hash] returns a hash with 'min' and 'max' values
     def self.schedule_constant_get_min_max(schedule_constant)
       result = { 'min' => schedule_constant.value, 'max' => schedule_constant.value }
 
@@ -45,11 +67,44 @@ module OpenstudioStandards
       return values
     end
 
+    # Returns the ScheduleCompact minimum and maximum values encountered during the run-period.
+    # This method does not include summer and winter design day values.
+    #
+    # @param schedule_constant [OpenStudio::Model::ScheduleCompact] OpenStudio ScheduleCompact object
+    # return [Hash] returns a hash with 'min' and 'max' values
+    def self.schedule_compact_get_min_max(schedule_compact)
+      vals = []
+      prev_str = ''
+      schedule_compact.extensibleGroups.each do |eg|
+        if prev_str.include?('until')
+          val = eg.getDouble(0)
+          if val.is_initialized
+            vals << eg.getDouble(0).get
+          end
+        end
+        str = eg.getString(0)
+        if str.is_initialized
+          prev_str = str.get.downcase
+        end
+      end
+
+      # Error if no values were found
+      if vals.size.zero?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleCompact', "Could not find any value in #{schedule_compact.name} when determining min and max.")
+        result = { 'min' => nil, 'max' => nil }
+        return result
+      end
+
+      result = { 'min' => vals.min, 'max' => vals.max }
+
+      return result
+    end
+
     # returns the ScheduleRuleset minimum and maximum values encountered during the run-period.
     # This method does not include summer and winter design day values.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
-    # @return [Hash] returns as hash with 'min' and 'max' values
+    # @return [Hash] returns a hash with 'min' and 'max' values
     def self.schedule_ruleset_get_min_max(schedule_ruleset)
       # validate schedule
       if schedule_ruleset.to_ScheduleRuleset.is_initialized

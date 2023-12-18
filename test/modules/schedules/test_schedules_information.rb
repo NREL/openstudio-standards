@@ -5,6 +5,37 @@ class TestSchedulesInformation < Minitest::Test
     @sch = OpenstudioStandards::Schedules
   end
 
+  def test_schedule_get_min_max
+    model = OpenStudio::Model::Model.new
+    schedule = OpenStudio::Model::ScheduleConstant.new(model)
+    schedule.setValue(42.0)
+    result = @sch.schedule_get_min_max(schedule)
+    assert(result['min'] == 42.0)
+    assert(result['max'] == 42.0)
+
+    test_options = {
+      'name' => 'Simple Schedule',
+      'winter_time_value_pairs' => { 8.0 => 4.0, 16.0 => 12.0, 24.0 => 5.0 },
+      'summer_time_value_pairs' => { 8.0 => 2.0, 16.0 => 10.0, 24.0 => 3.0 },
+      'default_time_value_pairs' => { 8.0 => 6.0, 16.0 => 14.0, 24.0 => 7.0 }
+    }
+    schedule = @sch.create_simple_schedule(model, test_options)
+    result = @sch.schedule_get_min_max(schedule)
+    assert(result['min'] == 6.0)
+    assert(result['max'] == 14.0)
+
+    schedule = OpenStudio::Model::ScheduleCompact.new(model)
+    schedule.setString(3, 'Through: 12/31')
+    schedule.setString(4, 'For: AllDays')
+    schedule.setString(5, 'Until: 14:00')
+    schedule.setString(6, '21.0')
+    schedule.setString(7, 'Until: 24:00')
+    schedule.setString(8, '42.0')
+    result = @sch.schedule_get_min_max(schedule)
+    assert(result['min'] == 21.0)
+    assert(result['max'] == 42.0)
+  end
+
   def test_schedule_constant_get_min_max
     model = OpenStudio::Model::Model.new
     schedule = OpenStudio::Model::ScheduleConstant.new(model)
@@ -38,6 +69,20 @@ class TestSchedulesInformation < Minitest::Test
     result = @sch.schedule_constant_get_hourly_values(schedule)
     assert(result.class.to_s == 'Array')
     assert(result.size == 8784)
+  end
+
+  def test_schedule_compact_get_min_max
+    model = OpenStudio::Model::Model.new
+    schedule = OpenStudio::Model::ScheduleCompact.new(model)
+    schedule.setString(3, 'Through: 12/31')
+    schedule.setString(4, 'For: AllDays')
+    schedule.setString(5, 'Until: 14:00')
+    schedule.setString(6, '21.0')
+    schedule.setString(7, 'Until: 24:00')
+    schedule.setString(8, '42.0')
+    result = @sch.schedule_compact_get_min_max(schedule)
+    assert(result['min'] == 21.0)
+    assert(result['max'] == 42.0)
   end
 
   def test_schedule_ruleset_get_min_max
