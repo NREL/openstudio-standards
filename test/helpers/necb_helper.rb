@@ -69,6 +69,68 @@ module NecbHelper
     ]
   end
 
+  # Utility function to help make an expected results hash.
+  def make_empty_expected_json(loop_hash)
+    values = loop_hash.values
+    puts values.first.product(*values[1..-1]).map { |e| loop_hash.keys.zip(e).to_h }
+    
+  end
+
+  # Method used to recursively parse the expected json to figure out the test cases and then run them
+  # (adapted template design pattern).
+  # The test_pars hash is used by the recursion to remember what condition is being tested in a nested hash. It already 
+  # contains some of the test parameters.
+  # Will call the method 'do_test_...' to do the work. This method is called from 'test_...'
+  def parse_json_and_test(expected_results:, test_pars:)
+
+    # Find the test cases. Do this with recursion but remember where we are in a new hash passed to the do_test method.
+    # The nested hash is has essentially a set of loops (vintages, weather files, fuel types etc). As the recursion 
+    # descends down through these keep track of which one is the current 'iterator'.
+    # While doing this build up the test_results hash.
+    iterator_name = expected_results[:VarType]
+    test_results = Hash.new
+    test_results[:VarType] = iterator_name
+    puts "******* #{iterator_name} **********"
+
+    # If at the 'TestCase' level then stop recursion and run the test defined in the current hash.
+    if iterator_name == "TestCase"
+
+      test_results[:reference] = expected_results[:reference]
+
+      # This hash is the test case. The key is the short name (usually something like 'case-1', and its unique).
+      # The value of the hash has the test specific inputs and the result.
+      expected_results.each do |key, value|
+        puts "$$$ #{key}"
+        next if key == :VarType # This is less expensive than using the except method chained before the each.
+        next if key == :reference # This is less expensive than using the except method chained before the each.
+        #puts "Test case: #{test_pars}"
+        #puts "Current test: #{value}"
+
+        # Run this test case. By default call the do_testMethod method.
+        method_name = "do_#{test_pars[:test_method]}"
+        case_results = self.send(method_name, test_pars: test_pars, test_case: value)
+        puts "######### Case reults"
+        puts JSON.pretty_generate(case_results)
+        test_results[key] = case_results
+      end
+    else
+
+      # Recursively go through the variables defined in the json file and find the test cases.
+      expected_results.each do |key, value|
+        next if key == :VarType
+        #puts "k,v: #{key}, #{value}"
+        if value.is_a? Hash
+          test_pars[iterator_name.to_sym] = key.to_s
+          puts "calling myself"
+          test_results[key] = parse_json_and_test(expected_results:value, test_pars: test_pars)
+        end
+      end
+    end
+    puts "Test Results #################"
+    puts JSON.pretty_generate(test_results)
+    return test_results
+  end
+
   # Method to recover existing template (or create on if it has not been instantiated).
   def get_standard(template)
     standard = nil
@@ -190,7 +252,8 @@ module NecbHelper
           end
         end
       end
-      puts error_msg
+      msg="  Test outputs do not match expected results!"
+      assert_empty(error_msg, "#{msg} \n#{error_msg}")
     else
 
       # Open files and compare the line by line. Remove line endings before checking strings (this can be an issue when running in docker).

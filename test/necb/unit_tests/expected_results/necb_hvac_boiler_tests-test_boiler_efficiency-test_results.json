@@ -1,7 +1,9 @@
 {
+  "VarType": "Vintage",
   "NECB2011": {
-    "reference": null,
+    "VarType": "FuelType",
     "Electricity": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2011_sys1_Boiler-Electricity_cap-10kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 10.0,
@@ -10,6 +12,7 @@
       }
     },
     "NaturalGas": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2011_sys1_Boiler-NaturalGas_cap-43kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 43.96,
@@ -30,6 +33,7 @@
       }
     },
     "FuelOilNo2": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2011_sys1_Boiler-FuelOilNo2_cap-43kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 43.96,
@@ -51,8 +55,9 @@
     }
   },
   "NECB2015": {
-    "reference": null,
+    "VarType": "FuelType",
     "Electricity": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2015_sys1_Boiler-Electricity_cap-10kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 10.0,
@@ -61,6 +66,7 @@
       }
     },
     "NaturalGas": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2015_sys1_Boiler-NaturalGas_cap-43kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 43.96,
@@ -81,6 +87,7 @@
       }
     },
     "FuelOilNo2": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2015_sys1_Boiler-FuelOilNo2_cap-43kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 43.96,
@@ -102,8 +109,9 @@
     }
   },
   "NECB2017": {
-    "reference": null,
+    "VarType": "FuelType",
     "Electricity": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2017_sys1_Boiler-Electricity_cap-10kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 10.0,
@@ -113,8 +121,9 @@
     }
   },
   "NECB2020": {
-    "reference": null,
+    "VarType": "FuelType",
     "Electricity": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2020_sys1_Boiler-Electricity_cap-10kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 10.0,
@@ -123,6 +132,7 @@
       }
     },
     "NaturalGas": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2020_sys1_Boiler-NaturalGas_cap-43kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 43.96,
@@ -143,6 +153,7 @@
       }
     },
     "FuelOilNo2": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "NECB2020_sys1_Boiler-FuelOilNo2_cap-43kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 43.96,
@@ -164,8 +175,9 @@
     }
   },
   "BTAPPRE1980": {
-    "reference": null,
+    "VarType": "FuelType",
     "Electricity": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "BTAPPRE1980_sys1_Boiler-Electricity_cap-10kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 10.0,
@@ -174,6 +186,7 @@
       }
     },
     "NaturalGas": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "BTAPPRE1980_sys1_Boiler-NaturalGas_cap-43kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 43.96,
@@ -194,6 +207,7 @@
       }
     },
     "FuelOilNo2": {
+      "VarType": "TestCase",
       "case-1": {
         "name": "BTAPPRE1980_sys1_Boiler-FuelOilNo2_cap-43kW_MAU-true_MauCoil-Hot-Water_Baseboard-Hot-Water",
         "tested_capacity_kW": 43.96,
@@ -213,7 +227,5 @@
         "efficiency_value": 0.807
       }
     }
-  },
-  "BTAP1980TO2010": {
   }
 }

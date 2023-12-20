@@ -1,5 +1,7 @@
 {
+  "VarType": "Vintage",
   "NECB2011": {
+    "VarType": "TestCase",
     "reference": "Reference required",
     "case_100.0kW": {
       "name": "NECB2011_sys1_Boiler-NaturalGas_boiler_cap-100000.0watts_HeatingCoilType-Electric_Baseboard-Hot-Water",
@@ -24,6 +26,7 @@
     }
   },
   "NECB2015": {
+    "VarType": "TestCase",
     "reference": "Reference required",
     "case_100.0kW": {
       "name": "NECB2015_sys1_Boiler-NaturalGas_boiler_cap-100000.0watts_HeatingCoilType-Electric_Baseboard-Hot-Water",
@@ -48,6 +51,7 @@
     }
   },
   "NECB2017": {
+    "VarType": "TestCase",
     "reference": "Reference required",
     "case_100.0kW": {
       "name": "NECB2017_sys1_Boiler-NaturalGas_boiler_cap-100000.0watts_HeatingCoilType-Electric_Baseboard-Hot-Water",
@@ -72,6 +76,7 @@
     }
   },
   "NECB2020": {
+    "VarType": "TestCase",
     "reference": "Reference required",
     "case_100.0kW": {
       "name": "NECB2020_sys1_Boiler-NaturalGas_boiler_cap-100000.0watts_HeatingCoilType-Electric_Baseboard-Hot-Water",
@@ -96,6 +101,7 @@
     }
   },
   "BTAPPRE1980": {
+    "VarType": "TestCase",
     "reference": "Reference required",
     "case_100.0kW": {
       "name": "BTAPPRE1980_sys1_Boiler-NaturalGas_boiler_cap-100000.0watts_HeatingCoilType-Electric_Baseboard-Hot-Water",
@@ -120,6 +126,7 @@
     }
   },
   "BTAP1980TO2010": {
+    "VarType": "TestCase",
     "reference": "Reference required",
     "case_100.0kW": {
       "name": "BTAP1980TO2010_sys1_Boiler-NaturalGas_boiler_cap-100000.0watts_HeatingCoilType-Electric_Baseboard-Hot-Water",
