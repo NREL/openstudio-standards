@@ -818,7 +818,7 @@ class AppendixGPRMTests < Minitest::Test
                 if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
                   setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
                   # reuse code in Standards.ThermalZone to find tstat max temperature
-                  setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['min']
+                  setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_get_min_max", setpoint_sch)['min']
                   break
                 end
               end
