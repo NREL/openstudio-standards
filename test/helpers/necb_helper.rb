@@ -70,10 +70,14 @@ module NecbHelper
   end
 
   # Utility function to help make an expected results hash.
+  # https://www.bounga.org/ruby/2020/04/08/creating-a-deeply-nested-hash-in-ruby/
   def make_empty_expected_json(loop_hash)
     values = loop_hash.values
-    puts values.first.product(*values[1..-1]).map { |e| loop_hash.keys.zip(e).to_h }
-    
+    puts "Values: #{values}"
+    puts "Values.first: #{values.first}"
+    puts "Values.first.product: #{values.first.product(*values[1..-1])}"
+    template = values.first.product(*values[1..-1]).map { |e| loop_hash.keys.zip(e).to_h }
+    #puts JSON.pretty_generate(template)
   end
 
   # Method used to recursively parse the expected json to figure out the test cases and then run them
