@@ -101,7 +101,7 @@ module OpenstudioStandards
         prev_length + to_append.weather_data.size == @weather_data.size
       end
 
-      def metadata_to_hash
+      def as_json(options = {})
         {
           city: @city,
           state: @state,
@@ -114,6 +114,10 @@ module OpenstudioStandards
         }
       end
 
+      def to_json(*options)
+        as_json(*options).to_json(*options)
+      end
+      
       private
 
       # initialize
