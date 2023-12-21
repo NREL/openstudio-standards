@@ -25,6 +25,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/schedules/create'
   require_relative 'openstudio-standards/schedules/modify'
   require_relative 'openstudio-standards/schedules/information'
+  require_relative 'openstudio-standards/schedules/parametric'
 
   # HVAC Module
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
