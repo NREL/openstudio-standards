@@ -32,7 +32,7 @@ module OpenstudioStandards
       attr_accessor :monthly_undis_ground_temps_4p0m
 
       def initialize(path)
-        @text = nil
+        @text = ''
         @path = Pathname.new(path)
         @valid = false
         @lat = nil
@@ -62,6 +62,11 @@ module OpenstudioStandards
         @monthly_undis_ground_temps_0p5m = []
         @monthly_undis_ground_temps_4p0m = []
         init
+      end
+
+      def self.load(filename)
+        raise "Stat file does not exist: #{filename}" unless File.file?(filename)
+        f = OpenstudioStandards::Weather::StatFile.new(filename)
       end
 
       # Output for debugging stat routines.
