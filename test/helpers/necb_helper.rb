@@ -70,15 +70,24 @@ module NecbHelper
   end
 
   # Utility function to help make an expected results hash.
-  # https://www.bounga.org/ruby/2020/04/08/creating-a-deeply-nested-hash-in-ruby/
+  # Expects the last two entries in the hash to be TestCase and TestPars.
   def make_empty_expected_json(loop_hash)
-    values = loop_hash.values
-    puts "Values: #{values}"
-    puts "Values.first: #{values.first}"
-    puts "Values.first.product: #{values.first.product(*values[1..-1])}"
-    template = values.first.product(*values[1..-1]).map { |e| loop_hash.keys.zip(e).to_h }
-    #puts JSON.pretty_generate(template)
+    expected_results_template = Hash.new
+    loop_hash.reverse_each do |loop_k, loop_v|
+      if loop_k.to_s == "TestPars" then 
+        loop_v.each {|key| expected_results_template[key.to_sym] = "tbd"}
+      else
+        temp = Hash.new
+        temp["VarType".to_sym] = loop_k
+        if loop_k.to_s == "TestCase" then temp["reference".to_sym] = "Add NECB reference here" end
+        loop_v.each {|key| temp[key.to_sym] = expected_results_template}
+        expected_results_template = temp.clone
+      end
+    end
+    #puts "\nFINAL hash:\n#{JSON.pretty_generate(expected_results_template)}"
+    return expected_results_template
   end
+    
 
   # Method used to recursively parse the expected json to figure out the test cases and then run them
   # (adapted template design pattern).
@@ -125,8 +134,7 @@ module NecbHelper
         #puts "k,v: #{key}, #{value}"
         if value.is_a? Hash
           test_pars[iterator_name.to_sym] = key.to_s
-          puts "calling myself"
-          test_results[key] = parse_json_and_test(expected_results:value, test_pars: test_pars)
+          test_results[key] = parse_json_and_test(expected_results: value, test_pars: test_pars)
         end
       end
     end

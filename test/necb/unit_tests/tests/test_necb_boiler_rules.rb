@@ -18,7 +18,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   #  Makes use of the template design pattern with the work done by the do_ method below (i.e. 'do_' prepended to the current method name)
   def no_test_boiler_efficiency
 
-    # Define test parameters.
+    # Define test parameters. Remaining parameters for a specific test come from the json file.
     test_parameters = {test_method: __method__,
                        save_intermediate_models: false,
                        mau_type: true, 
@@ -343,148 +343,185 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   # 'compliance_boiler_custom_efficiencies_expected_results.json
   def test_custom_efficiency
 
-    puts "*****************************************************************************"
-    puts "*****************************************************************************"
-    loop_hash = {:vintage => @AllTemplates, :ecms => ["a", 'B'], :weather => ["ottawa", "toronto", "vancouver"]}
-    make_empty_expected_json(loop_hash)
-    puts "*****************************************************************************"
-    puts "*****************************************************************************"
+    # Generate a template expected results file. If adding more cases use this to create the new entries.
+    #standard_ecms = get_standard("ECMS")
+    #puts standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"] # Used to get the case names
+    #loop_hash = {:Vintage => @AllTemplates, 
+    #             :TestCase => ["NECB_default", "NECB_85%eff", "NECB_88%eff", "NECB_91%eff", "NECB_94%eff", "Viessmann_96.2%eff"], 
+    #             :TestPars => ["boiler_name", "boiler_eff", "eff_curve_name", "curve_coefficients"]}
+    #loop_json = make_empty_expected_json(loop_hash)
+    #file_root = "#{self.class.name}-#{__method__}".downcase
+    #file_name = File.join(@expected_results_folder, "#{file_root}-expected_results-template.json")
+    #File.write(file_name, JSON.pretty_generate(loop_json))
 
-  end
-  def no_test_custopm_efficicney
-
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    templates = ['NECB2011', 'BTAPPRE1980']
-    save_intermediate_models = false
-
-    # Generate the osm files for all relevant cases to generate the test data for system 1.
-    mau_type = true
-    mau_heating_coil_type = 'Hot Water'
-    baseboard_type = 'Hot Water'
-    test_res = []
-
-    templates.each do |template|
-      standard = get_standard(template)
-      standard_ecms = get_standard("ECMS")
-      boiler_fueltype = 'NaturalGas'
-      boiler_cap = 1500000
-      standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"].each do |cust_eff_test|
-        name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{cust_eff_test["name"].to_s}"
-        name.gsub!(/\s+/, "-")
-        puts "***************#{name}***************\n"
-      
-        # Load model and set climate file.
-        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-        
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
-        standard.add_sys1_unitary_ac_baseboard_heating(model: model,
-                                                       zones: model.getThermalZones,
-                                                       mau_type: mau_type,
-                                                       mau_heating_coil_type: mau_heating_coil_type,
-                                                       baseboard_type: baseboard_type,
-                                                       hw_loop: hw_loop)
-        model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
-
-        # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-
-        # Customize the efficiency.
-        standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: cust_eff_test)
-
-        boilers = model.getBoilerHotWaters
-        boilers.each do |boiler|
-          corr_coeff = []
-          eff_curve = nil
-          eff_curve_type = boiler.normalizedBoilerEfficiencyCurve.get.iddObjectType.valueName.to_s
-          case eff_curve_type
-          when "OS_Curve_Bicubic"
-            eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveBicubic.get
-            corr_coeff << eff_curve.coefficient1Constant
-            corr_coeff << eff_curve.coefficient2x
-            corr_coeff << eff_curve.coefficient3xPOW2
-            corr_coeff << eff_curve.coefficient4y
-            corr_coeff << eff_curve.coefficient5yPOW2
-            corr_coeff << eff_curve.coefficient6xTIMESY
-            corr_coeff << eff_curve.coefficient7xPOW3
-            corr_coeff << eff_curve.coefficient8yPOW3
-            corr_coeff << eff_curve.coefficient9xPOW2TIMESY
-            corr_coeff << eff_curve.coefficient10xTIMESYPOW2
-            corr_coeff << eff_curve.minimumValueofx
-            corr_coeff << eff_curve.maximumValueofx
-            corr_coeff << eff_curve.minimumValueofy
-            corr_coeff << eff_curve.maximumValueofy
-          when "OS_Curve_Biquadratic"
-            eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveBiquadratic.get
-            corr_coeff << eff_curve.coefficient1Constant
-            corr_coeff << eff_curve.coefficient2x
-            corr_coeff << eff_curve.coefficient3xPOW2
-            corr_coeff << eff_curve.coefficient4y
-            corr_coeff << eff_curve.coefficient5yPOW2
-            corr_coeff << eff_curve.coefficient6xTIMESY
-            corr_coeff << eff_curve.minimumValueofx
-            corr_coeff << eff_curve.maximumValueofx
-            corr_coeff << eff_curve.minimumValueofy
-            corr_coeff << eff_curve.maximumValueofy
-          when "OS_Curve_Cubic"
-            eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveCubic.get
-            corr_coeff << eff_curve.coefficient1Constant
-            corr_coeff << eff_curve.coefficient2x
-            corr_coeff << eff_curve.coefficient3xPOW2
-            corr_coeff << eff_curve.coefficient4xPOW3
-            corr_coeff << eff_curve.minimumValueofx
-            corr_coeff << eff_curve.maximumValueofx
-          when "OS_Curve_Linear"
-            eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveLinear.get
-            corr_coeff << eff_curve.coefficient1Constant
-            corr_coeff << eff_curve.coefficient2x
-            corr_coeff << eff_curve.minimumValueofx
-            corr_coeff << eff_curve.maximumValueofx
-          when "OS_Curve_Quadratic"
-            eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveQuadratic.get
-            corr_coeff << eff_curve.coefficient1Constant
-            corr_coeff << eff_curve.coefficient2x
-            corr_coeff << eff_curve.coefficient3xPOW2
-            corr_coeff << eff_curve.minimumValueofx
-            corr_coeff << eff_curve.maximumValueofx
-          when "OS_Curve_QuadraticLinear"
-            eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveQuadraticLinear.get
-            corr_coeff << eff_curve.coefficient1Constant
-            corr_coeff << eff_curve.coefficient2x
-            corr_coeff << eff_curve.coefficient3xPOW2
-            corr_coeff << eff_curve.coefficient4y
-            corr_coeff << eff_curve.coefficient5xTIMESY
-            corr_coeff << eff_curve.coefficient6xPOW2TIMESY
-            corr_coeff << eff_curve.minimumValueofx
-            corr_coeff << eff_curve.maximumValueofx
-            corr_coeff << eff_curve.minimumValueofy
-            corr_coeff << eff_curve.maximumValueofy
-          end
-          eff_curve_name = eff_curve.name
-          boiler_eff = boiler.nominalThermalEfficiency
-          test_res << {
-              template: template,
-              boiler_name: boiler.name,
-              boiler_eff: boiler_eff,
-              eff_curve_name: eff_curve_name,
-              curve_coefficients: corr_coeff
-          }
-        end
-      end
-    end
+    # Define test parameters. Remaining parameters for a specific test come from the json file.
+    test_parameters = {test_method: __method__,
+                       save_intermediate_models: false,
+                       mau_type: true, 
+                       mau_heating_coil_type: 'Hot Water',
+                       baseboard_type: 'Hot Water'}
+                       
+    # Read expected results. This is used to set the tested cases as the parameters change depending on the
+    # fuel type and boiler size.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results_json = JSON.parse(File.read(file_name), {symbolize_names: true})
+  
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = parse_json_and_test(expected_results: expected_results_json, test_pars: test_parameters)
 
     # Write test results.
-    test_result_file = File.join( @test_results_folder, "boiler_efficiency_modification_test_results.json")
-    File.write(test_result_file, JSON.pretty_generate(test_res))
-    expected_result_file = File.join( @test_results_folder, "boiler_efficiency_modification_expected_results.json")
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
 
     # Check if test results match expected.
-    msg = "Boiler custom efficiencies test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
+    msg = "Boiler efficiencies test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_results_json, test_results_file: test_results, msg: msg, type: 'json_data')
+  end
+
+  # Companion method to test_custom_efficiency that runs a specific test.
+  # test_pars has the initially defined parameters plus where we are in the nexted results hash.
+  # test_case has the specific test parameters.
+  def do_test_custom_efficiency(test_pars:, test_case:)
+
+    # Debug.
+    puts JSON.pretty_generate(test_pars)
+    puts JSON.pretty_generate(test_case)
+
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    output_folder = method_output_folder(test_pars[:test_method])
+    save_intermediate_models = test_pars[:save_intermediate_models]
+    mau_type = test_pars[:mau_type]
+    heating_coil_type = test_pars[:mau_heating_coil_type]
+    baseboard_type = test_pars[:baseboard_type]
+    vintage = test_pars[:Vintage]
+
+    # Test specific inputs.
+    boiler_name = test_case[:boiler_name]
+    boiler_fueltype = 'NaturalGas'
+    boiler_cap = 1500000
+
+    # Define the test name. 
+    name = "#{vintage}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{heating_coil_type}_Baseboard-#{baseboard_type}_efficiency"#-#{cust_eff_test["name"].to_s}"
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+      
+    # Wrap test in begin/rescue/ensure.
+    begin
+      standard = get_standard(vintage)
+      standard_ecms = get_standard("ECMS")
+
+      # Find the specific boiler in the ECMS data files.
+      eff_options = standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"]
+      cust_eff_test = eff_options.select {|e| e["name"] == boiler_name}
+
+      puts cust_eff_test
+
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.add_sys1_unitary_ac_baseboard_heating(model: model,
+                                                      zones: model.getThermalZones,
+                                                      mau_type: mau_type,
+                                                      mau_heating_coil_type: heating_coil_type,
+                                                      baseboard_type: baseboard_type,
+                                                      hw_loop: hw_loop)
+      model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
+
+      # Run sizing.
+      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+
+      # Customize the efficiency.
+      standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: cust_eff_test)
+    rescue => error
+      puts "Something went wrong! #{error.message}"
+    end
+
+    # Extract the results for checking. There are always two boilers.
+    boilers = model.getBoilerHotWaters
+    boilers.each do |boiler|
+      corr_coeff = []
+      eff_curve = nil
+      eff_curve_type = boiler.normalizedBoilerEfficiencyCurve.get.iddObjectType.valueName.to_s
+      case eff_curve_type
+      when "OS_Curve_Bicubic"
+        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveBicubic.get
+        corr_coeff << eff_curve.coefficient1Constant
+        corr_coeff << eff_curve.coefficient2x
+        corr_coeff << eff_curve.coefficient3xPOW2
+        corr_coeff << eff_curve.coefficient4y
+        corr_coeff << eff_curve.coefficient5yPOW2
+        corr_coeff << eff_curve.coefficient6xTIMESY
+        corr_coeff << eff_curve.coefficient7xPOW3
+        corr_coeff << eff_curve.coefficient8yPOW3
+        corr_coeff << eff_curve.coefficient9xPOW2TIMESY
+        corr_coeff << eff_curve.coefficient10xTIMESYPOW2
+        corr_coeff << eff_curve.minimumValueofx
+        corr_coeff << eff_curve.maximumValueofx
+        corr_coeff << eff_curve.minimumValueofy
+        corr_coeff << eff_curve.maximumValueofy
+      when "OS_Curve_Biquadratic"
+        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveBiquadratic.get
+        corr_coeff << eff_curve.coefficient1Constant
+        corr_coeff << eff_curve.coefficient2x
+        corr_coeff << eff_curve.coefficient3xPOW2
+        corr_coeff << eff_curve.coefficient4y
+        corr_coeff << eff_curve.coefficient5yPOW2
+        corr_coeff << eff_curve.coefficient6xTIMESY
+        corr_coeff << eff_curve.minimumValueofx
+        corr_coeff << eff_curve.maximumValueofx
+        corr_coeff << eff_curve.minimumValueofy
+        corr_coeff << eff_curve.maximumValueofy
+      when "OS_Curve_Cubic"
+        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveCubic.get
+        corr_coeff << eff_curve.coefficient1Constant
+        corr_coeff << eff_curve.coefficient2x
+        corr_coeff << eff_curve.coefficient3xPOW2
+        corr_coeff << eff_curve.coefficient4xPOW3
+        corr_coeff << eff_curve.minimumValueofx
+        corr_coeff << eff_curve.maximumValueofx
+      when "OS_Curve_Linear"
+        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveLinear.get
+        corr_coeff << eff_curve.coefficient1Constant
+        corr_coeff << eff_curve.coefficient2x
+        corr_coeff << eff_curve.minimumValueofx
+        corr_coeff << eff_curve.maximumValueofx
+      when "OS_Curve_Quadratic"
+        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveQuadratic.get
+        corr_coeff << eff_curve.coefficient1Constant
+        corr_coeff << eff_curve.coefficient2x
+        corr_coeff << eff_curve.coefficient3xPOW2
+        corr_coeff << eff_curve.minimumValueofx
+        corr_coeff << eff_curve.maximumValueofx
+      when "OS_Curve_QuadraticLinear"
+        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveQuadraticLinear.get
+        corr_coeff << eff_curve.coefficient1Constant
+        corr_coeff << eff_curve.coefficient2x
+        corr_coeff << eff_curve.coefficient3xPOW2
+        corr_coeff << eff_curve.coefficient4y
+        corr_coeff << eff_curve.coefficient5xTIMESY
+        corr_coeff << eff_curve.coefficient6xPOW2TIMESY
+        corr_coeff << eff_curve.minimumValueofx
+        corr_coeff << eff_curve.maximumValueofx
+        corr_coeff << eff_curve.minimumValueofy
+        corr_coeff << eff_curve.maximumValueofy
+      end
+      eff_curve_name = eff_curve.name
+      boiler_eff = boiler.nominalThermalEfficiency
+      results = {
+          template: template,
+          boiler_name: boiler.name,
+          boiler_eff: boiler_eff,
+          eff_curve_name: eff_curve_name,
+          curve_coefficients: corr_coeff
+      }
+    end
   end
 
 end
