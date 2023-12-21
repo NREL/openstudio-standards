@@ -405,6 +405,83 @@ module OpenstudioStandards
       return annual_flh
     end
 
+    # Returns the total number of hours where the schedule is greater than the specified value.
+    # This method includes leap days on leap years.
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param lower_limit [Double] the lower limit.  Values equal to the limit will not be counted.
+    # @return [Double] The total number of hours this schedule is above the specified value.
+    def self.schedule_ruleset_get_hours_above_value(schedule_ruleset, lower_limit)
+      # define the start and end date
+      year_start_date = nil
+      year_end_date = nil
+      if schedule_ruleset.model.yearDescription.is_initialized
+        year_description = schedule_ruleset.model.yearDescription.get
+        year = year_description.assumedYear
+        year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+        year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', 'Year description is not specified. Annual hours above value calculation will assume 2009, the default year OS uses.')
+        year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
+        year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
+      end
+
+      # Get the ordered list of all the day schedules
+      day_schs = schedule_ruleset.getDaySchedules(year_start_date, year_end_date)
+
+      # Get the array of which schedule is used on each day of the year
+      day_schs_used_each_day = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
+
+      # Create a map that shows how many days each schedule is used
+      day_sch_freq = day_schs_used_each_day.group_by { |n| n }
+
+      # Build a hash that maps schedule day index to schedule day
+      schedule_index_to_day = {}
+      day_schs.each_with_index do |day_sch, i|
+        schedule_index_to_day[day_schs_used_each_day[i]] = day_sch
+      end
+
+      # Loop through each of the schedules that is used, figure out the
+      # hours for that day, then multiply this by the number
+      # of days that day schedule applies and add this to the total.
+      annual_hrs = 0.0
+      default_day_sch = schedule_ruleset.defaultDaySchedule
+      day_sch_freq.each do |freq|
+        sch_index = freq[0]
+        number_of_days_sch_used = freq[1].size
+
+        # Get the day schedule at this index
+        day_sch = nil
+        day_sch = if sch_index == -1 # If index = -1, this day uses the default day schedule (not a rule)
+                    default_day_sch
+                  else
+                    schedule_index_to_day[sch_index]
+                  end
+
+        # Determine the hours for just one day
+        daily_hrs = 0.0
+        values = day_sch.values
+        times = day_sch.times
+
+        previous_time_decimal = 0.0
+        times.each_with_index do |time, i|
+          time_decimal = (time.days * 24.0) + time.hours + (time.minutes / 60.0) + (time.seconds / 3600.0)
+          duration_of_value = time_decimal - previous_time_decimal
+          if values[i] > lower_limit
+            daily_hrs += duration_of_value
+          end
+          previous_time_decimal = time_decimal
+        end
+
+        # Multiply the daily hours by the number
+        # of days this schedule is used per year
+        # and add this to the overall total
+        annual_hrs += daily_hrs * number_of_days_sch_used
+      end
+
+      return annual_hrs
+    end
+
     # create OpenStudio TimeSeries object from ScheduleRuleset values
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object

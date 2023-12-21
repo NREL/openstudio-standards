@@ -235,6 +235,24 @@ class TestSchedulesInformation < Minitest::Test
     assert(result.round(2) == 5270.4)
   end
 
+  def test_schedule_ruleset_get_hours_above_value
+    model = OpenStudio::Model::Model.new
+    # test ScheduleRuleset
+    test_options = {
+      'name' => 'Simple Schedule',
+      'winter_time_value_pairs' => { 8.0 => 0.2, 16.0 => 1.0, 24.0 => 0.5 },
+      'summer_time_value_pairs' => { 8.0 => 0.1, 16.0 => 0.9, 24.0 => 0.3 },
+      'default_time_value_pairs' => { 8.0 => 0.6, 16.0 => 0.8, 24.0 => 0.4 }
+    }
+    schedule = @sch.create_simple_schedule(model, test_options)
+    result = @sch.schedule_ruleset_get_hours_above_value(schedule, 0.7)
+    assert(result.round(2) == 2920.0)
+
+    model.getYearDescription.setCalendarYear(2020)
+    result = @sch.schedule_ruleset_get_hours_above_value(schedule, 0.7)
+    assert(result.round(2) == 2928.0)
+  end
+
   def test_schedule_ruleset_get_start_and_end_times
     model = OpenStudio::Model::Model.new
     test_options = {
