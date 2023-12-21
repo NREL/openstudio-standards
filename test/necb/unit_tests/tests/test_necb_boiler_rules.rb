@@ -515,7 +515,6 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       eff_curve_name = eff_curve.name
       boiler_eff = boiler.nominalThermalEfficiency
       results = {
-          template: template,
           boiler_name: boiler.name,
           boiler_eff: boiler_eff,
           eff_curve_name: eff_curve_name,
