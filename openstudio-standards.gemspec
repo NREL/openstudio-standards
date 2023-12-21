@@ -10,12 +10,12 @@ Gem::Specification.new do |spec|
   spec.homepage = 'http://openstudio.net'
   spec.summary = 'Creates DOE Prototype building models and transforms proposed OpenStudio models to baseline OpenStudio models.'
   spec.description = 'Creates DOE Prototype building models and transforms proposed models to baseline models for energy codes like ASHRAE 90.1 and the Canadian NECB.'
-  spec.license = 'LGPL'
+  spec.license = 'Modified BSD License'
 
   spec.required_ruby_version = '>= 2.0.0'
   spec.required_rubygems_version = '>= 1.3.6'
 
-  spec.files = Dir['License.txt', 'lib/**/*', 'data/**/*']
+  spec.files = Dir['LICENSE.md', 'lib/**/*', 'data/**/*']
   # spec.test_files = Dir['test/**/*']
   spec.require_paths = ['lib']
   spec.add_development_dependency 'minitest-reporters', '1.6.1'
