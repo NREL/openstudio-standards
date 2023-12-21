@@ -49,7 +49,7 @@ module OpenstudioStandards
           if water_use_equipment.flowRateFractionSchedule.is_initialized
             # get annual equiv for model schedule
             schedule_inst = water_use_equipment.flowRateFractionSchedule.get
-            annual_equiv_flow_rate = OpenStudioStandards::Schedules.schedule_get_equivalent_full_load_hours(schedule_inst)
+            annual_equiv_flow_rate = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(schedule_inst)
             if annual_equiv_flow_rate.nil?
               check_elems << OpenStudio::Attribute.new('flag', "#{schedule_inst.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
               next
@@ -109,7 +109,7 @@ module OpenstudioStandards
                 space_type.peoples.each do |inst|
                   inst_num_people = inst.getNumberOfPeople(space_type_floor_area)
                   inst_schedule = inst.numberofPeopleSchedule.get # sim will fail prior to this if doesn't have it
-                  annual_equivalent_people = OpenStudioStandards::Schedules.schedule_get_equivalent_full_load_hours(inst_schedule)
+                  annual_equivalent_people = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(inst_schedule)
                   if annual_equivalent_people.nil?
                     check_elems << OpenStudio::Attribute.new('flag', "#{inst_schedule.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
                     annual_equivalent_people = 0.0
@@ -202,7 +202,7 @@ module OpenstudioStandards
                 space_type.peoples.each do |inst|
                   inst_num_people = inst.getNumberOfPeople(space_type_floor_area)
                   inst_schedule = inst.numberofPeopleSchedule.get # sim will fail prior to this if doesn't have it
-                  annual_equivalent_people = OpenStudioStandards::Schedules.schedule_get_equivalent_full_load_hours(inst_schedule)
+                  annual_equivalent_people = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(inst_schedule)
                   if annual_equivalent_people.nil?
                     check_elems << OpenStudio::Attribute.new('flag', "#{inst_schedule.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
                     annual_equivalent_people = 0.0

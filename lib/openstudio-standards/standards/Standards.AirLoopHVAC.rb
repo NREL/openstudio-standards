@@ -2853,7 +2853,7 @@ class Standard
     # that the availability schedule does not reflect occupancy.
     if occ_sch.nil? || occ_sch == air_loop_hvac.model.alwaysOnDiscreteSchedule
       occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
-      flh = OpenStudioStandards::Schedules.schedule_get_equivalent_full_load_hours(occ_sch)
+      flh = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(occ_sch)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used to close OA damper during unoccupied hours.")
     else
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Setting motorized OA damper schedule to #{occ_sch.name}.")
@@ -3389,7 +3389,7 @@ class Standard
 
     # Get the airloop occupancy schedule
     loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
-    flh = OpenStudioStandards::Schedules.schedule_get_equivalent_full_load_hours(loop_occ_sch)
+    flh = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(loop_occ_sch)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
 
     # Set HVAC availability schedule to follow occupancy

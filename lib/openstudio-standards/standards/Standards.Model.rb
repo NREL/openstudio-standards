@@ -2184,7 +2184,7 @@ class Standard
           next if lights_sch.empty?
 
           lights_sch = lights_sch.get
-          full_load_hrs = OpenStudioStandards::Schedules.schedule_get_equivalent_full_load_hours(lights_sch)
+          full_load_hrs = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(lights_sch)
           if full_load_hrs > 0
             ann_op_hrs = full_load_hrs
             break # Stop after the first schedule with more than 0 hrs

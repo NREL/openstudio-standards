@@ -254,7 +254,7 @@ class Standard
     hours_of_operation = parametric_inputs[schedule][:hoo_inputs]
     # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name} hours_of_operation = #{hours_of_operation.name}.")
 
-    starting_aeflh = OpenStudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule)
+    starting_aeflh = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule)
 
     # store floor and ceiling value
     val_flr = nil
@@ -400,7 +400,7 @@ class Standard
     # @todo should they have their own formula, or should this be hard coded logic by schedule type
 
     # check orig vs. updated aeflh
-    final_aeflh = OpenStudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule)
+    final_aeflh = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule)
     percent_change = ((starting_aeflh - final_aeflh) / starting_aeflh) * 100.0
     if percent_change.abs > 0.05
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name}, applying parametric schedules made a #{percent_change.round(1)}% change in annual equivalent full load hours. (from #{starting_aeflh.round(2)} to #{final_aeflh.round(2)})")
