@@ -21,14 +21,83 @@ module OpenstudioStandards
         schedule = schedule.to_ScheduleCompact.get
         result = OpenstudioStandards::Schedules.schedule_compact_get_min_max(schedule)
       when 'OS_Schedule_Year'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_min_max does not yet support ScheduleYear.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_min_max does not yet support ScheduleYear schedules.')
+        result = { 'min' => nil, 'max' => nil }
+      when 'OS_Schedule_Interval'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_min_max does not yet support ScheduleInterval schedules.')
         result = { 'min' => nil, 'max' => nil }
       else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for schedule_get_min_max.")
         result = { 'min' => nil, 'max' => nil }
       end
 
       return result
     end
+
+    # Returns the Schedule minimum and maximum values during the winter or summer design day.
+    #
+    # @param schedule [OpenStudio::Model::Schedule] OpenStudio Schedule object
+    # @param type [String] 'winter' for the winter design day, 'summer' for the summer design day
+    # return [Hash] returns a hash with 'min' and 'max' values
+    def self.schedule_get_design_day_min_max(schedule, type = 'winter')
+      case schedule.iddObjectType.valueName.to_s
+      when 'OS_Schedule_Ruleset'
+        schedule = schedule.to_ScheduleRuleset.get
+        result = OpenstudioStandards::Schedules.schedule_ruleset_get_design_day_min_max(schedule, type)
+      when 'OS_Schedule_Constant'
+        schedule = schedule.to_ScheduleConstant.get
+        result = OpenstudioStandards::Schedules.schedule_constant_get_design_day_min_max(schedule, type)
+      when 'OS_Schedule_Compact'
+        schedule = schedule.to_ScheduleCompact.get
+        result = OpenstudioStandards::Schedules.schedule_compact_get_design_day_min_max(schedule, type)
+      when 'OS_Schedule_Year'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_design_day_min_max does not yet support ScheduleYear schedules.')
+        result = { 'min' => nil, 'max' => nil }
+      when 'OS_Schedule_Interval'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_design_day_min_max does not yet support ScheduleInterval schedules.')
+        result = { 'min' => nil, 'max' => nil }
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for schedule_get_design_day_min_max.")
+        result = { 'min' => nil, 'max' => nil }
+      end
+
+      return result
+    end
+
+    # Returns the Schedule equivalent full load hours (EFLH).
+    # For example a fractional schedule of 0.5, 24/7, 365 would return a value of 4380.
+    # This method includes leap days on leap years.
+    #
+    # @param schedule [OpenStudio::Model::Schedule] OpenStudio Schedule object
+    # return [Double] The total equivalent full load hours for this schedule
+    def self.schedule_get_equivalent_full_load_hours(schedule)
+      case schedule.iddObjectType.valueName.to_s
+      when 'OS_Schedule_Ruleset'
+        schedule = schedule.to_ScheduleRuleset.get
+        result = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule)
+      when 'OS_Schedule_Constant'
+        schedule = schedule.to_ScheduleConstant.get
+        result = OpenstudioStandards::Schedules.schedule_constant_get_equivalent_full_load_hours(schedule)
+      when 'OS_Schedule_Compact'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_equivalent_full_load_hours does not yet support ScheduleCompact schedules.')
+        result = nil
+      when 'OS_Schedule_Year'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_equivalent_full_load_hours does not yet support ScheduleYear schedules.')
+        result = nil
+      when 'OS_Schedule_Interval'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_equivalent_full_load_hours does not yet support ScheduleInterval schedules.')
+        result = nil
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for schedule_get_equivalent_full_load_hours.")
+        result = nil
+      end
+
+      return result
+    end
+
+    # @!endgroup Information
+
+    # @!group Information:ScheduleConstant
 
     # Returns the ScheduleConstant minimum and maximum values encountered during the run-period.
     # This method does not include summer and winter design day values.
@@ -41,10 +110,20 @@ module OpenstudioStandards
       return result
     end
 
-    # Returns the equivalent full load hours (EFLH) for a ScheduleConstant.
-    # For example, an always-on fractional schedule
-    # (always 1.0, 24/7, 365) would return a value of 8760
-    # and (always 1.0, 24/7, 365) would return a value of 8784.
+    # Returns the ScheduleConstant minimum and maximum values during the winter or summer design day.
+    #
+    # @param schedule_constant [OpenStudio::Model::ScheduleConstant] OpenStudio ScheduleConstant object
+    # @param type [String] 'winter' for the winter design day, 'summer' for the summer design day
+    # return [Hash] returns a hash with 'min' and 'max' values
+    def self.schedule_constant_get_design_day_min_max(schedule_constant, type)
+      result = { 'min' => schedule_constant.value, 'max' => schedule_constant.value }
+
+      return result
+    end
+
+    # Returns SheduleConstant equivalent full load hours (EFLH).
+    # For example a fractional schedule of 0.5, 24/7, 365 would return a value of 4380.
+    # This method includes leap days on leap years.
     #
     # @param schedule_constant [OpenStudio::Model::ScheduleConstant] OpenStudio ScheduleConstant object
     # return [Double] The total equivalent full load hours for this schedule
@@ -69,10 +148,14 @@ module OpenstudioStandards
       return values
     end
 
+    # @!endgroup Information:ScheduleConstant
+
+    # @!group Information:ScheduleCompact
+
     # Returns the ScheduleCompact minimum and maximum values encountered during the run-period.
     # This method does not include summer and winter design day values.
     #
-    # @param schedule_constant [OpenStudio::Model::ScheduleCompact] OpenStudio ScheduleCompact object
+    # @param schedule_compact [OpenStudio::Model::ScheduleCompact] OpenStudio ScheduleCompact object
     # return [Hash] returns a hash with 'min' and 'max' values
     def self.schedule_compact_get_min_max(schedule_compact)
       vals = []
@@ -102,9 +185,9 @@ module OpenstudioStandards
       return result
     end
 
-    # Returns the ScheduleCompact minimum and maximum values during the winter or summer design day
+    # Returns the ScheduleCompact minimum and maximum values during the winter or summer design day.
     #
-    # @param schedule_constant [OpenStudio::Model::ScheduleCompact] OpenStudio ScheduleCompact object
+    # @param schedule_compact [OpenStudio::Model::ScheduleCompact] OpenStudio ScheduleCompact object
     # @param type [String] 'winter' for the winter design day, 'summer' for the summer design day
     # return [Hash] returns a hash with 'min' and 'max' values
     def self.schedule_compact_get_design_day_min_max(schedule_compact, type = 'winter')
@@ -144,6 +227,34 @@ module OpenstudioStandards
 
       return result
     end
+
+    # @!endgroup Information:ScheduleCompact
+
+    # @!group Information:ScheduleDay
+
+    # Returns the ScheduleDay daily equivalent full load hours (EFLH).
+    #
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
+    # return [Double] The daily total equivalent full load hours for this schedule
+    def self.schedule_day_get_equivalent_full_load_hours(schedule_day)
+      daily_flh = 0
+      values = schedule_day.values
+      times = schedule_day.times
+
+      previous_time_decimal = 0
+      times.each_with_index do |time, i|
+        time_decimal = (time.days * 24.0) + time.hours + (time.minutes / 60.0) + (time.seconds / 3600.0)
+        duration_of_value = time_decimal - previous_time_decimal
+        daily_flh += values[i] * duration_of_value
+        previous_time_decimal = time_decimal
+      end
+
+      return daily_flh
+    end
+
+    # @!endgroup Information:ScheduleDay
+
+    # @!group Information:ScheduleRuleset
 
     # Returns the ScheduleRuleset minimum and maximum values encountered during the run-period.
     # This method does not include summer and winter design day values.
@@ -188,6 +299,112 @@ module OpenstudioStandards
       return result
     end
 
+    # Returns the ScheduleRuleset minimum and maximum values during the winter or summer design day.
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param type [String] 'winter' for the winter design day, 'summer' for the summer design day
+    # return [Hash] returns a hash with 'min' and 'max' values
+    def self.schedule_ruleset_get_design_day_min_max(schedule_ruleset, type = 'winter')
+      if type == 'winter'
+        schedule = schedule_ruleset.winterDesignDaySchedule
+      elsif type == 'summer'
+        schedule = schedule_ruleset.summerDesignDaySchedule
+      end
+
+      if !schedule
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', "#{schedule_ruleset.name} is missing #{type} design day schedule, use default day schedule to process the min max search")
+        schedule = schedule_ruleset.defaultDaySchedule
+      end
+
+      min = nil
+      max = nil
+      schedule.values.each do |value|
+        if min.nil?
+          min = value
+        else
+          min = value if min > value
+        end
+        if max.nil?
+          max = value
+        else
+          max = value if max < value
+        end
+      end
+      result = { 'min' => min, 'max' => max }
+
+      return result
+    end
+
+    # Returns SheduleRuleset equivalent full load hours (EFLH).
+    # For example a fractional schedule of 0.5, 24/7, 365 would return a value of 4380.
+    # This method includes leap days on leap years.
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # return [Double] The total equivalent full load hours for this schedule
+    def self.schedule_ruleset_get_equivalent_full_load_hours(schedule_ruleset)
+      # define the start and end date
+      year_start_date = nil
+      year_end_date = nil
+      if schedule_ruleset.model.yearDescription.is_initialized
+        year_description = schedule_ruleset.model.yearDescription.get
+        year = year_description.assumedYear
+        year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+        year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', 'Year description is not specified. Full load hours calculation will assume 2009, the default year OS uses.')
+        year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
+        year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
+      end
+
+      # Get the ordered list of all the day schedules
+      day_schs = schedule_ruleset.getDaySchedules(year_start_date, year_end_date)
+
+      # Get the array of which schedule is used on each day of the year
+      day_schs_used_each_day = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
+
+      # Create a map that shows how many days each schedule is used
+      day_sch_freq = day_schs_used_each_day.group_by { |n| n }
+
+      # Build a hash that maps schedule day index to schedule day
+      schedule_index_to_day = {}
+      day_schs.each_with_index do |day_sch, i|
+        schedule_index_to_day[day_schs_used_each_day[i]] = day_sch
+      end
+
+      # Loop through each of the schedules that is used, figure out the
+      # full load hours for that day, then multiply this by the number
+      # of days that day schedule applies and add this to the total.
+      annual_flh = 0.0
+      max_daily_flh = 0.0
+      default_day_sch = schedule_ruleset.defaultDaySchedule
+      day_sch_freq.each do |freq|
+        sch_index = freq[0]
+        number_of_days_sch_used = freq[1].size
+
+        # Get the day schedule at this index
+        day_sch = nil
+        day_sch = if sch_index == -1 # If index = -1, this day uses the default day schedule (not a rule)
+                    default_day_sch
+                  else
+                    schedule_index_to_day[sch_index]
+                  end
+        daily_flh = OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(day_sch)
+
+        # Multiply the daily EFLH by the number
+        # of days this schedule is used per year
+        # and add this to the overall total
+        annual_flh += daily_flh * number_of_days_sch_used
+      end
+
+      # Warn if the max daily EFLH is more than 24,
+      # which would indicate that this isn't a fractional schedule.
+      if max_daily_flh > 24
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{schedule_ruleset.name} has more than 24 EFLH in one day schedule, indicating that it is not a fractional schedule.")
+      end
+
+      return annual_flh
+    end
+
     # create OpenStudio TimeSeries object from ScheduleRuleset values
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
@@ -214,7 +431,6 @@ module OpenstudioStandards
 
     # Determine the hour when the schedule first exceeds the starting value and when
     # it goes back down to the ending value at the end of the day.
-    # This method only works for ScheduleRuleset schedules.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [Hash<OpenStudio:Time>] returns as hash with 'start_time', 'end time']
@@ -305,5 +521,7 @@ module OpenstudioStandards
 
       return { 'start_time' => start_time, 'end_time' => end_time }
     end
+
+    # @!endgroup Information:ScheduleRuleset
   end
 end

@@ -2184,20 +2184,10 @@ class Standard
           next if lights_sch.empty?
 
           lights_sch = lights_sch.get
-          if lights_sch.to_ScheduleRuleset.is_initialized
-            lights_sch = lights_sch.to_ScheduleRuleset.get
-            full_load_hrs = schedule_ruleset_annual_equivalent_full_load_hrs(lights_sch)
-            if full_load_hrs > 0
-              ann_op_hrs = full_load_hrs
-              break # Stop after the first schedule with more than 0 hrs
-            end
-          elsif lights_sch.to_ScheduleConstant.is_initialized
-            lights_sch = lights_sch.to_ScheduleConstant.get
-            full_load_hrs = OpenstudioStandards::Schedules.schedule_constant_get_equivalent_full_load_hours(lights_sch)
-            if full_load_hrs > 0
-              ann_op_hrs = full_load_hrs
-              break # Stop after the first schedule with more than 0 hrs
-            end
+          full_load_hrs = OpenStudioStandards::Schedules.schedule_get_equivalent_full_load_hours(lights_sch)
+          if full_load_hrs > 0
+            ann_op_hrs = full_load_hrs
+            break # Stop after the first schedule with more than 0 hrs
           end
         end
         wk_op_hrs = ann_op_hrs / 52.0
@@ -6730,10 +6720,10 @@ class Standard
     schedule_days = {} # key is day_schedule value is hours in day (used to tag profiles)
     sch.scheduleRules.each do |rule|
       schedule_days[rule.daySchedule] = rule.ruleIndex
-      daily_flhs << day_schedule_equivalent_full_load_hrs(rule.daySchedule)
+      daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(rule.daySchedule)
     end
     schedule_days[sch.defaultDaySchedule] = -1
-    daily_flhs << day_schedule_equivalent_full_load_hrs(sch.defaultDaySchedule)
+    daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(sch.defaultDaySchedule)
 
     # get indices for current schedule
     year_description = sch.model.yearDescription.get
@@ -6847,7 +6837,7 @@ class Standard
       end
 
       # test expected value against estimated value
-      daily_flh = day_schedule_equivalent_full_load_hrs(schedule_day)
+      daily_flh = OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(schedule_day)
       percent_change = ((daily_flh - est_daily_flh) / daily_flh) * 100.0
       if percent_change.abs > 0.05
         # @todo this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
@@ -7032,32 +7022,6 @@ class Standard
       end
     end
     return lowest_story
-  end
-
-  # Utility function that returns the min and max value in a design day schedule.
-  #
-  # @todo move this to Standards.Schedule.rb
-  # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
-  # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
-  # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.
-  def search_min_max_value_from_design_day_schedule(schedule, type = 'winter')
-    if schedule.is_initialized
-      schedule = schedule.get
-      if schedule.to_ScheduleRuleset.is_initialized
-        schedule = schedule.to_ScheduleRuleset.get
-        setpoint_min_max = schedule_ruleset_design_day_min_max_value(schedule, type)
-      elsif schedule.to_ScheduleConstant.is_initialized
-        schedule = schedule.to_ScheduleConstant.get
-        # for constant schedule, there is only one value, so the annual should be equal to design condition.
-        setpoint_min_max = OpenstudioStandards::Schedules.schedule_constant_get_min_max(schedule)
-      elsif schedule.to_ScheduleCompact.is_initialized
-        schedule = schedule.to_ScheduleCompact.get
-        setpoint_min_max = OpenstudioStandards::Schedules.schedule_compact_get_design_day_min_max(schedule, type)
-      end
-      return setpoint_min_max
-    end
-    OpenStudio.logFree(OpenStudio::Error, 'openstudio::standards::Schedule', 'Schedule is not exist, or wrong type of schedule (not Ruleset, Compact or Constant), or cannot found the design day schedules. Return 999.9 for min and max')
-    return { 'min' => 999.9, 'max' => 999.9 }
   end
 
   # Identifies non mechanically cooled ("nmc") systems, if applicable

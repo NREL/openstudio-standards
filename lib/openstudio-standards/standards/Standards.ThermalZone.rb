@@ -550,7 +550,7 @@ class Standard
       sch_ruleset.defaultDaySchedule.addValue(times[i], values[i])
     end
 
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Created #{sch_ruleset.name} with #{schedule_ruleset_annual_equivalent_full_load_hrs(sch_ruleset)} annual EFLH.")
+    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Created #{sch_ruleset.name} with #{OpenStudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(sch_ruleset)} annual EFLH.")
 
     return sch_ruleset
   end
