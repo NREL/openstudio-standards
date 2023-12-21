@@ -794,12 +794,6 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
 
-      schedule_types = [
-        'Ruleset',
-        'Constant',
-        'Compact'
-      ]
-
       # cooling delta t
       if std.thermal_zone_cooled?(thermal_zone)
         case thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureInputMethod
@@ -812,16 +806,7 @@ class AppendixGPRMTests < Minitest::Test
             tstat = tstat.get
             setpoint_sch = tstat.coolingSetpointTemperatureSchedule
             if setpoint_sch.is_initialized
-              setpoint_sch = setpoint_sch.get
-              schedule_types.each do |schedule_type|
-                full_objtype_name = "OS_Schedule_#{schedule_type}"
-                if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
-                  setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
-                  # reuse code in Standards.ThermalZone to find tstat max temperature
-                  setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_get_min_max", setpoint_sch)['min']
-                  break
-                end
-              end
+              setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['min']
             end
           end
           if setpoint_c.nil?
@@ -864,14 +849,8 @@ class AppendixGPRMTests < Minitest::Test
               setpoint_sch = tstat.heatingSetpointTemperatureSchedule
               if setpoint_sch.is_initialized
                 setpoint_sch = setpoint_sch.get
-                schedule_types.each do |schedule_type|
-                  full_objtype_name = "OS_Schedule_#{schedule_type}"
-                  if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
-                    setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
-                    # reuse code in Standards.ThermalZone to find tstat max temperature
-                    setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['max']
-                    break
-                  end
+                if setpoint_sch.is_initialized
+                  setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['max']
                 end
               end
             end

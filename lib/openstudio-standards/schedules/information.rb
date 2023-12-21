@@ -23,6 +23,8 @@ module OpenstudioStandards
       when 'OS_Schedule_Year'
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_min_max does not yet support ScheduleYear.')
         result = { 'min' => nil, 'max' => nil }
+      else
+        result = { 'min' => nil, 'max' => nil }
       end
 
       return result
