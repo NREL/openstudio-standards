@@ -175,7 +175,8 @@ class BTAPDatapoint
                                        airloop_economizer_type: @options[:airloop_economizer_type],
                                        shw_scale: @options[:shw_scale],
                                        baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
-                                       tbd_option: @options[:tbd_option]
+                                       tbd_option: @options[:tbd_option],
+                                       necb_hdd: @options[:necb_hdd]
                                        )
       end
 

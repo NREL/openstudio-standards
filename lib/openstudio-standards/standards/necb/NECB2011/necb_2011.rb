@@ -23,6 +23,12 @@ class NECB2011 < Standard
     return variable.to_f
   end
 
+  def convert_arg_to_bool(variable:, default:)
+    return default if variable.nil? || (variable == 'NECB_Default')
+    return false if variable == false
+    return true
+  end
+
   def get_standards_table(table_name:)
     if @standards_data['tables'][table_name].nil?
       message = "Could not find table #{table_name} in database."
@@ -382,6 +388,7 @@ class NECB2011 < Standard
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
+    necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
