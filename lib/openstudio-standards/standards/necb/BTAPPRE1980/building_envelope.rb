@@ -3,7 +3,7 @@ class BTAPPRE1980
   # NECB 3.2.1.4
   def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0, necb_hdd: true)
     # NECB FDWR limit
-    hdd = get_necb_hdd18(model: model, necb_hdd: nech_hdd)
+    hdd = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
 
     # Get the maximum NECB fdwr
     # fdwr_set settings:
