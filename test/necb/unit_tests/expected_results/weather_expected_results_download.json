@@ -308,7 +308,7 @@
     "db990": -26.2
   },
   {
-    "file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "location_name": "CAN-AB-Calgary Intl AP",
     "energy_plus_location_name": "Calgary Intl AP_AB_CAN",
     "country": "CAN",
@@ -392,7 +392,7 @@
     "db990": -25.4
   },
   {
-    "file": "CAN_AB_Fort.McMurray.AP.716890_CWEC2016.epw",
+    "file": "CAN_AB_Fort.Mcmurray.AP.716890_CWEC2020.epw",
     "location_name": "CAN-AB-Fort McMurray AP",
     "energy_plus_location_name": "Fort McMurray AP_AB_CAN",
     "country": "CAN",

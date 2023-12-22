@@ -6,7 +6,7 @@ class NECBRegressionHelper < Minitest::Test
 
   def setup()
     @building_type = 'FullServiceRestaurant'
-    @epw_file = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
+    @epw_file = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
     @template = 'NECB2011'
     @test_dir = "#{File.dirname(__FILE__)}/output"
     @expected_results_folder = "#{File.dirname(__FILE__)}/../expected_results/"

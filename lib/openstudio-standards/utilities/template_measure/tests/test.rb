@@ -104,7 +104,7 @@ class BTAPModelMeasure_Test < Minitest::Test
     BTAP::FileIO.save_osm(model, File.join(File.dirname(__FILE__), 'output', 'saved_file.osm'))
 
     # We can even call the standard methods to apply to the model.
-    necb2011_standard.model_add_design_days_and_weather_file(model, 'NECB HDD Method', 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw')
+    necb2011_standard.model_add_design_days_and_weather_file(model, 'NECB HDD Method', 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2020.epw')
 
     puts BTAP::FileIO.compare_osm_files(before_measure_model, model)
     necb2011_standard.apply_standard_construction_properties(model: model) # standards candidate

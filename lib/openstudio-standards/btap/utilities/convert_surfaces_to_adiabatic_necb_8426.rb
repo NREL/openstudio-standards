@@ -159,7 +159,7 @@ class TestNECBSurfaces8426Custom < CreateDOEPrototypeBuildingTest
     #  'CAN_YT_Whitehorse.719640_CWEC.epw', #CZ 7b - FuelOil1 HDD = 6946
     #  'CAN_NU_Resolute.719240_CWEC.epw', # CZ 8  -FuelOil2 HDD = 12570
     #  'CAN_BC_Prince.George.718960_CWEC.epw',
-    'CAN_QC_Montreal-Trudeau.Intl.AP.716270_CWEC2016.epw'
+    'CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw'
   ]
   building_types.each do |building|
     epw_files.each do |weather|

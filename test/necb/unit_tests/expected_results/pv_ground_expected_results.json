@@ -1,7 +1,7 @@
 [
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "NaturalGas",
     "pv_ground_type": "add_pv_ground",

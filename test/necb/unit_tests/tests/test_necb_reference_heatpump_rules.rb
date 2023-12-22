@@ -46,7 +46,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
 
           # Save baseline model.
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -232,7 +232,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
           # save baseline
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
@@ -333,7 +333,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
           # save baseline
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
@@ -764,7 +764,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
         # save baseline
         BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
@@ -849,7 +849,7 @@ def test_ref_heatpump_heating_low_temp
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
 
         # Save baseline model.
         BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")

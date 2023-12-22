@@ -17,7 +17,7 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
   end
 
   # Additional constant ranges for tests.
-  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
+  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
   Templates = ['NECB2011', 'NECB2015', 'NECB2017']
 
   # @return [Bool] true if successful.

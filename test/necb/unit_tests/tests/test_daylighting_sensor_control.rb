@@ -48,7 +48,7 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
         # # 'SmallHotel',
         'Warehouse'
     ]
-    @epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
+    @epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
     @primary_heating_fuels = ['DefaultFuel']
     @dcv_types = ['No DCV']
     @lighting_types = ['NECB_Default'] #LED  #NECB_Default

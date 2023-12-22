@@ -19,12 +19,12 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
   # Set global weather files sample.
   NECB_epw_files_for_cdn_climate_zones = [
-      'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw', #  CZ 4 HDD = 2932
-      'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw', #    CZ 5 HDD = 3567
-      'CAN_QC_Montreal-Trudeau.Intl.AP.716270_CWEC2016.epw', #CZ 6 HDD = 4563
-      'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', #CZ 7aHDD = 5501
-      'CAN_AB_Fort.McMurray.AP.716890_CWEC2016.epw', #CZ 7b HDD = 6572
-      'CAN_NT_Yellowknife.AP.719360_CWEC2016.epw' # CZ 8HDD = 12570
+      'CAN_BC_Vancouver.Intl.AP.718920_CWEC2020.epw', #  CZ 4 HDD = 2932
+      'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw', #    CZ 5 HDD = 3567
+      'CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw', #CZ 6 HDD = 4563
+      'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw', #CZ 7aHDD = 5501
+      'CAN_AB_Fort.Mcmurray.AP.716890_CWEC2020.epw', #CZ 7b HDD = 6572
+      'CAN_NT_Yellowknife.AP.719360_CWEC2020.epw' # CZ 8HDD = 12570
   ]
 
   # Create scaffolding to create a model with windows, then reset to appropriate values.
