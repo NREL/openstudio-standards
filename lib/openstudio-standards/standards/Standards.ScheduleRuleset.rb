@@ -1,28 +1,6 @@
 class Standard
   # @!group ScheduleRuleset
 
-  # Returns the averaged hourly values of the ruleset schedule for all hours of the year
-  #
-  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  # @return [Array<Double>] An array of hourly values over the whole year
-  def schedule_ruleset_annual_hourly_values(schedule_ruleset)
-    schedule_values = []
-    year_description = schedule_ruleset.model.getYearDescription
-    (1..365).each do |i|
-      date = year_description.makeDate(i)
-      day_sch = schedule_ruleset.getDaySchedules(date, date)[0]
-      (0..23).each do |j|
-        # take average value over the hour
-        value_15 = day_sch.getValue(OpenStudio::Time.new(0, j, 15, 0))
-        value_30 = day_sch.getValue(OpenStudio::Time.new(0, j, 30, 0))
-        value_45 = day_sch.getValue(OpenStudio::Time.new(0, j, 45, 0))
-        avg = (value_15 + value_30 + value_45).to_f / 3.0
-        schedule_values << avg.round(5)
-      end
-    end
-    return schedule_values
-  end
-
   # Remove unused profiles and set most prevalent profile as default
   # When moving profile that isn't lowest priority to default need to address possible issues with overlapping rules dates or days of week
   # method expands on functionality of RemoveUnusedDefaultProfiles measure
@@ -400,107 +378,6 @@ class Standard
     end
 
     return weekday_values
-  end
-
-  # Create a sequential array of values from a ScheduleReset object
-  # Will actually include 24 extra values if model year is a leap year
-  # Will also include 24 values at end of array representing the holiday day schedule
-  # Intended use is for storing fan schedules to hash of ZoneName:SchedArray so schedules
-  # can be saved when HVAC objects are deleted
-  # @author Doug Maddox, PNNL
-  # @param [object] model
-  # @param [Object] schedule_ruleset
-  # @return [Array<Double>] Array of sequential hourly values for year + 24 hours at end for holiday
-  def get_8760_values_from_schedule_ruleset(model, schedule_ruleset)
-    yd = model.getYearDescription
-    start_date = yd.makeDate(1, 1)
-    end_date = yd.makeDate(12, 31)
-
-    day_of_week = start_date.dayOfWeek.valueName
-
-    values = OpenStudio::DoubleVector.new
-    day = OpenStudio::Time.new(1.0)
-    interval = OpenStudio::Time.new(1.0 / 24.0)
-    day_schedules = schedule_ruleset.to_ScheduleRuleset.get.getDaySchedules(start_date, end_date)
-
-    numdays = day_schedules.size
-
-    # Get holiday schedule and append to end of values array
-    day_schedule_holiday = nil
-    schedule_ruleset.to_ScheduleRuleset.get.scheduleRules.each do |week_rule|
-      # If a holiday day type is defined, then store the schedule object for the first occurrence
-      # For now this is not implemented into the 8760 array
-      # if week_rule.applyHoliday
-      #  day_schedule_holiday = week_rule.daySchedule
-      #  break
-      # end
-    end
-    if day_schedule_holiday.nil?
-      day_schedule_holiday = schedule_ruleset.to_ScheduleRuleset.get.defaultDaySchedule
-    end
-    # Currently holidaySchedule is not working in SDK in ScheduleRuleset object
-    # @todo enable the following lines when holidaySchedule is available
-    # if !schedule_ruleset.isHolidayScheduleDefaulted
-    #   day_schedule = schedule_ruleset.to_ScheduleRuleset.get.holidaySchedule
-    # else
-    #  day_schedule = schedule_ruleset.to_ScheduleRuleset.get.defaultSchedule
-    # end
-
-    # Make new array of day schedules for year, and add holiday day schedule to end
-    day_sched_array = []
-    day_schedules.each do |day_schedule|
-      day_sched_array << day_schedule
-    end
-
-    day_sched_array << day_schedule_holiday
-    numdays = day_schedules.size
-
-    day_sched_array.each do |day_schedule|
-      current_hour = interval
-      time_values = day_schedule.times
-      num_times = time_values.size
-      value_sum = 0
-      value_count = 0
-      time_values.each do |until_hr|
-        if until_hr < current_hour
-          # Add to tally for next hour average
-          value_sum += day_schedule.getValue(until_hr).to_f
-          value_count += 1
-        elsif until_hr >= current_hour + interval
-          # Loop through hours to catch current hour up to until_hr
-          while current_hour <= until_hr
-            values << day_schedule.getValue(until_hr).to_f
-            current_hour += interval
-          end
-
-          if (current_hour - until_hr) < interval
-            # This means until_hr is not an even hour break
-            # i.e. there is a sub-hour time step
-            # Increment the sum for averaging
-            value_sum += day_schedule.getValue(until_hr).to_f
-            value_count += 1
-          end
-
-        else
-          # Add to tally for this hour average
-          value_sum += day_schedule.getValue(until_hr).to_f
-          value_count += 1
-          # Calc hour average
-          if value_count > 0
-            value_avg = value_sum / value_count
-          else
-            value_avg = 0
-          end
-          values << value_avg
-          # setup for next hour
-          value_sum = 0
-          value_count = 0
-          current_hour += interval
-        end
-      end
-    end
-
-    return values
   end
 
   # Create a ScheduleRuleset object from an 8760 sequential array of values for a

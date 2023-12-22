@@ -853,10 +853,10 @@ class ASHRAE901PRM < Standard
 
       case schedule_type
       when 'ScheduleRuleset'
-        load_schmax = get_8760_values_from_schedule(model, load_schedule).max
-        load_schmin = get_8760_values_from_schedule(model, load_schedule).min
+        load_schmax = OpenstudioStandards::Schedules.schedule_get_min_max(load_schedule)['max']
+        load_schmin = OpenstudioStandards::Schedules.schedule_get_min_max(load_schedule)['min']
         load_schmode = get_weekday_values_from_8760(model,
-                                                    Array(get_8760_values_from_schedule(model, load_schedule)),
+                                                    Array(OpenstudioStandards::Schedules.schedule_get_hourly_values(load_schedule)),
                                                     value_includes_holiday = true).mode[0]
 
         # AppendixG-2019 G3.1.2.2.1

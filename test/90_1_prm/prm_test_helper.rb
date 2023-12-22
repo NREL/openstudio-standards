@@ -925,10 +925,10 @@ class AppendixGPRMTests < Minitest::Test
 
       case schedule_type
       when 'ScheduleRuleset'
-        load_schmax = std_prm.get_8760_values_from_schedule(model, load_schedule).max
-        load_schmin = std_prm.get_8760_values_from_schedule(model, load_schedule).min
+        load_schmax = OpenstudioStandards::Schedules.schedule_get_min_max(load_schedule)['max']
+        load_schmin = OpenstudioStandards::Schedules.schedule_get_min_max(load_schedule)['min']
         load_schmode = std_prm.get_weekday_values_from_8760(model,
-                                                            Array(std_prm.get_8760_values_from_schedule(model, load_schedule)),
+                                                            Array(OpenstudioStandards::Schedules.schedule_get_hourly_values(load_schedule)),
                                                             value_includes_holiday = true).mode[0]
 
         # AppendixG-2019 G3.1.2.2.1
@@ -2226,7 +2226,7 @@ class AppendixGPRMTests < Minitest::Test
 
   def get_fan_hours_per_week(model, air_loop)
     fan_schedule = air_loop.availabilitySchedule
-    fan_hours_8760 = @prototype_creator.get_8760_values_from_schedule(model, fan_schedule)
+    fan_hours_8760 = @prototype_creator.OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
     fan_hours_52 = []
 
     hr_of_yr = -1

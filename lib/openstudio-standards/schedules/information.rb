@@ -95,6 +95,36 @@ module OpenstudioStandards
       return result
     end
 
+    # Returns an array of average hourly values from a Schedule object
+    # Returns 8760 values, 8784 for leap years.
+    #
+    # @param schedule [OpenStudio::Model::Schedule] OpenStudio Schedule object
+    # @return [Array<Double>] Array of hourly values for the year
+    def self.schedule_get_hourly_values(schedule)
+      case schedule.iddObjectType.valueName.to_s
+      when 'OS_Schedule_Ruleset'
+        schedule = schedule.to_ScheduleRuleset.get
+        result = OpenstudioStandards::Schedules.schedule_ruleset_get_hourly_values(schedule)
+      when 'OS_Schedule_Constant'
+        schedule = schedule.to_ScheduleConstant.get
+        result = OpenstudioStandards::Schedules.schedule_constant_get_hourly_values(schedule)
+      when 'OS_Schedule_Compact'
+        schedule = schedule.to_ScheduleCompact.get
+        result = OpenstudioStandards::Schedules.schedule_compact_get_hourly_values(schedule)
+      when 'OS_Schedule_Year'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_hourly_values does not yet support ScheduleYear schedules.')
+        result = nil
+      when 'OS_Schedule_Interval'
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_hourly_values does not yet support ScheduleInterval schedules.')
+        result = nil
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for schedule_get_hourly_values.")
+        result = nil
+      end
+
+      return result
+    end
+
     # @!endgroup Information
 
     # @!group Information:ScheduleConstant
@@ -135,8 +165,8 @@ module OpenstudioStandards
       return eflh
     end
 
-    # Returns an array of hourly values from a ScheduleConstant object
-    # Will return 8760 values, and 8784 for leap years.
+    # Returns an array of average hourly values from a ScheduleConstant object
+    # Returns 8760 values, 8784 for leap years.
     #
     # @param schedule_constant [OpenStudio::Model::ScheduleConstant] OpenStudio ScheduleConstant object
     # @return [Array<Double>] Array of hourly values for the year
@@ -228,6 +258,27 @@ module OpenstudioStandards
       return result
     end
 
+    # Returns an array of average hourly values from a ScheduleCompact object
+    # Returns 8760 values, 8784 for leap years.
+    #
+    # @param schedule_compact [OpenStudio::Model::ScheduleCompact] OpenStudio ScheduleCompact object
+    # @return [Array<Double>] Array of hourly values for the year
+    def self.schedule_compact_get_hourly_values(schedule_compact)
+      # set a ScheduleTypeLimits if none is present
+      # this is required for the ScheduleTranslator instantiation
+      unless schedule_compact.scheduleTypeLimits.is_initialized
+        schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+        schedule_compact.setScheduleTypeLimits(schedule_type_limits)
+      end
+
+      # convert to a ScheduleRuleset and use its method
+      sch_translator = ScheduleTranslator.new(schedule_compact.model, schedule_compact)
+      schedule_ruleset = sch_translator.convert_schedule_compact_to_schedule_ruleset
+      result = OpenstudioStandards::Schedules.schedule_ruleset_get_hourly_values(schedule_ruleset)
+
+      return result
+    end
+
     # @!endgroup Information:ScheduleCompact
 
     # @!group Information:ScheduleDay
@@ -250,6 +301,38 @@ module OpenstudioStandards
       end
 
       return daily_flh
+    end
+
+
+    # Returns an array of average hourly values from a ScheduleDay object
+    # Returns 24 values
+    #
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
+    # @return [Array<Double>] Array of hourly values for the day
+    def self.schedule_day_get_hourly_values(schedule_day)
+      schedule_values = []
+
+      # determine smallest time interval
+      times = schedule_day.times
+      time_interval_min = 15.0
+      previous_time_decimal = 0.0
+      times.each_with_index do |time, i|
+        time_decimal = (time.days * 24.0 * 60.0) + (time.hours * 60.0) + time.minutes + (time.seconds / 60)
+        interval_min = time_decimal - previous_time_decimal
+        time_interval_min = interval_min if interval_min < time_interval_min
+        previous_time_decimal = time_decimal
+      end
+      time_interval_min = time_interval_min.round(0).to_i
+
+      # get the hourly average by averaging the values in the hour at the smallest time interval
+      (0..23).each do |j|
+        values = []
+        times = (time_interval_min..60).step(time_interval_min).to_a
+        times.each { |t| values << schedule_day.getValue(OpenStudio::Time.new(0, j, t, 0)) }
+        schedule_values << (values.sum / times.size).round(5)
+      end
+
+      return schedule_values
     end
 
     # @!endgroup Information:ScheduleDay
@@ -351,7 +434,7 @@ module OpenstudioStandards
         year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
         year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', 'Year description is not specified. Full load hours calculation will assume 2009, the default year OS uses.')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', 'Year description is not specified. Full load hours calculation will assume 2009, the default year OS uses.')
         year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
         year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
       end
@@ -399,10 +482,45 @@ module OpenstudioStandards
       # Warn if the max daily EFLH is more than 24,
       # which would indicate that this isn't a fractional schedule.
       if max_daily_flh > 24
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{schedule_ruleset.name} has more than 24 EFLH in one day schedule, indicating that it is not a fractional schedule.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', "#{schedule_ruleset.name} has more than 24 EFLH in one day schedule, indicating that it is not a fractional schedule.")
       end
 
       return annual_flh
+    end
+
+    # Returns an array of average hourly values from a ScheduleRuleset object
+    # Returns 8760 values, 8784 for leap years.
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @return [Array<Double>] Array of hourly values for the year
+    def self.schedule_ruleset_get_hourly_values(schedule_ruleset)
+      # define the start and end date
+      year_start_date = nil
+      year_end_date = nil
+      if schedule_ruleset.model.yearDescription.is_initialized
+        year_description = schedule_ruleset.model.yearDescription.get
+        year = year_description.assumedYear
+        year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+        year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', 'Year description is not specified. Annual hours above value calculation will assume 2009, the default year OS uses.')
+        year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
+        year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
+      end
+
+      # Get the ordered list of all the day schedules
+      day_schs = schedule_ruleset.getDaySchedules(year_start_date, year_end_date)
+
+      # Loop through each day schedule and add its hours to total
+      # @todo store the 24 hourly average values for each day schedule instead of recalculating for all days
+      annual_hourly_values = []
+      day_schs.each do |day_sch|
+        # add daily average hourly values to annual hourly values array
+        daily_hours = OpenstudioStandards::Schedules.schedule_day_get_hourly_values(day_sch)
+        daily_hours.each { |h| annual_hourly_values << h }
+      end
+
+      return annual_hourly_values
     end
 
     # Returns the total number of hours where the schedule is greater than the specified value.
@@ -421,7 +539,7 @@ module OpenstudioStandards
         year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
         year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', 'Year description is not specified. Annual hours above value calculation will assume 2009, the default year OS uses.')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', 'Year description is not specified. Annual hours above value calculation will assume 2009, the default year OS uses.')
         year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
         year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
       end
@@ -494,7 +612,7 @@ module OpenstudioStandards
       values = OpenStudio::DoubleVector.new
       day = OpenStudio::Time.new(1.0)
       interval = OpenStudio::Time.new(1.0 / 48.0)
-      day_schedules = schedule_ruleset.to_ScheduleRuleset.get.getDaySchedules(start_date, end_date)
+      day_schedules = schedule_ruleset.getDaySchedules(start_date, end_date)
       day_schedules.each do |day_schedule|
         time = interval
         while time < day

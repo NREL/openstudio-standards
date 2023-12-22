@@ -1191,7 +1191,7 @@ class Standard
             fan_schedule = avail_mgr.schedule
             # fan_sch_translator = ScheduleTranslator.new(model, fan_schedule)
             # fan_sch_ruleset = fan_sch_translator.translate
-            fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+            fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
           end
         end
       end
@@ -1208,7 +1208,7 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Failed to retreive fan object for AirLoop #{air_loop_hvac.name}")
         end
-        fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+        fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
       end
 
       # Assign this schedule to each zone on this air loop
@@ -1229,7 +1229,7 @@ class Standard
           fan_object = zone_hvac_get_fan_object(zone_equipment)
           if !fan_object.nil?
             fan_schedule = fan_object.availabilitySchedule
-            fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+            fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
             fan_sch_names[zone.name.get] = fan_schedule_8760
             break
           end
@@ -1289,36 +1289,6 @@ class Standard
       fan_obj = fan_component.to_FanVariableVolume.get
     end
     return fan_obj
-  end
-
-  # Convert from schedule object to array of hourly values for entire year
-  # Array will include extra 24 values for leap year
-  # Array will also include extra 24 values at end for holiday day type
-  # @author: Doug Maddox, PNNL
-  # @todo consider moving this to Standards.Schedule.rb
-  # @param: model [Object]
-  # @param: fan_schedule [Object]
-  # @return: [Array<String>] annual hourly values from schedule
-  def get_8760_values_from_schedule(model, fan_schedule)
-    sch_object_type = fan_schedule.iddObjectType.valueName.to_s
-    fan_8760 = nil
-    case sch_object_type
-    when 'OS_Schedule_Ruleset'
-      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule)
-    when 'OS_Schedule_Constant'
-      fan_schedule_constant = fan_schedule.to_ScheduleConstant.get
-      fan_8760 = OpenstudioStandards::Schedules.schedule_constant_get_hourly_values(fan_schedule_constant)
-    when 'OS_Schedule_Compact'
-      # First convert to ScheduleRuleset
-      sch_translator = ScheduleTranslator.new(model, fan_schedule)
-      fan_schedule_ruleset = sch_translator.convert_schedule_compact_to_schedule_ruleset
-      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule_ruleset)
-    when 'OS_Schedule_Year'
-      # @todo add function for ScheduleYear
-      # fan_8760 = get_8760_values_from_schedule_year(model, fan_schedule)
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Automated baseline measure does not support use of Schedule Year')
-    end
-    return fan_8760
   end
 
   # Determine the baseline system type given the inputs.  Logic is different for different standards.
