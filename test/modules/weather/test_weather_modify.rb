@@ -19,16 +19,6 @@ class TestWeatherModify < Minitest::Test
   end
 
   def test_model_set_weather_file
-    # meta test of standards test models
-    # test_dir = File.expand_path(File.join(File.dirname(__FILE__), '../../90_1_prm/models'))
-    # puts test_dir
-    # Dir.glob(File.join(test_dir,'*.osm')).each do |osm_file|
-    #   puts osm_file
-    #   model = load_test_model(osm_file)
-    #   wf = model.getWeatherFile
-    #   puts wf.city
-    # end
-
     # load test model from prm tests
     test_dir = File.expand_path(File.join(File.dirname(__FILE__),'../../90_1_prm/models'))
     test_model = "bldg_1.osm"
