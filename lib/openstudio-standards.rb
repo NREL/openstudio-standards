@@ -50,6 +50,7 @@ module OpenstudioStandards
 
   # Weather Module
   require_relative 'openstudio-standards/weather/information'
+  require_relative 'openstudio-standards/weather/modify'
   require_relative 'openstudio-standards/weather/epw'
   require_relative 'openstudio-standards/weather/stat_file'
 

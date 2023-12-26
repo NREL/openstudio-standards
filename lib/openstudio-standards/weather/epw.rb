@@ -110,7 +110,8 @@ module OpenstudioStandards
           wmo: @wmo,
           latitude: @lat,
           longitude: @lon,
-          elevation: @elevation
+          elevation: @elevation,
+          filename: @filename
         }
       end
 

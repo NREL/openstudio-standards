@@ -51,15 +51,16 @@ module OpenstudioStandards
     # @param stat_file [OpenstudioStandards::Weather::StatFile] parsed STAT file object
     def self.model_set_site_water_mains_temperature(model, stat_file)
       water_temp = model.getSiteWaterMainsTemperature
-      water_temp.setAnnualAverageOutdoorAirTemperature(stat_model.mean_dry_bulb)
-      water_temp.setMaximumDifferenceInMonthlyAverageOutdoorAirTemperatures(stat_model.delta_dry_bulb)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "Site Water Mains Temperature mean OA dry bulb is #{stat_model.mean_dry_bulb}. Delta OA dry bulb is #{stat_model.delta_dry_bulb}.")
+      water_temp.setAnnualAverageOutdoorAirTemperature(stat_file.mean_dry_bulb)
+      water_temp.setMaximumDifferenceInMonthlyAverageOutdoorAirTemperatures(stat_file.delta_dry_bulb)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "Site Water Mains Temperature mean OA dry bulb is #{stat_file.mean_dry_bulb}. Delta OA dry bulb is #{stat_file.delta_dry_bulb}.")
     end
 
     # imports design days into the model
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param ddy_model [OpenStudio::Model::Model] OpenStudio model object populated with design day objects
+    # @param ddy_list [Array<String>] list of regular expressions matching design day names to import
     def self.model_set_design_days(model, ddy_model, ddy_list)
       # remove any existing design day objects
       model.getDesignDays.each(&:remove)
@@ -99,10 +100,10 @@ module OpenstudioStandards
       climate_zones = model.getClimateZones
       climate_zones.clear
       if climate_zone.include?('CEC')
-        climate_zones.setClimateZone('CEC', args['climate_zone'].gsub('T24-CEC', ''))
+        climate_zones.setClimateZone('CEC', climate_zone.gsub('T24-CEC', ''))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "Setting Climate Zone to #{climate_zones.getClimateZones('CEC').first.value}")
       elsif climate_zone.include?('ASHRAE')
-        climate_zones.setClimateZone('ASHRAE', args['climate_zone'].gsub('ASHRAE 169-2006-', ''))
+        climate_zones.setClimateZone('ASHRAE', climate_zone.gsub(/ASHRAE .*-.*-/, ''))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "Setting Climate Zone to #{climate_zones.getClimateZones('ASHRAE').first.value}")
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.modify', "Unknown climate zone #{climate_zone}. Climate Zone will not be set.")
@@ -123,8 +124,8 @@ module OpenstudioStandards
       model_set_weather_file(model, epw_file)
       model_set_site_information(model, epw_file)
 
-      stat_file = OpenStudioStandards::Weather::StatFile.load(weather_file_path.gsub('.epw', '.stat'))
-      model_set_water_mains_temperature(model, stat_file)
+      stat_file = OpenstudioStandards::Weather::StatFile.load(weather_file_path.gsub('.epw', '.stat'))
+      model_set_site_water_mains_temperature(model, stat_file)
 
       ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
       if !File.file?(ddy_file_path)
@@ -132,7 +133,7 @@ module OpenstudioStandards
         return false
       end
 
-      ddy_model = OpenStudio::EnergyPlus::loadAndTranslateIdfFile(ddy_file_path).get
+      ddy_model = OpenStudio::EnergyPlus::loadAndTranslateIdf(ddy_file_path).get
       model_set_design_days(model, ddy_model, ddy_list)
 
       if climate_zone.empty?

@@ -95,7 +95,7 @@ module OpenstudioStandards
       end
 
       if ashrae_climate_zone == ''
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather', 'Please assign an ASHRAE Climate Zone to your model.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', 'Please assign an ASHRAE Climate Zone to your model.')
         return false
       else
         cz_number = ashrae_climate_zone.split(//).first.to_i
@@ -103,7 +103,7 @@ module OpenstudioStandards
 
       # expected climate zone number should be 0 through 8
       if ![0, 1, 2, 3, 4, 5, 6, 7, 8].include? cz_number
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather', 'ASHRAE climate zone number is not within expected range of 1 to 8.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', 'ASHRAE climate zone number is not within expected range of 1 to 8.')
         return false
       end
 
@@ -112,7 +112,7 @@ module OpenstudioStandards
 
     # Get absolute path of a weather file included within openstudio-standards
     #
-    # @param weather_file_name [String] Name of a weather file include within openstudio-standards
+    # @param weather_file_name [String] Name of a weather file included within openstudio-standards, including file extension .epw
     # @return [String] Weather file path
     def self.get_standards_weather_file_path(weather_file_name)
       # Define where the weather files lives
@@ -125,12 +125,12 @@ module OpenstudioStandards
 
         # extract to local weather dir
         weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.weather.Model', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.information', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
         FileUtils.mkdir_p(weather_dir)
 
         path_length = "#{weather_dir}/#{weather_file_name}".length
         if path_length > 260
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Weather file path length #{path_length} is >260 characters and may cause issues in Windows environments.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.information', "Weather file path length #{path_length} is >260 characters and may cause issues in Windows environments.")
         end
         File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
         File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
@@ -151,16 +151,66 @@ module OpenstudioStandards
       return weather_file_path
     end
 
+    # Get absolute path of a weather file included within openstudio-standards that is representative of the climate zone
+    #
+    # @param climate_zone [String] Name of a climate zone
+    # @return [String] Weather file absolutepath
     def self.get_representative_weather_file_path_from_climate_zone(climate_zone)
       climate_zone_weather_file_map = climate_zone_weather_file_map()
       weather_file_name = climate_zone_weather_file_map[climate_zone]
       if weather_file_name.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.modify', "Could not determine weather for climate zone: #{climate_zone}")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', "Could not determine weather for climate zone: #{climate_zone}")
         return false
       else
         return get_standards_weather_file_path(weather_file_name)
       end
     end
 
+    # Get a list of regular expressions matching the design day categories
+    #
+    # For looking up design day objects by type
+    # @param category [String] The design day category: All Heating, 
+    def self.ddy_regex_lookup(category)
+      ddy_regex_map = {
+        /Htg 99.6. Condns DB/ => ["All Heating", "Heating DB", "Heating 99.6%"],
+        /Htg 99. Condns DB/ => ["All Heating", "Heating DB", "Heating 99%"],
+        /Htg Wind 99. Condns WS=>MCDB/ => ["All Heating", "Heating Wind", "Heating 99%"],
+        /Clg 1. Condns DB=>MWB/ => ["All Cooling", "Cooling DB", "Cooling 1%"],
+        /Clg 2. Condns DP=>MDB/ => ["All Cooling", "Cooling DP", "Cooling 2%"],
+        /Clg .4. Condns WB=>MDB/ => ["All Cooling", "Cooling WB", "Cooling 0.4%"],
+        /Clg .4. Condns DB=>MWB/ => ["All Cooling", "Cooling DB", "Cooling 0.4%"],
+        /January .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "January", "Cooling DB", "Cooling 0.4%"],
+        /February .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "February", "Cooling DB", "Cooling 0.4%"],
+        /March .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "March", "Cooling DB", "Cooling 0.4%"],
+        /April .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "April", "Cooling DB", "Cooling 0.4%"],
+        /May .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "May", "Cooling DB", "Cooling 0.4%"],
+        /June .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "June", "Cooling DB", "Cooling 0.4%"],
+        /July .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "July", "Cooling DB", "Cooling 0.4%"],
+        /August .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "August", "Cooling DB", "Cooling 0.4%"],
+        /September .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "September", "Cooling DB", "Cooling 0.4%"],
+        /October .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "October", "Cooling DB", "Cooling 0.4%"],
+        /November .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "November", "Cooling DB", "Cooling 0.4%"],
+        /December .4. Condns DB=>MCWB/ => ["All Cooling", "Monthly Cooling", "December", "Cooling DB", "Cooling 0.4%"],
+        /January .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "January", "Cooling WB", "Cooling 0.4%"],
+        /February .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "February", "Cooling WB", "Cooling 0.4%"],
+        /March .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "March", "Cooling WB", "Cooling 0.4%"],
+        /April .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "April", "Cooling WB", "Cooling 0.4%"],
+        /May .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "May", "Cooling WB", "Cooling 0.4%"],
+        /June .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "June", "Cooling WB", "Cooling 0.4%"],
+        /July .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "July", "Cooling WB", "Cooling 0.4%"],
+        /August .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "August", "Cooling WB", "Cooling 0.4%"],
+        /September .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "September", "Cooling WB", "Cooling 0.4%"],
+        /October .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "October", "Cooling WB", "Cooling 0.4%"],
+        /November .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "November", "Cooling WB", "Cooling 0.4%"],
+        /December .4. Condns WB=>MCDB/ => ["All Cooling", "Monthly Cooling", "December", "Cooling WB", "Cooling 0.4%"]
+      }
+      valid = ddy_regex_map.values.flatten.uniq
+      if valid.include?(category)
+        return ddy_regex_map.select{|k,v| v.include?(category)}.keys
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', "Could not find a matching ddy regular expression for entered category #{category}. Valid categories are #{valid}.")
+        # raise
+      end
+    end
   end
 end

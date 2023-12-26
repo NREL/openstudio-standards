@@ -10,7 +10,7 @@ module OpenstudioStandards
       attr_accessor :lon
       attr_accessor :elevation
       attr_accessor :gmt
-      attr_accessor :monthlyDB
+      attr_accessor :monthly_dry_bulb
       attr_accessor :hdd18
       attr_accessor :cdd18
       attr_accessor :hdd10
