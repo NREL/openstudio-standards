@@ -2332,7 +2332,7 @@ class Standard
     sorted_spaces = {}
     model.getSpaces.sort.each do |space|
       # Skip plenum spaces
-      next if space_plenum?(space)
+      next if OpenstudioStandards::Space.space_plenum?(space)
 
       # loop through space surfaces to find min z value
       z_points = []
@@ -4732,7 +4732,7 @@ class Standard
           cat = 'Semiheated'
           # Heated and Cooled
         else
-          res = space_residential?(space)
+          res = OpenstudioStandards::Space.space_residential?(space)
           cat = if res
                   'ResConditioned'
                 else
@@ -4936,7 +4936,7 @@ class Standard
 
       # Determine the space category
       cat = 'NonRes'
-      if space_residential?(space)
+      if OpenstudioStandards::Space.space_residential?(space)
         cat = 'Res'
       end
       # if space.is_semiheated
@@ -4988,7 +4988,7 @@ class Standard
     model.getSpaces.sort.each do |space|
       # Determine the space category
       cat = 'NonRes'
-      if space_residential?(space)
+      if OpenstudioStandards::Space.space_residential?(space)
         cat = 'Res'
       end
       # if space.is_semiheated
@@ -5931,7 +5931,7 @@ class Standard
     res_people_design = 0
     non_res_people_design = 0
     model.getSpaces.sort.each do |space|
-      if space_residential?(space)
+      if OpenstudioStandards::Space.space_residential?(space)
         res_spaces << space
         res_people_design += space.numberOfPeople * space.multiplier
       else

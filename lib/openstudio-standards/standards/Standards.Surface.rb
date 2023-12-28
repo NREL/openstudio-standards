@@ -161,7 +161,7 @@ class Standard
           if tilt_degrees <= max_angle && tilt_degrees >= min_angle
             # If the wall is vertical determine if it is adjacent to a plenum.  If yes include it in the array of
             # plenum walls and add it to the plenum wall area counter (accounting for space multipliers).
-            if space_plenum?(space)
+            if OpenstudioStandards::Space.space_plenum?(space)
               plenum_surfaces << surface
               exp_plenum_area += surface.grossArea * space.multiplier
             else
@@ -235,7 +235,7 @@ class Standard
 
           # Determine if the roof is adjacent to a plenum.
           sub_surface_info = []
-          if space_plenum?(space)
+          if OpenstudioStandards::Space.space_plenum?(space)
             # If the roof is adjacent to a plenum add it to the plenum roof array and the plenum roof area counter
             # (accounting for space multipliers).
             plenum_surfaces << surface

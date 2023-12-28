@@ -570,7 +570,7 @@ class Standard
       # Ignore space if not part of total area
       next unless space.partofTotalFloorArea
 
-      if space_residential?(space)
+      if OpenstudioStandards::Space.space_residential?(space)
         res_area_m2 += space.floorArea
       else
         nonres_area_m2 += space.floorArea
@@ -990,7 +990,7 @@ class Standard
     area_plenum = 0
     area_non_plenum = 0
     thermal_zone.spaces.each do |space|
-      if space_plenum?(space)
+      if OpenstudioStandards::Space.space_plenum?(space)
         area_plenum += space.floorArea
       else
         area_non_plenum += space.floorArea
@@ -1140,7 +1140,7 @@ class Standard
     area_plenum = 0
     area_non_plenum = 0
     thermal_zone.spaces.each do |space|
-      if space_plenum?(space)
+      if OpenstudioStandards::Space.space_plenum?(space)
         area_plenum += space.floorArea
       else
         area_non_plenum += space.floorArea
@@ -1277,7 +1277,7 @@ class Standard
     area_plenum = 0
     area_non_plenum = 0
     thermal_zone.spaces.each do |space|
-      if space_plenum?(space)
+      if OpenstudioStandards::Space.space_plenum?(space)
         area_plenum += space.floorArea
       else
         area_non_plenum += space.floorArea

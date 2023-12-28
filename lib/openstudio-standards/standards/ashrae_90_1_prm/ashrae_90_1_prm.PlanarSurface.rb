@@ -67,7 +67,7 @@ class ASHRAE901PRM < Standard
     # Determine if residential or nonresidential
     # based on the space type.
     occ_type = 'Nonresidential'
-    if space_residential?(space)
+    if OpenstudioStandards::Space.space_residential?(space)
       occ_type = 'Residential'
     end
 

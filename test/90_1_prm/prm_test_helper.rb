@@ -399,7 +399,7 @@ class AppendixGPRMTests < Minitest::Test
       has_res = 'false'
       std = Standard.build("#{template}_#{building_type}")
       model_baseline.getSpaces.sort.each do |space|
-        if std.space_residential?(space)
+        if OpenstudioStandards::Space.space_residential?(space)
           has_res = 'true'
         end
       end
