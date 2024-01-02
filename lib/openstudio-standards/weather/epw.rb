@@ -37,8 +37,12 @@ module OpenstudioStandards
         process_header
       end
 
+      # load an EPW file as an instance of OpenstudioStandards::Weather::Epw
+      #
+      # @param filename [String] full path to EPW file
       def self.load(filename)
         raise "EPW file does not exist: #{filename}" unless File.file?(filename)
+
         f = OpenstudioStandards::Weather::Epw.new(filename)
       end
 
@@ -49,14 +53,8 @@ module OpenstudioStandards
           xml_builder_obj.description do
             xml_builder_obj.cdata!('<img src="kml/ep_header8.png" width=180 align=right><br><table><tr><td colspan="2">'\
                            "<b>#{@city}</b></href></td></tr>\n" +
-                                       # "<tr><td></td><td><b>Data Type</td></tr>\n"+
                                        "<tr><td></td><td>WMO <b>#{@wmo}</b></td></tr>\n" +
-                                       # "<tr><td></td><td>E   3� 15'   N 36� 43'</td></tr>\n"+
-                                       # "<tr><td></td><td><b>25</b> m</td></tr>\n"+
                                        "<tr><td></td><td>Time Zone GMT <b>#{@gmt}</b> hours</td></tr>\n" +
-                                       # "<tr><td></td><td>ASHRAE Std 169 Climate Zone <b>4A - Mixed - Humid</b></td></tr>\n"+
-                                       # "<tr><td></td><td>99% Heating DB=<b>3.1</b>, 1% Cooling DB=<b>33.2</b></td></tr>\n"+
-                                       # "<tr><td></td><td>HDD18 <b>1019</b>, CDD10 <b>2849</b></td></tr>\n"+
                                        "<tr><td></td><td>URL #{url}</td></tr></table>")
           end
           xml_builder_obj.styleUrl '#weatherlocation'
@@ -71,6 +69,9 @@ module OpenstudioStandards
         return @valid
       end
 
+      # save the weather data from EPW file to CSV
+      #
+      # @param filename [String] Path to the file that will be saved. Will overwrite if it exists.
       def save_as(filename)
         File.delete filename if File.exist? filename
         FileUtils.mkdir_p(File.dirname(filename)) unless Dir.exist?(File.dirname(filename))
@@ -101,6 +102,15 @@ module OpenstudioStandards
         prev_length + to_append.weather_data.size == @weather_data.size
       end
 
+      # returns the EPW data as a JSON string
+      #
+      # @return [String] JSON string
+      def to_json(*options)
+        as_json(*options).to_json(*options)
+      end
+
+      private
+
       def as_json(options = {})
         {
           city: @city,
@@ -114,12 +124,6 @@ module OpenstudioStandards
           filename: @filename
         }
       end
-
-      def to_json(*options)
-        as_json(*options).to_json(*options)
-      end
-      
-      private
 
       # initialize
       def process_header

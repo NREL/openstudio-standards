@@ -64,6 +64,9 @@ module OpenstudioStandards
         init
       end
 
+      # load a Stat file as an instance of OpenstudioStandards::Weather::StatFile
+      #
+      # @param filename [String] full path to Stat file
       def self.load(filename)
         raise "Stat file does not exist: #{filename}" unless File.file?(filename)
         f = OpenstudioStandards::Weather::StatFile.new(filename)
@@ -101,39 +104,10 @@ module OpenstudioStandards
         line << "#{@valid}"
       end
 
-      def as_json(options = {})
-        {
-          'path' => @path,
-          'valid' => @valid,
-          'lat' => @lat,
-          'lon' => @lon,
-          'gmt' => @gmt,
-          'elevation' => @elevation,
-          'hdd18' => @hdd18,
-          'cdd18' => @cdd18,
-          'hdd10' => @hdd10,
-          'cdd10' => @cdd10,
-          'monthly_dry_bulb' => @monthly_dry_bulb,
-          'delta_dry_bulb' => @delta_dry_bulb,
-          'mean_dry_bulb' => @mean_dry_bulb,
-          'heating_design_info' => @heating_design_info,
-          'cooling_design_info' => @cooling_design_info,
-          'extremes_design_info' => @extremes_design_info,
-          'climate_zone' => @climate_zone,
-          'standard' => @standard,
-          'summer_wet_months' => @summer_wet_months,
-          'winter_dry_months' => @winter_dry_months,
-          'autumn_months' => @autumn_months,  
-          'spring_months' => @spring_months,
-          'typical_summer_wet_week' => @typical_summer_wet_week,
-          'typical_winter_dry_week' => @typical_winter_dry_week,
-          'typical_autumn_week' => @typical_autumn_week,
-          'typical_spring_week' => @typical_spring_week,
-          'monthly_undis_ground_temps_0p5m' => @monthly_undis_ground_temps_0p5m,
-          'monthly_undis_ground_temps_4p0m' => @monthly_undis_ground_temps_4p0m
-        }
-      end
-
+      # returns the stat data as a JSON string
+      #
+      # @param options [Hash] options to pass to as_json
+      # @return [String] JSON-formatted string
       def to_json(*options)
         as_json(*options).to_json(*options)
       end
@@ -166,7 +140,39 @@ module OpenstudioStandards
       end
   
       private
-  
+
+      def as_json(options = {})
+        {
+          'path' => @path,
+          'valid' => @valid,
+          'lat' => @lat,
+          'lon' => @lon,
+          'gmt' => @gmt,
+          'elevation' => @elevation,
+          'hdd18' => @hdd18,
+          'cdd18' => @cdd18,
+          'hdd10' => @hdd10,
+          'cdd10' => @cdd10,
+          'monthly_dry_bulb' => @monthly_dry_bulb,
+          'delta_dry_bulb' => @delta_dry_bulb,
+          'mean_dry_bulb' => @mean_dry_bulb,
+          'heating_design_info' => @heating_design_info,
+          'cooling_design_info' => @cooling_design_info,
+          'extremes_design_info' => @extremes_design_info,
+          'climate_zone' => @climate_zone,
+          'standard' => @standard,
+          'summer_wet_months' => @summer_wet_months,
+          'winter_dry_months' => @winter_dry_months,
+          'autumn_months' => @autumn_months,  
+          'spring_months' => @spring_months,
+          'typical_summer_wet_week' => @typical_summer_wet_week,
+          'typical_winter_dry_week' => @typical_winter_dry_week,
+          'typical_autumn_week' => @typical_autumn_week,
+          'typical_spring_week' => @typical_spring_week,
+          'monthly_undis_ground_temps_0p5m' => @monthly_undis_ground_temps_0p5m,
+          'monthly_undis_ground_temps_4p0m' => @monthly_undis_ground_temps_4p0m
+        }
+      end
       # initialize
       def init
         if @path.exist?
