@@ -274,6 +274,17 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', 'Set FC factor constructions for slab and below grade walls.')
       end
 
+      # adjust F factor constructions to avoid simulation errors
+      model.getFFactorGroundFloorConstructions.each do |cons|
+        # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons = 0.15/1.95
+        if cons.area <= (0.135 + 0.03 + 0.15/1.95) * cons.perimeterExposed * cons.fFactor
+          # set minimum Rfic to > 1e-3
+          new_area = 0.233 * cons.perimeterExposed * cons.fFactor
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)}.")
+          cons.setArea(new_area)
+        end
+      end
+
       # make construction set and apply to building
       if add_constructions
 
