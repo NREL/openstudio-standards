@@ -848,10 +848,7 @@ class AppendixGPRMTests < Minitest::Test
               tstat = tstat.get
               setpoint_sch = tstat.heatingSetpointTemperatureSchedule
               if setpoint_sch.is_initialized
-                setpoint_sch = setpoint_sch.get
-                if setpoint_sch.is_initialized
-                  setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['max']
-                end
+                setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['max']
               end
             end
             if setpoint_c.nil?
