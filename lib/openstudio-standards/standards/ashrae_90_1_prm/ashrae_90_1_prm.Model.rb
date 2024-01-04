@@ -2126,7 +2126,7 @@ class ASHRAE901PRM < Standard
                   @sizing_run_dir,
                   "Failed to find a matching climate zone #{climate_zone} from the climate zone weather files.")
         weather_file = climate_zone_weather_file_map[climate_zone]
-        stat_file_path = OpenstudioStandards::Weather.get_weather_file_path(weather_file).sub('.epw', '.stat').to_s
+        stat_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file).sub('.epw', '.stat').to_s
       end
 
       ground_temp = OpenStudio::Model::SiteGroundTemperatureFCfactorMethod.new(model)
