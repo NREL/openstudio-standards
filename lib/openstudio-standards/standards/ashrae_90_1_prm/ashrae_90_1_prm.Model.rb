@@ -1152,9 +1152,10 @@ class ASHRAE901PRM < Standard
     preheat_setpoint_c = OpenStudio.convert(preheat_setpoint_f, 'F', 'C').get
 
     # create a new constant schedule and this method will add schedule limit type
-    preheat_coil_sch = model_add_constant_schedule_ruleset(model,
-                                                           preheat_setpoint_c,
-                                                           name = "#{coil_name} Setpoint Temp - #{preheat_setpoint_f.round}F")
+    preheat_coil_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                       preheat_setpoint_c,
+                                                                                       name: "#{coil_name} Setpoint Temp - #{preheat_setpoint_f.round}F",
+                                                                                       schedule_type_limit: 'Temperature')
     preheat_coil_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, preheat_coil_sch)
     preheat_coil_manager.setName("#{coil_name} Preheat Coil Setpoint Manager")
 

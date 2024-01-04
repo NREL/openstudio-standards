@@ -37,9 +37,10 @@ class Standard
     sizing_plant.setLoopType('Cooling')
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
-    chw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                       dsgn_sup_wtr_temp_c,
-                                                       name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F")
+    chw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                   dsgn_sup_wtr_temp_c,
+                                                                                   name: "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F",
+                                                                                   schedule_type_limit: 'Temperature')
     chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, chw_temp_sch)
     chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
     chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
