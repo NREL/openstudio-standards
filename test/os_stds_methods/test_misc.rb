@@ -61,5 +61,5 @@ class TestMisc < Minitest::Test
     # Missing info so look in library; Expected to return an optional material since it is not in the library
     mat_3 = std.model_add_material(model, "U 0.51 SHGC 0.23 Simp G Window")
     assert(mat_3.is_a?(OpenStudio::Model::OptionalMaterial))
-  end 
+  end
 end
