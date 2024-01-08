@@ -437,7 +437,7 @@ module OpenstudioStandards
 
       when 'PVAV with gas heat with electric reheat', 'PVAV with gas coil heat with electric reheat'
         standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones,
-                                       air_loop_heating_type = 'Gas')
+                                       air_loop_heating_type: 'Gas')
 
       when 'PVAV with gas boiler heat with electric reheat'
         standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones)
