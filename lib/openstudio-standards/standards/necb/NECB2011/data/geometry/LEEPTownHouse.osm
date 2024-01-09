@@ -19286,7 +19286,7 @@ OS:Facility,
 
 OS:Building,
   {f084eff1-38e9-4be3-8e15-08183ba5242e}, !- Handle
-  4-storey Stacked THs,                   !- Name
+  LEEPTownHouse,                          !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -19296,7 +19296,7 @@ OS:Building,
   4,                                      !- Standards Number of Stories
   4,                                      !- Standards Number of Above Ground Stories
   ,                                       !- Standards Template
-  ,                                       !- Standards Building Type
+  LEEPTownHouse,                          !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable
   ;                                       !- Nominal Floor to Ceiling Height {m}
