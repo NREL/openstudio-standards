@@ -8,7 +8,7 @@
     "Generator PVWatts 1 - dc_system_capacity": "88032.1359886609",
     "Generator PVWatts 1 - module_type": "Standard",
     "Generator PVWatts 1 - array_type": "FixedOpenRack",
-    "Generator PVWatts 1 - tilt_angle": 51.114,
+    "Generator PVWatts 1 - tilt_angle": 51.11,
     "Generator PVWatts 1 - azimuth_angle": 180.0,
     "Electric Load Center Inverter PVWatts 1 - dc_to_as_size_ratio": 1.1,
     "Electric Load Center Inverter PVWatts 1 - inverter_efficiency": 0.96,
