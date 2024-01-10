@@ -848,10 +848,7 @@ class AppendixGPRMTests < Minitest::Test
               tstat = tstat.get
               setpoint_sch = tstat.heatingSetpointTemperatureSchedule
               if setpoint_sch.is_initialized
-                setpoint_sch = setpoint_sch.get
-                if setpoint_sch.is_initialized
-                  setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['max']
-                end
+                setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['max']
               end
             end
             if setpoint_c.nil?
@@ -2226,7 +2223,7 @@ class AppendixGPRMTests < Minitest::Test
 
   def get_fan_hours_per_week(model, air_loop)
     fan_schedule = air_loop.availabilitySchedule
-    fan_hours_8760 = @prototype_creator.OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
+    fan_hours_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
     fan_hours_52 = []
 
     hr_of_yr = -1
@@ -2671,7 +2668,8 @@ class AppendixGPRMTests < Minitest::Test
     thermal_zone = model.getThermalZoneByName(arguments[0]).get
     tstat = thermal_zone.thermostat.get
     tstat = tstat.to_ThermostatSetpointDualSetpoint.get
-    tstat.setCoolingSetpointTemperatureSchedule(std.model_add_constant_schedule_ruleset(model, 24, name = "#{thermal_zone.name.to_s} Cooling Schedule."))
+    cooling_schedule = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model, 24, name: "#{thermal_zone.name.to_s} Cooling Schedule.", schedule_type_limit: 'Temperature')
+    tstat.setCoolingSetpointTemperatureSchedule(cooling_schedule)
 
     return model
   end
