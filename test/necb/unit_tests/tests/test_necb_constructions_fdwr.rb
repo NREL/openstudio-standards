@@ -150,7 +150,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         standard.apply_fdwr_srr_daylighting(model: @model)
 
         # Store hdd for classifing results.
-        @hdd = standard.get_necb_hdd18(@model)
+        @hdd = standard.get_necb_hdd18(model: @model, necb_hdd: true)
 		
         # Set the infiltration rate at each space.
         @model.getSpaces.sort.each do |space|
