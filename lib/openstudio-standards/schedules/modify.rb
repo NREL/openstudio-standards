@@ -1,7 +1,49 @@
 # Methods to modify existing Schedule objects
 module OpenstudioStandards
   module Schedules
-    # @!group Modify
+    # @!group Modify:ScheduleDay
+
+    # Method to multiply the values in a day schedule by a specified value
+    # The method can optionally apply the multiplier to only values above a lower limit.
+    # This limit prevents multipliers for things like occupancy sensors from affecting unoccupied hours.
+    #
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
+    # @param multiplier [Double] value to multiply schedule values by
+    # @param lower_apply_limit [Double] apply the multiplier to only values above this value
+    # @return [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
+    def self.schedule_day_multiply_by_value(schedule_day, multiplier, lower_apply_limit: nil)
+      # Record the original times and values
+      times = schedule_day.times
+      values = schedule_day.values
+
+      # Remove the original times and values
+      schedule_day.clearValues
+
+      # Create new values by using the multiplier on the original values
+      new_values = []
+      values.each do |value|
+        if lower_apply_limit.nil?
+          new_values << value * multiplier
+        else
+          if value > lower_apply_limit
+            new_values << value * multiplier
+          else
+            new_values << value
+          end
+        end
+      end
+
+      # Add the revised time/value pairs to the schedule
+      new_values.each_with_index do |new_value, i|
+        schedule_day.addValue(times[i], new_value)
+      end
+
+      return schedule_day
+    end
+
+    # @!endgroup Modify:ScheduleDay
+
+    # @!group Modify:ScheduleRuleset
 
     # Increase/decrease by percentage or static value
     #
@@ -441,5 +483,7 @@ module OpenstudioStandards
 
       return schedule
     end
+
+    # @!endgroup Modify:ScheduleRuleset
   end
 end

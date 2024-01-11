@@ -4,7 +4,27 @@ class TestSchedulesModify < Minitest::Test
   def setup
     @sch = OpenstudioStandards::Schedules
   end
-  
+
+  def test_schedule_day_multiply_by_value
+    model = OpenStudio::Model::Model.new
+    test_options = {
+      'name' => 'Simple Schedule',
+      'default_time_value_pairs' => { 8.0 => 0.05, 16.0 => 0.9, 24.0 => 0.05 }
+    }
+    schedule = @sch.create_simple_schedule(model, test_options)
+    @sch.schedule_day_multiply_by_value(schedule.defaultDaySchedule, 1.1)
+    schedule_min_max = @sch.schedule_ruleset_get_min_max(schedule)
+    assert(schedule_min_max['min'] == 0.055)
+    assert(schedule_min_max['max'] == 0.99)
+    schedule.remove
+
+    schedule = @sch.create_simple_schedule(model, test_options)
+    @sch.schedule_day_multiply_by_value(schedule.defaultDaySchedule, 1.1, lower_apply_limit: 0.1)
+    schedule_min_max = @sch.schedule_ruleset_get_min_max(schedule)
+    assert(schedule_min_max['min'] == 0.05)
+    assert(schedule_min_max['max'] == 0.99)
+  end
+
   def test_schedule_ruleset_simple_value_adjust
     model = OpenStudio::Model::Model.new
     test_options = {
