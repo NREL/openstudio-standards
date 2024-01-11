@@ -2,7 +2,7 @@ module OpenstudioStandards
   # The CreateTypical module provides methods to create and modify an entire building energy model of a typical building
   module CreateTypical
     # @!group Space Type Blending
-    # Methods to splend space types together
+    # Methods to blend space types together
 
     # get all loads for a space or space type and place in hash by type
     #
