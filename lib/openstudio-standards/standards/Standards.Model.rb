@@ -63,6 +63,16 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Boolean] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    # enforce the user model to be a non-leap year, defaulting to 2009 if the model year is a leap year
+    if user_model.yearDescription.is_initialized
+      year_description = user_model.yearDescription.get
+      if year_description.isLeapYear
+        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+          "The user model year #{year_description.assumedYear} is a leap year. Changing to 2009, a non-leap year, as required by PRM guidelines.")
+        year_description.setCalendarYear(2009)
+      end
+    end
+
     if create_proposed_model
       # Perform a user model design day run only to make sure
       # that the user model is valid, i.e. can run without major
