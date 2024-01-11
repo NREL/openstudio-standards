@@ -13,7 +13,6 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     define_std_ranges
   end
 
-
   # Test to validate the boiler thermal efficiency generated against expected values.
   #  Makes use of the template design pattern with the work done by the do_ method below (i.e. 'do_' prepended to the current method name)
   def no_test_boiler_efficiency
@@ -49,8 +48,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   def do_test_boiler_efficiency(test_pars:, test_case:)
 
     # Debug.
-    #puts JSON.pretty_generate(test_pars)
-    #puts JSON.pretty_generate(test_case)
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
@@ -132,7 +131,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   # if capacity <= 176 kW ---> one single stage boiler
   # if capacity > 176 kW and <= 352 kW ---> 2 boilers of equal capacity
   # if capacity > 352 kW ---> one modulating boiler down to 25% of capacity"
-  def no_test_number_of_boilers
+  def test_number_of_boilers
+    logger.info "Starting: #{__method__}"
 
     # Define test parameters.
     test_parameters = {test_method: __method__,
@@ -160,6 +160,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     msg = "Boiler efficiencies test results do not match what is expected in test"
     file_compare(expected_results_file: expected_results_json, test_results_file: test_results, msg: msg, type: 'json_data')
 
+    logger.info "Finished: #{__method__}"
   end
   
   # Companion method to test_number_of_boilers that runs a specific test.
@@ -168,8 +169,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   def do_test_number_of_boilers(test_pars:, test_case:)
     
     # Debug.
-    puts JSON.pretty_generate(test_pars)
-    puts JSON.pretty_generate(test_case)
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
@@ -219,7 +220,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Run sizing. Is this required?
       run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
     rescue => error
-      puts "Something went wrong! #{error.message}"
+      logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
     
     # Check that there are two boilers in the model. BTAP sets the second boiler to 0.001 W if the rules say only one boiler required.
@@ -355,6 +356,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     #File.write(file_name, JSON.pretty_generate(loop_json))
 
     # Define test parameters. Remaining parameters for a specific test come from the json file.
+    logger.info "Starting: #{__method__}"
+    
     test_parameters = {test_method: __method__,
                        save_intermediate_models: false,
                        mau_type: true, 
@@ -377,16 +380,18 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     # Check if test results match expected.
     msg = "Boiler efficiencies test results do not match what is expected in test"
     file_compare(expected_results_file: expected_results_json, test_results_file: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished: #{__method__}"
   end
 
   # Companion method to test_custom_efficiency that runs a specific test.
   # test_pars has the initially defined parameters plus where we are in the nexted results hash.
   # test_case has the specific test parameters.
   def do_test_custom_efficiency(test_pars:, test_case:)
+    logger.info "Starting: #{__method__}"
 
     # Debug.
-    puts JSON.pretty_generate(test_pars)
-    puts JSON.pretty_generate(test_case)
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
@@ -440,7 +445,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Customize the efficiency.
       standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: cust_eff_test)
     rescue => error
-      puts "Something went wrong! #{error.message}"
+      logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
 
     # Extract the results for checking. There are always two boilers.
@@ -522,5 +527,5 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       }
     end
   end
-
+  logger.info "Finished: #{__method__}"
 end

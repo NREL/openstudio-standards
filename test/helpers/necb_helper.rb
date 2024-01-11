@@ -1,4 +1,5 @@
 # Additional methods for NECB tests
+require 'logger'
 require 'fileutils'
 require 'pathname'
 require 'json'
@@ -20,7 +21,23 @@ class Integer
   end
 end
 
+
 module NecbHelper
+
+  # Create a logger for the tests.
+  def logger
+    NecbHelper.logger
+  end
+
+  # Global, memoized, lazy initialized instance of a logger
+  def self.logger
+    logfile = "#{__dir__}/../necb/unit_tests/log.txt"
+    @logger ||= Logger.new(logfile, File::WRONLY | File::APPEND)
+  end
+
+  # Set the logging level
+  logger.info!
+
   # Hold an array of the instantiated standards (to save recreating them all the time).
   @@standards = []
 
