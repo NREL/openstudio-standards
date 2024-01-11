@@ -68,7 +68,7 @@ class Standard
       year_description = user_model.yearDescription.get
       if year_description.isLeapYear
         OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-          "The user model year #{year_description.assumedYear} is a leap year. Changing to 2009, a non-leap year, as required by PRM guidelines.")
+                           "The user model year #{year_description.assumedYear} is a leap year. Changing to 2009, a non-leap year, as required by PRM guidelines.")
         year_description.setCalendarYear(2009)
       end
     end
