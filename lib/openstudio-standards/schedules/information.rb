@@ -346,38 +346,34 @@ module OpenstudioStandards
     # @return [Hash] returns a hash with 'min' and 'max' values
     def self.schedule_ruleset_get_min_max(schedule_ruleset)
       # validate schedule
-      if schedule_ruleset.to_ScheduleRuleset.is_initialized
-        schedule = schedule_ruleset.to_ScheduleRuleset.get
+      unless schedule_ruleset.to_ScheduleRuleset.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_min_max() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        return nil
+      end
 
-        # gather profiles
-        profiles = []
-        profiles << schedule.defaultDaySchedule
-        rules = schedule.scheduleRules
-        rules.each do |rule|
-          profiles << rule.daySchedule
-        end
+      # gather profiles
+      profiles = []
+      profiles << schedule_ruleset.defaultDaySchedule
+      schedule_ruleset.scheduleRules.each { |rule| profiles << rule.daySchedule }
 
-        # test profiles
-        min = nil
-        max = nil
-        profiles.each do |profile|
-          profile.values.each do |value|
-            if min.nil?
-              min = value
-            else
-              if min > value then min = value end
-            end
-            if max.nil?
-              max = value
-            else
-              if max < value then max = value end
-            end
+      # test profiles
+      min = nil
+      max = nil
+      profiles.each do |profile|
+        profile.values.each do |value|
+          if min.nil?
+            min = value
+          else
+            if min > value then min = value end
+          end
+          if max.nil?
+            max = value
+          else
+            if max < value then max = value end
           end
         end
-        result = { 'min' => min, 'max' => max }
-      else
-        result = nil
       end
+      result = { 'min' => min, 'max' => max }
 
       return result
     end
@@ -388,6 +384,12 @@ module OpenstudioStandards
     # @param type [String] 'winter' for the winter design day, 'summer' for the summer design day
     # return [Hash] returns a hash with 'min' and 'max' values
     def self.schedule_ruleset_get_design_day_min_max(schedule_ruleset, type = 'winter')
+      # validate schedule
+      unless schedule_ruleset.to_ScheduleRuleset.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_design_day_min_max() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        return nil
+      end
+
       if type == 'winter'
         schedule = schedule_ruleset.winterDesignDaySchedule
       elsif type == 'summer'
@@ -425,6 +427,12 @@ module OpenstudioStandards
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # return [Double] The total equivalent full load hours for this schedule
     def self.schedule_ruleset_get_equivalent_full_load_hours(schedule_ruleset)
+      # validate schedule
+      unless schedule_ruleset.to_ScheduleRuleset.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_equivalent_full_load_hours() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        return nil
+      end
+
       # define the start and end date
       year_start_date = nil
       year_end_date = nil
@@ -494,6 +502,12 @@ module OpenstudioStandards
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [Array<Double>] Array of hourly values for the year
     def self.schedule_ruleset_get_hourly_values(schedule_ruleset)
+      # validate schedule
+      unless schedule_ruleset.to_ScheduleRuleset.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_hourly_values() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        return nil
+      end
+
       # define the start and end date
       year_start_date = nil
       year_end_date = nil
@@ -530,6 +544,12 @@ module OpenstudioStandards
     # @param lower_limit [Double] the lower limit.  Values equal to the limit will not be counted.
     # @return [Double] The total number of hours this schedule is above the specified value.
     def self.schedule_ruleset_get_hours_above_value(schedule_ruleset, lower_limit)
+      # validate schedule
+      unless schedule_ruleset.to_ScheduleRuleset.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_hours_above_value() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        return nil
+      end
+
       # define the start and end date
       year_start_date = nil
       year_end_date = nil
@@ -605,6 +625,12 @@ module OpenstudioStandards
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [OpenStudio::TimeSeries] OpenStudio TimeSeries object of schedule values
     def self.schedule_ruleset_get_timeseries(schedule_ruleset)
+      # validate schedule
+      unless schedule_ruleset.to_ScheduleRuleset.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_timeseries() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        return nil
+      end
+
       yd = schedule_ruleset.model.getYearDescription
       start_date = yd.makeDate(1, 1)
       end_date = yd.makeDate(12, 31)
@@ -630,11 +656,11 @@ module OpenstudioStandards
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [Hash<OpenStudio:Time>] returns as hash with 'start_time', 'end time']
     def self.schedule_ruleset_get_start_and_end_times(schedule_ruleset)
-      # Ensure that this is a ScheduleRuleset
-      schedule_ruleset = schedule_ruleset.to_ScheduleRuleset
-      return [nil, nil] if schedule_ruleset.empty?
-
-      schedule_ruleset = schedule_ruleset.get
+      # validate schedule
+      unless schedule_ruleset.to_ScheduleRuleset.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_start_and_end_times() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        return [nil, nil]
+      end
 
       # Define the start and end date
       if schedule_ruleset.model.yearDescription.is_initialized
