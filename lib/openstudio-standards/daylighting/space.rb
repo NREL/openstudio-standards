@@ -3,7 +3,6 @@ module OpenstudioStandards
   module Daylighting
     # @!group Space
 
-
     # add a daylight sensor to a space
     #
     # @param space [OpenStudio::Model::Space] OpenStudio Space object

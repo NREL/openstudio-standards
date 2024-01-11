@@ -3160,7 +3160,6 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param material_name [String] name of the material
   # @return [OpenStudio::Model::Material] material object
-  # @todo make return an OptionalMaterial
   def model_add_material(model, material_name)
     # First check model and return material if it already exists
     model.getMaterials.sort.each do |material|
@@ -3170,19 +3169,64 @@ class Standard
       end
     end
 
-    # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding material: #{material_name}")
-
     # Get the object data
-    data = model_find_object(standards_data['materials'], 'name' => material_name)
-    unless data
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
-      return false
-      # @todo change to return empty optional material
+    # For Simple Glazing materials:
+    # Attempt to get properties from the name of the material
+    material_type = nil
+    if material_name.downcase.include?('simple glazing')
+      material_type = 'SimpleGlazing'
+      u_factor = nil
+      shgc = nil
+      vt = nil
+      material_name.split.each_with_index do |item, i|
+        prop_value = material_name.split[i + 1].to_f
+        if item == 'U'
+          unless u_factor.nil?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Multiple U-Factor values have been identified for #{material_name}: previous = #{u_factor}, new = #{prop_value}. Please check the material name. New U-Factor will be used.")
+          end
+          u_factor = prop_value
+        elsif item == 'SHGC'
+          unless shgc.nil?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Multiple SHGC values have been identified for #{material_name}: previous = #{shgc}, new = #{prop_value}. Please check the material name. New SHGC will be used.")
+          end
+          shgc = prop_value
+        elsif item == 'VT'
+          unless vt.nil?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Multiple VT values have been identified for #{material_name}: previous = #{vt}, new = #{prop_value}. Please check the material name. New SHGC will be used.")
+          end
+          vt = prop_value
+        end
+      end
+      if u_factor.nil? && shgc.nil? && vt.nil?
+        material_type = nil
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Properties of the simple glazing material named #{material_name} could not be identified from its name.")
+      else
+        if u_factor.nil?
+          u_factor = 1.23
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find the U-Factor for the simple glazing material named #{material_name}, a default value of 1.23 is used.")
+        end
+        if shgc.nil?
+          shgc = 0.61
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find the SHGC for the simple glazing material named #{material_name}, a default value of 0.61 is used.")
+        end
+        if vt.nil?
+          vt = 0.81
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find the VT for the simple glazing material named #{material_name}, a default value of 0.81 is used.")
+        end
+      end
+    end
+    # If no properties could be found or the material
+    # is not of the simple glazing type, search the database
+    if material_type.nil?
+      data = model_find_object(standards_data['materials'], 'name' => material_name)
+      unless data
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
+        return OpenStudio::Model::OptionalMaterial.new
+      end
+      material_type = data['material_type']
     end
 
     material = nil
-    material_type = data['material_type']
-
     if material_type == 'StandardOpaqueMaterial'
       material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
       material.setName(material_name)
@@ -3222,9 +3266,9 @@ class Standard
       material = OpenStudio::Model::SimpleGlazing.new(model)
       material.setName(material_name)
 
-      material.setUFactor(OpenStudio.convert(data['u_factor'].to_f, 'Btu/hr*ft^2*R', 'W/m^2*K').get)
-      material.setSolarHeatGainCoefficient(data['solar_heat_gain_coefficient'].to_f)
-      material.setVisibleTransmittance(data['visible_transmittance'].to_f)
+      material.setUFactor(OpenStudio.convert(u_factor.to_f, 'Btu/hr*ft^2*R', 'W/m^2*K').get)
+      material.setSolarHeatGainCoefficient(shgc.to_f)
+      material.setVisibleTransmittance(vt.to_f)
 
     elsif material_type == 'StandardGlazing'
       material = OpenStudio::Model::StandardGlazing.new(model)
