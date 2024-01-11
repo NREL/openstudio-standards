@@ -495,7 +495,7 @@ module OpenstudioStandards
 
           compare_hash = {}
           if !stories_flat.empty?
-            stories_flat.last.each { |k, v| compare_hash[k] = flat_hash[k] if flat_hash[k] != v }
+            stories_flat.last.each { |s, m| compare_hash[s] = flat_hash[s] if flat_hash[s] != m }
           end
           if (bar_hash[:story_multiplier_method] != 'None' && stories_flat.last == flat_hash) || (bar_hash[:story_multiplier_method] != 'None' && compare_hash.size == 1 && compare_hash.include?(:multiplier))
             stories_flat.last[:multiplier] += v[:story_min_multiplier]
