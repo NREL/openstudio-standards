@@ -1,7 +1,8 @@
-# Methods to create typical models
 module OpenstudioStandards
+  # The CreateTypical module provides methods to create and modify an entire building energy model of a typical building
   module CreateTypical
     # @!group CreateTypical
+    # Methods to create typical models
 
     # create typical building from model
     # creates a complete energy model from model with defined geometry and standards space type assignments

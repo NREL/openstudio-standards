@@ -1,7 +1,8 @@
-# Method to apply a typical CBECS HVAC system to thermal zones
 module OpenstudioStandards
+  # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
     # @!group Setpoint Managers:Information
+    # Methods to get information about setpoint managers
 
     # Get the min and max setpoint values for a setpoint manager
     #

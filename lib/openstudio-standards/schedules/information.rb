@@ -1,8 +1,8 @@
-# Methods to get information from Schedule objects
-# Many of these methods may be moved to core OpenStudio
 module OpenstudioStandards
+  # The Schedules module provides methods to create, modify, and get information about Schedule objects
   module Schedules
     # @!group Information
+    # Methods to get information about Schedule objects
 
     # add general schedule_min_max(schedule) method and merge with other methods
 

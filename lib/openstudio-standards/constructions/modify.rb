@@ -1,7 +1,8 @@
-# Methods to modify construction properties
 module OpenstudioStandards
+  # The Constructions module provides methods create, modify, and get information about model Constructions
   module Constructions
     # @!group Modify
+    # Methods to modify Constructions
 
     # add new material layer to a construction
     #
