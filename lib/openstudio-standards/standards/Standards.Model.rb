@@ -1191,7 +1191,7 @@ class Standard
             fan_schedule = avail_mgr.schedule
             # fan_sch_translator = ScheduleTranslator.new(model, fan_schedule)
             # fan_sch_ruleset = fan_sch_translator.translate
-            fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+            fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
           end
         end
       end
@@ -1208,7 +1208,7 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Failed to retreive fan object for AirLoop #{air_loop_hvac.name}")
         end
-        fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+        fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
       end
 
       # Assign this schedule to each zone on this air loop
@@ -1229,7 +1229,7 @@ class Standard
           fan_object = zone_hvac_get_fan_object(zone_equipment)
           if !fan_object.nil?
             fan_schedule = fan_object.availabilitySchedule
-            fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+            fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
             fan_sch_names[zone.name.get] = fan_schedule_8760
             break
           end
@@ -1289,36 +1289,6 @@ class Standard
       fan_obj = fan_component.to_FanVariableVolume.get
     end
     return fan_obj
-  end
-
-  # Convert from schedule object to array of hourly values for entire year
-  # Array will include extra 24 values for leap year
-  # Array will also include extra 24 values at end for holiday day type
-  # @author: Doug Maddox, PNNL
-  # @todo consider moving this to Standards.Schedule.rb
-  # @param: model [Object]
-  # @param: fan_schedule [Object]
-  # @return: [Array<String>] annual hourly values from schedule
-  def get_8760_values_from_schedule(model, fan_schedule)
-    sch_object_type = fan_schedule.iddObjectType.valueName.to_s
-    fan_8760 = nil
-    case sch_object_type
-    when 'OS_Schedule_Ruleset'
-      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule)
-    when 'OS_Schedule_Constant'
-      fan_schedule_constant = fan_schedule.to_ScheduleConstant.get
-      fan_8760 = get_8760_values_from_schedule_constant(model, fan_schedule_constant)
-    when 'OS_Schedule_Compact'
-      # First convert to ScheduleRuleset
-      sch_translator = ScheduleTranslator.new(model, fan_schedule)
-      fan_schedule_ruleset = sch_translator.convert_schedule_compact_to_schedule_ruleset
-      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule_ruleset)
-    when 'OS_Schedule_Year'
-      # @todo add function for ScheduleYear
-      # fan_8760 = get_8760_values_from_schedule_year(model, fan_schedule)
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Automated baseline measure does not support use of Schedule Year')
-    end
-    return fan_8760
   end
 
   # Determine the baseline system type given the inputs.  Logic is different for different standards.
@@ -2184,20 +2154,10 @@ class Standard
           next if lights_sch.empty?
 
           lights_sch = lights_sch.get
-          if lights_sch.to_ScheduleRuleset.is_initialized
-            lights_sch = lights_sch.to_ScheduleRuleset.get
-            full_load_hrs = schedule_ruleset_annual_equivalent_full_load_hrs(lights_sch)
-            if full_load_hrs > 0
-              ann_op_hrs = full_load_hrs
-              break # Stop after the first schedule with more than 0 hrs
-            end
-          elsif lights_sch.to_ScheduleConstant.is_initialized
-            lights_sch = lights_sch.to_ScheduleConstant.get
-            full_load_hrs = schedule_constant_annual_equivalent_full_load_hrs(lights_sch)
-            if full_load_hrs > 0
-              ann_op_hrs = full_load_hrs
-              break # Stop after the first schedule with more than 0 hrs
-            end
+          full_load_hrs = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(lights_sch)
+          if full_load_hrs > 0
+            ann_op_hrs = full_load_hrs
+            break # Stop after the first schedule with more than 0 hrs
           end
         end
         wk_op_hrs = ann_op_hrs / 52.0
@@ -2903,142 +2863,6 @@ class Standard
     end
 
     return desired_object
-  end
-
-  # Create constant ScheduleRuleset
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param value [Double] the value to use, 24-7, 365
-  # @param name [String] the name of the schedule
-  # @param sch_type_limit [String] the name of a schedule type limit
-  #   options are Temperature, Humidity Ratio, Fractional, OnOff, and Activity
-  # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  def model_add_constant_schedule_ruleset(model,
-                                          value,
-                                          name = nil,
-                                          sch_type_limit: 'Temperature')
-    # check to see if schedule exists with same name and constant value and return if true
-    unless name.nil?
-      existing_sch = model.getScheduleRulesetByName(name)
-      if existing_sch.is_initialized
-        existing_sch = existing_sch.get
-        existing_day_sch_vals = existing_sch.defaultDaySchedule.values
-        if existing_day_sch_vals.size == 1 && (existing_day_sch_vals[0] - value).abs < 1.0e-6
-          return existing_sch
-        end
-      end
-    end
-
-    schedule = OpenStudio::Model::ScheduleRuleset.new(model)
-    unless name.nil?
-      schedule.setName(name)
-      schedule.defaultDaySchedule.setName("#{name} Default")
-    end
-
-    if !sch_type_limit.nil?
-      sch_type_limits_obj = model_add_schedule_type_limits(model, standard_sch_type_limit: sch_type_limit)
-      schedule.setScheduleTypeLimits(sch_type_limits_obj)
-    end
-
-    schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
-    return schedule
-  end
-
-  # Create ScheduleTypeLimits
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param standard_sch_type_limit [String] the name of a standard schedule type limit with predefined limits
-  #   options are Dimensionless, Temperature, Humidity Ratio, Fractional, OnOff, and Activity
-  # @param name [String] the name of the schedule type limits
-  # @param lower_limit_value [double] the lower limit value for the schedule type
-  # @param upper_limit_value [double] the upper limit value for the schedule type
-  # @param numeric_type [String] the numeric type, options are Continuous or Discrete
-  # @param unit_type [String] the unit type, options are defined in EnergyPlus I/O reference
-  # @return [OpenStudio::Model::ScheduleTypeLimits] schedule type limits
-  def model_add_schedule_type_limits(model,
-                                     standard_sch_type_limit: nil,
-                                     name: nil,
-                                     lower_limit_value: nil,
-                                     upper_limit_value: nil,
-                                     numeric_type: nil,
-                                     unit_type: nil)
-
-    if standard_sch_type_limit.nil?
-      if lower_limit_value.nil? || upper_limit_value.nil? || numeric_type.nil? || unit_type.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'If calling model_add_schedule_type_limits without a standard_sch_type_limit, you must specify all properties of ScheduleTypeLimits.')
-        return false
-      end
-      schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-      schedule_type_limits.setName(name) if !name.nil?
-      schedule_type_limits.setLowerLimitValue(lower_limit_value)
-      schedule_type_limits.setUpperLimitValue(upper_limit_value)
-      schedule_type_limits.setNumericType(numeric_type)
-      schedule_type_limits.setUnitType(unit_type)
-    else
-      schedule_type_limits = model.getScheduleTypeLimitsByName(standard_sch_type_limit)
-      if !schedule_type_limits.empty?
-        schedule_type_limits = schedule_type_limits.get
-        if schedule_type_limits.name.to_s.downcase == 'temperature'
-          schedule_type_limits.resetLowerLimitValue
-          schedule_type_limits.resetUpperLimitValue
-          schedule_type_limits.setNumericType('Continuous')
-          schedule_type_limits.setUnitType('Temperature')
-        end
-      else
-        case standard_sch_type_limit.downcase
-          when 'dimensionless'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Dimensionless')
-            schedule_type_limits.setLowerLimitValue(0.0)
-            schedule_type_limits.setUpperLimitValue(1000.0)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('Dimensionless')
-
-          when 'temperature'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Temperature')
-            schedule_type_limits.setLowerLimitValue(0.0)
-            schedule_type_limits.setUpperLimitValue(100.0)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('Temperature')
-
-          when 'humidity ratio'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Humidity Ratio')
-            schedule_type_limits.setLowerLimitValue(0.0)
-            schedule_type_limits.setUpperLimitValue(0.3)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('Dimensionless')
-
-          when 'fraction', 'fractional'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Fraction')
-            schedule_type_limits.setLowerLimitValue(0.0)
-            schedule_type_limits.setUpperLimitValue(1.0)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('Dimensionless')
-
-          when 'onoff'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('OnOff')
-            schedule_type_limits.setLowerLimitValue(0)
-            schedule_type_limits.setUpperLimitValue(1)
-            schedule_type_limits.setNumericType('Discrete')
-            schedule_type_limits.setUnitType('Availability')
-
-          when 'activity'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Activity')
-            schedule_type_limits.setLowerLimitValue(70.0)
-            schedule_type_limits.setUpperLimitValue(1000.0)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('ActivityLevel')
-          else
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Invalid standard_sch_type_limit for method model_add_schedule_type_limits.')
-        end
-      end
-    end
-    return schedule_type_limits
   end
 
   # Create a schedule from the openstudio standards dataset and add it to the model.
@@ -6753,7 +6577,7 @@ class Standard
     end
 
     # gather and store data for scheduleRuleset
-    min_max = schedule_ruleset_annual_min_max_value(sch)
+    min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(sch)
     ruleset_hash = { floor: min_max['min'], ceiling: min_max['max'], target: load_inst, hoo_inputs: hours_of_operation }
     parametric_inputs[sch] = ruleset_hash
 
@@ -6774,10 +6598,10 @@ class Standard
     schedule_days = {} # key is day_schedule value is hours in day (used to tag profiles)
     sch.scheduleRules.each do |rule|
       schedule_days[rule.daySchedule] = rule.ruleIndex
-      daily_flhs << day_schedule_equivalent_full_load_hrs(rule.daySchedule)
+      daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(rule.daySchedule)
     end
     schedule_days[sch.defaultDaySchedule] = -1
-    daily_flhs << day_schedule_equivalent_full_load_hrs(sch.defaultDaySchedule)
+    daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(sch.defaultDaySchedule)
 
     # get indices for current schedule
     year_description = sch.model.yearDescription.get
@@ -6891,7 +6715,7 @@ class Standard
       end
 
       # test expected value against estimated value
-      daily_flh = day_schedule_equivalent_full_load_hrs(schedule_day)
+      daily_flh = OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(schedule_day)
       percent_change = ((daily_flh - est_daily_flh) / daily_flh) * 100.0
       if percent_change.abs > 0.05
         # @todo this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
@@ -7076,32 +6900,6 @@ class Standard
       end
     end
     return lowest_story
-  end
-
-  # Utility function that returns the min and max value in a design day schedule.
-  #
-  # @todo move this to Standards.Schedule.rb
-  # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
-  # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
-  # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.
-  def search_min_max_value_from_design_day_schedule(schedule, type = 'winter')
-    if schedule.is_initialized
-      schedule = schedule.get
-      if schedule.to_ScheduleRuleset.is_initialized
-        schedule = schedule.to_ScheduleRuleset.get
-        setpoint_min_max = schedule_ruleset_design_day_min_max_value(schedule, type)
-      elsif schedule.to_ScheduleConstant.is_initialized
-        schedule = schedule.to_ScheduleConstant.get
-        # for constant schedule, there is only one value, so the annual should be equal to design condition.
-        setpoint_min_max = schedule_constant_annual_min_max_value(schedule)
-      elsif schedule.to_ScheduleCompact.is_initialized
-        schedule = schedule.to_ScheduleCompact.get
-        setpoint_min_max = schedule_compact_design_day_min_max_value(schedule, type)
-      end
-      return setpoint_min_max
-    end
-    OpenStudio.logFree(OpenStudio::Error, 'openstudio::standards::Schedule', 'Schedule is not exist, or wrong type of schedule (not Ruleset, Compact or Constant), or cannot found the design day schedules. Return 999.9 for min and max')
-    return { 'min' => 999.9, 'max' => 999.9 }
   end
 
   # Identifies non mechanically cooled ("nmc") systems, if applicable
