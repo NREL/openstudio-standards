@@ -1301,7 +1301,9 @@ class Standard
     is_vest = false
 
     # Check area
-    return is_vest if thermal_zone.floorArea < OpenStudio.convert(200, 'ft^2', 'm^2').get
+    unless thermal_zone.floorArea < OpenStudio.convert(200, 'ft^2', 'm^2').get
+      return is_vest
+    end
 
     # Check presence of infiltration
     thermal_zone.spaces.each do |space|
