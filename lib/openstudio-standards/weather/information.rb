@@ -1,5 +1,5 @@
-# Methods to create Schedule objects
 module OpenstudioStandards
+  # The Weather module provides methods to set and get information about the model weather file
   module Weather
     # @!group Information
 

@@ -1,7 +1,8 @@
-# Methods to create Schedule objects
 module OpenstudioStandards
+  # The Schedules module provides methods to create, modify, and get information about Schedule objects
   module Schedules
     # @!group Create
+    # Methods to create Schedule objects
 
     # create a ScheduleTypeLimits object for a schedule
     #

@@ -1,7 +1,8 @@
-# Method to apply a typical CBECS HVAC system to thermal zones
 module OpenstudioStandards
+  # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
     # @!group CBECS HVAC
+    # Method to apply a typical CBECS HVAC system to thermal zones
 
     # Adds the HVAC system as derived from the combinations of CBECS 2012 MAINHT and MAINCL fields.
     # Mapping between combinations and HVAC systems per http://www.nrel.gov/docs/fy08osti/41956.pdf

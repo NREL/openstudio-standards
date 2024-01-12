@@ -1,8 +1,8 @@
-# Methods to get information from Schedule objects
-# Many of these methods may be moved to core OpenStudio
 module OpenstudioStandards
+  # The Schedules module provides methods to create, modify, and get information about Schedule objects
   module Schedules
     # @!group Information
+    # Methods to get information about Schedule objects
 
     # Returns the Schedule minimum and maximum values encountered during the run-period.
     # This method does not include summer and winter design day values.
