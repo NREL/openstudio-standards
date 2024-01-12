@@ -23,8 +23,14 @@ class NECB2011 < Standard
     return variable.to_f
   end
 
+  # This method converts arguments to bool.  Anything other than a bool false or string 'false' is converted
+  # to a bool true.  Bool false and case insesitive string false are turned into bool false.
   def convert_arg_to_bool(variable:, default:)
-    return default if variable.nil? || (variable == 'NECB_Default')
+    return true if variable.nil?
+    if variable.is_a? String
+      return true if variable.to_s.downcase == 'necb_default'
+      return false if variable.to_s.downcase == 'false'
+    end
     return false if variable == false
     return true
   end
