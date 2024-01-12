@@ -19477,7 +19477,7 @@ OS:Facility,
 
 OS:Building,
   {3259ed3c-9915-470d-a5cf-b8c3a604c36c}, !- Handle
-  Point Tower,                            !- Name
+  LEEPPointTower,                         !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -19487,7 +19487,7 @@ OS:Building,
   23,                                     !- Standards Number of Stories
   23,                                     !- Standards Number of Above Ground Stories
   ,                                       !- Standards Template
-  ,                                       !- Standards Building Type
+  LEEPPointTower,                         !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable
   ;                                       !- Nominal Floor to Ceiling Height {m}

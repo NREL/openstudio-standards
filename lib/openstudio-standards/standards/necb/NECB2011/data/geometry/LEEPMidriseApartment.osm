@@ -1219,7 +1219,7 @@ OS:ThermostatSetpoint:DualSetpoint,
 
 OS:Building,
   {161a51f0-9700-4aa1-8ba8-f2513d0eecae}, !- Handle
-  6-storey Mid Rise,                      !- Name
+  LEEPMidriseApartment,                   !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -1229,7 +1229,7 @@ OS:Building,
   6,                                      !- Standards Number of Stories
   6,                                      !- Standards Number of Above Ground Stories
   ,                                       !- Standards Template
-  ,                                       !- Standards Building Type
+  LEEPMidriseApartment,                   !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable
   ;                                       !- Nominal Floor to Ceiling Height {m}
