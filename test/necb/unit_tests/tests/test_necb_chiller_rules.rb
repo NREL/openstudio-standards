@@ -19,6 +19,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
   # each chiller will have 1055 kW and that would move it to the upper row of NECB2020 code and COP will be always 5.633 not 6.018 (Mariana)
   # Consequently i've updated the expected results for all chiller types except the centrifugal chillers that are more then 2110 kW (7,200,000 btu/hr) to be 5.633 not 6.018
   def test_NECB_chiller_cop
+    logger.info "Starting: #{__method__}"
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
@@ -140,7 +141,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
             # Run sizing.
             run_sizing(model: model,  template: template, test_name: name,save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
           rescue => error
-            puts "Something went wrong! #{error.message}"
+            logger.error "#{__FILE__}::#{__method__} #{error.message}"
           end
 
           # Recover the COP for testing below.
@@ -192,6 +193,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     # Check if test results match expected.
     msg = "Boiler efficiencies test results do not match what is expected in test"
     file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished: #{__method__}"
   end
 
   # Test to validate the number of chillers used and their capacities depending on total cooling capacity.
@@ -199,6 +201,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
   # "if capacity <= 2100 kW ---> one chiller
   # if capacity > 2100 kW ---> 2 chillers with half the capacity each"
   def test_number_of_chillers
+    logger.info "Starting: #{__method__}"
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
@@ -235,7 +238,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       rescue NoMethodError => error
         template_cases_results[:reference] = "Reference required"
         test_results[template.to_sym] = template_cases_results
-        puts "ERROR: #{error.message}\n -> This was probably triggered by the template not existing in the expected results set. Continue and report at end."
+        logger.warn "Adding reference tag to results for #{template} in #{__method__}"
       end
 
       # Load template/standard.
@@ -285,7 +288,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
             # Run the standards.
             run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
           rescue => error
-            puts "Something went wrong! #{error.message}"
+            logger.error "#{__FILE__}::#{__method__} #{error.message}"
           end
 
           # Check that there are two chillers in the model.
@@ -360,10 +363,12 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     # Check if test results match expected.
     msg = "Number of chillers and capacity test results do not match what is expected in test"
     file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished: #{__method__}"
   end
 
   # Test to validate the chiller performance curves.
   def test_chiller_curves
+    logger.info "Starting: #{__method__}"
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
@@ -437,4 +442,5 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     msg = "Chiller performance curve coeffs test results do not match expected in test"
     file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
+  logger.info "Finished: #{__method__}"
 end

@@ -38,6 +38,12 @@ module NecbHelper
   # Set the logging level
   logger.info!
 
+  # Customize the log format
+  logger.formatter = proc do |severity, datetime, _progname, msg|
+    datefmt = datetime.strftime('%Y-%m-%dT%H:%M:%S.%6N')
+    "timestamp=#{datefmt} level=#{severity.ljust(5)} msg='#{msg}' location=[#{caller_locations(4,1)[0].to_s}]\n"
+  end
+
   # Hold an array of the instantiated standards (to save recreating them all the time).
   @@standards = []
 
