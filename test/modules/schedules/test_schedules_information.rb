@@ -228,6 +228,27 @@ class TestSchedulesInformation < Minitest::Test
     assert(result['max'] == 0.42)
   end
 
+  def test_schedule_day_get_min_max
+    model = OpenStudio::Model::Model.new
+    schedule_day = OpenStudio::Model::ScheduleDay.new(model)
+    schedule_day.addValue(OpenStudio::Time.new(0, 9, 0, 0), 0.6)
+    schedule_day.addValue(OpenStudio::Time.new(0, 11, 0, 0), 0.8)
+    schedule_day.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
+    result = @sch.schedule_day_get_min_max(schedule_day)
+    assert(result['min'] == 0.2)
+    assert(result['max'] == 0.8)
+  end
+
+  def test_schedule_day_get_equivalent_full_load_hours
+    model = OpenStudio::Model::Model.new
+    schedule_day = OpenStudio::Model::ScheduleDay.new(model)
+    schedule_day.addValue(OpenStudio::Time.new(0, 9, 0, 0), 0.6)
+    schedule_day.addValue(OpenStudio::Time.new(0, 11, 0, 0), 0.8)
+    schedule_day.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
+    result = @sch.schedule_day_get_equivalent_full_load_hours(schedule_day)
+    assert(result == 9.6)
+  end
+
   def test_schedule_day_get_hourly_values
     model = OpenStudio::Model::Model.new
     schedule_day = OpenStudio::Model::ScheduleDay.new(model)
@@ -253,6 +274,39 @@ class TestSchedulesInformation < Minitest::Test
     result = @sch.schedule_ruleset_get_min_max(schedule)
     assert(result['min'] == 6.0)
     assert(result['max'] == 14.0)
+
+    # create a complex schedule for testing variants
+    rules = []
+    rules << ['All Days', '1/1-12/31', 'Mon/Tue/Wed/Thu/Fri/Sat/Sun', [8, 0.1], [12, 0.4], [16, 0.8], [24, 0.1]]
+    rules << ['All Days in March and April', '3/1-4/30', 'Mon/Tue/Wed/Thu/Fri/Sat/Sun', [8, 0.2], [12, 0.4], [16, 0.7], [24, 0.2]]
+    test_options = {
+      'name' => 'Test Create Complex',
+      'winter_design_day' => [[24, 0]],
+      'summer_design_day' => [[24, 1]],
+      'default_day' => ['Test Create Complex Default', [8, 0.0], [12, 0.4], [16, 0.9], [24, 0.0]],
+      'rules' => rules
+    }
+    schedule = @sch.create_complex_schedule(model, test_options)
+
+    # default operation
+    result = @sch.schedule_ruleset_get_min_max(schedule)
+    assert(result['min'] == 0.1)
+    assert(result['max'] == 0.8)
+
+    # all values in schedule
+    result = @sch.schedule_ruleset_get_min_max(schedule, only_run_period_values: false)
+    assert(result['min'] == 0.0)
+    assert(result['max'] == 0.9)
+
+    # test complex schedule that doesn't use default day and limited run period
+    run_period = model.getRunPeriod
+    run_period.setBeginMonth(3)
+    run_period.setBeginDayOfMonth(7)
+    run_period.setEndMonth(4)
+    run_period.setEndDayOfMonth(14)
+    result = @sch.schedule_ruleset_get_min_max(schedule)
+    assert(result['min'] == 0.2)
+    assert(result['max'] == 0.7)
   end
 
   def test_schedule_ruleset_get_design_day_min_max
@@ -292,10 +346,9 @@ class TestSchedulesInformation < Minitest::Test
 
   def test_schedule_ruleset_get_hourly_values
     model = OpenStudio::Model::Model.new
-    # test ScheduleRuleset
     rules = []
     rules << ['Tuesdays and Thursdays', '1/1-12/31', 'Tue/Thu', [4, 0], [4.33, 1], [18, 0], [18.66, 1], [24, 0]]
-    rules << ['Wednesdays and Fridays', '1/1-12/31', 'Tue/Thu', [6, 0], [6.33, 1], [16, 0], [16.66, 1], [24, 0]]
+    rules << ['Wednesdays and Fridays', '1/1-12/31', 'Wed/Fri', [6, 0], [6.33, 1], [16, 0], [16.66, 1], [24, 0]]
     test_options = {
       'name' => 'Test Create Complex',
       'winter_design_day' => [[24, 0]],
