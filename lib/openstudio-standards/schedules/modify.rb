@@ -1,6 +1,8 @@
-# Methods to modify existing Schedule objects
 module OpenstudioStandards
+  # The Schedules module provides methods to create, modify, and get information about Schedule objects
   module Schedules
+    # Methods to modify existing Schedule objects
+
     # @!group Modify:ScheduleDay
 
     # Method to multiply the values in a day schedule by a specified value
