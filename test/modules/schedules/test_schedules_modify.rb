@@ -83,4 +83,27 @@ class TestSchedulesModify < Minitest::Test
     basic_shift = { 'shift_hoo' => 2.0 }
     @sch.schedule_ruleset_adjust_hours_of_operation(schedule, basic_shift)
   end
+
+  def test_schedule_ruleset_cleanup_profiles
+    model = OpenStudio::Model::Model.new
+
+    # create a complex schedule to cleanup
+    rules = []
+    rules << ['All Days', '1/1-12/31', 'Mon/Tue/Wed/Thu/Fri/Sat/Sun', [8, 0.1], [12, 0.4], [16, 0.8], [24, 0.1]]
+    rules << ['All Days in March and April', '3/1-4/30', 'Mon/Tue/Wed/Thu/Fri/Sat/Sun', [8, 0.2], [12, 0.4], [16, 0.7], [24, 0.2]]
+    test_options = {
+      'name' => 'Test Create Complex',
+      'winter_design_day' => [[24, 0]],
+      'summer_design_day' => [[24, 1]],
+      'default_day' => ['Test Create Complex Default', [8, 0.0], [12, 0.4], [16, 0.9], [24, 0.0]],
+      'rules' => rules
+    }
+    schedule = @sch.create_complex_schedule(model, test_options)
+
+    # check to see that the default schedule was replaced
+    result_schedule = @sch.schedule_ruleset_cleanup_profiles(schedule)
+    day_min_max = @sch.schedule_day_get_min_max(result_schedule.defaultDaySchedule)
+    assert(day_min_max['min'] == 0.1)
+    assert(day_min_max['max'] == 0.8)
+  end
 end

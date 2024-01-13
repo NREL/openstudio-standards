@@ -6547,7 +6547,7 @@ class Standard
     props.setFeature('param_sch_ceiling', min_max['max'])
 
     # cleanup existing profiles
-    schedule_ruleset_cleanup_profiles(sch)
+    OpenstudioStandards::Schedules.schedule_ruleset_cleanup_profiles(sch)
 
     # gather profiles
     daily_flhs = [] # will be used to tag, min,medium,max operation for non typical operations
