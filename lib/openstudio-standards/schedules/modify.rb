@@ -272,13 +272,11 @@ module OpenstudioStandards
 
       # push default profiles to array
       if options['default']
-        default_rule = schedule.defaultDaySchedule
-        profiles << default_rule
+        profiles << schedule.defaultDaySchedule
       end
 
       # push profiles to array
-      rules = schedule.scheduleRules
-      rules.each do |rule|
+      schedule.scheduleRules.each do |rule|
         day_sch = rule.daySchedule
 
         # if any day requested also exists in the rule, then it will be altered
@@ -300,12 +298,10 @@ module OpenstudioStandards
 
       # add design days to array
       if options['summer']
-        summer_design = schedule.summerDesignDaySchedule
-        profiles << summer_design
+        profiles << schedule.summerDesignDaySchedule
       end
       if options['winter']
-        winter_design = schedule.winterDesignDaySchedule
-        profiles << winter_design
+        profiles << schedule.winterDesignDaySchedule
       end
 
       # give info messages as I change specific profiles
@@ -505,7 +501,7 @@ module OpenstudioStandards
       rule_vector = schedule_ruleset.scheduleRules
 
       replace_existing_default = false
-      if (indices_vector.include? -1) && (most_frequent_item != -1)
+      if indices_vector.include?(-1) && (most_frequent_item != -1)
         # clean up if default isn't most common (e.g. sunday vs. weekday)
         # if no existing rules cover specific days of week, make new rule from default covering those days of week
         possible_days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
