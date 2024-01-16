@@ -5,6 +5,66 @@ class TestSchedulesCreate < Minitest::Test
     @sch = OpenstudioStandards::Schedules
   end
 
+  def test_create_schedule_type_limits
+    model = OpenStudio::Model::Model.new
+
+    # test standard schedule type limits
+    for type in ['Dimensionless', 'Temperature', 'Humidity Ratio', 'Fraction', 'OnOff', 'Activity']
+      schedule_type_limits = @sch.create_schedule_type_limits(model, standard_schedule_type_limit: type)
+      name = schedule_type_limits.name.to_s
+      unit_type = schedule_type_limits.unitType.to_s
+      numeric_type = schedule_type_limits.numericType.to_s
+      case type
+      when 'Humidity Ratio'
+        expected_unit_type = 'Dimensionless'
+        expected_numeric_type = 'Continuous'
+      when 'Fraction', 'Fractional'
+        expected_unit_type = 'Dimensionless'
+        expected_numeric_type = 'Continuous'
+      when 'OnOff'
+        expected_unit_type = 'Availability'
+        expected_numeric_type = 'Discrete'
+      when 'Activity'
+        expected_unit_type = 'ActivityLevel'
+        expected_numeric_type = 'Continuous'
+      else
+        expected_unit_type = type
+        expected_numeric_type = 'Continuous'
+      end
+      assert(name == type, "Expected schedule type limits name #{schedule_type_limits.name} to be #{type}")
+      assert(unit_type == expected_unit_type, "Expected schedule type limits unit type #{schedule_type_limits.unitType} to be #{expected_unit_type}")
+      assert(numeric_type == expected_numeric_type, "Expected schedule type limits numeric type #{schedule_type_limits.unitType} to be #{expected_numeric_type}")
+    end
+
+    # test custom schedule type limits
+    schedule_type_limits = @sch.create_schedule_type_limits(model,
+                                                            name: 'Infiltration Schedule Type Limits',
+                                                            lower_limit_value: 0.0,
+                                                            upper_limit_value: 1.0,
+                                                            numeric_type: 'Continuous',
+                                                            unit_type: 'Dimensionless')
+    name = schedule_type_limits.name.to_s
+    unit_type = schedule_type_limits.unitType.to_s
+    numeric_type = schedule_type_limits.numericType.to_s
+    lower_limit = schedule_type_limits.lowerLimitValue.get
+    upper_limit = schedule_type_limits.upperLimitValue.get
+    assert(name = 'Infiltration Schedule Type Limits')
+    assert(unit_type = 'Continuous')
+    assert(numeric_type = 'Dimensionless')
+    assert(name = 0.0)
+    assert(name = 1.0)
+  end
+
+  def test_create_constant_schedule_ruleset
+    model = OpenStudio::Model::Model.new
+    schedule = @sch.create_constant_schedule_ruleset(model, 42.0,
+                                                     name: 'Test Schedule',
+                                                     schedule_type_limit: 'Temperature')
+    result = @sch.schedule_ruleset_get_min_max(schedule)
+    assert(result['min'] == 42.0)
+    assert(result['max'] == 42.0)
+  end
+
   def test_create_simple_schedule
     model = OpenStudio::Model::Model.new
     test_options = {

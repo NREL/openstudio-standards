@@ -1,7 +1,8 @@
-# Methods to create typical models
 module OpenstudioStandards
+  # The CreateTypical module provides methods to create and modify an entire building energy model of a typical building
   module CreateTypical
     # @!group CreateTypical
+    # Methods to create typical models
 
     # create typical building from model
     # creates a complete energy model from model with defined geometry and standards space type assignments
@@ -277,7 +278,7 @@ module OpenstudioStandards
       # adjust F factor constructions to avoid simulation errors
       model.getFFactorGroundFloorConstructions.each do |cons|
         # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons = 0.15/1.95
-        if cons.area <= (0.135 + 0.03 + 0.15/1.95) * cons.perimeterExposed * cons.fFactor
+        if cons.area <= (0.135 + 0.03 + 0.15 / 1.95) * cons.perimeterExposed * cons.fFactor
           # set minimum Rfic to > 1e-3
           new_area = 0.233 * cons.perimeterExposed * cons.fFactor
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)}.")

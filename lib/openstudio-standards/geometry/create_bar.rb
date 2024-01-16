@@ -1,7 +1,8 @@
-# Methods to create geometry
 module OpenstudioStandards
+  # This Module provides methods to create, modify, and get information about model geometry
   module Geometry
     # @!group CreateBar
+    # Methods to create bar geometry
 
     # Building Form Defaults from Table 4.2 in Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010
     # aspect ratio for NA replaced with floor area to perimeter ratio from prototype model
@@ -494,7 +495,7 @@ module OpenstudioStandards
 
           compare_hash = {}
           if !stories_flat.empty?
-            stories_flat.last.each { |k, v| compare_hash[k] = flat_hash[k] if flat_hash[k] != v }
+            stories_flat.last.each { |s, m| compare_hash[s] = flat_hash[s] if flat_hash[s] != m }
           end
           if (bar_hash[:story_multiplier_method] != 'None' && stories_flat.last == flat_hash) || (bar_hash[:story_multiplier_method] != 'None' && compare_hash.size == 1 && compare_hash.include?(:multiplier))
             stories_flat.last[:multiplier] += v[:story_min_multiplier]

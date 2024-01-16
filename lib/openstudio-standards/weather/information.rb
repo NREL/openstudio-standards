@@ -1,5 +1,6 @@
 # Methods to store model weather/location information
 module OpenstudioStandards
+  # The Weather module provides methods to set and get information about the model weather file
   module Weather
     # @!group Information
 

@@ -25,6 +25,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/schedules/create'
   require_relative 'openstudio-standards/schedules/modify'
   require_relative 'openstudio-standards/schedules/information'
+  require_relative 'openstudio-standards/schedules/parametric'
 
   # HVAC Module
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
@@ -261,8 +262,6 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.Pump"
   require_relative "#{stds}/Standards.PumpConstantSpeed"
   require_relative "#{stds}/Standards.PumpVariableSpeed"
-  require_relative "#{stds}/Standards.ScheduleCompact"
-  require_relative "#{stds}/Standards.ScheduleConstant"
   require_relative "#{stds}/Standards.ScheduleRuleset"
   require_relative "#{stds}/Standards.Space"
   require_relative "#{stds}/Standards.SpaceType"

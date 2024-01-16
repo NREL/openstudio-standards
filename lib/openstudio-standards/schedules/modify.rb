@@ -1,7 +1,8 @@
-# Methods to modify existing Schedule objects
 module OpenstudioStandards
+  # The Schedules module provides methods to create, modify, and get information about Schedule objects
   module Schedules
     # @!group Modify
+    # Methods to modify existing Schedule objects
 
     # Increase/decrease by percentage or static value
     #
