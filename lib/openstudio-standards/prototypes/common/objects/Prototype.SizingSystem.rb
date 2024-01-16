@@ -43,7 +43,7 @@ class Standard
   # @todo this needs to be changed in both the sizing system and controller mechanical ventilation objects
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_system_outdoor_air_sizing_vrp_method(air_loop_hvac)
     # Do not apply the adjustment to some of the system in
     # the hospital and outpatient which have their minimum

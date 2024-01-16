@@ -4,7 +4,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [String] building type
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_swh(model, building_type, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 

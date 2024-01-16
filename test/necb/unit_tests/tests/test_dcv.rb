@@ -41,7 +41,7 @@ class NECB_DCV_Tests < Minitest::Test
         # 'SmallHotel',
         # 'Warehouse'
     ]
-    @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
+    @epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
     @primary_heating_fuels = ['NaturalGas']
     @dcv_types = ['Occupancy_based_DCV', 'CO2_based_DCV'] #['No_DCV'] #['NECB_Default']
     @lighting_types = ['NECB_Default'] #LED  #NECB_Default

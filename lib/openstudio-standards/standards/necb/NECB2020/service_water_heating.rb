@@ -5,13 +5,13 @@ class NECB2020
   # Per PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
   # Appendix A: Service Water Heating
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   #
   # NECB2020 uses a different procedure calculate gas water heater efficiencies (compared to previous NECB)
   #
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
     # Get the capacity of the water heater
-    # TODO add capability to pull autosized water heater capacity
+    # @todo add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
     capacity_w = water_heater_mixed.heaterMaximumCapacity
     if capacity_w.empty?
@@ -24,7 +24,7 @@ class NECB2020
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Get the volume of the water heater
-    # TODO add capability to pull autosized water heater volume
+    # @todo add capability to pull autosized water heater volume
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
     volume_m3 = water_heater_mixed.tankVolume
     if volume_m3.empty?
@@ -202,7 +202,7 @@ class NECB2020
     # Skin loss
     water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_w_per_k)
     water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_w_per_k)
-    # TODO: Parasitic loss (pilot light)
+    # @todo Parasitic loss (pilot light)
     # PNNL document says pilot lights were removed, but IDFs
     # still have the on/off cycle parasitic fuel consumptions filled in
     water_heater_mixed.setOnCycleParasiticFuelType(fuel_type)

@@ -219,7 +219,13 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           end_uses = ['InteriorLights', 'ExteriorLights', 'InteriorEquipment', 'ExteriorEquipment', 'Fans', 'Pumps', 'Heating', 'Cooling', 'HeatRejection', 'Humidifier', 'HeatRecovery', 'DHW', 'Cogeneration', 'Refrigeration', 'WaterSystems']
 
           # EnergyPlus I/O Reference Manual, Table 5.1
-          fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling', 'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+          if model.version < OpenStudio::VersionString.new('3.7.0')
+            fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling',
+                     'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+          else
+            fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'DistrictCooling',
+                     'DistrictHeatingWater', 'DistrictHeatingSteam', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+          end
 
           # Creating individual meters
           meters = end_uses.product fuels

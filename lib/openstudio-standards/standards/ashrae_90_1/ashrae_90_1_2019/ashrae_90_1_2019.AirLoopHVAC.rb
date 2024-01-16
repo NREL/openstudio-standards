@@ -82,7 +82,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
     return true
   end
@@ -92,7 +92,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] Returns true if allowable, if the system has no economizer or no OA system.
+  # @return [Boolean] Returns true if allowable, if the system has no economizer or no OA system.
   #   Returns false if the economizer type is not allowable.
   def air_loop_hvac_economizer_type_allowable?(air_loop_hvac, climate_zone)
     # EnergyPlus economizer types
@@ -180,7 +180,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   # @todo Add exception logic for systems with AIA healthcare ventilation requirements dual duct systems
   def air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
     multizone_opt_required = false
@@ -327,7 +327,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
     is_sat_reset_required = false
 
@@ -557,7 +557,7 @@ class ASHRAE9012019 < ASHRAE901
   # system outdoor air flow following ASHRAE Std. 62.1-2019
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
     # Do not apply the adjustment to some of the system in
@@ -586,7 +586,7 @@ class ASHRAE9012019 < ASHRAE901
 
     # Retrieve the sum of the zone minimum primary airflow
     if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', 'Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     else
       vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates
     end
@@ -608,7 +608,7 @@ class ASHRAE9012019 < ASHRAE901
 
       # error if zone autosized methods are not available
       if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Required ThermalZone methods .autosizedCoolingDesignAirFlowRate and .autosizedHeatingDesignAirFlowRate are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', 'Required ThermalZone methods .autosizedCoolingDesignAirFlowRate and .autosizedHeatingDesignAirFlowRate are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
       end
 
       clg_dsn_flow = zone.autosizedCoolingDesignAirFlowRate
@@ -742,8 +742,8 @@ class ASHRAE9012019 < ASHRAE901
   # by scheduling air terminal dampers (so load can
   # still be met) and cycling unitary system fans
   #
-  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] OpenStudio AirLoopHVAC object
-  # @param standby_mode_space [Array] List of all spaces required to have standby mode controls
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @param standby_mode_spaces [Array<OpenStudio::Model::Space>] List of all spaces required to have standby mode controls
   # @return [Boolean] true if sucessful, false otherwise
   def air_loop_hvac_standby_mode_occupancy_control(air_loop_hvac, standby_mode_spaces)
     if air_loop_hvac_include_unitary_system?(air_loop_hvac)

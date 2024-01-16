@@ -27,7 +27,7 @@ class ASHRAE901PRM < Standard
   #
   # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
   # @param sys_type [String] HVAC system type
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] minimum thermal efficiency
   def coil_heating_gas_standard_minimum_thermal_efficiency(coil_heating_gas, sys_type, rename = false)
     # Get the coil properties

@@ -2,7 +2,7 @@ class ASHRAE901PRM < Standard
   # Keep only one cooling tower, but use one condenser pump per chiller
 
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Condenser'
@@ -93,8 +93,9 @@ class ASHRAE901PRM < Standard
   # Splits the single chiller used for the initial sizing run
   # into multiple separate chillers based on Appendix G.
   #
-  # @param plant_loop_args [Array] chilled water loop (OpenStudio::Model::PlantLoop), sizing run directory
-  # @return [Bool] returns true if successful, false if not
+  # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
+  # @param sizing_run_dir [String] sizing run directory
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
     # Skip non-cooling plants & secondary cooling loop
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
@@ -250,7 +251,7 @@ class ASHRAE901PRM < Standard
   #   you could set at 0.9 and just calculate the pressure rise to have your 19 W/GPM or whatever
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_pump_power(plant_loop)
     hot_water_pump_power = 19 # W/gpm
     hot_water_district_pump_power = 14 # W/gpm
@@ -271,7 +272,7 @@ class ASHRAE901PRM < Standard
 
       has_district_heating = false
       plant_loop.supplyComponents.each do |sc|
-        if sc.to_DistrictHeating.is_initialized
+        if sc.iddObjectType.valueName.to_s.include?('DistrictHeating')
           has_district_heating = true
         end
       end
@@ -335,9 +336,8 @@ class ASHRAE901PRM < Standard
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop
   # @param dsgn_sup_wtr_temp [Double] design chilled water supply T
   # @param dsgn_sup_wtr_temp_delt [Double] design chilled water supply delta T
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
-
     design_chilled_water_temperature = 44 # Loop design chilled water temperature (F)
     design_chilled_water_temperature_delta = 10.1 # Loop design chilled water temperature  (deltaF)
     chw_outdoor_temperature_high = 80 # Chilled water temperature reset at high outdoor air temperature (F)
@@ -347,7 +347,7 @@ class ASHRAE901PRM < Standard
     chiller_chw_low_temp_limit = 36 # Chiller leaving chilled water lower temperature limit (F)
     chiller_chw_cond_temp = 95 # Chiller entering condenser fluid temperature (F)
     primary_pump_power = 9 # primary pump power (W/gpm)
- 
+
     if dsgn_sup_wtr_temp.nil?
       dsgn_sup_wtr_temp_c = OpenStudio.convert(design_chilled_water_temperature, 'F', 'C').get
     else
@@ -366,17 +366,17 @@ class ASHRAE901PRM < Standard
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
     # Use OA reset setpoint manager
-    outdoor_low_temperature_C = OpenStudio.convert(chw_outdoor_temperature_low, 'F', 'C').get.round(1)
-    outdoor_high_temperature_C = OpenStudio.convert(chw_outdoor_temperature_high, 'F', 'C').get.round(1)
-    setpoint_temperature_outdoor_high_C = OpenStudio.convert(chw_outdoor_high_setpoint, 'F', 'C').get.round(1)
-    setpoint_temperature_outdoor_low_C = OpenStudio.convert(chw_outdoor_low_setpoint, 'F', 'C').get.round(1)
+    outdoor_low_temperature_c = OpenStudio.convert(chw_outdoor_temperature_low, 'F', 'C').get.round(1)
+    outdoor_high_temperature_c = OpenStudio.convert(chw_outdoor_temperature_high, 'F', 'C').get.round(1)
+    setpoint_temperature_outdoor_high_c = OpenStudio.convert(chw_outdoor_high_setpoint, 'F', 'C').get.round(1)
+    setpoint_temperature_outdoor_low_c = OpenStudio.convert(chw_outdoor_low_setpoint, 'F', 'C').get.round(1)
 
     chw_stpt_manager = OpenStudio::Model::SetpointManagerOutdoorAirReset.new(model)
     chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
-    chw_stpt_manager.setOutdoorHighTemperature(outdoor_high_temperature_C) # Degrees Celsius
-    chw_stpt_manager.setSetpointatOutdoorHighTemperature(setpoint_temperature_outdoor_high_C) # Degrees Celsius
-    chw_stpt_manager.setOutdoorLowTemperature(outdoor_low_temperature_C) # Degrees Celsius
-    chw_stpt_manager.setSetpointatOutdoorLowTemperature(setpoint_temperature_outdoor_low_C) # Degrees Celsius
+    chw_stpt_manager.setOutdoorHighTemperature(outdoor_high_temperature_c) # Degrees Celsius
+    chw_stpt_manager.setSetpointatOutdoorHighTemperature(setpoint_temperature_outdoor_high_c) # Degrees Celsius
+    chw_stpt_manager.setOutdoorLowTemperature(outdoor_low_temperature_c) # Degrees Celsius
+    chw_stpt_manager.setSetpointatOutdoorLowTemperature(setpoint_temperature_outdoor_low_c) # Degrees Celsius
     chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
 
     return true
@@ -391,5 +391,4 @@ class ASHRAE901PRM < Standard
     pri_sec_config = 'heat_exchanger'
     return pri_sec_config
   end
-
 end

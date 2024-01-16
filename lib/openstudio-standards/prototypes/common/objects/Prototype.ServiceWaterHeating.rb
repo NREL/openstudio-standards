@@ -14,7 +14,7 @@ class Standard
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param water_heater_fuel [String] water heater fuel. Valid choices are NaturalGas, Electricity
   # @param parasitic_fuel_consumption_rate [Double] the parasitic fuel consumption rate of the water heater, in W
-  # @param add_pipe_losses [Bool] if true, add piping and associated heat losses to system.  If false, add no pipe heat losses
+  # @param add_pipe_losses [Boolean] if true, add piping and associated heat losses to system.  If false, add no pipe heat losses
   # @param floor_area_served [Double] area served by the SWH loop, in m^2.  Used for pipe loss piping length estimation
   # @param number_of_stories [Integer] number of stories served by the SWH loop.  Used for pipe loss piping length estimation
   # @param pipe_insulation_thickness [Double] thickness of the fiberglass batt pipe insulation, in m.  Use 0 for uninsulated pipes
@@ -151,7 +151,7 @@ class Standard
   # @param service_water_temperature [Double] water heater temperature, in C
   # @param parasitic_fuel_consumption_rate [Double] water heater parasitic fuel consumption rate, in W
   # @param swh_temp_sch [OpenStudio::Model::Schedule] the service water heating schedule. If nil, will be defaulted.
-  # @param set_peak_use_flowrate [Bool] if true, the peak flow rate and flow rate schedule will be set.
+  # @param set_peak_use_flowrate [Boolean] if true, the peak flow rate and flow rate schedule will be set.
   # @param peak_flowrate [Double] in m^3/s
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] zone to place water heater in.
@@ -314,12 +314,12 @@ class Standard
   # @param service_water_temperature [Double] water heater temperature, in C
   # @param parasitic_fuel_consumption_rate [Double] water heater parasitic fuel consumption rate, in W
   # @param swh_temp_sch [OpenStudio::Model::Schedule] the service water heating schedule. If nil, will be defaulted.
-  # @param set_peak_use_flowrate [Bool] if true, the peak flow rate and flow rate schedule will be set.
+  # @param set_peak_use_flowrate [Boolean] if true, the peak flow rate and flow rate schedule will be set.
   # @param peak_flowrate [Double] in m^3/s
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] zone to place water heater in.
   #   If nil, will be assumed in 70F air for heat loss.
-  # @param use_ems_control [Bool] if true, use ems control logic if using a 'WrappedCondenser' style HPWH.
+  # @param use_ems_control [Boolean] if true, use ems control logic if using a 'WrappedCondenser' style HPWH.
   # @return [OpenStudio::Model::WaterHeaterMixed] the resulting water heater
   def model_add_heatpump_water_heater(model,
                                       type: 'PumpedCondenser',
@@ -624,7 +624,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.ServiceWaterHeating', "Unsupported schedule type for HPWH setpoint schedule #{swh_temp_sch.name}.")
         return false
       end
-      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch,schedule_type, 'Schedule Value')
+      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch, schedule_type, 'Schedule Value')
       hpwhschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_HPWHSchedOverride")
 
       # create actuator for lower heating element in water tank
@@ -967,7 +967,7 @@ class Standard
   # @param space [OpenStudio::Model::Space] the Space to add a WaterUseEquipment for
   # @param space_multiplier [Double] the multiplier to use if the supplied Space actually represents
   #   more area than is shown in the model.
-  # @param is_flow_per_area [Bool] if true, use the value in the 'service_water_heating_peak_flow_per_area'
+  # @param is_flow_per_area [Boolean] if true, use the value in the 'service_water_heating_peak_flow_per_area'
   #   field of the space_types JSON.  If false, use the value in the 'service_water_heating_peak_flow_rate' field.
   # @return [OpenStudio::Model::WaterUseEquipment] the WaterUseEquipment for the
   def model_add_swh_end_uses_by_space(model,
@@ -1066,7 +1066,7 @@ class Standard
   # Determine whether or not water fixtures are attached to spaces
   # @todo For hotels and apartments, add the water fixture at the space level
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_attach_water_fixtures_to_spaces?(model)
     # if building_type!=nil && ((building_type.downcase.include?"hotel") || (building_type.downcase.include?"apartment"))
     #   return true
@@ -1133,9 +1133,9 @@ class Standard
   # @param floor_area_served [Double] the area of building served by the service water heating loop, in m^2
   # @param number_of_stories [Integer] the number of stories served by the service water heating loop
   # @param pipe_insulation_thickness [Double] the thickness of the pipe insulation, in m.  Use 0 for no insulation
-  # @param circulating [Bool] use true for circulating systems, false for non-circulating systems
+  # @param circulating [Boolean] use true for circulating systems, false for non-circulating systems
   # @param air_temp_surrounding_piping [Double] the temperature of the air surrounding the piping, in C.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_piping_losses_to_swh_system(model,
                                             swh_loop,
                                             circulating,

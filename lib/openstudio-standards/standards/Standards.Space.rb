@@ -8,7 +8,7 @@ class Standard
   #   situations.  When it fails, it will log warnings/errors for users to see.
   #
   # @param space [OpenStudio::Model::Space] space object
-  # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
+  # @param draw_daylight_areas_for_debugging [Boolean] If this argument is set to true,
   #   daylight areas will be added to the model as surfaces for visual debugging.
   #   Yellow = toplighted area, Red = primary sidelighted area,
   #   Blue = secondary sidelighted area, Light Blue = floor
@@ -804,9 +804,9 @@ class Standard
 
   # Default for 2013 and earlier is to Add daylighting controls (sidelighting and toplighting) per the template
   # @param space [OpenStudio::Model::Space] the space with daylighting
-  # @param remove_existing_controls [Bool] if true, will remove existing controls then add new ones
-  # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
-  # @return [boolean] true if successful
+  # @param remove_existing [Boolean] if true, will remove existing controls then add new ones
+  # @param draw_areas_for_debug [Boolean] If this argument is set to true,
+  # @return [Boolean] returns true if successful, false if not
   def space_set_baseline_daylighting_controls(space, remove_existing = false, draw_areas_for_debug = false)
     added = space_add_daylighting_controls(space, remove_existing, draw_areas_for_debug)
     return added
@@ -818,12 +818,12 @@ class Standard
   #   situations.  When it fails, it will log warnings/errors for users to see.
   #
   # @param space [OpenStudio::Model::Space] the space with daylighting
-  # @param remove_existing_controls [Bool] if true, will remove existing controls then add new ones
-  # @param draw_daylight_areas_for_debugging [Bool] If this argument is set to true,
+  # @param remove_existing_controls [Boolean] if true, will remove existing controls then add new ones
+  # @param draw_daylight_areas_for_debugging [Boolean] If this argument is set to true,
   #   daylight areas will be added to the model as surfaces for visual debugging.
   #   Yellow = toplighted area, Red = primary sidelighted area,
   #   Blue = secondary sidelighted area, Light Blue = floor
-  # @return [boolean] true if successful
+  # @return [Boolean] returns true if successful, false if not
   # @todo add a list of valid choices for template argument
   # @todo add exception for retail spaces
   # @todo add exception 2 for skylights with VT < 0.4
@@ -1223,9 +1223,9 @@ class Standard
   # @param areas [Hash] a hash of daylighted areas
   # @param sorted_windows [Hash] a hash of windows, sorted by priority
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
-  # @param req_top_ctrl [Bool] if toplighting controls are required
-  # @param req_pri_ctrl [Bool] if primary sidelighting controls are required
-  # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
+  # @param req_top_ctrl [Boolean] if toplighting controls are required
+  # @param req_pri_ctrl [Boolean] if primary sidelighting controls are required
+  # @param req_sec_ctrl [Boolean] if secondary sidelighting controls are required
   # @return [Array] array of 4 items
   #   [sensor 1 fraction, sensor 2 fraction, sensor 1 window, sensor 2 window]
   def space_daylighting_fractions_and_windows(space,
@@ -1342,7 +1342,7 @@ class Standard
   #
   # @param space [OpenStudio::Model::Space] space object
   # @return [Double] the baseline infiltration rate, in cfm/ft^2 exterior above grade wall area at 75 Pa
-  def space_infiltration_rate_75_pa(space)
+  def space_infiltration_rate_75_pa(space = nil)
     basic_infil_rate_cfm_per_ft2 = 1.8
     return basic_infil_rate_cfm_per_ft2
   end
@@ -1454,7 +1454,7 @@ class Standard
 
       # Conditioned space OR semi-heated space <-> unconditioned spaces
       unless surf_cnt
-        # TODO: add a case for 'Zone' when supported
+        # @todo add a case for 'Zone' when supported
         if surface.outsideBoundaryCondition == 'Surface'
           adj_space = surface.adjacentSurface.get.space.get
           adj_space_cond_type = space_conditioning_category(adj_space)
@@ -1481,7 +1481,7 @@ class Standard
   # or if the space type name contains the word plenum.
   #
   # @param space [OpenStudio::Model::Space] space object
-  # return [Bool] returns true if plenum, false if not
+  # return [Boolean] returns true if plenum, false if not
   def space_plenum?(space)
     plenum_status = false
 
@@ -1523,7 +1523,7 @@ class Standard
   # type of the space below the largest floor in the plenum.
   #
   # @param space [OpenStudio::Model::Space] space object
-  # return [Bool] true if residential, false if nonresidential
+  # return [Boolean] true if residential, false if nonresidential
   def space_residential?(space)
     is_res = false
 
@@ -1596,7 +1596,6 @@ class Standard
   # Determines whether the space is conditioned per 90.1, which is based on heating and cooling loads.
   #
   # @param space [OpenStudio::Model::Space] space object
-  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] NonResConditioned, ResConditioned, Semiheated, Unconditioned
   # @todo add logic to detect indirectly-conditioned spaces based on air transfer
   def space_conditioning_category(space)
@@ -1717,7 +1716,7 @@ class Standard
   #
   # @author Andrew Parker, Julien Marrec
   # @param space [OpenStudio::Model::Space] space object
-  # @return [Bool] returns true if heated, false if not
+  # @return [Boolean] returns true if heated, false if not
   def space_heated?(space)
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -1738,7 +1737,7 @@ class Standard
   #
   # @author Andrew Parker, Julien Marrec
   # @param space [OpenStudio::Model::Space] space object
-  # @return [Bool] returns true if cooled, false if not
+  # @return [Boolean] returns true if cooled, false if not
   def space_cooled?(space)
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -1854,7 +1853,7 @@ class Standard
   # and fraction lost for equipment
   # @author Doug Maddox, PNNL
   # @param space object
-  # @param return_noncoincident_value [boolean] if true, return value is noncoincident peak; if false, return is array off coincident load
+  # @param return_noncoincident_value [Boolean] if true, return value is noncoincident peak; if false, return is array off coincident load
   # @return [Double] 8760 array of the design internal load, in W, for this space
   def space_internal_load_annual_array(model, space, return_noncoincident_value)
     # For each type of load, first convert schedules to 8760 arrays so coincident load can be determined
@@ -2070,13 +2069,13 @@ class Standard
   # to determine whether specific zones should be isolated to PSZ based on
   # space loads that differ significantly from other zones on the multizone system
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param space [OpenStudio::Model::Space] the space
   # @param equips [object] This is an array of equipment objects in the model
   # @param eqp_type [String] string description of the type of equipment object
   # @param ppl_total [Numeric] total number of people in the space
   # @param load_values [Array] 8760 array of load values for the equipment type
-  # @param return_noncoincident_value [boolean] return a single peak value if true; return 8760 gain profile if false
+  # @param return_noncoincident_value [Boolean] return a single peak value if true; return 8760 gain profile if false
   #
   # @return [Array] load values array; if return_noncoincident_value is true, array has only one value
   #
@@ -2108,13 +2107,13 @@ class Standard
   # to determine whether specific zones should be isolated to PSZ based on
   # space loads that differ significantly from other zones on the multizone system
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param space [OpenStudio::Model::Space] the space
   # @param equip [object] This can be any type of equipment object in the space
   # @param eqp_type [String] string description of the type of equipment object
   # @param ppl_total [Numeric] total number of people in the space
   # @param load_values [Array] 8760 array of load values for the equipment type
-  # @param return_noncoincident_value [boolean] return a single peak value if true; return 8760 gain profile if false
+  # @param return_noncoincident_value [Boolean] return a single peak value if true; return 8760 gain profile if false
   #
   # @return [Array] load values array; if return_noncoincident_value is true, array has only one value
   #
@@ -2216,7 +2215,7 @@ class Standard
   # will return a sorted array of array of spaces and connected area (Descending)
   #
   # @param space [OpenStudio::Model::Space] space object
-  # @param same_floor [Bool] only consider spaces on the same floor
+  # @param same_floor [Boolean] only consider spaces on the same floor
   # @return [Hash] sorted hash with array of spaces and area
   def space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor = true)
     same_floor_spaces = []
@@ -2281,7 +2280,7 @@ class Standard
   # Find the space that has the most wall area touching this space.
   #
   # @param space [OpenStudio::Model::Space] space object
-  # @param same_floor [Bool] only consider spaces on the same floor
+  # @param same_floor [Boolean] only consider spaces on the same floor
   # @return [OpenStudio::Model::Space] space object
   def space_get_adjacent_space_with_most_shared_wall_area(space, same_floor = true)
     return get_adjacent_spaces_with_touching_area(same_floor)[0][0]
@@ -2938,8 +2937,8 @@ class Standard
 
   # A function to check whether a space is a return / supply plenum.
   # This function only works on spaces used as a AirLoopSupplyPlenum or AirLoopReturnPlenum
-  # @param [OpenStudio::Model::Space] space
-  # @return boolean true if it is plenum, else false.
+  # @param space [OpenStudio::Model::Space]
+  # @return [Boolean] true if it is plenum, else false.
   def space_is_plenum(space)
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -2970,8 +2969,8 @@ class Standard
 
   # Provide the type of daylighting control type
   #
-  # @param [OpenStudio::Model::Space] OpenStudio Space object
-  # return [String] daylighting control type
+  # @param space [OpenStudio::Model::Space] OpenStudio Space object
+  # @return [String] daylighting control type
   def space_daylighting_control_type(space)
     return 'Stepped'
   end
@@ -2979,9 +2978,17 @@ class Standard
   # Provide the minimum input power fraction for continuous
   # dimming daylighting control
   #
-  # @param [OpenStudio::Model::Space] OpenStudio Space object
-  # return [Float] daylighting minimum input power fraction
+  # @param space [OpenStudio::Model::Space] OpenStudio Space object
+  # @return [Double] daylighting minimum input power fraction
   def space_daylighting_minimum_input_power_fraction(space)
     return 0.3
+  end
+
+  # Create and assign PRM computer room electric equipment schedule
+  #
+  # @param space [OpenStudio::Model::Space] OpenStudio Space object
+  # @return [Boolean] returns true if successful, false if not
+  def space_add_prm_computer_room_equipment_schedule(space)
+    return true
   end
 end

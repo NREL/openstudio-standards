@@ -48,7 +48,7 @@ class ASHRAE901PRM < Standard
   # Determine the required enthalpy recovery ratio (ERR)
   #
   # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] OpenStudio heat exchanger object
-  # @return [Float] ERR
+  # @return [Double] enthalpy recovery ratio
   def heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio(heat_exchanger_air_to_air_sensible_and_latent)
     return 0.5
   end

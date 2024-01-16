@@ -19,12 +19,12 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
   # Set global weather files sample.
   NECB_epw_files_for_cdn_climate_zones = [
-      'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw', #  CZ 4 HDD = 2932
-      'CAN_BC_Kamloops.AP.718870_CWEC2016.epw', #    CZ 5 HDD = 3567
-      'CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw', #CZ 6 HDD = 4563
-      'CAN_AB_Banff.CS.711220_CWEC2016.epw', #CZ 7aHDD = 5501
-      'CAN_ON_Armstrong.AP.718410_CWEC2016.epw', #CZ 7b HDD = 6572
-      'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
+      'CAN_BC_Vancouver.Intl.AP.718920_CWEC2020.epw', #  CZ 4 HDD = 2932
+      'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw', #    CZ 5 HDD = 3567
+      'CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw', #CZ 6 HDD = 4563
+      'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw', #CZ 7aHDD = 5501
+      'CAN_AB_Fort.Mcmurray.AP.716890_CWEC2020.epw', #CZ 7b HDD = 6572
+      'CAN_NT_Yellowknife.AP.719360_CWEC2020.epw' # CZ 8HDD = 12570
   ]
 
   # Create scaffolding to create a model with windows, then reset to appropriate values.
@@ -103,7 +103,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   # test will set up  
   # for all HDDs 
   # NECB2011 8.4.4.1
-  # @return [Bool] true if successful. 
+  # @return [Boolean] true if successful. 
   def test_necb_hdd_envelope_rules()
 
     # Set up remaining parameters for test.
@@ -150,7 +150,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         standard.apply_fdwr_srr_daylighting(model: @model)
 
         # Store hdd for classifing results.
-        @hdd = standard.get_necb_hdd18(@model)
+        @hdd = standard.get_necb_hdd18(model: @model, necb_hdd: true)
 		
         # Set the infiltration rate at each space.
         @model.getSpaces.sort.each do |space|

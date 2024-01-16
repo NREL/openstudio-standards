@@ -78,7 +78,7 @@ class DOERefPre1980 < ASHRAE901
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param elevator_type [String] valid choices are Traction, Hydraulic
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @return [Double] elevator lift power in watts
   def model_elevator_lift_power(model, elevator_type, building_type)
     lift_pwr_w = 0

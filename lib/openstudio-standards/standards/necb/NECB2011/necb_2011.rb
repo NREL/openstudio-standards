@@ -23,6 +23,18 @@ class NECB2011 < Standard
     return variable.to_f
   end
 
+  # This method converts arguments to bool.  Anything other than a bool false or string 'false' is converted
+  # to a bool true.  Bool false and case insesitive string false are turned into bool false.
+  def convert_arg_to_bool(variable:, default:)
+    return true if variable.nil?
+    if variable.is_a? String
+      return true if variable.to_s.downcase == 'necb_default'
+      return false if variable.to_s.downcase == 'false'
+    end
+    return false if variable == false
+    return true
+  end
+
   def get_standards_table(table_name:)
     if @standards_data['tables'][table_name].nil?
       message = "Could not find table #{table_name} in database."
@@ -151,11 +163,15 @@ class NECB2011 < Standard
     rm * c # Delta in meters
   end
 
-  def get_necb_hdd18(model)
+  def get_necb_hdd18(model:, necb_hdd: true)
     max_distance_tolerance = 500000
     min_distance = 100000000000000.0
     necb_closest = nil
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+    # If necb_hdd is false use the information in the .stat file associated with the.epw file.
+    unless necb_hdd
+      return epw.hdd18.to_f
+    end
     # this extracts the table from the json database.
     necb_2015_table_c1 = @standards_data['tables']['necb_2015_table_c1']['table']
     necb_2015_table_c1.each do |necb|
@@ -236,7 +252,8 @@ class NECB2011 < Standard
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil,
                                    tbd_option: nil,
-                                   tbd_interpolate: false)
+                                   tbd_interpolate: false,
+                                   necb_hdd: true)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
@@ -294,7 +311,8 @@ class NECB2011 < Standard
                                 shw_scale: shw_scale,  # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) a float number larger than 0.0
                                 output_meters: output_meters,
                                 airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
-                                baseline_system_zones_map_option: baseline_system_zones_map_option  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                necb_hdd: necb_hdd
                                 )
 
   end
@@ -369,12 +387,14 @@ class NECB2011 < Standard
                            shw_scale: nil,
                            output_meters: nil,
                            airloop_economizer_type: nil,
-                           baseline_system_zones_map_option: nil)
+                           baseline_system_zones_map_option: nil,
+                           necb_hdd: true)
     self.fuel_type_set = SystemFuels.new()
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
+    necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
@@ -403,10 +423,12 @@ class NECB2011 < Standard
                    glass_door_solar_trans: glass_door_solar_trans,
                    fixed_wind_solar_trans: fixed_wind_solar_trans,
                    skylight_solar_trans: skylight_solar_trans,
-                   infiltration_scale: infiltration_scale)
+                   infiltration_scale: infiltration_scale,
+                   necb_hdd: necb_hdd)
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
-                               srr_set: srr_set)
+                               srr_set: srr_set,
+                               necb_hdd: necb_hdd)
     apply_thermal_bridging(model: model,
                            tbd_option: tbd_option,
                            tbd_interpolate: tbd_interpolate,
@@ -570,7 +592,13 @@ class NECB2011 < Standard
     # apply unitary cop
     ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: true, sql_db_vars_map: sql_db_vars_map)
     # set capacities of district heating and cooling equipment for ground-source heat pump ecm
-    ecm.set_ghx_loop_district_cap(model) if (!model.getDistrictHeatings.empty? && !model.getDistrictCoolings.empty?)
+    district_heat = false
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      district_heat = !model.getDistrictHeatings.empty?
+    else
+      district_heat = !model.getDistrictHeatingWaters.empty?
+    end
+    ecm.set_ghx_loop_district_cap(model) if (district_heat && !model.getDistrictCoolings.empty?)
 
     # -------Pump sizing required by some vintages----------------
     # Apply Pump power as required.
@@ -662,7 +690,8 @@ class NECB2011 < Standard
                      glass_door_solar_trans: nil,
                      fixed_wind_solar_trans: nil,
                      skylight_solar_trans: nil,
-                     infiltration_scale: nil)
+                     infiltration_scale: nil,
+                     necb_hdd: true)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     model_apply_infiltration_standard(model)
@@ -685,7 +714,8 @@ class NECB2011 < Standard
                                            skylight_cond: skylight_cond,
                                            glass_door_solar_trans: glass_door_solar_trans,
                                            fixed_wind_solar_trans: fixed_wind_solar_trans,
-                                           skylight_solar_trans: skylight_solar_trans)
+                                           skylight_solar_trans: skylight_solar_trans,
+                                           necb_hdd: necb_hdd)
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
@@ -916,12 +946,12 @@ class NECB2011 < Standard
   #     # limit
   #     # <-3.1:  Remove all the windows/skylights
   #     # > 1:  Do nothing
-  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0, necb_hdd: true)
     fdwr_set = -1.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil?
     srr_set = -1.0 if (srr_set == 'NECB_default') || srr_set.nil?
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
-    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: necb_hdd)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
@@ -935,7 +965,7 @@ class NECB2011 < Standard
   # @param model [OpenStudio::Model::Model] an OpenStudio model
   # @param tbd_option [String] BTAP/TBD option
   #
-  # @return [Bool] true if successful, e.g. no errors, compliant if uprated
+  # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
 
   ##
   # (Optionally) uprates, then derates, envelope surface constructions due to
@@ -945,12 +975,12 @@ class NECB2011 < Standard
   #
   # @param model [OpenStudio::Model::Model] an OpenStudio model
   # @param tbd_option [String] BTAP/TBD option
-  # @param tbd_interpolate [Bool] true if TBD interpolates between costed Uo
+  # @param tbd_interpolate [Boolean] true if TBD interpolates between costed Uo
   # @param wall_U [Double] wall conductance in W/m2.K (nil by default)
   # @param floor_U [Double] floor conductance in W/m2.K (nil by default)
   # @param roof_U [Double] roof conductance in W/m2.K (nil by default)
   #
-  # @return [Bool] true if successful, e.g. no errors, compliant if uprated
+  # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
   def apply_thermal_bridging(model: nil,
                              tbd_option: 'none',
                              tbd_interpolate: false,
@@ -992,8 +1022,7 @@ class NECB2011 < Standard
     true
   end
 
-
-  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
+  # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     raise('validation of model failed.') unless validate_initial_model(model)
 
@@ -1028,7 +1057,7 @@ class NECB2011 < Standard
   #
   # @param min_occ_pct [Double] the fractional value below which
   # the system will be considered unoccupied.
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
     # Set the system to night cycle
     air_loop_hvac.setNightCycleControlType('CycleOnAny')
@@ -1210,7 +1239,7 @@ class NECB2011 < Standard
     return true
   end
 
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def set_occ_sensor_spacetypes(model, space_type_map)
     building_type = 'Space Function'
     space_type_map.each do |space_type_name, space_names|
@@ -1366,7 +1395,7 @@ class NECB2011 < Standard
       daylighted_area_under_skylights_hash = {}
       skylight_effective_aperture_hash = {}
 
-      ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011. #TODO: consider removing overlapped sidelighted area
+      ##### Calculate "Primary Sidelighted Areas" AND "Sidelighting Effective Aperture" as per NECB2011. # @todo consider removing overlapped sidelighted area
       daylight_spaces.sort.each do |daylight_space|
         primary_sidelighted_area = 0.0
         area_weighted_vt_handle = 0.0
@@ -1679,7 +1708,7 @@ class NECB2011 < Standard
   end # END model_add_daylighting_controls(model:, daylighting_type:)
 
   ##### Define ScheduleTypeLimits for Any_Number_ppm
-  ##### TODO: (upon other BTAP tasks) This function can be added to btap/schedules.rb > module StandardScheduleTypeLimits
+  ##### @todo (upon other BTAP tasks) This function can be added to btap/schedules.rb > module StandardScheduleTypeLimits
   def get_any_number_ppm(model)
     name = 'Any_Number_ppm'
     any_number_ppm_schedule_type_limits = model.getScheduleTypeLimitsByName(name)
@@ -1699,7 +1728,7 @@ class NECB2011 < Standard
     return if dcv_type == 'NECB_Defualt'
 
     if dcv_type == 'Occupancy_based_DCV' || dcv_type == 'CO2_based_DCV'
-      # TODO: IMPORTANT: (upon other BTAP tasks) Set a value for the "Outdoor Air Flow per Person" field of the "OS:DesignSpecification:OutdoorAir" object
+      # @todo IMPORTANT: (upon other BTAP tasks) Set a value for the "Outdoor Air Flow per Person" field of the "OS:DesignSpecification:OutdoorAir" object
       # Note: The "Outdoor Air Flow per Person" field is required for occupancy-based DCV.
       # Note: The "Outdoor Air Flow per Person" values should be based on ASHRAE 62.1: Article 6.2.2.1.
       # Note: The "Outdoor Air Flow per Person" should be entered for "ventilation_per_person" in "lib/openstudio-standards/standards/necb/NECB2011/data/space_types.json"
@@ -1836,17 +1865,17 @@ class NECB2011 < Standard
 
     # ##### Since Atrium's LPD for LED lighting depends on atrium's height, the height of the atrium (if applicable) should be found.
     standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
-    if standards_space_type.include? 'Atrium' # TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
+    if standards_space_type.include? 'Atrium' # @todo Note that since none of the archetypes has Atrium, this was tested for 'Dining'. #Atrium
       puts "#{standards_space_type} - has atrium" # space_type.name.to_s
       # Get the max height for the spacetype.
       max_space_height_for_spacetype = get_max_space_height_for_space_type(space_type: space_type)
-      if max_space_height_for_spacetype < 12.0 # TODO: Note that since none of the archetypes has Atrium, this was tested for 'Dining' with the threshold of 5.0 m for space_height.
-        # TODO: Regarding the below equations, identify which version of ASHRAE 90.1 was used in NECB2015.
+      if max_space_height_for_spacetype < 12.0 # @todo Note that since none of the archetypes has Atrium, this was tested for 'Dining' with the threshold of 5.0 m for space_height.
+        # @todo Regarding the below equations, identify which version of ASHRAE 90.1 was used in NECB2015.
         atrium_lpd_eq_smaller_12_intercept = 0
         atrium_lpd_eq_smaller_12_slope = 1.06
         atrium_lpd_eq_larger_12_intercept = 4.3
         atrium_lpd_eq_larger_12_slope = 1.06
-        lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_smaller_12_intercept + atrium_lpd_eq_smaller_12_slope * 12.0) * 0.092903 # W/ft2 TODO: Note that for NECB2011, a constant LPD is used for atrium based on NECB2015's equations. NECB2011's threshold for height is 13.0 m.
+        lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_smaller_12_intercept + atrium_lpd_eq_smaller_12_slope * 12.0) * 0.092903 # W/ft2 @todo Note that for NECB2011, a constant LPD is used for atrium based on NECB2015's equations. NECB2011's threshold for height is 13.0 m.
       elsif max_space_height_for_spacetype >= 12.0 && max_space_height_for_spacetype < 13.0
         lighting_per_area_led_lighting_atrium = (atrium_lpd_eq_larger_12_intercept + atrium_lpd_eq_larger_12_slope * 12.5) * 0.092903 # W/ft2
       else # i.e. space_height >= 13.0
@@ -1868,7 +1897,7 @@ class NECB2011 < Standard
   # Some loads are governed by the standard, others are typical values
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_loads(model, lights_type, lights_scale)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 

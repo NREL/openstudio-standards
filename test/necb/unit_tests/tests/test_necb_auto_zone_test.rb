@@ -13,7 +13,7 @@ class NECB_Autozone_Tests < Minitest::Test
     define_folders(__dir__)
     define_std_ranges
 
-    @epw_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
+    @epw_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
     @template = 'NECB2011'
   end
 

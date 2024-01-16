@@ -18,7 +18,7 @@ class NECB_Weather_Tests < Minitest::Test
   # This is not for compliance, but for archetype development. This will compare
   # to values in an excel/csv file stored in the weather folder.
   # NECB2011 8.4.2.3
-  # @return [Bool] true if successful.
+  # @return [Boolean] true if successful.
   def test_weather_reading()
     #todo Must deal with ground temperatures..They are currently not correct for NECB.
     test_results = File.join(@test_results_folder,'weather_test_results.json')

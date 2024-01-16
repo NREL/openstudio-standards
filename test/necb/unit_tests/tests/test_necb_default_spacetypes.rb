@@ -17,7 +17,7 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
 
   # Tests to ensure that the NECB default schedules are being defined correctly.
   # This is not for compliance, but for archetype development. 
-  # @return [Bool] true if successful. 
+  # @return [Boolean] true if successful. 
   def test_schedule_type_defaults()
 
     # Set up remaining parameters for test.

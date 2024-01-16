@@ -46,6 +46,7 @@ Standard.class_eval do
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model.getAirLoopHVACs.each do |air_loop|
       next unless air_loop_hvac_multizone_vav_system?(air_loop)
+
       model_system_outdoor_air_sizing_vrp_method(air_loop)
       air_loop_hvac_apply_vav_damper_action(air_loop)
     end
@@ -136,7 +137,7 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param rel_path_to_osm [String] the path to an .osm file, relative to this file
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_replace_model_from_osm(model, rel_path_to_osm)
     # Take the existing model and remove all the objects
     # (this is cheesy), but need to keep the same memory block
@@ -243,7 +244,7 @@ Standard.class_eval do
   # Some loads are governed by the standard, others are typical values
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_loads(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
@@ -357,7 +358,7 @@ Standard.class_eval do
   # @param model[OpenStudio::Model::Model] OpenStudio Model
   # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_constructions(model, building_type, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
     is_residential = 'No' # default is nonresidential for building level
@@ -542,8 +543,8 @@ Standard.class_eval do
   # CFactorUndergroundWallConstruction and require some additional parameters when compared to Construction
   #
   # @param model[OpenStudio::Model::Model] OpenStudio Model
-  # @param climate_zone [string] climate zone as described for prototype models. C-Factor is based on this parameter
-  # @param building_type [string] the building type
+  # @param climate_zone [String climate zone as described for prototype models. C-Factor is based on this parameter
+  # @param building_type [String the building type
   # @return [void]
   def model_set_below_grade_wall_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
@@ -620,8 +621,8 @@ Standard.class_eval do
   # calculated. Used for F-Factor floors that require additional parameters.
   #
   # @param model [OpenStudio Model] OpenStudio model being modified
-  # @param building_type [string] the building type
-  # @param climate_zone [string] climate zone as described for prototype models. F-Factor is based on this parameter
+  # @param building_type [String the building type
+  # @param climate_zone [String climate zone as described for prototype models. F-Factor is based on this parameter
   def model_set_floor_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
@@ -788,7 +789,7 @@ Standard.class_eval do
   #
   # @param model[OpenStudio::Model::Model] OpenStudio Model
   # @param building_type [String] the building type
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_internal_mass(model, building_type)
     # Assign a material to all internal mass objects
     material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
@@ -847,7 +848,7 @@ Standard.class_eval do
   # e.g. (Prototype.secondary_school.rb) file.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_create_thermal_zones(model, space_multiplier_map = nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
 
@@ -1449,7 +1450,7 @@ Standard.class_eval do
   # the PNNL documentation.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo genericize and move this method to Standards.Space
   def model_add_occupancy_sensors(model, building_type, climate_zone)
     # Only add occupancy sensors for 90.1-2010
@@ -1553,7 +1554,7 @@ Standard.class_eval do
   # in OpenStudio_Standards_prototype_inputs
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo translate w/linear foot of facade, door, parking, etc
   #   into lookup table and implement that way instead of hard-coding as
   #   inputs in the spreadsheet.
@@ -1628,7 +1629,7 @@ Standard.class_eval do
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo Consistency - make prototype and reference vintages consistent
   def model_modify_infiltration_coefficients(model, building_type, climate_zone)
     # Select the terrain type, which
@@ -1673,7 +1674,7 @@ Standard.class_eval do
   # Sets the inside and outside convection algorithms for different vintages
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo Consistency - make prototype and reference vintages consistent
   def model_modify_surface_convection_algorithm(model)
     inside = model.getInsideSurfaceConvectionAlgorithm
@@ -1721,7 +1722,7 @@ Standard.class_eval do
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo Consistency - make sizing factors consistent
   #   between building types, climate zones, and vintages?
   def model_apply_sizing_parameters(model, building_type)
@@ -1798,7 +1799,7 @@ Standard.class_eval do
   # Applies the Prototype Building assumptions that contradict/supersede
   # the given standard.
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   def model_apply_prototype_hvac_efficiency_adjustments(model)
     building_data = model_get_building_properties(model)
     building_type = building_data['building_type']
@@ -2488,7 +2489,7 @@ Standard.class_eval do
   # by Steven Taylor and Hwakong Cheng.
   # https://tayloreng.egnyte.com/dl/mN0c9t4WSO/ASHRAE_Journal_-_Economizer_High_Limit_Devices_and_Why_Enthalpy_Economizers_Dont_Work.pdf_
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the economizer type.  Possible values are:
   # 'NoEconomizer'
@@ -2594,7 +2595,7 @@ Standard.class_eval do
   # @author Xuechen (Jerry) Lei, PNNL
   #
   # @param model [OpenStudio::Model::Model] OpenStudio Model
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_lights_shutoff(model)
     return false
   end
@@ -2612,7 +2613,7 @@ Standard.class_eval do
   # Metal coiling door code minimum infiltration rate at 75 Pa
   #
   # @param [String] Climate zone
-  # @return [Float] Minimum infiltration rate for metal coiling doors
+  # @return [Double] Minimum infiltration rate for metal coiling doors
   def model_door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
     case climate_zone
       when 'ASHRAE 169-2006-7A',
@@ -2628,7 +2629,7 @@ Standard.class_eval do
   # Metal rollup door code minimum infiltration rate at 75 Pa
   #
   # @param [String] Climate zone
-  # @return [Float] Minimum infiltration rate for metal coiling doors
+  # @return [Double] Minimum infiltration rate for metal coiling doors
   def model_door_infil_flow_rate_rollup_cfm_ft2(climate_zone)
     return 0.4
   end
@@ -2636,7 +2637,7 @@ Standard.class_eval do
   # Open door infiltration rate at 75 Pa
   #
   # @param [String] Climate zone
-  # @return [Float] Open door infiltration rate
+  # @return [Double] Open door infiltration rate
   def model_door_infil_flow_rate_open_cfm_ft2(climate_zone)
     return 9.7875
   end
@@ -2823,7 +2824,7 @@ Standard.class_eval do
   # Add transfer to prototype for spaces that require it
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] true if successful, false otherwise
+  # @return [Boolean] returns true if successful, false if not
   def model_add_transfer_air(model)
     # Do not add transfer air if not required
     return true unless model_transfer_air_required?(model)
@@ -2884,8 +2885,8 @@ Standard.class_eval do
   # required to setup/back their thermostat setpoints
   #
   # @param time_offset_hash [Hash] Hash providing time (key) and schedule value offset (values)
-  # @param schedule [OpenStudio::model::ScheduleRuleset] OpenStudio schedule object
-  # @return [OpenStudio::model::ScheduleRuleset] Modified OpenStudio schedule object
+  # @param schedule [OpenStudio::Model::ScheduleRuleset] OpenStudio schedule object
+  # @return [OpenStudio::Model::ScheduleRuleset] Modified OpenStudio schedule object
   def model_offset_schedule_value(schedule, time_offset_hash)
     offset_sch = schedule.clone(schedule.model).to_ScheduleRuleset.get
 
@@ -2924,8 +2925,8 @@ Standard.class_eval do
   # required to setup/back their thermostat setpoints
   #
   # @param time_offset_hash [Hash] Hash providing time (key) and schedule value offset (values)
-  # @param schedule [OpenStudio::model::ScheduleRuleset] OpenStudio schedule object
-  # @return [OpenStudio::model::ScheduleRuleset] Modified OpenStudio schedule object
+  # @param schedule [OpenStudio::Model::ScheduleRuleset] OpenStudio schedule object
+  # @return [OpenStudio::Model::ScheduleRuleset] Modified OpenStudio schedule object
   def model_set_schedule_value(schedule, time_value_hash)
     return nil unless schedule.to_ScheduleRuleset.is_initialized
 
@@ -2962,8 +2963,8 @@ Standard.class_eval do
 
   # Modify thermostat schedule to account for a thermostat setback/up
   #
-  # @param thermostat [OpenStudio::model::ThermostatSetpointDualSetpoint] OpenStudio ThermostatSetpointDualSetpoint object
-  # @return [Boolean] true if success
+  # @param thermostat [OpenStudio::Model::ThermostatSetpointDualSetpoint] OpenStudio ThermostatSetpointDualSetpoint object
+  # @return [Boolean] returns true if successful, false if not
   def space_occupancy_standby_mode(thermostat)
     return false
   end

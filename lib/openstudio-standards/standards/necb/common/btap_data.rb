@@ -499,7 +499,8 @@ class BTAPData
   def climate_data
     # Store Geography Data
     geography_data = {}
-    geography_data['location_necb_hdd'] = @standard.get_necb_hdd18(@model)
+    geography_data['location_necb_hdd'] = @standard.get_necb_hdd18(model: @model, necb_hdd: true)
+    geography_data['location_weather_file_hdd'] = @standard.get_necb_hdd18(model: @model, necb_hdd: false)
     geography_data['location_weather_file'] = File.basename(@model.getWeatherFile.path.get.to_s)
     geography_data['location_epw_cdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).cdd18
     geography_data['location_epw_hdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).hdd18
@@ -1353,7 +1354,7 @@ class BTAPData
     data['energy_peak_electric_w_per_m_sq'] = electric_peak.empty? ? 0.0 : electric_peak.get / @conditioned_floor_area_m_sq
     data['energy_peak_natural_gas_w_per_m_sq'] = natural_gas_peak.empty? ? 0.0 : natural_gas_peak.get / @conditioned_floor_area_m_sq
 
-    # Peak heating load  #TODO: IMPORTANT NOTE: Peak heating load must be updated if a combination of fuel types is used in a building model.
+    # Peak heating load  # @todo IMPORTANT NOTE: Peak heating load must be updated if a combination of fuel types is used in a building model.
     command = "SELECT Value
                FROM TabularDataWithStrings
                WHERE ReportName='EnergyMeters'
@@ -1375,7 +1376,7 @@ class BTAPData
     heating_peak_w = [heating_peak_w_electricity.to_f, heating_peak_w_gas.to_f].max
     data['heating_peak_w_per_m_sq'] = heating_peak_w / @conditioned_floor_area_m_sq
 
-    # Peak cooling load    #TODO: IMPORTANT NOTE: Peak cooling load must be updated if a combination of fuel types is used in a building model.
+    # Peak cooling load    # @todo IMPORTANT NOTE: Peak cooling load must be updated if a combination of fuel types is used in a building model.
     command = "SELECT Value
                FROM TabularDataWithStrings
                WHERE ReportName='EnergyMeters'
@@ -1815,7 +1816,7 @@ class BTAPData
     return var.get
   end
 
-  # TODO: SQL command units may have been converted wrong.
+  # @todo SQL command units may have been converted wrong.
 
   def get_actual_child_object(object)
     # monkey patch class to have a decendants static method to return all possible subclasses of the object.

@@ -4,7 +4,7 @@ class Standard
   # Sets the minimum effectiveness of the heat exchanger per the standard.
   #
   # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] the heat exchanger
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def heat_exchanger_air_to_air_sensible_and_latent_apply_effectiveness(heat_exchanger_air_to_air_sensible_and_latent)
     # Assumed to be sensible and latent at all flow
     full_htg_sens_eff, full_htg_lat_eff, part_htg_sens_eff, part_htg_lat_eff, full_cool_sens_eff, full_cool_lat_eff, part_cool_sens_eff, part_cool_lat_eff = heat_exchanger_air_to_air_sensible_and_latent_minimum_effectiveness(heat_exchanger_air_to_air_sensible_and_latent)
@@ -46,9 +46,9 @@ class Standard
   # climate zones a 50% ERR at typical condition leads a ERR > 50%,
   # the ERR is thus scaled down.
   #
-  # @param enthalpy_recovery_ratio [float] Enthalpy Recovery Ratio (ERR)
+  # @param enthalpy_recovery_ratio [Double] Enthalpy Recovery Ratio (ERR)
   # @param climate_zone [String] climate zone
-  # @return [float] adjusted ERR
+  # @return [Double] adjusted ERR
   def enthalpy_recovery_ratio_design_to_typical_adjustment(enthalpy_recovery_ratio, climate_zone)
     if climate_zone.include? '2B'
       enthalpy_recovery_ratio /= 0.65 / 0.55

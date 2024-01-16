@@ -127,7 +127,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param epw_file [String] the name of the epw file; if blank will default to epw file for the ASHRAE climate zone
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_design_days_and_weather_file(model, climate_zone, epw_file = '', weather_dir = nil)
     success = true
     require_relative 'Weather.stat_file'
@@ -217,7 +217,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param [String] openstudio-standards building type
   # @param [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_ground_temperatures(model, building_type, climate_zone)
     # Define the weather file for each climate zone
     climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
@@ -636,7 +636,7 @@ module BTAP
 
       # This method will set the weather file and returns a log string.
       # @author phylroy.lopez@nrcan.gc.ca
-      # @param model [OpenStudio::model::Model] A model object
+      # @param model [OpenStudio::Model::Model] A model object
       # @return [String] log
       def set_weather_file(model, runner = nil)
         BTAP.runner_register('Info', 'BTAP::Environment::WeatherFile::set_weather', runner)
@@ -915,7 +915,7 @@ module BTAP
           end
         end
         return heating_design_day_number, cooling_design_day_number
-      end # def get_heating_design_day_number
+      end
 
       # This method calculates dehumidification degree days (DDD)
       # @author sara.gilani@canada.ca
@@ -991,11 +991,10 @@ module BTAP
 
             ddd += line[CALCULATED_HUMIDITY_RATIO_AVG_DAILY_DIFF_BASE].to_f
 
-          end # unless line.first =~ /\D(.*)/
-        end # @filearray.each do |line|
-        # puts @filearray
+          end
+        end
         return ddd
-      end # def calculate_humidity_ratio
-    end # Environment
+      end
+    end
   end
 end

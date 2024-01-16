@@ -109,8 +109,8 @@ module Baseline9012013
         if (heat_delta - 20).abs > 0.1
           heat_delta_bad << "#{zone.name} Htg delta =#{heat_delta}"
         end
-      end # if !tstat
-    end #model.get
+      end
+    end
     assert_equal(cool_delta_bad.size, 0, "Cooling supply air to room air temperature difference is not 20F for zones #{cool_delta_bad.sort.join("\n")}.")
     assert_equal(heat_delta_bad.size, 0, "Heating supply air to room air temperature difference is not 20F for zones #{heat_delta_bad.sort.join("\n")}.")
 
@@ -576,9 +576,17 @@ module Baseline9012013
     prm_maj_sec = 'G3.1.1 Baseline HVAC System Type'
 
     # get model objects, could use zone.heatinFuelTypes or zone.appGHeatingFuelTypes
-    prop_dist_htgs = prop_model.getDistrictHeatings
+    if prop_model.version < OpenStudio::VersionString.new('3.7.0')
+      prop_dist_htgs = prop_model.getDistrictHeatings
+    else
+      prop_dist_htgs = prop_model.getDistrictHeatingWaters
+    end
     prop_dist_clgs = prop_model.getDistrictCoolings
-    base_dist_htgs = base_model.getDistrictHeatings
+    if prop_model.version < OpenStudio::VersionString.new('3.7.0')
+      base_dist_htgs = base_model.getDistrictHeatings
+    else
+      base_dist_htgs = base_model.getDistrictHeatingWaters
+    end
     base_dist_clgs = base_model.getDistrictCoolings
 
     # tests
@@ -660,7 +668,7 @@ module Baseline9012013
     chiller_num = chillers.size
 
     # get baseline peak cooling laod
-    base_peak_clg_si = 'TODO' # get from sql
+    base_peak_clg_si = '' # @todo get from sql
     base_peak_clg_ip = 200 # OpenStudio.convert(base_peak_clg_si, 'W', 'tons').get
 
     chiller_cap = []
@@ -674,7 +682,7 @@ module Baseline9012013
       elsif base_peak_clg_ip >= 600
         assert(chiller_num >= 2, "#{prm_maj_sec}: number of chillers")
         chillers.each do |c|
-          #TODO get size
+          # @todo get size
 
         end
       end
@@ -1970,7 +1978,12 @@ module Baseline9012013
     hot_water_area_served_ft2 = 0
     zones_served = []
     # get hot water loop
-    model.getDistrictHeatings.each do |district_heating|
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      district_heatings = model.getDistrictHeatings
+    else
+      district_heatings = model.getDistrictHeatingWaters
+    end
+    district_heatings.each do |district_heating|
       if district_heating.plantLoop.is_initialized
         plant_loop = district_heating.plantLoop.get
         next if plant_loop.name.get.to_s.include? "DHW" or plant_loop.name.get.to_s.include? "Service Water Heating"
@@ -2277,7 +2290,12 @@ module Baseline9012013
   def check_hw_controls(model, failure_array)
     # get hot water loops
     hw_loops = []
-    model.getDistrictHeatings.each do |district_heating|
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      district_heatings = model.getDistrictHeatings
+    else
+      district_heatings = model.getDistrictHeatingWaters
+    end
+    district_heatings.each do |district_heating|
       if district_heating.plantLoop.is_initialized
         next if district_heating.plantLoop.get.name.get.to_s.include? "DHW" or district_heating.plantLoop.get.name.get.to_s.include? "Service Water Heating"
         hw_loops << district_heating.plantLoop.get

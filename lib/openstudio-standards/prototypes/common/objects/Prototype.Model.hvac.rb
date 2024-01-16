@@ -5,7 +5,7 @@ class Standard
   # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_hvac(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding HVAC')
 
@@ -449,7 +449,7 @@ class Standard
 
       when 'Fan Coil'
         case system['heating_type']
-        when 'Gas', 'DistrictHeating', 'Electricity'
+        when 'Gas', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam', 'Electricity'
           hot_water_loop = model_get_or_add_hot_water_loop(model, system['heating_type'])
         when nil
           hot_water_loop = nil
@@ -468,7 +468,7 @@ class Standard
 
       when 'Baseboards'
         case system['heating_type']
-        when 'Gas', 'DistrictHeating'
+        when 'Gas', 'DistrictHeating', 'DistrictHeatingWater', 'DistrictHeatingSteam'
           hot_water_loop = model_get_or_add_hot_water_loop(model, system['heating_type'])
         when 'Electricity'
           hot_water_loop = nil
@@ -498,7 +498,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param area_type [String] Valid choices are residential and nonresidential
   # @param delivery_type [String] Conditioning delivery type. Valid choices are air and hydronic
-  # @param heating_source [String] Valid choices are Electricity, NaturalGas, DistrictHeating, DistrictAmbient
+  # @param heating_source [String] Valid choices are Electricity, NaturalGas, DistrictHeating, DistrictHeatingWater, DistrictHeatingSteam, DistrictAmbient
   # @param cooling_source [String] Valid choices are Electricity, DistrictCooling, DistrictAmbient
   # @param area_m2 [Double] Area in m^2
   # @param num_stories [Integer] Number of stories

@@ -17,7 +17,7 @@ class String
 end
 
 class GeneratorNECBRegressionTests
-  # default location circleci_tests.txt file when run on
+  # default location ci_tests.txt file when run on
 
   def initialize()
     @file_out_dir = File.absolute_path(File.join(__dir__, "..", 'tests'))
@@ -38,7 +38,7 @@ class GeneratorNECBRegressionTests
     reset_folder(@file_out_dir)
 
     @epw_files = [
-        'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
+        'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
     ]
     @templates = [
         'NECB2011',

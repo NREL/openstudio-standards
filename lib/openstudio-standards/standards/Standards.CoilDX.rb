@@ -48,7 +48,7 @@ module CoilDX
   #
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
-  # @return [Bool] returns true if it is a heat pump, false if not
+  # @return [Boolean] returns true if it is a heat pump, false if not
   def coil_dx_heat_pump?(coil_dx)
     heat_pump = false
 
@@ -84,7 +84,7 @@ module CoilDX
   #
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
-  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
+  # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [String] the heating type
   def coil_dx_heating_type(coil_dx, necb_ref_hp = false)
     htg_type = nil
@@ -160,8 +160,8 @@ module CoilDX
   #
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
-  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
-  # @return [hash] has for search criteria to be used for find object
+  # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
+  # @return [Hash] has for search criteria to be used for find object
   def coil_dx_find_search_criteria(coil_dx, necb_ref_hp = false)
     search_criteria = {}
     search_criteria['template'] = template

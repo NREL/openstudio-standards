@@ -4,10 +4,10 @@ module HighriseApartment
   # hvac adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
 
@@ -50,7 +50,7 @@ module HighriseApartment
   # add elevator and lights&fans for the top floor corridor
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def add_extra_equip_corridor(model)
     corridor_top_space = model.getSpaceByName('T Corridor').get
     elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -93,7 +93,7 @@ module HighriseApartment
   #
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def add_door_infiltration(climate_zone, model)
     return false if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
 
@@ -128,7 +128,7 @@ module HighriseApartment
   # update fan efficiency
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_update_fan_efficiency(model)
     model.getFanOnOffs.sort.each do |fan_onoff|
       next if fan_onoff.name.get.to_s.include?('ERV')
@@ -142,10 +142,10 @@ module HighriseApartment
   # swh adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
@@ -153,10 +153,10 @@ module HighriseApartment
   # geometry adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
     model_set_building_north_axis(model, 0.0)

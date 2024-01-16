@@ -5,6 +5,52 @@ require_relative 'openstudio-standards/version'
 module OpenstudioStandards
   require 'json' # Used to load standards JSON files
 
+  # Load Modules
+
+  # Geometry Module
+  require_relative 'openstudio-standards/geometry/create'
+  require_relative 'openstudio-standards/geometry/create_bar'
+  require_relative 'openstudio-standards/geometry/modify'
+  require_relative 'openstudio-standards/geometry/information'
+
+  # Construction Module
+  require_relative 'openstudio-standards/constructions/information'
+  require_relative 'openstudio-standards/constructions/modify'
+  require_relative 'openstudio-standards/constructions/materials/modify'
+
+  # Daylighting Module
+  require_relative 'openstudio-standards/daylighting/space'
+
+  # Schedules Module
+  require_relative 'openstudio-standards/schedules/create'
+  require_relative 'openstudio-standards/schedules/modify'
+  require_relative 'openstudio-standards/schedules/information'
+
+  # HVAC Module
+  require_relative 'openstudio-standards/hvac/cbecs_hvac'
+
+  # CreateTypical Module
+  require_relative 'openstudio-standards/create_typical/enumerations'
+  require_relative 'openstudio-standards/create_typical/space_type_ratios'
+  require_relative 'openstudio-standards/create_typical/create_typical'
+  require_relative 'openstudio-standards/create_typical/space_type_blend'
+
+  # QAQC Module
+  require_relative 'openstudio-standards/qaqc/calibration'
+  require_relative 'openstudio-standards/qaqc/envelope'
+  require_relative 'openstudio-standards/qaqc/eui'
+  require_relative 'openstudio-standards/qaqc/hvac'
+  require_relative 'openstudio-standards/qaqc/internal_loads'
+  require_relative 'openstudio-standards/qaqc/schedules'
+  require_relative 'openstudio-standards/qaqc/service_water_heating'
+  require_relative 'openstudio-standards/qaqc/weather_files'
+  require_relative 'openstudio-standards/qaqc/zone_conditions'
+  require_relative 'openstudio-standards/qaqc/create_results'
+  require_relative 'openstudio-standards/qaqc/reporting'
+
+  # Weather Module
+  require_relative 'openstudio-standards/weather/information'
+
   # Weather data
   require_relative 'openstudio-standards/weather/Weather.Model'
 
@@ -22,6 +68,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/schedule_translator'
   require_relative 'openstudio-standards/utilities/array'
   require_relative 'openstudio-standards/utilities/object_info'
+  require_relative 'openstudio-standards/utilities/assertion'
 
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'
@@ -284,6 +331,9 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.SpaceType"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Surface"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.DesignSpecificationOutdoorAir"
+  require_relative "#{stds}/ashrae_90_1_prm/userdata_csv/userdata_enums.rb"
+  require_relative "#{stds}/ashrae_90_1_prm/userdata_csv/ashrae_90_1_prm.UserData"
 
   # 90.1-PRM-2019
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"

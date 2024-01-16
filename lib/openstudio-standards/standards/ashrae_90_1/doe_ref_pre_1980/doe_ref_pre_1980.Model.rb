@@ -7,7 +7,7 @@ class DOERefPre1980 < ASHRAE901
   # no changes are actually made to the model.
   #
   # base infiltration rates off of.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo This infiltration method is not used by the Reference
   # buildings, fix this inconsistency.
   def model_apply_infiltration_standard(model)

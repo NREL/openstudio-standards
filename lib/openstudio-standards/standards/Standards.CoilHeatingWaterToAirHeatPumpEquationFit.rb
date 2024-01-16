@@ -88,7 +88,7 @@ class Standard
   # Finds lookup object in standards and return efficiency
   #
   # @param coil_heating_water_to_air_heat_pump [OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit] coil heating object
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_heating_water_to_air_heat_pump_standard_minimum_cop(coil_heating_water_to_air_heat_pump, rename = false)
     search_criteria = {}

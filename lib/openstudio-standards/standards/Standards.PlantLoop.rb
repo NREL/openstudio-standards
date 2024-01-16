@@ -5,7 +5,7 @@ class Standard
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_standard_controls(plant_loop, climate_zone)
     # Supply water temperature reset
     # plant_loop_enable_supply_water_temperature_reset(plant_loop) if plant_loop_supply_water_temperature_reset_required?(plant_loop)
@@ -17,7 +17,7 @@ class Standard
   # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop
   # @param dsgn_sup_wtr_temp [Double] design chilled water supply T
   # @param dsgn_sup_wtr_temp_delt [Double] design chilled water supply delta T
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def chw_sizing_control(model, chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
     # chilled water loop sizing and controls
     if dsgn_sup_wtr_temp.nil?
@@ -62,7 +62,7 @@ class Standard
   # Returns true if primary and/or secondary pumps are variable speed.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if variable flow, false if not
+  # @return [Boolean] returns true if variable flow, false if not
   def plant_loop_variable_flow_system?(plant_loop)
     variable_flow = false
 
@@ -89,7 +89,7 @@ class Standard
   #   you could set at 0.9 and just calculate the pressure rise to have your 19 W/GPM or whatever
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_pump_power(plant_loop)
     # Determine the pumping power per
     # flow based on loop type.
@@ -104,7 +104,7 @@ class Standard
 
         has_district_heating = false
         plant_loop.supplyComponents.each do |sc|
-          if sc.to_DistrictHeating.is_initialized
+          if sc.iddObjectType.valueName.to_s.include?('DistrictHeating')
             has_district_heating = true
           end
         end
@@ -187,7 +187,7 @@ class Standard
   # Applies the temperatures to the plant loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -206,7 +206,7 @@ class Standard
   # Applies the hot water temperatures to the plant loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_hot_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
 
@@ -243,7 +243,7 @@ class Standard
   # Applies the chilled water temperatures to the plant loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_chilled_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
 
@@ -286,7 +286,7 @@ class Standard
   # Applies the condenser water temperatures to the plant loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_condenser_water_temperatures(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -447,7 +447,7 @@ class Standard
   # Required if heating or cooling capacity is greater than 300,000 Btu/hr.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def plant_loop_supply_water_temperature_reset_required?(plant_loop)
     reset_required = false
 
@@ -488,7 +488,7 @@ class Standard
   # Enable reset of hot or chilled water temperature based on outdoor air temperature.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_enable_supply_water_temperature_reset(plant_loop)
     # Get the current setpoint manager on the outlet node
     # and determine if already has temperature reset
@@ -623,8 +623,8 @@ class Standard
     # on the plant loop.
     total_heating_capacity_w = 0
     plant_loop.supplyComponents.each do |sc|
-      # BoilerHotWater
       if sc.to_BoilerHotWater.is_initialized
+        # BoilerHotWater
         boiler = sc.to_BoilerHotWater.get
         if boiler.nominalCapacity.is_initialized
           total_heating_capacity_w += boiler.nominalCapacity.get
@@ -633,8 +633,8 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of Boiler:HotWater ' #{boiler.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
         end
-        # WaterHeater:Mixed
       elsif sc.to_WaterHeaterMixed.is_initialized
+        # WaterHeater:Mixed
         water_heater = sc.to_WaterHeaterMixed.get
         if water_heater.heaterMaximumCapacity.is_initialized
           total_heating_capacity_w += water_heater.heaterMaximumCapacity.get
@@ -643,8 +643,8 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name} capacity of WaterHeater:Mixed #{water_heater.name} is not available, total heating capacity of plant loop will be incorrect when applying standard.")
         end
-        # WaterHeater:Stratified
       elsif sc.to_WaterHeaterStratified.is_initialized
+        # WaterHeater:Stratified
         water_heater = sc.to_WaterHeaterStratified.get
         if water_heater.heater1Capacity.is_initialized
           total_heating_capacity_w += water_heater.heater1Capacity.get
@@ -652,9 +652,16 @@ class Standard
         if water_heater.heater2Capacity.is_initialized
           total_heating_capacity_w += water_heater.heater2Capacity.get
         end
+      elsif sc.iddObjectType.valueName.to_s.include?('DistrictHeating')
         # DistrictHeating
-      elsif sc.to_DistrictHeating.is_initialized
-        dist_htg = sc.to_DistrictHeating.get
+        case sc.iddObjectType.valueName.to_s
+        when 'OS_DistrictHeating'
+          dist_htg = sc.to_DistrictHeating.get
+        when 'OS_DistrictHeatingWater'
+          dist_htg = sc.to_DistrictHeatingWater.get
+        when 'OS_DistrictHeatingSteam'
+          dist_htg = sc.to_DistrictHeatingSteam.get
+        end
         if dist_htg.nominalCapacity.is_initialized
           total_heating_capacity_w += dist_htg.nominalCapacity.get
         elsif dist_htg.autosizedNominalCapacity.is_initialized
@@ -743,7 +750,7 @@ class Standard
   # Applies the pumping controls to the loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_pumping_type(plant_loop)
     sizing_plant = plant_loop.sizingPlant
     loop_type = sizing_plant.loopType
@@ -763,7 +770,7 @@ class Standard
   # Applies the chilled water pumping controls to the loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_chilled_water_pumping_type(plant_loop)
     # Determine the pumping type.
     minimum_cap_tons = 300.0
@@ -835,7 +842,7 @@ class Standard
   # Applies the hot water pumping controls to the loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] hot water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_hot_water_pumping_type(plant_loop)
     # Determine the minimum area to determine
     # pumping type.
@@ -870,7 +877,7 @@ class Standard
   # Applies the condenser water pumping controls to the loop based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] condenser water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_baseline_condenser_water_pumping_type(plant_loop)
     # All condenser water loops are constant flow
     control_type = 'Constant Flow'
@@ -898,7 +905,7 @@ class Standard
   # into multiple separate boilers based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] hot water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_boilers(plant_loop)
     # Skip non-heating plants
     return true unless plant_loop.sizingPlant.loopType == 'Heating'
@@ -961,8 +968,9 @@ class Standard
   # Splits the single chiller used for the initial sizing run
   # into multiple separate chillers based on Appendix G.
   #
-  # @param plant_loop_args [Array] chilled water loop (OpenStudio::Model::PlantLoop), sizing run directory
-  # @return [Bool] returns true if successful, false if not
+  # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
+  # @param sizing_run_dir [String] sizing run directory
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
@@ -1110,7 +1118,7 @@ class Standard
   # into multiple separate cooling towers based on Appendix G.
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] condenser water loop
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def plant_loop_apply_prm_number_of_cooling_towers(plant_loop)
     # Skip non-cooling plants
     return true unless plant_loop.sizingPlant.loopType == 'Condenser'
@@ -1372,7 +1380,7 @@ class Standard
       obj_type = component.iddObjectType.valueName.to_s
 
       case obj_type
-        when 'OS_DistrictHeating'
+        when 'OS_DistrictHeating', 'OS_DistrictHeatingWater', 'OS_DistrictHeatingSteam'
           primary_fuels << 'DistrictHeating'
           combination_system = false
         when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
@@ -1401,10 +1409,10 @@ class Standard
 
             # error if Loop heating fuels method is not available
             if component.model.version < OpenStudio::VersionString.new('3.6.0')
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', 'Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
             end
 
-            secondary_fuels += source_plant_loop.heatingFuelTypes.map { |f| f.valueName }
+            secondary_fuels += source_plant_loop.heatingFuelTypes.map(&:valueName)
             secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop)
           end
 
@@ -1430,10 +1438,10 @@ class Standard
 
             # error if Loop heating fuels method is not available
             if component.model.version < OpenStudio::VersionString.new('3.6.0')
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', 'Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
             end
 
-            secondary_fuels += source_plant_loop.heatingFuelTypes.map { |f| f.valueName }
+            secondary_fuels += source_plant_loop.heatingFuelTypes.map(&:valueName)
             secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop)
           end
 
@@ -1451,10 +1459,10 @@ class Standard
 
             # error if Loop heating fuels method is not available
             if component.model.version < OpenStudio::VersionString.new('3.6.0')
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', "Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.PlantLoop', 'Required Loop method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
             end
 
-            secondary_fuels += source_plant_loop.heatingFuelTypes.map { |f| f.valueName }
+            secondary_fuels += source_plant_loop.heatingFuelTypes.map(&:valueName)
             secondary_heating_capacity += plant_loop_total_heating_capacity(source_plant_loop)
           end
 
@@ -1493,5 +1501,44 @@ class Standard
     # Heat capacity of water (4180 J/(kg*K))
     plantloop_capacity = plantloop_dt * plantloop_maxflowrate * 1000.0 * 4180.0
     return plantloop_capacity
+  end
+
+  # This methods replaces all indoor or outdoor pipes which model the heat transfer between the pipe and the
+  # environement by adiabatic pipes.
+  #
+  # @param plant_loop [OpenStudio::Model::PlantLoop] plant loop
+  # @return [Boolean] returns true if successful
+  def plant_loop_adiabatic_pipes_only(plant_loop)
+    supply_side_components = plant_loop.supplyComponents
+    demand_side_components = plant_loop.demandComponents
+    plant_loop_components = supply_side_components += demand_side_components
+    plant_loop_components.each do |component|
+      # Get the object type
+      obj_type = component.iddObjectType.valueName.to_s
+      next unless ['OS_Pipe_Indoor', 'OS_Pipe_Outdoor'].include?(obj_type)
+
+      # Get pipe object
+      pipe = nil
+      case obj_type
+      when 'OS_Pipe_Indoor'
+        pipe = component.to_PipeIndoor.get
+      when 'OS_Pipe_Outdoor'
+        pipe = component.to_PipeOutdoor.get
+      end
+
+      # Get pipe node
+      node = prm_get_optional_handler(pipe, @sizing_run_dir, 'to_StraightComponent', 'outletModelObject', 'to_Node')
+
+      # Get pipe and node names
+      node_name = node.name.get
+      pipe_name = pipe.name.get
+
+      # Replace indoor or outdoor pipe by an adiabatic pipe
+      new_pipe = OpenStudio::Model::PipeAdiabatic.new(plant_loop.model)
+      new_pipe.setName(pipe_name)
+      new_pipe.addToNode(node)
+      component.remove
+    end
+    return true
   end
 end

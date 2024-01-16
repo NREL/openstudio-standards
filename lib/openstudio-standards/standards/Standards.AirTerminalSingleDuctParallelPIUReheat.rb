@@ -4,7 +4,7 @@ class Standard
   # Sets the fan power of a PIU fan based on the W/cfm specified in the standard.
   #
   # @param air_terminal_single_duct_parallel_piu_reheat [OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat] air terminal object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_terminal_single_duct_parallel_piu_reheat_apply_prm_baseline_fan_power(air_terminal_single_duct_parallel_piu_reheat)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirTerminalSingleDuctParallelPIUReheat', "Setting PIU fan power for #{air_terminal_single_duct_parallel_piu_reheat.name}.")
 
@@ -72,7 +72,7 @@ class Standard
   # means that the secondary fan will be on when the primary air
   # flow is at the minimum flow fraction.
   #
-  # @return [Float] returns nil or a float representing the fraction
+  # @return [Double] returns nil or a float representing the fraction
   def air_terminal_single_duct_parallel_piu_reheat_fan_on_flow_fraction
     return nil
   end
@@ -90,7 +90,7 @@ class Standard
   #
   # @param air_terminal_single_duct_parallel_piu_reheat [OpenStudio::Model::AirTerminalSingleDuctParallelPIUReheat] the air terminal object
   # @param zone_min_oa [Double] the zone outdoor air flow rate, in m^3/s.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_terminal_single_duct_parallel_piu_reheat_apply_minimum_primary_airflow_fraction(air_terminal_single_duct_parallel_piu_reheat, zone_min_oa = nil)
     # Minimum primary air flow
     min_primary_airflow_frac = air_terminal_single_duct_parallel_reheat_piu_minimum_primary_airflow_fraction(air_terminal_single_duct_parallel_piu_reheat)

@@ -394,13 +394,13 @@ class Standard
       end
 
       # get values for new default profile
-      new_default_daySchedule = rule_vector[new_default_index].daySchedule
-      new_default_daySchedule_values = new_default_daySchedule.values
-      new_default_daySchedule_times = new_default_daySchedule.times
+      new_default_day_schedule = rule_vector[new_default_index].daySchedule
+      new_default_day_schedule_values = new_default_day_schedule.values
+      new_default_day_schedule_times = new_default_day_schedule.times
 
       # update values and times for default profile
-      for i in 0..(new_default_daySchedule_values.size - 1)
-        old_default_schedule_day.addValue(new_default_daySchedule_times[i], new_default_daySchedule_values[i])
+      for i in 0..(new_default_day_schedule_values.size - 1)
+        old_default_schedule_day.addValue(new_default_day_schedule_times[i], new_default_day_schedule_values[i])
       end
 
       # remove rule object that has become the default. Also try to remove the ScheduleDay
@@ -415,8 +415,8 @@ class Standard
   # @author David Goldwasser
   # @param schedule [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   # @param ramp_frequency [Double] ramp frequency in minutes
-  # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
-  # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
+  # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
+  # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
   # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   def schedule_apply_parametric_inputs(schedule, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs = nil)
     # Check if parametric inputs were supplied and generate them if not
@@ -611,7 +611,7 @@ class Standard
   # @param sat_end_time [OpenStudio::Time] Saturday end time.  If greater than 24:00, hours of operation will wrap over midnight.
   # @param sun_start_time [OpenStudio::Time] Sunday start time.  If nil, no change will be made to this day.
   # @param sun_end_time [OpenStudio::Time] Sunday end time.  If greater than 24:00, hours of operation will wrap over midnight.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def schedule_ruleset_set_hours_of_operation(schedule_ruleset, wkdy_start_time: nil, wkdy_end_time: nil, sat_start_time: nil, sat_end_time: nil, sun_start_time: nil, sun_end_time: nil)
     # Default day is assumed to represent weekdays
     if wkdy_start_time && wkdy_end_time
@@ -645,9 +645,9 @@ class Standard
   #
   # Return Array of weekday values from Array of all day values
   # @author Xuechen (Jerry) Lei, PNNL
-  # @param model [OpenStudio::model::Model] OpenStudio model object
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param values [Array] hourly time-series values of all days
-  # @param value_includes_holiday [Bool] whether the input values include a day of holiday at the end of the array
+  # @param value_includes_holiday [Boolean] whether the input values include a day of holiday at the end of the array
   #
   # @return [Array] hourly time-series values in weekdays
   #
@@ -721,7 +721,7 @@ class Standard
       day_schedule_holiday = schedule_ruleset.to_ScheduleRuleset.get.defaultDaySchedule
     end
     # Currently holidaySchedule is not working in SDK in ScheduleRuleset object
-    # TODO: enable the following lines when holidaySchedule is available
+    # @todo enable the following lines when holidaySchedule is available
     # if !schedule_ruleset.isHolidayScheduleDefaulted
     #   day_schedule = schedule_ruleset.to_ScheduleRuleset.get.holidaySchedule
     # else
@@ -974,7 +974,7 @@ class Standard
       end
 
       # Last day in values array is the holiday schedule
-      # TODO: add holiday schedule when implemented in OpenStudio SDK
+      # @todo add holiday schedule when implemented in OpenStudio SDK
     end
 
     # Need to handle design days
@@ -1186,8 +1186,8 @@ class Standard
   # @param val_flr [Double] value floor
   # @param val_clg [Double] value ceiling
   # @param ramp_frequency [Double] ramp frequency in minutes
-  # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
-  # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
+  # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
+  # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
   # @return [OpenStudio::Model::ScheduleDay] schedule day
   # @api private
   def process_hrs_of_operation_hash(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
@@ -1404,7 +1404,7 @@ class Standard
     # @todo apply secondary logic
 
     # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
-    sch_day.setInterpolatetoTimestep(true)
+    # sch_day.setInterpolatetoTimestep(true)
 
     return sch_day
   end

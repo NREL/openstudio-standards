@@ -6,7 +6,7 @@ class ASHRAE9012016 < ASHRAE901
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] Returns true if successful, false otherwise
+  # @return [Boolean] Returns true if successful, false otherwise
   def model_fenestration_orientation(model, climate_zone)
     # Building rotation to meet the same code requirement for
     # 90.1-2010 are kept
@@ -200,7 +200,7 @@ class ASHRAE9012016 < ASHRAE901
   # @note code_sections [90.1-2016_6.5.7.1]
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if transfer air is required, false if not
+  # @return [Boolean] returns true if transfer air is required, false if not
   def model_transfer_air_required?(model)
     return true
   end
@@ -231,7 +231,7 @@ class ASHRAE9012016 < ASHRAE901
   # @author Xuechen (Jerry) Lei, PNNL
   #
   # @param model [OpenStudio::Model::Model] OpenStudio Model
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_lights_shutoff(model)
     zones = model.getThermalZones
     num_zones = 0
