@@ -3230,7 +3230,7 @@ class ECMS
     end
     boiler_size_kbtu_per_hour = OpenStudio.convert(boiler_size_w, 'W', 'kBtu/h').get
     boiler_primacy = 'Primary '
-    if boiler_size_w < 1.0
+    if boiler_size_w < 1.0 || component.name.to_s.upcase.include?("SECONDARY")
       boiler_primacy = 'Secondary '
     end
     if eff['name'].nil?
@@ -3238,6 +3238,7 @@ class ECMS
     else
       eff_measure_name = eff['name']
     end
+    old_boiler_name = component.name.to_s
     new_boiler_name = (boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff").strip
     component.setName(new_boiler_name)
   end
