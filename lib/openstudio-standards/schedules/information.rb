@@ -9,10 +9,10 @@ module OpenstudioStandards
     #
     # @param schedule [OpenStudio::Model::Schedule] OpenStudio Schedule object
     # @param only_run_period_values [Bool] check values encountered only during the run period
-    #   Default to true. Only applicable to ScheduleRuleset schedules.
+    #   Default to false. Only applicable to ScheduleRuleset schedules.
     #   This will ignore ScheduleRules or the DefaultDaySchedule if never used.
     # return [Hash] returns a hash with 'min' and 'max' values
-    def self.schedule_get_min_max(schedule, only_run_period_values: true)
+    def self.schedule_get_min_max(schedule, only_run_period_values: false)
       case schedule.iddObjectType.valueName.to_s
       when 'OS_Schedule_Ruleset'
         schedule = schedule.to_ScheduleRuleset.get
@@ -366,14 +366,14 @@ module OpenstudioStandards
 
     # Returns the ScheduleRuleset minimum and maximum values.
     # This method does not include summer and winter design day values.
-    # By default the method reports values encountered only during the run period,
-    # but can optionally report values from all component day schedules even if unused.
+    # By default the method reports values from all component day schedules even if unused,
+    # but can optionally report values encountered only during the run period.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @param only_run_period_values [Bool] check values encountered only during the run period
-    #   Default to true. This will ignore ScheduleRules or the DefaultDaySchedule if never used.
+    #   Default to false. This will ignore ScheduleRules or the DefaultDaySchedule if never used.
     # @return [Hash] returns a hash with 'min' and 'max' values
-    def self.schedule_ruleset_get_min_max(schedule_ruleset, only_run_period_values: true)
+    def self.schedule_ruleset_get_min_max(schedule_ruleset, only_run_period_values: false)
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_min_max() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")

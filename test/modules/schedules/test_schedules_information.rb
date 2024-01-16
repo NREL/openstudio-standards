@@ -288,15 +288,15 @@ class TestSchedulesInformation < Minitest::Test
     }
     schedule = @sch.create_complex_schedule(model, test_options)
 
-    # default operation
+    # default operation, all values in schedule
     result = @sch.schedule_ruleset_get_min_max(schedule)
-    assert(result['min'] == 0.1)
-    assert(result['max'] == 0.8)
-
-    # all values in schedule
-    result = @sch.schedule_ruleset_get_min_max(schedule, only_run_period_values: false)
     assert(result['min'] == 0.0)
     assert(result['max'] == 0.9)
+
+    # values only during run period
+    result = @sch.schedule_ruleset_get_min_max(schedule, only_run_period_values: true)
+    assert(result['min'] == 0.1)
+    assert(result['max'] == 0.8)
 
     # test complex schedule that doesn't use default day and limited run period
     run_period = model.getRunPeriod
@@ -304,7 +304,7 @@ class TestSchedulesInformation < Minitest::Test
     run_period.setBeginDayOfMonth(7)
     run_period.setEndMonth(4)
     run_period.setEndDayOfMonth(14)
-    result = @sch.schedule_ruleset_get_min_max(schedule)
+    result = @sch.schedule_ruleset_get_min_max(schedule, only_run_period_values: true)
     assert(result['min'] == 0.2)
     assert(result['max'] == 0.7)
   end
