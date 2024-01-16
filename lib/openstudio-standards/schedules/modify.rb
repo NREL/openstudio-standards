@@ -47,6 +47,52 @@ module OpenstudioStandards
 
     # @!group Modify:ScheduleRuleset
 
+    # Add a ScheduleRule to a ScheduleRuleset object from an array of hourly values
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param start_date [OpenStudio::Date] start date of week period
+    # @param end_date [OpenStudio::Date] end date of week period
+    # @param day_names [Array<String>] list of days of week for which this day type is applicable
+    # @param values [Array<Double>] array of 24 hourly values for a day
+    # @param rule_name [String] rule ScheduleDay object name
+    # @return [OpenStudio::Model::ScheduleRule] OpenStudio ScheduleRule object
+    def self.schedule_ruleset_add_rule(schedule_ruleset, values,
+                                       start_date: nil,
+                                       end_date: nil,
+                                       day_names: nil,
+                                       rule_name: nil)
+      # create new schedule rule
+      sch_rule = OpenStudio::Model::ScheduleRule.new(schedule_ruleset)
+      day_sch = sch_rule.daySchedule
+      day_sch.setName(rule_name) unless rule_name.nil?
+
+      # set the dates when the rule applies
+      sch_rule.setStartDate(start_date) unless start_date.nil?
+      sch_rule.setEndDate(end_date) unless end_date.nil?
+
+      # set the days for which the rule applies
+      unless day_names.nil?
+        day_names.each do |day_of_week|
+          sch_rule.setApplySunday(true) if day_of_week == 'Sunday'
+          sch_rule.setApplyMonday(true) if day_of_week == 'Monday'
+          sch_rule.setApplyTuesday(true) if day_of_week == 'Tuesday'
+          sch_rule.setApplyWednesday(true) if day_of_week == 'Wednesday'
+          sch_rule.setApplyThursday(true) if day_of_week == 'Thursday'
+          sch_rule.setApplyFriday(true) if day_of_week == 'Friday'
+          sch_rule.setApplySaturday(true) if day_of_week == 'Saturday'
+        end
+      end
+
+      # Create the day schedule and add hourly values
+      (0..23).each do |ihr|
+        next if values[ihr] == values[ihr + 1]
+
+        day_sch.addValue(OpenStudio::Time.new(0, ihr + 1, 0, 0), values[ihr])
+      end
+
+      return sch_rule
+    end
+
     # Increase/decrease by percentage or static value
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object

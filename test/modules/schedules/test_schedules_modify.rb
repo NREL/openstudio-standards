@@ -25,6 +25,30 @@ class TestSchedulesModify < Minitest::Test
     assert(schedule_min_max['max'] == 0.99)
   end
 
+  def test_schedule_ruleset_add_rule
+    model = OpenStudio::Model::Model.new
+    test_options = {
+      'name' => 'Simple Schedule',
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 }
+    }
+    schedule = @sch.create_simple_schedule(model, test_options)
+    values = Array.new(8, 0.25) + Array.new(8, 0.75) + Array.new(8, 0.25)
+    start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
+    end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
+    @sch.schedule_ruleset_add_rule(schedule, values,
+                                   start_date: start_date,
+                                   end_date: end_date,
+                                   day_names: ['Wednesday'],
+                                   rule_name: 'Wednesdays')
+    # Jan 7, 2009 is a Wednesday
+    start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 7, 2009)
+    end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 7, 2009)
+    day_schs = schedule.getDaySchedules(start_date, end_date)
+    hourly_values = @sch.schedule_day_get_hourly_values(day_schs[0])
+    assert(hourly_values.min == 0.25)
+    assert(hourly_values.max == 0.75)
+  end
+
   def test_schedule_ruleset_simple_value_adjust
     model = OpenStudio::Model::Model.new
     test_options = {
