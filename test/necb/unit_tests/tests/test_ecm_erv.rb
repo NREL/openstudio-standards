@@ -44,7 +44,7 @@ class ECM_ERV_Tests < Minitest::Test
         #'SmallHotel',
         #'Warehouse'
     ]
-    @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
+    @epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
     @primary_heating_fuels = ['Electricity']
     @erv_packages = ["NECB_Default","NECB_Default_All","Plate-Existing", 'Plate-All','Rotary-All']
 

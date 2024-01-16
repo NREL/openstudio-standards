@@ -499,7 +499,8 @@ class BTAPData
   def climate_data
     # Store Geography Data
     geography_data = {}
-    geography_data['location_necb_hdd'] = @standard.get_necb_hdd18(@model)
+    geography_data['location_necb_hdd'] = @standard.get_necb_hdd18(model: @model, necb_hdd: true)
+    geography_data['location_weather_file_hdd'] = @standard.get_necb_hdd18(model: @model, necb_hdd: false)
     geography_data['location_weather_file'] = File.basename(@model.getWeatherFile.path.get.to_s)
     geography_data['location_epw_cdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).cdd18
     geography_data['location_epw_hdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).hdd18

@@ -23,6 +23,18 @@ class NECB2011 < Standard
     return variable.to_f
   end
 
+  # This method converts arguments to bool.  Anything other than a bool false or string 'false' is converted
+  # to a bool true.  Bool false and case insesitive string false are turned into bool false.
+  def convert_arg_to_bool(variable:, default:)
+    return true if variable.nil?
+    if variable.is_a? String
+      return true if variable.to_s.downcase == 'necb_default'
+      return false if variable.to_s.downcase == 'false'
+    end
+    return false if variable == false
+    return true
+  end
+
   def get_standards_table(table_name:)
     if @standards_data['tables'][table_name].nil?
       message = "Could not find table #{table_name} in database."
@@ -151,11 +163,15 @@ class NECB2011 < Standard
     rm * c # Delta in meters
   end
 
-  def get_necb_hdd18(model)
+  def get_necb_hdd18(model:, necb_hdd: true)
     max_distance_tolerance = 500000
     min_distance = 100000000000000.0
     necb_closest = nil
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+    # If necb_hdd is false use the information in the .stat file associated with the.epw file.
+    unless necb_hdd
+      return epw.hdd18.to_f
+    end
     # this extracts the table from the json database.
     necb_2015_table_c1 = @standards_data['tables']['necb_2015_table_c1']['table']
     necb_2015_table_c1.each do |necb|
@@ -236,7 +252,8 @@ class NECB2011 < Standard
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil,
                                    tbd_option: nil,
-                                   tbd_interpolate: false)
+                                   tbd_interpolate: false,
+                                   necb_hdd: true)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
@@ -294,7 +311,8 @@ class NECB2011 < Standard
                                 shw_scale: shw_scale,  # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) a float number larger than 0.0
                                 output_meters: output_meters,
                                 airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
-                                baseline_system_zones_map_option: baseline_system_zones_map_option  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                necb_hdd: necb_hdd
                                 )
 
   end
@@ -369,12 +387,14 @@ class NECB2011 < Standard
                            shw_scale: nil,
                            output_meters: nil,
                            airloop_economizer_type: nil,
-                           baseline_system_zones_map_option: nil)
+                           baseline_system_zones_map_option: nil,
+                           necb_hdd: true)
     self.fuel_type_set = SystemFuels.new()
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
+    necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
@@ -403,10 +423,12 @@ class NECB2011 < Standard
                    glass_door_solar_trans: glass_door_solar_trans,
                    fixed_wind_solar_trans: fixed_wind_solar_trans,
                    skylight_solar_trans: skylight_solar_trans,
-                   infiltration_scale: infiltration_scale)
+                   infiltration_scale: infiltration_scale,
+                   necb_hdd: necb_hdd)
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
-                               srr_set: srr_set)
+                               srr_set: srr_set,
+                               necb_hdd: necb_hdd)
     apply_thermal_bridging(model: model,
                            tbd_option: tbd_option,
                            tbd_interpolate: tbd_interpolate,
@@ -668,7 +690,8 @@ class NECB2011 < Standard
                      glass_door_solar_trans: nil,
                      fixed_wind_solar_trans: nil,
                      skylight_solar_trans: nil,
-                     infiltration_scale: nil)
+                     infiltration_scale: nil,
+                     necb_hdd: true)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     model_apply_infiltration_standard(model)
@@ -691,7 +714,8 @@ class NECB2011 < Standard
                                            skylight_cond: skylight_cond,
                                            glass_door_solar_trans: glass_door_solar_trans,
                                            fixed_wind_solar_trans: fixed_wind_solar_trans,
-                                           skylight_solar_trans: skylight_solar_trans)
+                                           skylight_solar_trans: skylight_solar_trans,
+                                           necb_hdd: necb_hdd)
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
@@ -922,12 +946,12 @@ class NECB2011 < Standard
   #     # limit
   #     # <-3.1:  Remove all the windows/skylights
   #     # > 1:  Do nothing
-  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0, necb_hdd: true)
     fdwr_set = -1.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil?
     srr_set = -1.0 if (srr_set == 'NECB_default') || srr_set.nil?
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
-    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: necb_hdd)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end

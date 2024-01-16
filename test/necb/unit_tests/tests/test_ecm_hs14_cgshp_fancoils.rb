@@ -31,7 +31,7 @@ class ECM_HS14_CGSHP_FanCoils_Tests < Minitest::Test
     res_file_output_text = "Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,coeff5,min_w,max_w,min_x,max_x,min_y,max_y,min_z,max_z,min_output,max_output\n"
     
     # Generate osm file.
-    epw_file = 'CAN_QC_Montreal-Trudeau.Intl.AP.716270_CWEC2016.epw'
+    epw_file = 'CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw'
     model = standard.model_create_prototype_model(building_type: 'QuickServiceRestaurant',
                                           epw_file: epw_file,
                                           template: 'NECB2017',

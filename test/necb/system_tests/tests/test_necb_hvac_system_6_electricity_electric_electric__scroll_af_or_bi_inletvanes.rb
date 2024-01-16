@@ -29,7 +29,7 @@ class NECB_HVAC_System_6_Test_E_E_E_S_AFORBI_IV < Minitest::Test
   def test_necb_hvac_system_6_electricity_electric_electric__scroll_af_or_bi_inletvanes()
 
     vintage = 'NECB2011'
-    weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
+    weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
     template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = 'system_6'
     vintage = 'NECB2011'
