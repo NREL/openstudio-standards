@@ -1,8 +1,97 @@
 module OpenstudioStandards
   # The Schedules module provides methods to create, modify, and get information about Schedule objects
   module Schedules
-    # @!group Modify
     # Methods to modify existing Schedule objects
+
+    # @!group Modify:ScheduleDay
+
+    # Method to multiply the values in a day schedule by a specified value
+    # The method can optionally apply the multiplier to only values above a lower limit.
+    # This limit prevents multipliers for things like occupancy sensors from affecting unoccupied hours.
+    #
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
+    # @param multiplier [Double] value to multiply schedule values by
+    # @param lower_apply_limit [Double] apply the multiplier to only values above this value
+    # @return [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
+    def self.schedule_day_multiply_by_value(schedule_day, multiplier, lower_apply_limit: nil)
+      # Record the original times and values
+      times = schedule_day.times
+      values = schedule_day.values
+
+      # Remove the original times and values
+      schedule_day.clearValues
+
+      # Create new values by using the multiplier on the original values
+      new_values = []
+      values.each do |value|
+        if lower_apply_limit.nil?
+          new_values << value * multiplier
+        else
+          if value > lower_apply_limit
+            new_values << value * multiplier
+          else
+            new_values << value
+          end
+        end
+      end
+
+      # Add the revised time/value pairs to the schedule
+      new_values.each_with_index do |new_value, i|
+        schedule_day.addValue(times[i], new_value)
+      end
+
+      return schedule_day
+    end
+
+    # @!endgroup Modify:ScheduleDay
+
+    # @!group Modify:ScheduleRuleset
+
+    # Add a ScheduleRule to a ScheduleRuleset object from an array of hourly values
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param start_date [OpenStudio::Date] start date of week period
+    # @param end_date [OpenStudio::Date] end date of week period
+    # @param day_names [Array<String>] list of days of week for which this day type is applicable
+    # @param values [Array<Double>] array of 24 hourly values for a day
+    # @param rule_name [String] rule ScheduleDay object name
+    # @return [OpenStudio::Model::ScheduleRule] OpenStudio ScheduleRule object
+    def self.schedule_ruleset_add_rule(schedule_ruleset, values,
+                                       start_date: nil,
+                                       end_date: nil,
+                                       day_names: nil,
+                                       rule_name: nil)
+      # create new schedule rule
+      sch_rule = OpenStudio::Model::ScheduleRule.new(schedule_ruleset)
+      day_sch = sch_rule.daySchedule
+      day_sch.setName(rule_name) unless rule_name.nil?
+
+      # set the dates when the rule applies
+      sch_rule.setStartDate(start_date) unless start_date.nil?
+      sch_rule.setEndDate(end_date) unless end_date.nil?
+
+      # set the days for which the rule applies
+      unless day_names.nil?
+        day_names.each do |day_of_week|
+          sch_rule.setApplySunday(true) if day_of_week == 'Sunday'
+          sch_rule.setApplyMonday(true) if day_of_week == 'Monday'
+          sch_rule.setApplyTuesday(true) if day_of_week == 'Tuesday'
+          sch_rule.setApplyWednesday(true) if day_of_week == 'Wednesday'
+          sch_rule.setApplyThursday(true) if day_of_week == 'Thursday'
+          sch_rule.setApplyFriday(true) if day_of_week == 'Friday'
+          sch_rule.setApplySaturday(true) if day_of_week == 'Saturday'
+        end
+      end
+
+      # Create the day schedule and add hourly values
+      (0..23).each do |ihr|
+        next if values[ihr] == values[ihr + 1]
+
+        day_sch.addValue(OpenStudio::Time.new(0, ihr + 1, 0, 0), values[ihr])
+      end
+
+      return sch_rule
+    end
 
     # Increase/decrease by percentage or static value
     #
@@ -229,13 +318,11 @@ module OpenstudioStandards
 
       # push default profiles to array
       if options['default']
-        default_rule = schedule.defaultDaySchedule
-        profiles << default_rule
+        profiles << schedule.defaultDaySchedule
       end
 
       # push profiles to array
-      rules = schedule.scheduleRules
-      rules.each do |rule|
+      schedule.scheduleRules.each do |rule|
         day_sch = rule.daySchedule
 
         # if any day requested also exists in the rule, then it will be altered
@@ -257,12 +344,10 @@ module OpenstudioStandards
 
       # add design days to array
       if options['summer']
-        summer_design = schedule.summerDesignDaySchedule
-        profiles << summer_design
+        profiles << schedule.summerDesignDaySchedule
       end
       if options['winter']
-        winter_design = schedule.winterDesignDaySchedule
-        profiles << winter_design
+        profiles << schedule.winterDesignDaySchedule
       end
 
       # give info messages as I change specific profiles
@@ -442,5 +527,111 @@ module OpenstudioStandards
 
       return schedule
     end
+
+    # Remove unused profiles and set most prevalent profile as default.
+    # This method expands on the functionality of the RemoveUnusedDefaultProfiles measure.
+    #
+    # @author David Goldwasser
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @todo There are potential issues with overlapping rule dates or days of week when setting a profile that isn't the lowest priority as the default day.
+    def self.schedule_ruleset_cleanup_profiles(schedule_ruleset)
+      # set start and end dates
+      year_description = schedule_ruleset.model.yearDescription.get
+      year = year_description.assumedYear
+      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+
+      indices_vector = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
+      most_frequent_item = indices_vector.uniq.max_by { |i| indices_vector.count(i) }
+      rule_vector = schedule_ruleset.scheduleRules
+
+      replace_existing_default = false
+      if indices_vector.include?(-1) && (most_frequent_item != -1)
+        # clean up if default isn't most common (e.g. sunday vs. weekday)
+        # if no existing rules cover specific days of week, make new rule from default covering those days of week
+        possible_days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        used_days_of_week = []
+        rule_vector.each do |rule|
+          if rule.applyMonday then used_days_of_week << 'Monday' end
+          if rule.applyTuesday then used_days_of_week << 'Tuesday' end
+          if rule.applyWednesday then used_days_of_week << 'Wednesday' end
+          if rule.applyThursday then used_days_of_week << 'Thursday' end
+          if rule.applyFriday then used_days_of_week << 'Friday' end
+          if rule.applySaturday then used_days_of_week << 'Saturday' end
+          if rule.applySunday then used_days_of_week << 'Sunday' end
+        end
+        if used_days_of_week.uniq.size < possible_days_of_week.size
+          replace_existing_default = true
+          schedule_rule_new = OpenStudio::Model::ScheduleRule.new(schedule_ruleset, schedule_ruleset.defaultDaySchedule)
+          if !used_days_of_week.include?('Monday') then schedule_rule_new.setApplyMonday(true) end
+          if !used_days_of_week.include?('Tuesday') then schedule_rule_new.setApplyTuesday(true) end
+          if !used_days_of_week.include?('Wednesday') then schedule_rule_new.setApplyWednesday(true) end
+          if !used_days_of_week.include?('Thursday') then schedule_rule_new.setApplyThursday(true) end
+          if !used_days_of_week.include?('Friday') then schedule_rule_new.setApplyFriday(true) end
+          if !used_days_of_week.include?('Saturday') then schedule_rule_new.setApplySaturday(true) end
+          if !used_days_of_week.include?('Sunday') then schedule_rule_new.setApplySunday(true) end
+        end
+      end
+
+      if !indices_vector.include?(-1) || replace_existing_default
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Schedules.Modify', "#{schedule_ruleset.name} does not use the default profile, it will be replaced.")
+
+        # reset values in default ScheduleDay
+        old_default_schedule_day = schedule_ruleset.defaultDaySchedule
+        old_default_schedule_day.clearValues
+
+        # update selection to the most commonly used profile vs. the lowest priority, if it can be done without any conflicts
+        # safe test is to see if any other rules use same days of week as most common,
+        # if doesn't pass then make highest rule the new default to avoid any problems. School may not pass this test, woudl use last rule
+        days_of_week_most_frequent_item = []
+        schedule_rule_most_frequent = rule_vector[most_frequent_item]
+        if schedule_rule_most_frequent.applyMonday then days_of_week_most_frequent_item << 'Monday' end
+        if schedule_rule_most_frequent.applyTuesday then days_of_week_most_frequent_item << 'Tuesday' end
+        if schedule_rule_most_frequent.applyWednesday then days_of_week_most_frequent_item << 'Wednesday' end
+        if schedule_rule_most_frequent.applyThursday then days_of_week_most_frequent_item << 'Thursday' end
+        if schedule_rule_most_frequent.applyFriday then days_of_week_most_frequent_item << 'Friday' end
+        if schedule_rule_most_frequent.applySaturday then days_of_week_most_frequent_item << 'Saturday' end
+        if schedule_rule_most_frequent.applySunday then days_of_week_most_frequent_item << 'Sunday' end
+
+        # loop through rules
+        conflict_found = false
+        rule_vector.each do |rule|
+          next if rule == schedule_rule_most_frequent
+
+          days_of_week_most_frequent_item.each do |day_of_week|
+            if (day_of_week == 'Monday') && rule.applyMonday then conflict_found == true end
+            if (day_of_week == 'Tuesday') && rule.applyTuesday then conflict_found == true end
+            if (day_of_week == 'Wednesday') && rule.applyWednesday then conflict_found == true end
+            if (day_of_week == 'Thursday') && rule.applyThursday then conflict_found == true end
+            if (day_of_week == 'Friday') && rule.applyFriday then conflict_found == true end
+            if (day_of_week == 'Saturday') && rule.applySaturday then conflict_found == true end
+            if (day_of_week == 'Sunday') && rule.applySunday then conflict_found == true end
+          end
+        end
+        if conflict_found
+          new_default_index = indices_vector.max
+        else
+          new_default_index = most_frequent_item
+        end
+
+        # get values for new default profile
+        new_default_day_schedule = rule_vector[new_default_index].daySchedule
+        new_default_day_schedule_values = new_default_day_schedule.values
+        new_default_day_schedule_times = new_default_day_schedule.times
+
+        # update values and times for default profile
+        for i in 0..(new_default_day_schedule_values.size - 1)
+          old_default_schedule_day.addValue(new_default_day_schedule_times[i], new_default_day_schedule_values[i])
+        end
+
+        # remove rule object that has become the default. Also try to remove the ScheduleDay
+        rule_vector[new_default_index].remove # this seems to also remove the ScheduleDay associated with the rule
+      end
+
+      return schedule_ruleset
+    end
+
+    # @!endgroup Modify:ScheduleRuleset
   end
 end
