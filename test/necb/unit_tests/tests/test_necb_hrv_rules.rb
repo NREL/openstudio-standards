@@ -6,9 +6,6 @@ include(NecbHelper)
 
 class NECB_HVAC_HRV_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -61,7 +58,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     end
 
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     systems = model.getAirLoopHVACs
     tol = 1.0e-5

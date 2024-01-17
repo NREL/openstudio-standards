@@ -8,9 +8,6 @@ include(NecbHelper)
 # outpatient.osm file).
 class NECB_SHW_tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges

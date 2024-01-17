@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_SWH_Additional_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -74,7 +71,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                                                                                                 new_auto_zoner: false)
 
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     # Extract standards generated part-load performance curve.
     shw_units = model.getWaterHeaterMixeds
@@ -156,7 +153,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         shw_units[0].setTankVolume(ivol/1000.0)
 
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
         # Get standard water tank efficiency and standby losses.
         actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
@@ -260,7 +257,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         shw_units[0].setTankVolume(ivol/1000.0)
         
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
        
         # Get standard water tank efficiency and standby losses.
         actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
@@ -360,7 +357,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                                                                                                   new_auto_zoner: false)
 
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
       # Get standard water tank efficiency and standby losses.
       shw_units = model.getWaterHeaterMixeds

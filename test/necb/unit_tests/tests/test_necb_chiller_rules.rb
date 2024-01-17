@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Chiller_Test < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -105,7 +102,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
           model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
 
           # Run sizing.
-          run_sizing(model: model,  template: template, test_name: name,save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+          run_sizing(model: model,  template: template, test_name: name,save_model_versions: save_intermediate_models)
           
           model.getChillerElectricEIRs.each do |ichiller|
             if ichiller.referenceCapacity.to_f > 1
@@ -181,7 +178,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
         model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
 
         # Run the standards.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
         
         # Check that there are two chillers in the model.
         chillers = model.getChillerElectricEIRs
@@ -275,7 +272,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
                                        hw_loop: hw_loop)
       
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
       chillers = model.getChillerElectricEIRs
       chiller_cap_ft_curve = chillers[0].coolingCapacityFunctionOfTemperature.to_CurveBiquadratic.get

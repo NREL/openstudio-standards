@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class ECM_HS14_CGSHP_FanCoils_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges

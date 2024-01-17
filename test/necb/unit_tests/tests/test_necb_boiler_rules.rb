@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Boiler_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -109,7 +106,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
           model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+          run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
           
           # Recover the thermal efficiency set in the measure for checking below.
           model.getBoilerHotWaters.each do |iboiler|
@@ -204,7 +201,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
       boilers = model.getBoilerHotWaters
       
@@ -290,7 +287,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
                                                    hw_loop: hw_loop)
 
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     boilers = model.getBoilerHotWaters
     boiler_curve = boilers[0].normalizedBoilerEfficiencyCurve.get.to_CurveCubic.get
@@ -351,7 +348,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
         model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
         # Customize the efficiency.
         standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: cust_eff_test)

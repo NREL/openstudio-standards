@@ -8,9 +8,6 @@ include(NecbHelper)
 # a modified version of the initial HighriseApartement.osm geometry file.
 class NECB_Ceiling_Centroid_Test < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges

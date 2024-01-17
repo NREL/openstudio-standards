@@ -6,9 +6,6 @@ include(NecbHelper)
 # epw/stat files.
 class NECB_Weather_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
