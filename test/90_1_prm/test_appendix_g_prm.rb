@@ -236,6 +236,4 @@ class AppendixGPRMTests < Minitest::Test
 
     check_residential_lpd(model_hash['proposed'])
   end
-
-
 end

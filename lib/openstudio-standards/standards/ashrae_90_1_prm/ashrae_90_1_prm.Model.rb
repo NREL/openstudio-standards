@@ -853,10 +853,10 @@ class ASHRAE901PRM < Standard
 
       case schedule_type
       when 'ScheduleRuleset'
-        load_schmax = get_8760_values_from_schedule(model, load_schedule).max
-        load_schmin = get_8760_values_from_schedule(model, load_schedule).min
+        load_schmax = OpenstudioStandards::Schedules.schedule_get_min_max(load_schedule)['max']
+        load_schmin = OpenstudioStandards::Schedules.schedule_get_min_max(load_schedule)['min']
         load_schmode = get_weekday_values_from_8760(model,
-                                                    Array(get_8760_values_from_schedule(model, load_schedule)),
+                                                    Array(OpenstudioStandards::Schedules.schedule_get_hourly_values(load_schedule)),
                                                     value_includes_holiday = true).mode[0]
 
         # AppendixG-2019 G3.1.2.2.1
@@ -1136,8 +1136,8 @@ class ASHRAE901PRM < Standard
       if tstat.is_initialized
         tstat = tstat.get
         setpoint_sch = tstat.heatingSetpointTemperatureSchedule
-        setpoint_min_max = search_min_max_value_from_design_day_schedule(setpoint_sch, 'heating')
-        setpoint_c = setpoint_min_max['max']
+        setpoint_c = OpenstudioStandards::Schedules.schedule_get_design_day_min_max(setpoint_sch.get, 'winter')['max']
+        next if setpoint_c.nil?
         if setpoint_c > max_heat_setpoint
           max_heat_setpoint = setpoint_c
         end
@@ -1152,9 +1152,10 @@ class ASHRAE901PRM < Standard
     preheat_setpoint_c = OpenStudio.convert(preheat_setpoint_f, 'F', 'C').get
 
     # create a new constant schedule and this method will add schedule limit type
-    preheat_coil_sch = model_add_constant_schedule_ruleset(model,
-                                                           preheat_setpoint_c,
-                                                           name = "#{coil_name} Setpoint Temp - #{preheat_setpoint_f.round}F")
+    preheat_coil_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                       preheat_setpoint_c,
+                                                                                       name: "#{coil_name} Setpoint Temp - #{preheat_setpoint_f.round}F",
+                                                                                       schedule_type_limit: 'Temperature')
     preheat_coil_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, preheat_coil_sch)
     preheat_coil_manager.setName("#{coil_name} Preheat Coil Setpoint Manager")
 
