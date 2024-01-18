@@ -49,7 +49,7 @@ class Standard
     # Add SiteWaterMainsTemperature -- via parsing of STAT file.
     stat_filename = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.stat"
     if File.exist? stat_filename
-      stat_file = EnergyPlus::StatFile.new(stat_filename)
+      stat_file = OpenstudioStandards::Weather::StatFile.load(stat_filename)
       water_temp = model.getSiteWaterMainsTemperature
       water_temp.setAnnualAverageOutdoorAirTemperature(stat_file.mean_dry_bulb)
       water_temp.setMaximumDifferenceInMonthlyAverageOutdoorAirTemperatures(stat_file.delta_dry_bulb)
@@ -391,7 +391,7 @@ module BTAP
           @ddy_file = OpenStudio::EnergyPlus.loadAndTranslateIdf(@ddy_filepath).get
         end
 
-        @stat_file = EnergyPlus::StatFile.new(@stat_filepath)
+        @stat_file = OpenstudioStandards::Weather::StatFile.load(@stat_filepath)
 
         # assign variables.
 
