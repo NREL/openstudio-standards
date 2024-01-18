@@ -202,15 +202,11 @@ class Standard
     # Set the U-value of the insulation layer
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     glass_layer.setUFactor(ins_u_value_si)
-    glass_layer.setName("#{glass_layer.name} U-#{ins_u_value_ip.round(2)}")
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_r_value_ip = #{ins_r_value_ip.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_ip = #{ins_u_value_ip.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_si = #{ins_u_value_si.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
-
-    # Modify the construction name
-    construction.setName("#{construction.name} U-#{target_u_value_ip.round(2)}")
 
     return true
   end
@@ -232,10 +228,6 @@ class Standard
     # Set the SHGC
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     glass_layer.setSolarHeatGainCoefficient(target_shgc)
-    glass_layer.setName("#{glass_layer.name} SHGC #{target_shgc.round(2)}")
-
-    # Modify the construction name
-    construction.setName("#{construction.name} SHGC #{target_shgc.round(2)}")
 
     return true
   end
@@ -894,10 +886,7 @@ class Standard
     # Set the Tvis
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     glass_layer.setVisibleTransmittance(target_tvis)
-    glass_layer.setName("#{glass_layer.name} TVis #{target_tvis.round(3)}")
 
-    # Modify the construction name
-    construction.setName("#{construction.name} TVis #{target_tvis.round(2)}")
     return true
   end
 end

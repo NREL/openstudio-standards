@@ -1,7 +1,8 @@
-# Method to apply a typical CBECS HVAC system to thermal zones
 module OpenstudioStandards
+  # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
     # @!group AirLoop:Information
+    # Methods to get information on AirLoop objects
 
     # Returns whether air loop HVAC is a direct evaporative system
     #

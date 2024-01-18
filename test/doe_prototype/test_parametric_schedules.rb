@@ -71,11 +71,11 @@ class TestParametricSchedules < Minitest::Test
       # store original areas as has, add to CSV for altered schedules
       orig_sch_hash = {}
       model.getScheduleRulesets.each do |schedule|
-        orig_sch_hash[schedule] = standard.schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
+        orig_sch_hash[schedule] = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule)
       end
       orig_sch_day_hash = {}
       model.getScheduleDays.each do |sch_day|
-        orig_sch_day_hash[sch_day] = standard.day_schedule_equivalent_full_load_hrs(sch_day)
+        orig_sch_day_hash[sch_day] = OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(sch_day)
       end
 
       # todo - add in test code to change hours of operation for just one vs. the entire model. Make sure has unique days and hours
@@ -125,7 +125,7 @@ class TestParametricSchedules < Minitest::Test
       # loop through parametric schedules and add asserts to compare against orig
       parametric_schedules.each do |k2,v2|
         orig_hours = orig_sch_hash[k2]
-        final_hours = standard.schedule_ruleset_annual_equivalent_full_load_hrs(k2)
+        final_hours = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(k2)
         delta_hours = orig_hours - final_hours
         percent_change = 100 * delta_hours/orig_hours
         schedule_csv_rows << [k, k2.name.get.to_s, orig_hours, final_hours,delta_hours,percent_change]

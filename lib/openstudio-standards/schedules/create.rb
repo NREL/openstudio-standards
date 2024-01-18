@@ -1,7 +1,151 @@
-# Methods to create Schedule objects
 module OpenstudioStandards
+  # The Schedules module provides methods to create, modify, and get information about Schedule objects
   module Schedules
     # @!group Create
+    # Methods to create Schedule objects
+
+    # create a ScheduleTypeLimits object for a schedule
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param standard_schedule_type_limit [String] the name of a standard schedule type limit with predefined limits
+    #   options are Dimensionless, Temperature, Humidity Ratio, Fraction, Fractional, OnOff, and Activity
+    # @param name [String] the name of the schedule type limits
+    # @param lower_limit_value [double] the lower limit value for the schedule type
+    # @param upper_limit_value [double] the upper limit value for the schedule type
+    # @param numeric_type [String] the numeric type, options are Continuous or Discrete
+    # @param unit_type [String] the unit type, options are defined in EnergyPlus I/O reference
+    # @return [OpenStudio::Model::ScheduleTypeLimits] OpenStudio ScheduleTypeLimits object
+    def self.create_schedule_type_limits(model,
+                                         standard_schedule_type_limit: nil,
+                                         name: nil,
+                                         lower_limit_value: nil,
+                                         upper_limit_value: nil,
+                                         numeric_type: nil,
+                                         unit_type: nil)
+
+
+      if standard_schedule_type_limit.nil?
+        if lower_limit_value.nil? || upper_limit_value.nil? || numeric_type.nil? || unit_type.nil?
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Create', 'If calling create_schedule_type_limits without a standard_schedule_type_limit, you must specify all properties of ScheduleTypeLimits.')
+          return false
+        end
+        schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+        schedule_type_limits.setName(name) if !name.nil?
+        schedule_type_limits.setLowerLimitValue(lower_limit_value)
+        schedule_type_limits.setUpperLimitValue(upper_limit_value)
+        schedule_type_limits.setNumericType(numeric_type)
+        schedule_type_limits.setUnitType(unit_type)
+      else
+        schedule_type_limits = model.getScheduleTypeLimitsByName(standard_schedule_type_limit)
+        if !schedule_type_limits.empty?
+          schedule_type_limits = schedule_type_limits.get
+          if schedule_type_limits.name.to_s.downcase == 'temperature'
+            schedule_type_limits.resetLowerLimitValue
+            schedule_type_limits.resetUpperLimitValue
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Temperature')
+          end
+        else
+          case standard_schedule_type_limit.downcase
+            when 'dimensionless'
+              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+              schedule_type_limits.setName('Dimensionless')
+              schedule_type_limits.setLowerLimitValue(0.0)
+              schedule_type_limits.setUpperLimitValue(1000.0)
+              schedule_type_limits.setNumericType('Continuous')
+              schedule_type_limits.setUnitType('Dimensionless')
+  
+            when 'temperature'
+              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+              schedule_type_limits.setName('Temperature')
+              schedule_type_limits.setLowerLimitValue(0.0)
+              schedule_type_limits.setUpperLimitValue(100.0)
+              schedule_type_limits.setNumericType('Continuous')
+              schedule_type_limits.setUnitType('Temperature')
+  
+            when 'humidity ratio'
+              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+              schedule_type_limits.setName('Humidity Ratio')
+              schedule_type_limits.setLowerLimitValue(0.0)
+              schedule_type_limits.setUpperLimitValue(0.3)
+              schedule_type_limits.setNumericType('Continuous')
+              schedule_type_limits.setUnitType('Dimensionless')
+  
+            when 'fraction', 'fractional'
+              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+              schedule_type_limits.setName('Fraction')
+              schedule_type_limits.setLowerLimitValue(0.0)
+              schedule_type_limits.setUpperLimitValue(1.0)
+              schedule_type_limits.setNumericType('Continuous')
+              schedule_type_limits.setUnitType('Dimensionless')
+  
+            when 'onoff'
+              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+              schedule_type_limits.setName('OnOff')
+              schedule_type_limits.setLowerLimitValue(0)
+              schedule_type_limits.setUpperLimitValue(1)
+              schedule_type_limits.setNumericType('Discrete')
+              schedule_type_limits.setUnitType('Availability')
+  
+            when 'activity'
+              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+              schedule_type_limits.setName('Activity')
+              schedule_type_limits.setLowerLimitValue(70.0)
+              schedule_type_limits.setUpperLimitValue(1000.0)
+              schedule_type_limits.setNumericType('Continuous')
+              schedule_type_limits.setUnitType('ActivityLevel')
+            else
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Create', 'Invalid standard_schedule_type_limit for method create_schedule_type_limits.')
+              return false
+          end
+        end
+      end
+      return schedule_type_limits
+    end
+
+  # Create constant ScheduleRuleset with a given value
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param value [Double] the value to use, 24-7, 365
+  # @param name [String] the name of the schedule
+  # @param schedule_type_limit [String] the name of a schedule type limit
+  #   options are Dimensionless, Temperature, Humidity Ratio, Fraction, Fractional, OnOff, and Activity
+  # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+  def self.create_constant_schedule_ruleset(model,
+                                            value,
+                                            name: nil,
+                                            schedule_type_limit: nil)
+    # check to see if schedule exists with same name and constant value and return if true
+    unless name.nil?
+      existing_sch = model.getScheduleRulesetByName(name)
+      if existing_sch.is_initialized
+        existing_sch = existing_sch.get
+        existing_day_sch_vals = existing_sch.defaultDaySchedule.values
+        if existing_day_sch_vals.size == 1 && (existing_day_sch_vals[0] - value).abs < 1.0e-6
+          return existing_sch
+        end
+      end
+    end
+
+    # create ScheduleRuleset
+    schedule = OpenStudio::Model::ScheduleRuleset.new(model)
+    schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
+
+    # set name
+    unless name.nil?
+      schedule.setName(name)
+      schedule.defaultDaySchedule.setName("#{name} Default")
+    end
+
+    # set schedule type limits
+    if !schedule_type_limit.nil?
+      sch_type_limits_obj = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
+                                                                                       standard_schedule_type_limit: schedule_type_limit)
+      schedule.setScheduleTypeLimits(sch_type_limits_obj)
+    end
+    
+    return schedule
+  end
 
     # create a ruleset schedule with a basic profile
     #
@@ -63,7 +207,7 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param options [Hash] Hash of name and time value pairs
-    # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ruleset schedule object
+    # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     def self.create_complex_schedule(model, options = {})
       defaults = {
         'name' => nil,
@@ -153,7 +297,7 @@ module OpenstudioStandards
     # create a new schedule using absolute velocity of existing schedule
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
-    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ruleset schedule object
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @todo fix velocity so it isn't fraction change per step, but per hour
     #   (I need to count hours between times and divide value by this)

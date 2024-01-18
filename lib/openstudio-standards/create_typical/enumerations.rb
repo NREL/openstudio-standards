@@ -1,7 +1,8 @@
-# Methods to create available inputs for typical models
 module OpenstudioStandards
+  # The CreateTypical module provides methods to create and modify an entire building energy model of a typical building
   module CreateTypical
     # @!group CreateTypicalEnumerations
+    # Enumerations for CreateTypical
 
     # Get DOE building types
     #

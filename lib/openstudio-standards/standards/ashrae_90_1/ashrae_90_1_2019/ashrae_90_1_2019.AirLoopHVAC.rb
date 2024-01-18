@@ -448,7 +448,7 @@ class ASHRAE9012019 < ASHRAE901
       ann_op_hrs = 8760.0
     elsif avail_sch.to_ScheduleRuleset.is_initialized
       avail_sch = avail_sch.to_ScheduleRuleset.get
-      ann_op_hrs = schedule_ruleset_annual_hours_above_value(avail_sch, 0.0)
+      ann_op_hrs = OpenstudioStandards::Schedules.schedule_ruleset_get_hours_above_value(avail_sch, 0.0)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "For #{air_loop_hvac.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
     end
@@ -783,7 +783,7 @@ class ASHRAE9012019 < ASHRAE901
                 air_terminal.setConstantMinimumAirFlowFraction(0)
               end
               air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
-              air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(model_add_constant_schedule_ruleset(air_loop_hvac.model, mdp_org, name = "#{air_terminal.name} - MDP", sch_type_limit: 'Fraction'), '12' => 0.1))
+              air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(OpenstudioStandards::Schedules.create_constant_schedule_ruleset(air_loop_hvac.model, mdp_org, name: "#{air_terminal.name} - MDP", schedule_type_limit: 'Fraction'), '12' => 0.1))
             elsif air_terminal.zoneMinimumAirFlowInputMethod == 'Scheduled'
               air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(air_terminal.minimumAirFlowFractionSchedule.get, '12' => 0.1))
             else

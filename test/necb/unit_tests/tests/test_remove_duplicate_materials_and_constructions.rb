@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_RemoveDuplicateModelObjects_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges

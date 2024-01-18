@@ -6,8 +6,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
 
   def setup()
     define_folders(__dir__)
@@ -51,7 +49,7 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
                                                                         hw_loop: hw_loop)
     
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     loops = model.getPlantLoops
     loops.each do |iloop|
@@ -116,7 +114,7 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
                                      hw_loop: hw_loop)
     
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     loops = model.getPlantLoops
     expected_exitT = 29.0
