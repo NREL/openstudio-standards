@@ -925,6 +925,7 @@ class ECMS
     when 'ptac_electric_off'
       zone_eqpt = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model, always_on, zone_fan, zone_htg_eqpt, zone_clg_eqpt)
       zone_eqpt.setName('ZoneHVACPackagedTerminalAirConditioner')
+      zone_eqpt.setSupplyAirFanOperatingModeSchedule(always_off)
       if zone_vent_off
         zone_eqpt.setOutdoorAirFlowRateDuringCoolingOperation(1.0e-6)
         zone_eqpt.setOutdoorAirFlowRateDuringHeatingOperation(1.0e-6)
@@ -1187,7 +1188,7 @@ class ECMS
     sys_info['sys_htg_eqpt_type'] = 'coil_electric'
     sys_info['sys_supp_htg_eqpt_type'] = 'none'
     sys_info['sys_clg_eqpt_type'] = 'coil_dx'
-    if zones.size == 1
+    if (zones.size == 1) || (sys_info['sys_abbr'] == 'sys_4')
       sys_info['sys_setpoint_mgr_type'] = 'single_zone_reheat'
       sys_info['sys_setpoint_mgr_type'] = 'scheduled' if system_doas_flags[sys_name.to_s]
       sys_info['sys_supp_fan_type'] = 'constant_volume'
@@ -1256,7 +1257,7 @@ class ECMS
         sys_ret_fan_type: sys_info['sys_ret_fan_type'],
         sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type']
       )
-      # Appy performance curves
+      # Apply performance curves
       eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
       coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
       coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
@@ -1264,7 +1265,7 @@ class ECMS
       if sys_info['sys_vent_type'] == 'doas'
         zone_htg_eqpt_type = 'ptac_electric_off'
         zone_clg_eqpt_type = 'ptac_electric_off'
-        zone_fan_type = 'constant_volume'
+        zone_fan_type = 'on_off'
       else
         zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
         zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
@@ -1522,8 +1523,8 @@ class ECMS
             # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
             dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
             if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
-            # clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
-            # htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
+            clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
+            htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
             # assign COPs
             search_criteria = {}
             search_criteria['name'] = pthp_eqpt_name
@@ -1590,7 +1591,7 @@ class ECMS
       if sys_info['sys_vent_type'] == 'doas'
         zone_htg_eqpt_type = 'ptac_electric_off'
         zone_clg_eqpt_type = 'ptac_electric_off'
-        zone_fan_type = 'constant_volume'
+        zone_fan_type = 'on_off'
       else
         zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
         zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
@@ -3247,7 +3248,7 @@ class ECMS
     end
     boiler_size_kbtu_per_hour = OpenStudio.convert(boiler_size_w, 'W', 'kBtu/h').get
     boiler_primacy = 'Primary '
-    if boiler_size_w < 1.0
+    if boiler_size_w < 1.0 || component.name.to_s.upcase.include?("SECONDARY")
       boiler_primacy = 'Secondary '
     end
     if eff['name'].nil?
@@ -3255,6 +3256,7 @@ class ECMS
     else
       eff_measure_name = eff['name']
     end
+    old_boiler_name = component.name.to_s
     new_boiler_name = (boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff").strip
     component.setName(new_boiler_name)
   end
