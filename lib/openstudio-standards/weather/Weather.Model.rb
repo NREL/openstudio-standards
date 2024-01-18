@@ -1,5 +1,4 @@
 class Standard
-
   # Adds the design days and weather file for the specified climate zone
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -8,7 +7,6 @@ class Standard
   # @return [Boolean] returns true if successful, false if not
   def model_add_design_days_and_weather_file(model, climate_zone, epw_file = '', weather_dir = nil)
     success = true
-    require_relative 'Weather.stat_file'
 
     # Remove any existing Design Day objects that are in the file
     model.getDesignDays.each(&:remove)
@@ -186,8 +184,6 @@ end
 
 module BTAP
   module Environment
-    require_relative 'Weather.stat_file'
-
     # this method is used to populate user interfaces if needed from the hash above.
     def self.get_canadian_weather_file_names
       canadian_file_names = []

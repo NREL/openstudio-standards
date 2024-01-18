@@ -7,9 +7,7 @@ class TestWeatherInformation < Minitest::Test
 
   def test_model_get_ashrae_climate_zone_number
     model = OpenStudio::Model::Model.new
-    std = Standard.build('90.1-2013')
-    std.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
-
+    OpenstudioStandards::Weather.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
     result = @weather.model_get_ashrae_climate_zone_number(model)
     assert_equal(result, 4)
   end
@@ -18,8 +16,8 @@ class TestWeatherInformation < Minitest::Test
     model = OpenStudio::Model::Model.new
 
     weather_file_names = [
-      # "ALTURAS_725958_CZ2010", 
-      # "LIVERMORE_724927_CZ2010", 
+      # "ALTURAS_725958_CZ2010",
+      # "LIVERMORE_724927_CZ2010",
       # "USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3",
       "USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3"
     ]
@@ -43,11 +41,9 @@ class TestWeatherInformation < Minitest::Test
       assert_equal(stat_file.extremes_design_info.size, 16)
       assert_equal(stat_file.monthly_dry_bulb.size, 12)
     end
-
   end
 
   def test_ddy_regex_lookup
-
     result = @weather.ddy_regex_lookup('All Heating')
     assert(result.size == 3)
     result = @weather.ddy_regex_lookup('Monthly Cooling')
@@ -57,8 +53,5 @@ class TestWeatherInformation < Minitest::Test
     bad_name = "Seattle Fake Design Day Name"
     result.each{|r| assert(test_name =~ r)}
     result.each{|r| assert_nil(bad_name =~ r)}
-
   end
-
-  
 end

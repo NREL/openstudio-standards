@@ -92,15 +92,20 @@ module OpenstudioStandards
       end
     end
 
-    # set the model ClimateZone object
+    # Sets the model ClimateZone object
+    # Clears out any climate zones previously added to the model.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param climate_zone [String] full climate zone string, e.g. "ASHRAE 169-2013-1A"
+    # @return [Boolean] returns true if successful, false if not
     def self.model_set_climate_zone(model, climate_zone)
+      # Remove previous climate zones from the model
       climate_zones = model.getClimateZones
       climate_zones.clear
+
+      # Split the string into the correct institution and value
       if climate_zone.include?('CEC')
-        climate_zones.setClimateZone('CEC', climate_zone.gsub('T24-CEC', ''))
+        climate_zones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', '').gsub('T24-CEC', ''))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "Setting Climate Zone to #{climate_zones.getClimateZones('CEC').first.value}")
       elsif climate_zone.include?('ASHRAE')
         climate_zones.setClimateZone('ASHRAE', climate_zone.gsub(/ASHRAE .*-.*-/, ''))
@@ -108,6 +113,8 @@ module OpenstudioStandards
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.modify', "Unknown climate zone #{climate_zone}. Climate Zone will not be set.")
       end
+
+      return true
     end
 
     # set the model WeatherFile and Site information based on a weather file
@@ -141,7 +148,7 @@ module OpenstudioStandards
         climate_zone = "ASHRAE 169-2013-#{climate_zone}"
       end
 
-      model_set_climate_zone(model, climate_zone)
+      OpenstudioStandards::Weather.model_set_climate_zone(model, climate_zone)
     end
   end
 end

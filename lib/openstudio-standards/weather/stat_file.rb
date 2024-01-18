@@ -73,6 +73,7 @@ module OpenstudioStandards
       # @param filename [String] full path to Stat file
       def self.load(filename)
         raise "Stat file does not exist: #{filename}" unless File.file?(filename)
+
         f = OpenstudioStandards::Weather::StatFile.new(filename)
       end
 
@@ -107,7 +108,7 @@ module OpenstudioStandards
         line << "#{@typical_spring_week} ,"
         line << "#{@monthly_undis_ground_temps_0p5m} ,"
         line << "#{@monthly_undis_ground_temps_4p0m} ,"
-        line << "#{@valid}"
+        line << @valid.to_s
       end
 
       # returns the stat data as a JSON string
@@ -123,7 +124,7 @@ module OpenstudioStandards
       end
 
       # ground temps as monthly dry bulb tempreature lagged 3 months
-      def monthly_lagged_dry_bulb
+      def monthly_lagged_dry_bulb_calc
         if !@monthly_dry_bulb.empty?
           lagged_temperatures = @monthly_dry_bulb.rotate(-3)
         else
@@ -134,7 +135,7 @@ module OpenstudioStandards
       end
 
       # the mean of the mean monthly dry bulbs
-      def mean_dry_bulb
+      def mean_dry_bulb_calc
         if !@monthly_dry_bulb.empty?
           sum = @monthly_dry_bulb.inject(:+)
           mean = sum / @monthly_dry_bulb.size
@@ -146,7 +147,7 @@ module OpenstudioStandards
       end
 
       # max - min of the mean monthly dry bulbs
-      def delta_dry_bulb
+      def delta_dry_bulb_calc
         if !@monthly_dry_bulb.empty?
           delta_t = @monthly_dry_bulb.max - @monthly_dry_bulb.min
         else
@@ -191,16 +192,20 @@ module OpenstudioStandards
           'monthly_undis_ground_temps_4p0m' => @monthly_undis_ground_temps_4p0m
         }
       end
+
       # initialize
       def init
-        if @path.exist?
-          File.open(@path) do |f|
-            @text = f.read.force_encoding('iso-8859-1').encode('UTF-8')
-            parse
-            @monthly_lagged_dry_bulb = monthly_lagged_dry_bulb
-            @mean_dry_bulb = mean_dry_bulb
-            @delta_dry_bulb = delta_dry_bulb
-          end
+        unless @path.exist?
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.StatFile', "Can't find #{@path}")
+          raise
+        end
+
+        File.open(@path) do |f|
+          @text = f.read.force_encoding('iso-8859-1').encode('UTF-8')
+          parse
+          @monthly_lagged_dry_bulb = monthly_lagged_dry_bulb_calc
+          @mean_dry_bulb = mean_dry_bulb_calc
+          @delta_dry_bulb = delta_dry_bulb_calc
         end
       end
 
@@ -227,7 +232,7 @@ module OpenstudioStandards
           raise
         else
           match_info_raw = match_data[1].strip.split(/\s+/)
-          match_info_raw = match_info_raw.map { |x| x.to_f }
+          match_info_raw = match_info_raw.map(&:to_f)
 
           # check info size
           if match_info_raw.size != temp_info[:size]
@@ -249,7 +254,7 @@ module OpenstudioStandards
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find #{season_info[:name]}. Check data source.")
           raise
         else
-          if ["Summer", "Winter"].include?(season_info[:name].split[0])
+          if ['Summer', 'Winter'].include?(season_info[:name].split[0])
             instance_variable_set("@#{season_info[:container]}", match_data[2].to_s.strip)
           else
             instance_variable_set("@#{season_info[:container]}", match_data[1].to_s.strip)
@@ -298,27 +303,27 @@ module OpenstudioStandards
 
         # parse degree day info
         degree_day_info = [
-          {dd_name: "CDD 10", container: "cdd10", regex: /-\s*(.*) annual \((standard|wthr file)\) cooling degree-days \(10.?C baseline\)/},
-          {dd_name: "HDD 10", container: "hdd10", regex: /-\s*(.*) annual \((wthr file)\) heating degree-days \(10.?C baseline\)/},
-          {dd_name: "CDD 18", container: "cdd18", regex: /-\s*(.*) annual \((wthr file)\) cooling degree-days \(18.*C baseline\)/},
-          {dd_name: "HDD 18", container: "hdd18", regex: /-\s*(.*) annual \((wthr file)\) heating degree-days \(18.*C baseline\)/}
+          { dd_name: 'CDD 10', container: 'cdd10', regex: /-\s*(.*) annual \((standard|wthr file)\) cooling degree-days \(10.?C baseline\)/ },
+          { dd_name: 'HDD 10', container: 'hdd10', regex: /-\s*(.*) annual \((wthr file)\) heating degree-days \(10.?C baseline\)/ },
+          { dd_name: 'CDD 18', container: 'cdd18', regex: /-\s*(.*) annual \((wthr file)\) cooling degree-days \(18.*C baseline\)/ },
+          { dd_name: 'HDD 18', container: 'hdd18', regex: /-\s*(.*) annual \((wthr file)\) heating degree-days \(18.*C baseline\)/ }
         ]
-        degree_day_info.each{|dd_info| parse_dd_info(dd_info)}
+        degree_day_info.each { |dd_info| parse_dd_info(dd_info) }
 
         # parse design temperatures
         temperature_info = [
-          {name: "Heating Design Temperatures", regex: /Heating(\s*\d+.*)\n/, container: @heating_design_info, size: 15},
-          {name: "Cooling Design Temperatures", regex: /Cooling(\s*\d+.*)\n/, container: @cooling_design_info, size: 32},
-          {name: "Extreme Design Temperatures", regex: /\s*Extremes\s*(.*)\n/, container: @extremes_design_info, size: 16},
-          {name: "Monthly Dry Bulb Temperatures", regex: /Daily Avg(.*)\n/, container: @monthly_dry_bulb, size: 12}
+          { name: 'Heating Design Temperatures', regex: /Heating(\s*\d+.*)\n/, container: @heating_design_info, size: 15 },
+          { name: 'Cooling Design Temperatures', regex: /Cooling(\s*\d+.*)\n/, container: @cooling_design_info, size: 32 },
+          { name: 'Extreme Design Temperatures', regex: /\s*Extremes\s*(.*)\n/, container: @extremes_design_info, size: 16 },
+          { name: 'Monthly Dry Bulb Temperatures', regex: /Daily Avg(.*)\n/, container: @monthly_dry_bulb, size: 12 }
         ]
-        temperature_info.each{|temp_info| parse_design_temp_info(temp_info)}
+        temperature_info.each { |temp_info| parse_design_temp_info(temp_info) }
 
         # parse undisturbed ground temps at 0.5 and 4.0 m depth
         regex = /Monthly.*Calculated.*undisturbed*.*Ground.*Temperatures.*\n.*Jan.*Feb.*Mar.*Apr.*May.*Jun.*Jul.*Aug.*Sep.*Oct.*Nov.*Dec.*\n(.*)\n(.*)\n(.*)/
         match_data = @text.match(regex)
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temperatures")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temperatures.")
           raise
         else
           # first match is undisturbed ground temperature at 0.5 m and 4.0 m depth
@@ -355,13 +360,13 @@ module OpenstudioStandards
         end
 
         # parse season months
-        season_info = [
-          {name: "Summer Wet Months", container: "summer_wet_months", regex: /(Summer is |Wet Period=)(.*)/},
-          {name: "Winter Dry Months", container: "winter_dry_months", regex: /(Winter is |Dry Period=)(.*)/},
-          {name: "Autumn Months", container: "autumn_months", regex: /Autumn is (.*)/},
-          {name: "Spring Months", container: "spring_months", regex: /Spring is (.*)/}
+        season_infos = [
+          { name: 'Summer Wet Months', container: 'summer_wet_months', regex: /(Summer is |Wet Period=)(.*)/ },
+          { name: 'Winter Dry Months', container: 'winter_dry_months', regex: /(Winter is |Dry Period=)(.*)/ },
+          { name: 'Autumn Months', container: 'autumn_months', regex: /Autumn is (.*)/ },
+          { name: 'Spring Months', container: 'spring_months', regex: /Spring is (.*)/ }
         ]
-        season_info.each{|season_info| parse_season_info(season_info)}
+        season_infos.each { |season_info| parse_season_info(season_info) }
 
         # week periods
         regex = /Typical Week Period selected:(.*?)C/

@@ -63,7 +63,7 @@ Standard.class_eval do
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model.getBuilding.setStandardsBuildingType(building_type)
-    model_set_climate_zone(model, climate_zone)
+    OpenstudioStandards::Weather.model_set_climate_zone(model, climate_zone)
     model_add_lights_shutoff(model)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false

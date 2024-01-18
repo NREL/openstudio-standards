@@ -110,7 +110,7 @@ class ASHRAE901PRM < Standard
   # @return [Double] Building envelope area in m2
   def model_building_envelope_area(model)
     # Get climate zone
-    climate_zone = model_standards_climate_zone(model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
     # Get the space building envelope area
     # According to the 90.1 definition, building envelope include:
     # - "the elements of a building that separate conditioned spaces from the exterior"
@@ -3126,7 +3126,7 @@ class ASHRAE901PRM < Standard
   # @param climate_zone [String] full name of climate zone
   # @return [String] fuel or electric
   def find_prm_heat_type(hvac_building_type, climate_zone)
-    climate_code = get_climate_zone_code(climate_zone)
+    climate_code = climate_zone.split('-')[-1]
     heat_type_props = model_find_object(standards_data['prm_heat_type'],
                                         'template' => template,
                                         'hvac_building_type' => hvac_building_type,
