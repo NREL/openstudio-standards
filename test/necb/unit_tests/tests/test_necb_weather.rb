@@ -2,7 +2,7 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
-#This test verifies that we can read in the weatherfile data from all the
+#This test verifies that we can read in the weather file data from all the
 # epw/stat files.
 class NECB_Weather_Tests < Minitest::Test
 
@@ -21,8 +21,6 @@ class NECB_Weather_Tests < Minitest::Test
     test_results = File.join(@test_results_folder,'weather_test_results.json')
     expected_results = File.join(@expected_results_folder,'weather_expected_results.json')
     expected_results_download = File.join(@expected_results_folder,'weather_expected_results_download.json')
-
-
     weather_file_folder = File.join(@root_folder,'data','weather')
     puts weather_file_folder
     
