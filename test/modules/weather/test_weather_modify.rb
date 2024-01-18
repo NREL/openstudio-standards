@@ -44,7 +44,6 @@ class TestWeatherModify < Minitest::Test
     assert_in_delta(wf.latitude, 39.17, 0.01)
     assert_in_delta(wf.longitude, -76.68, 0.01)
     assert_in_delta(wf.elevation, 45.0, 0.1)
-
   end
 
   def test_model_set_site_information
@@ -115,11 +114,10 @@ class TestWeatherModify < Minitest::Test
 
     # test new cz
     @weather.model_set_climate_zone(model, "ASHRAE 169-2013-3A")
-    
+
     czs = model.getClimateZones
     assert(czs.climateZones.size == 1)
     assert(czs.getClimateZone(0).value.to_s == "3A")
-
   end
 
   def test_model_set_design_days
@@ -139,6 +137,5 @@ class TestWeatherModify < Minitest::Test
 
     assert(ddy_model.getDesignDays.size >= model.getDesignDays.size)
     assert(model.getDesignDays.size == 7, "Model should have #{model.getDesignDays.size} design days")
-
   end
 end

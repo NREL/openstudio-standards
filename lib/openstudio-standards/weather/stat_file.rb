@@ -1,4 +1,4 @@
-require 'pathname' 
+require 'pathname'
 
 module OpenstudioStandards
   module Weather
@@ -11,6 +11,8 @@ module OpenstudioStandards
       attr_accessor :elevation
       attr_accessor :gmt
       attr_accessor :monthly_dry_bulb
+      attr_accessor :delta_dry_bulb
+      attr_accessor :mean_dry_bulb
       attr_accessor :hdd18
       attr_accessor :cdd18
       attr_accessor :hdd10
@@ -86,6 +88,7 @@ module OpenstudioStandards
         line << "#{@cdd10} ,"
         line << "#{mean_dry_bulb} ,"
         line << "#{delta_dry_bulb} ,"
+        line << "#{mean_dry_bulb} ,"
         line << "#{@heating_design_info} ,"
         line << "#{@cooling_design_info}  ,"
         line << "#{@extremes_design_info} ,"
@@ -115,7 +118,7 @@ module OpenstudioStandards
       def valid?
         return @valid
       end
-  
+
       # the mean of the mean monthly dry bulbs
       def mean_dry_bulb
         if !@monthly_dry_bulb.empty?
@@ -124,10 +127,10 @@ module OpenstudioStandards
         else
           mean = ''
         end
-  
+
         mean.to_f
       end
-  
+
       # max - min of the mean monthly dry bulbs
       def delta_dry_bulb
         if !@monthly_dry_bulb.empty?
@@ -135,10 +138,10 @@ module OpenstudioStandards
         else
           delta_t = ''
         end
-  
+
         delta_t.to_f
       end
-  
+
       private
 
       def as_json(options = {})
@@ -163,7 +166,7 @@ module OpenstudioStandards
           'standard' => @standard,
           'summer_wet_months' => @summer_wet_months,
           'winter_dry_months' => @winter_dry_months,
-          'autumn_months' => @autumn_months,  
+          'autumn_months' => @autumn_months,
           'spring_months' => @spring_months,
           'typical_summer_wet_week' => @typical_summer_wet_week,
           'typical_winter_dry_week' => @typical_winter_dry_week,
@@ -184,7 +187,7 @@ module OpenstudioStandards
           end
         end
       end
-  
+
       # helper function to parse cooling and heating degree days
       #
       # @param dd_info [Hash] :name, :regex, :container
@@ -198,7 +201,7 @@ module OpenstudioStandards
         end
       end
 
-      # helper function to parse monthly design conditions 
+      # helper function to parse monthly design conditions
       #
       # @param temp_info [Hash] :name, :size, :regex, :container
       def parse_design_temp_info(temp_info)
@@ -209,11 +212,11 @@ module OpenstudioStandards
         else
           match_info_raw = match_data[1].strip.split(/\s+/)
           match_info_raw = match_info_raw.map { |x| x.to_f }
-          
+
           # check info size
           if match_info_raw.size != temp_info[:size]
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.StatFile', "Expected to fine #{temp_info[:size]} #{temp_info[:name]} but found #{match_info_raw.size}. Check data source.")
-          end 
+          end
 
           match_info_raw.each do |val|
             temp_info[:container] << val
@@ -226,7 +229,7 @@ module OpenstudioStandards
       # @param season_info [Hash] :name, :container, :regex
       def parse_season_info(season_info)
         match_data = @text.match(season_info[:regex])
-        if match_data.nil? 
+        if match_data.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find #{season_info[:name]}. Check data source.")
           raise
         else
@@ -255,15 +258,15 @@ module OpenstudioStandards
           if match_data[1] == 'S'
             @lat = -@lat
           end
-  
+
           @lon = match_data[5].to_f + match_data[6].to_f / 60.0
           if match_data[4] == 'W'
             @lon = -@lon
           end
-  
+
           @gmt = match_data[7].to_f
         end
-  
+
         # parse elevation
         regex = /Elevation --\s*(.*)m (above|below) sea level/
         match_data = @text.match(regex)
@@ -276,7 +279,7 @@ module OpenstudioStandards
             @elevation = -@elevation
           end
         end
-  
+
         # parse degree day info
         degree_day_info = [
           {dd_name: "CDD 10", container: "cdd10", regex: /-\s*(.*) annual \((standard|wthr file)\) cooling degree-days \(10.?C baseline\)/},
@@ -285,7 +288,7 @@ module OpenstudioStandards
           {dd_name: "HDD 18", container: "hdd18", regex: /-\s*(.*) annual \((wthr file)\) heating degree-days \(18.*C baseline\)/}
         ]
         degree_day_info.each{|dd_info| parse_dd_info(dd_info)}
-  
+
         # parse design temperatures
         temperature_info = [
           {name: "Heating Design Temperatures", regex: /Heating(\s*\d+.*)\n/, container: @heating_design_info, size: 15},
@@ -295,7 +298,7 @@ module OpenstudioStandards
         ]
         temperature_info.each{|temp_info| parse_design_temp_info(temp_info)}
 
-        # parse undisturbed ground temps at 0.5 and 4.0 m depth 
+        # parse undisturbed ground temps at 0.5 and 4.0 m depth
         regex = /Monthly.*Calculated.*undisturbed*.*Ground.*Temperatures.*\n.*Jan.*Feb.*Mar.*Apr.*May.*Jun.*Jul.*Aug.*Sep.*Oct.*Nov.*Dec.*\n(.*)\n(.*)\n(.*)/
         match_data = @text.match(regex)
         if match_data.nil?
@@ -323,7 +326,7 @@ module OpenstudioStandards
           monthly_undis_ground_temps_4p0m.each { |temp| @monthly_undis_ground_temps_4p0m << temp.to_f }
         end
 
-        # parse 2004 climate zone and standard 
+        # parse 2004 climate zone and standard
         # regex = /Climate (\btype\b|\bZone\b) \"(.*?)\" \(ASHRAE Standards?(.*)\)\*?\*?/
         regex = /Climate (\btype\b|\bZone\b) \"(.*?)\" \(ASHRAE Standards?\s?(\d*-\d*)/
         match_data = @text.match(regex)
@@ -382,6 +385,6 @@ module OpenstudioStandards
         # now we are valid
         @valid = true
       end
-    end 
-  end 
+    end
+  end
 end
