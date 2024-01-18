@@ -213,5 +213,20 @@ module OpenstudioStandards
         # raise
       end
     end
+
+    # Returns the winter design outdoor air dry bulb temperatures in the model
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @return [Array<Double>] an array of outdoor design dry bulb temperatures in degrees Celsius
+    def self.model_get_heating_design_outdoor_temperatures(model)
+      heating_design_outdoor_temps = []
+      model.getDesignDays.each do |dd|
+        next unless dd.dayType == 'WinterDesignDay'
+
+        heating_design_outdoor_temps << dd.maximumDryBulbTemperature
+      end
+
+      return heating_design_outdoor_temps
+    end
   end
 end

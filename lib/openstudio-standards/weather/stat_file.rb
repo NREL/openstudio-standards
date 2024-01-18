@@ -11,6 +11,7 @@ module OpenstudioStandards
       attr_accessor :elevation
       attr_accessor :gmt
       attr_accessor :monthly_dry_bulb
+      attr_accessor :monthly_lagged_dry_bulb
       attr_accessor :delta_dry_bulb
       attr_accessor :mean_dry_bulb
       attr_accessor :hdd18
@@ -46,6 +47,7 @@ module OpenstudioStandards
         @hdd10 = nil
         @cdd10 = nil
         @monthly_dry_bulb = []
+        @monthly_lagged_dry_bulb = []
         @delta_dry_bulb = nil
         @mean_dry_bulb = nil
         @heating_design_info = []
@@ -86,7 +88,8 @@ module OpenstudioStandards
         line << "#{@cdd18} ,"
         line << "#{@hdd10} ,"
         line << "#{@cdd10} ,"
-        line << "#{mean_dry_bulb} ,"
+        line << "#{monthly_dry_bulb} ,"
+        line << "#{monthly_lagged_dry_bulb} ,"
         line << "#{delta_dry_bulb} ,"
         line << "#{mean_dry_bulb} ,"
         line << "#{@heating_design_info} ,"
@@ -117,6 +120,17 @@ module OpenstudioStandards
 
       def valid?
         return @valid
+      end
+
+      # ground temps as monthly dry bulb tempreature lagged 3 months
+      def monthly_lagged_dry_bulb
+        if !@monthly_dry_bulb.empty?
+          lagged_temperatures = @monthly_dry_bulb.rotate(-3)
+        else
+          lagged_temperatures = []
+        end
+
+        lagged_temperatures
       end
 
       # the mean of the mean monthly dry bulbs
@@ -157,6 +171,7 @@ module OpenstudioStandards
           'hdd10' => @hdd10,
           'cdd10' => @cdd10,
           'monthly_dry_bulb' => @monthly_dry_bulb,
+          'monthly_lagged_dry_bulb' => @monthly_lagged_dry_bulb,
           'delta_dry_bulb' => @delta_dry_bulb,
           'mean_dry_bulb' => @mean_dry_bulb,
           'heating_design_info' => @heating_design_info,
@@ -182,6 +197,7 @@ module OpenstudioStandards
           File.open(@path) do |f|
             @text = f.read.force_encoding('iso-8859-1').encode('UTF-8')
             parse
+            @monthly_lagged_dry_bulb = monthly_lagged_dry_bulb
             @mean_dry_bulb = mean_dry_bulb
             @delta_dry_bulb = delta_dry_bulb
           end

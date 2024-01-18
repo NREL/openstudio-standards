@@ -2122,7 +2122,7 @@ class ASHRAE901PRM < Standard
       if !File.exist? stat_file_path
         # When the stat file corresponding with the weather file in the model is missing,
         # use the weather file that represent the climate zone
-        climate_zone_weather_file_map = model_get_climate_zone_weather_file_map
+        climate_zone_weather_file_map = OpenstudioStandards::Weather.climate_zone_weather_file_map
         prm_raise(climate_zone_weather_file_map.key?(climate_zone),
                   @sizing_run_dir,
                   "Failed to find a matching climate zone #{climate_zone} from the climate zone weather files.")
@@ -2131,7 +2131,8 @@ class ASHRAE901PRM < Standard
       end
 
       ground_temp = OpenStudio::Model::SiteGroundTemperatureFCfactorMethod.new(model)
-      ground_temperatures = model_get_monthly_ground_temps_from_stat_file(stat_file_path)
+      stat_file = OpenstudioStandards::Weather::StatFile.load(stat_file_path)
+      ground_temperatures = stat_file.monthly_lagged_dry_bulb
       unless ground_temperatures.empty?
         # set the site ground temperature building surface
         ground_temp.setAllMonthlyTemperatures(ground_temperatures)
