@@ -33,7 +33,7 @@ class NECB_HVAC_System_1_Test < Minitest::Test
 
 
   def <%=test_name %>()
-    weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
+    weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
     template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = '<%=system[:name] %>'
     vintage = 'NECB2011'

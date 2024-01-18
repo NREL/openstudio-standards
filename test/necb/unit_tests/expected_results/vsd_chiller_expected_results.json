@@ -1,7 +1,7 @@
 [
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "ChillerElectricEIR_VSDCentrifugalWaterChiller - capacity": 235600.0,
@@ -17,7 +17,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "ChillerElectricEIR_VSDCentrifugalWaterChiller - capacity": 606600.0,
@@ -33,7 +33,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "ChillerElectricEIR_VSDCentrifugalWaterChiller - capacity": 819350.0,
@@ -49,7 +49,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "ChillerElectricEIR_VSDCentrifugalWaterChiller - capacity": 993400.0,
@@ -65,7 +65,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "ChillerElectricEIR_VSDCentrifugalWaterChiller - capacity": 1220250.0,
@@ -81,7 +81,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "ChillerElectricEIR_VSDCentrifugalWaterChiller - capacity": 1536750.0,
@@ -97,7 +97,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "ChillerElectricEIR_VSDCentrifugalWaterChiller - capacity": 1773100.0,
