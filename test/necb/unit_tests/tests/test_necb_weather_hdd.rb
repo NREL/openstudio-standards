@@ -4,10 +4,7 @@ require 'json'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
-# *** Needs a re-write to use std paths etc ***
-
-
-#This test will check that the ERVs are added and the assignment from the erv.json library works.
+# This test checks that the option to get HDD from the weather file or from an NECB table works properly.
 
 class NECB_Weather_HDD_Tests < Minitest::Test
 
@@ -22,7 +19,7 @@ class NECB_Weather_HDD_Tests < Minitest::Test
     # Intial test condition
     @test_passed = true
 
-    #Range of test options.
+    # Range of test options.
     @templates = [
       'BTAPPRE1980',
       'BTAP1980TO2010',
