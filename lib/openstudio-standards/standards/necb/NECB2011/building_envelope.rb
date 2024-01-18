@@ -1,9 +1,9 @@
 class NECB2011
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0)
+  def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0, necb_hdd: true)
     # NECB FDWR limit
-    hdd = get_necb_hdd18(model)
+    hdd = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
 
     # Get the maximum NECB fdwr
     # fdwr_set settings:
@@ -333,7 +333,8 @@ class NECB2011
                                              # tubular daylight diffuser
                                              tubular_daylight_diffuser_cond: nil,
                                              tubular_daylight_diffuser_solar_trans: nil,
-                                             tubular_daylight_diffuser_vis_trans: nil)
+                                             tubular_daylight_diffuser_vis_trans: nil,
+                                             necb_hdd: true)
 
     model.getDefaultConstructionSets.sort.each do |default_surface_construction_set|
       BTAP.runner_register('Info', 'apply_standard_construction_properties', runner)
@@ -344,7 +345,7 @@ class NECB2011
       end
 
       # hdd required in scope for eval function.
-      hdd = get_necb_hdd18(model)
+      hdd = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
       # Lambdas are preferred over methods in methods for small utility methods.
       correct_cond = lambda do |conductivity, surface_type|
         return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity == 'NECB_Default' ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
@@ -356,7 +357,7 @@ class NECB2011
       end
 
       BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set!(model: model,
-                                                                                              name: "#{default_surface_construction_set.name.get} at hdd = #{get_necb_hdd18(model)}",
+                                                                                              name: "#{default_surface_construction_set.name.get} at hdd = #{get_necb_hdd18(model: model, necb_hdd: necb_hdd)}",
                                                                                               default_surface_construction_set: default_surface_construction_set,
                                                                                               # ext surfaces
                                                                                               ext_wall_cond: correct_cond.call(ext_wall_cond, 'boundary_condition' => 'Outdoors', 'surface' => 'Wall'),
