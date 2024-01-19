@@ -3751,14 +3751,7 @@ class Standard
   # @return [OpenStudio::Model::Curve] curve object, nil if not found
   def model_add_curve(model, curve_name)
     # First check model and return curve if it already exists
-    existing_curves = []
-    existing_curves += model.getCurveLinears
-    existing_curves += model.getCurveCubics
-    existing_curves += model.getCurveQuadratics
-    existing_curves += model.getCurveBicubics
-    existing_curves += model.getCurveBiquadratics
-    existing_curves += model.getCurveQuadLinears
-    existing_curves.sort.each do |curve|
+    model.getCurves.sort.each do |curve|
       if curve.name.get.to_s == curve_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added curve: #{curve_name}")
         return curve
