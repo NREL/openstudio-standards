@@ -16,7 +16,7 @@ class NECB_SHW_tests < Minitest::Test
   # Additional constant ranges.
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw', 'CAN_NT_Yellowknife.AP.719360_CWEC2020.epw']
 
-  # @return [Bool] true if successful. 
+  # @return [Boolean] true if successful.
   def test_shw_test()
     output_array = []
 
@@ -98,7 +98,7 @@ class NECB_SHW_tests < Minitest::Test
         end
       end #loop to the next epw_file
     end #loop to the next Template
-    #Write test report file. 
+    #Write test report file.
     test_result_file = File.join(@test_results_folder,'shw_test_results.json')
     File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(output_array)) }
 

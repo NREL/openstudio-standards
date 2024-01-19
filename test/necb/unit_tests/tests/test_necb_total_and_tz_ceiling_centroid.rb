@@ -17,7 +17,7 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
   Templates = ['NECB2011', 'NECB2015', 'NECB2017']
 
-  # @return [Bool] true if successful.
+  # @return [Boolean] true if successful.
   def test_ceiling_centroid()
 
     # Set up remaining parameters for test.
@@ -25,7 +25,7 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
 
     output_array = []
     climate_zone = 'none'
-    #Iterate through code versions. It shouldn't make a different but do it anyway. 
+    #Iterate through code versions. It shouldn't make a different but do it anyway.
     Templates.sort.each do |template|
       Epw_files.sort.each do |epw_file|
         model = nil
