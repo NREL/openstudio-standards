@@ -45,15 +45,25 @@ module OpenstudioStandards
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "City is #{epw_file.city}. State is #{epw_file.state}")
     end
 
-    # set the model SiteWaterMainsTemperature object from parsed STAT file
+    # Set the model SiteWaterMainsTemperature object from parsed .stat file
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
-    # @param stat_file [OpenstudioStandards::Weather::StatFile] parsed STAT file object
-    def self.model_set_site_water_mains_temperature(model, stat_file)
+    # @param stat_file [OpenstudioStandards::Weather::StatFile] parsed .stat file object
+    # @return [OpenStudio::Model::SiteWaterMainsTemperature] OpenStudio SiteWaterMainsTemperature object
+    def self.model_set_site_water_mains_temperature(model, stat_file: nil)
+      # get .stat file from model if none provided
+      if stat_file.nil?
+        weather_file_path = model.getWeatherFile.path.get.to_s
+        stat_file =  OpenstudioStandards::Weather::StatFile.load(weather_file_path.sub('epw', 'stat'))
+      end
+
+      # set site water mains temperature
       water_temp = model.getSiteWaterMainsTemperature
       water_temp.setAnnualAverageOutdoorAirTemperature(stat_file.mean_dry_bulb)
       water_temp.setMaximumDifferenceInMonthlyAverageOutdoorAirTemperatures(stat_file.delta_dry_bulb)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "Site Water Mains Temperature mean OA dry bulb is #{stat_file.mean_dry_bulb}. Delta OA dry bulb is #{stat_file.delta_dry_bulb}.")
+
+      return water_temp
     end
 
     # imports design days into the model
@@ -117,6 +127,66 @@ module OpenstudioStandards
       return true
     end
 
+    # Set the SiteGroundTemperatureShallow object based on undisturbed ground temperatures at 0.5m depth from the stat file
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param stat_file [OpenstudioStandards::Weather::StatFile] parsed .stat file object
+    # @return [OpenStudio::Model::SiteGroundTemperatureShallow] OpenStudio SiteGroundTemperatureShallow object
+    def self.model_set_undisturbed_ground_temperature_shallow(model, stat_file: nil)
+      # get .stat file from model if none provided
+      if stat_file.nil?
+        weather_file_path = model.getWeatherFile.path.get.to_s
+        stat_file =  OpenstudioStandards::Weather::StatFile.load(weather_file_path.sub('epw', 'stat'))
+      end
+
+      # set ground temperature shallow values based on .stat file
+      ground_temperature_shallow = OpenStudio::Model::SiteGroundTemperatureShallow.new(model)
+      ground_temperature_shallow.setJanuarySurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[0])
+      ground_temperature_shallow.setFebruarySurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[1])
+      ground_temperature_shallow.setMarchSurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[2])
+      ground_temperature_shallow.setAprilSurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[3])
+      ground_temperature_shallow.setMaySurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[4])
+      ground_temperature_shallow.setJuneSurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[5])
+      ground_temperature_shallow.setJulySurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[6])
+      ground_temperature_shallow.setAugustSurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[7])
+      ground_temperature_shallow.setSeptemberSurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[8])
+      ground_temperature_shallow.setOctoberSurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[9])
+      ground_temperature_shallow.setNovemberSurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[10])
+      ground_temperature_shallow.setDecemberSurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[11])
+
+      return ground_temperature_shallow
+    end
+
+    # Set the SiteGroundTemperatureDeep object based on undisturbed ground temperatures at 4.0m depth from the stat file
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param stat_file [OpenstudioStandards::Weather::StatFile] parsed .stat file object
+    # @return [OpenStudio::Model::SiteGroundTemperatureDeep] OpenStudio SiteGroundTemperatureDeep object
+    def self.model_set_undisturbed_ground_temperature_deep(model, stat_file: nil)
+      # get .stat file from model if none provided
+      if stat_file.nil?
+        weather_file_path = model.getWeatherFile.path.get.to_s
+        stat_file =  OpenstudioStandards::Weather::StatFile.load(weather_file_path.sub('epw', 'stat'))
+      end
+
+      # set ground temperature deep values based on .stat file
+      ground_temperature_deep = OpenStudio::Model::SiteGroundTemperatureDeep.new(model)
+      ground_temperature_deep.setJanuaryDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[0])
+      ground_temperature_deep.setFebruaryDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[1])
+      ground_temperature_deep.setMarchDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[2])
+      ground_temperature_deep.setAprilDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[3])
+      ground_temperature_deep.setMayDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[4])
+      ground_temperature_deep.setJuneDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[5])
+      ground_temperature_deep.setJulyDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[6])
+      ground_temperature_deep.setAugustDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[7])
+      ground_temperature_deep.setSeptemberDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[8])
+      ground_temperature_deep.setOctoberDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[9])
+      ground_temperature_deep.setNovemberDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[10])
+      ground_temperature_deep.setDecemberDeepGroundTemperature(stat_file.monthly_undis_ground_temps_4p0m[11])
+
+      return ground_temperature_deep
+    end
+
     # set the model WeatherFile and Site information based on a weather file
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -131,7 +201,7 @@ module OpenstudioStandards
       model_set_site_information(model, epw_file)
 
       stat_file = OpenstudioStandards::Weather::StatFile.load(weather_file_path.gsub('.epw', '.stat'))
-      model_set_site_water_mains_temperature(model, stat_file)
+      model_set_site_water_mains_temperature(model, stat_file: stat_file)
 
       ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
       if !File.file?(ddy_file_path)

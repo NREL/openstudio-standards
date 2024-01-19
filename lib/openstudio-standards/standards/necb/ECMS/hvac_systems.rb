@@ -1729,46 +1729,6 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Define object "SiteGroundTemperatureShallow" and use ground temperatures from weather file at 0.5 m depth
-  def set_undisturbed_ground_surface_temp_objs(model)
-    surface_ground_temp_obj = OpenStudio::Model::SiteGroundTemperatureShallow.new(model)
-    wfile_path = model.getWeatherFile.path.get.to_s
-    statsfile =  OpenstudioStandards::Weather::StatFile.load(wfile_path.sub('epw', 'stat'))
-    surface_ground_temp_obj.setJanuarySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[0])
-    surface_ground_temp_obj.setFebruarySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[1])
-    surface_ground_temp_obj.setMarchSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[2])
-    surface_ground_temp_obj.setAprilSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[3])
-    surface_ground_temp_obj.setMaySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[4])
-    surface_ground_temp_obj.setJuneSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[5])
-    surface_ground_temp_obj.setJulySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[6])
-    surface_ground_temp_obj.setAugustSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[7])
-    surface_ground_temp_obj.setSeptemberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[8])
-    surface_ground_temp_obj.setOctoberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[9])
-    surface_ground_temp_obj.setNovemberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[10])
-    surface_ground_temp_obj.setDecemberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[11])
-  end
-
-  # =============================================================================================================================
-  # Define object "SiteGroundTemperatureDeep" and use ground temperatures from weather file at 4.0 m depth
-  def set_undisturbed_ground_deep_temp_objs(model)
-    surface_ground_temp_obj = OpenStudio::Model::SiteGroundTemperatureDeep.new(model)
-    wfile_path = model.getWeatherFile.path.get.to_s
-    statsfile = OpenstudioStandards::Weather::StatFile.load(wfile_path.sub('epw', 'stat'))
-    surface_ground_temp_obj.setJanuaryDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[0])
-    surface_ground_temp_obj.setFebruaryDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[1])
-    surface_ground_temp_obj.setMarchDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[2])
-    surface_ground_temp_obj.setAprilDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[3])
-    surface_ground_temp_obj.setMayDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[4])
-    surface_ground_temp_obj.setJuneDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[5])
-    surface_ground_temp_obj.setJulyDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[6])
-    surface_ground_temp_obj.setAugustDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[7])
-    surface_ground_temp_obj.setSeptemberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[8])
-    surface_ground_temp_obj.setOctoberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[9])
-    surface_ground_temp_obj.setNovemberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[10])
-    surface_ground_temp_obj.setDecemberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[11])
-  end
-
-  # =============================================================================================================================
   # Add equipment for ECM "hs14_cgshp_fancoils"
   #   -Constant volume DOAS with hydronic htg and clg coils.
   #   -Zonal terminal fan coil (4-pipe) connected to central ground-source heat pump.

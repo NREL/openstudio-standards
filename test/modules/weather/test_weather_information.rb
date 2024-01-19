@@ -7,7 +7,7 @@ class TestWeatherInformation < Minitest::Test
 
   def test_model_get_ashrae_climate_zone_number
     model = OpenStudio::Model::Model.new
-    OpenstudioStandards::Weather.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
+    @weather.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
     result = @weather.model_get_ashrae_climate_zone_number(model)
     assert_equal(result, 4)
   end
@@ -25,7 +25,7 @@ class TestWeatherInformation < Minitest::Test
     require 'json'
     require 'pp'
     weather_file_names.each do |weather_file_name|
-      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file_name + '.epw')
+      weather_file_path = @weather.get_standards_weather_file_path(weather_file_name + '.epw')
       assert(weather_file_path)
       puts weather_file_path
       stat_file_path = weather_file_path.gsub('.epw', '.stat')
