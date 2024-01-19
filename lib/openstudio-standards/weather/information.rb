@@ -1,10 +1,9 @@
-# Methods to store model weather/location information
 module OpenstudioStandards
-  # The Weather module provides methods to set and get information about the model weather file
+  # The Weather module provides methods to set and get information for model weather files
   module Weather
     # @!group Information
 
-    # A method to return an array of .epw files names mapped to each climate zone
+    # A method to return an array of .epw files names mapped to each climate zone.
     #
     # @param epw_file [String] optional epw_file name for NECB methods
     # @return [Hash] a hash of climate zone weather file pairs
@@ -113,7 +112,7 @@ module OpenstudioStandards
       return climate_zone
     end
 
-    # get the ASHRAE climate zone number
+    # Get the ASHRAE climate zone number.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @return [Integer] ASHRAE climate zone number, 0-8
@@ -142,7 +141,7 @@ module OpenstudioStandards
       return cz_number
     end
 
-    # Get the full path to the weather file that is specified in the model
+    # Get the full path to the weather file that is specified in the model.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @return [OpenStudio::OptionalPath] path to weather file
@@ -174,7 +173,7 @@ module OpenstudioStandards
       return full_epw_path
     end
 
-    # Get absolute path of a weather file included within openstudio-standards
+    # Get absolute path of a weather file included within openstudio-standards.
     #
     # @param weather_file_name [String] Name of a weather file included within openstudio-standards, including file extension .epw
     # @return [String] Weather file path
@@ -224,7 +223,7 @@ module OpenstudioStandards
       return weather_file_path
     end
 
-    # Get absolute path of a weather file included within openstudio-standards that is representative of the climate zone
+    # Get absolute path of a weather file included within openstudio-standards that is representative of the climate zone.
     #
     # @param climate_zone [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
     # @return [String] absolute file path
@@ -240,7 +239,7 @@ module OpenstudioStandards
       return standards_weather_file_path
     end
 
-    # Get a list of regular expressions matching the design day categories
+    # Get a list of regular expressions matching the design day categories.
     #
     # For looking up design day objects by type
     # @param category [String] The design day category: All Heating,
@@ -287,7 +286,7 @@ module OpenstudioStandards
       return ddy_regex_map.select { |k, v| v.include?(category) }.keys
     end
 
-    # Returns the winter design outdoor air dry bulb temperatures in the model
+    # Returns the winter design outdoor air dry bulb temperatures in the model.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @return [Array<Double>] an array of outdoor design dry bulb temperatures in degrees Celsius
@@ -301,5 +300,7 @@ module OpenstudioStandards
 
       return heating_design_outdoor_temps
     end
+
+    # @!endgroup Information
   end
 end

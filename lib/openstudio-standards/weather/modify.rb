@@ -1,9 +1,9 @@
-# methods to modify model weather/location information
 module OpenstudioStandards
+  # The Weather module provides methods to set and get information for model weather files
   module Weather
-    # @!group Weather
+    # @!group Modify
 
-    # Set the model WeatherFile object from a parsed .epw file
+    # Set the model WeatherFile object from a parsed .epw file.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param epw_file [OpenstudioStandards::Weather::EpwFile] parsed epw file object
@@ -28,7 +28,7 @@ module OpenstudioStandards
       return weather_file
     end
 
-    # Set the model Site object from a parsed .epw file
+    # Set the model Site object from a parsed .epw file.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param epw_file [OpenstudioStandards::Weather::EpwFile] parsed epw file object
@@ -46,7 +46,7 @@ module OpenstudioStandards
       return site
     end
 
-    # Set the model SiteWaterMainsTemperature object from a parsed .stat file
+    # Set the model SiteWaterMainsTemperature object from a parsed .stat file.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param stat_file [OpenstudioStandards::Weather::StatFile] parsed .stat file object
@@ -67,7 +67,7 @@ module OpenstudioStandards
       return water_temp
     end
 
-    # Set the SiteGroundTemperatureShallow object based on undisturbed ground temperatures at 0.5m depth from the .stat file
+    # Set the SiteGroundTemperatureShallow object based on undisturbed ground temperatures at 0.5m depth from the .stat file.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param stat_file [OpenstudioStandards::Weather::StatFile] parsed .stat file object
@@ -97,7 +97,7 @@ module OpenstudioStandards
       return ground_temperature_shallow
     end
 
-    # Set the SiteGroundTemperatureDeep object based on undisturbed ground temperatures at 4.0m depth from the .stat file
+    # Set the SiteGroundTemperatureDeep object based on undisturbed ground temperatures at 4.0m depth from the .stat file.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param stat_file [OpenstudioStandards::Weather::StatFile] parsed .stat file object
@@ -127,7 +127,7 @@ module OpenstudioStandards
       return ground_temperature_deep
     end
 
-    # Sets the model ClimateZone object
+    # Sets the model ClimateZone object.
     # Clears out any climate zones previously added to the model.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -152,7 +152,8 @@ module OpenstudioStandards
       return true
     end
 
-    # Set the model DesignDays from a .ddy file
+    # Set the model DesignDays from a .ddy file.
+    # Can pass in a regular expression list to select design days.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param ddy_file_path [String] path to .ddy file
@@ -203,8 +204,8 @@ module OpenstudioStandards
       end
     end
 
-    # Set the model weather file, site, ground temperatures, and design days based on a weather file or climate zone
-    # At least one of the weather_file_path or climate_zone must be specified.
+    # Set the model weather file, site information, ground temperatures, and design days based on a weather file or climate zone.
+    # Either the weather_file_path or the climate_zone argument must be specified.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param weather_file_path [String] absolute path to the .epw file. For weather files included in OpenStudio-standards, can be found using OpenstudioStandards::Weather::get_standards_weather_file_path(weather_file_name)
@@ -261,5 +262,7 @@ module OpenstudioStandards
         OpenstudioStandards::Weather.model_set_climate_zone(model, climate_zone)
       end
     end
+
+    # @!endgroup Modify
   end
 end
