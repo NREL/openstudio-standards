@@ -579,7 +579,7 @@ class ASHRAE901PRM < Standard
   def calculate_lpd_by_space(space_type, space)
     # get interior lighting data
     space_type_properties = interior_lighting_get_prm_data(space_type)
-    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The lighting properties for space: #{space.name.get} is based on lighting_space_type: #{space_type_properties['lighting_space_type']}, primary_space_type: #{space_type_properties['primary_space_type']}, secondary_space_type: #{space_type_properties['secondary_space_type']}.")
+    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The lighting properties for space: #{space.name.get} is based on lighting_space_type: #{space_type_properties['lpd_space_type']}, primary_space_type: #{space_type_properties['primary_space_type']}, secondary_space_type: #{space_type_properties['secondary_space_type']}.")
     space_lighting_per_area = 0.0
     # Assign data
     lights_have_info = false

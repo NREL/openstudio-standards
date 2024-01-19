@@ -9,6 +9,7 @@ require 'yaml'
 class BTAPDatapoint
   def initialize(input_folder: nil,
                  output_folder: nil,
+                 weather_folder: nil,
                  input_folder_cache: File.join(__dir__, 'input_cache'))
     @failed = false
 
@@ -19,7 +20,10 @@ class BTAPDatapoint
     if output_folder.nil?
       output_folder = File.join(__dir__, 'output')
     end
-
+    # Create an empty weather folder if one doesn't exist.  This is to avoid issues later.
+    if weather_folder.nil?
+      weather_folder = File.join(__dir__, 'weather')
+    end
     puts("INPUT FOLDER:#{input_folder}")
     puts("OUTPUT FOLDER:#{output_folder}")
 
@@ -115,6 +119,7 @@ class BTAPDatapoint
         # Otherwise modify osm input with options.
         @standard.model_apply_standard(model: model,
                                        epw_file: @options[:epw_file],
+                                       custom_weather_folder: weather_folder,
                                        sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
                                        primary_heating_fuel: @options[:primary_heating_fuel],
                                        necb_reference_hp: @options[:necb_reference_hp],
@@ -170,7 +175,8 @@ class BTAPDatapoint
                                        airloop_economizer_type: @options[:airloop_economizer_type],
                                        shw_scale: @options[:shw_scale],
                                        baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
-                                       tbd_option: @options[:tbd_option]
+                                       tbd_option: @options[:tbd_option],
+                                       necb_hdd: @options[:necb_hdd]
                                        )
       end
 

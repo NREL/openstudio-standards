@@ -81,9 +81,10 @@ class Standard
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
     hot_water_loop.setMinimumLoopTemperature(10.0)
-    hw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_sup_wtr_temp_c,
-                                                      name = "#{hot_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F")
+    hw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_sup_wtr_temp_c,
+                                                                                  name: "#{hot_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F",
+                                                                                  schedule_type_limit: 'Temperature')
     hw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, hw_temp_sch)
     hw_stpt_manager.setName("#{hot_water_loop.name} Setpoint Manager")
     hw_stpt_manager.addToNode(hot_water_loop.supplyOutletNode)
@@ -770,12 +771,14 @@ class Standard
     heat_pump_water_loop.setMaximumLoopTemperature(35.0)
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
-    hp_high_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                           sup_wtr_high_temp_c,
-                                                           name = "#{heat_pump_water_loop.name} High Temp - #{sup_wtr_high_temp.round(0)}F")
-    hp_low_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                          sup_wtr_low_temp_c,
-                                                          name = "#{heat_pump_water_loop.name} Low Temp - #{sup_wtr_low_temp.round(0)}F")
+    hp_high_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                       sup_wtr_high_temp_c,
+                                                                                       name: "#{heat_pump_water_loop.name} High Temp - #{sup_wtr_high_temp.round(0)}F",
+                                                                                       schedule_type_limit: 'Temperature')
+    hp_low_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                      sup_wtr_low_temp_c,
+                                                                                      name: "#{heat_pump_water_loop.name} Low Temp - #{sup_wtr_low_temp.round(0)}F",
+                                                                                      schedule_type_limit: 'Temperature')
     hp_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
     hp_stpt_manager.setName("#{heat_pump_water_loop.name} Scheduled Dual Setpoint")
     hp_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
@@ -1065,13 +1068,15 @@ class Standard
     amb_temp_sizing_c = OpenStudio.convert(amb_temp_sizing_f, 'F', 'C').get
     amb_delta_t_k = OpenStudio.convert(amb_delta_t_r, 'R', 'K').get
 
-    amb_high_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                            amb_high_temp_c,
-                                                            name = "Ambient Loop High Temp - #{amb_high_temp_f}F")
+    amb_high_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                        amb_high_temp_c,
+                                                                                        name: "Ambient Loop High Temp - #{amb_high_temp_f}F",
+                                                                                        schedule_type_limit: 'Temperature')
 
-    amb_low_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                           amb_low_temp_c,
-                                                           name = "Ambient Loop Low Temp - #{amb_low_temp_f}F")
+    amb_low_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                       amb_low_temp_c,
+                                                                                       name: "Ambient Loop Low Temp - #{amb_low_temp_f}F",
+                                                                                       schedule_type_limit: 'Temperature')
 
     amb_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
     amb_stpt_manager.setName("#{ambient_loop.name} Supply Water Setpoint Manager")
@@ -1179,10 +1184,10 @@ class Standard
       chilled_water_loop_name = ems_friendly_name(chilled_water_loop.name)
 
       # create hot water plant availability schedule managers and create an EMS acuator
-      sch_hot_water_availability = model_add_constant_schedule_ruleset(model,
-                                                                       0,
-                                                                       name = "#{hot_water_loop.name} Availability Schedule",
-                                                                       sch_type_limit: 'OnOff')
+      sch_hot_water_availability = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                   0,
+                                                                                                   name: "#{hot_water_loop.name} Availability Schedule",
+                                                                                                   schedule_type_limit: 'OnOff')
 
       hot_water_loop_manager = OpenStudio::Model::AvailabilityManagerScheduled.new(model)
       hot_water_loop_manager.setName("#{hot_water_loop.name} Availability Manager")
@@ -1197,10 +1202,10 @@ class Standard
       hot_water_loop.addAvailabilityManager(hot_water_loop_manager)
 
       # create chilled water plant availability schedule managers and create an EMS acuator
-      sch_chilled_water_availability = model_add_constant_schedule_ruleset(model,
-                                                                           0,
-                                                                           name = "#{chilled_water_loop.name} Availability Schedule",
-                                                                           sch_type_limit: 'OnOff')
+      sch_chilled_water_availability = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                       0,
+                                                                                                       name: "#{chilled_water_loop.name} Availability Schedule",
+                                                                                                       schedule_type_limit: 'OnOff')
 
       chilled_water_loop_manager = OpenStudio::Model::AvailabilityManagerScheduled.new(model)
       chilled_water_loop_manager.setName("#{chilled_water_loop.name} Availability Manager")
@@ -1604,10 +1609,10 @@ class Standard
     # could add a humidity controller here set to limit supply air to a 16.6C/62F dewpoint
     # the default outdoor air reset to 60F prevents exceeding this dewpoint in all ASHRAE climate zones
     # the humidity controller needs a DX coil that can control humidity, e.g. CoilCoolingDXTwoStageWithHumidityControlMode
-    # max_humidity_ratio_sch = model_add_constant_schedule_ruleset(model,
-    #                                                              0.012,
-    #                                                              name = "0.012 Humidity Ratio Schedule",
-    #                                                              sch_type_limit: "Humidity Ratio")
+    # max_humidity_ratio_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+    #                                                                                          0.012,
+    #                                                                                          name: "0.012 Humidity Ratio Schedule",
+    #                                                                                          schedule_type_limit: "Humidity Ratio")
     # sat_oa_reset = OpenStudio::Model::SetpointManagerScheduled.new(model, max_humidity_ratio_sch)
     # sat_oa_reset.setName("#{air_loop.name.to_s} Humidity Controller")
     # sat_oa_reset.setControlVariable('MaximumHumidityRatio')
@@ -1852,9 +1857,10 @@ class Standard
     end
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -2074,9 +2080,10 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -2226,9 +2233,10 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -2412,9 +2420,10 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -2568,9 +2577,10 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 1.0)
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -3512,9 +3522,10 @@ class Standard
 
       # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
       if supply_temp_sch.nil?
-        supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                              dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                              name = 'AHU Supply Temp Sch')
+        supply_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                          dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                          name: 'AHU Supply Temp Sch',
+                                                                                          schedule_type_limit: 'Temperature')
       end
       setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
       setpoint_mgr_cooling.setName('CRAC supply air setpoint manager')
@@ -3613,9 +3624,10 @@ class Standard
 
     # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
     if supply_temp_sch.nil?
-      supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                            dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                            name = 'AHU Supply Temp Sch')
+      supply_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                        dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                        name: 'AHU Supply Temp Sch',
+                                                                                        schedule_type_limit: 'Temperature')
     end
     setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
     setpoint_mgr_cooling.setName('CRAH supply air setpoint manager')
@@ -4972,9 +4984,10 @@ class Standard
     radiant_htg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
     hot_water_loop.sizingPlant.setDesignLoopExitTemperature(radiant_htg_dsgn_sup_wtr_temp_c)
     hot_water_loop.sizingPlant.setLoopDesignTemperatureDifference(radiant_htg_dsgn_sup_wtr_temp_delt_k)
-    hw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      radiant_htg_dsgn_sup_wtr_temp_c,
-                                                      name = "#{hot_water_loop.name} Temp - #{radiant_htg_dsgn_sup_wtr_temp_f.round(0)}F")
+    hw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  radiant_htg_dsgn_sup_wtr_temp_c,
+                                                                                  name: "#{hot_water_loop.name} Temp - #{radiant_htg_dsgn_sup_wtr_temp_f.round(0)}F",
+                                                                                  schedule_type_limit: 'Temperature')
     hot_water_loop.supplyOutletNode.setpointManagers.each do |spm|
       if spm.to_SetpointManagerScheduled.is_initialized
         spm = spm.to_SetpointManagerScheduled.get
@@ -4989,9 +5002,10 @@ class Standard
     radiant_clg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_clg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
     chilled_water_loop.sizingPlant.setDesignLoopExitTemperature(radiant_clg_dsgn_sup_wtr_temp_c)
     chilled_water_loop.sizingPlant.setLoopDesignTemperatureDifference(radiant_clg_dsgn_sup_wtr_temp_delt_k)
-    chw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                       radiant_clg_dsgn_sup_wtr_temp_c,
-                                                       name = "#{chilled_water_loop.name} Temp - #{radiant_clg_dsgn_sup_wtr_temp_f.round(0)}F")
+    chw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                   radiant_clg_dsgn_sup_wtr_temp_c,
+                                                                                   name: "#{chilled_water_loop.name} Temp - #{radiant_clg_dsgn_sup_wtr_temp_f.round(0)}F",
+                                                                                   schedule_type_limit: 'Temperature')
     chilled_water_loop.supplyOutletNode.setpointManagers.each do |spm|
       if spm.to_SetpointManagerScheduled.is_initialized
         spm = spm.to_SetpointManagerScheduled.get
@@ -5006,12 +5020,14 @@ class Standard
     zn_radiant_clg_dsgn_temp_f = 74.0
     zn_radiant_clg_dsgn_temp_c = OpenStudio.convert(zn_radiant_clg_dsgn_temp_f, 'F', 'C').get
 
-    htg_control_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                               zn_radiant_htg_dsgn_temp_c,
-                                                               name = "Zone Radiant Loop Heating Threshold Temperature Schedule - #{zn_radiant_htg_dsgn_temp_f.round(0)}F")
-    clg_control_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                               zn_radiant_clg_dsgn_temp_c,
-                                                               name = "Zone Radiant Loop Cooling Threshold Temperature Schedule - #{zn_radiant_clg_dsgn_temp_f.round(0)}F")
+    htg_control_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                           zn_radiant_htg_dsgn_temp_c,
+                                                                                           name: "Zone Radiant Loop Heating Threshold Temperature Schedule - #{zn_radiant_htg_dsgn_temp_f.round(0)}F",
+                                                                                           schedule_type_limit: 'Temperature')
+    clg_control_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                           zn_radiant_clg_dsgn_temp_c,
+                                                                                           name: "Zone Radiant Loop Cooling Threshold Temperature Schedule - #{zn_radiant_clg_dsgn_temp_f.round(0)}F",
+                                                                                           schedule_type_limit: 'Temperature')
     throttling_range_f = 4.0 # 2 degF on either side of control temperature
     throttling_range_c = OpenStudio.convert(throttling_range_f, 'F', 'C').get
 
@@ -6132,9 +6148,10 @@ class Standard
       end
 
       # plant loop supply water control actuator
-      sch_plant_swt_ctrl = model_add_constant_schedule_ruleset(model,
-                                                               swt_init,
-                                                               name = "#{plant_water_loop_name}_Sch_Supply_Water_Temperature")
+      sch_plant_swt_ctrl = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                           swt_init,
+                                                                                           name: "#{plant_water_loop_name}_Sch_Supply_Water_Temperature",
+                                                                                           schedule_type_limit: 'Temperature')
 
       cmd_plant_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_plant_swt_ctrl,
                                                                                    'Schedule:Year',
@@ -6233,20 +6250,20 @@ class Standard
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to dictate cooling or heating mode of water plant
   def model_add_zone_heat_cool_request_count_program(model, thermal_zones)
     # create container schedules to hold number of zones needing heating and cooling
-    sch_zones_needing_heating = model_add_constant_schedule_ruleset(model,
-                                                                    0,
-                                                                    name = 'Zones Needing Heating Count Schedule',
-                                                                    sch_type_limit: 'Dimensionless')
+    sch_zones_needing_heating = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                0,
+                                                                                                name: 'Zones Needing Heating Count Schedule',
+                                                                                                schedule_type_limit: 'Dimensionless')
 
     zone_needing_heating_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating,
                                                                                           'Schedule:Year',
                                                                                           'Schedule Value')
     zone_needing_heating_actuator.setName('Zones_Needing_Heating')
 
-    sch_zones_needing_cooling = model_add_constant_schedule_ruleset(model,
-                                                                    0,
-                                                                    name = 'Zones Needing Cooling Count Schedule',
-                                                                    sch_type_limit: 'Dimensionless')
+    sch_zones_needing_cooling = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                0,
+                                                                                                name: 'Zones Needing Cooling Count Schedule',
+                                                                                                schedule_type_limit: 'Dimensionless')
 
     zone_needing_cooling_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling,
                                                                                           'Schedule:Year',
@@ -6254,20 +6271,20 @@ class Standard
     zone_needing_cooling_actuator.setName('Zones_Needing_Cooling')
 
     # create container schedules to hold ratio of zones needing heating and cooling
-    sch_zones_needing_heating_ratio = model_add_constant_schedule_ruleset(model,
-                                                                          0,
-                                                                          name = 'Zones Needing Heating Ratio Schedule',
-                                                                          sch_type_limit: 'Dimensionless')
+    sch_zones_needing_heating_ratio = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                      0,
+                                                                                                      name: 'Zones Needing Heating Ratio Schedule',
+                                                                                                      schedule_type_limit: 'Dimensionless')
 
     zone_needing_heating_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating_ratio,
                                                                                                 'Schedule:Year',
                                                                                                 'Schedule Value')
     zone_needing_heating_ratio_actuator.setName('Zone_Heating_Ratio')
 
-    sch_zones_needing_cooling_ratio = model_add_constant_schedule_ruleset(model,
-                                                                          0,
-                                                                          name = 'Zones Needing Cooling Ratio Schedule',
-                                                                          sch_type_limit: 'Dimensionless')
+    sch_zones_needing_cooling_ratio = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                      0,
+                                                                                                      name: 'Zones Needing Cooling Ratio Schedule',
+                                                                                                      schedule_type_limit: 'Dimensionless')
 
     zone_needing_cooling_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling_ratio,
                                                                                                 'Schedule:Year',
@@ -6503,9 +6520,10 @@ class Standard
         spm.setMinimumSetpointTemperature(dsgn_sup_wtr_temp_c)
       elsif spm.to_SetpointManagerScheduled.is_initialized
         spm = spm.to_SetpointManagerScheduled.get
-        cw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                          dsgn_sup_wtr_temp_c,
-                                                          name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp_f.round(0)}F")
+        cw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                      dsgn_sup_wtr_temp_c,
+                                                                                      name: "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp_f.round(0)}F",
+                                                                                      schedule_type_limit: 'Temperature')
         spm.setSchedule(cw_temp_sch)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Changing condenser water loop setpoint for '#{condenser_water_loop.name}' to '#{cw_temp_sch.name}' to account for the waterside economizer.")
       else

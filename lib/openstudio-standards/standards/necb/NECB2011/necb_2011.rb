@@ -23,6 +23,18 @@ class NECB2011 < Standard
     return variable.to_f
   end
 
+  # This method converts arguments to bool.  Anything other than a bool false or string 'false' is converted
+  # to a bool true.  Bool false and case insesitive string false are turned into bool false.
+  def convert_arg_to_bool(variable:, default:)
+    return true if variable.nil?
+    if variable.is_a? String
+      return true if variable.to_s.downcase == 'necb_default'
+      return false if variable.to_s.downcase == 'false'
+    end
+    return false if variable == false
+    return true
+  end
+
   def get_standards_table(table_name:)
     if @standards_data['tables'][table_name].nil?
       message = "Could not find table #{table_name} in database."
@@ -151,11 +163,15 @@ class NECB2011 < Standard
     rm * c # Delta in meters
   end
 
-  def get_necb_hdd18(model)
+  def get_necb_hdd18(model:, necb_hdd: true)
     max_distance_tolerance = 500000
     min_distance = 100000000000000.0
     necb_closest = nil
     epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+    # If necb_hdd is false use the information in the .stat file associated with the.epw file.
+    unless necb_hdd
+      return epw.hdd18.to_f
+    end
     # this extracts the table from the json database.
     necb_2015_table_c1 = @standards_data['tables']['necb_2015_table_c1']['table']
     necb_2015_table_c1.each do |necb|
@@ -181,6 +197,7 @@ class NECB2011 < Standard
   def model_create_prototype_model(template:,
                                    building_type:,
                                    epw_file:,
+                                   custom_weather_folder: nil,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
                                    primary_heating_fuel: 'Electricity',
@@ -235,12 +252,14 @@ class NECB2011 < Standard
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil,
                                    tbd_option: nil,
-                                   tbd_interpolate: false)
+                                   tbd_interpolate: false,
+                                   necb_hdd: true)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
                                 tbd_interpolate: tbd_interpolate,
                                 epw_file: epw_file,
+                                custom_weather_folder: custom_weather_folder,
                                 sizing_run_dir: sizing_run_dir,
                                 primary_heating_fuel: primary_heating_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
@@ -292,7 +311,8 @@ class NECB2011 < Standard
                                 shw_scale: shw_scale,  # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) a float number larger than 0.0
                                 output_meters: output_meters,
                                 airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
-                                baseline_system_zones_map_option: baseline_system_zones_map_option  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                necb_hdd: necb_hdd
                                 )
 
   end
@@ -313,6 +333,7 @@ class NECB2011 < Standard
                            tbd_option: nil,
                            tbd_interpolate: nil,
                            epw_file:,
+                           custom_weather_folder: nil,
                            sizing_run_dir: Dir.pwd,
                            necb_reference_hp: false,
                            necb_reference_hp_supp_fuel: 'DefaultFuel',
@@ -366,19 +387,21 @@ class NECB2011 < Standard
                            shw_scale: nil,
                            output_meters: nil,
                            airloop_economizer_type: nil,
-                           baseline_system_zones_map_option: nil)
+                           baseline_system_zones_map_option: nil,
+                           necb_hdd: true)
     self.fuel_type_set = SystemFuels.new()
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
+    necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
       space.autocalculateVolume
     end
 
-    apply_weather_data(model: model, epw_file: epw_file)
+    apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -400,10 +423,12 @@ class NECB2011 < Standard
                    glass_door_solar_trans: glass_door_solar_trans,
                    fixed_wind_solar_trans: fixed_wind_solar_trans,
                    skylight_solar_trans: skylight_solar_trans,
-                   infiltration_scale: infiltration_scale)
+                   infiltration_scale: infiltration_scale,
+                   necb_hdd: necb_hdd)
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
-                               srr_set: srr_set)
+                               srr_set: srr_set,
+                               necb_hdd: necb_hdd)
     apply_thermal_bridging(model: model,
                            tbd_option: tbd_option,
                            tbd_interpolate: tbd_interpolate,
@@ -629,14 +654,17 @@ class NECB2011 < Standard
     ecm.scale_oa_loads(model: model, scale: oa_scale)
   end
 
-  def apply_weather_data(model:, epw_file:)
+  def apply_weather_data(model:, epw_file:, custom_weather_folder: nil)
     # Create full path to weather file
     weather_files = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
     weather_file = File.join(weather_files, epw_file)
     # Check if the weather file exists.  If it does continue as normal, otherwise try to dowload it from the
     # canmet-energy/btap_weather repository
     unless File.exist?(weather_file)
-      get_weather_file_from_repo(epw_file: epw_file)
+      # Check if btap_batch transferred the weather file
+      weather_transfer = check_datapoint_weather_folder(epw_file: epw_file, weather_folder: weather_files, custom_weather_folder: custom_weather_folder)
+      # If btap_batch didn't transfer the weather file, download it.
+      get_weather_file_from_repo(epw_file: epw_file) unless weather_transfer
     end
     climate_zone = 'NECB HDD Method'
     # Fix EMS references. Temporary workaround for OS issue #2598
@@ -662,7 +690,8 @@ class NECB2011 < Standard
                      glass_door_solar_trans: nil,
                      fixed_wind_solar_trans: nil,
                      skylight_solar_trans: nil,
-                     infiltration_scale: nil)
+                     infiltration_scale: nil,
+                     necb_hdd: true)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     model_apply_infiltration_standard(model)
@@ -685,7 +714,8 @@ class NECB2011 < Standard
                                            skylight_cond: skylight_cond,
                                            glass_door_solar_trans: glass_door_solar_trans,
                                            fixed_wind_solar_trans: fixed_wind_solar_trans,
-                                           skylight_solar_trans: skylight_solar_trans)
+                                           skylight_solar_trans: skylight_solar_trans,
+                                           necb_hdd: necb_hdd)
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
@@ -916,12 +946,12 @@ class NECB2011 < Standard
   #     # limit
   #     # <-3.1:  Remove all the windows/skylights
   #     # > 1:  Do nothing
-  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0, necb_hdd: true)
     fdwr_set = -1.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil?
     srr_set = -1.0 if (srr_set == 'NECB_default') || srr_set.nil?
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
-    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: necb_hdd)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
@@ -1041,7 +1071,7 @@ class NECB2011 < Standard
 
     # Get the airloop occupancy schedule
     loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
-    flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch)
+    flh = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(loop_occ_sch)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
 
     # Set HVAC availability schedule to follow occupancy
@@ -2219,28 +2249,14 @@ class NECB2011 < Standard
     historic_git_folder = @standards_data['constants']['historic_weather_folder_url']['value'].to_s
     # Get the files from the repository
     success_flag = download_and_save_file(weather_list_url: historic_weather_files_loc, weather_loc: weather_loc, git_folder: historic_git_folder)
-    return if success_flag == true
+    return if success_flag
     # If the file could not be found in the historical data look for it with the future weather data.
     puts "Could not find #{epw_file} in historical weather data files, looking in future weather data files."
     future_weather_files_loc = @standards_data['constants']['future_weather_file_list']['value'].to_s
     future_git_folder = @standards_data['constants']['future_weather_folder_url']['value'].to_s
     success_flag = download_and_save_file(weather_list_url: future_weather_files_loc, weather_loc: weather_loc, git_folder: future_git_folder)
-    if success_flag == true
-      # Rename the non-ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
-      # because the ASHRAE .ddy file includes sizing information not included in the regular .ddy file for future
-      # weather data files.  Unfortunately, openstudio-standards just looks for the regular .ddy file for sizing
-      # information which is why the switch is done.
-      puts "Renaming #{weather_loc}.ddy as #{weather_loc}_orig.ddy and #{weather_loc}_ASHRAE.ddy as #{weather_loc}.ddy."
-      puts "This is so that the design weather information in the #{weather_loc}_ASHRAE.ddy file is used."
-      weather_dir = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
-      orig_ddy_name = File.join(weather_dir, (weather_loc + ".ddy"))
-      ashrae_ddy_name = File.join(weather_dir, (weather_loc + "_ASHRAE.ddy"))
-      rev_ddy_name = File.join(weather_dir, (weather_loc + "_orig.ddy"))
-      FileUtils.cp(orig_ddy_name, rev_ddy_name)
-      FileUtils.cp(ashrae_ddy_name, orig_ddy_name)
-      return
-    end
-    raise("Could not locate the following file in the canmet/btap_weather repository: #{epw_file}.  Please check the spelling of the file or visit https://github.com/canmet-energy/btap_weather to see if the file exists.")
+    return if success_flag
+    raise("Could not locate the following file in the canmet/btap_weather repository or could not extract the data: #{epw_file}.  Please check the spelling of the file or visit https://github.com/canmet-energy/btap_weather to see if the file exists.")
   end
 
   # This method actually looks for and downloads the zip file from the https://github.com/canmet-energy/btap_weather
@@ -2273,7 +2289,6 @@ class NECB2011 < Standard
           # If the weather file is on the list proceed, otherwise report that it could not be found
           unless zip_name.nil?
             # Found the weather file on the list
-            status = true
             # Define the full url of the weather zip file we want to download
             save_file_url = git_folder + zip_name
             # Define the local location of where the weather zip file will be saved
@@ -2293,21 +2308,7 @@ class NECB2011 < Standard
                   File.open(save_file, 'wb') { |f| f.write(file_url.read) }
                   puts "Downloaded #{save_file_url} to #{save_file}"
                   # Extract the individual weother files from the zip file
-                  Zip::File.open(save_file) do |zip_file|
-                    puts "Expanding #{save_file}"
-                    # Cycle through each file in the zip file
-                    zip_file.each do |entry|
-                      # Define the location of where the file will be saved locally
-                      curr_save_file = File.join(weather_dir, entry.name.to_s)
-                      puts "Extracting #{entry.name} to #{curr_save_file}"
-                      # entry.extract # This was required before but now it isn't.  I'm confused so am saving this comment to
-                      # remind me if there are ploblems later
-                      # Read the data from the file
-                      content = entry.get_input_stream.read
-                      # Save the data locally
-                      File.open(curr_save_file, 'wb') { |save_f| save_f.write(content) }
-                    end
-                  end
+                  status = extract_weather_data(zipped_file: save_file, weather_dir: weather_dir)
                 end
                 attemptb = 10
               rescue
@@ -2324,6 +2325,85 @@ class NECB2011 < Standard
       end
     end
     return status
+  end
+
+  # This method checks if a zip file containing weather data is stored in an external directory.  If it is, then it
+  # checks if the name of the zip file (without extension) matches the name of the desired epw file (without extension).
+  # If it does then it copies the zip file to the openstudio-standards weather directory and expands the file.
+  # Presumably the zip file contains the .ddy, .epw, and .stat files needed by the rest of BTAP.  If no appropriate
+  # weather zip files are present in the external directory then the method returns false.
+  # Arguments:
+  # epw_file (string): The name of the .epw file that BTAP will use.
+  # weather_folder (string): The path to the openstudio-standards weather folder.
+  # custom_weather_folder (string): The path to the external folder presumably containing the weather data zip file.
+  def check_datapoint_weather_folder(epw_file:, weather_folder:, custom_weather_folder: nil)
+    # Check if the external weather directory exists and return false if there isn't one
+    return false if custom_weather_folder.nil?
+    # Check if there are any zip files in the external weather directory and return false if there isn't any.
+    zip_search_term = File.join(custom_weather_folder.to_s, '*.zip')
+    zip_files = Dir[zip_search_term]
+    return false if zip_files.empty?
+    # Look for a zip file in the external directory named after the .epw file.  If there isn't one return false.
+    weather_loc = epw_file[0..-5]
+    weather_zip = weather_loc + '.zip'
+    zip_find = zip_files.select{ |check_file | File.basename(check_file).to_s.downcase == weather_zip.to_s.downcase }
+    return false if zip_find.empty?
+    # Copy the zip file we want from the external weather directory to the openstudio-standards weather directory and
+    # extract the weather data in the file.
+    puts "Copying: #{zip_find[0]} from the btap_cli weather folder to the openstudio-standards weather folder: #{weather_folder}"
+    FileUtils.cp(zip_find[0], weather_folder)
+    dest_zip = File.join(weather_folder, weather_zip)
+    # Return true if everything goes well.
+    return extract_weather_data(zipped_file: dest_zip, weather_dir: weather_folder)
+  end
+
+  # This method extracts data from a zip file.  The name implies it is to be used for zip files containing weather
+  # data but really it can be used to extract any zip file.
+  # Arguments:
+  # zipped_file (string): As the name implies, this is the name and path to the zip file we want to expand.
+  # weather_dir (string): This is the folder where the zipped files will be extracted to.  Don't let the name fool you.
+  #                       it can be any folder not just a weather directory.
+  def extract_weather_data(zipped_file:, weather_dir:)
+    # Set a flag to check if the weather data is for future weather.
+    future_file = false
+    # Start expanding the data.
+    Zip::File.open(zipped_file) do |zip_file|
+      puts "Expanding #{zipped_file}"
+      # Cycle through each file in the zip file
+      zip_file.each do |entry|
+        # Define the location of where the file will be saved locally
+        curr_save_file = File.join(weather_dir, entry.name.to_s)
+        puts "Extracting #{entry.name} to #{curr_save_file}"
+        # Check if the file includes a '_ASHRAE.ddy' term.  If there is, later on we will rename the '_ASHRAE.ddy' file
+        # to just '.ddy'. This is so the rest of BTAP uses the _ASHRAE.ddy file.
+        entry_name = entry.name.to_s
+        if entry_name.length > 11
+          future_file = true if entry_name[-11..-1] == '_ASHRAE.ddy'
+        end
+        # entry.extract # This was required before but now it isn't.  I'm confused so am saving this comment to
+        # remind me if there are problems later.
+        # Read the data from the file
+        content = entry.get_input_stream.read
+        # Save the data locally
+        File.open(curr_save_file, 'wb') { |save_f| save_f.write(content) }
+      end
+    end
+    if future_file
+      # Rename the non-ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
+      # because the ASHRAE .ddy file includes sizing information not included in the regular .ddy file for future
+      # weather data files.  Unfortunately, openstudio-standards just looks for the regular .ddy file for sizing
+      # information which is why the switch is done.
+      weather_loc = (File.basename(zipped_file).to_s)[0..-5]
+      puts "Renaming #{weather_loc}.ddy as #{weather_loc}_orig.ddy and #{weather_loc}_ASHRAE.ddy as #{weather_loc}.ddy."
+      puts "This is so that the design weather information in the #{weather_loc}_ASHRAE.ddy file is used."
+      orig_ddy_name = File.join(weather_dir, (weather_loc + ".ddy"))
+      ashrae_ddy_name = File.join(weather_dir, (weather_loc + "_ASHRAE.ddy"))
+      rev_ddy_name = File.join(weather_dir, (weather_loc + "_orig.ddy"))
+      FileUtils.cp(orig_ddy_name, rev_ddy_name)
+      FileUtils.cp(ashrae_ddy_name, orig_ddy_name)
+    end
+    # Return true if everything worked out
+    return true
   end
 
 end

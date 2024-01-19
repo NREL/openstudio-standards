@@ -1,6 +1,10 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
+# *** Needs a re-write to use std paths etc ***
 
 class NECB_LED_Lighting_Tests < Minitest::Test
 
@@ -36,7 +40,7 @@ class NECB_LED_Lighting_Tests < Minitest::Test
         'SmallHotel',
         'Warehouse'
     ]
-    @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
+    @epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
     @primary_heating_fuels = ['DefaultFuel']
     @dcv_types = ['No DCV']
     @lighting_types = ['LED'] #LED  #NECB_Default

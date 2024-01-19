@@ -147,10 +147,10 @@ module LargeDataCenterHighITE
       #   supply_temp_diff_sch = it_equip.supplyTemperatureDifferenceSchedule.get
       #   if supply_temp_diff_sch.to_ScheduleRuleset.is_initialized
       #     # use the largest supply approach temperature schedule if multiple IT equips are using different schedules
-      #     if schedule_ruleset_annual_min_max_value(supply_temp_diff_sch)['max'] <= supply_temp_diff_max
+      #     if OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(supply_temp_diff_sch)['max'] <= supply_temp_diff_max
       #       next
       #     else
-      #       supply_temp_diff_max = schedule_ruleset_annual_min_max_value(supply_temp_diff_sch)['max']
+      #       supply_temp_diff_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(supply_temp_diff_sch)['max']
       #       supply_temp_diff_sch = supply_temp_diff_sch.to_ScheduleRuleset.get
       #       supply_temp_sch = supply_temp_diff_sch.clone(model).to_ScheduleRuleset.get
       #       supply_temp_sch.setName('AHU Supply Temp Sch updated')
@@ -169,9 +169,10 @@ module LargeDataCenterHighITE
       # Take the supply approach temperature at fully open air management scenario
       supply_temp_diff_max = it_equip.supplyTemperatureDifference if it_equip.supplyTemperatureDifference > supply_temp_diff_max
       if supply_temp_diff_max > 0
-        supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                              it_equip.designEnteringAirTemperature - supply_temp_diff_max,
-                                                              name = 'AHU Supply Temp Sch updated')
+        supply_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                          it_equip.designEnteringAirTemperature - supply_temp_diff_max,
+                                                                                          name: 'AHU Supply Temp Sch updated',
+                                                                                          schedule_type_limit: 'Temperature')
       end
     end
     return supply_temp_sch

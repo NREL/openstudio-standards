@@ -1252,7 +1252,7 @@ Standard.class_eval do
         end
 
         # Modify schedules
-        model_multiply_schedule(model, sch.defaultDaySchedule, sch_mult, 0)
+        OpenstudioStandards::Schedules.schedule_day_multiply_by_value(sch.defaultDaySchedule, sch_mult)
       end
     end
   end
@@ -1521,11 +1521,11 @@ Standard.class_eval do
         reduced_lights_schs[lights_sch_name] = new_lights_sch
 
         # Reduce default day schedule
-        model_multiply_schedule(model, new_lights_sch.defaultDaySchedule, red_multiplier, 0.25)
+        OpenstudioStandards::Schedules.schedule_day_multiply_by_value(new_lights_sch.defaultDaySchedule, red_multiplier, lower_apply_limit: 0.25)
 
         # Reduce all other rule schedules
         new_lights_sch.scheduleRules.each do |sch_rule|
-          model_multiply_schedule(model, sch_rule.daySchedule, red_multiplier, 0.25)
+          OpenstudioStandards::Schedules.schedule_day_multiply_by_value(sch_rule.daySchedule, red_multiplier, lower_apply_limit: 0.25)
         end
       end
 
@@ -2451,35 +2451,6 @@ Standard.class_eval do
     return final_groups
   end
 
-  # Method to multiply the values in a day schedule by a specified value
-  # but only when the existing value is higher than a specified lower limit.
-  # This limit prevents occupancy sensors from affecting unoccupied hours.
-  def model_multiply_schedule(model, day_sch, multiplier, limit)
-    # Record the original times and values
-    times = day_sch.times
-    values = day_sch.values
-
-    # Remove the original times and values
-    day_sch.clearValues
-
-    # Create new values by using the multiplier on the original values
-    new_values = []
-    values.each do |value|
-      new_values << if value > limit
-                      value * multiplier
-                    else
-                      value
-                    end
-    end
-
-    # Add the revised time/value pairs to the schedule
-    new_values.each_with_index do |new_value, i|
-      day_sch.addValue(times[i], new_value)
-    end
-  end
-
-  # end reduce schedule
-
   # Determine the prototypical economizer type for the model.
   # Defaults to FixedDryBulb based on anecdotal evidence of this being
   # the most common type encountered in the field, combined
@@ -2859,9 +2830,9 @@ Standard.class_eval do
       # Set exhaust fan balanced air flow schedule to only consider the transfer air to be balanced air flow
       balanced_air_flow_schedule = exhaust_fan.availabilitySchedule.get.clone(model).to_ScheduleRuleset.get
       balanced_air_flow_schedule.setName("#{exhaust_fan_zone_name} Exhaust Fan Balanced Air Flow Schedule")
-      model_multiply_schedule(model, balanced_air_flow_schedule.defaultDaySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get, 0)
+      OpenstudioStandards::Schedules.schedule_day_multiply_by_value(balanced_air_flow_schedule.defaultDaySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get)
       balanced_air_flow_schedule.scheduleRules.each do |sch_rule|
-        model_multiply_schedule(model, sch_rule.daySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get, 0)
+        OpenstudioStandards::Schedules.schedule_day_multiply_by_value(sch_rule.daySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get)
       end
       transfer_air_source_zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_air_flow_schedule)
 
