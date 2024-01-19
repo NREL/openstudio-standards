@@ -7,7 +7,7 @@ module OpenstudioStandards
     # A method to return an array of .epw files names mapped to each climate zone
     #
     # @param epw_file [String] optional epw_file name for NECB methods
-    # @return [Hash] a hash of ashrae climate zone weather file pairs
+    # @return [Hash] a hash of climate zone weather file pairs
     def self.climate_zone_weather_file_map(epw_file = '')
       # Define the weather file for each climate zone
       climate_zone_weather_file_map = {
@@ -226,17 +226,18 @@ module OpenstudioStandards
 
     # Get absolute path of a weather file included within openstudio-standards that is representative of the climate zone
     #
-    # @param climate_zone [String] Name of a climate zone
-    # @return [String] Weather file absolutepath
-    def self.get_representative_weather_file_path_from_climate_zone(climate_zone)
-      climate_zone_weather_file_map = climate_zone_weather_file_map()
+    # @param climate_zone [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
+    # @return [String] absolute file path
+    def self.climate_zone_representative_weather_file_path(climate_zone)
+      climate_zone_weather_file_map = OpenstudioStandards::Weather.climate_zone_weather_file_map
       weather_file_name = climate_zone_weather_file_map[climate_zone]
       if weather_file_name.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', "Could not determine weather for climate zone: #{climate_zone}")
         return false
       end
 
-      return get_standards_weather_file_path(weather_file_name)
+      standards_weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file_name)
+      return standards_weather_file_path
     end
 
     # Get a list of regular expressions matching the design day categories
