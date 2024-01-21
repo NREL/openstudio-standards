@@ -14,12 +14,14 @@ class Standard
     # Get fuel type
     fuel_type = nil
     case boiler_hot_water.fuelType
+    when 'NaturalGas'
+      fuel_type = 'NaturalGas'
     when 'Electricity'
       fuel_type = 'Electric'
     when 'FuelOilNo1', 'FuelOilNo2'
       fuel_type = 'Oil'
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuelType} is not yet supported.  Assuming 'NaturalGas'.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuel_type} is not yet supported.  Assuming 'NaturalGas'.")
       fuel_type = 'NaturalGas'
     end
 
