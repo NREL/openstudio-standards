@@ -215,8 +215,7 @@ module OpenstudioStandards
       def parse_dd_info(dd_info)
         match_data = @text.match(dd_info[:regex])
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find #{dd_info[:name]}")
-          raise
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find degree day information for #{dd_info[:name]} in the .stat file.")
         else
           instance_variable_set("@#{dd_info[:container]}", match_data[1].to_f)
         end
@@ -228,8 +227,7 @@ module OpenstudioStandards
       def parse_design_temp_info(temp_info)
         match_data = @text.match(temp_info[:regex])
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.StatFile', "Can't find #{temp_info[:name]}")
-          raise
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find design temperatures #{temp_info[:name]}. They may not be available in the .stat file.")
         else
           match_info_raw = match_data[1].strip.split(/\s+/)
           match_info_raw = match_info_raw.map(&:to_f)
@@ -251,8 +249,7 @@ module OpenstudioStandards
       def parse_season_info(season_info)
         match_data = @text.match(season_info[:regex])
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find #{season_info[:name]}. Check data source.")
-          raise
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find #{season_info[:name]}. Data source may not have that season, or it may not be available in the .stat file.")
         else
           if ['Summer', 'Winter'].include?(season_info[:name].split[0])
             instance_variable_set("@#{season_info[:container]}", match_data[2].to_s.strip)
@@ -272,8 +269,7 @@ module OpenstudioStandards
         end
 
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.StatFile', "Can't find lat/lon/gmt")
-          raise
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find lat/lon/gmt in .stat file.")
         else
           @lat = match_data[2].to_f + match_data[3].to_f / 60.0
           if match_data[1] == 'S'
@@ -292,8 +288,7 @@ module OpenstudioStandards
         regex = /Elevation --\s*(.*)m (above|below) sea level/
         match_data = @text.match(regex)
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find elevation")
-          raise
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find elevation in .stat file.")
         else
           @elevation = match_data[1].to_f
           if match_data[2] == 'below'
@@ -323,8 +318,7 @@ module OpenstudioStandards
         regex = /Monthly.*Calculated.*undisturbed*.*Ground.*Temperatures.*\n.*Jan.*Feb.*Mar.*Apr.*May.*Jun.*Jul.*Aug.*Sep.*Oct.*Nov.*Dec.*\n(.*)\n(.*)\n(.*)/
         match_data = @text.match(regex)
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temperatures.")
-          raise
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temperatures in .stat file.")
         else
           # first match is undisturbed ground temperature at 0.5 m and 4.0 m depth
           monthly_undis_ground_temps_0p5m = match_data[1].strip.split(/\s+/)
@@ -335,16 +329,15 @@ module OpenstudioStandards
           monthly_undis_ground_temps_4p0m.shift
           # have to be 12 months
           if monthly_undis_ground_temps_0p5m.size != 12
-            puts "Can't find undisturbed ground temps at 0.5 m"
-            raise
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temps at 0.5m in the .stat file.")
+          else
+            monthly_undis_ground_temps_0p5m.each { |temp| @monthly_undis_ground_temps_0p5m << temp.to_f }
           end
           if monthly_undis_ground_temps_4p0m.size != 12
-            puts "Can't find undisturbed ground temps at 4.0 m"
-            raise
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temps at 4.0m in the .stat file.")
+          else
+            monthly_undis_ground_temps_4p0m.each { |temp| @monthly_undis_ground_temps_4p0m << temp.to_f }
           end
-          # insert as numbers
-          monthly_undis_ground_temps_0p5m.each { |temp| @monthly_undis_ground_temps_0p5m << temp.to_f }
-          monthly_undis_ground_temps_4p0m.each { |temp| @monthly_undis_ground_temps_4p0m << temp.to_f }
         end
 
         # parse 2004 climate zone and standard
@@ -372,8 +365,7 @@ module OpenstudioStandards
         regex = /Typical Week Period selected:(.*?)C/
         match_data = @text.scan(regex)
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find Typical weather weeks")
-          raise
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find typical weather weeks in the .stat file.")
         else
           @typical_summer_wet_week = Date.parse("#{match_data[0][0].split(':')[0]} 2000")
           @typical_winter_dry_week = Date.parse("#{match_data[1][0].split(':')[0]} 2000")
@@ -389,7 +381,7 @@ module OpenstudioStandards
         regex = /Extreme Hot Week Period selected:(.*?)C/
         match_data = @text.match(regex)
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find Extreme hot weather week")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find extreme hot weather week in the .stat file.")
         else
           @extreme_hot_week = Date.parse((match_data[1].split(':')[0]).to_s)
         end
@@ -397,8 +389,7 @@ module OpenstudioStandards
         regex = /Extreme Cold Week Period selected:(.*?)C/
         match_data = @text.match(regex)
         if match_data.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find Extreme hot weather week")
-          raise
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find extreme cold weather week in the .stat file.")
         else
           @extreme_cold_week = Date.parse((match_data[1].split(':')[0]).to_s)
         end
