@@ -33,7 +33,8 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
         # Open the Outpatient model.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"Ceilingtest.osm"))
         # Set the weather file.
-        BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         # Get access to the standards class
         standard = get_standard(template)
         # Find the centroid of the highest outside ceiling and add it to the output array

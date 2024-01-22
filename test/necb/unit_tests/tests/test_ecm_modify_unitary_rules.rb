@@ -28,14 +28,14 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     unitary_ecms = ['Carrier WeatherExpert','Lennox Model L Ultra High Efficiency']
     num_cap_intv = {'Carrier WeatherExpert' => 4,'Lennox Model L Ultra High Efficiency' => 12}
     speeds = ['single']
-    
+
     templates.each do |template|
       unitary_ecms.each do |unitary_ecm|
         unitary_expected_result_file = File.join(@expected_results_folder, "ecm_modify_unitary_#{unitary_ecm.downcase.gsub(' ','_')}_expected_results.csv")
         standard = get_standard(template)
         ecm = get_standard('ECMS')
         unitary_res_file_output_text = "Heating Type,Min Capacity (W),Max Capacity (W),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER),Coefficient of Performance (COP)\n"
-        
+
         # Initialize hashes for storing expected unitary efficiency data from file.
         heating_type_min_cap = {}
         heating_type_min_cap['Electric Resistance'] = []
@@ -87,12 +87,13 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
               name = "#{unitary_ecm.delete(' ')}_sys3_MuaHtgCoilType~#{heating_coil_type}_Speed~#{speed}_UnitaryCap~#{unitary_cap}watts"
               name.gsub!(/\s+/, "-")
               puts "***************#{name}***************\n"
-    
+
               # Load model and set climate file.
               model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-              BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+              weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+              OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
               BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-              
+
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
               always_on = model.alwaysOnDiscreteSchedule
               standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -110,7 +111,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
                   dxcoil.setRatedAirFlowRate(flow_rate)
                 end
               end
-              
+
               # Run sizing.
               sql_db_vars_map = {}
               ecm.modify_unitary_cop(model: model, unitary_cop: "#{unitary_ecm}", sizing_done: false, sql_db_vars_map: sql_db_vars_map)
