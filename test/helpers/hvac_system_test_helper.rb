@@ -89,8 +89,7 @@ def model_hvac_test(hvac_arguments)
     end
 
     # Assign a weather file
-    standard.model_add_design_days_and_weather_file(model, climate_zone, '')
-    OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     zones = model.getThermalZones
     heated_and_cooled_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
@@ -323,8 +322,7 @@ def model_radiant_system_test(arguments)
     end
 
     # Assign a weather file
-    standard.model_add_design_days_and_weather_file(model, climate_zone, '')
-    OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # create plant loops
     zones = model.getThermalZones

@@ -33,7 +33,7 @@ class TestServiceWaterHeating < Minitest::Test
 
     #puts 'weather path:'
     #puts OpenstudioStandards::Weather.model_get_full_weather_file_path(model)
-    std.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2013-3A')
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: 'ASHRAE 169-2013-3A')
     annual_run_success = std.model_run_simulation_and_log_errors(model, "output/#{test_name}/AR")
     assert(annual_run_success)
 
@@ -73,7 +73,7 @@ class TestServiceWaterHeating < Minitest::Test
 
     #puts 'weather path:'
     #puts OpenstudioStandards::Weather.model_get_full_weather_file_path(model)
-    std.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2013-3A')
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: 'ASHRAE 169-2013-3A')
     annual_run_success = std.model_run_simulation_and_log_errors(model, "output/#{test_name}/AR")
     assert(annual_run_success)
 

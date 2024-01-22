@@ -666,13 +666,13 @@ class NECB2011 < Standard
       # If btap_batch didn't transfer the weather file, download it.
       get_weather_file_from_repo(epw_file: epw_file) unless weather_transfer
     end
-    climate_zone = 'NECB HDD Method'
+
     # Fix EMS references. Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getYearDescription.setDayofWeekforStartDay('Sunday')
-    model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
-    OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
   end
 
   def apply_envelope(model:,

@@ -208,7 +208,8 @@ module BTAPMeasureTestHelper
   def test_argument_ranges
     model = OpenStudio::Model::Model.new
     standard = Standard.build('NECB2015')
-    standard.model_add_design_days_and_weather_file(model, nil, 'CAN_AB_Edmonton.Intl.AP.711230_CWEC2020.epw')
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_AB_Edmonton.Intl.AP.711230_CWEC2020.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
     [true, false].each do |json_input|
       [true, false].each do |string_double|
