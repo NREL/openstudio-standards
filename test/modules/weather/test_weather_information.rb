@@ -5,11 +5,23 @@ class TestWeatherInformation < Minitest::Test
     @weather = OpenstudioStandards::Weather
   end
 
+  def test_climate_zone_weather_file_map
+    # test California climate zones
+    (1..16).to_a.each do |i|
+      climate_zone = "CEC T24-CEC#{i}"
+      weather_file_name = @weather.climate_zone_weather_file_map[climate_zone]
+      weather_file_path = @weather.get_standards_weather_file_path(weather_file_name)
+      ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
+      stat_file_path = weather_file_path.gsub('.epw', '.stat')
+      assert(File.exist?(weather_file_path))
+      assert(File.exist?(ddy_file_path))
+      assert(File.exist?(stat_file_path))
+    end
+  end
+
   def test_model_get_ashrae_climate_zone_number
     model = OpenStudio::Model::Model.new
-    std = Standard.build('90.1-2013')
-    std.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
-
+    @weather.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
     result = @weather.model_get_ashrae_climate_zone_number(model)
     assert_equal(result, 4)
   end
@@ -18,8 +30,8 @@ class TestWeatherInformation < Minitest::Test
     model = OpenStudio::Model::Model.new
 
     weather_file_names = [
-      # "ALTURAS_725958_CZ2010", 
-      # "LIVERMORE_724927_CZ2010", 
+      # "ALTURAS_725958_CZ2010",
+      # "LIVERMORE_724927_CZ2010",
       # "USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3",
       "USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3"
     ]
@@ -27,7 +39,7 @@ class TestWeatherInformation < Minitest::Test
     require 'json'
     require 'pp'
     weather_file_names.each do |weather_file_name|
-      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file_name + '.epw')
+      weather_file_path = @weather.get_standards_weather_file_path(weather_file_name + '.epw')
       assert(weather_file_path)
       puts weather_file_path
       stat_file_path = weather_file_path.gsub('.epw', '.stat')
@@ -43,11 +55,9 @@ class TestWeatherInformation < Minitest::Test
       assert_equal(stat_file.extremes_design_info.size, 16)
       assert_equal(stat_file.monthly_dry_bulb.size, 12)
     end
-
   end
 
   def test_ddy_regex_lookup
-
     result = @weather.ddy_regex_lookup('All Heating')
     assert(result.size == 3)
     result = @weather.ddy_regex_lookup('Monthly Cooling')
@@ -57,8 +67,5 @@ class TestWeatherInformation < Minitest::Test
     bad_name = "Seattle Fake Design Day Name"
     result.each{|r| assert(test_name =~ r)}
     result.each{|r| assert_nil(bad_name =~ r)}
-
   end
-
-  
 end

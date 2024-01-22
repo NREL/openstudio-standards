@@ -179,7 +179,6 @@ module OpenstudioStandards
           end
         end
       end
-
     end
   end
 end

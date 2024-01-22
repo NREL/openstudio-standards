@@ -1,13 +1,12 @@
-# Methods to store model weather/location information
 module OpenstudioStandards
-  # The Weather module provides methods to set and get information about the model weather file
+  # The Weather module provides methods to set and get information for model weather files
   module Weather
     # @!group Information
 
-    # A method to return an array of .epw files names mapped to each climate zone
+    # A method to return an array of .epw files names mapped to each climate zone.
     #
     # @param epw_file [String] optional epw_file name for NECB methods
-    # @return [Hash] a hash of ashrae climate zone weather file pairs
+    # @return [Hash] a hash of climate zone weather file pairs
     def self.climate_zone_weather_file_map(epw_file = '')
       # Define the weather file for each climate zone
       climate_zone_weather_file_map = {
@@ -82,7 +81,38 @@ module OpenstudioStandards
       return climate_zone_weather_file_map
     end
 
-    # get the ASHRAE climate zone number
+    # Converts the climate zone in the model into the format used by the openstudio-standards lookup tables.
+    # For example,
+    #   institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
+    #   institution: CEC, value: 3  becomes: CEC T24-CEC3.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @return [String] the string representation of the climate zone,
+    #   empty string if no climate zone is present in the model.
+    def self.model_get_climate_zone(model)
+      climate_zone = ''
+      model.getClimateZones.climateZones.each do |cz|
+        if cz.institution == 'ASHRAE'
+          next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
+
+          if cz.value == '7' || cz.value == '8'
+            climate_zone = "ASHRAE 169-2013-#{cz.value}A"
+          else
+            climate_zone = "ASHRAE 169-2013-#{cz.value}"
+          end
+        elsif cz.institution == 'CEC'
+          # Skip blank ASHRAE climate zones put in by OpenStudio Application
+          if cz.value == ''
+            next
+          end
+
+          climate_zone = "CEC T24-CEC#{cz.value}"
+        end
+      end
+      return climate_zone
+    end
+
+    # Get the ASHRAE climate zone number.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @return [Integer] ASHRAE climate zone number, 0-8
@@ -111,7 +141,39 @@ module OpenstudioStandards
       return cz_number
     end
 
-    # Get absolute path of a weather file included within openstudio-standards
+    # Get the full path to the weather file that is specified in the model.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @return [OpenStudio::OptionalPath] path to weather file
+    def self.model_get_full_weather_file_path(model)
+      full_epw_path = OpenStudio::OptionalPath.new
+
+      if model.weatherFile.is_initialized
+        epw_path = model.weatherFile.get.path
+        if epw_path.is_initialized
+          if File.exist?(epw_path.get.to_s)
+            full_epw_path = OpenStudio::OptionalPath.new(epw_path.get)
+          else
+            # If this is an always-run Measure, need to check a different path
+            alt_weath_path = File.expand_path(File.join(Dir.pwd, '../../resources'))
+            alt_epw_path = File.expand_path(File.join(alt_weath_path, epw_path.get.to_s))
+            if File.exist?(alt_epw_path)
+              full_epw_path = OpenStudio::OptionalPath.new(OpenStudio::Path.new(alt_epw_path))
+            else
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Model has been assigned a weather file, but the file is not in the specified location of '#{epw_path.get}'.")
+            end
+          end
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has a weather file assigned, but the weather file path has been deleted.')
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has not been assigned a weather file.')
+      end
+
+      return full_epw_path
+    end
+
+    # Get absolute path of a weather file included within openstudio-standards.
     #
     # @param weather_file_name [String] Name of a weather file included within openstudio-standards, including file extension .epw
     # @return [String] Weather file path
@@ -133,9 +195,18 @@ module OpenstudioStandards
         if path_length > 260
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.information', "Weather file path length #{path_length} is >260 characters and may cause issues in Windows environments.")
         end
-        File.open("#{weather_dir}/#{weather_file_name}", 'wb') { |f| f << epw_string; f.flush }
-        File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb') { |f| f << ddy_string; f.flush }
-        File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb') { |f| f << stat_string; f.flush }
+        File.open("#{weather_dir}/#{weather_file_name}", 'wb').each do |f|
+          f << epw_string
+          f.flush
+        end
+        File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.ddy')}", 'wb').each do |f|
+          f << ddy_string
+          f.flush
+        end
+        File.open("#{weather_dir}/#{weather_file_name.gsub('.epw', '.stat')}", 'wb').each do |f|
+          f << stat_string
+          f.flush
+        end
       else
         # loaded gem from system path
         top_dir = File.expand_path('../../..', File.dirname(__FILE__))
@@ -152,22 +223,23 @@ module OpenstudioStandards
       return weather_file_path
     end
 
-    # Get absolute path of a weather file included within openstudio-standards that is representative of the climate zone
+    # Get absolute path of a weather file included within openstudio-standards that is representative of the climate zone.
     #
-    # @param climate_zone [String] Name of a climate zone
-    # @return [String] Weather file absolutepath
-    def self.get_representative_weather_file_path_from_climate_zone(climate_zone)
-      climate_zone_weather_file_map = climate_zone_weather_file_map()
+    # @param climate_zone [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
+    # @return [String] absolute file path
+    def self.climate_zone_representative_weather_file_path(climate_zone)
+      climate_zone_weather_file_map = OpenstudioStandards::Weather.climate_zone_weather_file_map
       weather_file_name = climate_zone_weather_file_map[climate_zone]
       if weather_file_name.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', "Could not determine weather for climate zone: #{climate_zone}")
         return false
-      else
-        return get_standards_weather_file_path(weather_file_name)
       end
+
+      standards_weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file_name)
+      return standards_weather_file_path
     end
 
-    # Get a list of regular expressions matching the design day categories
+    # Get a list of regular expressions matching the design day categories.
     #
     # For looking up design day objects by type
     # @param category [String] The design day category: All Heating,
@@ -206,12 +278,29 @@ module OpenstudioStandards
         /December .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'December', 'Cooling WB', 'Cooling 0.4%']
       }
       valid = ddy_regex_map.values.flatten.uniq
-      if valid.include?(category)
-        return ddy_regex_map.select { |k, v| v.include?(category) }.keys
-      else
+      unless valid.include?(category)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', "Could not find a matching ddy regular expression for entered category #{category}. Valid categories are #{valid}.")
-        # raise
+        return false
       end
+
+      return ddy_regex_map.select { |k, v| v.include?(category) }.keys
     end
+
+    # Returns the winter design outdoor air dry bulb temperatures in the model.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @return [Array<Double>] an array of outdoor design dry bulb temperatures in degrees Celsius
+    def self.model_get_heating_design_outdoor_temperatures(model)
+      heating_design_outdoor_temps = []
+      model.getDesignDays.each do |dd|
+        next unless dd.dayType == 'WinterDesignDay'
+
+        heating_design_outdoor_temps << dd.maximumDryBulbTemperature
+      end
+
+      return heating_design_outdoor_temps
+    end
+
+    # @!endgroup Information
   end
 end

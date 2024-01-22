@@ -1225,7 +1225,7 @@ class $(classname) < Minitest::Test
 
         # Assign a weather file
         standard.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2006-7A', '')
-        standard.model_add_ground_temperatures(model, 'MediumOffice', 'ASHRAE 169-2006-7A')
+        OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: 'ASHRAE 169-2006-7A')
         # Add the HVAC
         standard.model_add_hvac_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, model.getThermalZones)
 

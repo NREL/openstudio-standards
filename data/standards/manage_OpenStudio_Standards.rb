@@ -136,8 +136,6 @@ def unique_properties(sheet_name)
            ['template', 'climate_ID']
          when 'motors'
            ['template', 'number_of_poles', 'type', 'synchronous_speed', 'minimum_capacity', 'maximum_capacity']
-         when 'ground_temperatures'
-           ['building_type', 'template', 'climate_zone']
          when 'hvac_inference'
            ['template', 'size_category', 'heating_source', 'cooling_source', 'delivery_type']
          when 'size_category'

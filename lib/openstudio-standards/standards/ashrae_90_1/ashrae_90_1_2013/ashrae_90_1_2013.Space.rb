@@ -123,7 +123,7 @@ class ASHRAE9012013 < ASHRAE901
     space_area_m2 = space.floorArea
 
     # get the climate zone
-    climate_zone = model_standards_climate_zone(space.model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(space.model)
 
     if req_top_ctrl && req_pri_ctrl && req_sec_ctrl
       # Sensor 1 controls toplighted area

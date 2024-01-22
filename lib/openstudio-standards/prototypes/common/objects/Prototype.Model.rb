@@ -59,11 +59,11 @@ Standard.class_eval do
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
     model_add_daylight_savings(model)
-    model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
+    OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model.getBuilding.setStandardsBuildingType(building_type)
-    model_set_climate_zone(model, climate_zone)
+    OpenstudioStandards::Weather.model_set_climate_zone(model, climate_zone)
     model_add_lights_shutoff(model)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
