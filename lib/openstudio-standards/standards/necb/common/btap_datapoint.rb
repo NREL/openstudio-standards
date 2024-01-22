@@ -114,7 +114,7 @@ class BTAPDatapoint
         local_epw_file_path = File.join(input_folder_cache,@options[:epw_file])
         epw_dir = input_folder_cache if File.exists? local_epw_file_path
         @standard.model_add_design_days_and_weather_file(model, climate_zone, epw_file, epw_dir) # Standards
-        @standard.model_add_ground_temperatures(model, nil, climate_zone)
+        OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
       else
         # Otherwise modify osm input with options.
         @standard.model_apply_standard(model: model,

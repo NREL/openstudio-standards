@@ -127,6 +127,94 @@ module OpenstudioStandards
       return ground_temperature_deep
     end
 
+    # Set ground temperatures in the model.
+    # The method will first attempt to find ground temperatures for the SiteGroundTemperatureFCfactorMethod object from the .stat file associated with the model .epw file. If it cannot find the .stat file, it will use values from the model climate zone or climate zone argument specified. If it still can't find ground temperatures, it will set default values for the SiteGroundTemperatureBuildingSurface object instead.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param climate_zone [String] full climate zone string, e.g. "ASHRAE 169-2013-4A"
+    # @return [Boolean] returns true if successful, false if not
+    def self.model_set_ground_temperatures(model, climate_zone: nil)
+      # look for .stat file from .epw file
+      full_epw_path = nil
+      stat_file_path = nil
+      if model.weatherFile.is_initialized
+        epw_path = model.weatherFile.get.path
+        if epw_path.is_initialized
+          if File.exist?(epw_path.get.to_s)
+            full_epw_path = epw_path.get.to_s
+          else
+            # If this is an always-run Measure, need to check a different path
+            alt_weath_path = File.expand_path(File.join(Dir.pwd, '../../resources'))
+            alt_epw_path = File.expand_path(File.join(alt_weath_path, epw_path.get.to_s))
+            if File.exist?(alt_epw_path)
+              full_epw_path = alt_epw_path
+            end
+          end
+        end
+      end
+
+      if full_epw_path
+        stat_file_path = full_epw_path.gsub('.epw', '.stat')
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not locate the .epw file, cannot get ground temperatures from the associated .stat file.')
+      end
+
+      # if no .stat file found, lookup defaults based on the climate zone
+      if stat_file_path.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not locate the .stat file. Looking up default values based on the climate zone.')
+        if climate_zone.nil?
+          # attempt to get the climate zone from the model
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Climate zone not provided. Looking up from model.')
+          climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
+        end
+
+        unless climate_zone.nil? || climate_zone.empty?
+          # Define the weather file for each climate zone
+          climate_zone_weather_file_map = OpenstudioStandards::Weather.climate_zone_weather_file_map
+          # Get the weather file name from the hash
+          weather_file_name = climate_zone_weather_file_map[climate_zone]
+          if weather_file_name.nil?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}, cannot get ground temperatures from .stat file.")
+          else
+            # Get the path to the stat file
+            weather_file = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file_name)
+            stat_file_path = weather_file.gsub('.epw', '.stat')
+          end
+        end
+      end
+
+      # load the lagged ground temperatures for the FC factor method from the .stat file
+      stat_file = nil
+      ground_temperatures = []
+      if !stat_file_path.nil? && File.exist?(stat_file_path)
+        stat_file = OpenstudioStandards::Weather::StatFile.load(stat_file_path)
+        ground_temperatures = stat_file.monthly_lagged_dry_bulb
+
+        # set the site ground temperature building surface
+        ground_temp = model.getSiteGroundTemperatureFCfactorMethod
+        ground_temp.setAllMonthlyTemperatures(ground_temperatures)
+      end
+
+      # use default surface values if FC factor method ground temperatures unavailable
+      if ground_temperatures.empty?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', 'Could not find ground temperatures from the .stat file. Will use generic SiteGroundTemperatureBuildingSurface temperatures, which will skew results.')
+        ground_temp = model.getSiteGroundTemperatureBuildingSurface
+        ground_temp.setJanuaryGroundTemperature(19.527)
+        ground_temp.setFebruaryGroundTemperature(19.502)
+        ground_temp.setMarchGroundTemperature(19.536)
+        ground_temp.setAprilGroundTemperature(19.598)
+        ground_temp.setMayGroundTemperature(20.002)
+        ground_temp.setJuneGroundTemperature(21.640)
+        ground_temp.setJulyGroundTemperature(22.225)
+        ground_temp.setAugustGroundTemperature(22.375)
+        ground_temp.setSeptemberGroundTemperature(21.449)
+        ground_temp.setOctoberGroundTemperature(20.121)
+        ground_temp.setNovemberGroundTemperature(19.802)
+        ground_temp.setDecemberGroundTemperature(19.633)
+      end
+      return true
+    end
+
     # Sets the model ClimateZone object.
     # Clears out any climate zones previously added to the model.
     #
@@ -208,7 +296,7 @@ module OpenstudioStandards
     # Either the weather_file_path or the climate_zone argument must be specified.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
-    # @param weather_file_path [String] absolute path to the .epw file. For weather files included in OpenStudio-standards, can be found using OpenstudioStandards::Weather::get_standards_weather_file_path(weather_file_name)
+    # @param weather_file_path [String] absolute path to the .epw file. For weather files included in openStudio-standards, can be found using OpenstudioStandards::Weather::get_standards_weather_file_path(weather_file_name)
     # @param climate_zone [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
     # @param ddy_list [Array] list of regexes to match design day names to add to model, e.g. /Clg 1. Condns DB=>MWB/
     # @return [Boolean] returns true if successful, false if not
@@ -232,7 +320,7 @@ module OpenstudioStandards
       OpenstudioStandards::Weather.model_set_weather_file(model, epw_file)
       OpenstudioStandards::Weather.model_set_site_information(model, epw_file)
 
-      # set site water mains and undisturbed ground tempreatures from the .stat file
+      # set site water mains and undisturbed ground temperatures from the .stat file
       stat_file_climate_zone = nil
       stat_file_path = weather_file_path.gsub('.epw', '.stat')
       if File.file?(stat_file_path)

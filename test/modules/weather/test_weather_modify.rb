@@ -94,6 +94,42 @@ class TestWeatherModify < Minitest::Test
     assert(result.to_SiteGroundTemperatureDeep.is_initialized)
   end
 
+  def test_model_set_ground_temperatures
+    model = OpenStudio::Model::Model.new
+
+    # default temperatures from no input
+    result = @weather.model_set_ground_temperatures(model)
+    assert(result)
+    ground_temp_object = model.getSiteGroundTemperatureBuildingSurface
+    assert(ground_temp_object.isJanuaryGroundTemperatureDefaulted == false)
+
+    # FC factor ground temperatures from provided climate zone
+    model = OpenStudio::Model::Model.new
+    result = @weather.model_set_ground_temperatures(model, climate_zone: 'ASHRAE 169-2013-5B')
+    assert(result)
+    ground_temp_object = model.getSiteGroundTemperatureFCfactorMethod
+    assert(ground_temp_object.isJanuaryGroundTemperatureDefaulted == false)
+
+    # FC factor ground temperatures from climate zone set in the model
+    model = OpenStudio::Model::Model.new
+    @weather.model_set_climate_zone(model, 'ASHRAE 169-2013-3A')
+    result = @weather.model_set_ground_temperatures(model)
+    assert(result)
+    ground_temp_object = model.getSiteGroundTemperatureFCfactorMethod
+    assert(ground_temp_object.isJanuaryGroundTemperatureDefaulted == false)
+
+    # FC factor ground temperatures from .stat file associated with model .epw file
+    model = OpenStudio::Model::Model.new
+    @weather.model_set_ground_temperatures(model)
+    weather_file_path = @weather.get_standards_weather_file_path('USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw')
+    epw_file = OpenstudioStandards::Weather::Epw.load(weather_file_path)
+    @weather.model_set_weather_file(model, epw_file)
+    result = @weather.model_set_ground_temperatures(model)
+    assert(result)
+    ground_temp_object = model.getSiteGroundTemperatureFCfactorMethod
+    assert(ground_temp_object.isJanuaryGroundTemperatureDefaulted == false)
+  end
+
   def test_model_set_climate_zone
     model = OpenStudio::Model::Model.new
 
