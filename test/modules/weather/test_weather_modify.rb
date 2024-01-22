@@ -10,7 +10,7 @@ class TestWeatherModify < Minitest::Test
 
     # get new weather file path and parse .epw file
     weather_file_path = @weather.get_standards_weather_file_path('USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw')
-    epw_file = OpenstudioStandards::Weather::Epw.load(weather_file_path)
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
 
     # set new weather file from epw_file
     @weather.model_set_weather_file(model, epw_file)
@@ -32,7 +32,7 @@ class TestWeatherModify < Minitest::Test
 
     # get new weather file path and parse .epw file
     weather_file_path = @weather.get_standards_weather_file_path('USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw')
-    epw_file = OpenstudioStandards::Weather::Epw.load(weather_file_path)
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
 
     # set new site info
     @weather.model_set_site_information(model, epw_file)
@@ -67,7 +67,7 @@ class TestWeatherModify < Minitest::Test
 
     # get new weather file path and parse .epw file
     weather_file_path = @weather.get_standards_weather_file_path('USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw')
-    epw_file = OpenstudioStandards::Weather::Epw.load(weather_file_path)
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
     @weather.model_set_weather_file(model, epw_file)
 
     result = @weather.model_set_undisturbed_ground_temperature_shallow(model)
@@ -83,7 +83,7 @@ class TestWeatherModify < Minitest::Test
 
     # get new weather file path and parse .epw file
     weather_file_path = @weather.get_standards_weather_file_path('USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw')
-    epw_file = OpenstudioStandards::Weather::Epw.load(weather_file_path)
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
     @weather.model_set_weather_file(model, epw_file)
 
     result = @weather.model_set_undisturbed_ground_temperature_deep(model)
@@ -122,7 +122,7 @@ class TestWeatherModify < Minitest::Test
     model = OpenStudio::Model::Model.new
     @weather.model_set_ground_temperatures(model)
     weather_file_path = @weather.get_standards_weather_file_path('USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw')
-    epw_file = OpenstudioStandards::Weather::Epw.load(weather_file_path)
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
     @weather.model_set_weather_file(model, epw_file)
     result = @weather.model_set_ground_temperatures(model)
     assert(result)
@@ -142,24 +142,54 @@ class TestWeatherModify < Minitest::Test
   end
 
   def test_model_set_design_days
-    model = OpenStudio::Model::Model.new
-
-    # get new weather file path and parse .epw file
-    weather_file_path = @weather.get_standards_weather_file_path('USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw')
-    epw_file = OpenstudioStandards::Weather::Epw.load(weather_file_path)
-
-    # set new weather file from epw_file
-    @weather.model_set_weather_file(model, epw_file)
-
     # test design days from model weather file
+    model = OpenStudio::Model::Model.new
+    weather_file_path = @weather.get_standards_weather_file_path('USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw')
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
+    @weather.model_set_weather_file(model, epw_file)
     @weather.model_set_design_days(model)
-    assert(model.getDesignDays.size > 0)
+    assert(model.getDesignDays.size == 2)
 
     # test design days with optional arguments
+    model.getDesignDays.each(&:remove)
     ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
     ddy_list = @weather.ddy_regex_lookup('All Heating') + @weather.ddy_regex_lookup('All Cooling')
     @weather.model_set_design_days(model, ddy_file_path: ddy_file_path, ddy_list: ddy_list)
     assert(model.getDesignDays.size == 7, "Model should have #{model.getDesignDays.size} design days")
+
+    # test specific design days
+    model = OpenStudio::Model::Model.new
+    weather_file_path = @weather.get_standards_weather_file_path('IND_DL_New.Delhi-Safdarjung.AP.421820_TMYx.epw')
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
+    @weather.model_set_weather_file(model, epw_file)
+    ddy_list = [/Htg 99.6. Condns DB/, /Clg .4% Condns DB=>MWB/, /September .4% Condns WB=>MCDB/]
+    @weather.model_set_design_days(model, ddy_list: ddy_list)
+    assert(model.getDesignDays.size == 3)
+  end
+
+  def test_model_set_weather_file_and_design_days
+    # test from weather file
+    model = OpenStudio::Model::Model.new
+    weather_file_path = @weather.get_standards_weather_file_path('USA_MD_Baltimore-Washington.Intl.AP.724060_TMY3.epw')
+    result = @weather.model_set_weather_file_and_design_days(model, weather_file_path: weather_file_path)
+    assert(result)
+
+    # test from climate zone
+    model = OpenStudio::Model::Model.new
+    result = @weather.model_set_weather_file_and_design_days(model, climate_zone: 'ASHRAE 169-2013-5B')
+    assert(result)
+
+    # test with ddy list specified
+    model = OpenStudio::Model::Model.new
+    weather_file_path = @weather.get_standards_weather_file_path('OAKLAND_724930_CZ2010.epw')
+    ddy_list = @weather.ddy_regex_lookup('All Heating') + @weather.ddy_regex_lookup('All Cooling')
+    result = @weather.model_set_weather_file_and_design_days(model, weather_file_path: weather_file_path, ddy_list: ddy_list)
+    assert(result)
+
+    # test with neither
+    model = OpenStudio::Model::Model.new
+    result = @weather.model_set_weather_file_and_design_days(model)
+    assert(!result)
   end
 
   def test_model_set_building_location

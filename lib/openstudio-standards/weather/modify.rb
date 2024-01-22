@@ -6,24 +6,19 @@ module OpenstudioStandards
     # Set the model WeatherFile object from a parsed .epw file.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
-    # @param epw_file [OpenstudioStandards::Weather::EpwFile] parsed epw file object
+    # @param epw_file [OpenStudio::EpwFile] OpenStudio EpwFile object
     # @return [OpenStudio::Model::WeatherFile] OpenStudio WeatherFile object
     def self.model_set_weather_file(model, epw_file)
-      weather_file = model.getWeatherFile
+      weather_file = OpenStudio::Model::WeatherFile.setWeatherFile(model, epw_file).get
       weather_file.setCity(epw_file.city)
-      weather_file.setStateProvinceRegion(epw_file.state)
+      weather_file.setStateProvinceRegion(epw_file.stateProvinceRegion)
       weather_file.setCountry(epw_file.country)
-      weather_file.setDataSource(epw_file.data_type)
-      weather_file.setWMONumber(epw_file.wmo.to_s)
-      weather_file.setLatitude(epw_file.lat)
-      weather_file.setLongitude(epw_file.lon)
-      weather_file.setTimeZone(epw_file.gmt)
+      weather_file.setDataSource(epw_file.dataSource)
+      weather_file.setWMONumber(epw_file.wmoNumber)
+      weather_file.setLatitude(epw_file.latitude)
+      weather_file.setLongitude(epw_file.longitude)
+      weather_file.setTimeZone(epw_file.timeZone)
       weather_file.setElevation(epw_file.elevation)
-      if model.version < OpenStudio::VersionString.new('3.0.0')
-        weather_file.setString(10, "file:///#{epw_file.filename}")
-      else
-        weather_file.setString(10, epw_file.filename.to_s)
-      end
 
       return weather_file
     end
@@ -31,15 +26,15 @@ module OpenstudioStandards
     # Set the model Site object from a parsed .epw file.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
-    # @param epw_file [OpenstudioStandards::Weather::EpwFile] parsed epw file object
+    # @param epw_file [OpenStudio::EpwFile] OpenStudio EpwFile object
     # @return [OpenStudio::Model::Site] OpenStudio Site object
     def self.model_set_site_information(model, epw_file)
-      weather_name = "#{epw_file.city}_#{epw_file.state}_#{epw_file.country}"
+      weather_name = "#{epw_file.city}_#{epw_file.stateProvinceRegion}_#{epw_file.country}"
       site = model.getSite
       site.setName(weather_name)
-      site.setLatitude(epw_file.lat)
-      site.setLongitude(epw_file.lon)
-      site.setTimeZone(epw_file.gmt)
+      site.setLatitude(epw_file.latitude)
+      site.setLongitude(epw_file.longitude)
+      site.setTimeZone(epw_file.timeZone)
       site.setElevation(epw_file.elevation)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "Set Site information to #{weather_name}.")
 
@@ -246,9 +241,16 @@ module OpenstudioStandards
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param ddy_file_path [String] path to .ddy file
     # @param ddy_list [Array<String>] list of regular expressions matching design day names to import.
-    #   Default is set to nil, which will import all design day objects.
+    #  The default (nil) will add the annual heating 99.6% DB and annual cooling 0.4% DB design days.
     # @return [Boolean] returns true if successful, false if not
-    def self.model_set_design_days(model, ddy_file_path: nil, ddy_list: nil)
+    def self.model_set_design_days(model,
+                                   ddy_file_path: nil,
+                                   ddy_list: nil)
+      # if not ddy_list provided, use the annual heating 99.6% DB and annual cooling 0.4% DB design days
+      if ddy_list.nil? || ddy_list.empty?
+        ddy_list = [/Htg 99.6. Condns DB/, /Clg .4% Condns DB=>MWB/, /Clg 0.4% Condns DB=>MCWB/]
+      end
+
       # remove any existing design day objects
       model.getDesignDays.each(&:remove)
 
@@ -259,7 +261,7 @@ module OpenstudioStandards
       end
 
       unless File.file?(ddy_file_path)
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.modify', "Could not find design day file: #{ddy_file_path}")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.modify', "Could not find .ddy file: #{ddy_file_path}")
         return false
       end
 
@@ -271,36 +273,95 @@ module OpenstudioStandards
         return false
       end
 
-      objs_to_add = []
+      # add design days that match ddy_list regexes
       ddy_model.getDesignDays.sort.each do |d|
-        if ddy_list.nil? || ddy_list.empty?
-          # add all design days
-          ddy_model.getDesignDays.each { |dd| objs_to_add << dd }
-        else
-          # add design days that match ddy_list regexes
-          ddy_list.each do |ddy_name_regex|
-            if d.name.get.to_s =~ ddy_name_regex
-              objs_to_add << d
-            end
+        ddy_list.each do |ddy_name_regex|
+          if d.name.get.to_s =~ ddy_name_regex
+            model.addObject(d.clone)
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "Added design day #{d.name}.")
           end
         end
       end
 
-      objs_to_add.each do |o|
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.modify', "Adding design day #{o.name.get}.")
-        model.addObject(o)
+      # Check to ensure that some design days were added
+      if model.getDesignDays.size.zero?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.modify', "No design days were loaded, check syntax of .ddy file: #{ddy_file_path}.")
+        return false
+      end
+
+      return true
+    end
+
+    # Set the model weather file, site information, climate zone, and design days based on a weather file or climate zone.
+    # Either the weather_file_path or the climate_zone argument must be specified.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param weather_file_path [String] absolute path to the .epw file. For weather files included in openStudio-standards, can be found using OpenstudioStandards::Weather::get_standards_weather_file_path(weather_file_name)
+    # @param climate_zone [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
+    # @param ddy_list [Array] list of regexes to match design day names to add to model, e.g. /Clg 1. Condns DB=>MWB/.
+    #  The default (nil) will add the annual heating 99.6% DB and annual cooling 0.4% DB design days.
+    # @return [Boolean] returns true if successful, false if not
+    def self.model_set_weather_file_and_design_days(model,
+                                                    weather_file_path: nil,
+                                                    climate_zone: nil,
+                                                    ddy_list: nil)
+      # check that either weather_file_path or climate_zone provided
+      if weather_file_path.nil? && climate_zone.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', 'model_set_weather_file_and_design_days must be called with either the weather_file_path or climate_zone argument specified.')
+        return false
+      end
+
+      # load weather file if specified
+      if !weather_file_path.nil?
+        epw_file = OpenStudio::EpwFile.new(weather_file_path)
+      else
+        # look up the standard weather file for the climate zone
+        weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+        epw_file = OpenStudio::EpwFile.new(weather_file_path)
+      end
+
+      # set weather file and site information
+      OpenstudioStandards::Weather.model_set_weather_file(model, epw_file)
+      OpenstudioStandards::Weather.model_set_site_information(model, epw_file)
+
+      # set design days from the .ddy file
+      ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
+      OpenstudioStandards::Weather.model_set_design_days(model, ddy_file_path: ddy_file_path, ddy_list: ddy_list)
+
+      # set the climate zone
+      if climate_zone.nil? || climate_zone.empty?
+        # attempt to use the climate zone from the stat file
+        stat_file_climate_zone = nil
+        stat_file_path = weather_file_path.gsub('.epw', '.stat')
+        if File.file?(stat_file_path)
+          stat_file = OpenstudioStandards::Weather::StatFile.load(stat_file_path)
+          stat_file_climate_zone = stat_file.climate_zone
+        end
+
+        if stat_file_climate_zone.nil?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', 'Could not determine and set the climate zone.')
+        else
+          climate_zone = "ASHRAE 169-2013-#{stat_file_climate_zone}"
+          OpenstudioStandards::Weather.model_set_climate_zone(model, climate_zone)
+        end
+      else
+        OpenstudioStandards::Weather.model_set_climate_zone(model, climate_zone)
       end
     end
 
-    # Set the model weather file, site information, ground temperatures, and design days based on a weather file or climate zone.
+    # Set the model weather file, site information, climate zone, design days, site water main temperatures, undisturbed ground temperatures, and ground temperatures based on a weather file or climate zone.
     # Either the weather_file_path or the climate_zone argument must be specified.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param weather_file_path [String] absolute path to the .epw file. For weather files included in openStudio-standards, can be found using OpenstudioStandards::Weather::get_standards_weather_file_path(weather_file_name)
     # @param climate_zone [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
     # @param ddy_list [Array] list of regexes to match design day names to add to model, e.g. /Clg 1. Condns DB=>MWB/
+    #  The default (nil) will add the annual heating 99.6% DB and annual cooling 0.4% DB design days.
     # @return [Boolean] returns true if successful, false if not
-    def self.model_set_building_location(model, weather_file_path: nil, climate_zone: nil, ddy_list: nil)
+    def self.model_set_building_location(model,
+                                         weather_file_path: nil,
+                                         climate_zone: nil,
+                                         ddy_list: nil)
       # check that either weather_file_path or climate_zone provided
       if weather_file_path.nil? && climate_zone.nil?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', 'model_set_building_location must be called with either the weather_file_path or climate_zone argument specified.')
@@ -309,16 +370,18 @@ module OpenstudioStandards
 
       # load weather file if specified
       if !weather_file_path.nil?
-        epw_file = OpenstudioStandards::Weather::Epw.load(weather_file_path)
+        epw_file = OpenStudio::EpwFile.new(weather_file_path)
       else
         # look up the standard weather file for the climate zone
         weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
-        epw_file = OpenstudioStandards::Weather::Epw.load(weather_file_path)
+        epw_file = OpenStudio::EpwFile.new(weather_file_path)
       end
 
-      # set weather file and site information
-      OpenstudioStandards::Weather.model_set_weather_file(model, epw_file)
-      OpenstudioStandards::Weather.model_set_site_information(model, epw_file)
+      # set the model weather file, site information, climate zone, and design days
+      OpenstudioStandards::Weather.model_set_weather_file_and_design_days(model,
+                                                                          weather_file_path: weather_file_path,
+                                                                          climate_zone: climate_zone,
+                                                                          ddy_list: ddy_list)
 
       # set site water mains and undisturbed ground temperatures from the .stat file
       stat_file_climate_zone = nil
@@ -333,22 +396,10 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', "Could not find .stat file at #{stat_file_path}. Unable to set site water mains temperature and undisturbed ground temperatures.")
       end
 
-      # set design days from the .ddy file
-      ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
-      OpenstudioStandards::Weather.model_set_design_days(model, ddy_file_path: ddy_file_path, ddy_list: ddy_list)
+      # set the model ground temperatures
+      OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
 
-      # set the climate zone
-      if climate_zone.nil? || climate_zone.empty?
-        # attempt to use the climate zone from the stat file
-        if stat_file_climate_zone.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', 'Could not determine and set the climate zone.')
-        else
-          climate_zone = "ASHRAE 169-2013-#{stat_file_climate_zone}"
-          OpenstudioStandards::Weather.model_set_climate_zone(model, climate_zone)
-        end
-      else
-        OpenstudioStandards::Weather.model_set_climate_zone(model, climate_zone)
-      end
+      return true
     end
 
     # @!endgroup Modify
