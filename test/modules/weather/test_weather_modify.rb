@@ -215,5 +215,11 @@ class TestWeatherModify < Minitest::Test
     model = OpenStudio::Model::Model.new
     result = @weather.model_set_building_location(model)
     assert(!result)
+
+    # test Canadian weather file
+    model = OpenStudio::Model::Model.new
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_BC_Vancouver.Intl.AP.718920_CWEC2020.epw')
+    result = OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+    assert(result)
   end
 end

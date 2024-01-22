@@ -19,6 +19,20 @@ class TestWeatherInformation < Minitest::Test
     end
   end
 
+  def test_model_get_climate_zone
+    model = OpenStudio::Model::Model.new
+
+    # test ASHRAE climate zone
+    @weather.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
+    result = @weather.model_get_climate_zone(model)
+    assert_equal(result, 'ASHRAE 169-2013-4A')
+
+    # test CEC climate zone
+    @weather.model_set_climate_zone(model, 'CEC T24-CEC3')
+    result = @weather.model_get_climate_zone(model)
+    assert_equal(result, 'CEC T24-CEC3')
+  end
+
   def test_model_get_ashrae_climate_zone_number
     model = OpenStudio::Model::Model.new
     @weather.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
@@ -26,35 +40,29 @@ class TestWeatherInformation < Minitest::Test
     assert_equal(result, 4)
   end
 
-  def test_stat_file
+  def test_model_get_full_weather_file_path
     model = OpenStudio::Model::Model.new
 
-    weather_file_names = [
-      # "ALTURAS_725958_CZ2010",
-      # "LIVERMORE_724927_CZ2010",
-      # "USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3",
-      "USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3"
-    ]
+    # test getting weather file path
+    weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path('ASHRAE 169-2013-5B')
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
+    OpenstudioStandards::Weather.model_set_weather_file(model, epw_file)
+    result = OpenstudioStandards::Weather.model_get_full_weather_file_path(model)
+    assert(result.get.to_s.include?('Denver'))
+  end
 
-    require 'json'
-    require 'pp'
-    weather_file_names.each do |weather_file_name|
-      weather_file_path = @weather.get_standards_weather_file_path(weather_file_name + '.epw')
-      assert(weather_file_path)
-      puts weather_file_path
-      stat_file_path = weather_file_path.gsub('.epw', '.stat')
-      assert(File.exist?(stat_file_path))
-      stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
-      # json = stat_file.to_json
-      # pp JSON.parse(json)
-      assert_in_delta(stat_file.lat, 47.46, 0.01)
-      assert_in_delta(stat_file.lon, -122.31, 0.01)
-      assert_equal(stat_file.gmt, -8.0)
-      assert_equal(stat_file.heating_design_info.size, 15)
-      assert_equal(stat_file.cooling_design_info.size, 32)
-      assert_equal(stat_file.extremes_design_info.size, 16)
-      assert_equal(stat_file.monthly_dry_bulb.size, 12)
-    end
+  def test_get_standards_weather_file_path
+    weather_file_name = 'USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw'
+    result = @weather.get_standards_weather_file_path(weather_file_name)
+    assert(File.exist?(result))
+    assert(result.include?('Denver'))
+  end
+
+  def test_climate_zone_representative_weather_file_path
+    climate_zone = 'ASHRAE 169-2013-5B'
+    result = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+    assert(File.exist?(result))
+    assert(result.include?('Denver'))
   end
 
   def test_ddy_regex_lookup
@@ -67,5 +75,16 @@ class TestWeatherInformation < Minitest::Test
     bad_name = "Seattle Fake Design Day Name"
     result.each{|r| assert(test_name =~ r)}
     result.each{|r| assert_nil(bad_name =~ r)}
+  end
+
+  def test_model_get_heating_design_outdoor_temperatures
+    model = OpenStudio::Model::Model.new
+    climate_zone = 'ASHRAE 169-2013-5B'
+    weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+    ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
+    ddy_list = @weather.ddy_regex_lookup('All Heating')
+    @weather.model_set_design_days(model, ddy_file_path: ddy_file_path, ddy_list: ddy_list)
+    result = OpenstudioStandards::Weather.model_get_heating_design_outdoor_temperatures(model)
+    assert(result.size == 3)
   end
 end
