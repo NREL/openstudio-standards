@@ -245,45 +245,40 @@ module OpenstudioStandards
     # @param category [String] The design day category: All Heating,
     def self.ddy_regex_lookup(category)
       ddy_regex_map = {
-        /Htg 99.6. Condns DB/ => ['All Heating', 'Heating DB', 'Heating 99.6%'],
-        /Htg 99. Condns DB/ => ['All Heating', 'Heating DB', 'Heating 99%'],
-        /Htg Wind 99. Condns WS=>MCDB/ => ['All Heating', 'Heating Wind', 'Heating 99%'],
-        /Clg 1. Condns DB=>MWB/ => ['All Cooling', 'Cooling DB', 'Cooling 1%'],
-        /Clg 2. Condns DP=>MDB/ => ['All Cooling', 'Cooling DP', 'Cooling 2%'],
-        /Clg .4. Condns WB=>MDB/ => ['All Cooling', 'Cooling WB', 'Cooling 0.4%'],
-        /Clg .4. Condns DB=>MWB/ => ['All Cooling', 'Cooling DB', 'Cooling 0.4%'],
-        /January .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'January', 'Cooling DB', 'Cooling 0.4%'],
-        /February .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'February', 'Cooling DB', 'Cooling 0.4%'],
-        /March .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'March', 'Cooling DB', 'Cooling 0.4%'],
-        /April .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'April', 'Cooling DB', 'Cooling 0.4%'],
-        /May .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'May', 'Cooling DB', 'Cooling 0.4%'],
-        /June .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'June', 'Cooling DB', 'Cooling 0.4%'],
-        /July .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'July', 'Cooling DB', 'Cooling 0.4%'],
-        /August .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'August', 'Cooling DB', 'Cooling 0.4%'],
-        /September .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'September', 'Cooling DB', 'Cooling 0.4%'],
-        /October .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'October', 'Cooling DB', 'Cooling 0.4%'],
-        /November .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'November', 'Cooling DB', 'Cooling 0.4%'],
-        /December .4. Condns DB=>MCWB/ => ['All Cooling', 'Monthly Cooling', 'December', 'Cooling DB', 'Cooling 0.4%'],
-        /January .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'January', 'Cooling WB', 'Cooling 0.4%'],
-        /February .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'February', 'Cooling WB', 'Cooling 0.4%'],
-        /March .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'March', 'Cooling WB', 'Cooling 0.4%'],
-        /April .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'April', 'Cooling WB', 'Cooling 0.4%'],
-        /May .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'May', 'Cooling WB', 'Cooling 0.4%'],
-        /June .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'June', 'Cooling WB', 'Cooling 0.4%'],
-        /July .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'July', 'Cooling WB', 'Cooling 0.4%'],
-        /August .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'August', 'Cooling WB', 'Cooling 0.4%'],
-        /September .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'September', 'Cooling WB', 'Cooling 0.4%'],
-        /October .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'October', 'Cooling WB', 'Cooling 0.4%'],
-        /November .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'November', 'Cooling WB', 'Cooling 0.4%'],
-        /December .4. Condns WB=>MCDB/ => ['All Cooling', 'Monthly Cooling', 'December', 'Cooling WB', 'Cooling 0.4%']
+        'All Heating'=> /Htg/,
+        'Heating DB'=> /Htg.* DB/,
+        'Heating 99.6%'=> /Htg.*99.6%/,
+        'Heating 99%'=> /Htg.*99%/,
+        'Heating Wind'=> /Htg Wind/,
+        'All Cooling'=> / (0?\.4|1|2|5)\.?0?%/,
+        'Annual Cooling'=> /Ann Clg/,
+        'All Cooling DB'=> /DB=>MC?WB/,
+        'All Cooling WB'=> /WB=>MC?DB/,
+        'All Cooling DP'=> /Clg.* DP/,
+        'All Cooling Enth'=> /Clg.* Enth/,
+        'Annual Cooling DB'=> /Clg.* DB/,
+        'Annual Cooling WB'=> /Clg.* WB/,
+        'Annual Cooling DP'=> /Clg.* DP/,
+        'Annual Cooling Enth'=> /Clg.* Enth/,
+        'Cooling 0.4%'=> /.4%/,
+        'Cooling 2%'=> /2%/,
+        'Cooling 5%'=> /5%/,
+        'Annual Cooling 0.4%'=> /Ann.*.4%/,
+        'Annual Cooling 2%'=> /Ann.*2%/,
+        'Monthly Cooling'=> /Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/,
+        'Monthly 0.4%'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*0?.4/,
+        'Monthly 2%'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*2%/,
+        'Monthly 5%'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*5%/,
+        'Monthly DB'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*DB=>MC?WB/,
+        'Monthly WB'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*WB=>MC?DB/,
       }
-      valid = ddy_regex_map.values.flatten.uniq
+      valid = ddy_regex_map.keys
       unless valid.include?(category)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', "Could not find a matching ddy regular expression for entered category #{category}. Valid categories are #{valid}.")
         return false
       end
 
-      return ddy_regex_map.select { |k, v| v.include?(category) }.keys
+      return [ddy_regex_map[category]]
     end
 
     # Returns the winter design outdoor air dry bulb temperatures in the model.
