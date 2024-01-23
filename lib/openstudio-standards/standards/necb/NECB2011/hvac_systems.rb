@@ -251,12 +251,14 @@ class NECB2011
 
     # Get January winter design temperature
     # get model weather file name
-    weather_file = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get)
+    weather_file = air_loop_hvac.model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
 
     # get winter(heating) design temp stored in array
     # Note that the NECB2011 specifies using the 2.5% january design temperature
     # The outdoor temperature used here is the 0.4% heating design temperature of the coldest month, available in stat file
-    outdoor_temp = weather_file.heating_design_info[1]
+    outdoor_temp = stat_file.heating_design_info[1]
 
     #      for debugging/testing
     #      puts "outdoor design temp = #{outdoor_temp}"

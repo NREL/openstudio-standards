@@ -299,19 +299,18 @@ module BTAPMeasureTestHelper
   def create_necb_protype_model(building_type, climate_zone, epw_file, template)
     osm_directory = "#{Dir.pwd}/output/#{building_type}-#{template}-#{climate_zone}-#{epw_file}"
     FileUtils.mkdir_p osm_directory unless Dir.exist?(osm_directory)
-    # Get Weather climate zone from lookup
-    weather = BTAP::Environment::WeatherFile.new(epw_file)
-    # create model
-    building_name = "#{template}_#{building_type}"
 
-    prototype_creator = Standard.build(building_name)
+    # Set building location from epw file
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+
+    # create model
+    prototype_creator = Standard.build("#{template}_#{building_type}")
     model = prototype_creator.model_create_prototype_model(climate_zone,
                                                            epw_file,
                                                            osm_directory,
                                                            @debug,
                                                            model)
-    # set weather file to epw_file passed to model.
-    weather.set_weather_file(model)
     return model
   end
 

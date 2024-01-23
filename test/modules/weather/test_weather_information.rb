@@ -80,7 +80,7 @@ class TestWeatherInformation < Minitest::Test
   def test_model_get_heating_design_outdoor_temperatures
     model = OpenStudio::Model::Model.new
     climate_zone = 'ASHRAE 169-2013-5B'
-    weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+    weather_file_path = @weather.climate_zone_representative_weather_file_path(climate_zone)
     ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
     ddy_list = @weather.ddy_regex_lookup('All Heating')
     @weather.model_set_design_days(model, ddy_file_path: ddy_file_path, ddy_list: ddy_list)

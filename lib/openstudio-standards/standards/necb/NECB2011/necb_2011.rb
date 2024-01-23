@@ -167,25 +167,28 @@ class NECB2011 < Standard
     max_distance_tolerance = 500000
     min_distance = 100000000000000.0
     necb_closest = nil
-    epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+    weather_file_path = model.weatherFile.get.path.get.to_s
+    epw_file = model.weatherFile.get.file.get
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
     # If necb_hdd is false use the information in the .stat file associated with the.epw file.
     unless necb_hdd
-      return epw.hdd18.to_f
+      return stat_file.hdd18
     end
     # this extracts the table from the json database.
     necb_2015_table_c1 = @standards_data['tables']['necb_2015_table_c1']['table']
     necb_2015_table_c1.each do |necb|
       next if necb['lat_long'].nil? # Need this until Tyson cleans up table.
 
-      dist = distance([epw.latitude.to_f, epw.longitude.to_f], necb['lat_long'])
+      dist = distance([epw_file.latitude, epw_file.longitude], necb['lat_long'])
       if min_distance > dist
         min_distance = dist
         necb_closest = necb
       end
     end
-    if ((min_distance / 1000.0) > max_distance_tolerance) && !epw.hdd18.nil?
+    if ((min_distance / 1000.0) > max_distance_tolerance) && !stat_file.hdd18.nil?
       puts "Could not find close NECB HDD from Table C1 < #{max_distance_tolerance}km. Closest city is #{min_distance / 1000.0}km away. Using epw hdd18 instead."
-      return epw.hdd18.to_f
+      return stat_file.hdd18
     else
       dist_clause = "%.2f % #{(min_distance / 1000.0)}"
       puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref: nbc_2015_table_c1'

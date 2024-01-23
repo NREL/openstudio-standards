@@ -301,6 +301,67 @@ module OpenstudioStandards
       return heating_design_outdoor_temps
     end
 
+    # Returns the ASHRAE climate zone based on degree days
+    #
+    # @param hdd18 [Double] Cooling Degree Days, 18°C base
+    # @param cdd10 [Double] Cooling Degree Days, 10°C base
+    # @return [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
+    # @todo support Humid (A) / Dry (B) distinctions based on precipitation per Section A3 of ASHRAE 169
+    def self.get_climate_zone_from_degree_days(hdd18, cdd10)
+      if cdd10 > 6000
+        # Extremely Hot  Humid (0A), Dry (0B)
+        return 'ASHRAE 169-2013-0A'
+
+      elsif (cdd10 > 5000) && (cdd10 <= 6000)
+        # Very Hot  Humid (1A), Dry (1B)
+        return 'ASHRAE 169-2013-1A'
+
+      elsif (cdd10 > 3500) && (cdd10 <= 5000)
+        # Hot  Humid (2A), Dry (2B)
+        return 'ASHRAE 169-2013-2A'
+
+      elsif ((cdd10 > 2500) && (cdd10 < 3500)) && (hdd18 <= 2000)
+        # Warm  Humid (3A), Dry (3B)
+        return 'ASHRAE 169-2013-3A' # and 'ASHRAE 169-2013-3B'
+
+      elsif (cdd10 <= 2500) && (hdd18 <= 2000)
+        # Warm  Marine (3C)
+        return 'ASHRAE 169-2013-3C'
+
+      elsif ((cdd10 > 1500) && (cdd10 < 3500)) && ((hdd18 > 2000) && (hdd18 <= 3000))
+        # Mixed  Humid (4A), Dry (4B)
+        return 'ASHRAE 169-2013-4A' # and 'ASHRAE 169-2013-4B'
+
+      elsif (cdd10 <= 1500) && ((hdd18 > 2000) && (hdd18 <= 3000))
+        # Mixed  Marine
+        return 'ASHRAE 169-2013-4C'
+
+      elsif ((cdd10 > 1000) && (cdd10 <= 3500)) && ((hdd18 > 3000) && (hdd18 <= 4000))
+        # Cool Humid (5A), Dry (5B)
+        return 'ASHRAE 169-2013-5A' # and 'ASHRAE 169-2013-5B'
+
+      elsif (cdd10 <= 1000) && ((hdd18 > 3000) && (hdd18 <= 4000))
+        # Cool  Marine (5C)
+        return 'ASHRAE 169-2013-5C'
+
+      elsif (hdd18 > 4000) && (hdd18 <= 5000)
+        # Cold  Humid (6A), Dry (6B)
+        return 'ASHRAE 169-2013-6A' # and 'ASHRAE 169-2013-6B'
+
+      elsif (hdd18 > 5000) && (hdd18 <= 7000)
+        # Very Cold (7)
+        return 'ASHRAE 169-2013-7A'
+
+      elsif hdd18 > 7000
+        # Subarctic/Arctic (8)
+        return 'ASHRAE 169-2013-8A'
+
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', "Could not determine climate zone from #{hdd18} heating degree days base 18°C and #{cdd10} cooling degree days base 10°C.")
+        return ''
+      end
+    end
+
     # @!endgroup Information
   end
 end
