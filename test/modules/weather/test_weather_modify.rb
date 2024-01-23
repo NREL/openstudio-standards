@@ -148,7 +148,7 @@ class TestWeatherModify < Minitest::Test
     epw_file = OpenStudio::EpwFile.new(weather_file_path)
     @weather.model_set_weather_file(model, epw_file)
     @weather.model_set_design_days(model)
-    assert(model.getDesignDays.size == 2)
+    assert(model.getDesignDays.size == 3)
 
     # test design days with optional arguments
     model.getDesignDays.each(&:remove)
