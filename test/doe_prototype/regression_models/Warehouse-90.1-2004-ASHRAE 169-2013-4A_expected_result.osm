@@ -6502,6 +6502,36 @@ OS:RunPeriodControl:DaylightSavingTime,
   2nd Sunday in March,                    !- Start Date
   1st Sunday in November;                 !- End Date
 
+OS:Site:GroundTemperature:Shallow,
+  {ba49d071-a3d8-46d8-a6fd-f02894fc1fcd}, !- Handle
+  6,                                      !- January Surface Ground Temperature {C}
+  2.1,                                    !- February Surface Ground Temperature {C}
+  1.1,                                    !- March Surface Ground Temperature {C}
+  2,                                      !- April Surface Ground Temperature {C}
+  7.2,                                    !- May Surface Ground Temperature {C}
+  13.1,                                   !- June Surface Ground Temperature {C}
+  18.7,                                   !- July Surface Ground Temperature {C}
+  22.7,                                   !- August Surface Ground Temperature {C}
+  23.9,                                   !- September Surface Ground Temperature {C}
+  22,                                     !- October Surface Ground Temperature {C}
+  17.5,                                   !- November Surface Ground Temperature {C}
+  11.7;                                   !- December Surface Ground Temperature {C}
+
+OS:Site:GroundTemperature:Deep,
+  {d0e054a1-d7ac-42cc-932e-4af9909d7665}, !- Handle
+  11.8,                                   !- January Deep Ground Temperature {C}
+  9,                                      !- February Deep Ground Temperature {C}
+  7.2,                                    !- March Deep Ground Temperature {C}
+  6.7,                                    !- April Deep Ground Temperature {C}
+  7.7,                                    !- May Deep Ground Temperature {C}
+  10.1,                                   !- June Deep Ground Temperature {C}
+  13,                                     !- July Deep Ground Temperature {C}
+  15.9,                                   !- August Deep Ground Temperature {C}
+  17.8,                                   !- September Deep Ground Temperature {C}
+  18.2,                                   !- October Deep Ground Temperature {C}
+  17.1,                                   !- November Deep Ground Temperature {C}
+  14.8;                                   !- December Deep Ground Temperature {C}
+
 OS:Site:GroundTemperature:FCfactorMethod,
   {a6284590-1466-439a-9138-bff99f029a12}, !- Handle
   14,                                     !- January Ground Temperature {C}
