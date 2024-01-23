@@ -155,7 +155,7 @@ class TestWeatherModify < Minitest::Test
     ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
     ddy_list = @weather.ddy_regex_lookup('All Heating') + @weather.ddy_regex_lookup('All Cooling')
     @weather.model_set_design_days(model, ddy_file_path: ddy_file_path, ddy_list: ddy_list)
-    assert(model.getDesignDays.size == 7, "Model should have #{model.getDesignDays.size} design days")
+    assert(model.getDesignDays.size == 16, "Model should have #{model.getDesignDays.size} design days")
 
     # test specific design days
     model = OpenStudio::Model::Model.new
