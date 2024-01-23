@@ -87,4 +87,15 @@ class TestWeatherInformation < Minitest::Test
     result = OpenstudioStandards::Weather.model_get_heating_design_outdoor_temperatures(model)
     assert(result.size == 3)
   end
+
+  def test_design_day_average_global_irradiance
+    model = OpenStudio::Model::Model.new
+    weather_file_path = @weather.get_standards_weather_file_path('USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+
+    design_day = model.getDesignDayByName('Atlanta-Hartsfield.Jackson.Intl.AP_GA_USA Ann Clg .4% Condns DB=>MWB').get
+    result = @weather.design_day_average_global_irradiance(design_day)
+    result_ip = OpenStudio.convert(result, 'W/m^2', 'Btu/ft^2*h').get
+    assert_in_delta(result_ip, 126.1, 0.1)
+  end
 end

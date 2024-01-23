@@ -2089,11 +2089,25 @@ class BTAPData
     tcd_degree_f = OpenStudio.convert(tcd_degree_c.to_f, 'C', 'F').get
 
     ### IGHL (Irradiance, Global, at the heating design condition) (Btu/h.ft2) in PHIUS, 2021
-    solar_irradiance_on_heating_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_heating_design_day
+    average_daily_global_irradiance_w_per_m2_array = []
+    model.getDesignDays.each do |design_day|
+      next unless design_day.dayType == 'WinterDesignDay'
+
+      average_daily_global_irradiance_w_per_m2 = OpenstudioStandards::Weather.design_day_average_global_irradiance(design_day)
+      average_daily_global_irradiance_w_per_m2_array << average_daily_global_irradiance_w_per_m2
+    end
+    solar_irradiance_on_heating_design_day_w_per_m_sq = average_daily_global_irradiance_w_per_m2_array.min
     solar_irradiance_on_heating_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_heating_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
 
     ### IGCL (Irradiance, Global, at the cooling design condition) (Btu/h.ft2) in PHIUS, 2021
-    solar_irradiance_on_cooling_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_cooling_design_day
+    average_daily_global_irradiance_w_per_m2_array = []
+    model.getDesignDays.each do |design_day|
+      next unless design_day.dayType == 'SummerDesignDay'
+
+      average_daily_global_irradiance_w_per_m2 = OpenstudioStandards::Weather.design_day_average_global_irradiance(design_day)
+      average_daily_global_irradiance_w_per_m2_array << average_daily_global_irradiance_w_per_m2
+    end
+    solar_irradiance_on_cooling_design_day_w_per_m_sq = average_daily_global_irradiance_w_per_m2_array.max
     solar_irradiance_on_cooling_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_cooling_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
 
     ### occupant density (persons per ft2 of floor area)

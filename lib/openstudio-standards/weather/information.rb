@@ -362,6 +362,80 @@ module OpenstudioStandards
       end
     end
 
+    # Calculate average global irradiance for the design day
+    # Calculated from ASHRAE HOF 2017 Chp 14 Clear-Sky Solar Radiation
+    #
+    # @param [OpenStudio::Model::DesignDay] OpenStudio DesignDay object
+    # @return [Double] average global irradiance over the full day (24 hours) (W/m^2)
+    def self.design_day_average_global_irradiance(design_day)
+      # get site longitude and time zone longitude
+      weather_file = design_day.model.weatherFile.get
+      site_longitude_degrees = weather_file.longitude
+      site_latitude_degrees = weather_file.latitude
+      site_latitude_radians = site_latitude_degrees * (Math::PI / 180.0)
+      time_zone_longitude_degrees = 15.0 * weather_file.timeZone
+
+      # day of year
+      day_of_year = Date.new(y=2009, m=design_day.month, d=design_day.dayOfMonth).yday
+
+      # equation of time
+      gamma_degrees = 360 * (day_of_year - 1) / 365.0
+      gamma_radians = gamma_degrees * (Math::PI / 180.0)
+      equation_of_time_minutes = 2.2918 * (0.0075 + (0.1868 * Math.cos(gamma_radians)) - (3.2077 * Math.sin(gamma_radians)) - (1.4615 * Math.cos(2 * gamma_radians)) - (4.089 * Math.sin(2 * gamma_radians)))
+
+      # extraterrestrial normal irradiance, W/m^2
+      extraterrestrial_normal_irradiance_degrees = 360 * (day_of_year - 3) / 365.0
+      extraterrestrial_normal_irradiance_radians = extraterrestrial_normal_irradiance_degrees * (Math::PI / 180.0)
+      extraterrestrial_normal_irradiance = 1367.0 * (1.0 + 0.033 * Math.cos(extraterrestrial_normal_irradiance_radians))
+
+      # declination
+      day_angle_degrees = 360.0 * (day_of_year + 284) / 365.0
+      day_angle_radians = day_angle_degrees * (Math::PI / 180.0)
+      declination_degrees = 23.45 * Math.sin(day_angle_radians)
+      declination_radians = declination_degrees * (Math::PI / 180.0)
+
+      # air mass exponents from optical depth
+      tau_b = design_day.ashraeClearSkyOpticalDepthForBeamIrradiance
+      tau_d = design_day.ashraeClearSkyOpticalDepthForDiffuseIrradiance
+      ab = 1.454 - (0.406 * tau_b) - (0.268 * tau_d) + (0.021 * tau_b * tau_d)
+      ad = 0.507 + (0.205 * tau_b) - (0.080 * tau_d) - (0.190 * tau_b * tau_d)
+
+      global_irradiance_array = []
+      (0..23).to_a.each do |local_standard_time_hour|
+        # apparent solar time
+        apparent_solar_time = local_standard_time_hour + (equation_of_time_minutes / 60.0) + (site_longitude_degrees - time_zone_longitude_degrees)/15.0
+
+        # hour angle
+        hour_angle_degrees = 15.0 * (apparent_solar_time - 12.0)
+        hour_angle_radians = hour_angle_degrees * (Math::PI / 180.0)
+
+        # solar altitude
+        solar_altitude_radians = Math.asin(Math.cos(site_latitude_radians) * Math.cos(declination_radians) * Math.cos(hour_angle_radians) + Math.sin(site_latitude_radians) * Math.sin(declination_radians))
+        solar_altitude_degrees = solar_altitude_radians * (180.0 / Math::PI)
+
+        # equation 16 air mass
+        # equation 17 and 18 irradiance calculation
+        if solar_altitude_degrees > 0
+          air_mass = 1 / (Math.sin(solar_altitude_radians) + 0.50572 * (6.07995 + solar_altitude_degrees)**(-1.6364))
+          beam_normal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_b * air_mass**ab)
+          diffuse_horizontal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_d * air_mass**ad)
+        else
+          air_mass = nil
+          beam_normal_irradiance = 0.0
+          diffuse_horizontal_irradiance = 0.0
+        end
+        global_irradiance = beam_normal_irradiance + diffuse_horizontal_irradiance
+        global_irradiance_array << global_irradiance
+
+        # puts "For local_standard_time_hour #{local_standard_time_hour}, apparent_solar_time #{apparent_solar_time}, hour_angle_degrees #{hour_angle_degrees}, solar_altitude_degrees #{solar_altitude_degrees}, air_mass #{air_mass}, beam_normal_irradiance #{beam_normal_irradiance}, diffuse_horizontal_irradiance #{diffuse_horizontal_irradiance}"
+      end
+
+      average_daily_global_irradiance = global_irradiance_array.sum / 24.0
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.information', "For design day #{design_day.name}, day_of_year #{day_of_year}, time zone #{weather_file.timeZone}, site_longitude_degrees #{site_longitude_degrees}, time_zone_longitude_degrees #{time_zone_longitude_degrees}, site_latitude_degrees #{site_latitude_degrees}, equation_of_time_minutes #{equation_of_time_minutes}, declination_degrees #{declination_degrees}, extraterrestrial_normal_irradiance #{extraterrestrial_normal_irradiance}, average_daily_global_irradiance #{average_daily_global_irradiance} W/m^2.")
+
+      return average_daily_global_irradiance
+    end
+
     # @!endgroup Information
   end
 end
