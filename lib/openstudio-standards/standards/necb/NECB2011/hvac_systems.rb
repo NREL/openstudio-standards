@@ -2043,7 +2043,7 @@ class NECB2011
     clg_coil = add_onespeed_DX_coil(model, always_on)
 
     # Set up PTAC constant volume supply fan
-    fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+    fan = OpenStudio::Model::FanOnOff.new(model)
     fan.setPressureRise(640)
 
     # This method will seem like an error in number of args..but this is due to swig voodoo.
@@ -2053,6 +2053,7 @@ class NECB2011
                                                                          htg_coil,
                                                                          clg_coil)
     ptac.setName("#{zone.name} PTAC")
+    ptac.setSupplyAirFanOperatingModeSchedule(always_off)
     if zero_outdoor_air
       ptac.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded 1.0e-5
       ptac.setOutdoorAirFlowRateDuringCoolingOperation(1.0e-5)
@@ -2446,13 +2447,33 @@ class NECB2011
           puts "num_of_supp_coils #{num_of_supp_coils}"
           return supp_htg_type = 'Electric Resistance or None' 
         end
-
-
-
       end
     end
+  end
 
-
-  
+  # Sets the capacity of the reheat coil based on the minimum flow fraction, and the maximum flow rate.
+  #
+  # @param air_terminal_single_duct_vav_reheat [OpenStudio::Model::AirTerminalSingleDuctVAVReheat] the air terminal object
+  # @return [Bool] returns true if successful, false if not
+  def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
+    flow_rate_fraction = 0.0
+    if air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction.is_initialized
+      flow_rate_fraction = air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction.get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirTerminalSingleDuctVAVReheat', \
+      "Minimum flow fraction is not defined for terminal device #{air_terminal_single_duct_vav_reheat.name}")
+      return false
+    end
+    cap = 1.2 * 1000.0 * flow_rate_fraction * air_terminal_single_duct_vav_reheat.autosizedMaximumAirFlowRate.to_f * (43.0 - 13.0)
+    if air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingElectric.is_initialized
+      reheat_coil = air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingElectric.get
+      reheat_coil.setNominalCapacity(cap)
+    elsif air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.is_initialized
+      reheat_coil = air_terminal_single_duct_vav_reheat.reheatCoil.to_CoilHeatingWater.get
+      reheat_coil.setPerformanceInputMethod('NominalCapacity')
+      reheat_coil.setRatedCapacity(cap)
+    end
+    air_terminal_single_duct_vav_reheat.setMaximumReheatAirTemperature(43.0)
+    return true
   end
 end

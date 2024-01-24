@@ -100,7 +100,7 @@ class Standard
         end
         htg_coil.setHeatingPowerConsumptionCurve(heating_power_consumption_curve)
       end
-      
+
       # part load fraction correlation curve added as a required curve in OS v3.7.0
       if model.version > OpenStudio::VersionString.new('3.6.1')
         if model.getCurveByName('Water to Air Heat Pump Part Load Fraction Correlation Curve').is_initialized

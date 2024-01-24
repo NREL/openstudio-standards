@@ -1,51 +1,41 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
 
 class NECB_Autozone_Tests < Minitest::Test
-  BUILDINGS = [
-      "FullServiceRestaurant",
-      "LargeHotel",
-      "LargeOffice",
-      "MediumOffice",
-      "HighriseApartment",
-      "MidriseApartment",
-      "Outpatient",
-      "PrimarySchool",
-      "QuickServiceRestaurant",
-      "RetailStandalone",
-      "RetailStripmall",
-      "SmallHotel",
-      "SmallOffice",
-      "Warehouse",
-      "Hospital"
-  ]
 
+  def setup()
+    define_folders(__dir__)
+    define_std_ranges
 
-  #metacode to create tests dynamically for each archetype.
-  BUILDINGS.each do |attribute|
+    @epw_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
+    @template = 'NECB2011'
+  end
+
+  # Metacode to create tests dynamically for each archetype.
+  define_std_ranges
+  @AllBuildings.each do |attribute|
     define_method(:"test_#{attribute}") {
       model = autozone("#{attribute}")
     }
   end
 
-  def setup()
-    @output_folder = "#{File.dirname(__FILE__)}/output/autozoner"
-    @relative_geometry_path = "/../../lib/openstudio-standards/standards/necb/NECB2011/data/geometry/"
-    @epw_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
-    @template = 'NECB2011'
-    @climate_zone = 'NECB HDD Method'
-    FileUtils.mkdir_p(@output_folder) unless File.directory?(@output_folder)
-  end
-
   # Test to validate the heat pump performance curves
   def autozone(building_type)
-    outfile = @output_folder + "/#{building_type}_autozoned.osm"
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(building_type)
+
+    outfile = output_folder + "/#{building_type}_autozoned.osm"
     File.delete(outfile) if File.exist?(outfile)
-    outfile_json = @output_folder + "/#{building_type}_autozoned.json"
+    outfile_json = output_folder + "/#{building_type}_autozoned.json"
     File.delete(outfile_json) if File.exist?(outfile_json)
-    standard = Standard.build("#{@template}")
+
+    standard = get_standard("#{@template}")
     model = standard.model_create_prototype_model(epw_file: @epw_file,
-                                                  sizing_run_dir: File.join(@output_folder, building_type, 'sizing'),
+                                                  sizing_run_dir: File.join(output_folder, building_type, 'sizing'),
                                                   template: @template,
                                                   building_type: building_type,
                                                   primary_heating_fuel: 'NaturalGas')
@@ -81,10 +71,10 @@ class NECB_Autozone_Tests < Minitest::Test
       debug[:thermal_zones].sort! {|a, b| [a[:thermal_zone_name]] <=> [b[:thermal_zone_name]]}
       air_loops << debug
     end
-    outfile_json = @output_folder + "/#{building_type}_autozoned.json"
+    outfile_json = output_folder + "/#{building_type}_autozoned.json"
     puts "Writing Output #{outfile_json}"
     air_loops.sort! {|a, b| [a[:airloop_name]] <=> [b[:airloop_name]]}
     File.write(outfile_json, JSON.pretty_generate(air_loops))
-    #assert(standard.model_run_simulation_and_log_errors(model, File.join(@output_folder, building_type)), "#{building_type} Failed to run.")
+    #assert(standard.model_run_simulation_and_log_errors(model, File.join(output_folder, building_type)), "#{building_type} Failed to run.")
   end
 end

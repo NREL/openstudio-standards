@@ -253,7 +253,8 @@ class NECB2011
 
     # Store Geography Data
     qaqc[:geography] = {}
-    qaqc[:geography][:hdd] = get_necb_hdd18(model)
+    qaqc[:geography][:hdd_necb] = get_necb_hdd18(model: model, necb_hdd: true)
+    qaqc[:geography][:hdd] = get_necb_hdd18(model: model, necb_hdd: false)
     qaqc[:geography][:cdd] = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).cdd18
     qaqc[:geography][:climate_zone] = NECB2011.new.get_climate_zone_name(qaqc[:geography][:hdd])
     qaqc[:geography][:city] = model.getWeatherFile.city

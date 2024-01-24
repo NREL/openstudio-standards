@@ -131,3 +131,6 @@ The main developers will review your changes and either approve the pull request
 1. Issues and feature requests are reported on the [GitHub Repository Issues Page](https://github.com/NREL/openstudio-standards/issues ).
 2. Issues should be labeled according to the [OpenStudio Issue Prioritization Guide](https://github.com/NREL/OpenStudio/wiki/Issue-Prioritization)
 3. Failing tests do not need to be listed as issues; they should be fixed if they fail.
+
+## Data
+A database containing all the data used by openstudio-standards (and more) is being developed [here](https://github.com/pnnl/building-energy-standards-data)

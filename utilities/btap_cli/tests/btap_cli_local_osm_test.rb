@@ -4,6 +4,7 @@ class BTAP_CLI_Test < Minitest::Test
     input_folder = File.join(__dir__, '..', 'input')
     input_folder_cache = File.join(__dir__, '..', 'input_cache')
     output_folder = File.join(__dir__, '..', 'output')
+    weather_folder = File.join(__dir__, ['..', 'weather'])
     # Make sure temp folder is always clean.
     FileUtils.rm_rf(input_folder) if Dir.exist?(input_folder)
     FileUtils.rm_rf(input_folder_cache) if Dir.exist?(input_folder_cache)
@@ -12,6 +13,6 @@ class BTAP_CLI_Test < Minitest::Test
     # Run options and local osm file locations
     FileUtils.cp(File.join(__dir__, 'run_options_local_osm.yml'), File.join(input_folder, 'run_options.yml'))
     FileUtils.cp(File.join(__dir__, 'LocalCompleteModel.osm'), File.join(input_folder, 'LocalCompleteModel.osm'))
-    BTAPDatapoint.new(input_folder: input_folder, output_folder: output_folder, input_folder_cache: File.join(__dir__, 'input_cache'))
+    BTAPDatapoint.new(input_folder: input_folder, output_folder: output_folder, weather_folder: weather_folder, input_folder_cache: File.join(__dir__, 'input_cache'))
   end
 end
