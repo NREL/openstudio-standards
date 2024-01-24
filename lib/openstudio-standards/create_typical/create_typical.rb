@@ -45,6 +45,10 @@ module OpenstudioStandards
     # @param enable_dst [Boolean] Enable daylight savings
     # @param unmet_hours_tolerance_r [Double] Thermostat setpoint tolerance for unmet hours in degrees Rankine
     # @param remove_objects [Boolean] Clean model of non-geometry objects. Only removes the same objects types as those added to the model.
+    # @param user_hvac_mapping [Hash] Hash defining a mapping of system types to zones.
+    #   Structure is:
+    #     ['systems'][N]['system_type'] = 'MY_CBECS_HVAC_TYPE' as defined in lib/openstudio-standards/hvac/cbecs_hvac.rb
+    #     ['systems'][N]['thermal_zones'] = ['Zone 1', 'Zone 2', ...]
     # @return [Boolean] returns true if successful, false if not
     def self.create_typical_building_from_model(model,
                                                 template,
@@ -78,7 +82,8 @@ module OpenstudioStandards
                                                 hoo_var_method: 'hours',
                                                 enable_dst: true,
                                                 unmet_hours_tolerance_r: 1.0,
-                                                remove_objects: true)
+                                                remove_objects: true,
+                                                user_hvac_mapping: nil)
 
       # report initial condition of model
       initial_object_size = model.getModelObjects.size
@@ -597,100 +602,128 @@ module OpenstudioStandards
           standard.model_remove_prm_hvac(model)
         end
 
-        case hvac_system_type
-        when 'Inferred'
+        # If user does not map HVAC types to zones with a JSON file, run conventional approach to HVAC assignment
+        if user_hvac_mapping.nil?
+          case hvac_system_type
+          when 'Inferred'
 
-          # Get the hvac delivery type enum
-          hvac_delivery = case hvac_delivery_type
-                          when 'Forced Air'
-                            'air'
-                          when 'Hydronic'
-                            'hydronic'
-                          end
+            # Get the hvac delivery type enum
+            hvac_delivery = case hvac_delivery_type
+                            when 'Forced Air'
+                              'air'
+                            when 'Hydronic'
+                              'hydronic'
+                            end
 
-          # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
-          sys_groups = standard.model_group_zones_by_type(model, OpenStudio.convert(20_000, 'ft^2', 'm^2').get)
+            # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
+            sys_groups = standard.model_group_zones_by_type(model, OpenStudio.convert(20_000, 'ft^2', 'm^2').get)
 
-          # For each group, infer the HVAC system type.
-          sys_groups.each do |sys_group|
-            # Infer the primary system type
-            sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel = standard.model_typical_hvac_system_type(model,
-                                                                                                          climate_zone,
-                                                                                                          sys_group['type'],
-                                                                                                          hvac_delivery,
-                                                                                                          heating_fuel,
-                                                                                                          cooling_fuel,
-                                                                                                          OpenStudio.convert(sys_group['area_ft2'], 'ft^2', 'm^2').get,
-                                                                                                          sys_group['stories'])
+            # For each group, infer the HVAC system type.
+            sys_groups.each do |sys_group|
+              # Infer the primary system type
+              sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel = standard.model_typical_hvac_system_type(model,
+                                                                                                            climate_zone,
+                                                                                                            sys_group['type'],
+                                                                                                            hvac_delivery,
+                                                                                                            heating_fuel,
+                                                                                                            cooling_fuel,
+                                                                                                            OpenStudio.convert(sys_group['area_ft2'], 'ft^2', 'm^2').get,
+                                                                                                            sys_group['stories'])
 
-            # Infer the secondary system type for multizone systems
-            sec_sys_type = case sys_type
-                           when 'PVAV Reheat', 'VAV Reheat'
-                             'PSZ-AC'
-                           when 'PVAV PFP Boxes', 'VAV PFP Boxes'
-                             'PSZ-HP'
-                           else
-                             sys_type # same as primary system type
-                           end
+              # Infer the secondary system type for multizone systems
+              sec_sys_type = case sys_type
+                             when 'PVAV Reheat', 'VAV Reheat'
+                               'PSZ-AC'
+                             when 'PVAV PFP Boxes', 'VAV PFP Boxes'
+                               'PSZ-HP'
+                             else
+                               sys_type # same as primary system type
+                             end
 
-            # group zones
-            story_zone_lists = standard.model_group_zones_by_story(model, sys_group['zones'])
+              # group zones
+              story_zone_lists = standard.model_group_zones_by_story(model, sys_group['zones'])
 
-            # On each story, add the primary system to the primary zones
-            # and add the secondary system to any zones that are different.
-            story_zone_lists.each do |story_group|
-              # Differentiate primary and secondary zones, based on
-              # operating hours and internal loads (same as 90.1 PRM)
-              pri_sec_zone_lists = standard.model_differentiate_primary_secondary_thermal_zones(model, story_group)
-              system_zones = pri_sec_zone_lists['primary']
+              # On each story, add the primary system to the primary zones
+              # and add the secondary system to any zones that are different.
+              story_zone_lists.each do |story_group|
+                # Differentiate primary and secondary zones, based on
+                # operating hours and internal loads (same as 90.1 PRM)
+                pri_sec_zone_lists = standard.model_differentiate_primary_secondary_thermal_zones(model, story_group)
+                system_zones = pri_sec_zone_lists['primary']
 
-              # if the primary system type is PTAC, filter to cooled zones to prevent sizing error if no cooling
-              if sys_type == 'PTAC'
-                heated_and_cooled_zones = system_zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-                cooled_only_zones = system_zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-                system_zones = heated_and_cooled_zones + cooled_only_zones
-              end
-
-              # Add the primary system to the primary zones
-              unless standard.model_add_hvac_system(model, sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
-                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{sys_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
-                return false
-              end
-
-              # Add the secondary system to the secondary zones (if any)
-              if !pri_sec_zone_lists['secondary'].empty?
-                system_zones = pri_sec_zone_lists['secondary']
-                if (sec_sys_type == 'PTAC') || (sec_sys_type == 'PSZ-AC')
+                # if the primary system type is PTAC, filter to cooled zones to prevent sizing error if no cooling
+                if sys_type == 'PTAC'
                   heated_and_cooled_zones = system_zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
                   cooled_only_zones = system_zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
                   system_zones = heated_and_cooled_zones + cooled_only_zones
                 end
-                unless standard.model_add_hvac_system(model, sec_sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
+
+                # Add the primary system to the primary zones
+                unless standard.model_add_hvac_system(model, sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
                   OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{sys_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
                   return false
                 end
+
+                # Add the secondary system to the secondary zones (if any)
+                if !pri_sec_zone_lists['secondary'].empty?
+                  system_zones = pri_sec_zone_lists['secondary']
+                  if (sec_sys_type == 'PTAC') || (sec_sys_type == 'PSZ-AC')
+                    heated_and_cooled_zones = system_zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
+                    cooled_only_zones = system_zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
+                    system_zones = heated_and_cooled_zones + cooled_only_zones
+                  end
+                  unless standard.model_add_hvac_system(model, sec_sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
+                    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{sys_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
+                    return false
+                  end
+                end
               end
             end
+
+          else
+
+            # HVAC system_type specified
+            # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
+            sys_groups = standard.model_group_zones_by_type(model, OpenStudio.convert(20_000, 'ft^2', 'm^2').get)
+            sys_groups.each do |sys_group|
+              # group zones
+              story_zone_groups = standard.model_group_zones_by_story(model, sys_group['zones'])
+
+              # Add the user specified HVAC system for each story.
+              # Single-zone systems will get one per zone.
+              story_zone_groups.each do |zones|
+                unless OpenstudioStandards::HVAC.add_cbecs_hvac_system(model, standard, hvac_system_type, zones)
+                  OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against cbecs_hvac.rb in the HVAC module for valid HVAC system type names.")
+                  return false
+                end
+              end
+
+            end
+
           end
 
         else
-          # HVAC system_type specified
-          # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
-          sys_groups = standard.model_group_zones_by_type(model, OpenStudio.convert(20_000, 'ft^2', 'm^2').get)
-          sys_groups.each do |sys_group|
-            # group zones
-            story_zone_groups = standard.model_group_zones_by_story(model, sys_group['zones'])
+          # If user specified a mapping of HVAC systems to zones
+          user_hvac_mapping['systems'].each do |system_hash|
 
-            # Add the user specified HVAC system for each story.
-            # Single-zone systems will get one per zone.
-            story_zone_groups.each do |zones|
-              unless OpenstudioStandards::HVAC.add_cbecs_hvac_system(model, standard, hvac_system_type, zones)
-                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against cbecs_hvac.rb in the HVAC module for valid HVAC system type names.")
-                return false
-              end
+            hvac_system_type = system_hash["system_type"]
+            zone_names = system_hash["thermal_zones"]
+
+            # Get OS:ThermalZone objects
+            zones = zone_names.map do |zone_name|
+              model.getThermalZoneByName(zone_name).get
+            end
+
+            puts "Adding #{hvac_system_type} to #{zone_names.join(', ')}"
+
+            unless OpenstudioStandards::HVAC.add_cbecs_hvac_system(model, standard, hvac_system_type, zones)
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against cbecs_hvac.rb in the HVAC module for valid HVAC system type names.")
+              return false
             end
           end
         end
+
+
       end
 
       # hours of operation
