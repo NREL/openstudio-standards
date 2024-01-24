@@ -296,6 +296,195 @@ module OpenstudioStandards
       return heating_design_outdoor_temps
     end
 
+    # Returns the ASHRAE climate zone based on degree days
+    #
+    # @param hdd18 [Double] Cooling Degree Days, 18°C base
+    # @param cdd10 [Double] Cooling Degree Days, 10°C base
+    # @return [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
+    # @todo support Humid (A) / Dry (B) distinctions based on precipitation per Section A3 of ASHRAE 169
+    def self.get_climate_zone_from_degree_days(hdd18, cdd10)
+      if cdd10 > 6000
+        # Extremely Hot  Humid (0A), Dry (0B)
+        return 'ASHRAE 169-2013-0A'
+
+      elsif (cdd10 > 5000) && (cdd10 <= 6000)
+        # Very Hot  Humid (1A), Dry (1B)
+        return 'ASHRAE 169-2013-1A'
+
+      elsif (cdd10 > 3500) && (cdd10 <= 5000)
+        # Hot  Humid (2A), Dry (2B)
+        return 'ASHRAE 169-2013-2A'
+
+      elsif ((cdd10 > 2500) && (cdd10 < 3500)) && (hdd18 <= 2000)
+        # Warm  Humid (3A), Dry (3B)
+        return 'ASHRAE 169-2013-3A' # and 'ASHRAE 169-2013-3B'
+
+      elsif (cdd10 <= 2500) && (hdd18 <= 2000)
+        # Warm  Marine (3C)
+        return 'ASHRAE 169-2013-3C'
+
+      elsif ((cdd10 > 1500) && (cdd10 < 3500)) && ((hdd18 > 2000) && (hdd18 <= 3000))
+        # Mixed  Humid (4A), Dry (4B)
+        return 'ASHRAE 169-2013-4A' # and 'ASHRAE 169-2013-4B'
+
+      elsif (cdd10 <= 1500) && ((hdd18 > 2000) && (hdd18 <= 3000))
+        # Mixed  Marine
+        return 'ASHRAE 169-2013-4C'
+
+      elsif ((cdd10 > 1000) && (cdd10 <= 3500)) && ((hdd18 > 3000) && (hdd18 <= 4000))
+        # Cool Humid (5A), Dry (5B)
+        return 'ASHRAE 169-2013-5A' # and 'ASHRAE 169-2013-5B'
+
+      elsif (cdd10 <= 1000) && ((hdd18 > 3000) && (hdd18 <= 4000))
+        # Cool  Marine (5C)
+        return 'ASHRAE 169-2013-5C'
+
+      elsif (hdd18 > 4000) && (hdd18 <= 5000)
+        # Cold  Humid (6A), Dry (6B)
+        return 'ASHRAE 169-2013-6A' # and 'ASHRAE 169-2013-6B'
+
+      elsif (hdd18 > 5000) && (hdd18 <= 7000)
+        # Very Cold (7)
+        return 'ASHRAE 169-2013-7A'
+
+      elsif hdd18 > 7000
+        # Subarctic/Arctic (8)
+        return 'ASHRAE 169-2013-8A'
+
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', "Could not determine climate zone from #{hdd18} heating degree days base 18°C and #{cdd10} cooling degree days base 10°C.")
+        return ''
+      end
+    end
+
+    # Calculate average global irradiance for the design day
+    # Calculated from ASHRAE HOF 2017 Chp 14 Clear-Sky Solar Radiation
+    #
+    # @param [OpenStudio::Model::DesignDay] OpenStudio DesignDay object
+    # @return [Double] average global irradiance over the full day (24 hours) (W/m^2)
+    def self.design_day_average_global_irradiance(design_day)
+      # get site longitude and time zone longitude
+      weather_file = design_day.model.weatherFile.get
+      site_longitude_degrees = weather_file.longitude
+      site_latitude_degrees = weather_file.latitude
+      site_latitude_radians = site_latitude_degrees * (Math::PI / 180.0)
+      time_zone_longitude_degrees = 15.0 * weather_file.timeZone
+
+      # day of year
+      day_of_year = Date.new(y=2009, m=design_day.month, d=design_day.dayOfMonth).yday
+
+      # equation of time
+      gamma_degrees = 360 * (day_of_year - 1) / 365.0
+      gamma_radians = gamma_degrees * (Math::PI / 180.0)
+      equation_of_time_minutes = 2.2918 * (0.0075 + (0.1868 * Math.cos(gamma_radians)) - (3.2077 * Math.sin(gamma_radians)) - (1.4615 * Math.cos(2 * gamma_radians)) - (4.089 * Math.sin(2 * gamma_radians)))
+
+      # extraterrestrial normal irradiance, W/m^2
+      extraterrestrial_normal_irradiance_degrees = 360 * (day_of_year - 3) / 365.0
+      extraterrestrial_normal_irradiance_radians = extraterrestrial_normal_irradiance_degrees * (Math::PI / 180.0)
+      extraterrestrial_normal_irradiance = 1367.0 * (1.0 + 0.033 * Math.cos(extraterrestrial_normal_irradiance_radians))
+
+      # declination
+      day_angle_degrees = 360.0 * (day_of_year + 284) / 365.0
+      day_angle_radians = day_angle_degrees * (Math::PI / 180.0)
+      declination_degrees = 23.45 * Math.sin(day_angle_radians)
+      declination_radians = declination_degrees * (Math::PI / 180.0)
+
+      # air mass exponents from optical depth
+      tau_b = design_day.ashraeClearSkyOpticalDepthForBeamIrradiance
+      tau_d = design_day.ashraeClearSkyOpticalDepthForDiffuseIrradiance
+      ab = 1.454 - (0.406 * tau_b) - (0.268 * tau_d) + (0.021 * tau_b * tau_d)
+      ad = 0.507 + (0.205 * tau_b) - (0.080 * tau_d) - (0.190 * tau_b * tau_d)
+
+      global_irradiance_array = []
+      (0..23).to_a.each do |local_standard_time_hour|
+        # apparent solar time
+        apparent_solar_time = local_standard_time_hour + (equation_of_time_minutes / 60.0) + (site_longitude_degrees - time_zone_longitude_degrees)/15.0
+
+        # hour angle
+        hour_angle_degrees = 15.0 * (apparent_solar_time - 12.0)
+        hour_angle_radians = hour_angle_degrees * (Math::PI / 180.0)
+
+        # solar altitude
+        solar_altitude_radians = Math.asin(Math.cos(site_latitude_radians) * Math.cos(declination_radians) * Math.cos(hour_angle_radians) + Math.sin(site_latitude_radians) * Math.sin(declination_radians))
+        solar_altitude_degrees = solar_altitude_radians * (180.0 / Math::PI)
+
+        # equation 16 air mass
+        # equation 17 and 18 irradiance calculation
+        if solar_altitude_degrees > 0
+          air_mass = 1 / (Math.sin(solar_altitude_radians) + 0.50572 * (6.07995 + solar_altitude_degrees)**(-1.6364))
+          beam_normal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_b * air_mass**ab)
+          diffuse_horizontal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_d * air_mass**ad)
+        else
+          air_mass = nil
+          beam_normal_irradiance = 0.0
+          diffuse_horizontal_irradiance = 0.0
+        end
+        global_irradiance = beam_normal_irradiance + diffuse_horizontal_irradiance
+        global_irradiance_array << global_irradiance
+
+        # puts "For local_standard_time_hour #{local_standard_time_hour}, apparent_solar_time #{apparent_solar_time}, hour_angle_degrees #{hour_angle_degrees}, solar_altitude_degrees #{solar_altitude_degrees}, air_mass #{air_mass}, beam_normal_irradiance #{beam_normal_irradiance}, diffuse_horizontal_irradiance #{diffuse_horizontal_irradiance}"
+      end
+
+      average_daily_global_irradiance = global_irradiance_array.sum / 24.0
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.information', "For design day #{design_day.name}, day_of_year #{day_of_year}, time zone #{weather_file.timeZone}, site_longitude_degrees #{site_longitude_degrees}, time_zone_longitude_degrees #{time_zone_longitude_degrees}, site_latitude_degrees #{site_latitude_degrees}, equation_of_time_minutes #{equation_of_time_minutes}, declination_degrees #{declination_degrees}, extraterrestrial_normal_irradiance #{extraterrestrial_normal_irradiance}, average_daily_global_irradiance #{average_daily_global_irradiance} W/m^2.")
+
+      return average_daily_global_irradiance
+    end
+
+    # Calculate dehumidification degree days from an epw_file
+    #
+    # @param epw_file [OpenStudio::EpwFile] OpenStudio EpwFile object
+    # @param base_humidity_ratio [Double] base humidity ratio, default is 0.010
+    # @return [Double] dehumdification degree days
+    def self.epw_file_get_dehumidification_degree_days(epw_file, base_humidity_ratio: 0.010)
+      db_temps_c = epw_file.getTimeSeries('Dry Bulb Temperature').get.values
+      db_temps_k = db_temps_c.map { |v| v + 273.15 }
+      rh_values = epw_file.getTimeSeries('Relative Humidity').get.values
+      atm_p_values = epw_file.getTimeSeries('Atmospheric Station Pressure').get.values
+
+      # coefficients for the calculation of pws (Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS)
+      c1 = -5.6745359E+03
+      c2 = 6.3925247E+00
+      c3 = -9.6778430E-03
+      c4 = 6.2215701E-07
+      c5 = 2.0747825E-09
+      c6 = -9.4840240E-13
+      c7 = 4.1635019E+00
+      c8 = -5.8002206E+03
+      c9 = 1.3914993E+00
+      c10 = -4.8640239E-02
+      c11 = 4.1764768E-05
+      c12 = -1.4452093E-08
+      c13 = 6.5459673E+00
+
+      # calculate saturation pressure of water vapor (Pa)
+      sp_values = []
+      db_temps_k.each do |t|
+        if t <= 273.15
+          sp = (c1 / t) + c2 + c3 * t + c4 * t**2 + c5 * t**3 + c6 * t**4 + c7 * Math.log(t, Math.exp(1))
+
+        else
+          sp = (c8 / t) + c9 + c10 * t + c11 * t**2 + c12 * t**3 + c13 * Math.log(t, Math.exp(1))
+        end
+        sp_values << Math.exp(1)**sp
+      end
+
+      # calculate partial pressure of water vapor (Pa)
+      pp_values = sp_values.zip(rh_values).map{ |sp, rh| sp * rh / 100.0 }
+
+      # calculate total pressure (Pa)
+      tp_values = pp_values.zip(atm_p_values).map{ |pp, atm| pp + atm }
+
+      # calculate humidity ratio
+      hr_values = pp_values.zip(tp_values).map{ |pp, tp| (0.621945 * pp) / (tp - pp)}
+
+      # calculate dehumidification degree days based on humidity ratio values above the base
+      hr_values_above_base = hr_values.map{ |hr| hr > base_humidity_ratio ? hr : 0.0}
+      dehumidification_degree_days = hr_values_above_base.sum / 24.0
+
+      return dehumidification_degree_days
+    end
+
     # @!endgroup Information
   end
 end

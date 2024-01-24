@@ -80,11 +80,34 @@ class TestWeatherInformation < Minitest::Test
   def test_model_get_heating_design_outdoor_temperatures
     model = OpenStudio::Model::Model.new
     climate_zone = 'ASHRAE 169-2013-5B'
-    weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+    weather_file_path = @weather.climate_zone_representative_weather_file_path(climate_zone)
     ddy_file_path = weather_file_path.gsub('.epw', '.ddy')
     ddy_list = @weather.ddy_regex_lookup('All Heating')
     @weather.model_set_design_days(model, ddy_file_path: ddy_file_path, ddy_list: ddy_list)
     result = OpenstudioStandards::Weather.model_get_heating_design_outdoor_temperatures(model)
     assert(result.size == 3)
+  end
+
+  def test_design_day_average_global_irradiance
+    model = OpenStudio::Model::Model.new
+    weather_file_path = @weather.get_standards_weather_file_path('USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+
+    design_day = model.getDesignDayByName('Atlanta-Hartsfield.Jackson.Intl.AP_GA_USA Ann Clg .4% Condns DB=>MWB').get
+    result = @weather.design_day_average_global_irradiance(design_day)
+    result_ip = OpenStudio.convert(result, 'W/m^2', 'Btu/ft^2*h').get
+    assert_in_delta(result_ip, 126.1, 0.1)
+  end
+
+  def test_epw_file_get_dehumidification_degree_days
+    weather_file_path = @weather.get_standards_weather_file_path('USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw')
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
+    result = @weather.epw_file_get_dehumidification_degree_days(epw_file)
+    assert_in_delta(result, 2.1, 0.1)
+
+    weather_file_path = @weather.get_standards_weather_file_path('USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw')
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
+    result = @weather.epw_file_get_dehumidification_degree_days(epw_file)
+    assert_in_delta(result, 0.56, 0.1)
   end
 end

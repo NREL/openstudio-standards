@@ -25,7 +25,10 @@ Standard.class_eval do
     end
     # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'
-      climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+      stat_file_path = weather_file.gsub('.epw', '.stat')
+      stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+      climate_zone = OpenstudioStandards::Weather.get_climate_zone_from_degree_days(stat_file.hdd18, stat_file.cdd10)
     else
       # this is required to be blank otherwise it may cause side effects.
       epw_file = ''

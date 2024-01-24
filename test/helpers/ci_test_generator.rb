@@ -248,7 +248,8 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
                 name = "sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
                 puts "***************************************#{name}*******************************************************\n"
                 model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-                BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+                weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+                OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
                 if (baseboard_type == "Hot Water") || (mau_heating_coil_type == "Hot Water")
                   hw_loop = OpenStudio::Model::PlantLoop.new(model)
                   standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
@@ -274,7 +275,8 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
               name = "sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-None_Baseboard-#{baseboard_type}"
               puts "***************************************#{name}*******************************************************\n"
               model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-              BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+              weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+              OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
               if (baseboard_type == "Hot Water")
                 hw_loop = OpenStudio::Model::PlantLoop.new(model)
                 standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
@@ -425,7 +427,8 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
             name = "sys2_Boiler-#{boiler_fueltype}_Chiller#-#{chiller_type}_MuACoolingType-#{mua_cooling_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-            BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+            OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             standard.add_sys2_FPFC_sys5_TPFC(model: model,
@@ -567,7 +570,8 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
             name = "sys3_Boiler-#{boiler_fueltype}_HeatingCoilType#-#{heating_coil_type_sys3}_BaseboardType-#{baseboard_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-            BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+            OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
             hw_loop = nil
             if (baseboard_type == "Hot Water")
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -714,7 +718,8 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
             name = "sys4_Boiler-#{boiler_fueltype}_HeatingCoilType#-#{heating_coil}_BaseboardType-#{baseboard_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-            BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+            OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
             hw_loop = nil
             if (baseboard_type == "Hot Water")
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -858,7 +863,8 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
             name = "sys5_Boiler-#{boiler_fueltype}_ChillerType-#{chiller_type}_MuaCoolingType-#{mua_cooling_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-            BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+            OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             standard.add_sys2_FPFC_sys5_TPFC( model: model,
@@ -1007,7 +1013,8 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
                 name = "sys6_Bo-#{boiler_fueltype}_Ch-#{chiller_type}_BB-#{baseboard_type}_HC-#{heating_coil_type}_Fan-#{fan_type}"
                 puts "***************************************#{name}*******************************************************\n"
                 model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-                BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+                weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+                OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
                 hw_loop = nil
                 if (baseboard_type == "Hot Water") || (heating_coil_type == "Hot Water")
                   hw_loop = OpenStudio::Model::PlantLoop.new(model)

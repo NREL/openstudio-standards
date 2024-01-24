@@ -182,7 +182,8 @@ class TestNECBSurfaces8426Custom < CreateDOEPrototypeBuildingTest
       output_folder = "#{File.dirname(__FILE__)}/output/#{test_name}"
       model = OpenStudio::Model::Model.new
       model.create_prototype_building(building, 'NECB 2011', 'NECB HDD Method', weather, output_folder)
-      BTAP::Environment::WeatherFile.new(weather).set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather)
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       model.getSpaces.each do |space|
         # puts space.name
         hash[:"Space: #{space.name}"] = {}
