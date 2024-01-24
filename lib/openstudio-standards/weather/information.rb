@@ -242,7 +242,8 @@ module OpenstudioStandards
     # Get a list of regular expressions matching the design day categories.
     #
     # For looking up design day objects by type
-    # @param category [String] The design day category: All Heating,
+    # @param category [String] The design day category, e.g. 'All Heating', 'Annual Cooling'.
+    # @return [Array<Regexp>] list of regular expressions matching design day names to import.
     def self.ddy_regex_lookup(category)
       ddy_regex_map = {
         'All Heating'=> /Htg/,

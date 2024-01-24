@@ -240,7 +240,7 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param ddy_file_path [String] path to .ddy file
-    # @param ddy_list [Array<String>] list of regular expressions matching design day names to import.
+    # @param ddy_list [Array<Regexp>] list of regular expressions matching design day names to import.
     #  The default (nil) will add the annual heating 99.6% DB and annual cooling 0.4% DB and WB design days.
     # @return [Boolean] returns true if successful, false if not
     def self.model_set_design_days(model,
@@ -298,7 +298,7 @@ module OpenstudioStandards
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param weather_file_path [String] absolute path to the .epw file. For weather files included in openStudio-standards, can be found using OpenstudioStandards::Weather::get_standards_weather_file_path(weather_file_name)
     # @param climate_zone [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
-    # @param ddy_list [Array] list of regexes to match design day names to add to model, e.g. /Clg 1. Condns DB=>MWB/.
+    # @param ddy_list [Array<Regexp>] list of regexes to match design day names to add to model, e.g. /Clg 1. Condns DB=>MWB/.
     #  The default (nil) will add the annual heating 99.6% DB and annual cooling 0.4% DB and WB design days.
     # @return [Boolean] returns true if successful, false if not
     def self.model_set_weather_file_and_design_days(model,
@@ -355,7 +355,7 @@ module OpenstudioStandards
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param weather_file_path [String] absolute path to the .epw file. For weather files included in openStudio-standards, can be found using OpenstudioStandards::Weather::get_standards_weather_file_path(weather_file_name)
     # @param climate_zone [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
-    # @param ddy_list [Array] list of regexes to match design day names to add to model, e.g. /Clg 1. Condns DB=>MWB/
+    # @param ddy_list [Array<Regexp>] list of regexes to match design day names to add to model, e.g. /Clg 1. Condns DB=>MWB/
     #  The default (nil) will add the annual heating 99.6% DB and annual cooling 0.4% DB and WB design days.
     # @return [Boolean] returns true if successful, false if not
     def self.model_set_building_location(model,
