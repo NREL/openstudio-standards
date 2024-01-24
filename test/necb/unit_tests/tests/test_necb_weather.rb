@@ -11,7 +11,7 @@ class NECB_Weather_Tests < Minitest::Test
     define_std_ranges
   end
 
-  # Tests to ensure that the NECB default schedules are being defined correctly.
+  # Tests to ensure that the NECB weather files are being defined correctly.
   # This is not for compliance, but for archetype development. This will compare
   # to values in an excel/csv file stored in the weather folder.
   # NECB2011 8.4.2.3
