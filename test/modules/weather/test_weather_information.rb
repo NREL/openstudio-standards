@@ -98,4 +98,16 @@ class TestWeatherInformation < Minitest::Test
     result_ip = OpenStudio.convert(result, 'W/m^2', 'Btu/ft^2*h').get
     assert_in_delta(result_ip, 126.1, 0.1)
   end
+
+  def test_epw_file_get_dehumidification_degree_days
+    weather_file_path = @weather.get_standards_weather_file_path('USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3.epw')
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
+    result = @weather.epw_file_get_dehumidification_degree_days(epw_file)
+    assert_in_delta(result, 2.1, 0.1)
+
+    weather_file_path = @weather.get_standards_weather_file_path('USA_AZ_Tucson-Davis-Monthan.AFB.722745_TMY3.epw')
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
+    result = @weather.epw_file_get_dehumidification_degree_days(epw_file)
+    assert_in_delta(result, 0.56, 0.1)
+  end
 end

@@ -436,6 +436,60 @@ module OpenstudioStandards
       return average_daily_global_irradiance
     end
 
+    # Calculate dehumidification degree days from an epw_file
+    #
+    # @param epw_file [OpenStudio::EpwFile] OpenStudio EpwFile object
+    # @param base_humidity_ratio [Double] base humidity ratio, default is 0.010
+    # @return [Double] dehumdification degree days
+    def self.epw_file_get_dehumidification_degree_days(epw_file, base_humidity_ratio: 0.010)
+      db_temps_c = epw_file.getTimeSeries('Dry Bulb Temperature').get.values
+      db_temps_k = db_temps_c.map { |v| v + 273.15 }
+      rh_values = epw_file.getTimeSeries('Relative Humidity').get.values
+      atm_p_values = epw_file.getTimeSeries('Atmospheric Station Pressure').get.values
+
+      # coefficients for the calculation of pws (Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS)
+      c1 = -5.6745359E+03
+      c2 = 6.3925247E+00
+      c3 = -9.6778430E-03
+      c4 = 6.2215701E-07
+      c5 = 2.0747825E-09
+      c6 = -9.4840240E-13
+      c7 = 4.1635019E+00
+      c8 = -5.8002206E+03
+      c9 = 1.3914993E+00
+      c10 = -4.8640239E-02
+      c11 = 4.1764768E-05
+      c12 = -1.4452093E-08
+      c13 = 6.5459673E+00
+
+      # calculate saturation pressure of water vapor (Pa)
+      sp_values = []
+      db_temps_k.each do |t|
+        if t <= 273.15
+          sp = (c1 / t) + c2 + c3 * t + c4 * t**2 + c5 * t**3 + c6 * t**4 + c7 * Math.log(t, Math.exp(1))
+
+        else
+          sp = (c8 / t) + c9 + c10 * t + c11 * t**2 + c12 * t**3 + c13 * Math.log(t, Math.exp(1))
+        end
+        sp_values << Math.exp(1)**sp
+      end
+
+      # calculate partial pressure of water vapor (Pa)
+      pp_values = sp_values.zip(rh_values).map{ |sp, rh| sp * rh / 100.0 }
+
+      # calculate total pressure (Pa)
+      tp_values = pp_values.zip(atm_p_values).map{ |pp, atm| pp + atm }
+
+      # calculate humidity ratio
+      hr_values = pp_values.zip(tp_values).map{ |pp, tp| (0.621945 * pp) / (tp - pp)}
+
+      # calculate dehumidification degree days based on humidity ratio values above the base
+      hr_values_above_base = hr_values.map{ |hr| hr > base_humidity_ratio ? hr : 0.0}
+      dehumidification_degree_days = hr_values_above_base.sum / 24.0
+
+      return dehumidification_degree_days
+    end
+
     # @!endgroup Information
   end
 end

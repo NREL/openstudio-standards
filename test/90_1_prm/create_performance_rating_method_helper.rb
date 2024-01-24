@@ -39,7 +39,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
 
   model = load_test_model(model_name)
 
-  # @todo see Weather.Model.rb for weather file locations for each climate zone
+  # @todo see weather module for weather file locations for each climate zone
   base_rel_path = '../../../data/weather/'
   if model.weatherFile.empty?
     epw_name = nil

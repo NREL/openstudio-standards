@@ -2072,7 +2072,7 @@ class BTAPData
 
     ### Dehumidification degree days
     ### ('Dehumidification degree-days, base 0.010' in REF: Wright (2019))
-    dehumidification_degree_days = BTAP::Environment::WeatherFile.new(weather_file_path).calculate_humidity_ratio
+    dehumidification_degree_days = OpenstudioStandards::Weather.epw_file_get_dehumidification_degree_days(epw_file)
 
     ### annual global horizontal irradiance (GHI)
     ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get
