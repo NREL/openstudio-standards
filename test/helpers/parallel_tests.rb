@@ -41,23 +41,21 @@ def write_results(result, test_file, test_name)
   test_file_output = File.join(@test_output_folder, "#{File.basename(test_file)}_#{test_name}_test_output.json")
   File.delete(test_file_output) if File.exist?(test_file_output)
   test_result = false
+  # store output for failed run.
+  output = {"test_file" => test_file,
+    "test_name" => test_name,
+    "test_result" => test_result,
+    "output" => {
+        "status" => result[2],
+        "std_out" => result[0].split(/\r?\n/),
+        "std_err" => result[1].split(/\r?\n/)
+    }
+  }
+  File.open(test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
   if result[2].success?
     puts "PASSED: #{test_name} IN FILE #{test_file.gsub(/.*\/test\//, 'test/')}".green
     return true
   else
-    #store output for failed run.
-    output = {"test_file" => test_file,
-              "test_name" => test_name,
-              "test_result" => test_result,
-              "output" => {
-                  "status" => result[2],
-                  "std_out" => result[0].split(/\r?\n/),
-                  "std_err" => result[1].split(/\r?\n/)
-              }
-    }
-
-    #puts test_file_output
-    File.open(test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
     puts "FAILED: #{test_name} IN FILE #{test_file.gsub(/.*\/test\//, 'test/')}".red
     return false
   end
