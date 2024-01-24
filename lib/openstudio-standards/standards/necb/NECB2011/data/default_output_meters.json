@@ -1,0 +1,32 @@
+{
+  "tables": {
+    "default_output_meters": {
+      "data_type": "table",
+      "refs": [
+        "Defualt output meters to inculde in every simulation."
+      ],
+      "table": [
+        {
+          "name": "NaturalGas:Facility",
+          "frequency": "timestep"
+        },
+        {
+          "name": "Electricity:Facility",
+          "frequency": "timestep"
+        },
+        {
+          "name": "FuelOil#2:Facility",
+          "frequency": "timestep"
+        },
+        {
+          "name": "DISTRICTHEATING:FACILITY",
+          "frequency": "timestep"
+        },
+        {
+          "name": "DISTRICTCOOLING:FACILITY",
+          "frequency": "timestep"
+        }
+      ]
+    }
+  }
+}

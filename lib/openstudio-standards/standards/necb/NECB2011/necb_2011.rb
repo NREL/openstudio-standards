@@ -2207,11 +2207,37 @@ class NECB2011 < Standard
   end
 
   def set_output_meters(model:,output_meters:)
+    # Including a set of default meters to all models.  These meters are defined are defined in
+    # 'default_output_meters.json' and retrieved from @standards_data below.
+    default_output_meters = @standards_data['tables']['default_output_meters']['table']
+    #Check if the default output meters are defined before doing anything.
+    unless default_output_meters.nil? or default_output_meters.empty?
+      # Go through each default output meter and if see if they are included in the user defined output meters.  If no
+      # output meters are define then add the default output meters en mass.
+      if output_meters.nil? or output_meters.empty?
+        output_meters = default_output_meters
+      else
+        default_output_meters.each do |default_meter|
+          match_meters = output_meters.select{ |output_meter| output_meter["name"].to_s.upcase == default_meter['name'].to_s.upcase }
+          # If a default output meter is not included in the user defined output meters then add it.
+          if match_meters.empty?
+            output_meters << default_meter
+          else
+            # If a default output meter matches one of the user defined output meters, ensure the the reporting frequency
+            # is that for the default output meter.
+            match_meters.each do |match_meter|
+              puts("A meter named #{match_meter['name']} was found.  This matches one of the default meters.  Setting the reporting frequency to #{default_meter['frequency']}.")
+              match_meter["frequency"] = default_meter["frequency"]
+            end
+          end
+        end
+      end
+    end
+    # Leaving this check in for the case when the default output meters are not defined.
     unless output_meters.nil? or output_meters.empty?
-      # remove existing output meters
+      # Get existing output meters
       existing_meters = model.getOutputMeters
-
-      # OpenStudio doesn't seemt to like two meters of the same name, even if they have different reporting frequencies.
+      # OpenStudio doesn't seem to like having two meters of the same name, even if they have different reporting frequencies.
       output_meters.each do |new_meter|
         #check if meter already exists
         result = existing_meters.select { |e_m| e_m.name == new_meter['name'] }
