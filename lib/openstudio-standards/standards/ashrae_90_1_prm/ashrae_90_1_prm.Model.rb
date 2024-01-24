@@ -1138,6 +1138,7 @@ class ASHRAE901PRM < Standard
         setpoint_sch = tstat.heatingSetpointTemperatureSchedule
         setpoint_c = OpenstudioStandards::Schedules.schedule_get_design_day_min_max(setpoint_sch.get, 'winter')['max']
         next if setpoint_c.nil?
+
         if setpoint_c > max_heat_setpoint
           max_heat_setpoint = setpoint_c
         end

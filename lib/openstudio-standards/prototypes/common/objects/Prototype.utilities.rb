@@ -281,7 +281,7 @@ class Standard
   # @return [Double] Coefficient of Performance (COP)
   def seer_to_cop_cooling_with_fan(seer)
     eer = -0.0182 * seer * seer + 1.1088 * seer
-    cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+    cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + 0.12) / (1 - 0.12)
 
     return cop
   end
@@ -292,7 +292,7 @@ class Standard
   # @param cop [Double] Coefficient of Performance (COP)
   # @return [Double] seasonal energy efficiency ratio (SEER)
   def cop_to_seer_cooling_with_fan(cop)
-    eer = cop_to_eer(cop)
+    eer = cop_to_eer_no_fan(cop)
     delta = 1.1088**2 - 4.0 * 0.0182 * eer
     seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
 
@@ -343,13 +343,13 @@ class Standard
   # @param eer [Double] Energy Efficiency Ratio (EER)
   # @param capacity_w [Double] the heating capacity at AHRI rating conditions, in W
   # @return [Double] Coefficient of Performance (COP)
-  def eer_to_cop(eer, capacity_w = nil)
+  def eer_to_cop_no_fan(eer, capacity_w = nil)
     if capacity_w.nil?
       # The PNNL Method.
       # r is the ratio of supply fan power to total equipment power at the rating condition,
       # assumed to be 0.12 for the reference buildings per PNNL.
       r = 0.12
-      cop = (eer / 3.413 + r) / (1 - r)
+      cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + r) / (1 - r)
     else
       # The 90.1-2013 method
       # Convert the capacity to Btu/hr
@@ -365,13 +365,13 @@ class Standard
   #
   # @param cop [Double] COP
   # @return [Double] Energy Efficiency Ratio (EER)
-  def cop_to_eer(cop, capacity_w = nil)
+  def cop_to_eer_no_fan(cop, capacity_w = nil)
     if capacity_w.nil?
       # The PNNL Method.
       # r is the ratio of supply fan power to total equipment power at the rating condition,
       # assumed to be 0.12 for the reference buildngs per PNNL.
       r = 0.12
-      eer = 3.413 * (cop * (1 - r) - r)
+      eer = OpenStudio.convert(1.0, 'W', 'Btu/h').get * (cop * (1 - r) - r)
     else
       # The 90.1-2013 method
       # Convert the capacity to Btu/hr
@@ -380,6 +380,14 @@ class Standard
     end
 
     return eer
+  end
+
+  # Convert from EER to COP
+  #
+  # @param cop [Double] Energy Efficiency Ratio (EER)
+  # @return [Double] Coefficient of Performance (COP)
+  def eer_to_cop(eer)
+    return eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get
   end
 
   # Convert from COP to kW/ton

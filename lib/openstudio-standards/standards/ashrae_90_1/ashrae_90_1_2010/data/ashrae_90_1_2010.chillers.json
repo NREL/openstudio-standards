@@ -138,7 +138,7 @@
     {
       "cooling_type": "WaterCooled",
       "condenser_type": null,
-      "compressor_type": "Screw",
+      "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "compliance_path": "Path A",
       "minimum_capacity": 0,
@@ -153,7 +153,7 @@
     {
       "cooling_type": "WaterCooled",
       "condenser_type": null,
-      "compressor_type": "Screw",
+      "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "compliance_path": "Path A",
       "minimum_capacity": 75,
@@ -168,7 +168,7 @@
     {
       "cooling_type": "WaterCooled",
       "condenser_type": null,
-      "compressor_type": "Screw",
+      "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "compliance_path": "Path A",
       "minimum_capacity": 150,
@@ -183,7 +183,7 @@
     {
       "cooling_type": "WaterCooled",
       "condenser_type": null,
-      "compressor_type": "Screw",
+      "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "compliance_path": "Path A",
       "minimum_capacity": 300,
@@ -378,7 +378,7 @@
     {
       "cooling_type": "WaterCooled",
       "condenser_type": null,
-      "compressor_type": "Screw",
+      "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "compliance_path": "Path B",
       "minimum_capacity": 0,
@@ -393,7 +393,7 @@
     {
       "cooling_type": "WaterCooled",
       "condenser_type": null,
-      "compressor_type": "Screw",
+      "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "compliance_path": "Path B",
       "minimum_capacity": 75,
@@ -408,7 +408,7 @@
     {
       "cooling_type": "WaterCooled",
       "condenser_type": null,
-      "compressor_type": "Screw",
+      "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "compliance_path": "Path B",
       "minimum_capacity": 150,
@@ -423,7 +423,7 @@
     {
       "cooling_type": "WaterCooled",
       "condenser_type": null,
-      "compressor_type": "Screw",
+      "compressor_type": "Rotary Screw",
       "absorption_type": null,
       "compliance_path": "Path B",
       "minimum_capacity": 300,

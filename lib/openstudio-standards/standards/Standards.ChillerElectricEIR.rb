@@ -12,10 +12,7 @@ class Standard
     # Determine if WaterCooled or AirCooled by
     # checking if the chiller is connected to a condenser
     # water loop or not.  Use name as fallback for exporting HVAC library.
-    cooling_type = 'AirCooled'
-    if chiller_electric_eir.secondaryPlantLoop.is_initialized || chiller_electric_eir.name.get.to_s.include?('WaterCooled')
-      cooling_type = 'WaterCooled'
-    end
+    cooling_type = chiller_electric_eir.condenserType
 
     search_criteria['cooling_type'] = cooling_type
 
@@ -59,6 +56,12 @@ class Standard
       search_criteria['compressor_type'] = compressor_type
     end
 
+    # @todo Find out what compliance path is desired
+    # perhaps this could be set using additional
+    # properties when the chiller is created
+    # Assume path a by default for now
+    search_criteria['compliance_path'] = 'Path A'
+
     return search_criteria
   end
 
@@ -92,13 +95,26 @@ class Standard
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
     chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
 
-    if chlr_props.nil? || !chlr_props['minimum_full_load_efficiency']
+    if chlr_props.nil?
+      search_criteria.delete('compliance_path')
+      chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
+    end
+    if chlr_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency.")
       return nil
     else
-      # lookup the efficiency value
-      kw_per_ton = chlr_props['minimum_full_load_efficiency']
-      cop = kw_per_ton_to_cop(kw_per_ton)
+      cop = nil
+      if !chlr_props['minimum_coefficient_of_performance'].nil?
+        cop = chlr_props['minimum_coefficient_of_performance']
+      elsif !chlr_props['minimum_energy_efficiency_ratio'].nil?
+        cop = eer_to_cop(chlr_props['minimum_energy_efficiency_ratio'])
+      elsif !chlr_props['minimum_kilowatts_per_tons'].nil?
+        cop = kw_per_ton_to_cop(chlr_props['minimum_kilowatts_per_tons'])
+      end
+      if cop.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency.")
+        return nil
+      end
     end
 
     return cop
@@ -128,10 +144,26 @@ class Standard
 
     # Get the chiller properties
     chlr_props = model_find_object(chillers, search_criteria, capacity_tons, Date.today)
-    unless chlr_props
+    cop = nil
+    if chlr_props.nil?
+      search_criteria.delete('compliance_path')
+      chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
+    end
+    if chlr_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find chiller properties using #{search_criteria}, cannot apply standard efficiencies or curves.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return false
+    else
+      if !chlr_props['minimum_coefficient_of_performance'].nil?
+        cop = chlr_props['minimum_coefficient_of_performance']
+      elsif !chlr_props['minimum_energy_efficiency_ratio'].nil?
+        cop = eer_to_cop(chlr_props['minimum_energy_efficiency_ratio'])
+      elsif !chlr_props['minimum_kilowatts_per_tons'].nil?
+        cop = kw_per_ton_to_cop(chlr_props['minimum_kilowatts_per_tons'])
+      end
+      if cop.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency.")
+        return false
+      end
     end
 
     # Make the CAPFT curve
@@ -163,15 +195,11 @@ class Standard
     end
 
     # Set the efficiency value
-    kw_per_ton = nil
-    cop = nil
-    if chlr_props['minimum_full_load_efficiency']
-      kw_per_ton = chlr_props['minimum_full_load_efficiency']
-      cop = kw_per_ton_to_cop(kw_per_ton)
-      chiller_electric_eir.setReferenceCOP(cop)
-    else
+    if cop.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency, will not be set.")
       successfully_set_all_properties = false
+    else
+      chiller_electric_eir.setReferenceCOP(cop)
     end
 
     # Append the name with size and kw/ton
