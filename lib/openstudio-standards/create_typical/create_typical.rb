@@ -709,7 +709,6 @@ module OpenstudioStandards
                   return false
                 end
               end
-
             end
 
           end
@@ -717,9 +716,8 @@ module OpenstudioStandards
         else
           # If user specified a mapping of HVAC systems to zones
           user_hvac_mapping['systems'].each do |system_hash|
-
-            hvac_system_type = system_hash["system_type"]
-            zone_names = system_hash["thermal_zones"]
+            hvac_system_type = system_hash['system_type']
+            zone_names = system_hash['thermal_zones']
 
             # Get OS:ThermalZone objects
             zones = zone_names.map do |zone_name|
@@ -734,7 +732,6 @@ module OpenstudioStandards
             end
           end
         end
-
 
       end
 
