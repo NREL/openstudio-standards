@@ -8,27 +8,27 @@
       "table": [
         {
           "name": "NaturalGas:Facility",
-          "frequency": "timestep"
+          "frequency": "Timestep"
         },
         {
           "name": "Electricity:Facility",
-          "frequency": "timestep"
+          "frequency": "Timestep"
         },
         {
           "name": "ElectricityNet:Facility",
-          "frequency": "timestep"
+          "frequency": "Timestep"
         },
         {
           "name": "FuelOil#2:Facility",
-          "frequency": "timestep"
+          "frequency": "Timestep"
         },
         {
           "name": "DISTRICTHEATING:FACILITY",
-          "frequency": "timestep"
+          "frequency": "Timestep"
         },
         {
           "name": "DISTRICTCOOLING:FACILITY",
-          "frequency": "timestep"
+          "frequency": "Timestep"
         }
       ]
     }
