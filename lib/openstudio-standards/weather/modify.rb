@@ -172,8 +172,8 @@ module OpenstudioStandards
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.weather.Model', "Could not determine the weather file for climate zone: #{climate_zone}, cannot get ground temperatures from .stat file.")
           else
             # Get the path to the stat file
-            weather_file = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file_name)
-            stat_file_path = weather_file.gsub('.epw', '.stat')
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file_name)
+            stat_file_path = weather_file_path.gsub('.epw', '.stat')
           end
         end
       end

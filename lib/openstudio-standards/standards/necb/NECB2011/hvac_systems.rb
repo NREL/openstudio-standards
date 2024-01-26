@@ -251,8 +251,8 @@ class NECB2011
 
     # Get January winter design temperature
     # get model weather file name
-    weather_file = air_loop_hvac.model.weatherFile.get.path.get.to_s
-    stat_file_path = weather_file.gsub('.epw', '.stat')
+    weather_file_path = air_loop_hvac.model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
     stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
 
     # get winter(heating) design temp stored in array
