@@ -502,7 +502,7 @@ class BTAPData
     geography_data['location_necb_hdd'] = @standard.get_necb_hdd18(model: @model, necb_hdd: true)
     geography_data['location_weather_file'] = File.basename(@model.getWeatherFile.path.get.to_s)
     weather_file_path = @model.weatherFile.get.path.get.to_s
-    stat_file_path = weather_file.gsub('.epw', '.stat')
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
     stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
     geography_data['location_epw_cdd'] = stat_file.cdd18
     geography_data['location_epw_hdd'] = stat_file.hdd18
