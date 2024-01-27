@@ -67,9 +67,9 @@ class TestWeatherInformation < Minitest::Test
 
   def test_ddy_regex_lookup
     result = @weather.ddy_regex_lookup('All Heating')
-    assert(result.size == 3)
+    assert(result.size == 1, "Expected 'All Heating' regex lookup to return an array of size = 1.")
     result = @weather.ddy_regex_lookup('Monthly Cooling')
-    assert(result.size == 24)
+    assert(result.size == 1, "Expected 'Monthly Cooling' regex lookup to return an array of size = 1.")
     result = @weather.ddy_regex_lookup('Heating 99.6%')
     test_name = "Seattle Seattle Tacoma Intl A Ann Htg 99.6% Condns DB"
     bad_name = "Seattle Fake Design Day Name"
@@ -85,7 +85,7 @@ class TestWeatherInformation < Minitest::Test
     ddy_list = @weather.ddy_regex_lookup('All Heating')
     @weather.model_set_design_days(model, ddy_file_path: ddy_file_path, ddy_list: ddy_list)
     result = OpenstudioStandards::Weather.model_get_heating_design_outdoor_temperatures(model)
-    assert(result.size == 3)
+    assert(result.size == 4)
   end
 
   def test_design_day_average_global_irradiance
