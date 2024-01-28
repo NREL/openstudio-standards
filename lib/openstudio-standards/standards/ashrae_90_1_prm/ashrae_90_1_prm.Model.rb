@@ -109,8 +109,6 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Double] Building envelope area in m2
   def model_building_envelope_area(model)
-    # Get climate zone
-    climate_zone = model_standards_climate_zone(model)
     # Get the space building envelope area
     # According to the 90.1 definition, building envelope include:
     # - "the elements of a building that separate conditioned spaces from the exterior"
@@ -120,7 +118,7 @@ class ASHRAE901PRM < Standard
     #    from conditioned spaces."
     building_envelope_area_m2 = 0
     model.getSpaces.each do |space|
-      building_envelope_area_m2 += space_envelope_area(space, climate_zone)
+      building_envelope_area_m2 += OpenstudioStandards::Geometry.space_get_envelope_area(space)
     end
     if building_envelope_area_m2 == 0.0
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Calculated building envelope area is 0 m2, no infiltration will be added.')

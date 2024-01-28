@@ -328,9 +328,9 @@ module OpenstudioStandards
         envelope_data_hash[:stories][story][:story_multiplied_exterior_roof_area] = story_multiplied_exterior_roof_area
 
         # get perimeter and adiabatic walls that appear to be party walls
-        perimeter_and_party_walls = OpenstudioStandards::Geometry.story_get_exterior_wall_perimeter(story,
-                                                                                                    multiplier_adjustment: story_min_multiplier,
-                                                                                                    bounding_box: bounding_box)
+        perimeter_and_party_walls = OpenstudioStandards::Geometry.building_story_get_exterior_wall_perimeter(story,
+                                                                                                             multiplier_adjustment: story_min_multiplier,
+                                                                                                             bounding_box: bounding_box)
         envelope_data_hash[:stories][story][:story_perimeter] = perimeter_and_party_walls[:perimeter]
         envelope_data_hash[:stories][story][:story_party_walls] = []
         east = false

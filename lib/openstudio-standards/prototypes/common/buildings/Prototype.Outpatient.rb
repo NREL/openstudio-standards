@@ -169,7 +169,7 @@ module Outpatient
         model.getSpaces.sort.each do |space|
           space_type = space.spaceType.get
           # Skip interior spaces
-          next if space_exterior_wall_and_window_area(space) <= 0
+          next if OpenstudioStandards::Geometry.space_get_exterior_wall_and_subsurface_area(space) <= 0
           # Skip spaces that have no infiltration objects to adjust
           next if space_type.spaceInfiltrationDesignFlowRates.size <= 0
 

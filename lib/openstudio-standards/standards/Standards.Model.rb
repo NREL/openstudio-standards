@@ -768,7 +768,7 @@ class Standard
     # Tally up stories including multipliers
     num_stories = 0
     stories.each do |story|
-      num_stories += building_story_floor_multiplier(story)
+      num_stories += OpenstudioStandards::Geometry.building_story_get_floor_multiplier(story)
     end
 
     return num_stories
@@ -1611,7 +1611,8 @@ class Standard
           # Add a PVAV with Reheat for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(space.buildingStory.get)
+            stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
           system_name = "#{story_name} PVAV_Reheat (Sys5)"
@@ -1666,7 +1667,8 @@ class Standard
           # Add an VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(space.buildingStory.get)
+            stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
           system_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
@@ -1746,7 +1748,8 @@ class Standard
           # Add a VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(space.buildingStory.get)
+            stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
           system_name = "#{story_name} VAV_Reheat (Sys7)"
@@ -1821,7 +1824,8 @@ class Standard
           # Add an VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(space.buildingStory.get)
+            stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
           system_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
@@ -5130,7 +5134,7 @@ class Standard
   # @return [OpenStudio::Model::BuildingStory] the story
   def model_get_story_for_nominal_z_coordinate(model, minz, tolerance = 0.3)
     model.getBuildingStorys.sort.each do |story|
-      z = building_story_minimum_z_value(story)
+      z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(story)
 
       if (minz - z).abs < tolerance
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "The story with a min z value of #{minz.round(2)} is #{story.name}.")
@@ -6937,7 +6941,7 @@ class Standard
     model.getSpaces.sort.each do |space|
       story = space.buildingStory.get
       lowest_story = story if lowest_story.nil?
-      space_min_z = building_story_minimum_z_value(story)
+      space_min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(story)
       if space_min_z < min_z_story
         min_z_story = space_min_z
         lowest_story = story

@@ -567,7 +567,7 @@ Standard.class_eval do
     # iterate through spaces and set any necessary CFactorUndergroundWallConstructions
     model.getSpaces.each do |space|
       # Get height of the first below grade wall in this space. Will return nil if none are found.
-      below_grade_wall_height = model_get_space_below_grade_wall_height(space)
+      below_grade_wall_height = OpenstudioStandards::Geometry.space_get_below_grade_wall_height(space)
       next if below_grade_wall_height.nil?
 
       c_factor_wall_name = "Basement Wall C-Factor #{c_factor_si.round(2)} Height #{below_grade_wall_height.round(2)}"
@@ -591,30 +591,6 @@ Standard.class_eval do
         end
       end
     end
-  end
-
-  # Finds heights of the first below grade walls and returns them as a numeric. Used when defining C Factor walls.
-  # Returns nil if the space is above grade.
-  # @param space [OpenStudio::Model::Space] space to determine below grade wall height
-  # @return [Numeric, nil]
-  def model_get_space_below_grade_wall_height(space)
-    # find height of first below-grade wall adjacent to the ground
-    space.surfaces.each do |surface|
-      next unless surface.surfaceType == 'Wall'
-
-      boundary_condition = surface.outsideBoundaryCondition
-      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition.to_s.downcase.include?('ground')
-
-      # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
-      z_values = []
-      surface.vertices.each do |vertex|
-        z_values << vertex.z
-      end
-      surface_height = z_values.max - z_values.min
-      return surface_height
-    end
-
-    return nil
   end
 
   # Searches a model for spaces adjacent to ground. If the slab's perimeter is adjacent to ground, the length is
@@ -644,7 +620,8 @@ Standard.class_eval do
     # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
     model.getSpaces.each do |space|
       # Find this space's exposed floor area and perimeter. NOTE: this assumes only only floor per space.
-      perimeter, area = model_get_f_floor_geometry(space)
+      perimeter = OpenstudioStandards::Geometry.space_get_f_floor_perimeter(space)
+      area = OpenstudioStandards::Geometry.space_get_f_floor_area(space)
       next if area == 0 # skip floors not adjacent to ground
 
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction.
@@ -671,118 +648,6 @@ Standard.class_eval do
         end
       end
     end
-  end
-
-  # This function returns the space's ground perimeter and area. Assumes only one floor per space!
-  # @param space [OpenStudio::Model::Space] space object
-  # @return [Numeric, Numeric]
-  def model_get_f_floor_geometry(space)
-    perimeter = 0
-
-    floors = []
-
-    # Find space's floors
-    space.surfaces.each do |surface|
-      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition.to_s.downcase.include?('ground')
-        floors << surface
-      end
-    end
-
-    # Raise a warning for any space with more than 1 ground contact floor surface.
-    if floors.length > 1
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name} has more than one ground contact floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
-    elsif floors.empty? # If this space has no ground contact floors, return 0
-      return 0, 0
-    end
-
-    floor = floors[0]
-
-    # cycle through surfaces in space
-    space.surfaces.each do |surface|
-      # find perimeter of floor by finding intersecting outdoor walls and measuring the intersection
-      if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Outdoors'
-        perimeter += model_calculate_wall_and_floor_intersection(surface, floor)
-      end
-    end
-
-    # Get floor area
-    area = floor.netArea
-
-    return perimeter, area
-  end
-
-  # This function returns the length of intersection between a wall and floor sharing space. Primarily used for
-  # FFactorGroundFloorConstruction exposed perimeter calculations.
-  # @note this calculation has a few assumptions:
-  # - Floors are flat. This means they have a constant z-axis value.
-  # - If a wall shares an edge with a floor, it's assumed that edge intersects with only this floor.
-  # - The wall and floor share a common space. This space is assumed to only have one floor!
-  # @param wall[OpenStudio::Model::Surface] wall surface being compared to the floor of interest
-  # @param floor[OpenStudio::Model::Surface] floor occupying same space as wall. Edges checked for interesections with wall
-  # @return [Numeric] returns the intersection/overlap length of the wall and floor of interest
-  def model_calculate_wall_and_floor_intersection(wall, floor)
-    # Used for determining if two points are 'equal' if within this length
-    tolerance = 0.0001
-
-    # Get floor and wall edges
-    wall_edge_array = model_get_surface_edges(wall)
-    floor_edge_array = model_get_surface_edges(floor)
-
-    # Floor assumed flat and constant in x-y plane (i.e. a single z value)
-    floor_z_value = floor_edge_array[0][0].z
-
-    # Iterate through wall edges
-    wall_edge_array.each do |wall_edge|
-      wall_edge_p1 = wall_edge[0]
-      wall_edge_p2 = wall_edge[1]
-
-      # If points representing the wall surface edge have different z-coordinates, this edge is not parallel to the
-      # floor and can be skipped
-
-      if tolerance <= (wall_edge_p1.z - wall_edge_p2.z).abs
-        next
-      end
-
-      # If wall edge is parallel to the floor, ensure it's on the same x-y plane as the floor.
-      if tolerance <= (wall_edge_p1.z - floor_z_value).abs
-        next
-      end
-
-      # If the edge is parallel with the floor and in the same x-y plane as the floor, assume an intersection the
-      # length of the wall edge
-      intersect_vector = wall_edge_p1 - wall_edge_p2
-      edge_vector = OpenStudio::Vector3d.new(intersect_vector.x, intersect_vector.y, intersect_vector.z)
-      return(edge_vector.length)
-    end
-
-    # If no edges intersected, return 0
-    return 0
-  end
-
-  # Returns an array of OpenStudio::Point3D pairs of an OpenStudio::Model::Surface's edges. Used to calculate surface
-  # intersections.
-  # @param surface[OpenStudio::Model::Surface] - surface whose edges are being returned
-  # @return [Array<Array(OpenStudio::Point3D, OpenStudio::Point3D)>] - array of pair of points describing the line segment of an edge
-  def model_get_surface_edges(surface)
-    vertices = surface.vertices
-    n_vertices = vertices.length
-
-    # Create edge hash that keeps track of all edges in surface. An edge is defined here as an array of length 2
-    # containing two OpenStudio::Point3Ds that define the line segment representing a surface edge.
-    edge_array = [] # format edge_array[i] = [OpenStudio::Point3D, OpenStudio::Point3D]
-
-    # Iterate through each vertex in the surface and construct an edge for it
-    for edge_counter in 0..n_vertices - 1
-
-      # If not the last vertex in surface
-      if edge_counter < n_vertices - 1
-        edge_array << [vertices[edge_counter], vertices[edge_counter + 1]]
-      else # Make index adjustments for final index in vertices array
-        edge_array << [vertices[edge_counter], vertices[0]]
-      end
-    end
-
-    return edge_array
   end
 
   # Adds internal mass objects and constructions based on the building type
@@ -1073,7 +938,7 @@ Standard.class_eval do
             # process zones of each makeup_target
             zones_by_standards[makeup_target].each do |thermal_zone, space_type_hash|
               # get adjacent zones
-              adjacent_zones = thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone)
+              adjacent_zones = OpenstudioStandards::Geometry.thermal_zone_get_adjacent_zones_with_shared_walls(thermal_zone)
 
               # find adjacent zones matching key and value from standard_space_types_with_makup_air
               first_adjacent_makeup_source = nil

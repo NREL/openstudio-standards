@@ -1344,7 +1344,7 @@ class AppendixGPRMTests < Minitest::Test
       # Get space envelope area
       spc_env_area = 0
       model.getSpaces.sort.each do |spc|
-        spc_env_area += std.space_envelope_area(spc, climate_zone)
+        spc_env_area += OpenstudioStandards::Geometry.space_get_envelope_area(spc)
       end
       # close the sql
       sql.close
@@ -1369,7 +1369,7 @@ class AppendixGPRMTests < Minitest::Test
       # Check if the space envelope area calculations
       spc_env_area = 0
       model.getSpaces.sort.each do |spc|
-        spc_env_area += std.space_envelope_area(spc, climate_zone)
+        spc_env_area += OpenstudioStandards::Geometry.space_get_envelope_area(spc)
       end
       assert((space_env_areas[run_id].to_f - spc_env_area.round(2)).abs < 0.001, "Space envelope calculation is incorrect for the #{building_type}, #{template}, #{climate_zone} model: #{spc_env_area.round(2)} (model) vs. #{space_env_areas[run_id]} (expected).")
 

@@ -1,8 +1,9 @@
 module OpenstudioStandards
   # This Module provides methods to create, modify, and get information about model geometry
   module Geometry
-    # @!group Information
     # Methods to get information about model geometry
+
+    # @!group Information:Calculations
 
     # calculate aspect ratio from area and perimeter
     #
@@ -17,13 +18,94 @@ module OpenstudioStandards
       return aspect_ratio
     end
 
-    # @!endgroup Information
+    # This function returns the length of intersection between a wall and floor sharing space. Primarily used for
+    # FFactorGroundFloorConstruction exposed perimeter calculations.
+    # @note this calculation has a few assumptions:
+    # - Floors are flat. This means they have a constant z-axis value.
+    # - If a wall shares an edge with a floor, it's assumed that edge intersects with only this floor.
+    # - The wall and floor share a common space. This space is assumed to only have one floor!
+    #
+    # @param wall[OpenStudio::Model::Surface] wall surface being compared to the floor of interest
+    # @param floor[OpenStudio::Model::Surface] floor occupying same space as wall. Edges checked for interesections with wall
+    # @return [Double] returns the intersection/overlap length of the wall and floor in meters
+    def self.wall_and_floor_intersection_length(wall, floor)
+      # Used for determining if two points are 'equal' if within this length
+      tolerance = 0.0001
+
+      # Get floor and wall edges
+      wall_edge_array = OpenstudioStandards::Geometry.surface_get_edges(wall)
+      floor_edge_array = OpenstudioStandards::Geometry.surface_get_edges(floor)
+
+      # Floor assumed flat and constant in x-y plane (i.e. a single z value)
+      floor_z_value = floor_edge_array[0][0].z
+
+      # Iterate through wall edges
+      wall_edge_array.each do |wall_edge|
+        wall_edge_p1 = wall_edge[0]
+        wall_edge_p2 = wall_edge[1]
+
+        # If points representing the wall surface edge have different z-coordinates, this edge is not parallel to the
+        # floor and can be skipped
+
+        if tolerance <= (wall_edge_p1.z - wall_edge_p2.z).abs
+          next
+        end
+
+        # If wall edge is parallel to the floor, ensure it's on the same x-y plane as the floor.
+        if tolerance <= (wall_edge_p1.z - floor_z_value).abs
+          next
+        end
+
+        # If the edge is parallel with the floor and in the same x-y plane as the floor, assume an intersection the
+        # length of the wall edge
+        intersect_vector = wall_edge_p1 - wall_edge_p2
+        edge_vector = OpenStudio::Vector3d.new(intersect_vector.x, intersect_vector.y, intersect_vector.z)
+        return(edge_vector.length)
+      end
+
+      # If no edges intersected, return 0
+      return 0.0
+    end
+
+    # @!endgroup Information:Calculations
+
+    # @!group Information:Surface
+
+    # Returns an array of OpenStudio::Point3D pairs of an OpenStudio::Model::Surface's edges. Used to calculate surface intersections.
+    #
+    # @param surface[OpenStudio::Model::Surface] OpenStudio surface object
+    # @return [Array<Array(OpenStudio::Point3D, OpenStudio::Point3D)>] Array of pair of points describing the line segment of an edge
+    def self.surface_get_edges(surface)
+      vertices = surface.vertices
+      n_vertices = vertices.length
+
+      # Create edge hash that keeps track of all edges in surface. An edge is defined here as an array of length 2
+      # containing two OpenStudio::Point3Ds that define the line segment representing a surface edge.
+      # format edge_array[i] = [OpenStudio::Point3D, OpenStudio::Point3D]
+      edge_array = []
+
+      # Iterate through each vertex in the surface and construct an edge for it
+      for edge_counter in 0..n_vertices - 1
+
+        # If not the last vertex in surface
+        if edge_counter < n_vertices - 1
+          edge_array << [vertices[edge_counter], vertices[edge_counter + 1]]
+        else
+          # Make index adjustments for final index in vertices array
+          edge_array << [vertices[edge_counter], vertices[0]]
+        end
+      end
+
+      return edge_array
+    end
+
+    # @!endgroup Information:Surface
 
     # @!group Information:Surfaces
 
     # return an array of z values for surfaces passed in. The values will be relative to the parent origin.
     #
-    # @param surfaces [Array<OpenStudio::Model::Surface>] array of Surface objects
+    # @param surfaces [Array<OpenStudio::Model::Surface>] Array of OpenStudio Surface objects
     # @return [Array<Double>] array of z values in meters
     def self.surfaces_get_z_values(surfaces)
       z_values = []
@@ -43,7 +125,7 @@ module OpenstudioStandards
 
     # Check if a point is contained on any surface in an array of surfaces
     #
-    # @param surfaces [Array<OpenStudio::Model::Surface>] array of Surface objects
+    # @param surfaces [Array<OpenStudio::Model::Surface>] Array of OpenStudio Surface objects
     # @param point [OpenStudio::Point3d] Point3d object
     # @return [Boolean] true if on a surface in surface array, false if not
     def self.surfaces_contain_point?(surfaces, point)
@@ -70,6 +152,315 @@ module OpenstudioStandards
     # @!endgroup Information:Surfaces
 
     # @!group Information:Space
+
+    # Calculate the space envelope area.
+    # According to the 90.1 definition, building envelope include:
+    # 1. "the elements of a building that separate conditioned spaces from the exterior"
+    # 2. "the elements of a building that separate conditioned space from unconditioned
+    #    space or that enclose semiheated spaces through which thermal energy may be
+    #    transferred to or from the exterior, to or from unconditioned spaces or to or
+    #    from conditioned spaces."
+    #
+    # Outside boundary conditions currently supported:
+    # - Adiabatic
+    # - Surface
+    # - Outdoors
+    # - Foundation
+    # - Ground
+    # - GroundFCfactorMethod
+    # - OtherSideCoefficients
+    # - OtherSideConditionsModel
+    # - GroundSlabPreprocessorAverage
+    # - GroundSlabPreprocessorCore
+    # - GroundSlabPreprocessorPerimeter
+    # - GroundBasementPreprocessorAverageWall
+    # - GroundBasementPreprocessorAverageFloor
+    # - GroundBasementPreprocessorUpperWall
+    # - GroundBasementPreprocessorLowerWall
+    #
+    # Surface type currently supported:
+    # - Floor
+    # - Wall
+    # - RoofCeiling
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @param multiplier [Boolean] account for space multiplier
+    # @return [Double] area in m^2
+    def self.space_get_envelope_area(space, multiplier: true)
+      area_m2 = 0.0
+
+      # Get the space conditioning type
+      space_cond_type = space_conditioning_category(space)
+
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Only account for spaces that are conditioned or semi-heated
+        next unless space_cond_type != 'Unconditioned'
+
+        surf_cnt = false
+
+        # Conditioned space OR semi-heated space <-> exterior
+        # Conditioned space OR semi-heated space <-> ground
+        if surface.outsideBoundaryCondition == 'Outdoors' || surface.isGroundSurface
+          surf_cnt = true
+        end
+
+        # Conditioned space OR semi-heated space <-> unconditioned spaces
+        unless surf_cnt
+          # @todo add a case for 'Zone' when supported
+          if surface.outsideBoundaryCondition == 'Surface'
+            adj_space = surface.adjacentSurface.get.space.get
+            adj_space_cond_type = space_conditioning_category(adj_space)
+            surf_cnt = true unless adj_space_cond_type != 'Unconditioned'
+          end
+        end
+
+        if surf_cnt
+          # This surface
+          area_m2 += surface.netArea
+          # Subsurfaces in this surface
+          surface.subSurfaces.sort.each do |subsurface|
+            area_m2 += subsurface.netArea
+          end
+        end
+      end
+
+      if multiplier
+        area_m2 *= space.multiplier
+      end
+
+      return area_m2
+    end
+
+    # Calculate the area of the exterior walls, including the area of the windows and doors on these walls.
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @param multiplier [Boolean] account for space multiplier
+    # @return [Double] area in m^2
+    def self.space_get_exterior_wall_and_subsurface_area(space, multiplier: true)
+      area_m2 = 0.0
+
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'Wall'
+
+        # This surface
+        area_m2 += surface.netArea
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |subsurface|
+          area_m2 += subsurface.netArea
+        end
+      end
+
+      if multiplier
+        area_m2 *= space.multiplier
+      end
+
+      return area_m2
+    end
+
+    # Calculate the area of the exterior walls, including the area of the windows and doors on these walls, and the area of roofs.
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @param multiplier [Boolean] account for space multiplier
+    # @return [Double] area in m^2
+    def self.space_get_exterior_wall_and_subsurface_and_roof_area(space, multiplier: true)
+      area_m2 = 0.0
+
+      # Loop through all surfaces in this space
+      space.surfaces.sort.each do |surface|
+        # Skip non-outdoor surfaces
+        next unless surface.outsideBoundaryCondition == 'Outdoors'
+        # Skip non-walls
+        next unless surface.surfaceType == 'Wall' || surface.surfaceType == 'RoofCeiling'
+
+        # This surface
+        area_m2 += surface.netArea
+        # Subsurfaces in this surface
+        surface.subSurfaces.sort.each do |subsurface|
+          area_m2 += subsurface.netArea
+        end
+      end
+
+      if multiplier
+        area_m2 *= space.multiplier
+      end
+
+      return area_m2
+    end
+
+    # Get a sorted array of tuples containing a list of spaces and connected area in descending order
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @param same_floor [Boolean] only consider spaces on the same floor
+    # @return [Hash] sorted hash with array of spaces and area
+    def self.space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor: true)
+      same_floor_spaces = []
+      spaces = []
+      space.surfaces.each do |surface|
+        adj_surface = surface.adjacentSurface
+        unless adj_surface.empty?
+          space.model.getSpaces.sort.each do |other_space|
+            next if other_space == space
+
+            other_space.surfaces.each do |surf|
+              if surf == adj_surface.get
+                spaces << other_space
+              end
+            end
+          end
+        end
+      end
+      # If looking for only spaces adjacent on the same floor.
+      if same_floor == true
+        if space.buildingStory.empty?
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Information', "Cannot get adjacent spaces of space #{space.name} since space not set to BuildingStory.")
+          return nil
+        end
+
+        spaces.each do |other_space|
+          if space.buildingStory.empty?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Information', "One or more adjecent spaces to space #{space.name} is not assigned to a BuildingStory. Ensure all spaces are assigned.")
+            return nil
+          end
+
+          if other_space.buildingStory.get == space.buildingStory.get
+            same_floor_spaces << other_space
+          end
+        end
+        spaces = same_floor_spaces
+      end
+
+      # now sort by areas.
+      area_index = []
+      array_hash = {}
+      return array_hash if spaces.size.zero?
+
+      # iterate through each surface in the space
+      space.surfaces.each do |surface|
+        # get the adjacent surface in another space.
+        adj_surface = surface.adjacentSurface
+        unless adj_surface.empty?
+          # go through each of the adjacent spaces to find the matching surface/space.
+          spaces.each_with_index do |other_space, index|
+            next if other_space == space
+
+            other_space.surfaces.each do |surf|
+              if surf == adj_surface.get
+                # initialize array index to zero for first time so += will work.
+                area_index[index] = 0 if area_index[index].nil?
+                area_index[index] += surf.grossArea
+                array_hash[other_space] = area_index[index]
+              end
+            end
+          end
+        end
+      end
+      sorted_spaces = array_hash.sort_by { |_key, value| value }.reverse
+      return sorted_spaces
+    end
+
+    # Find the space that has the most wall area touching this space.
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @param same_floor [Boolean] only consider spaces on the same floor
+    # @return [OpenStudio::Model::Space] OpenStudio Space object
+    def self.space_get_adjacent_space_with_most_shared_wall_area(space, same_floor: true)
+      adjacent_space = OpenstudioStandards::Geometry.space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor: same_floor)[0][0]
+      return adjacent_space
+    end
+
+    # Finds heights of the first below grade walls and returns them as a numeric. Used when defining C Factor walls.
+    # Returns nil if the space is above grade.
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Double] height in meters, or nil if undefined
+    def self.space_get_below_grade_wall_height(space)
+      # find height of first below-grade wall adjacent to the ground
+      surface_height = nil
+      space.surfaces.each do |surface|
+        next unless surface.surfaceType == 'Wall'
+
+        boundary_condition = surface.outsideBoundaryCondition
+        next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition.to_s.downcase.include?('ground')
+
+        # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
+        z_values = []
+        surface.vertices.each do |vertex|
+          z_values << vertex.z
+        end
+        surface_height = z_values.max - z_values.min
+      end
+
+      return surface_height
+    end
+
+    # This function returns the space's ground perimeter length.
+    # Assumes only one floor per space!
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Double] length in meters
+    def self.space_get_f_floor_perimeter(space)
+      # Find space's floors with ground contact
+      floors = []
+      space.surfaces.each do |surface|
+        if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition.to_s.downcase.include?('ground')
+          floors << surface
+        end
+      end
+
+      # If this space has no ground contact floors, return 0
+      return 0.0 if floors.empty?
+
+      # Raise a warning for any space with more than 1 ground contact floor surface.
+      if floors.length > 1
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Geometry.Information', "Space: #{space.name} has more than one ground contact floor. FFactorGroundFloorConstruction perimeter in this space may be incorrect.")
+      end
+
+      # cycle through surfaces in the space and get adjacency length to the floor
+      floor = floors[0]
+      perimeter = 0.0
+      space.surfaces.each do |surface|
+        # find perimeter of floor by finding intersecting outdoor walls and measuring the intersection
+        if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Outdoors'
+          perimeter += OpenstudioStandards::Geometry.wall_and_floor_intersection_length(surface, floor)
+        end
+      end
+
+      return perimeter
+    end
+
+    # This function returns the space's ground area.
+    # Assumes only one floor per space!
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Double] area in m^2
+    def self.space_get_f_floor_area(space)
+      # Find space's floors with ground contact
+      floors = []
+      space.surfaces.each do |surface|
+        if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition.to_s.downcase.include?('ground')
+          floors << surface
+        end
+      end
+
+      # If this space has no ground contact floors, return 0
+      return 0.0 if floors.empty?
+
+      # Raise a warning for any space with more than 1 ground contact floor surface.
+      if floors.length > 1
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Geometry.Information', "Space: #{space.name} has more than one ground contact floor. FFactorGroundFloorConstruction area in this space may be incorrect.")
+      end
+
+      # Get floor area
+      floor = floors[0]
+      area = floor.netArea
+
+      return area
+    end
 
     # @!endgroup Information:Space
 
@@ -119,6 +510,34 @@ module OpenstudioStandards
 
     # @!endgroup Information:Spaces
 
+    # @!group Information:ThermalZone
+
+    # Return an array of zones that share a wall with the zone
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @param same_floor [Boolean] only valid option for now is true
+    # @return [Array<OpenStudio::Model::ThermalZone>] Array of OpenStudio ThermalZone objects
+    def self.thermal_zone_get_adjacent_zones_with_shared_walls(thermal_zone, same_floor: true)
+      adjacent_zones = []
+
+      thermal_zone.spaces.each do |space|
+        adj_spaces = OpenstudioStandards::Geometry.space_get_adjacent_spaces_with_shared_wall_areas(space, same_floor: same_floor)
+        adj_spaces.each do |k, v|
+          # skip if space is in current thermal zone.
+          next unless space.thermalZone.is_initialized
+          next if k.thermalZone.get == thermal_zone
+
+          adjacent_zones << k.thermalZone.get
+        end
+      end
+
+      adjacent_zones = adjacent_zones.uniq
+
+      return adjacent_zones
+    end
+
+    # @!endgroup Information:ThermalZone
+
     # @!group Information:Story
 
     # Calculate the story exterior wall perimeter. Selected story should have above grade walls. If not perimeter may return zero.
@@ -129,10 +548,10 @@ module OpenstudioStandards
     # @param bounding_box [OpenStudio::BoundingBox] bounding box to determine which spaces are included
     # @todo this doesn't catch walls that are split that sit above floor surfaces that are not (e.g. main corridoor in secondary school model)
     # @todo also odd with multi-height spaces
-    def self.story_get_exterior_wall_perimeter(story,
-                                               multiplier_adjustment: nil,
-                                               exterior_boundary_conditions: ['Outdoors', 'Ground'],
-                                               bounding_box: nil)
+    def self.building_story_get_exterior_wall_perimeter(story,
+                                                        multiplier_adjustment: nil,
+                                                        exterior_boundary_conditions: ['Outdoors', 'Ground'],
+                                                        bounding_box: nil)
       perimeter = 0
       party_walls = []
       story.spaces.each do |space|
@@ -220,12 +639,12 @@ module OpenstudioStandards
                 length = OpenStudio::Vector3d.new(point_one - point_two).length
                 party_walls << v2[2]
                 length_ip_display = OpenStudio.convert(length, 'm', 'ft').get.round(2)
-                OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', " * #{v2[2].name} has an adiabatic boundary condition and sits in plane with the building bounding box. Adding #{length_ip_display} (ft) to perimeter length of #{story.name} for this surface, assuming it is a party wall.")
+                OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Information', " * #{v2[2].name} has an adiabatic boundary condition and sits in plane with the building bounding box. Adding #{length_ip_display} (ft) to perimeter length of #{story.name} for this surface, assuming it is a party wall.")
               elsif space.multiplier == 1
                 length = OpenStudio::Vector3d.new(point_one - point_two).length
                 party_walls << v2[2]
                 length_ip_display = OpenStudio.convert(length, 'm', 'ft').get.round(2)
-                OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', " * #{v2[2].name} has an adiabatic boundary condition and is in a zone with a multiplier of 1. Adding #{length_ip_display} (ft) to perimeter length of #{story.name} for this surface, assuming it is a party wall.")
+                OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Information', " * #{v2[2].name} has an adiabatic boundary condition and is in a zone with a multiplier of 1. Adding #{length_ip_display} (ft) to perimeter length of #{story.name} for this surface, assuming it is a party wall.")
               else
                 length = 0
               end
@@ -246,6 +665,77 @@ module OpenstudioStandards
       end
 
       return { perimeter: perimeter, party_walls: party_walls }
+    end
+
+    # Checks all spaces on this story that are part of the total floor area to see if they have the same multiplier.
+    # If they do, assume that the multipliers are being used as a floor multiplier.
+    #
+    # @param building_story [OpenStudio::Model::BuildingStory] OpenStudio BuildingStory object
+    # @return [Integer] return the floor multiplier for this story, returning 1 if no floor multiplier.
+    def self.building_story_get_floor_multiplier(building_story)
+      floor_multiplier = 1
+
+      # Determine the multipliers for all spaces
+      multipliers = []
+      building_story.spaces.each do |space|
+        # Ignore spaces that aren't part of the total floor area
+        next unless space.partofTotalFloorArea
+
+        multipliers << space.multiplier
+      end
+
+      # If there are no spaces on this story, assume
+      # a multiplier of 1
+      if multipliers.size.zero?
+        return floor_multiplier
+      end
+
+      # Calculate the average multiplier and
+      # then convert to integer.
+      avg_multiplier = (multipliers.inject { |a, e| a + e }.to_f / multipliers.size).to_i
+
+      # If the multiplier is greater than 1, report this
+      if avg_multiplier > 1
+        floor_multiplier = avg_multiplier
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Information', "Story #{building_story.name} has a multiplier of #{floor_multiplier}.")
+      end
+
+      return floor_multiplier
+    end
+
+    # Gets the minimum z-value of the building story.
+    # This is considered to be the minimum z value of any vertex of any surface of any space on the story,
+    # with the exception of plenum spaces.
+    #
+    # @param building_story [OpenStudio::Model::BuildingStory] OpenStudio BuildingStory object
+    # @return [Double] the minimum z-value in meters
+    def self.building_story_get_minimum_z_value(building_story)
+      z_heights = []
+      building_story.spaces.each do |space|
+        # Skip plenum spaces
+        next if space_plenum?(space)
+
+        # Get the z value of the space, which
+        # vertices in space surfaces are relative to.
+        z_origin = space.zOrigin
+
+        # loop through space surfaces to find min z value
+        space.surfaces.each do |surface|
+          surface.vertices.each do |vertex|
+            z_heights << vertex.z + z_origin
+          end
+        end
+      end
+
+      # Error if no z heights were found
+      z = 999.9
+      if !z_heights.empty?
+        z = z_heights.min
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Information', "For #{building_story.name} could not find the minimum_z_value, which means the story has no spaces assigned or the spaces have no surfaces.")
+      end
+
+      return z
     end
 
     # @!endgroup Information:Story

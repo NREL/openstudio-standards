@@ -227,7 +227,6 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.AirTerminalSingleDuctParallelPIUReheat"
   require_relative "#{stds}/Standards.AirTerminalSingleDuctVAVReheat"
   require_relative "#{stds}/Standards.BoilerHotWater"
-  require_relative "#{stds}/Standards.BuildingStory"
   require_relative "#{stds}/Standards.ChillerElectricEIR"
   require_relative "#{stds}/Standards.CoilCoolingDXMultiSpeed"
   require_relative "#{stds}/Standards.CoilCoolingDXSingleSpeed"

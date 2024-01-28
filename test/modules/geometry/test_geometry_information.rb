@@ -11,6 +11,8 @@ class TestGeometryInformation < Minitest::Test
     @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAEPrimarySchool.osm")
   end
 
+  # Information:Calculations
+
   def test_aspect_ratio
     result = @geo.aspect_ratio(400.0, 80.0)
     assert_equal(result, 1.0)
@@ -18,6 +20,18 @@ class TestGeometryInformation < Minitest::Test
     result = @geo.aspect_ratio(400.0, 160.0)
     assert_equal(result.round(2), 13.93)
   end
+
+  def test_wall_and_floor_intersection_length
+
+  end
+
+  # Information:Surface
+
+  def test_surface_get_edges
+
+  end
+
+  # Information:Surfaces
 
   def test_surfaces_get_z_values
     surfaces = @model.getSurfaces.select { |s| s.outsideBoundaryCondition == 'Ground' }
@@ -37,6 +51,42 @@ class TestGeometryInformation < Minitest::Test
     assert_equal(result, false)
   end
 
+  # Information:Space
+
+  def test_space_get_envelope_area
+
+  end
+
+  def test_space_get_exterior_wall_and_subsurface_area
+
+  end
+
+  def test_space_get_exterior_wall_and_subsurface_and_roof_area
+
+  end
+
+  def test_space_get_adjacent_spaces_with_shared_wall_areas
+
+  end
+
+  def test_space_get_adjacent_space_with_most_shared_wall_area
+
+  end
+
+  def test_space_get_below_grade_wall_height
+
+  end
+
+  def test_space_get_f_floor_perimeter
+
+  end
+
+  def test_space_get_f_floor_area
+
+  end
+
+  # Information:Spaces
+
   def test_spaces_get_floor_area
     result = @geo.spaces_get_floor_area(@model.getSpaces)
     assert_equal(result.round(0), 6871)
@@ -52,11 +102,28 @@ class TestGeometryInformation < Minitest::Test
     assert_equal(result.round(0), 9383)
   end
 
-  def test_story_get_exterior_wall_perimeter
+  # Information:ThermalZone
+  def test_thermal_zone_get_adjacent_zones_with_shared_walls
+
+  end
+
+  # Information:Story
+
+  def test_building_story_get_exterior_wall_perimeter
     story = @model.getBuildingStorys[0]
-    result = @geo.story_get_exterior_wall_perimeter(story)
+    result = @geo.building_story_get_exterior_wall_perimeter(story)
     assert_equal(result[:perimeter].round(0), 619)
   end
+
+  def test_building_story_get_floor_multiplier
+
+  end
+
+  def test_building_story_get_minimum_z_value
+
+  end
+
+  # Information:Model
 
   def test_model_get_exterior_window_to_wall_ratio
     result = @geo.model_get_exterior_window_to_wall_ratio(@model, spaces: [])
