@@ -53,8 +53,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
       # Todo: Use 'medium' as draw_profile for now. Add a warning
       search_criteria['draw_profile'] = "medium"
-      # todo: delete later
-      capacity_btu_per_hr = 74900
       wh_props = model_find_object(standards_data['water_heaters'], search_criteria, capacity = capacity_btu_per_hr, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil, volume = volumn_gal)
       puts wh_props
       unless wh_props
