@@ -37,6 +37,7 @@ module NecbHelper
 
   # Set the logging level
   logger.info!
+  #logger.debug!
 
   # Customize the log format
   logger.formatter = proc do |severity, datetime, _progname, msg|
@@ -93,22 +94,41 @@ module NecbHelper
   end
 
   # Utility function to help make an expected results hash.
-  # Expects the last two entries in the hash to be TestCase and TestPars.
-  def make_empty_expected_json(loop_hash)
+  # @param test_cases_loop_hash [Hash] defines the variables that the test will loop through.
+  #  see test/necb/unit_tests/tests/test_necb_boiler_rules.rb for examples.
+  # @return a nested json containing the test case descriptions and placeholders for results.
+  # @note Expects the last two entries in the hash to be TestCase and TestPars.
+  def make_test_cases_json(test_cases_loop_hash)
     expected_results_template = Hash.new
-    loop_hash.reverse_each do |loop_k, loop_v|
+    test_cases_loop_hash.reverse_each do |loop_k, loop_v|
+      #puts "loop key: #{loop_k}, loop value: #{loop_v}"
       if loop_k.to_s == "TestPars" then 
-        loop_v.each {|key| expected_results_template[key.to_sym] = "tbd"}
+        loop_v.each {|key, value| expected_results_template[key] = value}
       else
         temp = Hash.new
         temp["VarType".to_sym] = loop_k
-        if loop_k.to_s == "TestCase" then temp["reference".to_sym] = "Add NECB reference here" end
+        #if loop_k.to_s == "TestCase" then temp["reference".to_sym] = "Add NECB reference here" end
         loop_v.each {|key| temp[key.to_sym] = expected_results_template}
         expected_results_template = temp.clone
       end
+      #puts "expected_results_template #{expected_results_template}"
     end
     #puts "\nFINAL hash:\n#{JSON.pretty_generate(expected_results_template)}"
     return expected_results_template
+  end
+
+  # @param test_cases_hash [Hash] target hash that we will be **altering**
+  # @param additional_cases_hash [Hash] read from this hash
+  # @return the modified test_cases_hash hash
+  # @note this one does not merge Arrays
+  def merge_test_cases!(test_cases_hash, additional_cases_hash)
+    test_cases_hash.merge!(additional_cases_hash) { |key, oldval, newval|
+      if oldval.kind_of?(Hash) && newval.kind_of?(Hash)
+        merge_test_cases!(oldval, newval)
+      else
+        newval
+      end
+    }
   end
     
 
@@ -117,52 +137,51 @@ module NecbHelper
   # The test_pars hash is used by the recursion to remember what condition is being tested in a nested hash. It already 
   # contains some of the test parameters.
   # Will call the method 'do_test_...' to do the work. This method is called from 'test_...'
-  def parse_json_and_test(expected_results:, test_pars:)
+  # VarType and Reference are reserved keys that are ignored here.
+  def do_test_cases(test_cases:, test_pars:)
 
     # Find the test cases. Do this with recursion but remember where we are in a new hash passed to the do_test method.
     # The nested hash is has essentially a set of loops (vintages, weather files, fuel types etc). As the recursion 
-    # descends down through these keep track of which one is the current 'iterator'.
+    # descends down through these keep track of which one is the current 'var_type'.
     # While doing this build up the test_results hash.
-    iterator_name = expected_results[:VarType]
+    var_type = test_cases[:VarType].to_s
     test_results = Hash.new
-    test_results[:VarType] = iterator_name
-    puts "******* #{iterator_name} **********"
+    test_results[:VarType] = var_type
+    logger.debug  "Parsing test cases for VarType #{var_type}"
+    if test_cases.key?(:Reference) then test_results[:Reference] = test_cases[:Reference] end
 
     # If at the 'TestCase' level then stop recursion and run the test defined in the current hash.
-    if iterator_name == "TestCase"
+    if var_type == "TestCase"
 
-      test_results[:reference] = expected_results[:reference]
-
-      # This hash is the test case. The key is the short name (usually something like 'case-1', and its unique).
+      # This hash is the test case. The key is the short name (usually something like 'case-1', and it is unique).
       # The value of the hash has the test specific inputs and the result.
-      expected_results.each do |key, value|
-        puts "$$$ #{key}"
+      test_cases.each do |key, value|
         next if key == :VarType # This is less expensive than using the except method chained before the each.
-        next if key == :reference # This is less expensive than using the except method chained before the each.
-        #puts "Test case: #{test_pars}"
-        #puts "Current test: #{value}"
+        next if key == :Reference
+        logger.info  "Initiating test case #{key}"
+        logger.debug  "Test case: #{test_pars}"
+        logger.debug  "Current test: #{value}"
 
         # Run this test case. By default call the do_testMethod method.
         method_name = "do_#{test_pars[:test_method]}"
         case_results = self.send(method_name, test_pars: test_pars, test_case: value)
-        puts "######### Case reults"
-        puts JSON.pretty_generate(case_results)
+        logger.debug  "Test case results: #{case_results}"
         test_results[key] = case_results
       end
     else
 
       # Recursively go through the variables defined in the json file and find the test cases.
-      expected_results.each do |key, value|
+      test_cases.each do |key, value|
         next if key == :VarType
+        next if key == :Reference
         #puts "k,v: #{key}, #{value}"
         if value.is_a? Hash
-          test_pars[iterator_name.to_sym] = key.to_s
-          test_results[key] = parse_json_and_test(expected_results: value, test_pars: test_pars)
+          test_pars[var_type.to_sym] = key.to_s
+          test_results[key] = do_test_cases(test_cases: value, test_pars: test_pars)
         end
       end
     end
-    puts "Test Results #################"
-    puts JSON.pretty_generate(test_results)
+    logger.debug  "All test results: #{test_results}"
     return test_results
   end
 

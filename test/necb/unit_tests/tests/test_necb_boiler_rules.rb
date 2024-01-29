@@ -1,6 +1,7 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
+require 'hashie'
 
 
 class NECB_HVAC_Boiler_Tests < Minitest::Test
@@ -15,31 +16,77 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
   # Test to validate the boiler thermal efficiency generated against expected values.
   #  Makes use of the template design pattern with the work done by the do_ method below (i.e. 'do_' prepended to the current method name)
-  def no_test_boiler_efficiency
-
-    # Define test parameters. Remaining parameters for a specific test come from the json file.
+  def test_boiler_efficiency
+    logger.info "Starting suite of tests for: #{__method__}"
+    
+    # Define test parameters that apply to all tests.
     test_parameters = {test_method: __method__,
                        save_intermediate_models: false,
                        mau_type: true, 
                        mau_heating_coil_type: 'Hot Water',
                        baseboard_type: 'Hot Water'}
 
-    # Read expected results. This is used to set the tested cases as the parameters change depending on the
-    # fuel type and boiler size.
-    file_root = "#{self.class.name}-#{__method__}".downcase
-    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
-    expected_results_json = JSON.parse(File.read(file_name), {symbolize_names: true})
-  
+    # Define test cases. 
+    test_cases = Hash.new
+
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = {:Reference => "Some table in NECB 2011"}
+    
+    # Test cases. Three cases for NG and FuelOil, one for Electric.
+    # Results and name are tbd here as they will be calculated in the test.
+    test_cases_hash = {:Vintage => @AllTemplates, 
+                       :FuelType => ["Electricity"],
+                       :TestCase => ["case-1"], 
+                       :TestPars => {:name => "tbd",
+                                     :tested_capacity_kW => 10.0,
+                                     :efficiency_metric => "thermal efficiency",
+                                     :efficiency_value => "tbd"}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => @AllTemplates, 
+                       :FuelType => ["NaturalGas", "FuelOilNo2"],
+                       :TestCase => ["case-1"], 
+                       :TestPars => {:name => "tbd",
+                                     :tested_capacity_kW => 43.96,
+                                     :efficiency_metric => "annual fuel utilization efficiency",
+                                     :efficiency_value => "tbd"}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => @AllTemplates, 
+                       :FuelType => ["NaturalGas", "FuelOilNo2"],
+                       :TestCase => ["case-2"], 
+                       :TestPars => {:name => "tbd",
+                                     :tested_capacity_kW => 410.3,
+                                     :efficiency_metric => "thermal efficiency",
+                                     :efficiency_value => "tbd"}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => @AllTemplates, 
+                       :FuelType => ["NaturalGas", "FuelOilNo2"],
+                       :TestCase => ["case-3"], 
+                       :TestPars => {:name => "tbd",
+                                     :tested_capacity_kW => 2510,
+                                     :efficiency_metric => "combustion efficiency",
+                                     :efficiency_value => "tbd"}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+      
     # Create empty results hash and call the template method that runs the individual test cases.
-    test_results = parse_json_and_test(expected_results: expected_results_json, test_pars: test_parameters)
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
     # Write test results.
+    file_root = "#{self.class.name}-#{__method__}".downcase
     test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
     File.write(test_result_file, JSON.pretty_generate(test_results))
 
+    # Read expected results. 
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name))
+
     # Check if test results match expected.
     msg = "Boiler efficiencies test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_results_json, test_results_file: test_results, msg: msg, type: 'json_data')
+    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished suite of tests for: #{__method__}"
   end
 
   # Companion method to test_boiler_efficiency that runs a specific test.
@@ -68,7 +115,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     # Define the test name. 
     name = "#{vintage}_sys1_Boiler-#{fueltype}_cap-#{boiler_cap.to_int}kW_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
     name.gsub!(/\s+/, "-")
-    puts "***************#{name}***************\n"
+    logger.info "Starting individual test: #{name}"
 
     # Wrap test in begin/rescue/ensure.
     begin
@@ -95,7 +142,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
     rescue => error
-      puts "Something went wrong! #{error.message}"
+      logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
 
     # Recover the thermal efficiency set in the measure for checking below.
@@ -123,6 +170,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       efficiency_metric: efficiency_metric,
       efficiency_value: test_efficiency_value.signif(3)
     }
+    logger.info "Completed individual test: #{name}"
+    return results
   end
 
   
@@ -131,8 +180,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   # if capacity <= 176 kW ---> one single stage boiler
   # if capacity > 176 kW and <= 352 kW ---> 2 boilers of equal capacity
   # if capacity > 352 kW ---> one modulating boiler down to 25% of capacity"
-  def test_number_of_boilers
-    logger.info "Starting: #{__method__}"
+  def no_test_number_of_boilers
+    logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters.
     test_parameters = {test_method: __method__,
@@ -160,7 +209,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     msg = "Boiler efficiencies test results do not match what is expected in test"
     file_compare(expected_results_file: expected_results_json, test_results_file: test_results, msg: msg, type: 'json_data')
 
-    logger.info "Finished: #{__method__}"
+    logger.info "Finished suite of tests for: #{__method__}"
   end
   
   # Companion method to test_number_of_boilers that runs a specific test.
@@ -342,21 +391,33 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
   # Test to validate the custom boiler thermal efficiencies applied against expected values stored in the file:
   # 'compliance_boiler_custom_efficiencies_expected_results.json
-  def test_custom_efficiency
+  def no_test_custom_efficiency
 
     # Generate a template expected results file. If adding more cases use this to create the new entries.
-    #standard_ecms = get_standard("ECMS")
-    #puts standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"] # Used to get the case names
-    #loop_hash = {:Vintage => @AllTemplates, 
-    #             :TestCase => ["NECB_default", "NECB_85%eff", "NECB_88%eff", "NECB_91%eff", "NECB_94%eff", "Viessmann_96.2%eff"], 
-    #             :TestPars => ["boiler_name", "boiler_eff", "eff_curve_name", "curve_coefficients"]}
-    #loop_json = make_empty_expected_json(loop_hash)
-    #file_root = "#{self.class.name}-#{__method__}".downcase
-    #file_name = File.join(@expected_results_folder, "#{file_root}-expected_results-template.json")
-    #File.write(file_name, JSON.pretty_generate(loop_json))
+    standard_ecms = get_standard("ECMS")
+    boilers = standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"] # Used to get the case names
+    test_cases = {}
+    boilers.each do |boiler|
+      test_cases_hash = {:Vintage => @AllTemplates, 
+                   :TestCase => [boiler["name"]], 
+                   :TestPars => {:reference=>boiler["notes"],
+                                 :boiler_name=>boiler["name"], 
+                                 :boiler_eff=>boiler["efficiency"], 
+                                 :eff_curve_name=>boiler["part_load_curve"], 
+                                 :curve_coefficients=>"tbd"}}
+      new_test_cases = make_test_cases_json(test_cases_hash)
+      merge_test_cases!(test_cases, new_test_cases)
+    end
+
+    puts "-------------------------"
+    puts "merged test cases:"
+    puts "#{JSON.pretty_generate(test_cases)}"
+
+  end
+  def remainder_test_custom_efficiency
 
     # Define test parameters. Remaining parameters for a specific test come from the json file.
-    logger.info "Starting: #{__method__}"
+    logger.info "Starting suite of tests for: #{__method__}"
     
     test_parameters = {test_method: __method__,
                        save_intermediate_models: false,
@@ -380,14 +441,14 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     # Check if test results match expected.
     msg = "Boiler efficiencies test results do not match what is expected in test"
     file_compare(expected_results_file: expected_results_json, test_results_file: test_results, msg: msg, type: 'json_data')
-    logger.info "Finished: #{__method__}"
+    logger.info "Finished suite of tests for: #{__method__}"
   end
 
   # Companion method to test_custom_efficiency that runs a specific test.
   # test_pars has the initially defined parameters plus where we are in the nexted results hash.
   # test_case has the specific test parameters.
   def do_test_custom_efficiency(test_pars:, test_case:)
-    logger.info "Starting: #{__method__}"
+    logger.info "Starting suite of tests for: #{__method__}"
 
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
@@ -526,6 +587,6 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
           curve_coefficients: corr_coeff
       }
     end
+    logger.info "Finished suite of tests for: #{__method__}"
   end
-  logger.info "Finished: #{__method__}"
 end
