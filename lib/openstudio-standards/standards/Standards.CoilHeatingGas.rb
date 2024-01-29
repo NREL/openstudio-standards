@@ -4,12 +4,24 @@ class Standard
   # Applies the standard efficiency ratings to CoilHeatingGas.
   #
   # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
+  # @param search_criteria [Hash] search criteria for looking up furnace data
+  # @return [Hash] updated search criteria
+  def coil_heating_gas_additional_search_criteria(coil_heating_gas, search_criteria)
+    return search_criteria
+  end
+
+  # Applies the standard efficiency ratings to CoilHeatingGas.
+  #
+  # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
   # @return [Boolean] returns true if successful, false if not
   def coil_heating_gas_apply_efficiency_and_curves(coil_heating_gas)
     successfully_set_all_properties = false
     # Initialize search criteria
     search_criteria = {}
     search_criteria['template'] = template
+    search_criteria['equipment_type'] = 'Warm Air Furnace'
+    search_criteria['fuel_type'] = 'NaturalGas'
+    search_criteria = coil_heating_gas_additional_search_criteria(coil_heating_gas, search_criteria)
 
     # Get the capacity, but return false if not available
     capacity_w = coil_heating_gas_find_capacity(coil_heating_gas)
