@@ -61,7 +61,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type_swh [String] parameters to assign the swh building are type,
   def model_apply_baseline_swh_loops(model,
-                            building_type_swh)
+                                     building_type,
+                                     swh_building_type = 'All others')
     # get the original water heater info
     original_water_heater_info_hash = {}
     # Get original water heater information
@@ -87,7 +88,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       # Modify the service water heater
       model.getWaterHeaterMixeds.sort.each do |water_heater|
         model_apply_water_heater_prm_parameter(water_heater,
-                                          building_type_swh)
+                                               swh_building_type)
       end
     else
       # Todo: service water heater with multiple building area type
