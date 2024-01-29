@@ -315,7 +315,7 @@ class Standard
 
       # Modify the service water heating loops per the baseline rules
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
-      model_apply_baseline_swh_loops(model, building_type)
+      model_apply_baseline_swh_loops(model, building_type, swh_building_type)
 
       # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
@@ -2621,7 +2621,6 @@ class Standard
         matching_objects = matching_capacity_objects
       end
     end
-
     # If volume was specified, narrow down the matching objects
     unless volume.nil?
       # Skip objects that don't have fields for minimum_storage and maximum_storage
@@ -2629,7 +2628,6 @@ class Standard
 
       # Skip objects that don't have values specified for minimum_storage and maximum_storage
       matching_objects = matching_objects.reject { |object| object['minimum_storage'].nil? || object['maximum_storage'].nil? }
-
       # Round up if volume is an integer
       if volume == volume.round
         volume += (volume * 0.01)
