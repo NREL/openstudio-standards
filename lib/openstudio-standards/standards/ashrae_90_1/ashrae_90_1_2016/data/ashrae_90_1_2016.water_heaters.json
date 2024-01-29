@@ -1,7 +1,7 @@
 {
   "water_heaters": [
     {
-      "equipment_type": "Table Top Water Heater",
+      "equipment_type": "Table Top Water Heaters",
       "fuel_type": "Electricity",
       "minimum_capacity": 0,
       "maximum_capacity": 40944,
@@ -109,7 +109,7 @@
       "r_value": null
     },
     {
-      "equipment_type": "Storage Water Heater",
+      "equipment_type": "Storage Water Heaters",
       "fuel_type": "NaturalGas",
       "minimum_capacity": 0,
       "maximum_capacity": 75000,
@@ -136,7 +136,7 @@
       "r_value": null
     },
     {
-      "equipment_type": "Storage Water Heater",
+      "equipment_type": "Storage Water Heaters",
       "fuel_type": "NaturalGas",
       "minimum_capacity": 0,
       "maximum_capacity": 75000,
@@ -163,7 +163,7 @@
       "r_value": null
     },
     {
-      "equipment_type": "Storage Water Heater",
+      "equipment_type": "Storage Water Heaters",
       "fuel_type": "NaturalGas",
       "minimum_capacity": 75000.01,
       "maximum_capacity": 99999999,
@@ -271,7 +271,7 @@
       "r_value": null
     },
     {
-      "equipment_type": "Storage Water Heater",
+      "equipment_type": "Storage Water Heaters",
       "fuel_type": "Oil",
       "minimum_capacity": 0,
       "maximum_capacity": 105000,
@@ -298,7 +298,7 @@
       "r_value": null
     },
     {
-      "equipment_type": "Storage Water Heater",
+      "equipment_type": "Storage Water Heaters",
       "fuel_type": "Oil",
       "minimum_capacity": 105000.01,
       "maximum_capacity": 99999999,
