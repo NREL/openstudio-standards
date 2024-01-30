@@ -136,7 +136,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
                 actual_unitary_eff[heating_type][int] = (standard.cop_to_seer_cooling_with_fan(actual_unitary_cop[heating_type][int].to_f) + 0.001).round(2)
                 output_line_text += "#{actual_unitary_eff[heating_type][int]},,\n"
               elsif efficiency_type[heating_type][int] == 'Energy Efficiency Ratio (EER)'
-                actual_unitary_eff[heating_type][int] = (standard.cop_to_eer(actual_unitary_cop[heating_type][int].to_f) + 0.001).round(2)
+                actual_unitary_eff[heating_type][int] = (standard.cop_to_eer_no_fan(actual_unitary_cop[heating_type][int].to_f) + 0.001).round(2)
                 output_line_text += ",#{actual_unitary_eff[heating_type][int]},\n"
               elsif efficiency_type[heating_type][int] == 'Coefficient of Performance (COP)'
                 actual_unitary_eff[heating_type][int] = sprintf('%.2f', actual_unitary_cop[heating_type][int].to_f)

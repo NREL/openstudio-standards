@@ -200,11 +200,12 @@ class Standard
       successfully_set_all_properties = false
     else
       chiller_electric_eir.setReferenceCOP(cop)
+      kw_per_ton = kw_per_ton_to_cop(cop)
     end
 
     # Append the name with size and kw/ton
-    chiller_electric_eir.setName("#{chiller_electric_eir.name} #{capacity_tons.round}tons #{cop.round(1)}COP")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ChillerElectricEIR', "For #{template}: #{chiller_electric_eir.name}: #{cooling_type} #{condenser_type} #{compressor_type} Capacity = #{capacity_tons.round}tons; COP = #{cop.round(1)}")
+    chiller_electric_eir.setName("#{chiller_electric_eir.name} #{capacity_tons.round}tons #{kw_per_ton.round(1)}kW/ton")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ChillerElectricEIR', "For #{template}: #{chiller_electric_eir.name}: #{cooling_type} #{condenser_type} #{compressor_type} Capacity = #{capacity_tons.round}tons; COP = #{cop.round(1)} (#{kw_per_ton.round(1)}kW/ton)")
 
     return successfully_set_all_properties
   end
