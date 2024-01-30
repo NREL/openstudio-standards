@@ -58,8 +58,28 @@ class Standard
     search_criteria = {}
     search_criteria['template'] = template
     search_criteria['fuel_type'] = fuel_type
-    wh_props = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
-    unless wh_props
+    search_criteria['equipment_type'] = 'Storage Water Heaters'
+
+    # Search base on capacity first
+    wh_props_capacity = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
+    wh_props_capacity_and_volume = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, volume_gal)
+    wh_props_capacity_and_capacity_btu_per_hr = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, capacity_btu_per_hr)
+    wh_props_capacity_and_volume_and_capacity_per_volume = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, volume_gal, capacity_btu_per_hr / volume_gal)
+
+    # We consider that the lookup is successful if only one set of record is returned
+    wh_props_capacity = wh_props_capacity.nil? ? {} : wh_props_capacity
+    wh_props_capacity_and_volume = wh_props_capacity_and_volume.nil? ? {} : wh_props_capacity_and_volume
+    wh_props_capacity_and_capacity_btu_per_hr = wh_props_capacity_and_capacity_btu_per_hr.nil? ? {} : wh_props_capacity_and_capacity_btu_per_hr
+    wh_props_capacity_and_volume_and_capacity_per_volume = wh_props_capacity_and_volume_and_capacity_per_volume.nil? ? {} : wh_props_capacity_and_volume_and_capacity_per_volume
+    if wh_props_capacity.size == 1
+      wh_props == wh_props_capacity
+    elsif wh_props_capacity_and_volume.size == 1
+      wh_props == wh_props_capacity_and_volume
+    elsif wh_props_capacity_and_capacity_btu_per_hr == 1
+      wh_props == wh_props_capacity_and_capacity_btu_per_hr
+    elsif wh_props_capacity_and_volume_and_capacity_per_volume == 1
+      wh_props == wh_props_capacity_and_volume_and_capacity_per_volume
+    else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find water heater properties, cannot apply efficiency standard.")
       return false
     end
@@ -70,7 +90,6 @@ class Standard
     water_heater_efficiency = nil
     ua_btu_per_hr_per_f = nil
 
-    # Rarely specified by thermal efficiency alone
     if wh_props['thermal_efficiency'] && !wh_props['standby_loss_capacity_allowance']
       thermal_efficiency = wh_props['thermal_efficiency']
       water_heater_efficiency = thermal_efficiency

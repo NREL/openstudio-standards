@@ -28,7 +28,7 @@
       "r_value": null
     },
     {
-      "equipment_type": "Water Heaters",
+      "equipment_type": "Storage Water Heaters",
       "fuel_type": "Electricity",
       "minimum_capacity": 0,
       "maximum_capacity": 40944,
@@ -55,7 +55,7 @@
       "r_value": null
     },
     {
-      "equipment_type": "Water Heaters",
+      "equipment_type": "Storage Water Heaters",
       "fuel_type": "Electricity",
       "minimum_capacity": 40944.01,
       "maximum_capacity": 99999999,
