@@ -12,7 +12,7 @@ class ASHRAE901PRM < Standard
     search_criteria = {}
     search_criteria['fuel_type'] = 'NaturalGas'
     if sys_type == 'Gas_Furnace'
-      search_criteria['equipment_type'] = 'Warm Air Unit Heater'
+      search_criteria['equipment_type'] = 'Warm Air Unit Heaters'
     else
       search_criteria['equipment_type'] = 'Warm Air Furnace'
     end
