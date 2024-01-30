@@ -1,0 +1,243 @@
+{
+  "VarType": "Vintage",
+  "NECB2011": {
+    "VarType": "TestCase",
+    "reference": "Add NECB reference here",
+    "NECB_default": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_85%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_88%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_91%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_94%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "Viessmann_96.2%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    }
+  },
+  "NECB2015": {
+    "VarType": "TestCase",
+    "reference": "Add NECB reference here",
+    "NECB_default": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_85%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_88%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_91%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_94%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "Viessmann_96.2%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    }
+  },
+  "NECB2017": {
+    "VarType": "TestCase",
+    "reference": "Add NECB reference here",
+    "NECB_default": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_85%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_88%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_91%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_94%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "Viessmann_96.2%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    }
+  },
+  "NECB2020": {
+    "VarType": "TestCase",
+    "reference": "Add NECB reference here",
+    "NECB_default": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_85%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_88%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_91%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_94%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "Viessmann_96.2%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    }
+  },
+  "BTAPPRE1980": {
+    "VarType": "TestCase",
+    "reference": "Add NECB reference here",
+    "NECB_default": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_85%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_88%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_91%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_94%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "Viessmann_96.2%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    }
+  },
+  "BTAP1980TO2010": {
+    "VarType": "TestCase",
+    "reference": "Add NECB reference here",
+    "NECB_default": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_85%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_88%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_91%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "NECB_94%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    },
+    "Viessmann_96.2%eff": {
+      "boiler_name": "tbd",
+      "boiler_eff": "tbd",
+      "eff_curve_name": "tbd",
+      "curve_coefficients": "tbd"
+    }
+  }
+}
