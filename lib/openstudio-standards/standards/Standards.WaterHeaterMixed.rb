@@ -124,13 +124,18 @@ class Standard
     end
 
     # Typically specified this way for large electric water heaters
-    if wh_props['standby_loss_base'] && wh_props['standby_loss_volume_allowance']
+    if wh_props['standby_loss_base'] && wh_props['standby_loss_volume_allowance'] && wh_props['standby_loss_square_root_volume_allowance']
       # Fixed water heater efficiency per PNNL
       water_heater_efficiency = 1.0
       # Calculate the max allowable standby loss (SL)
       sl_base = wh_props['standby_loss_base']
-      sl_drt = wh_props['standby_loss_volume_allowance']
-      sl_btu_per_hr = sl_base + (sl_drt * Math.sqrt(volume_gal))
+      if wh_props['standby_loss_square_root_volume_allowance']
+        sl_drt = wh_props['standby_loss_square_root_volume_allowance']
+        sl_btu_per_hr = sl_base + (sl_drt * Math.sqrt(volume_gal))
+      else # standby_loss_volume_allowance
+        sl_drt = wh_props['standby_loss_volume_allowance']
+        sl_btu_per_hr = sl_base + (sl_drt * volume_gal)
+      end
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = @instvarbuilding_type == 'MidriseApartment' ? sl_btu_per_hr / 70 * 23 :  sl_btu_per_hr / 70
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
