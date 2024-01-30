@@ -174,7 +174,7 @@ module NecbHelper
       test_cases.each do |key, value|
         next if key == :VarType
         next if key == :Reference
-        #puts "k,v: #{key}, #{value}"
+        logger.debug  "Test case k,v: #{key}, #{value}"
         if value.is_a? Hash
           test_pars[var_type.to_sym] = key.to_s
           test_results[key] = do_test_cases(test_cases: value, test_pars: test_pars)
@@ -194,7 +194,7 @@ module NecbHelper
       standard = Standard.build(template)
       @@standards << standard
     end
-    puts "**** Using template: #{standard.class}"
+    logger.debug "Using template: #{standard.class}"
     return standard
   end
 
@@ -215,10 +215,10 @@ module NecbHelper
                  save_model_versions: false)
 
     # Report what we are doing (helps when things go wrong!).
-    puts "**** Running measure for test class: #{self.class.ancestors[0]}"
-    puts "****   from method: #{caller_locations(1,1)[0].label}"
-    puts "****   with scenario name: #{test_name}"
-    puts "****   for template: #{template}"
+    logger.debug "Running measure for test class: #{self.class.ancestors[0]}"
+    logger.debug "  from method: #{caller_locations(1,1)[0].label}"
+    logger.debug "  with scenario name: #{test_name}"
+    logger.debug "  for template: #{template}"
 
     # Instantiate the required version of standards.
     standard = get_standard(template)
@@ -227,7 +227,7 @@ module NecbHelper
     test_class_name = self.class.ancestors[0].to_s.downcase
     test_method_name = caller_locations.first.base_label
     output_dir = File.join(@top_output_folder, test_class_name, test_method_name, test_name)
-    puts "****************** #{output_dir}"
+    logger.debug "Output folder #{output_dir}"
 
     # Check output_dir exists, if not create.
     unless Dir.exist? output_dir
@@ -240,10 +240,10 @@ module NecbHelper
     # Perform first sizing run.
     sizing_folder = "#{output_dir}/SR1"
     if standard.model_run_sizing_run(model, sizing_folder) == false
-      puts "could not find sizing run #{sizing_folder}"
+      logger.error "Could not find sizing run #{sizing_folder}"
       assert(false, "Failure in sizing run wile running test: #{self.class.ancestors[0]}")
     else
-      puts "found sizing run #{sizing_folder}"
+      logger.debug "Found sizing run #{sizing_folder}"
     end
 
     # Apply HVAC assumptions for efficiency etc.
@@ -267,10 +267,10 @@ module NecbHelper
       #  to properly apply the pump rules.
       sizing_folder = "#{output_dir}/SR2"
       if standard.model_run_sizing_run(model, sizing_folder) == false
-        puts "could not find sizing run #{sizing_folder}"
+        logger.error "Could not find second sizing run #{sizing_folder}"
         assert(false, "Failure in sizing run wile running test: #{self.class.ancestors[0]}")
       else
-        puts "found sizing run #{sizing_folder}"
+        logger.debug "Found secind sizing run #{sizing_folder}"
       end
     end
 
