@@ -1,0 +1,12 @@
+{
+  "VarType": "Vintage",
+  "NECB2011": {
+    "VarType": "FuelType",
+    "Reference": "Some table in NECB 2011",
+    "NaturalGas": {
+      "VarType": "TestCase",
+      "case-1": {
+      }
+    }
+  }
+}

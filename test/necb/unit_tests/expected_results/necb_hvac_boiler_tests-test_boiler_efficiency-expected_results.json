@@ -2,7 +2,7 @@
   "VarType": "Vintage",
   "NECB2011": {
     "VarType": "FuelType",
-    "Reference": "Some table in NECB 2011",
+    "Reference": "NECB 2011 p3 Table 5.2.12.1",
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
