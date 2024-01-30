@@ -157,7 +157,7 @@ module NecbHelper
       # The value of the hash has the test specific inputs and the result.
       test_cases.each do |key, value|
         next if key == :VarType # This is less expensive than using the except method chained before the each.
-        next if key == :Reference
+        if test_cases.key?(:Reference) then test_results[:Reference] = test_cases[:Reference]; next end
         logger.info  "Initiating test case #{key}"
         logger.debug  "Test case: #{test_pars}"
         logger.debug  "Current test: #{value}"

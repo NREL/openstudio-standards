@@ -89,9 +89,10 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     logger.info "Finished suite of tests for: #{__method__}"
   end
 
-  # Companion method to test_boiler_efficiency that runs a specific test.
-  # test_pars has the initially defined parameters plus where we are in the nexted results hash.
-  # test_case has the specific test parameters.
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_boiler_efficiency that runs a specific test. Called by do_test_cases in necb_helper.rb.
   def do_test_boiler_efficiency(test_pars:, test_case:)
 
     # Debug.
@@ -136,7 +137,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
                                                     baseboard_type: baseboard_type,
                                                     hw_loop: hw_loop)
       
-      # Set the boiler capacity. Convert from kw to W first!
+      # Set the boiler capacity. Convert from kw to W first.
       model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap*1000.0)}
 
       # Run sizing.
@@ -191,6 +192,23 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
                        heating_coil_type: 'Electric',
                        baseboard_type: 'Hot Water'}
 
+    # Define test cases. 
+    test_cases = Hash.new
+
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = {:Reference => "Some table in NECB 2011"}
+    
+    # Test cases. Three cases for NG and FuelOil, one for Electric.
+    # Results and name are tbd here as they will be calculated in the test.
+    test_cases_hash = {:Vintage => @AllTemplates, 
+                       :FuelType => ["Electricity"],
+                       :TestCase => ["case-1"], 
+                       :TestPars => {:name => "tbd",
+                                     :tested_capacity_kW => 10.0,
+                                     :efficiency_metric => "thermal efficiency",
+                                     :efficiency_value => "tbd"}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
 
     # Read expected results. This is used to set the tested cases as the parameters change depending on the
     # fuel type and boiler size.
@@ -212,9 +230,10 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     logger.info "Finished suite of tests for: #{__method__}"
   end
   
-  # Companion method to test_number_of_boilers that runs a specific test.
-  # test_pars has the initially defined parameters plus where we are in the nexted results hash.
-  # test_case has the specific test parameters.
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_number_of_boilers that runs a specific test. Called by do_test_cases in necb_helper.rb.
   def do_test_number_of_boilers(test_pars:, test_case:)
     
     # Debug.
@@ -243,7 +262,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     name = "Sys1_#{boiler_cap.round(0)}W_#{boiler_fueltype}_boiler_HeatingCoilType-#{heating_coil_type}_Baseboard-#{baseboard_type}"
     long_name = "#{vintage}_#{name}"
     name.gsub!(/\s+/, "-")
-    puts "*************** #{long_name} ***************\n"
+    logger.info "Starting individual test: #{name}"
 
     # Wrap test in begin/rescue/ensure.
     begin
@@ -335,13 +354,53 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   end
 
   # Test to validate the boiler part load performance curve
-  def no_test_NECB2011_boiler_plf_vs_plr_curve
+  def no_test_boiler_plf_vs_plr_curve
+    logger.info "Starting suite of tests for: #{__method__}"
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
     template = 'NECB2011'
     standard = get_standard(template)
     save_intermediate_models = false
+    
+    boilers = model.getBoilerHotWaters
+    boiler_curve = boilers[0].normalizedBoilerEfficiencyCurve.get.to_CurveCubic.get
+    boiler_res_file_output_text += "BOILER-EFFFPLR-NECB2011,cubic,#{boiler_curve.coefficient1Constant},#{boiler_curve.coefficient2x},#{boiler_curve.coefficient3xPOW2}," +
+        "#{boiler_curve.coefficient4xPOW3},#{boiler_curve.minimumValueofx},#{boiler_curve.maximumValueofx}"
+
+    # Write test results file.
+    test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_test_results.csv")
+    File.open(test_result_file, 'w') {|f| f.write(boiler_res_file_output_text)}
+
+    # Test that the values are correct by doing a file compare.
+    expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_expected_results.csv")
+
+    # Check if test results match expected.
+    msg = "Boiler plf vs plr curve coeffs test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
+
+    # Write test results.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
+
+    # Read expected results. 
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name))
+
+    # Check if test results match expected.
+    msg = "Boiler efficiencies test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished suite of tests for: #{__method__}"
+  end
+
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_boiler_plf_vs_plr_curve that runs a specific test. Called by do_test_cases in necb_helper.rb.
+  def do_test_boiler_plf_vs_plr_curve
 
     # Generate the osm files for all relevant cases to generate the test data for system 1.
     boiler_res_file_output_text = "Name,Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
@@ -352,7 +411,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     name = "#{template}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
     name.gsub!(/\s+/, "-")
-    puts "***************#{name}***************\n"
+    logger.info "Starting individual test: #{name}"
 
     # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
@@ -372,21 +431,23 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     # Run sizing.
     run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
+    # Extract the results for checking. There are always two boilers.
+    results = Hash.new
+    results[:Reference] = reference
     boilers = model.getBoilerHotWaters
-    boiler_curve = boilers[0].normalizedBoilerEfficiencyCurve.get.to_CurveCubic.get
-    boiler_res_file_output_text += "BOILER-EFFFPLR-NECB2011,cubic,#{boiler_curve.coefficient1Constant},#{boiler_curve.coefficient2x},#{boiler_curve.coefficient3xPOW2}," +
-        "#{boiler_curve.coefficient4xPOW3},#{boiler_curve.minimumValueofx},#{boiler_curve.maximumValueofx}"
-
-    # Write test results file.
-    test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_test_results.csv")
-    File.open(test_result_file, 'w') {|f| f.write(boiler_res_file_output_text)}
-
-    # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_expected_results.csv")
-
-    # Check if test results match expected.
-    msg = "Boiler plf vs plr curve coeffs test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
+    boilers.each do |boiler|
+      eff_curve_name, eff_curve_type, corr_coeff = get_boiler_eff_curve_data(boiler)
+      boiler_eff = boiler.nominalThermalEfficiency
+      results[boiler.name] = {
+          boiler_name: boiler.name,
+          boiler_eff: boiler_eff,
+          eff_curve_name: eff_curve_name,
+          eff_curve_type: eff_curve_type,
+          curve_coefficients: corr_coeff
+      }
+    end
+    logger.info "Completed individual test: #{name}"
+    return results
   end
 
   # Test to validate the custom boiler thermal efficiencies applied against expected values stored in the file:
@@ -408,7 +469,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     boilers.each do |boiler|
       test_cases_hash = {:Vintage => @AllTemplates, 
                          :TestCase => [boiler["name"]], 
-                         :TestPars => {:reference=>boiler["notes"],
+                         :TestPars => {:Reference=>boiler["notes"],
                                        :boiler_name=>boiler["name"], 
                                        :boiler_eff=>boiler["efficiency"], 
                                        :eff_curve_name=>boiler["part_load_curve"], 
@@ -417,8 +478,6 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       merge_test_cases!(test_cases, new_test_cases)
     end
 
-                       
-  
     # Create empty results hash and call the template method that runs the individual test cases.
     test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
@@ -437,9 +496,10 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     logger.info "Finished suite of tests for: #{__method__}"
   end
 
-  # Companion method to test_custom_efficiency that runs a specific test.
-  # test_pars has the initially defined parameters plus where we are in the nexted results hash.
-  # test_case has the specific test parameters.
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_custom_efficiency that runs a specific test. Called by do_test_cases in necb_helper.rb.
   def do_test_custom_efficiency(test_pars:, test_case:)
 
     # Debug.
@@ -498,85 +558,94 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Extract the results for checking. There are always two boilers.
     results = Hash.new
+    results[:Reference] = reference
     boilers = model.getBoilerHotWaters
     boilers.each do |boiler|
-      corr_coeff = []
-      eff_curve = nil
-      eff_curve_type = boiler.normalizedBoilerEfficiencyCurve.get.iddObjectType.valueName.to_s
-      case eff_curve_type
-      when "OS_Curve_Bicubic"
-        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveBicubic.get
-        corr_coeff << eff_curve.coefficient1Constant
-        corr_coeff << eff_curve.coefficient2x
-        corr_coeff << eff_curve.coefficient3xPOW2
-        corr_coeff << eff_curve.coefficient4y
-        corr_coeff << eff_curve.coefficient5yPOW2
-        corr_coeff << eff_curve.coefficient6xTIMESY
-        corr_coeff << eff_curve.coefficient7xPOW3
-        corr_coeff << eff_curve.coefficient8yPOW3
-        corr_coeff << eff_curve.coefficient9xPOW2TIMESY
-        corr_coeff << eff_curve.coefficient10xTIMESYPOW2
-        corr_coeff << eff_curve.minimumValueofx
-        corr_coeff << eff_curve.maximumValueofx
-        corr_coeff << eff_curve.minimumValueofy
-        corr_coeff << eff_curve.maximumValueofy
-      when "OS_Curve_Biquadratic"
-        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveBiquadratic.get
-        corr_coeff << eff_curve.coefficient1Constant
-        corr_coeff << eff_curve.coefficient2x
-        corr_coeff << eff_curve.coefficient3xPOW2
-        corr_coeff << eff_curve.coefficient4y
-        corr_coeff << eff_curve.coefficient5yPOW2
-        corr_coeff << eff_curve.coefficient6xTIMESY
-        corr_coeff << eff_curve.minimumValueofx
-        corr_coeff << eff_curve.maximumValueofx
-        corr_coeff << eff_curve.minimumValueofy
-        corr_coeff << eff_curve.maximumValueofy
-      when "OS_Curve_Cubic"
-        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveCubic.get
-        corr_coeff << eff_curve.coefficient1Constant
-        corr_coeff << eff_curve.coefficient2x
-        corr_coeff << eff_curve.coefficient3xPOW2
-        corr_coeff << eff_curve.coefficient4xPOW3
-        corr_coeff << eff_curve.minimumValueofx
-        corr_coeff << eff_curve.maximumValueofx
-      when "OS_Curve_Linear"
-        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveLinear.get
-        corr_coeff << eff_curve.coefficient1Constant
-        corr_coeff << eff_curve.coefficient2x
-        corr_coeff << eff_curve.minimumValueofx
-        corr_coeff << eff_curve.maximumValueofx
-      when "OS_Curve_Quadratic"
-        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveQuadratic.get
-        corr_coeff << eff_curve.coefficient1Constant
-        corr_coeff << eff_curve.coefficient2x
-        corr_coeff << eff_curve.coefficient3xPOW2
-        corr_coeff << eff_curve.minimumValueofx
-        corr_coeff << eff_curve.maximumValueofx
-      when "OS_Curve_QuadraticLinear"
-        eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveQuadraticLinear.get
-        corr_coeff << eff_curve.coefficient1Constant
-        corr_coeff << eff_curve.coefficient2x
-        corr_coeff << eff_curve.coefficient3xPOW2
-        corr_coeff << eff_curve.coefficient4y
-        corr_coeff << eff_curve.coefficient5xTIMESY
-        corr_coeff << eff_curve.coefficient6xPOW2TIMESY
-        corr_coeff << eff_curve.minimumValueofx
-        corr_coeff << eff_curve.maximumValueofx
-        corr_coeff << eff_curve.minimumValueofy
-        corr_coeff << eff_curve.maximumValueofy
-      end
-      eff_curve_name = eff_curve.name
+      eff_curve_name, eff_curve_type, corr_coeff = get_boiler_eff_curve_data(boiler)
       boiler_eff = boiler.nominalThermalEfficiency
       results[boiler.name] = {
-          reference: reference,
           boiler_name: boiler.name,
           boiler_eff: boiler_eff,
           eff_curve_name: eff_curve_name,
+          eff_curve_type: eff_curve_type,
           curve_coefficients: corr_coeff
       }
     end
     logger.info "Completed individual test: #{name}"
     return results
+  end
+
+  # @note Helper method to return the part load curve data.
+  # @param boiler [OS::Boiler] an openstudio boiler.
+  # @return the efficiency curve name [String], curve type [String] and the curve coefficients [Array] (curve type dependent).
+  def get_boiler_eff_curve_data(boiler)
+    corr_coeff = []
+    eff_curve = nil
+    eff_curve_type = boiler.normalizedBoilerEfficiencyCurve.get.iddObjectType.valueName.to_s
+    case eff_curve_type
+    when "OS_Curve_Bicubic"
+      eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveBicubic.get
+      corr_coeff << eff_curve.coefficient1Constant
+      corr_coeff << eff_curve.coefficient2x
+      corr_coeff << eff_curve.coefficient3xPOW2
+      corr_coeff << eff_curve.coefficient4y
+      corr_coeff << eff_curve.coefficient5yPOW2
+      corr_coeff << eff_curve.coefficient6xTIMESY
+      corr_coeff << eff_curve.coefficient7xPOW3
+      corr_coeff << eff_curve.coefficient8yPOW3
+      corr_coeff << eff_curve.coefficient9xPOW2TIMESY
+      corr_coeff << eff_curve.coefficient10xTIMESYPOW2
+      corr_coeff << eff_curve.minimumValueofx
+      corr_coeff << eff_curve.maximumValueofx
+      corr_coeff << eff_curve.minimumValueofy
+      corr_coeff << eff_curve.maximumValueofy
+    when "OS_Curve_Biquadratic"
+      eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveBiquadratic.get
+      corr_coeff << eff_curve.coefficient1Constant
+      corr_coeff << eff_curve.coefficient2x
+      corr_coeff << eff_curve.coefficient3xPOW2
+      corr_coeff << eff_curve.coefficient4y
+      corr_coeff << eff_curve.coefficient5yPOW2
+      corr_coeff << eff_curve.coefficient6xTIMESY
+      corr_coeff << eff_curve.minimumValueofx
+      corr_coeff << eff_curve.maximumValueofx
+      corr_coeff << eff_curve.minimumValueofy
+      corr_coeff << eff_curve.maximumValueofy
+    when "OS_Curve_Cubic"
+      eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveCubic.get
+      corr_coeff << eff_curve.coefficient1Constant
+      corr_coeff << eff_curve.coefficient2x
+      corr_coeff << eff_curve.coefficient3xPOW2
+      corr_coeff << eff_curve.coefficient4xPOW3
+      corr_coeff << eff_curve.minimumValueofx
+      corr_coeff << eff_curve.maximumValueofx
+    when "OS_Curve_Linear"
+      eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveLinear.get
+      corr_coeff << eff_curve.coefficient1Constant
+      corr_coeff << eff_curve.coefficient2x
+      corr_coeff << eff_curve.minimumValueofx
+      corr_coeff << eff_curve.maximumValueofx
+    when "OS_Curve_Quadratic"
+      eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveQuadratic.get
+      corr_coeff << eff_curve.coefficient1Constant
+      corr_coeff << eff_curve.coefficient2x
+      corr_coeff << eff_curve.coefficient3xPOW2
+      corr_coeff << eff_curve.minimumValueofx
+      corr_coeff << eff_curve.maximumValueofx
+    when "OS_Curve_QuadraticLinear"
+      eff_curve = boiler.normalizedBoilerEfficiencyCurve.get.to_CurveQuadraticLinear.get
+      corr_coeff << eff_curve.coefficient1Constant
+      corr_coeff << eff_curve.coefficient2x
+      corr_coeff << eff_curve.coefficient3xPOW2
+      corr_coeff << eff_curve.coefficient4y
+      corr_coeff << eff_curve.coefficient5xTIMESY
+      corr_coeff << eff_curve.coefficient6xPOW2TIMESY
+      corr_coeff << eff_curve.minimumValueofx
+      corr_coeff << eff_curve.maximumValueofx
+      corr_coeff << eff_curve.minimumValueofy
+      corr_coeff << eff_curve.maximumValueofy
+    end
+    eff_curve_name = eff_curve.name
+    return eff_curve_name, eff_curve_type, corr_coeff
   end
 end
