@@ -261,6 +261,7 @@ class BTAPDatapoint
 
         #output hourly data
         self.output_hourly_data(model,@dp_temp_folder, @options[:datapoint_id])
+        #self.output_eplus_meter_data(model, @dp_temp_folder, @options[:datapoint_id], @standard)
       end
     rescue StandardError => bang
       puts "Error occured: #{bang}"
@@ -442,15 +443,41 @@ class BTAPDatapoint
     end
   end
 
-  def output_eplus_meter_data(model, output_folder,datapoint_id)
+  def output_eplus_meter_data(model, output_folder, datapoint_id, prototype_creator)
     osm_path = File.join(output_folder, "run_dir/in.osm")
     sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
-    csv_output = File.join(output_folder, "hourly.csv")
+    csv_output = File.join(output_folder, "meter_data.csv")
 
-    hours_of_year = []
+    standards_info = prototype_creator.corrupt_standards_database["eplus_sql_timestep_ref"]
+    timestep_refs = standards_info["eplus_sql_timestep_ref"]
+    meter_timestep = standards_info["default_output_meters"]
+
+    timestep_ref = timestap_refs.select{ |ref| ref["meter_step"].to_s.upcase == meter_timestep[0]["frequency"].to_s.upcase }
+    case timestep_ref["meter_step"].to_s
+    when 'Detailed'
+      timestep_res = 1
+    when 'Timestep'
+      timestep_res = 1
+    when 'Hourly'
+      timestep_res = 60
+    when 'Daily'
+      timestep_res = 0
+    when "Monthly"
+      timestep_res = 0
+    when 'Annual'
+      timestep_res = 0
+    end
+    if timestep_ref["meter_step"].to_s == "Detailed" || timestep_ref["meter_step"].to_s == "Timestep"
+      puts "hello"
+    end
+    timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
+    timestep_length = 60.0 / timesteps_per_hour
+
+    year_timestep_count = 8760*timesteps_per_hour
+    timesteps_of_year = []
     d = Time.new(2006, 1, 1, 1)
-    (0...8760).each do |increment|
-      hours_of_year << (d + (60 * 60) * increment).strftime('%Y-%m-%d %H:%M')
+    (0...year_timestep_count).each do |increment|
+      timesteps_of_year << (d + (timestep_length * 60) * increment).strftime('%Y-%m-%d %H:%M')
     end
 
 
@@ -514,13 +541,13 @@ class BTAPDatapoint
       array_of_hashes << data_hash
     end
 
-    CSV.open(csv_output, "wb") do |csv|
-      unless array_of_hashes.empty?
-        csv << array_of_hashes.first.keys # adds the attributes name on the first line
-        array_of_hashes.each do |hash|
-          csv << hash.values
-        end
-      end
-    end
+    #CSV.open(csv_output, "wb") do |csv|
+      #  unless array_of_hashes.empty?
+        #    csv << array_of_hashes.first.keys # adds the attributes name on the first line
+        #    array_of_hashes.each do |hash|
+          #      csv << hash.values
+          #    end
+        #      end
+      #    end
   end
 end

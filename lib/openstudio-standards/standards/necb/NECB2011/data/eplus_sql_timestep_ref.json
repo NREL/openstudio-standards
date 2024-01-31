@@ -1,0 +1,48 @@
+{
+  "tables": {
+    "eplus_sql_timestep_ref": {
+      "data_type": "table",
+      "refs": [
+        "Correlation between eplus meter timestep frequencies and the reference given in the sql file."
+      ],
+      "table": [
+        {
+          "meter_step": "Detailed",
+          "sql_step": "Zone Timestep",
+          "resolution_priority": 1,
+          "notes": "Excludes ElectricityNet meter"
+        },
+        {
+          "name": "Timestep",
+          "frequency": "Zone Timestep",
+          "resolution_priority": 1,
+          "notes": "Provides meters for zones too even if not requested."
+        },
+        {
+          "name": "Hourly",
+          "frequency": "Hourly",
+          "resolution_priority": 2,
+          "notes": ""
+        },
+        {
+          "name": "Daily",
+          "frequency": "Daily",
+          "resolution_priority": 3,
+          "notes": ""
+        },
+        {
+          "name": "Monthly",
+          "frequency": "Monthly",
+          "resolution_priority": 4,
+          "notes": ""
+        },
+        {
+          "name": "Annual",
+          "frequency": "Annual",
+          "resolution_priority": 5,
+          "notes": ""
+        }
+      ]
+    }
+  }
+}
