@@ -185,8 +185,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     # Define test parameters.
     test_parameters = {test_method: __method__,
                        save_intermediate_models: false,
-                       mau_type: true, 
                        boiler_fueltype: 'NaturalGas',
+                       mau_type: true, 
                        heating_coil_type: 'Electric',
                        baseboard_type: 'Hot Water'}
 
@@ -200,19 +200,19 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = {:Vintage => @AllTemplates, 
                        :FuelType => ["NaturalGas"],
-                       :TestCase => ["case-1"], 
+                       :TestCase => ["Single_Small_Boiler"], 
                        :TestPars => {:tested_capacity_kW => 100}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     test_cases_hash = {:Vintage => @AllTemplates, 
                        :FuelType => ["NaturalGas"],
-                       :TestCase => ["case-2"], 
+                       :TestCase => ["Two_Equal_Sized_Boilers"], 
                        :TestPars => {:tested_capacity_kW => 200}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     test_cases_hash = {:Vintage => @AllTemplates, 
                        :FuelType => ["NaturalGas"],
-                       :TestCase => ["case-3"], 
+                       :TestCase => ["Single_Large_Boiler"], 
                        :TestPars => {:tested_capacity_kW => 400}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -252,21 +252,16 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     output_folder = method_output_folder(test_pars[:test_method])
     save_intermediate_models = test_pars[:save_intermediate_models]
     mau_type = test_pars[:mau_type]
-    heating_coil_type = test_pars[:mau_heating_coil_type]
+    heating_coil_type = test_pars[:heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
     boiler_fueltype = test_pars[:FuelType]
     vintage = test_pars[:Vintage]
 
     # Test specific inputs.
-    boiler_cap = test_case[:tested_capacity_kW]
-
-    # What are these?
-    first_cutoff_blr_cap = 176000.0
-    second_cutoff_blr_cap = 352000.0
-    tol = 1.0e-3
+    total_boiler_cap = test_case[:tested_capacity_kW]
 
     # Define the test name. 
-    name = "#{vintage}_Sys1_#{boiler_cap.round(0)}W_#{boiler_fueltype}_boiler_HeatingCoilType-#{heating_coil_type}_Baseboard-#{baseboard_type}"
+    name = "#{vintage}_Sys1_#{total_boiler_cap.round(0)}kW_#{boiler_fueltype}_boiler_HeatingCoilType-#{heating_coil_type}_Baseboard-#{baseboard_type}"
     name.gsub!(/\s+/, "-")
     logger.info "Starting individual test: #{name}"
 
@@ -282,14 +277,13 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
       standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
-      standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
-          model: model,
-          zones: model.getThermalZones,
-          heating_coil_type: heating_coil_type,
-          baseboard_type: baseboard_type,
-          hw_loop: hw_loop,
-          new_auto_zoner: false)
-      model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
+      standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                  zones: model.getThermalZones,
+                                                                                                  heating_coil_type: heating_coil_type,
+                                                                                                  baseboard_type: baseboard_type,
+                                                                                                  hw_loop: hw_loop,
+                                                                                                  new_auto_zoner: false)
+      model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(total_boiler_cap*1000.0)}
 
       # Run sizing. Is this required?
       run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
@@ -300,67 +294,36 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     # Check that there are two boilers in the model. BTAP sets the second boiler to 0.001 W if the rules say only one boiler required.
     results = Hash.new
     boilers = model.getBoilerHotWaters
-    num_of_boilers_is_correct = false
-    if boilers.size == 2 then
-      num_of_boilers_is_correct = true
-    end
-    assert(num_of_boilers_is_correct, 'test_number_of_boilers: Number of boilers is not 2')
+    boiler_count = 0
+    total_capacity = 0
+    boilers.each do |boiler|
 
-    this_is_the_first_cap_range = false
-    this_is_the_second_cap_range = false
-    this_is_the_third_cap_range = false
-    if boiler_cap < first_cutoff_blr_cap
-      this_is_the_first_cap_range = true
-    elsif boiler_cap > second_cutoff_blr_cap
-      this_is_the_third_cap_range = true
-    else
-      this_is_the_second_cap_range = true
-    end
-    # compare boiler capacities to expected values
-    primary_boiler_capacity = []
-    secondary_boiler_capacity = []
-    boilers.each do |iboiler|
-      if iboiler.name.to_s.include? 'Primary Boiler'
-        primary_boiler_capacity = iboiler.nominalCapacity.to_f
-        boiler_cap_is_correct = false
-        if this_is_the_first_cap_range || this_is_the_third_cap_range
-          cap_diff = (boiler_cap - iboiler.nominalCapacity.to_f).abs / boiler_cap
-        elsif this_is_the_second_cap_range
-          cap_diff = (0.5 * boiler_cap - iboiler.nominalCapacity.to_f).abs / (0.5 * boiler_cap)
-        end
-        if cap_diff < tol then
-          boiler_cap_is_correct = true
-        end
-        assert(boiler_cap_is_correct, 'test_number_of_boilers: Primary boiler capacity is not correct')
-      end
-      if iboiler.name.to_s.include? 'Secondary Boiler'
-        secondary_boiler_capacity = iboiler.nominalCapacity.to_f
-        boiler_cap_is_correct = false
-        if this_is_the_first_cap_range || this_is_the_third_cap_range
-          cap_diff = (iboiler.nominalCapacity.to_f - 0.001).abs
-        elsif this_is_the_second_cap_range
-          cap_diff = (0.5 * boiler_cap - iboiler.nominalCapacity.to_f).abs / (0.5 * boiler_cap)
-        end
-        if cap_diff < tol then
-          boiler_cap_is_correct = true
-        end
-        assert(boiler_cap_is_correct, 'test_number_of_boilers: Secondary boiler capacity is not correct')
-      end
+      # Skip boilers that are sized zero.
+      next if boiler.nominalCapacity.to_f < 0.1
+
       # Add this test case to results.
-      results[:iboiler.name]= {
-        name: iboiler.name,
-        tested_capacity_kW: (boiler_cap).signif, 
-        number_of_boilers: boilers.size,
-        boiler_capacity_kW: (primary_boiler_capacity/1000.0).signif, 
-        minimum_part_load_ratio: iboiler.minimumPartLoadRatio
+      boiler_count += 1
+      boiler_capacity = (boiler.nominalCapacity.to_f)/1000.0
+      total_capacity += boiler_capacity
+      boilerID = "Boiler-#{boiler_count}"
+      results[boilerID]= {
+        name: boiler.name,
+        boiler_capacity_kW: (boiler_capacity).signif, 
+        minimum_part_load_ratio: boiler.minimumPartLoadRatio
       }
     end
+    results[:All]= {
+      tested_capacity_kW: (total_boiler_cap.to_f).signif, 
+      total_capacity_kW: (total_capacity).signif, 
+      number_of_boilers: boiler_count,
+    }
     logger.info "Completed individual test: #{name}"
     return results
   end
 
   # Test to validate the boiler part load performance curve.
   def test_boiler_plf_vs_plr_curve
+    logger.debug!
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
@@ -374,7 +337,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "Some table in NECB 2011"}
+    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 8.4.4.22 (maybe)"}
     
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
@@ -418,12 +381,12 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     output_folder = method_output_folder(test_pars[:test_method])
     save_intermediate_models = test_pars[:save_intermediate_models]
     mau_type = test_pars[:mau_type]
-    heating_coil_type = test_pars[:mau_heating_coil_type]
+    mau_heating_coil_type = test_pars[:mau_heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
     boiler_fueltype = test_pars[:FuelType]
     vintage = test_pars[:Vintage]
 
-    name = "#{vintage}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{heating_coil_type}_Baseboard-#{baseboard_type}"
+    name = "#{vintage}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
     name.gsub!(/\s+/, "-")
     logger.info "Starting individual test: #{name}"
 
@@ -437,6 +400,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
+      standard = get_standard(vintage)
       standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
       standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                     zones: model.getThermalZones,
@@ -455,6 +419,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     results = Hash.new
     boilers = model.getBoilerHotWaters
     boilers.each do |boiler|
+      logger.info "Boiler: #{boiler}"
       eff_curve_name, eff_curve_type, corr_coeff = get_boiler_eff_curve_data(boiler)
       boiler_eff = boiler.nominalThermalEfficiency
       results[boiler.name] = {
@@ -529,7 +494,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     output_folder = method_output_folder(test_pars[:test_method])
     save_intermediate_models = test_pars[:save_intermediate_models]
     mau_type = test_pars[:mau_type]
-    heating_coil_type = test_pars[:mau_heating_coil_type]
+    mau_heating_coil_type = test_pars[:mau_heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
     vintage = test_pars[:Vintage]
     reference = test_case[:Reference]
@@ -540,7 +505,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     boiler_cap = 1500000
 
     # Define the test name. 
-    name = "#{vintage}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{boiler_name}"
+    name = "#{vintage}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{boiler_name}"
     name.gsub!(/\s+/, "-")
     logger.info "Started individual test: #{name}"
       
@@ -560,7 +525,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                       zones: model.getThermalZones,
                                                       mau_type: mau_type,
-                                                      mau_heating_coil_type: heating_coil_type,
+                                                      mau_heating_coil_type: mau_heating_coil_type,
                                                       baseboard_type: baseboard_type,
                                                       hw_loop: hw_loop)
       model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
