@@ -120,6 +120,89 @@ class Standard
     return cop
   end
 
+  # Get applicable performance curve for capacity as a function of temperature
+  #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
+  # @param compressor_type [String] compressor type
+  # @param cooling_type [String] cooling type ('AirCooled' or 'WaterCooled')
+  # @param chiller_tonnage [Double] chiller capacity in ton
+  # @return [String] name of applicable cuvre, nil if not found
+  # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
+  def chiller_electric_eir_get_cap_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
+    if cooling_type == 'AirCooled'
+      return 'AirCooled_Chiller_2010_PathA_CAPFT'
+    elsif cooling_type == 'WaterCooled'
+      case compressor_type
+      when 'Centrifugal'
+        if chiller_tonnage >= 150
+          return 'WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT'
+        else
+          return 'WaterCooled_Centrifugal_Chiller_LT150_2004_CAPFT'
+        end
+      when 'Reciprocating', 'Rotary Screw', 'Scroll'
+        return 'ChlrWtrPosDispPathAAllQRatio_fTchwsTcwsSI'
+      else
+        return nil
+      end
+    else
+      return nil
+    end
+  end
+
+  # Get applicable performance curve for EIR as a function of temperature
+  #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
+  # @param compressor_type [String] compressor type
+  # @param cooling_type [String] cooling type ('AirCooled' or 'WaterCooled')
+  # @param chiller_tonnage [Double] chiller capacity in ton
+  # @return [String] name of applicable cuvre, nil if not found
+  # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
+  def chiller_electric_eir_get_eir_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
+    if cooling_type == 'AirCooled'
+      return 'AirCooled_Chiller_2010_PathA_EIRFT'
+    elsif cooling_type == 'WaterCooled'
+      case compressor_type
+      when 'Centrifugal'
+        if chiller_tonnage >= 150
+          return 'WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT'
+        else
+          return 'WaterCooled_Centrifugal_Chiller_LT150_2004_EIRFT'
+        end
+      when 'Reciprocating', 'Rotary Screw', 'Scroll'
+        return 'ChlrWtrPosDispPathAAllEIRRatio_fTchwsTcwsSI'
+      else
+        return nil
+      end
+    else
+      return nil
+    end
+  end
+
+  # Get applicable performance curve for EIR as a function of part load ratio
+  #
+  # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
+  # @param compressor_type [String] compressor type
+  # @param cooling_type [String] cooling type ('AirCooled' or 'WaterCooled')
+  # @param chiller_tonnage [Double] chiller capacity in ton
+  # @return [String] name of applicable cuvre, nil if not found
+  # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
+  def chiller_electric_eir_get_eir_f_plr_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
+    if cooling_type == 'AirCooled'
+      return 'AirCooled_Chiller_AllCapacities_2004_2010_EIRFPLR'
+    elsif cooling_type == 'WaterCooled'
+      case compressor_type
+      when 'Centrifugal'
+        return 'ChlrWtrCentPathAAllEIRRatio_fQRatio'
+      when 'Reciprocating', 'Rotary Screw', 'Scroll'
+        return 'ChlrWtrCentPathAAllEIRRatio_fQRatio'
+      else
+        return nil
+      end
+    else
+      return nil
+    end
+  end
+
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
@@ -135,6 +218,7 @@ class Standard
     cooling_type = search_criteria['cooling_type']
     condenser_type = search_criteria['condenser_type']
     compressor_type = search_criteria['compressor_type']
+    compliance_path = search_criteria['compliance_path']
 
     # Get the chiller capacity
     capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
@@ -147,6 +231,7 @@ class Standard
     cop = nil
     if chlr_props.nil?
       search_criteria.delete('compliance_path')
+      compliance_path = nil
       chlr_props = model_find_object(standards_data['chillers'], search_criteria, capacity_tons, Date.today)
     end
     if chlr_props.nil?
@@ -167,31 +252,48 @@ class Standard
     end
 
     # Make the CAPFT curve
-    cool_cap_ft = model_add_curve(chiller_electric_eir.model, chlr_props['capft'])
-    if cool_cap_ft
-      chiller_electric_eir.setCoolingCapacityFunctionOfTemperature(cool_cap_ft)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find cool_cap_ft curve, will not be set.")
+    cool_cap_f_t_name = chiller_electric_eir_get_cap_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, capacity_tons, compliance_path)
+    if cool_cap_f_t_name.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find performance curve describing the capacity of the chiller as a function of temperature, will not be set.")
       successfully_set_all_properties = false
+    else
+      cool_cap_f_t = model_add_curve(chiller_electric_eir.model, cool_cap_f_t_name)
+      if cool_cap_f_t
+        chiller_electric_eir.setCoolingCapacityFunctionOfTemperature(cool_cap_f_t)
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, the performance curve describing the capacity of the chiller as a function of temperature could not be found.")
+        successfully_set_all_properties = false
+      end
     end
 
     # Make the EIRFT curve
-    cool_eir_ft = model_add_curve(chiller_electric_eir.model, chlr_props['eirft'])
-    if cool_eir_ft
-      chiller_electric_eir.setElectricInputToCoolingOutputRatioFunctionOfTemperature(cool_eir_ft)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find cool_eir_ft curve, will not be set.")
+    cool_eir_f_t_name = chiller_electric_eir_get_eir_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, capacity_tons, compliance_path)
+    if cool_eir_f_t_name.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find performance curve describing the EIR of the chiller as a function of temperature, will not be set.")
       successfully_set_all_properties = false
+    else
+      cool_eir_f_t = model_add_curve(chiller_electric_eir.model, cool_eir_f_t_name)
+      if cool_eir_f_t
+        chiller_electric_eir.setElectricInputToCoolingOutputRatioFunctionOfTemperature(cool_eir_f_t)
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, the performance curve describing the EIR of the chiller as a function of temperature could not be found.")
+        successfully_set_all_properties = false
+      end
     end
 
     # Make the EIRFPLR curve
-    # which may be either a CurveBicubic or a CurveQuadratic based on chiller type
-    cool_plf_fplr = model_add_curve(chiller_electric_eir.model, chlr_props['eirfplr'])
-    if cool_plf_fplr
-      chiller_electric_eir.setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_fplr)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find cool_plf_fplr curve, will not be set.")
+    cool_eir_f_plr_name = chiller_electric_eir_get_eir_f_plr_curve_name(chiller_electric_eir, compressor_type, cooling_type, capacity_tons, compliance_path)
+    if cool_eir_f_plr_name.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find performance curve describing the EIR of the chiller as a function of part load ratio, will not be set.")
       successfully_set_all_properties = false
+    else
+      cool_plf_f_plr = model_add_curve(chiller_electric_eir.model, cool_eir_f_plr_name)
+      if cool_plf_f_plr
+        chiller_electric_eir.setElectricInputToCoolingOutputRatioFunctionOfPLR(cool_plf_f_plr)
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, the performance curve describing the EIR of the chiller as a function of part load ratio could not be found.")
+        successfully_set_all_properties = false
+      end
     end
 
     # Set the efficiency value
