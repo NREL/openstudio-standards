@@ -625,9 +625,7 @@ Standard.class_eval do
       next if area == 0 # skip floors not adjacent to ground
 
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction.
-      # @note periods '.' were causing issues and were therefore removed.
-      #   Caused E+ error with duplicate names despite being different.
-      f_floor_const_name = "Foundation F #{f_factor_si.round(2)} Perim #{perimeter.round(2)} Area #{area.round(2)}".gsub('.', '')
+      f_floor_const_name = "Foundation F #{f_factor_si.round(2)} W/m*K Perim #{perimeter.round(2)}m Area #{area.round(2)}m2"
 
       # Check if the floor construction has been constructed already. If so, look it up in the model
       if model.getFFactorGroundFloorConstructionByName(f_floor_const_name).is_initialized

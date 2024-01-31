@@ -190,7 +190,8 @@ module OpenstudioStandards
       area_m2 = 0.0
 
       # Get the space conditioning type
-      space_cond_type = space_conditioning_category(space)
+      std = Standard.build('90.1-2019') # delete once space methods refactored
+      space_cond_type = std.space_conditioning_category(space)
 
       # Loop through all surfaces in this space
       space.surfaces.sort.each do |surface|
@@ -210,7 +211,7 @@ module OpenstudioStandards
           # @todo add a case for 'Zone' when supported
           if surface.outsideBoundaryCondition == 'Surface'
             adj_space = surface.adjacentSurface.get.space.get
-            adj_space_cond_type = space_conditioning_category(adj_space)
+            adj_space_cond_type = std.space_conditioning_category(adj_space)
             surf_cnt = true unless adj_space_cond_type != 'Unconditioned'
           end
         end
@@ -235,9 +236,9 @@ module OpenstudioStandards
     # Calculate the area of the exterior walls, including the area of the windows and doors on these walls.
     #
     # @param space [OpenStudio::Model::Space] OpenStudio Space object
-    # @param multiplier [Boolean] account for space multiplier
+    # @param multiplier [Boolean] account for space multiplier, default false
     # @return [Double] area in m^2
-    def self.space_get_exterior_wall_and_subsurface_area(space, multiplier: true)
+    def self.space_get_exterior_wall_and_subsurface_area(space, multiplier: false)
       area_m2 = 0.0
 
       # Loop through all surfaces in this space
@@ -265,9 +266,9 @@ module OpenstudioStandards
     # Calculate the area of the exterior walls, including the area of the windows and doors on these walls, and the area of roofs.
     #
     # @param space [OpenStudio::Model::Space] OpenStudio Space object
-    # @param multiplier [Boolean] account for space multiplier
+    # @param multiplier [Boolean] account for space multiplier, default false
     # @return [Double] area in m^2
-    def self.space_get_exterior_wall_and_subsurface_and_roof_area(space, multiplier: true)
+    def self.space_get_exterior_wall_and_subsurface_and_roof_area(space, multiplier: false)
       area_m2 = 0.0
 
       # Loop through all surfaces in this space
@@ -713,7 +714,8 @@ module OpenstudioStandards
       z_heights = []
       building_story.spaces.each do |space|
         # Skip plenum spaces
-        next if space_plenum?(space)
+        std = Standard.build('90.1-2019') # delete once space methods refactored
+        next if std.space_plenum?(space)
 
         # Get the z value of the space, which
         # vertices in space surfaces are relative to.
