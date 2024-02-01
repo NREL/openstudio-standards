@@ -64,24 +64,23 @@ class GeoTest < Minitest::Test
 
 
   def create_building_with_space_types(standard:, all_spacetypes:, run_dir:)
-    #creating an empty model object
+    # creating an empty model object
     model = OpenStudio::Model::Model.new()
     standard = Standard.build(standard)
     number_of_floors = (all_spacetypes.size) / 5
     model.getBuilding.setStandardsNumberOfStories(number_of_floors)
     model.getBuilding.setStandardsNumberOfAboveGroundStories(number_of_floors)
 
-    #Create Geometry shell.
-    BTAP::Geometry::Wizards::create_shape_rectangle(model,
-                                                    100.0,
-                                                    100.0,
-                                                    number_of_floors,
-                                                    0,
-                                                    3.8,
-                                                    1,
-                                                    25,
-                                                    0.0,
-    )
+    # Create Geometry shell
+    OpenstudioStandards::Geometry.create_shape_rectangle(model,
+                                                         100.0,
+                                                         100.0,
+                                                         number_of_floors,
+                                                         0,
+                                                         3.8,
+                                                         1,
+                                                         25,
+                                                         0.0)
 
     #Array to store spacetypes by name.
     space_type_objects = []
