@@ -25,7 +25,7 @@ module OpenstudioStandards
       res_people_design = 0
       non_res_people_design = 0
       model.getSpaces.sort.each do |space|
-        if OpenstudioStandards::Schedules.space_residential??(space)
+        if OpenstudioStandards::Space.space_residential?(space)
           res_spaces << space
           res_people_design += space.numberOfPeople * space.multiplier
         else
@@ -33,7 +33,19 @@ module OpenstudioStandards
           non_res_people_design += space.numberOfPeople * space.multiplier
         end
       end
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Schedules', "Model has design level of #{non_res_people_design} people in non residential spaces and #{res_people_design} people in residential spaces.")
+      OpenStudio.logFree(OpenStudio::Info, 'Openstudio.standards.Schedules', "Model has design level of #{non_res_people_design} people in non residential spaces and #{res_people_design} people in residential spaces.")
+
+      # create merged schedule for prevalent type (not used but can be generated for diagnostics)
+      if gen_occ_profile
+        res_prevalent = false
+        if res_people_design > non_res_people_design
+          occ_merged = OpenStudioStandards::Space.spaces_get_occupancy_schedule(res_spaces, sch_name: 'Calculated Occupancy Fraction Residential Merged')
+          res_prevalent = true
+        else
+          occ_merged = OpenStudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces, sch_name: 'Calculated Occupancy Fraction NonResidential Merged')
+        end
+      end
+
 
     end
   end

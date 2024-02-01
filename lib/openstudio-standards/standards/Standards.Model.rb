@@ -5863,22 +5863,22 @@ class Standard
     if gen_occ_profile
       res_prevalent = false
       if res_people_design > non_res_people_design
-        occ_merged = spaces_get_occupancy_schedule(res_spaces, sch_name: 'Calculated Occupancy Fraction Residential Merged')
+        occ_merged = OpenStudioStandards::Space.spaces_get_occupancy_schedule(res_spaces, sch_name: 'Calculated Occupancy Fraction Residential Merged')
         res_prevalent = true
       else
-        occ_merged = spaces_get_occupancy_schedule(non_res_spaces, sch_name: 'Calculated Occupancy Fraction NonResidential Merged')
+        occ_merged = OpenStudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces, sch_name: 'Calculated Occupancy Fraction NonResidential Merged')
       end
     end
 
     # re-run spaces_get_occupancy_schedule with x above min occupancy to create on/off schedule
     if res_people_design > non_res_people_design
-      hours_of_operation = spaces_get_occupancy_schedule(res_spaces,
+      hours_of_operation = OpenStudioStandards::Space.spaces_get_occupancy_schedule(res_spaces,
                                                          sch_name: 'Building Hours of Operation Residential',
                                                          occupied_percentage_threshold: fraction_of_daily_occ_range,
                                                          threshold_calc_method: 'normalized_daily_range')
       res_prevalent = true
     else
-      hours_of_operation = spaces_get_occupancy_schedule(non_res_spaces,
+      hours_of_operation = OpenStudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces,
                                                          sch_name: 'Building Hours of Operation NonResidential',
                                                          occupied_percentage_threshold: fraction_of_daily_occ_range,
                                                          threshold_calc_method: 'normalized_daily_range')
