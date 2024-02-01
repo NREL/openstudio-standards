@@ -20,7 +20,6 @@
 
 module BTAP
   module Geometry
-
     def self.enumerate_spaces_model(model, prepend_name = false)
       #enumerate stories.
       BTAP::Geometry::BuildingStoreys::auto_assign_spaces_to_stories(model)
@@ -195,7 +194,6 @@ module BTAP
       return 1.0 - (total_net_surface_area / total_gross_surface_area)
     end
 
-
     # This method will rotate the model
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param degrees [Float] rotation value
@@ -206,7 +204,6 @@ module BTAP
       model.getPlanarSurfaceGroups().each {|planar_surface| planar_surface.changeTransformation(t)}
       return model
     end
-
 
     def self.rotate_building(model: , degrees: nil)
 
@@ -225,11 +222,7 @@ module BTAP
       final_building_angle = building.setNorthAxis(building.northAxis + degrees)
     end
 
-
-
-
     module BuildingStoreys
-
       #This method will delete any exisiting stories and then try to assign stories based on
       # the z-axis origin of the space.
       def self.auto_assign_spaces_to_stories(model)
@@ -247,19 +240,6 @@ module BTAP
           space.setBuildingStory(building_story_hash[space.zOrigin])
         end
       end
-
-      #Get the zones in a storey
-      def self.get_zones_from_storey(storey)
-        #check to see if the storey has a zone that is part of the zone list.
-        zones = Array.new
-        storey.spaces.sort.each do |space|
-          if not space.thermalZone.empty? and not zones.include?(space.thermalZone.get)
-            zones.push(space.thermalZone.get)
-          end
-        end
-        return zones
-      end
-
 
       # override run to implement the functionality of your script
       # model is an OpenStudio::Model::Model, runner is a OpenStudio::Ruleset::UserScriptRunner
@@ -293,66 +273,20 @@ module BTAP
           space_obj = space[0]
           space_minz = space[1]
           if space_obj.buildingStory.empty?
-
-            story = getStoryForNominalZCoordinate(model, space_minz)
-            #puts("Setting story of Space " + space_obj.name.get + " to " + story.name.get + ".")
+            story = OpenstudioStandards::Geometry.model_get_building_story_for_nominal_height(model, space_minz)
+            if story.nil?
+              story = OpenStudio::Model::BuildingStory.new(model)
+              story.setNominalZCoordinate(space_minz)
+              story.setName("Building Story #{space_minz.round(1)}m")
+            end
             space_obj.setBuildingStory(story)
           end
         end
       end
-
-      # find the first story with z coordinate, create one if needed
-      def self.getStoryForNominalZCoordinate(model, minz)
-
-        model.getBuildingStorys.sort.each do |story|
-          z = story.nominalZCoordinate
-          if not z.empty?
-            if minz == z.get
-              return story
-            end
-          end
-        end
-
-        story = OpenStudio::Model::BuildingStory.new(model)
-        story.setNominalZCoordinate(minz)
-        return story
-      end
-
-      def self.getStoryAboveGround(model)
-        count = 0
-        model.getBuildingStorys.sort.each do |story|
-          z = story.nominalZCoordinate
-          unless z.empty?
-            if z.to_f >= 0
-              #puts story.name.get
-              count += 1
-            end
-          end
-        end
-        return count
-      end
-
-
-      def self.getStoryBelowGround(model)
-        count = 0
-        model.getBuildingStorys.sort.each do |story|
-          z = story.nominalZCoordinate
-          unless z.empty?
-            if z.to_f < 0
-              #puts story.name.get
-              count += 1
-            end
-          end
-        end
-        return count
-      end
-
     end
-
 
     #This module contains helper functions that deal with Space objects.
     module Spaces
-
       #This method will return the horizontal placement type. (N,S,W,E,C) In the
       # case of a corner, it will take whatever surface area it faces is the
       # largest. It will also return the top, bottom or middle conditions.
@@ -488,7 +422,6 @@ module BTAP
         return json_data
       end
 
-
       def self.is_perimeter_space?(model, space)
         exterior_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces,
                                                                                    ["Outdoors",
@@ -521,7 +454,6 @@ module BTAP
           end
         end
       end
-
 
       # This method will return a Array of surfaces that are contained within the
       # passed spaces. Note: if you wish to avoid to create an array of spaces,
@@ -592,25 +524,10 @@ module BTAP
         end
         return returnarray
       end
-
-      #to do write test.
-      def self.assign_spaces_to_thermal_zone(model, spaces_array, thermal_zone)
-        spaces_array = BTAP::Common::validate_array(model, spaces_array, "Space")
-        thermal_zone = BTAP::Common::validate_array(model, thermal_zone, "ThermalZone")[0]
-        spaces_array.each do |space|
-          space.setThermalZone(thermal_zone)
-        end
-      end
-
     end
 
     #This Module contains methods that create, modify and query Thermal zone objects.
     module Zones
-
-      def self.enumerate_model(model)
-
-      end
-
 
       # This method will filter an array of zones that have an external wall
       # passed floors. Note: if you wish to avoid to create an array of spaces,
@@ -654,16 +571,9 @@ module BTAP
       def self.get_surfaces_from_thermal_zones(thermal_zone_array)
         BTAP::Geometry::Surfaces::get_all_surfaces_from_thermal_zones(thermal_zone_array)
       end
-
-      def self.create_thermal_zone(model, spaces_array = "")
-        thermal_zone = OpenStudio::Model::ThermalZone.new(model)
-        BTAP::Geometry::Spaces::assign_spaces_to_thermal_zone(model, spaces_array, thermal_zone)
-        return thermal_zone
-      end
-
     end
-    module Surfaces
 
+    module Surfaces
       def self.create_surface(model, name, os_point3d_array, boundary_condition = "", construction = "")
         os_surface = OpenStudio::Model::Surface.new(os_point3d_array, model)
         os_surface.setName(name)
@@ -799,12 +709,9 @@ module BTAP
       def self.get_total_ext_wall_area(model)
         outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
         outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
-
-
       end
 
       def self.get_total_ext_floor_area(model)
-
         outdoor_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Floor")
       end
 
@@ -814,7 +721,6 @@ module BTAP
 
       def self.get_total_ext_roof_area(model)
         outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
-
       end
 
 
@@ -887,7 +793,6 @@ module BTAP
         return BTAP::Resources::Envelope::Constructions::get_tvis(model,construction)
       end
 
-
       def self.get_surface_net_area(surface)
         return surface.netArea()
       end
@@ -895,7 +800,6 @@ module BTAP
       def self.get_sub_surface_net_area(subsurface)
         return subsurface.netArea()
       end
-
 
       def self.set_surfaces_construction(surfaces, construction)
         surfaces.each do |surface|
@@ -939,7 +843,6 @@ module BTAP
         surfaces.each {|surface| non_defaulted_surfaces << surface unless surface.isConstructionDefaulted}
         return non_defaulted_surfaces
       end
-
 
       def self.filter_by_boundary_condition(surfaces, boundary_conditions)
         #check to see if a string or an array was passed.
@@ -1019,7 +922,6 @@ module BTAP
         end
         return return_surfaces
       end
-
 
       def self.show(surfaces)
         surfaces.each do |surface|

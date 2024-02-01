@@ -704,13 +704,12 @@ module OpenstudioStandards
       return floor_multiplier
     end
 
-    # Gets the minimum z-value of the building story.
-    # This is considered to be the minimum z value of any vertex of any surface of any space on the story,
-    # with the exception of plenum spaces.
+    # Gets the minimum height of the building story.
+    # This is considered to be the minimum z value of any vertex of any surface of any space on the story, with the exception of plenum spaces.
     #
     # @param building_story [OpenStudio::Model::BuildingStory] OpenStudio BuildingStory object
-    # @return [Double] the minimum z-value in meters
-    def self.building_story_get_minimum_z_value(building_story)
+    # @return [Double] the minimum height in meters
+    def self.building_story_get_minimum_height(building_story)
       z_heights = []
       building_story.spaces.each do |space|
         # Skip plenum spaces
@@ -740,9 +739,73 @@ module OpenstudioStandards
       return z
     end
 
+    # Get an array of OpenStudio ThermalZone objects for an OpenStudio BuildingStory
+    #
+    # @param building_story [OpenStudio::Model::BuildingStory] OpenStudio BuildingStory object
+    # @return [Array<OpenStudio::Model::ThermalZone>] Array of OpenStudio ThermalZone objects, empty array if none
+    def self.building_story_get_thermal_zones(building_story)
+      zones = []
+      building_story.spaces.sort.each do |space|
+        zones << space.thermalZone.get if space.thermalZone.is_initialized
+      end
+      zones = zones.uniq
+
+      return zones
+    end
+
     # @!endgroup Information:Story
 
     # @!group Information:Model
+
+    # Returns the building story associated with a given minimum height.
+    # This return the story that matches the minimum z value of any vertex of any surface of any space on the story, with the exception of plenum spaces.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param minimum_height [Double] The base height of the desired story, in meters.
+    # @param tolerance [Double] tolerance for comparison, in m. Default is 0.3 m ~1ft
+    # @return [OpenStudio::Model::BuildingStory] OpenStudio BuildingStory object, nil if none matching
+    def self.model_get_building_story_for_nominal_height(model, minimum_height, tolerance: 0.3)
+      matched_story = nil
+      model.getBuildingStorys.sort.each do |story|
+        z = OpenstudioStandards::Geometry.building_story_get_minimum_height(story)
+        if (minimum_height - z).abs < tolerance
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "The story with a min z value of #{minimum_height.round(2)} is #{story.name}.")
+          matched_story = story
+        end
+      end
+
+      return matched_story
+    end
+
+    # Returns an array of the above ground building stories in the model.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @return [Array<OpenStudio::Model::BuildingStory>] Array of OpenStudio BuildingStory objects, empty array if none
+    def self.model_get_building_stories_above_ground(model)
+      above_ground_stories = []
+      model.getBuildingStorys.sort.each do |story|
+        z = story.nominalZCoordinate
+        unless z.empty?
+          above_ground_stories << story if z.to_f >= 0
+        end
+      end
+      return above_ground_stories
+    end
+
+    # Returns an array of the below ground building stories in the model.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @return [Array<OpenStudio::Model::BuildingStory>] Array of OpenStudio BuildingStory objects, empty array if none
+    def self.model_get_building_stories_below_ground(model)
+      below_ground_stories = []
+      model.getBuildingStorys.sort.each do |story|
+        z = story.nominalZCoordinate
+        unless z.empty?
+          below_ground_stories << story if z.to_f < 0
+        end
+      end
+      return below_ground_stories
+    end
 
     # Returns the window to wall ratio
     #

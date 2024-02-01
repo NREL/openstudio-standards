@@ -146,13 +146,35 @@ class TestGeometryInformation < Minitest::Test
     assert_equal(1, result)
   end
 
-  def test_building_story_get_minimum_z_value
+  def test_building_story_get_minimum_height
     story = @model.getBuildingStorys.sort[1]
-    result = @geo.building_story_get_minimum_z_value(story)
+    result = @geo.building_story_get_minimum_height(story)
     assert_equal(4.0, result)
   end
 
+  def test_building_story_get_thermal_zones
+    story = @model.getBuildingStorys.sort[1]
+    result = @geo.building_story_get_thermal_zones(story)
+    assert_equal(21, result.size)
+  end
+
   # Information:Model
+
+  def test_model_get_building_story_for_nominal_height
+    story = @model.getBuildingStorys.sort[1]
+    result = @geo.model_get_building_story_for_nominal_height(@model, 4.1)
+    assert_equal('Building Story 2', result.name.to_s)
+  end
+
+  def test_model_get_building_stories_above_ground
+    result = @geo.model_get_building_stories_above_ground(@model)
+    assert_equal(2, result.size)
+  end
+
+  def test_model_get_building_stories_below_ground
+    result = @geo.model_get_building_stories_below_ground(@model)
+    assert_equal(0, result.size)
+  end
 
   def test_model_get_exterior_window_to_wall_ratio
     result = @geo.model_get_exterior_window_to_wall_ratio(@model, spaces: [])

@@ -1611,7 +1611,7 @@ class Standard
           # Add a PVAV with Reheat for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(space.buildingStory.get)
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(space.buildingStory.get)
             stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
@@ -1667,7 +1667,7 @@ class Standard
           # Add an VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(space.buildingStory.get)
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(space.buildingStory.get)
             stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
@@ -1748,7 +1748,7 @@ class Standard
           # Add a VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(space.buildingStory.get)
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(space.buildingStory.get)
             stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
@@ -1824,7 +1824,7 @@ class Standard
           # Add an VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(space.buildingStory.get)
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(space.buildingStory.get)
             stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
@@ -2367,7 +2367,13 @@ class Standard
       space_obj = space[0]
       space_minz = space[1]
       if space_obj.buildingStory.empty?
-        story = model_get_story_for_nominal_z_coordinate(model, space_minz)
+        story = OpenstudioStandards::Geometry.model_get_building_story_for_nominal_height(model, space_minz)
+        if story.nil?
+          story = OpenStudio::Model::BuildingStory.new(model)
+          story.setNominalZCoordinate(space_minz)
+          story.setName("Building Story #{space_minz.round(1)}m")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "No story with a min z value of #{space_minz.round(2)} m +/- #{tolerance} m was found, so a new story called #{story.name} was created.")
+        end
         space_obj.setBuildingStory(story)
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space #{space[0].name} was not assigned to a story by the user.  It has been assigned to #{story.name}.")
       end
@@ -5125,30 +5131,6 @@ class Standard
     return true
   end
 
-  # Helper method to get the story object that corresponds to a specific minimum z value.
-  # Makes a new story if none found at this height.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param minz [Double] the z value (height) of the desired story, in meters.
-  # @param tolerance [Double] tolerance for comparison, in m. Default is 0.3 m ~1ft
-  # @return [OpenStudio::Model::BuildingStory] the story
-  def model_get_story_for_nominal_z_coordinate(model, minz, tolerance = 0.3)
-    model.getBuildingStorys.sort.each do |story|
-      z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(story)
-
-      if (minz - z).abs < tolerance
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "The story with a min z value of #{minz.round(2)} is #{story.name}.")
-        return story
-      end
-    end
-
-    story = OpenStudio::Model::BuildingStory.new(model)
-    story.setNominalZCoordinate(minz)
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "No story with a min z value of #{minz.round(2)} m +/- #{tolerance} m was found, so a new story called #{story.name} was created.")
-
-    return story
-  end
-
   # Returns average daily hot water consumption by building type
   # recommendations from 2011 ASHRAE Handbook - HVAC Applications Table 7 section 50.14
   # Not all building types are included in lookup
@@ -6941,7 +6923,7 @@ class Standard
     model.getSpaces.sort.each do |space|
       story = space.buildingStory.get
       lowest_story = story if lowest_story.nil?
-      space_min_z = OpenstudioStandards::Geometry.building_story_get_minimum_z_value(story)
+      space_min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(story)
       if space_min_z < min_z_story
         min_z_story = space_min_z
         lowest_story = story
