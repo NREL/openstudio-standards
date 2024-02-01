@@ -1,7 +1,6 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
-require 'hashie'
 
 
 class NECB_HVAC_Boiler_Tests < Minitest::Test
@@ -323,7 +322,6 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
   # Test to validate the boiler part load performance curve.
   def test_boiler_plf_vs_plr_curve
-    logger.debug!
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
