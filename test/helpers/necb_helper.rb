@@ -307,7 +307,8 @@ module NecbHelper
         end
       end
       msg="  Test outputs do not match expected results!"
-      assert_empty(error_msg, "#{msg} \n#{error_msg}")
+      #assert_empty(error_msg, "#{msg} \n#{error_msg}")
+      assert_empty(error_msg, "#{msg}")
     else
 
       # Open files and compare the line by line. Remove line endings before checking strings (this can be an issue when running in docker).
