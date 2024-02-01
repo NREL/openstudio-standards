@@ -147,7 +147,7 @@ class TestGeometryInformation < Minitest::Test
   end
 
   def test_building_story_get_minimum_z_value
-    story = @model.getBuildingStorys[1]
+    story = @model.getBuildingStorys.sort[1]
     result = @geo.building_story_get_minimum_z_value(story)
     assert_equal(4.0, result)
   end
