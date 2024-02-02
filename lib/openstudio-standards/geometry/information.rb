@@ -596,7 +596,7 @@ module OpenstudioStandards
             # next if not v1[0] == v2[1] # next if not same geometry reversed
             # next if not v1[1] == v2[0]
 
-            # these are three item array's add in tollerance for each array entry
+            # these are three item array's add in tolerance for each array entry
             tolerance = 0.0001
             test_a = true
             test_b = true
@@ -944,7 +944,7 @@ module OpenstudioStandards
     # @return [Double] perimeter length in meters
     # @todo this doesn't catch walls that are split that sit above floor surfaces that are not (e.g. main corridoor in secondary school model)
     # @todo also odd with multi-height spaces
-    def self.model_get_perimeter_length(model)
+    def self.model_get_perimeter(model)
       perimeter = 0.0
       model.getSpaces.sort.each do |space|
         # counter to use later

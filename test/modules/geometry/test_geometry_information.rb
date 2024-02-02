@@ -135,13 +135,13 @@ class TestGeometryInformation < Minitest::Test
   # Information:Story
 
   def test_building_story_get_exterior_wall_perimeter
-    story = @model.getBuildingStorys[0]
+    story = @model.getBuildingStoryByName('Building Story 1').get
     result = @geo.building_story_get_exterior_wall_perimeter(story)
     assert_equal(708, result[:perimeter].round(0))
   end
 
   def test_building_story_get_floor_multiplier
-    story = @model.getBuildingStorys[0]
+    story = @model.getBuildingStoryByName('Building Story 1').get
     result = @geo.building_story_get_floor_multiplier(story)
     assert_equal(1, result)
   end
@@ -189,8 +189,8 @@ class TestGeometryInformation < Minitest::Test
     assert_equal(299, result['east_window'].round(0))
   end
 
-  def test_model_get_perimeter_length
-    result = @geo.model_get_perimeter_length(@model)
+  def test_model_get_perimeter
+    result = @geo.model_get_perimeter(@model)
     assert_equal(708, result.round(0))
   end
 end
