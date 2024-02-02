@@ -62,9 +62,9 @@ class Standard
 
     # Search base on capacity first
     wh_props_capacity = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
-    wh_props_capacity_and_volume = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, volume_gal)
-    wh_props_capacity_and_capacity_btu_per_hr = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, capacity_btu_per_hr)
-    wh_props_capacity_and_volume_and_capacity_per_volume = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, volume_gal, capacity_btu_per_hr / volume_gal)
+    wh_props_capacity_and_volume = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal)
+    wh_props_capacity_and_capacity_btu_per_hr = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, nil, capacity_btu_per_hr)
+    wh_props_capacity_and_volume_and_capacity_per_volume = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal, capacity_btu_per_hr / volume_gal)
 
     # We consider that the lookup is successful if only one set of record is returned
     wh_props_capacity = wh_props_capacity.nil? ? {} : wh_props_capacity
