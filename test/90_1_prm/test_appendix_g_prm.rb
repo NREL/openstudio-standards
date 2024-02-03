@@ -237,5 +237,9 @@ class AppendixGPRMTests < Minitest::Test
     check_residential_lpd(model_hash['proposed'])
   end
 
+  def test_swh
+    model_hash = prm_test_helper('swh', require_prototype=false, require_baseline=true)
+    check_swh(model_hash["baseline"])
+  end
 
 end
