@@ -830,6 +830,40 @@ module OpenstudioStandards
       return { 'start_time' => start_time, 'end_time' => end_time }
     end
 
+    # Returns the day schedules associated with a schedule ruleset
+    # Optionally includes summer and winter design days
+    # @param schedule_ruleset: [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param include_design_days [Bool] include summer and winter design day profiles
+    #   Defaults to false
+    # @return [Array<OpenStudio::Model::ScheduleDay>] array of day schedules
+    def self.schedule_ruleset_get_day_schedules(schedule_ruleset, include_design_days: false)
+      profiles = []
+      profiles << schedule_ruleset.defaultDaySchedule
+      schedule_ruleset.scheduleRules.each do |rule|
+        profiles << rule.daySchedule
+      end
+
+      if include_design_days
+
+        if schedule_ruleset.isSummerDesignDayScheduleDefaulted
+          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_day_schedules called for #{schedule_ruleset.name.get} with include_design_days: true, but the summer design day is defaulted. Duplicate design day will not be added.")
+        else
+          profiles << rule.summerDesignDaySchedule
+        end
+
+        if schedule_ruleset.isWinterDesignDayScheduleDefaulted
+          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_day_schedules called for #{schedule_ruleset.name.get} with include_design_days: true, but the winter design day is defaulted. Duplicate design day will not be added.")
+        else
+          profiles << rule.winterDesignDaySchedule
+        end
+
+      end
+
+      return profiles
+    end
+
+
+
     # @!endgroup Information:ScheduleRuleset
   end
 end
