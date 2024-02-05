@@ -59,7 +59,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # Modify the existing service water heating loops to match the baseline required heating type.
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [String] the building type (For consistency with the standard class, not used in the method)
-  # @param swh_building_type [String] parameters to assign the swh building are type
+  # @param swh_building_type [String] the swh building are type
   # @return [Boolean] returns true if successful, false if not
 
   def model_apply_baseline_swh_loops(model,
