@@ -56,17 +56,17 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     return wwr_range
   end
 
-  # Apply the baseline swh loops.
-  # The method reads the user data to get the swh building area types
-  # and assign the corresponding swh loops
+  # Modify the existing service water heating loops to match the baseline required heating type.
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type_swh [String] parameters to assign the swh building are type,
+  # @param building_type [String] the building type (For consistency with the standard class, not used in the method)
+  # @param swh_building_type [String] parameters to assign the swh building are type
+  # @return [Boolean] returns true if successful, false if not
+
   def model_apply_baseline_swh_loops(model,
                                      building_type,
                                      swh_building_type = 'All others')
-    # get the original water heater info
+    # Get the original water heater information
     original_water_heater_info_hash = {}
-    # Get original water heater information
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       original_water_heater_info_hash = {water_heater.name.get.to_s => model_get_object_hash(water_heater)}
     end
@@ -76,6 +76,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     model.getWaterUseEquipments.each do |wateruse_equipment|
       wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = wateruse_equipment.additionalProperties.getFeatureAsString('building_type_swh').to_s
     end
+
     # If there is additional properties, test uniq user data.
     if wateruse_equipment_hash
       building_area_type_number = wateruse_equipment_hash.values.uniq.length
@@ -86,6 +87,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
     # Apply baseline swh loops
     if building_area_type_number == 1
+      # One building area type
       # Modify the service water heater
       model.getWaterHeaterMixeds.sort.each do |water_heater|
         model_apply_water_heater_prm_parameter(water_heater,
@@ -119,7 +121,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   end
 
 
-  # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
+  # Modified Method (added an additional argument 'volume') to search through a hash
+  # for the objects that meets the desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
   # @param hash_of_objects [Hash] hash of objects to search through
@@ -130,15 +133,11 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   #   the objects will only be returned if the specified date is between the start_date and end_date.
   # @param area [Double] area of the object in question.  If area is supplied,
   #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
-  # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
+  # @param num_floors [Double] num_floors of the object in question.  If num_floors is supplied,
   #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
+  # @param volume [Double] volume of the object in question.  If volume is supplied,
+  #   the objects will only be returned if the specified volume is between the minimum_storage and maximum_storage values.
   # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
-  # @example Find all the schedule rules that match the name
-  #   rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
-  #   if rules.size.zero?
-  #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-  #     return false
-  #   end
   def model_find_objects(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil, volume = nil)
     matching_objects = []
     if hash_of_objects.is_a?(Hash) && hash_of_objects.key?('table')
@@ -180,8 +179,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       if capacity == capacity.round
         capacity += (capacity * 0.01)
       end
-      # Todo: delte later
-      puts "Calculated capacity: #{capacity}"
+
       # Skip objects whose the minimum capacity is below or maximum capacity above the specified capacity
       matching_capacity_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
 
@@ -299,14 +297,10 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
   # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
   #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
+  # @param volume [Double] capacity of the object in question.  If volume is supplied,
+  #   the objects will only be returned if the specified volume is between the minimum_storage and maximum_storage values.
   # @return [Hash] Return tbe first matching object hash if successful, nil if not.
-  # @example Find the motor that meets these size criteria
-  #   search_criteria = {
-  #   'template' => template,
-  #   'number_of_poles' => 4.0,
-  #   'type' => 'Enclosed',
-  #   }
-  #   motor_properties = self.model.find_object(motors, search_criteria, capacity: 2.5)
+
   def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil, volume = nil)
     matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors, fan_motor_bhp, volume)
     # Check the number of matching objects found
