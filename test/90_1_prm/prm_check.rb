@@ -2002,4 +2002,24 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
   end
+
+  # Check service water heater parameters for the single building area type
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_swh_single_building_type(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+      std = Standard.build('90.1-PRM-2019')
+      heater_prop = std.model_find_object(std.standards_data['prm_swh_bldg_type'], {'swh_building_type' => 'Office'})
+      new_fuel_data = heater_prop['baseline_heating_method']
+      if new_fuel_data == "Gas Storage"
+        new_fuel = "NaturalGas"
+      else
+        new_fuel = "Electricity"
+      end
+      model_baseline.getWaterHeaterMixeds.sort.each do |water_heater|
+        assert(water_heater.heaterFuelType == new_fuel, "New fule type is not the expected value.")
+      end
+    end
+  end
 end
