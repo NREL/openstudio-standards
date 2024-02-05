@@ -103,6 +103,8 @@ class ECMS
       storey_cond = false
       total_area = 0.0
       sum = 0.0
+      raise("get_storey_avg_clg_zcoords: storey #{storey.name} has no spaces associated with it. Either delete the storey or " \
+            "assign spaces to it") if storey.spaces.empty?
       storey.spaces.each do |space|
         # Determine if any of the spaces/zones of the storey are conditioned? If yes then the floor is considered to be conditioned
         if space.thermalZone.is_initialized
