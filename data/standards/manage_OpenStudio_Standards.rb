@@ -103,7 +103,7 @@ def unique_properties(sheet_name)
          when 'chillers'
            ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'compliance_path', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'furnaces'
-           ['template', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'equipment_type', 'fuel_type', 'electric_power_phase', 'minimum_capacity', 'maximum_capacity', 'minimum_combo_unit_cooling_capacity', 'maximum_combo_unit_cooling_capacity', 'subtype', 'start_date', 'end_date']
          when 'heat_rejection'
            ['template', 'equipment_type', 'fan_type', 'start_date', 'end_date']
          when 'water_source_heat_pumps'

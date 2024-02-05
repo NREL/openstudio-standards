@@ -327,6 +327,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirTerminalSingleDuctVAVReheat"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.ChillerElectricEIR"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoilHeatingGas"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerSingleSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerTwoSpeed"
