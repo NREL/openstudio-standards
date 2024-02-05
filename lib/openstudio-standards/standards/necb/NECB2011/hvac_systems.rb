@@ -489,6 +489,36 @@ class NECB2011
     return [minimum_oa_flow_cfm, maximum_stories]
   end
 
+  # find search criteria
+  #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @return [Hash] used for standards_lookup_table(model)
+  def boiler_hot_water_find_search_criteria(boiler_hot_water)
+    # Define the criteria to find the boiler properties
+    # in the hvac standards data set.
+    search_criteria = {}
+    search_criteria['template'] = template
+    # Get fuel type
+    fuel_type = nil
+    case boiler_hot_water.fuelType
+    when 'NaturalGas'
+      fuel_type = 'Gas'
+    when 'Electricity'
+      fuel_type = 'Electric'
+    when 'FuelOilNo1', 'FuelOilNo2'
+      fuel_type = 'Oil'
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuel_type} is not yet supported.  Assuming 'Gas.'")
+      fuel_type = 'Gas'
+    end
+
+    search_criteria['fuel_type'] = fuel_type
+    # Get the fluid type
+    fluid_type = 'Hot Water'
+    search_criteria['fluid_type'] = fluid_type
+    return search_criteria
+  end
+
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify

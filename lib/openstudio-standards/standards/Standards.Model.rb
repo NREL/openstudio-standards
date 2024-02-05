@@ -3601,14 +3601,14 @@ class Standard
     existing_curves += model.getCurveBicubics
     existing_curves += model.getCurveBiquadratics
     existing_curves += model.getCurveQuadLinears
+    existing_curves += model.getTableMultiVariableLookups
+    existing_curves += model.getTableLookups
     existing_curves.sort.each do |curve|
       if curve.name.get.to_s == curve_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added curve: #{curve_name}")
         return curve
       end
     end
-
-    # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
     # Find curve data
     data = model_find_object(standards_data['curves'], 'name' => curve_name)
@@ -3720,32 +3720,66 @@ class Standard
         curve.setMinimumCurveOutput(data['minimum_dependent_variable_output'])
         curve.setMaximumCurveOutput(data['maximum_dependent_variable_output'])
         return curve
-      when 'MultiVariableLookupTable'
+      when 'TableLookup', 'LookupTable', 'TableMultiVariableLookup', 'MultiVariableLookupTable'
         num_ind_var = data['number_independent_variables'].to_i
-        table = OpenStudio::Model::TableMultiVariableLookup.new(model, num_ind_var)
-        table.setName(data['name'])
-        table.setInterpolationMethod(data['interpolation_method'])
-        table.setNumberofInterpolationPoints(data['number_of_interpolation_points'])
-        table.setCurveType(data['curve_type'])
-        table.setTableDataFormat('SingleLineIndependentVariableWithMatrix')
-        table.setNormalizationReference(data['normalization_reference'].to_f)
-        table.setOutputUnitType(data['output_unit_type'])
-        table.setMinimumValueofX1(data['minimum_independent_variable_1'].to_f)
-        table.setMaximumValueofX1(data['maximum_independent_variable_1'].to_f)
-        table.setInputUnitTypeforX1(data['input_unit_type_x1'])
-        if num_ind_var == 2
-          table.setMinimumValueofX2(data['minimum_independent_variable_2'].to_f)
-          table.setMaximumValueofX2(data['maximum_independent_variable_2'].to_f)
-          table.setInputUnitTypeforX2(data['input_unit_type_x2'])
-        end
-        data_points = data.each.select { |key, value| key.include? 'data_point' }
-        data_points.each do |key, value|
-          if num_ind_var == 1
-            table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f)
-          elsif num_ind_var == 2
-            table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f, value.split(',')[2].to_f)
+        if model.version < OpenStudio::VersionString.new('3.7.0')
+          # Use TableMultiVariableLookup object
+          table = OpenStudio::Model::TableMultiVariableLookup.new(model, num_ind_var)
+          table.setInterpolationMethod(data['interpolation_method'])
+          table.setNumberofInterpolationPoints(data['number_of_interpolation_points'])
+          table.setCurveType(data['curve_type'])
+          table.setTableDataFormat('SingleLineIndependentVariableWithMatrix')
+          table.setNormalizationReference(data['normalization_reference'].to_f)
+
+          # set table limits
+          table.setMinimumValueofX1(data['minimum_independent_variable_1'].to_f)
+          table.setMaximumValueofX1(data['maximum_independent_variable_1'].to_f)
+          table.setInputUnitTypeforX1(data['input_unit_type_x1'])
+          if num_ind_var == 2
+            table.setMinimumValueofX2(data['minimum_independent_variable_2'].to_f)
+            table.setMaximumValueofX2(data['maximum_independent_variable_2'].to_f)
+            table.setInputUnitTypeforX2(data['input_unit_type_x2'])
+          end
+
+          # add data points
+          data_points = data.each.select { |key, value| key.include? 'data_point' }
+          data_points.each do |key, value|
+            if num_ind_var == 1
+              table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f)
+            elsif num_ind_var == 2
+              table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f, value.split(',')[2].to_f)
+            end
+          end
+        else
+          # Use TableLookup Object
+          table = OpenStudio::Model::TableLookup.new(model)
+          table.setNormalizationDivisor(data['normalization_reference'].to_f)
+
+          # sorting data in ascending order
+          data_points = data.each.select { |key, value| key.include? 'data_point' }
+          data_points = data_points.sort_by { |item| item[1].split(',').map(&:to_f) }
+          data_points.each do |key, value|
+            var_dep = value.split(',')[2].to_f
+            table.addOutputValue(var_dep)
+          end
+          num_ind_var.times do |i|
+            table_indvar = OpenStudio::Model::TableIndependentVariable.new(model)
+            table_indvar.setName(data['name'] + "_ind_#{i + 1}")
+            table_indvar.setInterpolationMethod(data['interpolation_method'])
+
+            # set table limits
+            table_indvar.setMinimumValue(data["minimum_independent_variable_#{i + 1}"].to_f)
+            table_indvar.setMaximumValue(data["maximum_independent_variable_#{i + 1}"].to_f)
+            table_indvar.setUnitType(data["input_unit_type_x#{i + 1}"].to_s)
+
+            # add data points
+            var_ind_unique = data_points.map { |key, value| value.split(',')[i].to_f }.uniq
+            var_ind_unique.each { |var_ind| table_indvar.addValue(var_ind) }
+            table.addIndependentVariable(table_indvar)
           end
         end
+        table.setName(data['name'])
+        table.setOutputUnitType(data['output_unit_type'])
         return table
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{curve_name}' has an invalid form: #{data['form']}', cannot create this curve.")
