@@ -302,7 +302,7 @@ class Standard
       successfully_set_all_properties = false
     else
       chiller_electric_eir.setReferenceCOP(cop)
-      kw_per_ton = kw_per_ton_to_cop(cop)
+      kw_per_ton = cop_to_kw_per_ton(cop)
     end
 
     # Append the name with size and kw/ton
