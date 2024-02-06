@@ -3,7 +3,6 @@ require 'logger'
 require 'fileutils'
 require 'pathname'
 require 'json'
-require 'hashdiff'
 
 # Add significant digits capability to float amd integer class to tidy up reporting.
 class Float
@@ -278,14 +277,14 @@ module NecbHelper
     BTAP::FileIO.save_osm(model, "#{output_dir}/post-sizing.osm") if save_model_versions
   end
 
-  # Check if two files are identical with some added smarts
+  # Check if two files are identical with some added smarts.
   # (used in place of simple ruby methods)
   def file_compare(expected_results_file:, test_results_file:, msg: "Files do not match", type: nil)
   
     if type == "json_data" 
 
       # Compare two json classes.
-      diff = Hashdiff.best_diff(expected_results_file, test_results_file, delimiter: '::')
+      diff = CompareJSON.diff(expected_results_file, test_results_file)
       error_msg = ""
       if !diff.nil?
         diff.each do |e|
@@ -293,22 +292,21 @@ module NecbHelper
             if e[2].nil? 
               error_msg << "test results missing #{e[1]}.\n"
             else
-              error_msg << "test results missing #{e[2]} in #{e[1]}.\n"
+              error_msg << "test results missing #{JSON.pretty_generate(e[2])} in #{e[1]}.\n"
             end
           elsif e[0]=="~"
-            error_msg << "test results differ in #{e[1]}:\n  Expected: #{e[2]}\n      Test: #{e[3]}\n"
+            error_msg << "test results differ in #{e[1]}:\n  Expected: #{JSON.pretty_generate(e[2])}\n      Test: #{JSON.pretty_generate(e[3])}\n"
           elsif e[0]=="+"
             if e[2].nil? || e[2].to_s == "{}"
               error_msg << "expected results missing #{e[1]}.\n"
             else
-              error_msg << "expected results missing #{e[2]} in #{e[1]}.\n"
+              error_msg << "expected results missing #{JSON.pretty_generate(e[2])} in #{e[1]}.\n"
             end
           end
         end
       end
-      msg="  Test outputs do not match expected results!"
-      #assert_empty(error_msg, "#{msg} \n#{error_msg}")
-      assert_empty(error_msg, "#{msg}")
+      msg="Test outputs do not match expected results!\n" + error_msg
+      assert(error_msg.empty?, msg) # Works better than assert_empty.
     else
 
       # Open files and compare the line by line. Remove line endings before checking strings (this can be an issue when running in docker).
@@ -331,6 +329,274 @@ module NecbHelper
       test_results_file_path=Pathname.new(test_results_file).cleanpath
       comp_files_str="  Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
       assert(same, "#{msg} #{self.class.ancestors[0]}.\n#{comp_files_str}\n#{comp_lines_str}")
+    end
+  end
+
+  # Methods to compare results json objects. Derived from Hashdiff gem (https://github.com/liufengyun/hashdiff/tree/master)
+  #  Extracted core functionality and hardwired some of the options.
+  module CompareJSON
+    def self.diff(obj1, obj2, options = {})
+      opts = {
+        prefix: '',
+        similarity: 0.8,
+        delimiter: '.',
+        strict: true,
+        ignore_keys: [],
+        indifferent: false,
+        strip: false,
+        numeric_tolerance: 0
+      }.merge!(options) # Used to build up nested hash location when recursive called. Or is it yust the current key?
+
+      return [] if obj1.nil? && obj2.nil?
+
+      return [['~', opts[:prefix], obj1, obj2]] if obj1.nil? || obj2.nil?
+
+      return LcsCompareArrays.call(obj1, obj2, opts) if obj1.is_a?(Array) 
+
+      return CompareHashes.call(obj1, obj2, opts) if obj1.is_a?(Hash)
+
+      return [] if obj1 == obj2
+
+      [['~', opts[:prefix], obj1, obj2]]
+    end
+    
+    class CompareHashes
+      class << self
+        def call(obj1, obj2, opts = {})
+          return [] if obj1.empty? && obj2.empty?
+
+          obj1_keys = obj1.keys
+          obj2_keys = obj2.keys
+          obj1_lookup = {}
+          obj2_lookup = {}
+
+          added_keys = (obj2_keys - obj1_keys).sort_by(&:to_s)
+          common_keys = (obj1_keys & obj2_keys).sort_by(&:to_s)
+          deleted_keys = (obj1_keys - obj2_keys).sort_by(&:to_s)
+
+          result = []
+
+          # Add deleted properties.
+          deleted_keys.each do |k|
+            change_key = CompareJSON.prefix_append_key(opts[:prefix], k)
+            result << ['-', change_key, obj1[k]]
+          end
+
+          # Recursive comparison for common keys.
+          common_keys.each do |k|
+            prefix = CompareJSON.prefix_append_key(opts[:prefix], k)
+            result.concat(CompareJSON.diff(obj1[k], obj2[k], opts.merge(prefix: prefix)))
+          end
+
+          # Added properties.
+          added_keys.each do |k|
+            change_key = CompareJSON.prefix_append_key(opts[:prefix], k)
+            result << ['+', change_key, obj2[k]]
+          end
+
+          return result
+        end
+      end
+    end
+
+    class LcsCompareArrays
+      class << self
+        def call(obj1, obj2, opts = {})
+          result = []
+
+          changeset = CompareJSON.diff_array_lcs(obj1, obj2, opts) do |lcs|
+            # Use a's index for similarity.
+            lcs.each do |pair|
+              prefix = CompareJSON.prefix_append_array_index(opts[:prefix], pair[0])
+
+              result.concat(CompareJSON.diff(obj1[pair[0]], obj2[pair[1]], opts.merge(prefix: prefix)))
+            end
+          end
+
+          changeset.each do |change|
+            next if change[0] != '-' && change[0] != '+'
+
+            change_key = CompareJSON.prefix_append_array_index(opts[:prefix], change[1])
+
+            result << [change[0], change_key, change[2]]
+          end
+
+          result
+        end
+      end
+    end
+
+    # Diff array using LCS algorithm
+    def self.diff_array_lcs(arraya, arrayb, options = {})
+      return [] if arraya.empty? && arrayb.empty?
+
+      change_set = []
+
+      if arraya.empty?
+        arrayb.each_index do |index|
+          change_set << ['+', index, arrayb[index]]
+        end
+
+        return change_set
+      end
+
+      if arrayb.empty?
+        arraya.each_index do |index|
+          i = arraya.size - index - 1
+          change_set << ['-', i, arraya[i]]
+        end
+
+        return change_set
+      end
+
+      opts = {
+        prefix: '',
+        similarity: 0.8,
+        delimiter: '.'
+      }.merge!(options)
+
+      links = lcs(arraya, arrayb, opts)
+
+      # yield common
+      yield links if block_given?
+
+      # padding the end
+      links << [arraya.size, arrayb.size]
+
+      last_x = -1
+      last_y = -1
+      links.each do |pair|
+        x, y = pair
+
+        # remove from a, beginning from the end
+        (x > last_x + 1) && (x - last_x - 2).downto(0).each do |i|
+          change_set << ['-', last_y + i + 1, arraya[i + last_x + 1]]
+        end
+
+        # add from b, beginning from the head
+        (y > last_y + 1) && 0.upto(y - last_y - 2).each do |i|
+          change_set << ['+', last_y + i + 1, arrayb[i + last_y + 1]]
+        end
+
+        # update flags
+        last_x = x
+        last_y = y
+      end
+
+      change_set
+    end
+    
+    # Calculate array difference using LCS algorithm
+    # http://en.wikipedia.org/wiki/Longest_common_subsequence_problem
+    def self.lcs(arraya, arrayb, options = {})
+      return [] if arraya.empty? || arrayb.empty?
+
+      opts = { similarity: 0.8 }.merge!(options)
+
+      opts[:prefix] = prefix_append_array_index(opts[:prefix], '*')
+
+      a_start = b_start = 0
+      a_finish = arraya.size - 1
+      b_finish = arrayb.size - 1
+      vector = []
+
+      lcs = []
+      (b_start..b_finish).each do |bi|
+        lcs[bi] = []
+        (a_start..a_finish).each do |ai|
+          if similar?(arraya[ai], arrayb[bi], opts)
+            topleft = (ai > 0) && (bi > 0) ? lcs[bi - 1][ai - 1][1] : 0
+            lcs[bi][ai] = [:topleft, topleft + 1]
+          elsif (top = bi > 0 ? lcs[bi - 1][ai][1] : 0)
+            left = ai > 0 ? lcs[bi][ai - 1][1] : 0
+            count = top > left ? top : left
+
+            direction = if top > left
+                          :top
+                        elsif top < left
+                          :left
+                        elsif bi.zero?
+                          :top
+                        elsif ai.zero?
+                          :left
+                        else
+                          :both
+                        end
+
+            lcs[bi][ai] = [direction, count]
+          end
+        end
+      end
+
+      x = a_finish
+      y = b_finish
+      while (x >= 0) && (y >= 0) && (lcs[y][x][1] > 0)
+        if lcs[y][x][0] == :both
+          x -= 1
+        elsif lcs[y][x][0] == :topleft
+          vector.insert(0, [x, y])
+          x -= 1
+          y -= 1
+        elsif lcs[y][x][0] == :top
+          y -= 1
+        elsif lcs[y][x][0] == :left
+          x -= 1
+        end
+      end
+
+      return vector
+    end
+
+    # Judge whether two objects are similar. Use a similarity of 0.8 for all cases.
+    def self.similar?(obja, objb, options = {})
+      return obja == objb if !any_hash_or_array?(obja, objb)
+
+      count_a = count_nodes(obja)
+      count_b = count_nodes(objb)
+
+      return true if (count_a + count_b).zero?
+
+      opts = { similarity: 0.8 }.merge!(options)
+
+      diffs = count_diff(diff(obja, objb, opts))
+
+      (1 - diffs / (count_a + count_b).to_f) >= opts[:similarity]
+    end
+    
+    # Count node differences.
+    def self.count_diff(diffs)
+      diffs.inject(0) do |sum, item|
+        old_change_count = count_nodes(item[2])
+        new_change_count = count_nodes(item[3])
+        sum + (old_change_count + new_change_count)
+      end
+    end
+    
+    # Count total nodes for an object.
+    def self.count_nodes(obj)
+      return 0 unless obj
+
+      count = 0
+      if obj.is_a?(Array)
+        obj.each { |e| count += count_nodes(e) }
+      elsif obj.is_a?(Hash)
+        obj.each_value { |v| count += count_nodes(v) }
+      else
+        return 1
+      end
+
+      count
+    end
+
+    def self.any_hash_or_array?(obja, objb)
+      obja.is_a?(Array) || obja.is_a?(Hash) || objb.is_a?(Array) || objb.is_a?(Hash)
+    end
+
+    def self.prefix_append_key(prefix, key)
+      prefix.empty? ? key.to_s : "#{prefix}::#{key}"
+    end
+    def self.prefix_append_array_index(prefix, array_index)
+      "#{prefix}[#{array_index}]"
     end
   end
 end
