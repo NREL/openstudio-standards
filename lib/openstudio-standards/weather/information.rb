@@ -361,7 +361,7 @@ module OpenstudioStandards
     # Calculate average global irradiance for the design day
     # Calculated from ASHRAE HOF 2017 Chp 14 Clear-Sky Solar Radiation
     #
-    # @param [OpenStudio::Model::DesignDay] OpenStudio DesignDay object
+    # @param design_day [OpenStudio::Model::DesignDay] OpenStudio DesignDay object
     # @return [Double] average global irradiance over the full day (24 hours) (W/m^2)
     def self.design_day_average_global_irradiance(design_day)
       # get site longitude and time zone longitude
