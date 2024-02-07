@@ -2014,4 +2014,13 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
   end
+
+  # Check service water heater fuel type for the single building area type
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_swh_multiple_building_type(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      
+
+    end
+  end
 end
