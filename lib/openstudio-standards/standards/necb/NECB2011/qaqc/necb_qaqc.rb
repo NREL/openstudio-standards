@@ -255,7 +255,10 @@ class NECB2011
     qaqc[:geography] = {}
     qaqc[:geography][:hdd_necb] = get_necb_hdd18(model: model, necb_hdd: true)
     qaqc[:geography][:hdd] = get_necb_hdd18(model: model, necb_hdd: false)
-    qaqc[:geography][:cdd] = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).cdd18
+    weather_file_path = model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    qaqc[:geography][:cdd] = stat_file.cdd18
     qaqc[:geography][:climate_zone] = NECB2011.new.get_climate_zone_name(qaqc[:geography][:hdd])
     qaqc[:geography][:city] = model.getWeatherFile.city
     qaqc[:geography][:state_province_region] = model.getWeatherFile.stateProvinceRegion
@@ -1586,7 +1589,10 @@ class NECB2011
         # data.each do |key,value|
         # puts key
         outdoor_air_L_per_s = air_loop_info[:outdoor_air_L_per_s]
-        db990 = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).db990
+        weather_file_path = model.weatherFile.get.path.get.to_s
+        stat_file_path = weather_file_path.gsub('.epw', '.stat')
+        stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+        db990 = stat_file.heating_design_info[2]
         necb_section_test(
           qaqc,
           result_value,
@@ -1601,7 +1607,11 @@ class NECB2011
     # necb_section_name = "NECB2011-5.2.10.1"
     # qaqc[:air_loops].each do |air_loop_info|
     #   unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
-    #     hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
+    #     weather_file_path = model.weatherFile.get.path.get.to_s
+    #     stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    #     stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    #     db990 = stat_file.heating_design_info[2]
+    #     hrv_calc = 0.00123 * air_loop_info[:outdoor_air_L_per_s] * (21 - db990) #=AP46*(21-O$1)
     #     hrv_reqd = hrv_calc > 150 ? true : false
     #     #qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
     #     hrv_present = false
@@ -1733,7 +1743,10 @@ class NECB2011
       # data.each do |key,value|
       # puts key
       outdoor_air_L_per_s = air_loop_info[:outdoor_air_L_per_s]
-      db990 = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).db990
+      weather_file_path = model.weatherFile.get.path.get.to_s
+      stat_file_path = weather_file_path.gsub('.epw', '.stat')
+      stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+      db990 = stat_file.heating_design_info[2]
       necb_section_test(
         qaqc,
         result_value,
@@ -1747,7 +1760,11 @@ class NECB2011
     # necb_section_name = "NECB2011-5.2.10.1"
     # qaqc[:air_loops].each do |air_loop_info|
     #   unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
-    #     hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
+    #     weather_file_path = model.weatherFile.get.path.get.to_s
+    #     stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    #     stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    #     db990 = stat_file.heating_design_info[2]
+    #     hrv_calc = 0.00123 * air_loop_info[:outdoor_air_L_per_s] * (21 - db990) #=AP46*(21-O$1)
     #     hrv_reqd = hrv_calc > 150 ? true : false
     #     #qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
     #     hrv_present = false
