@@ -47,11 +47,11 @@ class TestParametricSchedules < Minitest::Test
 
       # find and create hours of operation
       if v.has_key?(:fraction_of_daily_occ_range)
-        hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true,fraction_of_daily_occ_range: v[:fraction_of_daily_occ_range])
+        hours_of_operation = OpenstudioStandards::Schedules..model_infer_hours_of_operation_building(model,gen_occ_profile: true,fraction_of_daily_occ_range: v[:fraction_of_daily_occ_range])
       elsif v.has_key?(:inver_res)
-        hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true,invert_res: v[:inver_res])
+        hours_of_operation = OpenstudioStandards::Schedules..model_infer_hours_of_operation_building(model,gen_occ_profile: true,invert_res: v[:inver_res])
       else
-        hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true)
+        hours_of_operation = OpenstudioStandards::Schedules..model_infer_hours_of_operation_building(model,gen_occ_profile: true)
       end
       assert(hours_of_operation.to_ScheduleRuleset.is_initialized)
       puts "Test: Created building hours of operation schedule named #{hours_of_operation.name}."
