@@ -136,7 +136,9 @@ class NECBRegressionHelper < Minitest::Test
       end
     end
 
-    BTAP::Environment::WeatherFile.new(@epw_file).set_weather_file(@model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(@epw_file)
+    OpenstudioStandards::Weather.model_set_building_location(@model, weather_file_path: weather_file_path)
+
     Standard.build("#{@template}").model_run_simulation_and_log_errors(@model, @run_dir)
   end
 

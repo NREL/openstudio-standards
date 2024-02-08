@@ -408,8 +408,8 @@ class NECB2011
 
           # Create CAV RH (RH based on region's default fuel type)
           if necb_reference_hp_supp_fuel == 'DefaultFuel'
-            epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-            necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+            epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+            necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
           end
           if necb_reference_hp_supp_fuel == 'NaturalGas'
             rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)

@@ -52,9 +52,8 @@ module OpenstudioStandards
 
   # Weather Module
   require_relative 'openstudio-standards/weather/information'
-
-  # Weather data
-  require_relative 'openstudio-standards/weather/Weather.Model'
+  require_relative 'openstudio-standards/weather/modify'
+  require_relative 'openstudio-standards/weather/stat_file'
 
   # HVAC standards
   require_relative 'openstudio-standards/standards/Standards.Model'
