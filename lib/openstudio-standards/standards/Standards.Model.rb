@@ -723,25 +723,6 @@ class Standard
     return false
   end
 
-  # Determine the residential and nonresidential floor areas based on the space type properties for each space.
-  # For spaces with no space type, assume nonresidential.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Hash] keys are 'residential' and 'nonresidential', units are m^2
-  def model_residential_and_nonresidential_floor_areas(model)
-    res_area_m2 = 0
-    nonres_area_m2 = 0
-    model.getSpaces.sort.each do |space|
-      if thermal_zone_residential?(space)
-        res_area_m2 += space.floorArea
-      else
-        nonres_area_m2 += space.floorArea
-      end
-    end
-
-    return { 'residential' => res_area_m2, 'nonresidential' => nonres_area_m2 }
-  end
-
   # Determine the number of stories spanned by the supplied zones.
   # If all zones on one of the stories have an identical multiplier,
   # assume that the multiplier is a floor multiplier and increase the number of stories accordingly.
