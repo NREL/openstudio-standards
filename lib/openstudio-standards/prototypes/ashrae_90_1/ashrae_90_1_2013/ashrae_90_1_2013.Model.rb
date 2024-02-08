@@ -48,10 +48,10 @@ class ASHRAE9012013 < ASHRAE901
       case building_type
         when 'Hospital'
           # Rotate the building counter-clockwise
-          model_set_building_north_axis(model, 270.0)
+          OpenstudioStandards::Geometry.model_set_building_north_axis(model, 270.0)
         when 'SmallHotel'
           # Rotate the building clockwise
-          model_set_building_north_axis(model, 180)
+          OpenstudioStandards::Geometry.model_set_building_north_axis(model, 180)
       end
     end
 

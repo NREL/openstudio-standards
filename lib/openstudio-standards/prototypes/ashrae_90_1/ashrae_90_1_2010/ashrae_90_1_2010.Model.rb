@@ -58,10 +58,10 @@ class ASHRAE9012010 < ASHRAE901
           #   5.2.1.7 in Thornton et al. 2011
           when 'Hospital'
             # Rotate the building counter-clockwise
-            model_set_building_north_axis(model, 270.0)
+            OpenstudioStandards::Geometry.model_set_building_north_axis(model, 270.0)
           when 'SmallHotel'
             # Rotate the building clockwise
-            model_set_building_north_axis(model, 180.0)
+            OpenstudioStandards::Geometry.model_set_building_north_axis(model, 180.0)
           else
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.ashrae_90_1_2010', "The prototype model doesn't meet the requirement from Section 5.5.4.5 in ASHRAE Standard 90.1-2010.")
         end

@@ -211,7 +211,7 @@ class Standard
       model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
       # Assign building stories to spaces in the building where stories are not yet assigned.
-      model_assign_spaces_to_stories(model)
+      OpenstudioStandards::Geometry.model_assign_spaces_to_building_stories(model)
 
       # Modify the internal loads in each space type, keeping user-defined schedules.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Changing Lighting Loads ***')
@@ -1560,7 +1560,7 @@ class Standard
         end
 
         # Group zones by story
-        story_zone_lists = model_group_zones_by_story(model, zones)
+        story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, zones)
 
         # For the array of zones on each story,
         # separate the primary zones from the secondary zones.
@@ -1616,7 +1616,7 @@ class Standard
         end
 
         # Group zones by story
-        story_zone_lists = model_group_zones_by_story(model, zones)
+        story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, zones)
 
         # For the array of zones on each story,
         # separate the primary zones from the secondary zones.
@@ -1695,12 +1695,12 @@ class Standard
         end
 
         # Group zones by story
-        story_zone_lists = model_group_zones_by_story(model, zones)
+        story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, zones)
 
         # For the array of zones on each story, separate the primary zones from the secondary zones.
         # Add the baseline system type to the primary zones and add the suplemental system type to the secondary zones.
         story_zone_lists.each do |story_group|
-          # The model_group_zones_by_story(model)  NO LONGER returns empty lists when a given floor doesn't have any of the zones
+          # The OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model)  NO LONGER returns empty lists when a given floor doesn't have any of the zones
           # So NO need to filter it out otherwise you get an error undefined method `spaces' for nil:NilClass
           # next if zones.empty?
 
@@ -1773,7 +1773,7 @@ class Standard
         end
 
         # Group zones by story
-        story_zone_lists = model_group_zones_by_story(model, zones)
+        story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, zones)
 
         # For the array of zones on each story,
         # separate the primary zones from the secondary zones.
@@ -1958,7 +1958,7 @@ class Standard
 
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
-    model_assign_spaces_to_stories(model)
+    OpenstudioStandards::Geometry.model_assign_spaces_to_building_stories(model)
 
     # Determine the baseline HVAC system type for each of
     # the groups of zones and add that system type.
@@ -1986,7 +1986,7 @@ class Standard
           end
 
           # Group zones by story
-          story_zone_lists = model_group_zones_by_story(model, sys_group['zones'])
+          story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
           # For the array of zones on each story,
           # separate the primary zones from the secondary zones.
           # Add the baseline system type to the primary zones
@@ -2252,99 +2252,6 @@ class Standard
   def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
     # Not applicable if not stable baseline
     return
-  end
-
-  # Group an array of zones into multiple arrays, one for each story in the building.
-  # Zones with spaces on multiple stories will be assigned to only one of the stories.
-  # Removes empty array (when the story doesn't contain any of the zones)
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
-  # @return [Array<Array<OpenStudio::Model::ThermalZone>>] array of arrays of zones
-  def model_group_zones_by_story(model, zones)
-    story_zone_lists = []
-    zones_already_assigned = []
-    model.getBuildingStorys.sort.each do |story|
-      # Get all the spaces on this story
-      spaces = story.spaces
-
-      # Get all the thermal zones that serve these spaces
-      all_zones_on_story = []
-      spaces.each do |space|
-        if space.thermalZone.is_initialized
-          all_zones_on_story << space.thermalZone.get
-        else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space #{space.name} has no thermal zone, it is not included in the simulation.")
-        end
-      end
-
-      # Find zones in the list that are on this story
-      zones_on_story = []
-      zones.each do |zone|
-        if all_zones_on_story.include?(zone)
-          # Skip zones that were already assigned to a story.
-          # This can happen if a zone has multiple spaces on multiple stories.
-          # Stairwells and atriums are typical scenarios.
-          next if zones_already_assigned.include?(zone)
-
-          zones_on_story << zone
-          zones_already_assigned << zone
-        end
-      end
-
-      unless zones_on_story.empty?
-        story_zone_lists << zones_on_story
-      end
-    end
-
-    return story_zone_lists
-  end
-
-  # Assign each space in the model to a building story based on common z (height) values.
-  # If no story object is found for a particular height, create a new one and assign it to the space.
-  # Does not assign a story to plenum spaces.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] returns true if successful, false if not
-  def model_assign_spaces_to_stories(model)
-    # Make hash of spaces and minz values
-    sorted_spaces = {}
-    model.getSpaces.sort.each do |space|
-      # Skip plenum spaces
-      next if space_plenum?(space)
-
-      # loop through space surfaces to find min z value
-      z_points = []
-      space.surfaces.each do |surface|
-        surface.vertices.each do |vertex|
-          z_points << vertex.z
-        end
-      end
-      minz = z_points.min + space.zOrigin
-      sorted_spaces[space] = minz
-    end
-
-    # Pre-sort spaces
-    sorted_spaces = sorted_spaces.sort_by { |a| a[1] }
-
-    # Take the sorted list and assign/make stories
-    sorted_spaces.each do |space|
-      space_obj = space[0]
-      space_minz = space[1]
-      if space_obj.buildingStory.empty?
-        story = OpenstudioStandards::Geometry.model_get_building_story_for_nominal_height(model, space_minz)
-        if story.nil?
-          story = OpenStudio::Model::BuildingStory.new(model)
-          story.setNominalZCoordinate(space_minz)
-          story.setName("Building Story #{space_minz.round(1)}m")
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "No story with a min z value of #{space_minz.round(2)} m +/- #{tolerance} m was found, so a new story called #{story.name} was created.")
-        end
-        space_obj.setBuildingStory(story)
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space #{space[0].name} was not assigned to a story by the user.  It has been assigned to #{story.name}.")
-      end
-    end
-
-    return true
   end
 
   # Applies the multi-zone VAV outdoor air sizing requirements to all applicable air loops in the model.
