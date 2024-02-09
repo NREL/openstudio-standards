@@ -13,10 +13,12 @@
     "daylighting_control": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []]
     ],
-    "dcv": [
+    "dcv_01": [
         ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []], ["change_zone_num_ppl", ["Cafeteria_ZN_1_FLR_1 ZN", 400]], ["enable_airloop_dcv", ["Cafeteria_ZN_1_FLR_1 ZN PSZ-AC_2-7"]], ["mark_test_case_no", [1, 8]]]],
         ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "dcv_userdata_cafeteria_zone_exception", [["remove_transformer", []], ["change_zone_num_ppl", ["Cafeteria_ZN_1_FLR_1 ZN", 400]], ["enable_airloop_dcv", ["Cafeteria_ZN_1_FLR_1 ZN PSZ-AC_2-7"]], ["mark_test_case_no", [2]]]],
-        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []], ["change_zone_num_ppl", ["Cafeteria_ZN_1_FLR_1 ZN", 400]], ["enable_airloop_dcv", ["Kitchen_ZN_1_FLR_1 ZN PSZ-AC_1-6"]], ["mark_test_case_no", [3, 7]]]],
+        ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []], ["change_zone_num_ppl", ["Cafeteria_ZN_1_FLR_1 ZN", 400]], ["enable_airloop_dcv", ["Kitchen_ZN_1_FLR_1 ZN PSZ-AC_1-6"]], ["mark_test_case_no", [3, 7]]]]
+    ],
+    "dcv_02": [
         ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "dcv_userdata_cafeteria_airloop_exception", [["remove_transformer", []], ["change_zone_num_ppl", ["Cafeteria_ZN_1_FLR_1 ZN", 400]], ["mark_test_case_no", [4]]]],
         ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []], ["enable_airloop_dcv", ["Cafeteria_ZN_1_FLR_1 ZN PSZ-AC_2-7"]], ["mark_test_case_no", [5]]]],
         ["PrimarySchool", "90.1-2019", "ASHRAE 169-2013-4A", "dcv_userdata_cafeteria_zone_exception", [["remove_transformer", []], ["mark_test_case_no", [6]]]]
@@ -68,8 +70,6 @@
     "hvac_baseline_03": [
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["set_zone_multiplier",[4]]]],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["set_zone_multiplier",[5]]]]
     ],
@@ -100,13 +100,14 @@
         ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []],["change_zone_epd", ["Perimeter_bot_ZN_1 ZN",70]]]],
         ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []],["change_to_long_occ_sch", ["Perimeter_bot_ZN_1 ZN"]]]]
     ],
-    "hvac_sizing": [
+    "hvac_sizing_01": [
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
         ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []],
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
         ["RetailStripmall", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []],
-        ["RetailStandalone", "90.1-2010", "ASHRAE 169-2013-2A", "userdata_default_test", []],
+        ["RetailStandalone", "90.1-2010", "ASHRAE 169-2013-2A", "userdata_default_test", []]
+    ],
+    "hvac_sizing_02": [
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", []],
@@ -167,22 +168,21 @@
         ["SmallOffice", "90.1-2004", "ASHRAE 169-2013-2B", "userdata_pe_04",[["remove_transformer", []]]]
     ],
     "pipe_insulation": [
-        
         ["QuickServiceRestaurant", "90.1-2019", "ASHRAE 169-2013-2A", "userdata_default_test", [["add_piping_insulation", []]]]
     ],
-    "plant_temp_reset_ctrl": [
-        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", []],
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
+    "plant_temp_reset_ctrl_01": [
         ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["change_bldg_type", ["Assembly"]], ["remove_transformer", []]]],
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["change_bldg_type", ["Assembly"]], ["remove_transformer", []]]]
     ],
+    "plant_temp_reset_ctrl_02": [
+        ["MidriseApartment", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", []],
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
+        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]]
+    ],
     "preheat_coil_ctrl": [
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
-        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
-        ["SecondarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]]
+        ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]]
     ],
     "proposed_model_residential_lpd": [
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_res_ltg", [["remove_transformer", []], ["reduce_lpd" , []]]]
