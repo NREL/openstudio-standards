@@ -220,7 +220,6 @@ class AppendixGPRMTests < Minitest::Test
                                                                                  sizing_run_dir = run_dir_baseline,
                                                                                  run_all_orients = false,
                                                                                  unmet_load_hours_check = false,
-                                                                                 compliance_check=false,
                                                                                  debug = GENERATE_PRM_LOG)
 
       # Check if baseline model could be created
