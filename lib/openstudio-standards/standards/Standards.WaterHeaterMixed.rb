@@ -61,24 +61,20 @@ class Standard
     search_criteria['equipment_type'] = 'Storage Water Heaters'
 
     # Search base on capacity first
-    wh_props_capacity = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
-    wh_props_capacity_and_volume = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal)
-    wh_props_capacity_and_capacity_btu_per_hr = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, nil, capacity_btu_per_hr)
-    wh_props_capacity_and_volume_and_capacity_per_volume = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal, capacity_btu_per_hr / volume_gal)
+    wh_props_capacity = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
+    wh_props_capacity_and_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal)
+    wh_props_capacity_and_capacity_btu_per_hr = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, nil, capacity_btu_per_hr)
+    wh_props_capacity_and_volume_and_capacity_per_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal, capacity_btu_per_hr / volume_gal)
 
     # We consider that the lookup is successful if only one set of record is returned
-    wh_props_capacity = wh_props_capacity.nil? ? {} : wh_props_capacity
-    wh_props_capacity_and_volume = wh_props_capacity_and_volume.nil? ? {} : wh_props_capacity_and_volume
-    wh_props_capacity_and_capacity_btu_per_hr = wh_props_capacity_and_capacity_btu_per_hr.nil? ? {} : wh_props_capacity_and_capacity_btu_per_hr
-    wh_props_capacity_and_volume_and_capacity_per_volume = wh_props_capacity_and_volume_and_capacity_per_volume.nil? ? {} : wh_props_capacity_and_volume_and_capacity_per_volume
     if wh_props_capacity.size == 1
-      wh_props == wh_props_capacity
+      wh_props = wh_props_capacity[0]
     elsif wh_props_capacity_and_volume.size == 1
-      wh_props == wh_props_capacity_and_volume
+      wh_props = wh_props_capacity_and_volume[0]
     elsif wh_props_capacity_and_capacity_btu_per_hr == 1
-      wh_props == wh_props_capacity_and_capacity_btu_per_hr
+      wh_props = wh_props_capacity_and_capacity_btu_per_hr[0]
     elsif wh_props_capacity_and_volume_and_capacity_per_volume == 1
-      wh_props == wh_props_capacity_and_volume_and_capacity_per_volume
+      wh_props = wh_props_capacity_and_volume_and_capacity_per_volume[0]
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find water heater properties, cannot apply efficiency standard.")
       return false
@@ -124,7 +120,7 @@ class Standard
     end
 
     # Typically specified this way for large electric water heaters
-    if wh_props['standby_loss_base'] && wh_props['standby_loss_volume_allowance'] && wh_props['standby_loss_square_root_volume_allowance']
+    if wh_props['standby_loss_base'] && (wh_props['standby_loss_volume_allowance'] || wh_props['standby_loss_square_root_volume_allowance'])
       # Fixed water heater efficiency per PNNL
       water_heater_efficiency = 1.0
       # Calculate the max allowable standby loss (SL)
@@ -160,9 +156,16 @@ class Standard
     end
 
     # Typically specified this way for large natural gas water heaters
-    if wh_props['standby_loss_capacity_allowance'] && wh_props['standby_loss_volume_allowance'] && wh_props['thermal_efficiency']
+    if wh_props['standby_loss_capacity_allowance'] && (wh_props['standby_loss_volume_allowance'] || wh_props['standby_loss_square_root_volume_allowance']) && wh_props['thermal_efficiency']
       sl_cap_adj = wh_props['standby_loss_capacity_allowance']
-      sl_vol_drt = wh_props['standby_loss_volume_allowance']
+      if !wh_props['standby_loss_volume_allowance'].nil?
+        sl_vol_drt = wh_props['standby_loss_volume_allowance']
+      elsif !wh_props['standby_loss_square_root_volume_allowance'].nil?
+        sl_vol_drt = wh_props['standby_loss_square_root_volume_allowance']
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, could not retrieve the standby loss volume allowance.")
+        return false
+      end
       et = wh_props['thermal_efficiency']
       # Estimate storage tank volume
       tank_volume = volume_gal > 100 ? (volume_gal - 100).round(0) : 0
