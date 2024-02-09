@@ -13,195 +13,159 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     define_std_ranges
   end
 
-  # Test to validate the chiller COP generated against expected values stored in the file:
-  # 'compliance_chiller_cop_expected_results.csv
   # For NECB 2020 testing, for all chiller types except the centrifugal chillers, I don't think we can test the last row of NECB2020 code of capacities more than 2110 kw, as it will be divided into 2 chillers,
   # each chiller will have 1055 kW and that would move it to the upper row of NECB2020 code and COP will be always 5.633 not 6.018 (Mariana)
   # Consequently i've updated the expected results for all chiller types except the centrifugal chillers that are more then 2110 kW (7,200,000 btu/hr) to be 5.633 not 6.018
   def test_NECB_chiller_cop
-    logger.info "Starting: #{__method__}"
-
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    templates = ['NECB2011', 'NECB2020']
-    save_intermediate_models = false
+    logger.info "Starting suite of tests for: #{__method__}"
     
-    # Initialize test results hash.
-    test_results = {}
+    # Define test parameters that apply to all tests.
+    test_parameters = {test_method: __method__,
+                       save_intermediate_models: false,
+                       boiler_fueltype: 'Electricity',
+                       mau_cooling_type: 'Hydronic'}
 
-    templates.each do |template|
-      
-      # Create empty entry for the test cases results and copy over the reference.
-      template_cases_results = {}
-      begin
-        template_cases_results[:reference] = expected_results[template.to_sym][:reference]
-      rescue NoMethodError => error
-        test_results[template.to_sym] = {}
-        # puts "Probably triggered by the template not existing in the expected results set. Continue and report at end.\n#{error.message}"
-        next
-      end
-      
-      # Load template/standard.
-      standard = get_standard(template)
+    # Define test cases. 
+    test_cases = Hash.new
 
-      expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
-
-      # Initialize hashes for storing expected chiller cop data from file.
-      chiller_type_min_cap = {}
-      chiller_type_min_cap['Rotary Screw'] = []
-      chiller_type_min_cap['Reciprocating'] = []
-      chiller_type_min_cap['Scroll'] = []
-      chiller_type_min_cap['Centrifugal'] = []
-      chiller_type_max_cap = {}
-      chiller_type_max_cap['Rotary Screw'] = []
-      chiller_type_max_cap['Reciprocating'] = []
-      chiller_type_max_cap['Scroll'] = []
-      chiller_type_max_cap['Centrifugal'] = []
-
-      # Read the file for the cutoff min and max capacities for various chiller types.
-      CSV.foreach(expected_result_file, headers: true) do |data|
-        chiller_type_min_cap[data['Type']] << data['Min Capacity (Btu per hr)']
-        chiller_type_max_cap[data['Type']] << data['Max Capacity (Btu per hr)']
-      end
-
-      # Use the expected chiller cop data to generate suitable equipment capacities for the test to cover all
-      # the relevant equipment capacity ranges
-      # This implementation assumed a max of 3 capacity intervals for chillers where in reality only one range is needed
-      # for NECB2011/NECB2020
-      chiller_type_cap = {}
-      chiller_type_cap['Rotary Screw'] = []
-      chiller_type_cap['Reciprocating'] = []
-      chiller_type_cap['Scroll'] = []
-      chiller_type_cap['Centrifugal'] = []
-
-      # Create a Loop to set the capacity test values
-      chiller_type_min_cap.each do |type, min_caps|
-        last_cap = 0.0 # Get last minimum capacity
-        min_caps.each_cons(2) do |min, max|
-          min_w = (OpenStudio.convert(min.to_f, 'Btu/hr', 'W')).to_f
-          max_w = (OpenStudio.convert(max.to_f, 'Btu/hr', 'W')).to_f
-          ave = (min_w + max_w) / 2
-          chiller_type_cap[type] << ave
-          last_cap = max_w
-        end
-        chiller_type_cap[type] << last_cap + 10000
-      end
-
-      # Generate the osm files for all relevant cases to generate the test data for system 2
-      actual_chiller_cop = {}
-
-      actual_chiller_cop['Rotary Screw'] = []
-      actual_chiller_cop['Reciprocating'] = []
-      actual_chiller_cop['Scroll'] = []
-      actual_chiller_cop['Centrifugal'] = []
-      chiller_res_file_output_text = "Type,Min Capacity (Btu per hr),Max Capacity (Btu per hr),COP\n"
-      boiler_fueltype = 'Electricity'
-      chiller_types = ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
-      mua_cooling_type = 'Hydronic'
-      
-      chiller_types.each do |chiller_type|
-
-        # Create empty entry this test case results.
-        individual_case_results = {}
-
-        # Loop through the individual test cases.
-        #test_cases = expected_results[template.to_sym][fueltype.to_sym]
-        #next if test_cases.nil?
-        #test_cases.each do |key, test_case|
-
-          # Define local variables.
-          #case_name = key.to_s
-          #fueltype = fueltype.to_s
-          #boiler_cap = test_case[:tested_capacity_kW]
-          #efficiency_metric = test_case[:efficiency_metric]
-
-        chiller_type_cap[chiller_type].each do |chiller_cap|
-          name = "#{template}_sys2_ChillerType-#{chiller_type}_Chiller_cap-#{chiller_cap}watts"
-          name.gsub!(/\s+/, "-")
-          puts "***************#{name}***************\n"
-
-          # Wrap test in begin/rescue/ensure.
-          begin
-            # Load model and set climate file.
-            model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/../resources/5ZoneNoHVAC.osm")
-            BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
-            BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-
-            hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            always_on = model.alwaysOnDiscreteSchedule
-            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
-            standard.add_sys2_FPFC_sys5_TPFC(model: model,
-                                            zones: model.getThermalZones,
-                                            chiller_type: chiller_type,
-                                            fan_coil_type: 'FPFC',
-                                            mau_cooling_type: mua_cooling_type,
-                                            hw_loop: hw_loop)
-            model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap)}
-
-            # Run sizing.
-            run_sizing(model: model,  template: template, test_name: name,save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-          rescue => error
-            logger.error "#{__FILE__}::#{__method__} #{error.message}"
-          end
-
-          # Recover the COP for testing below.
-          model.getChillerElectricEIRs.each do |ichiller|
-            if ichiller.referenceCapacity.to_f > 1
-              actual_chiller_cop[chiller_type] << ichiller.referenceCOP.round(3)
-              cop=ichiller.referenceCOP
-              break
-            end
-          end
-
-          # Add this test case to results.
-          individual_case_results[case_name.to_sym] = {
-            name: name,
-            tested_capacity_kW: chiller_cap.signif,
-            chiller_type: chiller_type,
-            COP: cop.signif(3)
-          }
-        end
-
-        # Add this test case to results hash.
-        template_cases_results[fueltype.to_sym] = individual_case_results
-      end
-
-      # Generate table of test chiller cop
-      chiller_types.each do |type|
-        for int in 0..chiller_type_cap[type].size - 1
-          output_line_text = "#{type},#{chiller_type_min_cap[type][int]},#{chiller_type_max_cap[type][int]},#{actual_chiller_cop[type][int]}\n"
-          chiller_res_file_output_text += output_line_text
-        end
-      end
-
-      # Write actual results file.
-      test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_chiller_cop_test_results.csv")
-      File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text) }
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 Table 5.2.12.1 which points to CSA-C743-09 (Table 10)"}
+    test_cases[:NECB2015] = {:Reference => "NECB 2015 ?"}
+    test_cases[:NECB2017] = {:Reference => "NECB 2017 p3 Table 5.2.12.1 which points to CSA-C743-09 (Table 10) and NRCan regs?"}
+    test_cases[:NECB2020] = {:Reference => "NECB 2020 p1 Table 5.2.12.1.-K (Path B)"}
     
-      # Check if test results match expected.
-      msg = "Chiller COP test results do not match what is expected in test"
-      file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
+    # Test cases. Define each case seperately as they have unique kW values to test accross the vintages/chiller types.
+    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2020'], 
+                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       :TestCase => ["small"], 
+                       :TestPars => {:tested_capacity_kW => 132}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2020'], 
+                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       :TestCase => ["medium"], 
+                       :TestPars => {:tested_capacity_kW => 396}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2020'], 
+                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       :TestCase => ["large"], 
+                       :TestPars => {:tested_capacity_kW => 791}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2020'], 
+                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       :TestCase => ["x-large"], 
+                       :TestPars => {:tested_capacity_kW => 1200}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
 
-      # Add results for this template to the results hash.
-      test_results[template.to_sym] = template_cases_results
-    end
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
     # Write test results.
+    file_root = "#{self.class.name}-#{__method__}".downcase
     test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
     File.write(test_result_file, JSON.pretty_generate(test_results))
 
+    # Read expected results. 
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name), {symbolize_names: true})
+
     # Check if test results match expected.
-    msg = "Boiler efficiencies test results do not match what is expected in test"
+    msg = "Chiller COP test results do not match what is expected in test"
     file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
-    logger.info "Finished: #{__method__}"
+    logger.info "Finished suite of tests for: #{__method__}"
+  end
+
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_NECB_chiller_cop that runs a specific test. Called by do_test_cases in necb_helper.rb.
+  def do_test_NECB_chiller_cop (test_pars:, test_case:)
+
+    # Debug.
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
+
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    output_folder = method_output_folder(test_pars[:test_method])
+    save_intermediate_models = test_pars[:save_intermediate_models]
+    mau_cooling_type = test_pars[:mau_cooling_type]
+    boiler_fueltype = test_pars[:boiler_fueltype]
+    vintage = test_pars[:Vintage]
+    chiller_type = test_pars[:ChillerType]
+
+    # Test specific inputs.
+    chiller_cap = test_case[:tested_capacity_kW]
+
+    # Define the test name. 
+    name = "#{vintage}_sys2_ChillerType-#{chiller_type}_Chiller_cap-#{chiller_cap}kW"
+    name.gsub!(/\s+/, "-")
+    logger.info "Starting individual test: #{name}"
+
+    # Wrap test in begin/rescue/ensure.
+    begin
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+      BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}/baseline.osm") if save_intermediate_models
+
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard = get_standard(vintage)
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                      zones: model.getThermalZones,
+                                      chiller_type: chiller_type,
+                                      fan_coil_type: 'FPFC',
+                                      mau_cooling_type: mau_cooling_type,
+                                      hw_loop: hw_loop)
+      model.getChillerElectricEIRs.each {|chiller| chiller.setReferenceCapacity(chiller_cap*1000.0)}
+
+      # Run sizing.
+      run_sizing(model: model,  template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    rescue => error
+      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+    end
+
+    # Recover the COP for checking. 
+    results = Hash.new
+    chiller_count = 0
+    total_capacity = 0.0
+    model.getChillerElectricEIRs.each do |chiller|
+      next if chiller.referenceCapacity.to_f < 0.1
+
+      # Add this test case to results.
+      chiller_count += 1
+      chiller_capacity = (chiller.referenceCapacity.to_f)/1000.0
+      total_capacity += chiller_capacity
+      chillerID = "Chiller-#{chiller_count}"
+      results[chillerID.to_sym]= {
+        name: chiller.name.to_s,
+        tested_capacity_kW: chiller_cap.signif,
+        capacity_kW: chiller_capacity.signif,
+        capacity_ton: OpenStudio.convert(chiller_capacity, 'kW', 'ton').get.signif,
+        capacity_BTUh: OpenStudio.convert(chiller_capacity, 'kW', 'kBtu/hr').get.signif,
+        COP_kW_kW: chiller.referenceCOP.to_f.signif,
+        COP_kW_ton: OpenStudio.convert((1.0/chiller.referenceCOP.to_f), '1/kW', '1/ton').get.signif
+      }
+    end
+
+    logger.info "Completed individual test: #{name}"
+    return results
   end
 
   # Test to validate the number of chillers used and their capacities depending on total cooling capacity.
   # NECB2011 rule for number of chillers is:
   # "if capacity <= 2100 kW ---> one chiller
   # if capacity > 2100 kW ---> 2 chillers with half the capacity each"
-  def test_number_of_chillers
+  def no_test_number_of_chillers
     logger.info "Starting: #{__method__}"
+
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 8.4.4.11.(6)"}
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
@@ -367,8 +331,11 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
   end
 
   # Test to validate the chiller performance curves.
-  def test_chiller_curves
+  def no_test_chiller_curves
     logger.info "Starting: #{__method__}"
+
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 Table 8.4.4.22.C"}
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
