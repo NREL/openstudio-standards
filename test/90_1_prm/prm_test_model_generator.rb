@@ -218,7 +218,7 @@ class AppendixGPRMTests < Minitest::Test
                                                                                  create_proposed_model = true,
                                                                                  custom = nil,
                                                                                  sizing_run_dir = run_dir_baseline,
-                                                                                 run_all_orients = false,
+                                                                                 run_all_orients = true,
                                                                                  unmet_load_hours_check = false,
                                                                                  debug = GENERATE_PRM_LOG)
 
