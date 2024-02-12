@@ -29,34 +29,40 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 Table 5.2.12.1 which points to CSA-C743-09 (Table 10)"}
-    test_cases[:NECB2015] = {:Reference => "NECB 2015 ?"}
-    test_cases[:NECB2017] = {:Reference => "NECB 2017 p3 Table 5.2.12.1 which points to CSA-C743-09 (Table 10) and NRCan regs?"}
+    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 Table 5.2.12.1. Points to CSA-C743-09"}
+    test_cases[:NECB2015] = {:Reference => "NECB 2015 p1 Table 5.2.12.1. Points to CSA-C743-09"}
+    test_cases[:NECB2017] = {:Reference => "NECB 2017 p2 Table 5.2.12.1. Points to CSA-C743-09"}
     test_cases[:NECB2020] = {:Reference => "NECB 2020 p1 Table 5.2.12.1.-K (Path B)"}
     
     # Test cases. Define each case seperately as they have unique kW values to test accross the vintages/chiller types.
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2020'], 
+    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
                        :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
                        :TestCase => ["small"], 
                        :TestPars => {:tested_capacity_kW => 132}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2020'], 
+    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
                        :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
                        :TestCase => ["medium"], 
                        :TestPars => {:tested_capacity_kW => 396}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2020'], 
+    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
                        :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
                        :TestCase => ["large"], 
                        :TestPars => {:tested_capacity_kW => 791}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2020'], 
+    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
                        :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
                        :TestCase => ["x-large"], 
                        :TestPars => {:tested_capacity_kW => 1200}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => ['NECB2020'], 
+                       :ChillerType => ["Scroll", "Rotary Screw", "Reciprocating"],
+                       :TestCase => ["xx-large"], 
+                       :TestPars => {:tested_capacity_kW => 2200}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -144,7 +150,6 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       chillerID = "Chiller-#{chiller_count}"
       results[chillerID.to_sym]= {
         name: chiller.name.to_s,
-        tested_capacity_kW: chiller_cap.signif,
         capacity_kW: chiller_capacity.signif,
         capacity_ton: OpenStudio.convert(chiller_capacity, 'kW', 'ton').get.signif,
         capacity_BTUh: OpenStudio.convert(chiller_capacity, 'kW', 'kBtu/hr').get.signif,
@@ -152,6 +157,11 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
         COP_kW_ton: OpenStudio.convert((1.0/chiller.referenceCOP.to_f), '1/kW', '1/ton').get.signif
       }
     end
+    results[:All]= {
+      tested_capacity_kW: (chiller_cap.to_f).signif, 
+      total_capacity_kW: (total_capacity).signif, 
+      number_of_chillers: chiller_count,
+    }
 
     logger.info "Completed individual test: #{name}"
     return results
