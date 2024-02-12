@@ -78,7 +78,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       boiler_fueltype = 'Electricity'
       chiller_types = ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
       mua_cooling_type = 'Hydronic'
-      
+
       chiller_types.each do |chiller_type|
         chiller_type_cap[chiller_type].each do |chiller_cap|
           name = "#{template}_sys2_ChillerType-#{chiller_type}_Chiller_cap-#{chiller_cap}watts"
@@ -87,7 +87,8 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
           # Load model and set climate file.
           model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/../resources/5ZoneNoHVAC.osm")
-          BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw").set_weather_file(model)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+          OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -103,7 +104,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
           # Run sizing.
           run_sizing(model: model,  template: template, test_name: name,save_model_versions: save_intermediate_models)
-          
+
           model.getChillerElectricEIRs.each do |ichiller|
             if ichiller.referenceCapacity.to_f > 1
               actual_chiller_cop[chiller_type] << ichiller.referenceCOP.round(3)
@@ -124,7 +125,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       # Write actual results file.
       test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_chiller_cop_test_results.csv")
       File.open(test_result_file, 'w') { |f| f.write(chiller_res_file_output_text) }
-    
+
       # Check if test results match expected.
       msg = "Chiller COP test results do not match what is expected in test"
       file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
@@ -162,7 +163,8 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
         # Load model and set climate file.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -179,7 +181,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
         # Run the standards.
         run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
-        
+
         # Check that there are two chillers in the model.
         chillers = model.getChillerElectricEIRs
         num_of_chillers_is_correct = false
@@ -194,7 +196,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
         else
           this_is_the_second_cap_range = true
         end
-        
+
         # Compare chiller capacities to expected values.
         chillers.each do |ichiller|
           if ichiller.name.to_s.include? 'Primary Chiller'
@@ -251,14 +253,15 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     boiler_fueltype = 'NaturalGas'
     chiller_types = ['Scroll', 'Reciprocating', 'Rotary Screw', 'Centrifugal']
     mua_cooling_type = 'Hydronic'
-    
+
     chiller_types.each do |chiller_type|
       name = "sys5_ChillerType_#{chiller_type}"
       name.gsub!(/\s+/, "-")
       puts "***************#{name}***************\n"
 
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -270,7 +273,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
                                        fan_coil_type: 'FPFC',
                                        mau_cooling_type: mua_cooling_type,
                                        hw_loop: hw_loop)
-      
+
       # Run sizing.
       run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 

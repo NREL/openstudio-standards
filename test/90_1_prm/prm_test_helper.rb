@@ -64,7 +64,7 @@ class AppendixGPRMTests < Minitest::Test
       mod_str = mod.flatten.join('_') unless mod.empty?
 
       # Initialize weather file, necessary but not used
-      epw_file = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
+      epw_file_name = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
 
       # Create output folder if it doesn't already exist
       @test_dir = "#{File.dirname(__FILE__)}/output"
@@ -86,7 +86,7 @@ class AppendixGPRMTests < Minitest::Test
 
       # Create the prototype
       @prototype_creator = Standard.build("#{template}_#{building_type}")
-      model = @prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
+      model = @prototype_creator.model_create_prototype_model(climate_zone, epw_file_name, run_dir)
 
       # Make modification if requested
       @bldg_type_alt_now = nil
