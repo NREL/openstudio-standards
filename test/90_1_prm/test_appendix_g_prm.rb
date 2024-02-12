@@ -207,7 +207,6 @@ class AppendixGPRMTests < Minitest::Test
 
   def test_proposed_model_residential_lpd
     model_hash = prm_test_helper('proposed_model_residential_lpd', require_prototype = false, require_baseline = false, require_proposed = true)
-
     check_residential_lpd(model_hash['proposed'])
   end
 

@@ -1824,9 +1824,9 @@ class AppendixGPRMTests < Minitest::Test
       model_baseline.getAirLoopHVACs.each do |airloop|
         # Baseline system type identified based on airloop HVAC name
         if airloop.name.to_s.include?('Sys5') ||
-           airloop.name.to_s.include?('Sys6') ||
-           airloop.name.to_s.include?('Sys7') ||
-           airloop.name.to_s.include?('Sys8')
+          airloop.name.to_s.include?('Sys6') ||
+          airloop.name.to_s.include?('Sys7') ||
+          airloop.name.to_s.include?('Sys8')
           # Get all SPM assigned to supply outlet node of the airloop
           spms = airloop.supplyOutletNode.setpointManagers
           spm_check = false

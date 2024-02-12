@@ -75,7 +75,7 @@ class ASHRAE901PRM < Standard
 
     # Get the airloop occupancy schedule
     loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
-    flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch)
+    flh = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(loop_occ_sch)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
 
     # Set HVAC availability schedule to follow occupancy
@@ -708,19 +708,19 @@ class ASHRAE901PRM < Standard
             htg_sch = htg_sch.get
             if htg_sch.to_ScheduleRuleset.is_initialized
               htg_sch = htg_sch.to_ScheduleRuleset.get
-              max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end
             elsif htg_sch.to_ScheduleConstant.is_initialized
               htg_sch = htg_sch.to_ScheduleConstant.get
-              max_c = schedule_constant_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_constant_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end
             elsif htg_sch.to_ScheduleCompact.is_initialized
               htg_sch = htg_sch.to_ScheduleCompact.get
-              max_c = schedule_compact_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_compact_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end
@@ -736,7 +736,7 @@ class ASHRAE901PRM < Standard
             htg_sch = htg_sch.get
             if htg_sch.to_ScheduleRuleset.is_initialized
               htg_sch = htg_sch.to_ScheduleRuleset.get
-              max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end

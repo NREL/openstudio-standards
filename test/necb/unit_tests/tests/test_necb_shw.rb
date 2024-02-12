@@ -1,40 +1,32 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
-
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 # This class will perform tests to ensure that the NECB SHW tank and pump are being sized correctly and that the water
 # use equipment are being defined correctly.  Test takes all space types defined in the appropriate NECB spacetypes.json
 # file and applies them to the outpatient.osm file (actually, it just changes the name of the space types in the
 # outpatient.osm file).
 class NECB_SHW_tests < Minitest::Test
-  #Standards
-  Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020','BTAPPRE1980']
-  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw', 'CAN_QC_Kuujjuaq.AP.719060_CWEC2016.epw']
-
-
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
-  # @return [Boolean] true if successful. 
+  # Additional constant ranges.
+  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw', 'CAN_NT_Yellowknife.AP.719360_CWEC2020.epw']
+
+  # @return [Boolean] true if successful.
   def test_shw_test()
     output_array = []
-    climate_zone = 'none'
 
     #get shw efficiency measure data from ECMS class shw_set.json
-    ecm_standard = Standard.build("ECMS")
+    ecm_standard = get_standard("ECMS")
     shw_measures = ecm_standard.standards_data['tables']['shw_eff_ecm']['table']
     shw_ecms = ["NECB_Default", "Natural Gas Power Vent with Electric Ignition"]
 
     #Iterate through NECB2011 and NECB2015 as well as weather locations heated by gas and electricity.
-    Templates.sort.each do |template|
+    @Templates.sort.each do |template|
       Epw_files.sort.each do |epw_file|
 
         index = 0
@@ -50,11 +42,12 @@ class NECB_SHW_tests < Minitest::Test
           standard = nil
           # Open the Outpatient model.
           model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
-          # Set the weather file.
-          BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+          # Set the weather file
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+          OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           # Get spacetypes from JSON.  I say I use all of the spacetypes but really it is only those with a
           # "buliding_type" of "Space Function".
-          standard = Standard.build(template)
+          standard = get_standard(template)
 
           search_criteria = {
               "template" => template,
@@ -87,8 +80,8 @@ class NECB_SHW_tests < Minitest::Test
 		  #Apply the water heater mixed efficiencies
 		  model.getWaterHeaterMixeds.sort.each { |obj| standard.water_heater_mixed_apply_efficiency(obj) }
 
-          # Apply measure info if gas
-          apply_shw_ecm = false
+          # Apply measure info if gas.
+          #apply_shw_ecm = false
           model.getWaterHeaterMixeds.sort.each do |waterheater_test|
             if waterheater_test.heaterFuelType == "NaturalGas"
               shw_ecms.each do |shw_ecm|
@@ -106,16 +99,16 @@ class NECB_SHW_tests < Minitest::Test
         end
       end #loop to the next epw_file
     end #loop to the next Template
-    #Write test report file. 
+    #Write test report file.
     test_result_file = File.join(@test_results_folder,'shw_test_results.json')
     File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(output_array)) }
 
     #Test that the values are correct by doing a file compare.
     expected_result_file = File.join(@expected_results_folder,'shw_expected_results.json')
-    b_result = FileUtils.compare_file(expected_result_file , test_result_file )
-    assert( b_result, 
-      "shw test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}"
-    )
+
+    # Check if test results match expected.
+    msg = "SHW test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   def add_shw_test_output_info(model:, output_array:, template:, epw_file:, space_type_names:)

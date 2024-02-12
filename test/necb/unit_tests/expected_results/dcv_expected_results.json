@@ -1,7 +1,7 @@
 [
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "CO2_based_DCV",
@@ -27,7 +27,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "Occupancy_based_DCV",
@@ -53,7 +53,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "CO2_based_DCV",
@@ -151,7 +151,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "Occupancy_based_DCV",
@@ -249,7 +249,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "CO2_based_DCV",
@@ -275,7 +275,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "Occupancy_based_DCV",
@@ -301,7 +301,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "CO2_based_DCV",
@@ -399,7 +399,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "Occupancy_based_DCV",
@@ -497,7 +497,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "CO2_based_DCV",
@@ -523,7 +523,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "Occupancy_based_DCV",
@@ -549,7 +549,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "CO2_based_DCV",
@@ -647,7 +647,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "NaturalGas",
     "dcv_type": "Occupancy_based_DCV",
