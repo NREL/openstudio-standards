@@ -130,7 +130,8 @@ module OpenstudioStandards
         area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
 
         # Determine the number of stories this group spans
-        num_stories = model_num_stories_spanned(model, gp_zns)
+        std = Standard.build('90.1-2019') # delete once space methods refactored
+        num_stories = std.model_num_stories_spanned(model, gp_zns)
 
         # Create a hash representing this group
         group = {}
