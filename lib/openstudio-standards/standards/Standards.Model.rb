@@ -60,35 +60,41 @@ class Standard
   #   If nothing is specified, no custom logic will be applied; the process will follow the template logic explicitly.
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
+  # @param compliance_check [Boolean] indicate whether this run will be used for compliance check by ruleset checking tool.
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Boolean] returns true if successful, false if not
-  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, compliance_check=false, debug = false)
     # User data process
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     # TODO - move this portion to the top of the function
     bldg_type_hvac_zone_hash = {}
     handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
 
+    # Perform a user model design day run only to make sure
+    # that the user model is valid, i.e. can run without major
+    # errors
+    if !model_run_sizing_run(user_model, "#{sizing_run_dir}/USER-SR")
+      OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                         "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+      prm_raise(false,
+                sizing_run_dir,
+                "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
+    end
+
+    # Check if proposed HVAC system is autosized
+    if model_is_hvac_autosized(user_model)
+      OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                         "The user model's HVAC system is partly autosized.")
+    end
+
+    proposed_model = user_model
     if create_proposed_model
-      # Perform a user model design day run only to make sure
-      # that the user model is valid, i.e. can run without major
-      # errors
-      if !model_run_sizing_run(user_model, "#{sizing_run_dir}/USER-SR")
-        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-                           "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
-        prm_raise(false,
-                  sizing_run_dir,
-                  "The user model is not a valid OpenStudio model. Baseline and proposed model(s) won't be created.")
-      end
-
-      # Check if proposed HVAC system is autosized
-      if model_is_hvac_autosized(user_model)
-        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
-                           "The user model's HVAC system is partly autosized.")
-      end
-
       # Generate proposed model from the user-provided model
       proposed_model = model_create_prm_proposed_building(user_model)
+    end
+
+    if compliance_check
+      proposed_model = model_add_compliance_check_requirements(user_model)
     end
 
     # Check proposed model unmet load hours
@@ -111,6 +117,7 @@ class Standard
                   'Simulation on proposed model failed. Baseline generation is stopped.')
       end
     end
+
     if create_proposed_model
       # Make the run directory if it doesn't exist
       unless Dir.exist?(sizing_run_dir)
@@ -564,6 +571,19 @@ class Standard
     end
 
     return true
+  end
+
+  # Modify models to prepare for RPD generation
+  # based on the inputs currently in the user model.
+  #
+  # @param user_model [OpenStudio::model::Model] User specified OpenStudio model
+  # @return [OpenStudio::model::Model] returns the user model that is modified for RPD generation
+  def model_add_compliance_check_requirements(user_model)
+    # In this method, we will make a copy and add
+    # 1. output json
+    # 2. space types
+    temp_user_model = BTAP::FileIO.deep_copy(user_model)
+    return temp_user_model
   end
 
   # Creates a Performance Rating Method (aka 90.1-Appendix G) proposed building model
