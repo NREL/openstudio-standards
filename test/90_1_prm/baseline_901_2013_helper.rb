@@ -65,8 +65,6 @@ module Baseline9012013
   # @author Eric Ringold, Ambient Energy
   def check_sat_delta(model)
 
-    standard = Standard.build('90.1-2013')
-
     delta_good = []
     cool_delta_bad = []
     heat_delta_bad = []
@@ -81,8 +79,8 @@ module Baseline9012013
         cooling_sch = tstat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
 
         # get heating and cooling setpoints
-        heating_min_max = standard.schedule_ruleset_annual_min_max_value(heating_sch)
-        cooling_min_max = standard.schedule_ruleset_annual_min_max_value(cooling_sch)
+        heating_min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(heating_sch)
+        cooling_min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(cooling_sch)
 
         heat_set_t = OpenStudio.convert(heating_min_max['max'],"C","F").get
         cool_set_t = OpenStudio.convert(cooling_min_max['min'],"C","F").get

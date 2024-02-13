@@ -1,7 +1,8 @@
-# Methods to create typical models
 module OpenstudioStandards
+  # The Constructions module provides methods create, modify, and get information about model Constructions
   module Constructions
     # @!group Information
+    # Methods to get information about Constructions
 
     # Returns the solar reflectance index of an exposed surface.
     # On a scale of 0 to 100, standard black is 0, and standard white is 100.

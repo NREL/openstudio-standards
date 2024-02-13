@@ -6,7 +6,7 @@ class NECBRegressionHelper < Minitest::Test
 
   def setup()
     @building_type = 'FullServiceRestaurant'
-    @epw_file = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
+    @epw_file = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
     @template = 'NECB2011'
     @test_dir = "#{File.dirname(__FILE__)}/output"
     @expected_results_folder = "#{File.dirname(__FILE__)}/../expected_results/"
@@ -136,7 +136,9 @@ class NECBRegressionHelper < Minitest::Test
       end
     end
 
-    BTAP::Environment::WeatherFile.new(@epw_file).set_weather_file(@model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(@epw_file)
+    OpenstudioStandards::Weather.model_set_building_location(@model, weather_file_path: weather_file_path)
+
     Standard.build("#{@template}").model_run_simulation_and_log_errors(@model, @run_dir)
   end
 

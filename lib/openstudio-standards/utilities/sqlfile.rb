@@ -138,7 +138,7 @@ Standard.class_eval do
 
       # calculate zone occupancy by making a new ruleset schedule
       occ_schedule_ruleset = std.thermal_zone_get_occupancy_schedule(zone)
-      occ_values = std.schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
+      occ_values = OpenstudioStandards::Schedules.schedule_ruleset_get_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
       zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (zone_temperatures[i] - x) }
@@ -242,7 +242,7 @@ Standard.class_eval do
 
       # calculate zone occupancy by making a new ruleset schedule
       occ_schedule_ruleset = std.thermal_zone_get_occupancy_schedule(zone)
-      occ_values = std.schedule_ruleset_annual_hourly_values(occ_schedule_ruleset)
+      occ_values = OpenstudioStandards::Schedules.schedule_ruleset_get_hourly_values(occ_schedule_ruleset)
 
       # calculate difference accounting for unmet hours tolerance
       zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |x, i| (x - zone_temperatures[i]) }

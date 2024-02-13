@@ -3,7 +3,7 @@
     "boilers": {
       "data_type": "table",
       "refs": [
-        "assumption"
+        "NECB 2020 (first printing) Table 5.2.12.1.-N"
       ],
       "table": [
         {
@@ -19,7 +19,7 @@
           "minimum_thermal_efficiency": null,
           "minimum_combustion_efficiency": null,
           "efffplr": "BOILER-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2020 (first printing) Table 5.2.12.1.-N"
         },
         {
           "fluid_type": "Hot Water",
@@ -34,7 +34,7 @@
           "minimum_thermal_efficiency": 0.90,
           "minimum_combustion_efficiency": null,
           "efffplr": "BOILER-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2020 (first printing) Table 5.2.12.1.-N"
         },
         {
           
@@ -50,7 +50,7 @@
           "minimum_thermal_efficiency": null,
           "minimum_combustion_efficiency": 0.90,
           "efffplr": "BOILER-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2020 (first printing) Table 5.2.12.1.-N"
         },
         {
           
@@ -66,7 +66,7 @@
           "minimum_thermal_efficiency": 1.0,
           "minimum_combustion_efficiency": null,
           "efffplr": "BOILER-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2020 (first printing) Table 5.2.12.1.-N"
         },
         {
           
@@ -82,7 +82,7 @@
           "minimum_thermal_efficiency": null,
           "minimum_combustion_efficiency": null,
           "efffplr": "BOILER-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2020 (first printing) Table 5.2.12.1.-N"
         },
         {
           
@@ -98,7 +98,7 @@
           "minimum_thermal_efficiency": 0.87,
           "minimum_combustion_efficiency": null,
           "efffplr": "BOILER-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2020 (first printing) Table 5.2.12.1.-N"
         },
         {
           
@@ -114,7 +114,7 @@
           "minimum_thermal_efficiency": null,
           "minimum_combustion_efficiency": 0.88,
           "efffplr": "BOILER-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011"
+          "notes": "From NECB 2020 (first printing) Table 5.2.12.1.-N"
         }
       ]
     }

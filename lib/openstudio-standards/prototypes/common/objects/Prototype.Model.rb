@@ -25,12 +25,16 @@ Standard.class_eval do
     end
     # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'
-      climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+      stat_file_path = weather_file_path.gsub('.epw', '.stat')
+      stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+      climate_zone = OpenstudioStandards::Weather.get_climate_zone_from_degree_days(stat_file.hdd18, stat_file.cdd10)
     else
       # this is required to be blank otherwise it may cause side effects.
       epw_file = ''
     end
     model = load_geometry_osm(@geometry_file)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
     model_custom_geometry_tweaks(model, building_type, climate_zone, @prototype_input)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
@@ -42,7 +46,6 @@ Standard.class_eval do
     model_add_door_infiltration(model, climate_zone)
     model_modify_surface_convection_algorithm(model)
     model_create_thermal_zones(model, @space_multiplier_map)
-    model_add_design_days_and_weather_file(model, climate_zone, epw_file)
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model.getAirLoopHVACs.each do |air_loop|
       next unless air_loop_hvac_multizone_vav_system?(air_loop)
@@ -59,11 +62,9 @@ Standard.class_eval do
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
     model_add_daylight_savings(model)
-    model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model.getBuilding.setStandardsBuildingType(building_type)
-    model_set_climate_zone(model, climate_zone)
     model_add_lights_shutoff(model)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
@@ -1252,7 +1253,7 @@ Standard.class_eval do
         end
 
         # Modify schedules
-        model_multiply_schedule(model, sch.defaultDaySchedule, sch_mult, 0)
+        OpenstudioStandards::Schedules.schedule_day_multiply_by_value(sch.defaultDaySchedule, sch_mult)
       end
     end
   end
@@ -1521,11 +1522,11 @@ Standard.class_eval do
         reduced_lights_schs[lights_sch_name] = new_lights_sch
 
         # Reduce default day schedule
-        model_multiply_schedule(model, new_lights_sch.defaultDaySchedule, red_multiplier, 0.25)
+        OpenstudioStandards::Schedules.schedule_day_multiply_by_value(new_lights_sch.defaultDaySchedule, red_multiplier, lower_apply_limit: 0.25)
 
         # Reduce all other rule schedules
         new_lights_sch.scheduleRules.each do |sch_rule|
-          model_multiply_schedule(model, sch_rule.daySchedule, red_multiplier, 0.25)
+          OpenstudioStandards::Schedules.schedule_day_multiply_by_value(sch_rule.daySchedule, red_multiplier, lower_apply_limit: 0.25)
         end
       end
 
@@ -2451,35 +2452,6 @@ Standard.class_eval do
     return final_groups
   end
 
-  # Method to multiply the values in a day schedule by a specified value
-  # but only when the existing value is higher than a specified lower limit.
-  # This limit prevents occupancy sensors from affecting unoccupied hours.
-  def model_multiply_schedule(model, day_sch, multiplier, limit)
-    # Record the original times and values
-    times = day_sch.times
-    values = day_sch.values
-
-    # Remove the original times and values
-    day_sch.clearValues
-
-    # Create new values by using the multiplier on the original values
-    new_values = []
-    values.each do |value|
-      new_values << if value > limit
-                      value * multiplier
-                    else
-                      value
-                    end
-    end
-
-    # Add the revised time/value pairs to the schedule
-    new_values.each_with_index do |new_value, i|
-      day_sch.addValue(times[i], new_value)
-    end
-  end
-
-  # end reduce schedule
-
   # Determine the prototypical economizer type for the model.
   # Defaults to FixedDryBulb based on anecdotal evidence of this being
   # the most common type encountered in the field, combined
@@ -2859,9 +2831,9 @@ Standard.class_eval do
       # Set exhaust fan balanced air flow schedule to only consider the transfer air to be balanced air flow
       balanced_air_flow_schedule = exhaust_fan.availabilitySchedule.get.clone(model).to_ScheduleRuleset.get
       balanced_air_flow_schedule.setName("#{exhaust_fan_zone_name} Exhaust Fan Balanced Air Flow Schedule")
-      model_multiply_schedule(model, balanced_air_flow_schedule.defaultDaySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get, 0)
+      OpenstudioStandards::Schedules.schedule_day_multiply_by_value(balanced_air_flow_schedule.defaultDaySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get)
       balanced_air_flow_schedule.scheduleRules.each do |sch_rule|
-        model_multiply_schedule(model, sch_rule.daySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get, 0)
+        OpenstudioStandards::Schedules.schedule_day_multiply_by_value(sch_rule.daySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get)
       end
       transfer_air_source_zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_air_flow_schedule)
 
