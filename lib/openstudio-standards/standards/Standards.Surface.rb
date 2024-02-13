@@ -443,65 +443,6 @@ class Standard
     return ua
   end
 
-  # Calculate a surface's absolute azimuth
-  # source: https://github.com/NREL/openstudio-extension-gem/blob/e354355054b83ffc26e3b69befa20d6baf5ef242/lib/openstudio/extension/core/os_lib_geometry.rb#L913
-  #
-  # @param surface [OpenStudio::Model::Surface] surface object
-  # @return [Double] surface absolute azimuth
-  def surface_absolute_azimuth(surface)
-    # Get associated space
-    space = surface.space.get
-
-    # Get model object
-    model = surface.model
-
-    # Calculate azimuth
-    surface_azimuth_rel_space = OpenStudio.convert(surface.azimuth, 'rad', 'deg').get
-    space_dir_rel_north = space.directionofRelativeNorth
-    building_dir_rel_north = model.getBuilding.northAxis
-    surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
-    surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
-
-    return surface_abs_azimuth
-  end
-
-  # Determine a surface absolute cardinal direction
-  #
-  # @param surface [OpenStudio::Model::Surface] surface object
-  # @return [String] surface absolute cardinal direction
-  def surface_cardinal_direction(surface)
-    # Get the surface's absolute azimuth
-    surface_abs_azimuth = surface_absolute_azimuth(surface)
-
-    # Determine the surface's cardinal direction
-    if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
-      return 'N'
-    elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
-      return 'N'
-    elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
-      return 'E'
-    elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
-      return 'S'
-    elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
-      return 'W'
-    end
-  end
-
-  # Calculate the wwr of a surface
-  #
-  # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
-  # @return [Double] window to wall ratio of a surface
-  def surface_get_wwr(surface)
-    surface_area = surface.grossArea
-    surface_fene_area = 0.0
-    surface.subSurfaces.sort.each do |ss|
-      next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
-
-      surface_fene_area += ss.netArea
-    end
-    return surface_fene_area / surface_area
-  end
-
   # Adjust the fenestration area to the values specified by the reduction value in a surface
   #
   # @param surface [OpenStudio::Model:Surface] openstudio surface object
@@ -523,20 +464,5 @@ class Standard
       end
     end
     return true
-  end
-
-  # Calculate the door ratio of a surface
-  #
-  # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
-  # @return [Double] window to wall ratio of a surface
-  def surface_get_door_ratio(surface)
-    surface_area = surface.grossArea
-    surface_door_area = 0.0
-    surface.subSurfaces.sort.each do |ss|
-      next unless ss.subSurfaceType == 'Door'
-
-      surface_door_area += ss.netArea
-    end
-    return surface_door_area / surface_area
   end
 end

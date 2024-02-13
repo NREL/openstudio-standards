@@ -37,6 +37,30 @@ class TestGeometryInformation < Minitest::Test
     assert_equal(4, result.size)
   end
 
+  def test_surface_get_window_to_wall_ratio
+    wall_surface = @model.getSurfaceByName('Aux_Gym_ZN_1_FLR_1_Wall_2').get
+    result = @geo.surface_get_window_to_wall_ratio(wall_surface)
+    assert_in_delta(0.35, result, 0.1)
+  end
+
+  def test_surface_get_door_to_wall_ratio
+    wall_surface = @model.getSurfaceByName('Aux_Gym_ZN_1_FLR_1_Wall_2').get
+    result = @geo.surface_get_door_to_wall_ratio(wall_surface)
+    assert_in_delta(0.014, result, 0.001)
+  end
+
+  def test_surface_get_absolute_azimuth
+    wall_surface = @model.getSurfaceByName('Aux_Gym_ZN_1_FLR_1_Wall_2').get
+    result = @geo.surface_get_absolute_azimuth(wall_surface)
+    assert_in_delta(90.0, result, 0.1)
+  end
+
+  def test_surface_get_cardinal_direction
+    wall_surface = @model.getSurfaceByName('Aux_Gym_ZN_1_FLR_1_Wall_2').get
+    result = @geo.surface_get_cardinal_direction(wall_surface)
+    assert('E', result)
+  end
+
   # Information:Surfaces
 
   def test_surfaces_get_z_values
@@ -184,8 +208,15 @@ class TestGeometryInformation < Minitest::Test
   end
 
   def test_model_get_exterior_window_to_wall_ratio
-    result = @geo.model_get_exterior_window_to_wall_ratio(@model, spaces: [])
-    assert_equal(0.36, result.round(2))
+    result = @geo.model_get_exterior_window_to_wall_ratio(@model)
+    assert_in_delta(0.360, result, 0.01)
+
+    result = @geo.model_get_exterior_window_to_wall_ratio(@model, cardinal_direction: 'N')
+    assert_in_delta(0.361, result, 0.01)
+
+    space = @model.getSpaceByName('Aux_Gym_ZN_1_FLR_1').get
+    result = @geo.model_get_exterior_window_to_wall_ratio(@model, spaces: [space])
+    assert_in_delta(0.366, result, 0.01)
   end
 
   def test_model_get_exterior_window_and_wall_area_by_orientation

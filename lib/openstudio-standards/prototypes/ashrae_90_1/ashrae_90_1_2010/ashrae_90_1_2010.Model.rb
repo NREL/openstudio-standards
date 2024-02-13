@@ -42,9 +42,9 @@ class ASHRAE9012010 < ASHRAE901
   def model_fenestration_orientation(model, climate_zone)
     wwr = false
 
-    win_area_w = model_get_window_area_info_for_orientation(model, 'W', wwr: wwr)
-    win_area_e = model_get_window_area_info_for_orientation(model, 'E', wwr: wwr)
-    win_area_s = model_get_window_area_info_for_orientation(model, 'S', wwr: wwr)
+    win_area_w = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['west_window']
+    win_area_e = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['east_window']
+    win_area_s = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['south_window']
 
     # Make prototype specific adjustment to meet the code requirement
     if !((win_area_s > win_area_w) && (win_area_s > win_area_e))

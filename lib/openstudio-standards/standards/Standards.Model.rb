@@ -4629,7 +4629,7 @@ class Standard
             # surface with fenestration to its maximum but adjusted by door areas when need to add windows in surfaces no fenestration
             # turn negative to positive to get the correct adjustment factor.
             red = -red
-            surface_wwr = surface_get_wwr(surface)
+            surface_wwr = OpenstudioStandards::Geometry.surface_get_window_to_wall_ratio(surface)
             residual_fene += (0.9 - red * surface_wwr) * surface.grossArea
           end
           surface_adjust_fenestration_in_a_surface(surface, red, model)

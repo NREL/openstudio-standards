@@ -2069,7 +2069,7 @@ class ASHRAE901PRM < Standard
         next if surface.surfaceType != 'Wall'
         next if surface.outsideBoundaryCondition != 'Outdoors'
 
-        orientation = surface_cardinal_direction(surface)
+        orientation = OpenstudioStandards::Geometry.surface_get_cardinal_direction(surface)
         surface.subSurfaces.each do |subsurface|
           subsurface_type = subsurface.subSurfaceType.to_s.downcase
           # Do not count doors
@@ -2278,8 +2278,8 @@ class ASHRAE901PRM < Standard
                                       total_plenum_wall_m2: 0.0)
 
     surface_name = surface.name.get
-    surface_wwr = surface_get_wwr(surface)
-    surface_dr = surface_get_door_ratio(surface)
+    surface_wwr = OpenstudioStandards::Geometry.surface_get_window_to_wall_ratio(surface)
+    surface_dr = OpenstudioStandards::Geometry.surface_get_door_to_wall_ratio(surface)
 
     if multiplier < 1.0
       # Case when reduction is required

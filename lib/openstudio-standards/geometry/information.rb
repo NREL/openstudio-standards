@@ -99,6 +99,82 @@ module OpenstudioStandards
       return edge_array
     end
 
+    # Calculate the window to wall ratio of a surface
+    #
+    # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
+    # @return [Double] window to wall ratio of a surface
+    def self.surface_get_window_to_wall_ratio(surface)
+      surface_area = surface.grossArea
+      surface_fene_area = 0.0
+      surface.subSurfaces.sort.each do |ss|
+        next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
+
+        surface_fene_area += ss.netArea
+      end
+      return surface_fene_area / surface_area
+    end
+
+    # Calculate the door to wall ratio of a surface
+    #
+    # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
+    # @return [Double] door to wall ratio of a surface
+    def self.surface_get_door_to_wall_ratio(surface)
+      surface_area = surface.grossArea
+      surface_door_area = 0.0
+      surface.subSurfaces.sort.each do |ss|
+        next unless ss.subSurfaceType == 'Door'
+
+        surface_door_area += ss.netArea
+      end
+      return surface_door_area / surface_area
+    end
+
+    # Calculate a surface's absolute azimuth
+    #
+    # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
+    # @return [Double] surface absolute azimuth in degrees
+    def self.surface_get_absolute_azimuth(surface)
+      # Get associated space
+      space = surface.space.get
+
+      # Get model object
+      model = surface.model
+
+      # Calculate azimuth
+      surface_azimuth_rel_space = OpenStudio.convert(surface.azimuth, 'rad', 'deg').get
+      space_dir_rel_north = space.directionofRelativeNorth
+      building_dir_rel_north = model.getBuilding.northAxis
+      surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
+      surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
+
+      return surface_abs_azimuth
+    end
+
+    # Determine a surface absolute cardinal direction
+    #
+    # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
+    # @return [String] surface absolute cardinal direction, 'N', 'E', 'S, 'W'
+    def self.surface_get_cardinal_direction(surface)
+      # Get the surface's absolute azimuth
+      surface_abs_azimuth = OpenstudioStandards::Geometry.surface_get_absolute_azimuth(surface)
+
+      # Determine the surface's cardinal direction
+      cardinal_direction = ''
+      if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
+        cardinal_direction = 'N'
+      elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
+        cardinal_direction = 'N'
+      elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
+        cardinal_direction = 'E'
+      elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
+        cardinal_direction = 'S'
+      elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
+        cardinal_direction = 'W'
+      end
+
+      return cardinal_direction
+    end
+
     # @!endgroup Information:Surface
 
     # @!group Information:Surfaces
@@ -846,17 +922,24 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param spaces [Array<OpenStudio::Model::Space>] optional array of Space objects.
-    #   If provided, the return will report for only those spaces.
+    #  If provided, the return will report for only those spaces.
+    # @param cardinal_direction [String] Cardinal direction 'N', 'E', 'S', 'W'
+    #  If provided, the return will report for only the provided cardinal direction
     # @return [Double] window to wall ratio
-    def self.model_get_exterior_window_to_wall_ratio(model, spaces: [])
+    def self.model_get_exterior_window_to_wall_ratio(model,
+                                                     spaces: [],
+                                                     cardinal_direction: nil)
       # counters
-      total_gross_ext_wall_area = 0
-      total_ext_window_area = 0
+      total_gross_ext_wall_area = 0.0
+      total_ext_window_area = 0.0
+      window_to_wall_ratio = 0.0
 
+      # get spaces if none provided
       if spaces.empty?
         spaces = model.getSpaces
       end
 
+      # loop through each space and log window and wall areas
       spaces.each do |space|
         # get surface area adjusting for zone multiplier
         zone = space.thermalZone
@@ -865,18 +948,33 @@ module OpenstudioStandards
           if zone_multiplier > 1
           end
         else
-          zone_multiplier = 1 # space is not in a thermal zone
+          # space is not in a thermal zone
+          zone_multiplier = 1
         end
 
-        space.surfaces.each do |s|
-          next if s.surfaceType != 'Wall'
-          next if s.outsideBoundaryCondition != 'Outdoors'
+        # loop through spaces and skip all that aren't exterior walls and don't match selected cardinal direction
+        space.surfaces.each do |surface|
+          next if surface.surfaceType != 'Wall'
+          next if surface.outsideBoundaryCondition != 'Outdoors'
 
-          surface_gross_area = s.grossArea * zone_multiplier
+          # filter by cardinal direction if specified
+          case cardinal_direction
+          when 'N', 'n', 'North', 'north'
+            next unless OpenstudioStandards::Geometry.surface_get_cardinal_direction(surface) == 'N'
+          when 'E', 'e', 'East', 'east'
+            next unless OpenstudioStandards::Geometry.surface_get_cardinal_direction(surface) == 'E'
+          when 'S', 's', 'South', 'south'
+            next unless OpenstudioStandards::Geometry.surface_get_cardinal_direction(surface) == 'S'
+          when 'W', 'w', 'West', 'west'
+            next unless OpenstudioStandards::Geometry.surface_get_cardinal_direction(surface) == 'W'
+          end
+
+          # Get wall and window area
+          surface_gross_area = surface.grossArea * zone_multiplier
 
           # loop through sub surfaces and add area including multiplier
           ext_window_area = 0
-          s.subSurfaces.each do |sub_surface|
+          surface.subSurfaces.each do |sub_surface|
             ext_window_area += sub_surface.grossArea * sub_surface.multiplier * zone_multiplier
           end
 
@@ -885,13 +983,11 @@ module OpenstudioStandards
         end
       end
 
-      if total_gross_ext_wall_area > 0
-        result = total_ext_window_area / total_gross_ext_wall_area
-      else
-        result = 0.0
+      if total_gross_ext_wall_area > 0.0
+        window_to_wall_ratio = total_ext_window_area / total_gross_ext_wall_area
       end
 
-      return result
+      return window_to_wall_ratio
     end
 
     # Returns the wall area and window area by orientation
