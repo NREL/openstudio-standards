@@ -2715,8 +2715,7 @@ class ASHRAE901PRM < Standard
     # Determine the number of stories spanned by each group and report out info.
     final_groups.each do |group|
       # Determine the number of stories this group spans
-      num_stories = model_num_stories_spanned(model, group['zones'])
-      group['stories'] = num_stories
+      group['stories'] = OpenstudioStandards::Geometry.thermal_zones_get_number_of_stories_spanned(group['zones'])
       # Report out the final grouping
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['occ']}, fuel = #{group['fuel']}, area = #{group['group_area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
       group['zones'].sort.each_slice(5) do |zone_list|

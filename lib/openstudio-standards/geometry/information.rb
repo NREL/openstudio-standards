@@ -539,6 +539,41 @@ module OpenstudioStandards
 
     # @!endgroup Information:ThermalZone
 
+    # @!group Information:ThermalZones
+
+    # Determine the number of stories spanned by the supplied thermal zones.
+    # If all zones on one of the stories have an identical multiplier,
+    # assume that the multiplier is a floor multiplier and increase the number of stories accordingly.
+    # Stories do not have to be contiguous.
+    #
+    # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] An array of OpenStudio ThermalZone objects
+    # @return [Integer] The number of stories spanned by the thermal zones
+    def self.thermal_zones_get_number_of_stories_spanned(thermal_zones)
+      # Get the story object for all zones
+      stories = []
+      thermal_zones.each do |zone|
+        zone.spaces.each do |space|
+          story = space.buildingStory
+          next if story.empty?
+
+          stories << story.get
+        end
+      end
+
+      # Reduce down to the unique set of stories
+      stories = stories.uniq
+
+      # Tally up stories including multipliers
+      num_stories = 0
+      stories.each do |story|
+        num_stories += OpenstudioStandards::Geometry.building_story_get_floor_multiplier(story)
+      end
+
+      return num_stories
+    end
+
+    # @!endgroup Information:ThermalZones
+
     # @!group Information:Story
 
     # Calculate the story exterior wall perimeter. Selected story should have above grade walls. If not perimeter may return zero.

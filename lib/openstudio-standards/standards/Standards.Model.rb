@@ -723,38 +723,6 @@ class Standard
     return false
   end
 
-  # Determine the number of stories spanned by the supplied zones.
-  # If all zones on one of the stories have an identical multiplier,
-  # assume that the multiplier is a floor multiplier and increase the number of stories accordingly.
-  # Stories do not have to be contiguous.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
-  # @return [Integer] the number of stories spanned
-  def model_num_stories_spanned(model, zones)
-    # Get the story object for all zones
-    stories = []
-    zones.each do |zone|
-      zone.spaces.each do |space|
-        story = space.buildingStory
-        next if story.empty?
-
-        stories << story.get
-      end
-    end
-
-    # Reduce down to the unique set of stories
-    stories = stories.uniq
-
-    # Tally up stories including multipliers
-    num_stories = 0
-    stories.each do |story|
-      num_stories += OpenstudioStandards::Geometry.building_story_get_floor_multiplier(story)
-    end
-
-    return num_stories
-  end
-
   # Add design day schedule objects for space loads,
   # not used for 2013 and earlier
   # @author Xuechen (Jerry) Lei, PNNL
@@ -1080,8 +1048,7 @@ class Standard
     # Determine the number of stories spanned by each group and report out info.
     final_groups.each do |group|
       # Determine the number of stories this group spans
-      num_stories = model_num_stories_spanned(model, group['zones'])
-      group['stories'] = num_stories
+      group['stories'] = OpenstudioStandards::Geometry.thermal_zones_get_number_of_stories_spanned(group['zones'])
       # Report out the final grouping
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['occ']}, fuel = #{group['fuel']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
       group['zones'].sort.each_slice(5) do |zone_list|

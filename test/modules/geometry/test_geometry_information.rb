@@ -126,10 +126,17 @@ class TestGeometryInformation < Minitest::Test
 
   # Information:ThermalZone
   def test_thermal_zone_get_adjacent_zones_with_shared_walls
-    thermal_zone = story = @model.getThermalZones[0]
+    thermal_zone = @model.getThermalZones[0]
     result = @geo.thermal_zone_get_adjacent_zones_with_shared_walls(thermal_zone)
     assert_equal(2, result.size)
     assert_equal('OpenStudio::Model::ThermalZone', result[0].class.to_s)
+  end
+
+  # Information:ThermalZones
+  def test_thermal_zones_get_number_of_stories_spanned
+    thermal_zones = @model.getThermalZones
+    result = @geo.thermal_zones_get_number_of_stories_spanned(thermal_zones)
+    assert_equal(2, result)
   end
 
   # Information:Story
