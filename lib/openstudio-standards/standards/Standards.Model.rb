@@ -2604,7 +2604,7 @@ class Standard
       matching_objects = matching_objects.reject { |object| object['minimum_storage'].nil? || object['maximum_storage'].nil? }
 
       # Skip objects whose the minimum volume is below or maximum volume above the specified volume
-      matching_volume_objects = matching_objects.reject { |object| volume.to_f <= object['minimum_storage'].to_f || volume.to_f >= object['maximum_storage'].to_f }
+      matching_volume_objects = matching_objects.reject { |object| volume.to_f < object['minimum_storage'].to_f || volume.to_f > object['maximum_storage'].to_f }
 
       # If no object was found, round the volume down in case the number fell between the limits in the json file.
       if matching_volume_objects.size.zero?

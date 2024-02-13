@@ -54,31 +54,8 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, fuel type of #{fuel_type} is not yet supported, standard will not be applied.")
     end
 
-    # Get the water heater properties
-    search_criteria = {}
-    search_criteria['template'] = template
-    search_criteria['fuel_type'] = fuel_type
-    search_criteria['equipment_type'] = 'Storage Water Heaters'
-
-    # Search base on capacity first
-    wh_props_capacity = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
-    wh_props_capacity_and_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal)
-    wh_props_capacity_and_capacity_btu_per_hr = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, nil, capacity_btu_per_hr)
-    wh_props_capacity_and_volume_and_capacity_per_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal, capacity_btu_per_hr / volume_gal)
-
-    # We consider that the lookup is successful if only one set of record is returned
-    if wh_props_capacity.size == 1
-      wh_props = wh_props_capacity[0]
-    elsif wh_props_capacity_and_volume.size == 1
-      wh_props = wh_props_capacity_and_volume[0]
-    elsif wh_props_capacity_and_capacity_btu_per_hr == 1
-      wh_props = wh_props_capacity_and_capacity_btu_per_hr[0]
-    elsif wh_props_capacity_and_volume_and_capacity_per_volume == 1
-      wh_props = wh_props_capacity_and_volume_and_capacity_per_volume[0]
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find water heater properties, cannot apply efficiency standard.")
-      return false
-    end
+    wh_props = water_heater_mixed_get_efficiency_requirement(water_heater_mixed, fuel_type, capacity_btu_per_hr, volume_gal)
+    return false if wh_props == {}
 
     # Calculate the water heater efficiency and
     # skin loss coefficient (UA) using different methods,
@@ -221,6 +198,56 @@ class Standard
     return true
   end
 
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
+  # @param fuel_type [Float] water heater fuel type
+  # @param capacity_btu_per_hr [Float] water heater capacity in Btu/h
+  # @param volume_gal [Float] water heater gallons of storage
+  # @return [Hash] returns a hash wwith the applicable efficiency requirements
+  def water_heater_mixed_get_efficiency_requirement(water_heater_mixed, fuel_type, capacity_btu_per_hr, volume_gal)
+    # Get the water heater properties
+    search_criteria = {}
+    search_criteria['template'] = template
+    search_criteria['fuel_type'] = fuel_type
+    search_criteria['equipment_type'] = 'Storage Water Heaters'
+
+    # Search base on capacity first
+    wh_props_capacity = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
+    wh_props_capacity_and_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal.round(0))
+    wh_props_capacity_and_capacity_btu_per_hr = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, nil, capacity_btu_per_hr)
+    wh_props_capacity_and_volume_and_capacity_per_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal, capacity_btu_per_hr / volume_gal)
+
+    # We consider that the lookup is successful if only one set of record is returned
+    if wh_props_capacity.size == 1
+      wh_props = wh_props_capacity[0]
+    elsif wh_props_capacity_and_volume.size == 1
+      wh_props = wh_props_capacity_and_volume[0]
+    elsif wh_props_capacity_and_capacity_btu_per_hr == 1
+      wh_props = wh_props_capacity_and_capacity_btu_per_hr[0]
+    elsif wh_props_capacity_and_volume_and_capacity_per_volume == 1
+      wh_props = wh_props_capacity_and_volume_and_capacity_per_volume[0]
+    else
+      # Search again with additional criteria
+      search_criteria = water_heater_mixed_additional_search_criteria(water_heater_mixed, search_criteria)
+      wh_props_capacity = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
+      wh_props_capacity_and_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal.round(0))
+      wh_props_capacity_and_capacity_btu_per_hr = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, nil, capacity_btu_per_hr)
+      wh_props_capacity_and_volume_and_capacity_per_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal, capacity_btu_per_hr / volume_gal)
+      if wh_props_capacity.size == 1
+        wh_props = wh_props_capacity[0]
+      elsif wh_props_capacity_and_volume.size == 1
+        wh_props = wh_props_capacity_and_volume[0]
+      elsif wh_props_capacity_and_capacity_btu_per_hr == 1
+        wh_props = wh_props_capacity_and_capacity_btu_per_hr[0]
+      elsif wh_props_capacity_and_volume_and_capacity_per_volume == 1
+        wh_props = wh_props_capacity_and_volume_and_capacity_per_volume[0]
+      else
+        return {}
+      end
+    end
+
+    return wh_props
+  end
+
   # Applies the correct fuel type for the water heaters
   # in the baseline model.  For most standards and for most building
   # types, the baseline uses the same fuel type as the proposed.
@@ -345,5 +372,14 @@ class Standard
     end
 
     return water_heater_efficiency, ua_btu_per_hr_per_f
+  end
+
+  # Add additional search criteria for water heater lookup efficiency.
+  #
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
+  # @param search_criteria [Hash] search criteria for looking up water heater data
+  # @return [Hash] updated search criteria
+  def water_heater_mixed_additional_search_criteria(water_heater_mixed, search_criteria)
+    return search_criteria
   end
 end
