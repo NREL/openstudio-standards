@@ -93,7 +93,9 @@ module OpenstudioStandards
       return sch_rule
     end
 
-    # Increase/decrease by percentage or static value
+    # Increase/decrease by percentage or static value.
+    # If the schedule has scheduleTypeLimits object, the adjusted values will subject to the lower and upper
+    # bounds of the schedule type limits object.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @param value [Double] Hash of name and time value pairs
