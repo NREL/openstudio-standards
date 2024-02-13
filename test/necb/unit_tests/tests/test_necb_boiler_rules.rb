@@ -178,7 +178,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   # if capacity <= 176 kW ---> one single stage boiler
   # if capacity > 176 kW and <= 352 kW ---> 2 boilers of equal capacity
   # if capacity > 352 kW ---> one modulating boiler down to 25% of capacity"
-  def xx_test_number_of_boilers
+  def test_number_of_boilers
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters.
