@@ -238,6 +238,6 @@ class AppendixGPRMTests < Minitest::Test
 
   def test_swh_single_building_type
     model_hash = prm_test_helper('swh_single_building_type', require_prototype=false, require_baseline=true)
-    check_swh_single_building_type_fuel_type(model_hash["baseline"])
+    check_swh_single_building_type(model_hash["baseline"])
   end
 end
