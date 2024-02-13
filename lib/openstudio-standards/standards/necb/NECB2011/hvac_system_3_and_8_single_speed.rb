@@ -163,11 +163,11 @@ class NECB2011
     if necb_reference_hp
       #AirLoopHVACUnitaryHeatPumpAirToAir needs FanOnOff in order for the fan to turn off during off hours
       fan = OpenStudio::Model::FanOnOff.new(model, always_on)
-    else      
+    else
       fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
     end
 
-    # Set up DX coil 
+    # Set up DX coil
     if necb_reference_hp #NECB curve characteristics
       clg_coil = add_onespeed_DX_coil(model, always_on)
       clg_coil.setName('CoilCoolingDXSingleSpeed_ashp')
@@ -214,8 +214,8 @@ class NECB2011
 
       #create supplemental heating coil based on default regional fuel type
       if necb_reference_hp_supp_fuel == 'DefaultFuel'
-        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-        necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+        epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+        necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
       end
       if necb_reference_hp_supp_fuel == 'NaturalGas'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)

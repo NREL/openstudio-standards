@@ -491,7 +491,7 @@ class NRELZNEReady2017 < ASHRAE901
       ann_op_hrs = 8760.0
     elsif avail_sch.to_ScheduleRuleset.is_initialized
       avail_sch = avail_sch.to_ScheduleRuleset.get
-      ann_op_hrs = schedule_ruleset_annual_hours_above_value(avail_sch, 0.0)
+      ann_op_hrs = OpenstudioStandards::Schedules.schedule_ruleset_get_hours_above_value(avail_sch, 0.0)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
     end

@@ -1,7 +1,8 @@
-# Methods to create geometry
 module OpenstudioStandards
+  # This Module provides methods to create, modify, and get information about model geometry
   module Geometry
     # @!group Create
+    # Methods to create geometry
 
     # method to create a point object at the center of a floor
     #

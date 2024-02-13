@@ -99,7 +99,7 @@
           "minimum_thermal_efficiency": 0.80,
           "minimum_combustion_efficiency": null,
           "efffplr": "BOILER-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011"
+          "notes": "From MNECB Supplement 5.4.7.4.4"
         },
         {
           
@@ -115,7 +115,7 @@
           "minimum_thermal_efficiency": 0.80,
           "minimum_combustion_efficiency": null,
           "efffplr": "BOILER-EFFFPLR-NECB2011",
-          "notes": "From NECB 2011"
+          "notes": "From MNECB Supplement 5.4.7.4.4"
         }
       ]
     }

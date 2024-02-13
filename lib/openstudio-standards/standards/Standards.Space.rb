@@ -1603,7 +1603,7 @@ class Standard
     return space.additionalProperties.getFeatureAsString('space_conditioning_category').get if space.additionalProperties.hasFeature('space_conditioning_category')
 
     # Get climate zone
-    climate_zone = model_standards_climate_zone(space.model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(space.model)
 
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -1769,7 +1769,7 @@ class Standard
       if act_sch.is_initialized
         if act_sch.get.to_ScheduleRuleset.is_initialized
           act_sch = act_sch.get.to_ScheduleRuleset.get
-          w_per_person = schedule_ruleset_annual_min_max_value(act_sch)['max']
+          w_per_person = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(act_sch)['max']
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
         end
@@ -1831,7 +1831,7 @@ class Standard
       occ_sch = people.numberofPeopleSchedule
       if occ_sch.is_initialized
         occ_sch_obj = occ_sch.get
-        occ_sch_values = get_8760_values_from_schedule(model, occ_sch_obj)
+        occ_sch_values = OpenstudioStandards::Schedules.schedule_get_hourly_values(occ_sch_obj)
         # Flag = 1 if any schedule shows occupancy for a given hour
         if !occ_sch_values.nil?
           (0..8759).each do |ihr|
@@ -1900,7 +1900,7 @@ class Standard
       end
       if act_sch.is_initialized
         act_sch_obj = act_sch.get
-        act_sch_values = get_8760_values_from_schedule(model, act_sch_obj)
+        act_sch_values = OpenstudioStandards::Schedules.schedule_get_hourly_values(act_sch_obj)
         if !act_sch_values.nil?
           w_per_person = act_sch_values.max
         else
@@ -1920,7 +1920,7 @@ class Standard
       end
       if occ_sch.is_initialized
         occ_sch_obj = occ_sch.get
-        occ_sch_values = get_8760_values_from_schedule(model, occ_sch_obj)
+        occ_sch_values = OpenstudioStandards::Schedules.schedule_get_hourly_values(occ_sch_obj)
         if !occ_sch_max.nil?
           occ_sch_max = occ_sch_values.max
         else
@@ -1977,7 +1977,7 @@ class Standard
       end
       if ltg_sch.is_initialized
         ltg_sch_obj = ltg_sch.get
-        ltg_sch_values = get_8760_values_from_schedule(model, ltg_sch_obj)
+        ltg_sch_values = OpenstudioStandards::Schedules.schedule_get_hourly_values(ltg_sch_obj)
         if !ltg_sch_values.nil?
           ltg_sch_max = ltg_sch_values.max
         else
@@ -2013,7 +2013,7 @@ class Standard
       end
       if ltg_sch.is_initialized
         ltg_sch_obj = ltg_sch.get
-        ltg_sch_values = get_8760_values_from_schedule(model, ltg_sch_obj)
+        ltg_sch_values = OpenstudioStandards::Schedules.schedule_get_hourly_values(ltg_sch_obj)
         if !ltg_sch_values.nil?
           ltg_sch_max = ltg_sch_values.max
         else
@@ -2190,7 +2190,7 @@ class Standard
     load_sch_ruleset = nil
     if load_sch.is_initialized
       load_sch_obj = load_sch.get
-      load_sch_values = get_8760_values_from_schedule(model, load_sch_obj)
+      load_sch_values = OpenstudioStandards::Schedules.schedule_get_hourly_values(load_sch_obj)
       if !load_sch_values.nil?
         load_sch_max = load_sch_values.max
       else

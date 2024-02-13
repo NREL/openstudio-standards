@@ -1,12 +1,13 @@
-# Method to apply a typical CBECS HVAC system to thermal zones
 module OpenstudioStandards
+  # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
     # @!group AirLoop:Information
+    # Methods to get information on AirLoop objects
 
     # Returns whether air loop HVAC is a direct evaporative system
     #
     # @param air_loop_hvac [<OpenStudio::Model::AirLoopHVAC>] OpenStudio AirLoopHVAC object
-    # @return [Bool] returns true if successful, false if not
+    # @return [Boolean] returns true if successful, false if not
     def self.air_loop_hvac_direct_evap?(air_loop_hvac)
       # check if direct evap
       is_direct_evap = false
@@ -24,7 +25,7 @@ module OpenstudioStandards
     # Returns whether air loop HVAC is a unitary system
     #
     # @param air_loop_hvac [<OpenStudio::Model::AirLoopHVAC>] OpenStudio AirLoopHVAC object
-    # @return [Bool] returns true if air_loop_hvac is a unitary system, false if not
+    # @return [Boolean] returns true if air_loop_hvac is a unitary system, false if not
     def self.air_loop_hvac_unitary_system?(air_loop_hvac)
       # check if unitary system
       is_unitary_system = false
