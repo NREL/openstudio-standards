@@ -81,6 +81,45 @@ class TestGeometryInformation < Minitest::Test
     assert_equal(result, false)
   end
 
+  # Information:SubSurface
+
+  def test_sub_surface_vertical_rectangle
+    model = OpenStudio::Model::Model.new
+
+    width = 5.0
+    length = 10.0
+    polygon = OpenStudio::Point3dVector.new
+    polygon << OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << OpenStudio::Point3d.new(0.0, width, 0.0)
+    polygon << OpenStudio::Point3d.new(length, width, 0.0)
+    polygon << OpenStudio::Point3d.new(length, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+
+    south_surface = nil
+    space.surfaces.each do |surface|
+      south_surface = surface if @geo.surface_get_cardinal_direction(surface) == 'S'
+    end
+
+    vertices = OpenStudio::Point3dVector.new
+    vertices << OpenStudio::Point3d.new(2.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(4.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(4.0, 0.0, 2.0)
+    vertices << OpenStudio::Point3d.new(2.0, 0.0, 2.0)
+    rect_sub_surface = OpenStudio::Model::SubSurface.new(vertices, model)
+    rect_sub_surface.setSurface(south_surface)
+    result = @geo.sub_surface_vertical_rectangle?(rect_sub_surface)
+    assert(result)
+
+    vertices = OpenStudio::Point3dVector.new
+    vertices << OpenStudio::Point3d.new(6.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(7.0, 0.0, 2.0)
+    vertices << OpenStudio::Point3d.new(8.0, 0.0, 1.0)
+    tri_sub_surface = OpenStudio::Model::SubSurface.new(vertices, model)
+    tri_sub_surface.setSurface(south_surface)
+    result = @geo.sub_surface_vertical_rectangle?(tri_sub_surface)
+    assert(!result)
+  end
+
   # Information:Space
 
   # def test_space_get_envelope_area

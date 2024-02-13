@@ -227,6 +227,40 @@ module OpenstudioStandards
 
     # @!endgroup Information:Surfaces
 
+    # @!group Information:SubSurface
+
+    # Determine if the sub surface is a vertical rectangle,
+    # meaning a rectangle where the bottom is parallel to the ground.
+    #
+    # @param sub_surface [OpenStudio::Model::SubSurface] OpenStudio SubSurface object
+    # @return [Boolean] returns true if the surface is a vertical rectangle, false if not
+    def self.sub_surface_vertical_rectangle?(sub_surface)
+      # Get the vertices once
+      verts = sub_surface.vertices
+
+      # Check for 4 vertices
+      return false unless verts.size == 4
+
+      # Check if the 2 lowest z-values
+      # are the same
+      z_vals = []
+      verts.each do |vertex|
+        z_vals << vertex.z
+      end
+      z_vals = z_vals.sort
+      return false unless z_vals[0] == z_vals[1]
+
+      # Check if the diagonals are equal length
+      diag_a = verts[0] - verts[2]
+      diag_b = verts[1] - verts[3]
+      return false unless diag_a.length == diag_b.length
+
+      # If here, we have a rectangle
+      return true
+    end
+
+    # @!endgroup Information:SubSurface
+
     # @!group Information:Space
 
     # Calculate the space envelope area.

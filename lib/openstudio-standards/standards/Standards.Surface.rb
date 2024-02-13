@@ -456,7 +456,7 @@ class Standard
       surface.subSurfaces.sort.each do |ss|
         next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
 
-        if sub_surface_vertical_rectangle?(ss)
+        if OpenstudioStandards::Geometry.sub_surface_vertical_rectangle?(ss)
           sub_surface_reduce_area_by_percent_by_raising_sill(ss, reduction)
         else
           sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
