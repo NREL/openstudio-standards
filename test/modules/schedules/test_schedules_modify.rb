@@ -65,6 +65,21 @@ class TestSchedulesModify < Minitest::Test
     assert(schedule.to_ScheduleRuleset.is_initialized)
     schedule_max = @sch.schedule_ruleset_get_min_max(schedule)['max']
     assert(schedule_max == 2.0)
+
+    # Test case when schedule type limits put constraint on the adjustment values
+    schedule_type_limits = @sch.create_schedule_type_limits(model,
+                                                            name: 'Fraction Schedule Type',
+                                                            lower_limit_value: 0.0,
+                                                            upper_limit_value: 2.0,
+                                                            numeric_type: 'Continuous',
+                                                            unit_type: 'Dimensionless'
+    )
+    schedule.setScheduleTypeLimits(schedule_type_limits)
+    @sch.schedule_ruleset_simple_value_adjust(schedule, 50)
+    assert(schedule.to_ScheduleRuleset.is_initialized)
+    schedule_max = @sch.schedule_ruleset_get_min_max(schedule)['max']
+    assert(schedule_max == 2.0)
+
   end
 
   def test_schedule_ruleset_conditional_adjust_value
