@@ -332,37 +332,32 @@ module NecbHelper
     end
   end
 
-  # Methods to compare results json objects. Derived from Hashdiff gem (https://github.com/liufengyun/hashdiff/tree/master)
-  #  Extracted core functionality and hardwired some of the options.
+  # @param obj1 [Hash] json data for comparison
+  # @param obj2 [Hash] json data for comparison
+  # @param prefix [string] built up reference of where we are in the nested json, :: separated keys
+  # @return the differences between the two json data objects
+  # @note Derived from Hashdiff gem (https://github.com/liufengyun/hashdiff/tree/master). Extracted core functionality that is used above.
   module CompareJSON
-    def self.diff(obj1, obj2, options = {})
-      opts = {
-        prefix: '',
-        similarity: 0.8,
-        delimiter: '.',
-        strict: true,
-        ignore_keys: [],
-        indifferent: false,
-        strip: false,
-        numeric_tolerance: 0
-      }.merge!(options) # Used to build up nested hash location when recursive called. Or is it yust the current key?
-
+    def self.diff(obj1, obj2, prefix = '')
+      
       return [] if obj1.nil? && obj2.nil?
 
-      return [['~', opts[:prefix], obj1, obj2]] if obj1.nil? || obj2.nil?
+      return [['~', prefix, obj1, obj2]] if obj1.nil? || obj2.nil?
 
-      return LcsCompareArrays.call(obj1, obj2, opts) if obj1.is_a?(Array) 
+      return LcsCompareArrays.call(obj1, obj2, prefix) if obj1.is_a?(Array) 
 
-      return CompareHashes.call(obj1, obj2, opts) if obj1.is_a?(Hash)
+      return CompareHashes.call(obj1, obj2, prefix) if obj1.is_a?(Hash)
 
       return [] if obj1 == obj2
 
-      [['~', opts[:prefix], obj1, obj2]]
+      [['~', prefix, obj1, obj2]]
     end
     
     class CompareHashes
       class << self
-        def call(obj1, obj2, opts = {})
+        def call(obj1, obj2, prefix = '')
+          current_prefix = prefix
+          prefix = ''
           return [] if obj1.empty? && obj2.empty?
 
           obj1_keys = obj1.keys
@@ -378,19 +373,19 @@ module NecbHelper
 
           # Add deleted properties.
           deleted_keys.each do |k|
-            change_key = CompareJSON.prefix_append_key(opts[:prefix], k)
+            change_key = CompareJSON.prefix_append_key(prefix, k)
             result << ['-', change_key, obj1[k]]
           end
 
           # Recursive comparison for common keys.
           common_keys.each do |k|
-            prefix = CompareJSON.prefix_append_key(opts[:prefix], k)
-            result.concat(CompareJSON.diff(obj1[k], obj2[k], opts.merge(prefix: prefix)))
+            prefix = CompareJSON.prefix_append_key(current_prefix, k)
+            result.concat(CompareJSON.diff(obj1[k], obj2[k], prefix))
           end
 
           # Added properties.
           added_keys.each do |k|
-            change_key = CompareJSON.prefix_append_key(opts[:prefix], k)
+            change_key = CompareJSON.prefix_append_key(prefix, k)
             result << ['+', change_key, obj2[k]]
           end
 
@@ -401,22 +396,22 @@ module NecbHelper
 
     class LcsCompareArrays
       class << self
-        def call(obj1, obj2, opts = {})
+        def call(obj1, obj2, prefix = '')
           result = []
 
-          changeset = CompareJSON.diff_array_lcs(obj1, obj2, opts) do |lcs|
+          changeset = CompareJSON.diff_array_lcs(obj1, obj2, prefix) do |lcs|
             # Use a's index for similarity.
             lcs.each do |pair|
-              prefix = CompareJSON.prefix_append_array_index(opts[:prefix], pair[0])
+              prefix = CompareJSON.prefix_append_array_index(prefix, pair[0])
 
-              result.concat(CompareJSON.diff(obj1[pair[0]], obj2[pair[1]], opts.merge(prefix: prefix)))
+              result.concat(CompareJSON.diff(obj1[pair[0]], obj2[pair[1]], prefix))
             end
           end
 
           changeset.each do |change|
             next if change[0] != '-' && change[0] != '+'
 
-            change_key = CompareJSON.prefix_append_array_index(opts[:prefix], change[1])
+            change_key = CompareJSON.prefix_append_array_index(prefix, change[1])
 
             result << [change[0], change_key, change[2]]
           end
@@ -427,7 +422,9 @@ module NecbHelper
     end
 
     # Diff array using LCS algorithm
-    def self.diff_array_lcs(arraya, arrayb, options = {})
+    def self.diff_array_lcs(arraya, arrayb, prefix = '')
+      current_prefix = prefix
+      prefix = ''
       return [] if arraya.empty? && arrayb.empty?
 
       change_set = []
@@ -449,13 +446,8 @@ module NecbHelper
         return change_set
       end
 
-      opts = {
-        prefix: '',
-        similarity: 0.8,
-        delimiter: '.'
-      }.merge!(options)
-
-      links = lcs(arraya, arrayb, opts)
+      prefix = current_prefix
+      links = lcs(arraya, arrayb, prefix)
 
       # yield common
       yield links if block_given?
@@ -488,12 +480,10 @@ module NecbHelper
     
     # Calculate array difference using LCS algorithm
     # http://en.wikipedia.org/wiki/Longest_common_subsequence_problem
-    def self.lcs(arraya, arrayb, options = {})
+    def self.lcs(arraya, arrayb, prefix = '')
       return [] if arraya.empty? || arrayb.empty?
 
-      opts = { similarity: 0.8 }.merge!(options)
-
-      opts[:prefix] = prefix_append_array_index(opts[:prefix], '*')
+      prefix = prefix_append_array_index(prefix, '*')
 
       a_start = b_start = 0
       a_finish = arraya.size - 1
@@ -504,7 +494,7 @@ module NecbHelper
       (b_start..b_finish).each do |bi|
         lcs[bi] = []
         (a_start..a_finish).each do |ai|
-          if similar?(arraya[ai], arrayb[bi], opts)
+          if arraya[ai] == arrayb[bi]
             topleft = (ai > 0) && (bi > 0) ? lcs[bi - 1][ai - 1][1] : 0
             lcs[bi][ai] = [:topleft, topleft + 1]
           elsif (top = bi > 0 ? lcs[bi - 1][ai][1] : 0)
@@ -545,51 +535,6 @@ module NecbHelper
       end
 
       return vector
-    end
-
-    # Judge whether two objects are similar. Use a similarity of 0.8 for all cases.
-    def self.similar?(obja, objb, options = {})
-      return obja == objb if !any_hash_or_array?(obja, objb)
-
-      count_a = count_nodes(obja)
-      count_b = count_nodes(objb)
-
-      return true if (count_a + count_b).zero?
-
-      opts = { similarity: 0.8 }.merge!(options)
-
-      diffs = count_diff(diff(obja, objb, opts))
-
-      (1 - diffs / (count_a + count_b).to_f) >= opts[:similarity]
-    end
-    
-    # Count node differences.
-    def self.count_diff(diffs)
-      diffs.inject(0) do |sum, item|
-        old_change_count = count_nodes(item[2])
-        new_change_count = count_nodes(item[3])
-        sum + (old_change_count + new_change_count)
-      end
-    end
-    
-    # Count total nodes for an object.
-    def self.count_nodes(obj)
-      return 0 unless obj
-
-      count = 0
-      if obj.is_a?(Array)
-        obj.each { |e| count += count_nodes(e) }
-      elsif obj.is_a?(Hash)
-        obj.each_value { |v| count += count_nodes(v) }
-      else
-        return 1
-      end
-
-      count
-    end
-
-    def self.any_hash_or_array?(obja, objb)
-      obja.is_a?(Array) || obja.is_a?(Hash) || objb.is_a?(Array) || objb.is_a?(Hash)
     end
 
     def self.prefix_append_key(prefix, key)
