@@ -214,7 +214,7 @@ class AppendixGPRMTests < Minitest::Test
                                                                                  @@hvac_building_types[hvac_building_type],
                                                                                  @@wwr_building_types[building_type],
                                                                                  @@swh_building_types[building_type],
-                                                                                 model_deep_copy = false,
+                                                                                 model_deep_copy = true,
                                                                                  create_proposed_model = true,
                                                                                  custom = nil,
                                                                                  sizing_run_dir = run_dir_baseline,
