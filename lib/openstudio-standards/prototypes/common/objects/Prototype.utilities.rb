@@ -292,7 +292,7 @@ class Standard
   # @param cop [Double] Coefficient of Performance (COP)
   # @return [Double] seasonal energy efficiency ratio (SEER)
   def cop_to_seer_cooling_with_fan(cop)
-    eer = cop_to_eer_no_fan(cop)
+    eer = cop_to_eer(cop)
     delta = 1.1088**2 - 4.0 * 0.0182 * eer
     seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
 
@@ -388,6 +388,14 @@ class Standard
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop(eer)
     return eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get
+  end
+
+  # Convert from COP to EER
+  #
+  # @param cop [Double] Coefficient of Performance (COP)
+  # @return [Double] Energy Efficiency Ratio (EER)
+  def cop_to_eer(cop)
+    return cop * OpenStudio.convert(1.0, 'W', 'Btu/h').get
   end
 
   # Convert from COP to kW/ton
