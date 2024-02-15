@@ -250,3 +250,4 @@ class AppendixGPRMTests < Minitest::Test
     check_wwr(model_hash['baseline'])
   end
 end
+
