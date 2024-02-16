@@ -53,12 +53,12 @@ class BTAPPRE1980 < NECB2011
   #     # limit
   #     # <-3.1:  Remove all the windows/skylights
   #     # > 1:  Do nothing
-  def apply_fdwr_srr_daylighting(model:, fdwr_set: -2.0, srr_set: -2.0)
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -2.0, srr_set: -2.0, necb_hdd: true)
     fdwr_set = -2.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil? || (fdwr_set.to_f.round(0) == -1.0)
     srr_set = -2.0 if (srr_set == 'NECB_default') || srr_set.nil? || (srr_set.to_f.round(0) == -1.0)
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
-    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: true)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end

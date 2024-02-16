@@ -1,7 +1,8 @@
-# Methods to modify geometry
 module OpenstudioStandards
+  # This Module provides methods to create, modify, and get information about model geometry
   module Geometry
     # @!group Modify
+    # Methods to modify geometry
 
     # lower z value of vertices with starting value above z_value_target to z_value_target
     #

@@ -63,6 +63,16 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Boolean] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    # enforce the user model to be a non-leap year, defaulting to 2009 if the model year is a leap year
+    if user_model.yearDescription.is_initialized
+      year_description = user_model.yearDescription.get
+      if year_description.isLeapYear
+        OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                           "The user model year #{year_description.assumedYear} is a leap year. Changing to 2009, a non-leap year, as required by PRM guidelines.")
+        year_description.setCalendarYear(2009)
+      end
+    end
+
     if create_proposed_model
       # Perform a user model design day run only to make sure
       # that the user model is valid, i.e. can run without major
@@ -1191,7 +1201,7 @@ class Standard
             fan_schedule = avail_mgr.schedule
             # fan_sch_translator = ScheduleTranslator.new(model, fan_schedule)
             # fan_sch_ruleset = fan_sch_translator.translate
-            fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+            fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
           end
         end
       end
@@ -1208,7 +1218,7 @@ class Standard
         else
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Failed to retreive fan object for AirLoop #{air_loop_hvac.name}")
         end
-        fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+        fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
       end
 
       # Assign this schedule to each zone on this air loop
@@ -1229,7 +1239,7 @@ class Standard
           fan_object = zone_hvac_get_fan_object(zone_equipment)
           if !fan_object.nil?
             fan_schedule = fan_object.availabilitySchedule
-            fan_schedule_8760 = get_8760_values_from_schedule(model, fan_schedule)
+            fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
             fan_sch_names[zone.name.get] = fan_schedule_8760
             break
           end
@@ -1289,36 +1299,6 @@ class Standard
       fan_obj = fan_component.to_FanVariableVolume.get
     end
     return fan_obj
-  end
-
-  # Convert from schedule object to array of hourly values for entire year
-  # Array will include extra 24 values for leap year
-  # Array will also include extra 24 values at end for holiday day type
-  # @author: Doug Maddox, PNNL
-  # @todo consider moving this to Standards.Schedule.rb
-  # @param: model [Object]
-  # @param: fan_schedule [Object]
-  # @return: [Array<String>] annual hourly values from schedule
-  def get_8760_values_from_schedule(model, fan_schedule)
-    sch_object_type = fan_schedule.iddObjectType.valueName.to_s
-    fan_8760 = nil
-    case sch_object_type
-    when 'OS_Schedule_Ruleset'
-      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule)
-    when 'OS_Schedule_Constant'
-      fan_schedule_constant = fan_schedule.to_ScheduleConstant.get
-      fan_8760 = get_8760_values_from_schedule_constant(model, fan_schedule_constant)
-    when 'OS_Schedule_Compact'
-      # First convert to ScheduleRuleset
-      sch_translator = ScheduleTranslator.new(model, fan_schedule)
-      fan_schedule_ruleset = sch_translator.convert_schedule_compact_to_schedule_ruleset
-      fan_8760 = get_8760_values_from_schedule_ruleset(model, fan_schedule_ruleset)
-    when 'OS_Schedule_Year'
-      # @todo add function for ScheduleYear
-      # fan_8760 = get_8760_values_from_schedule_year(model, fan_schedule)
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Automated baseline measure does not support use of Schedule Year')
-    end
-    return fan_8760
   end
 
   # Determine the baseline system type given the inputs.  Logic is different for different standards.
@@ -1454,41 +1434,6 @@ class Standard
   def model_prm_baseline_system_change_fuel_type(model, fuel_type, climate_zone)
     # Don't change fuel type for most templates
     return fuel_type
-  end
-
-  # Get ASHRAE ID code for climate zone
-  # @param climate_zone [String] full name of climate zone
-  # @return [String] ASHRAE ID code for climate zone
-  def get_climate_zone_code(climate_zone)
-    cz_codes = []
-    cz_codes << '0A'
-    cz_codes << '0B'
-    cz_codes << '1A'
-    cz_codes << '1B'
-    cz_codes << '2A'
-    cz_codes << '2B'
-    cz_codes << '3A'
-    cz_codes << '3B'
-    cz_codes << '3C'
-    cz_codes << '4A'
-    cz_codes << '4B'
-    cz_codes << '4C'
-    cz_codes << '5A'
-    cz_codes << '5B'
-    cz_codes << '5C'
-    cz_codes << '6A'
-    cz_codes << '6B'
-    cz_codes << '7A'
-    cz_codes << '7B'
-    cz_codes << '8A'
-    cz_codes << '8B'
-
-    cz_codes.each do |cz|
-      pattern = Regexp.new(cz, true)
-      if pattern =~ climate_zone
-        return cz.to_s
-      end
-    end
   end
 
   # Add the specified baseline system type to the specified zones based on the specified template.
@@ -1929,7 +1874,7 @@ class Standard
       when 'SZ_VAV' # System 11, chilled water, heating type varies by climate zone
         unless zones.empty?
           # htg type
-          climate_zone = model_standards_climate_zone(model)
+          climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
           case climate_zone
             when 'ASHRAE 169-2006-0A',
               'ASHRAE 169-2006-0B',
@@ -2184,20 +2129,10 @@ class Standard
           next if lights_sch.empty?
 
           lights_sch = lights_sch.get
-          if lights_sch.to_ScheduleRuleset.is_initialized
-            lights_sch = lights_sch.to_ScheduleRuleset.get
-            full_load_hrs = schedule_ruleset_annual_equivalent_full_load_hrs(lights_sch)
-            if full_load_hrs > 0
-              ann_op_hrs = full_load_hrs
-              break # Stop after the first schedule with more than 0 hrs
-            end
-          elsif lights_sch.to_ScheduleConstant.is_initialized
-            lights_sch = lights_sch.to_ScheduleConstant.get
-            full_load_hrs = schedule_constant_annual_equivalent_full_load_hrs(lights_sch)
-            if full_load_hrs > 0
-              ann_op_hrs = full_load_hrs
-              break # Stop after the first schedule with more than 0 hrs
-            end
+          full_load_hrs = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(lights_sch)
+          if full_load_hrs > 0
+            ann_op_hrs = full_load_hrs
+            break # Stop after the first schedule with more than 0 hrs
           end
         end
         wk_op_hrs = ann_op_hrs / 52.0
@@ -2905,142 +2840,6 @@ class Standard
     return desired_object
   end
 
-  # Create constant ScheduleRuleset
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param value [Double] the value to use, 24-7, 365
-  # @param name [String] the name of the schedule
-  # @param sch_type_limit [String] the name of a schedule type limit
-  #   options are Temperature, Humidity Ratio, Fractional, OnOff, and Activity
-  # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  def model_add_constant_schedule_ruleset(model,
-                                          value,
-                                          name = nil,
-                                          sch_type_limit: 'Temperature')
-    # check to see if schedule exists with same name and constant value and return if true
-    unless name.nil?
-      existing_sch = model.getScheduleRulesetByName(name)
-      if existing_sch.is_initialized
-        existing_sch = existing_sch.get
-        existing_day_sch_vals = existing_sch.defaultDaySchedule.values
-        if existing_day_sch_vals.size == 1 && (existing_day_sch_vals[0] - value).abs < 1.0e-6
-          return existing_sch
-        end
-      end
-    end
-
-    schedule = OpenStudio::Model::ScheduleRuleset.new(model)
-    unless name.nil?
-      schedule.setName(name)
-      schedule.defaultDaySchedule.setName("#{name} Default")
-    end
-
-    if !sch_type_limit.nil?
-      sch_type_limits_obj = model_add_schedule_type_limits(model, standard_sch_type_limit: sch_type_limit)
-      schedule.setScheduleTypeLimits(sch_type_limits_obj)
-    end
-
-    schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), value)
-    return schedule
-  end
-
-  # Create ScheduleTypeLimits
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param standard_sch_type_limit [String] the name of a standard schedule type limit with predefined limits
-  #   options are Dimensionless, Temperature, Humidity Ratio, Fractional, OnOff, and Activity
-  # @param name [String] the name of the schedule type limits
-  # @param lower_limit_value [double] the lower limit value for the schedule type
-  # @param upper_limit_value [double] the upper limit value for the schedule type
-  # @param numeric_type [String] the numeric type, options are Continuous or Discrete
-  # @param unit_type [String] the unit type, options are defined in EnergyPlus I/O reference
-  # @return [OpenStudio::Model::ScheduleTypeLimits] schedule type limits
-  def model_add_schedule_type_limits(model,
-                                     standard_sch_type_limit: nil,
-                                     name: nil,
-                                     lower_limit_value: nil,
-                                     upper_limit_value: nil,
-                                     numeric_type: nil,
-                                     unit_type: nil)
-
-    if standard_sch_type_limit.nil?
-      if lower_limit_value.nil? || upper_limit_value.nil? || numeric_type.nil? || unit_type.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'If calling model_add_schedule_type_limits without a standard_sch_type_limit, you must specify all properties of ScheduleTypeLimits.')
-        return false
-      end
-      schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-      schedule_type_limits.setName(name) if !name.nil?
-      schedule_type_limits.setLowerLimitValue(lower_limit_value)
-      schedule_type_limits.setUpperLimitValue(upper_limit_value)
-      schedule_type_limits.setNumericType(numeric_type)
-      schedule_type_limits.setUnitType(unit_type)
-    else
-      schedule_type_limits = model.getScheduleTypeLimitsByName(standard_sch_type_limit)
-      if !schedule_type_limits.empty?
-        schedule_type_limits = schedule_type_limits.get
-        if schedule_type_limits.name.to_s.downcase == 'temperature'
-          schedule_type_limits.resetLowerLimitValue
-          schedule_type_limits.resetUpperLimitValue
-          schedule_type_limits.setNumericType('Continuous')
-          schedule_type_limits.setUnitType('Temperature')
-        end
-      else
-        case standard_sch_type_limit.downcase
-          when 'dimensionless'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Dimensionless')
-            schedule_type_limits.setLowerLimitValue(0.0)
-            schedule_type_limits.setUpperLimitValue(1000.0)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('Dimensionless')
-
-          when 'temperature'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Temperature')
-            schedule_type_limits.setLowerLimitValue(0.0)
-            schedule_type_limits.setUpperLimitValue(100.0)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('Temperature')
-
-          when 'humidity ratio'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Humidity Ratio')
-            schedule_type_limits.setLowerLimitValue(0.0)
-            schedule_type_limits.setUpperLimitValue(0.3)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('Dimensionless')
-
-          when 'fraction', 'fractional'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Fraction')
-            schedule_type_limits.setLowerLimitValue(0.0)
-            schedule_type_limits.setUpperLimitValue(1.0)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('Dimensionless')
-
-          when 'onoff'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('OnOff')
-            schedule_type_limits.setLowerLimitValue(0)
-            schedule_type_limits.setUpperLimitValue(1)
-            schedule_type_limits.setNumericType('Discrete')
-            schedule_type_limits.setUnitType('Availability')
-
-          when 'activity'
-            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-            schedule_type_limits.setName('Activity')
-            schedule_type_limits.setLowerLimitValue(70.0)
-            schedule_type_limits.setUpperLimitValue(1000.0)
-            schedule_type_limits.setNumericType('Continuous')
-            schedule_type_limits.setUnitType('ActivityLevel')
-          else
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Invalid standard_sch_type_limit for method model_add_schedule_type_limits.')
-        end
-      end
-    end
-    return schedule_type_limits
-  end
-
   # Create a schedule from the openstudio standards dataset and add it to the model.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -3160,7 +2959,6 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param material_name [String] name of the material
   # @return [OpenStudio::Model::Material] material object
-  # @todo make return an OptionalMaterial
   def model_add_material(model, material_name)
     # First check model and return material if it already exists
     model.getMaterials.sort.each do |material|
@@ -3170,19 +2968,64 @@ class Standard
       end
     end
 
-    # OpenStudio::logFree(OpenStudio::Info, 'openstudio.standards.Model', "Adding material: #{material_name}")
-
     # Get the object data
-    data = model_find_object(standards_data['materials'], 'name' => material_name)
-    unless data
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
-      return false
-      # @todo change to return empty optional material
+    # For Simple Glazing materials:
+    # Attempt to get properties from the name of the material
+    material_type = nil
+    if material_name.downcase.include?('simple glazing')
+      material_type = 'SimpleGlazing'
+      u_factor = nil
+      shgc = nil
+      vt = nil
+      material_name.split.each_with_index do |item, i|
+        prop_value = material_name.split[i + 1].to_f
+        if item == 'U'
+          unless u_factor.nil?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Multiple U-Factor values have been identified for #{material_name}: previous = #{u_factor}, new = #{prop_value}. Please check the material name. New U-Factor will be used.")
+          end
+          u_factor = prop_value
+        elsif item == 'SHGC'
+          unless shgc.nil?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Multiple SHGC values have been identified for #{material_name}: previous = #{shgc}, new = #{prop_value}. Please check the material name. New SHGC will be used.")
+          end
+          shgc = prop_value
+        elsif item == 'VT'
+          unless vt.nil?
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Multiple VT values have been identified for #{material_name}: previous = #{vt}, new = #{prop_value}. Please check the material name. New SHGC will be used.")
+          end
+          vt = prop_value
+        end
+      end
+      if u_factor.nil? && shgc.nil? && vt.nil?
+        material_type = nil
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Properties of the simple glazing material named #{material_name} could not be identified from its name.")
+      else
+        if u_factor.nil?
+          u_factor = 1.23
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find the U-Factor for the simple glazing material named #{material_name}, a default value of 1.23 is used.")
+        end
+        if shgc.nil?
+          shgc = 0.61
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find the SHGC for the simple glazing material named #{material_name}, a default value of 0.61 is used.")
+        end
+        if vt.nil?
+          vt = 0.81
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find the VT for the simple glazing material named #{material_name}, a default value of 0.81 is used.")
+        end
+      end
+    end
+    # If no properties could be found or the material
+    # is not of the simple glazing type, search the database
+    if material_type.nil?
+      data = model_find_object(standards_data['materials'], 'name' => material_name)
+      unless data
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for material: #{material_name}, will not be created.")
+        return OpenStudio::Model::OptionalMaterial.new
+      end
+      material_type = data['material_type']
     end
 
     material = nil
-    material_type = data['material_type']
-
     if material_type == 'StandardOpaqueMaterial'
       material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
       material.setName(material_name)
@@ -3222,9 +3065,9 @@ class Standard
       material = OpenStudio::Model::SimpleGlazing.new(model)
       material.setName(material_name)
 
-      material.setUFactor(OpenStudio.convert(data['u_factor'].to_f, 'Btu/hr*ft^2*R', 'W/m^2*K').get)
-      material.setSolarHeatGainCoefficient(data['solar_heat_gain_coefficient'].to_f)
-      material.setVisibleTransmittance(data['visible_transmittance'].to_f)
+      material.setUFactor(OpenStudio.convert(u_factor.to_f, 'Btu/hr*ft^2*R', 'W/m^2*K').get)
+      material.setSolarHeatGainCoefficient(shgc.to_f)
+      material.setVisibleTransmittance(vt.to_f)
 
     elsif material_type == 'StandardGlazing'
       material = OpenStudio::Model::StandardGlazing.new(model)
@@ -3758,14 +3601,14 @@ class Standard
     existing_curves += model.getCurveBicubics
     existing_curves += model.getCurveBiquadratics
     existing_curves += model.getCurveQuadLinears
+    existing_curves += model.getTableMultiVariableLookups
+    existing_curves += model.getTableLookups
     existing_curves.sort.each do |curve|
       if curve.name.get.to_s == curve_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added curve: #{curve_name}")
         return curve
       end
     end
-
-    # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
     # Find curve data
     data = model_find_object(standards_data['curves'], 'name' => curve_name)
@@ -3877,69 +3720,71 @@ class Standard
         curve.setMinimumCurveOutput(data['minimum_dependent_variable_output'])
         curve.setMaximumCurveOutput(data['maximum_dependent_variable_output'])
         return curve
-      when 'MultiVariableLookupTable'
+      when 'TableLookup', 'LookupTable', 'TableMultiVariableLookup', 'MultiVariableLookupTable'
         num_ind_var = data['number_independent_variables'].to_i
-        table = OpenStudio::Model::TableMultiVariableLookup.new(model, num_ind_var)
-        table.setName(data['name'])
-        table.setInterpolationMethod(data['interpolation_method'])
-        table.setNumberofInterpolationPoints(data['number_of_interpolation_points'])
-        table.setCurveType(data['curve_type'])
-        table.setTableDataFormat('SingleLineIndependentVariableWithMatrix')
-        table.setNormalizationReference(data['normalization_reference'].to_f)
-        table.setOutputUnitType(data['output_unit_type'])
-        table.setMinimumValueofX1(data['minimum_independent_variable_1'].to_f)
-        table.setMaximumValueofX1(data['maximum_independent_variable_1'].to_f)
-        table.setInputUnitTypeforX1(data['input_unit_type_x1'])
-        if num_ind_var == 2
-          table.setMinimumValueofX2(data['minimum_independent_variable_2'].to_f)
-          table.setMaximumValueofX2(data['maximum_independent_variable_2'].to_f)
-          table.setInputUnitTypeforX2(data['input_unit_type_x2'])
-        end
-        data_points = data.each.select { |key, value| key.include? 'data_point' }
-        data_points.each do |key, value|
-          if num_ind_var == 1
-            table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f)
-          elsif num_ind_var == 2
-            table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f, value.split(',')[2].to_f)
+        if model.version < OpenStudio::VersionString.new('3.7.0')
+          # Use TableMultiVariableLookup object
+          table = OpenStudio::Model::TableMultiVariableLookup.new(model, num_ind_var)
+          table.setInterpolationMethod(data['interpolation_method'])
+          table.setNumberofInterpolationPoints(data['number_of_interpolation_points'])
+          table.setCurveType(data['curve_type'])
+          table.setTableDataFormat('SingleLineIndependentVariableWithMatrix')
+          table.setNormalizationReference(data['normalization_reference'].to_f)
+
+          # set table limits
+          table.setMinimumValueofX1(data['minimum_independent_variable_1'].to_f)
+          table.setMaximumValueofX1(data['maximum_independent_variable_1'].to_f)
+          table.setInputUnitTypeforX1(data['input_unit_type_x1'])
+          if num_ind_var == 2
+            table.setMinimumValueofX2(data['minimum_independent_variable_2'].to_f)
+            table.setMaximumValueofX2(data['maximum_independent_variable_2'].to_f)
+            table.setInputUnitTypeforX2(data['input_unit_type_x2'])
+          end
+
+          # add data points
+          data_points = data.each.select { |key, value| key.include? 'data_point' }
+          data_points.each do |key, value|
+            if num_ind_var == 1
+              table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f)
+            elsif num_ind_var == 2
+              table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f, value.split(',')[2].to_f)
+            end
+          end
+        else
+          # Use TableLookup Object
+          table = OpenStudio::Model::TableLookup.new(model)
+          table.setNormalizationDivisor(data['normalization_reference'].to_f)
+
+          # sorting data in ascending order
+          data_points = data.each.select { |key, value| key.include? 'data_point' }
+          data_points = data_points.sort_by { |item| item[1].split(',').map(&:to_f) }
+          data_points.each do |key, value|
+            var_dep = value.split(',')[2].to_f
+            table.addOutputValue(var_dep)
+          end
+          num_ind_var.times do |i|
+            table_indvar = OpenStudio::Model::TableIndependentVariable.new(model)
+            table_indvar.setName(data['name'] + "_ind_#{i + 1}")
+            table_indvar.setInterpolationMethod(data['interpolation_method'])
+
+            # set table limits
+            table_indvar.setMinimumValue(data["minimum_independent_variable_#{i + 1}"].to_f)
+            table_indvar.setMaximumValue(data["maximum_independent_variable_#{i + 1}"].to_f)
+            table_indvar.setUnitType(data["input_unit_type_x#{i + 1}"].to_s)
+
+            # add data points
+            var_ind_unique = data_points.map { |key, value| value.split(',')[i].to_f }.uniq
+            var_ind_unique.each { |var_ind| table_indvar.addValue(var_ind) }
+            table.addIndependentVariable(table_indvar)
           end
         end
+        table.setName(data['name'])
+        table.setOutputUnitType(data['output_unit_type'])
         return table
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{curve_name}' has an invalid form: #{data['form']}', cannot create this curve.")
         return nil
     end
-  end
-
-  # Get the full path to the weather file that is specified in the model
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [OpenStudio::OptionalPath] path to weather file
-  def model_get_full_weather_file_path(model)
-    full_epw_path = OpenStudio::OptionalPath.new
-
-    if model.weatherFile.is_initialized
-      epw_path = model.weatherFile.get.path
-      if epw_path.is_initialized
-        if File.exist?(epw_path.get.to_s)
-          full_epw_path = OpenStudio::OptionalPath.new(epw_path.get)
-        else
-          # If this is an always-run Measure, need to check a different path
-          alt_weath_path = File.expand_path(File.join(Dir.pwd, '../../resources'))
-          alt_epw_path = File.expand_path(File.join(alt_weath_path, epw_path.get.to_s))
-          if File.exist?(alt_epw_path)
-            full_epw_path = OpenStudio::OptionalPath.new(OpenStudio::Path.new(alt_epw_path))
-          else
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Model has been assigned a weather file, but the file is not in the specified location of '#{epw_path.get}'.")
-          end
-        end
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has a weather file assigned, but the weather file path has been deleted.')
-      end
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has not been assigned a weather file.')
-    end
-
-    return full_epw_path
   end
 
   # Find the legacy simulation results from a CSV of previously created results.
@@ -4145,7 +3990,7 @@ class Standard
   # @return [Hash] key for climate zone, building type, and standards template.  All values are strings.
   def model_get_building_properties(model, remap_office = true)
     # get climate zone from model
-    climate_zone = model_standards_climate_zone(model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
 
     # get building type from model
     building_type = ''
@@ -5323,7 +5168,7 @@ class Standard
     end
 
     # get climate zone value
-    climate_zone = model_standards_climate_zone(model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
 
     internal_loads = {}
     internal_loads['mech_vent_cfm'] = units_per_bldg * (0.01 * conditioned_floor_area + 7.5 * (bedrooms_per_unit + 1.0))
@@ -5763,57 +5608,6 @@ class Standard
           sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
-    end
-    return true
-  end
-
-  # Converts the climate zone in the model into the format used by the openstudio-standards lookup tables.
-  # For example,
-  #   institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
-  #   institution: CEC, value: 3  becomes: CEC T24-CEC3.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [String] the string representation of the climate zone,
-  #   empty string if no climate zone is present in the model.
-  def model_standards_climate_zone(model)
-    climate_zone = ''
-    model.getClimateZones.climateZones.each do |cz|
-      if cz.institution == 'ASHRAE'
-        next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
-
-        climate_zone = if cz.value == '7' || cz.value == '8'
-                         "ASHRAE 169-2013-#{cz.value}A"
-                       else
-                         "ASHRAE 169-2013-#{cz.value}"
-                       end
-      elsif cz.institution == 'CEC'
-        next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
-
-        climate_zone = "CEC T24-CEC#{cz.value}"
-      end
-    end
-    return climate_zone
-  end
-
-  # Sets the climate zone object in the model using
-  # the correct institution based on the climate zone specified
-  # in the format used by the openstudio-standards lookups.
-  # Clears out any climate zones previously added to the model.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Boolean] returns true if successful, false if not
-  def model_set_climate_zone(model, climate_zone)
-    # Remove previous climate zones from the model
-    model.getClimateZones.clear
-    # Split the string into the correct institution and value
-    if climate_zone.include? 'ASHRAE 169-2006-'
-      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
-    elsif climate_zone.include? 'ASHRAE 169-2013-'
-      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2013-', ''))
-    elsif climate_zone.include? 'CEC T24-CEC'
-      model.getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', ''))
-
     end
     return true
   end
@@ -6709,7 +6503,7 @@ class Standard
     end
 
     # gather and store data for scheduleRuleset
-    min_max = schedule_ruleset_annual_min_max_value(sch)
+    min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(sch)
     ruleset_hash = { floor: min_max['min'], ceiling: min_max['max'], target: load_inst, hoo_inputs: hours_of_operation }
     parametric_inputs[sch] = ruleset_hash
 
@@ -6723,17 +6517,17 @@ class Standard
     props.setFeature('param_sch_ceiling', min_max['max'])
 
     # cleanup existing profiles
-    schedule_ruleset_cleanup_profiles(sch)
+    OpenstudioStandards::Schedules.schedule_ruleset_cleanup_profiles(sch)
 
     # gather profiles
     daily_flhs = [] # will be used to tag, min,medium,max operation for non typical operations
     schedule_days = {} # key is day_schedule value is hours in day (used to tag profiles)
     sch.scheduleRules.each do |rule|
       schedule_days[rule.daySchedule] = rule.ruleIndex
-      daily_flhs << day_schedule_equivalent_full_load_hrs(rule.daySchedule)
+      daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(rule.daySchedule)
     end
     schedule_days[sch.defaultDaySchedule] = -1
-    daily_flhs << day_schedule_equivalent_full_load_hrs(sch.defaultDaySchedule)
+    daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(sch.defaultDaySchedule)
 
     # get indices for current schedule
     year_description = sch.model.yearDescription.get
@@ -6847,7 +6641,7 @@ class Standard
       end
 
       # test expected value against estimated value
-      daily_flh = day_schedule_equivalent_full_load_hrs(schedule_day)
+      daily_flh = OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(schedule_day)
       percent_change = ((daily_flh - est_daily_flh) / daily_flh) * 100.0
       if percent_change.abs > 0.05
         # @todo this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
@@ -7034,32 +6828,6 @@ class Standard
     return lowest_story
   end
 
-  # Utility function that returns the min and max value in a design day schedule.
-  #
-  # @todo move this to Standards.Schedule.rb
-  # @param schedule [OpenStudio::Model::Schedule] can be ScheduleCompact, ScheduleRuleset, ScheduleConstant
-  # @param type [String] 'heating' for winter design day, 'cooling' for summer design day
-  # @return [Hash] Hash has two keys, min and max. if failed, return 999.9 for min and max.
-  def search_min_max_value_from_design_day_schedule(schedule, type = 'winter')
-    if schedule.is_initialized
-      schedule = schedule.get
-      if schedule.to_ScheduleRuleset.is_initialized
-        schedule = schedule.to_ScheduleRuleset.get
-        setpoint_min_max = schedule_ruleset_design_day_min_max_value(schedule, type)
-      elsif schedule.to_ScheduleConstant.is_initialized
-        schedule = schedule.to_ScheduleConstant.get
-        # for constant schedule, there is only one value, so the annual should be equal to design condition.
-        setpoint_min_max = schedule_constant_annual_min_max_value(schedule)
-      elsif schedule.to_ScheduleCompact.is_initialized
-        schedule = schedule.to_ScheduleCompact.get
-        setpoint_min_max = schedule_compact_design_day_min_max_value(schedule, type)
-      end
-      return setpoint_min_max
-    end
-    OpenStudio.logFree(OpenStudio::Error, 'openstudio::standards::Schedule', 'Schedule is not exist, or wrong type of schedule (not Ruleset, Compact or Constant), or cannot found the design day schedules. Return 999.9 for min and max')
-    return { 'min' => 999.9, 'max' => 999.9 }
-  end
-
   # Identifies non mechanically cooled ("nmc") systems, if applicable
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -7178,7 +6946,7 @@ class Standard
     # air-loop based system
     model.getThermalZones.each do |zone|
       # Conditioning category won't include indirectly conditioned thermal zones
-      cond_cat = thermal_zone_conditioning_category(zone, model_standards_climate_zone(model))
+      cond_cat = thermal_zone_conditioning_category(zone, OpenstudioStandards::Weather.model_get_climate_zone(model))
 
       # Initialize the return air type
       return_air_type = nil

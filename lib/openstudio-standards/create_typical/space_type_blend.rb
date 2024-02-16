@@ -1,7 +1,8 @@
-# Methods to create typical models
 module OpenstudioStandards
+  # The CreateTypical module provides methods to create and modify an entire building energy model of a typical building
   module CreateTypical
     # @!group Space Type Blending
+    # Methods to blend space types together
 
     # get all loads for a space or space type and place in hash by type
     #
@@ -697,7 +698,7 @@ module OpenstudioStandards
         elsif load_inst.designFlowRateCalculationMethod == 'Flow/ExteriorWallArea'
           load_inst.setFlowperExteriorWallArea(load_inst.flowperExteriorWallArea.get * ext_wall_area_ratio)
         elsif load_inst.designFlowRateCalculationMethod == 'AirChanges/Hour'
-          load_inst.setAirChangesperHour (load_inst.airChangesperHour.get * volume_ratio)
+          load_inst.setAirChangesperHour(load_inst.airChangesperHour.get * volume_ratio)
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "Unexpected value type for #{load_inst.name}")
           return false

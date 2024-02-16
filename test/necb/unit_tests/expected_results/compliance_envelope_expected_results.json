@@ -31,7 +31,7 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "3450.0": {
+    "3890.0": {
       "fdwr": 0.4,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
@@ -62,8 +62,8 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "4500.0": {
-      "fdwr": 0.367,
+    "4400.0": {
+      "fdwr": 0.373,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
       "outdoor_walls_average_conductances": 0.247,
@@ -93,8 +93,8 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "5500.0": {
-      "fdwr": 0.3,
+    "5000.0": {
+      "fdwr": 0.333,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
@@ -124,8 +124,8 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "6500.0": {
-      "fdwr": 0.233,
+    "6250.0": {
+      "fdwr": 0.25,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
@@ -155,7 +155,7 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "12360.0": {
+    "8170.0": {
       "fdwr": 0.2,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.142,
@@ -219,7 +219,7 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "3450.0": {
+    "3890.0": {
       "fdwr": 0.4,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
@@ -250,8 +250,8 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "4500.0": {
-      "fdwr": 0.367,
+    "4400.0": {
+      "fdwr": 0.373,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.183,
       "outdoor_walls_average_conductances": 0.247,
@@ -281,8 +281,8 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "5500.0": {
-      "fdwr": 0.3,
+    "5000.0": {
+      "fdwr": 0.333,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
@@ -312,8 +312,8 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "6500.0": {
-      "fdwr": 0.233,
+    "6250.0": {
+      "fdwr": 0.25,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.162,
       "outdoor_walls_average_conductances": 0.21,
@@ -343,7 +343,7 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "12360.0": {
+    "8170.0": {
       "fdwr": 0.2,
       "srr": 0.05,
       "outdoor_roofs_average_conductances": 0.142,
@@ -407,7 +407,7 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "3450.0": {
+    "3890.0": {
       "fdwr": 0.4,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.156,
@@ -438,8 +438,8 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "4500.0": {
-      "fdwr": 0.367,
+    "4400.0": {
+      "fdwr": 0.373,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.156,
       "outdoor_walls_average_conductances": 0.247,
@@ -469,8 +469,8 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "5500.0": {
-      "fdwr": 0.3,
+    "5000.0": {
+      "fdwr": 0.333,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.138,
       "outdoor_walls_average_conductances": 0.21,
@@ -500,8 +500,8 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "6500.0": {
-      "fdwr": 0.233,
+    "6250.0": {
+      "fdwr": 0.25,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.138,
       "outdoor_walls_average_conductances": 0.21,
@@ -531,7 +531,7 @@
         "Story 3 West Perimeter Space": "0.25,"
       }
     },
-    "12360.0": {
+    "8170.0": {
       "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.121,
@@ -595,7 +595,7 @@
         "Story 3 West Perimeter Space": "0.935,"
       }
     },
-    "3450.0": {
+    "3890.0": {
       "fdwr": 0.4,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.156,
@@ -626,8 +626,8 @@
         "Story 3 West Perimeter Space": "0.935,"
       }
     },
-    "4500.0": {
-      "fdwr": 0.367,
+    "4400.0": {
+      "fdwr": 0.373,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.138,
       "outdoor_walls_average_conductances": 0.24,
@@ -657,8 +657,8 @@
         "Story 3 West Perimeter Space": "0.935,"
       }
     },
-    "5500.0": {
-      "fdwr": 0.3,
+    "5000.0": {
+      "fdwr": 0.333,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.121,
       "outdoor_walls_average_conductances": 0.215,
@@ -688,8 +688,8 @@
         "Story 3 West Perimeter Space": "0.935,"
       }
     },
-    "6500.0": {
-      "fdwr": 0.233,
+    "6250.0": {
+      "fdwr": 0.25,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.117,
       "outdoor_walls_average_conductances": 0.19,
@@ -719,7 +719,7 @@
         "Story 3 West Perimeter Space": "0.935,"
       }
     },
-    "12360.0": {
+    "8170.0": {
       "fdwr": 0.2,
       "srr": 0.02,
       "outdoor_roofs_average_conductances": 0.11,
@@ -783,7 +783,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "3450.0": {
+    "3890.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.296,
@@ -814,7 +814,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "4500.0": {
+    "4400.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.267,
@@ -845,7 +845,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "5500.0": {
+    "5000.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.227,
@@ -876,7 +876,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "6500.0": {
+    "6250.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.227,
@@ -907,7 +907,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "12360.0": {
+    "8170.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.176,
@@ -971,7 +971,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "3450.0": {
+    "3890.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.296,
@@ -1002,7 +1002,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "4500.0": {
+    "4400.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.267,
@@ -1033,7 +1033,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "5500.0": {
+    "5000.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.227,
@@ -1064,7 +1064,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "6500.0": {
+    "6250.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.227,
@@ -1095,7 +1095,7 @@
         "Story 3 West Perimeter Space": "1.116,"
       }
     },
-    "12360.0": {
+    "8170.0": {
       "fdwr": 0.6,
       "srr": 0.0998,
       "outdoor_roofs_average_conductances": 0.176,

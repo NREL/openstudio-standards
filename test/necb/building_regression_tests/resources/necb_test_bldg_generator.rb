@@ -38,7 +38,7 @@ class GeneratorNECBRegressionTests
     reset_folder(@file_out_dir)
 
     @epw_files = [
-        'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
+        'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
     ]
     @templates = [
         'NECB2011',

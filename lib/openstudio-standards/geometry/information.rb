@@ -1,8 +1,8 @@
-# Methods to get information about model geometry
-# Many of these methods may be moved to core OpenStudio
 module OpenstudioStandards
+  # This Module provides methods to create, modify, and get information about model geometry
   module Geometry
     # @!group Information
+    # Methods to get information about model geometry
 
     # calculate aspect ratio from area and perimeter
     #

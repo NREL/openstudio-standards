@@ -65,8 +65,6 @@ module Baseline9012013
   # @author Eric Ringold, Ambient Energy
   def check_sat_delta(model)
 
-    standard = Standard.build('90.1-2013')
-
     delta_good = []
     cool_delta_bad = []
     heat_delta_bad = []
@@ -81,8 +79,8 @@ module Baseline9012013
         cooling_sch = tstat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
 
         # get heating and cooling setpoints
-        heating_min_max = standard.schedule_ruleset_annual_min_max_value(heating_sch)
-        cooling_min_max = standard.schedule_ruleset_annual_min_max_value(cooling_sch)
+        heating_min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(heating_sch)
+        cooling_min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(cooling_sch)
 
         heat_set_t = OpenStudio.convert(heating_min_max['max'],"C","F").get
         cool_set_t = OpenStudio.convert(cooling_min_max['min'],"C","F").get
@@ -339,22 +337,22 @@ module Baseline9012013
             seer = 14.0
             # Per PNNL, convert SEER to COP with fan
             eer = -0.0182 * seer * seer + 1.1088 * seer
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           elsif size >= 65000 && size < 135000
             eer = 11.0
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           elsif size >= 135000 && size < 240000
             eer = 10.8
             # Per PNNL, covert EER to COP using a capacity-agnostic formula
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           elsif size >= 240000 && size < 760000
             eer = 9.8
             # Per PNNL, covert EER to COP using a capacity-agnostic formula
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           else # size >= 760000
             eer = 9.5
             # Per PNNL, covert EER to COP using a capacity-agnostic formula
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           end
 
           if (coil_cop - cop).abs >= 0.1

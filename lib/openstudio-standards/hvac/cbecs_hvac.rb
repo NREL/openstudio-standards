@@ -1,7 +1,8 @@
-# Method to apply a typical CBECS HVAC system to thermal zones
 module OpenstudioStandards
+  # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
     # @!group CBECS HVAC
+    # Method to apply a typical CBECS HVAC system to thermal zones
 
     # Adds the HVAC system as derived from the combinations of CBECS 2012 MAINHT and MAINCL fields.
     # Mapping between combinations and HVAC systems per http://www.nrel.gov/docs/fy08osti/41956.pdf
@@ -435,8 +436,12 @@ module OpenstudioStandards
       when 'PVAV with PFP boxes'
         standard.model_add_hvac_system(model, 'PVAV PFP Boxes', ht = 'Electricity', znht = 'Electricity', cl = 'Electricity', zones)
 
-      when 'PVAV with gas heat with electric reheat'
-        standard.model_add_hvac_system(model, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones)
+      when 'PVAV with gas heat with electric reheat', 'PVAV with gas coil heat with electric reheat'
+        standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones,
+                                       air_loop_heating_type: 'Gas')
+
+      when 'PVAV with gas boiler heat with electric reheat'
+        standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones)
 
       # all residential systems do not have ventilation
       when 'Residential AC with baseboard electric'
