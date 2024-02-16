@@ -672,7 +672,7 @@ class AppendixGPRMTests < Minitest::Test
 
   def get_fan_hours_per_week(model, air_loop)
     fan_schedule = air_loop.availabilitySchedule
-    fan_hours_8760 = @prototype_creator.get_8760_values_from_schedule(model, fan_schedule)
+    fan_hours_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
     fan_hours_52 = []
 
     hr_of_yr = -1

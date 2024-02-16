@@ -1605,20 +1605,14 @@ class AppendixGPRMTests < Minitest::Test
       # user_data_dir match to identify matched propose and baseline
       if base_user_data_dir == 'userdata_pe_01'
         # test case 1, apply 5% RPC (0.5 * 0.1) to Office WholeBuilding -Sm Offie Elec Equip
-        base_electric_equipment_schedules = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get.scheduleRules
-
-        base_electric_equipment_schedules.each do |schedule_rule|
-          receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
-          assert((0.05 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.05 (5%) but get #{receptacle_power_credits}")
-        end
+        base_electric_equipment_schedule = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get
+        receptacle_power_credits = base_electric_equipment_schedule.name.get.split('_')[3].to_f
+        assert((0.05 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.05 (5%) but get #{receptacle_power_credits}")
       elsif base_user_data_dir == 'userdata_pe_02'
         # test case 2, apply 15% RPC (0.15) to Office WholeBuilding -Sm Offie Elec Equip
-        base_electric_equipment_schedules = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get.scheduleRules
-
-        base_electric_equipment_schedules.each do |schedule_rule|
-          receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
-          assert((0.15 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.15 (15%) but get #{receptacle_power_credits}")
-        end
+        base_electric_equipment_schedule = baseline_model.getElectricEquipments[0].schedule.get.to_ScheduleRuleset.get
+        receptacle_power_credits = base_electric_equipment_schedule.name.get.split('_')[3].to_f
+        assert((0.15 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.15 (15%) but get #{receptacle_power_credits}")
       elsif base_user_data_dir == 'userdata_pe_03'
         # test case 3, record motor horsepower, efficiency and whether it is exempt
         base_electric_equipment = baseline_model.getElectricEquipments[0]
@@ -1634,11 +1628,9 @@ class AppendixGPRMTests < Minitest::Test
         baseline_equipments.each do |equipment|
           baseline_equipment_name = equipment.name.get
           if baseline_equipment_name == 'Office WholeBuilding - Sm Office Elec Equip 4'
-            base_electric_equipment_schedules = equipment.schedule.get.to_ScheduleRuleset.get.scheduleRules
-            base_electric_equipment_schedules.each do |schedule_rule|
-              receptacle_power_credits = schedule_rule.name.get.split('_')[1].to_f
-              assert((0.025 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.025 (5%) but get #{receptacle_power_credits}")
-            end
+            base_electric_equipment_schedule = equipment.schedule.get.to_ScheduleRuleset.get
+            receptacle_power_credits = base_electric_equipment_schedule.name.get.split('_')[3].to_f
+            assert((0.025 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.025 (5%) but get #{receptacle_power_credits}")
           end
         end
       end
