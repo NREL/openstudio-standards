@@ -18,12 +18,6 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
 
-      schedule_types = [
-        'Ruleset',
-        'Constant',
-        'Compact'
-      ]
-
       # cooling delta t
       if std.thermal_zone_cooled?(thermal_zone)
         case thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureInputMethod
@@ -78,7 +72,7 @@ class AppendixGPRMTests < Minitest::Test
               tstat = tstat.get
               setpoint_sch = tstat.heatingSetpointTemperatureSchedule
               if setpoint_sch.is_initialized
-                setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['min']
+                setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['max']
               end
             end
             if setpoint_c.nil?
