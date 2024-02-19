@@ -1486,7 +1486,7 @@ class Standard
     return space.additionalProperties.getFeatureAsString('space_conditioning_category').get if space.additionalProperties.hasFeature('space_conditioning_category')
 
     # Get climate zone
-    climate_zone = model_standards_climate_zone(space.model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(space.model)
 
     # Get the zone this space is inside
     zone = space.thermalZone

@@ -624,11 +624,11 @@ class Standard
       if summer_oat_wbs_f.size.zero?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', 'No valid WB=>MDB Summer Design Days were found in the model.  Attempting to load wet bulb sizing from the .ddy file directly.')
         if model.weatherFile.is_initialized && model.weatherFile.get.path.is_initialized
-          weather_file = model.weatherFile.get.path.get.to_s
+          weather_file_path = model.weatherFile.get.path.get.to_s
           # Run differently depending on whether running from embedded filesystem in OpenStudio CLI or not
-          if weather_file[0] == ':' # Running from OpenStudio CLI
+          if weather_file_path[0] == ':' # Running from OpenStudio CLI
             # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
-            ddy_file = weather_file.gsub('.epw', '.ddy')
+            ddy_file = weather_file_path.gsub('.epw', '.ddy')
             if EmbeddedScripting.hasFile(ddy_file)
               ddy_string = EmbeddedScripting.getFileAsString(ddy_file)
               temp_ddy_path = "#{Dir.pwd}/in.ddy"
@@ -639,15 +639,15 @@ class Standard
               ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(temp_ddy_path).get
               File.delete(temp_ddy_path) if File.exist?(temp_ddy_path)
             else
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file_path}")
             end
           else
             # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
-            ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
+            ddy_file = "#{File.join(File.dirname(weather_file_path), File.basename(weather_file_path, '.*'))}.ddy"
             if File.exist? ddy_file
               ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
             else
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file_path}")
             end
           end
 
@@ -4828,7 +4828,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Replacing #{radiant_type} constructions with new radiant slab constructions.")
 
     # determine construction insulation thickness by climate zone
-    climate_zone = model_standards_climate_zone(model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
     if climate_zone.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Unable to determine climate zone for radiant slab insulation determination.  Defaulting to climate zone 5, R-20 insulation, 110F heating design supply water temperature.')
       cz_mult = 4
@@ -5372,7 +5372,7 @@ class Standard
                                                        name: "#{air_loop.name} Cooling Coil",
                                                        type: 'Residential Central AC')
         clg_coil.setRatedSensibleHeatRatio(shr)
-        clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(eer_to_cop(eer)))
+        clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(eer_to_cop_no_fan(eer)))
         clg_coil.setRatedEvaporatorFanPowerPerVolumeFlowRate(OpenStudio::OptionalDouble.new(ac_w_per_cfm / OpenStudio.convert(1.0, 'cfm', 'm^3/s').get))
         clg_coil.setNominalTimeForCondensateRemovalToBegin(OpenStudio::OptionalDouble.new(1000.0))
         clg_coil.setRatioOfInitialMoistureEvaporationRateAndSteadyStateLatentCapacity(OpenStudio::OptionalDouble.new(1.5))

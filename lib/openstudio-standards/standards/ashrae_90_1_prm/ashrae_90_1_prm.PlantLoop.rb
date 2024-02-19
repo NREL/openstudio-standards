@@ -120,11 +120,11 @@ class ASHRAE901PRM < Standard
     if cap_tons <= 300
       num_chillers = 1
       chiller_cooling_type = 'WaterCooled'
-      chiller_compressor_type = 'Rotary Screw and Scroll'
+      chiller_compressor_type = 'Rotary Screw'
     elsif cap_tons > 300 && cap_tons < 600
       num_chillers = 2
       chiller_cooling_type = 'WaterCooled'
-      chiller_compressor_type = 'Rotary Screw and Scroll'
+      chiller_compressor_type = 'Rotary Screw'
     else
       # Max capacity of a single chiller
       max_cap_ton = 800.0

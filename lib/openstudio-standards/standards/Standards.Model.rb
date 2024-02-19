@@ -1436,41 +1436,6 @@ class Standard
     return fuel_type
   end
 
-  # Get ASHRAE ID code for climate zone
-  # @param climate_zone [String] full name of climate zone
-  # @return [String] ASHRAE ID code for climate zone
-  def get_climate_zone_code(climate_zone)
-    cz_codes = []
-    cz_codes << '0A'
-    cz_codes << '0B'
-    cz_codes << '1A'
-    cz_codes << '1B'
-    cz_codes << '2A'
-    cz_codes << '2B'
-    cz_codes << '3A'
-    cz_codes << '3B'
-    cz_codes << '3C'
-    cz_codes << '4A'
-    cz_codes << '4B'
-    cz_codes << '4C'
-    cz_codes << '5A'
-    cz_codes << '5B'
-    cz_codes << '5C'
-    cz_codes << '6A'
-    cz_codes << '6B'
-    cz_codes << '7A'
-    cz_codes << '7B'
-    cz_codes << '8A'
-    cz_codes << '8B'
-
-    cz_codes.each do |cz|
-      pattern = Regexp.new(cz, true)
-      if pattern =~ climate_zone
-        return cz.to_s
-      end
-    end
-  end
-
   # Add the specified baseline system type to the specified zones based on the specified template.
   # For some multi-zone system types, the standards require identifying zones whose loads or schedules
   # are outliers and putting these systems on separate single-zone systems.  This method does that.
@@ -1909,7 +1874,7 @@ class Standard
       when 'SZ_VAV' # System 11, chilled water, heating type varies by climate zone
         unless zones.empty?
           # htg type
-          climate_zone = model_standards_climate_zone(model)
+          climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
           case climate_zone
             when 'ASHRAE 169-2006-0A',
               'ASHRAE 169-2006-0B',
@@ -3636,14 +3601,14 @@ class Standard
     existing_curves += model.getCurveBicubics
     existing_curves += model.getCurveBiquadratics
     existing_curves += model.getCurveQuadLinears
+    existing_curves += model.getTableMultiVariableLookups
+    existing_curves += model.getTableLookups
     existing_curves.sort.each do |curve|
       if curve.name.get.to_s == curve_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added curve: #{curve_name}")
         return curve
       end
     end
-
-    # OpenStudio::logFree(OpenStudio::Info, "openstudio.prototype.addCurve", "Adding curve '#{curve_name}' to the model.")
 
     # Find curve data
     data = model_find_object(standards_data['curves'], 'name' => curve_name)
@@ -3755,69 +3720,71 @@ class Standard
         curve.setMinimumCurveOutput(data['minimum_dependent_variable_output'])
         curve.setMaximumCurveOutput(data['maximum_dependent_variable_output'])
         return curve
-      when 'MultiVariableLookupTable'
+      when 'TableLookup', 'LookupTable', 'TableMultiVariableLookup', 'MultiVariableLookupTable'
         num_ind_var = data['number_independent_variables'].to_i
-        table = OpenStudio::Model::TableMultiVariableLookup.new(model, num_ind_var)
-        table.setName(data['name'])
-        table.setInterpolationMethod(data['interpolation_method'])
-        table.setNumberofInterpolationPoints(data['number_of_interpolation_points'])
-        table.setCurveType(data['curve_type'])
-        table.setTableDataFormat('SingleLineIndependentVariableWithMatrix')
-        table.setNormalizationReference(data['normalization_reference'].to_f)
-        table.setOutputUnitType(data['output_unit_type'])
-        table.setMinimumValueofX1(data['minimum_independent_variable_1'].to_f)
-        table.setMaximumValueofX1(data['maximum_independent_variable_1'].to_f)
-        table.setInputUnitTypeforX1(data['input_unit_type_x1'])
-        if num_ind_var == 2
-          table.setMinimumValueofX2(data['minimum_independent_variable_2'].to_f)
-          table.setMaximumValueofX2(data['maximum_independent_variable_2'].to_f)
-          table.setInputUnitTypeforX2(data['input_unit_type_x2'])
-        end
-        data_points = data.each.select { |key, value| key.include? 'data_point' }
-        data_points.each do |key, value|
-          if num_ind_var == 1
-            table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f)
-          elsif num_ind_var == 2
-            table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f, value.split(',')[2].to_f)
+        if model.version < OpenStudio::VersionString.new('3.7.0')
+          # Use TableMultiVariableLookup object
+          table = OpenStudio::Model::TableMultiVariableLookup.new(model, num_ind_var)
+          table.setInterpolationMethod(data['interpolation_method'])
+          table.setNumberofInterpolationPoints(data['number_of_interpolation_points'])
+          table.setCurveType(data['curve_type'])
+          table.setTableDataFormat('SingleLineIndependentVariableWithMatrix')
+          table.setNormalizationReference(data['normalization_reference'].to_f)
+
+          # set table limits
+          table.setMinimumValueofX1(data['minimum_independent_variable_1'].to_f)
+          table.setMaximumValueofX1(data['maximum_independent_variable_1'].to_f)
+          table.setInputUnitTypeforX1(data['input_unit_type_x1'])
+          if num_ind_var == 2
+            table.setMinimumValueofX2(data['minimum_independent_variable_2'].to_f)
+            table.setMaximumValueofX2(data['maximum_independent_variable_2'].to_f)
+            table.setInputUnitTypeforX2(data['input_unit_type_x2'])
+          end
+
+          # add data points
+          data_points = data.each.select { |key, value| key.include? 'data_point' }
+          data_points.each do |key, value|
+            if num_ind_var == 1
+              table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f)
+            elsif num_ind_var == 2
+              table.addPoint(value.split(',')[0].to_f, value.split(',')[1].to_f, value.split(',')[2].to_f)
+            end
+          end
+        else
+          # Use TableLookup Object
+          table = OpenStudio::Model::TableLookup.new(model)
+          table.setNormalizationDivisor(data['normalization_reference'].to_f)
+
+          # sorting data in ascending order
+          data_points = data.each.select { |key, value| key.include? 'data_point' }
+          data_points = data_points.sort_by { |item| item[1].split(',').map(&:to_f) }
+          data_points.each do |key, value|
+            var_dep = value.split(',')[2].to_f
+            table.addOutputValue(var_dep)
+          end
+          num_ind_var.times do |i|
+            table_indvar = OpenStudio::Model::TableIndependentVariable.new(model)
+            table_indvar.setName(data['name'] + "_ind_#{i + 1}")
+            table_indvar.setInterpolationMethod(data['interpolation_method'])
+
+            # set table limits
+            table_indvar.setMinimumValue(data["minimum_independent_variable_#{i + 1}"].to_f)
+            table_indvar.setMaximumValue(data["maximum_independent_variable_#{i + 1}"].to_f)
+            table_indvar.setUnitType(data["input_unit_type_x#{i + 1}"].to_s)
+
+            # add data points
+            var_ind_unique = data_points.map { |key, value| value.split(',')[i].to_f }.uniq
+            var_ind_unique.each { |var_ind| table_indvar.addValue(var_ind) }
+            table.addIndependentVariable(table_indvar)
           end
         end
+        table.setName(data['name'])
+        table.setOutputUnitType(data['output_unit_type'])
         return table
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{curve_name}' has an invalid form: #{data['form']}', cannot create this curve.")
         return nil
     end
-  end
-
-  # Get the full path to the weather file that is specified in the model
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [OpenStudio::OptionalPath] path to weather file
-  def model_get_full_weather_file_path(model)
-    full_epw_path = OpenStudio::OptionalPath.new
-
-    if model.weatherFile.is_initialized
-      epw_path = model.weatherFile.get.path
-      if epw_path.is_initialized
-        if File.exist?(epw_path.get.to_s)
-          full_epw_path = OpenStudio::OptionalPath.new(epw_path.get)
-        else
-          # If this is an always-run Measure, need to check a different path
-          alt_weath_path = File.expand_path(File.join(Dir.pwd, '../../resources'))
-          alt_epw_path = File.expand_path(File.join(alt_weath_path, epw_path.get.to_s))
-          if File.exist?(alt_epw_path)
-            full_epw_path = OpenStudio::OptionalPath.new(OpenStudio::Path.new(alt_epw_path))
-          else
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Model has been assigned a weather file, but the file is not in the specified location of '#{epw_path.get}'.")
-          end
-        end
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has a weather file assigned, but the weather file path has been deleted.')
-      end
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has not been assigned a weather file.')
-    end
-
-    return full_epw_path
   end
 
   # Find the legacy simulation results from a CSV of previously created results.
@@ -4023,7 +3990,7 @@ class Standard
   # @return [Hash] key for climate zone, building type, and standards template.  All values are strings.
   def model_get_building_properties(model, remap_office = true)
     # get climate zone from model
-    climate_zone = model_standards_climate_zone(model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
 
     # get building type from model
     building_type = ''
@@ -5201,7 +5168,7 @@ class Standard
     end
 
     # get climate zone value
-    climate_zone = model_standards_climate_zone(model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
 
     internal_loads = {}
     internal_loads['mech_vent_cfm'] = units_per_bldg * (0.01 * conditioned_floor_area + 7.5 * (bedrooms_per_unit + 1.0))
@@ -5641,57 +5608,6 @@ class Standard
           sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
-    end
-    return true
-  end
-
-  # Converts the climate zone in the model into the format used by the openstudio-standards lookup tables.
-  # For example,
-  #   institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
-  #   institution: CEC, value: 3  becomes: CEC T24-CEC3.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [String] the string representation of the climate zone,
-  #   empty string if no climate zone is present in the model.
-  def model_standards_climate_zone(model)
-    climate_zone = ''
-    model.getClimateZones.climateZones.each do |cz|
-      if cz.institution == 'ASHRAE'
-        next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
-
-        climate_zone = if cz.value == '7' || cz.value == '8'
-                         "ASHRAE 169-2013-#{cz.value}A"
-                       else
-                         "ASHRAE 169-2013-#{cz.value}"
-                       end
-      elsif cz.institution == 'CEC'
-        next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
-
-        climate_zone = "CEC T24-CEC#{cz.value}"
-      end
-    end
-    return climate_zone
-  end
-
-  # Sets the climate zone object in the model using
-  # the correct institution based on the climate zone specified
-  # in the format used by the openstudio-standards lookups.
-  # Clears out any climate zones previously added to the model.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Boolean] returns true if successful, false if not
-  def model_set_climate_zone(model, climate_zone)
-    # Remove previous climate zones from the model
-    model.getClimateZones.clear
-    # Split the string into the correct institution and value
-    if climate_zone.include? 'ASHRAE 169-2006-'
-      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
-    elsif climate_zone.include? 'ASHRAE 169-2013-'
-      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2013-', ''))
-    elsif climate_zone.include? 'CEC T24-CEC'
-      model.getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', ''))
-
     end
     return true
   end
@@ -6586,7 +6502,7 @@ class Standard
     # air-loop based system
     model.getThermalZones.each do |zone|
       # Conditioning category won't include indirectly conditioned thermal zones
-      cond_cat = thermal_zone_conditioning_category(zone, model_standards_climate_zone(model))
+      cond_cat = thermal_zone_conditioning_category(zone, OpenstudioStandards::Weather.model_get_climate_zone(model))
 
       # Initialize the return air type
       return_air_type = nil

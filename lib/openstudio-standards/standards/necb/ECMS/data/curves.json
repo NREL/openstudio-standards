@@ -522,7 +522,7 @@
           "number_independent_variables": 2,
           "interpolation_method": "LinearInterpolationOfTable",
           "number_of_interpolation_points": 2,
-          "curve_type": "Biquadratic",
+          "curve_type": "BiQuadratic",
           "normalization_reference": 1.0,
           "output_unit_type": "Dimensionless",
           "data_point1": "7.625,0.5,1.0",
