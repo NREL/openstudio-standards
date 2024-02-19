@@ -41,22 +41,22 @@ module OpenstudioStandards
       if gen_occ_profile
         res_prevalent = false
         if res_people_design > non_res_people_design
-          occ_merged = OpenStudioStandards::Space.spaces_get_occupancy_schedule(res_spaces, sch_name: 'Calculated Occupancy Fraction Residential Merged')
+          occ_merged = OpenstudioStandards::Space.spaces_get_occupancy_schedule(res_spaces, sch_name: 'Calculated Occupancy Fraction Residential Merged')
           res_prevalent = true
         else
-          occ_merged = OpenStudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces, sch_name: 'Calculated Occupancy Fraction NonResidential Merged')
+          occ_merged = OpenstudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces, sch_name: 'Calculated Occupancy Fraction NonResidential Merged')
         end
       end
 
       # re-run spaces_get_occupancy_schedule with x above min occupancy to create on/off schedule
       if res_people_design > non_res_people_design
-        hours_of_operation = OpenStudioStandards::Space.spaces_get_occupancy_schedule(res_spaces,
+        hours_of_operation = OpenstudioStandards::Space.spaces_get_occupancy_schedule(res_spaces,
                                                           sch_name: 'Building Hours of Operation Residential',
                                                           occupied_percentage_threshold: fraction_of_daily_occ_range,
                                                           threshold_calc_method: 'normalized_daily_range')
         res_prevalent = true
       else
-        hours_of_operation = OpenStudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces,
+        hours_of_operation = OpenstudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces,
                                                           sch_name: 'Building Hours of Operation NonResidential',
                                                           occupied_percentage_threshold: fraction_of_daily_occ_range,
                                                           threshold_calc_method: 'normalized_daily_range')
@@ -194,7 +194,7 @@ module OpenstudioStandards
       thermal_zone_hash = {} # key is zone and hash is hours of operation
       model.getThermalZones.sort.each do |zone|
         # identify hours of operation
-        hours_of_operation = spaces_hours_of_operation(zone.spaces)
+        hours_of_operation = Space.spaces_hours_of_operation(zone.spaces)
         thermal_zone_hash[zone] = hours_of_operation
         # get thermostat setpoint schedules
         if zone.thermostatSetpointDualSetpoint.is_initialized
@@ -219,7 +219,7 @@ module OpenstudioStandards
           air_loop_spaces += zone.spaces
           air_loop_spaces += zone.spaces
         end
-        hours_of_operation = spaces_hours_of_operation(air_loop_spaces)
+        hours_of_operation = Space.spaces_hours_of_operation(air_loop_spaces)
         air_loop_hash[air_loop] = hours_of_operation
         if air_loop.availabilitySchedule.to_ScheduleRuleset.is_initialized
           schedule = air_loop.availabilitySchedule.to_ScheduleRuleset.get
@@ -311,7 +311,7 @@ module OpenstudioStandards
             hours_of_operation = space_hours_of_operation(space)
             gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
           else
-            hours_of_operation = spaces_hours_of_operation(model.getSpaces)
+            hours_of_operation = Space.spaces_hours_of_operation(model.getSpaces)
             if !hours_of_operation.nil?
               gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
             end
@@ -373,6 +373,69 @@ module OpenstudioStandards
     end
 
     # @!endgroup Parametric:Model
+
+    # @!group Parametric:Space
+
+    # pass array of space types or spaces
+    #
+    # @author David Goldwasser
+    # @param space_space_types [Array] array of spaces or space types
+    # @param parametric_inputs [Hash]
+    # @param gather_data_only [Boolean]
+    # @return [Hash]
+    def self.gather_inputs_parametric_space_space_type_schedules(space_space_types, parametric_inputs, gather_data_only)
+      space_space_types.each do |space_type|
+        # get hours of operation for space type once
+        next if space_type.class == 'OpenStudio::Model::SpaceTypes' && space_type.floorArea == 0
+
+        hours_of_operation = Space.space_hours_of_operation(space_type)
+        if hours_of_operation.nil?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "Can't evaluate schedules for #{space_type.name}, doesn't have hours of operation.")
+          next
+        end
+        # loop through internal load instances
+        space_type.lights.each do |load_inst|
+          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        end
+        space_type.luminaires.each do |load_inst|
+          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        end
+        space_type.electricEquipment.each do |load_inst|
+          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        end
+        space_type.gasEquipment.each do |load_inst|
+          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        end
+        space_type.steamEquipment.each do |load_inst|
+          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        end
+        space_type.otherEquipment.each do |load_inst|
+          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        end
+        space_type.people.each do |load_inst|
+          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+          if load_inst.activityLevelSchedule.is_initialized && load_inst.activityLevelSchedule.get.to_ScheduleRuleset.is_initialized
+            act_sch = load_inst.activityLevelSchedule.get.to_ScheduleRuleset.get
+            gather_inputs_parametric_schedules(act_sch, load_inst, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
+          end
+        end
+        space_type.spaceInfiltrationDesignFlowRates.each do |load_inst|
+          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        end
+        space_type.spaceInfiltrationEffectiveLeakageAreas.each do |load_inst|
+          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        end
+        dsgn_spec_oa = space_type.designSpecificationOutdoorAir
+        if dsgn_spec_oa.is_initialized
+          Space.gather_inputs_parametric_load_inst_schedules(dsgn_spec_oa.get, parametric_inputs, hours_of_operation, gather_data_only)
+        end
+      end
+
+      return parametric_inputs
+    end
+
+
+    # @!endgroup Parametric:Space
 
     # @!group Parametric:ScheduleRuleset
 
@@ -871,14 +934,6 @@ module OpenstudioStandards
     end
 
     # @!endgroup Parametric:ScheduleDay
-
-
-
-
-
-
-
-
 
 
   end

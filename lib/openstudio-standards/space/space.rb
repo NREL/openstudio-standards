@@ -110,6 +110,209 @@ module OpenstudioStandards
       return is_res
     end
 
+    # @todo add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
+    # @todo ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
+    # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
+    # report hours of operation. Won't be a single set of values, will be a collection of rules
+    # note Building, space, and spaceType can get hours of operation from schedule set, but not buildingStory
+    #
+    # @author David Goldwasser
+    # @param space [OpenStudio::Model::Space] space object
+    # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
+    def self.space_hours_of_operation(space)
+      default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
+      hours_of_operation = space.getDefaultSchedule(default_sch_type)
+      if !hours_of_operation.is_initialized
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Hours of Operation Schedule is not set for #{space.name}.")
+        return nil
+      end
+      hours_of_operation = hours_of_operation.get
+      if !hours_of_operation.to_ScheduleRuleset.is_initialized
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Hours of Operation Schedule #{hours_of_operation.name} is not a ScheduleRuleset.")
+        return nil
+      end
+      hours_of_operation = hours_of_operation.to_ScheduleRuleset.get
+      profiles = {}
+
+      # get indices for current schedule
+      year_description = hours_of_operation.model.yearDescription.get
+      year = year_description.assumedYear
+      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+      indices_vector = hours_of_operation.getActiveRuleIndices(year_start_date, year_end_date)
+
+      # add default profile to hash
+      hoo_start = nil
+      hoo_end = nil
+      unexpected_val = false
+      times = hours_of_operation.defaultDaySchedule.times
+      values = hours_of_operation.defaultDaySchedule.values
+      times.each_with_index do |time, i|
+        if values[i] == 0 && hoo_start.nil?
+          hoo_start = time.totalHours
+        elsif values[i] == 1 && hoo_end.nil?
+          hoo_end = time.totalHours
+        elsif values[i] != 1 && values[i] != 0
+          unexpected_val = true
+        end
+      end
+
+      # address schedule that is always on or always off (start and end can not both be nil unless unexpected value was found)
+      if !hoo_start.nil? && hoo_end.nil?
+        hoo_end = hoo_start
+      elsif !hoo_end.nil? && hoo_start.nil?
+        hoo_start = hoo_end
+      end
+
+      # some validation
+      if times.size > 3 || unexpected_val || hoo_start.nil? || hoo_end.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{hours_of_operation.name} does not look like a valid hours of operation schedule for parametric schedule generation.")
+        return nil
+      end
+
+      # hours of operation start and finish
+      rule_hash = {}
+      rule_hash[:hoo_start] = hoo_start
+      rule_hash[:hoo_end] = hoo_end
+      hoo_hours = nil
+      if hoo_start == hoo_end
+        if values.uniq == [1]
+          hoo_hours = 24
+        else
+          hoo_hours = 0
+        end
+      elsif hoo_end > hoo_start
+        hoo_hours = hoo_end - hoo_start
+      elsif hoo_start > hoo_end
+        hoo_hours = hoo_end + 24 - hoo_start
+      end
+      rule_hash[:hoo_hours] = hoo_hours
+      days_used = []
+      indices_vector.each_with_index do |profile_index, i|
+        if profile_index == -1 then days_used << i + 1 end
+      end
+      rule_hash[:days_used] = days_used
+      profiles[-1] = rule_hash
+
+      hours_of_operation.scheduleRules.reverse.each do |rule|
+        # may not need date and days of week, will likely refer to specific date and get rule when applying parametricformula
+        rule_hash = {}
+
+        hoo_start = nil
+        hoo_end = nil
+        unexpected_val = false
+        times = rule.daySchedule.times
+        values = rule.daySchedule.values
+        times.each_with_index do |time, i|
+          if values[i] == 0 && hoo_start.nil?
+            hoo_start = time.totalHours
+          elsif values[i] == 1 && hoo_end.nil?
+            hoo_end = time.totalHours
+          elsif values[i] != 1 && values[i] != 0
+            unexpected_val = true
+          end
+        end
+
+        # address schedule that is always on or always off (start and end can not both be nil unless unexpected value was found)
+        if !hoo_start.nil? && hoo_end.nil?
+          hoo_end = hoo_start
+        elsif !hoo_end.nil? && hoo_start.nil?
+          hoo_start = hoo_end
+        end
+
+        # some validation
+        if times.size > 3 || unexpected_val || hoo_start.nil? || hoo_end.nil?
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{hours_of_operation.name} does not look like a valid hours of operation schedule for parametric schedule generation.")
+          return nil
+        end
+
+        # hours of operation start and finish
+        rule_hash[:hoo_start] = hoo_start
+        rule_hash[:hoo_end] = hoo_end
+        hoo_hours = nil
+        if hoo_start == hoo_end
+          if values.uniq == [1]
+            hoo_hours = 24
+          else
+            hoo_hours = 0
+          end
+        elsif hoo_end > hoo_start
+          hoo_hours = hoo_end - hoo_start
+        elsif hoo_start > hoo_end
+          hoo_hours = hoo_end + 24 - hoo_start
+        end
+        rule_hash[:hoo_hours] = hoo_hours
+        days_used = []
+        indices_vector.each_with_index do |profile_index, i|
+          if profile_index == rule.ruleIndex then days_used << i + 1 end
+        end
+        rule_hash[:days_used] = days_used
+
+        #       # todo - delete rule details below unless end up needing to use them
+        #       if rule.startDate.is_initialized
+        #         date = rule.startDate.get
+        #         rule_hash[:start_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+        #       else
+        #         rule_hash[:start_date] = nil
+        #       end
+        #       if rule.endDate.is_initialized
+        #         date = rule.endDate.get
+        #         rule_hash[:end_date] = "#{date.monthOfYear.value}/#{date.dayOfMonth}"
+        #       else
+        #         rule_hash[:end_date] = nil
+        #       end
+        #       rule_hash[:mon] = rule.applyMonday
+        #       rule_hash[:tue] = rule.applyTuesday
+        #       rule_hash[:wed] = rule.applyWednesday
+        #       rule_hash[:thu] = rule.applyThursday
+        #       rule_hash[:fri] = rule.applyFriday
+        #       rule_hash[:sat] = rule.applySaturday
+        #       rule_hash[:sun] = rule.applySunday
+
+        # update hash
+        profiles[rule.ruleIndex] = rule_hash
+      end
+
+      return profiles
+    end
+
+    # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
+    # report hours of operation. Won't be a single set of values, will be a collection of rules
+    # this will call space_hours_of_operation on each space in array
+    # loop through all days of year to make as many rules as ncessary
+    # expand hours of operation. When hours of operation do not overlap for two spaces, add logic to remove all but largest gap
+    #
+    # @author David Goldwasser
+    # @param spaces [Array<OpenStudio::Model::Space>] takes array of spaces
+    # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
+    def self.spaces_hours_of_operation(spaces)
+      hours_of_operation_array = []
+      space_names = []
+      spaces.each do |space|
+        space_names << space.name.to_s
+        hoo_hash = space_hours_of_operation(space)
+        if !hoo_hash.nil?
+          # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, hours of operation hash = #{hoo_hash}.")
+          hours_of_operation_array << hoo_hash
+        end
+      end
+
+      # @todo replace this with logic to get combined hours of operation for collection of spaces.
+      # each hours_of_operation_array is hash with key for each profile.
+      # each profile has hash with keys for hoo_start, hoo_end, hoo_hours, days_used
+      # my goal is to compare profiles and days used across all profiles to create new entries as necessary
+      # then for all days I need to extend hours of operation addressing any situations where multile occupancy gaps occur
+      #
+      # loop through all 365/366 days
+
+      # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Evaluating hours of operation for #{space_names.join(',')}: #{hours_of_operation_array}")
+
+      # @todo what is this getting max of, it isn't longest hours of operation, is it the most profiles?
+      hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
+
+      return hours_of_operation
+    end
+
     # This method creates a new fractional schedule ruleset.
     # If occupied_percentage_threshold is set, this method will return a discrete on/off fractional schedule
     # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
@@ -127,7 +330,7 @@ module OpenstudioStandards
     #   The goal is a dynamic threshold that calibrates each day.
     # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
     # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
-    def spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: 'value')
+    def self.spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: 'value')
       unless !spaces.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.space', 'Empty spaces array passed to spaces_get_occupancy_schedule method.')
         return false
@@ -455,5 +658,36 @@ module OpenstudioStandards
 
       return sch_ruleset
     end
+
+    # @!endgroup Space
+
+    # @!group SpaceLoadInstance
+    # method to process load instance schedules for model_setup_parametric_schedules
+    #
+    # @author David Goldwasser
+    # @param load_inst [OpenStudio::Model::SpaceLoadInstance]
+    # @param parametric_inputs [Hash]
+    # @param hours_of_operation [Hash]
+    # @param gather_data_only [Boolean]
+    # @return [Hash]
+    def self.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+      if load_inst.class.to_s == 'OpenStudio::Model::People'
+        opt_sch = load_inst.numberofPeopleSchedule
+      elsif load_inst.class.to_s == 'OpenStudio::Model::DesignSpecificationOutdoorAir'
+        opt_sch = load_inst.outdoorAirFlowRateFractionSchedule
+      else
+        opt_sch = load_inst.schedule
+      end
+      if !opt_sch.is_initialized || !opt_sch.get.to_ScheduleRuleset.is_initialized
+        return nil
+      end
+
+      gather_inputs_parametric_schedules(opt_sch.get.to_ScheduleRuleset.get, load_inst, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
+
+      return parametric_inputs
+    end
+
+
+    # @!endgroup SpaceLoadInstance
   end
 end

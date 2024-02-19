@@ -175,7 +175,7 @@ class Standard
       sch_name = "#{thermal_zone.name} Occ Sch"
     end
     # Get the occupancy schedule for all spaces in thermal_zone
-    sch_ruleset = OpenStudioStandards::Space.spaces_get_occupancy_schedule(thermal_zone.spaces,
+    sch_ruleset = OpenstudioStandards::Space.spaces_get_occupancy_schedule(thermal_zone.spaces,
                                                 sch_name: sch_name,
                                                 occupied_percentage_threshold: occupied_percentage_threshold)
     return sch_ruleset
@@ -203,7 +203,7 @@ class Standard
         spaces << space
       end
     end
-    sch_ruleset = OpenStudioStandards::Space.spaces_get_occupancy_schedule(spaces,
+    sch_ruleset = OpenstudioStandards::Space.spaces_get_occupancy_schedule(spaces,
                                                 sch_name: sch_name,
                                                 occupied_percentage_threshold: occupied_percentage_threshold)
     return sch_ruleset
