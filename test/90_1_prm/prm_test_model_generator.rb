@@ -209,11 +209,18 @@ class AppendixGPRMTests < Minitest::Test
       unmet_load_hours = mod_str == 'unmet_load_hours'
 
       # Create baseline model
-      model_baseline = @prototype_creator.model_create_prm_stable_baseline_building(model, climate_zone,
-                                                                                    @@hvac_building_types[hvac_building_type],
-                                                                                    @@wwr_building_types[building_type],
-                                                                                    @@swh_building_types[building_type],
-                                                                                    run_dir_baseline, false, GENERATE_PRM_LOG)
+      model_baseline = @prototype_creator.model_create_prm_any_baseline_building(model, '',
+                                                                                 climate_zone,
+                                                                                 @@hvac_building_types[hvac_building_type],
+                                                                                 @@wwr_building_types[building_type],
+                                                                                 @@swh_building_types[building_type],
+                                                                                 model_deep_copy = true,
+                                                                                 create_proposed_model = true,
+                                                                                 custom = nil,
+                                                                                 sizing_run_dir = run_dir_baseline,
+                                                                                 run_all_orients = true,
+                                                                                 unmet_load_hours_check = false,
+                                                                                 debug = GENERATE_PRM_LOG)
 
       # Check if baseline model could be created
       assert(model_baseline, "Baseline model could not be generated for #{building_type}, #{template}, #{climate_zone}.")

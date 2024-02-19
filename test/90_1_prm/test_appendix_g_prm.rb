@@ -28,8 +28,13 @@ class AppendixGPRMTests < Minitest::Test
     check_daylighting_control(model_hash['baseline'])
   end
 
-  def test_dcv
-    model_hash = prm_test_helper('dcv', require_prototype = false, require_baseline = true)
+  def test_dcv_01
+    model_hash = prm_test_helper('dcv_01', require_prototype = false, require_baseline = true)
+    check_dcv(model_hash['baseline'])
+  end
+
+  def test_dcv_02
+    model_hash = prm_test_helper('dcv_02', require_prototype = false, require_baseline = true)
     check_dcv(model_hash['baseline'])
   end
 
@@ -103,8 +108,18 @@ class AppendixGPRMTests < Minitest::Test
     check_psz_split_from_mz(model_hash['baseline'])
   end
 
-  def test_hvac_sizing
-    model_hash = prm_test_helper('hvac_sizing', require_prototype = false, require_baseline = true)
+  def test_hvac_sizing_01
+    model_hash = prm_test_helper('hvac_sizing_01', require_prototype = false, require_baseline = true)
+    check_hvac_sizing(model_hash['baseline'])
+  end
+
+  def test_hvac_sizing_02
+    model_hash = prm_test_helper('hvac_sizing_02', require_prototype = false, require_baseline = true)
+    check_hvac_sizing(model_hash['baseline'])
+  end
+
+  def test_hvac_sizing_03
+    model_hash = prm_test_helper('hvac_sizing_03', require_prototype = false, require_baseline = true)
     check_hvac_sizing(model_hash['baseline'])
   end
 
@@ -180,8 +195,13 @@ class AppendixGPRMTests < Minitest::Test
     check_pipe_insulation(model_hash['proposed'])
   end
 
-  def test_plant_temp_reset_ctrl
-    model_hash = prm_test_helper('plant_temp_reset_ctrl', require_prototype = false, require_baseline = true)
+  def test_plant_temp_reset_ctrl_01
+    model_hash = prm_test_helper('plant_temp_reset_ctrl_01', require_prototype = false, require_baseline = true)
+    check_hw_chw_reset(model_hash['baseline'])
+  end
+
+  def test_plant_temp_reset_ctrl_02
+    model_hash = prm_test_helper('plant_temp_reset_ctrl_02', require_prototype = false, require_baseline = true)
     check_hw_chw_reset(model_hash['baseline'])
   end
 
@@ -192,7 +212,6 @@ class AppendixGPRMTests < Minitest::Test
 
   def test_proposed_model_residential_lpd
     model_hash = prm_test_helper('proposed_model_residential_lpd', require_prototype = false, require_baseline = false, require_proposed = true)
-
     check_residential_lpd(model_hash['proposed'])
   end
 
@@ -236,3 +255,4 @@ class AppendixGPRMTests < Minitest::Test
     check_wwr(model_hash['baseline'])
   end
 end
+
