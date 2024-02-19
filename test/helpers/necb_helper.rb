@@ -3,6 +3,7 @@ require 'logger'
 require 'fileutils'
 require 'pathname'
 require 'json'
+#require 'hashdiff'
 
 # Add significant digits capability to float amd integer class to tidy up reporting.
 class Float
@@ -279,12 +280,13 @@ module NecbHelper
 
   # Check if two files are identical with some added smarts.
   # (used in place of simple ruby methods)
-  def file_compare(expected_results_file:, test_results_file:, msg: "Files do not match", type: nil)
+  def compare_results(expected_results:, test_results:, msg: "Files do not match", type: nil)
   
     if type == "json_data" 
 
       # Compare two json classes.
-      diff = CompareJSON.diff(expected_results_file, test_results_file)
+      #diff = hashdiff.diff(expected_results, test_results)
+      diff = CompareJSON.diff(expected_results, test_results)
       error_msg = ""
       if !diff.nil?
         diff.each do |e|
@@ -311,8 +313,8 @@ module NecbHelper
 
       # Open files and compare the line by line. Remove line endings before checking strings (this can be an issue when running in docker).
       same = true
-      fe = File.open(expected_results_file, 'rb') 
-      ft = File.open(test_results_file, 'rb')
+      fe = File.open(expected_results, 'rb') 
+      ft = File.open(test_results, 'rb')
       comp_lines_str = ""
       fe.each.zip(ft.each).each do |le, lt|
         le=le.gsub /(\r$|\n$)/,''
@@ -325,8 +327,8 @@ module NecbHelper
       # Close files before assert.
       fe.close
       ft.close
-      expected_results_file_path=Pathname.new(expected_results_file).cleanpath
-      test_results_file_path=Pathname.new(test_results_file).cleanpath
+      expected_results_file_path=Pathname.new(expected_results).cleanpath
+      test_results_file_path=Pathname.new(test_results).cleanpath
       comp_files_str="  Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
       assert(same, "#{msg} #{self.class.ancestors[0]}.\n#{comp_files_str}\n#{comp_lines_str}")
     end
@@ -373,7 +375,7 @@ module NecbHelper
 
           # Add deleted properties.
           deleted_keys.each do |k|
-            change_key = CompareJSON.prefix_append_key(prefix, k)
+            change_key = CompareJSON.prefix_append_key(current_prefix, k)
             result << ['-', change_key, obj1[k]]
           end
 
@@ -385,7 +387,7 @@ module NecbHelper
 
           # Added properties.
           added_keys.each do |k|
-            change_key = CompareJSON.prefix_append_key(prefix, k)
+            change_key = CompareJSON.prefix_append_key(current_prefix, k)
             result << ['+', change_key, obj2[k]]
           end
 

@@ -82,7 +82,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Check if test results match expected.
     msg = "Boiler efficiencies test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
   end
 
@@ -231,7 +231,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Check if test results match expected.
     msg = "Boiler efficiencies test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
 
     logger.info "Finished suite of tests for: #{__method__}"
   end
@@ -360,7 +360,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Check if test results match expected.
     msg = "Boiler plf vs plr curve coeffs test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
   end
 
@@ -474,7 +474,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Check if test results match expected.
     msg = "Boiler efficiencies test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
   end
 

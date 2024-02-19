@@ -80,7 +80,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Check if test results match expected.
     msg = "Chiller COP test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
   end
 
@@ -148,7 +148,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       chiller_capacity = (chiller.referenceCapacity.to_f)/1000.0
       total_capacity += chiller_capacity
       chillerID = "Chiller-#{chiller_count}"
-      results[chillerID.to_sym]= {
+      results[chillerID.to_sym] = {
         name: chiller.name.to_s,
         capacity_kW: chiller_capacity.signif,
         capacity_ton: OpenStudio.convert(chiller_capacity, 'kW', 'ton').get.signif,
@@ -157,7 +157,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
         COP_kW_ton: OpenStudio.convert((1.0/chiller.referenceCOP.to_f), '1/kW', '1/ton').get.signif
       }
     end
-    results[:All]= {
+    results[:All] = {
       tested_capacity_kW: (chiller_cap.to_f).signif, 
       total_capacity_kW: (total_capacity).signif, 
       number_of_chillers: chiller_count,
@@ -219,7 +219,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Check if test results match expected.
     msg = "Number of chillers and capacity test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
   end
 
@@ -291,7 +291,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       chiller_capacity = (chiller.referenceCapacity.to_f)/1000.0
       total_capacity += chiller_capacity
       chillerID = "Chiller-#{chiller_count}"
-      results[chillerID.to_sym]= {
+      results[chillerID.to_sym] = {
         name: chiller.name.to_s,
         capacity_kW: chiller_capacity.signif,
         capacity_ton: OpenStudio.convert(chiller_capacity, 'kW', 'ton').get.signif,
@@ -299,7 +299,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
         minimum_part_load_ratio: chiller.minimumPartLoadRatio.signif
       }
     end
-    results[:All]= {
+    results[:All] = {
       tested_capacity_kW: (chiller_cap.to_f).signif, 
       total_capacity_kW: (total_capacity).signif, 
       number_of_chillers: chiller_count,
@@ -355,7 +355,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Check if test results match expected.
     msg = "Chiller performance curve coeffs test results do not match expected in test"
-    file_compare(expected_results_file: expected_results, test_results_file: test_results, msg: msg, type: 'json_data')
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
   end
 
@@ -427,7 +427,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       chiller_capacity = (chiller.referenceCapacity.to_f)/1000.0
       capacity_kW = chiller_capacity.signif
       chiller_name = chiller.name.get
-      results[chiller_name.to_sym]= {
+      results[chiller_name.to_sym] = {
           chiller_name: chiller_name,
           capacity_kW: capacity_kW,
           eff_curve_name: eff_curve_name,
