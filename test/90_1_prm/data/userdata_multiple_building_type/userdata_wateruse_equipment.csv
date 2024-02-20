@@ -1,0 +1,16 @@
+name,building_type_swh
+Core_bottom Service Water Use 0.17gpm,Dining: Cafeteria/fast food
+Core_mid Service Water Use 0.17gpm,Dining: Cafeteria/fast food
+Core_top Service Water Use 0.17gpm,Dining: Cafeteria/fast food
+Perimeter_bot_ZN_1 Service Water Use 0.04gpm,Office
+Perimeter_bot_ZN_2 Service Water Use 0.02gpm,Office
+Perimeter_bot_ZN_3 Service Water Use 0.04gpm,Office
+Perimeter_bot_ZN_4 Service Water Use 0.02gpm,Office
+Perimeter_mid_ZN_1 Service Water Use 0.04gpm,Office
+Perimeter_mid_ZN_2 Service Water Use 0.02gpm,Office
+Perimeter_mid_ZN_3 Service Water Use 0.04gpm,Office
+Perimeter_mid_ZN_4 Service Water Use 0.02gpm,Office
+Perimeter_top_ZN_1 Service Water Use 0.04gpm,Office
+Perimeter_top_ZN_2 Service Water Use 0.02gpm,Office
+Perimeter_top_ZN_3 Service Water Use 0.04gpm,Office
+Perimeter_top_ZN_4 Service Water Use 0.02gpm,Office
