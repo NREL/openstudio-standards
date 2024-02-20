@@ -806,14 +806,23 @@ module Baseline9012013
             next unless dd.dayType == 'SummerDesignDay'
             next unless dd.name.get.to_s.include?('WB=>MDB')
 
-            if dd.humidityIndicatingType == 'Wetbulb'
-              des_day_wb_si = dd.humidityIndicatingConditionsAtMaximumDryBulb
-              des_day_wb_ip << OpenStudio.convert(des_day_wb_si, 'C', 'F').get
-              puts "DD WB = #{des_day_wb_ip}"
+            if base_model.version < OpenStudio::VersionString.new('3.3.0')
+              if dd.humidityIndicatingType == 'Wetbulb'
+                des_day_wb_si = dd.humidityIndicatingConditionsAtMaximumDryBulb
+                des_day_wb_ip << OpenStudio.convert(des_day_wb_si, 'C', 'F').get
+                puts "DD WB = #{des_day_wb_ip}"
+              else
+                puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
+              end
             else
-              puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
+              if dd.humidityConditionType == 'Wetbulb'
+                des_day_wb_si = dd.wetBulbOrDewPointAtMaximumDryBulb
+                des_day_wb_ip << OpenStudio.convert(des_day_wb_si, 'C', 'F').get
+                puts "DD WB = #{des_day_wb_ip}"
+              else
+                puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
+              end
             end
-
           end
 
           if des_day_wb_ip.size == 0
@@ -2195,9 +2204,14 @@ module Baseline9012013
           design_day_name = design_day.name.get.to_s
           next unless design_day.dayType == "SummerDesignDay"
           next unless design_day_name.include? "WB=>MDB"
-          next unless design_day.humidityIndicatingType == "Wetbulb"
 
-          design_wb_c = design_day.humidityIndicatingConditionsAtMaximumDryBulb
+          if model.version < OpenStudio::VersionString.new('3.3.0')
+            next unless design_day.humidityIndicatingType == "Wetbulb"
+            design_wb_c = design_day.humidityIndicatingConditionsAtMaximumDryBulb
+          else
+            next unless design_day.humidityConditionType == "Wetbulb"
+            design_wb_c = design_day.wetBulbOrDewPointAtMaximumDryBulb
+          end
           design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
           if design_wb_f_max.nil?
             design_wb_f_max = design_wb_f

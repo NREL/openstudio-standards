@@ -612,11 +612,20 @@ class Standard
         next unless dd.dayType == 'SummerDesignDay'
         next unless dd.name.get.to_s.include?('WB=>MDB')
 
-        if dd.humidityIndicatingType == 'Wetbulb'
-          summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
-          summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+
+        if condenser_water_loop.model.version < OpenStudio::VersionString.new('3.3.0')
+          if dd.humidityIndicatingType == 'Wetbulb'
+            summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+            summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
+          if dd.humidityConditionType == 'Wetbulb'
+            summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb
+            summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For #{dd.name}, humidity is specified as #{dd.humidityConditionType}; cannot determine Twb.")
+          end
         end
       end
 
@@ -655,7 +664,11 @@ class Standard
             ddy_model.getDesignDays.sort.each do |dd|
               # Save the model wetbulb design conditions Condns WB=>MDB
               if dd.name.get.include? '4% Condns WB=>MDB'
-                summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+                if model.version < OpenStudio::VersionString.new('3.3.0')
+                  summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+                else
+                  summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb
+                end
                 summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
               end
             end
