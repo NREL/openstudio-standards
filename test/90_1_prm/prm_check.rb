@@ -1994,7 +1994,7 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
   end
-  
+
   # Check service water heater fuel type for the single building area type
   # @param prototypes_base [Hash] Baseline prototypes
   def check_swh_single_building_type(prototypes_base)
