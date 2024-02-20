@@ -1994,7 +1994,9 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
   end
-
+  
+  # Check service water heater fuel type for the single building area type
+  # @param prototypes_base [Hash] Baseline prototypes
   def check_swh_single_building_type(prototypes_base)
     prototypes_base.each do |prototype, model_baseline|
       # set the fuel type according to the building area type (Small Office)
@@ -2006,6 +2008,15 @@ class AppendixGPRMTests < Minitest::Test
         assert((water_heater.heaterThermalEfficiency.get - water_heater_efficiency)/water_heater_efficiency < 0.01, "New efficiency is not the expected value.")
         assert((water_heater.offCycleLossCoefficienttoAmbientTemperature.get - ua_w_per_k)/ua_w_per_k < 0.01, "New surface loss coefficient is not the expected value.")
       end
+    end
+  end
+
+  # Check service water heater fuel type for the single building area type
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_swh_multiple_building_type(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+
+
     end
   end
 end
