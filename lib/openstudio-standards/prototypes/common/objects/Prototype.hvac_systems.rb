@@ -619,6 +619,7 @@ class Standard
             summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
           else
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
+          end
         else
           if dd.humidityConditionType == 'Wetbulb'
             summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb
