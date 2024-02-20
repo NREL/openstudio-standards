@@ -113,7 +113,7 @@ class TestParametricSchedules < Minitest::Test
 =end
 
       # model_build_parametric_schedules
-      parametric_schedules = standard.model_apply_parametric_schedules(model)
+      parametric_schedules = OpenstudioStandards::Schedules.model_apply_parametric_schedules(model)
       assert(parametric_schedules.size > 0)
       puts "Test: Updated #{parametric_schedules.size} parametric schedules"
 
