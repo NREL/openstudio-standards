@@ -110,45 +110,35 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     test_cases[:NECB2017] = {:Reference => "xx"}
     test_cases[:NECB2020] = {:Reference => "xx"}
     
-  # Set global weather files sample.
-  #NECB_epw_files_for_cdn_climate_zones = [
-  #  'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw', #  CZ 4 HDD = 2932
-  #  'CAN_BC_Kamloops.AP.718870_CWEC2016.epw', #    CZ 5 HDD = 3567
-  #  'CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw', #CZ 6 HDD = 4563
-  #  'CAN_AB_Banff.CS.711220_CWEC2016.epw', #CZ 7aHDD = 5501
-  #  'CAN_ON_Armstrong.AP.718410_CWEC2016.epw', #CZ 7b HDD = 6572
-  #  'CAN_NU_Resolute.AP.719240_CWEC2016.epw' # CZ 8HDD = 12570
-  #]
-    
     # Test cases. Define each case seperately as they have unique locations.
     test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ['climate zone 4'], 
-                       :TestPars => {:epw_file => 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw'}}
+                       :TestCase => ["climate_zone_4"], 
+                       :TestPars => {:epw_file => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ['climate zone 5'], 
-                       :TestPars => {:epw_file => 'CAN_BC_Kamloops.AP.718870_CWEC2016.epw'}}
+                       :TestCase => ["climate_zone_5"], 
+                       :TestPars => {:epw_file => "CAN_BC_Kamloops.AP.718870_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ['climate zone 6'], 
-                       :TestPars => {:epw_file => 'CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw'}}
+                       :TestCase => ["climate_zone_6"], 
+                       :TestPars => {:epw_file => "CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ['climate zone 7a'], 
-                       :TestPars => {:epw_file => 'CAN_AB_Banff.CS.711220_CWEC2016.epw'}}
+                       :TestCase => ["climate_zone_7a"], 
+                       :TestPars => {:epw_file => "CAN_AB_Banff.CS.711220_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ['climate zone 7b'], 
-                       :TestPars => {:epw_file => 'CAN_ON_Armstrong.AP.718410_CWEC2016.epw'}}
+                       :TestCase => ["climate_zone_7b"], 
+                       :TestPars => {:epw_file => "CAN_ON_Armstrong.AP.718410_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ['climate zone 8'], 
-                       :TestPars => {:epw_file => 'CAN_NU_Resolute.AP.719240_CWEC2016.epw'}}
+                       :TestCase => ["climate_zone_8"], 
+                       :TestPars => {:epw_file => "CAN_NU_Resolute.AP.719240_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -273,27 +263,21 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     end
 
     results = Hash.new
-    results["Weather".to_sym] = {
+    results = {
       epw_file: epw_file,
-      hdd: hdd
-    }
-    results["Windows and doors".to_sym] = {
+      hdd: hdd,
       fdwr: roundOrNA(fdwr_info["fdwr"], 2),
-      average_shgc: roundOrNA(windows_average_shgc, 2),
-      windows_average_conductance: roundOrNA(windows_average_conductance),
-      doors_average_conductance: roundOrNA(doors_average_conductance)
-    }
-    results["Skylights".to_sym] = {
       srr: roundOrNA(srr_info["srr"], 2),
-      average_conductance: roundOrNA(skylights_average_conductance)
-    }
-    results["Opaque envelope average conductances".to_sym] = {
-      outdoor_roofs: roundOrNA(outdoor_roofs_average_conductance),
-      outdoor_walls: roundOrNA(outdoor_walls_average_conductance),
-      outdoor_floors: roundOrNA(outdoor_floors_average_conductance),
-      ground_roofs: roundOrNA(ground_roofs_average_conductances),
-      ground_walls: roundOrNA(ground_walls_average_conductances),
-      ground_floors: roundOrNA(ground_floors_average_conductances)
+      outdoor_roofs_average_conductance: roundOrNA(outdoor_roofs_average_conductance),
+      outdoor_walls_average_conductance: roundOrNA(outdoor_walls_average_conductance),
+      outdoor_floors_average_conductance: roundOrNA(outdoor_floors_average_conductance),
+      ground_roofs_average_conductance: roundOrNA(ground_roofs_average_conductances),
+      ground_walls_average_conductance: roundOrNA(ground_walls_average_conductances),
+      ground_floors_average_conductance: roundOrNA(ground_floors_average_conductances),
+      windows_average_conductance: roundOrNA(windows_average_conductance),
+      windows_average_shgc: roundOrNA(windows_average_shgc, 2),
+      skylights_average_conductance: roundOrNA(skylights_average_conductance),
+      doors_average_conductance: roundOrNA(doors_average_conductance)
     }
 
 
