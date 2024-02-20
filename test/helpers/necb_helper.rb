@@ -66,30 +66,30 @@ module NecbHelper
   end
 
   def define_std_ranges
-    @Templates = ['NECB2011', 'NECB2015', 'NECB2017', 'BTAPPRE1980']
-    @AllTemplates = ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020', 'BTAPPRE1980', 'BTAP1980TO2010']
+    @Templates = ["NECB2011", "NECB2015", "NECB2017", "BTAPPRE1980"]
+    @AllTemplates = ["NECB2011", "NECB2015", "NECB2017", "NECB2020", "BTAPPRE1980", "BTAP1980TO2010"]
     @AllBuildings = [
-      'FullServiceRestaurant',
-      'LargeHotel',
-      'LargeOffice',
-      'MediumOffice',
-      'HighriseApartment',
-      'MidriseApartment',
-      'Outpatient',
-      'PrimarySchool',
-      'QuickServiceRestaurant',
-      'RetailStandalone',
-      'RetailStripmall',
-      'SmallHotel',
-      'SmallOffice',
-      'Warehouse',
-      'Hospital'
+      "FullServiceRestaurant",
+      "LargeHotel",
+      "LargeOffice",
+      "MediumOffice",
+      "HighriseApartment",
+      "MidriseApartment",
+      "Outpatient",
+      "PrimarySchool",
+      "QuickServiceRestaurant",
+      "RetailStandalone",
+      "RetailStripmall",
+      "SmallHotel",
+      "SmallOffice",
+      "Warehouse",
+      "Hospital"
     ]
     @CommonBuildings = [
-      'MediumOffice',
-      'MidriseApartment',
-      'RetailStandalone',
-      'Warehouse',
+      "MediumOffice",
+      "MidriseApartment",
+      "RetailStandalone",
+      "Warehouse",
     ]
   end
 
@@ -101,19 +101,18 @@ module NecbHelper
   def make_test_cases_json(test_cases_loop_hash)
     expected_results_template = Hash.new
     test_cases_loop_hash.reverse_each do |loop_k, loop_v|
-      #puts "loop key: #{loop_k}, loop value: #{loop_v}"
+      logger.debug "loop key: #{loop_k}, loop value: #{loop_v}"
       if loop_k.to_s == "TestPars" then 
         loop_v.each {|key, value| expected_results_template[key] = value}
       else
         temp = Hash.new
-        temp["VarType".to_sym] = loop_k
-        #if loop_k.to_s == "TestCase" then temp["reference".to_sym] = "Add NECB reference here" end
+        temp["VarType".to_sym] = loop_k.to_s
         loop_v.each {|key| temp[key.to_sym] = expected_results_template}
         expected_results_template = temp.clone
       end
-      #puts "expected_results_template #{expected_results_template}"
+      logger.debug "expected_results_template #{expected_results_template}"
     end
-    #puts "\nFINAL hash:\n#{JSON.pretty_generate(expected_results_template)}"
+    logger.debug "\nFINAL hash:\n#{JSON.pretty_generate(expected_results_template)}"
     return expected_results_template
   end
 
@@ -122,6 +121,8 @@ module NecbHelper
   # @return the modified test_cases_hash hash
   # @note this one does not merge Arrays
   def merge_test_cases!(test_cases_hash, additional_cases_hash)
+    logger.debug "test_cases_hash: #{test_cases_hash}"
+    logger.debug "additional_cases_hash: #{additional_cases_hash}"
     test_cases_hash.merge!(additional_cases_hash) { |key, oldval, newval|
       if oldval.kind_of?(Hash) && newval.kind_of?(Hash)
         merge_test_cases!(oldval, newval)
@@ -129,6 +130,8 @@ module NecbHelper
         newval
       end
     }
+    logger.debug "\nMerged hash:\n#{JSON.pretty_generate(test_cases_hash)}"
+    return test_cases_hash
   end
     
 
@@ -139,6 +142,8 @@ module NecbHelper
   # Will call the method 'do_test_...' to do the work. This method is called from 'test_...'
   # VarType and Reference are reserved keys that are ignored here.
   def do_test_cases(test_cases:, test_pars:)
+    logger.debug "Test cases #{test_cases}"
+    logger.debug "Test pars #{test_pars}"
 
     # Find the test cases. Do this with recursion but remember where we are in a new hash passed to the do_test method.
     # The nested hash is has essentially a set of loops (vintages, weather files, fuel types etc). As the recursion 
@@ -147,7 +152,7 @@ module NecbHelper
     var_type = test_cases[:VarType].to_s
     test_results = Hash.new
     test_results[:VarType] = var_type
-    logger.debug  "Parsing test cases for VarType #{var_type}"
+    logger.debug "Parsing test cases for VarType #{var_type}"
     if test_cases.key?(:Reference) then test_results[:Reference] = test_cases[:Reference] end
 
     # If at the 'TestCase' level then stop recursion and run the test defined in the current hash.
@@ -156,8 +161,8 @@ module NecbHelper
       # This hash is the test case. The key is the short name (usually something like 'case-1', and it is unique).
       # The value of the hash has the test specific inputs and the result.
       test_cases.each do |key, value|
-        next if key == :VarType # This is less expensive than using the except method chained before the each.
-        if test_cases.key?(:Reference) then test_results[:Reference] = test_cases[:Reference]; next end
+        next if key == :VarType # Skip to next. This is less expensive than using the except method chained before the each.
+        next if key == :Reference # Skip to next. 
         logger.info  "Initiating test case #{key}"
         logger.debug  "Test case: #{test_pars}"
         logger.debug  "Current test: #{value}"
