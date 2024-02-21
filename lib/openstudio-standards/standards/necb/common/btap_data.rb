@@ -501,8 +501,11 @@ class BTAPData
     geography_data = {}
     geography_data['location_necb_hdd'] = @standard.get_necb_hdd18(model: @model, necb_hdd: true)
     geography_data['location_weather_file'] = File.basename(@model.getWeatherFile.path.get.to_s)
-    geography_data['location_epw_cdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).cdd18
-    geography_data['location_epw_hdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).hdd18
+    weather_file_path = @model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    geography_data['location_epw_cdd'] = stat_file.cdd18
+    geography_data['location_epw_hdd'] = stat_file.hdd18
     geography_data['location_necb_climate_zone'] = @standard.get_climate_zone_name(geography_data['location_necb_hdd'])
     geography_data['location_city'] = @model.getWeatherFile.city
     geography_data['location_state_province_region'] = @model.getWeatherFile.stateProvinceRegion
@@ -2053,41 +2056,58 @@ class BTAPData
       unit_density_per_ft_sq = 1.0 / bldg_conditioned_floor_area_ft_sq
     end
 
-    ### Get weather file name
-    weather_file = model.weatherFile.get.path.get.to_s
-#    weather_file = weather_file.split('/')[-1]
+    ### Get weather file
+    weather_file_path = model.weatherFile.get.path.get.to_s
+    epw_file = model.weatherFile.get.file.get
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
 
     ### Cooling Degree Days, base 50degF
-    cdd10_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).cdd10
+    cdd10_degree_c_days = stat_file.cdd10
     cdd50_degree_f_days = cdd10_degree_c_days * 9.0 / 5.0
 
     ### Heating Degree Days, base 65degF (note that base temperature of 18degC has been considered)
-    hdd18_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).hdd18
+    hdd18_degree_c_days = stat_file.hdd18
     hdd65_degree_f_days = hdd18_degree_c_days * 9.0 / 5.0
 
     ### Dehumidification degree days
     ### ('Dehumidification degree-days, base 0.010' in REF: Wright (2019))
-    dehumidification_degree_days = BTAP::Environment::WeatherFile.new(weather_file).calculate_humidity_ratio
+    dehumidification_degree_days = OpenstudioStandards::Weather.epw_file_get_dehumidification_degree_days(epw_file)
 
     ### annual global horizontal irradiance (GHI)
-    annual_ghi_kwh_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_annual_ghi
+    ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get
+    annual_ghi_kwh_per_m_sq = ghi_timeseries.values.sum / 1000.0
 
     ### THD-1 Temperature at the colder of the two heating design conditions in PHIUS, 2021
     ### ('Heating design temperature' in REF: Wright (2019))
-    thd_degree_c = BTAP::Environment::WeatherFile.new(weather_file).heating_design_info[1]
+    thd_degree_c = stat_file.heating_design_info[1]
     thd_degree_f = OpenStudio.convert(thd_degree_c, 'C', 'F').get
 
     ### TCD  Temperature at the cooling design condition in PHIUS, 2021
     ### ('Cooling design temperature' in REF: Wright (2019))
-    tcd_degree_c = BTAP::Environment::WeatherFile.new(weather_file).cooling_design_info[2]
+    tcd_degree_c = stat_file.cooling_design_info[2]
     tcd_degree_f = OpenStudio.convert(tcd_degree_c.to_f, 'C', 'F').get
 
     ### IGHL (Irradiance, Global, at the heating design condition) (Btu/h.ft2) in PHIUS, 2021
-    solar_irradiance_on_heating_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_heating_design_day
+    average_daily_global_irradiance_w_per_m2_array = []
+    model.getDesignDays.each do |design_day|
+      next unless design_day.dayType == 'WinterDesignDay'
+
+      average_daily_global_irradiance_w_per_m2 = OpenstudioStandards::Weather.design_day_average_global_irradiance(design_day)
+      average_daily_global_irradiance_w_per_m2_array << average_daily_global_irradiance_w_per_m2
+    end
+    solar_irradiance_on_heating_design_day_w_per_m_sq = average_daily_global_irradiance_w_per_m2_array.min
     solar_irradiance_on_heating_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_heating_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
 
     ### IGCL (Irradiance, Global, at the cooling design condition) (Btu/h.ft2) in PHIUS, 2021
-    solar_irradiance_on_cooling_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_cooling_design_day
+    average_daily_global_irradiance_w_per_m2_array = []
+    model.getDesignDays.each do |design_day|
+      next unless design_day.dayType == 'SummerDesignDay'
+
+      average_daily_global_irradiance_w_per_m2 = OpenstudioStandards::Weather.design_day_average_global_irradiance(design_day)
+      average_daily_global_irradiance_w_per_m2_array << average_daily_global_irradiance_w_per_m2
+    end
+    solar_irradiance_on_cooling_design_day_w_per_m_sq = average_daily_global_irradiance_w_per_m2_array.max
     solar_irradiance_on_cooling_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_cooling_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
 
     ### occupant density (persons per ft2 of floor area)

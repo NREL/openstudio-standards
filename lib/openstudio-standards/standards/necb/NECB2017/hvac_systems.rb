@@ -38,7 +38,10 @@ class NECB2017
       return false
     end
 
-    hdd = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get).hdd18
+    weather_file_path = air_loop_hvac.model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    hdd = stat_file.hdd18
     flow = min_oa_flow_m3_per_s
     oaf = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
     erv_required = eval(get_standards_formula('heat_recovery_requirement_formula'))

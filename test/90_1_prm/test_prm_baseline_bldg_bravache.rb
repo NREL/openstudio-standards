@@ -69,10 +69,9 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
       puts "No Weather file set, and CANNOT locate #{climate_zone}"
     else
       rel_path = base_rel_path + epw_name
-      weather_file =  File.expand_path(rel_path, __FILE__)
-      weather = BTAP::Environment::WeatherFile.new(weather_file)
-      #Set Weather file to model.
-      success = weather.set_weather_file(model)
+      weather_file_path =  File.expand_path(rel_path, __FILE__)
+       # set the weather file to the model
+      success = OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       if success
         puts "Set Weather file to '#{weather_file}'"
       else

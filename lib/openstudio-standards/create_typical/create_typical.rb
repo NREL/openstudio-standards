@@ -404,7 +404,7 @@ module OpenstudioStandards
         standard.model_modify_infiltration_coefficients(model, primary_bldg_type, climate_zone)
 
         # set ground temperatures from DOE prototype buildings
-        standard.model_add_ground_temperatures(model, primary_bldg_type, climate_zone)
+        OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
       end
 
       # add elevators (returns ElectricEquipment object)
