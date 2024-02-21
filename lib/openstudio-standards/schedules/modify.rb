@@ -93,7 +93,8 @@ module OpenstudioStandards
       return sch_rule
     end
 
-    # Increase/decrease by percentage or static value
+    # Increase/decrease by percentage or static value.
+    # If the schedule has a scheduleTypeLimits object, the adjusted values will subject to the lower and upper bounds of the schedule type limits object.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @param value [Double] Hash of name and time value pairs
@@ -105,6 +106,19 @@ module OpenstudioStandards
     def self.schedule_ruleset_simple_value_adjust(schedule_ruleset, value, modification_type = 'Multiplier')
       # gather profiles
       profiles = []
+      # positive infinity
+      upper_bound = Float::INFINITY
+      # negative infinity
+      lower_bound = -upper_bound
+      if schedule_ruleset.scheduleTypeLimits.is_initialized
+        scheduleTypeLimits = schedule_ruleset.scheduleTypeLimits.get
+        if scheduleTypeLimits.lowerLimitValue.is_initialized
+          lower_bound = scheduleTypeLimits.lowerLimitValue.get
+        end
+        if scheduleTypeLimits.upperLimitValue.is_initialized
+          upper_bound = scheduleTypeLimits.upperLimitValue.get
+        end
+      end
       default_profile = schedule_ruleset.to_ScheduleRuleset.get.defaultDaySchedule
       profiles << default_profile
       rules = schedule_ruleset.scheduleRules
@@ -120,10 +134,12 @@ module OpenstudioStandards
           case modification_type
           when 'Multiplier', 'Percentage'
             # percentage was used early on but Multiplier is preferable
-            profile.addValue(times[i], sch_value * value)
+            new_value = [lower_bound, [upper_bound, sch_value * value].min].max
+            profile.addValue(times[i], new_value)
           when 'Sum', 'Value'
             # value was used early on but Sum is preferable
-            profile.addValue(times[i], sch_value + value)
+            new_value = [lower_bound, [upper_bound, sch_value + value].min].max
+            profile.addValue(times[i], new_value)
           end
           i += 1
         end

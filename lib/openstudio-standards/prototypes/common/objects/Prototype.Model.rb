@@ -25,12 +25,16 @@ Standard.class_eval do
     end
     # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'
-      climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+      stat_file_path = weather_file_path.gsub('.epw', '.stat')
+      stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+      climate_zone = OpenstudioStandards::Weather.get_climate_zone_from_degree_days(stat_file.hdd18, stat_file.cdd10)
     else
       # this is required to be blank otherwise it may cause side effects.
       epw_file = ''
     end
     model = load_geometry_osm(@geometry_file)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
     model_custom_geometry_tweaks(model, building_type, climate_zone, @prototype_input)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
@@ -42,7 +46,6 @@ Standard.class_eval do
     model_add_door_infiltration(model, climate_zone)
     model_modify_surface_convection_algorithm(model)
     model_create_thermal_zones(model, @space_multiplier_map)
-    model_add_design_days_and_weather_file(model, climate_zone, epw_file)
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model.getAirLoopHVACs.each do |air_loop|
       next unless air_loop_hvac_multizone_vav_system?(air_loop)
@@ -59,11 +62,9 @@ Standard.class_eval do
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
     model_add_daylight_savings(model)
-    model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model.getBuilding.setStandardsBuildingType(building_type)
-    model_set_climate_zone(model, climate_zone)
     model_add_lights_shutoff(model)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false

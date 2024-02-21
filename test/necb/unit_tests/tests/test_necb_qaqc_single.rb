@@ -41,9 +41,8 @@ class NECB_QAQC_Single_Test < CreateDOEPrototypeBuildingTest
                                                              epw_file: info['epw'],
                                                              debug: false,
                                                              sizing_run_dir: output_folder)
-
-
-      BTAP::Environment::WeatherFile.new(info['epw']).set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(info['epw'])
+      OpenstudioStandards::Weather.model_set_building_location(@model, weather_file_path: weather_file_path)
       prototype_creator.model_run_simulation_and_log_errors(model, run_dir(test_name, info))
       qaqc = prototype_creator.init_qaqc(model)
       #write to json file.
