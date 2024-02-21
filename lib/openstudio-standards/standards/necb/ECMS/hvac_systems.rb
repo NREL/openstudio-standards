@@ -1907,10 +1907,10 @@ class ECMS
 
     # add output variables  for district heating and cooling
     model.getOutputVariables.each {|ivar| ivar.remove}
-    dist_htg_var = OpenStudio::Model::OutputVariable.new("District Heating Water Rate",model)
+    dist_htg_var = OpenStudio::Model::OutputVariable.new("District Heating Hot Water Rate",model)
     dist_htg_var.setReportingFrequency("hourly")
     dist_htg_var.setKeyValue("*")
-    dist_clg_var = OpenStudio::Model::OutputVariable.new("District Cooling Water Rate",model)
+    dist_clg_var = OpenStudio::Model::OutputVariable.new("District Cooling Chilled Water Rate",model)
     dist_clg_var.setReportingFrequency("hourly")
     dist_clg_var.setKeyValue("*")
 
@@ -2027,9 +2027,11 @@ class ECMS
     dist_htg_eqpts = ghx_loop.supplyComponents.select { |comp| comp.iddObjectType.valueName.to_s.include?('DistrictHeating') }
     if !dist_htg_eqpts.empty?
       case dist_htg_eqpts[0].iddObjectType.valueName.to_s
-      when 'OS_DistrictHeating_Water'
+      when 'OS_DistrictHeating'
         dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeating.get
-      when 'OS_DistrictHeating_Steam'
+      when 'OS_DistrictHeatingWater'
+        dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeatingWater.get
+      when 'OS_DistrictHeatingSteam'
         dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeatingSteam.get
       end
     end
@@ -2038,7 +2040,7 @@ class ECMS
     raise("set_cond_loop_district_cap: condenser loop doesn't have a district heating and district cooling objects") if dist_htg_eqpts.empty? || dist_clg_eqpts.empty?
     # District Heating
     sql_command = "SELECT ReportVariableDataDictionaryIndex FROM ReportVariableDataDictionary
-               WHERE VariableName='District Heating Water Rate'"
+               WHERE VariableName='District Heating Hot Water Rate'"
     dhtg_index = model.sqlFile.get.execAndReturnFirstString(sql_command).get
     raise("set_ghx_loop_district_cap: EnergyPlus sql results file has no data for district heating hot water rate") if dhtg_index.nil?
     sql_command = "SELECT Value FROM ReportVariableWithTime
@@ -2049,7 +2051,7 @@ class ECMS
     dist_htg_s = model.sqlFile.get.execAndReturnVectorOfString(sql_command).get
     # District Cooling
     sql_command = "SELECT ReportVariableDataDictionaryIndex FROM ReportVariableDataDictionary
-               WHERE VariableName='District Cooling Water Rate'"
+               WHERE VariableName='District Cooling Chilled Water Rate'"
     dclg_index = model.sqlFile.get.execAndReturnFirstString(sql_command).get
     raise("set_ghx_loop_district_cap: EnergyPlus sql results file has no data for district cooling chilled water rate") if dclg_index.nil?
     sql_command = "SELECT Value FROM ReportVariableWithTime
