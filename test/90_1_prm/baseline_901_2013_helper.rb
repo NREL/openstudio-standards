@@ -815,9 +815,8 @@ module Baseline9012013
                 puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
               end
             else
-              if dd.humidityConditionType == 'Wetbulb'
-                des_day_wb_si = dd.wetBulbOrDewPointAtMaximumDryBulb
-                des_day_wb_ip << OpenStudio.convert(des_day_wb_si, 'C', 'F').get
+              if dd.humidityConditionType == 'Wetbulb' && dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+                des_day_wb_ip << OpenStudio.convert(dd.wetBulbOrDewPointAtMaximumDryBulb.get, 'C', 'F').get
                 puts "DD WB = #{des_day_wb_ip}"
               else
                 puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"

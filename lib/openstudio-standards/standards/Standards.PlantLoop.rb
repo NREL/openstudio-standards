@@ -311,9 +311,8 @@ class Standard
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
         end
       else
-        if dd.humidityConditionType == 'Wetbulb'
-          summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb
-          summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+        if dd.humidityConditionType == 'Wetbulb' && dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+          summer_oat_wbs_f << OpenStudio.convert(dd.wetBulbOrDewPointAtMaximumDryBulb.get, 'C', 'F').get
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{dd.name}, humidity is specified as #{dd.humidityConditionType}; cannot determine Twb.")
         end
