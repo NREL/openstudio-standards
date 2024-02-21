@@ -792,7 +792,7 @@ module OpenstudioStandards
 
       # change night cycling control to "Thermostat" cycling and increase thermostat tolerance to 1.99999
       manager_night_cycles = model.getAvailabilityManagerNightCycles
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Changing thermostat tollerance to 1.99999 for #{manager_night_cycles.size} night cycle manager objects.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Changing thermostat tolerance to 1.99999 for #{manager_night_cycles.size} night cycle manager objects.")
       manager_night_cycles.each do |night_cycle|
         night_cycle.setThermostatTolerance(1.9999)
         night_cycle.setCyclingRunTimeControlType('Thermostat')
