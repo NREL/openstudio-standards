@@ -35,7 +35,7 @@ module OpenstudioStandards
           non_res_people_design += space.numberOfPeople * space.multiplier
         end
       end
-      OpenStudio.logFree(OpenStudio::Info, 'Openstudio.standards.Schedules', "Model has design level of #{non_res_people_design} people in non residential spaces and #{res_people_design} people in residential spaces.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.Model', "Model has design level of #{non_res_people_design.round(2)} people in non residential spaces and #{res_people_design.round(2)} people in residential spaces.")
 
       # create merged schedule for prevalent type (not used but can be generated for diagnostics)
       if gen_occ_profile
@@ -133,7 +133,7 @@ module OpenstudioStandards
       # reverse 1 and 0 values for res_prevalent building
       # currently spaces_get_occupancy_schedule doesn't use defaultDayProflie, so only inspecting rules for now.
       if invert_res && res_prevalent
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', 'Per argument passed in hours of operation are being inverted for buildings with more people in residential versus non-residential spaces.')
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.Model', 'Per argument passed in, hours of operation are being inverted for buildings with more people in residential versus non-residential spaces.')
         hours_of_operation.scheduleRules.each do |rule|
           profile = rule.daySchedule
           times = profile.times
@@ -285,10 +285,10 @@ module OpenstudioStandards
           elsif !air_loop.nil?
             hours_of_operation = air_loop_hash[air_loop]
           elsif !plant_loop.nil?
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "#{schedule.name.get} is associated with plant loop, will not gather parametric inputs")
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.Model', "#{schedule.name.get} is associated with plant loop, will not gather parametric inputs")
             next
           else
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Cannot identify where #{component.name.get} is in system. Will not gather parametric inputs for #{schedule.name.get}")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Model', "Cannot identify where #{component.name.get} is in system. Will not gather parametric inputs for #{schedule.name.get}")
             next
           end
           gather_inputs_parametric_schedules(schedule, component, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
@@ -358,7 +358,7 @@ module OpenstudioStandards
           next if sch.directUseCount <= 0 # won't catch if used for space type load instance, but that space type isn't used
 
           # @todo address schedules that fall into this category, if they are used in the model
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For #{sch.sources.first.name}, #{sch.name} is not setup as parametric schedule. It has #{sch.sources.size} sources.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Model', "For #{sch.sources.first.name}, #{sch.name} is not setup as parametric schedule. It has #{sch.sources.size} sources.")
           next
         end
 
@@ -390,7 +390,7 @@ module OpenstudioStandards
 
         hours_of_operation = Space.space_hours_of_operation(space_type)
         if hours_of_operation.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "Can't evaluate schedules for #{space_type.name}, doesn't have hours of operation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Space', "Can't evaluate schedules for #{space_type.name}, doesn't have hours of operation.")
           next
         end
         # loop through internal load instances
@@ -454,7 +454,7 @@ module OpenstudioStandards
     def self.gather_inputs_parametric_schedules(sch, load_inst, parametric_inputs, hours_of_operation, ramp: true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
       if parametric_inputs.key?(sch)
         if hours_of_operation != parametric_inputs[sch][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.Model', "#{load_inst.name} uses #{sch.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[sch][:target].name}.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedule', "#{load_inst.name} uses #{sch.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[sch][:target].name}.")
           return nil
         end
       end
@@ -603,7 +603,7 @@ module OpenstudioStandards
         if percent_change.abs > 0.05
           # @todo this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
           # post application checks compares against actual instead of estimated values
-          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedule', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
         end
 
         raw_string = []
@@ -819,7 +819,7 @@ module OpenstudioStandards
     # this will use parametric inputs contained in schedule and profiles along with inferred hours of operation to generate updated ruleset schedule profiles
     #
     # @author David Goldwasser
-    # @param schedule [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
     # @param ramp_frequency [Double] ramp frequency in minutes
     # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
     # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
@@ -827,19 +827,19 @@ module OpenstudioStandards
     def self.schedule_ruleset_apply_parametric_inputs(schedule_ruleset, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs = nil)
       # Check if parametric inputs were supplied and generate them if not
       if parametric_inputs.nil?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, no parametric inputs were not supplied so they will be generated now.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name}, no parametric inputs were not supplied so they will be generated now.")
         parametric_inputs = model_setup_parametric_schedules(schedule.model, gather_data_only: true)
       end
 
       # Check that parametric inputs exist for this schedule after generation
       if parametric_inputs[schedule_ruleset].nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, no parametric inputs exists so schedule will not be changed.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name}, no parametric inputs exists so schedule will not be changed.")
         return schedule_ruleset
       end
 
       # Check that an hours of operation schedule is associated with this schedule
       if parametric_inputs[schedule_ruleset][:hoo_inputs].nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name}, no associated hours of operation schedule was found so schedule will not be changed.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name}, no associated hours of operation schedule was found so schedule will not be changed.")
         return schedule_ruleset
       end
 
@@ -869,7 +869,7 @@ module OpenstudioStandards
           sch_day.remove # remove day schedule for this rule
           rule.remove # remove the rule
         elsif !sch_day.additionalProperties.hasFeature('param_day_profile')
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{schedule.name} doesn't have a parametric formula for #{rule.name} This profile will not be altered.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.ScheduleRuleset', "#{schedule.name} doesn't have a parametric formula for #{rule.name} This profile will not be altered.")
           next
         else
           profiles[sch_day] = rule
@@ -941,15 +941,15 @@ module OpenstudioStandards
           # loop through new rules to make and process
           autogen_rules.each do |autogen_rule, hash|
             # generate new rule
-            sch_rule_autogen = OpenStudio::Model::ScheduleRule.new(schedule)
+            sch_rule_autogen = OpenStudio::Model::ScheduleRule.new(schedule_ruleset)
             if current_rule_index
-              target_index = schedule.scheduleRules.size - 1 # just above default
+              target_index = schedule_ruleset.scheduleRules.size - 1 # just above default
             else
               target_index = current_rule_index - 1 # confirm just above orig rule
             end
             current_rule_index = target_index
             if rule.nil?
-              sch_rule_autogen.setName("autogen #{schedule.name} #{target_index}")
+              sch_rule_autogen.setName("autogen #{schedule_ruleset.name} #{target_index}")
             else
               sch_rule_autogen.setName("autogen #{rule.name} #{target_index}")
             end
@@ -996,7 +996,7 @@ module OpenstudioStandards
       final_aeflh = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule_ruleset)
       percent_change = ((starting_aeflh - final_aeflh) / starting_aeflh) * 100.0
       if percent_change.abs > 0.05
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name}, applying parametric schedules made a #{percent_change.round(1)}% change in annual equivalent full load hours. (from #{starting_aeflh.round(2)} to #{final_aeflh.round(2)})")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name}, applying parametric schedules made a #{percent_change.round(1)}% change in annual equivalent full load hours. (from #{starting_aeflh.round(2)} to #{final_aeflh.round(2)})")
       end
 
       return schedule_ruleset
@@ -1005,32 +1005,6 @@ module OpenstudioStandards
     # @!endgroup Parametric:ScheduleRuleset
 
     # @!group Parametric:ScheduleDay
-
-    # Set the hours of operation (0 or 1) for a ScheduleDay.
-    # Clears out existing time/value pairs and sets to supplied values.
-    #
-    # @author Andrew Parker
-    # @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
-    # @param start_time [OpenStudio::Time] Start time.
-    # @param end_time [OpenStudio::Time] End time.  If greater than 24:00, hours of operation will wrap over midnight.
-    #
-    # @return [Void]
-    # @api private
-    def self.schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
-      schedule_day.clearValues
-      twenty_four_hours = OpenStudio::Time.new(0, 24, 0, 0)
-      if end_time < twenty_four_hours
-        # Operating hours don't wrap over midnight
-        schedule_day.addValue(start_time, 0) # 0 until start time
-        schedule_day.addValue(end_time, 1) # 1 from start time until end time
-        schedule_day.addValue(twenty_four_hours, 0) # 0 after end time
-      else
-        # Operating hours start on previous day
-        schedule_day.addValue(end_time - twenty_four_hours, 1) # 1 for hours started on the previous day
-        schedule_day.addValue(start_time, 0) # 0 from end of previous days hours until start of today's
-        schedule_day.addValue(twenty_four_hours, 1) # 1 from start of today's hours until midnight
-      end
-    end
 
     # adjust individual schedule profiles from parametric inputs
     #
@@ -1080,10 +1054,10 @@ module OpenstudioStandards
           if time_float.to_i.to_s == time_float.to_s || time_float.to_f.to_s == time_float.to_s # check to see if numeric
             time_float = time_float.to_f
           else
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{time} for #{schedule_day.name} is invalid. It can't be converted to a float.")
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.ScheduleDay', "Time formula #{time} for #{schedule_day.name} is invalid. It can't be converted to a float.")
           end
         rescue SyntaxError => e
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{time} for #{schedule_day.name} is invalid. It can't be evaluated.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.ScheduleDay', "Time formula #{time} for #{schedule_day.name} is invalid. It can't be evaluated.")
         end
 
         # replace variables in array of values
@@ -1098,10 +1072,10 @@ module OpenstudioStandards
             if val_float.to_i.to_s == val_float.to_s || val_float.to_f.to_s == val_float.to_s # check to see if numeric
               val_float = val_float.to_f
             else
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Value formula #{val_float} for #{schedule_day.name} is invalid. It can't be converted to a float.")
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.ScheduleDay', "Value formula #{val_float} for #{schedule_day.name} is invalid. It can't be converted to a float.")
             end
           rescue SyntaxError => e
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Time formula #{val_float} for #{schedule_day.name} is invalid. It can't be evaluated.")
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.ScheduleDay', "Time formula #{val_float} for #{schedule_day.name} is invalid. It can't be evaluated.")
           end
           val_in_out_float << val_float
         end
@@ -1146,7 +1120,7 @@ module OpenstudioStandards
 
           # @todo it doesn't actually stop here now
           if error_on_out_of_order
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{schedule_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Method will stop because Error on Out of Order was set to true.")
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.ScheduleDay', "Pre-interpolated processed hash for #{schedule_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Method will stop because Error on Out of Order was set to true.")
           end
 
           if neg_time_hash.key?(i)
@@ -1174,7 +1148,7 @@ module OpenstudioStandards
           time_value_pairs[i][0] = updated_time
 
           # reporting mostly for diagnostic purposes
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule_day.name} profile item #{i} time was #{last_time} and item #{i + 1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleDay', "For #{schedule_day.name} profile item #{i} time was #{last_time} and item #{i + 1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
 
           last_time = updated_time
           throw_order_warning = true
@@ -1186,7 +1160,7 @@ module OpenstudioStandards
 
       # issue warning if order was changed
       if throw_order_warning
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "Pre-interpolated processed hash for #{schedule_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjusted as shown to crate a valid profile: #{time_value_pairs}")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.ScheduleDay', "Pre-interpolated processed hash for #{schedule_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjusted as shown to crate a valid profile: #{time_value_pairs}")
       end
 
       # add interpolated values at ramp_frequency

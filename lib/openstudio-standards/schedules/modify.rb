@@ -43,6 +43,31 @@ module OpenstudioStandards
       return schedule_day
     end
 
+    # Set the hours of operation (0 or 1) for a ScheduleDay.
+    # Clears out existing time/value pairs and sets to supplied values.
+    #
+    # @author Andrew Parker
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
+    # @param start_time [OpenStudio::Time] Start time.
+    # @param end_time [OpenStudio::Time] End time.  If greater than 24:00, hours of operation will wrap over midnight.
+    #
+    # @return [Void]
+    # @api private
+    def self.schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
+      schedule_day.clearValues
+      twenty_four_hours = OpenStudio::Time.new(0, 24, 0, 0)
+      if end_time < twenty_four_hours
+        # Operating hours don't wrap over midnight
+        schedule_day.addValue(start_time, 0) # 0 until start time
+        schedule_day.addValue(end_time, 1) # 1 from start time until end time
+        schedule_day.addValue(twenty_four_hours, 0) # 0 after end time
+      else
+        # Operating hours start on previous day
+        schedule_day.addValue(end_time - twenty_four_hours, 1) # 1 for hours started on the previous day
+        schedule_day.addValue(start_time, 0) # 0 from end of previous days hours until start of today's
+        schedule_day.addValue(twenty_four_hours, 1) # 1 from start of today's hours until midnight
+      end
+    end
     # @!endgroup Modify:ScheduleDay
 
     # @!group Modify:ScheduleRuleset
