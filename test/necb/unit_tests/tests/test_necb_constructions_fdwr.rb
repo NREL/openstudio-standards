@@ -7,7 +7,7 @@ include(NecbHelper)
 # components are created from scratch to ensure model are up to date and we will
 # not run into version issues with the test. 
 ## to specifically test aspects of the NECB2011 code that are HDD dependant. 
-class NECB_Constructions_FDWR_Tests < Minitest::Test
+class NECB_HDD_Tests < Minitest::Test
 
   # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
@@ -21,31 +21,32 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   # Will require large windows and constructions that have high U-values.    
   def create_base_model()
 
-    #Create new model for testing. 
-    @model = OpenStudio::Model::Model.new
-    #Create Geometry that will be used for all tests.  
+    # Create new model for testing. 
+    model = OpenStudio::Model::Model.new
 
-    #Below ground story to tests all ground surfaces including roof.
+    # Create Geometry that will be used for all tests.  
+    # Below ground story to tests all ground surfaces including roof.
     length = 100.0; width = 100.0; num_above_ground_floors = 0; num_under_ground_floors = 1; floor_to_floor_height = 3.8; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = -10.0
-    @below_ground_floors = BTAP::Geometry::Wizards::create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+    below_ground_floors = BTAP::Geometry::Wizards::create_shape_rectangle(model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
 
-    #Above ground story to test all above outdoors surfaces including floor.
+    # Above ground story to test all above outdoors surfaces including floor.
     length = 100.0; width = 100.0; num_above_ground_floors = 3; num_under_ground_floors = 0; floor_to_floor_height = 3.8; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-    @above_ground_floors = BTAP::Geometry::Wizards::create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+    above_ground_floors = BTAP::Geometry::Wizards::create_shape_rectangle(model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
 
-    #Find all outdoor surfaces. 
-    outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(@model.getSurfaces(), "Outdoors")
-    @outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
-    @outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
+    # Find all outdoor surfaces. 
+    outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
+    outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
+    outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
 
-    @model.getBuilding.setStandardsNumberOfStories(4)
-    @model.getBuilding.setStandardsNumberOfAboveGroundStories(3)
+    model.getBuilding.setStandardsNumberOfStories(4)
+    model.getBuilding.setStandardsNumberOfAboveGroundStories(3)
 
-    #Set all FWDR to a ratio of 0.60
+    # Set all FWDR to a ratio of 0.60
     subsurfaces = []
     counter = 0
-    @outdoor_walls.each { |wall| subsurfaces << wall.setWindowToWallRatio(0.60) }
-    #ensure all wall subsurface types are represented. 
+    outdoor_walls.each { |wall| subsurfaces << wall.setWindowToWallRatio(0.60) }
+    
+    # Ensure all wall subsurface types are represented. 
     subsurfaces.each do |subsurface|
       counter = counter + 1
 
@@ -62,12 +63,11 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       end
     end
 
+    # Create skylights that are 10% of area with a 4x4m size.
+    pattern = OpenStudio::Model::generateSkylightPattern(model.getSpaces, model.getSpaces[0].directionofRelativeNorth, 0.10, 4.0, 4.0) # ratio, x value, y value
+    subsurfaces = OpenStudio::Model::applySkylightPattern(pattern, model.getSpaces, OpenStudio::Model::OptionalConstructionBase.new)
 
-    #Create skylights that are 10% of area with a 4x4m size.
-    pattern = OpenStudio::Model::generateSkylightPattern(@model.getSpaces, @model.getSpaces[0].directionofRelativeNorth, 0.10, 4.0, 4.0) # ratio, x value, y value
-    subsurfaces = OpenStudio::Model::applySkylightPattern(pattern, @model.getSpaces, OpenStudio::Model::OptionalConstructionBase.new)
-
-    #ensure all roof subsurface types are represented. 
+    # Ensure all roof subsurface types are represented. 
     subsurfaces.each do |subsurface|
       counter = counter + 1
       case counter
@@ -84,9 +84,11 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     end
 
     standard = get_standard("NECB2011")
-    standard.model_clear_and_set_example_constructions(@model)
-    #Ensure that building is Conditioned add spacetype to each space. 
+    standard.model_clear_and_set_example_constructions(model)
 
+    # Ensure that building is Conditioned add spacetype to each space. 
+
+    return model
   end
 
   # Tests to ensure that the U-Values of the construction are set correctly. This 
@@ -94,7 +96,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   # for all HDDs 
   # NECB2011 8.4.4.1
   # @return [Bool] true if successful. 
-  def test_necb_hdd_rules()
+  def test_envelope_rules()
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
@@ -164,7 +166,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   # @param test_case [Hash] has the specific test parameters.
   # @return results of this case.
   # @note Companion method to test_necb_hdd_envelope_rules that runs a specific test. Called by do_test_cases in necb_helper.rb.
-  def do_test_necb_hdd_rules(test_pars:, test_case:)
+  def do_test_envelope_rules(test_pars:, test_case:)
 
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
@@ -180,47 +182,47 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     epw_file = test_case[:epw_file]
 
     # Define the base model. HDD rules are applied to this.
-    create_base_model()
+    model = create_base_model()
 
-    # Create a space type and assign to all spaces.. This is done because the FWDR is only applied to conditioned spaces.. So we need conditioning data.
+    # Create a space type and assign to all spaces.. This is done because the FWDR is only applied to conditioned spaces. So we need conditioning data.
     building_type = "Office"
     space_type = "WholeBuilding"
     standard = get_standard(vintage)
 
     table = standard.standards_data['tables']['space_types']['table']
     space_type_properties = table.detect { |st| st["building_type"] == building_type && st["space_type"] == space_type }
-    st = OpenStudio::Model::SpaceType.new(@model)
+    st = OpenStudio::Model::SpaceType.new(model)
     st.setStandardsBuildingType(space_type_properties['building_type'])
     st.setStandardsSpaceType(space_type_properties['space_type'])
     st.setName("#{vintage}-#{space_type_properties['building_type']}-#{space_type_properties['space_type']}")
     standard.space_type_apply_rendering_color(st)
-    standard.model_add_loads(@model, 'NECB_Default', 1.0)
+    standard.model_add_loads(model, 'NECB_Default', 1.0)
 
     # Now loop through each space and assign the spacetype.
-    @model.getSpaces.each do |space|
+    model.getSpaces.each do |space|
       space.setSpaceType(st)
     end
 
     # Create Zones.
-    standard.model_create_thermal_zones(@model)
+    standard.model_create_thermal_zones(model)
 
     # Worflow should mirror BTAP workflow up to fdwr. Note envelope includes infiltration.
     # Not validating spacetypes as not needed for this simplified test.
-    standard.apply_weather_data(model: @model, epw_file: File.basename(epw_file))
-    standard.apply_loads(model: @model)
-    standard.apply_envelope(model: @model)
-    standard.apply_fdwr_srr_daylighting(model: @model)
+    standard.apply_weather_data(model: model, epw_file: File.basename(epw_file))
+    standard.apply_loads(model: model)
+    standard.apply_envelope(model: model)
+    standard.apply_fdwr_srr_daylighting(model: model)
 
     # Set the infiltration rate at each space.
-    @model.getSpaces.sort.each do |space|
+    model.getSpaces.sort.each do |space|
       standard.space_apply_infiltration_rate(space)
     end
 
     # Store hdd for classifing results.
-    hdd = standard.get_necb_hdd18(@model)
+    hdd = standard.get_necb_hdd18(model)
 
     # Get Surfaces by type.
-    outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(@model.getSurfaces(), "Outdoors")
+    outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
     outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
     outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
     outdoor_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Floor")
@@ -229,7 +231,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     skylights = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["Skylight", "TubularDaylightDiffuser", "TubularDaylightDome"])
     doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["Door", "GlassDoor"])
     overhead_doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["OverheadDoor"])
-    ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(@model.getSurfaces(), "Ground")
+    ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Ground")
     ground_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Wall")
     ground_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling")
     ground_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor")
@@ -251,8 +253,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     #overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
 
     # SRR and FDWR.
-    srr_info = standard.find_exposed_conditioned_roof_surfaces(@model)
-    fdwr_info = standard.find_exposed_conditioned_vertical_surfaces(@model)
+    srr_info = standard.find_exposed_conditioned_roof_surfaces(model)
+    fdwr_info = standard.find_exposed_conditioned_vertical_surfaces(model)
 
     # Output conductances.
     def roundOrNA(data, figs = 4)
@@ -280,11 +282,10 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
       doors_average_conductance: roundOrNA(doors_average_conductance)
     }
 
-
-    # Infiltration test.
-    # Get the effective infiltration rate through the walls and roof only.
-    sorted_spaces = BTAP::Geometry::Spaces::get_spaces_from_storeys(@model, @above_ground_floors).sort_by { |space| space.name.get }
-    # Need to sort spaces otherwise the output order is random.
+    # Infiltration rates.
+    # Get the effective infiltration rate through the walls and roof only. Need to sort spaces otherwise the output order is random.
+    #sorted_spaces = BTAP::Geometry::Spaces::get_spaces_from_storeys(model, above_ground_floors).sort_by { |space| space.name.get }
+    sorted_spaces = model.getSpaces.sort_by { |space| space.name.get }
     infiltration_results = Hash.new
     sorted_spaces.each do |space|
       assert(space.spaceInfiltrationDesignFlowRates.size <= 1, "There should be no more than one infiltration object per space in the reference/budget building#{space.spaceInfiltrationDesignFlowRates}")
