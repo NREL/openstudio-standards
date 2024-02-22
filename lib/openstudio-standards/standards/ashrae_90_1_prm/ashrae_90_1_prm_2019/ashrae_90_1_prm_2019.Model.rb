@@ -77,7 +77,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = wateruse_equipment.additionalProperties.getFeatureAsString('building_type_swh').to_s
     end
 
-    # If there is additional properties, test uniq user data.
+    # If there is additional properties, get the uniq building area type numbers.
     if wateruse_equipment_hash
       building_area_type_number = wateruse_equipment_hash.values.uniq.length
     else
