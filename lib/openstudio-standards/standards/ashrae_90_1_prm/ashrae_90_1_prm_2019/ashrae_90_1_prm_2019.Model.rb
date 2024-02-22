@@ -74,7 +74,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # Get the building area type from the additional properties of wateruse_equipment
     wateruse_equipment_hash = {}
     model.getWaterUseEquipments.each do |wateruse_equipment|
-      wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = wateruse_equipment.additionalProperties.getFeatureAsString('building_type_swh').to_s
+      wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = get_additional_property_as_string(wateruse_equipment, 'building_type_swh')
     end
 
     # If there is additional properties, get the uniq building area type numbers.
