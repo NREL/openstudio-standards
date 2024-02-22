@@ -23,7 +23,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # Get the volumn of the water heater
     volumn_m3 = water_heater_mixed.tankVolume
     if volumn_m3.empty?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volumn, standard will not be applied.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find volumn, standard will not be applied.")
       return false
     else
       volumn_m3 = volumn_m3.get / comp_qty
