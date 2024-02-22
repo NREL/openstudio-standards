@@ -83,17 +83,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       ua_btu_per_hr_per_f = eff_ua[1]
     end
 
-    # Ensure that efficiency and UA were both set
-    if water_heater_eff.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot calculate efficiency, cannot apply efficiency standard.")
-      return false
-    end
-
-    if ua_btu_per_hr_per_f.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot calculate UA, cannot apply efficiency standard.")
-      return false
-    end
-
     # Convert to SI
     ua_w_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, skin-loss UA = #{ua_w_per_k} W/K.")
