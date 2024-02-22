@@ -86,16 +86,16 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
 
     # Apply baseline swh loops
-    if building_area_type_number == 1
+    # if building_area_type_number == 1
       # One building area type
       # Modify the service water heater
-      model.getWaterHeaterMixeds.sort.each do |water_heater|
-        model_apply_water_heater_prm_parameter(water_heater,
-                                               swh_building_type)
-      end
-    else
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      model_apply_water_heater_prm_parameter(water_heater,
+                                             swh_building_type)
+    end
+    # else
       # Todo: service water heater with multiple building area type
-      puts "Todo: service water heater with multiple building area type"
+
       # # 1. Remove current swh loop
       # model.getPlantLoops.sort.each do |loop|
       #   # Don't remove loops except service water heating loops
@@ -116,7 +116,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       #                      water_heater_volume)
       #
       # end
-    end
+    # end
     return true
   end
 
