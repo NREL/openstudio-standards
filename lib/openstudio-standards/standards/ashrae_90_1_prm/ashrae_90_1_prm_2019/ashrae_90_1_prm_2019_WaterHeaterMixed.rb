@@ -13,7 +13,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # Get the capacity of the water heater
     capacity_w = water_heater_mixed.heaterMaximumCapacity
     if capacity_w.empty?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find capacity, standard will not be applied.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find capacity, standard will not be applied.")
       return false
     else
       capacity_w = capacity_w.get / comp_qty
