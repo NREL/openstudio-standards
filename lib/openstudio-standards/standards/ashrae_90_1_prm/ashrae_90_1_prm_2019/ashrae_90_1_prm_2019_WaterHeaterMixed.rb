@@ -8,11 +8,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # @return [Boolean] returns true if successful, false if not
   def model_apply_water_heater_prm_parameter(water_heater_mixed, building_type_swh)
     # get number of water heaters
-    if water_heater_mixed.additionalProperties.getFeatureAsInteger('component_quantity').is_initialized
-      comp_qty = water_heater_mixed.additionalProperties.getFeatureAsInteger('component_quantity').get
-    else
-      comp_qty = 1
-    end
+    comp_qty = get_additional_property_as_integer(water_heater_mixed, 'component_quantity', 1)
 
     # Get the capacity of the water heater
     capacity_w = water_heater_mixed.heaterMaximumCapacity
