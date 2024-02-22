@@ -2207,11 +2207,15 @@ module Baseline9012013
           if model.version < OpenStudio::VersionString.new('3.3.0')
             next unless design_day.humidityIndicatingType == "Wetbulb"
             design_wb_c = design_day.humidityIndicatingConditionsAtMaximumDryBulb
+            design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
           else
             next unless design_day.humidityConditionType == "Wetbulb"
-            design_wb_c = design_day.wetBulbOrDewPointAtMaximumDryBulb
+            if design_day.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+              design_wb_c = design_day.wetBulbOrDewPointAtMaximumDryBulb
+              design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
+            end
           end
-          design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
+
           if design_wb_f_max.nil?
             design_wb_f_max = design_wb_f
           else

@@ -666,10 +666,14 @@ class Standard
               if dd.name.get.include? '4% Condns WB=>MDB'
                 if model.version < OpenStudio::VersionString.new('3.3.0')
                   summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+                  summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
                 else
-                  summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb
+                  if dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+                    summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb
+                    summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+                  end
                 end
-                summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+
               end
             end
           end
