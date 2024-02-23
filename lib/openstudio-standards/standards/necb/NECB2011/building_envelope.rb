@@ -151,7 +151,7 @@ class NECB2011
         surface.subSurfaces.sort.each do |ss|
           # Reduce the size of the window
           red = 1.0 - mult
-          sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
         end
       end
     end
@@ -272,7 +272,7 @@ class NECB2011
         surface.subSurfaces.sort.each do |ss|
           # Reduce the size of the subsurface
           red = 1.0 - mult
-          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
     end

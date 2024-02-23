@@ -108,7 +108,7 @@ class AppendixGPRMTests < Minitest::Test
           next unless ss.subSurfaceType == 'Skylight'
 
           # increase the size of the skylight
-          @prototype_creator.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, mult)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, mult)
         end
       end
     end

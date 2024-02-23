@@ -3,9 +3,89 @@ module OpenstudioStandards
   module Geometry
     # Methods to modify geometry
 
-    # @!group Modify:Surfaces
+    # @!group Modify:SubSurface
 
-    # @!endgroup Modify:Surfaces
+    # Reduce the area of the subsurface by shrinking it toward the centroid
+    # @author Julien Marrec
+    #
+    # @param sub_surface [OpenStudio::Model::SubSurface] OpenStudio SubSurface object
+    # @param percent_reduction [Double] the fractional amount to reduce the area
+    # @return [Boolean] returns true if successful, false if not
+    def self.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(sub_surface, percent_reduction)
+      # if percent_reduction > 1=> percent increase instead of reduction
+      mult = percent_reduction <= 1 ? 1 - percent_reduction : percent_reduction
+      scale_factor = mult**0.5
+
+      # Get the centroid (Point3d)
+      g = sub_surface.centroid
+
+      # Create an array to collect the new vertices
+      new_vertices = []
+
+      # Loop on vertices (Point3ds)
+      sub_surface.vertices.each do |vertex|
+        # Point3d - Point3d = Vector3d
+        # Vector from centroid to vertex (GA, GB, GC, etc)
+        centroid_vector = vertex - g
+
+        # Resize the vector (done in place) according to scale_factor
+        centroid_vector.setLength(centroid_vector.length * scale_factor)
+
+        # Move the vertex toward the centroid
+        vertex = g + centroid_vector
+
+        new_vertices << vertex
+      end
+
+      # Assign the new vertices to the self
+      sub_surface.setVertices(new_vertices)
+
+      return true
+    end
+
+    # Reduce the area of the subsurface by raising the sill height
+    #
+    # @param sub_surface [OpenStudio::Model::SubSurface] OpenStudio SubSurface object
+    # @param percent_reduction [Double] the fractional amount to reduce the area
+    # @return [Boolean] returns true if successful, false if not
+    def self.sub_surface_reduce_area_by_percent_by_raising_sill(sub_surface, percent_reduction)
+      # Find the min and max z values
+      min_z_val = 99_999
+      max_z_val = -99_999
+      sub_surface.vertices.each do |vertex|
+        # Min z value
+        if vertex.z < min_z_val
+          min_z_val = vertex.z
+        end
+        # Max z value
+        if vertex.z > max_z_val
+          max_z_val = vertex.z
+        end
+      end
+
+      # Calculate the window height
+      height = max_z_val - min_z_val
+
+      # Calculate the new sill height
+      z_delta = height * percent_reduction
+
+      # Reset the z value of the lowest points within a certain threshold
+      new_vertices = []
+      sub_surface.vertices.each do |vertex|
+        if (vertex.z - min_z_val).abs < 0.025
+          new_vertices << vertex + OpenStudio::Vector3d.new(0.0, 0.0, z_delta)
+        else
+          new_vertices << vertex
+        end
+      end
+
+      # Reset the vertices
+      sub_surface.setVertices(new_vertices)
+
+      return true
+    end
+
+    # @!endgroup Modify:SubSurface
 
     # @!group Modify:Model
 
