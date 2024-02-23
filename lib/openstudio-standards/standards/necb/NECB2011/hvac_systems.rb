@@ -1330,24 +1330,27 @@ class NECB2011
       elsif fan.name.to_s.include?('Return')
         motor_type += 'VARIABLE-RETURN'
       end
-      # 0.909 corrects for 10% over sizing implemented upstream
-      # 0.7457 is to convert from bhp to kW
-      fan_power_kw = 0.909 * 0.7457 * motor_bhp
-      power_vs_flow_curve_name = if fan_power_kw >= 25.0
+      
+      # Calculate fan power using NECB equation (5.2.3.2)
+      max_flow = fan.maximumFlowRate.get
+      static_p = fan.pressureRise
+      total_eff = fan.fanTotalEfficiency
+      necb_fan_power_kw = max_flow * static_p / (total_eff * 1000.0)
+      power_vs_flow_curve_name = if necb_fan_power_kw >= 25.0
                                    'VarVolFan-FCInletVanes-NECB2011-FPLR'
-                                 elsif fan_power_kw >= 7.5 && fan_power_kw < 25
+                                 elsif necb_fan_power_kw >= 7.5 && necb_fan_power_kw < 25
                                    'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
                                  else
                                    'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
                                  end
       power_vs_flow_curve = model_add_curve(fan.model, power_vs_flow_curve_name)
       fan.setFanPowerMinimumFlowRateInputMethod('Fraction')
-      fan.setFanPowerCoefficient5(0.0)
       fan.setFanPowerMinimumFlowFraction(power_vs_flow_curve.minimumValueofx)
       fan.setFanPowerCoefficient1(power_vs_flow_curve.coefficient1Constant)
       fan.setFanPowerCoefficient2(power_vs_flow_curve.coefficient2x)
       fan.setFanPowerCoefficient3(power_vs_flow_curve.coefficient3xPOW2)
       fan.setFanPowerCoefficient4(power_vs_flow_curve.coefficient4xPOW3)
+      fan.setFanPowerCoefficient5(0.0)
     elsif fan.class.name == 'OpenStudio::Model::FanZoneExhaust'
       motor_type = 'CONSTANT-RETURN'
     else
