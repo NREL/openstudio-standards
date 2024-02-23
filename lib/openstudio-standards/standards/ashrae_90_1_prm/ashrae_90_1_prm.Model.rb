@@ -1136,6 +1136,7 @@ class ASHRAE901PRM < Standard
         setpoint_sch = tstat.heatingSetpointTemperatureSchedule
         setpoint_c = OpenstudioStandards::Schedules.schedule_get_design_day_min_max(setpoint_sch.get, 'winter')['max']
         next if setpoint_c.nil?
+
         if setpoint_c > max_heat_setpoint
           max_heat_setpoint = setpoint_c
         end
@@ -1415,6 +1416,8 @@ class ASHRAE901PRM < Standard
     handle_airloop_user_input_data(model)
     # exterior lighting handler
     handle_exterior_lighting_user_input_data(model)
+    # load lights data from user data
+    handle_lights_user_input_data(model)
     # load OA data from user data
     handle_outdoor_air_user_input_data(model)
     # load air loop DOAS user data from the proposed model
@@ -1425,7 +1428,174 @@ class ASHRAE901PRM < Standard
     handle_thermal_zone_user_input_data(model)
     # load electric equipment user data
     handle_electric_equipment_user_input_data(model)
+    # load gas equipment user data
+    handle_gas_equipment_user_input_data(model)
+    # load water use connection user data
+    handle_wateruse_connections_user_input_data(model)
+    # load water use equipment user data
+    handle_wateruse_equipment_user_input_data(model, default_swh_building_type)
+    # load water use equipment definition user data
+    handle_wateruse_equipment_definition_user_input_data(model)
     return true
+  end
+
+  # A function to load lights from user data csv files
+  # The file name is userdata_lights.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_lights_user_input_data(model)
+    user_lights = get_userdata(UserDataFiles::LIGHTS)
+    model.getLightss.each do |light|
+      if user_lights
+        user_data_updated = false
+        user_lights.each do |user_light|
+          next unless UserData.compare(light.name.get, user_light['name'])
+
+          has_retail_display_exception = prm_read_user_data(user_light, 'has_retail_display_exception', false)
+          if has_retail_display_exception
+            light.additionalProperties.setFeature('has_retail_display_exception', true)
+          else
+            light.additionalProperties.setFeature('has_retail_display_exception', false)
+          end
+
+          has_unregulated_exception = prm_read_user_data(user_light, 'has_unregulated_exception', false)
+          if has_unregulated_exception
+            light.additionalProperties.setFeature('has_unregulated_exception', true)
+          else
+            light.additionalProperties.setFeature('has_unregulated_exception', false)
+          end
+
+          unregulated_category = prm_read_user_data(user_light, 'unregulated_category')
+          if unregulated_category
+            light.additionalProperties.setFeature('unregulated_category', unregulated_category)
+          end
+
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "WaterUseConnections name #{light.name.get} was not found in user data file: #{UserDataFiles::LIGHTS}; No user data applied.")
+        end
+      end
+    end
+  end
+
+  # A function to load water use equipment definition from user data csv files
+  # The file name is userdata_wateruse_equipment_definition.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_wateruse_equipment_definition_user_input_data(model)
+    user_data_wateruse_equipment_definition = get_userdata(UserDataFiles::WATERUSE_EQUIPMENT_DEFINITION)
+    model.getWaterUseEquipmentDefinitions.each do |wateruse_equipment|
+      if user_data_wateruse_equipment_definition
+        user_data_updated = false
+        user_data_wateruse_equipment_definition.each do |user_wateruse|
+          next unless UserData.compare(wateruse_equipment.name.get, user_wateruse['name'])
+
+          peak_flow_rate = prm_read_user_data(user_wateruse, 'peak_flow_rate', nil)
+          if peak_flow_rate
+            wateruse_equipment.additionalProperties.setFeature('peak_flow_rate', peak_flow_rate)
+          end
+
+          flow_rate_fraction_schedule_name = prm_read_user_data(user_wateruse, 'flow_rate_fraction_schedule', '')
+          # verify the schedule exist in the model
+          prm_raise(model.getScheduleRulesetByName(flow_rate_fraction_schedule_name) ||
+                      model.getScheduleCompactByName(flow_rate_fraction_schedule_name) ||
+                      model.getScheduleConstantByName(flow_rate_fraction_schedule_name),
+                    @sizing_run_dir,
+                    "Cannot find #{flow_rate_fraction_schedule_name} in the model. Note, such schedule shall be one of the following type: RuleSet, Compact and Constant")
+          wateruse_equipment.additionalProperties.setFeature('flow_rate_fraction_schedule', flow_rate_fraction_schedule_name)
+
+          target_temperature_schedule_name = prm_read_user_data(user_wateruse, 'target_temperature_schedule', '')
+          # verify the schedule exist in the model
+          prm_raise(model.getScheduleRulesetByName(target_temperature_schedule_name) ||
+                      model.getScheduleCompactByName(target_temperature_schedule_name) ||
+                      model.getScheduleConstantByName(target_temperature_schedule_name),
+                    @sizing_run_dir,
+                    "Cannot find #{target_temperature_schedule_name} in the model. Note, such schedule shall be one of the following type: RuleSet, Compact and Constant")
+          wateruse_equipment.additionalProperties.setFeature('target_temperature_schedule', target_temperature_schedule_name)
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "WaterUseConnections name #{wateruse_equipment.name.get} was not found in user data file: #{UserDataFiles::WATERUSE_EQUIPMENT_DEFINITION}; No user data applied.")
+        end
+      end
+    end
+  end
+
+  # A function to load water use equipment from user data csv files
+  # The file name is userdata_wateruse_equipment.csv
+  # @param [OpenStudio::Model::Model] model
+  # @param [String] SWH building type
+  def handle_wateruse_equipment_user_input_data(model, default_swh_building_type)
+    user_data_wateruse_equipment = get_userdata(UserDataFiles::WATERUSE_EQUIPMENT)
+    user_data_building = get_userdata(UserDataFiles::BUILDING)
+    # get swh building type from user data building
+    default_type = default_swh_building_type
+    if user_data_building
+      building_name = prm_get_optional_handler(model, @sizing_run_dir, 'building', 'name')
+      user_building_index = user_data_building.index { |user_building| UserData.compare(user_building['name'], building_name) }
+      unless user_building_index.nil? || prm_read_user_data(user_data_building[user_building_index], 'building_type_swh', nil)
+        # Only thermal zone in the buildings user data and have building_type_for_hvac data will be assigned.
+        default_type = prm_read_user_data(user_data_building[user_building_index], 'building_type_swh', default_type)
+        OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Building type swh found in #{UserDataFiles::WATERUSE_EQUIPMENT} for building #{building_name}, set default building type swh to #{default_type}")
+      end
+    end
+    model.getWaterUseEquipments.each do |wateruse_equipment|
+      user_data_updated = false
+      if user_data_wateruse_equipment
+        user_data_wateruse_equipment.each do |user_wateruse|
+          if UserData.compare(wateruse_equipment.name.get, user_wateruse['name'])
+            building_type_swh = prm_read_user_data(user_wateruse, 'building_type_swh', nil)
+            if building_type_swh
+              wateruse_equipment.additionalProperties.setFeature('building_type_swh', building_type_swh)
+            end
+            user_data_updated = true
+          end
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "WaterUseEquipment name #{wateruse_equipment.name.get} was not found in user data file: #{UserDataFiles::WATERUSE_EQUIPMENT}; default building swh type #{default_type} applied.")
+        end
+      end
+      # No user data updated, use default type
+      unless user_data_updated
+        wateruse_equipment.additionalProperties.setFeature('building_type_swh', default_type)
+      end
+    end
+  end
+
+  # A function to load water use connections schedules from user data csv files
+  # The file name is userdata_wateruse_connections.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_wateruse_connections_user_input_data(model)
+    user_data_wateruse_connections = get_userdata(UserDataFiles::WATERUSE_CONNECTIONS)
+    model.getWaterUseConnectionss.each do |wateruse_connections|
+      if user_data_wateruse_connections
+        user_data_updated = false
+        user_data_wateruse_connections.each do |user_wateruse|
+          next unless UserData.compare(wateruse_connections.name.get, user_wateruse['name'])
+
+          hot_water_supply_temperature_schedule_name = prm_read_user_data(user_wateruse, 'hot_water_supply_temperature_schedule', '')
+          # verify the schedule exist in the model
+          prm_raise(model.getScheduleRulesetByName(hot_water_supply_temperature_schedule_name) ||
+                      model.getScheduleCompactByName(hot_water_supply_temperature_schedule_name) ||
+                      model.getScheduleConstantByName(hot_water_supply_temperature_schedule_name),
+                    @sizing_run_dir,
+                    "Cannot find #{hot_water_supply_temperature_schedule_name} in the model. Note, such schedule shall be one of the following type: RuleSet, Compact and Constant")
+          wateruse_connections.additionalProperties.setFeature('hot_water_supply_temperature_schedule', hot_water_supply_temperature_schedule_name)
+
+          cold_water_supply_temperature_schedule_name = prm_read_user_data(user_wateruse, 'cold_water_supply_temperature_schedule', '')
+          # verify the schedule exist in the model
+          prm_raise(model.getScheduleRulesetByName(cold_water_supply_temperature_schedule_name) ||
+                      model.getScheduleCompactByName(cold_water_supply_temperature_schedule_name) ||
+                      model.getScheduleConstantByName(cold_water_supply_temperature_schedule_name),
+                    @sizing_run_dir,
+                    "Cannot find #{cold_water_supply_temperature_schedule_name} in the model. Note, such schedule shall be one of the following type: RuleSet, Compact and Constant")
+          wateruse_connections.additionalProperties.setFeature('cold_water_supply_temperature_schedule', cold_water_supply_temperature_schedule_name)
+          user_data_updated = true
+        end
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "WaterUseConnections name #{wateruse_connections.name.get} was not found in user data file: #{UserDataFiles::WATERUSE_CONNECTIONS}; No user data applied.")
+        end
+      end
+    end
   end
 
   # A function to load exterior lighting data from user data csv files
@@ -1508,6 +1678,12 @@ class ASHRAE901PRM < Standard
         user_data_plug_load.each do |user_plug_load|
           next unless UserData.compare(elevator_equipment.name.get, user_plug_load['name'])
 
+          fraction_of_controlled_receptacles = prm_read_user_data(user_plug_load, 'fraction_of_controlled_receptacles', '0.0').to_f
+          elevator_equipment.additionalProperties.setFeature('fraction_of_controlled_receptacles', fraction_of_controlled_receptacles)
+
+          receptacle_power_savings = prm_read_user_data(user_plug_load, 'receptacle_power_savings', '0.0').to_f
+          elevator_equipment.additionalProperties.setFeature('receptacle_power_savings', receptacle_power_savings)
+
           num_lifts = prm_read_user_data(user_plug_load, 'elevator_number_of_lifts', '0').to_i
           if num_lifts > 0
             elevator_equipment.additionalProperties.setFeature('elevator_number_of_lifts', num_lifts)
@@ -1531,6 +1707,33 @@ class ASHRAE901PRM < Standard
 
         unless user_data_updated
           OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Electric equipment name #{elevator_equipment.name.get} was not found in user data file: #{UserDataFiles::ELECTRIC_EQUIPMENT}; No user data applied.")
+        end
+      end
+    end
+  end
+
+  # A function to load gas equipment csv files
+  # The file name is userdata_gas_equipment.csv
+  # @param [OpenStudio::Model::Model] model
+  def handle_gas_equipment_user_input_data(model)
+    user_data_gas_equipment = get_userdata(UserDataFiles::GAS_EQUIPMENT)
+    model.getGasEquipments.each do |gas_equipment|
+      if user_data_gas_equipment
+        user_data_updated = false
+        user_data_gas_equipment.each do |user_gas_equipment|
+          next unless UserData.compare(gas_equipment.name.get, user_gas_equipment['name'])
+
+          fraction_of_controlled_receptacles = prm_read_user_data(user_gas_equipment, 'fraction_of_controlled_receptacles', '0.0').to_f
+          prm_raise(fraction_of_controlled_receptacles > 1.0, 'The fraction of all controlled receptacles cannot be higher than 1.0')
+          gas_equipment.additionalProperties.setFeature('fraction_of_controlled_receptacles', fraction_of_controlled_receptacles)
+
+          receptacle_power_savings = prm_read_user_data(user_gas_equipment, 'receptacle_power_savings', '0.0').to_f
+          gas_equipment.additionalProperties.setFeature('receptacle_power_savings', receptacle_power_savings)
+          user_data_updated = true
+        end
+
+        unless user_data_updated
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Gas equipment name #{gas_equipment.name.get} was not found in user data file: #{UserDataFiles::GAS_EQUIPMENT}; No user data applied.")
         end
       end
     end
@@ -1619,6 +1822,81 @@ class ASHRAE901PRM < Standard
         end
         unless user_data_updated
           OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Air loop name #{air_loop.name.get} was not found in user data file: #{UserDataFiles::AIRLOOP_HVAC}; No user data applied.")
+        end
+      end
+    end
+  end
+
+  # Retrieve zone HVAC user specified compliance inputs from CSV file
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  def handle_zone_hvac_user_input_data(model)
+    user_zone_hvac = get_userdata(UserDataFiles::ZONE_HVAC)
+    return unless user_zone_hvac && !user_zone_hvac.empty?
+
+    zone_hvac_equipment = model.getZoneHVACComponents
+    if zone_hvac_equipment.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log', 'No zone HVAC equipment is present in the proposed model, user provided information cannot be used to generate the baseline building model.')
+      return
+    end
+
+    user_zone_hvac.each do |zone_hvac_eqp_info|
+      user_defined_zone_hvac_obj_name = zone_hvac_eqp_info['name']
+      user_defined_zone_hvac_obj_type_name = zone_hvac_eqp_info['zone_hvac_object_type_name']
+
+      # Check that the object type name do exist
+      begin
+        user_defined_zone_hvac_obj_type_name_idd = user_defined_zone_hvac_obj_type_name.to_IddObjectType
+      rescue StandardError => e
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "#{user_defined_zone_hvac_obj_type_name}, provided in the user zone HVAC user data, is not a valid OpenStudio model object.")
+      end
+
+      # Retrieve zone HVAC object(s) by name
+      zone_hvac_eqp = model.getZoneHVACComponentsByName(user_defined_zone_hvac_obj_name, false)
+
+      # If multiple object have the same name
+      if zone_hvac_eqp.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "The #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} provided in the user zone HVAC user data could not be found in the model.")
+      elsif zone_hvac_eqp.length == 1
+        zone_hvac_eqp = zone_hvac_eqp[0]
+        zone_hvac_eqp_idd = zone_hvac_eqp.iddObjectType.to_s
+        if zone_hvac_eqp_idd != user_defined_zone_hvac_obj_type_name
+          OpenStudio.logFree(OpenStudio::Error, 'prm.log', "The object type name provided in the zone HVAC user data (#{user_defined_zone_hvac_obj_type_name}) does not match with the one in the model: #{zone_hvac_eqp_idd}.")
+        end
+      else
+        zone_hvac_eqp.each do |eqp|
+          zone_hvac_eqp_idd = eqp.iddObjectType
+          if zone_hvac_eqp_idd == user_defined_zone_hvac_obj_type_name
+            zone_hvac_eqp = eqp
+            break
+          end
+        end
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "A #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} (as specified in the user zone HVAC data) could not be found in the model.")
+      end
+
+      if zone_hvac_eqp.thermalZone.is_initialized
+        thermal_zone = zone_hvac_eqp.thermalZone.get
+
+        zone_hvac_eqp_info.keys.each do |info_key|
+          if info_key.include?('fan_power_credit')
+            if !zone_hvac_eqp_info[info_key].to_s.empty?
+              if info_key.include?('has_')
+                if thermal_zone.additionalProperties.hasFeature(info_key)
+                  current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
+                else
+                  thermal_zone.additionalProperties.setFeature(info_key, 1.0)
+                end
+              else
+                if thermal_zone.additionalProperties.hasFeature(info_key)
+                  current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
+                  thermal_zone.additionalProperties.setFeature(info_key, current_value + zone_hvac_eqp_info[info_key])
+                else
+                  thermal_zone.additionalProperties.setFeature(info_key, zone_hvac_eqp_info[info_key])
+                end
+              end
+            end
+          end
         end
       end
     end
@@ -2144,81 +2422,6 @@ class ASHRAE901PRM < Standard
   # @param file_directory [String] file directory
   def generate_baseline_log(file_directory)
     log_messages_to_file_prm("#{file_directory}/prm.log", false)
-  end
-
-  # Retrieve zone HVAC user specified compliance inputs from CSV file
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  def handle_zone_hvac_user_input_data(model)
-    user_zone_hvac = @standards_data.key?('userdata_zone_hvac') ? @standards_data['userdata_zone_hvac'] : nil
-    return unless user_zone_hvac && !user_zone_hvac.empty?
-
-    zone_hvac_equipment = model.getZoneHVACComponents
-    if zone_hvac_equipment.empty?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', 'No zone HVAC equipment is present in the proposed model, user provided information cannot be used to generate the baseline building model.')
-      return
-    end
-
-    user_zone_hvac.each do |zone_hvac_eqp_info|
-      user_defined_zone_hvac_obj_name = zone_hvac_eqp_info['name']
-      user_defined_zone_hvac_obj_type_name = zone_hvac_eqp_info['zone_hvac_object_type_name']
-
-      # Check that the object type name do exist
-      begin
-        user_defined_zone_hvac_obj_type_name_idd = user_defined_zone_hvac_obj_type_name.to_IddObjectType
-      rescue StandardError => e
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "#{user_defined_zone_hvac_obj_type_name}, provided in the user zone HVAC user data, is not a valid OpenStudio model object.")
-      end
-
-      # Retrieve zone HVAC object(s) by name
-      zone_hvac_eqp = model.getZoneHVACComponentsByName(user_defined_zone_hvac_obj_name, false)
-
-      # If multiple object have the same name
-      if zone_hvac_eqp.empty?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "The #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} provided in the user zone HVAC user data could not be found in the model.")
-      elsif zone_hvac_eqp.length == 1
-        zone_hvac_eqp = zone_hvac_eqp[0]
-        zone_hvac_eqp_idd = zone_hvac_eqp.iddObjectType.to_s
-        if zone_hvac_eqp_idd != user_defined_zone_hvac_obj_type_name
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "The object type name provided in the zone HVAC user data (#{user_defined_zone_hvac_obj_type_name}) does not match with the one in the model: #{zone_hvac_eqp_idd}.")
-        end
-      else
-        zone_hvac_eqp.each do |eqp|
-          zone_hvac_eqp_idd = eqp.iddObjectType
-          if zone_hvac_eqp_idd == user_defined_zone_hvac_obj_type_name
-            zone_hvac_eqp = eqp
-            break
-          end
-        end
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.model', "A #{user_defined_zone_hvac_obj_type_name} object named #{user_defined_zone_hvac_obj_name} (as specified in the user zone HVAC data) could not be found in the model.")
-      end
-
-      if zone_hvac_eqp.thermalZone.is_initialized
-        thermal_zone = zone_hvac_eqp.thermalZone.get
-
-        zone_hvac_eqp_info.keys.each do |info_key|
-          if info_key.include?('fan_power_credit')
-            if !zone_hvac_eqp_info[info_key].to_s.empty?
-              if info_key.include?('has_')
-                if thermal_zone.additionalProperties.hasFeature(info_key)
-                  current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
-                  thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
-                else
-                  thermal_zone.additionalProperties.setFeature(info_key, 1.0)
-                end
-              else
-                if thermal_zone.additionalProperties.hasFeature(info_key)
-                  current_value = thermal_zone.additionalProperties.getFeatureAsDouble(info_key).to_f
-                  thermal_zone.additionalProperties.setFeature(info_key, current_value + zone_hvac_eqp_info[info_key])
-                else
-                  thermal_zone.additionalProperties.setFeature(info_key, zone_hvac_eqp_info[info_key])
-                end
-              end
-            end
-          end
-        end
-      end
-    end
   end
 
   # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
