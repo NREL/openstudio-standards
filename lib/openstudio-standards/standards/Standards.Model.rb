@@ -63,6 +63,12 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Boolean] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    # User data process
+    # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
+    # TODO - move this portion to the top of the function
+    bldg_type_hvac_zone_hash = {}
+    handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+
     # enforce the user model to be a non-leap year, defaulting to 2009 if the model year is a leap year
     if user_model.yearDescription.is_initialized
       year_description = user_model.yearDescription.get
@@ -127,12 +133,6 @@ class Standard
       idf_path = OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.idf")
       idf.save(idf_path, true)
     end
-
-    # User data process
-    # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
-    # TODO - move this portion to the top of the function
-    bldg_type_hvac_zone_hash = {}
-    handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
 
     # Define different orientation from original orientation
     # for each individual baseline models
