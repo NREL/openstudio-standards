@@ -62,12 +62,12 @@ class ASHRAE901PRM < Standard
       infil_sch = space.model.alwaysOnDiscreteSchedule
     else
       # Add specific schedule type object to insure compatibility with the OpenStudio infiltration object
-      infil_sch_limit_type = model_add_schedule_type_limits(space.model,
-                                                            name: 'Infiltration Schedule Type Limits',
-                                                            lower_limit_value: 0.0,
-                                                            upper_limit_value: 1.0,
-                                                            numeric_type: 'Continuous',
-                                                            unit_type: 'Dimensionless')
+      infil_sch_limit_type = OpenstudioStandards::Schedules.create_schedule_type_limits(space.model,
+                                                                                        name: 'Infiltration Schedule Type Limits',
+                                                                                        lower_limit_value: 0.0,
+                                                                                        upper_limit_value: 1.0,
+                                                                                        numeric_type: 'Continuous',
+                                                                                        unit_type: 'Dimensionless')
       infil_sch.setScheduleTypeLimits(infil_sch_limit_type)
     end
 

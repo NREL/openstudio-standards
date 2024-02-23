@@ -1,8 +1,10 @@
-# Methods to modify material properties
 module OpenstudioStandards
+  # The Constructions module provides methods create, modify, and get information about model Constructions
   module Constructions
+    # The Materials module provides methods create, modify, and get information about Materials
     module Materials
       # @!group Modify
+      # Methods to modify Materials
 
       # change thermal resistance of opaque materials by increasing material thickness,
       # or setting thermal resistance directly for massless or airgap materials.

@@ -7,7 +7,7 @@ class TestApplyHVACEfficiencyStandard < Minitest::Test
     std = Standard.build('90.1-2019')
     model = std.safe_load_model("#{File.dirname(__FILE__)}/models/basic_pthp_model.osm")
     building = model.getBuilding
-    std.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2013-4A')
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: 'ASHRAE 169-2013-4A')
 
     # Set the heating and cooling sizing parameters
     std.model_apply_prm_sizing_parameters(model)
@@ -19,7 +19,7 @@ class TestApplyHVACEfficiencyStandard < Minitest::Test
     # to achieve a 60% ventilation effectiveness minimum for the system
     # following the ventilation rate procedure from 62.1
     std.model_apply_multizone_vav_outdoor_air_sizing(model)
-    # get the climate zone  
+    # get the climate zone
     climate_zone_obj = model.getClimateZones.getClimateZone('ASHRAE', 2006)
     if climate_zone_obj.empty
       climate_zone_obj = model.getClimateZones.getClimateZone('ASHRAE', 2013)
