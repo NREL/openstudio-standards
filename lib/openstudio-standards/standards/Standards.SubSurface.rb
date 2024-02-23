@@ -168,7 +168,8 @@ class Standard
   # @return [Boolean] returns true if successful, false if not
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction)
     # Get rid of all existing subsurfaces.
-    remove_all_subsurfaces(surface: surface)
+    surface.subSurfaces.sort.each(&:remove)
+
     # What is the centroid of the surface.
     surf_cent = surface.centroid
     scale_factor = Math.sqrt(area_fraction)
@@ -219,8 +220,10 @@ class Standard
   def sub_surface_create_scaled_subsurfaces_from_surface(surface:, area_fraction:, construction:)
     # Set geometry tolerences:
     geometry_tolerence = 12
-    # Get rid of all existing subsurfaces.
-    remove_all_subsurfaces(surface: surface)
+
+    # Get rid of all existing subsurfaces
+    surface.subSurfaces.sort.each(&:remove)
+
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
     # concave.
 
@@ -295,34 +298,6 @@ class Standard
       # There is now only one surface on the subsurface.  Enforce this
       new_sub_surface.setMultiplier(1)
     end
-    return true
-  end
-
-  # This just uses applies 'setWindowToWallRatio' method from the OpenStudio SDK.  The only addition is that it changes
-  # the name of the window to be the surface name plus the subsurface type (always 'fixedwindow').
-  #
-  # @param surface [OpenStudio::Model::Surface] surface object
-  # @param area_fraction [Double] fraction of area of the larger surface
-  # @param construction [OpenStudio::Model::Construction] construction to use for the new surface
-  # @return [Boolean] returns true if successful, false if not
-  def set_window_to_wall_ratio_set_name(surface:, area_fraction:, construction:)
-    surface.setWindowToWallRatio(area_fraction)
-    surface.subSurfaces.sort.each do |sub_surf|
-      sub_surf.setSubSurfaceType('FixedWindow')
-      sub_surf.setConstruction(construction)
-      new_name = surface.name.to_s + '_' + sub_surf.subSurfaceType.to_s
-      sub_surf.setName(new_name)
-    end
-    return true
-  end
-
-  # This removes all of the subsurfaces from a surface.
-  # Is a preparation for replaceing windows or clearing doors before adding windows.
-  #
-  # @param surface [OpenStudio::Model::Surface] surface object
-  # @return [Boolean] returns true if successful, false if not
-  def remove_all_subsurfaces(surface:)
-    surface.subSurfaces.sort.each(&:remove)
     return true
   end
 end

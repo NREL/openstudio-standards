@@ -619,17 +619,6 @@ module BTAP
         return surfaces
       end
 
-
-      # This Method removes all the subsurfaces in a model (Windows, Doors )
-      # @author Phylroy A. Lopez
-      # @return [OpenStudio::Model::Model] the OpenStudio model object (self reference).
-      def self.remove_all_subsurfaces(surfaces)
-        surfaces.each do |subsurface|
-          subsurface.remove
-        end
-        return surfaces
-      end
-
       def self.get_surfaces_from_spaces(spaces_array)
         surfaces = Array.new()
         spaces_array.each do |space|
