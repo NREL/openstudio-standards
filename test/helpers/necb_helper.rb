@@ -211,27 +211,29 @@ module NecbHelper
   #   necb_ref_hp = true if the caase is for the NECB reference model using heat pumps
   #   sql_db_vars_map - ???
   #   save_model_versions - logical to trigger saving of osm files before and after standards applied
+  #   output_dir - folder where the models are saved to (if requested)
   def run_sizing(model:, 
                  template: 'NECB2011', 
-                 test_name:, 
                  second_run: false,
                  necb_ref_hp: false,
                  sql_db_vars_map: nil, 
-                 save_model_versions: false)
+                 save_model_versions: false,
+                 output_dir: nil)
 
     # Report what we are doing (helps when things go wrong!).
     logger.debug "Running measure for test class: #{self.class.ancestors[0]}"
     logger.debug "  from method: #{caller_locations(1,1)[0].label}"
-    logger.debug "  with scenario name: #{test_name}"
     logger.debug "  for template: #{template}"
 
     # Instantiate the required version of standards.
     standard = get_standard(template)
 
-    # Define output folder.
-    test_class_name = self.class.ancestors[0].to_s.downcase
-    test_method_name = caller_locations.first.base_label
-    output_dir = File.join(@top_output_folder, test_class_name, test_method_name, test_name)
+    # Define output folder if not passed. This should be removed once all calls updated.
+    if output_dir == nil then
+      test_class_name = self.class.ancestors[0].to_s.downcase
+      test_method_name = caller_locations.first.base_label
+      output_dir = File.join(@top_output_folder, test_class_name, test_method_name, template)
+    end
     logger.debug "Output folder #{output_dir}"
 
     # Check output_dir exists, if not create.
@@ -355,6 +357,12 @@ module NecbHelper
 
       return CompareHashes.call(obj1, obj2, prefix) if obj1.is_a?(Hash)
 
+      if obj1.to_s.include?("Controller") then
+        puts "obj1: #{obj1}"
+        puts "obj1: #{obj2.class.name}"
+        puts "obj2: #{obj2}"
+        puts "obj2: #{obj2.class.name}"
+      end
       return [] if obj1 == obj2
 
       [['~', prefix, obj1, obj2]]

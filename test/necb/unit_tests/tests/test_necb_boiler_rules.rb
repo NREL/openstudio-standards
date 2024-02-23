@@ -112,7 +112,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Define the test name. 
     name = "#{vintage}_sys1_Boiler-#{fueltype}_cap-#{boiler_cap.to_int}kW_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
-    name.gsub!(/\s+/, "-")
+    name_short = "#{vintage}_sys1_Boiler-#{fueltype}_cap-#{boiler_cap.to_int}kW"
+    name_short.gsub!(/\s+/, "-")
     logger.info "Starting individual test: #{name}"
 
     # Wrap test in begin/rescue/ensure.
@@ -121,7 +122,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}/baseline.osm") if save_intermediate_models
+      output_folder = "#{output_folder}/#{name_short}"
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
@@ -138,7 +140,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap*1000.0)}
 
       # Run sizing.
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
@@ -261,7 +263,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Define the test name. 
     name = "#{vintage}_Sys1_#{total_boiler_cap.round(0)}kW_#{boiler_fueltype}_boiler_HeatingCoilType-#{heating_coil_type}_Baseboard-#{baseboard_type}"
-    name.gsub!(/\s+/, "-")
+    name_short = "#{vintage}_sys1_Boiler-#{fueltype}_cap-#{boiler_cap.to_int}kW"
+    name_short.gsub!(/\s+/, "-")
     logger.info "Starting individual test: #{name}"
 
     # Wrap test in begin/rescue/ensure.
@@ -270,7 +273,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}/baseline.osm") if save_intermediate_models
+      output_folder = "#{output_folder}/#{name_short}"
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
@@ -285,7 +289,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(total_boiler_cap*1000.0)}
 
       # Run sizing. Is this required?
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
@@ -385,7 +389,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     vintage = test_pars[:Vintage]
 
     name = "#{vintage}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
-    name.gsub!(/\s+/, "-")
+    name_short = "#{vintage}"
+    name_short.gsub!(/\s+/, "-")
     logger.info "Starting individual test: #{name}"
 
     # Wrap test in begin/rescue/ensure.
@@ -394,7 +399,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      output_folder = "#{output_folder}/#{name_short}"
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
@@ -408,7 +414,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
                                                     hw_loop: hw_loop)
 
       # Run sizing.
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
@@ -505,7 +511,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Define the test name. 
     name = "#{vintage}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{boiler_name}"
-    name.gsub!(/\s+/, "-")
+    name_short = "#{vintage}"
+    name_short.gsub!(/\s+/, "-")
     logger.info "Started individual test: #{name}"
       
     # Wrap test in begin/rescue/ensure.
@@ -516,7 +523,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      output_folder = "#{output_folder}/#{name_short}"
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
       
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
@@ -530,7 +538,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
       # Run sizing.
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
 
       # Customize the efficiency. Specify the name and the method will look up the correct boiler.
       standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: boiler_name)

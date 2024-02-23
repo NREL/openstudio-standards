@@ -88,7 +88,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
   # @param test_case [Hash] has the specific test parameters.
   # @return results of this case.
   # @note Companion method to test_NECB_chiller_cop that runs a specific test. Called by do_test_cases in necb_helper.rb.
-  def do_test_NECB_chiller_cop (test_pars:, test_case:)
+  def do_test_NECB_chiller_cop(test_pars:, test_case:)
 
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
