@@ -127,7 +127,7 @@ class Standard
       # 1 Btu to raise 1 lb of water 1 F
       # Therefore 8.25 Btu / gal of water * deg F
       # 70F delta-T between water and zone
-      hrly_loss_btu_per_hr = hrly_loss_pct * volume_gal * 8.25 * 70
+      hrly_loss_btu_per_hr = hrly_loss_pct * volume_gal * 8.25
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = hrly_loss_btu_per_hr / 70
     end
