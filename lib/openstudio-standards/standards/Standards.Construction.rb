@@ -685,7 +685,7 @@ class Standard
     # report change as Info
     info = ''
     outdoor_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(model.getSurfaces, 'Outdoors')
-    outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
+    outdoor_subsurfaces = outdoor_surfaces.flat_map(&:subSurfaces)
     ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(model.getSurfaces, 'Ground')
     ext_windows = BTAP::Geometry::Surfaces.filter_subsurfaces_by_types(outdoor_subsurfaces, ['FixedWindow', 'OperableWindow'])
     ext_skylights = BTAP::Geometry::Surfaces.filter_subsurfaces_by_types(outdoor_subsurfaces, ['Skylight', 'TubularDaylightDiffuser', 'TubularDaylightDome'])

@@ -455,30 +455,6 @@ module BTAP
         end
       end
 
-      # This method will return a Array of surfaces that are contained within the
-      # passed spaces. Note: if you wish to avoid to create an array of spaces,
-      # simply put the space variable in [] brackets
-      # Ex: get_all_surfaces_from_spaces( [space1,space2] )
-      # @param spaces_array an array of type [OpenStudio::Model::Space]
-      # @return an array of surfaces contained in the passed spaces.
-      def self.get_surfaces_from_spaces(model, spaces_array)
-        BTAP::Geometry::Surfaces::get_surfaces_from_spaces(spaces_array)
-      end
-
-      # This method will return a SpaceArray of surfaces that are contained within the
-      # passed floors. Note: if you wish to avoid to create an array of spaces,
-      # simply put the space variable in [] brackets
-      # Ex: get_all_surfaces_from_spaces( [space1,space2] )
-      # @param model
-      # @param floors
-      # @return [Array<OpenStudio::Model::Space>] an array of spaces
-      def self.get_spaces_from_storeys(model, floors)
-        floors = BTAP::Common::validate_array(model, floors, "BuildingStory")
-        spaces = Array.new()
-        floors.each {|floor| spaces.concat(floor.spaces)}
-        return spaces
-      end
-
       # This method will filter an array of spaces that have an external wall
       # passed floors. Note: if you wish to avoid to create an array of spaces,
       # simply put the space variable in [] brackets
@@ -567,10 +543,6 @@ module BTAP
         end
         return array
       end
-
-      def self.get_surfaces_from_thermal_zones(thermal_zone_array)
-        BTAP::Geometry::Surfaces::get_all_surfaces_from_thermal_zones(thermal_zone_array)
-      end
     end
 
     module Surfaces
@@ -582,7 +554,7 @@ module BTAP
         else
           puts "boundary condition not set for #{name}"
         end
-        self.set_surfaces_construction([os_surface], construction)
+        os_surface.setConstruction(construction)
         return os_surface
       end
 
@@ -619,48 +591,13 @@ module BTAP
         return surfaces
       end
 
-      def self.get_surfaces_from_spaces(spaces_array)
-        surfaces = Array.new()
-        spaces_array.each do |space|
-          surfaces.concat(space.surfaces())
-        end
-        return surfaces
-      end
-
-      def self.get_surfaces_from_building_stories(model, story_array)
-        surfaces = Array.new()
-        BTAP::Geometry::Spaces::get_spaces_from_storeys(model, story_array).each do |space|
-          surfaces.concat(space.surfaces())
-        end
-        return surfaces
-      end
-
-      def self.get_surfaces_from_thermal_zones(thermal_zone_array)
-        surfaces = Array.new()
-        thermal_zone_array.each do |thermal_zone|
-          thermal_zone.spaces.sort.each do |space|
-            surfaces.concat(space.surfaces())
-          end
-          return surfaces
-        end
-      end
-
-      def self.get_subsurfaces_from_surfaces(surface_array)
-        subsurfaces = Array.new()
-        surface_array.each do |surface|
-          subsurfaces.concat(surface.subSurfaces)
-        end
-        return subsurfaces
-      end
-
-
       #determine average conductance on set of surfaces or subsurfaces.
       def self.get_weighted_average_surface_conductance(surfaces)
         total_area = 0.0
         temp = 0.0
         surfaces.each do |surface|
-          temp = temp + BTAP::Geometry::Surfaces::get_surface_net_area(surface) * BTAP::Geometry::Surfaces::get_surface_construction_conductance(surface)
-          total_area = total_area + BTAP::Geometry::Surfaces::get_surface_net_area(surface)
+          temp = temp + surface.netArea * BTAP::Geometry::Surfaces::get_surface_construction_conductance(surface)
+          total_area = total_area + surface.netArea
         end
         average_conductance = "NA"
         average_conductance = temp / total_area unless total_area == 0.0
@@ -672,8 +609,8 @@ module BTAP
         total_area = 0.0
         temp = 0.0
         surfaces.each do |surface|
-          temp = temp + BTAP::Geometry::Surfaces::get_surface_net_area(surface) * BTAP::Geometry::Surfaces::get_surface_construction_shgc(surface)
-          total_area = total_area + BTAP::Geometry::Surfaces::get_surface_net_area(surface)
+          temp = temp + surface.netArea * BTAP::Geometry::Surfaces::get_surface_construction_shgc(surface)
+          total_area = total_area + surface.netArea
         end
         ave_shgc = "NA"
         ave_shgc = temp / total_area unless total_area == 0.0
@@ -685,33 +622,13 @@ module BTAP
         total_area = 0.0
         temp = 0.0
         surfaces.each do |surface|
-          temp = temp + BTAP::Geometry::Surfaces::get_surface_net_area(surface) * BTAP::Geometry::Surfaces::get_surface_construction_tvis(surface)
-          total_area = total_area + BTAP::Geometry::Surfaces::get_surface_net_area(surface)
+          temp = temp + surface.netArea * BTAP::Geometry::Surfaces::get_surface_construction_tvis(surface)
+          total_area = total_area + surface.netArea
         end
         ave_tvis = "NA"
         ave_tvis = temp / total_area unless total_area == 0.0
         return ave_tvis
       end
-
-
-      #get total exterior surface area of building.
-      def self.get_total_ext_wall_area(model)
-        outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
-        outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
-      end
-
-      def self.get_total_ext_floor_area(model)
-        outdoor_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Floor")
-      end
-
-      def self.get_total_ext_fenestration_area(model)
-
-      end
-
-      def self.get_total_ext_roof_area(model)
-        outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
-      end
-
 
       #["FixedWindow" , "OperableWindow" , "Door" , "GlassDoor", "OverheadDoor" , "Skylight", "TubularDaylightDiffuser","TubularDaylightDome"]
       def self.filter_subsurfaces_by_types(subsurfaces, subSurfaceTypes)
@@ -780,21 +697,6 @@ module BTAP
         construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
         #create a new construction with the requested RSI value based on the current construction.
         return BTAP::Resources::Envelope::Constructions::get_tvis(model,construction)
-      end
-
-      def self.get_surface_net_area(surface)
-        return surface.netArea()
-      end
-
-      def self.get_sub_surface_net_area(subsurface)
-        return subsurface.netArea()
-      end
-
-      def self.set_surfaces_construction(surfaces, construction)
-        surfaces.each do |surface|
-          surface.setConstruction(construction)
-        end
-        return true
       end
 
       #  This method sets the boundary condition for a surface and it's matching surface.

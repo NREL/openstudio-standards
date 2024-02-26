@@ -162,7 +162,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
         outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
         outdoor_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Floor")
-        outdoor_subsurfaces = BTAP::Geometry::Surfaces::get_subsurfaces_from_surfaces(outdoor_surfaces)
+        outdoor_subsurfaces = outdoor_surfaces.flat_map(&:subSurfaces)
         windows = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["FixedWindow", "OperableWindow"])
         skylights = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["Skylight", "TubularDaylightDiffuser", "TubularDaylightDome"])
         doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["Door", "GlassDoor"])
@@ -217,7 +217,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
         # Infiltration test.
         # Get the effective infiltration rate through the walls and roof only.
-        sorted_spaces = BTAP::Geometry::Spaces::get_spaces_from_storeys(@model, @above_ground_floors).sort_by { |space| space.name.get }
+        sorted_spaces = @above_ground_floors.flat_map(&:spaces).sort_by { |space| space.name.get }
+
         # Need to sort spaces otherwise the output order is random.
         @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'] = {}
         sorted_spaces.each do |space|

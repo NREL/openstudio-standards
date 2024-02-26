@@ -11,6 +11,13 @@ class TestGeometryInformation < Minitest::Test
     @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESecondarySchool.osm")
   end
 
+  def test_flat_map
+    wall_surface = @model.getSurfaceByName('Aux_Gym_ZN_1_FLR_1_Wall_1').get
+    wall_surface2 = @model.getSurfaceByName('Aux_Gym_ZN_1_FLR_1_Wall_2').get
+    sub_surfaces = [wall_surface, wall_surface2].flat_map(&:subSurfaces)
+    assert(7, sub_surfaces.size)
+  end
+
   # Information:Calculations
 
   def test_aspect_ratio
@@ -22,7 +29,6 @@ class TestGeometryInformation < Minitest::Test
   end
 
   def test_wall_and_floor_intersection_length
-
     wall_surface = @model.getSurfaceByName('Aux_Gym_ZN_1_FLR_1_Wall_1').get
     floor_surface = @model.getSurfaceByName('Aux_Gym_ZN_1_FLR_1_Floor').get
     result = @geo.wall_and_floor_intersection_length(wall_surface, floor_surface)

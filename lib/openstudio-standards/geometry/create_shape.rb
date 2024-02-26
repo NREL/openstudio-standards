@@ -177,7 +177,8 @@ module OpenstudioStandards
 
         # Ensure that underground stories (when z<0 have Ground set as Boundary conditions).
         # Apply the Ground BC to all surfaces, the top ceiling will be corrected below when the surface matching algorithm is called.
-        BTAP::Geometry::Surfaces.set_surfaces_boundary_condition(model, BTAP::Geometry::Surfaces.get_surfaces_from_building_stories(model, story), 'Ground') if z < 0
+        underground_surfaces = story.spaces.flat_map(&:surfaces)
+        BTAP::Geometry::Surfaces.set_surfaces_boundary_condition(model, underground_surfaces, 'Ground') if z < 0
       end
 
       BTAP::Geometry.match_surfaces(model)
