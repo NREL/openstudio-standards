@@ -76,49 +76,6 @@ class Standard
     return comp_infil_rate_m3_per_s
   end
 
-  # Start of method meant to help implement NECB2015 8.4.4.5.(5).
-  # The method starts by finding exterior surfaces which help enclose conditioned spaces.
-  # It then removes the subsurfaces.
-  # Though not implemented yet it was supposed to then put a window centered in the surface with a sill
-  # height and window height defined passed via sill_heght_m and window_height_m
-  # (0.9 m, and 1.8 m respectively for NECB2015).
-  # The width of the window was to be set so that the fdwr matched whatever code said (passed by fdwr).
-  # @author Chris Kirney
-  # @note 2018-05-17 not complete-do not call.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param sill_height_m [Double] sill height in meters
-  # @param window_height_m [Double] window height in meters
-  # @param fdwr [Double] fdwr
-  # @return [Boolean] returns true if successful, false if not
-  def surface_replace_existing_subsurfaces_with_centered_subsurface(model, sill_height_m, window_height_m, fdwr)
-    vertical_surfaces = find_exposed_conditioned_vertical_surfaces(model)
-    vertical_surfaces.each do |vertical_surface|
-      vertical_surface.subSurfaces.sort.each do |vertical_subsurface|
-        # Need to fix this so that error show up in right place
-        if vertical_subsurface.nil?
-          puts 'Surface does not exist'
-        else
-          vertical_subsurface.remove
-        end
-      end
-      # corner_coords = vertical_surface.vertices
-      code_window_area = fdwr * vertical_surface.grossArea
-      code_window_width = code_window_area / window_height_m
-      min_z = 0
-      vertical_surface.vertices.each_with_index do |vertex, index|
-        if index == 0
-          min_z = vertex.z
-        elsif vertex.z < min_z
-          min_z = vertex.z
-        end
-      end
-      surface_centroid = vertical_surface.centroid
-      surface_normal = vertical_surface.outwardNormal
-    end
-    return true
-  end
-
   # This method searches through a model a returns vertical exterior surfaces which help
   # enclose a conditioned space.  It distinguishes between walls adjacent to plenums and wall adjacent to other
   # conditioned spaces (as attics in OpenStudio are considered plenums and conditioned spaces though many would
