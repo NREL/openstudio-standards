@@ -96,7 +96,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    output_folder = method_output_folder(test_pars[:test_method])
+    output_folder = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
     mau_cooling_type = test_pars[:mau_cooling_type]
     boiler_fueltype = test_pars[:boiler_fueltype]
@@ -108,7 +108,8 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define the test name. 
     name = "#{vintage}_sys2_ChillerType-#{chiller_type}_Chiller_cap-#{chiller_cap}kW"
-    name.gsub!(/\s+/, "-")
+    name_short = "#{vintage}_sys2_Chiller-#{chiller_type}_cap-#{chiller_cap}kW"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
 
     # Wrap test in begin/rescue/ensure.
@@ -235,7 +236,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    output_folder = method_output_folder(test_pars[:test_method])
+    output_folder = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
     boiler_fueltype = test_pars[:boiler_fueltype]
     baseboard_type = test_pars[:baseboard_type]
@@ -252,7 +253,8 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
       # Define the test name. 
       name = "#{vintage}_sys6_ChillerType_#{chiller_type}-Chiller_cap-#{chiller_cap}kW"
-      name.gsub!(/\s+/, "-")
+      name_short = "#{vintage}_sys6_Chiller-#{chiller_type}_cap-#{chiller_cap}kW"
+      output_folder = method_output_folder("#{test_name}/#{name_short}")
       logger.info "Starting individual test: #{name}"
 
       # Load model and set climate file.
@@ -371,7 +373,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    output_folder = method_output_folder(test_pars[:test_method])
+    output_folder = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
     boiler_fueltype = test_pars[:boiler_fueltype]
     mau_cooling_type = test_pars[:mau_cooling_type]
@@ -390,7 +392,8 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
       # Define the test name. 
       name = "#{vintage}_sys5_ChillerType_#{chiller_type}"
-      name.gsub!(/\s+/, "-")
+      name_short = "#{vintage}_sys5_ChillerType_#{chiller_type}"
+      output_folder = method_output_folder("#{test_name}/#{name_short}")
       logger.info "Starting individual test: #{name}"
 
       # Load model and set climate file.

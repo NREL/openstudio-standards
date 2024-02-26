@@ -59,6 +59,7 @@ module NecbHelper
   end
 
   def method_output_folder(name="")
+    name.gsub!(/\s+/, "-")
     output_folder = File.join(@top_output_folder, self.class.ancestors[0].to_s.downcase, name.to_s.downcase)
     FileUtils.rm_rf(output_folder)
     FileUtils.mkdir_p(output_folder)

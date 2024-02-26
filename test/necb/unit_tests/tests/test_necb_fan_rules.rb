@@ -20,7 +20,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
     
     # Define test parameters that apply to all tests.
     test_parameters = {test_method: __method__,
-                       save_intermediate_models: false,
+                       save_intermediate_models: true,
                        boiler_fueltype: 'NaturalGas',
                        baseboard_type: 'Hot Water',
                        chiller_type: 'Scroll',
@@ -80,7 +80,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    output_folder = method_output_folder(test_pars[:test_method])
+    test_name = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
     boiler_fueltype = test_pars[:boiler_fueltype]
     vintage = test_pars[:Vintage]
@@ -94,8 +94,8 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
     # Define the test name. 
     name = "#{vintage}_sys6_vavfancap-#{fan_flow}L/s"
-    name_short = "#{vintage}_VAV-#{fan_flow}L/s"
-    name_short.gsub!(/\s+/, "-")
+    name_short = "#{vintage}_VAV-#{fan_flow}"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
 
     # Wrap test in begin/rescue/ensure.
@@ -103,7 +103,6 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      output_folder = "#{output_folder}/#{name_short}"
       BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -124,7 +123,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
       end
 
       # Run sizing.
-      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
@@ -237,7 +236,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    output_folder = method_output_folder(test_pars[:test_method])
+    test_name = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
     boiler_fueltype = test_pars[:boiler_fueltype]
     baseboard_type = test_pars[:baseboard_type]
@@ -250,8 +249,8 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
     # Define the test name. 
     name = "#{vintage}_sys1"
-    name_short = "#{vintage}"
-    name_short.gsub!(/\s+/, "-")
+    name_short = "#{vintage}_sys1"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
 
     # Wrap test in begin/rescue/ensure.
@@ -260,7 +259,6 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      output_folder = "#{output_folder}/#{name_short}"
       BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
