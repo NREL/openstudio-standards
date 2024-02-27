@@ -19,6 +19,7 @@ lib/openstudio-standards/geometry/**/*.rb
 lib/openstudio-standards/create_typical/**/*.rb
 lib/openstudio-standards/hvac/**/*.rb
 lib/openstudio-standards/constructions/**/*.rb
+lib/openstudio-standards/infiltration/**/*.rb
 lib/openstudio-standards/daylighting/**/*.rb
 lib/openstudio-standards/qaqc/**/*.rb
 
