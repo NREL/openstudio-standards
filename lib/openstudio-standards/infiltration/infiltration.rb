@@ -45,7 +45,7 @@ module OpenstudioStandards
     # @!group Surface
 
     # Determine the component infiltration rate for a surface
-    # Details described in Gowri, Krishnan, Winiarski, David W, and Jarnagin, Ronald E. Infiltration modeling guidelines for commercial building energy analysis. United States: N. p., 2009. Web. doi:10.2172/968203.
+    # Details described in Table 5.7 of Thornton, Brian A, Rosenberg, Michael I, Richman, Eric E, Wang, Weimin, Xie, YuLong, Zhang, Jian, Cho, Heejin, Mendon, Vrushali V, Athalye, Rahul A, and Liu, Bing. Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010. United States: N. p., 2011. Web. doi:10.2172/1015277.
     #
     # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
     # @param type [String] choices are 'baseline' and 'advanced'
@@ -116,7 +116,7 @@ module OpenstudioStandards
     # @!group SubSurface
 
     # Determine the component infiltration rate for a sub surface
-    # Details described in Gowri, Krishnan, Winiarski, David W, and Jarnagin, Ronald E. Infiltration modeling guidelines for commercial building energy analysis. United States: N. p., 2009. Web. doi:10.2172/968203.
+    # Details described in Table 5.7 of Thornton, Brian A, Rosenberg, Michael I, Richman, Eric E, Wang, Weimin, Xie, YuLong, Zhang, Jian, Cho, Heejin, Mendon, Vrushali V, Athalye, Rahul A, and Liu, Bing. Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010. United States: N. p., 2011. Web. doi:10.2172/1015277.
     #
     # @param sub_surface [OpenStudio::Model::SubSurface] OpenStudio SubSurface object
     # @param type [String] choices are 'baseline' and 'advanced'
