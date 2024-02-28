@@ -37,16 +37,16 @@ module OpenstudioStandards
       end
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.Model', "Model has design level of #{non_res_people_design.round(2)} people in non residential spaces and #{res_people_design.round(2)} people in residential spaces.")
 
-      # create merged schedule for prevalent type (not used but can be generated for diagnostics)
-      if gen_occ_profile
-        res_prevalent = false
-        if res_people_design > non_res_people_design
-          occ_merged = OpenstudioStandards::Space.spaces_get_occupancy_schedule(res_spaces, sch_name: 'Calculated Occupancy Fraction Residential Merged')
-          res_prevalent = true
-        else
-          occ_merged = OpenstudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces, sch_name: 'Calculated Occupancy Fraction NonResidential Merged')
-        end
-      end
+      # # create merged schedule for prevalent type (not used but can be generated for diagnostics)
+      # if gen_occ_profile
+      #   res_prevalent = false
+      #   if res_people_design > non_res_people_design
+      #     occ_merged = OpenstudioStandards::Space.spaces_get_occupancy_schedule(res_spaces, sch_name: 'Calculated Occupancy Fraction Residential Merged')
+      #     res_prevalent = true
+      #   else
+      #     occ_merged = OpenstudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces, sch_name: 'Calculated Occupancy Fraction NonResidential Merged')
+      #   end
+      # end
 
       # re-run spaces_get_occupancy_schedule with x above min occupancy to create on/off schedule
       if res_people_design > non_res_people_design
@@ -165,15 +165,16 @@ module OpenstudioStandards
 
     # This method users the hours of operation for a space and the existing ScheduleRuleset profiles to setup parametric schedule
     # inputs. Inputs include one or more load profile formulas. Data is stored in model attributes for downstream
-    # application. This should impact all ScheduleRuleset objects in the model. Plant and Air loop hoours of operations
+    # application. This should impact all ScheduleRuleset objects in the model. Plant and Air loop hours of operations
     # should be traced back to a space or spaces.
     #
     # @author David Goldwasser
     # @param model [OpenStudio::Model::Model] OpenStudio model object
-    # @param step_ramp_logic [String] type of step logic to use
-    # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
+    # @param step_ramp_logic [String] type of step logic to use - @TODO: this is currently not used
+    # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hours of operation for objects like swh with and exterior lighting
     # @param gather_data_only [Boolean] false (stops method before changes made if true)
-    # @param hoo_var_method [String] accepts hours and fractional. Any other value value will result in hoo variables not being applied
+    # @param hoo_var_method [String] accepts 'hours' or 'fractional'. Any other value value will result in hour of operation variables not being applied
+    #   Options are 'hours', 'fractional'
     # @return [Hash] schedule is key, value is hash of number of objects
     def self.model_setup_parametric_schedules(model, step_ramp_logic: nil, infer_hoo_for_non_assigned_objects: true, gather_data_only: false, hoo_var_method: 'hours')
       parametric_inputs = {}
@@ -217,7 +218,7 @@ module OpenstudioStandards
         air_loop_spaces = []
         air_loop.thermalZones.sort.each do |zone|
           air_loop_spaces += zone.spaces
-          air_loop_spaces += zone.spaces
+          # air_loop_spaces += zone.spaces
         end
         hours_of_operation = Space.spaces_hours_of_operation(air_loop_spaces)
         air_loop_hash[air_loop] = hours_of_operation
@@ -308,7 +309,7 @@ module OpenstudioStandards
           opt_space = water_use_equipment.space
           if opt_space.is_initialized
             space = space.get
-            hours_of_operation = space_hours_of_operation(space)
+            hours_of_operation = Space.space_hours_of_operation(space)
             gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
           else
             hours_of_operation = Space.spaces_hours_of_operation(model.getSpaces)
@@ -376,10 +377,10 @@ module OpenstudioStandards
 
     # @!group Parametric:Space
 
-    # pass array of space types or spaces
+    # gathers parametric inputs for all loads objects associated with spaces/space types in provided array
     #
     # @author David Goldwasser
-    # @param space_space_types [Array] array of spaces or space types
+    # @param space_space_types [Array] array of OpenStudio::Model::Space or OpenStudio::Model::SpaceType objects
     # @param parametric_inputs [Hash]
     # @param gather_data_only [Boolean]
     # @return [Hash]
@@ -445,7 +446,7 @@ module OpenstudioStandards
     # @param sch [OpenStudio::Model::Schedule]
     # @param load_inst [OpenStudio::Model::SpaceLoadInstance]
     # @param parametric_inputs [Hash]
-    # @param hours_of_operation [Hash]
+    # @param hours_of_operation [Hash] - hash of {profile_index: {:hoo_start, :hoo_end, :hoo_hours, days_used:[dayNumbers]}}
     # @param ramp [Boolean]
     # @param min_ramp_dur_hr [Double]
     # @param gather_data_only [Boolean]
@@ -454,7 +455,7 @@ module OpenstudioStandards
     def self.gather_inputs_parametric_schedules(sch, load_inst, parametric_inputs, hours_of_operation, ramp: true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
       if parametric_inputs.key?(sch)
         if hours_of_operation != parametric_inputs[sch][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedule', "#{load_inst.name} uses #{sch.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[sch][:target].name}.")
+          # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedule', "#{load_inst.name} uses #{sch.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[sch][:target].name}.")
           return nil
         end
       end
@@ -478,7 +479,7 @@ module OpenstudioStandards
 
       # gather profiles
       daily_flhs = [] # will be used to tag, min,medium,max operation for non typical operations
-      schedule_days = {} # key is day_schedule value is hours in day (used to tag profiles)
+      schedule_days = {} # key is day_schedule value is rule index
       sch.scheduleRules.each do |rule|
         schedule_days[rule.daySchedule] = rule.ruleIndex
         daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(rule.daySchedule)
@@ -487,11 +488,20 @@ module OpenstudioStandards
       daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(sch.defaultDaySchedule)
 
       # get indices for current schedule
-      year_description = sch.model.yearDescription.get
-      year = year_description.assumedYear
-      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
-      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
-      indices_vector = sch.getActiveRuleIndices(year_start_date, year_end_date)
+      indices_vector = schedule_ruleset_get_annual_rule_indices(sch)
+
+      # align schedule_rules_with_hours_of_operation
+      # get operation schedule from hours_of_operation hash
+      # operation_schedule = hours_of_operation[:schedule]
+      # op_sch_indices = schedule_ruleset_get_annual_rule_indices(operation_schedule)
+      # operation_schedule.scheduleRules.each do |op_rule|
+      #   sch.scheduleRules.each do |sch_rule|
+      #     if op_rule
+      #     end
+      #   end
+      # end
+
+      # puts "#{__method__}>>>> hours_of_operation: #{hours_of_operation}"
 
       # step through profiles and add additional properties to describe profiles
       schedule_days.each_with_index do |(schedule_day, current_rule_index), i|
@@ -501,23 +511,43 @@ module OpenstudioStandards
         indices_vector.each_with_index do |profile_index, i|
           if profile_index == current_rule_index then days_used << i + 1 end
         end
+        # puts "#{__method__}>>> #{schedule_day.name} days_used: #{days_used}"
+
+
         # find days_used in hoo profiles that contains all days used from this profile
-        hoo_profile_match_hash = {}
-        best_fit_check = {}
+        # hoo_profile_match_hash = {}
+        # best_fit_check = {}
+
+
+        days_for_rule_not_in_hoo_profile = []
         hours_of_operation.each do |profile_index, value|
+          next if profile_index == :schedule
           days_for_rule_not_in_hoo_profile = days_used - value[:days_used]
-          hoo_profile_match_hash[profile_index] = days_for_rule_not_in_hoo_profile
-          best_fit_check[profile_index] = days_for_rule_not_in_hoo_profile.size
+          # puts "in loop: #{profile_index} - #{days_for_rule_not_in_hoo_profile}"
+          # hoo_profile_match_hash[profile_index] = days_for_rule_not_in_hoo_profile
+          # best_fit_check[profile_index] = days_for_rule_not_in_hoo_profile.size
           if days_for_rule_not_in_hoo_profile.empty?
             hoo_target_index = profile_index
           end
         end
         # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have ot split rule and alter model
         if hoo_target_index.nil?
+          hours_of_operation.each do |profile_index, value|
+            next if profile_index == :schedule
+            if days_used.to_set.subset?(value[:days_used].to_set)
+              puts "#{schedule_day.name.get} is subset of hoo profile #{profile_index}"
+            elsif days_used.to_set.superset?(value[:days_used].to_set)
+              puts "#{schedule_day.name.get} is superset of hoo profile #{profile_index}"
+            else puts "#{schedule_day.name.get} neither subset nor superset"
+            end
+          end
+
           hoo_start = nil
           hoo_end = nil
           occ = nil
           vac = nil
+          # OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.Schedules', "In #{__method__}, schedule #{schedule_day.name} has no hours_of_operation target index. Days for rule not in hoo profile: #{days_for_rule_not_in_hoo_profile}")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedules', "In #{__method__}, schedule #{schedule_day.name} has no hours_of_operation target index. Won't be modified")
           # @todo issue warning when this happens on any profile that isn't a constant value
         else
           # get hours of operation for this specific profile
@@ -526,6 +556,7 @@ module OpenstudioStandards
           occ = hours_of_operation[hoo_target_index][:hoo_hours]
           vac = 24.0 - hours_of_operation[hoo_target_index][:hoo_hours]
         end
+
 
         props = schedule_day.additionalProperties
         par_val_time_hash = {} # time is key, value is value in and optional value out as a one or two object array
@@ -606,6 +637,8 @@ module OpenstudioStandards
           OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedule', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
         end
 
+        # puts "#{schedule_day.name}: par_val_time_hash: #{par_val_time_hash}"
+
         raw_string = []
         par_val_time_hash.sort.each do |time, value_array|
           # add in value variables
@@ -646,7 +679,8 @@ module OpenstudioStandards
             formula_identifier.each do |k, v|
               formula_identifier_min_abs[k] = v.abs
             end
-
+            # puts formula_identifier
+            # puts formula_identifier_min_abs
             # pick from possible formula approaches for any datapoint where x is hour value
             min_key = formula_identifier_min_abs.key(formula_identifier_min_abs.values.min)
             min_value = formula_identifier[min_key]
@@ -662,6 +696,7 @@ module OpenstudioStandards
                 else # greater than 0
                   time = "hoo_start - #{min_value}"
                 end
+                # puts time
               elsif min_key == 'mid'
                 if min_value == 0
                   time = 'mid'
@@ -672,6 +707,7 @@ module OpenstudioStandards
                 else # greater than 0
                   time = "mid - #{min_value}"
                 end
+                # puts time
               else # min_key == "end"
                 if min_value == 0
                   time = 'hoo_end'
@@ -680,6 +716,7 @@ module OpenstudioStandards
                 else # greater than 0
                   time = "hoo_end - #{min_value}"
                 end
+                # puts time
               end
 
             elsif hoo_var_method == 'fractional'
@@ -736,6 +773,8 @@ module OpenstudioStandards
           end
         end
 
+        # puts "#{schedule_day.name}: param_day_profile: #{raw_string.join(' | ')}"
+
         # store profile formula with hoo and value variables
         props.setFeature('param_day_profile', raw_string.join(' | '))
 
@@ -769,6 +808,96 @@ module OpenstudioStandards
     # @!endgroup Parametric:Schedule
 
     # @!group Parametric:ScheduleRuleset
+
+    # Determine active rule indices for a ScheduleRuleset
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset]
+    # @return [Array] Array of 365 or 377 ScheduleRule indices. If no rule is in place on a given day, -1 is returned for that day
+    def self.schedule_ruleset_get_annual_rule_indices(schedule_ruleset)
+      year_description = schedule_ruleset.model.yearDescription
+      if year_description.is_initialized
+        year = year_description.get.assumedYear
+        year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+        year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+        indices_vector = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
+        return indices_vector
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.ScheduleRuleset', "In #{__method__}, cannot determine rule indices for #{schedule_ruleset}: No Year Description found.")
+      end
+    end
+
+    # copies a ScheduleRule to a given ScheduleRuleset and applies that rule to a given ScheduleDay
+    def self.schedule_rule_copy_to_new_ruleset_with_day_schedule(rule_to_copy, target_ruleset, target_day_sch)
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleRule', "Copying rule #{rule_to_copy.name.get} from: #{rule_to_copy.scheduleRuleset.name.get} to: #{target_ruleset.name.get} applying: #{target_day_sch.name.get}")
+      # target_day_schedule will be cloned, new_rule will be highest priority for target_rulest
+      new_rule = OpenStudio::Model::ScheduleRule.new(target_ruleset, target_day_sch)
+      # copy inputs from rule_to_copy
+      new_rule.setStartDate(rule_to_copy.startDate.get) unless rule_to_copy.startDate.empty?
+      new_rule.setEndDate(rule_to_copy.endDate.get) unless rule_to_copy.endDate.empty?
+      new_rule.setApplySunday(rule_to_copy.applySunday) if rule_to_copy.applySunday
+      new_rule.setApplyMonday(rule_to_copy.applyMonday) if rule_to_copy.applyMonday
+      new_rule.setApplyTuesday(rule_to_copy.applyTuesday) if rule_to_copy.applyTuesday
+      new_rule.setApplyWednesday(rule_to_copy.applyWednesday) if rule_to_copy.applyWednesday
+      new_rule.setApplyThursday(rule_to_copy.applyThursday) if rule_to_copy.applyThursday
+      new_rule.setApplyFriday(rule_to_copy.applyFriday) if rule_to_copy.applyFriday
+      new_rule.setApplySaturday(rule_to_copy.applySaturday) if rule_to_copy.applySaturday
+      # specific dates
+      if rule_to_copy.specificDates.size > 0
+        rule_to_copy.specificDates.each{|date| new_rule.setSpecificDate(date)}
+      end
+      return true
+    end
+
+    # return hash of rule_index => [days_used]. Default day has rule_index = -1
+    def self.schedule_ruleset_days_used_hash(schedule_ruleset)
+      sch_indices_vector = schedule_ruleset_get_annual_rule_indices(schedule_ruleset)
+      days_used_hash = Hash.new{|h,k| h[k] = Array.new}
+      sch_indices_vector.uniq.sort.each do |rule_i|
+        sch_indices_vector.each_with_index{|rule,i| days_used_hash[rule_i] << i+1 if rule_i == rule}
+      end
+      return days_used_hash
+    end
+
+    def self.schedule_ruleset_gather_schedule_day_rule_indices(schedule_ruleset)
+      schedule_day_hash = {}
+      schedule_ruleset.scheduleRules.each do |rule|
+        schedule_day_hash[rule.daySchedule] = rule.ruleIndex
+      end
+      schedule_day_hash[schedule_ruleset.defaultDaySchedule] = -1
+      return schedule_day_hash
+    end
+
+    # returns a hash of rule indices => []
+    def self.schedule_ruleset_align_rules_with_hours_of_operation(schedule_ruleset, hours_of_operation)
+
+      days_used_hash = schedule_ruleset_days_used_hash(schedule_ruleset)
+
+      schedule_day_hash = schedule_ruleset_gather_schedule_day_rule_indices(schedule_ruleset)
+
+      # remove schedule and default day from hours_of_operation hash
+      hoo_rule_hash = hours_of_operation.slice(*hours_of_operation.keys.reject{|k| [:schedule, -1].include? k})
+      schedule_day_hash.each do |day_schedule, rule_index|
+        # find days in indices vector that this rule applies to
+        days_used = days_used_hash[rule_index]
+        # reverse sort by ruleindex - so resulting copy will have same order. results in nested array of [[k1,v1],[k2,v2]]
+        hoo_rule_hash.sort_by{|k,v| k}.reverse.each do |rule_a|
+          hoo_rule_days_used = rule_a[1][:days_used]
+          if !hoo_rule_days_used.to_set.superset?(days_used.to_set)
+            puts "hoo rule #{rule_a[1]} is subset of #{day_schedule.name.get}"
+            occ_rule = hours_of_operation[:schedule].scheduleRules[rule_a[0]]
+            # clone occ rule and apply to schedule_ruleset
+            new_rule = schedule_rule_copy_to_new_ruleset_with_day_schedule(occ_rule, schedule_ruleset, day_schedule)
+          end
+        end
+      end
+    end
+
+    def self.schedule_day_find_hoo_target_index(schedule_day)
+
+
+    end
+
+
 
     # Apply specified hours of operation values to rules in this schedule.
     # Weekday values will be applied to the default profile.
@@ -845,7 +974,7 @@ module OpenstudioStandards
 
       # Get the hours of operation schedule
       hours_of_operation = parametric_inputs[schedule_ruleset][:hoo_inputs]
-      # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "For #{schedule_ruleset.name} hours_of_operation = #{hours_of_operation.name}.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name} hours_of_operation = #{hours_of_operation}.")
 
       starting_aeflh = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule_ruleset)
 
@@ -878,11 +1007,7 @@ module OpenstudioStandards
       profiles[schedule_ruleset.defaultDaySchedule] = nil
 
       # get indices for current schedule
-      year_description = schedule_ruleset.model.yearDescription.get
-      year = year_description.assumedYear
-      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
-      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
-      indices_vector = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
+      indices_vector = schedule_ruleset_get_annual_rule_indices(schedule_ruleset)
 
       # process profiles
       profiles.each do |sch_day, rule|
@@ -918,7 +1043,9 @@ module OpenstudioStandards
 
         # get hours of operation for this specific profile
         hoo_start = hours_of_operation[hoo_target_index][:hoo_start]
+        # puts hoo_start
         hoo_end = hours_of_operation[hoo_target_index][:hoo_end]
+        # puts hoo_end
 
         # update scheduleDay
         schedule_day_adjust_from_parameters(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
@@ -1039,6 +1166,8 @@ module OpenstudioStandards
       vac = 24.0 - occ
       range = val_clg - val_flr
 
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleDay', "Schedule #{schedule_day.name} has this formula hash: #{formula_hash}")
+
       # apply variables and create updated hash with only numbers
       formula_hash_var_free = {}
       formula_hash.each do |time, val_in_out|
@@ -1091,6 +1220,8 @@ module OpenstudioStandards
           time_value_pairs << [time, val]
         end
       end
+
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleDay', "Schedule #{schedule_day.name} will be adjusted with these time-value pairs: #{time_value_pairs}")
 
       # re-order so first value is lowest, and last is highest (need to adjust so no negative or > 24 values first)
       neg_time_hash = {}
@@ -1220,6 +1351,8 @@ module OpenstudioStandards
       if time_value_pairs.last[0] != 24.0
         time_value_pairs << [24.0, time_value_pairs.first[1]]
       end
+
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleDay', "Schedule #{schedule_day.name} will be adjusted with these time-value pairs: #{time_value_pairs}")
 
       # reset scheduleDay values based on interpolated values
       schedule_day.clearValues

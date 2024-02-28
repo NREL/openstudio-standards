@@ -116,9 +116,10 @@ module OpenstudioStandards
     # report hours of operation. Won't be a single set of values, will be a collection of rules
     # note Building, space, and spaceType can get hours of operation from schedule set, but not buildingStory
     #
+    # Retrieves the default occupancy schedule assigned to the space
     # @author David Goldwasser
     # @param space [OpenStudio::Model::Space] space object
-    # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
+    # @return [Hash]: {ScheduleRule index}
     def self.space_hours_of_operation(space)
       default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
       hours_of_operation = space.getDefaultSchedule(default_sch_type)
@@ -132,7 +133,7 @@ module OpenstudioStandards
         return nil
       end
       hours_of_operation = hours_of_operation.to_ScheduleRuleset.get
-      profiles = {}
+      profiles = {schedule: hours_of_operation}
 
       # get indices for current schedule
       year_description = hours_of_operation.model.yearDescription.get
