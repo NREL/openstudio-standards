@@ -435,47 +435,6 @@ class Standard
     return thermal_eff + 0.007
   end
 
-  # Convert one infiltration rate at a given pressure
-  # to an infiltration rate at another pressure
-  # per method described here:  http://www.taskair.net/knowledge/Infiltration%20Modeling%20Guidelines%20for%20Commercial%20Building%20Energy%20Analysis.pdf
-  # where the infiltration coefficient is 0.65
-  #
-  # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
-  # @param intial_pressure_pa [Double] pressure rise at which initial infiltration rate was determined in Pa
-  # @param final_pressure_pa [Double] desired pressure rise to adjust infiltration rate to in Pa
-  # @param infiltration_coefficient [Double] infiltration coeffiecient
-  # @return [Double] adjusted infiltration rate in m^3/s
-  def adjust_infiltration_to_lower_pressure(initial_infiltration_rate_m3_per_s, intial_pressure_pa, final_pressure_pa, infiltration_coefficient = 0.65)
-    adjusted_infiltration_rate_m3_per_s = initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**infiltration_coefficient
-
-    return adjusted_infiltration_rate_m3_per_s
-  end
-
-  # Convert the infiltration rate at a 75 Pa to an infiltration rate at the typical value for the prototype buildings
-  # per method described here:  http://www.pnl.gov/main/publications/external/technical_reports/PNNL-18898.pdf
-  # Gowri K, DW Winiarski, and RE Jarnagin. 2009.
-  # Infiltration modeling guidelines for commercial building energy analysis.
-  # PNNL-18898, Pacific Northwest National Laboratory, Richland, WA.
-  #
-  # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
-  # @return [Double] adjusted infiltration rate in m^3/s
-  def adjust_infiltration_to_prototype_building_conditions(initial_infiltration_rate_m3_per_s)
-    # Details of these coefficients can be found in paper
-    alpha = 0.22 # unitless - terrain adjustment factor
-    intial_pressure_pa = 75.0 # 75 Pa
-    uh = 4.47 # m/s - wind speed
-    rho = 1.18 # kg/m^3 - air density
-    cs = 0.1617 # unitless - positive surface pressure coefficient
-    n = 0.65 # unitless - infiltration coefficient
-
-    # Calculate the typical pressure - same for all building types
-    final_pressure_pa = 0.5 * cs * rho * uh**2
-
-    adjusted_infiltration_rate_m3_per_s = (1.0 + alpha) * initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**n
-
-    return adjusted_infiltration_rate_m3_per_s
-  end
-
   # Convert biquadratic curves that are a function of temperature
   # from IP (F) to SI (C) or vice-versa.  The curve is of the form
   # z = C1 + C2*x + C3*x^2 + C4*y + C5*y^2 + C6*x*y
