@@ -18,6 +18,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/constructions/modify'
   require_relative 'openstudio-standards/constructions/materials/modify'
 
+  # Infiltration Module
+  require_relative 'openstudio-standards/infiltration/infiltration'
+
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
 
