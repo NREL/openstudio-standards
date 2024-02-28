@@ -105,7 +105,7 @@ class Standard
     if unmet_load_hours_check
       # Run user model; need annual simulation to get unmet load hours
       if model_run_simulation_and_log_errors(proposed_model, run_dir = "#{sizing_run_dir}/PROP")
-        umlh = model_get_unmet_load_hours(proposed_model)
+        umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
         if umlh > 300
           OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
                              "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) won't be created.")
@@ -527,10 +527,11 @@ class Standard
             # the PRM-RM; Note that the PRM-RM only suggest to increase
             # air zone air flow, but the zone sizing factor in EnergyPlus
             # increase both air flow and load.
-            if model_get_unmet_load_hours(model) > 300
+            umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
+            if umlh > 300
               model.getThermalZones.each do |thermal_zone|
                 # Cooling adjustments
-                clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
+                clg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_cooling_hours(thermal_zone)
                 if clg_umlh > 50
                   sizing_factor = 1.0
                   if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
@@ -544,7 +545,7 @@ class Standard
 
                 # Heating adjustments
                 # Reset sizing factor
-                htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
+                htg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_heating_hours(thermal_zone)
                 if htg_umlh > 50
                   sizing_factor = 1.0
                   if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized

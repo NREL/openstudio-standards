@@ -11,6 +11,9 @@ modules/create_typical/test_space_type_ratios.rb
 modules/create_typical/test_enumerations.rb
 modules/create_typical/test_create_typical.rb
 modules/create_typical/test_space_type_blend.rb
+modules/sql_file/test_sql_file.rb
+modules/sql_file/test_unmet_hours.rb
+modules/sql_file/test_energy_use.rb
 modules/weather/test_weather_information.rb
 modules/weather/test_weather_modify.rb
 modules/weather/test_weather_stat_file.rb

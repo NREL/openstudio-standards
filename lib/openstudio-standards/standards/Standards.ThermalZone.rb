@@ -2062,32 +2062,4 @@ class Standard
   def thermal_zone_prm_lab_delta_t(thermal_zone)
     return nil
   end
-
-  # Determine the number of unmet load hours during occupancy for a thermal zone
-  #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
-  # @param umlh_type [String] Type of unmet load hours, either 'Cooling' or 'Heating'
-  def thermal_zone_get_unmet_load_hours(thermal_zone, umlh_type)
-    umlh = OpenStudio::OptionalDouble.new
-    sql = thermal_zone.model.sqlFile
-    if sql.is_initialized
-      sql = sql.get
-      query = "SELECT Value
-              FROM tabulardatawithstrings
-              WHERE ReportName='SystemSummary'
-              AND ReportForString='Entire Facility'
-              AND TableName='Time Setpoint Not Met'
-              AND ColumnName='During Occupied #{umlh_type.capitalize}'
-              AND RowName='#{thermal_zone.name.to_s.upcase}'
-              AND Units='hr'"
-      val = sql.execAndReturnFirstDouble(query)
-      if val.is_initialized
-        umlh = OpenStudio::OptionalDouble.new(val.get)
-      end
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
-    end
-
-    return umlh.to_f
-  end
 end
