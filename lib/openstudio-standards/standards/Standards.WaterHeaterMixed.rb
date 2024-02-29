@@ -90,7 +90,7 @@ class Standard
         vol_drt = wh_props['uniform_energy_factor_volume_allowance']
         uniform_energy_factor = base_uniform_energy_factor - (vol_drt * volume_gal)
       end
-      energy_factor = water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
+      energy_factor = water_heater_convert_uniform_energy_factor_to_energy_factor(water_heater_mixed, fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
       water_heater_efficiency, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, energy_factor, capacity_btu_per_hr)
       # Two booster water heaters
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
@@ -311,12 +311,13 @@ class Standard
 
   # Convert Uniform Energy Factor (UEF) to Energy Factor (EF)
   #
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
   # @param fuel_type [String] water heater fuel type
   # @param uniform_energy_factor [Float] water heater Uniform Energy Factor (UEF)
   # @param capacity_btu_per_hr [Float] water heater capacity
   # @param volume_gal [Float] water heater storage volume in gallons
   # @return [Float] returns Energy Factor (EF)
-  def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
+  def water_heater_convert_uniform_energy_factor_to_energy_factor(water_heater_mixed, fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
     # Get water heater sub type
     sub_type = water_heater_determine_sub_type(fuel_type, capacity_btu_per_hr, volume_gal)
 
