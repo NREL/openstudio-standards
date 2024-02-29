@@ -89,7 +89,7 @@ class NECB2011
     else
       fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
     end
-    
+
     # Set up DX coil with NECB performance curve characteristics;
     clg_coil = add_onespeed_DX_coil(model, always_on)
     clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
@@ -124,8 +124,8 @@ class NECB2011
     if necb_reference_hp
       #create supplemental heating coil based on default regional fuel type
       if necb_reference_hp_supp_fuel == 'DefaultFuel'
-        epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-        necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+        epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+        necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
       end
       if necb_reference_hp_supp_fuel == 'NaturalGas'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
@@ -140,11 +140,11 @@ class NECB2011
       air_to_air_heatpump.setControllingZone(control_zone)
       air_to_air_heatpump.setSupplyAirFanOperatingModeSchedule(always_on)
       air_to_air_heatpump.addToNode(supply_inlet_node)
-    else    
+    else
       fan.addToNode(supply_inlet_node)
       htg_coil.addToNode(supply_inlet_node)
       clg_coil.addToNode(supply_inlet_node)
-      
+
     end
     oa_system.addToNode(supply_inlet_node)
     # Add a setpoint manager single zone reheat to control the

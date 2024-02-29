@@ -3,8 +3,6 @@
 --exclude lib/openstudio-standards/prototypes/common/buildings/Prototype.*.rb
 --exclude lib/openstudio-standards/utilities/convert_costing_constructions.rb
 --exclude lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb
---exclude lib/openstudio-standards/weather/Weather.Model.rb
---exclude lib/openstudio-standards/weather/Weather.stat_file.rb
 --exclude lib/openstudio-standards/utilities/sched_create.rb
 --exclude lib/openstudio-standards/utilities/os_sim_extract.rb
 --exclude lib/openstudio-standards/utilities/hash.rb
@@ -21,6 +19,7 @@ lib/openstudio-standards/geometry/**/*.rb
 lib/openstudio-standards/create_typical/**/*.rb
 lib/openstudio-standards/hvac/**/*.rb
 lib/openstudio-standards/constructions/**/*.rb
+lib/openstudio-standards/infiltration/**/*.rb
 lib/openstudio-standards/daylighting/**/*.rb
 lib/openstudio-standards/qaqc/**/*.rb
 

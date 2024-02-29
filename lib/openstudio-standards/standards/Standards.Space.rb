@@ -1276,7 +1276,7 @@ class Standard
     conv_fact = 196.85
 
     # Adjust the infiltration rate to the average pressure for the prototype buildings.
-    adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
+    adj_infil_rate_cfm_per_ft2 = OpenstudioStandards::Infiltration.adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
     adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
     # Get the exterior wall area
     exterior_wall_and_window_area_m2 = space_exterior_wall_and_window_area(space)
@@ -1603,7 +1603,7 @@ class Standard
     return space.additionalProperties.getFeatureAsString('space_conditioning_category').get if space.additionalProperties.hasFeature('space_conditioning_category')
 
     # Get climate zone
-    climate_zone = model_standards_climate_zone(space.model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(space.model)
 
     # Get the zone this space is inside
     zone = space.thermalZone

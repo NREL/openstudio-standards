@@ -18,6 +18,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/constructions/modify'
   require_relative 'openstudio-standards/constructions/materials/modify'
 
+  # Infiltration Module
+  require_relative 'openstudio-standards/infiltration/infiltration'
+
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
 
@@ -51,9 +54,8 @@ module OpenstudioStandards
 
   # Weather Module
   require_relative 'openstudio-standards/weather/information'
-
-  # Weather data
-  require_relative 'openstudio-standards/weather/Weather.Model'
+  require_relative 'openstudio-standards/weather/modify'
+  require_relative 'openstudio-standards/weather/stat_file'
 
   # HVAC standards
   require_relative 'openstudio-standards/standards/Standards.Model'
@@ -280,6 +282,7 @@ module OpenstudioStandards
   # 90.1-2007
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.BoilerHotWater"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.ChillerElectricEIR"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.Model"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.Space"
@@ -288,6 +291,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.BoilerHotWater"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.ChillerElectricEIR"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTowerSingleSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTowerTwoSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTowerVariableSpeed"
@@ -299,6 +303,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.BoilerHotWater"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.ChillerElectricEIR"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTowerSingleSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTowerTwoSpeed"
@@ -311,8 +316,9 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.WaterHeaterMixed"
   # 90.1-2016
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirLoopHVAC"
-  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.BoilerHotWater"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.BoilerHotWater"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.ChillerElectricEIR"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTowerSingleSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTowerTwoSpeed"
@@ -322,8 +328,10 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.ThermalZone"
   # 90.1-2019
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirLoopHVAC"
-  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.BoilerHotWater"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.BoilerHotWater"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.ChillerElectricEIR"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoilHeatingGas"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerSingleSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerTwoSpeed"

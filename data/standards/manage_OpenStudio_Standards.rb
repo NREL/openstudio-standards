@@ -101,9 +101,9 @@ def unique_properties(sheet_name)
          when 'boilers'
            ['template', 'fluid_type', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'chillers'
-           ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'variable_speed_drive', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'compliance_path', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'furnaces'
-           ['template', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'equipment_type', 'fuel_type', 'electric_power_phase', 'minimum_capacity', 'maximum_capacity', 'minimum_combo_unit_cooling_capacity', 'maximum_combo_unit_cooling_capacity', 'subtype', 'start_date', 'end_date']
          when 'heat_rejection'
            ['template', 'equipment_type', 'fan_type', 'start_date', 'end_date']
          when 'water_source_heat_pumps'
@@ -136,8 +136,6 @@ def unique_properties(sheet_name)
            ['template', 'climate_ID']
          when 'motors'
            ['template', 'number_of_poles', 'type', 'synchronous_speed', 'minimum_capacity', 'maximum_capacity']
-         when 'ground_temperatures'
-           ['building_type', 'template', 'climate_zone']
          when 'hvac_inference'
            ['template', 'size_category', 'heating_source', 'cooling_source', 'delivery_type']
          when 'size_category'

@@ -63,6 +63,12 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Boolean] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    # User data process
+    # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
+    # TODO - move this portion to the top of the function
+    bldg_type_hvac_zone_hash = {}
+    handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+
     # enforce the user model to be a non-leap year, defaulting to 2009 if the model year is a leap year
     if user_model.yearDescription.is_initialized
       year_description = user_model.yearDescription.get
@@ -127,12 +133,6 @@ class Standard
       idf_path = OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.idf")
       idf.save(idf_path, true)
     end
-
-    # User data process
-    # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
-    # TODO - move this portion to the top of the function
-    bldg_type_hvac_zone_hash = {}
-    handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
 
     # Define different orientation from original orientation
     # for each individual baseline models
@@ -1436,41 +1436,6 @@ class Standard
     return fuel_type
   end
 
-  # Get ASHRAE ID code for climate zone
-  # @param climate_zone [String] full name of climate zone
-  # @return [String] ASHRAE ID code for climate zone
-  def get_climate_zone_code(climate_zone)
-    cz_codes = []
-    cz_codes << '0A'
-    cz_codes << '0B'
-    cz_codes << '1A'
-    cz_codes << '1B'
-    cz_codes << '2A'
-    cz_codes << '2B'
-    cz_codes << '3A'
-    cz_codes << '3B'
-    cz_codes << '3C'
-    cz_codes << '4A'
-    cz_codes << '4B'
-    cz_codes << '4C'
-    cz_codes << '5A'
-    cz_codes << '5B'
-    cz_codes << '5C'
-    cz_codes << '6A'
-    cz_codes << '6B'
-    cz_codes << '7A'
-    cz_codes << '7B'
-    cz_codes << '8A'
-    cz_codes << '8B'
-
-    cz_codes.each do |cz|
-      pattern = Regexp.new(cz, true)
-      if pattern =~ climate_zone
-        return cz.to_s
-      end
-    end
-  end
-
   # Add the specified baseline system type to the specified zones based on the specified template.
   # For some multi-zone system types, the standards require identifying zones whose loads or schedules
   # are outliers and putting these systems on separate single-zone systems.  This method does that.
@@ -1909,7 +1874,7 @@ class Standard
       when 'SZ_VAV' # System 11, chilled water, heating type varies by climate zone
         unless zones.empty?
           # htg type
-          climate_zone = model_standards_climate_zone(model)
+          climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
           case climate_zone
             when 'ASHRAE 169-2006-0A',
               'ASHRAE 169-2006-0B',
@@ -3867,38 +3832,6 @@ class Standard
     end
   end
 
-  # Get the full path to the weather file that is specified in the model
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [OpenStudio::OptionalPath] path to weather file
-  def model_get_full_weather_file_path(model)
-    full_epw_path = OpenStudio::OptionalPath.new
-
-    if model.weatherFile.is_initialized
-      epw_path = model.weatherFile.get.path
-      if epw_path.is_initialized
-        if File.exist?(epw_path.get.to_s)
-          full_epw_path = OpenStudio::OptionalPath.new(epw_path.get)
-        else
-          # If this is an always-run Measure, need to check a different path
-          alt_weath_path = File.expand_path(File.join(Dir.pwd, '../../resources'))
-          alt_epw_path = File.expand_path(File.join(alt_weath_path, epw_path.get.to_s))
-          if File.exist?(alt_epw_path)
-            full_epw_path = OpenStudio::OptionalPath.new(OpenStudio::Path.new(alt_epw_path))
-          else
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Model has been assigned a weather file, but the file is not in the specified location of '#{epw_path.get}'.")
-          end
-        end
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has a weather file assigned, but the weather file path has been deleted.')
-      end
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Model has not been assigned a weather file.')
-    end
-
-    return full_epw_path
-  end
-
   # Find the legacy simulation results from a CSV of previously created results.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -4102,7 +4035,7 @@ class Standard
   # @return [Hash] key for climate zone, building type, and standards template.  All values are strings.
   def model_get_building_properties(model, remap_office = true)
     # get climate zone from model
-    climate_zone = model_standards_climate_zone(model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
 
     # get building type from model
     building_type = ''
@@ -5280,7 +5213,7 @@ class Standard
     end
 
     # get climate zone value
-    climate_zone = model_standards_climate_zone(model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
 
     internal_loads = {}
     internal_loads['mech_vent_cfm'] = units_per_bldg * (0.01 * conditioned_floor_area + 7.5 * (bedrooms_per_unit + 1.0))
@@ -5720,57 +5653,6 @@ class Standard
           sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
-    end
-    return true
-  end
-
-  # Converts the climate zone in the model into the format used by the openstudio-standards lookup tables.
-  # For example,
-  #   institution: ASHRAE, value: 6A  becomes: ASHRAE 169-2013-6A.
-  #   institution: CEC, value: 3  becomes: CEC T24-CEC3.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [String] the string representation of the climate zone,
-  #   empty string if no climate zone is present in the model.
-  def model_standards_climate_zone(model)
-    climate_zone = ''
-    model.getClimateZones.climateZones.each do |cz|
-      if cz.institution == 'ASHRAE'
-        next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
-
-        climate_zone = if cz.value == '7' || cz.value == '8'
-                         "ASHRAE 169-2013-#{cz.value}A"
-                       else
-                         "ASHRAE 169-2013-#{cz.value}"
-                       end
-      elsif cz.institution == 'CEC'
-        next if cz.value == '' # Skip blank ASHRAE climate zones put in by OpenStudio Application
-
-        climate_zone = "CEC T24-CEC#{cz.value}"
-      end
-    end
-    return climate_zone
-  end
-
-  # Sets the climate zone object in the model using
-  # the correct institution based on the climate zone specified
-  # in the format used by the openstudio-standards lookups.
-  # Clears out any climate zones previously added to the model.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Boolean] returns true if successful, false if not
-  def model_set_climate_zone(model, climate_zone)
-    # Remove previous climate zones from the model
-    model.getClimateZones.clear
-    # Split the string into the correct institution and value
-    if climate_zone.include? 'ASHRAE 169-2006-'
-      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2006-', ''))
-    elsif climate_zone.include? 'ASHRAE 169-2013-'
-      model.getClimateZones.setClimateZone('ASHRAE', climate_zone.gsub('ASHRAE 169-2013-', ''))
-    elsif climate_zone.include? 'CEC T24-CEC'
-      model.getClimateZones.setClimateZone('CEC', climate_zone.gsub('CEC T24-CEC', ''))
-
     end
     return true
   end
@@ -7109,7 +6991,7 @@ class Standard
     # air-loop based system
     model.getThermalZones.each do |zone|
       # Conditioning category won't include indirectly conditioned thermal zones
-      cond_cat = thermal_zone_conditioning_category(zone, model_standards_climate_zone(model))
+      cond_cat = thermal_zone_conditioning_category(zone, OpenstudioStandards::Weather.model_get_climate_zone(model))
 
       # Initialize the return air type
       return_air_type = nil

@@ -28,7 +28,7 @@ Standard.class_eval do
 
     # Set up the simulation
     # Find the weather file
-    epw_path = model_get_full_weather_file_path(model)
+    epw_path = OpenstudioStandards::Weather.model_get_full_weather_file_path(model)
     if epw_path.empty?
       return false
     end
