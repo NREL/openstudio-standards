@@ -46,13 +46,7 @@ module OpenstudioStandards
             return false
           end
         end
-
-        # convert to ruby array
-        zone_temperatures = []
-        zone_temp_vector = zone_temp_timeseries.get.values
-        for i in (0..zone_temp_vector.size - 1)
-          zone_temperatures << zone_temp_vector[i]
-        end
+        zone_temp_timeseries = zone_temp_timeseries.get.values
 
         # get zone thermostat heating setpoint temperatures
         zone_setpoint_temp_timeseries = sql_file.timeSeries(ann_env_pd, 'Hourly', 'Zone Thermostat Heating Setpoint Temperature', zone.name.get)
@@ -61,20 +55,14 @@ module OpenstudioStandards
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SqlFile', "Could not find heating setpoint temperature timeseries for zone '#{zone.name.get}'")
           return false
         end
-
-        # convert to ruby array
-        zone_setpoint_temperatures = []
-        zone_setpoint_temp_vector = zone_setpoint_temp_timeseries.get.values
-        for i in (0..zone_setpoint_temp_vector.size - 1)
-          zone_setpoint_temperatures << zone_setpoint_temp_vector[i]
-        end
+        zone_setpoint_temp_timeseries = zone_setpoint_temp_timeseries.get.values
 
         # calculate zone occupancy by making a new ruleset schedule
         occ_schedule_ruleset = std.thermal_zone_get_occupancy_schedule(zone)
         occ_values = OpenstudioStandards::Schedules.schedule_ruleset_get_hourly_values(occ_schedule_ruleset)
 
         # calculate difference accounting for unmet hours tolerance
-        zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |t, x| (zone_temperatures[x] - t) }
+        zone_temperature_diff = zone_setpoint_temp_timeseries.map.with_index { |t, x| (zone_temp_timeseries[x] - t) }
         zone_unmet_hours = zone_temperature_diff.map { |x| (x + tolerance_k) < 0 ? 1 : 0 }
         zone_occ_unmet_hours = []
         for i in (0..zone_unmet_hours.size - 1)
@@ -94,8 +82,8 @@ module OpenstudioStandards
         zone_data << {
           'zone_name' => zone.name,
           'zone_area' => zone.floorArea,
-          'zone_air_temperatures' => zone_temperatures.map { |t| t.round(3) },
-          'zone_air_setpoint_temperatures' => zone_setpoint_temperatures.map { |t| t.round(3) },
+          'zone_air_temperatures' => zone_temp_timeseries.map { |t| t.round(3) },
+          'zone_air_setpoint_temperatures' => zone_setpoint_temp_timeseries.map { |t| t.round(3) },
           'zone_air_temperature_differences' => zone_temperature_diff.map { |d| d.round(3) },
           'zone_occupancy' => occ_values.map { |x| x.round(3) },
           'zone_unmet_hours' => zone_unmet_hours,
@@ -156,13 +144,7 @@ module OpenstudioStandards
             return false
           end
         end
-
-        # convert to ruby array
-        zone_temperatures = []
-        zone_temp_vector = zone_temp_timeseries.get.values
-        for i in (0..zone_temp_vector.size - 1)
-          zone_temperatures << zone_temp_vector[i]
-        end
+        zone_temp_timeseries = zone_temp_timeseries.get.values
 
         # get zone thermostat heating setpoint temperatures
         zone_setpoint_temp_timeseries = sql_file.timeSeries(ann_env_pd, 'Hourly', 'Zone Thermostat Cooling Setpoint Temperature', zone.name.get)
@@ -171,20 +153,14 @@ module OpenstudioStandards
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SqlFile', "Could not find cooling setpoint temperature timeseries for zone '#{zone.name.get}'")
           return false
         end
-
-        # convert to ruby array
-        zone_setpoint_temperatures = []
-        zone_setpoint_temp_vector = zone_setpoint_temp_timeseries.get.values
-        for i in (0..zone_setpoint_temp_vector.size - 1)
-          zone_setpoint_temperatures << zone_setpoint_temp_vector[i]
-        end
+        zone_setpoint_temp_timeseries = zone_setpoint_temp_timeseries.get.values
 
         # calculate zone occupancy by making a new ruleset schedule
         occ_schedule_ruleset = std.thermal_zone_get_occupancy_schedule(zone)
         occ_values = OpenstudioStandards::Schedules.schedule_ruleset_get_hourly_values(occ_schedule_ruleset)
 
         # calculate difference accounting for unmet hours tolerance
-        zone_temperature_diff = zone_setpoint_temperatures.map.with_index { |t, x| (t - zone_temperatures[x]) }
+        zone_temperature_diff = zone_setpoint_temp_timeseries.map.with_index { |t, x| (t - zone_temp_timeseries[x]) }
         zone_unmet_hours = zone_temperature_diff.map { |x| (x - tolerance_k) > 0 ? 1 : 0 }
         zone_occ_unmet_hours = []
         for i in (0..zone_unmet_hours.size - 1)
@@ -204,8 +180,8 @@ module OpenstudioStandards
         zone_data << {
           'zone_name' => zone.name,
           'zone_area' => zone.floorArea,
-          'zone_air_temperatures' => zone_temperatures.map { |t| t.round(3) },
-          'zone_air_setpoint_temperatures' => zone_setpoint_temperatures.map { |t| t.round(3) },
+          'zone_air_temperatures' => zone_temp_timeseries.map { |t| t.round(3) },
+          'zone_air_setpoint_temperatures' => zone_setpoint_temp_timeseries.map { |t| t.round(3) },
           'zone_air_temperature_differences' => zone_temperature_diff.map { |d| d.round(3) },
           'zone_occupancy' => occ_values.map { |x| x.round(3) },
           'zone_unmet_hours' => zone_unmet_hours,
