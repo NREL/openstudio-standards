@@ -267,9 +267,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
           # Get the current simulation results
           if run_type == 'dd-only'
-            current_values = prototype_creator.model_get_dd_results_by_end_use_and_fuel_type(model)
+            current_values = OpenstudioStandards::SqlFile.model_get_dd_results_by_end_use_and_fuel_type(model)
           else
-            current_values = prototype_creator.model_get_annual_results_by_end_use_and_fuel_type(model)
+            current_values = OpenstudioStandards::SqlFile.model_get_annual_results_by_end_use_and_fuel_type(model)
           end
 
           # Get the osm values for all fuel type/end use pairs
