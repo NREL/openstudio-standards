@@ -2662,7 +2662,7 @@ class ECMS
     # If specified as SEER
     unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop_cooling_with_fan(min_seer)
+      cop = seer_to_cop_cooling(min_seer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2678,7 +2678,7 @@ class ECMS
     # if specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
-      cop = seer_to_cop_cooling_with_fan(min_seer)
+      cop = seer_to_cop_cooling(min_seer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2742,7 +2742,7 @@ class ECMS
     # if specified as HSPF (heat pump)
     unless props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      cop = hspf_to_cop_heating(min_hspf)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2798,7 +2798,7 @@ class ECMS
     # If specified as SEER
     unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop_cooling_with_fan(min_seer)
+      cop = seer_to_cop_cooling(min_seer)
       new_comp_name = "#{coil_cooling_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{template}: #{coil_cooling_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2814,7 +2814,7 @@ class ECMS
     # if specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
-      cop = seer_to_cop_cooling_with_fan(min_seer)
+      cop = seer_to_cop_cooling(min_seer)
       new_comp_name = "#{coil_cooling_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{template}: #{coil_cooling_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2878,7 +2878,7 @@ class ECMS
     # if specified as HSPF (heat pump)
     unless props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      cop = hspf_to_cop_heating(min_hspf)
       new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{template}: #{coil_heating_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2942,7 +2942,7 @@ class ECMS
     # if specified as HSPF (heat pump)
     unless props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      cop = hspf_to_cop_heating(min_hspf)
       new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -3006,7 +3006,7 @@ class ECMS
     # if specified as HSPF (heat pump)
     unless props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      cop = hspf_to_cop_heating(min_hspf)
       new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -3456,7 +3456,7 @@ class ECMS
           if unitary_cop['minimum_energy_efficiency_ratio']
             cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
           elsif unitary_cop['minimum_seasonal_energy_efficiency_ratio']
-            cop = seer_to_cop_cooling_with_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
+            cop = seer_to_cop_cooling(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
           elsif unitary_cop['minimum_coefficient_of_performance_cooling']
             cop = unitary_cop['minimum_coefficient_of_performance_cooling'].to_f
           end
