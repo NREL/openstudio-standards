@@ -275,7 +275,7 @@ class Standard
   end
 
   # Convert from SEER to COP (with fan) for cooling coils
-  # per the method specified in 90.1-2013 Appendix G
+  # per the method specified in Thornton et al. 2011
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
@@ -287,7 +287,7 @@ class Standard
   end
 
   # Convert from COP to SEER (with fan) for cooling coils
-  # per the method specified in 90.1-2013 Appendix G
+  # per the method specified in Thornton et al. 2011
   #
   # @param cop [Double] Coefficient of Performance (COP)
   # @return [Double] seasonal energy efficiency ratio (SEER)
@@ -345,9 +345,9 @@ class Standard
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop_no_fan(eer, capacity_w = nil)
     if capacity_w.nil?
-      # The PNNL Method.
+      # From Thornton et al. 2011
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildings per PNNL.
+      # assumed to be 0.12 for the reference buildings per Thornton et al. 2011.
       r = 0.12
       cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + r) / (1 - r)
     else
@@ -367,9 +367,9 @@ class Standard
   # @return [Double] Energy Efficiency Ratio (EER)
   def cop_to_eer_no_fan(cop, capacity_w = nil)
     if capacity_w.nil?
-      # The PNNL Method.
+      # From Thornton et al. 2011
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildngs per PNNL.
+      # assumed to be 0.12 for the reference buildngs per Thornton et al. 2011.
       r = 0.12
       eer = OpenStudio.convert(1.0, 'W', 'Btu/h').get * (cop * (1 - r) - r)
     else
