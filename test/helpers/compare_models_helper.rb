@@ -29,10 +29,10 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     'OS:PortList', # Names are UIDs
     'OS:Building', # Name includes timestamp of creation
     'OS:ModelObjectList', # Names are UIDs
-    'OS:ZoneHVAC:EquipmentList', # Names appear to be created non-deteministically
-    'OS:AvailabilityManagerAssignmentList', # Names appear to be created non-deteministically
-    'OS:Schedule:Rule', # Names appear to be created non-deteministically
-    'OS:ScheduleTypeLimits', # Names appear to be created non-deteministically
+    'OS:ZoneHVAC:EquipmentList', # Names appear to be created non-deterministically
+    'OS:AvailabilityManagerAssignmentList', # Names appear to be created non-deterministically
+    'OS:Schedule:Rule', # Names appear to be created non-deterministically
+    'OS:ScheduleTypeLimits', # Names appear to be created non-deterministically
     'OS:Rendering:Color', # Rendering colors don't matter
     'OS:Output:Meter', # Output meter objects may be different and don't affect results
     'OS:ProgramControl', # Deprecated object no longer translated to EnergyPlus
@@ -90,7 +90,7 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     end
   end
 
-  # Compare objects found in both models field by field 
+  # Compare objects found in both models field by field
   both_models.uniq.each do |b|
     true_object = b[0]
     compare_object = b[1]
