@@ -63,6 +63,12 @@ class Standard
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @return [Boolean] returns true if successful, false if not
   def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+    # User data process
+    # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
+    # TODO - move this portion to the top of the function
+    bldg_type_hvac_zone_hash = {}
+    handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
+
     # enforce the user model to be a non-leap year, defaulting to 2009 if the model year is a leap year
     if user_model.yearDescription.is_initialized
       year_description = user_model.yearDescription.get
@@ -99,7 +105,7 @@ class Standard
     if unmet_load_hours_check
       # Run user model; need annual simulation to get unmet load hours
       if model_run_simulation_and_log_errors(proposed_model, run_dir = "#{sizing_run_dir}/PROP")
-        umlh = model_get_unmet_load_hours(proposed_model)
+        umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
         if umlh > 300
           OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
                              "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) won't be created.")
@@ -127,12 +133,6 @@ class Standard
       idf_path = OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.idf")
       idf.save(idf_path, true)
     end
-
-    # User data process
-    # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
-    # TODO - move this portion to the top of the function
-    bldg_type_hvac_zone_hash = {}
-    handle_user_input_data(user_model, climate_zone, sizing_run_dir, hvac_building_type, wwr_building_type, swh_building_type, bldg_type_hvac_zone_hash)
 
     # Define different orientation from original orientation
     # for each individual baseline models
@@ -527,10 +527,11 @@ class Standard
             # the PRM-RM; Note that the PRM-RM only suggest to increase
             # air zone air flow, but the zone sizing factor in EnergyPlus
             # increase both air flow and load.
-            if model_get_unmet_load_hours(model) > 300
+            umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
+            if umlh > 300
               model.getThermalZones.each do |thermal_zone|
                 # Cooling adjustments
-                clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
+                clg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_cooling_hours(thermal_zone)
                 if clg_umlh > 50
                   sizing_factor = 1.0
                   if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
@@ -544,7 +545,7 @@ class Standard
 
                 # Heating adjustments
                 # Reset sizing factor
-                htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
+                htg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_heating_hours(thermal_zone)
                 if htg_umlh > 50
                   sizing_factor = 1.0
                   if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized

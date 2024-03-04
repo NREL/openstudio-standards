@@ -18,6 +18,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/constructions/modify'
   require_relative 'openstudio-standards/constructions/materials/modify'
 
+  # Infiltration Module
+  require_relative 'openstudio-standards/infiltration/infiltration'
+
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
 
@@ -49,6 +52,11 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/qaqc/create_results'
   require_relative 'openstudio-standards/qaqc/reporting'
 
+  # SQL File Module
+  require_relative 'openstudio-standards/sql_file/sql_file'
+  require_relative 'openstudio-standards/sql_file/unmet_hours'
+  require_relative 'openstudio-standards/sql_file/energy_use'
+
   # Weather Module
   require_relative 'openstudio-standards/weather/information'
   require_relative 'openstudio-standards/weather/modify'
@@ -64,7 +72,6 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/logging'
   require_relative 'openstudio-standards/utilities/simulation'
   require_relative 'openstudio-standards/utilities/hash'
-  require_relative 'openstudio-standards/utilities/sqlfile'
   require_relative 'openstudio-standards/utilities/schedule_translator'
   require_relative 'openstudio-standards/utilities/array'
   require_relative 'openstudio-standards/utilities/object_info'
