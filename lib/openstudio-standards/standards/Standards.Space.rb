@@ -1276,7 +1276,7 @@ class Standard
     conv_fact = 196.85
 
     # Adjust the infiltration rate to the average pressure for the prototype buildings.
-    adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
+    adj_infil_rate_cfm_per_ft2 = OpenstudioStandards::Infiltration.adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
     adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
     # Get the exterior wall area
     exterior_wall_and_window_area_m2 =  OpenstudioStandards::Geometry.space_get_exterior_wall_and_subsurface_area(space)
