@@ -41,6 +41,7 @@ class Standard
     # in the hvac standards data set.
     search_criteria = {}
     search_criteria['template'] = template
+    search_criteria['test_fluid'] = ''
 
     # Closed cooling towers are fluidcooler objects.
     search_criteria['equipment_type'] = equipment_type
@@ -69,7 +70,7 @@ class Standard
     end
 
     # Get fluid cooler efficiency
-    min_gpm_per_hp = ct_props['minimum_performance']
+    min_gpm_per_hp = ct_props['minimum_performance_gpm_per_hp']
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, design water flow = #{design_water_flow_gpm.round} gpm, minimum performance = #{min_gpm_per_hp} gpm/hp (nameplate).")
 
     # Calculate the allowed fan brake horsepower

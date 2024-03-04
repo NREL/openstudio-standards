@@ -39,6 +39,7 @@ module CoolingTower
     # in the hvac standards data set.
     search_criteria = {}
     search_criteria['template'] = template
+    search_criteria['test_fluid'] = ''
 
     # By definition cooling towers in E+ are open.
     # Closed cooling towers are the fluidcooler objects.
@@ -79,7 +80,7 @@ module CoolingTower
     end
 
     # Get cooling tower efficiency
-    min_gpm_per_hp = ct_props['minimum_performance']
+    min_gpm_per_hp = ct_props['minimum_performance_gpm_per_hp']
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, design water flow = #{design_water_flow_gpm.round} gpm, minimum performance = #{min_gpm_per_hp} gpm/hp (nameplate).")
 
     # Calculate the allowed fan brake horsepower
