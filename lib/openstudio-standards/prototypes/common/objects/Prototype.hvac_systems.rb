@@ -5503,7 +5503,7 @@ class Standard
         htg_coil = create_coil_heating_dx_single_speed(model,
                                                        name: "#{air_loop.name} heating coil",
                                                        type: 'Residential Central Air Source HP',
-                                                       cop: hspf_to_cop_heating_no_fan(hspf))
+                                                       cop: hspf_to_cop_no_fan(hspf))
         if model.version < OpenStudio::VersionString.new('3.5.0')
           htg_coil.setRatedSupplyFanPowerPerVolumeFlowRate(ac_w_per_cfm / OpenStudio.convert(1.0, 'cfm', 'm^3/s').get)
         else

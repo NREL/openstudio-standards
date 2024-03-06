@@ -54,13 +54,13 @@ class TestApplyHVACEfficiencyStandard < Minitest::Test
     std = Standard.build('90.1-2019')
     # SEER conversions
     seer = 15
-    cop_nf = std.seer_to_cop_cooling_no_fan(seer)
-    new_seer = std.cop_no_fan_to_seer_cooling(cop_nf)
+    cop_nf = std.seer_to_cop_no_fan(seer)
+    new_seer = std.cop_no_fan_to_seer(cop_nf)
     assert(seer == new_seer)
 
     # COP conversions
-    cop = std.seer_to_cop_cooling(seer)
-    new_seer = std.cop_to_seer_cooling(cop)
+    cop = std.seer_to_cop(seer)
+    new_seer = std.cop_to_seer(cop)
     assert(seer == new_seer)
 
     # EER conversions
@@ -73,8 +73,8 @@ class TestApplyHVACEfficiencyStandard < Minitest::Test
 
     # HSPF conversions
     hspf = 9
-    cop_nf = std.hspf_to_cop_heating_no_fan(hspf)
-    cop = std.hspf_to_cop_heating(hspf)
+    cop_nf = std.hspf_to_cop_no_fan(hspf)
+    cop = std.hspf_to_cop(hspf)
     assert(cop_nf > cop)
 
     # kW/ton conversions

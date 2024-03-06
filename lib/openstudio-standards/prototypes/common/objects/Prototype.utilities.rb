@@ -256,7 +256,7 @@ class Standard
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
-  def seer_to_cop_cooling_no_fan(seer)
+  def seer_to_cop_no_fan(seer)
     cop = -0.0076 * seer * seer + 0.3796 * seer
 
     return cop
@@ -267,7 +267,7 @@ class Standard
   #
   # @param cop [Double] COP
   # @return [Double] Seasonal Energy Efficiency Ratio
-  def cop_no_fan_to_seer_cooling(cop)
+  def cop_no_fan_to_seer(cop)
     delta = 0.3796**2 - 4.0 * 0.0076 * cop
     seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
 
@@ -279,7 +279,7 @@ class Standard
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
-  def seer_to_cop_cooling(seer)
+  def seer_to_cop(seer)
     eer = -0.0182 * seer * seer + 1.1088 * seer
     cop = eer_to_cop(eer)
 
@@ -291,7 +291,7 @@ class Standard
   #
   # @param cop [Double] Coefficient of Performance (COP)
   # @return [Double] seasonal energy efficiency ratio (SEER)
-  def cop_to_seer_cooling(cop)
+  def cop_to_seer(cop)
     eer = cop_to_eer(cop)
     delta = 1.1088**2 - 4.0 * 0.0182 * eer
     seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
@@ -319,7 +319,7 @@ class Standard
   #
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
-  def hspf_to_cop_heating_no_fan(hspf)
+  def hspf_to_cop_no_fan(hspf)
     cop = -0.0296 * hspf * hspf + 0.7134 * hspf
 
     return cop
@@ -330,7 +330,7 @@ class Standard
   #
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
-  def hspf_to_cop_heating(hspf)
+  def hspf_to_cop(hspf)
     cop = -0.0255 * hspf * hspf + 0.6239 * hspf
 
     return cop
