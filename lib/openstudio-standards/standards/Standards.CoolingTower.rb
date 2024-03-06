@@ -39,7 +39,6 @@ module CoolingTower
     # in the hvac standards data set.
     search_criteria = {}
     search_criteria['template'] = template
-    search_criteria['test_fluid'] = ''
 
     # By definition cooling towers in E+ are open.
     # Closed cooling towers are the fluidcooler objects.
