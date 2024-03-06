@@ -365,7 +365,7 @@ class Standard
   #
   # @param cop [Double] COP
   # @return [Double] Energy Efficiency Ratio (EER)
-  def cop_to_eer_no_fan(cop, capacity_w = nil)
+  def cop_no_fan_to_eer(cop, capacity_w = nil)
     if capacity_w.nil?
       # From Thornton et al. 2011
       # r is the ratio of supply fan power to total equipment power at the rating condition,
