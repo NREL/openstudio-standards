@@ -95,7 +95,6 @@ cbes_prototype/test_medium_office.rb
 cbes_prototype/test_retail_standalone.rb
 
 # NECB unit tests (in alphebetical order)
-necb/unit_tests/tests/test_btap_geometry_wizards.rb
 necb/unit_tests/tests/test_daylighting_sensor_control.rb
 necb/unit_tests/tests/test_dcv.rb
 necb/unit_tests/tests/test_ecm_hs14_cgshp_fancoils.rb

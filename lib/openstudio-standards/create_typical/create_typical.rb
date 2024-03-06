@@ -621,7 +621,8 @@ module OpenstudioStandards
                           end
 
           # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
-          sys_groups = standard.model_group_zones_by_type(model, OpenStudio.convert(20_000, 'ft^2', 'm^2').get)
+          min_area_m2 = OpenStudio.convert(20_000, 'ft^2', 'm^2').get
+          sys_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_occupancy_type(model, min_area_m2: min_area_m2)
 
           # For each group, infer the HVAC system type.
           sys_groups.each do |sys_group|
@@ -646,7 +647,7 @@ module OpenstudioStandards
                            end
 
             # group zones
-            story_zone_lists = standard.model_group_zones_by_story(model, sys_group['zones'])
+            story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
 
             # On each story, add the primary system to the primary zones
             # and add the secondary system to any zones that are different.
@@ -688,10 +689,11 @@ module OpenstudioStandards
         else
           # HVAC system_type specified
           # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
-          sys_groups = standard.model_group_zones_by_type(model, OpenStudio.convert(20_000, 'ft^2', 'm^2').get)
+          min_area_m2 = OpenStudio.convert(20_000, 'ft^2', 'm^2').get
+          sys_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_occupancy_type(model, min_area_m2: min_area_m2)
           sys_groups.each do |sys_group|
             # group zones
-            story_zone_groups = standard.model_group_zones_by_story(model, sys_group['zones'])
+            story_zone_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
 
             # Add the user specified HVAC system for each story.
             # Single-zone systems will get one per zone.
