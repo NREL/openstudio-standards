@@ -1219,7 +1219,7 @@ OS:ThermostatSetpoint:DualSetpoint,
 
 OS:Building,
   {161a51f0-9700-4aa1-8ba8-f2513d0eecae}, !- Handle
-  LEEPMidriseApartment,                   !- Name
+  6-storey Mid Rise,                      !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -1229,7 +1229,7 @@ OS:Building,
   6,                                      !- Standards Number of Stories
   6,                                      !- Standards Number of Above Ground Stories
   ,                                       !- Standards Template
-  LEEPMidriseApartment,                   !- Standards Building Type
+  ,                                       !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable
   ;                                       !- Nominal Floor to Ceiling Height {m}
@@ -5701,7 +5701,8 @@ OS:BuildingStory,
   3.8,                                    !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {7dff0839-5879-48f7-a056-ee0b56dd642a}; !- Group Rendering Name
+  {7dff0839-5879-48f7-a056-ee0b56dd642a}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
 
 OS:Space,
   {322f2ef7-c7c4-42b1-a159-200fac575d42}, !- Handle
@@ -7302,8 +7303,8 @@ OS:Surface,
   ,                                       !- Number of Vertices
   -4.36693699224413, 11.3369177634203, 3.8, !- X,Y,Z Vertex 1 {m}
   -4.36693699224413, 11.3369177634203, 0, !- X,Y,Z Vertex 2 {m}
-  -4.36693699224414, 1.79282307877131e-30, 0, !- X,Y,Z Vertex 3 {m}
-  -4.36693699224414, 1.79282307877131e-30, 3.8; !- X,Y,Z Vertex 4 {m}
+  -4.36693699224414, 2.39043077169508e-30, 0, !- X,Y,Z Vertex 3 {m}
+  -4.36693699224414, 2.39043077169508e-30, 3.8; !- X,Y,Z Vertex 4 {m}
 
 OS:Surface,
   {e239040e-ea0a-4e6c-b9b3-e737117031ab}, !- Handle
@@ -7404,7 +7405,8 @@ OS:BuildingStory,
   3,                                      !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {439980ad-3e44-402d-9baa-d4e123c5e3ec}; !- Group Rendering Name
+  {439980ad-3e44-402d-9baa-d4e123c5e3ec}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
 
 OS:Space,
   {c238d933-c66f-41ee-b3ab-df549f5dffed}, !- Handle
@@ -7417,7 +7419,13 @@ OS:Space,
   23.6685099738069,                       !- Y Origin {m}
   6.8,                                    !- Z Origin {m}
   {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
-  {56ff3f1c-be7f-4d29-82ba-f3ecfffd6202}; !- Thermal Zone Name
+  {56ff3f1c-be7f-4d29-82ba-f3ecfffd6202}, !- Thermal Zone Name
+  ,                                       !- Part of Total Floor Area
+  ,                                       !- Design Specification Outdoor Air Object Name
+  ,                                       !- Building Unit Name
+  ,                                       !- Volume {m3}
+  ,                                       !- Ceiling Height {m}
+  ;                                       !- Floor Area {m2}
 
 OS:Surface,
   {42bdb197-6235-4b4c-b0b5-375a48bc72d3}, !- Handle
@@ -7680,7 +7688,7 @@ OS:Space,
   41.4934779802782,                       !- X Origin {m}
   23.6685099738069,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {8c034607-d7af-43a3-bdc3-cd885eef2b9b}; !- Thermal Zone Name
 
 OS:Surface,
@@ -7812,7 +7820,7 @@ OS:Space,
   42.8053863570282,                       !- X Origin {m}
   23.6685099738069,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {64f9a50a-2e34-44a9-a993-8256cbf83bb3}; !- Thermal Zone Name
 
 OS:Surface,
@@ -8099,7 +8107,7 @@ OS:Space,
   55.4907410884902,                       !- X Origin {m}
   30.9330171515816,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {625d9ef6-7f23-4add-a71f-3fb76c6a1186}; !- Thermal Zone Name
 
 OS:Surface,
@@ -8622,7 +8630,7 @@ OS:Space,
   41.4934779802782,                       !- X Origin {m}
   29.6175885318952,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {e84694b7-9804-4e02-8c86-e1f7b86f4548}; !- Thermal Zone Name
 
 OS:Surface,
@@ -8754,7 +8762,7 @@ OS:Space,
   48.3986899928092,                       !- X Origin {m}
   35.9508522838568,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {301f83dd-8274-408d-8863-bf6559405710}; !- Thermal Zone Name
 
 OS:Surface,
@@ -9281,7 +9289,7 @@ OS:Space,
   48.3986899928092,                       !- X Origin {m}
   34.8070696462143,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {b1dfbfd1-6c6d-46b2-a717-dc87ebb52dcf}; !- Thermal Zone Name
 
 OS:Surface,
@@ -9434,7 +9442,7 @@ OS:Space,
   48.3986899928092,                       !- X Origin {m}
   30.9330171515816,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {d6f7abe7-b333-4f11-aa99-d03b1b14bc5b}; !- Thermal Zone Name
 
 OS:Surface,
@@ -9698,7 +9706,7 @@ OS:Space,
   41.4934779802782,                       !- X Origin {m}
   35.9508522838568,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {c14c3cd4-ce55-4581-b952-9db0cc88287a}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -10002,7 +10010,7 @@ OS:Space,
   48.3986899928092,                       !- X Origin {m}
   45.0998142334088,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {2ab02fb0-0e71-41c7-912d-ce6907c9d1ce}; !- Thermal Zone Name
 
 OS:Surface,
@@ -10455,7 +10463,7 @@ OS:Space,
   37.1265409880332,                       !- X Origin {m}
   35.9508522838568,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {c83e90ac-f674-4670-86ec-79fcf5beba88}; !- Thermal Zone Name
 
 OS:Surface,
@@ -10587,7 +10595,7 @@ OS:Space,
   41.4934779802782,                       !- X Origin {m}
   35.9508522838568,                       !- Y Origin {m}
   12.8,                                   !- Z Origin {m}
-  {a8d30073-8e3b-49c4-a8d0-ce06ac5aa68f}, !- Building Story Name
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Building Story Name
   {386c1661-92c1-4156-b3cb-5b1cd6372b96}; !- Thermal Zone Name
 
 OS:Surface,
@@ -17157,4 +17165,21 @@ OS:RunPeriod,
 OS:StandardsInformation:Material,
   {15d76d7d-91e5-49fc-8d8f-1421f61defce}, !- Handle
   {57a656b0-06ef-4771-ad1b-2a27d4d72bbc}; !- Material Name
+
+OS:BuildingStory,
+  {354f0676-773b-401f-80d8-3a67b30b6891}, !- Handle
+  Building Story 3,                       !- Name
+  ,                                       !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {ef4c6ad6-c566-440b-a6bd-4c5d84c6568d}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
+
+OS:Rendering:Color,
+  {ef4c6ad6-c566-440b-a6bd-4c5d84c6568d}, !- Handle
+  Rendering Color 93,                     !- Name
+  255,                                    !- Rendering Red Value
+  224,                                    !- Rendering Green Value
+  255;                                    !- Rendering Blue Value
 
