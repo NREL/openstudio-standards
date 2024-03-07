@@ -41,7 +41,6 @@ class Standard
     # in the hvac standards data set.
     search_criteria = {}
     search_criteria['template'] = template
-    search_criteria['test_fluid'] = ''
 
     # Closed cooling towers are fluidcooler objects.
     search_criteria['equipment_type'] = equipment_type
