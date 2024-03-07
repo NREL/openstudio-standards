@@ -2,7 +2,6 @@
   "VarType": "Vintage",
   "NECB2011": {
     "VarType": "FuelType",
-    "Reference": "NECB 2011 p3 8.4.4.22 (maybe)",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {

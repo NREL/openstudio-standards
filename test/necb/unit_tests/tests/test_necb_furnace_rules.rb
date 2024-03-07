@@ -130,6 +130,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     return results
   end
 
+=begin
   # Test to validate the furnace thermal efficiency generated against expected values stored in the file:
   # 'compliance_furnace_efficiencies_expected_results.csv
   def test_furnace_efficiency
@@ -311,75 +312,6 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     end
   end
 
-  # Test to validate the furnace part load performance curve
-  def test_NECB2011_furnace_plf_vs_plr_curve
-
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    template = 'NECB2011'
-    standard = get_standard(template)
-    save_intermediate_models = false
-
-    # Generate the osm files for all relevant cases to generate the test data for system 3.
-    boiler_fueltype = 'NaturalGas'
-    heating_coil_type = 'Gas'
-    baseboard_type = 'Hot Water'
-    # stage_types = ['single', 'multi']
-    stage_types = ['single'] # Multi stage failing
-    stage_types.each do |stage_type|
-      furnace_res_file_output_text = "Name,Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
-      name = "#{template}_sys3_Furnace-#{heating_coil_type}_Stages-#{stage_type}_Baseboard-#{baseboard_type}"
-      name.gsub!(/\s+/, "-")
-      puts "***************#{name}***************\n"
-
-      # Load model and set climate file.
-      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-
-      hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
-      if stage_type == 'single'
-        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                                    zones: model.getThermalZones,
-                                                                                                    heating_coil_type: heating_coil_type,
-                                                                                                    baseboard_type: baseboard_type,
-                                                                                                    hw_loop: hw_loop,
-                                                                                                    new_auto_zoner: false)
-      elsif stage_type == 'multi'
-        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
-                                                                                                   zones: model.getThermalZones,
-                                                                                                   heating_coil_type: heating_coil_type,
-                                                                                                   baseboard_type: baseboard_type,
-                                                                                                   hw_loop: hw_loop,
-                                                                                                   new_auto_zoner: false)
-      end
-
-      # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-
-      if stage_type == 'single'
-        furnace_curve = model.getCoilHeatingGass[0].partLoadFractionCorrelationCurve.get.to_CurveCubic.get
-      elsif stage_type == 'multi'
-        furnace_curve = model.getCoilHeatingGasMultiStages[0].partLoadFractionCorrelationCurve.get.to_CurveCubic.get
-      end
-      furnace_res_file_output_text += "Furnace-EFFFPLR-NECB2011,cubic,#{furnace_curve.coefficient1Constant},#{furnace_curve.coefficient2x},#{furnace_curve.coefficient3xPOW2}," +
-        "#{furnace_curve.coefficient4xPOW3},#{furnace_curve.minimumValueofx},#{furnace_curve.maximumValueofx}"
-
-      # Write test results file.
-      test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_furnace_#{stage_type}_plfvsplr_curve_test_results.csv")
-      File.open(test_result_file, 'w') { |f| f.write(furnace_res_file_output_text) }
-
-      # Test that the values are correct by doing a file compare.
-      expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_furnace_plfvsplr_curve_expected_results.csv")
-
-      # Check if test results match expected.
-      msg = "Furnace plf vs plr curve coeffs test results do not match what is expected in test"
-      file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
-    end
-  end
-
   # Test to validate number of stages for multi furnaces
   # *** Method re-named so that test not run as multi stage fails ***
   def no_test_NECB2011_furnace_num_stages
@@ -429,5 +361,6 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       assert(actual_num_stages == num_stages_needed[cap], "The actual number of stages for capacity #{cap} W is not #{num_stages_needed[cap]}")
     end
   end
+=end
 
 end
