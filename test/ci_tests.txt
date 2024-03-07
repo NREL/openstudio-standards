@@ -14,9 +14,6 @@ modules/infiltration/test_infiltration.rb
 modules/schedules/test_schedules_create.rb
 modules/schedules/test_schedules_information.rb
 modules/schedules/test_schedules_modify.rb
-modules/sql_file/test_sql_file.rb
-modules/sql_file/test_unmet_hours.rb
-modules/sql_file/test_energy_use.rb
 modules/weather/test_weather_information.rb
 modules/weather/test_weather_modify.rb
 modules/weather/test_weather_stat_file.rb
