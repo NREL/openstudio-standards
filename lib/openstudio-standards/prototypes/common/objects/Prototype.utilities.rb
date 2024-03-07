@@ -369,7 +369,7 @@ class Standard
 
   # Convert from EER to COP
   #
-  # @param cop [Double] Energy Efficiency Ratio (EER)
+  # @param eer [Double] Energy Efficiency Ratio (EER)
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop(eer)
     return eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get

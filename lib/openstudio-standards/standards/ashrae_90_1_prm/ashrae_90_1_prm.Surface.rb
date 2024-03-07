@@ -11,11 +11,11 @@ class ASHRAE901PRM < Standard
       surface.subSurfaces.each do |ss|
         next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
 
-        sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
+        OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
       end
     elsif reduction > 1.0
       # case increase the window
-      surface_wwr = surface_get_wwr(surface)
+      surface_wwr = OpenstudioStandards::Geometry.surface_get_window_to_wall_ratio(surface)
       if surface_wwr == 0.0
         # In this case, we are adding fenestration
         wwr_adjusted = reduction - 1.0

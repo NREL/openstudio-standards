@@ -287,7 +287,8 @@ class Standard
     space = surface.space.get
 
     # Find this space's exposed floor area and perimeter. NOTE: this assumes only only floor per space.
-    perimeter, area = model_get_f_floor_geometry(space)
+    perimeter = OpenstudioStandards::Geometry.space_get_f_floor_perimeter(space)
+    area = OpenstudioStandards::Geometry.space_get_f_floor_area(space)
 
     if area == 0
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Area for #{surface.name} was calculated to be 0 m2, slab f-factor cannot be set.")
@@ -343,7 +344,7 @@ class Standard
     space = surface.space.get
 
     # Get height of the first below grade wall in this space.
-    below_grade_wall_height = model_get_space_below_grade_wall_height(space)
+    below_grade_wall_height = OpenstudioStandards::Geometry.space_get_below_grade_wall_height(space)
 
     if below_grade_wall_height == 0
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Below grade wall height for #{surface.name} was calculated to be 0 m2, below grade wall c-factor cannot be set.")
@@ -684,7 +685,7 @@ class Standard
     # report change as Info
     info = ''
     outdoor_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(model.getSurfaces, 'Outdoors')
-    outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
+    outdoor_subsurfaces = outdoor_surfaces.flat_map(&:subSurfaces)
     ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(model.getSurfaces, 'Ground')
     ext_windows = BTAP::Geometry::Surfaces.filter_subsurfaces_by_types(outdoor_subsurfaces, ['FixedWindow', 'OperableWindow'])
     ext_skylights = BTAP::Geometry::Surfaces.filter_subsurfaces_by_types(outdoor_subsurfaces, ['Skylight', 'TubularDaylightDiffuser', 'TubularDaylightDome'])
