@@ -1522,7 +1522,7 @@ class ASHRAE901PRM < Standard
 
   # A function to load water use equipment from user data csv files
   # The file name is userdata_wateruse_equipment.csv
-  # @param [OpenStudio::Model::Model] model
+  # @param model [OpenStudio::Model::Model] OpenStudio model
   # @param [String] SWH building type
   def handle_wateruse_equipment_user_input_data(model, default_swh_building_type)
     user_data_wateruse_equipment = get_userdata(UserDataFiles::WATERUSE_EQUIPMENT)
