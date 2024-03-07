@@ -789,42 +789,6 @@ class Standard
     return is_mixed
   end
 
-  # Determine the net area of the zone
-  # Loops on each space, and checks if part of total floor area or not
-  # If not part of total floor area, it is not added to the zone floor area
-  # Will multiply it by the ZONE MULTIPLIER as well!
-  #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Double] the zone net floor area in m^2 (with multiplier taken into account)
-  def thermal_zone_floor_area_with_zone_multipliers(thermal_zone)
-    area_m2 = 0
-    thermal_zone.spaces.each do |space|
-      # If space is not part of floor area, we don't add it
-      next unless space.partofTotalFloorArea
-
-      area_m2 += space.floorArea
-    end
-
-    return area_m2 * thermal_zone.multiplier
-  end
-
-  # Determine the net area of the zone
-  # Loops on each space, and checks if part of total floor area or not
-  # If not part of total floor area, it is not added to the zone floor area
-  #
-  # @return [Double] the zone net floor area in m^2
-  def thermal_zone_floor_area(thermal_zone)
-    area_m2 = 0
-    thermal_zone.spaces.each do |space|
-      # If space is not part of floor area, we don't add it
-      next unless space.partofTotalFloorArea
-
-      area_m2 += space.floorArea
-    end
-
-    return area_m2
-  end
-
   # Infers the baseline system type based on the equipment serving the zone and their heating/cooling fuels.
   # Only does a high-level inference; does not look for the presence/absence of required controls, etc.
   #
@@ -2006,30 +1970,6 @@ class Standard
     return exhaust_fans
   end
 
-  # returns adjacent zones that share a wall with the zone
-  #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @param same_floor [Boolean] only valid option for now is true
-  # @return [Array<OpenStudio::Model::ThermalZone>] array of adjacent thermal zones
-  def thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone, same_floor = true)
-    adjacent_zones = []
-
-    thermal_zone.spaces.each do |space|
-      adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space)
-      adj_spaces.each do |k, v|
-        # skip if space is in current thermal zone.
-        next unless space.thermalZone.is_initialized
-        next if k.thermalZone.get == thermal_zone
-
-        adjacent_zones << k.thermalZone.get
-      end
-    end
-
-    adjacent_zones = adjacent_zones.uniq
-
-    return adjacent_zones
-  end
-
   # returns true if DCV is required for exhaust fan for specified tempate
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
@@ -2061,33 +2001,5 @@ class Standard
   # Specify supply to room delta for laboratory spaces based on 90.1 Appendix G Exception to G3.1.2.8.1 (implementation in PRM subclass)
   def thermal_zone_prm_lab_delta_t(thermal_zone)
     return nil
-  end
-
-  # Determine the number of unmet load hours during occupancy for a thermal zone
-  #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
-  # @param umlh_type [String] Type of unmet load hours, either 'Cooling' or 'Heating'
-  def thermal_zone_get_unmet_load_hours(thermal_zone, umlh_type)
-    umlh = OpenStudio::OptionalDouble.new
-    sql = thermal_zone.model.sqlFile
-    if sql.is_initialized
-      sql = sql.get
-      query = "SELECT Value
-              FROM tabulardatawithstrings
-              WHERE ReportName='SystemSummary'
-              AND ReportForString='Entire Facility'
-              AND TableName='Time Setpoint Not Met'
-              AND ColumnName='During Occupied #{umlh_type.capitalize}'
-              AND RowName='#{thermal_zone.name.to_s.upcase}'
-              AND Units='hr'"
-      val = sql.execAndReturnFirstDouble(query)
-      if val.is_initialized
-        umlh = OpenStudio::OptionalDouble.new(val.get)
-      end
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'Model has no sql file containing results, cannot lookup data.')
-    end
-
-    return umlh.to_f
   end
 end

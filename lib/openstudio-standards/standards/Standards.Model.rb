@@ -105,7 +105,7 @@ class Standard
     if unmet_load_hours_check
       # Run user model; need annual simulation to get unmet load hours
       if model_run_simulation_and_log_errors(proposed_model, run_dir = "#{sizing_run_dir}/PROP")
-        umlh = model_get_unmet_load_hours(proposed_model)
+        umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
         if umlh > 300
           OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
                              "Proposed model unmet load hours (#{umlh}) exceed 300. Baseline model(s) won't be created.")
@@ -211,7 +211,7 @@ class Standard
       model_apply_prm_baseline_skylight_to_roof_ratio(model)
 
       # Assign building stories to spaces in the building where stories are not yet assigned.
-      model_assign_spaces_to_stories(model)
+      OpenstudioStandards::Geometry.model_assign_spaces_to_building_stories(model)
 
       # Modify the internal loads in each space type, keeping user-defined schedules.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Changing Lighting Loads ***')
@@ -527,10 +527,11 @@ class Standard
             # the PRM-RM; Note that the PRM-RM only suggest to increase
             # air zone air flow, but the zone sizing factor in EnergyPlus
             # increase both air flow and load.
-            if model_get_unmet_load_hours(model) > 300
+            umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
+            if umlh > 300
               model.getThermalZones.each do |thermal_zone|
                 # Cooling adjustments
-                clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
+                clg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_cooling_hours(thermal_zone)
                 if clg_umlh > 50
                   sizing_factor = 1.0
                   if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
@@ -544,7 +545,7 @@ class Standard
 
                 # Heating adjustments
                 # Reset sizing factor
-                htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
+                htg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_heating_hours(thermal_zone)
                 if htg_umlh > 50
                   sizing_factor = 1.0
                   if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
@@ -721,57 +722,6 @@ class Standard
   # @return [Boolean] Returns true if a sizing run is required
   def model_create_prm_baseline_building_requires_proposed_model_sizing_run(model)
     return false
-  end
-
-  # Determine the residential and nonresidential floor areas based on the space type properties for each space.
-  # For spaces with no space type, assume nonresidential.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Hash] keys are 'residential' and 'nonresidential', units are m^2
-  def model_residential_and_nonresidential_floor_areas(model)
-    res_area_m2 = 0
-    nonres_area_m2 = 0
-    model.getSpaces.sort.each do |space|
-      if thermal_zone_residential?(space)
-        res_area_m2 += space.floorArea
-      else
-        nonres_area_m2 += space.floorArea
-      end
-    end
-
-    return { 'residential' => res_area_m2, 'nonresidential' => nonres_area_m2 }
-  end
-
-  # Determine the number of stories spanned by the supplied zones.
-  # If all zones on one of the stories have an identical multiplier,
-  # assume that the multiplier is a floor multiplier and increase the number of stories accordingly.
-  # Stories do not have to be contiguous.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
-  # @return [Integer] the number of stories spanned
-  def model_num_stories_spanned(model, zones)
-    # Get the story object for all zones
-    stories = []
-    zones.each do |zone|
-      zone.spaces.each do |space|
-        story = space.buildingStory
-        next if story.empty?
-
-        stories << story.get
-      end
-    end
-
-    # Reduce down to the unique set of stories
-    stories = stories.uniq
-
-    # Tally up stories including multipliers
-    num_stories = 0
-    stories.each do |story|
-      num_stories += building_story_floor_multiplier(story)
-    end
-
-    return num_stories
   end
 
   # Add design day schedule objects for space loads,
@@ -1099,8 +1049,7 @@ class Standard
     # Determine the number of stories spanned by each group and report out info.
     final_groups.each do |group|
       # Determine the number of stories this group spans
-      num_stories = model_num_stories_spanned(model, group['zones'])
-      group['stories'] = num_stories
+      group['stories'] = OpenstudioStandards::Geometry.thermal_zones_get_number_of_stories_spanned(group['zones'])
       # Report out the final grouping
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['occ']}, fuel = #{group['fuel']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
       group['zones'].sort.each_slice(5) do |zone_list|
@@ -1560,7 +1509,7 @@ class Standard
         end
 
         # Group zones by story
-        story_zone_lists = model_group_zones_by_story(model, zones)
+        story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, zones)
 
         # For the array of zones on each story,
         # separate the primary zones from the secondary zones.
@@ -1576,7 +1525,8 @@ class Standard
           # Add a PVAV with Reheat for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(space.buildingStory.get)
+            stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
           system_name = "#{story_name} PVAV_Reheat (Sys5)"
@@ -1615,7 +1565,7 @@ class Standard
         end
 
         # Group zones by story
-        story_zone_lists = model_group_zones_by_story(model, zones)
+        story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, zones)
 
         # For the array of zones on each story,
         # separate the primary zones from the secondary zones.
@@ -1631,7 +1581,8 @@ class Standard
           # Add an VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(space.buildingStory.get)
+            stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
           system_name = "#{story_name} PVAV_PFP_Boxes (Sys6)"
@@ -1693,12 +1644,12 @@ class Standard
         end
 
         # Group zones by story
-        story_zone_lists = model_group_zones_by_story(model, zones)
+        story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, zones)
 
         # For the array of zones on each story, separate the primary zones from the secondary zones.
         # Add the baseline system type to the primary zones and add the suplemental system type to the secondary zones.
         story_zone_lists.each do |story_group|
-          # The model_group_zones_by_story(model)  NO LONGER returns empty lists when a given floor doesn't have any of the zones
+          # The OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model)  NO LONGER returns empty lists when a given floor doesn't have any of the zones
           # So NO need to filter it out otherwise you get an error undefined method `spaces' for nil:NilClass
           # next if zones.empty?
 
@@ -1711,7 +1662,8 @@ class Standard
           # Add a VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(space.buildingStory.get)
+            stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
           system_name = "#{story_name} VAV_Reheat (Sys7)"
@@ -1770,7 +1722,7 @@ class Standard
         end
 
         # Group zones by story
-        story_zone_lists = model_group_zones_by_story(model, zones)
+        story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, zones)
 
         # For the array of zones on each story,
         # separate the primary zones from the secondary zones.
@@ -1786,7 +1738,8 @@ class Standard
           # Add an VAV for the primary zones
           stories = []
           story_group[0].spaces.each do |space|
-            stories << [space.buildingStory.get.name.get, building_story_minimum_z_value(space.buildingStory.get)]
+            min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(space.buildingStory.get)
+            stories << [space.buildingStory.get.name.get, min_z]
           end
           story_name = stories.min_by { |nm, z| z }[0]
           system_name = "#{story_name} VAV_PFP_Boxes (Sys8)"
@@ -1954,7 +1907,7 @@ class Standard
 
     # Assign building stories to spaces in the building
     # where stories are not yet assigned.
-    model_assign_spaces_to_stories(model)
+    OpenstudioStandards::Geometry.model_assign_spaces_to_building_stories(model)
 
     # Determine the baseline HVAC system type for each of
     # the groups of zones and add that system type.
@@ -1982,7 +1935,7 @@ class Standard
           end
 
           # Group zones by story
-          story_zone_lists = model_group_zones_by_story(model, sys_group['zones'])
+          story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
           # For the array of zones on each story,
           # separate the primary zones from the secondary zones.
           # Add the baseline system type to the primary zones
@@ -2248,93 +2201,6 @@ class Standard
   def model_create_multizone_fan_schedule(model, zone_op_hrs, pri_zones, system_name)
     # Not applicable if not stable baseline
     return
-  end
-
-  # Group an array of zones into multiple arrays, one for each story in the building.
-  # Zones with spaces on multiple stories will be assigned to only one of the stories.
-  # Removes empty array (when the story doesn't contain any of the zones)
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param zones [Array<OpenStudio::Model::ThermalZone>] an array of zones
-  # @return [Array<Array<OpenStudio::Model::ThermalZone>>] array of arrays of zones
-  def model_group_zones_by_story(model, zones)
-    story_zone_lists = []
-    zones_already_assigned = []
-    model.getBuildingStorys.sort.each do |story|
-      # Get all the spaces on this story
-      spaces = story.spaces
-
-      # Get all the thermal zones that serve these spaces
-      all_zones_on_story = []
-      spaces.each do |space|
-        if space.thermalZone.is_initialized
-          all_zones_on_story << space.thermalZone.get
-        else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space #{space.name} has no thermal zone, it is not included in the simulation.")
-        end
-      end
-
-      # Find zones in the list that are on this story
-      zones_on_story = []
-      zones.each do |zone|
-        if all_zones_on_story.include?(zone)
-          # Skip zones that were already assigned to a story.
-          # This can happen if a zone has multiple spaces on multiple stories.
-          # Stairwells and atriums are typical scenarios.
-          next if zones_already_assigned.include?(zone)
-
-          zones_on_story << zone
-          zones_already_assigned << zone
-        end
-      end
-
-      unless zones_on_story.empty?
-        story_zone_lists << zones_on_story
-      end
-    end
-
-    return story_zone_lists
-  end
-
-  # Assign each space in the model to a building story based on common z (height) values.
-  # If no story object is found for a particular height, create a new one and assign it to the space.
-  # Does not assign a story to plenum spaces.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] returns true if successful, false if not
-  def model_assign_spaces_to_stories(model)
-    # Make hash of spaces and minz values
-    sorted_spaces = {}
-    model.getSpaces.sort.each do |space|
-      # Skip plenum spaces
-      next if space_plenum?(space)
-
-      # loop through space surfaces to find min z value
-      z_points = []
-      space.surfaces.each do |surface|
-        surface.vertices.each do |vertex|
-          z_points << vertex.z
-        end
-      end
-      minz = z_points.min + space.zOrigin
-      sorted_spaces[space] = minz
-    end
-
-    # Pre-sort spaces
-    sorted_spaces = sorted_spaces.sort_by { |a| a[1] }
-
-    # Take the sorted list and assign/make stories
-    sorted_spaces.each do |space|
-      space_obj = space[0]
-      space_minz = space[1]
-      if space_obj.buildingStory.empty?
-        story = model_get_story_for_nominal_z_coordinate(model, space_minz)
-        space_obj.setBuildingStory(story)
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Space #{space[0].name} was not assigned to a story by the user.  It has been assigned to #{story.name}.")
-      end
-    end
-
-    return true
   end
 
   # Applies the multi-zone VAV outdoor air sizing requirements to all applicable air loops in the model.
@@ -4764,7 +4630,7 @@ class Standard
             # surface with fenestration to its maximum but adjusted by door areas when need to add windows in surfaces no fenestration
             # turn negative to positive to get the correct adjustment factor.
             red = -red
-            surface_wwr = surface_get_wwr(surface)
+            surface_wwr = OpenstudioStandards::Geometry.surface_get_window_to_wall_ratio(surface)
             residual_fene += (0.9 - red * surface_wwr) * surface.grossArea
           end
           surface_adjust_fenestration_in_a_surface(surface, red, model)
@@ -4908,7 +4774,7 @@ class Standard
 
           # Reduce the size of the skylight
           red = 1.0 - mult
-          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
     end
@@ -5052,30 +4918,6 @@ class Standard
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.Model', "Set sizing factors to #{htg} for heating and #{clg} for cooling.")
     return true
-  end
-
-  # Helper method to get the story object that corresponds to a specific minimum z value.
-  # Makes a new story if none found at this height.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param minz [Double] the z value (height) of the desired story, in meters.
-  # @param tolerance [Double] tolerance for comparison, in m. Default is 0.3 m ~1ft
-  # @return [OpenStudio::Model::BuildingStory] the story
-  def model_get_story_for_nominal_z_coordinate(model, minz, tolerance = 0.3)
-    model.getBuildingStorys.sort.each do |story|
-      z = building_story_minimum_z_value(story)
-
-      if (minz - z).abs < tolerance
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "The story with a min z value of #{minz.round(2)} is #{story.name}.")
-        return story
-      end
-    end
-
-    story = OpenStudio::Model::BuildingStory.new(model)
-    story.setNominalZCoordinate(minz)
-    OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "No story with a min z value of #{minz.round(2)} m +/- #{tolerance} m was found, so a new story called #{story.name} was created.")
-
-    return story
   end
 
   # Returns average daily hot water consumption by building type
@@ -5605,7 +5447,7 @@ class Standard
         surface.subSurfaces.sort.each do |ss|
           # Reduce the size of the window
           red = 1.0 - mult
-          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
     end
@@ -6819,7 +6661,7 @@ class Standard
     model.getSpaces.sort.each do |space|
       story = space.buildingStory.get
       lowest_story = story if lowest_story.nil?
-      space_min_z = building_story_minimum_z_value(story)
+      space_min_z = OpenstudioStandards::Geometry.building_story_get_minimum_height(story)
       if space_min_z < min_z_story
         min_z_story = space_min_z
         lowest_story = story

@@ -23,21 +23,6 @@ class Standard
     return model
   end
 
-  # load a sql file, exiting and erroring if a problem is found
-  #
-  # @param sql_path_string [String] file path to sql file
-  # @return [OpenStudio::SqlFile] sql file associated with the model, boolean false if not found
-  def safe_load_sql(sql_path_string)
-    sql_path = OpenStudio::Path.new(sql_path_string)
-    if OpenStudio.exists(sql_path)
-      sql = OpenStudio::SqlFile.new(sql_path)
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "#{sql_path} couldn't be found")
-      return false
-    end
-    return sql
-  end
-
   # Remove all resource objects in the model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -384,7 +369,7 @@ class Standard
 
   # Convert from EER to COP
   #
-  # @param cop [Double] Energy Efficiency Ratio (EER)
+  # @param eer [Double] Energy Efficiency Ratio (EER)
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop(eer)
     return eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get
