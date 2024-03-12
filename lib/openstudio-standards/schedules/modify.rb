@@ -136,12 +136,12 @@ module OpenstudioStandards
       # negative infinity
       lower_bound = -upper_bound
       if schedule_ruleset.scheduleTypeLimits.is_initialized
-        scheduleTypeLimits = schedule_ruleset.scheduleTypeLimits.get
-        if scheduleTypeLimits.lowerLimitValue.is_initialized
-          lower_bound = scheduleTypeLimits.lowerLimitValue.get
+        schedule_type_limits = schedule_ruleset.scheduleTypeLimits.get
+        if schedule_type_limits.lowerLimitValue.is_initialized
+          lower_bound = schedule_type_limits.lowerLimitValue.get
         end
-        if scheduleTypeLimits.upperLimitValue.is_initialized
-          upper_bound = scheduleTypeLimits.upperLimitValue.get
+        if schedule_type_limits.upperLimitValue.is_initialized
+          upper_bound = schedule_type_limits.upperLimitValue.get
         end
       end
       default_profile = schedule_ruleset.to_ScheduleRuleset.get.defaultDaySchedule

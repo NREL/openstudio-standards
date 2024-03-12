@@ -68,7 +68,7 @@ class TestSchedulesParametric < Minitest::Test
     # puts OpenStudio::Model.getRecursiveChildren(hoo_sch)
 
     hours_of_operation_schedule = @sch.model_infer_hours_of_operation_building(model)
-    puts OpenStudio::Model.getRecursiveChildren(hours_of_operation_schedule)
+    # puts OpenStudio::Model.getRecursiveChildren(hours_of_operation_schedule)
 
     hoo_default_vals = @sch.schedule_day_get_hourly_values(hours_of_operation_schedule.defaultDaySchedule)
     p hoo_default_vals

@@ -6,7 +6,7 @@ class TestSpace < Minitest::Test
     @sch = OpenstudioStandards::Schedules
   end
 
-  def test_space_plenum
+  def test_space_plenum?
     model = OpenStudio::Model::Model.new
     space = OpenStudio::Model::Space.new(model)
     space.setName('some space')
@@ -231,8 +231,5 @@ class TestSpace < Minitest::Test
     assert_equal(summer_wkdy_hrly_vals.rindex(1.0), 17)
 
     assert_equal(@sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_annual), 2610)
-
   end
-
-
 end

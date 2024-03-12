@@ -365,6 +365,7 @@ module OpenstudioStandards
           space.spaceType.get.people.each do |people|
             num_ppl_sch = people.numberofPeopleSchedule
             next if num_ppl_sch.empty?
+
             if num_ppl_sch.get.to_ScheduleRuleset.empty? # skip non-ruleset schedules
               OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "People schedule #{num_ppl_sch.get.name} is not a Ruleset Schedule, it will not contribute to hours of operation")
             else
@@ -379,6 +380,7 @@ module OpenstudioStandards
         space.people.each do |people|
           num_ppl_sch = people.numberofPeopleSchedule
           next if num_ppl_sch.empty?
+
           if num_ppl_sch.get.to_ScheduleRuleset.empty? # skip non-ruleset schedules
             OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "People schedule #{num_ppl_sch.get.name} is not a Ruleset Schedule, it will not contribute to hours of operation")
           else
@@ -687,7 +689,6 @@ module OpenstudioStandards
 
       return parametric_inputs
     end
-
 
     # @!endgroup SpaceLoadInstance
   end
