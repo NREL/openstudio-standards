@@ -88,6 +88,10 @@ module OpenstudioStandards
         if values.first == 0 && values.last == 0
           wrap_dur_left_hr = 24.0 - latest_time.totalHours
         end
+
+        # calculate time at first start
+        first_start_time = times[values.index(0)].totalHours
+
         occ_gap_hash = {}
         prev_time = 0
         prev_val = nil
@@ -97,7 +101,7 @@ module OpenstudioStandards
 
           if values[i] == 0 # only store vacant segments
             if time.totalHours == 24
-              occ_gap_hash[prev_time] = time.totalHours - prev_time + wrap_dur_left_hr
+              occ_gap_hash[prev_time] = wrap_dur_left_hr + first_start_time
             else
               occ_gap_hash[prev_time] = time.totalHours - prev_time
             end
@@ -218,7 +222,6 @@ module OpenstudioStandards
         air_loop_spaces = []
         air_loop.thermalZones.sort.each do |zone|
           air_loop_spaces += zone.spaces
-          # air_loop_spaces += zone.spaces
         end
         hours_of_operation = Space.spaces_hours_of_operation(air_loop_spaces)
         air_loop_hash[air_loop] = hours_of_operation
@@ -488,20 +491,11 @@ module OpenstudioStandards
       daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(sch.defaultDaySchedule)
 
       # get indices for current schedule
-      indices_vector = schedule_ruleset_get_annual_rule_indices(sch)
-
-      # align schedule_rules_with_hours_of_operation
-      # get operation schedule from hours_of_operation hash
-      # operation_schedule = hours_of_operation[:schedule]
-      # op_sch_indices = schedule_ruleset_get_annual_rule_indices(operation_schedule)
-      # operation_schedule.scheduleRules.each do |op_rule|
-      #   sch.scheduleRules.each do |sch_rule|
-      #     if op_rule
-      #     end
-      #   end
-      # end
-
-      # puts "#{__method__}>>>> hours_of_operation: #{hours_of_operation}"
+      year_description = sch.model.yearDescription.get
+      year = year_description.assumedYear
+      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+      indices_vector = sch.getActiveRuleIndices(year_start_date, year_end_date)
 
       # step through profiles and add additional properties to describe profiles
       schedule_days.each_with_index do |(schedule_day, current_rule_index), i|
@@ -515,32 +509,21 @@ module OpenstudioStandards
 
 
         # find days_used in hoo profiles that contains all days used from this profile
-        # hoo_profile_match_hash = {}
-        # best_fit_check = {}
-
+        hoo_profile_match_hash = {}
+        best_fit_check = {}
 
         days_for_rule_not_in_hoo_profile = []
         hours_of_operation.each do |profile_index, value|
-          next if profile_index == :schedule
           days_for_rule_not_in_hoo_profile = days_used - value[:days_used]
           # puts "in loop: #{profile_index} - #{days_for_rule_not_in_hoo_profile}"
-          # hoo_profile_match_hash[profile_index] = days_for_rule_not_in_hoo_profile
-          # best_fit_check[profile_index] = days_for_rule_not_in_hoo_profile.size
+          hoo_profile_match_hash[profile_index] = days_for_rule_not_in_hoo_profile
+          best_fit_check[profile_index] = days_for_rule_not_in_hoo_profile.size
           if days_for_rule_not_in_hoo_profile.empty?
             hoo_target_index = profile_index
           end
         end
         # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have ot split rule and alter model
         if hoo_target_index.nil?
-          hours_of_operation.each do |profile_index, value|
-            next if profile_index == :schedule
-            if days_used.to_set.subset?(value[:days_used].to_set)
-              puts "#{schedule_day.name.get} is subset of hoo profile #{profile_index}"
-            elsif days_used.to_set.superset?(value[:days_used].to_set)
-              puts "#{schedule_day.name.get} is superset of hoo profile #{profile_index}"
-            else puts "#{schedule_day.name.get} neither subset nor superset"
-            end
-          end
 
           hoo_start = nil
           hoo_end = nil
@@ -809,95 +792,6 @@ module OpenstudioStandards
 
     # @!group Parametric:ScheduleRuleset
 
-    # Determine active rule indices for a ScheduleRuleset
-    #
-    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset]
-    # @return [Array] Array of 365 or 377 ScheduleRule indices. If no rule is in place on a given day, -1 is returned for that day
-    def self.schedule_ruleset_get_annual_rule_indices(schedule_ruleset)
-      year_description = schedule_ruleset.model.yearDescription
-      if year_description.is_initialized
-        year = year_description.get.assumedYear
-        year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
-        year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
-        indices_vector = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
-        return indices_vector
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.ScheduleRuleset', "In #{__method__}, cannot determine rule indices for #{schedule_ruleset}: No Year Description found.")
-      end
-    end
-
-    # copies a ScheduleRule to a given ScheduleRuleset and applies that rule to a given ScheduleDay
-    def self.schedule_rule_copy_to_new_ruleset_with_day_schedule(rule_to_copy, target_ruleset, target_day_sch)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleRule', "Copying rule #{rule_to_copy.name.get} from: #{rule_to_copy.scheduleRuleset.name.get} to: #{target_ruleset.name.get} applying: #{target_day_sch.name.get}")
-      # target_day_schedule will be cloned, new_rule will be highest priority for target_rulest
-      new_rule = OpenStudio::Model::ScheduleRule.new(target_ruleset, target_day_sch)
-      # copy inputs from rule_to_copy
-      new_rule.setStartDate(rule_to_copy.startDate.get) unless rule_to_copy.startDate.empty?
-      new_rule.setEndDate(rule_to_copy.endDate.get) unless rule_to_copy.endDate.empty?
-      new_rule.setApplySunday(rule_to_copy.applySunday) if rule_to_copy.applySunday
-      new_rule.setApplyMonday(rule_to_copy.applyMonday) if rule_to_copy.applyMonday
-      new_rule.setApplyTuesday(rule_to_copy.applyTuesday) if rule_to_copy.applyTuesday
-      new_rule.setApplyWednesday(rule_to_copy.applyWednesday) if rule_to_copy.applyWednesday
-      new_rule.setApplyThursday(rule_to_copy.applyThursday) if rule_to_copy.applyThursday
-      new_rule.setApplyFriday(rule_to_copy.applyFriday) if rule_to_copy.applyFriday
-      new_rule.setApplySaturday(rule_to_copy.applySaturday) if rule_to_copy.applySaturday
-      # specific dates
-      if rule_to_copy.specificDates.size > 0
-        rule_to_copy.specificDates.each{|date| new_rule.setSpecificDate(date)}
-      end
-      return true
-    end
-
-    # return hash of rule_index => [days_used]. Default day has rule_index = -1
-    def self.schedule_ruleset_days_used_hash(schedule_ruleset)
-      sch_indices_vector = schedule_ruleset_get_annual_rule_indices(schedule_ruleset)
-      days_used_hash = Hash.new{|h,k| h[k] = Array.new}
-      sch_indices_vector.uniq.sort.each do |rule_i|
-        sch_indices_vector.each_with_index{|rule,i| days_used_hash[rule_i] << i+1 if rule_i == rule}
-      end
-      return days_used_hash
-    end
-
-    def self.schedule_ruleset_gather_schedule_day_rule_indices(schedule_ruleset)
-      schedule_day_hash = {}
-      schedule_ruleset.scheduleRules.each do |rule|
-        schedule_day_hash[rule.daySchedule] = rule.ruleIndex
-      end
-      schedule_day_hash[schedule_ruleset.defaultDaySchedule] = -1
-      return schedule_day_hash
-    end
-
-    # returns a hash of rule indices => []
-    def self.schedule_ruleset_align_rules_with_hours_of_operation(schedule_ruleset, hours_of_operation)
-
-      days_used_hash = schedule_ruleset_days_used_hash(schedule_ruleset)
-
-      schedule_day_hash = schedule_ruleset_gather_schedule_day_rule_indices(schedule_ruleset)
-
-      # remove schedule and default day from hours_of_operation hash
-      hoo_rule_hash = hours_of_operation.slice(*hours_of_operation.keys.reject{|k| [:schedule, -1].include? k})
-      schedule_day_hash.each do |day_schedule, rule_index|
-        # find days in indices vector that this rule applies to
-        days_used = days_used_hash[rule_index]
-        # reverse sort by ruleindex - so resulting copy will have same order. results in nested array of [[k1,v1],[k2,v2]]
-        hoo_rule_hash.sort_by{|k,v| k}.reverse.each do |rule_a|
-          hoo_rule_days_used = rule_a[1][:days_used]
-          if !hoo_rule_days_used.to_set.superset?(days_used.to_set)
-            puts "hoo rule #{rule_a[1]} is subset of #{day_schedule.name.get}"
-            occ_rule = hours_of_operation[:schedule].scheduleRules[rule_a[0]]
-            # clone occ rule and apply to schedule_ruleset
-            new_rule = schedule_rule_copy_to_new_ruleset_with_day_schedule(occ_rule, schedule_ruleset, day_schedule)
-          end
-        end
-      end
-    end
-
-    def self.schedule_day_find_hoo_target_index(schedule_day)
-
-
-    end
-
-
 
     # Apply specified hours of operation values to rules in this schedule.
     # Weekday values will be applied to the default profile.
@@ -1007,7 +901,11 @@ module OpenstudioStandards
       profiles[schedule_ruleset.defaultDaySchedule] = nil
 
       # get indices for current schedule
-      indices_vector = schedule_ruleset_get_annual_rule_indices(schedule_ruleset)
+      year_description = schedule_ruleset.model.yearDescription.get
+      year = year_description.assumedYear
+      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+      indices_vector = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
 
       # process profiles
       profiles.each do |sch_day, rule|
