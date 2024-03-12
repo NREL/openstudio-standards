@@ -23,21 +23,6 @@ class Standard
     return model
   end
 
-  # load a sql file, exiting and erroring if a problem is found
-  #
-  # @param sql_path_string [String] file path to sql file
-  # @return [OpenStudio::SqlFile] sql file associated with the model, boolean false if not found
-  def safe_load_sql(sql_path_string)
-    sql_path = OpenStudio::Path.new(sql_path_string)
-    if OpenStudio.exists(sql_path)
-      sql = OpenStudio::SqlFile.new(sql_path)
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "#{sql_path} couldn't be found")
-      return false
-    end
-    return sql
-  end
-
   # Remove all resource objects in the model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -384,7 +369,7 @@ class Standard
 
   # Convert from EER to COP
   #
-  # @param cop [Double] Energy Efficiency Ratio (EER)
+  # @param eer [Double] Energy Efficiency Ratio (EER)
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop(eer)
     return eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get
@@ -448,47 +433,6 @@ class Standard
   # @return [Double] Combustion efficiency
   def thermal_eff_to_comb_eff(thermal_eff)
     return thermal_eff + 0.007
-  end
-
-  # Convert one infiltration rate at a given pressure
-  # to an infiltration rate at another pressure
-  # per method described here:  http://www.taskair.net/knowledge/Infiltration%20Modeling%20Guidelines%20for%20Commercial%20Building%20Energy%20Analysis.pdf
-  # where the infiltration coefficient is 0.65
-  #
-  # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
-  # @param intial_pressure_pa [Double] pressure rise at which initial infiltration rate was determined in Pa
-  # @param final_pressure_pa [Double] desired pressure rise to adjust infiltration rate to in Pa
-  # @param infiltration_coefficient [Double] infiltration coeffiecient
-  # @return [Double] adjusted infiltration rate in m^3/s
-  def adjust_infiltration_to_lower_pressure(initial_infiltration_rate_m3_per_s, intial_pressure_pa, final_pressure_pa, infiltration_coefficient = 0.65)
-    adjusted_infiltration_rate_m3_per_s = initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**infiltration_coefficient
-
-    return adjusted_infiltration_rate_m3_per_s
-  end
-
-  # Convert the infiltration rate at a 75 Pa to an infiltration rate at the typical value for the prototype buildings
-  # per method described here:  http://www.pnl.gov/main/publications/external/technical_reports/PNNL-18898.pdf
-  # Gowri K, DW Winiarski, and RE Jarnagin. 2009.
-  # Infiltration modeling guidelines for commercial building energy analysis.
-  # PNNL-18898, Pacific Northwest National Laboratory, Richland, WA.
-  #
-  # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
-  # @return [Double] adjusted infiltration rate in m^3/s
-  def adjust_infiltration_to_prototype_building_conditions(initial_infiltration_rate_m3_per_s)
-    # Details of these coefficients can be found in paper
-    alpha = 0.22 # unitless - terrain adjustment factor
-    intial_pressure_pa = 75.0 # 75 Pa
-    uh = 4.47 # m/s - wind speed
-    rho = 1.18 # kg/m^3 - air density
-    cs = 0.1617 # unitless - positive surface pressure coefficient
-    n = 0.65 # unitless - infiltration coefficient
-
-    # Calculate the typical pressure - same for all building types
-    final_pressure_pa = 0.5 * cs * rho * uh**2
-
-    adjusted_infiltration_rate_m3_per_s = (1.0 + alpha) * initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**n
-
-    return adjusted_infiltration_rate_m3_per_s
   end
 
   # Convert biquadratic curves that are a function of temperature
