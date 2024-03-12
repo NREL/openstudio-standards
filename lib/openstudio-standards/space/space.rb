@@ -45,10 +45,11 @@ module OpenstudioStandards
       return plenum_status
     end
 
-    # Determine if the space is residential based on the space type properties for the space.
+    # Determine if the space is residential based on the space type name assigned to the space.
     # For spaces with no space type, assume nonresidential.
     # For spaces that are plenums, base the decision on the space
     # type of the space below the largest floor in the plenum.
+    # Matches residential for names including 'Apartment', 'GuestRoom', 'PatRoom', 'ResBedroom', 'ResLiving'
     #
     # @param space [OpenStudio::Model::Space] space object
     # return [Boolean] true if residential, false if nonresidential
@@ -119,7 +120,16 @@ module OpenstudioStandards
     # Retrieves the default occupancy schedule assigned to the space
     # @author David Goldwasser
     # @param space [OpenStudio::Model::Space] space object
-    # @return [Hash]: {ScheduleRule index}
+    # @return [Hash]: see example
+    # @example: {
+    #   schedule: space hours_of_operation schedule,
+    #   [rule index, -1 is default day]: {
+    #     hoo_start: [float] rule operation start hour,
+    #     hoo_end: [float] rule operation end hour,
+    #     hoo_hours: [float] rule operation duration hours,
+    #     days_used: [Array] annual day indices
+    #       }
+    #   }
     def self.space_hours_of_operation(space)
       default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
       hours_of_operation = space.getDefaultSchedule(default_sch_type)
@@ -133,7 +143,7 @@ module OpenstudioStandards
         return nil
       end
       hours_of_operation = hours_of_operation.to_ScheduleRuleset.get
-      profiles = {schedule: hours_of_operation}
+      profiles = {}
 
       # get indices for current schedule
       year_description = hours_of_operation.model.yearDescription.get
@@ -308,7 +318,7 @@ module OpenstudioStandards
 
       # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Evaluating hours of operation for #{space_names.join(',')}: #{hours_of_operation_array}")
 
-      # @todo what is this getting max of, it isn't longest hours of operation, is it the most profiles?
+      # returns the most prevalent hours of operation hash among spaces
       hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
 
       return hours_of_operation
@@ -347,25 +357,20 @@ module OpenstudioStandards
       end
       # Get all the occupancy schedules in spaces.
       # Include people added via the SpaceType and hard-assigned to the Space itself.
-      occ_schedules_num_occ = {} # hash of
+      occ_schedules_num_occ = {} # hash of occupancy ScheduleRuleset => number of total number of people
       max_occ_in_spaces = 0
       spaces.each do |space|
         # From the space type
         if space.spaceType.is_initialized
           space.spaceType.get.people.each do |people|
             num_ppl_sch = people.numberofPeopleSchedule
-            if num_ppl_sch.is_initialized
-              num_ppl_sch = num_ppl_sch.get
-              num_ppl_sch = num_ppl_sch.to_ScheduleRuleset
-              next if num_ppl_sch.empty? # Skip non-ruleset schedules
-
-              num_ppl_sch = num_ppl_sch.get
+            next if num_ppl_sch.empty?
+            if num_ppl_sch.get.to_ScheduleRuleset.empty? # skip non-ruleset schedules
+              OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "People schedule #{num_ppl_sch.get.name} is not a Ruleset Schedule, it will not contribute to hours of operation")
+            else
+              num_ppl_sch = num_ppl_sch.get.to_ScheduleRuleset.get
               num_ppl = people.getNumberOfPeople(space.floorArea)
-              if occ_schedules_num_occ[num_ppl_sch].nil?
-                occ_schedules_num_occ[num_ppl_sch] = num_ppl
-              else
-                occ_schedules_num_occ[num_ppl_sch] += num_ppl
-              end
+              occ_schedules_num_occ.key?(num_ppl_sch) ? occ_schedules_num_occ[num_ppl_sch] += num_ppl : occ_schedules_num_occ[num_ppl_sch] = num_ppl
               max_occ_in_spaces += num_ppl
             end
           end
@@ -373,18 +378,13 @@ module OpenstudioStandards
         # From the space
         space.people.each do |people|
           num_ppl_sch = people.numberofPeopleSchedule
-          if num_ppl_sch.is_initialized
-            num_ppl_sch = num_ppl_sch.get
-            num_ppl_sch = num_ppl_sch.to_ScheduleRuleset
-            next if num_ppl_sch.empty? # Skip non-ruleset schedules
-
-            num_ppl_sch = num_ppl_sch.get
+          next if num_ppl_sch.empty?
+          if num_ppl_sch.get.to_ScheduleRuleset.empty? # skip non-ruleset schedules
+            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "People schedule #{num_ppl_sch.get.name} is not a Ruleset Schedule, it will not contribute to hours of operation")
+          else
+            num_ppl_sch = num_ppl_sch.get.to_ScheduleRuleset.get
             num_ppl = people.getNumberOfPeople(space.floorArea)
-            if occ_schedules_num_occ[num_ppl_sch].nil?
-              occ_schedules_num_occ[num_ppl_sch] = num_ppl
-            else
-              occ_schedules_num_occ[num_ppl_sch] += num_ppl
-            end
+            occ_schedules_num_occ.key?(num_ppl_sch) ? occ_schedules_num_occ[num_ppl_sch] += num_ppl : occ_schedules_num_occ[num_ppl_sch] = num_ppl
             max_occ_in_spaces += num_ppl
           end
         end
@@ -485,7 +485,7 @@ module OpenstudioStandards
             end
           elsif threshold_calc_method == 'normalized_daily_range'
             occ_status = 0 # unoccupied
-            if spaces_occ_frac > daily_normalized_tol
+            if spaces_occ_frac >= daily_normalized_tol
               occ_status = 1
             end
           else
