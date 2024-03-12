@@ -858,8 +858,7 @@ module OpenstudioStandards
       z_heights = []
       building_story.spaces.each do |space|
         # Skip plenum spaces
-        std = Standard.build('90.1-2019') # delete once space methods refactored
-        next if std.space_plenum?(space)
+        next if OpenstudioStandards::Space.space_plenum?(space)
 
         # Get the z value of the space, which
         # vertices in space surfaces are relative to.

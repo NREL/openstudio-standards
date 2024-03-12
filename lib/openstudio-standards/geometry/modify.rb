@@ -100,8 +100,7 @@ module OpenstudioStandards
       sorted_spaces = {}
       model.getSpaces.sort.each do |space|
         # Skip plenum spaces
-        std = Standard.build('90.1-2019') # delete once space methods refactored
-        next if std.space_plenum?(space)
+        next if OpenstudioStandards::Space.space_plenum?(space)
 
         # loop through space surfaces to find min z value
         z_points = []
