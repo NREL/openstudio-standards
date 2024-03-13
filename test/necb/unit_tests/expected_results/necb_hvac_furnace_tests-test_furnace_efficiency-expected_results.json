@@ -184,6 +184,19 @@
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
       }
+    },
+    "NaturalGas": {
+      "VarType": "TestCase",
+      "case-1": {
+        "name": "BTAPPRE1980_sys3_Furnace-NaturalGas_cap-10kW_Baseboard-Hot Water",
+        "baseboard_type": "Hot Water",
+        "heating_coil_type": "NaturalGas",
+        "min_capacity_kW": 0,
+        "max_capacity_kW": 2930,
+        "tested_capacity_kW": 10,
+        "efficiency_metric": "thermal efficiency",
+        "efficiency_value": 0.8
+      }
     }
   },
   "BTAP1980TO2010": {
@@ -199,6 +212,19 @@
         "tested_capacity_kW": 10.0,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
+      }
+    },
+    "NaturalGas": {
+      "VarType": "TestCase",
+      "case-1": {
+        "name": "BTAP1980TO2010_sys3_Furnace-NaturalGas_cap-10kW_Baseboard-Hot Water",
+        "baseboard_type": "Hot Water",
+        "heating_coil_type": "NaturalGas",
+        "min_capacity_kW": 0,
+        "max_capacity_kW": 2930,
+        "tested_capacity_kW": 10,
+        "efficiency_metric": "thermal efficiency",
+        "efficiency_value": 0.8
       }
     }
   }

@@ -139,6 +139,19 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
+   test_cases_hash = { :Vintage => ["BTAP1980TO2010","BTAPPRE1980"],
+                        :heating_coil_types => ["NaturalGas"],
+                        :TestCase => ["case-1"],
+                        :TestPars => { :name => "tbd",
+                                       :min_capacity_kW => 0,
+                                       :max_capacity_kW => 2930,
+                                       :tested_capacity_kW => 10,
+                                       :baseboard_type => "Hot Water",
+                                       :efficiency_metric => "thermal efficiency",
+                                       :efficiency_value => "tbd" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
     # Create empty results hash and call the template method that runs the individual test cases.
     test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
@@ -149,7 +162,6 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # Read expected results.
     file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
-    puts " wwwwwww file_name: #{file_name}"
     expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
     # Check if test results match expected.
     msg = "furnace efficiencies test results do not match what is expected in test"
