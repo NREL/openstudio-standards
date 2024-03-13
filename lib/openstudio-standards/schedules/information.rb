@@ -832,7 +832,7 @@ module OpenstudioStandards
 
     # Returns the day schedules associated with a schedule ruleset
     # Optionally includes summer and winter design days
-    # @param schedule_ruleset: [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @param include_design_days [Bool] include summer and winter design day profiles
     #   Defaults to false
     # @return [Array<OpenStudio::Model::ScheduleDay>] array of day schedules
@@ -861,8 +861,6 @@ module OpenstudioStandards
 
       return profiles
     end
-
-
 
     # @!endgroup Information:ScheduleRuleset
   end

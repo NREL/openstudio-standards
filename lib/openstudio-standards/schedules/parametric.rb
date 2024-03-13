@@ -51,15 +51,15 @@ module OpenstudioStandards
       # re-run spaces_get_occupancy_schedule with x above min occupancy to create on/off schedule
       if res_people_design > non_res_people_design
         hours_of_operation = OpenstudioStandards::Space.spaces_get_occupancy_schedule(res_spaces,
-                                                          sch_name: 'Building Hours of Operation Residential',
-                                                          occupied_percentage_threshold: fraction_of_daily_occ_range,
-                                                          threshold_calc_method: 'normalized_daily_range')
+                                                                                      sch_name: 'Building Hours of Operation Residential',
+                                                                                      occupied_percentage_threshold: fraction_of_daily_occ_range,
+                                                                                      threshold_calc_method: 'normalized_daily_range')
         res_prevalent = true
       else
         hours_of_operation = OpenstudioStandards::Space.spaces_get_occupancy_schedule(non_res_spaces,
-                                                          sch_name: 'Building Hours of Operation NonResidential',
-                                                          occupied_percentage_threshold: fraction_of_daily_occ_range,
-                                                          threshold_calc_method: 'normalized_daily_range')
+                                                                                      sch_name: 'Building Hours of Operation NonResidential',
+                                                                                      occupied_percentage_threshold: fraction_of_daily_occ_range,
+                                                                                      threshold_calc_method: 'normalized_daily_range')
       end
 
       # remove gaps resulting in multiple on off cycles for each rule in schedule so it will be valid hours of operation
@@ -345,10 +345,10 @@ module OpenstudioStandards
       # get ramp frequency (fractional hour) from timestep
       if ramp_frequency.nil?
         steps_per_hour = if model.getSimulationControl.timestep.is_initialized
-                          model.getSimulationControl.timestep.get.numberOfTimestepsPerHour
-                        else
-                          6 # default OpenStudio timestep if none specified
-                        end
+                           model.getSimulationControl.timestep.get.numberOfTimestepsPerHour
+                         else
+                           6 # default OpenStudio timestep if none specified
+                         end
         ramp_frequency = 1.0 / steps_per_hour.to_f
       end
 
@@ -438,7 +438,6 @@ module OpenstudioStandards
       return parametric_inputs
     end
 
-
     # @!endgroup Parametric:Space
 
     # @!group Parametric:Schedule
@@ -449,7 +448,14 @@ module OpenstudioStandards
     # @param sch [OpenStudio::Model::Schedule]
     # @param load_inst [OpenStudio::Model::SpaceLoadInstance]
     # @param parametric_inputs [Hash]
-    # @param hours_of_operation [Hash] - hash of {profile_index: {:hoo_start, :hoo_end, :hoo_hours, days_used:[dayNumbers]}}
+    # @param hours_of_operation [Hash] hash, example:
+    #   { profile_index: {
+    #     hoo_start: [float] rule operation start hour,
+    #     hoo_end: [float] rule operation end hour,
+    #     hoo_hours: [float] rule operation duration hours,
+    #     days_used: [Array] annual day indices
+    #     }
+    #   }
     # @param ramp [Boolean]
     # @param min_ramp_dur_hr [Double]
     # @param gather_data_only [Boolean]
@@ -507,7 +513,6 @@ module OpenstudioStandards
         end
         # puts "#{__method__}>>> #{schedule_day.name} days_used: #{days_used}"
 
-
         # find days_used in hoo profiles that contains all days used from this profile
         hoo_profile_match_hash = {}
         best_fit_check = {}
@@ -539,7 +544,6 @@ module OpenstudioStandards
           occ = hours_of_operation[hoo_target_index][:hoo_hours]
           vac = 24.0 - hours_of_operation[hoo_target_index][:hoo_hours]
         end
-
 
         props = schedule_day.additionalProperties
         par_val_time_hash = {} # time is key, value is value in and optional value out as a one or two object array
@@ -791,7 +795,6 @@ module OpenstudioStandards
     # @!endgroup Parametric:Schedule
 
     # @!group Parametric:ScheduleRuleset
-
 
     # Apply specified hours of operation values to rules in this schedule.
     # Weekday values will be applied to the default profile.
@@ -1270,7 +1273,5 @@ module OpenstudioStandards
     end
 
     # @!endgroup Parametric:ScheduleDay
-
-
   end
 end
