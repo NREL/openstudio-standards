@@ -92,20 +92,16 @@ module OpenstudioStandards
       end
 
       space_type = space_to_check.spaceType
+
       if space_type.is_initialized
         space_type = space_type.get
         # @todo need an alternate way of determining residential without standards data
-        res_types = [/Apartment/, /GuestRoom/, /PatRoom/, /ResBedroom/, /ResLiving/]
-        res_types.each do |match|
-          if res_types.any? { |match| space_type.name.get =~ match }
-            is_res = true
-          else
-            is_res = false
-          end
+        res_types = [/\sApartment/, /GuestRoom/, /PatRoom/, /ResBedroom/, /ResLiving/]
+        if res_types.any? { |match| space_type.name.get =~ match }
+          is_res = true
         end
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{space_to_check.name}, assuming nonresidential.")
-        is_res = false
       end
 
       return is_res

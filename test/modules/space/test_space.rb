@@ -33,9 +33,15 @@ class TestSpace < Minitest::Test
 
     # from space type
     space_type = OpenStudio::Model::SpaceType.new(model)
-    space_type.setName('Apartment Space Type')
+    space_type.setName('MidriseApartment Apartment')
     space1.setSpaceType(space_type)
     assert_equal(@space.space_residential?(space1), true)
+
+    apt_ofc = OpenStudio::Model::SpaceType.new(model)
+    apt_ofc.setName('MidriseApartment Office')
+    ofc = OpenStudio::Model::Space.new(model)
+    ofc.setSpaceType(apt_ofc)
+    assert_equal(@space.space_residential?(ofc), false)
 
     # plenum from below space
     polygon = OpenStudio::Point3dVector.new
@@ -72,7 +78,7 @@ class TestSpace < Minitest::Test
     default_schedule_set.setHoursofOperationSchedule(hours_of_operation_schedule)
     space.setDefaultScheduleSet(default_schedule_set)
     hoo_hash = @space.space_hours_of_operation(space)
-    puts hoo_hash
+    # puts hoo_hash
     assert_equal(hoo_hash[-1][:hoo_start], 8)
     assert_equal(hoo_hash[-1][:hoo_end], 20)
     assert_equal(hoo_hash[-1][:hoo_hours], 20-8)
@@ -173,7 +179,7 @@ class TestSpace < Minitest::Test
 
     # not normalized
     occ_sch_values = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy threshold', occupied_percentage_threshold: 0.3, threshold_calc_method: nil)
-    puts "Un-normalized: #{occ_sch_values.scheduleRules.size} Schedule Rules"
+    # puts "Un-normalized: #{occ_sch_values.scheduleRules.size} Schedule Rules"
 
     spring_wkdy = occ_sch_values.getDaySchedules(OpenStudio::Date.new('2018-Apr-10'),OpenStudio::Date.new('2018-Apr-10')).first
     spring_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wkdy)
@@ -193,7 +199,7 @@ class TestSpace < Minitest::Test
 
     # normalized daily
     occ_sch_daily = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy daily', occupied_percentage_threshold: 0.3, threshold_calc_method: 'normalized_daily_range')
-    puts "Normalized Daily: #{occ_sch_daily.scheduleRules.size} Schedule Rules"
+    # puts "Normalized Daily: #{occ_sch_daily.scheduleRules.size} Schedule Rules"
 
     spring_wkdy = occ_sch_daily.getDaySchedules(OpenStudio::Date.new('2018-Apr-10'),OpenStudio::Date.new('2018-Apr-10')).first
     spring_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wkdy)
@@ -214,7 +220,7 @@ class TestSpace < Minitest::Test
 
     # normalized annually
     occ_sch_annual = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy annual', occupied_percentage_threshold: 0.3, threshold_calc_method: 'normalized_annual_range')
-    puts "Normalized Annually: #{occ_sch_annual.scheduleRules.size} Schedule Rules"
+    # puts "Normalized Annually: #{occ_sch_annual.scheduleRules.size} Schedule Rules"
 
     spring_wkdy = occ_sch_annual.getDaySchedules(OpenStudio::Date.new('2018-Apr-10'),OpenStudio::Date.new('2018-Apr-10')).first
     spring_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wkdy)
