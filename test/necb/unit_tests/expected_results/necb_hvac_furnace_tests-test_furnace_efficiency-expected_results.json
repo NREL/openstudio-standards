@@ -9,8 +9,6 @@
         "name": "NECB2011_sys3_Furnace-Electric_cap-10.0kW_Baseboard-Electric",
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 2930,
         "tested_capacity_kW": 10.0,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
@@ -22,8 +20,6 @@
         "name": "NECB2011_sys3_Furnace-NaturalGas_cap-58.65kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 117.23,
         "tested_capacity_kW": 58.65,
         "efficiency_metric": "annual fuel utilization efficiency",
         "efficiency_value": 0.924
@@ -32,8 +28,6 @@
         "name": "NECB2011_sys3_Furnace-NaturalGas_cap-127.3kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 117.3,
-        "max_capacity_kW": 2930,
         "tested_capacity_kW": 127.3,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.81
@@ -49,8 +43,6 @@
         "name": "NECB2015_sys3_Furnace-Electric_cap-10.0kW_Baseboard-Electric",
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 2930,
         "tested_capacity_kW": 10.0,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
@@ -59,22 +51,18 @@
     "NaturalGas": {
       "VarType": "TestCase",
       "case-1": {
-        "name": "NECB2015_sys3_Furnace-NaturalGas_cap-33.05kW_Baseboard-Hot Water",
+        "name": "NECB2015_sys3_Furnace-NaturalGas_cap-58.65kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 66,
-        "tested_capacity_kW": 33.05,
+        "tested_capacity_kW": 58.65,
         "efficiency_metric": "annual fuel utilization efficiency",
         "efficiency_value": 0.924
       },
       "case-2": {
-        "name": "NECB2015_sys3_Furnace-NaturalGas_cap-76.1kW_Baseboard-Hot Water",
+        "name": "NECB2015_sys3_Furnace-NaturalGas_cap-127.3kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 66.1,
-        "max_capacity_kW": 2930,
-        "tested_capacity_kW": 76.1,
+        "tested_capacity_kW": 127.3,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.81
       }
@@ -89,8 +77,6 @@
         "name": "NECB2017_sys3_Furnace-Electric_cap-10.0kW_Baseboard-Electric",
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 2930,
         "tested_capacity_kW": 10.0,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
@@ -99,22 +85,18 @@
     "NaturalGas": {
       "VarType": "TestCase",
       "case-1": {
-        "name": "NECB2017_sys3_Furnace-NaturalGas_cap-33.05kW_Baseboard-Hot Water",
+        "name": "NECB2017_sys3_Furnace-NaturalGas_cap-58.65kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 66,
-        "tested_capacity_kW": 33.05,
+        "tested_capacity_kW": 58.65,
         "efficiency_metric": "annual fuel utilization efficiency",
         "efficiency_value": 0.924
       },
       "case-2": {
-        "name": "NECB2017_sys3_Furnace-NaturalGas_cap-76.1kW_Baseboard-Hot Water",
+        "name": "NECB2017_sys3_Furnace-NaturalGas_cap-127.3kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 66.1,
-        "max_capacity_kW": 2930,
-        "tested_capacity_kW": 76.1,
+        "tested_capacity_kW": 127.3,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.81
       }
@@ -129,8 +111,6 @@
         "name": "NECB2020_sys3_Furnace-Electric_cap-10.0kW_Baseboard-Electric",
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 2930,
         "tested_capacity_kW": 10.0,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
@@ -139,32 +119,18 @@
     "NaturalGas": {
       "VarType": "TestCase",
       "case-1": {
-        "name": "NECB2020_sys3_Furnace-NaturalGas_cap-33.05kW_Baseboard-Hot Water",
+        "name": "NECB2020_sys3_Furnace-NaturalGas_cap-58.65kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 66,
-        "tested_capacity_kW": 33.05,
+        "tested_capacity_kW": 58.65,
         "efficiency_metric": "annual fuel utilization efficiency",
         "efficiency_value": 0.95
       },
       "case-2": {
-        "name": "NECB2020_sys3_Furnace-NaturalGas_cap-91.6kW_Baseboard-Hot Water",
+        "name": "NECB2020_sys3_Furnace-NaturalGas_cap-127.3kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 66.1,
-        "max_capacity_kW": 117,
-        "tested_capacity_kW": 91.6,
-        "efficiency_metric": "thermal efficiency",
-        "efficiency_value": 0.81
-      },
-      "case-3": {
-        "name": "NECB2020_sys3_Furnace-NaturalGas_cap-127.1kW_Baseboard-Hot Water",
-        "baseboard_type": "Hot Water",
-        "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 117.1,
-        "max_capacity_kW": 2930,
-        "tested_capacity_kW": 127.1,
+        "tested_capacity_kW": 127.3,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.81
       }
@@ -178,8 +144,6 @@
         "name": "BTAPPRE1980_sys3_Furnace-Electric_cap-10.0kW_Baseboard-Electric",
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 2930,
         "tested_capacity_kW": 10.0,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
@@ -187,13 +151,11 @@
     },
     "NaturalGas": {
       "VarType": "TestCase",
-      "case-1": {
-        "name": "BTAPPRE1980_sys3_Furnace-NaturalGas_cap-10kW_Baseboard-Hot Water",
+      "case-2": {
+        "name": "BTAPPRE1980_sys3_Furnace-NaturalGas_cap-127.3kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 2930,
-        "tested_capacity_kW": 10,
+        "tested_capacity_kW": 127.3,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.8
       }
@@ -207,8 +169,6 @@
         "name": "BTAP1980TO2010_sys3_Furnace-Electric_cap-10.0kW_Baseboard-Electric",
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 2930,
         "tested_capacity_kW": 10.0,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
@@ -216,13 +176,11 @@
     },
     "NaturalGas": {
       "VarType": "TestCase",
-      "case-1": {
-        "name": "BTAP1980TO2010_sys3_Furnace-NaturalGas_cap-10kW_Baseboard-Hot Water",
+      "case-2": {
+        "name": "BTAP1980TO2010_sys3_Furnace-NaturalGas_cap-127.3kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
-        "min_capacity_kW": 0,
-        "max_capacity_kW": 2930,
-        "tested_capacity_kW": 10,
+        "tested_capacity_kW": 127.3,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.8
       }

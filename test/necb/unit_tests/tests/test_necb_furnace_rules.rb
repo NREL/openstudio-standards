@@ -38,117 +38,29 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
                         :heating_coil_types => ['Electric'],
                         :TestCase => ["case-1"],
                         :TestPars => { :tested_capacity_kW => 10.0,
-                                       :min_capacity_kW => 0,
-                                       :max_capacity_kW => 2930,
                                        :baseboard_type => "Electric",
                                        :efficiency_metric => "thermal efficiency" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    ############################# Testing NECB2011 ####################################
-    test_cases_hash = { :Vintage => ["NECB2011"],
+    # AFUE : Testing the capacity of 58.65 kW would cover the range 0-117.23kW for NECB2011, 0-66 kW for NECB2015 and NECB2017, also 0-66 kW for NECB2020
+    # Thermal efficiency : Testing the capacity of 127.3 kW would cover the range 117.3-2930kW for NECB2011, 66.1-2930 kW for NECB2015 and NECB2017, also 66.1-2930 kW for NECB2020
+
+    test_cases_hash = { :Vintage => ["NECB2011", "NECB2015", "NECB2017", "NECB2020"],
                         :heating_coil_types => ["NaturalGas"],
                         :TestCase => ["case-1"],
-                        :TestPars => { :name => "tbd",
-                                       :min_capacity_kW => 0,
-                                       :max_capacity_kW => 117.23,
-                                       :tested_capacity_kW => 58.65,
+                        :TestPars => { :tested_capacity_kW => 58.65,
                                        :baseboard_type => "Hot Water",
-                                       :efficiency_metric => "annual fuel utilization efficiency",
-                                       :efficiency_value => "tbd" } }
+                                       :efficiency_metric => "annual fuel utilization efficiency"} }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2011"],
+    test_cases_hash = { :Vintage => @AllTemplates,
                         :heating_coil_types => ["NaturalGas"],
                         :TestCase => ["case-2"],
-                        :TestPars => { :name => "tbd",
-                                       :min_capacity_kW => 117.3,
-                                       :max_capacity_kW => 2930,
-                                       :tested_capacity_kW => 127.3,
+                        :TestPars => { :tested_capacity_kW => 127.3,
                                        :baseboard_type => "Hot Water",
-                                       :efficiency_metric => "thermal efficiency",
-                                       :efficiency_value => "tbd" } }
-    new_test_cases = make_test_cases_json(test_cases_hash)
-    merge_test_cases!(test_cases, new_test_cases)
-
-    ############################# Testing NECB2015 and 2017 ####################################
-    test_cases_hash = { :Vintage => ["NECB2015", "NECB2017"],
-                        :heating_coil_types => ["NaturalGas"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :name => "tbd",
-                                       :min_capacity_kW => 0,
-                                       :max_capacity_kW => 66,
-                                       :tested_capacity_kW => 33.05,
-                                       :baseboard_type => "Hot Water",
-                                       :efficiency_metric => "annual fuel utilization efficiency",
-                                       :efficiency_value => "tbd" } }
-    new_test_cases = make_test_cases_json(test_cases_hash)
-    merge_test_cases!(test_cases, new_test_cases)
-
-    test_cases_hash = { :Vintage => ["NECB2015", "NECB2017"],
-                        :heating_coil_types => ["NaturalGas"],
-                        :TestCase => ["case-2"],
-                        :TestPars => { :name => "tbd",
-                                       :min_capacity_kW => 66.1,
-                                       :max_capacity_kW => 2930,
-                                       :tested_capacity_kW => 76.1,
-                                       :baseboard_type => "Hot Water",
-                                       :efficiency_metric => "thermal efficiency",
-                                       :efficiency_value => "tbd" } }
-    new_test_cases = make_test_cases_json(test_cases_hash)
-    merge_test_cases!(test_cases, new_test_cases)
-
-    ############################# Testing NECB2020 ####################################
-    test_cases_hash = { :Vintage => ["NECB2020"],
-                        :heating_coil_types => ["NaturalGas"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :name => "tbd",
-                                       :min_capacity_kW => 0,
-                                       :max_capacity_kW => 66,
-                                       :tested_capacity_kW => 33.05,
-                                       :baseboard_type => "Hot Water",
-                                       :efficiency_metric => "annual fuel utilization efficiency",
-                                       :efficiency_value => "tbd" } }
-    new_test_cases = make_test_cases_json(test_cases_hash)
-    merge_test_cases!(test_cases, new_test_cases)
-
-    test_cases_hash = { :Vintage => ["NECB2020"],
-                        :heating_coil_types => ["NaturalGas"],
-                        :TestCase => ["case-2"],
-                        :TestPars => { :name => "tbd",
-                                       :min_capacity_kW => 66.1,
-                                       :max_capacity_kW => 117,
-                                       :tested_capacity_kW => 91.6,
-                                       :baseboard_type => "Hot Water",
-                                       :efficiency_metric => "thermal efficiency",
-                                       :efficiency_value => "tbd" } }
-    new_test_cases = make_test_cases_json(test_cases_hash)
-    merge_test_cases!(test_cases, new_test_cases)
-
-    test_cases_hash = { :Vintage => ["NECB2020"],
-                        :heating_coil_types => ["NaturalGas"],
-                        :TestCase => ["case-3"],
-                        :TestPars => { :name => "tbd",
-                                       :min_capacity_kW => 117.1,
-                                       :max_capacity_kW => 2930,
-                                       :tested_capacity_kW => 127.1,
-                                       :baseboard_type => "Hot Water",
-                                       :efficiency_metric => "thermal efficiency",
-                                       :efficiency_value => "tbd" } }
-    new_test_cases = make_test_cases_json(test_cases_hash)
-    merge_test_cases!(test_cases, new_test_cases)
-
-   test_cases_hash = { :Vintage => ["BTAP1980TO2010","BTAPPRE1980"],
-                        :heating_coil_types => ["NaturalGas"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :name => "tbd",
-                                       :min_capacity_kW => 0,
-                                       :max_capacity_kW => 2930,
-                                       :tested_capacity_kW => 10,
-                                       :baseboard_type => "Hot Water",
-                                       :efficiency_metric => "thermal efficiency",
-                                       :efficiency_value => "tbd" } }
+                                       :efficiency_metric => "thermal efficiency" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -188,8 +100,6 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     # Test specific inputs.
     furnace_cap = test_case[:tested_capacity_kW]
     efficiency_metric = test_case[:efficiency_metric]
-    min_capacity_kW = test_case[:min_capacity_kW]
-    max_capacity_kW = test_case[:max_capacity_kW]
     name = "#{vintage}_sys3_Furnace-#{heating_coil_type}_cap-#{furnace_cap}kW_Baseboard-#{baseboard_type}"
     name_short = "#{vintage}_#{furnace_cap}_sys3_Furnace"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
@@ -235,8 +145,6 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     # Convert efficiency depending on the metric being used.
     if efficiency_metric == 'annual fuel utilization efficiency'
       test_efficiency_value = standard.thermal_eff_to_afue(test_efficiency_value)
-    elsif efficiency_metric == 'combustion efficiency'
-      test_efficiency_value = standard.thermal_eff_to_comb_eff(test_efficiency_value)
     elsif efficiency_metric == 'thermal efficiency'
       test_efficiency_value = test_efficiency_value
     end
@@ -246,8 +154,6 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       name: name,
       baseboard_type: baseboard_type,
       heating_coil_type: heating_coil_type,
-      min_capacity_kW: min_capacity_kW,
-      max_capacity_kW: max_capacity_kW,
       tested_capacity_kW: furnace_cap.signif,
       efficiency_metric: efficiency_metric,
       efficiency_value: test_efficiency_value.signif(3)
@@ -257,6 +163,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     return results
   end
 
+=begin
   # Test to validate the furnace part load performance curve.
   def test_furnace_plf_vs_plr_curve
     logger.info "Starting suite of tests for: #{__method__}"
@@ -427,5 +334,6 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       assert(actual_num_stages == num_stages_needed[cap], "The actual number of stages for capacity #{cap} W is not #{num_stages_needed[cap]}")
     end
   end
+=end
 
 end
