@@ -710,11 +710,11 @@ module OpenstudioStandards
       # hours of operation
       if modify_wkdy_op_hrs || modify_wknd_op_hrs
         # Infer the current hours of operation schedule for the building
-        op_sch = standard.model_infer_hours_of_operation_building(model)
+        op_sch = OpenstudioStandards::Schedules.model_infer_hours_of_operation_building(model)
 
         # Convert existing schedules in the model to parametric schedules based on current hours of operation
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Generating parametric schedules from ruleset schedules using #{hoo_var_method} variable method for hours of operation formula.")
-        standard.model_setup_parametric_schedules(model, hoo_var_method: hoo_var_method)
+        OpenstudioStandards::Schedules.model_setup_parametric_schedules(model, hoo_var_method: hoo_var_method)
 
         # Create start and end times from start time and duration supplied
         wkdy_start_time = nil
@@ -733,7 +733,7 @@ module OpenstudioStandards
         end
 
         # Modify hours of operation, using weekdays values for all weekdays and weekend values for Saturday and Sunday
-        standard.schedule_ruleset_set_hours_of_operation(op_sch,
+        OpenstudioStandards::Schedules.schedule_ruleset_set_hours_of_operation(op_sch,
                                                          wkdy_start_time: wkdy_start_time,
                                                          wkdy_end_time: wkdy_end_time,
                                                          sat_start_time: wknd_start_time,
@@ -742,7 +742,7 @@ module OpenstudioStandards
                                                          sun_end_time: wknd_end_time)
 
         # Apply new operating hours to parametric schedules to make schedules in model reflect modified hours of operation
-        parametric_schedules = standard.model_apply_parametric_schedules(model, error_on_out_of_order: false)
+        parametric_schedules = OpenstudioStandards::Schedules.model_apply_parametric_schedules(model, error_on_out_of_order: false)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Updated #{parametric_schedules.size} schedules with new hours of operation.")
       end
 
@@ -794,7 +794,7 @@ module OpenstudioStandards
 
       # change night cycling control to "Thermostat" cycling and increase thermostat tolerance to 1.99999
       manager_night_cycles = model.getAvailabilityManagerNightCycles
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Changing thermostat tollerance to 1.99999 for #{manager_night_cycles.size} night cycle manager objects.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Changing thermostat tolerance to 1.99999 for #{manager_night_cycles.size} night cycle manager objects.")
       manager_night_cycles.each do |night_cycle|
         night_cycle.setThermostatTolerance(1.9999)
         night_cycle.setCyclingRunTimeControlType('Thermostat')
