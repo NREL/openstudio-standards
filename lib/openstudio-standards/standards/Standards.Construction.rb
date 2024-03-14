@@ -143,7 +143,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
 
     # Skip layer-by-layer fenestration constructions
-    unless construction_simple_glazing?(construction)
+    unless OpenstudioStandards::Constructions.construction_simple_glazing?(construction)
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Can only set the u-value of simple glazing. #{construction.name} is not simple glazing.")
       return false
     end
@@ -208,48 +208,6 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_si = #{ins_u_value_si.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
 
-    return true
-  end
-
-  # Sets the U-value of a construction to a specified value by modifying the thickness of the insulation layer.
-  #
-  # @param construction [OpenStudio::Model::Construction] construction object
-  # @param target_shgc [Double] Solar Heat Gain Coefficient
-  # @return [Boolean] returns true if successful, false if not
-  def construction_set_glazing_shgc(construction, target_shgc)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting SHGC for #{construction.name}.")
-
-    # Skip layer-by-layer fenestration constructions
-    unless construction_simple_glazing?(construction)
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Can only set the SHGC of simple glazing. #{construction.name} is not simple glazing.")
-      return false
-    end
-
-    # Set the SHGC
-    glass_layer = construction.layers.first.to_SimpleGlazing.get
-    glass_layer.setSolarHeatGainCoefficient(target_shgc)
-
-    return true
-  end
-
-  # Determines if the construction is a simple glazing construction,
-  # as indicated by having a single layer of type SimpleGlazing.
-  #
-  # @param construction [OpenStudio::Model::Construction] construction object
-  # @return [Boolean] returns true if it is a simple glazing, false if not
-  def construction_simple_glazing?(construction)
-    # Not simple if more than 1 layer
-    if construction.layers.length > 1
-      return false
-    end
-
-    # Not simple unless the layer is a SimpleGlazing material
-    # if construction.layers.first.to_SimpleGlazing.empty?
-    if construction.layers.first.to_SimpleGlazing.empty?
-      return false
-    end
-
-    # If here, must be simple glazing
     return true
   end
 
@@ -754,9 +712,9 @@ class Standard
     # Mulitply by percentages if required.
     if is_percentage
       target_u_value_si = target_u_value_si / 100.0 * BTAP::Resources::Envelope::Constructions.get_conductance(construction) unless conductance.nil?
-      if standard.construction_simple_glazing?(construction)
+      if OpenstudioStandards::Constructions.construction_simple_glazing?(construction)
         target_shgc = target_shgc / 100.0 * construction.layers.first.to_SimpleGlazing.get.solarHeatGainCoefficient unless target_shgc.nil?
-        target_tvis = target_tvis / 100.0 * construction.layers.first.to_SimpleGlazing.get.setVisibleTransmittance unless target_tvis.nil?
+        target_tvis = target_tvis / 100.0 * construction.layers.first.to_SimpleGlazing.get.visibleTransmittance unless target_tvis.nil?
       end
     end
 
@@ -776,7 +734,8 @@ class Standard
       new_construction = construction_deep_copy(model, construction)
       case surface.outsideBoundaryCondition
         when 'Outdoors'
-          if standard.construction_simple_glazing?(new_construction)
+          if OpenstudioStandards::Constructions.construction_simple_glazing?(new_construction)
+            simple_glazing = construction.layers.first.to_SimpleGlazing.get
             unless conductance.nil?
               standard.construction_set_glazing_u_value(new_construction,
                                                         target_u_value_ip.to_f,
@@ -784,15 +743,8 @@ class Standard
                                                         false,
                                                         false)
             end
-            unless shgc.nil?
-              standard.construction_set_glazing_shgc(new_construction,
-                                                     shgc)
-            end
-            unless tvis.nil?
-              construction_set_glazing_tvis(new_construction,
-                                            tvis)
-            end
-
+            simple_glazing.setSolarHeatGainCoefficient(shgc) unless shgc.nil?
+            simple_glazing.setVisibleTransmittance(tvis) unless tvis.nil?
           else
             unless conductance.nil?
               standard.construction_set_u_value(new_construction,
@@ -862,32 +814,5 @@ class Standard
       new_construction.setLayer(layernumber, cloned_layer)
     end
     return new_construction
-  end
-
-  # Sets the T-vis of a simple glazing construction to a specified value
-  # by modifying the thickness of the insulation layer.
-  #
-  # @param construction [OpenStudio::Model::Construction] construction object
-  # @param target_tvis [Double] Visible Transmittance
-  # @return [Boolean] returns true if successful, false if not
-  def construction_set_glazing_tvis(construction, target_tvis)
-    if target_tvis >= 1.0
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Can only set the Tvis can only be set to less than 1.0. #{target_tvis} is greater than 1.0")
-      return false
-    end
-
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting TVis for #{construction.name} to #{target_tvis}")
-    standard = Standard.new
-    # Skip layer-by-layer fenestration constructions
-    unless standard.construction_simple_glazing?(construction)
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Can only set the Tvis of simple glazing. #{construction.name} is not simple glazing.")
-      return false
-    end
-
-    # Set the Tvis
-    glass_layer = construction.layers.first.to_SimpleGlazing.get
-    glass_layer.setVisibleTransmittance(target_tvis)
-
-    return true
   end
 end

@@ -1,6 +1,7 @@
 
 modules/constructions/test_constructions.rb
 modules/constructions/test_materials.rb
+modules/constructions/test_information.rb
 modules/create_typical/test_space_type_ratios.rb
 modules/create_typical/test_enumerations.rb
 modules/create_typical/test_create_typical.rb

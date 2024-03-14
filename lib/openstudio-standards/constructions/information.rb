@@ -80,5 +80,26 @@ module OpenstudioStandards
 
       return construction_array
     end
+
+    # Determines if the construction is a simple glazing construction,
+    # as indicated by having a single layer of type SimpleGlazing.
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @return [Boolean] returns true if it is a simple glazing, false if not
+    def self.construction_simple_glazing?(construction)
+      # Not simple if more than 1 layer
+      if construction.layers.length > 1
+        return false
+      end
+
+      # Not simple unless the layer is a SimpleGlazing material
+      # if construction.layers.first.to_SimpleGlazing.empty?
+      if construction.layers.first.to_SimpleGlazing.empty?
+        return false
+      end
+
+      # If here, must be simple glazing
+      return true
+    end
   end
 end
