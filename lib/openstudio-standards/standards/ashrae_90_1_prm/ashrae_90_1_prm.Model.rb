@@ -312,7 +312,7 @@ class ASHRAE901PRM < Standard
 
     # adjust_infiltration_to_prototype_building_conditions(1) corresponds
     # to the 0.112 shown in G3.1.1.4
-    curr_tot_infil_m3_per_s_per_envelope_area = bldg_air_leakage_rate / adjust_infiltration_to_prototype_building_conditions(1) / building_envelope_area_m2
+    curr_tot_infil_m3_per_s_per_envelope_area = bldg_air_leakage_rate / OpenstudioStandards::Infiltration.adjust_infiltration_to_prototype_building_conditions(1) / building_envelope_area_m2
     return curr_tot_infil_m3_per_s_per_envelope_area
   end
 
@@ -335,7 +335,7 @@ class ASHRAE901PRM < Standard
 
     # Adjust the infiltration rate to the average pressure for the prototype buildings.
     # adj_infil_rate_cfm_per_ft2 = 0.112 * basic_infil_rate_cfm_per_ft2
-    adj_infil_rate_cfm_per_ft2 = adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
+    adj_infil_rate_cfm_per_ft2 = OpenstudioStandards::Infiltration.adjust_infiltration_to_prototype_building_conditions(basic_infil_rate_cfm_per_ft2)
     adj_infil_rate_m3_per_s_per_m2 = adj_infil_rate_cfm_per_ft2 / conv_fact
 
     # Calculate the total infiltration

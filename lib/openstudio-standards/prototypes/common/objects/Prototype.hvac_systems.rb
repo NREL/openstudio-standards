@@ -612,7 +612,6 @@ class Standard
         next unless dd.dayType == 'SummerDesignDay'
         next unless dd.name.get.to_s.include?('WB=>MDB')
 
-
         if condenser_water_loop.model.version < OpenStudio::VersionString.new('3.3.0')
           if dd.humidityIndicatingType == 'Wetbulb'
             summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
