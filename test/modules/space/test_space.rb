@@ -172,10 +172,10 @@ class TestSpace < Minitest::Test
     assert_equal(summer_wkdy_hrly_vals.rindex(0.625), 11)
     assert_equal(summer_wkdy_hrly_vals.index(0.875), 12)
     assert_equal(summer_wkdy_hrly_vals.rindex(0.875), 15)
-    assert_equal(summer_wkdy_hrly_vals.rindex(0.538), 17)
-    assert_equal(summer_wkdy_hrly_vals.rindex(0.163), 19)
+    assert_equal(summer_wkdy_hrly_vals.rindex(0.5375), 17)
+    assert_equal(summer_wkdy_hrly_vals.rindex(0.1625), 19)
 
-    assert_in_delta(@sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_fracs), 2290.28, 0.01)
+    assert_in_delta(@sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_fracs), 2290.15, 0.01) # before refactor: 2290.28
 
     # not normalized
     occ_sch_values = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy threshold', occupied_percentage_threshold: 0.3, threshold_calc_method: nil)
