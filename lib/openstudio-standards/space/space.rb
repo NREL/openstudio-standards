@@ -1,8 +1,6 @@
 # Methods to obtain information about model spaces
 module OpenstudioStandards
   module Space
-    # @!group Space
-
     # Determine if the space is a plenum.
     # Assume it is a plenum if it is a supply or return plenum for an AirLoop,
     # if it is not part of the total floor area,
@@ -73,7 +71,7 @@ module OpenstudioStandards
           end
         end
         if largest_surface.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
+          OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{space.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
           return is_res
         end
         # Get the space on the other side of this floor
@@ -82,11 +80,11 @@ module OpenstudioStandards
           if adj_surface.space.is_initialized
             space_to_check = adj_surface.space.get
           else
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} is a plenum, but could not find a space attached to the largest floor's adjacent surface #{adj_surface.name} to determine if plenum should be res or nonres.  Assuming nonresidential.")
+            OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{space.name} is a plenum, but could not find a space attached to the largest floor's adjacent surface #{adj_surface.name} to determine if plenum should be res or nonres.  Assuming nonresidential.")
             return is_res
           end
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
+          OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{space.name} is a plenum, but could not find a floor with a space below it to determine if plenum should be  res or nonres.  Assuming nonresidential.")
           return is_res
         end
       end
@@ -101,10 +99,96 @@ module OpenstudioStandards
           is_res = true
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Could not find a space type for #{space_to_check.name}, assuming nonresidential.")
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "Could not find a space type for #{space_to_check.name}, assuming nonresidential.")
       end
 
       return is_res
+    end
+
+    # Determines heating status.
+    # If the space's zone has a thermostat with a maximum heating setpoint above 5C (41F), counts as heated.
+    #
+    # @author Andrew Parker, Julien Marrec
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Boolean] returns true if heated, false if not
+    def self.space_heated?(space)
+      # Get the zone this space is inside
+      zone = space.thermalZone
+
+      # Assume unheated if not assigned to a zone
+      if zone.empty?
+        return false
+      end
+
+      # Get the category from the zone
+      htd = OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone.get)
+
+      return htd
+    end
+
+    # Determines cooling status.
+    # If the space's zone has a thermostat with a minimum cooling setpoint above 33C (91F), counts as cooled.
+    #
+    # @author Andrew Parker, Julien Marrec
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Boolean] returns true if cooled, false if not
+    def self.space_cooled?(space)
+      # Get the zone this space is inside
+      zone = space.thermalZone
+
+      # Assume uncooled if not assigned to a zone
+      if zone.empty?
+        return false
+      end
+
+      # Get the category from the zone
+      cld = OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone.get)
+
+      return cld
+    end
+
+    # Determine the design internal load (W) for this space without space multipliers.
+    # This include People, Lights, Electric Equipment, and Gas Equipment.
+    # It assumes 100% of the wattage is converted to heat, and that the design peak schedule value is 1 (100%).
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Double] the design internal load, in W
+    def self.space_get_design_internal_load(space)
+      load_w = 0.0
+
+      # People
+      space.people.each do |people|
+        w_per_person = 125 # Initial assumption
+        act_sch = people.activityLevelSchedule
+        if act_sch.is_initialized
+          if act_sch.get.to_ScheduleRuleset.is_initialized
+            act_sch = act_sch.get.to_ScheduleRuleset.get
+            w_per_person = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(act_sch)['max']
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+          end
+          OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{space.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
+        end
+
+        num_ppl = people.getNumberOfPeople(space.floorArea)
+
+        ppl_w = num_ppl * w_per_person
+
+        load_w += ppl_w
+      end
+
+      # Lights
+      load_w += space.lightingPower
+
+      # Electric Equipment
+      load_w += space.electricEquipmentPower
+
+      # Gas Equipment
+      load_w += space.gasEquipmentPower
+
+      OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "#{space.name} has #{load_w.round}W of design internal loads.")
+
+      return load_w
     end
 
     # @todo add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
@@ -115,7 +199,7 @@ module OpenstudioStandards
     #
     # Retrieves the default occupancy schedule assigned to the space
     # @author David Goldwasser
-    # @param space [OpenStudio::Model::Space] space object
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
     # @return [Hash]: see example
     # @example: {
     #   schedule: space hours_of_operation schedule,
@@ -130,12 +214,12 @@ module OpenstudioStandards
       default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
       hours_of_operation = space.getDefaultSchedule(default_sch_type)
       if !hours_of_operation.is_initialized
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Hours of Operation Schedule is not set for #{space.name}.")
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "Hours of Operation Schedule is not set for #{space.name}.")
         return nil
       end
       hours_of_operation = hours_of_operation.get
       if !hours_of_operation.to_ScheduleRuleset.is_initialized
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "Hours of Operation Schedule #{hours_of_operation.name} is not a ScheduleRuleset.")
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "Hours of Operation Schedule #{hours_of_operation.name} is not a ScheduleRuleset.")
         return nil
       end
       hours_of_operation = hours_of_operation.to_ScheduleRuleset.get
@@ -173,7 +257,7 @@ module OpenstudioStandards
 
       # some validation
       if times.size > 3 || unexpected_val || hoo_start.nil? || hoo_end.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{hours_of_operation.name} does not look like a valid hours of operation schedule for parametric schedule generation.")
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{hours_of_operation.name} does not look like a valid hours of operation schedule for parametric schedule generation.")
         return nil
       end
 
@@ -229,7 +313,7 @@ module OpenstudioStandards
 
         # some validation
         if times.size > 3 || unexpected_val || hoo_start.nil? || hoo_end.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{hours_of_operation.name} does not look like a valid hours of operation schedule for parametric schedule generation.")
+          OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{hours_of_operation.name} does not look like a valid hours of operation schedule for parametric schedule generation.")
           return nil
         end
 
@@ -290,7 +374,7 @@ module OpenstudioStandards
     # expand hours of operation. When hours of operation do not overlap for two spaces, add logic to remove all but largest gap
     #
     # @author David Goldwasser
-    # @param spaces [Array<OpenStudio::Model::Space>] takes array of spaces
+    # @param spaces [Array<OpenStudio::Model::Space>] An array of OpenStudio Space objects
     # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
     def self.spaces_hours_of_operation(spaces)
       hours_of_operation_array = []
@@ -299,7 +383,7 @@ module OpenstudioStandards
         space_names << space.name.to_s
         hoo_hash = space_hours_of_operation(space)
         if !hoo_hash.nil?
-          # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "For #{space.name}, hours of operation hash = #{hoo_hash}.")
+          # OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "For #{space.name}, hours of operation hash = #{hoo_hash}.")
           hours_of_operation_array << hoo_hash
         end
       end
@@ -312,7 +396,7 @@ module OpenstudioStandards
       #
       # loop through all 365/366 days
 
-      # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Evaluating hours of operation for #{space_names.join(',')}: #{hours_of_operation_array}")
+      # OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "Evaluating hours of operation for #{space_names.join(',')}: #{hours_of_operation_array}")
 
       # returns the most prevalent hours of operation hash among spaces
       hours_of_operation = hours_of_operation_array.max_by { |i| hours_of_operation_array.count(i) }
@@ -339,7 +423,7 @@ module OpenstudioStandards
     # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
     def self.spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: 'value')
       unless !spaces.empty?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.space', 'Empty spaces array passed to spaces_get_occupancy_schedule method.')
+        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::Space', 'Empty spaces array passed to spaces_get_occupancy_schedule method.')
         return false
       end
 
@@ -363,7 +447,7 @@ module OpenstudioStandards
             next if num_ppl_sch.empty?
 
             if num_ppl_sch.get.to_ScheduleRuleset.empty? # skip non-ruleset schedules
-              OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "People schedule #{num_ppl_sch.get.name} is not a Ruleset Schedule, it will not contribute to hours of operation")
+              OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "People schedule #{num_ppl_sch.get.name} is not a Ruleset Schedule, it will not contribute to hours of operation")
             else
               num_ppl_sch = num_ppl_sch.get.to_ScheduleRuleset.get
               num_ppl = people.getNumberOfPeople(space.floorArea)
@@ -378,7 +462,7 @@ module OpenstudioStandards
           next if num_ppl_sch.empty?
 
           if num_ppl_sch.get.to_ScheduleRuleset.empty? # skip non-ruleset schedules
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "People schedule #{num_ppl_sch.get.name} is not a Ruleset Schedule, it will not contribute to hours of operation")
+            OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "People schedule #{num_ppl_sch.get.name} is not a Ruleset Schedule, it will not contribute to hours of operation")
           else
             num_ppl_sch = num_ppl_sch.get.to_ScheduleRuleset.get
             num_ppl = people.getNumberOfPeople(space.floorArea)
@@ -389,13 +473,13 @@ module OpenstudioStandards
       end
 
       unless sch_name.nil?
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Finding space schedules for #{sch_name}.")
+        OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "Finding space schedules for #{sch_name}.")
       end
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "The #{spaces.size} spaces have #{occ_schedules_num_occ.size} unique occ schedules.")
+      OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "The #{spaces.size} spaces have #{occ_schedules_num_occ.size} unique occ schedules.")
       occ_schedules_num_occ.each do |occ_sch, num_occ|
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "...#{occ_sch.name} - #{num_occ.round} people")
+        OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "...#{occ_sch.name} - #{num_occ.round} people")
       end
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "   Total #{max_occ_in_spaces.round} people in #{spaces.size} spaces.")
+      OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "   Total #{max_occ_in_spaces.round} people in #{spaces.size} spaces.")
 
       # Store arrays of 365 day schedules used by each occ schedule once for later
       # Store arrays of day schedule times for later
@@ -576,7 +660,7 @@ module OpenstudioStandards
           end
 
           # If here, we need to make a rule to cover from the previous rule to today
-          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
+          OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
           sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
           sch_rule.setName("#{sch_name} #{weekday} Rule")
           day_sch = sch_rule.daySchedule
@@ -653,14 +737,11 @@ module OpenstudioStandards
         sch_ruleset.defaultDaySchedule.addValue(times[i], values[i])
       end
 
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Created #{sch_ruleset.name} with #{OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(sch_ruleset)} annual EFLH.")
+      OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "Created #{sch_ruleset.name} with #{OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(sch_ruleset)} annual EFLH.")
 
       return sch_ruleset
     end
 
-    # @!endgroup Space
-
-    # @!group SpaceLoadInstance
     # method to process load instance schedules for model_setup_parametric_schedules
     #
     # @author David Goldwasser
@@ -685,7 +766,5 @@ module OpenstudioStandards
 
       return parametric_inputs
     end
-
-    # @!endgroup SpaceLoadInstance
   end
 end

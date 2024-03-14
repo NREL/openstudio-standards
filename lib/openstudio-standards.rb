@@ -34,7 +34,10 @@ module OpenstudioStandards
 
   # Space Module
   require_relative 'openstudio-standards/space/space'
-  
+
+  # Thermal Zone Module
+  require_relative 'openstudio-standards/thermal_zone/thermal_zone'
+
   # HVAC Module
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
 

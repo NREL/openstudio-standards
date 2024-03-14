@@ -7,7 +7,7 @@ class ASHRAE9012013 < ASHRAE901
   # @return [String] the occupancy type category
   # @todo Add public assembly building types
   def thermal_zone_occupancy_type(thermal_zone)
-    occ_type = if thermal_zone_residential?(thermal_zone)
+    occ_type = if OpenstudioStandards::ThermalZone.thermal_zone_residential?(thermal_zone)
                  'residential'
                else
                  'nonresidential'

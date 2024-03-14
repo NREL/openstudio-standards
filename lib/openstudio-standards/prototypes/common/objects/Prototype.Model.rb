@@ -671,8 +671,8 @@ Standard.class_eval do
       internal_mass_def.setConstruction(construction)
       model.getSpaces.each do |space|
         # only add internal mass objects to conditioned spaces
-        next unless space_cooled?(space)
-        next unless space_heated?(space)
+        next unless OpenstudioStandards::Space.space_cooled?(space)
+        next unless OpenstudioStandards::Space.space_heated?(space)
 
         internal_mass = OpenStudio::Model::InternalMass.new(internal_mass_def)
         internal_mass.setName("#{space.name} Mass")
@@ -1660,7 +1660,7 @@ Standard.class_eval do
         serves_res_spc = false
 
         air_loop_hvac.thermalZones.each do |zone|
-          next unless thermal_zone_residential?(zone)
+          next unless OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone)
 
           oa_cfm_per_ft2 = 0.0578940512546562
           oa_m3_per_m2 = OpenStudio.convert(OpenStudio.convert(oa_cfm_per_ft2, 'cfm', 'm^3/s').get, '1/ft^2', '1/m^2').get

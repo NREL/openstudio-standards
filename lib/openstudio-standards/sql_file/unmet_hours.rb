@@ -33,7 +33,7 @@ module OpenstudioStandards
       zone_data = []
       model.getThermalZones.each do |zone|
         # skip zones that aren't heated
-        next unless std.thermal_zone_heated?(zone)
+        next unless OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone)
 
         # get zone air temperatures
         zone_temp_timeseries = sql_file.timeSeries(ann_env_pd, 'Hourly', 'Zone Air Temperature', zone.name.get)
@@ -131,7 +131,7 @@ module OpenstudioStandards
       zone_data = []
       model.getThermalZones.each do |zone|
         # skip zones that aren't cooled
-        next unless std.thermal_zone_cooled?(zone)
+        next unless OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone)
 
         # get zone air temperatures
         zone_temp_timeseries = sql_file.timeSeries(ann_env_pd, 'Hourly', 'Zone Air Temperature', zone.name.get)

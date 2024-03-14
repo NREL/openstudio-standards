@@ -745,7 +745,7 @@ class Standard
 
     model.getThermalZones.sort.each do |zone|
       # Skip plenums
-      if thermal_zone_plenum?(zone)
+      if OpenstudioStandards::ThermalZone.thermal_zone_plenum?(zone)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Zone #{zone.name} is a plenum.  It will not be assigned a baseline system.")
         next
       end
@@ -759,8 +759,8 @@ class Standard
       end
 
       # Skip unconditioned zones
-      heated = thermal_zone_heated?(zone)
-      cooled = thermal_zone_cooled?(zone)
+      heated = OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone)
+      cooled = OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone)
       if !heated && !cooled
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Zone #{zone.name} is unconditioned.  It will not be assigned a baseline system.")
         next
@@ -961,7 +961,7 @@ class Standard
       heated_only_zones = []
       heated_cooled_zones = []
       gp['zones'].each do |zn|
-        if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
+        if OpenstudioStandards::ThermalZone.thermal_zone_heated?(zn['zone']) && !OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zn['zone'])
           heated_only_zones << zn
         else
           heated_cooled_zones << zn
@@ -2112,7 +2112,7 @@ class Standard
       area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
       data['area_ft2'] = area_ft2
       # Get the internal loads
-      int_load_w = thermal_zone_design_internal_load(zone) * zone.multiplier
+      int_load_w = OpenstudioStandards::ThermalZone.thermal_zone_get_design_internal_load(zone) * zone.multiplier
       # Normalize per-area
       int_load_w_per_m2 = int_load_w / area_m2
       int_load_btu_per_ft2 = OpenStudio.convert(int_load_w_per_m2, 'W/m^2', 'Btu/hr*ft^2').get
@@ -4472,8 +4472,8 @@ class Standard
         # If heated-only, will be assumed Semiheated.
         # The full-bore method is on the next line in case needed.
         # cat = thermal_zone_conditioning_category(space, template, climate_zone)
-        cooled = space_cooled?(space)
-        heated = space_heated?(space)
+        cooled = OpenstudioStandards::Space.space_cooled?(space)
+        heated = OpenstudioStandards::Space.space_heated?(space)
         cat = 'Unconditioned'
         # Unconditioned
         if !heated && !cooled

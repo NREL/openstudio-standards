@@ -2746,7 +2746,7 @@ class ASHRAE901PRM < Standard
 
     total_area_ft2 = 0
     zones.each do |zn|
-      if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
+      if OpenstudioStandards::ThermalZone.thermal_zone_heated?(zn['zone']) && !OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zn['zone'])
         # this will occur when there is no cooling tstat, or when min cooling setpoint is above 91 F
         heated_only_zones << zn['zone']
       elsif comp_room_loads[zn['zone'].name.get] > 0

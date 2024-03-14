@@ -16,6 +16,7 @@ modules/schedules/test_schedules_information.rb
 modules/schedules/test_schedules_modify.rb
 modules/schedules/test_schedules_parametric.rb
 modules/space/test_space.rb
+modules/thermal_zone/test_thermal_zone.rb
 modules/weather/test_weather_information.rb
 modules/weather/test_weather_modify.rb
 modules/weather/test_weather_stat_file.rb

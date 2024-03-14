@@ -501,7 +501,7 @@ class ASHRAE9012019 < ASHRAE901
       nontrans_dwel = false
       if building_type == 'MidriseApartment' || building_type == 'HighriseApartment'
         air_loop_hvac.thermalZones.each do |zone|
-          next unless thermal_zone_residential?(zone)
+          next unless OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone)
 
           nontrans_dwel = true
         end

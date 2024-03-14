@@ -25,8 +25,8 @@ class Standard
     # Sort through each space
     model.getSpaces.sort.each do |space|
       # Is the space heated or cooled?
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
+      cooled = OpenstudioStandards::Space.space_cooled?(space)
+      heated = OpenstudioStandards::Space.space_heated?(space)
       # Assume conditioned means the space is heated, cooled, or both.
       if heated || cooled
         # If the space is conditioned then go through each surface and determine if it a vertial exterior wall.
@@ -106,8 +106,8 @@ class Standard
     sub_surface_area = 0
     # Sort through each space and determine if it conditioned.  Conditioned meaning it is either heated, cooled, or both.
     model.getSpaces.sort.each do |space|
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
+      cooled = OpenstudioStandards::Space.space_cooled?(space)
+      heated = OpenstudioStandards::Space.space_heated?(space)
       # If the space is conditioned sort through the surfaces looking for outdoor roofs.
       if heated || cooled
         space.surfaces.sort.each do |surface|

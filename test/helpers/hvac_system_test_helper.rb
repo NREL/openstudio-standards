@@ -92,11 +92,11 @@ def model_hvac_test(hvac_arguments)
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     zones = model.getThermalZones
-    heated_and_cooled_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-    heated_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) }
-    cooled_zones = zones.select { |zone| standard.thermal_zone_cooled?(zone) }
-    cooled_only_zones = zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-    heated_only_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) && !standard.thermal_zone_cooled?(zone) }
+    heated_and_cooled_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+    heated_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) }
+    cooled_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+    cooled_only_zones = zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+    heated_only_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && !OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
     system_zones = heated_and_cooled_zones + cooled_only_zones
     case zone_selection
     when 'heated_zones'

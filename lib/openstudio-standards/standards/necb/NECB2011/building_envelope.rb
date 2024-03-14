@@ -63,8 +63,8 @@ class NECB2011
       # setpoints.  If heated-only, will be assumed Semiheated.
       # The full-bore method is on the next line in case needed.
       # cat = thermal_zone_conditioning_category(space, template, climate_zone)
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
+      cooled = OpenstudioStandards::Space.space_cooled?(space)
+      heated = OpenstudioStandards::Space.space_heated?(space)
       cat = 'Unconditioned'
       # Unconditioned
       if !heated && !cooled
@@ -74,7 +74,7 @@ class NECB2011
         cat = 'Semiheated'
         # Heated and Cooled
       else
-        res = thermal_zone_residential?(space.thermalZone.get)
+        res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(space.thermalZone.get)
         cat = if res
                 'ResConditioned'
               else

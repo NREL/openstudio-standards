@@ -19,7 +19,7 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # cooling delta t
-      if std.thermal_zone_cooled?(thermal_zone)
+      if OpenstudioStandards::ThermalZone.thermal_zone_cooled?(thermal_zone)
         case thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureInputMethod
         when 'SupplyAirTemperatureDifference'
           assert((thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference - delta_t_r).abs < 0.001, "supply to room cooling temperature difference for #{thermal_zone.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect. It is #{thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference}, but should be #{delta_t_r}")
@@ -50,7 +50,7 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # heating delta t
-      if std.thermal_zone_heated?(thermal_zone)
+      if OpenstudioStandards::ThermalZone.thermal_zone_heated?(thermal_zone)
         has_unit_heater = false
         # 90.1 Appendix G G3.1.2.8.2
         thermal_zone.equipment.each do |eqt|
