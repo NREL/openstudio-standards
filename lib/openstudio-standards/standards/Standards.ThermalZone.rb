@@ -1,56 +1,6 @@
 class Standard
   # @!group ThermalZone
 
-  # Determine if the thermal zone is a Fossil Fuel, Fossil/Electric Hybrid, and Purchased Heat zone.
-  # If not, it is an Electric or Other Zone.
-  # This is as-defined by 90.1 Appendix G.
-  #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Boolean] true if Fossil Fuel, Fossil/Electric Hybrid, and Purchased Heat zone,
-  #   false if Electric or Other.
-  # @todo It's not doing it properly right now.
-  #   If you have a zone with a VRF + a DOAS (via an ATU SingleDUct Uncontrolled)
-  #   it'll pick up both natural gas and electricity and classify it as fossil fuel,
-  #   when I would definitely classify it as electricity
-  def thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
-    is_fossil = false
-
-    # Get an array of the heating fuels
-    # used by the zone.  Possible values are
-    # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
-    # Coal, Diesel, Gasoline, SolarEnergy,
-    # DistrictHeating, DistrictHeatingWater, and DistrictHeatingSteam.
-
-    # error if HVACComponent heating fuels method is not available
-    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
-    end
-
-    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
-
-    if htg_fuels.include?('Gas')
-      htg_fuels.include?('NaturalGas') ||
-        htg_fuels.include?('Propane') ||
-        htg_fuels.include?('PropaneGas') ||
-        htg_fuels.include?('FuelOil_1') ||
-        htg_fuels.include?('FuelOilNo1') ||
-        htg_fuels.include?('FuelOil_2') ||
-        htg_fuels.include?('FuelOilNo2') ||
-        htg_fuels.include?('Coal') ||
-        htg_fuels.include?('Diesel') ||
-        htg_fuels.include?('Gasoline') ||
-        htg_fuels.include?('DistrictHeating') ||
-        htg_fuels.include?('DistrictHeatingWater') ||
-        htg_fuels.include?('DistrictHeatingSteam')
-
-      is_fossil = true
-    end
-
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, heating fuels = #{htg_fuels.join(', ')}; thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)  = #{is_fossil}.")
-
-    return is_fossil
-  end
-
   # for 2013 and prior, baseline fuel = proposed fuel
   # @param thermal_zone
   # @return [String with applicable DistrictHeating and/or DistrictCooling
@@ -70,45 +20,21 @@ class Standard
   # @param custom [String] string for custom case statement
   # @return [String] the fuel type category
   def thermal_zone_fossil_or_electric_type(thermal_zone, custom)
-    fossil = false
-    electric = false
-
     # error if HVACComponent heating fuels method is not available
     if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
-    # Fossil heating
+    # Cooling fuels, for determining unconditioned zones
     htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
-    if htg_fuels.include?('Gas')
-      htg_fuels.include?('NaturalGas') ||
-        htg_fuels.include?('Propane') ||
-        htg_fuels.include?('PropaneGas') ||
-        htg_fuels.include?('FuelOil_1') ||
-        htg_fuels.include?('FuelOilNo1') ||
-        htg_fuels.include?('FuelOil_2') ||
-        htg_fuels.include?('FuelOilNo2') ||
-        htg_fuels.include?('Coal') ||
-        htg_fuels.include?('Diesel') ||
-        htg_fuels.include?('Gasoline') ||
-        htg_fuels.include?('DistrictHeating') ||
-        htg_fuels.include?('DistrictHeatingWater') ||
-        htg_fuels.include?('DistrictHeatingSteam')
-      fossil = true
-    end
-
-    # Electric heating
-    if htg_fuels.include?('Electricity')
-      electric = true
-    end
-
-    # Cooling fuels, for determining
-    # unconditioned zones
-    clg_fuels = thermal_zone.coolingFuelTypes
+    clg_fuels = thermal_zone.coolingFuelTypes.map(&:valueName)
+    fossil = OpenstudioStandards::ThermalZone.thermal_zone_fossil_heat?(thermal_zone)
+    district = OpenstudioStandards::ThermalZone.thermal_zone_district_heat?(thermal_zone)
+    electric = OpenstudioStandards::ThermalZone.thermal_zone_electric_heat?(thermal_zone)
 
     # Categorize
     fuel_type = nil
-    if fossil
+    if fossil || district
       # If uses any fossil, counts as fossil even if electric is present too
       fuel_type = 'fossil'
     elsif electric
@@ -135,73 +61,7 @@ class Standard
       end
     end
 
-    # OpenStudio::logFree(OpenStudio::Info, "openstudio.Standards.Model", "For #{self.name}, fuel type = #{fuel_type}.")
-
     return fuel_type
-  end
-
-  # Determine if the thermal zone is Fossil/Purchased Heat/Electric Hybrid
-  #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @return [Boolean] true if mixed Fossil/Electric Hybrid, and Purchased Heat zone, false if not
-  def thermal_zone_mixed_heating_fuel?(thermal_zone)
-    is_mixed = false
-
-    # error if HVACComponent heating fuels method is not available
-    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
-    end
-
-    # Get an array of the heating fuels
-    # used by the zone.  Possible values are
-    # Electricity, NaturalGas, Propane, PropaneGas, FuelOilNo1, FuelOilNo2,
-    # Coal, Diesel, Gasoline, SolarEnergy,
-    # DistrictHeating, DistrictHeatingWater, and DistrictHeatingSteam.
-    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
-
-    # Includes fossil
-    fossil = false
-    if htg_fuels.include?('Gas')
-      htg_fuels.include?('NaturalGas') ||
-        htg_fuels.include?('Propane') ||
-        htg_fuels.include?('PropaneGas') ||
-        htg_fuels.include?('FuelOil_1') ||
-        htg_fuels.include?('FuelOilNo1') ||
-        htg_fuels.include?('FuelOil_2') ||
-        htg_fuels.include?('FuelOilNo2') ||
-        htg_fuels.include?('Coal') ||
-        htg_fuels.include?('Diesel') ||
-        htg_fuels.include?('Gasoline')
-
-      fossil = true
-    end
-
-    # Electric and fossil and district
-    has_district_heating = (htg_fuels.include?('DistrictHeating') || htg_fuels.include?('DistrictHeatingWater') || htg_fuels.include?('DistrictHeatingSteam'))
-    if htg_fuels.include?('Electricity') && has_district_heating && fossil
-      is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity, fossil, and district.")
-    end
-
-    # Electric and fossil
-    if htg_fuels.include?('Electricity') && fossil
-      is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity and fossil.")
-    end
-
-    # Electric and district
-    if htg_fuels.include?('Electricity') && has_district_heating
-      is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed electricity and district.")
-    end
-
-    # Fossil and district
-    if fossil && has_district_heating
-      is_mixed = true
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, heating mixed fossil and district.")
-    end
-
-    return is_mixed
   end
 
   # Infers the baseline system type based on the equipment serving the zone and their heating/cooling fuels.
@@ -254,7 +114,7 @@ class Standard
     # Get the zone heating and cooling fuels
     htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
     clg_fuels = thermal_zone.coolingFuelTypes.map(&:valueName)
-    is_fossil = thermal_zone_fossil_hybrid_or_purchased_heat?(thermal_zone)
+    is_fossil = OpenstudioStandards::ThermalZone.thermal_zone_fossil_heat?(thermal_zone) || OpenstudioStandards::ThermalZone.thermal_zone_district_heat?(thermal_zone)
 
     # Infer the HVAC type
     sys_type = 'Unknown'

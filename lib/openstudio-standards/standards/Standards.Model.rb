@@ -1094,32 +1094,26 @@ class Standard
     heat_list = ''
     has_district_heat = false
     has_fuel_heat = false
-    has_elec_heat = false
-
-    # error if HVACComponent heating fuels method is not available
-    if model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
-    end
-
+    has_electric_heat = false
     zones.each do |zone|
-      htg_fuels = zone.heatingFuelTypes.map(&:valueName)
-      if htg_fuels.include?('DistrictHeating') || htg_fuels.include?('DistrictHeatingWater') || htg_fuels.include?('DistrictHeatingSteam')
+      if OpenstudioStandards::ThermalZone.thermal_zone_district_heat?(zone)
         has_district_heat = true
       end
-      other_heat = thermal_zone_fossil_or_electric_type(zone, '')
-      if other_heat == 'fossil'
+      if OpenstudioStandards::ThermalZone.thermal_zone_fossil_heat?(zone)
         has_fuel_heat = true
-      elsif other_heat == 'electric'
-        has_elec_heat = true
+      end
+      if OpenstudioStandards::ThermalZone.thermal_zone_electric_heat?(zone)
+        has_electric_heat = true
       end
     end
+
     if has_district_heat
       heat_list = 'districtheating'
     end
     if has_fuel_heat
       heat_list += '_fuel'
     end
-    if has_elec_heat
+    if has_electric_heat
       heat_list += '_electric'
     end
     return heat_list

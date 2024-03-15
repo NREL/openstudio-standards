@@ -376,6 +376,97 @@ module OpenstudioStandards
       return cld
     end
 
+    # Determine if the thermal zone is heated by electricity.
+    # This will return true if there is any electric heat, even if not the primary heating source.
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Boolean] true if heated by electricity, false if fossil fuel or other.
+    def self.thermal_zone_electric_heat?(thermal_zone)
+      # error if HVACComponent heating fuels method is not available
+      if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+      end
+
+      # Get an array of the heating fuels used by the zone
+      htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
+      is_electric = htg_fuels.include?('Electricity') ? true : false
+
+      return is_electric
+    end
+
+    # Determine if the thermal zone is heated by a fossil fuel.
+    # This will return true if there is any fossil heat, even if not the primary heating source.
+    # As an example, a zone served by a VRF + DOAS system will show as fossil heated
+    # if the DOAS ventilation air is fossil heated
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Boolean] true if heated by fossil fuel, false if electric or other.
+    def self.thermal_zone_fossil_heat?(thermal_zone)
+      # error if HVACComponent heating fuels method is not available
+      if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+      end
+
+      is_fossil = false
+      # Get an array of the heating fuels used by the zone
+      htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
+      if htg_fuels.include?('Gas') ||
+         htg_fuels.include?('NaturalGas') ||
+         htg_fuels.include?('Propane') ||
+         htg_fuels.include?('PropaneGas') ||
+         htg_fuels.include?('FuelOil_1') ||
+         htg_fuels.include?('FuelOilNo1') ||
+         htg_fuels.include?('FuelOil_2') ||
+         htg_fuels.include?('FuelOilNo2') ||
+         htg_fuels.include?('Coal') ||
+         htg_fuels.include?('Diesel') ||
+         htg_fuels.include?('Gasoline')
+
+        is_fossil = true
+      end
+
+      return is_fossil
+    end
+
+    # Determine if the thermal zone is heated by district or purchased heat.
+    # This will return true if there is any fossil heat, even if not the primary heating source.
+    # As an example, a zone served by a VRF + DOAS system will show as district heated
+    # if the DOAS ventilation air is heated by a district system
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Boolean] true if heated by district heat, false if electric or other.
+    def self.thermal_zone_district_heat?(thermal_zone)
+      # error if HVACComponent heating fuels method is not available
+      if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+      end
+
+      is_district = false
+      # Get an array of the heating fuels used by the zone
+      htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
+      if htg_fuels.include?('DistrictHeating') ||
+         htg_fuels.include?('DistrictHeatingWater') ||
+         htg_fuels.include?('DistrictHeatingSteam')
+
+        is_district = true
+      end
+
+      return is_district
+    end
+
+    # Determine if the thermal zone is heated by two or more of electricity, fossil fuel, and district or purchased heat.
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Boolean] true if mixed fossil, electric, and district/purchased heat, false if not
+    def self.thermal_zone_mixed_heat?(thermal_zone)
+      electric_heat = OpenstudioStandards::ThermalZone.thermal_zone_electric_heat?(thermal_zone)
+      fossil_heat = OpenstudioStandards::ThermalZone.thermal_zone_fossil_heat?(thermal_zone)
+      district_heat = OpenstudioStandards::ThermalZone.thermal_zone_district_heat?(thermal_zone)
+      is_mixed = [electric_heat, fossil_heat, district_heat].count(true) > 1
+
+      return is_mixed
+    end
+
     # Adds a thermostat that heats the space to 0 F and cools to 120 F.
     # These numbers are outside of the threshold that is considered heated
     # or cooled by thermal_zone_cooled?() and thermal_zone_heated?()
