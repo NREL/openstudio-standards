@@ -3049,7 +3049,7 @@ class Standard
             # Set the U-Value and SHGC
             construction_set_glazing_u_value(construction, target_u_value_ip.to_f, data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
             simple_glazing = construction.layers.first.to_SimpleGlazing
-            simple_glazing.setSolarHeatGainCoefficient(target_shgc) if simple_glazing.is_initialized
+            simple_glazing.get.setSolarHeatGainCoefficient(target_shgc) if simple_glazing.is_initialized
           else # if !data['intended_surface_type'] == 'ExteriorWindow' && !data['intended_surface_type'] == 'Skylight'
             # Set the U-Value
             construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
