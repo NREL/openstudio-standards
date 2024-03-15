@@ -1,56 +1,6 @@
 class Standard
   # @!group ThermalZone
 
-  # This method creates a new fractional schedule ruleset.
-  # If occupied_percentage_threshold is set, this method will return a discrete on/off fractional schedule
-  # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
-  # and zero all other times.  Otherwise the method will return the weighted fractional occupancy schedule.
-  #
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
-  # @param sch_name [String] the name of the generated occupancy schedule
-  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
-  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
-  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
-  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
-  def thermal_zone_get_occupancy_schedule(thermal_zone, sch_name: nil, occupied_percentage_threshold: nil)
-    if sch_name.nil?
-      sch_name = "#{thermal_zone.name} Occ Sch"
-    end
-    # Get the occupancy schedule for all spaces in thermal_zone
-    sch_ruleset = OpenstudioStandards::Space.spaces_get_occupancy_schedule(thermal_zone.spaces,
-                                                                           sch_name: sch_name,
-                                                                           occupied_percentage_threshold: occupied_percentage_threshold)
-    return sch_ruleset
-  end
-
-  # This method creates a new fractional schedule ruleset.
-  # If occupied_percentage_threshold is set, this method will return a discrete on/off fractional schedule
-  # with a value of one when occupancy across all spaces is greater than or equal to the occupied_percentage_threshold,
-  # and zero all other times.  Otherwise the method will return the weighted fractional occupancy schedule.
-  #
-  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of thermal_zones to create occupancy schedule
-  # @param sch_name [String] the name of the generated occupancy schedule
-  # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
-  #   if this parameter is set, the returned ScheduleRuleset will be 0 = unoccupied, 1 = occupied
-  #   otherwise the ScheduleRuleset will be the weighted fractional occupancy schedule
-  # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
-  def thermal_zones_get_occupancy_schedule(thermal_zones, sch_name: nil, occupied_percentage_threshold: nil)
-    if sch_name.nil?
-      sch_name = "#{thermal_zones.size} zone Occ Sch"
-    end
-    # Get the occupancy schedule for all spaces in thermal_zones
-    spaces = []
-    thermal_zones.each do |thermal_zone|
-      thermal_zone.spaces.each do |space|
-        spaces << space
-      end
-    end
-    sch_ruleset = OpenstudioStandards::Space.spaces_get_occupancy_schedule(spaces,
-                                                                           sch_name: sch_name,
-                                                                           occupied_percentage_threshold: occupied_percentage_threshold)
-    return sch_ruleset
-  end
-
   # Determine if the thermal zone is a Fossil Fuel, Fossil/Electric Hybrid, and Purchased Heat zone.
   # If not, it is an Electric or Other Zone.
   # This is as-defined by 90.1 Appendix G.

@@ -184,17 +184,36 @@ class TestSpace < Minitest::Test
 
   def test_thermal_zone_get_space_type
     std = Standard.build('90.1-2013')
-    @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESecondarySchool.osm")
-    thermal_zone = @model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESecondarySchool.osm")
+    thermal_zone = model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
     space_type = @zone.thermal_zone_get_space_type(thermal_zone)
     assert_equal('SecondarySchool Gym', space_type.get.name.get)
   end
 
   def test_thermal_zone_get_building_type
     std = Standard.build('90.1-2013')
-    @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESecondarySchool.osm")
-    thermal_zone = @model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESecondarySchool.osm")
+    thermal_zone = model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
     assert_equal('SecondarySchool', @zone.thermal_zone_get_building_type(thermal_zone))
+  end
+
+  def test_thermal_zone_get_occupancy_schedule
+    std = Standard.build('90.1-2013')
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESecondarySchool.osm")
+    std.model_add_loads(model)
+    thermal_zone = model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
+    occ_sch = @zone.thermal_zone_get_occupancy_schedule(thermal_zone)
+    assert_equal(0.95, occ_sch.defaultDaySchedule.values.max)
+  end
+
+  def test_thermal_zones_get_occupancy_schedule
+    std = Standard.build('90.1-2013')
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESecondarySchool.osm")
+    std.model_add_loads(model)
+    thermal_zone1 = model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
+    thermal_zone2 = model.getThermalZoneByName('TZ-Mult_Class_1_Pod_1_ZN_1_FLR_1').get
+    occ_sch = @zone.thermal_zones_get_occupancy_schedule([thermal_zone1, thermal_zone2])
+    assert_equal(0.703, occ_sch.defaultDaySchedule.values.max)
   end
 
   def test_thermal_zone_get_outdoor_airflow_rate

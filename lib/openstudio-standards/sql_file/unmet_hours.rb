@@ -58,7 +58,7 @@ module OpenstudioStandards
         zone_setpoint_temp_timeseries = zone_setpoint_temp_timeseries.get.values
 
         # calculate zone occupancy by making a new ruleset schedule
-        occ_schedule_ruleset = std.thermal_zone_get_occupancy_schedule(zone)
+        occ_schedule_ruleset = OpenstudioStandards::ThermalZone.thermal_zone_get_occupancy_schedule(zone)
         occ_values = OpenstudioStandards::Schedules.schedule_ruleset_get_hourly_values(occ_schedule_ruleset)
 
         # calculate difference accounting for unmet hours tolerance
@@ -156,7 +156,7 @@ module OpenstudioStandards
         zone_setpoint_temp_timeseries = zone_setpoint_temp_timeseries.get.values
 
         # calculate zone occupancy by making a new ruleset schedule
-        occ_schedule_ruleset = std.thermal_zone_get_occupancy_schedule(zone)
+        occ_schedule_ruleset = OpenstudioStandards::ThermalZone.thermal_zone_get_occupancy_schedule(zone)
         occ_values = OpenstudioStandards::Schedules.schedule_ruleset_get_hourly_values(occ_schedule_ruleset)
 
         # calculate difference accounting for unmet hours tolerance
