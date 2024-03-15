@@ -778,7 +778,7 @@ class Standard
       zn_hash['occ'] = thermal_zone_occupancy_type(zone)
 
       # Building type
-      zn_hash['bldg_type'] = thermal_zone_building_type(zone)
+      zn_hash['bldg_type'] = OpenstudioStandards::ThermalZone.thermal_zone_get_building_type(zone)
 
       # Fuel type
       # for 2013 and prior, baseline fuel = proposed fuel
@@ -1803,7 +1803,7 @@ class Standard
                                model.getPlantLoopByName('Hot Water Loop').get
                              else
                                model_add_hw_loop(model, main_heat_fuel)
-                            end
+                             end
           else
             # If no hot water loop is defined, heat will default to electric resistance
             heating_type = 'Electric'
@@ -1815,7 +1815,7 @@ class Standard
                                  model_add_chw_loop(model,
                                                     cooling_fuel: cool_fuel,
                                                     chw_pumping_type: 'const_pri')
-                              end
+                               end
 
           model_add_four_pipe_fan_coil(model,
                                        zones,
@@ -5585,10 +5585,6 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The model started with #{start_size} objects and finished with #{end_size} objects after removing unused resource objects.")
     return true
   end
-
-
-
-
 
   private
 

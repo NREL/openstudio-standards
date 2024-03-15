@@ -207,11 +207,10 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   def remove_zone_oa_per_person_spec(model, arguments)
-    std = Standard.build('90.1-PRM-2019')
     # argument contains a list of zone names to remove oa per person specification
     arguments.each do |zone_name|
       thermal_zone = model.getThermalZoneByName(zone_name).get
-      std.thermal_zone_convert_oa_req_to_per_area(thermal_zone)
+      OpenstudioStandards::ThermalZone.thermal_zone_convert_outdoor_air_to_per_area(thermal_zone)
     end
     return model
   end

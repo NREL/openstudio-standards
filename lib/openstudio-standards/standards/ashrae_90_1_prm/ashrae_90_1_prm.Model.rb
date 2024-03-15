@@ -1389,7 +1389,7 @@ class ASHRAE901PRM < Standard
         air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
         air_loop_hvac.thermalZones.sort.each do |zone|
           unless baseline_thermal_zone_demand_control_ventilation_required?(zone)
-            thermal_zone_convert_oa_req_to_per_area(zone)
+            OpenstudioStandards::ThermalZone.thermal_zone_convert_outdoor_air_to_per_area(zone)
           end
         end
       end

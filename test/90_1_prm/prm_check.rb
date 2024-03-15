@@ -1941,20 +1941,19 @@ class AppendixGPRMTests < Minitest::Test
   #
   # @param prototypes_base [Hash] Baseline prototypes
   def check_vav_min_sp(prototypes_base)
-    standard = Standard.build('90.1-PRM-2019')
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
       model.getAirLoopHVACs.each do |air_loop|
         air_loop.thermalZones.each do |zone|
           zone.equipment.each do |equip|
             if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              zone_oa = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
               vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
               expected_mdp = [zone_oa / vav_terminal.autosizedMaximumAirFlowRate.get, 0.3].max.round(2)
               actual_mdp = vav_terminal.constantMinimumAirFlowFraction.get.round(2)
               assert(expected_mdp == actual_mdp, "Minimum MDP for #{building_type} for #{template} in #{climate_zone} should be #{expected_mdp} but #{actual_mdp} is used in the model.")
             elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
-              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              zone_oa = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
               fp_vav_terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
               expected_prim_frac = [zone_oa / fp_vav_terminal.autosizedMaximumPrimaryAirFlowRate.get, 0.3].max.round(2)
               actual_prim_frac = fp_vav_terminal.minimumPrimaryAirFlowFraction.get

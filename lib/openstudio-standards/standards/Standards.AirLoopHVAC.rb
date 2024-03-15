@@ -124,7 +124,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Converting ventilation requirements to per-area for all zones served that do not require DCV.")
       air_loop_hvac.thermalZones.sort.each do |zone|
         unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
-          thermal_zone_convert_oa_req_to_per_area(zone)
+          OpenstudioStandards::ThermalZone.thermal_zone_convert_outdoor_air_to_per_area(zone)
         end
       end
     end
@@ -1982,7 +1982,7 @@ class Standard
     air_loop_hvac.thermalZones.each do |zone|
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-          zone_oa = thermal_zone_outdoor_airflow_rate(zone)
+          zone_oa = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
           vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
           air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(vav_terminal, zone_oa, has_ddc)
         end
@@ -2016,7 +2016,7 @@ class Standard
     air_loop_hvac.thermalZones.each do |zone|
       # Vou is the system uncorrected outdoor airflow:
       # Zone airflow is multiplied by the zone multiplier
-      v_ou += thermal_zone_outdoor_airflow_rate(zone) * zone.multiplier.to_f
+      v_ou += OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone) * zone.multiplier.to_f
     end
 
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
@@ -2055,7 +2055,7 @@ class Standard
 
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
-      v_bz = thermal_zone_outdoor_airflow_rate(zone)
+      v_bz = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
 
       # Zone air distribution, assumed 1 per PNNL
       e_z = 1.0

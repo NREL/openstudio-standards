@@ -57,6 +57,33 @@ module OpenstudioStandards
       return is_res
     end
 
+    # Determine if this zone is a vestibule.
+    # Zone must be less than 200 ft^2 and also have an infiltration object specified using Flow/Zone.
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Boolean] returns true if vestibule, false if not
+    def self.thermal_zone_vestibule?(thermal_zone)
+      is_vest = false
+
+      # Check area
+      unless thermal_zone.floorArea < OpenStudio.convert(200, 'ft^2', 'm^2').get
+        return is_vest
+      end
+
+      # Check presence of infiltration
+      thermal_zone.spaces.each do |space|
+        space.spaceInfiltrationDesignFlowRates.each do |infil|
+          if infil.designFlowRate.is_initialized
+            is_vest = true
+            OpenStudio.logFree(OpenStudio::Info, 'OpenstudioStandards::ThermalZone', "For #{thermal_zone.name}: This zone is considered a vestibule.")
+            break
+          end
+        end
+      end
+
+      return is_vest
+    end
+
     # Determines heating status.
     # If the zone has a thermostat with a maximum heating setpoint above 5C (41F), counts as heated.
     # Plenums are also assumed to be heated.
@@ -349,6 +376,39 @@ module OpenstudioStandards
       return cld
     end
 
+    # Adds a thermostat that heats the space to 0 F and cools to 120 F.
+    # These numbers are outside of the threshold that is considered heated
+    # or cooled by thermal_zone_cooled?() and thermal_zone_heated?()
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Boolean] returns true if successful, false if not
+    def self.thermal_zone_add_unconditioned_thermostat(thermal_zone)
+      # Heated to 0F (below thermal_zone_heated?(thermal_zone)  threshold)
+      htg_t_f = 0
+      htg_t_c = OpenStudio.convert(htg_t_f, 'F', 'C').get
+      htg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(thermal_zone.model)
+      htg_stpt_sch.setName('Unconditioned Minimal Heating')
+      htg_stpt_sch.defaultDaySchedule.setName('Unconditioned Minimal Heating Default')
+      htg_stpt_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), htg_t_c)
+
+      # Cooled to 120F (above thermal_zone_cooled?(thermal_zone)  threshold)
+      clg_t_f = 120
+      clg_t_c = OpenStudio.convert(clg_t_f, 'F', 'C').get
+      clg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(thermal_zone.model)
+      clg_stpt_sch.setName('Unconditioned Minimal Heating')
+      clg_stpt_sch.defaultDaySchedule.setName('Unconditioned Minimal Heating Default')
+      clg_stpt_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), clg_t_c)
+
+      # Thermostat
+      thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(thermal_zone.model)
+      thermostat.setName("#{thermal_zone.name} Unconditioned Thermostat")
+      thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
+      thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
+      thermal_zone.setThermostatSetpointDualSetpoint(thermostat)
+
+      return true
+    end
+
     # Determine the design internal load (W) for this zone without space multipliers.
     # This include People, Lights, Electric Equipment, and Gas Equipment in all spaces in this zone.
     # It assumes 100% of the wattage is converted to heat, and that the design peak schedule value is 1 (100%).
@@ -363,6 +423,222 @@ module OpenstudioStandards
       end
 
       return load_w
+    end
+
+    # Returns the space type that represents a majority of the floor area.
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Boost::Optional<OpenStudio::Model::SpaceType>] An OptionalSpaceType
+    def self.thermal_zone_get_space_type(thermal_zone)
+      space_type_to_area = Hash.new(0.0)
+
+      thermal_zone.spaces.each do |space|
+        if space.spaceType.is_initialized
+          space_type = space.spaceType.get
+          space_type_to_area[space_type] += space.floorArea
+        end
+      end
+
+      # If no space types, return empty optional SpaceType
+      if space_type_to_area.size.zero?
+        return OpenStudio::Model::OptionalSpaceType.new
+      end
+
+      # Sort by area
+      biggest_space_type = space_type_to_area.sort_by { |st, area| area }.reverse[0][0]
+
+      return OpenStudio::Model::OptionalSpaceType.new(biggest_space_type)
+    end
+
+    # Returns the standards building type that represents the majority of floor area.
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [String] the standards building type
+    def self.thermal_zone_get_building_type(thermal_zone)
+      # determine areas of each building type
+      building_type_areas = {}
+      thermal_zone.spaces.each do |space|
+        # ignore space if not part of total area
+        next unless space.partofTotalFloorArea
+
+        if space.spaceType.is_initialized
+          space_type = space.spaceType.get
+          if space_type.standardsBuildingType.is_initialized
+            building_type = space_type.standardsBuildingType.get
+            if building_type_areas[building_type].nil?
+              building_type_areas[building_type] = space.floorArea
+            else
+              building_type_areas[building_type] += space.floorArea
+            end
+          end
+        end
+      end
+
+      # return largest building type area
+      building_type = building_type_areas.key(building_type_areas.values.max)
+
+      if building_type.nil?
+        OpenStudio.logFree(OpenStudio::Info, 'OpenstudioStandards::ThermalZone', "Thermal zone #{thermal_zone.name} does not have standards building type.")
+      end
+
+      return building_type
+    end
+
+    # Calculates the zone outdoor airflow requirement (Voz)
+    # based on the inputs in the DesignSpecification:OutdoorAir objects in all spaces in the zone.
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Double] the zone outdoor air flow rate in cubic meters per second (m^3/s)
+    def self.thermal_zone_get_outdoor_airflow_rate(thermal_zone)
+      tot_oa_flow_rate = 0.0
+
+      spaces = thermal_zone.spaces.sort
+
+      sum_floor_area = 0.0
+      sum_number_of_people = 0.0
+      sum_volume = 0.0
+
+      # Variables for merging outdoor air
+      any_max_oa_method = false
+      sum_oa_for_people = 0.0
+      sum_oa_for_floor_area = 0.0
+      sum_oa_rate = 0.0
+      sum_oa_for_volume = 0.0
+
+      # Find common variables for the new space
+      spaces.each do |space|
+        floor_area = space.floorArea
+        sum_floor_area += floor_area
+
+        number_of_people = space.numberOfPeople
+        sum_number_of_people += number_of_people
+
+        volume = space.volume
+        sum_volume += volume
+
+        dsn_oa = space.designSpecificationOutdoorAir
+        next if dsn_oa.empty?
+
+        dsn_oa = dsn_oa.get
+
+        # compute outdoor air rates in case we need them
+        oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
+        oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
+        oa_rate = dsn_oa.outdoorAirFlowRate
+        oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour / 3600
+
+        # First check if this space uses the Maximum method and other spaces do not
+        if dsn_oa.outdoorAirMethod == 'Maximum'
+          sum_oa_rate += [oa_for_people, oa_for_floor_area, oa_rate, oa_for_volume].max
+        elsif dsn_oa.outdoorAirMethod == 'Sum'
+          sum_oa_for_people += oa_for_people
+          sum_oa_for_floor_area += oa_for_floor_area
+          sum_oa_rate += oa_rate
+          sum_oa_for_volume += oa_for_volume
+        end
+      end
+
+      tot_oa_flow_rate += sum_oa_for_people
+      tot_oa_flow_rate += sum_oa_for_floor_area
+      tot_oa_flow_rate += sum_oa_rate
+      tot_oa_flow_rate += sum_oa_for_volume
+
+      # Convert to cfm
+      tot_oa_flow_rate_cfm = OpenStudio.convert(tot_oa_flow_rate, 'm^3/s', 'cfm').get
+
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, design min OA = #{tot_oa_flow_rate_cfm.round} cfm.")
+
+      return tot_oa_flow_rate
+    end
+
+    # Calculates the zone outdoor airflow requirement and divides by the zone area.
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Double] the zone outdoor air flow rate per area in cubic meters per second (m^3/s)
+    def self.thermal_zone_get_outdoor_airflow_rate_per_area(thermal_zone)
+      tot_oa_flow_rate_per_area = 0.0
+
+      # Find total area of the zone
+      sum_floor_area = 0.0
+      thermal_zone.spaces.sort.each do |space|
+        sum_floor_area += space.floorArea
+      end
+
+      # Get the OA flow rate
+      tot_oa_flow_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(thermal_zone)
+
+      # Calculate the per-area value
+      tot_oa_flow_rate_per_area = tot_oa_flow_rate / sum_floor_area
+
+      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, OA per area = #{tot_oa_flow_rate_per_area.round(8)} m^3/s*m^2.")
+
+      return tot_oa_flow_rate_per_area
+    end
+
+    # Convert total minimum OA requirement to a per-area value.
+    #
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @return [Boolean] returns true if successful, false if not
+    def self.thermal_zone_convert_outdoor_air_to_per_area(thermal_zone)
+      # For each space in the zone, convert
+      # all design OA to per-area
+      # unless the "Outdoor Air Method" is "Maximum"
+      thermal_zone.spaces.each do |space|
+        # Find the design OA, which may be assigned at either the
+        # SpaceType or directly at the Space
+        dsn_oa = space.designSpecificationOutdoorAir
+        next if dsn_oa.empty?
+
+        dsn_oa = dsn_oa.get
+        next if dsn_oa.outdoorAirMethod == 'Maximum'
+
+        # Get the space properties
+        floor_area = space.floorArea
+        number_of_people = space.numberOfPeople
+        volume = space.volume
+
+        # Sum up the total OA from all sources
+        oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
+        oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
+        oa_rate = dsn_oa.outdoorAirFlowRate
+        oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour / 3600
+        tot_oa = oa_for_people + oa_for_floor_area + oa_rate + oa_for_volume
+
+        # Convert total to per-area
+        tot_oa_per_area = tot_oa / floor_area
+
+        # Check if there is another design OA object that has already
+        # been converted from per-person to per-area that matches.
+        # If so, reuse that instead of creating a duplicate.
+        new_dsn_oa_name = "#{dsn_oa.name} to per-area"
+        if thermal_zone.model.getDesignSpecificationOutdoorAirByName(new_dsn_oa_name).is_initialized
+          new_dsn_oa = thermal_zone.model.getDesignSpecificationOutdoorAirByName(new_dsn_oa_name).get
+        else
+          new_dsn_oa = OpenStudio::Model::DesignSpecificationOutdoorAir.new(thermal_zone.model)
+          new_dsn_oa.setName(new_dsn_oa_name)
+        end
+
+        # Assign this new design OA to the space
+        space.setDesignSpecificationOutdoorAir(new_dsn_oa)
+
+        # Set the method
+        new_dsn_oa.setOutdoorAirMethod('Sum')
+        # Set the per-area requirement
+        new_dsn_oa.setOutdoorAirFlowperFloorArea(tot_oa_per_area)
+        # Zero-out the per-person, ACH, and flow requirements
+        new_dsn_oa.setOutdoorAirFlowperPerson(0.0)
+        new_dsn_oa.setOutdoorAirFlowAirChangesperHour(0.0)
+        new_dsn_oa.setOutdoorAirFlowRate(0.0)
+        # Copy the orignal OA schedule, if any
+        if dsn_oa.outdoorAirFlowRateFractionSchedule.is_initialized
+          oa_sch = dsn_oa.outdoorAirFlowRateFractionSchedule.get
+          new_dsn_oa.setOutdoorAirFlowRateFractionSchedule(oa_sch)
+        end
+
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: Converted total ventilation requirements to per-area value.")
+      end
+
+      return true
     end
   end
 end

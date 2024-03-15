@@ -58,6 +58,26 @@ class TestSpace < Minitest::Test
     assert_equal(false, @zone.thermal_zone_residential?(ofc_thermal_zone))
   end
 
+  def test_thermal_zone_vestibule?
+    model = OpenStudio::Model::Model.new
+    # from plenum
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 3.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(3.0, 3.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(3.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    space.setThermalZone(thermal_zone)
+    assert_equal(false, @zone.thermal_zone_vestibule?(thermal_zone))
+
+    infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+    infiltration.setDesignFlowRate(1.0)
+    infiltration.setSpace(space)
+    assert_equal(true, @zone.thermal_zone_vestibule?(thermal_zone))
+  end
+
   def test_thermal_zone_heated?
     model = OpenStudio::Model::Model.new
     polygon = OpenStudio::Point3dVector.new
@@ -120,6 +140,23 @@ class TestSpace < Minitest::Test
     assert_equal(false, @zone.thermal_zone_cooled?(thermal_zone))
   end
 
+  def test_thermal_zone_add_unconditioned_thermostat
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    space.setThermalZone(thermal_zone)
+    @zone.thermal_zone_add_unconditioned_thermostat(thermal_zone)
+    assert(thermal_zone.thermostatSetpointDualSetpoint.is_initialized)
+    assert_equal(false, @zone.thermal_zone_heated?(thermal_zone))
+    assert_equal(false, @zone.thermal_zone_cooled?(thermal_zone))
+  end
+
   def test_thermal_zone_get_design_internal_load
     model = OpenStudio::Model::Model.new
     polygon = OpenStudio::Point3dVector.new
@@ -143,5 +180,108 @@ class TestSpace < Minitest::Test
     std = Standard.build('90.1-2013')
     std.model_add_loads(model)
     assert_in_delta(708.67, @zone.thermal_zone_get_design_internal_load(thermal_zone), 0.1)
+  end
+
+  def test_thermal_zone_get_space_type
+    std = Standard.build('90.1-2013')
+    @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESecondarySchool.osm")
+    thermal_zone = @model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
+    space_type = @zone.thermal_zone_get_space_type(thermal_zone)
+    assert_equal('SecondarySchool Gym', space_type.get.name.get)
+  end
+
+  def test_thermal_zone_get_building_type
+    std = Standard.build('90.1-2013')
+    @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESecondarySchool.osm")
+    thermal_zone = @model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
+    assert_equal('SecondarySchool', @zone.thermal_zone_get_building_type(thermal_zone))
+  end
+
+  def test_thermal_zone_get_outdoor_airflow_rate
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    space.setThermalZone(thermal_zone)
+    assert_equal(0.0, @zone.thermal_zone_get_outdoor_airflow_rate(thermal_zone))
+
+    # create space type and set standards info
+    space_type = OpenStudio::Model::SpaceType.new(model)
+    space_type.setStandardsBuildingType('PrimarySchool')
+    space_type.setStandardsSpaceType('Classroom')
+    space.setSpaceType(space_type)
+
+    # add loads
+    std = Standard.build('90.1-2013')
+    std.model_add_loads(model)
+    assert_in_delta(0.047, @zone.thermal_zone_get_outdoor_airflow_rate(thermal_zone), 0.001)
+  end
+
+  def test_thermal_zone_get_outdoor_airflow_rate_per_area
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    space.setThermalZone(thermal_zone)
+    assert_equal(0.0, @zone.thermal_zone_get_outdoor_airflow_rate_per_area(thermal_zone))
+
+    # create space type and set standards info
+    space_type = OpenStudio::Model::SpaceType.new(model)
+    space_type.setStandardsBuildingType('PrimarySchool')
+    space_type.setStandardsSpaceType('Classroom')
+    space.setSpaceType(space_type)
+
+    # add loads
+    std = Standard.build('90.1-2013')
+    std.model_add_loads(model)
+    assert_in_delta(0.00188, @zone.thermal_zone_get_outdoor_airflow_rate_per_area(thermal_zone), 0.0001)
+  end
+
+  def test_thermal_zone_convert_outdoor_air_to_per_area
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    space.setThermalZone(thermal_zone)
+
+    # create space type and set standards info
+    space_type = OpenStudio::Model::SpaceType.new(model)
+    space_type.setStandardsBuildingType('PrimarySchool')
+    space_type.setStandardsSpaceType('Classroom')
+    space.setSpaceType(space_type)
+
+    # add loads
+    std = Standard.build('90.1-2013')
+    std.model_add_loads(model)
+
+    # get outdoor air and check per person values specified
+    oa = space.designSpecificationOutdoorAir.get
+    initial_oa_per_person = oa.outdoorAirFlowperPerson
+    intial_oa_per_area = oa.outdoorAirFlowperFloorArea
+    assert(initial_oa_per_person > 0)
+    assert(intial_oa_per_area > 0)
+
+    # check that outdoor air spec has been converted to per area
+    @zone.thermal_zone_convert_outdoor_air_to_per_area(thermal_zone)
+    oa = space.designSpecificationOutdoorAir.get
+    final_oa_per_person = oa.outdoorAirFlowperPerson
+    final_oa_per_area = oa.outdoorAirFlowperFloorArea
+    assert_equal(0.0, final_oa_per_person)
+    assert(final_oa_per_area > intial_oa_per_area)
   end
 end
