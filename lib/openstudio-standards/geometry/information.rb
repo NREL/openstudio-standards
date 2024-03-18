@@ -858,8 +858,7 @@ module OpenstudioStandards
       z_heights = []
       building_story.spaces.each do |space|
         # Skip plenum spaces
-        std = Standard.build('90.1-2019') # delete once space methods refactored
-        next if std.space_plenum?(space)
+        next if OpenstudioStandards::Space.space_plenum?(space)
 
         # Get the z value of the space, which
         # vertices in space surfaces are relative to.
@@ -1150,7 +1149,7 @@ module OpenstudioStandards
             # next if not v1[0] == v2[1] # next if not same geometry reversed
             # next if not v1[1] == v2[0]
 
-            # these are three item array's add in tollerance for each array entry
+            # these are three item array's add in tolerance for each array entry
             tolerance = 0.0001
             test_a = true
             test_b = true
