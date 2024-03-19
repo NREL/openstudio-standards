@@ -114,325 +114,8 @@ module BTAP
         model.getPlanarSurfaces.sort.each { |item| item.resetConstruction }
       end
 
-
-      # This module contains Materials, Constructions and ConstructionSets
-      module Materials #Resources::Envelope::Materials
-        # This module contains methods to create opaque materials for Opaque constructions such as walls, roofs, floor and ceilings.
-        module Opaque #Resources::Envelope::Materials::Opaque
-          #Test Opaque Module
-          if __FILE__ == $0
-            require 'test/unit'
-            class OpaqueTests < Test::Unit::TestCase
-
-              #This method tests the creation of opaque materials.
-              #@author phylroy.lopez@nrcan.gc.ca
-              def test_create_opaque_material()
-                model = OpenStudio::Model::Model.new()
-                material = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material(model)
-                assert(!(material.to_StandardOpaqueMaterial.empty?))
-              end
-
-              #This method tests the creation of massless opaque materials.
-              #@author phylroy.lopez@nrcan.gc.ca
-              def test_create_massless_opaque_material()
-                model = OpenStudio::Model::Model.new()
-                material = BTAP::Resources::Envelope::Materials::Opaque::create_massless_opaque_material(model)
-                assert(!(material.to_MasslessOpaqueMaterial.empty?))
-              end
-
-              #This method tests the creation of air gap.
-              #@author phylroy.lopez@nrcan.gc.ca
-              def test_create_air_gap()
-                model = OpenStudio::Model::Model.new()
-                material = BTAP::Resources::Envelope::Materials::Opaque::create_air_gap(model)
-                assert(!(material.to_AirGap.empty?))
-              end
-            end
-          end # End Test Opaque
-
-
-          # This method will create a OpenStudio::Model::StandardOpaqueMaterial material layer.
-          # BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material
-          # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @param model [OpenStudio::Model::Model]  {http://openstudio.nrel.gov/latest-c-sdk-documentation/model}
-          # @param name [String] the name of the surface.
-          # @param thickness [Float] meters.
-          # @param conductivity [Float]  W/m*K.
-          # @param density [Float]  kg/m3
-          # @param specific_heat [Float]  J/kg*K
-          # @param roughness [String]  valid values are  = ["VeryRough", "Rough", "MediumRough","Smooth","MediumSmooth","VerySmooth"]
-          # @param thermal_absorptance [Float] range of 0 to 1.0
-          # @param solar_absorptance [Float] range of 0 to 1.0
-          # @param visible_absorptance [Float] range of 0 to 1.0
-          # @return [OpenStudio::Model::StandardOpaqueMaterial] material {http://openstudio.nrel.gov/sites/openstudio.nrel.gov/files/nv_data/cpp_documentation_it/model/html/classopenstudio_1_1model_1_1_standard_opaque_material.html}
-          def self.create_opaque_material(model,
-                                          name = "opaque material",
-                                          thickness = 0.1,
-                                          conductivity = 0.1,
-                                          density = 0.1,
-                                          specific_heat = 100,
-                                          roughness = "Smooth",
-                                          thermal_absorptance = 0.9,
-                                          solar_absorptance = 0.7,
-                                          visible_absorptance = 0.7)
-            # make sure the roughness value is acceptable.
-            raise("Roughness Value \"#{roughness}\" is not a part of accepted values such as: #{OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.join(",")}") unless OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.include?(roughness)
-            # I was thinking of adding a suffix to the name to make it more descriptive, but this can be confusing. Keeping it here if I need it later.
-            # name = name + " " + "t=" + sprintf("%.3f", thickness) + "c=" + sprintf("%.3f", conductance) + "d=" + sprintf("%.3f", density) + "s=" + sprintf("%.3", specific_heat)
-            material = OpenStudio::Model::StandardOpaqueMaterial.new(model, roughness, thickness, conductivity, density, specific_heat)
-            material.setName(name) unless name == "" or name == nil
-            material.setThermalAbsorptance(thermal_absorptance)
-            material.setSolarAbsorptance(solar_absorptance)
-            material.setVisibleAbsorptance(visible_absorptance)
-            return material
-          end
-
-
-          # This method will create a new OpenStudio::Model::MasslessOpaqueMaterial material layer
-          # @author Phylroy A. Lopez Natural Resources Canada <plopez@nrcan.gc.ca>
-          # @param model [OpenStudio::Model::Model]  {http://openstudio.nrel.gov/latest-c-sdk-documentation/model OpenStudio::Model::Model}
-          # @param name [String] the name of the surface.
-          # @param roughness [String]  valid values are  = ["VeryRough", "Rough", "MediumRough","Smooth","MediumSmooth","VerySmooth"]
-          # @param thermalResistance  [Float]  m*K/W
-          # @return [OpenStudio::Model::MasslessOpaqueMaterial] massless {http://openstudio.nrel.gov/sites/openstudio.nrel.gov/files/nv_data/cpp_documentation_it/model/html/classopenstudio_1_1model_1_1_massless_opaque_material.html OpenStudio::Model::MasslessOpaqueMaterial}
-          def self.create_massless_opaque_material(model, name = "massless opaque", roughness = "Smooth", thermalResistance = 0.1)
-            # make sure the roughness value is acceptable.
-            raise("Roughness Value \"#{roughness}\" is not a part of accepted values: #{OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.join(",")}") unless OpenStudio::Model::StandardOpaqueMaterial::roughnessValues.include?(roughness)
-            massless = OpenStudio::Model::MasslessOpaqueMaterial.new(model, roughness, thermalResistance)
-            massless.setName(name)
-            return massless
-          end
-
-          # This method will create a new OpenStudio::Model::AirGap material layer
-          # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @param model [OpenStudio::Model::Model]  {http://openstudio.nrel.gov/latest-c-sdk-documentation/model OpenStudio::Model::Model}
-          # @param name [String] the name of the surface.
-          # @param resistance [Float]  m2*K/W
-          # @return [OpenStudio::Model::AirGap] air
-          def self.create_air_gap(model, name = "air gap", resistance = 0.1)
-            air = OpenStudio::Model::AirGap.new(model, resistance)
-            air.setName(name)
-            return air
-          end
-        end
-
-
-        #This module contains methods to create  materials for  glazed construction such as windows, doors, and skylights.
-        module Fenestration #Resources::Envelope::Materials::Fenestration
-
-          #Test Fenestration Module
-          if __FILE__ == $0
-            require 'test/unit'
-            class FenestrationTests < Test::Unit::TestCase
-              #This method will test the creation of simple glazing
-              #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-              def test_create_simple_glazing()
-                model = OpenStudio::Model::Model.new()
-                material = BTAP::Resources::Envelope::Materials::Fenestration::create_simple_glazing(model)
-                assert(!(material.to_SimpleGlazing.empty?))
-              end
-
-              #This method will test the creation of standard glazing
-              #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-              def test_create_standard_glazing()
-                model = OpenStudio::Model::Model.new()
-                material = BTAP::Resources::Envelope::Materials::Fenestration::create_standard_glazing(model)
-                assert(!(material.to_StandardGlazing.empty?))
-              end
-
-              #This method will test the creation of simple gas
-              #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-              def test_create_gas()
-                model = OpenStudio::Model::Model.new()
-                material = BTAP::Resources::Envelope::Materials::Fenestration::create_gas(model)
-                assert(!(material.to_Gas.empty?))
-              end
-
-              #This method will test the creation of blind
-              #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-              def test_create_blind()
-                model = OpenStudio::Model::Model.new()
-                material = BTAP::Resources::Envelope::Materials::Fenestration::create_blind(model)
-                assert(!(material.to_Blind.empty?))
-              end
-
-              #This method will test the creation of screen
-              #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-              def test_create_screen()
-                model = OpenStudio::Model::Model.new()
-                material = BTAP::Resources::Envelope::Materials::Fenestration::create_screen(model)
-                assert(!(material.to_Screen.empty?))
-              end
-
-              #This method will test the creation of shade
-              #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-              def test_create_shade()
-                model = OpenStudio::Model::Model.new()
-                material = BTAP::Resources::Envelope::Materials::Fenestration::create_shade(model)
-                assert(!(material.to_Shade.empty?))
-              end
-
-            end
-          end # End Test Fenestration
-
-
-          # This method creates a OpenStudio::Model::SimpleGlazing material layer
-          # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @param model [OpenStudio::Model::Model]
-          # @param name [String] the name of the material.
-          # @param shgc [Float]  solar heat gain coeff.
-          # @param ufactor [Float]  W/m2*K
-          # @param thickness  [Float] m
-          # @param visible_transmittance [Float]
-          # @return [OpenStudio::Model::SimpleGlazing] simpleglazing
-          def self.create_simple_glazing(model, name = "simple glazing test", shgc = 0.10, ufactor = 0.10, thickness = 0.005, visible_transmittance = 0.8)
-            simpleglazing = OpenStudio::Model::SimpleGlazing.new(model)
-            simpleglazing.setSolarHeatGainCoefficient(shgc)
-            simpleglazing.setUFactor(ufactor)
-            simpleglazing.setThickness(thickness)
-            simpleglazing.setVisibleTransmittance(visible_transmittance)
-            simpleglazing.setName(name)
-            return simpleglazing
-          end
-
-
-          # This method creates a OpenStudio::Model::StandardGlazing material layer
-          # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @param model [OpenStudio::Model::Model]
-          # @param name = "Standard Glazing Test", of the material.
-          # @param thickness [Float] m
-          # @param conductivity [Float] W/m*K
-          # @param solarTransmittanceatNormalIncidence [Float]
-          # @param frontSideSolarReflectanceatNormalIncidence [Float]
-          # @param backSideSolarReflectanceatNormalIncidence = [Float]
-          # @param visibleTransmittance [Float]
-          # @param frontSideVisibleReflectanceatNormalIncidence[Float]
-          # @param backSideVisibleReflectanceatNormalIncidence [Float]
-          # @param infraredTransmittanceatNormalIncidence [Float]
-          # @param frontSideInfraredHemisphericalEmissivity [Float]
-          # @param backSideInfraredHemisphericalEmissivity [Float]
-          # @return [OpenStudio::Model::StandardGlazing] stdglazing
-          def self.create_standard_glazing(
-              model,
-              name = "Standard Glazing Test",
-              thickness = 0.003,
-              conductivity = 0.9,
-              solarTransmittanceatNormalIncidence = 0.84,
-              frontSideSolarReflectanceatNormalIncidence = 0.075,
-              backSideSolarReflectanceatNormalIncidence = 0.075,
-              visibleTransmittance = 0.9,
-              frontSideVisibleReflectanceatNormalIncidence = 0.081,
-              backSideVisibleReflectanceatNormalIncidence = 0.081,
-              infraredTransmittanceatNormalIncidence = 0.0,
-              frontSideInfraredHemisphericalEmissivity = 0.84,
-              backSideInfraredHemisphericalEmissivity = 0.84,
-              opticalDataType = "SpectralAverage",
-              dirt_correction_factor = 1.0,
-              is_solar_diffusing = false
-          )
-            raise("Roughness Value \"#{roughness}\" is not a part of accepted values: #{OpenStudio::Model::StandardGlazing::opticalDataTypeValues().join(",")}") unless OpenStudio::Model::StandardGlazing::opticalDataTypeValues().include?(opticalDataType)
-            stdglazing = OpenStudio::Model::StandardGlazing.new(model)
-            stdglazing.setThickness(thickness.to_f)
-            stdglazing.setSolarTransmittanceatNormalIncidence(solarTransmittanceatNormalIncidence.to_f)
-            stdglazing.setFrontSideSolarReflectanceatNormalIncidence(frontSideSolarReflectanceatNormalIncidence.to_f)
-            stdglazing.setBackSideSolarReflectanceatNormalIncidence(backSideSolarReflectanceatNormalIncidence.to_f)
-            stdglazing.setVisibleTransmittance(visibleTransmittance.to_f)
-            stdglazing.setFrontSideVisibleReflectanceatNormalIncidence(frontSideVisibleReflectanceatNormalIncidence.to_f)
-            stdglazing.setBackSideVisibleReflectanceatNormalIncidence(backSideVisibleReflectanceatNormalIncidence.to_f)
-            stdglazing.setInfraredTransmittanceatNormalIncidence(infraredTransmittanceatNormalIncidence.to_f)
-            stdglazing.setFrontSideInfraredHemisphericalEmissivity(frontSideInfraredHemisphericalEmissivity.to_f)
-            stdglazing.setBackSideInfraredHemisphericalEmissivity(backSideInfraredHemisphericalEmissivity.to_f)
-            stdglazing.setThermalConductivity(conductivity.to_f)
-            stdglazing.setName(name)
-            stdglazing.setOpticalDataType(opticalDataType)
-            stdglazing.setDirtCorrectionFactorforSolarandVisibleTransmittance(dirt_correction_factor)
-            stdglazing.setSolarDiffusing(is_solar_diffusing)
-            return stdglazing
-          end
-
-
-          #This method creates an gas material layer. gas_type can be "Air", "Argon","Krypton","Xenon",or "Custom"
-          # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @param model [OpenStudio::Model::Model]
-          # @param name [String] = "air test", of the material.
-          # @param gas_type [String] = "Air"
-          # @param thickness [Float] = 0.003
-          # @return [OpenStudio::Model::Gas::validGasTypes] gas
-          def self.create_gas(model, name = "air test", gas_type = "Air", thickness = 0.003)
-            raise "gas_type #{gas_type} is not part of the allow values: #{OpenStudio::Model::Gas::validGasTypes()}" unless OpenStudio::Model::Gas::validGasTypes().include?(gas_type)
-            gas = OpenStudio::Model::Gas.new(model)
-            gas.setGasType(gas_type)
-            gas.setThickness(thickness)
-            gas.setName(name)
-            return gas
-          end
-
-
-          #This method will create a blind layer.
-          # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @param model [OpenStudio::Model::Model]
-          # @param name [String] = "blind test"
-          # @param slatWidth [Float] = 0.1
-          # @param slatSeparation [Float] = 0.1
-          # @param frontSideSlatBeamSolarReflectance [Float] = 0.1
-          # @param backSideSlatBeamSolarReflectance [Float] = 0.1
-          # @param frontSideSlatDiffuseSolarReflectance [Float] = 0.1
-          # @param backSideSlatDiffuseSolarReflectance [Float] = 0.1
-          # @param slatBeamVisibleTransmittance [Float] = 0.1
-          # @return [OpenStudio::Model::Blind] blind
-          def self.create_blind(model, name = "blind test", slatWidth = 0.1, slatSeparation = 0.1, frontSideSlatBeamSolarReflectance = 0.1, backSideSlatBeamSolarReflectance = 0.1, frontSideSlatDiffuseSolarReflectance = 0.1, backSideSlatDiffuseSolarReflectance = 0.1, slatBeamVisibleTransmittance = 0.1)
-            blind = OpenStudio::Model::Blind.new(model, slatWidth, slatSeparation, frontSideSlatBeamSolarReflectance, backSideSlatBeamSolarReflectance, frontSideSlatDiffuseSolarReflectance, backSideSlatDiffuseSolarReflectance, slatBeamVisibleTransmittance)
-            blind.setName(name)
-            return blind
-          end
-
-
-          #This method will create a screen layer.
-          # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @param model [OpenStudio::Model::Model]
-          # @param name [String] = "screen test"
-          # @param diffuseSolarReflectance [Float] = 0.1
-          # @param diffuseVisibleReflectance [Float] = 0.1
-          # @param screenMaterialSpacing [Float] = 0.1
-          # @param screenMaterialDiameter [Float] = 0.1
-          # @return [OpenStudio::Model::Screen] screen
-          def self.create_screen(model, name = "screen test", diffuseSolarReflectance = 0.1, diffuseVisibleReflectance = 0.1, screenMaterialSpacing = 0.1, screenMaterialDiameter = 0.1)
-            screen = OpenStudio::Model::Screen.new(model, diffuseSolarReflectance, diffuseVisibleReflectance, screenMaterialSpacing, screenMaterialDiameter)
-            screen.setName(name)
-            return screen
-          end
-
-
-          #This method will create a shade layer.
-          # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-          # @param model [OpenStudio::Model::Model]
-          # @param name [String] = "shade test"
-          # @param solarTransmittance [Float] = 0.1
-          # @param solarReflectance [Float] = 0.1
-          # @param visibleTransmittance [Float] = 0.1
-          # @param visibleReflectance [Float] = 0.1
-          # @param thermalHemisphericalEmissivity [Float] = 0.1
-          # @param thermalTransmittance [Float] = 0.1
-          # @param thickness [Float] = 0.1
-          # @param conductivity [Float] = 0.1
-          # @return [OpenStudio::Model::Shade.new] shade
-          def self.create_shade(model, name = "shade test", solarTransmittance = 0.1, solarReflectance = 0.1, visibleTransmittance = 0.1, visibleReflectance = 0.1, thermalHemisphericalEmissivity = 0.1, thermalTransmittance = 0.1, thickness = 0.1, conductivity = 0.1)
-            shade = OpenStudio::Model::Shade.new(model, solarTransmittance, solarReflectance, visibleTransmittance, visibleReflectance, thermalHemisphericalEmissivity, thermalTransmittance, thickness, conductivity)
-            shade.setName(name)
-            return shade
-          end
-
-
-        end #module Fenestration
-
-
-      end #module materials
-
-
       #This module contains methods dealing with the creation and modification of constructions.
       module Constructions #Resources::Envelope::Constructions
-
-
         #Test Constructions Module
         if __FILE__ == $0
           require 'test/unit'
@@ -443,29 +126,25 @@ module BTAP
             def setup
               @model = OpenStudio::Model::Model.new()
               #Create opaque layers from defaults
-              @insulation = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material(@model, "insulation", 0.1, 0.001, 0.1, 0.1, "Smooth", 0.9, 0.7, 0.7)
-              @opaque = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material(@model)
-              @air_gap = BTAP::Resources::Envelope::Materials::Opaque::create_air_gap(@model)
-              @massless = BTAP::Resources::Envelope::Materials::Opaque::create_massless_opaque_material(@model)
+              @insulation = OpenStudio::Model::StandardOpaqueMaterial.new(@model, 'Smooth', 0.1, 0.001, 0.1, 0.1)
+              @opaque = OpenStudio::Model::StandardOpaqueMaterial.new(@model, 'Smooth', 0.1, 0.1, 0.1, 100)
+              @massless = OpenStudio::Model::MasslessOpaqueMaterial.new(@model, 'Smooth', 0.1)
               #Create fenestration layer from defaults.
-              @simple = BTAP::Resources::Envelope::Materials::Fenestration::create_simple_glazing(@model)
-              @standard = BTAP::Resources::Envelope::Materials::Fenestration::create_standard_glazing(@model)
-              @gas = BTAP::Resources::Envelope::Materials::Fenestration::create_gas(@model)
-              @blind = BTAP::Resources::Envelope::Materials::Fenestration::create_blind(@model)
-              @screen = BTAP::Resources::Envelope::Materials::Fenestration::create_screen(@model)
-              @shade = BTAP::Resources::Envelope::Materials::Fenestration::create_shade(@model)
-              @opaque_construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@opaque, @air_gap, @insulation, @massless, @opaque], @insulation)
-              @fenestration_construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@simple, @standard], @gas)
+              @simple = OpenStudio::Model::SimpleGlazing.new(@model, 0.1, 0.1)
+              @simple.setThickness(0.005)
+              @simple.setVisibleTransmittance(0.8)
+              @standard = OpenStudio::Model::StandardGlazing.new(@model, 'SpectralAverage', 0.003)
+              @opaque_construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@opaque, @insulation, @massless, @opaque], @insulation)
+              @fenestration_construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@simple, @standard])
 
-              array = [@opaque, "insulation", @air_gap]
+              array = [@opaque, "insulation"]
               BTAP::Common::validate_array(@model, array, "Material")
-
             end
 
             #This method will create a test opaque construction.
             #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
             def test_create_opaque_construction()
-              construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@opaque, @air_gap, @insulation, @massless, @opaque], @insulation)
+              construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@opaque, @insulation, @massless, @opaque], @insulation)
               #Check that the construction was created
               assert(!(construction.to_Construction.empty?))
               #check that all layers were entered
@@ -490,7 +169,7 @@ module BTAP
             #This method will test creation of fenestration construction.
             #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
             def test_create_fenestration_construction()
-              construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@simple, @standard, @gas, @blind, @screen, @shade], @gas)
+              construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@simple, @standard])
               assert_equal(6, construction.layers.size)
               assert(!(construction.to_Construction.empty?))
             end
@@ -963,11 +642,10 @@ module BTAP
             def test_create_default_surface_constructions()
               model = OpenStudio::Model::Model.new()
               #Create layers from defaults
-              insulation = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material(model)
-              opaque = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material(model)
-              air_gap = BTAP::Resources::Envelope::Materials::Opaque::create_air_gap(model)
-              massless = BTAP::Resources::Envelope::Materials::Opaque::create_massless_opaque_material(model)
-              construction = BTAP::Resources::Envelope::Constructions::create_construction(model, "test construction", [opaque, air_gap, insulation, massless, opaque], insulation)
+              insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.1, 0.001, 0.1, 0.1)
+              opaque = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.1, 0.1, 0.1, 100)
+              massless = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 0.1)
+              construction = BTAP::Resources::Envelope::Constructions::create_construction(model, "test construction", [opaque, insulation, massless, opaque], insulation)
               walls_cons = floor_cons = roof_cons = construction
               construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions(model, "test construction set", walls_cons, floor_cons, roof_cons)
               #Check that the construction was created
@@ -980,13 +658,11 @@ module BTAP
             def test_create_default_subsurface_constructions()
               model = OpenStudio::Model::Model.new()
               #Create layers from defaults
-              simple = BTAP::Resources::Envelope::Materials::Fenestration::create_simple_glazing(model)
-              standard = BTAP::Resources::Envelope::Materials::Fenestration::create_standard_glazing(model)
-              gas = BTAP::Resources::Envelope::Materials::Fenestration::create_gas(model)
-              blind = BTAP::Resources::Envelope::Materials::Fenestration::create_blind(model)
-              screen = BTAP::Resources::Envelope::Materials::Fenestration::create_screen(model)
-              shade = BTAP::Resources::Envelope::Materials::Fenestration::create_shade(model)
-              fixedWindowConstruction = BTAP::Resources::Envelope::Constructions::create_construction(model, "test construction", [simple, standard, gas, blind, screen, shade], gas)
+              simple = OpenStudio::Model::SimpleGlazing.new(model, 0.1, 0.1)
+              simple.setThickness(0.005)
+              simple.setVisibleTransmittance(0.8)
+              standard = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
+              fixedWindowConstruction = BTAP::Resources::Envelope::Constructions::create_construction(model, "test construction", [simple, standard])
               operableWindowConstruction = setDoorConstruction = setGlassDoorConstruction = overheadDoorConstruction = skylightConstruction = tubularDaylightDomeConstruction = tubularDaylightDiffuserConstruction = fixedWindowConstruction
               default_subsurface_constructions = BTAP::Resources::Envelope::ConstructionSets::create_subsurface_construction_set(
                   model,
@@ -1007,23 +683,20 @@ module BTAP
             def test_create_default_construction_set()
               model = OpenStudio::Model::Model.new()
               #Create layers from defaults
-              insulation = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material(model)
-              opaque = BTAP::Resources::Envelope::Materials::Opaque::create_opaque_material(model)
-              air_gap = BTAP::Resources::Envelope::Materials::Opaque::create_air_gap(model)
-              massless = BTAP::Resources::Envelope::Materials::Opaque::create_massless_opaque_material(model)
-              construction = BTAP::Resources::Envelope::Constructions::create_construction(model, "test construction", [opaque, air_gap, insulation, massless, opaque], insulation)
+              insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.1, 0.001, 0.1, 0.1)
+              opaque = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.1, 0.1, 0.1, 100)
+              massless = OpenStudio::Model::MasslessOpaqueMaterial.new(model, 'Smooth', 0.1)
+              construction = BTAP::Resources::Envelope::Constructions::create_construction(model, "test construction", [opaque, insulation, massless, opaque], insulation)
               walls_cons = floor_cons = roof_cons = construction
               exterior_construction_set = BTAP::Resources::Envelope::ConstructionSets::create_default_surface_constructions(model, "test construction set", walls_cons, floor_cons, roof_cons)
               interior_construction_set = ground_construction_set = exterior_construction_set
 
               #Create layers from defaults
-              simple = BTAP::Resources::Envelope::Materials::Fenestration::create_simple_glazing(model)
-              standard = BTAP::Resources::Envelope::Materials::Fenestration::create_standard_glazing(model)
-              gas = BTAP::Resources::Envelope::Materials::Fenestration::create_gas(model)
-              blind = BTAP::Resources::Envelope::Materials::Fenestration::create_blind(model)
-              screen = BTAP::Resources::Envelope::Materials::Fenestration::create_screen(model)
-              shade = BTAP::Resources::Envelope::Materials::Fenestration::create_shade(model)
-              fixedWindowConstruction = BTAP::Resources::Envelope::Constructions::create_construction(model, "test construction", [simple, standard, gas, blind, screen, shade], gas)
+              simple = OpenStudio::Model::SimpleGlazing.new(model, 0.1, 0.1)
+              simple.setThickness(0.005)
+              simple.setVisibleTransmittance(0.8)
+              standard = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
+              fixedWindowConstruction = BTAP::Resources::Envelope::Constructions::create_construction(model, "test construction", [simple, standard])
               operableWindowConstruction = setDoorConstruction = setGlassDoorConstruction = overheadDoorConstruction = skylightConstruction = tubularDaylightDomeConstruction = tubularDaylightDiffuserConstruction = fixedWindowConstruction
               ext_subsurface_constructions = BTAP::Resources::Envelope::ConstructionSets::create_subsurface_construction_set(
                   model,

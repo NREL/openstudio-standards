@@ -1973,54 +1973,12 @@ Standard.class_eval do
 
   def model_clear_and_set_example_constructions(model)
     # Define Materials
-    name = 'opaque material'
-    thickness = 0.012700
-    conductivity = 0.160000
-    opaque_mat = BTAP::Resources::Envelope::Materials::Opaque.create_opaque_material(model, name, thickness, conductivity)
-
-    name = 'insulation material'
-    thickness = 0.050000
-    conductivity = 0.043000
-    insulation_mat = BTAP::Resources::Envelope::Materials::Opaque.create_opaque_material(model, name, thickness, conductivity)
-
-    name = 'simple glazing test'
-    shgc = 0.250000
-    ufactor = 3.236460
-    thickness = 0.003000
-    visible_transmittance = 0.160000
-    simple_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_simple_glazing(model, name, shgc, ufactor, thickness, visible_transmittance)
-
-    name = 'Standard Glazing Test'
-    thickness = 0.003
-    conductivity = 0.9
-    solar_trans_normal = 0.84
-    front_solar_ref_normal = 0.075
-    back_solar_ref_normal = 0.075
-    vlt = 0.9
-    front_vis_ref_normal = 0.081
-    back_vis_ref_normal = 0.081
-    ir_trans_normal = 0.0
-    front_ir_emis = 0.84
-    back_ir_emis = 0.84
-    optical_data_type = 'SpectralAverage'
-    dirt_correction_factor = 1.0
-    is_solar_diffusing = false
-
-    standard_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_standard_glazing(model,
-                                                                                                      name,
-                                                                                                      thickness,
-                                                                                                      conductivity,
-                                                                                                      solar_trans_normal,
-                                                                                                      front_solar_ref_normal,
-                                                                                                      back_solar_ref_normal, vlt,
-                                                                                                      front_vis_ref_normal,
-                                                                                                      back_vis_ref_normal,
-                                                                                                      ir_trans_normal,
-                                                                                                      front_ir_emis,
-                                                                                                      back_ir_emis,
-                                                                                                      optical_data_type,
-                                                                                                      dirt_correction_factor,
-                                                                                                      is_solar_diffusing)
+    opaque_mat = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.0127, 0.16, 0.1, 100)
+    insulation_mat = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.05, 0.043, 0.1, 100)
+    simple_glazing_mat = OpenStudio::Model::SimpleGlazing.new(model, 3.236460, 0.25)
+    simple_glazing_mat.setThickness(0.003)
+    simple_glazing_mat.setVisibleTransmittance(0.16)
+    standard = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
 
     # Define Constructions
     # # Surfaces

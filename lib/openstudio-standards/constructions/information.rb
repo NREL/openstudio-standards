@@ -40,7 +40,7 @@ module OpenstudioStandards
 
       total = 0.0
       construction.layers.each do |material|
-        total = total + 1.0 / OpenstudioStandards::Constructions::Materials.material_get_conductance(material, temperature: temperature)
+        total += 1.0 / OpenstudioStandards::Constructions::Materials.material_get_conductance(material, temperature: temperature)
       end
 
       return 1.0 / total
