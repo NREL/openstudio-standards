@@ -120,21 +120,35 @@ class TestSchedulesParametric < Minitest::Test
 
     parametric_inputs = @sch.gather_inputs_parametric_schedules(lght_sch, lght, {}, hours_of_operation, ramp:true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
 
-    # this will create additional properties which do not pass the assertions
-    # fixme: refactor method so that schedules with rules that don't match hours_of_operation will pass
-    # parametric_inputs = @sch.gather_inputs_parametric_schedules(clg_sch, nil, {}, hours_of_operation, ramp: true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
+    parametric_inputs = @sch.gather_inputs_parametric_schedules(clg_sch, nil, {}, hours_of_operation, ramp: true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
 
     # collect additional properties
     props = get_additional_properties(lght_sch.defaultDaySchedule.additionalProperties)
-    lght_sch.scheduleRules.each {|obj| props + get_additional_properties(obj.daySchedule.additionalProperties)}
-    props + get_additional_properties(clg_sch.defaultDaySchedule.additionalProperties)
-    clg_sch.scheduleRules.each {|obj| props + get_additional_properties(obj.daySchedule.additionalProperties)}
+    lght_sch.scheduleRules.each {|obj| props += get_additional_properties(obj.daySchedule.additionalProperties)}
 
-    # test that add'props have tags to modify the schedules
-    props.select{|p| p.include? 'param_day_profile'}.each do |formula|
-      assert(formula.include?('hoo_start'), "missing hoo_start: #{formula}")
-      assert(formula.include?('hoo_end'), "missing hoo_end: #{formula}")
-    end
+    # test formulas individually
+    lght_def_prop = get_additional_properties(lght_sch.defaultDaySchedule.additionalProperties)
+    def_param_profile = lght_def_prop.select { |prop| prop.include?('param_day_profile') }.first
+    assert(def_param_profile.include?('hoo_start'), "#{lght_sch.defaultDaySchedule.name.get} missing hoo_start: #{lght_def_prop}")
+    assert(def_param_profile.include?('hoo_end'), "#{lght_sch.defaultDaySchedule.name.get} missing hoo_end: #{lght_def_prop}")
+    lght_wknd_prop = get_additional_properties(lght_sch.scheduleRules.first.daySchedule.additionalProperties)
+    wkdn_param_profile = lght_wknd_prop.select { |prop| prop.include?('param_day_profile') }.first
+    assert(wkdn_param_profile.include?('hoo_start'), "#{lght_sch.scheduleRules.first.daySchedule.name.get} missing hoo_start: #{lght_def_prop}")
+
+    props += get_additional_properties(clg_sch.defaultDaySchedule.additionalProperties)
+    clg_sch.scheduleRules.each {|obj| props += get_additional_properties(obj.daySchedule.additionalProperties)}
+
+    # test formulas individually
+    clg_def_prop = get_additional_properties(clg_sch.defaultDaySchedule.additionalProperties)
+    def_param_profile = clg_def_prop.select { |prop| prop.include?('param_day_profile') }.first
+    assert(def_param_profile.include?('hoo_start'), "#{clg_sch.defaultDaySchedule.name.get} missing hoo_start: #{clg_def_prop}")
+    assert(def_param_profile.include?('hoo_end'), "#{clg_sch.defaultDaySchedule.name.get} missing hoo_end: #{clg_def_prop}")
+    clg_wknd_prop = get_additional_properties(clg_sch.scheduleRules.first.daySchedule.additionalProperties)
+    wknd_param_profile = clg_wknd_prop.select { |prop| prop.include? ('param_day_profile' ) }.first
+    assert(wknd_param_profile.include?('hoo_start +'), "#{clg_sch.scheduleRules.first.daySchedule.name.get} missing hoo_start: #{clg_wknd_prop}")
+    assert(wknd_param_profile.include?('hoo_start -'), "#{clg_sch.scheduleRules.first.daySchedule.name.get} missing hoo_end: #{clg_wknd_prop}")
+
+    # props.each{|pr| p pr}
   end
 
   def test_schedule_ruleset_apply_parametric_inputs
