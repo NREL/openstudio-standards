@@ -158,7 +158,7 @@ module OpenstudioStandards
               else
                 # currently only used for surfaces with outdoor boundary condition
               end
-              film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
+              film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
               thermal_conductance = surface_detail[:construction].thermalConductance.get
               r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
               source_units = 'm^2*K/W'
@@ -232,7 +232,7 @@ module OpenstudioStandards
                 else
                   # currently only used for surfaces with outdoor boundary condition
                 end
-                film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
+                film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
 
                 thermal_conductance = sub_surface_detail[:construction].thermalConductance.get
                 r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
@@ -325,7 +325,7 @@ module OpenstudioStandards
                     end
                   # currently only used for surfaces with outdoor boundary condition
                 end
-                film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
+                film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
                 thermal_conductance = surface_detail[:construction].thermalConductance.get
                 r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
                 source_units = 'm^2*K/W'

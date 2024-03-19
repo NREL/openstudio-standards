@@ -324,8 +324,7 @@ class AppendixGPRMTests < Minitest::Test
       end
       # @todo: we've identified an issue with the r-value for air film in EnergyPlus for semi-exterior surfaces:
       # https://github.com/NREL/EnergyPlus/issues/9470
-      # todos were added in film_coefficients_r_value() since this is just a reporting issue, we're checking the
-      # no film u-value for opaque interior surfaces
+      # todos were added in OpenstudioStandards::Constructions.film_coefficients_r_value() since this is just a reporting issue, we're checking the no film u-value for opaque interior surfaces
       opaque_interior_name.each do |val|
         u_value_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'U-Factor no Film', 'W/m2-K').to_f
         construction_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'Construction', '').to_s

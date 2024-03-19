@@ -46,7 +46,7 @@ class Standard
       return true
     end
 
-    min_r_value_si = film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    min_r_value_si = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
     max_u_value_si = 1.0 / min_r_value_si
     max_u_value_ip = OpenStudio.convert(max_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     if target_u_value_ip >= max_u_value_ip
@@ -77,7 +77,7 @@ class Standard
     end
 
     # Determine the R-value of the air films, if requested
-    other_layer_r_value_si += film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+    other_layer_r_value_si += OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
 
     # Determine the difference between the desired R-value
     # and the R-value of the non-insulation layers and air films.
@@ -171,7 +171,7 @@ class Standard
     # guide) so the target_includes_int_film_coefficients and target_includes_ext_film_coefficients
     # variable values are changed to their opposite so if the target value includes a film
     # the target value is unchanged
-    film_coeff_r_value_si += film_coefficients_r_value(intended_surface_type, !target_includes_int_film_coefficients, !target_includes_ext_film_coefficients)
+    film_coeff_r_value_si += OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, !target_includes_int_film_coefficients, !target_includes_ext_film_coefficients)
     film_coeff_u_value_si = 1.0 / film_coeff_r_value_si
     film_coeff_u_value_ip = OpenStudio.convert(film_coeff_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     film_coeff_r_value_ip = 1.0 / film_coeff_u_value_ip
@@ -612,10 +612,10 @@ class Standard
       material = layer.to_FenestrationMaterial.get unless layer.to_FenestrationMaterial.empty?
       # check if the cast was successful, then find the insulation layer.
       unless material.nil?
-
-        if BTAP::Resources::Envelope::Materials.get_conductance(material) < min_conductance
+        material_conductance = OpenstudioStandards::Constructions::Materials.material_get_conductance(material)
+        if material_conductance < min_conductance
           # Keep track of the highest thermal resistance value.
-          min_conductance = BTAP::Resources::Envelope::Materials.get_conductance(material)
+          min_conductance = material_conductance
           return_material = material
           unless material.to_OpaqueMaterial.empty?
             construction.setInsulation(material)
@@ -624,8 +624,8 @@ class Standard
       end
     end
     if construction.insulation.empty? && construction.isOpaque
-      raise
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "This construction has no insulation layer specified. Construction #{construction.name.get} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
+      raise
     end
     return construction.insulation.get
   end
@@ -711,7 +711,7 @@ class Standard
     target_tvis = tvis
     # Mulitply by percentages if required.
     if is_percentage
-      target_u_value_si = target_u_value_si / 100.0 * BTAP::Resources::Envelope::Constructions.get_conductance(construction) unless conductance.nil?
+      target_u_value_si = target_u_value_si / 100.0 * OpenstudioStandards::Constructions.construction_get_conductance(construction) unless conductance.nil?
       if OpenstudioStandards::Constructions.construction_simple_glazing?(construction)
         target_shgc = target_shgc / 100.0 * construction.layers.first.to_SimpleGlazing.get.solarHeatGainCoefficient unless target_shgc.nil?
         target_tvis = target_tvis / 100.0 * construction.layers.first.to_SimpleGlazing.get.visibleTransmittance unless target_tvis.nil?

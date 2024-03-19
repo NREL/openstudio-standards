@@ -117,33 +117,6 @@ module BTAP
 
       # This module contains Materials, Constructions and ConstructionSets
       module Materials #Resources::Envelope::Materials
-        #This method gets conductance.
-        #@author phylroy.lopez@nrcan.gc.ca
-        #@param material [OpenStudio::Model::StandardOpaqueMaterial]
-        #@param temperature_c [Float]
-        #@return [Float] conductance
-        def self.get_conductance(material, temperature_c = 0.0)
-          conductance = nil
-          #this method is a wrapper around OS functions. No testing is required.
-          #Convert C to K
-          temperature_k = temperature_c + 273.0
-          conductance = material.to_SimpleGlazing.get.uFactor unless material.to_SimpleGlazing.empty?
-          conductance = material.to_StandardGlazing.get.thermalConductance unless material.to_StandardGlazing.empty?
-          conductance = material.to_OpaqueMaterial.get.thermalConductance unless material.to_OpaqueMaterial.empty?
-          conductance = material.to_Shade.get.thermalConductance unless material.to_Shade.empty?
-          conductance = material.to_Screen.get.thermalConductance unless material.to_Screen.empty?
-          conductance = material.to_MasslessOpaqueMaterial.get.thermalConductance unless material.to_MasslessOpaqueMaterial.empty?
-          conductance = 1.0 / material.to_AirGap.get.thermalResistance unless material.to_AirGap.empty?
-          conductance = material.to_Gas.get.getThermalConductivity(temperature_k) unless material.to_Gas.empty?
-          conductance = material.to_GasMixture.get.getThermalConductance(temperature_k) unless material.to_GasMixture.empty?
-          conductance = material.to_RoofVegetation.get.thermalConductance unless material.to_RoofVegetation.empty?
-          conductance = material.to_RefractionExtinctionGlazing.get.thermalConductance unless material.to_RefractionExtinctionGlazing.empty?
-          conductance = 9999.9 unless material.to_Blind.empty?
-          raise ("Conductance for Material: #{material.name} could not be set.") if conductance == nil
-          return conductance
-        end
-
-
         # This module contains methods to create opaque materials for Opaque constructions such as walls, roofs, floor and ceilings.
         module Opaque #Resources::Envelope::Materials::Opaque
           #Test Opaque Module
@@ -530,7 +503,7 @@ module BTAP
               assert_in_delta(0.05, new_construction.thermalConductance.to_f, 0.00001)
               #              fenestration
               new_construction = BTAP::Resources::Envelope::Constructions::customize_fenestration_construction(@model, @fenestration_construction, 0.5, nil, nil, 0.0)
-              assert_in_delta(0.5, Resources::Envelope::Constructions::get_conductance(new_construction).to_f, 0.00001)
+              assert_in_delta(0.5, OpenstudioStandards::Constructions.construction_get_conductance(new_construction).to_f, 0.00001)
             end
           end
         end # End Test Constructions
@@ -561,10 +534,10 @@ module BTAP
               material = layer.to_FenestrationMaterial.get unless layer.to_FenestrationMaterial.empty?
               #check if the cast was successful, then find the insulation layer.
               unless nil == material
-
-                if BTAP::Resources::Envelope::Materials::get_conductance(material) < min_conductance
+                material_conductance = OpenstudioStandards::Constructions::Materials.material_get_conductance(material)
+                if  material_conductance < min_conductance
                   #Keep track of the highest thermal resistance value.
-                  min_conductance = BTAP::Resources::Envelope::Materials::get_conductance(material)
+                  min_conductance = material_conductance
                   return_material = material
                   unless material.to_OpaqueMaterial.empty?
                     construction.setInsulation(material)
@@ -841,32 +814,6 @@ module BTAP
           return tvis
         end
 
-        #this method will get the conductance (metric) of the construction.
-        #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@param construction <String>
-        #@param at_temperature_c [Float]  = 0.0
-        #@return [Double] 1.0
-        def self.get_conductance(construction, at_temperature_c = 0.0)
-          #if , by accidnet a construction base was passed...convert it to a construction object.
-          construction = OpenStudio::Model::getConstructionByName(construction.model, construction.name.to_s).get unless construction.to_ConstructionBase.empty?
-          total = 0.0
-          construction.layers.each do |material|
-
-            total = total + 1.0 / BTAP::Resources::Envelope::Materials::get_conductance(material, at_temperature_c)
-          end
-          return 1.0 / total
-        end
-
-        #this method will get the rsi (metric) of the construction.
-        #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@param construction <String>
-        #@param at_temperature_c [Float] = 0.0
-        #@return [Double] 1.0 / self.get_conductance(construction, at_temperature_c
-        def self.get_rsi(construction, at_temperature_c = 0.0)
-          return 1.0 / self.get_conductance(construction, at_temperature_c)
-        end
-
-
         #This will create a deep copy of the construction
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
         #@param model [OpenStudio::Model::Model]
@@ -931,7 +878,7 @@ module BTAP
           #TSol in this case is SHGC
           solarTransmittanceatNormalIncidence = self.get_shgc(model, construction) if solarTransmittanceatNormalIncidence.nil?
           visibleTransmittance = self.get_tvis(model, construction) if visibleTransmittance == nil
-          conductance = self.get_conductance(construction) if conductance == nil
+          conductance = OpenstudioStandards::Constructions.construction_get_conductance(construction) if conductance == nil
           frontSideSolarReflectanceatNormalIncidence = 1.0 - solarTransmittanceatNormalIncidence
           backSideSolarReflectanceatNormalIncidence = 1.0 - solarTransmittanceatNormalIncidence
           frontSideVisibleReflectanceatNormalIncidence = 0.081000
@@ -1556,7 +1503,7 @@ module BTAP
             #ensure it exists
             cost = "NA"
             cost = cost_item.cost unless cost_item.empty?
-            rsi = BTAP::Resources::Envelope::Constructions::get_rsi(item[1])
+            rsi = 1.0 / OpenstudioStandards::Constructions.construction_get_conductance(item[1])
             table << "#{item[0]},#{rsi},#{cost}\n"
           end
           return table

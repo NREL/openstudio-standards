@@ -12,7 +12,7 @@ module OpenstudioStandards
     # @param roughness [String] surface roughness of the new material layer.
     #   Options are 'VeryRough', 'Rough', 'MediumRough', 'MediumSmooth', 'Smooth', and 'VerySmooth'
     # @param thickness [Double] thickness of the new material layer in meters
-    # @param conductivity [Double] conductivity of new material layer in W/m*K
+    # @param conductivity [Double] thermal conductivity of new material layer in W/m*K
     # @param density [Double] density of the new material layer in kg/m^3
     # @param specific_heat [Double] specific heat of the new material layer in J/kg*K
     # @param thermal_absorptance [Double] target thermal absorptance
