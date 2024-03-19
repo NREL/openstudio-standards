@@ -118,6 +118,11 @@ class AppendixGPRMTests < Minitest::Test
     check_hvac_sizing(model_hash['baseline'])
   end
 
+  def test_hvac_sizing_03
+    model_hash = prm_test_helper('hvac_sizing_03', require_prototype = false, require_baseline = true)
+    check_hvac_sizing(model_hash['baseline'])
+  end
+
   def test_infiltration
     model_hash = prm_test_helper('infiltration', require_prototype = true, require_baseline = true, require_proposed = true)
     check_infiltration(model_hash['prototype'], model_hash['baseline'], 'baseline')
@@ -207,7 +212,6 @@ class AppendixGPRMTests < Minitest::Test
 
   def test_proposed_model_residential_lpd
     model_hash = prm_test_helper('proposed_model_residential_lpd', require_prototype = false, require_baseline = false, require_proposed = true)
-
     check_residential_lpd(model_hash['proposed'])
   end
 

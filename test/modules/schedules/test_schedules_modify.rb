@@ -72,14 +72,12 @@ class TestSchedulesModify < Minitest::Test
                                                             lower_limit_value: 0.0,
                                                             upper_limit_value: 2.0,
                                                             numeric_type: 'Continuous',
-                                                            unit_type: 'Dimensionless'
-    )
+                                                            unit_type: 'Dimensionless')
     schedule.setScheduleTypeLimits(schedule_type_limits)
     @sch.schedule_ruleset_simple_value_adjust(schedule, 50)
     assert(schedule.to_ScheduleRuleset.is_initialized)
     schedule_max = @sch.schedule_ruleset_get_min_max(schedule)['max']
     assert(schedule_max == 2.0)
-
   end
 
   def test_schedule_ruleset_conditional_adjust_value

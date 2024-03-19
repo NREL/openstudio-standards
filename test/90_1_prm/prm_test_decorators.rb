@@ -420,11 +420,12 @@ class AppendixGPRMTests < Minitest::Test
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param arguments [Array] Not used
   def change_clg_therm(model, arguments)
-    std = Standard.build('90.1-2019')
+    std = Standard.build("90.1-2019")
     thermal_zone = model.getThermalZoneByName(arguments[0]).get
     tstat = thermal_zone.thermostat.get
     tstat = tstat.to_ThermostatSetpointDualSetpoint.get
-    tstat.setCoolingSetpointTemperatureSchedule(std.model_add_constant_schedule_ruleset(model, 24, name = "#{thermal_zone.name} Cooling Schedule."))
+    cooling_schedule = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model, 24, name: "#{thermal_zone.name.to_s} Cooling Schedule.", schedule_type_limit: 'Temperature')
+    tstat.setCoolingSetpointTemperatureSchedule(cooling_schedule)
 
     return model
   end

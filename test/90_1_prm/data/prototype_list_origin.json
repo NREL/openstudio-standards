@@ -85,7 +85,8 @@
         ["Hospital", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []],["increase_computer_rooms_epd", [5]]]],
-        ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []], ["convert_spaces_to_cmp_rms", []]]]
+        ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []], ["convert_spaces_to_cmp_rms", []]]],
+        ["MediumOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []], ["convert_spaces_to_cmp_rms", []], ["increase_computer_rooms_epd", [20]]]]
     ],
     "hvac_efficiency": [
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-8A", "userdata_default_test", []],

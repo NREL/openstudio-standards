@@ -18,12 +18,6 @@ class AppendixGPRMTests < Minitest::Test
         end
       end
 
-      schedule_types = [
-        'Ruleset',
-        'Constant',
-        'Compact'
-      ]
-
       # cooling delta t
       if std.thermal_zone_cooled?(thermal_zone)
         case thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureInputMethod
@@ -36,16 +30,7 @@ class AppendixGPRMTests < Minitest::Test
             tstat = tstat.get
             setpoint_sch = tstat.coolingSetpointTemperatureSchedule
             if setpoint_sch.is_initialized
-              setpoint_sch = setpoint_sch.get
-              schedule_types.each do |schedule_type|
-                full_objtype_name = "OS_Schedule_#{schedule_type}"
-                if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
-                  setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
-                  # reuse code in Standards.ThermalZone to find tstat max temperature
-                  setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['min']
-                  break
-                end
-              end
+              setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['min']
             end
           end
           if setpoint_c.nil?
@@ -87,16 +72,7 @@ class AppendixGPRMTests < Minitest::Test
               tstat = tstat.get
               setpoint_sch = tstat.heatingSetpointTemperatureSchedule
               if setpoint_sch.is_initialized
-                setpoint_sch = setpoint_sch.get
-                schedule_types.each do |schedule_type|
-                  full_objtype_name = "OS_Schedule_#{schedule_type}"
-                  if full_objtype_name == setpoint_sch.iddObjectType.valueName.to_s
-                    setpoint_sch = setpoint_sch.public_send("to_Schedule#{schedule_type}").get
-                    # reuse code in Standards.ThermalZone to find tstat max temperature
-                    setpoint_c = std.public_send("schedule_#{schedule_type.downcase}_annual_min_max_value", setpoint_sch)['max']
-                    break
-                  end
-                end
+                setpoint_c = OpenstudioStandards::Schedules.schedule_get_min_max(setpoint_sch.get)['max']
               end
             end
             if setpoint_c.nil?
@@ -170,10 +146,10 @@ class AppendixGPRMTests < Minitest::Test
 
       case schedule_type
       when 'ScheduleRuleset'
-        load_schmax = std_prm.get_8760_values_from_schedule(model, load_schedule).max
-        load_schmin = std_prm.get_8760_values_from_schedule(model, load_schedule).min
+        load_schmax = OpenstudioStandards::Schedules.schedule_get_min_max(load_schedule)['max']
+        load_schmin = OpenstudioStandards::Schedules.schedule_get_min_max(load_schedule)['min']
         load_schmode = std_prm.get_weekday_values_from_8760(model,
-                                                            Array(std_prm.get_8760_values_from_schedule(model, load_schedule)),
+                                                            Array(OpenstudioStandards::Schedules.schedule_get_hourly_values(load_schedule)),
                                                             value_includes_holiday = true).mode[0]
 
         # AppendixG-2019 G3.1.2.2.1
@@ -672,7 +648,7 @@ class AppendixGPRMTests < Minitest::Test
 
   def get_fan_hours_per_week(model, air_loop)
     fan_schedule = air_loop.availabilitySchedule
-    fan_hours_8760 = @prototype_creator.get_8760_values_from_schedule(model, fan_schedule)
+    fan_hours_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
     fan_hours_52 = []
 
     hr_of_yr = -1

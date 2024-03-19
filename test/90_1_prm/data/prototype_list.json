@@ -111,7 +111,9 @@
         ["Warehouse", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", []],
         ["MediumOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]],
         ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", []],
-        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["convert_spaces_from_to", ["OfficeWholeBuilding - Sm Office", "laboratory"]]]],
+        ["SmallOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["convert_spaces_from_to", ["OfficeWholeBuilding - Sm Office", "laboratory"]]]]
+    ],
+    "hvac_sizing_03": [
         ["LargeOffice", "90.1-2004", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]]
     ],
     "infiltration": [

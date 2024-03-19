@@ -94,8 +94,7 @@ module OpenstudioStandards
     end
 
     # Increase/decrease by percentage or static value.
-    # If the schedule has scheduleTypeLimits object, the adjusted values will subject to the lower and upper
-    # bounds of the schedule type limits object.
+    # If the schedule has a scheduleTypeLimits object, the adjusted values will subject to the lower and upper bounds of the schedule type limits object.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @param value [Double] Hash of name and time value pairs
@@ -107,10 +106,10 @@ module OpenstudioStandards
     def self.schedule_ruleset_simple_value_adjust(schedule_ruleset, value, modification_type = 'Multiplier')
       # gather profiles
       profiles = []
-      # negative infinity
-      lower_bound = -1.0 / 0.0
       # positive infinity
       upper_bound = Float::INFINITY
+      # negative infinity
+      lower_bound = -upper_bound
       if schedule_ruleset.scheduleTypeLimits.is_initialized
         scheduleTypeLimits = schedule_ruleset.scheduleTypeLimits.get
         if scheduleTypeLimits.lowerLimitValue.is_initialized
