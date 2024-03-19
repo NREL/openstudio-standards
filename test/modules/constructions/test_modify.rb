@@ -26,6 +26,20 @@ class TestConstructions < Minitest::Test
     assert(result)
   end
 
+  def test_construction_find_and_set_insulation_layer
+    model = OpenStudio::Model::Model.new
+    mat1 = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0889, 2.31, 2322, 832)
+    mat1.setName('Material 1')
+    insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.1, 0.001, 0.1, 0.1)
+    insulation.setName('Insulation')
+    mat2 = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0889, 2.31, 2322, 832)
+    mat2.setName('Material 2')
+    construction = OpenStudio::Model::Construction.new(model)
+    construction.setLayers([mat1, insulation, mat2])
+    insulation_layer = @constructions.construction_find_and_set_insulation_layer(construction)
+    assert('Insulation', insulation_layer.name.get)
+  end
+
   def test_construction_set_surface_properties
     model = OpenStudio::Model::Model.new
     layers = OpenStudio::Model::MaterialVector.new

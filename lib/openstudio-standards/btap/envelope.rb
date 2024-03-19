@@ -17,7 +17,6 @@
 # *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 # **********************************************************************/
 
-
 require "#{File.dirname(__FILE__)}/btap"
 
 module BTAP
@@ -109,7 +108,6 @@ module BTAP
         BTAP::Resources::Envelope::remove_all_thermal_mass_definitions(model)
       end
 
-
       def self.set_all_surfaces_to_default_construction(model)
         model.getPlanarSurfaces.sort.each { |item| item.resetConstruction }
       end
@@ -153,19 +151,6 @@ module BTAP
               assert(construction.insulation().get == @insulation)
             end
 
-            #This method will test find and set insulation layer.
-            # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-            def test_find_and_set_insulation_layer()
-              construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@opaque, @air_gap, @insulation, @massless, @opaque])
-
-              #check insulation was not set.
-              assert((construction.insulation().empty?))
-              #now set it.
-              BTAP::Resources::Envelope::Constructions::find_and_set_insulation_layer(@model, [construction])
-              #Now check that it found the insulation  value.
-              assert(construction.insulation().get == @insulation)
-            end
-
             #This method will test creation of fenestration construction.
             #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
             def test_create_fenestration_construction()
@@ -186,53 +171,6 @@ module BTAP
             end
           end
         end # End Test Constructions
-
-        #This method will search through the layers and find the layer with the
-        #lowest conductance and set that as the insulation layer. Note: Concrete walls
-        #or slabs with no insulation layer but with a carper will see the carpet as the
-        #insulation layer.
-        #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@param model [OpenStudio::Model::Model]
-        #@param constructions_array [BTAP::Common::validate_array]
-        #@return <String> insulating_layers
-        def self.find_and_set_insulation_layer(model, constructions_array)
-          constructions_array = BTAP::Common::validate_array(model, constructions_array, "Construction")
-          insulating_layers = Array.new()
-          constructions_array.each do |construction|
-            return_material = ""
-            #skip if already has an insulation layer set.
-            next unless construction.insulation.empty?
-            #set insulation layer.
-            #find insulation layer
-            min_conductance = 100.0
-            #loop through Layers
-            construction.layers.each do |layer|
-              #try casting the layer to an OpaqueMaterial.
-              material = nil
-              material = layer.to_OpaqueMaterial.get unless layer.to_OpaqueMaterial.empty?
-              material = layer.to_FenestrationMaterial.get unless layer.to_FenestrationMaterial.empty?
-              #check if the cast was successful, then find the insulation layer.
-              unless nil == material
-                material_conductance = OpenstudioStandards::Constructions::Materials.material_get_conductance(material)
-                if  material_conductance < min_conductance
-                  #Keep track of the highest thermal resistance value.
-                  min_conductance = material_conductance
-                  return_material = material
-                  unless material.to_OpaqueMaterial.empty?
-                    construction.setInsulation(material)
-                  end
-                end
-              end
-            end
-            if construction.insulation.empty? and construction.isOpaque
-              raise ("construction #{construction.name.get.to_s} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
-            end
-
-            insulating_layers << return_material
-          end
-
-          return insulating_layers
-        end
 
         #This method will create a new construction based on self and a new conductance value.
         #It will check to see if a similar construction has already been created by this method
@@ -270,7 +208,7 @@ module BTAP
 
           if conductance.kind_of?(Float)
             #re-find insulation layer
-            find_and_set_insulation_layer(model, new_construction)
+            OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(new_construction)
 
             #Determine how low the resistance can be set. Subtract exisiting insulation
             #Values from the total resistance to see how low we can go.
@@ -624,10 +562,7 @@ module BTAP
           #puts new_materials_array.size
           return self.create_construction(construction.model, cons_name, new_materials_array)
         end
-
-
       end #module Constructions
-
 
       #This module contains methods for creating ConstructionSets.
       module ConstructionSets #Resources::Envelope::ConstructionSets
@@ -652,7 +587,6 @@ module BTAP
               assert(!(construction_set.to_DefaultSurfaceConstructions.empty?))
             end
 
-
             #This method creates default subsurface constructions
             #@author phylroy.lopez@nrcan.gc.ca
             def test_create_default_subsurface_constructions()
@@ -676,7 +610,6 @@ module BTAP
                   tubularDaylightDiffuserConstruction)
               assert(!(default_subsurface_constructions.to_DefaultSubSurfaceConstructions.empty?))
             end
-
 
             #This method creates default constructions
             #@author phylroy.lopez@nrcan.gc.ca
@@ -726,7 +659,6 @@ module BTAP
           end
         end
 
-
         #This method set the default construction set from an OSM library file and the construction set name.
         #params construction_library_file [String] Path to osm file that contains the contruction set to be used.
         #params construction_set_name [String] Name of the construction set to be used.
@@ -750,7 +682,6 @@ module BTAP
           BTAP::runner_register("Info", "set_construction_set_by_file(#{construction_library_file}, #{construction_set_name}) Completed Sucessfully.")
           return true
         end
-
 
         #This method customizes default surface construction and sets conductance
         #@author phylroy.lopez@nrcan.gc.ca
@@ -865,7 +796,6 @@ module BTAP
 
         end
 
-
         #This will remove all associated construction costs for each construction
         #type associated with the construction set. Unless the value is set to nil, in which case it will do nothing.
         #@author phylroy.lopez@nrcan.gc.ca
@@ -920,7 +850,6 @@ module BTAP
               ["tubular_daylight_diffuser_cost_m3", tubular_daylight_diffuser_cost, default_surface_construction_set.defaultExteriorSubSurfaceConstructions.get.tubularDaylightDiffuserConstruction.get]
           ]
 
-
           #Assign cost to each construction.
           constructions_and_cost.each do |item|
             unless item[1].nil?
@@ -936,7 +865,6 @@ module BTAP
           building = default_surface_construction_set.model.building.get
           BTAP::Resources::Economics::object_cost(building, "Builing Contruction Set Whole Building Capital Cost", total_building_construction_set_cost, "CostPerEach")
         end
-
 
         #This will customize default subsurface construction conductances.
         #@author phylroy.lopez@nrcan.gc.ca
@@ -1001,7 +929,6 @@ module BTAP
           return set
         end
 
-
         #This will customize default surface construction conductance.
         #@author phylroy.lopez@nrcan.gc.ca
         #@param model [OpenStudio::Model::Model]
@@ -1020,7 +947,6 @@ module BTAP
           set.setRoofCeilingConstruction(Resources::Envelope::Constructions::customize_opaque_construction(model, default_surface_constructions.roofCeilingConstruction.get, roof_conductance)) unless roof_conductance.nil?
           return set
         end
-
 
         #This creates a new construction set of wall, floor and roof/ceiling objects.
         #@author phylroy.lopez@nrcan.gc.ca
@@ -1106,7 +1032,6 @@ module BTAP
           end
           return false
         end
-
 
         #This method creates a default construction set. A construction set for
         #exterior, interior,ground and subsurface must be created prior to populate

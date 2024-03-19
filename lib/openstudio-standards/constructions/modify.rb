@@ -55,6 +55,38 @@ module OpenstudioStandards
       return new_material
     end
 
+    # Find and set the insulation layer for a layered construction
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @return [OpenStudio::Model::OpaqueMaterial] OpenStudio OpaqueMaterial representing the insulation layer
+    def self.construction_find_and_set_insulation_layer(construction)
+      # skip and return the insulation layer if already set
+      return construction.insulation.get if construction.insulation.is_initialized
+
+      # loop through construction layers to find insulation layer
+      min_conductance = 100.0
+      insulation_material = nil
+      construction.layers.each do |layer|
+        # skip layers that aren't an OpaqueMaterial
+        next unless layer.to_OpaqueMaterial.is_initialized
+
+        material = layer.to_OpaqueMaterial.get
+        material_conductance = OpenstudioStandards::Constructions::Materials.material_get_conductance(material)
+        if material_conductance < min_conductance
+          min_conductance = material_conductance
+          insulation_material = material
+        end
+      end
+      construction.setInsulation(insulation_material) unless insulation_material.nil?
+
+      if construction.isOpaque && !construction.insulation.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::Constructions', "Unable to determine the insulation layer for construction #{construction.name.get}.")
+        return nil
+      end
+
+      return construction.insulation.get
+    end
+
     # set construction surface properties
     #
     # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object

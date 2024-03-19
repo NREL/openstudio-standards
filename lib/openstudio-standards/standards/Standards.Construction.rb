@@ -31,7 +31,7 @@ class Standard
     if insulation_layer_name.nil? && target_u_value_ip == 0.0
       # Do nothing if the construction already doesn't have an insulation layer
     elsif insulation_layer_name.nil?
-      insulation_layer_name = find_and_set_insulation_layer(construction).name
+      insulation_layer_name = OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(construction).name.get
     end
 
     # Remove the insulation layer if the specified U-value is zero.
@@ -594,42 +594,6 @@ class Standard
     return u_factor_w_per_m2_k
   end
 
-  # find and get the insulation layer for a construction
-  #
-  # @param construction [OpenStudio::Model::Construction] construction object
-  # @return [OpenStudio::Model::Material] insulation layer
-  def find_and_set_insulation_layer(construction)
-    # skip if already has an insulation layer set.
-    return construction.insulation.get unless construction.insulation.empty?
-
-    # find insulation layer
-    min_conductance = 100.0
-    # loop through Layers
-    construction.layers.each do |layer|
-      # try casting the layer to an OpaqueMaterial.
-      material = nil
-      material = layer.to_OpaqueMaterial.get unless layer.to_OpaqueMaterial.empty?
-      material = layer.to_FenestrationMaterial.get unless layer.to_FenestrationMaterial.empty?
-      # check if the cast was successful, then find the insulation layer.
-      unless material.nil?
-        material_conductance = OpenstudioStandards::Constructions::Materials.material_get_conductance(material)
-        if material_conductance < min_conductance
-          # Keep track of the highest thermal resistance value.
-          min_conductance = material_conductance
-          return_material = material
-          unless material.to_OpaqueMaterial.empty?
-            construction.setInsulation(material)
-          end
-        end
-      end
-    end
-    if construction.insulation.empty? && construction.isOpaque
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "This construction has no insulation layer specified. Construction #{construction.name.get} insulation layer could not be set!. This occurs when a insulation layer is duplicated in the construction.")
-      raise
-    end
-    return construction.insulation.get
-  end
-
   # change construction properties based on an a set of values
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -747,11 +711,10 @@ class Standard
             simple_glazing.setVisibleTransmittance(tvis) unless tvis.nil?
           else
             unless conductance.nil?
+              insulation_layer_name = OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(construction).name.get
               standard.construction_set_u_value(new_construction,
                                                 target_u_value_ip.to_f,
-                                                find_and_set_insulation_layer(
-                                                  new_construction
-                                                ).name.get,
+                                                insulation_layer_name,
                                                 intended_surface_type = nil,
                                                 false,
                                                 false)
@@ -761,11 +724,10 @@ class Standard
           case surface.surfaceType
             when 'Wall'
               unless conductance.nil?
+                insulation_layer_name = OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(construction).name.get
                 standard.construction_set_u_value(new_construction,
                                                   target_u_value_ip.to_f,
-                                                  find_and_set_insulation_layer(
-                                                    new_construction
-                                                  ).name.get,
+                                                  insulation_layer_name,
                                                   intended_surface_type = nil,
                                                   false,
                                                   false)
@@ -776,9 +738,10 @@ class Standard
             #                                                                   new_construction).name.get)
             when 'RoofCeiling', 'Floor'
               unless conductance.nil?
+                insulation_layer_name = OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(construction).name.get
                 standard.construction_set_u_value(new_construction,
                                                   target_u_value_ip.to_f,
-                                                  find_and_set_insulation_layer(new_construction).name.get,
+                                                  insulation_layer_name,
                                                   intended_surface_type = nil,
                                                   false,
                                                   false)
