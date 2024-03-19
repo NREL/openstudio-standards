@@ -704,9 +704,7 @@ module OpenstudioStandards
       # split day_used into sub arrays of consecutive days
       consec_days = days_used.chunk_while { |i, j| i + 1 == j }.to_a
 
-      p consec_days
-      # split consec_days into sub arrays of consecutive weeks by checking that all values in next array differ by seven from the value at the same index in this array
-      # consec_weeks = consec_days.chunk_while { |i, j| j.zip(i).map { |a| a.inject(:-) }.all?(7) }.to_a
+      # split consec_days into sub arrays of consecutive weeks by checking that any value in next array differs by seven from a value in this array
       consec_weeks = consec_days.chunk_while { |i, j| i.product(j).any? { |x, y| (x - y).abs == 7} }.to_a
 
       # make new rule for blocks of consectutive weeks
