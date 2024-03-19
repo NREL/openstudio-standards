@@ -1346,7 +1346,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Creating Space Types for #{building_type}.")
 
         # mapping building_type name is needed for a few methods
-        temp_standard = Standard.build('90.1-2013')
+        temp_standard = Standard.build(args[:template])
         building_type = temp_standard.model_get_lookup_name(building_type)
 
         # create space_type_map from array

@@ -32,6 +32,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/schedules/information'
   require_relative 'openstudio-standards/schedules/parametric'
 
+  # Space Module
+  require_relative 'openstudio-standards/space/space'
+  
   # HVAC Module
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
 

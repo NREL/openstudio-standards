@@ -241,7 +241,7 @@ class Standard
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
-  def seer_to_cop_cooling_no_fan(seer)
+  def seer_to_cop_no_fan(seer)
     cop = -0.0076 * seer * seer + 0.3796 * seer
 
     return cop
@@ -252,7 +252,7 @@ class Standard
   #
   # @param cop [Double] COP
   # @return [Double] Seasonal Energy Efficiency Ratio
-  def cop_to_seer_cooling_no_fan(cop)
+  def cop_no_fan_to_seer(cop)
     delta = 0.3796**2 - 4.0 * 0.0076 * cop
     seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
 
@@ -260,23 +260,23 @@ class Standard
   end
 
   # Convert from SEER to COP (with fan) for cooling coils
-  # per the method specified in 90.1-2013 Appendix G
+  # per the method specified in Thornton et al. 2011
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
-  def seer_to_cop_cooling_with_fan(seer)
+  def seer_to_cop(seer)
     eer = -0.0182 * seer * seer + 1.1088 * seer
-    cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + 0.12) / (1 - 0.12)
+    cop = eer_to_cop(eer)
 
     return cop
   end
 
   # Convert from COP to SEER (with fan) for cooling coils
-  # per the method specified in 90.1-2013 Appendix G
+  # per the method specified in Thornton et al. 2011
   #
   # @param cop [Double] Coefficient of Performance (COP)
   # @return [Double] seasonal energy efficiency ratio (SEER)
-  def cop_to_seer_cooling_with_fan(cop)
+  def cop_to_seer(cop)
     eer = cop_to_eer(cop)
     delta = 1.1088**2 - 4.0 * 0.0182 * eer
     seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
@@ -304,18 +304,18 @@ class Standard
   #
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
-  def hspf_to_cop_heating_no_fan(hspf)
+  def hspf_to_cop_no_fan(hspf)
     cop = -0.0296 * hspf * hspf + 0.7134 * hspf
 
     return cop
   end
 
   # Convert from HSPF to COP (with fan) for heat pump heating coils
-  # @ref [References::ASHRAE9012013] Appendix G
+  # @ref ASHRAE RP-1197
   #
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
-  def hspf_to_cop_heating_with_fan(hspf)
+  def hspf_to_cop(hspf)
     cop = -0.0255 * hspf * hspf + 0.6239 * hspf
 
     return cop
@@ -330,9 +330,9 @@ class Standard
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop_no_fan(eer, capacity_w = nil)
     if capacity_w.nil?
-      # The PNNL Method.
+      # From Thornton et al. 2011
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildings per PNNL.
+      # assumed to be 0.12 for the reference buildings per Thornton et al. 2011.
       r = 0.12
       cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + r) / (1 - r)
     else
@@ -350,11 +350,11 @@ class Standard
   #
   # @param cop [Double] COP
   # @return [Double] Energy Efficiency Ratio (EER)
-  def cop_to_eer_no_fan(cop, capacity_w = nil)
+  def cop_no_fan_to_eer(cop, capacity_w = nil)
     if capacity_w.nil?
-      # The PNNL Method.
+      # From Thornton et al. 2011
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildngs per PNNL.
+      # assumed to be 0.12 for the reference buildngs per Thornton et al. 2011.
       r = 0.12
       eer = OpenStudio.convert(1.0, 'W', 'Btu/h').get * (cop * (1 - r) - r)
     else
