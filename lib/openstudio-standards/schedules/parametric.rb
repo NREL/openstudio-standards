@@ -486,47 +486,71 @@ module OpenstudioStandards
       # cleanup existing profiles
       OpenstudioStandards::Schedules.schedule_ruleset_cleanup_profiles(sch)
 
-      # gather profiles
-      daily_flhs = [] # will be used to tag, min,medium,max operation for non typical operations
-      schedule_days = {} # key is day_schedule value is rule index
-      sch.scheduleRules.each do |rule|
-        schedule_days[rule.daySchedule] = rule.ruleIndex
-        daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(rule.daySchedule)
-      end
-      schedule_days[sch.defaultDaySchedule] = -1
-      daily_flhs << OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(sch.defaultDaySchedule)
+      # get initial hash of schedule days => rule indices
+      schedule_days = schedule_ruleset_get_schedule_day_rule_indices(sch)
+      # get all day schedule equivalent full load hours to tag
+      daily_flhs = schedule_days.keys.map { |day_sch| schedule_day_get_equivalent_full_load_hours(day_sch) }
+      # collect initial rule index => array of days used hash
+      sch_ruleset_days_used = schedule_ruleset_get_annual_days_used(sch)
 
-      # get indices for current schedule
-      year_description = sch.model.yearDescription.get
-      year = year_description.assumedYear
-      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
-      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
-      indices_vector = sch.getActiveRuleIndices(year_start_date, year_end_date)
+      # match up schedule rule days with hours of operation days
+      sch_day_map = {}
+      sch_ruleset_days_used.each do |sch_index, sch_days|
+        day_map = {}
+        sch_days.each do |day|
+          # find the hour of operation rule that contains the day number
+          hoo_key = hours_of_operation.find { |_, val| val[:days_used].include?(day) }&.first
+          day_map[day] = hoo_key
+        end
+        # group days with the same hour of operation index
+        grouped_days = Hash.new { |h, k| h[k] = [] }
+        day_map.each { |day, hoo_idx| grouped_days[hoo_idx] << day}
+        # group by schedule rule index
+        sch_day_map[sch_index] = grouped_days
+      end
+
+      # create new rule corresponding to the hour of operation rules
+      new_rule_ct = 0
+      sch_day_map.each do |sch_index, hoo_group|
+        hoo_group.each do |hoo_index, day_group|
+          # skip common default days
+          next if sch_index == -1 && hoo_index == -1
+          # skip if rules already match
+          if (sch_ruleset_days_used[sch_index] - day_group).empty?
+            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{sch.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
+            next
+          end
+          # create new rules
+          new_rules = schedule_ruleset_create_rules_from_day_list(sch, day_group, schedule_day: schedule_days.key(sch_index))
+          new_rule_ct += new_rules.size
+        end
+      end
+      # new rules are created at top of list - cleanup old rules
+      sch.scheduleRules[new_rule_ct..-1].each( &:remove ) unless new_rule_ct == 0
+
+      # re-collect new schedule rules
+      schedule_days = schedule_ruleset_get_schedule_day_rule_indices(sch)
+      # re-collect new rule index => days used array
+      sch_ruleset_days_used = schedule_ruleset_get_annual_days_used(sch)
 
       # step through profiles and add additional properties to describe profiles
       schedule_days.each_with_index do |(schedule_day, current_rule_index), i|
-        # loop through indices looking of rule in hoo that contains days in the rule
+
         hoo_target_index = nil
-        days_used = []
-        indices_vector.each_with_index do |profile_index, i|
-          if profile_index == current_rule_index then days_used << i + 1 end
-        end
-        # puts "#{__method__}>>> #{schedule_day.name} days_used: #{days_used}"
+
+        days_used = sch_ruleset_days_used[current_rule_index]
 
         # find days_used in hoo profiles that contains all days used from this profile
         hoo_profile_match_hash = {}
         best_fit_check = {}
 
-        days_for_rule_not_in_hoo_profile = []
+        # loop through indices looking of rule in hoo that contains all days in the rule
         hours_of_operation.each do |profile_index, value|
-          days_for_rule_not_in_hoo_profile = days_used - value[:days_used]
-          # puts "in loop: #{profile_index} - #{days_for_rule_not_in_hoo_profile}"
-          hoo_profile_match_hash[profile_index] = days_for_rule_not_in_hoo_profile
-          best_fit_check[profile_index] = days_for_rule_not_in_hoo_profile.size
-          if days_for_rule_not_in_hoo_profile.empty?
+          if (days_used - value[:days_used]).empty?
             hoo_target_index = profile_index
           end
         end
+
         # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have ot split rule and alter model
         if hoo_target_index.nil?
 
@@ -534,9 +558,8 @@ module OpenstudioStandards
           hoo_end = nil
           occ = nil
           vac = nil
-          # OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.Schedules', "In #{__method__}, schedule #{schedule_day.name} has no hours_of_operation target index. Days for rule not in hoo profile: #{days_for_rule_not_in_hoo_profile}")
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedules', "In #{__method__}, schedule #{schedule_day.name} has no hours_of_operation target index. Won't be modified")
-          # @todo issue warning when this happens on any profile that isn't a constant value
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.Schedules', "In #{__method__}, schedule #{schedule_day.name} has no hours_of_operation target index. Days for rule not in hoo profile: #{days_for_rule_not_in_hoo_profile}")
+          # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedules', "In #{__method__}, schedule #{schedule_day.name} has no hours_of_operation target index. Won't be modified")
         else
           # get hours of operation for this specific profile
           hoo_start = hours_of_operation[hoo_target_index][:hoo_start]
