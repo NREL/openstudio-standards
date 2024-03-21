@@ -41,8 +41,8 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    # AFUE : Testing the capacity of 58.65 kW would cover the range 0-117.23kW for NECB2011, 0-66 kW for NECB2015 and NECB2017, also 0-66 kW for NECB2020
-    # Thermal efficiency : Testing the capacity of 127.3 kW would cover the range 117.3-2930kW for NECB2011, 66.1-2930 kW for NECB2015 and NECB2017, also 66.1-2930 kW for NECB2020
+    # AFUE : Testing the capacity of 58.65 kW lies within the range of 0-117.23 kW for NECB2011, 0-66 kW for NECB2015 and NECB2017, also 0-66 kW for NECB2020
+    # Thermal efficiency : Testing the capacity of 127.3 kW lies within the range of 117.3-2930 kW for NECB2011, 66.1-2930 kW for NECB2015 and NECB2017, also 66.1-2930 kW for NECB2020
     test_cases_hash = { :Vintage => @AllTemplates,
                         :heating_coil_types => ["NaturalGas"],
                         :TestCase => ["case-1"],
