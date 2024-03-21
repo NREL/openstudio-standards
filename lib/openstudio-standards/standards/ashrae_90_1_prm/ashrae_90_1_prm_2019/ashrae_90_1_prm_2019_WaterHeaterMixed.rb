@@ -6,7 +6,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # @param building_type_swh [String] the swh building are type
   # @return [Boolean] returns true if successful, false if not
   def model_apply_water_heater_prm_parameter(water_heater_mixed, building_type_swh)
-    water_heater_mixed_apply_prm_fuel_type(water_heater_mixed, building_type_swh)
+    water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, building_type_swh)
     water_heater_mixed_apply_efficiency(water_heater_mixed)
     return true
   end
