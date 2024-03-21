@@ -86,37 +86,56 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
 
     # Apply baseline swh loops
-    # if building_area_type_number == 1
+    if building_area_type_number == 1
       # One building area type
       # Modify the service water heater
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       model_apply_water_heater_prm_parameter(water_heater,
                                              swh_building_type)
     end
-    # else
-      # Todo: service water heater with multiple building area type
+    else
+    # Todo: service water heater with multiple building area type
+    # 1. Remove current swh loop
+    model.getPlantLoops.sort.each do |loop|
+      # Don't remove loops except service water heating loops
+      next unless plant_loop_swh_loop?(loop)
+      loop.remove
+    end
+    # 2. Create new swh loops based on building area type
+    building_type_swh_unique = wateruse_equipment_hash.values.uniq
 
-      # # 1. Remove current swh loop
-      # model.getPlantLoops.sort.each do |loop|
-      #   # Don't remove loops except service water heating loops
-      #   next unless plant_loop_swh_loop?(loop)
-      #   loop.remove
-      # end
-      # # 2. Create new swh loops based on building area type
-      # building_type_swh_unique = building_type_swh_hash.values.uniq
-      # building_type_swh_unique.each do |building_type_swh|
-      #   building_type_swh_hash_new = building_type_swh_hash.select{|key, value| value == building_type_swh}
-      #   model_add_swh_loop(model,
-      #                      building_type_swh,
-      #                      building_type_swh_hash_new,
-      #                      service_water_temperature,
-      #                      service_water_pump_head,
-      #                      service_water_pump_motor_efficiency,
-      #                      water_heater_capacity,
-      #                      water_heater_volume)
-      #
-      # end
-    # end
+    building_type_swh_unique.each do |building_type_swh|
+      system_name = 'Service Water Loop ' + building_type_swh
+      # get the water heater info sub-hash
+      original_water_heater_info = original_water_heater_info_hash[original_water_heater_info_hash.keys[0]]
+      water_heater_thermal_zone = original_water_heater_info['Ambient Temperature Thermal Zone Name']
+      # wather_heater_thermal_zone = model.getThermalZoneByName(thermal_zone_name).get
+      # puts wather_heater_thermal_zone
+      service_water_temperature = original_water_heater_info['Maximum Temperature Limit {C}']
+      # todo: Hard coded now, implement in the future, may have multiple pumps in a building
+      service_water_pump_head = 29891
+      service_water_pump_motor_efficiency = 0.7
+      water_heater_capacity = original_water_heater_info['Heater Maximum Capacity {W}']
+      water_heater_volume = original_water_heater_info['Tank Volume {m3}']
+      water_heater_fuel = water_heater_mixed_apply_prm_baseline_fuel_type(building_type_swh)
+      parasitic_fuel_consumption_rate = original_water_heater_info['Off Cycle Parasitic Fuel Consumption Rate {W}']
+      model_add_swh_loop(model,
+             system_name,
+             water_heater_thermal_zone,
+             service_water_temperature,
+             service_water_pump_head,
+             service_water_pump_motor_efficiency,
+             water_heater_capacity,
+             water_heater_volume,
+             water_heater_fuel,
+             parasitic_fuel_consumption_rate,
+             add_pipe_losses = false,
+             floor_area_served = 465,
+             number_of_stories = 1,
+             pipe_insulation_thickness = 0.0127, # 1/2in
+             number_water_heaters = 1)
+    end
+    end
     return true
   end
 end
