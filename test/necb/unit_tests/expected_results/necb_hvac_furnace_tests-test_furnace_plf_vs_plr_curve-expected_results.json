@@ -2,6 +2,7 @@
   "VarType": "Vintage",
   "NECB2011": {
     "VarType": "FuelType",
+    "Reference": "NECB 2011 p3 Table 8.4.4.22.A",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {
@@ -60,6 +61,7 @@
   },
   "NECB2015": {
     "VarType": "FuelType",
+    "Reference": "NECB 2015 p1 Table 8.4.4.21.-A",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {
@@ -118,6 +120,7 @@
   },
   "NECB2017": {
     "VarType": "FuelType",
+    "Reference": "NECB 2017 p2 Table 8.4.4.21.-A",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {
@@ -176,6 +179,7 @@
   },
   "NECB2020": {
     "VarType": "FuelType",
+    "Reference": "NECB 2020 p1 Table 8.4.5.3",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {

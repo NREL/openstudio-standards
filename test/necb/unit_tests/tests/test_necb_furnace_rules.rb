@@ -12,7 +12,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     define_std_ranges
   end
 
-  # Test to validate the furnace thermal efficiency generated against expected values.
+  # Test to validate the furnace efficiency generated against expected values.
   #  Makes use of the template design pattern with the work done by the do_* method below (i.e. 'do_' prepended to the current method name)
   def test_furnace_efficiency
     logger.info "Starting suite of tests for: #{__method__}"
@@ -24,16 +24,14 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # Define test cases.
     test_cases = {}
-
     # Define references (per vintage in this case).
     test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 Table 5.2.12.1" }
     test_cases[:NECB2015] = { :Reference => "NECB 2015 p1 Table 5.2.12.1" }
     test_cases[:NECB2017] = { :Reference => "NECB 2017 p2 Table 5.2.12.1" }
     test_cases[:NECB2020] = { :Reference => "NECB 2020 p1 Table 5.2.12.1.-O" }
 
-    # Test cases. Three cases for NG and FuelOil, one for Electric.
+    # Test cases. Two cases for NG and one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-
     test_cases_hash = { :Vintage => @AllTemplates,
                         :heating_coil_types => ['Electric'],
                         :TestCase => ["case-1"],
@@ -45,13 +43,12 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # AFUE : Testing the capacity of 58.65 kW would cover the range 0-117.23kW for NECB2011, 0-66 kW for NECB2015 and NECB2017, also 0-66 kW for NECB2020
     # Thermal efficiency : Testing the capacity of 127.3 kW would cover the range 117.3-2930kW for NECB2011, 66.1-2930 kW for NECB2015 and NECB2017, also 66.1-2930 kW for NECB2020
-
-    test_cases_hash = { :Vintage => ["NECB2011", "NECB2015", "NECB2017", "NECB2020"],
+    test_cases_hash = { :Vintage => @AllTemplates,
                         :heating_coil_types => ["NaturalGas"],
                         :TestCase => ["case-1"],
                         :TestPars => { :tested_capacity_kW => 58.65,
                                        :baseboard_type => "Hot Water",
-                                       :efficiency_metric => "annual fuel utilization efficiency"} }
+                                       :efficiency_metric => "annual fuel utilization efficiency" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -129,7 +126,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
                                                                                                   new_auto_zoner: false)
 
       # Run sizing.
-      model.getCoilHeatingGass.each { |coil| coil.setNominalCapacity(furnace_cap * 1000) }
+      model.getCoilHeatingGass.each { |coil| coil.setNominalCapacity(furnace_cap * 1000.0) }
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
@@ -149,12 +146,15 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       test_efficiency_value = test_efficiency_value
     end
 
+    # Convert capacity to Btu/hr
+    capacity_btu_per_hr = OpenStudio.convert(furnace_cap, 'kW', 'Btu/hr').get
     # Add this test case to results and return the hash.
     results = {
       name: name,
       baseboard_type: baseboard_type,
       heating_coil_type: heating_coil_type,
       tested_capacity_kW: furnace_cap.signif,
+      tested_capacity_Btu_per_hr: capacity_btu_per_hr.signif,
       efficiency_metric: efficiency_metric,
       efficiency_value: test_efficiency_value.signif(3)
     }
@@ -163,7 +163,6 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     return results
   end
 
-=begin
   # Test to validate the furnace part load performance curve.
   def test_furnace_plf_vs_plr_curve
     logger.info "Starting suite of tests for: #{__method__}"
@@ -176,6 +175,12 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # Define test cases.
     test_cases = Hash.new
+
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 Table 8.4.4.22.A" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1 Table 8.4.4.21.-A" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2 Table 8.4.4.21.-A" }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1 Table 8.4.5.3" }
 
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = { :Vintage => @AllTemplates,
@@ -236,21 +241,13 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
       standard.setup_hw_loop_with_components(model, hw_loop, furnace_fueltype, always_on)
-      if stage_type == 'Single'
-        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                                    zones: model.getThermalZones,
-                                                                                                    heating_coil_type: heating_coil_type,
-                                                                                                    baseboard_type: baseboard_type,
-                                                                                                    hw_loop: hw_loop,
-                                                                                                    new_auto_zoner: false)
-      elsif stage_type == 'Multi'
-        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
-                                                                                                   zones: model.getThermalZones,
-                                                                                                   heating_coil_type: heating_coil_type,
-                                                                                                   baseboard_type: baseboard_type,
-                                                                                                   hw_loop: hw_loop,
-                                                                                                   new_auto_zoner: false)
-      end
+      # Single stage furnace.
+      standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                  zones: model.getThermalZones,
+                                                                                                  heating_coil_type: heating_coil_type,
+                                                                                                  baseboard_type: baseboard_type,
+                                                                                                  hw_loop: hw_loop,
+                                                                                                  new_auto_zoner: false)
 
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
@@ -277,16 +274,16 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
         max_x: furnace_curve.maximumValueofx
       }
     end
-
     logger.info "Completed individual test: #{name}"
     return results
   end
 
-  # Test to validate the furnace thermal efficiency generated against expected values stored in the file:
-  # 'compliance_furnace_efficiencies_expected_results.csv
-
   # Test to validate number of stages for multi furnaces
   # *** Method re-named so that test not run as multi stage fails ***
+  # Test fail with error : NoMethodError: undefined method
+  # `autosizedSpeed2GrossRatedTotalCoolingCapacity|' for #<OpenStudio::Model::CoilCoolingDXMultiSpeed:0x0000000009476978>|n
+  # lib/openstudio-standards/standards/Standards.CoilCoolingDXMultiSpeed.rb:232:in
+  # `coil_cooling_dx_multi_speed_find_capacity|'
   def no_test_NECB2011_furnace_num_stages
 
     # Set up remaining parameters for test.
@@ -313,7 +310,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -328,12 +325,11 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       model.getCoilHeatingGasMultiStages.each { |coil| coil.stages.last.setNominalCapacity(cap) }
 
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
       actual_num_stages = model.getCoilHeatingGasMultiStages[0].stages.size
       assert(actual_num_stages == num_stages_needed[cap], "The actual number of stages for capacity #{cap} W is not #{num_stages_needed[cap]}")
     end
   end
-=end
 
 end

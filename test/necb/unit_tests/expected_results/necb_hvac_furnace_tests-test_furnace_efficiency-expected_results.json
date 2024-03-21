@@ -10,6 +10,7 @@
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
         "tested_capacity_kW": 10.0,
+        "tested_capacity_Btu_per_hr": 34120,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
       }
@@ -21,6 +22,7 @@
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 58.65,
+        "tested_capacity_Btu_per_hr": 200100,
         "efficiency_metric": "annual fuel utilization efficiency",
         "efficiency_value": 0.924
       },
@@ -29,6 +31,7 @@
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 127.3,
+        "tested_capacity_Btu_per_hr": 434400,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.81
       }
@@ -44,6 +47,7 @@
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
         "tested_capacity_kW": 10.0,
+        "tested_capacity_Btu_per_hr": 34120,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
       }
@@ -55,6 +59,7 @@
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 58.65,
+        "tested_capacity_Btu_per_hr": 200100,
         "efficiency_metric": "annual fuel utilization efficiency",
         "efficiency_value": 0.924
       },
@@ -63,6 +68,7 @@
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 127.3,
+        "tested_capacity_Btu_per_hr": 434400,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.81
       }
@@ -78,6 +84,7 @@
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
         "tested_capacity_kW": 10.0,
+        "tested_capacity_Btu_per_hr": 34120,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
       }
@@ -89,6 +96,7 @@
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 58.65,
+        "tested_capacity_Btu_per_hr": 200100,
         "efficiency_metric": "annual fuel utilization efficiency",
         "efficiency_value": 0.924
       },
@@ -97,6 +105,7 @@
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 127.3,
+        "tested_capacity_Btu_per_hr": 434400,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.81
       }
@@ -112,6 +121,7 @@
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
         "tested_capacity_kW": 10.0,
+        "tested_capacity_Btu_per_hr": 34120,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
       }
@@ -123,6 +133,7 @@
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 58.65,
+        "tested_capacity_Btu_per_hr": 200100,
         "efficiency_metric": "annual fuel utilization efficiency",
         "efficiency_value": 0.95
       },
@@ -131,6 +142,7 @@
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 127.3,
+        "tested_capacity_Btu_per_hr": 434400,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.81
       }
@@ -145,17 +157,28 @@
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
         "tested_capacity_kW": 10.0,
+        "tested_capacity_Btu_per_hr": 34120,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
       }
     },
     "NaturalGas": {
       "VarType": "TestCase",
+      "case-1": {
+        "name": "BTAPPRE1980_sys3_Furnace-NaturalGas_cap-58.65kW_Baseboard-Hot Water",
+        "baseboard_type": "Hot Water",
+        "heating_coil_type": "NaturalGas",
+        "tested_capacity_kW": 58.65,
+        "tested_capacity_Btu_per_hr": 200100,
+        "efficiency_metric": "annual fuel utilization efficiency",
+        "efficiency_value": 0.8
+      },
       "case-2": {
         "name": "BTAPPRE1980_sys3_Furnace-NaturalGas_cap-127.3kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 127.3,
+        "tested_capacity_Btu_per_hr": 434400,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.8
       }
@@ -170,17 +193,28 @@
         "baseboard_type": "Electric",
         "heating_coil_type": "Electric",
         "tested_capacity_kW": 10.0,
+        "tested_capacity_Btu_per_hr": 34120,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 1.0
       }
     },
     "NaturalGas": {
       "VarType": "TestCase",
+      "case-1": {
+        "name": "BTAP1980TO2010_sys3_Furnace-NaturalGas_cap-58.65kW_Baseboard-Hot Water",
+        "baseboard_type": "Hot Water",
+        "heating_coil_type": "NaturalGas",
+        "tested_capacity_kW": 58.65,
+        "tested_capacity_Btu_per_hr": 200100,
+        "efficiency_metric": "annual fuel utilization efficiency",
+        "efficiency_value": 0.8
+      },
       "case-2": {
         "name": "BTAP1980TO2010_sys3_Furnace-NaturalGas_cap-127.3kW_Baseboard-Hot Water",
         "baseboard_type": "Hot Water",
         "heating_coil_type": "NaturalGas",
         "tested_capacity_kW": 127.3,
+        "tested_capacity_Btu_per_hr": 434400,
         "efficiency_metric": "thermal efficiency",
         "efficiency_value": 0.8
       }
