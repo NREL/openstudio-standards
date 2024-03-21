@@ -5,141 +5,18 @@ class Standard
   #
   # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_u_value_ip [Double] U-Value (Btu/ft^2*hr*R)
-  # @param insulation_layer_name [String] The name of the insulation layer in this construction
   # @param intended_surface_type [String]
   #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
   #   'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor', 'DemisingRoof',
   #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
-  # @param target_includes_int_film_coefficients [Boolean] if true, subtracts off standard film interior coefficients from your
+  # @param target_includes_interior_film_coefficients [Boolean] if true, subtracts off standard film interior coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @param target_includes_ext_film_coefficients [Boolean] if true, subtracts off standard exterior film coefficients from your
-  #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @return [Boolean] returns true if successful, false if not
-  # @todo Put in Phlyroy's logic for inferring the insulation layer of a construction
-  def construction_set_u_value(construction, target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
-
-    # Skip layer-by-layer fenestration constructions
-    if construction.isFenestration
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Can only set the u-value of opaque constructions or simple glazing. #{construction.name} is not opaque or simple glazing.")
-      return false
-    end
-
-    # Make sure an insulation layer was specified
-    if insulation_layer_name.nil? && target_u_value_ip == 0.0
-      # Do nothing if the construction already doesn't have an insulation layer
-    elsif insulation_layer_name.nil?
-      insulation_layer_name = OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(construction).name.get
-    end
-
-    # Remove the insulation layer if the specified U-value is zero.
-    if target_u_value_ip == 0.0
-      layer_index = 0
-      construction.layers.each do |layer|
-        break if layer.name.get == insulation_layer_name
-
-        layer_index += 1
-      end
-      construction.eraseLayer(layer_index)
-      return true
-    end
-
-    min_r_value_si = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
-    max_u_value_si = 1.0 / min_r_value_si
-    max_u_value_ip = OpenStudio.convert(max_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
-    if target_u_value_ip >= max_u_value_ip
-      target_u_value_ip = 1.0 / OpenStudio.convert(min_r_value_si + 0.001, 'm^2*K/W', 'ft^2*hr*R/Btu').get
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is greater than the sum of the inside and outside resistance, and the max U-value (6.636 SI) is used instead.")
-    end
-
-    # Convert the target U-value to SI
-    target_u_value_ip = target_u_value_ip.to_f
-    target_r_value_ip = 1.0 / target_u_value_ip
-
-    target_u_value_si = OpenStudio.convert(target_u_value_ip, 'Btu/ft^2*hr*R', 'W/m^2*K').get
-    target_r_value_si = 1.0 / target_u_value_si
-
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "#{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_u_value_ip = #{target_u_value_ip.round(3)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_r_value_ip = #{target_r_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_u_value_si = #{target_u_value_si.round(3)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_r_value_si = #{target_r_value_si.round(2)} for #{construction.name}.")
-
-    # Determine the R-value of the non-insulation layers
-    other_layer_r_value_si = 0.0
-    construction.layers.each do |layer|
-      next if layer.to_OpaqueMaterial.empty?
-      next if layer.name.get == insulation_layer_name
-
-      other_layer_r_value_si += layer.to_OpaqueMaterial.get.thermalResistance
-    end
-
-    # Determine the R-value of the air films, if requested
-    other_layer_r_value_si += OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
-
-    # Determine the difference between the desired R-value
-    # and the R-value of the non-insulation layers and air films.
-    # This is the desired R-value of the insulation.
-    ins_r_value_si = target_r_value_si - other_layer_r_value_si
-
-    # Set the R-value of the insulation layer
-    construction.layers.each_with_index do |layer, l|
-      next unless layer.name.get == insulation_layer_name
-
-      # Remove insulation layer if requested R-value is lower than sum of non-insulation materials
-      if ins_r_value_si <= 0.0
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too low given the other materials in the construction; insulation layer will be removed.")
-        construction.eraseLayer(l)
-        # Set the target R-value to the sum of other layers to make name match properties
-        target_r_value_ip = OpenStudio.convert(other_layer_r_value_si, 'm^2*K/W', 'ft^2*hr*R/Btu').get
-        break # Don't modify the insulation layer since it has been removed
-      end
-
-      # Modify the insulation layer
-      ins_r_value_ip = OpenStudio.convert(ins_r_value_si, 'm^2*K/W', 'ft^2*h*R/Btu').get
-      if layer.to_StandardOpaqueMaterial.is_initialized
-        layer = layer.to_StandardOpaqueMaterial.get
-        layer.setThickness(ins_r_value_si * layer.conductivity)
-        layer.setName("#{layer.name} R-#{ins_r_value_ip.round(2)}")
-        break # Stop looking for the insulation layer once found
-      elsif layer.to_MasslessOpaqueMaterial.is_initialized
-        layer = layer.to_MasslessOpaqueMaterial.get
-        layer.setThermalResistance(ins_r_value_si)
-        layer.setName("#{layer.name} R-#{ins_r_value_ip.round(2)}")
-        break # Stop looking for the insulation layer once found
-      elsif layer.to_AirGap.is_initialized
-        layer = layer.to_AirGap.get
-        target_thickness = ins_r_value_si * layer.thermalConductivity
-        layer.setThickness(target_thickness)
-        layer.setName("#{layer.name} R-#{ins_r_value_ip.round(2)}")
-        break # Stop looking for the insulation layer once found
-      end
-    end
-
-    # Modify the construction name
-    construction.setName("#{construction.name} R-#{target_r_value_ip.round(2)}")
-
-    return true
-  end
-
-  # Sets the U-value of a construction to a specified value by modifying the thickness of the insulation layer.
-  #
-  # @param construction [OpenStudio::Model::Construction] construction object
-  # @param target_u_value_ip [Double] U-Value (Btu/ft^2*hr*R)
-  # @param intended_surface_type [String]
-  #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
-  #   'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor', 'DemisingRoof',
-  #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
-  #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
-  #   'GroundContactWall', 'GroundContactRoof'
-  # @param target_includes_int_film_coefficients [Boolean] if true, subtracts off standard film interior coefficients from your
-  #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @param target_includes_ext_film_coefficients [Boolean] if true, subtracts off standard exterior film coefficients from your
+  # @param target_includes_exterior_film_coefficients [Boolean] if true, subtracts off standard exterior film coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
   # @return [Boolean] returns true if successful, false if not
-  def construction_set_glazing_u_value(construction, target_u_value_ip, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
+  def construction_set_glazing_u_value(construction, target_u_value_ip, intended_surface_type = 'ExteriorWall', target_includes_interior_film_coefficients, target_includes_exterior_film_coefficients)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
 
     # Skip layer-by-layer fenestration constructions
@@ -168,10 +45,10 @@ class Standard
     film_coeff_r_value_si = 0.0
     # In EnergyPlus, the U-factor input of the WindowMaterial:SimpleGlazingSystem
     # object includes the film coefficients (see IDD description, and I/O reference
-    # guide) so the target_includes_int_film_coefficients and target_includes_ext_film_coefficients
+    # guide) so the target_includes_interior_film_coefficients and target_includes_exterior_film_coefficients
     # variable values are changed to their opposite so if the target value includes a film
     # the target value is unchanged
-    film_coeff_r_value_si += OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, !target_includes_int_film_coefficients, !target_includes_ext_film_coefficients)
+    film_coeff_r_value_si += OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, !target_includes_interior_film_coefficients, !target_includes_exterior_film_coefficients)
     film_coeff_u_value_si = 1.0 / film_coeff_r_value_si
     film_coeff_u_value_ip = OpenStudio.convert(film_coeff_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
     film_coeff_r_value_ip = 1.0 / film_coeff_u_value_ip
@@ -226,7 +103,11 @@ class Standard
     u_value_ip = 1.0 / r_value_ip
 
     # Set the insulation U-value
-    construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactFloor', true, true)
+    OpenstudioStandards::Constructions.construction_set_u_value(construction, u_value_ip,
+                                                                insulation_layer_name: insulation_layer_name,
+                                                                intended_surface_type: 'GroundContactFloor',
+                                                                target_includes_interior_film_coefficients: true,
+                                                                target_includes_exterior_film_coefficients: true)
 
     # Modify the construction name
     construction.setName("#{construction.name} F-#{target_f_factor_ip.round(3)}")
@@ -283,7 +164,11 @@ class Standard
     u_value_ip = 1.0 / r_value_ip
 
     # Set the insulation U-value
-    construction_set_u_value(construction, u_value_ip, insulation_layer_name, 'GroundContactWall', true, true)
+    OpenstudioStandards::Constructions.construction_set_u_value(construction, u_value_ip,
+                                                                insulation_layer_name: insulation_layer_name,
+                                                                intended_surface_type: 'GroundContactWall',
+                                                                target_includes_interior_film_coefficients: true,
+                                                                target_includes_exterior_film_coefficients: true)
 
     # Modify the construction name
     construction.setName("#{construction.name} C-#{target_c_factor_ip.round(3)}")
@@ -697,60 +582,40 @@ class Standard
       target_u_value_ip = OpenStudio.convert(target_u_value_si.to_f, 'W/m^2*K', 'Btu/ft^2*hr*R').get unless target_u_value_si.nil?
       new_construction = construction_deep_copy(model, construction)
       case surface.outsideBoundaryCondition
-        when 'Outdoors'
-          if OpenstudioStandards::Constructions.construction_simple_glazing?(new_construction)
-            simple_glazing = construction.layers.first.to_SimpleGlazing.get
-            unless conductance.nil?
-              standard.construction_set_glazing_u_value(new_construction,
-                                                        target_u_value_ip.to_f,
-                                                        nil,
-                                                        false,
-                                                        false)
-            end
-            simple_glazing.setSolarHeatGainCoefficient(shgc) unless shgc.nil?
-            simple_glazing.setVisibleTransmittance(tvis) unless tvis.nil?
-          else
-            unless conductance.nil?
-              insulation_layer_name = OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(construction).name.get
-              standard.construction_set_u_value(new_construction,
-                                                target_u_value_ip.to_f,
-                                                insulation_layer_name,
-                                                intended_surface_type = nil,
-                                                false,
-                                                false)
-            end
+      when 'Outdoors'
+        if OpenstudioStandards::Constructions.construction_simple_glazing?(new_construction)
+          simple_glazing = construction.layers.first.to_SimpleGlazing.get
+          unless conductance.nil?
+            standard.construction_set_glazing_u_value(new_construction,
+                                                      target_u_value_ip.to_f,
+                                                      nil,
+                                                      false,
+                                                      false)
           end
-        when 'Ground'
-          case surface.surfaceType
-            when 'Wall'
-              unless conductance.nil?
-                insulation_layer_name = OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(construction).name.get
-                standard.construction_set_u_value(new_construction,
-                                                  target_u_value_ip.to_f,
-                                                  insulation_layer_name,
-                                                  intended_surface_type = nil,
-                                                  false,
-                                                  false)
-              end
-            #               standard.construction_set_underground_wall_c_factor(new_construction,
-            #                                                                   target_u_value_ip.to_f,
-            #                                                                   find_and_set_insulaton_layer(model,
-            #                                                                   new_construction).name.get)
-            when 'RoofCeiling', 'Floor'
-              unless conductance.nil?
-                insulation_layer_name = OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(construction).name.get
-                standard.construction_set_u_value(new_construction,
-                                                  target_u_value_ip.to_f,
-                                                  insulation_layer_name,
-                                                  intended_surface_type = nil,
-                                                  false,
-                                                  false)
-              end
-            #               standard.construction_set_slab_f_factor(new_construction,
-            #                                                       target_u_value_ip.to_f,
-            #                                                       find_and_set_insulaton_layer(model,
-            #                                                       new_construction).name.get)
+          simple_glazing.setSolarHeatGainCoefficient(shgc) unless shgc.nil?
+          simple_glazing.setVisibleTransmittance(tvis) unless tvis.nil?
+        else
+          unless conductance.nil?
+            OpenstudioStandards::Constructions.construction_set_u_value(new_construction, target_u_value_ip.to_f,
+                                                                        target_includes_interior_film_coefficients: false,
+                                                                        target_includes_exterior_film_coefficients: false)
           end
+        end
+      when 'Ground'
+        case surface.surfaceType
+        when 'Wall'
+          intended_surface_type = 'GroundContactWall'
+        when 'RoofCeiling'
+          intended_surface_type = 'GroundContactRoof'
+        when 'Floor'
+          intended_surface_type = 'GroundContactFloor'
+        end
+        unless conductance.nil?
+          OpenstudioStandards::Constructions.construction_set_u_value(new_construction, target_u_value_ip.to_f,
+                                                                      intended_surface_type: intended_surface_type,
+                                                                      target_includes_interior_film_coefficients: false,
+                                                                      target_includes_exterior_film_coefficients: false)
+        end
       end
       new_construction.setName(new_construction_name)
     else
