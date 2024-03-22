@@ -227,5 +227,124 @@ module OpenstudioStandards
                                                                                                           visible_absorptance: visible_absorptance)
       return new_material
     end
+
+    # Set the F-Factor of a slab to a specified value.
+    # Assumes an unheated, fully insulated slab, and modifies
+    # the insulation layer according to the values from 90.1-2004
+    # Table A6.3 Assembly F-Factors for Slab-on-Grade Floors.
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @param target_f_factor_ip [Double] Target F-Factor (Btu/ft*h*R)
+    # @param insulation_layer_name [String] The name of the insulation layer in this construction
+    # @return [Boolean] returns true if successful, false if not
+    def self.construction_set_slab_f_factor(construction, target_f_factor_ip, insulation_layer_name: nil)
+      # Regression from table A6.3 unheated, fully insulated slab
+      r_value_ip = 1.0248 * target_f_factor_ip**-2.186
+      u_value_ip = 1.0 / r_value_ip
+
+      # Set the insulation U-value
+      OpenstudioStandards::Constructions.construction_set_u_value(construction, u_value_ip,
+                                                                  insulation_layer_name: insulation_layer_name,
+                                                                  intended_surface_type: 'GroundContactFloor',
+                                                                  target_includes_interior_film_coefficients: true,
+                                                                  target_includes_exterior_film_coefficients: true)
+
+      # Modify the construction name
+      construction.setName("#{construction.name} F-#{target_f_factor_ip.round(3)}")
+
+      return true
+    end
+
+    # Set the surface specific F-factor parameters of a construction.
+    # This method only assumes one floor per space when calculating perimeter and area
+    #
+    # @param construction [OpenStudio::Model::FFactorGroundFloorConstruction] OpenStudio F-factor Construction object
+    # @param target_f_factor_ip [Float] Target F-Factor (Btu/ft*h*R)
+    # @param surface [OpenStudio::Model::Surface] OpenStudio Surface object
+    # @return [Boolean] returns true if successful, false if not
+    def self.construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
+      # Get space associated with surface
+      space = surface.space.get
+
+      # Find this space's exposed floor area and perimeter.
+      perimeter = OpenstudioStandards::Geometry.space_get_f_floor_perimeter(space)
+      area = OpenstudioStandards::Geometry.space_get_f_floor_area(space)
+
+      if area.zero?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Area for #{surface.name} was calculated to be 0 m2, slab f-factor cannot be set.")
+        return false
+      end
+
+      # Change construction name
+      construction.setName("#{construction.name}_#{surface.name}_#{target_f_factor_ip}")
+
+      # Set properties
+      f_factor_si = target_f_factor_ip * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
+      construction.setFFactor(f_factor_si)
+      construction.setArea(area)
+      construction.setPerimeterExposed(perimeter)
+
+      # Set surface outside boundary condition
+      surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+
+      return true
+    end
+
+    # Set the C-Factor of an underground wall to a specified value.
+    # Assumes continuous exterior insulation and modifies
+    # the insulation layer according to the values from 90.1-2004
+    # Table A4.2 Assembly C-Factors for Below-Grade walls.
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @param target_c_factor_ip [Double] Target C-Factor (Btu/ft^2*h*R)
+    # @param insulation_layer_name [String] The name of the insulation layer in this construction
+    # @return [Boolean] returns true if successful, false if not
+    def self.construction_set_underground_wall_c_factor(construction, target_c_factor_ip, insulation_layer_name: nil)
+      # Regression from table A4.2 continuous exterior insulation
+      r_value_ip = 0.775 * target_c_factor_ip**-1.067
+      u_value_ip = 1.0 / r_value_ip
+
+      # Set the insulation U-value
+      OpenstudioStandards::Constructions.construction_set_u_value(construction, u_value_ip,
+                                                                  insulation_layer_name: insulation_layer_name,
+                                                                  intended_surface_type: 'GroundContactWall',
+                                                                  target_includes_interior_film_coefficients: true,
+                                                                  target_includes_exterior_film_coefficients: true)
+
+      # Modify the construction name
+      construction.setName("#{construction.name} C-#{target_c_factor_ip.round(3)}")
+
+      return true
+    end
+
+    # Set the surface specific C-factor parameters of a construction
+    #
+    # @param construction [OpenStudio::Model::CFactorUndergroundWallConstruction] OpenStudio C-factor Construction object
+    # @param target_c_factor_ip [Float] Target C-Factor (Btu/ft^2*h*R)
+    # @param surface [OpenStudio::Model::Surface] OpenStudio surface object
+    # @return [Boolean] returns true if successful, false if not
+    def self.construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
+      # Get space associated with surface
+      space = surface.space.get
+
+      # Get height of the first below grade wall in this space.
+      below_grade_wall_height = OpenstudioStandards::Geometry.space_get_below_grade_wall_height(space)
+
+      if below_grade_wall_height.zero?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Below grade wall height for #{surface.name} was calculated to be 0 m2, below grade wall c-factor cannot be set.")
+        return false
+      end
+
+      # Change construction name
+      construction.setName("#{construction.name}_#{surface.name}_#{target_c_factor_ip}")
+
+      # Set properties
+      c_factor_si = target_c_factor_ip * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
+      construction.setCFactor(c_factor_si)
+      construction.setHeight(below_grade_wall_height)
+
+      # Set surface outside boundary condition
+      surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+    end
   end
 end

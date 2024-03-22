@@ -81,4 +81,74 @@ class TestConstructions < Minitest::Test
                                                                 visible_absorptance: 0.6)
     assert(result)
   end
+
+  def test_construction_set_slab_f_factor
+    model = OpenStudio::Model::Model.new
+    insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.068, 0.0432, 91, 837)
+    insulation.setName('Insulation')
+    mat1 = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.2, 1.729, 2243, 837)
+    mat1.setName('Material 1')
+    construction = OpenStudio::Model::Construction.new(model)
+    construction.setLayers([mat1, insulation])
+    assert(@constructions.construction_set_slab_f_factor(construction, 0.65))
+    u_value_si = @constructions.construction_get_conductance(construction)
+    u_value_ip = OpenStudio.convert(u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+    r_value_ip = 1.0 / u_value_ip
+    assert_in_delta(1.71, r_value_ip, 0.1)
+  end
+
+  def test_construction_set_surface_slab_f_factor
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
+    surface = model.getSurfaceByName('Surface 1').get
+    surface.setOutsideBoundaryCondition('Ground')
+    surface.setConstruction(construction)
+    assert(@constructions.construction_set_surface_slab_f_factor(construction, 0.65, surface))
+    assert('GroundFCfactorMethod', surface.outsideBoundaryCondition)
+  end
+
+  def test_construction_set_underground_wall_c_factor
+    model = OpenStudio::Model::Model.new
+    mat1 = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.2, 1.729, 2243, 837)
+    mat1.setName('Material 1')
+    insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.068, 0.0432, 91, 837)
+    insulation.setName('Insulation')
+    mat2 = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0127, 0.16, 785, 830)
+    mat2.setName('Material 2')
+    construction = OpenStudio::Model::Construction.new(model)
+    construction.setLayers([mat1, insulation, mat2])
+    assert(@constructions.construction_set_underground_wall_c_factor(construction, 0.065))
+    u_value_si = @constructions.construction_get_conductance(construction)
+    u_value_ip = OpenStudio.convert(u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+    r_value_ip = 1.0 / u_value_ip
+    assert_in_delta(13.64, r_value_ip, 0.1)
+  end
+
+  def test_construction_set_surface_underground_wall_c_factor
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, -3.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    model.getSurfaces.each do |surface|
+      success = surface.setOutsideBoundaryCondition('Ground') if surface.surfaceType == 'Wall'
+    end
+    #puts model
+    below_grade_wall_height = OpenstudioStandards::Geometry.space_get_below_grade_wall_height(space)
+    surface = model.getSurfaceByName('Surface 2').get
+    basement_wall_construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
+    surface.setConstruction(basement_wall_construction)
+    assert(@constructions.construction_set_surface_underground_wall_c_factor(basement_wall_construction, 0.065, surface))
+    assert('GroundFCfactorMethod', surface.outsideBoundaryCondition)
+  end
 end

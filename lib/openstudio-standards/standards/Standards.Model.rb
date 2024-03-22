@@ -3071,14 +3071,14 @@ class Standard
         if surface.nil?
           # Set the F-Factor (only applies to slabs on grade)
           # @todo figure out what the prototype buildings did about ground heat transfer
-          # construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, data['insulation_layer'])
+          # OpenstudioStandards::Constructions.construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, insulation_layer_name: data['insulation_layer'])
           OpenstudioStandards::Constructions.construction_set_u_value(construction, 0.0,
                                                                       insulation_layer_name: data['insulation_layer'],
                                                                       intended_surface_type: data['intended_surface_type'],
                                                                       target_includes_interior_film_coefficients: u_includes_int_film,
                                                                       target_includes_exterior_film_coefficients: u_includes_ext_film)
         else
-          construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
+          OpenstudioStandards::Constructions.construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
         end
       elsif target_c_factor_ip && (data['intended_surface_type'] == 'GroundContactWall' || data['intended_surface_type'] == 'GroundContactRoof')
         # C-factor objects are unique to each surface, so a surface needs to be passed
@@ -3086,14 +3086,14 @@ class Standard
         if surface.nil?
           # Set the C-Factor (only applies to underground walls)
           # @todo figure out what the prototype buildings did about ground heat transfer
-          # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
+          # OpenstudioStandards::Constructions.construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, insulation_layer_name: data['insulation_layer'])
           OpenstudioStandards::Constructions.construction_set_u_value(construction, 0.0,
                                                                       insulation_layer_name: data['insulation_layer'],
                                                                       intended_surface_type: data['intended_surface_type'],
                                                                       target_includes_interior_film_coefficients: u_includes_int_film,
                                                                       target_includes_exterior_film_coefficients: u_includes_ext_film)
         else
-          construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
+          OpenstudioStandards::Constructions.construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
         end
       end
 
