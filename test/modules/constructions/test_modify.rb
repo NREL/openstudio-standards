@@ -1,8 +1,7 @@
 require_relative '../../helpers/minitest_helper'
 
-class TestConstructions < Minitest::Test
+class TestConstructionsModify < Minitest::Test
   def setup
-    @create = OpenstudioStandards::CreateTypical
     @constructions = OpenstudioStandards::Constructions
   end
 

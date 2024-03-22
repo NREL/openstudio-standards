@@ -462,7 +462,7 @@ class Standard
       # create new construction.
       # create a copy
       target_u_value_ip = OpenStudio.convert(target_u_value_si.to_f, 'W/m^2*K', 'Btu/ft^2*hr*R').get unless target_u_value_si.nil?
-      new_construction = construction_deep_copy(model, construction)
+      new_construction = OpenstudioStandards::Constructions.construction_deep_copy(construction)
       case surface.outsideBoundaryCondition
       when 'Outdoors'
         if OpenstudioStandards::Constructions.construction_simple_glazing?(new_construction)
@@ -505,24 +505,5 @@ class Standard
     end
     surface.setConstruction(new_construction)
     return true
-  end
-
-  # This will create a deep copy of the construction
-  # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param construction [OpenStudio::Model::Construction] construction object
-  # @return [OpenStudio::Model::Construction] new construction object
-  def construction_deep_copy(model, construction)
-    construction = BTAP::Common.validate_array(model, construction, 'Construction').first
-    new_construction = construction.clone.to_Construction.get
-    # interating through layers."
-    (0..new_construction.layers.length - 1).each do |layernumber|
-      # cloning material"
-      cloned_layer = new_construction.getLayer(layernumber).clone.to_Material.get
-      # "setting material to new construction."
-      new_construction.setLayer(layernumber, cloned_layer)
-    end
-    return new_construction
   end
 end

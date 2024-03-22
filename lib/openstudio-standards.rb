@@ -16,6 +16,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/geometry/modify'
 
   # Construction Module
+  require_relative 'openstudio-standards/constructions/create'
   require_relative 'openstudio-standards/constructions/information'
   require_relative 'openstudio-standards/constructions/modify'
   require_relative 'openstudio-standards/constructions/materials/information'

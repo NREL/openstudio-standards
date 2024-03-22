@@ -201,7 +201,7 @@ module BTAP
           end
 
           #create a copy
-          new_construction = self.deep_copy(model, construction)
+          new_construction = OpenstudioStandards::Constructions.construction_deep_copy(construction)
 
           #Change Construction name in clone
           new_construction.setName(name_prefix)
@@ -429,24 +429,6 @@ module BTAP
             end
           end
           return tvis
-        end
-
-        #This will create a deep copy of the construction
-        #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@param model [OpenStudio::Model::Model]
-        #@param construction <String>
-        #@return [String] new_construction
-        def self.deep_copy(model, construction)
-          construction = BTAP::Common::validate_array(model, construction, "Construction").first
-          new_construction = construction.clone.to_Construction.get
-          #interating through layers."
-          (0..new_construction.layers.length - 1).each do |layernumber|
-            #cloning material"
-            cloned_layer = new_construction.getLayer(layernumber).clone.to_Material.get
-            #"setting material to new construction."
-            new_construction.setLayer(layernumber, cloned_layer)
-          end
-          return new_construction
         end
 
         #This will create construction model
