@@ -23,45 +23,6 @@ module BTAP
   module Resources #Resources
     # This module contains methods that relate to Materials, Constructions and Construction Sets
     module Envelope #Resources::Envelope
-
-      #This method removes all materials from model.
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::Model::Model] A model object
-      def self.remove_all_materials(model)
-        model.getMaterials().each do |item|
-          item.remove
-        end unless model.getMaterials().empty?
-      end
-
-      #This method removes all constructions from model.
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::Model::Model] A model object
-      def self.remove_all_constructions(model)
-        model.getConstructions().each { |item| item.remove }
-      end
-
-      #This method removes all default surface constructions from model.
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::Model::Model] A model object
-      def self.remove_all_default_surface_constructions(model)
-        model.getDefaultSurfaceConstructionss().each { |item| item.remove }
-      end
-
-      #This method removes all default subsurface constructions from model.
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::Model::Model] A model object
-      def self.remove_all_default_subsurface_constructions(model)
-        model.getDefaultSubSurfaceConstructionss().each { |item| item.remove }
-      end
-
-      #This method removes all default construction sets from model.
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::Model::Model] A model object
-      def self.remove_all_default_construction_sets(model)
-        model.getDefaultConstructionSets().each { |item| item.remove }
-        model.building.get.resetDefaultConstructionSet()
-      end
-
       #This method assignes interior surface construction to adiabatic surfaces from model.
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::Model::Model] A model object
@@ -86,30 +47,19 @@ module BTAP
         return true
       end
 
-      #This method removes all thermal mass definitions from model.
-      #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::Model::Model] A model object
-      def self.remove_all_thermal_mass_definitions(model)
-        model.getInternalMassDefinitions.sort.each { |item| item.remove }
-        model.getInternalMasss.sort.each { |item| item.remove }
-      end
-
       #This method removes all envelope information from model.
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::Model::Model] A model object
       def self.remove_all_envelope_information(model)
-        BTAP::Resources::Envelope::remove_all_materials(model)
-        BTAP::Resources::Envelope::remove_all_default_construction_sets(model)
-        BTAP::Resources::Envelope::remove_all_default_subsurface_constructions(model)
-        BTAP::Resources::Envelope::remove_all_default_surface_constructions(model)
-        BTAP::Resources::Envelope::set_all_surfaces_to_default_construction(model)
-        BTAP::Resources::Envelope::remove_all_constructions(model)
-        BTAP::Resources::Envelope::remove_all_materials(model)
-        BTAP::Resources::Envelope::remove_all_thermal_mass_definitions(model)
-      end
-
-      def self.set_all_surfaces_to_default_construction(model)
+        model.getDefaultConstructionSetss.each(&:remove)
+        model.building.get.resetDefaultConstructionSet
+        model.getDefaultSubSurfaceConstructionss.each(&:remove)
+        model.getDefaultSurfaceConstructionss.each(&:remove)
         model.getPlanarSurfaces.sort.each { |item| item.resetConstruction }
+        model.getConstructionBases.each(&:remove)
+        model.getMaterials.each(&:remove)
+        model.getInternalMassDefinitions(&:remove)
+        model.getInternalMasss(&:remove)
       end
 
       #This module contains methods dealing with the creation and modification of constructions.
