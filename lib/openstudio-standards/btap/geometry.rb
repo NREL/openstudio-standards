@@ -611,8 +611,10 @@ module BTAP
         total_area = 0.0
         temp = 0.0
         surfaces.each do |surface|
-          temp = temp + surface.netArea * BTAP::Geometry::Surfaces::get_surface_construction_shgc(surface)
-          total_area = total_area + surface.netArea
+          surface_construction = model.getConstructionByName(surface.construction.get.name.to_s).get
+          surface_shgc = OpenstudioStandards::Constructions.construction_get_solar_transmittance(surface_construction)
+          temp += surface.netArea *surface_shgc
+          total_area += surface.netArea
         end
         ave_shgc = "NA"
         ave_shgc = temp / total_area unless total_area == 0.0
@@ -624,8 +626,10 @@ module BTAP
         total_area = 0.0
         temp = 0.0
         surfaces.each do |surface|
-          temp = temp + surface.netArea * BTAP::Geometry::Surfaces::get_surface_construction_tvis(surface)
-          total_area = total_area + surface.netArea
+          surface_construction = model.getConstructionByName(surface.construction.get.name.to_s).get
+          surface_tvis = OpenstudioStandards::Constructions.construction_get_visible_transmittance(surface_construction)
+          temp += surface.netArea * surface_tvis
+          total_area += surface.netArea
         end
         ave_tvis = "NA"
         ave_tvis = temp / total_area unless total_area == 0.0
@@ -674,22 +678,6 @@ module BTAP
           surface.setConstruction(new_construction)
         end
         return surfaces
-      end
-
-      #This method gets the shgc for a surface
-      def self.get_surface_construction_shgc(surface)
-        #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
-        construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
-        #create a new construction with the requested RSI value based on the current construction.
-        return BTAP::Resources::Envelope::Constructions::get_shgc(surface.model,construction)
-      end
-
-      #This method gets the tvis for the surface
-      def self.get_surface_construction_tvis(surface)
-        #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
-        construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
-        #create a new construction with the requested RSI value based on the current construction.
-        return OpenstudioStandards::Constructions.construction_get_visible_transmittance(construction)
       end
 
       #  This method sets the boundary condition for a surface and it's matching surface.
