@@ -46,6 +46,60 @@ module OpenstudioStandards
       return 1.0 / total
     end
 
+    # Get the total solar transmittance for a fenestration construction (SHGC)
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @return [Double] total solar transmittance, or 1.0 if not available
+    def self.construction_get_solar_transmittance(construction)
+      tsol = nil
+      if construction.isFenestration
+        tsol = 1.0
+        construction.layers.each do |layer|
+          # Use shgc for simple glazing
+          tsol *= layer.to_SimpleGlazing.get.solarHeatGainCoefficient unless layer.to_SimpleGlazing.empty?
+          # Use solar transmittance for standard glazing
+          tsol *= layer.to_StandardGlazing.get.solarTransmittance unless layer.to_StandardGlazing.empty?
+        end
+      end
+
+      if tsol.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Constructions', "Unable to determine total solar transmittance for construction #{construction.name} because it is not considered Fenestration in the model. Returning a total solar transmittance of 1.0.")
+        tsol = 1.0
+      end
+
+      return tsol
+    end
+
+    # Get the total visible transmittance for a fenestration construction
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @return [Double] total visible transmittance, or 1.0 if not available
+    def self.construction_get_visible_transmittance(construction)
+      tvis = nil
+      if construction.isFenestration
+        tvis = 1.0
+        construction.layers.each do |layer|
+          # Use visible transmittance for simple glazing if specified
+          unless layer.to_SimpleGlazing.empty?
+            val = layer.to_SimpleGlazing.get.visibleTransmittance
+            tvis *= val.get unless val.empty?
+          end
+          # Use visible transmittance for standard glazing if specified
+          unless layer.to_StandardGlazing.empty?
+            val = layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence
+            tvis *= val.get unless val.empty?
+          end
+        end
+      end
+
+      if tvis.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Constructions', "Unable to determine total visible transmittance for construction #{construction.name} because it is not considered Fenestration in the model. Returning a total visible transmittance of 1.0.")
+        tvis = 1.0
+      end
+
+      return tvis
+    end
+
     # Gives the total R-value of the interior and exterior (if applicable) film coefficients for a particular type of surface.
     # @ref [References::ASHRAE9012010] A9.4.1 Air Films
     #

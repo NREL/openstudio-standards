@@ -305,8 +305,10 @@ class Standard
                                             nil,
                                             is_percentage)
       # report change as Info
-      surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(surface)
-      before_measure_surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(OpenStudio::Model.getSurfaceByName(before_measure_model, surface.name.to_s).get)
+      surface_construction = model.getConstructionByName(surface.construction.get.name.to_s).get
+      surface_conductance = OpenstudioStandards::Constructions.construction_get_conductance(surface_construction)
+      before_measure_surface = before_measure_model.getConstructionByName(surface.construction.get.name.to_s).get
+      before_measure_surface_conductance = OpenstudioStandards::Constructions.construction_get_conductance(before_measure_surface)
       if before_measure_surface_conductance.round(3) != surface_conductance.round(3)
         info << "#{surface.outsideBoundaryCondition.downcase}_#{surface.surfaceType.downcase}_conductance for #{surface.name} changed from #{before_measure_surface_conductance.round(3)} to #{surface_conductance.round(3)}."
       end
@@ -321,10 +323,10 @@ class Standard
                                             values[ecm_cond_name],
                                             values[ecm_shgc_name],
                                             values[ecm_tvis_name])
-
-      surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(surface)
-      before_surface = OpenStudio::Model.getSubSurfaceByName(before_measure_model, surface.name.to_s).get
-      before_measure_surface_conductance = BTAP::Geometry::Surfaces.get_surface_construction_conductance(before_surface)
+      surface_construction = model.getConstructionByName(surface.construction.get.name.to_s).get
+      surface_conductance = OpenstudioStandards::Constructions.construction_get_conductance(surface_construction)
+      before_surface_construction = before_measure_model.getConstructionByName(surface.construction.get.name.to_s).get
+      before_measure_surface_conductance = OpenstudioStandards::Constructions.construction_get_conductance(before_surface_construction)
       if before_measure_surface_conductance.round(3) != surface_conductance.round(3)
         info << "#{surface.outsideBoundaryCondition.downcase}_#{surface.subSurfaceType.downcase}_conductance for #{surface.name} changed from #{before_measure_surface_conductance.round(3)} to #{surface_conductance.round(3)}."
       end

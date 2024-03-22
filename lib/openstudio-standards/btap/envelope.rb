@@ -340,47 +340,6 @@ module BTAP
           end
         end
 
-        #This model gets tsol
-        #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@param model [OpenStudio::Model::Model]
-        #@param construction <String>
-        #@return [Float] tsol
-        def self.get_shgc(model, construction)
-          construction = BTAP::Common::validate_array(model, construction, "Construction").first
-          construction = OpenStudio::Model::getConstructionByName(model, construction.name.to_s).get
-          tsol = 1.0
-          if construction.isFenestration
-
-            construction.layers.each do |layer|
-              #check to see if it is a simple glazing. If so use the SHGC method.
-              tsol = tsol * layer.to_SimpleGlazing.get.solarHeatGainCoefficient unless layer.to_SimpleGlazing.empty?
-              #check to see if it is a standard glazing. If so use the solar transmittance method.
-              tsol = tsol * layer.to_StandardGlazing.get.solarTransmittance unless layer.to_StandardGlazing.empty?
-            end
-          end
-          return tsol
-        end
-
-        #This model gets tvis
-        #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-        #@param model [OpenStudio::Model::Model]
-        #@param construction <String>
-        #@return [Float] tvis
-        def self.get_tvis(model, construction)
-          construction = BTAP::Common::validate_array(model, construction, "Construction").first
-          construction = OpenStudio::Model::getConstructionByName(model, construction.name.to_s).get
-          tvis = 1.0
-          if construction.isFenestration
-            construction.layers.each do |layer|
-              #check to see if it is a simple glazing. If so use the SHGC method.
-              tvis = tvis * layer.to_SimpleGlazing.get.visibleTransmittance.get unless layer.to_SimpleGlazing.empty? || layer.to_SimpleGlazing.get.visibleTransmittance.empty?
-              #check to see if it is a standard glazing. If so use the solar transmittance method.
-              tvis = tvis * layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence.get unless layer.to_StandardGlazing.empty? || layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence.empty?
-            end
-          end
-          return tvis
-        end
-
         #This will create construction model
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
         #@param model [OpenStudio::Model::Model]
@@ -425,9 +384,9 @@ module BTAP
           raise ("This is not a fenestration!") unless construction.isFenestration
           #get equivilant values for tsol, tvis, and conductances.
           #TSol in this case is SHGC
-          solarTransmittanceatNormalIncidence = self.get_shgc(model, construction) if solarTransmittanceatNormalIncidence.nil?
-          visibleTransmittance = self.get_tvis(model, construction) if visibleTransmittance == nil
-          conductance = OpenstudioStandards::Constructions.construction_get_conductance(construction) if conductance == nil
+          solarTransmittanceatNormalIncidence = OpenstudioStandards::Constructions.construction_get_solar_transmittance(construction) if solarTransmittanceatNormalIncidence.nil?
+          visibleTransmittance = OpenstudioStandards::Constructions.construction_get_visible_transmittance(construction) if visibleTransmittance.nil?
+          conductance = OpenstudioStandards::Constructions.construction_get_conductance(construction) if conductance.nil?
           frontSideSolarReflectanceatNormalIncidence = 1.0 - solarTransmittanceatNormalIncidence
           backSideSolarReflectanceatNormalIncidence = 1.0 - solarTransmittanceatNormalIncidence
           frontSideVisibleReflectanceatNormalIncidence = 0.081000

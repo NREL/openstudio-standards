@@ -69,6 +69,40 @@ class TestConstructionsInformation < Minitest::Test
     assert_in_delta(0.0247, @constructions.construction_get_conductance(construction, temperature: 10.0), 0.0001)
   end
 
+  def test_construction_get_solar_transmittance
+    model = OpenStudio::Model::Model.new
+    simple_glazing = OpenStudio::Model::SimpleGlazing.new(model)
+    simple_glazing.setSolarHeatGainCoefficient(0.45)
+    construction = OpenStudio::Model::Construction.new(model)
+    construction.setLayers([simple_glazing])
+    assert(0.45, @constructions.construction_get_solar_transmittance(construction))
+
+    standard_glazing = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
+    standard_glazing.setSolarTransmittance(0.5)
+    construction.setLayers([standard_glazing])
+    assert(0.5, @constructions.construction_get_solar_transmittance(construction))
+
+    construction.setLayers([standard_glazing, standard_glazing])
+    assert(0.25, @constructions.construction_get_solar_transmittance(construction))
+  end
+
+  def test_construction_get_visible_transmittance
+    model = OpenStudio::Model::Model.new
+    simple_glazing = OpenStudio::Model::SimpleGlazing.new(model)
+    simple_glazing.setVisibleTransmittance(0.45)
+    construction = OpenStudio::Model::Construction.new(model)
+    construction.setLayers([simple_glazing])
+    assert(0.45, @constructions.construction_get_visible_transmittance(construction))
+
+    standard_glazing = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
+    standard_glazing.setVisibleTransmittance(0.5)
+    construction.setLayers([standard_glazing])
+    assert(0.5, @constructions.construction_get_visible_transmittance(construction))
+
+    construction.setLayers([standard_glazing, standard_glazing])
+    assert(0.25, @constructions.construction_get_visible_transmittance(construction))
+  end
+
   def test_construction_get_solar_reflectance_index
     model = OpenStudio::Model::Model.new
     layers = OpenStudio::Model::MaterialVector.new

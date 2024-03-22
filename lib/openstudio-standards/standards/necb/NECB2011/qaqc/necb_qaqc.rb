@@ -549,8 +549,8 @@ class NECB2011
       construction_info[:name] = construction.name.get
       construction_info[:net_area_m2] = construction.getNetArea.round(2)
       construction_info[:thermal_conductance_m2_w_per_k] = OpenstudioStandards::Constructions.construction_get_conductance(construction).round(3)
-      construction_info[:solar_transmittance] = BTAP::Resources::Envelope::Constructions.get_shgc(model, construction).round(3)
-      construction_info[:visible_tranmittance] = BTAP::Resources::Envelope::Constructions.get_tvis(model, construction).round(3)
+      construction_info[:solar_transmittance] = OpenstudioStandards::Constructions.construction_get_solar_transmittance(construction).round(3)
+      construction_info[:visible_tranmittance] = OpenstudioStandards::Constructions.construction_get_visible_transmittance(construction).round(3)
     end
 
     # Exterior

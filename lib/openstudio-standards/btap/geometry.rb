@@ -596,8 +596,10 @@ module BTAP
         total_area = 0.0
         temp = 0.0
         surfaces.each do |surface|
-          temp = temp + surface.netArea * BTAP::Geometry::Surfaces::get_surface_construction_conductance(surface)
-          total_area = total_area + surface.netArea
+          surface_construction = model.getConstructionByName(surface.construction.get.name.to_s).get
+          surface_conductance = OpenstudioStandards::Constructions.construction_get_conductance(surface_construction)
+          temp += surface.netArea * surface_conductance
+          total_area += surface.netArea
         end
         average_conductance = "NA"
         average_conductance = temp / total_area unless total_area == 0.0
@@ -674,15 +676,6 @@ module BTAP
         return surfaces
       end
 
-      #This method creates a new construction based on the current, changes the rsi and assign the construction to the current surface.
-      #Most of the meat of this method is in the construction class. Testing is done there.
-      def self.get_surface_construction_conductance(surface)
-        #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
-        construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
-        #create a new construction with the requested RSI value based on the current construction.
-        return OpenstudioStandards::Constructions.construction_get_conductance(construction)
-      end
-
       #This method gets the shgc for a surface
       def self.get_surface_construction_shgc(surface)
         #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
@@ -696,7 +689,7 @@ module BTAP
         #a bit of acrobatics to get the construction object from the ConstrustionBase object's name.
         construction = OpenStudio::Model::getConstructionByName(surface.model, surface.construction.get.name.to_s).get
         #create a new construction with the requested RSI value based on the current construction.
-        return BTAP::Resources::Envelope::Constructions::get_tvis(model,construction)
+        return OpenstudioStandards::Constructions.construction_get_visible_transmittance(construction)
       end
 
       #  This method sets the boundary condition for a surface and it's matching surface.
