@@ -67,6 +67,29 @@ class TestConstructionsModify < Minitest::Test
     assert_in_delta(40.0 - 0.17 - 0.68, r_value_ip, 0.01)
   end
 
+  def test_construction_set_glazing_u_value
+    model = OpenStudio::Model::Model.new
+    simple_glazing = OpenStudio::Model::SimpleGlazing.new(model)
+    construction = OpenStudio::Model::Construction.new(model)
+    construction.setLayers([simple_glazing])
+
+    # set to U-0.25 Btu/ft^2*hr*R
+    @constructions.construction_set_glazing_u_value(construction, 0.25,
+                                                    target_includes_interior_film_coefficients: false,
+                                                    target_includes_exterior_film_coefficients: false)
+    u_value_si = construction.layers.first.to_SimpleGlazing.get.uFactor
+    u_value_ip = OpenStudio.convert(u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+    assert_in_delta(1.0/(4.0 - 0.17 - 0.68), u_value_ip, 0.01)
+
+    # include film coefficients
+    @constructions.construction_set_glazing_u_value(construction, 0.25,
+                                                    target_includes_interior_film_coefficients: true,
+                                                    target_includes_exterior_film_coefficients: true)
+    u_value_si = construction.layers.first.to_SimpleGlazing.get.uFactor
+    u_value_ip = OpenStudio.convert(u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+    assert_in_delta(0.25, u_value_ip, 0.01)
+  end
+
   def test_construction_set_surface_properties
     model = OpenStudio::Model::Model.new
     layers = OpenStudio::Model::MaterialVector.new

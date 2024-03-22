@@ -1,93 +1,6 @@
 class Standard
   # @!group Construction
 
-  # Sets the U-value of a construction to a specified value by modifying the thickness of the insulation layer.
-  #
-  # @param construction [OpenStudio::Model::Construction] construction object
-  # @param target_u_value_ip [Double] U-Value (Btu/ft^2*hr*R)
-  # @param intended_surface_type [String]
-  #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
-  #   'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor', 'DemisingRoof',
-  #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
-  #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
-  #   'GroundContactWall', 'GroundContactRoof'
-  # @param target_includes_interior_film_coefficients [Boolean] if true, subtracts off standard film interior coefficients from your
-  #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @param target_includes_exterior_film_coefficients [Boolean] if true, subtracts off standard exterior film coefficients from your
-  #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @return [Boolean] returns true if successful, false if not
-  def construction_set_glazing_u_value(construction, target_u_value_ip, intended_surface_type = 'ExteriorWall', target_includes_interior_film_coefficients, target_includes_exterior_film_coefficients)
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
-
-    # Skip layer-by-layer fenestration constructions
-    unless OpenstudioStandards::Constructions.construction_simple_glazing?(construction)
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Can only set the u-value of simple glazing. #{construction.name} is not simple glazing.")
-      return false
-    end
-
-    glass_layer = construction.layers.first.to_SimpleGlazing.get
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
-
-    # Convert the target U-value to SI
-    target_u_value_ip = target_u_value_ip.to_f
-    target_r_value_ip = 1.0 / target_u_value_ip
-
-    target_u_value_si = OpenStudio.convert(target_u_value_ip, 'Btu/ft^2*hr*R', 'W/m^2*K').get
-    target_r_value_si = 1.0 / target_u_value_si
-
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "#{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_u_value_ip = #{target_u_value_ip.round(3)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_r_value_ip = #{target_r_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_u_value_si = #{target_u_value_si.round(3)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---target_r_value_si = #{target_r_value_si.round(2)} for #{construction.name}.")
-
-    # Determine the R-value of the air films, if requested
-    film_coeff_r_value_si = 0.0
-    # In EnergyPlus, the U-factor input of the WindowMaterial:SimpleGlazingSystem
-    # object includes the film coefficients (see IDD description, and I/O reference
-    # guide) so the target_includes_interior_film_coefficients and target_includes_exterior_film_coefficients
-    # variable values are changed to their opposite so if the target value includes a film
-    # the target value is unchanged
-    film_coeff_r_value_si += OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, !target_includes_interior_film_coefficients, !target_includes_exterior_film_coefficients)
-    film_coeff_u_value_si = 1.0 / film_coeff_r_value_si
-    film_coeff_u_value_ip = OpenStudio.convert(film_coeff_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
-    film_coeff_r_value_ip = 1.0 / film_coeff_u_value_ip
-
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_r_value_si = #{film_coeff_r_value_si.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_u_value_si = #{film_coeff_u_value_si.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_u_value_ip = #{film_coeff_u_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---film_coeff_r_value_ip = #{film_coeff_r_value_ip.round(2)} for #{construction.name}.")
-
-    # Determine the difference between the desired R-value
-    # and the R-value of the and air films.
-    # This is the desired R-value of the insulation.
-    ins_r_value_si = target_r_value_si - film_coeff_r_value_si
-    if ins_r_value_si <= 0.0
-      ins_r_value_si = 0.001
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R.")
-    end
-    ins_u_value_si = 1.0 / ins_r_value_si
-
-    if ins_u_value_si > 7.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)}; setting U-value to EnergyPlus limit of 7.0 W/m^2*K (1.23 Btu/ft^2*hr*R).")
-      ins_u_value_si = 7.0
-    end
-
-    ins_u_value_ip = OpenStudio.convert(ins_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
-    ins_r_value_ip = 1.0 / ins_u_value_ip
-
-    # Set the U-value of the insulation layer
-    glass_layer = construction.layers.first.to_SimpleGlazing.get
-    glass_layer.setUFactor(ins_u_value_si)
-
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_r_value_ip = #{ins_r_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_ip = #{ins_u_value_ip.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_si = #{ins_u_value_si.round(2)} for #{construction.name}.")
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
-
-    return true
-  end
-
   # Get the SHGC as calculated by EnergyPlus.
   # Only applies to fenestration constructions.
   #
@@ -468,11 +381,9 @@ class Standard
         if OpenstudioStandards::Constructions.construction_simple_glazing?(new_construction)
           simple_glazing = construction.layers.first.to_SimpleGlazing.get
           unless conductance.nil?
-            standard.construction_set_glazing_u_value(new_construction,
-                                                      target_u_value_ip.to_f,
-                                                      nil,
-                                                      false,
-                                                      false)
+            OpenstudioStandards::Constructions.construction_set_glazing_u_value(new_construction, target_u_value_ip.to_f,
+                                                                                target_includes_interior_film_coefficients: false,
+                                                                                target_includes_exterior_film_coefficients: false)
           end
           simple_glazing.setSolarHeatGainCoefficient(shgc) unless shgc.nil?
           simple_glazing.setVisibleTransmittance(tvis) unless tvis.nil?

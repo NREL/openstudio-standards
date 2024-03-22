@@ -3041,7 +3041,9 @@ class Standard
         if construction.isFenestration
           if OpenstudioStandards::Constructions.construction_simple_glazing?(construction)
             # Set the U-Value and SHGC
-            construction_set_glazing_u_value(construction, target_u_value_ip.to_f, data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+            OpenstudioStandards::Constructions.construction_set_glazing_u_value(construction, target_u_value_ip.to_f,
+                                                                                target_includes_interior_film_coefficients: u_includes_int_film,
+                                                                                target_includes_exterior_film_coefficients: u_includes_ext_film)
             simple_glazing = construction.layers.first.to_SimpleGlazing
             simple_glazing.get.setSolarHeatGainCoefficient(target_shgc) if simple_glazing.is_initialized
           else # if !data['intended_surface_type'] == 'ExteriorWindow' && !data['intended_surface_type'] == 'Skylight'

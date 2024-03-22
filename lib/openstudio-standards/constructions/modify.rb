@@ -205,6 +205,67 @@ module OpenstudioStandards
       return true
     end
 
+    # Sets the U-value of a simple glazing construction to a specified value by modifying the SimpleGlazing material.
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object that contains SimpleGlazing
+    # @param target_u_value_ip [Double] Target heat transfer coefficient (U-Value) (Btu/ft^2*hr*R)
+    # @param target_includes_interior_film_coefficients [Boolean] If true, subtracts off standard interior film coefficients
+    #   from the target heat transfer coefficient before modifying insulation thickness.
+    # @param target_includes_exterior_film_coefficients [Boolean] If true, subtracts off standard exterior film coefficients
+    #   from the target heat transfer coefficient before modifying insulation thickness.
+    # @return [Boolean] returns true if successful, false if not
+    def self.construction_set_glazing_u_value(construction, target_u_value_ip,
+                                              target_includes_interior_film_coefficients: true,
+                                              target_includes_exterior_film_coefficients: true)
+      # Skip layer-by-layer fenestration constructions
+      unless OpenstudioStandards::Constructions.construction_simple_glazing?(construction)
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Construction', "The construction_set_glazing_u_value method can only set the u-value of simple glazing. #{construction.name} does not containg simple glazing.")
+        return false
+      end
+
+      # Convert the target U-value to SI
+      target_r_value_ip = 1.0 / target_u_value_ip.to_f
+      target_u_value_si = OpenStudio.convert(target_u_value_ip, 'Btu/ft^2*hr*R', 'W/m^2*K').get
+      target_r_value_si = 1.0 / target_u_value_si
+
+      # Determine the R-value of the air films, if requested
+      # In EnergyPlus, the U-factor input of the WindowMaterial:SimpleGlazingSystem
+      # object includes the film coefficients (see IDD description, and I/O reference
+      # guide) so the target_includes_interior_film_coefficients and target_includes_exterior_film_coefficients
+      # variable values are changed to their opposite so if the target value includes a film
+      # the target value is unchanged
+      film_coeff_r_value_si = 0.0
+      film_coeff_r_value_si += OpenstudioStandards::Constructions.film_coefficients_r_value('ExteriorWindow', !target_includes_interior_film_coefficients, !target_includes_exterior_film_coefficients)
+      film_coeff_u_value_si = 1.0 / film_coeff_r_value_si
+      film_coeff_u_value_ip = OpenStudio.convert(film_coeff_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+      film_coeff_r_value_ip = 1.0 / film_coeff_u_value_ip
+
+      # Determine the difference between the desired R-value
+      # and the R-value of the and air films.
+      # This is the desired R-value of the insulation.
+      ins_r_value_si = target_r_value_si - film_coeff_r_value_si
+      if ins_r_value_si <= 0.0
+        ins_r_value_si = 0.001
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Construction', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R.")
+      end
+      ins_u_value_si = 1.0 / ins_r_value_si
+
+      if ins_u_value_si > 7.0
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Construction', "Requested U-value of #{target_u_value_ip} for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)}; setting U-value to EnergyPlus limit of 7.0 W/m^2*K (1.23 Btu/ft^2*hr*R).")
+        ins_u_value_si = 7.0
+      end
+      ins_u_value_ip = OpenStudio.convert(ins_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+
+      # Set the U-value of the insulation layer
+      glazing = construction.layers.first.to_SimpleGlazing.get
+      starting_u_value_si = glazing.uFactor.round(2)
+      staring_u_value_ip = OpenStudio.convert(starting_u_value_si, 'W/m^2*K', 'Btu/ft^2*hr*R').get
+      OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Construction', "Construction #{construction.name} contains SimpleGlazing '#{glazing.name}' with starting u_factor #{starting_u_value_si.round(2)} 'W/m^2*K' = #{staring_u_value_ip.round(2)} 'Btu/ft^2*hr*R'. Changing to u_factor #{ins_u_value_si.round(2)} 'W/m^2*K' = #{ins_u_value_ip.round(2)} 'Btu/ft^2*hr*R'.")
+      glazing.setUFactor(ins_u_value_si)
+
+      return true
+    end
+
     # set construction surface properties
     #
     # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
