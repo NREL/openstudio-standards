@@ -51,7 +51,7 @@ module BTAP
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::Model::Model] A model object
       def self.remove_all_envelope_information(model)
-        model.getDefaultConstructionSetss.each(&:remove)
+        model.getDefaultConstructionSets.each(&:remove)
         model.building.get.resetDefaultConstructionSet
         model.getDefaultSubSurfaceConstructionss.each(&:remove)
         model.getDefaultSurfaceConstructionss.each(&:remove)
