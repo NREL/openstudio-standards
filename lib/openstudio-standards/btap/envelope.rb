@@ -63,7 +63,6 @@ module BTAP
         model.building.get.resetDefaultConstructionSet()
       end
 
-
       #This method assignes interior surface construction to adiabatic surfaces from model.
       #@author phylroy.lopez@nrcan.gc.ca
       #@param model [OpenStudio::Model::Model] A model object
@@ -76,7 +75,7 @@ module BTAP
 
           unless all_adiabatic_surfaces.empty?
             wall_construction = model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.get
-            BTAP::Geometry::Surfaces::set_surfaces_construction(all_adiabatic_surfaces, wall_construction)
+            all_adiabatic_surfaces.each { |surface| surface.setConstruction(wall_construction) }
             names = ""
             all_adiabatic_surfaces.each { |surface| name = "#{names} , #{surface.name.to_s} " }
             BTAP::runner_register("Warning", "The following adiabatic surfaces have been assigned the construction #{wall_construction.name} : #{name}", runner)
@@ -1108,9 +1107,9 @@ module BTAP
         end
 
 
-        #This method set the default construction set from an OSM library file and the construction set name. 
-        #params construction_library_file [String] Path to osm file that contains the contruction set to be used. 
-        #params construction_set_name [String] Name of the construction set to be used. 
+        #This method set the default construction set from an OSM library file and the construction set name.
+        #params construction_library_file [String] Path to osm file that contains the contruction set to be used.
+        #params construction_set_name [String] Name of the construction set to be used.
         def self.set_construction_set_by_file(model, construction_library_file, construction_set_name, runner = nil)
           BTAP::runner_register("Info", "set_construction_set_by_file(#{construction_library_file}, #{construction_set_name})")
           #check if file exists
@@ -1119,12 +1118,12 @@ module BTAP
             return false
           end
           construction_set = BTAP::Resources::Envelope::ConstructionSets::get_construction_set_from_library(construction_library_file, construction_set_name)
-          #check if construction set name exists and can apply to the model. 
+          #check if construction set name exists and can apply to the model.
           unless model.building.get.setDefaultConstructionSet(construction_set.clone(model).to_DefaultConstructionSet.get)
             BTAP::runner_register("Error", "Could not use default construction set #{construction_set_name} from #{construction_library_file} ", runner)
             return false
           end
-          #sets all surfaces to use default constructions except adiabatic, where it does a hard assignment of the interior wall construction type. 
+          #sets all surfaces to use default constructions except adiabatic, where it does a hard assignment of the interior wall construction type.
           model.getPlanarSurfaces.sort.each { |item| item.resetConstruction }
           #if the default construction set is defined..try to assign the interior wall to the adiabatic surfaces
           BTAP::Resources::Envelope::assign_interior_surface_construction_to_adiabatic_surfaces(model, runner)
@@ -1137,7 +1136,7 @@ module BTAP
         #@author phylroy.lopez@nrcan.gc.ca
         #@param model [OpenStudio::Model::Model]
         #@param name [String]
-        #@param default_surface_construction_set <String> 
+        #@param default_surface_construction_set <String>
         #@param ext_wall_cond [Float] = nil
         #@param ext_floor_cond [Float] = nil
         #@param ext_roof_cond [Float] = nil
@@ -1475,7 +1474,7 @@ module BTAP
           #Load Contruction osm library.
           if File.exists?(construction_library_file)
             construction_lib = BTAP::FileIO::load_osm(construction_library_file)
-            #Get construction set.. 
+            #Get construction set..
             optional_construction_set = construction_lib.getDefaultConstructionSetByName(construction_set_name)
             if optional_construction_set.empty?
               raise("#{construction_set_name} does not exist in #{construction_library_file} library ")
