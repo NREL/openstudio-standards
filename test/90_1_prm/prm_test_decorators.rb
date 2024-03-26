@@ -1,4 +1,5 @@
 class AppendixGPRMTests < Minitest::Test
+  
   # Add exhaust fan object to each lab zone in model
   # @param model
   def add_exhaust_fan_per_lab_zone(model)
@@ -108,7 +109,7 @@ class AppendixGPRMTests < Minitest::Test
           next unless ss.subSurfaceType == 'Skylight'
 
           # increase the size of the skylight
-          @prototype_creator.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, mult)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, mult)
         end
       end
     end

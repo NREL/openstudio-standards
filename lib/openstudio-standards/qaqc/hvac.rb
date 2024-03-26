@@ -359,7 +359,7 @@ module OpenstudioStandards
         @model.getThermalZones.each do |zone|
           is_plenum = false
           zone.spaces.each do |space|
-            if std.space_plenum?(space)
+            if OpenstudioStandards::Space.space_plenum?(space)
               is_plenum = true
             end
           end

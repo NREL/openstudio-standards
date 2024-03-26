@@ -25,6 +25,28 @@ class TestSchedulesModify < Minitest::Test
     assert(schedule_min_max['max'] == 0.99)
   end
 
+  def test_schedule_day_set_hours_of_operation
+    model = OpenStudio::Model::Model.new
+    test_options = {
+      'name' => 'Simple Schedule',
+      'default_time_value_pairs' => { 7.0 => 0.0, 16.0 => 2.0, 24 => 0.0}
+    }
+    schedule_day = @sch.create_simple_schedule(model, test_options).defaultDaySchedule
+    start_time = OpenStudio::Time.new(0,9,0,0)
+    end_time = OpenStudio::Time.new(0,18,0,0)
+    @sch.schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
+    hourly_values = @sch.schedule_day_get_hourly_values(schedule_day)
+    assert_equal(hourly_values.index(1.0), 9)
+    assert_equal(hourly_values.rindex(1.0), 18-1)
+    # test fromprevious day
+    start_time = OpenStudio::Time.new(0,9,0,0)
+    end_time = OpenStudio::Time.new(0,28,0,0)
+    @sch.schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
+    hourly_values = @sch.schedule_day_get_hourly_values(schedule_day)
+    assert_equal(hourly_values.index(0.0), 28-24)
+    assert_equal(hourly_values.rindex(0.0), 9-1)
+  end
+
   def test_schedule_ruleset_add_rule
     model = OpenStudio::Model::Model.new
     test_options = {
@@ -118,7 +140,9 @@ class TestSchedulesModify < Minitest::Test
     }
     schedule = @sch.create_simple_schedule(model, test_options)
     basic_shift = { 'shift_hoo' => 2.0 }
-    @sch.schedule_ruleset_adjust_hours_of_operation(schedule, basic_shift)
+    schedule = @sch.schedule_ruleset_adjust_hours_of_operation(schedule, basic_shift)
+    hourly_values = @sch.schedule_day_get_hourly_values(schedule.defaultDaySchedule)
+    assert_equal(hourly_values.index(3.0), 8+2)
   end
 
   def test_schedule_ruleset_cleanup_profiles

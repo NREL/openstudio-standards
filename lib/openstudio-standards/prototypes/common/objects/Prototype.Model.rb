@@ -217,27 +217,6 @@ Standard.class_eval do
     model_add_loads(model)
   end
 
-  def model_assign_building_story(model, building_story_map = nil)
-    if building_story_map.nil? || building_story_map.empty?
-
-      model_assign_spaces_to_stories(model)
-      return true
-    end
-    building_story_map.each do |building_story_name, space_names|
-      stub_building_story = OpenStudio::Model::BuildingStory.new(model)
-      stub_building_story.setName(building_story_name)
-
-      space_names.each do |space_name|
-        space = model.getSpaceByName(space_name)
-        next if space.empty?
-
-        space = space.get
-        space.setBuildingStory(stub_building_story)
-      end
-    end
-    return true
-  end
-
   # Adds the loads and associated schedules for each space type
   # as defined in the OpenStudio_Standards_space_types.json file.
   # This includes lights, plug loads, occupants, ventilation rate requirements,
@@ -568,7 +547,7 @@ Standard.class_eval do
     # iterate through spaces and set any necessary CFactorUndergroundWallConstructions
     model.getSpaces.each do |space|
       # Get height of the first below grade wall in this space. Will return nil if none are found.
-      below_grade_wall_height = model_get_space_below_grade_wall_height(space)
+      below_grade_wall_height = OpenstudioStandards::Geometry.space_get_below_grade_wall_height(space)
       next if below_grade_wall_height.nil?
 
       c_factor_wall_name = "Basement Wall C-Factor #{c_factor_si.round(2)} Height #{below_grade_wall_height.round(2)}"
@@ -592,30 +571,6 @@ Standard.class_eval do
         end
       end
     end
-  end
-
-  # Finds heights of the first below grade walls and returns them as a numeric. Used when defining C Factor walls.
-  # Returns nil if the space is above grade.
-  # @param space [OpenStudio::Model::Space] space to determine below grade wall height
-  # @return [Numeric, nil]
-  def model_get_space_below_grade_wall_height(space)
-    # find height of first below-grade wall adjacent to the ground
-    space.surfaces.each do |surface|
-      next unless surface.surfaceType == 'Wall'
-
-      boundary_condition = surface.outsideBoundaryCondition
-      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition.to_s.downcase.include?('ground')
-
-      # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
-      z_values = []
-      surface.vertices.each do |vertex|
-        z_values << vertex.z
-      end
-      surface_height = z_values.max - z_values.min
-      return surface_height
-    end
-
-    return nil
   end
 
   # Searches a model for spaces adjacent to ground. If the slab's perimeter is adjacent to ground, the length is
@@ -645,13 +600,12 @@ Standard.class_eval do
     # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
     model.getSpaces.each do |space|
       # Find this space's exposed floor area and perimeter. NOTE: this assumes only only floor per space.
-      perimeter, area = model_get_f_floor_geometry(space)
+      perimeter = OpenstudioStandards::Geometry.space_get_f_floor_perimeter(space)
+      area = OpenstudioStandards::Geometry.space_get_f_floor_area(space)
       next if area == 0 # skip floors not adjacent to ground
 
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction.
-      # @note periods '.' were causing issues and were therefore removed.
-      #   Caused E+ error with duplicate names despite being different.
-      f_floor_const_name = "Foundation F #{f_factor_si.round(2)} Perim #{perimeter.round(2)} Area #{area.round(2)}".gsub('.', '')
+      f_floor_const_name = "Foundation F #{f_factor_si.round(2)}W/m*K Perim #{perimeter.round(2)}m Area #{area.round(2)}m2"
 
       # Check if the floor construction has been constructed already. If so, look it up in the model
       if model.getFFactorGroundFloorConstructionByName(f_floor_const_name).is_initialized
@@ -672,118 +626,6 @@ Standard.class_eval do
         end
       end
     end
-  end
-
-  # This function returns the space's ground perimeter and area. Assumes only one floor per space!
-  # @param space [OpenStudio::Model::Space] space object
-  # @return [Numeric, Numeric]
-  def model_get_f_floor_geometry(space)
-    perimeter = 0
-
-    floors = []
-
-    # Find space's floors
-    space.surfaces.each do |surface|
-      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition.to_s.downcase.include?('ground')
-        floors << surface
-      end
-    end
-
-    # Raise a warning for any space with more than 1 ground contact floor surface.
-    if floors.length > 1
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name} has more than one ground contact floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
-    elsif floors.empty? # If this space has no ground contact floors, return 0
-      return 0, 0
-    end
-
-    floor = floors[0]
-
-    # cycle through surfaces in space
-    space.surfaces.each do |surface|
-      # find perimeter of floor by finding intersecting outdoor walls and measuring the intersection
-      if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Outdoors'
-        perimeter += model_calculate_wall_and_floor_intersection(surface, floor)
-      end
-    end
-
-    # Get floor area
-    area = floor.netArea
-
-    return perimeter, area
-  end
-
-  # This function returns the length of intersection between a wall and floor sharing space. Primarily used for
-  # FFactorGroundFloorConstruction exposed perimeter calculations.
-  # @note this calculation has a few assumptions:
-  # - Floors are flat. This means they have a constant z-axis value.
-  # - If a wall shares an edge with a floor, it's assumed that edge intersects with only this floor.
-  # - The wall and floor share a common space. This space is assumed to only have one floor!
-  # @param wall[OpenStudio::Model::Surface] wall surface being compared to the floor of interest
-  # @param floor[OpenStudio::Model::Surface] floor occupying same space as wall. Edges checked for interesections with wall
-  # @return [Numeric] returns the intersection/overlap length of the wall and floor of interest
-  def model_calculate_wall_and_floor_intersection(wall, floor)
-    # Used for determining if two points are 'equal' if within this length
-    tolerance = 0.0001
-
-    # Get floor and wall edges
-    wall_edge_array = model_get_surface_edges(wall)
-    floor_edge_array = model_get_surface_edges(floor)
-
-    # Floor assumed flat and constant in x-y plane (i.e. a single z value)
-    floor_z_value = floor_edge_array[0][0].z
-
-    # Iterate through wall edges
-    wall_edge_array.each do |wall_edge|
-      wall_edge_p1 = wall_edge[0]
-      wall_edge_p2 = wall_edge[1]
-
-      # If points representing the wall surface edge have different z-coordinates, this edge is not parallel to the
-      # floor and can be skipped
-
-      if tolerance <= (wall_edge_p1.z - wall_edge_p2.z).abs
-        next
-      end
-
-      # If wall edge is parallel to the floor, ensure it's on the same x-y plane as the floor.
-      if tolerance <= (wall_edge_p1.z - floor_z_value).abs
-        next
-      end
-
-      # If the edge is parallel with the floor and in the same x-y plane as the floor, assume an intersection the
-      # length of the wall edge
-      intersect_vector = wall_edge_p1 - wall_edge_p2
-      edge_vector = OpenStudio::Vector3d.new(intersect_vector.x, intersect_vector.y, intersect_vector.z)
-      return(edge_vector.length)
-    end
-
-    # If no edges intersected, return 0
-    return 0
-  end
-
-  # Returns an array of OpenStudio::Point3D pairs of an OpenStudio::Model::Surface's edges. Used to calculate surface
-  # intersections.
-  # @param surface[OpenStudio::Model::Surface] - surface whose edges are being returned
-  # @return [Array<Array(OpenStudio::Point3D, OpenStudio::Point3D)>] - array of pair of points describing the line segment of an edge
-  def model_get_surface_edges(surface)
-    vertices = surface.vertices
-    n_vertices = vertices.length
-
-    # Create edge hash that keeps track of all edges in surface. An edge is defined here as an array of length 2
-    # containing two OpenStudio::Point3Ds that define the line segment representing a surface edge.
-    edge_array = [] # format edge_array[i] = [OpenStudio::Point3D, OpenStudio::Point3D]
-
-    # Iterate through each vertex in the surface and construct an edge for it
-    for edge_counter in 0..n_vertices - 1
-
-      # If not the last vertex in surface
-      if edge_counter < n_vertices - 1
-        edge_array << [vertices[edge_counter], vertices[edge_counter + 1]]
-      else # Make index adjustments for final index in vertices array
-        edge_array << [vertices[edge_counter], vertices[0]]
-      end
-    end
-
-    return edge_array
   end
 
   # Adds internal mass objects and constructions based on the building type
@@ -1074,7 +916,7 @@ Standard.class_eval do
             # process zones of each makeup_target
             zones_by_standards[makeup_target].each do |thermal_zone, space_type_hash|
               # get adjacent zones
-              adjacent_zones = thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone)
+              adjacent_zones = OpenstudioStandards::Geometry.thermal_zone_get_adjacent_zones_with_shared_walls(thermal_zone)
 
               # find adjacent zones matching key and value from standard_space_types_with_makup_air
               first_adjacent_makeup_source = nil
@@ -2254,204 +2096,6 @@ Standard.class_eval do
     return building_type
   end
 
-  # Split all zones in the model into groups that are big enough to justify their own HVAC system type.
-  # Similar to the logic from 90.1 Appendix G, but without regard to the fuel type of the existing HVAC system (because the model may not have one).
-  #
-  # @param min_area_m2[Double] the minimum area required to justify a different system type, default 20,000 ft^2
-  # @return [Array<Hash>] an array of hashes of area information, with keys area_ft2, type, stories, and zones (an array of zones)
-  def model_group_zones_by_type(model, min_area_m2 = 1858.0608)
-    min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
-
-    # Get occupancy type, fuel type, and area information for all zones, excluding unconditioned zones.
-    # Occupancy types are:
-    # Residential
-    # NonResidential
-    # Use 90.1-2010 so that retail and publicassembly are not split out
-    zones = model_zones_with_occ_and_fuel_type(model, nil)
-
-    # Ensure that there is at least one conditioned zone
-    if zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
-      return []
-    end
-
-    # Group the zones by occupancy type
-    type_to_area = Hash.new { 0.0 }
-    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
-
-    # Determine the dominant occupancy type by area
-    zones_grouped_by_occ.each do |occ_type, zns|
-      zns.each do |zn|
-        type_to_area[occ_type] += zn['area']
-      end
-    end
-    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
-
-    # Get the dominant occupancy type group
-    dom_occ_group = zones_grouped_by_occ[dom_occ]
-
-    # Check the non-dominant occupancy type groups to see if they are big enough to trigger the occupancy exception.
-    # If they are, leave the group standing alone.
-    # If they are not, add the zones in that group back to the dominant occupancy type group.
-    occ_groups = []
-    zones_grouped_by_occ.each do |occ_type, zns|
-      # Skip the dominant occupancy type
-      next if occ_type == dom_occ
-
-      # Add up the floor area of the group
-      area_m2 = 0
-      zns.each do |zn|
-        area_m2 += zn['area']
-      end
-      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-
-      # If the non-dominant group is big enough, preserve that group.
-      if area_ft2 > min_area_ft2
-        occ_groups << [occ_type, zns]
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with an occupancy type of #{occ_type} is bigger than the minimum area of #{min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
-        # Otherwise, add the zones back to the dominant group.
-      else
-        dom_occ_group += zns
-      end
-    end
-    # Add the dominant occupancy group to the list
-    occ_groups << [dom_occ, dom_occ_group]
-
-    # Calculate the area for each of the final groups
-    # and replace the zone hashes with an array of zone objects
-    final_groups = []
-    occ_groups.each do |occ_type, zns|
-      # Sum the area and put all zones into an array
-      area_m2 = 0.0
-      gp_zns = []
-      zns.each do |zn|
-        area_m2 += zn['area']
-        gp_zns << zn['zone']
-      end
-      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-
-      # Determine the number of stories this group spans
-      num_stories = model_num_stories_spanned(model, gp_zns)
-
-      # Create a hash representing this group
-      group = {}
-      group['area_ft2'] = area_ft2
-      group['type'] = occ_type
-      group['stories'] = num_stories
-      group['zones'] = gp_zns
-      final_groups << group
-
-      # Report out the final grouping
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['type']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
-      group['zones'].sort.each_slice(5) do |zone_list|
-        zone_names = []
-        zone_list.each do |zone|
-          zone_names << zone.name.get.to_s
-        end
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
-      end
-    end
-
-    return final_groups
-  end
-
-  # Split all zones in the model into groups that are big enough to justify their own HVAC system type.
-  # Similar to the logic from 90.1 Appendix G, but without regard to the fuel type of the existing HVAC system (because the model may not have one).
-  #
-  # @param min_area_m2[Double] the minimum area required to justify a different system type, default 20,000 ft^2
-  # @return [Array<Hash>] an array of hashes of area information, with keys area_ft2, type, stories, and zones (an array of zones)
-  def model_group_zones_by_building_type(model, min_area_m2 = 1858.0608)
-    min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
-
-    # Get occupancy type, building type, fuel type, and area information for all zones, excluding unconditioned zones
-    zones = model_zones_with_occ_and_fuel_type(model, nil)
-
-    # Ensure that there is at least one conditioned zone
-    if zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
-      return []
-    end
-
-    # Group the zones by building type
-    type_to_area = Hash.new { 0.0 }
-    zones_grouped_by_bldg_type = zones.group_by { |z| z['bldg_type'] }
-
-    # Determine the dominant building type by area
-    zones_grouped_by_bldg_type.each do |bldg_type, zns|
-      zns.each do |zn|
-        type_to_area[bldg_type] += zn['area']
-      end
-    end
-    dom_bldg_type = type_to_area.sort_by { |k, v| v }.reverse[0][0]
-
-    # Get the dominant building type group
-    dom_bldg_type_group = zones_grouped_by_bldg_type[dom_bldg_type]
-
-    # Check the non-dominant building type groups to see if they are big enough to trigger the building exception.
-    # If they are, leave the group standing alone.
-    # If they are not, add the zones in that group back to the dominant building type group.
-    bldg_type_groups = []
-    zones_grouped_by_bldg_type.each do |bldg_type, zns|
-      # Skip the dominant building type
-      next if bldg_type == dom_bldg_type
-
-      # Add up the floor area of the group
-      area_m2 = 0
-      zns.each do |zn|
-        area_m2 += zn['area']
-      end
-      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-
-      # If the non-dominant group is big enough, preserve that group.
-      if area_ft2 > min_area_ft2
-        bldg_type_groups << [bldg_type, zns]
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with a building type of #{bldg_type} is bigger than the minimum area of #{min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
-        # Otherwise, add the zones back to the dominant group.
-      else
-        dom_bldg_type_group += zns
-      end
-    end
-    # Add the dominant building type group to the list
-    bldg_type_groups << [dom_bldg_type, dom_bldg_type_group]
-
-    # Calculate the area for each of the final groups
-    # and replace the zone hashes with an array of zone objects
-    final_groups = []
-    bldg_type_groups.each do |bldg_type, zns|
-      # Sum the area and put all zones into an array
-      area_m2 = 0.0
-      gp_zns = []
-      zns.each do |zn|
-        area_m2 += zn['area']
-        gp_zns << zn['zone']
-      end
-      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-
-      # Determine the number of stories this group spans
-      num_stories = model_num_stories_spanned(model, gp_zns)
-
-      # Create a hash representing this group
-      group = {}
-      group['area_ft2'] = area_ft2
-      group['type'] = bldg_type
-      group['stories'] = num_stories
-      group['zones'] = gp_zns
-      final_groups << group
-
-      # Report out the final grouping
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: bldg_type = #{group['type']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
-      group['zones'].sort.each_slice(5) do |zone_list|
-        zone_names = []
-        zone_list.each do |zone|
-          zone_names << zone.name.get.to_s
-        end
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
-      end
-    end
-
-    return final_groups
-  end
-
   # Determine the prototypical economizer type for the model.
   # Defaults to FixedDryBulb based on anecdotal evidence of this being
   # the most common type encountered in the field, combined
@@ -2663,20 +2307,6 @@ Standard.class_eval do
     return true
   end
 
-  # Set the model's north axis (degrees from true North)
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param north_axis [Float] Degrees from true North
-  # @return [Boolean] Returns true if successful, false otherwise
-  def model_set_building_north_axis(model, north_axis)
-    return false if north_axis.nil?
-
-    building = model.getBuilding
-    building.setNorthAxis(north_axis)
-
-    return true
-  end
-
   # Calculate a model's window or WWR
   # Disregard space conditioning (assume all spaces are conditioned)
   # which is true for most of not all prototypes
@@ -2711,56 +2341,6 @@ Standard.class_eval do
     if wwr && wall_area > 0
       return window_area / wall_area * 100
     end
-
-    # else
-    return window_area
-  end
-
-  # Calculate a model's window or WWR for a specific orientation
-  # Disregard space conditioning (assume all spaces are conditioned)
-  # which is true for most of not all prototypes
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model objetc
-  # @param orientation [String] Orientation: "N", "E", "S", "W"
-  # @return [Boolean] Returns true if successful, false otherwise
-  def model_get_window_area_info_for_orientation(model, orientation, wwr: true)
-    return false unless ['N', 'E', 'S', 'W'].include? orientation
-
-    window_area = 0
-    wall_area = 0
-
-    model.getSpaces.each do |space|
-      # Get zone multiplier
-      multiplier = space.thermalZone.get.multiplier
-
-      space.surfaces.each do |surface|
-        next if surface.surfaceType != 'Wall'
-        next if surface.outsideBoundaryCondition != 'Outdoors'
-
-        case orientation
-          when 'N'
-            next unless surface_cardinal_direction(surface) == 'N'
-          when 'E'
-            next unless surface_cardinal_direction(surface) == 'E'
-          when 'S'
-            next unless surface_cardinal_direction(surface) == 'S'
-          when 'W'
-            next unless surface_cardinal_direction(surface) == 'W'
-        end
-
-        # Get wall and window area
-        wall_area += surface.grossArea * multiplier
-        surface.subSurfaces.each do |subsurface|
-          subsurface_type = subsurface.subSurfaceType.to_s.downcase
-          # Do not count doors
-          next unless (subsurface_type.include? 'window') || (subsurface_type.include? 'glass')
-
-          window_area += subsurface.grossArea * subsurface.multiplier * multiplier
-        end
-      end
-    end
-
-    return window_area / wall_area if wwr
 
     # else
     return window_area
