@@ -20,7 +20,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # building area type.
   # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
   # @param building_type [String] the building type (For consistency with the standard class, not used in the method)
-  # @return [Boolean] returns true if successful, false if not
+  # @return [String] returns the fuel type in string (Electricity or Nature Gas)
   def water_heater_mixed_apply_prm_baseline_fuel_type(building_type)
     # Get the fuel type data
     heater_prop = model_find_object(standards_data['prm_swh_bldg_type'], {'swh_building_type' => building_type})
