@@ -328,9 +328,9 @@ module OpenstudioStandards
         envelope_data_hash[:stories][story][:story_multiplied_exterior_roof_area] = story_multiplied_exterior_roof_area
 
         # get perimeter and adiabatic walls that appear to be party walls
-        perimeter_and_party_walls = OpenstudioStandards::Geometry.story_get_exterior_wall_perimeter(story,
-                                                                                                    multiplier_adjustment: story_min_multiplier,
-                                                                                                    bounding_box: bounding_box)
+        perimeter_and_party_walls = OpenstudioStandards::Geometry.building_story_get_exterior_wall_perimeter(story,
+                                                                                                             multiplier_adjustment: story_min_multiplier,
+                                                                                                             bounding_box: bounding_box)
         envelope_data_hash[:stories][story][:story_perimeter] = perimeter_and_party_walls[:perimeter]
         envelope_data_hash[:stories][story][:story_party_walls] = []
         east = false
@@ -1346,7 +1346,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Creating Space Types for #{building_type}.")
 
         # mapping building_type name is needed for a few methods
-        temp_standard = Standard.build('90.1-2013')
+        temp_standard = Standard.build(args[:template])
         building_type = temp_standard.model_get_lookup_name(building_type)
 
         # create space_type_map from array
@@ -1922,7 +1922,7 @@ module OpenstudioStandards
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "ns_wall_area_ip: #{wall_ns_ip} ft^2")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "ew_wall_area_ip: #{wall_ew_ip} ft^2")
       # for now using perimeter of ground floor and average story area (building area / num_stories)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "floor_area_to_perim_ratio: #{model.getBuilding.floorArea / (OpenstudioStandards::Geometry.model_get_perimeter_length(model) * num_stories)}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "floor_area_to_perim_ratio: #{model.getBuilding.floorArea / (OpenstudioStandards::Geometry.model_get_perimeter(model) * num_stories)}")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "bar_width: #{OpenStudio.convert(bars['primary'][:width], 'm', 'ft').get} ft")
 
       if args[:party_wall_fraction] > 0 || args[:party_wall_stories_north] > 0 || args[:party_wall_stories_south] > 0 || args[:party_wall_stories_east] > 0 || args[:party_wall_stories_west] > 0
