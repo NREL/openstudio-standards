@@ -7,7 +7,7 @@ module OpenstudioStandards
     # Returns whether air loop HVAC is a direct evaporative system
     #
     # @param air_loop_hvac [<OpenStudio::Model::AirLoopHVAC>] OpenStudio AirLoopHVAC object
-    # @return [Bool] returns true if successful, false if not
+    # @return [Boolean] returns true if successful, false if not
     def self.air_loop_hvac_direct_evap?(air_loop_hvac)
       # check if direct evap
       is_direct_evap = false
@@ -25,7 +25,7 @@ module OpenstudioStandards
     # Returns whether air loop HVAC is a unitary system
     #
     # @param air_loop_hvac [<OpenStudio::Model::AirLoopHVAC>] OpenStudio AirLoopHVAC object
-    # @return [Bool] returns true if air_loop_hvac is a unitary system, false if not
+    # @return [Boolean] returns true if air_loop_hvac is a unitary system, false if not
     def self.air_loop_hvac_unitary_system?(air_loop_hvac)
       # check if unitary system
       is_unitary_system = false

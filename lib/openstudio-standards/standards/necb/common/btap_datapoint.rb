@@ -2,7 +2,7 @@ require 'openstudio'
 require 'securerandom'
 require 'optparse'
 require 'yaml'
-require 'git-revision'
+#require 'git-revision'
 # resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
 # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
@@ -113,8 +113,8 @@ class BTAPDatapoint
         epw_dir = nil
         local_epw_file_path = File.join(input_folder_cache,@options[:epw_file])
         epw_dir = input_folder_cache if File.exists? local_epw_file_path
-        @standard.model_add_design_days_and_weather_file(model, climate_zone, epw_file, epw_dir) # Standards
-        @standard.model_add_ground_temperatures(model, nil, climate_zone)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       else
         # Otherwise modify osm input with options.
         @standard.model_apply_standard(model: model,
@@ -292,8 +292,8 @@ class BTAPDatapoint
   end
 
   def s3_copy_file_to_s3(bucket_name:, source_file:, target_file:, n: 0)
-    require 'aws-sdk-core'
-    require 'aws-sdk-s3'
+    #require 'aws-sdk-core'
+    #require 'aws-sdk-s3'
     Aws.use_bundled_cert!
     s3_resource = Aws::S3::Resource.new(region: 'ca-central-1')
 

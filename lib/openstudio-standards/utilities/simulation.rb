@@ -28,7 +28,7 @@ Standard.class_eval do
 
     # Set up the simulation
     # Find the weather file
-    epw_path = model_get_full_weather_file_path(model)
+    epw_path = OpenstudioStandards::Weather.model_get_full_weather_file_path(model)
     if epw_path.empty?
       return false
     end
@@ -217,7 +217,8 @@ Standard.class_eval do
   def model_do_all_zones_have_surfaces?(model)
     # Check to see if all zones have surfaces.
     model.getThermalZones.each do |zone|
-      if BTAP::Geometry::Surfaces.get_surfaces_from_thermal_zones([zone]).empty?
+      surfaces = zone.spaces.sort.flat_map(&:surfaces)
+      if surfaces.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Thermal zone #{zone.name} does not contain surfaces.\n")
         return false
       end
