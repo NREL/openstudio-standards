@@ -3,6 +3,7 @@ require_relative '../../helpers/minitest_helper'
 class TestConstructionsInformation < Minitest::Test
   def setup
     @create = OpenstudioStandards::CreateTypical
+    @geo = OpenstudioStandards::Geometry
     @constructions = OpenstudioStandards::Constructions
   end
 
@@ -92,15 +93,15 @@ class TestConstructionsInformation < Minitest::Test
     simple_glazing.setVisibleTransmittance(0.45)
     construction = OpenStudio::Model::Construction.new(model)
     construction.setLayers([simple_glazing])
-    assert(0.45, @constructions.construction_get_visible_transmittance(construction))
+    assert_in_delta(0.45, @constructions.construction_get_visible_transmittance(construction), 0.001)
 
     standard_glazing = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
     standard_glazing.setVisibleTransmittance(0.5)
     construction.setLayers([standard_glazing])
-    assert(0.5, @constructions.construction_get_visible_transmittance(construction))
+    assert_in_delta(0.5, @constructions.construction_get_visible_transmittance(construction), 0.001)
 
     construction.setLayers([standard_glazing, standard_glazing])
-    assert(0.25, @constructions.construction_get_visible_transmittance(construction))
+    assert_in_delta(0.25, @constructions.construction_get_visible_transmittance(construction), 0.001)
   end
 
   def test_construction_get_solar_reflectance_index
@@ -111,6 +112,165 @@ class TestConstructionsInformation < Minitest::Test
     construction.setLayers(layers)
     sri = @constructions.construction_get_solar_reflectance_index(construction)
     assert(sri  > 0)
+  end
+
+  def test_surfaces_get_conductance
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+
+    south_wall_surface = nil
+    space.surfaces.each do |surface|
+      next unless surface.surfaceType == 'Wall'
+      next unless @geo.surface_get_cardinal_direction(surface) == 'S'
+
+      south_wall_surface = surface
+    end
+
+    wall_construction = OpenStudio::Model::Construction.new(model)
+    material1 = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.12, 2.0, 2322, 832)
+    material2 = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.09, 1.5, 2322, 832)
+    wall_u = 1.0 / ((1.0 / (2.0 / 0.12)) + (1.0 / (1.5 / 0.09)))
+    wall_construction.setLayers([material1, material2])
+    south_wall_surface.setConstruction(wall_construction)
+
+    vertices = OpenStudio::Point3dVector.new
+    vertices << OpenStudio::Point3d.new(1.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(2.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(2.0, 0.0, 2.0)
+    vertices << OpenStudio::Point3d.new(1.0, 0.0, 2.0)
+    window1 = OpenStudio::Model::SubSurface.new(vertices, model)
+    window1.setSurface(south_wall_surface)
+
+    vertices = OpenStudio::Point3dVector.new
+    vertices << OpenStudio::Point3d.new(3.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(4.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(4.0, 0.0, 2.0)
+    vertices << OpenStudio::Point3d.new(3.0, 0.0, 2.0)
+    window2 = OpenStudio::Model::SubSurface.new(vertices, model)
+    window2.setSurface(south_wall_surface)
+
+    simple_glazing = OpenStudio::Model::SimpleGlazing.new(model, 0.40, 0.50)
+    construction1 = OpenStudio::Model::Construction.new(model)
+    construction1.setLayers([simple_glazing])
+    window1.setConstruction(construction1)
+
+    material1 = OpenStudio::Model::Gas.new(model, 'Air', 0.01)
+    material2 = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.1)
+    construction2 = OpenStudio::Model::Construction.new(model)
+    construction2.setLayers([material2, material1, material2])
+    window2.setConstruction(construction2)
+
+    avg_cond = @constructions.surfaces_get_conductance([window1, window2])
+    assert_in_delta((0.4 + 0.0247) / 2.0, avg_cond, 0.001)
+
+    avg_cond = @constructions.surfaces_get_conductance([window1, window2, south_wall_surface])
+    assert_in_delta((0.4 + 0.0247 + 13 * wall_u) / 15.0, avg_cond, 0.001)
+  end
+
+  def test_surfaces_get_solar_transmittance
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+
+    south_wall_surface = nil
+    space.surfaces.each do |surface|
+      next unless surface.surfaceType == 'Wall'
+      next unless @geo.surface_get_cardinal_direction(surface) == 'S'
+
+      south_wall_surface = surface
+    end
+
+    vertices = OpenStudio::Point3dVector.new
+    vertices << OpenStudio::Point3d.new(1.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(2.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(2.0, 0.0, 2.0)
+    vertices << OpenStudio::Point3d.new(1.0, 0.0, 2.0)
+    window1 = OpenStudio::Model::SubSurface.new(vertices, model)
+    window1.setSurface(south_wall_surface)
+
+    vertices = OpenStudio::Point3dVector.new
+    vertices << OpenStudio::Point3d.new(3.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(4.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(4.0, 0.0, 2.0)
+    vertices << OpenStudio::Point3d.new(3.0, 0.0, 2.0)
+    window2 = OpenStudio::Model::SubSurface.new(vertices, model)
+    window2.setSurface(south_wall_surface)
+
+    simple_glazing = OpenStudio::Model::SimpleGlazing.new(model)
+    simple_glazing.setSolarHeatGainCoefficient(0.3)
+    construction1 = OpenStudio::Model::Construction.new(model)
+    construction1.setLayers([simple_glazing])
+    window1.setConstruction(construction1)
+
+    standard_glazing = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
+    standard_glazing.setSolarTransmittance(0.6)
+    construction2 = OpenStudio::Model::Construction.new(model)
+    construction2.setLayers([standard_glazing])
+    window2.setConstruction(construction2)
+
+    avg_tsol = @constructions.surfaces_get_solar_transmittance([window1, window2])
+    assert_in_delta((0.3 + 0.6) / 2.0, avg_tsol, 0.001)
+  end
+
+  def test_surfaces_get_visible_transmittance
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+
+    south_wall_surface = nil
+    space.surfaces.each do |surface|
+      next unless surface.surfaceType == 'Wall'
+      next unless @geo.surface_get_cardinal_direction(surface) == 'S'
+
+      south_wall_surface = surface
+    end
+
+    vertices = OpenStudio::Point3dVector.new
+    vertices << OpenStudio::Point3d.new(1.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(2.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(2.0, 0.0, 2.0)
+    vertices << OpenStudio::Point3d.new(1.0, 0.0, 2.0)
+    window1 = OpenStudio::Model::SubSurface.new(vertices, model)
+    window1.setSurface(south_wall_surface)
+
+    vertices = OpenStudio::Point3dVector.new
+    vertices << OpenStudio::Point3d.new(3.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(4.0, 0.0, 1.0)
+    vertices << OpenStudio::Point3d.new(4.0, 0.0, 2.0)
+    vertices << OpenStudio::Point3d.new(3.0, 0.0, 2.0)
+    window2 = OpenStudio::Model::SubSurface.new(vertices, model)
+    window2.setSurface(south_wall_surface)
+
+    simple_glazing = OpenStudio::Model::SimpleGlazing.new(model)
+    simple_glazing.setVisibleTransmittance(0.3)
+    construction1 = OpenStudio::Model::Construction.new(model)
+    construction1.setLayers([simple_glazing])
+    window1.setConstruction(construction1)
+
+    standard_glazing = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
+    standard_glazing.setVisibleTransmittance(0.6)
+    construction2 = OpenStudio::Model::Construction.new(model)
+    construction2.setLayers([standard_glazing])
+    window2.setConstruction(construction2)
+
+    avg_tvis = @constructions.surfaces_get_visible_transmittance([window1, window2])
+    assert_in_delta((0.3 + 0.6) / 2.0, avg_tvis, 0.001)
   end
 
   def test_construction_set_get_constructions

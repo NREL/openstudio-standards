@@ -591,51 +591,6 @@ module BTAP
         return surfaces
       end
 
-      #determine average conductance on set of surfaces or subsurfaces.
-      def self.get_weighted_average_surface_conductance(surfaces)
-        total_area = 0.0
-        temp = 0.0
-        surfaces.each do |surface|
-          surface_construction = model.getConstructionByName(surface.construction.get.name.to_s).get
-          surface_conductance = OpenstudioStandards::Constructions.construction_get_conductance(surface_construction)
-          temp += surface.netArea * surface_conductance
-          total_area += surface.netArea
-        end
-        average_conductance = "NA"
-        average_conductance = temp / total_area unless total_area == 0.0
-        return average_conductance
-      end
-
-      #determine average conductance on set of surfaces or subsurfaces.
-      def self.get_weighted_average_surface_shgc(surfaces)
-        total_area = 0.0
-        temp = 0.0
-        surfaces.each do |surface|
-          surface_construction = model.getConstructionByName(surface.construction.get.name.to_s).get
-          surface_shgc = OpenstudioStandards::Constructions.construction_get_solar_transmittance(surface_construction)
-          temp += surface.netArea *surface_shgc
-          total_area += surface.netArea
-        end
-        ave_shgc = "NA"
-        ave_shgc = temp / total_area unless total_area == 0.0
-        return ave_shgc
-      end
-
-      #determine average conductance on set of surfaces or subsurfaces.
-      def self.get_weighted_average_surface_tvis(surfaces)
-        total_area = 0.0
-        temp = 0.0
-        surfaces.each do |surface|
-          surface_construction = model.getConstructionByName(surface.construction.get.name.to_s).get
-          surface_tvis = OpenstudioStandards::Constructions.construction_get_visible_transmittance(surface_construction)
-          temp += surface.netArea * surface_tvis
-          total_area += surface.netArea
-        end
-        ave_tvis = "NA"
-        ave_tvis = temp / total_area unless total_area == 0.0
-        return ave_tvis
-      end
-
       #["FixedWindow" , "OperableWindow" , "Door" , "GlassDoor", "OverheadDoor" , "Skylight", "TubularDaylightDiffuser","TubularDaylightDome"]
       def self.filter_subsurfaces_by_types(subsurfaces, subSurfaceTypes)
 

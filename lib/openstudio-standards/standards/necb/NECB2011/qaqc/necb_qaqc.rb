@@ -482,16 +482,16 @@ class NECB2011
                                               qaqc[:envelope][:overhead_doors_area_m2]
 
     # Average Conductances by surface Type
-    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
-    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
-    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
-    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_walls).round(4) if !ground_walls.empty?
-    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_roofs).round(4) if !ground_roofs.empty?
-    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_floors).round(4) if !ground_floors.empty?
-    qaqc[:envelope][:windows_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(windows).round(4) if !windows.empty?
-    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(skylights).round(4) if !skylights.empty?
-    qaqc[:envelope][:doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(doors).round(4) if !doors.empty?
-    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(overhead_doors).round(4) if !overhead_doors.empty?
+    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
+    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
+    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
+    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls).round(4) if !ground_walls.empty?
+    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs).round(4) if !ground_roofs.empty?
+    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors).round(4) if !ground_floors.empty?
+    qaqc[:envelope][:windows_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(windows).round(4) if !windows.empty?
+    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(skylights).round(4) if !skylights.empty?
+    qaqc[:envelope][:doors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(doors).round(4) if !doors.empty?
+    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors).round(4) if !overhead_doors.empty?
 
     # #Average Conductances for building whole weight factors
     !outdoor_walls.empty? ? o_wall_cond_weight = qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] * qaqc[:envelope][:outdoor_walls_area_m2] : o_wall_cond_weight = 0

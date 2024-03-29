@@ -4,102 +4,6 @@ module OpenstudioStandards
     # @!group Information
     # Methods to get information about Constructions
 
-    # Determines if the construction is a simple glazing construction,
-    # as indicated by having a single layer of type SimpleGlazing.
-    #
-    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
-    # @return [Boolean] returns true if it is a simple glazing, false if not
-    def self.construction_simple_glazing?(construction)
-      # Not simple if more than 1 layer
-      if construction.layers.length > 1
-        return false
-      end
-
-      # Not simple unless the layer is a SimpleGlazing material
-      # if construction.layers.first.to_SimpleGlazing.empty?
-      if construction.layers.first.to_SimpleGlazing.empty?
-        return false
-      end
-
-      # If here, must be simple glazing
-      return true
-    end
-
-    # Return the thermal conductance for an OpenStudio Construction object
-    #
-    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
-    # @param temperature [Double] Temperature in Celsius, used for gas or gas mixture thermal conductance
-    # @return [Double] thermal conductance in W/m^2*K
-    def self.construction_get_conductance(construction, temperature: 0.0)
-      # check to see if it can be cast as a layered construction, otherwise error
-      unless construction.to_LayeredConstruction.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::Constructions', "Unable to determine conductance for construction #{construction.name} because it is not a LayeredConstruction.")
-        return nil
-      end
-      construction = construction.to_LayeredConstruction.get
-
-      total = 0.0
-      construction.layers.each do |material|
-        total += 1.0 / OpenstudioStandards::Constructions::Materials.material_get_conductance(material, temperature: temperature)
-      end
-
-      return 1.0 / total
-    end
-
-    # Get the total solar transmittance for a fenestration construction (SHGC)
-    #
-    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
-    # @return [Double] total solar transmittance, or 1.0 if not available
-    def self.construction_get_solar_transmittance(construction)
-      tsol = nil
-      if construction.isFenestration
-        tsol = 1.0
-        construction.layers.each do |layer|
-          # Use shgc for simple glazing
-          tsol *= layer.to_SimpleGlazing.get.solarHeatGainCoefficient unless layer.to_SimpleGlazing.empty?
-          # Use solar transmittance for standard glazing
-          tsol *= layer.to_StandardGlazing.get.solarTransmittance unless layer.to_StandardGlazing.empty?
-        end
-      end
-
-      if tsol.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Constructions', "Unable to determine total solar transmittance for construction #{construction.name} because it is not considered Fenestration in the model. Returning a total solar transmittance of 1.0.")
-        tsol = 1.0
-      end
-
-      return tsol
-    end
-
-    # Get the total visible transmittance for a fenestration construction
-    #
-    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
-    # @return [Double] total visible transmittance, or 1.0 if not available
-    def self.construction_get_visible_transmittance(construction)
-      tvis = nil
-      if construction.isFenestration
-        tvis = 1.0
-        construction.layers.each do |layer|
-          # Use visible transmittance for simple glazing if specified
-          unless layer.to_SimpleGlazing.empty?
-            val = layer.to_SimpleGlazing.get.visibleTransmittance
-            tvis *= val.get unless val.empty?
-          end
-          # Use visible transmittance for standard glazing if specified
-          unless layer.to_StandardGlazing.empty?
-            val = layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence
-            tvis *= val.get unless val.empty?
-          end
-        end
-      end
-
-      if tvis.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Constructions', "Unable to determine total visible transmittance for construction #{construction.name} because it is not considered Fenestration in the model. Returning a total visible transmittance of 1.0.")
-        tvis = 1.0
-      end
-
-      return tvis
-    end
-
     # Gives the total R-value of the interior and exterior (if applicable) film coefficients for a particular type of surface.
     # @ref [References::ASHRAE9012010] A9.4.1 Air Films
     #
@@ -165,6 +69,106 @@ module OpenstudioStandards
       return film_r_si
     end
 
+    # @!endgroup Information
+
+    # @!group Information:Construction
+
+    # Determines if the construction is a simple glazing construction,
+    # as indicated by having a single layer of type SimpleGlazing.
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @return [Boolean] returns true if it is a simple glazing, false if not
+    def self.construction_simple_glazing?(construction)
+      # Not simple if more than 1 layer
+      if construction.layers.length > 1
+        return false
+      end
+
+      # Not simple unless the layer is a SimpleGlazing material
+      # if construction.layers.first.to_SimpleGlazing.empty?
+      if construction.layers.first.to_SimpleGlazing.empty?
+        return false
+      end
+
+      # If here, must be simple glazing
+      return true
+    end
+
+    # Return the thermal conductance for an OpenStudio Construction object
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @param temperature [Double] Temperature in Celsius, used for gas or gas mixture thermal conductance
+    # @return [Double] thermal conductance in W/m^2*K
+    def self.construction_get_conductance(construction, temperature: 0.0)
+      # check to see if it can be cast as a layered construction, otherwise error
+      unless construction.to_LayeredConstruction.is_initialized
+        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::Constructions', "Unable to determine conductance for construction #{construction.name} because it is not a LayeredConstruction.")
+        return nil
+      end
+      construction = construction.to_LayeredConstruction.get
+
+      total = 0.0
+      construction.layers.each do |material|
+        total += 1.0 / OpenstudioStandards::Constructions::Materials.material_get_conductance(material, temperature: temperature)
+      end
+
+      return 1.0 / total
+    end
+
+    # Get the total solar transmittance for a fenestration construction (SHGC)
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @return [Double] total solar transmittance, or 0.0 if not available
+    def self.construction_get_solar_transmittance(construction)
+      tsol = nil
+      if construction.isFenestration
+        tsol = 1.0
+        construction.layers.each do |layer|
+          # Use shgc for simple glazing
+          tsol *= layer.to_SimpleGlazing.get.solarHeatGainCoefficient unless layer.to_SimpleGlazing.empty?
+          # Use solar transmittance for standard glazing
+          tsol *= layer.to_StandardGlazing.get.solarTransmittance unless layer.to_StandardGlazing.empty?
+        end
+      end
+
+      if tsol.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Constructions', "Unable to determine total solar transmittance for construction #{construction.name} because it is not considered Fenestration in the model. Returning a total solar transmittance of 0.0.")
+        tsol = 0.0
+      end
+
+      return tsol
+    end
+
+    # Get the total visible transmittance for a fenestration construction
+    #
+    # @param construction [OpenStudio::Model::Construction] OpenStudio Construction object
+    # @return [Double] total visible transmittance, or 0.0 if not available
+    def self.construction_get_visible_transmittance(construction)
+      tvis = nil
+      if construction.isFenestration
+        tvis = 1.0
+        construction.layers.each do |layer|
+          # Use visible transmittance for simple glazing if specified
+          unless layer.to_SimpleGlazing.empty?
+            val = layer.to_SimpleGlazing.get.visibleTransmittance
+            tvis *= val.get unless val.empty?
+          end
+          # Use visible transmittance for standard glazing if specified
+          unless layer.to_StandardGlazing.empty?
+            val = layer.to_StandardGlazing.get.visibleTransmittanceatNormalIncidence
+            tvis *= val.get unless val.empty?
+          end
+        end
+      end
+
+      if tvis.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Constructions', "Unable to determine total visible transmittance for construction #{construction.name} because it is not considered Fenestration in the model. Returning a total visible transmittance of 0.0.")
+        tvis = 0.0
+      end
+
+      return tvis
+    end
+
     # Returns the solar reflectance index of an exposed surface.
     # On a scale of 0 to 100, standard black is 0, and standard white is 100.
     # The calculation derived from ASTM E1980 assuming medium wind speed.
@@ -181,9 +185,74 @@ module OpenstudioStandards
       return sri
     end
 
+    # @!endgroup Information:Construction
+
+    # @!group Information:Surfaces
+
+    # Determine the weighted average conductance for a set of planar surfaces (surfaces or sub surfaces)
+    #
+    # @param surfaces [Array<OpenStudio::Model::PlanarSurface>] Array of OpenStudio PlanarSurface objects
+    # @return [Double] thermal conductance in W/m^2*K
+    def self.surfaces_get_conductance(surfaces)
+      total_area = 0.0
+      temp = 0.0
+      surfaces.each do |surface|
+        next unless surface.construction.is_initialized
+
+        surface_construction = surface.model.getConstructionByName(surface.construction.get.name.to_s).get
+        surface_conductance = OpenstudioStandards::Constructions.construction_get_conductance(surface_construction)
+        temp += surface.netArea * surface_conductance
+        total_area += surface.netArea
+      end
+      average_conductance = total_area.zero? ? 0.0 : temp / total_area
+      return average_conductance
+    end
+
+    # Determine the weighted average solar transmittance for a set of planar surfaces (surfaces or sub surfaces)
+    #
+    # @param surfaces [Array<OpenStudio::Model::PlanarSurface>] Array of OpenStudio PlanarSurface objects
+    # @return [Double] total solar transmittance, or 1.0 if not available
+    def self.surfaces_get_solar_transmittance(surfaces)
+      total_area = 0.0
+      temp = 0.0
+      surfaces.each do |surface|
+        next unless surface.construction.is_initialized
+
+        surface_construction = surface.model.getConstructionByName(surface.construction.get.name.to_s).get
+        surface_shgc = OpenstudioStandards::Constructions.construction_get_solar_transmittance(surface_construction)
+        temp += surface.netArea * surface_shgc
+        total_area += surface.netArea
+      end
+      ave_shgc = total_area.zero? ? 1.0 : temp / total_area
+      return ave_shgc
+    end
+
+    # Determine the weighted average visible transmittance for a set of planar surfaces (surfaces or sub surfaces)
+    #
+    # @param surfaces [Array<OpenStudio::Model::PlanarSurface>] Array of OpenStudio PlanarSurface objects
+    # @return [Double] total visible transmittance, or 1.0 if not available
+    def self.surfaces_get_visible_transmittance(surfaces)
+      total_area = 0.0
+      temp = 0.0
+      surfaces.each do |surface|
+        next unless surface.construction.is_initialized
+
+        surface_construction = surface.model.getConstructionByName(surface.construction.get.name.to_s).get
+        surface_tvis = OpenstudioStandards::Constructions.construction_get_visible_transmittance(surface_construction)
+        temp += surface.netArea * surface_tvis
+        total_area += surface.netArea
+      end
+      ave_tvis = total_area.zero? ? 1.0 : temp / total_area
+      return ave_tvis
+    end
+
+    # @!endgroup Information:Surfaces
+
+    # @!group Information:DefaultConstructionSet
+
     # report names of constructions in a construction set
     #
-    # @param default_construction_set [OpenStudio::Model::Defaultdefault_construction_set] OpenStudio Defaultdefault_construction_set object
+    # @param default_construction_set [OpenStudio::Model::DefaultConstructionSet] OpenStudio DefaultConstructionSet object
     # @return [Array<OpenStudio::Model::Construction>] Array of OpenStudio Construction objects
     def self.construction_set_get_constructions(default_construction_set)
       construction_array = []
@@ -241,5 +310,7 @@ module OpenstudioStandards
 
       return construction_array
     end
+
+    # @!endgroup Information:DefaultConstructionSet
   end
 end

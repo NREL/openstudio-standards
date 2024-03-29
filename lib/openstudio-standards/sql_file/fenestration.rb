@@ -1,4 +1,3 @@
-
 module OpenstudioStandards
   # The SqlFile module provides methods to get information from the EnergyPlus .sql file after a run
   module SqlFile
