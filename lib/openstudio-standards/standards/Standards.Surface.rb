@@ -300,25 +300,8 @@ class Standard
     end
 
     surface.subSurfaces.sort.each do |subsurface|
-      if subsurface.construction.get.to_Construction.get.layers[0].to_Material.get.to_SimpleGlazing.empty?
-        # the uFactor() method does not work for complex glazing inputs
-        # For this case the U-Factor is retrieved from previous sizing run
-        u_factor = construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get)
-      else
-        # replace with direct query: u_factor = subsurface.uFactor.get
-        glass_u_factor_query = "SELECT Value
-                  FROM tabulardatawithstrings
-                  WHERE ReportName='EnvelopeSummary'
-                  AND ReportForString='Entire Facility'
-                  AND TableName='Exterior Fenestration'
-                  AND ColumnName='Glass U-Factor'
-                  AND RowName='#{subsurface.name.get.upcase}'"
-        sql = surface.model.sqlFile.get
-
-        glass_u_factor_w_per_m2_k = sql.execAndReturnFirstDouble(glass_u_factor_query)
-        u_factor = glass_u_factor_w_per_m2_k.is_initialized ? glass_u_factor_w_per_m2_k.get : 0.0
-      end
-      # u_factor = subsurface.uFactor.is_initialized ? (subsurface.uFactor.get) : (construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get))
+      subsurface_construction = subsurface.construction.get
+      u_factor = OpenstudioStandards::SqlFile.construction_calculated_fenestration_u_factor(subsurface_construction)
       ua += u_factor * subsurface.netArea
     end
 

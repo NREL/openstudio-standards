@@ -66,6 +66,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/sql_file/sql_file'
   require_relative 'openstudio-standards/sql_file/unmet_hours'
   require_relative 'openstudio-standards/sql_file/energy_use'
+  require_relative 'openstudio-standards/sql_file/fenestration'
 
   # Weather Module
   require_relative 'openstudio-standards/weather/information'

@@ -196,9 +196,10 @@ module OpenstudioStandards
               # check for non opaque sub surfaces
               source_units = 'W/m^2*K'
               target_units = 'Btu/ft^2*h*R'
-              u_factor_si = std.construction_calculated_u_factor(sub_surface_detail[:construction].to_LayeredConstruction.get.to_Construction.get)
+              surface_construction = sub_surface_detail[:construction].to_LayeredConstruction.get
+              u_factor_si = OpenstudioStandards::Constructions.construction_get_conductance(surface_construction)
               u_factor_ip = OpenStudio.convert(u_factor_si, source_units, target_units).get
-              shgc = std.construction_calculated_solar_heat_gain_coefficient(sub_surface_detail[:construction].to_LayeredConstruction.get.to_Construction.get)
+              shgc = OpenstudioStandards::Constructions.construction_get_solar_transmittance(surface_construction)
 
               # stop if didn't find values (0 or infinity)
               next if target_u_value_ip[sub_surface_detail[:surface_type]] == 0.0
