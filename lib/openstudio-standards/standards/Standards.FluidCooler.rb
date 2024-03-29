@@ -69,7 +69,7 @@ class Standard
     end
 
     # Get fluid cooler efficiency
-    min_gpm_per_hp = ct_props['minimum_performance']
+    min_gpm_per_hp = ct_props['minimum_performance_gpm_per_hp']
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, design water flow = #{design_water_flow_gpm.round} gpm, minimum performance = #{min_gpm_per_hp} gpm/hp (nameplate).")
 
     # Calculate the allowed fan brake horsepower
@@ -110,7 +110,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, allowed fan motor nameplate hp = #{fan_motor_nameplate_hp.round(1)} hp, fan brake horsepower = #{fan_bhp.round(1)}, and fan motor actual power = #{fan_motor_actual_power_hp.round(1)} hp (#{fan_motor_actual_power_w.round} W) at #{fan_motor_eff} motor efficiency.")
 
     # Append the efficiency to the name
-    fluid_cooler.setName("#{fluid_cooler.name} #{min_gpm_per_hp.round(1)} gpm/hp")
+    fluid_cooler.setName("#{fluid_cooler.name} #{min_gpm_per_hp.to_f.round(1)} gpm/hp")
 
     # Hard size the design fan power.
     # Leave the water flow and air flow autosized.

@@ -1,49 +1,58 @@
 {
   "heat_rejection": [
     {
-      "template": "90.1-2004",
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Centrifugal",
+      "test_fluid": null,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": 20,
+      "minimum_performance_btu_per_hr_per_hp": null
+    },
+    {
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Propeller or Axial",
+      "test_fluid": null,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": 38.2,
+      "minimum_performance_btu_per_hr_per_hp": null
+    },
+    {
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
+      "test_fluid": null,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
-      "notes": "From 90.1-2004 Table 6.8.1G"
+      "minimum_performance_gpm_per_hp": 20,
+      "minimum_performance_btu_per_hr_per_hp": null
     },
     {
-      "template": "90.1-2004",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Propeller or Axial",
+      "test_fluid": null,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 38.2,
-      "notes": "From 90.1-2004 Table 6.8.1G"
+      "minimum_performance_gpm_per_hp": 38.2,
+      "minimum_performance_btu_per_hr_per_hp": null
     },
     {
-      "template": "90.1-2004",
+      "equipment_type": "Air Cooled Condensers",
+      "fan_type": null,
+      "test_fluid": null,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": null,
+      "minimum_performance_btu_per_hr_per_hp": 176000
+    },
+    {
       "equipment_type": "Dry Cooler",
       "fan_type": "Propeller or Axial",
+      "test_fluid": null,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 4.0,
-      "notes": "Not required by code. Value provided by 90.1 Mechanical Subcommittee"
-    },
-    {
-      "template": "90.1-2004",
-      "equipment_type": "Open Cooling Tower",
-      "fan_type": "Centrifugal",
-      "start_date": "1919-09-09T00:00:00+00:00",
-      "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
-      "notes": "From 90.1-2004 Table 6.8.1G"
-    },
-    {
-      "template": "90.1-2004",
-      "equipment_type": "Open Cooling Tower",
-      "fan_type": "Propeller or Axial",
-      "start_date": "1919-09-09T00:00:00+00:00",
-      "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 38.2,
-      "notes": "From 90.1-2004 Table 6.8.1G"
+      "minimum_performance_gpm_per_hp": 4,
+      "minimum_performance_btu_per_hr_per_hp": null
     }
   ]
 }
