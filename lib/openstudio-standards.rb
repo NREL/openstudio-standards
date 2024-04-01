@@ -10,8 +10,10 @@ module OpenstudioStandards
   # Geometry Module
   require_relative 'openstudio-standards/geometry/create'
   require_relative 'openstudio-standards/geometry/create_bar'
-  require_relative 'openstudio-standards/geometry/modify'
+  require_relative 'openstudio-standards/geometry/create_shape'
+  require_relative 'openstudio-standards/geometry/group'
   require_relative 'openstudio-standards/geometry/information'
+  require_relative 'openstudio-standards/geometry/modify'
 
   # Construction Module
   require_relative 'openstudio-standards/constructions/information'
@@ -30,6 +32,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/schedules/information'
   require_relative 'openstudio-standards/schedules/parametric'
 
+  # Space Module
+  require_relative 'openstudio-standards/space/space'
+  
   # HVAC Module
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
 
@@ -233,7 +238,6 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.AirTerminalSingleDuctParallelPIUReheat"
   require_relative "#{stds}/Standards.AirTerminalSingleDuctVAVReheat"
   require_relative "#{stds}/Standards.BoilerHotWater"
-  require_relative "#{stds}/Standards.BuildingStory"
   require_relative "#{stds}/Standards.ChillerElectricEIR"
   require_relative "#{stds}/Standards.CoilCoolingDXMultiSpeed"
   require_relative "#{stds}/Standards.CoilCoolingDXSingleSpeed"
