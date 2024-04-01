@@ -84,7 +84,10 @@ module OpenstudioStandards
                                                 enable_dst: true,
                                                 unmet_hours_tolerance_r: 1.0,
                                                 remove_objects: true,
-                                                user_hvac_mapping: nil)
+                                                user_hvac_mapping: nil,
+                                                sizing_run_directory: nil)
+      # sizing run directory
+      sizing_run_directory = Dir.pwd if sizing_run_directory.nil?
 
       # report initial condition of model
       initial_object_size = model.getModelObjects.size
@@ -536,7 +539,7 @@ module OpenstudioStandards
 
         # add daylight controls, need to perform a sizing run for 2010
         if template == '90.1-2010' || template == 'ComStock 90.1-2010'
-          if standard.model_run_sizing_run(model, "#{Dir.pwd}/create_typical_building_from_model_SR0") == false
+          if standard.model_run_sizing_run(model, "#{sizing_run_directory}/create_typical_building_from_model_SR0") == false
             return false
           end
         end
@@ -788,7 +791,7 @@ module OpenstudioStandards
           standard.model_apply_prm_sizing_parameters(model)
 
           # Perform a sizing run
-          if standard.model_run_sizing_run(model, "#{Dir.pwd}/create_typical_building_from_model_SR1") == false
+          if standard.model_run_sizing_run(model, "#{sizing_run_directory}/create_typical_building_from_model_SR1") == false
             return false
           end
 
