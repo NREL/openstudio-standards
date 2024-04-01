@@ -6,7 +6,7 @@
       "fan_type": "Centrifugal",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance_gpm_per_hp": 20.0,
       "notes": "From 90.1-2004 Table 6.8.1G"
     },
     {
@@ -15,7 +15,7 @@
       "fan_type": "Propeller or Axial",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 38.2,
+      "minimum_performance_gpm_per_hp": 38.2,
       "notes": "From 90.1-2004 Table 6.8.1G"
     },
     {
@@ -24,7 +24,7 @@
       "fan_type": "Propeller or Axial",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 4.0,
+      "minimum_performance_gpm_per_hp": 4.0,
       "notes": "Not required by code. Value provided by 90.1 Mechanical Subcommittee"
     },
     {
@@ -33,7 +33,7 @@
       "fan_type": "Centrifugal",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
+      "minimum_performance_gpm_per_hp": 20.0,
       "notes": "From 90.1-2004 Table 6.8.1G"
     },
     {
@@ -42,7 +42,7 @@
       "fan_type": "Propeller or Axial",
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 38.2,
+      "minimum_performance_gpm_per_hp": 38.2,
       "notes": "From 90.1-2004 Table 6.8.1G"
     }
   ]
