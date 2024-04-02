@@ -206,11 +206,11 @@ module OpenstudioStandards
           thermostat = zone.thermostatSetpointDualSetpoint.get
           if thermostat.heatingSetpointTemperatureSchedule.is_initialized && thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
             schedule = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-            gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
+            gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
           end
           if thermostat.coolingSetpointTemperatureSchedule.is_initialized && thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
             schedule = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-            gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
+            gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
           end
         end
       end
@@ -558,7 +558,7 @@ module OpenstudioStandards
           hoo_end = nil
           occ = nil
           vac = nil
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.Schedules', "In #{__method__}, schedule #{schedule_day.name} has no hours_of_operation target index. Days for rule not in hoo profile: #{days_for_rule_not_in_hoo_profile}")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.Schedules', "In #{__method__}, schedule #{schedule_day.name} has no hours_of_operation target index. Won't be modified")
           # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedules', "In #{__method__}, schedule #{schedule_day.name} has no hours_of_operation target index. Won't be modified")
         else
           # get hours of operation for this specific profile
@@ -650,6 +650,9 @@ module OpenstudioStandards
         # puts "#{schedule_day.name}: par_val_time_hash: #{par_val_time_hash}"
 
         raw_string = []
+        # flags to control variable settings for tstats
+        start_set = false
+        end_set = false
         par_val_time_hash.sort.each do |time, value_array|
           # add in value variables
           # not currently using range, only using min max for constant schedules or schedules with just two values
@@ -769,6 +772,15 @@ module OpenstudioStandards
                 else # greater than 0
                   time = "hoo_end - occ * #{min_value_occ_fract.round(3)}"
                 end
+              end
+
+            elsif hoo_var_method == 'tstat'
+              # puts formula_identifier
+              if min_key == 'start' && !start_set
+                time = 'hoo_start + 0'
+                start_set = true
+              else
+                time = 'hoo_end + 0'
               end
 
             end
