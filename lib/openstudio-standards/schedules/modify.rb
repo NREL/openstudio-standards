@@ -72,7 +72,6 @@ module OpenstudioStandards
     # Sets the values of a day schedule from an array of values
     # Clears out existing time value pairs and sets to supplied values
     #
-    # @author Eric Ringold
     # @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
     # @param value_array [Array] Array of 24 values. Schedule times set based on value index. Identical values will be skipped.
     # @return [OpenStudio::Model::ScheduleDay]
