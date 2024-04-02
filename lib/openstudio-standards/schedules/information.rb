@@ -879,7 +879,7 @@ module OpenstudioStandards
       return days_used_hash
     end
 
-    # Returns the rule indeces associated with defaultDay and Rule days for a given ScheduleRuleset
+    # Returns the rule indices associated with defaultDay and Rule days for a given ScheduleRuleset
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset]
     # @return [Hash] hash of ScheduleDay => rule index. Default day has rule index of -1
