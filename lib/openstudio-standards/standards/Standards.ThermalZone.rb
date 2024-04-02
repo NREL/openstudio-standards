@@ -176,8 +176,8 @@ class Standard
     end
     # Get the occupancy schedule for all spaces in thermal_zone
     sch_ruleset = OpenstudioStandards::Space.spaces_get_occupancy_schedule(thermal_zone.spaces,
-                                                sch_name: sch_name,
-                                                occupied_percentage_threshold: occupied_percentage_threshold)
+                                                                           sch_name: sch_name,
+                                                                           occupied_percentage_threshold: occupied_percentage_threshold)
     return sch_ruleset
   end
 
@@ -204,12 +204,10 @@ class Standard
       end
     end
     sch_ruleset = OpenstudioStandards::Space.spaces_get_occupancy_schedule(spaces,
-                                                sch_name: sch_name,
-                                                occupied_percentage_threshold: occupied_percentage_threshold)
+                                                                           sch_name: sch_name,
+                                                                           occupied_percentage_threshold: occupied_percentage_threshold)
     return sch_ruleset
   end
-
-
 
   # Determine if the thermal zone is residential based on the space type properties for the spaces in the zone.
   # If there are both residential and nonresidential spaces in the zone,

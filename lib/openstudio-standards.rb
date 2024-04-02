@@ -34,7 +34,7 @@ module OpenstudioStandards
 
   # Space Module
   require_relative 'openstudio-standards/space/space'
-  
+
   # HVAC Module
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
 

@@ -5257,8 +5257,6 @@ class Standard
                                          slab_oat_low: slab_oat_low,
                                          slab_sp_at_oat_high: slab_sp_at_oat_high,
                                          slab_oat_high: slab_oat_high)
-      else
-        # 'none'; use energyplus default controls
       end
     end
     return radiant_loops

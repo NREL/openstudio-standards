@@ -8,7 +8,6 @@ AllCops:
   Exclude:
     - 'data/**/*'
     - 'test/**/*'
-    - 'lib/openstudio-standards/hvac_sizing/**/*'
     - 'lib/openstudio-standards/btap/**/*'
     - 'lib/openstudio-standards/standards/necb/**/*'
     - 'lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb'
@@ -25,4 +24,4 @@ Metrics/BlockLength:
   Max: 100
 
 Naming/FileName:
-  Enabled: false    
+  Enabled: false

@@ -299,8 +299,8 @@ module OpenstudioStandards
 
     # Returns the ASHRAE climate zone based on degree days
     #
-    # @param hdd18 [Double] Cooling Degree Days, 18°C base
-    # @param cdd10 [Double] Cooling Degree Days, 10°C base
+    # @param hdd18 [Double] Cooling Degree Days, 18C base
+    # @param cdd10 [Double] Cooling Degree Days, 10C base
     # @return [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
     # @todo support Humid (A) / Dry (B) distinctions based on precipitation per Section A3 of ASHRAE 169
     def self.get_climate_zone_from_degree_days(hdd18, cdd10)
