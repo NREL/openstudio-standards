@@ -203,6 +203,168 @@ class TestSchedulesParametric < Minitest::Test
     assert_equal(weekend_vals.rindex(1), 13)
   end
 
+  def create_simple_comstock_model_with_schedule_mod(type, wkdy_start, wkdy_dur, wknd_start, wknd_dur)
+    puts "-------------------------------------------------------------"
+    puts type
+
+    template = 'ComStock DOE Ref 1980-2004'
+    climate_zone = 'ASHRAE 169-2013-5B'
+
+    # create_bar
+    bar_args = {
+      climate_zone: climate_zone,
+      bldg_type_a: type,
+      bldg_subtype_a: 'largeoffice_default',
+      bldg_type_a_num_units: 1,
+      bldg_type_b: 'SecondarySchool',
+      bldg_subtype_b: 'NA',
+      bldg_type_b_fract_bldg_area: 0,
+      bldg_type_b_num_units: 1,
+      bldg_type_c: 'SecondarySchool',
+      bldg_subtype_c: 'NA',
+      bldg_type_c_fract_bldg_area: 0,
+      bldg_type_c_num_units: 1,
+      bldg_type_d: 'SecondarySchool',
+      bldg_subtype_d: 'NA',
+      bldg_type_d_fract_bldg_area: 0,
+      bldg_type_d_num_units: 1,
+      num_stories_below_grade: 0,
+      num_stories_above_grade: 1,
+      story_multiplier: 'None',
+      bar_division_method: 'Multiple Space Types - Individual Stories Sliced',
+      bottom_story_ground_exposed_floor: true,
+      top_story_exterior_exposed_roof: true,
+      make_mid_story_surfaces_adiabatic: true,
+      total_bldg_floor_area: 15000,
+      wwr: 0.38,
+      ns_to_ew_ratio: 3,
+      perim_mult: 0.0,
+      bar_width: 0.0,
+      bar_sep_dist_mult: 10.0,
+      building_rotation: 0.0,
+      template: template,
+      custom_height_bar: true,
+      floor_height: 0.0,
+      party_wall_fraction: 0.0,
+      party_wall_stories_north: 0,
+      party_wall_stories_south: 0,
+      party_wall_stories_east: 0,
+      party_wall_stories_west: 0,
+      double_loaded_corridor: 'Primary Space Type',
+      space_type_sort_logic: 'Building Type > Size',
+      single_floor_area: 0
+    }
+    @model = OpenStudio::Model::Model.new
+    OpenstudioStandards::Geometry.create_bar_from_building_type_ratios(@model, bar_args)
+
+    # simulation settings
+    dst_control = @model.getRunPeriodControlDaylightSavingTime
+    dst_control.setStartDate('2nd Sunday in March')
+    dst_control.setEndDate('1st Sunday in November')
+
+    # set timestep
+    timestep = @model.getTimestep
+    timestep.setNumberOfTimestepsPerHour(4)
+
+    # run period
+    run_period = @model.getRunPeriod
+    run_period.setBeginMonth(1)
+    run_period.setBeginDayOfMonth(1)
+    run_period.setEndMonth(12)
+    run_period.setEndDayOfMonth(31)
+
+    # calendar year
+    yr_desc = @model.getYearDescription
+    yr_desc.setCalendarYear(2018)
+
+    # weather file
+    weather_file_name = "USA_ID_Boise.Air.Terminal.726810_TMY3.epw"
+    weather_file_path = @weather.get_standards_weather_file_path(weather_file_name)
+    @weather.model_set_building_location(@model, weather_file_path: weather_file_path, ddy_list: nil)
+
+    orig_dir = Dir.pwd
+    Dir.chdir(File.join((__dir__), '/output'))
+
+    # create_typical with schedule modification, no hvac
+    OpenstudioStandards::CreateTypical.create_typical_building_from_model(@model,
+                                                                          template,
+                                                                          climate_zone: climate_zone,
+                                                                          # hvac_system_type: "VAV chiller with gas boiler reheat",
+                                                                          # hvac_delivery_type: "Inferred",
+                                                                          #  heating_fuel: "Inferred",
+                                                                          # service_water_heating_fuel: "Inferred",
+                                                                          # cooling_fuel: "Inferred",
+                                                                          wkdy_op_hrs_start_time: wkdy_start,
+                                                                          wkdy_op_hrs_duration: wkdy_dur,
+                                                                          wknd_op_hrs_start_time: wknd_start,
+                                                                          wknd_op_hrs_duration: wknd_dur,
+                                                                          modify_wkdy_op_hrs: true,
+                                                                          modify_wknd_op_hrs: true,
+                                                                          add_hvac: false,
+                                                                          add_elevators: false
+                                                                          )
+
+    Dir.chdir(orig_dir)
+  end
+
+  def test_comstock_schedule_mod
+    puts "\n######\nTEST:#{__method__}\n######\n"
+
+    run_dir = "#{@test_dir}/schedules_modified"
+
+    types = []
+    types << 'SecondarySchool'
+    types << 'PrimarySchool'
+    types << 'SmallOffice'
+    types << 'MediumOffice'
+    types << 'LargeOffice'
+    types << 'SmallHotel'
+    types << 'LargeHotel'
+    types << 'Warehouse'
+    types << 'RetailStandalone'
+    types << 'RetailStripmall'
+    types << 'QuickServiceRestaurant'
+    types << 'FullServiceRestaurant'
+    types << 'Hospital'
+    types << 'Outpatient'
+
+    types.each do |type|
+
+      create_simple_comstock_model_with_schedule_mod(type, 8.0, 12.0, 10.0, 6.0)
+
+      osm_path = "#{run_dir}/#{type}_modified.osm"
+      # assert(@model.save(osm_path, true))
+
+      # get thermostat schedules
+      tstat_schedules = []
+      @model.getThermostatSetpointDualSetpoints.each do |tstat|
+        next if tstat.coolingSetpointTemperatureSchedule.empty? || tstat.heatingSetpointTemperatureSchedule.empty?
+        clg_sch = tstat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+        htg_sch = tstat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
+        tstat_schedules << clg_sch unless tstat_schedules.include?(clg_sch)
+        tstat_schedules << htg_sch unless tstat_schedules.include?(clg_sch)
+      end
+
+      day_schedules = []
+      tstat_schedules.each do |sch_rule|
+        day_schedules << sch_rule.defaultDaySchedule
+      end
+
+      # building hour of operation schedule
+      default_op_sch = @model.getBuilding.getDefaultSchedule(OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')).get.to_ScheduleRuleset.get
+      op_times = default_op_sch.defaultDaySchedule.times.map(&:to_s)
+
+      # only test that default days match
+      day_schedules.each do |day_sch|
+        times = day_sch.times.map(&:to_s)
+        assert(op_times.to_set.superset?(times.to_set), "For #{type}, expected #{op_times} to include times from thermostat schedule #{day_sch.name.get}: #{times}")
+      end
+    end
+  end
+
+
+
+
 end
 
 
