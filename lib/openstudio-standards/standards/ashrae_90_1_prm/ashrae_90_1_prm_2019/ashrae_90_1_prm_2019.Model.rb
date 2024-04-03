@@ -111,14 +111,14 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       water_heater_thermal_zone = original_water_heater_info['Ambient Temperature Thermal Zone Name']
       # wather_heater_thermal_zone = model.getThermalZoneByName(thermal_zone_name).get
       # puts wather_heater_thermal_zone
-      service_water_temperature = original_water_heater_info['Maximum Temperature Limit {C}']
+      service_water_temperature = original_water_heater_info['Maximum Temperature Limit {C}'].to_f
       # todo: Hard coded now, implement in the future, may have multiple pumps in a building
       service_water_pump_head = 29891
       service_water_pump_motor_efficiency = 0.7
-      water_heater_capacity = original_water_heater_info['Heater Maximum Capacity {W}']
-      water_heater_volume = original_water_heater_info['Tank Volume {m3}']
+      water_heater_capacity = original_water_heater_info['Heater Maximum Capacity {W}'].to_f
+      water_heater_volume = original_water_heater_info['Tank Volume {m3}'].to_f
       water_heater_fuel = water_heater_mixed_apply_prm_baseline_fuel_type(building_type_swh)
-      parasitic_fuel_consumption_rate = original_water_heater_info['Off Cycle Parasitic Fuel Consumption Rate {W}']
+      parasitic_fuel_consumption_rate = original_water_heater_info['Off Cycle Parasitic Fuel Consumption Rate {W}'].to_f
       model_add_swh_loop(model,
              system_name,
              water_heater_thermal_zone,
