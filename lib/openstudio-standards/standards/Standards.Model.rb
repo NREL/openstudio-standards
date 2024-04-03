@@ -521,50 +521,50 @@ class Standard
             sql.close
           end
 
-          if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}")
-            # If UMLH are greater than the threshold allowed by Appendix G,
-            # increase zone air flow and load as per the recommendation in
-            # the PRM-RM; Note that the PRM-RM only suggest to increase
-            # air zone air flow, but the zone sizing factor in EnergyPlus
-            # increase both air flow and load.
-            umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
-            if umlh > 300
-              model.getThermalZones.each do |thermal_zone|
-                # Cooling adjustments
-                clg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_cooling_hours(thermal_zone)
-                if clg_umlh > 50
-                  sizing_factor = 1.0
-                  if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
-                    sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
-                  end
-                  # Make adjustment to zone cooling sizing factor
-                  # Do not adjust factors greater or equal to 2
-                  clg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
-                  thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
-                end
-
-                # Heating adjustments
-                # Reset sizing factor
-                htg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_heating_hours(thermal_zone)
-                if htg_umlh > 50
-                  sizing_factor = 1.0
-                  if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
-                    # Get zone heating sizing factor
-                    sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
-                  end
-
-                  # Make adjustment to zone heating sizing factor
-                  # Do not adjust factors greater or equal to 2
-                  htg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
-                  thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
-                end
-              end
-            end
-          else
-            # simulation failure, raise the exception.
-            # OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'OpenStudio simulation failed.')
+          # simulation failure, raise the exception
+          unless model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}")
             raise('OpenStudio simulation failed.')
           end
+
+          # If UMLH are greater than the threshold allowed by Appendix G,
+          # increase zone air flow and load as per the recommendation in
+          # the PRM-RM; Note that the PRM-RM only suggest to increase
+          # air zone air flow, but the zone sizing factor in EnergyPlus
+          # increase both air flow and load.
+          umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
+          if umlh > 300
+            model.getThermalZones.each do |thermal_zone|
+              # Cooling adjustments
+              clg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_cooling_hours(thermal_zone)
+              if clg_umlh > 50
+                sizing_factor = 1.0
+                if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
+                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
+                end
+                # Make adjustment to zone cooling sizing factor
+                # Do not adjust factors greater or equal to 2
+                clg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
+                thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
+              end
+
+              # Heating adjustments
+              # Reset sizing factor
+              htg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_heating_hours(thermal_zone)
+              if htg_umlh > 50
+                sizing_factor = 1.0
+                if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
+                  # Get zone heating sizing factor
+                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
+                end
+
+                # Make adjustment to zone heating sizing factor
+                # Do not adjust factors greater or equal to 2
+                htg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
+                thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
+              end
+            end
+          end
+
           nb_adjustments += 1
         end
       end
@@ -629,7 +629,7 @@ class Standard
     #       of OS:SpaceType is the PRM interior lighting space type. These values are
     #       from Table 9.6.1 as required by Section G3.1.6.e.
     proposed_lpd_residential_spaces = {
-      'dormitory - living quarters' => 0.5, # "primary_space_type": "Dormitory—Living Quarters",
+      'dormitory - living quarters' => 0.5, # "primary_space_type": "Dormitory - Living Quarters",
       'apartment - hardwired' => 0.6, # "primary_space_type": "Dwelling Unit"
       'guest room' => 0.41 # "primary_space_type": "Guest Room",
     }
@@ -2356,6 +2356,9 @@ class Standard
   #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
   # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
   #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
+  # @param fan_motor_hp [Double] fan motor brake horsepower.
+  # @param volume [Double] Equipment storage capacity in gallons.
+  # @param capacity_per_volume [Double] Equipment capacity per storage capacity in Btu/h/gal.
   # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
   # @example Find all the schedule rules that match the name
   #   rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
@@ -2363,7 +2366,7 @@ class Standard
   #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false
   #   end
-  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
+  def model_find_objects(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil, volume = nil, capacity_per_volume = nil)
     matching_objects = []
     if hash_of_objects.is_a?(Hash) && hash_of_objects.key?('table')
       hash_of_objects = hash_of_objects['table']
@@ -2414,6 +2417,48 @@ class Standard
         matching_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
       else
         matching_objects = matching_capacity_objects
+      end
+    end
+
+    # If volume was specified, narrow down the matching objects
+    unless volume.nil?
+      # Skip objects that don't have fields for minimum_storage and maximum_storage
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_storage') || !object.key?('maximum_storage') }
+
+      # Skip objects that don't have values specified for minimum_storage and maximum_storage
+      matching_objects = matching_objects.reject { |object| object['minimum_storage'].nil? || object['maximum_storage'].nil? }
+
+      # Skip objects whose the minimum volume is below or maximum volume above the specified volume
+      matching_volume_objects = matching_objects.reject { |object| volume.to_f < object['minimum_storage'].to_f || volume.to_f > object['maximum_storage'].to_f }
+
+      # If no object was found, round the volume down in case the number fell between the limits in the json file.
+      if matching_volume_objects.size.zero?
+        volume *= 0.99
+        # Skip objects whose minimum volume is below or maximum volume above the specified volume
+        matching_objects = matching_objects.reject { |object| volume.to_f <= object['minimum_storage'].to_f || volume.to_f >= object['maximum_storage'].to_f }
+      else
+        matching_objects = matching_volume_objects
+      end
+    end
+
+    # If capacity_per_volume was specified, narrow down the matching objects
+    unless capacity_per_volume.nil?
+      # Skip objects that don't have fields for minimum_capacity_per_storage and maximum_capacity_per_storage
+      matching_objects = matching_objects.reject { |object| !object.key?('minimum_capacity_per_storage') || !object.key?('maximum_capacity_per_storage') }
+
+      # Skip objects that don't have values specified for minimum_capacity_per_storage and maximum_capacity_per_storage
+      matching_objects = matching_objects.reject { |object| object['minimum_capacity_per_storage'].nil? || object['maximum_capacity_per_storage'].nil? }
+
+      # Skip objects whose the minimum capacity_per_volume is below or maximum capacity_per_volume above the specified capacity_per_volume
+      matching_capacity_per_volume_objects = matching_objects.reject { |object| capacity_per_volume.to_f <= object['minimum_capacity_per_storage'].to_f || capacity_per_volume.to_f >= object['maximum_capacity_per_storage'].to_f }
+
+      # If no object was found, round the volume down in case the number fell between the limits in the json file.
+      if matching_capacity_per_volume_objects.size.zero?
+        capacity_per_volume *= 0.99
+        # Skip objects whose minimum capacity_per_volume is below or maximum capacity_per_volume above the specified capacity_per_volume
+        matching_objects = matching_objects.reject { |object| capacity_per_volume.to_f <= object['minimum_capacity_per_storage'].to_f || capacity_per_volume.to_f >= object['maximum_capacity_per_storage'].to_f }
+      else
+        matching_objects = matching_capacity_per_volume_objects
       end
     end
 
@@ -2506,8 +2551,8 @@ class Standard
   #   'type' => 'Enclosed',
   #   }
   #   motor_properties = self.model.find_object(motors, search_criteria, capacity: 2.5)
-  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil)
-    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors, fan_motor_bhp)
+  def model_find_object(hash_of_objects, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = nil, volume = nil, capacity_per_volume = nil)
+    matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors, fan_motor_bhp, volume, capacity_per_volume)
 
     # Check the number of matching objects found
     if matching_objects.size.zero?

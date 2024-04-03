@@ -28,6 +28,7 @@ os_stds_methods/test_daylighting_controls.rb
 os_stds_methods/test_space_type.rb
 os_stds_methods/test_misc.rb
 os_stds_methods/test_radiant_controls.rb
+os_stds_methods/test_minimum_efficiency_lookups.rb
 
 90_1_prm/test_prm_baseline_bldg.rb
 90_1_prm/test_prm_baseline_bldg4.rb
@@ -88,7 +89,6 @@ doe_prototype/test_add_refrigeration.rb
 doe_prototype/test_add_swh.rb
 doe_prototype/test_effective_num_stories.rb
 doe_prototype/test_space_type_hash.rb
-doe_prototype/test_swh.rb
 doe_prototype/test_sim_control.rb
 
 cbes_prototype/test_small_office.rb
