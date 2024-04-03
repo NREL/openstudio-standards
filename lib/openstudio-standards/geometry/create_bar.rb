@@ -1187,43 +1187,42 @@ module OpenstudioStandards
       end
 
       # @todo should be able to remove this fix after OpenStudio intersection issue is fixed. At that time turn the above message into an error with return false after it
-      if match_error
+      return true unless match_error
 
-        # identify z value of top and bottom story
-        bottom_story = nil
-        top_story = nil
-        new_spaces.each do |space|
-          story = space.buildingStory.get
-          nom_z = story.nominalZCoordinate.get
-          if bottom_story.nil?
-            bottom_story = nom_z
-          elsif bottom_story > nom_z
-            bottom_story = nom_z
-          end
-          if top_story.nil?
-            top_story = nom_z
-          elsif top_story < nom_z
-            top_story = nom_z
+      # identify z value of top and bottom story
+      bottom_story = nil
+      top_story = nil
+      new_spaces.each do |space|
+        story = space.buildingStory.get
+        nom_z = story.nominalZCoordinate.get
+        if bottom_story.nil?
+          bottom_story = nom_z
+        elsif bottom_story > nom_z
+          bottom_story = nom_z
+        end
+        if top_story.nil?
+          top_story = nom_z
+        elsif top_story < nom_z
+          top_story = nom_z
+        end
+      end
+
+      # change boundary condition and intersection as needed.
+      new_spaces.each do |space|
+        if space.buildingStory.get.nominalZCoordinate.get > bottom_story
+          # change floors
+          space.surfaces.each do |surface|
+            next if !(surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground')
+
+            surface.setOutsideBoundaryCondition('Adiabatic')
           end
         end
+        if space.buildingStory.get.nominalZCoordinate.get < top_story
+          # change ceilings
+          space.surfaces.each do |surface|
+            next if !(surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Outdoors')
 
-        # change boundary condition and intersection as needed.
-        new_spaces.each do |space|
-          if space.buildingStory.get.nominalZCoordinate.get > bottom_story
-            # change floors
-            space.surfaces.each do |surface|
-              next if !(surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground')
-
-              surface.setOutsideBoundaryCondition('Adiabatic')
-            end
-          end
-          if space.buildingStory.get.nominalZCoordinate.get < top_story
-            # change ceilings
-            space.surfaces.each do |surface|
-              next if !(surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Outdoors')
-
-              surface.setOutsideBoundaryCondition('Adiabatic')
-            end
+            surface.setOutsideBoundaryCondition('Adiabatic')
           end
         end
       end

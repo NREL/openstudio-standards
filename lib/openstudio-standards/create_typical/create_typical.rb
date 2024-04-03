@@ -766,12 +766,12 @@ module OpenstudioStandards
 
         # Modify hours of operation, using weekdays values for all weekdays and weekend values for Saturday and Sunday
         OpenstudioStandards::Schedules.schedule_ruleset_set_hours_of_operation(op_sch,
-                                                         wkdy_start_time: wkdy_start_time,
-                                                         wkdy_end_time: wkdy_end_time,
-                                                         sat_start_time: wknd_start_time,
-                                                         sat_end_time: wknd_end_time,
-                                                         sun_start_time: wknd_start_time,
-                                                         sun_end_time: wknd_end_time)
+                                                                               wkdy_start_time: wkdy_start_time,
+                                                                               wkdy_end_time: wkdy_end_time,
+                                                                               sat_start_time: wknd_start_time,
+                                                                               sat_end_time: wknd_end_time,
+                                                                               sun_start_time: wknd_start_time,
+                                                                               sun_end_time: wknd_end_time)
 
         # Apply new operating hours to parametric schedules to make schedules in model reflect modified hours of operation
         parametric_schedules = OpenstudioStandards::Schedules.model_apply_parametric_schedules(model, error_on_out_of_order: false)

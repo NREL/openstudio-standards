@@ -508,8 +508,8 @@ module OpenstudioStandards
         # loop through indices looking of rule in hoo that contains days in the rule
         hoo_target_index = nil
         days_used = []
-        indices_vector.each_with_index do |profile_index, i|
-          if profile_index == current_rule_index then days_used << i + 1 end
+        indices_vector.each_with_index do |profile_index, p_i|
+          if profile_index == current_rule_index then days_used << p_i + 1 end
         end
         # puts "#{__method__}>>> #{schedule_day.name} days_used: #{days_used}"
 
@@ -1239,12 +1239,10 @@ module OpenstudioStandards
       # if time is > 24 shift to front of array and adjust value
       rotate_steps = 0
       time_value_pairs.reverse.each_with_index do |time_value_pair, i|
-        if time_value_pair[0] > 24
-          rotate_steps -= 1
-          time_value_pair[0] -= 24
-        else
-          next
-        end
+        next unless time_value_pair[0] > 24
+
+        rotate_steps -= 1
+        time_value_pair[0] -= 24
       end
       time_value_pairs.rotate!(rotate_steps)
 

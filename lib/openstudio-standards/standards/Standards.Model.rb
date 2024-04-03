@@ -521,50 +521,50 @@ class Standard
             sql.close
           end
 
-          if model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}")
-            # If UMLH are greater than the threshold allowed by Appendix G,
-            # increase zone air flow and load as per the recommendation in
-            # the PRM-RM; Note that the PRM-RM only suggest to increase
-            # air zone air flow, but the zone sizing factor in EnergyPlus
-            # increase both air flow and load.
-            umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
-            if umlh > 300
-              model.getThermalZones.each do |thermal_zone|
-                # Cooling adjustments
-                clg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_cooling_hours(thermal_zone)
-                if clg_umlh > 50
-                  sizing_factor = 1.0
-                  if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
-                    sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
-                  end
-                  # Make adjustment to zone cooling sizing factor
-                  # Do not adjust factors greater or equal to 2
-                  clg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
-                  thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
-                end
-
-                # Heating adjustments
-                # Reset sizing factor
-                htg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_heating_hours(thermal_zone)
-                if htg_umlh > 50
-                  sizing_factor = 1.0
-                  if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
-                    # Get zone heating sizing factor
-                    sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
-                  end
-
-                  # Make adjustment to zone heating sizing factor
-                  # Do not adjust factors greater or equal to 2
-                  htg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
-                  thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
-                end
-              end
-            end
-          else
-            # simulation failure, raise the exception.
-            # OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'OpenStudio simulation failed.')
+          # simulation failure, raise the exception
+          unless model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}")
             raise('OpenStudio simulation failed.')
           end
+
+          # If UMLH are greater than the threshold allowed by Appendix G,
+          # increase zone air flow and load as per the recommendation in
+          # the PRM-RM; Note that the PRM-RM only suggest to increase
+          # air zone air flow, but the zone sizing factor in EnergyPlus
+          # increase both air flow and load.
+          umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
+          if umlh > 300
+            model.getThermalZones.each do |thermal_zone|
+              # Cooling adjustments
+              clg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_cooling_hours(thermal_zone)
+              if clg_umlh > 50
+                sizing_factor = 1.0
+                if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
+                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
+                end
+                # Make adjustment to zone cooling sizing factor
+                # Do not adjust factors greater or equal to 2
+                clg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
+                thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
+              end
+
+              # Heating adjustments
+              # Reset sizing factor
+              htg_umlh = OpenstudioStandards::SqlFile.thermal_zone_get_annual_occupied_unmet_heating_hours(thermal_zone)
+              if htg_umlh > 50
+                sizing_factor = 1.0
+                if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
+                  # Get zone heating sizing factor
+                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
+                end
+
+                # Make adjustment to zone heating sizing factor
+                # Do not adjust factors greater or equal to 2
+                htg_umlh > 150 ? sizing_factor = [2.0, sizing_factor * 1.1].min : sizing_factor = [2.0, sizing_factor * 1.05].min
+                thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
+              end
+            end
+          end
+
           nb_adjustments += 1
         end
       end
@@ -629,7 +629,7 @@ class Standard
     #       of OS:SpaceType is the PRM interior lighting space type. These values are
     #       from Table 9.6.1 as required by Section G3.1.6.e.
     proposed_lpd_residential_spaces = {
-      'dormitory - living quarters' => 0.5, # "primary_space_type": "Dormitory—Living Quarters",
+      'dormitory - living quarters' => 0.5, # "primary_space_type": "Dormitory - Living Quarters",
       'apartment - hardwired' => 0.6, # "primary_space_type": "Dwelling Unit"
       'guest room' => 0.41 # "primary_space_type": "Guest Room",
     }
@@ -1803,7 +1803,7 @@ class Standard
                                model.getPlantLoopByName('Hot Water Loop').get
                              else
                                model_add_hw_loop(model, main_heat_fuel)
-                            end
+                             end
           else
             # If no hot water loop is defined, heat will default to electric resistance
             heating_type = 'Electric'
@@ -1815,7 +1815,7 @@ class Standard
                                  model_add_chw_loop(model,
                                                     cooling_fuel: cool_fuel,
                                                     chw_pumping_type: 'const_pri')
-                              end
+                               end
 
           model_add_four_pipe_fan_coil(model,
                                        zones,
@@ -5584,10 +5584,6 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The model started with #{start_size} objects and finished with #{end_size} objects after removing unused resource objects.")
     return true
   end
-
-
-
-
 
   private
 

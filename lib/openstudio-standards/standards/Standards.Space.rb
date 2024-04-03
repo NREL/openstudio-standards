@@ -1966,7 +1966,6 @@ class Standard
     return load_values
   end
 
-
   private
 
   # A series of private methods to modify polygons.
