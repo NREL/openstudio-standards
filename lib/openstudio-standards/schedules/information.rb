@@ -864,7 +864,7 @@ module OpenstudioStandards
 
     # Return the annual days of year that covered by each rule of a schedule ruleset
     #
-    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [Hash] hash of rule_index => [days_used]. Default day has rule_index = -1
     def self.schedule_ruleset_get_annual_days_used(schedule_ruleset)
       year_description = schedule_ruleset.model.getYearDescription
@@ -881,7 +881,7 @@ module OpenstudioStandards
 
     # Returns the rule indices associated with defaultDay and Rule days for a given ScheduleRuleset
     #
-    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset]
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @return [Hash] hash of ScheduleDay => rule index. Default day has rule index of -1
     def self.schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
       schedule_day_hash = {}

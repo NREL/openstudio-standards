@@ -180,7 +180,11 @@ module OpenstudioStandards
     # @param hoo_var_method [String] accepts 'hours' or 'fractional'. Any other value value will result in hour of operation variables not being applied
     #   Options are 'hours', 'fractional'
     # @return [Hash] schedule is key, value is hash of number of objects
-    def self.model_setup_parametric_schedules(model, step_ramp_logic: nil, infer_hoo_for_non_assigned_objects: true, gather_data_only: false, hoo_var_method: 'hours')
+    def self.model_setup_parametric_schedules(model,
+                                              step_ramp_logic: nil,
+                                              infer_hoo_for_non_assigned_objects: true,
+                                              gather_data_only: false,
+                                              hoo_var_method: 'hours')
       parametric_inputs = {}
       default_sch_type = OpenStudio::Model::DefaultScheduleType.new('HoursofOperationSchedule')
       # thermal zones, air loops, plant loops will require some logic if they refer to more than one hours of operaiton schedule.
@@ -190,27 +194,27 @@ module OpenstudioStandards
       # whatever approach is used for gathering parametric inputs for existing ruleset schedules should also be used for model_apply_parametric_schedules
 
       # loop through spaces (trace hours of operation back to space)
-      gather_inputs_parametric_space_space_type_schedules(model.getSpaces, parametric_inputs, gather_data_only)
+      OpenstudioStandards::Schedules.gather_inputs_parametric_space_space_type_schedules(model.getSpaces, parametric_inputs, gather_data_only)
 
       # loop through space types (trace hours of operation back to space type).
-      gather_inputs_parametric_space_space_type_schedules(model.getSpaceTypes, parametric_inputs, gather_data_only)
+      OpenstudioStandards::Schedules.gather_inputs_parametric_space_space_type_schedules(model.getSpaceTypes, parametric_inputs, gather_data_only)
 
       # loop through thermal zones (trace hours of operation back to spaces in thermal zone)
       thermal_zone_hash = {} # key is zone and hash is hours of operation
       model.getThermalZones.sort.each do |zone|
         # identify hours of operation
-        hours_of_operation = Space.spaces_hours_of_operation(zone.spaces)
+        hours_of_operation = OpenstudioStandards::Space.spaces_hours_of_operation(zone.spaces)
         thermal_zone_hash[zone] = hours_of_operation
         # get thermostat setpoint schedules
         if zone.thermostatSetpointDualSetpoint.is_initialized
           thermostat = zone.thermostatSetpointDualSetpoint.get
           if thermostat.heatingSetpointTemperatureSchedule.is_initialized && thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
             schedule = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-            gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
+            OpenstudioStandards::Schedules.gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
           end
           if thermostat.coolingSetpointTemperatureSchedule.is_initialized && thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
             schedule = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-            gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
+            OpenstudioStandards::Schedules.gather_inputs_parametric_schedules(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
           end
         end
       end
@@ -223,11 +227,11 @@ module OpenstudioStandards
         air_loop.thermalZones.sort.each do |zone|
           air_loop_spaces += zone.spaces
         end
-        hours_of_operation = Space.spaces_hours_of_operation(air_loop_spaces)
+        hours_of_operation = OpenstudioStandards::Space.spaces_hours_of_operation(air_loop_spaces)
         air_loop_hash[air_loop] = hours_of_operation
         if air_loop.availabilitySchedule.to_ScheduleRuleset.is_initialized
           schedule = air_loop.availabilitySchedule.to_ScheduleRuleset.get
-          gather_inputs_parametric_schedules(schedule, air_loop, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
+          OpenstudioStandards::Schedules.gather_inputs_parametric_schedules(schedule, air_loop, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
         end
         avail_mgrs = air_loop.availabilityManagers
         avail_mgrs.sort.each do |avail_mgr|
@@ -237,7 +241,7 @@ module OpenstudioStandards
           resources.sort.each do |resource|
             if resource.to_ScheduleRuleset.is_initialized
               schedule = resource.to_ScheduleRuleset.get
-              gather_inputs_parametric_schedules(schedule, avail_mgr, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
+              OpenstudioStandards::Schedules.gather_inputs_parametric_schedules(schedule, avail_mgr, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
             end
           end
         end
@@ -295,7 +299,7 @@ module OpenstudioStandards
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Model', "Cannot identify where #{component.name.get} is in system. Will not gather parametric inputs for #{schedule.name.get}")
             next
           end
-          gather_inputs_parametric_schedules(schedule, component, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
+          OpenstudioStandards::Schedules.gather_inputs_parametric_schedules(schedule, component, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
         end
       end
 
@@ -312,12 +316,12 @@ module OpenstudioStandards
           opt_space = water_use_equipment.space
           if opt_space.is_initialized
             space = space.get
-            hours_of_operation = Space.space_hours_of_operation(space)
-            gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
+            hours_of_operation = OpenstudioStandards::Space.space_hours_of_operation(space)
+            OpenstudioStandards::Schedules.gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
           else
-            hours_of_operation = Space.spaces_hours_of_operation(model.getSpaces)
+            hours_of_operation = OpenstudioStandards::Space.spaces_hours_of_operation(model.getSpaces)
             if !hours_of_operation.nil?
-              gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
+              OpenstudioStandards::Schedules.gather_inputs_parametric_schedules(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
             end
           end
 
@@ -336,12 +340,15 @@ module OpenstudioStandards
     # @note This measure will replace any prior chagnes made to ScheduleRule objects with new ScheduleRule values from
     # profile formulas
     # @author David Goldwasser
-    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param model [OpenStudio::Model::Model] OpenStudio Model object
     # @param ramp_frequency [Double] ramp frequency in minutes. If nil method will match simulation timestep
     # @param infer_hoo_for_non_assigned_objects [Boolean] # attempt to get hoo for objects like swh with and exterior lighting
     # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
     # @return [Array] of modified ScheduleRuleset objects
-    def self.model_apply_parametric_schedules(model, ramp_frequency: nil, infer_hoo_for_non_assigned_objects: true, error_on_out_of_order: true)
+    def self.model_apply_parametric_schedules(model,
+                                              ramp_frequency: nil,
+                                              infer_hoo_for_non_assigned_objects: true,
+                                              error_on_out_of_order: true)
       # get ramp frequency (fractional hour) from timestep
       if ramp_frequency.nil?
         steps_per_hour = if model.getSimulationControl.timestep.is_initialized
@@ -353,7 +360,7 @@ module OpenstudioStandards
       end
 
       # Go through model and create parametric formulas for all schedules
-      parametric_inputs = model_setup_parametric_schedules(model, gather_data_only: true)
+      parametric_inputs = OpenstudioStandards::Schedules.model_setup_parametric_schedules(model, gather_data_only: true)
 
       parametric_schedules = []
       model.getScheduleRulesets.sort.each do |sch|
@@ -367,7 +374,7 @@ module OpenstudioStandards
         end
 
         # apply parametric inputs
-        schedule_ruleset_apply_parametric_inputs(sch, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs)
+        OpenstudioStandards::Schedules.schedule_ruleset_apply_parametric_inputs(sch, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs)
 
         # add schedule to array
         parametric_schedules << sch
@@ -398,36 +405,36 @@ module OpenstudioStandards
           next
         end
         # loop through internal load instances
-        space_type.lights.each do |load_inst|
-          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        space_type.lights.each do |load_instance|
+          Space.gather_inputs_parametric_load_inst_schedules(load_instance, parametric_inputs, hours_of_operation, gather_data_only)
         end
-        space_type.luminaires.each do |load_inst|
-          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        space_type.luminaires.each do |load_instance|
+          Space.gather_inputs_parametric_load_inst_schedules(load_instance, parametric_inputs, hours_of_operation, gather_data_only)
         end
-        space_type.electricEquipment.each do |load_inst|
-          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        space_type.electricEquipment.each do |load_instance|
+          Space.gather_inputs_parametric_load_inst_schedules(load_instance, parametric_inputs, hours_of_operation, gather_data_only)
         end
-        space_type.gasEquipment.each do |load_inst|
-          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        space_type.gasEquipment.each do |load_instance|
+          Space.gather_inputs_parametric_load_inst_schedules(load_instance, parametric_inputs, hours_of_operation, gather_data_only)
         end
-        space_type.steamEquipment.each do |load_inst|
-          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        space_type.steamEquipment.each do |load_instance|
+          Space.gather_inputs_parametric_load_inst_schedules(load_instance, parametric_inputs, hours_of_operation, gather_data_only)
         end
-        space_type.otherEquipment.each do |load_inst|
-          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        space_type.otherEquipment.each do |load_instance|
+          Space.gather_inputs_parametric_load_inst_schedules(load_instance, parametric_inputs, hours_of_operation, gather_data_only)
         end
-        space_type.people.each do |load_inst|
-          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
-          if load_inst.activityLevelSchedule.is_initialized && load_inst.activityLevelSchedule.get.to_ScheduleRuleset.is_initialized
-            act_sch = load_inst.activityLevelSchedule.get.to_ScheduleRuleset.get
-            gather_inputs_parametric_schedules(act_sch, load_inst, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
+        space_type.people.each do |load_instance|
+          Space.gather_inputs_parametric_load_inst_schedules(load_instance, parametric_inputs, hours_of_operation, gather_data_only)
+          if load_instance.activityLevelSchedule.is_initialized && load_instance.activityLevelSchedule.get.to_ScheduleRuleset.is_initialized
+            act_sch = load_instance.activityLevelSchedule.get.to_ScheduleRuleset.get
+            OpenstudioStandards::Schedules.gather_inputs_parametric_schedules(act_sch, load_instance, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
           end
         end
-        space_type.spaceInfiltrationDesignFlowRates.each do |load_inst|
-          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        space_type.spaceInfiltrationDesignFlowRates.each do |load_instance|
+          Space.gather_inputs_parametric_load_inst_schedules(load_instance, parametric_inputs, hours_of_operation, gather_data_only)
         end
-        space_type.spaceInfiltrationEffectiveLeakageAreas.each do |load_inst|
-          Space.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
+        space_type.spaceInfiltrationEffectiveLeakageAreas.each do |load_instance|
+          Space.gather_inputs_parametric_load_inst_schedules(load_instance, parametric_inputs, hours_of_operation, gather_data_only)
         end
         dsgn_spec_oa = space_type.designSpecificationOutdoorAir
         if dsgn_spec_oa.is_initialized
@@ -445,8 +452,8 @@ module OpenstudioStandards
     # method to process load instance schedules for model_setup_parametric_schedules
     #
     # @author David Goldwasser
-    # @param sch [OpenStudio::Model::Schedule]
-    # @param load_inst [OpenStudio::Model::SpaceLoadInstance]
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param load_instance [OpenStudio::Model::SpaceLoadInstance] OpenStudio SpaceLoadInstance object
     # @param parametric_inputs [Hash]
     # @param hours_of_operation [Hash] hash, example:
     #   { profile_index: {
@@ -461,37 +468,41 @@ module OpenstudioStandards
     # @param gather_data_only [Boolean]
     # @param hoo_var_method [String] accepts hours and fractional. Any other value value will result in hoo variables not being applied
     # @return [Hash]
-    def self.gather_inputs_parametric_schedules(sch, load_inst, parametric_inputs, hours_of_operation, ramp: true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
-      if parametric_inputs.key?(sch)
-        if hours_of_operation != parametric_inputs[sch][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
-          # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedule', "#{load_inst.name} uses #{sch.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[sch][:target].name}.")
+    def self.gather_inputs_parametric_schedules(schedule_ruleset, load_instance, parametric_inputs, hours_of_operation,
+                                                ramp: true,
+                                                min_ramp_dur_hr: 2.0,
+                                                gather_data_only: false,
+                                                hoo_var_method: 'hours')
+      if parametric_inputs.key?(schedule_ruleset)
+        if hours_of_operation != parametric_inputs[schedule_ruleset][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
+          # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedule', "#{load_instance.name} uses #{schedule_ruleset.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[schedule_ruleset][:target].name}.")
           return nil
         end
       end
 
       # gather and store data for scheduleRuleset
-      min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(sch)
-      ruleset_hash = { floor: min_max['min'], ceiling: min_max['max'], target: load_inst, hoo_inputs: hours_of_operation }
-      parametric_inputs[sch] = ruleset_hash
+      min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(schedule_ruleset)
+      ruleset_hash = { floor: min_max['min'], ceiling: min_max['max'], target: load_instance, hoo_inputs: hours_of_operation }
+      parametric_inputs[schedule_ruleset] = ruleset_hash
 
       # stop here if only gathering information otherwise will continue and generate additional parametric properties for schedules and rules
       if gather_data_only then return parametric_inputs end
 
       # set scheduleRuleset properties
-      props = sch.additionalProperties
+      props = schedule_ruleset.additionalProperties
       props.setFeature('param_sch_ver', '0.0.1') # this is needed to see if formulas are in sync with version of standards that processes them also used to flag schedule as parametric
       props.setFeature('param_sch_floor', min_max['min'])
       props.setFeature('param_sch_ceiling', min_max['max'])
 
       # cleanup existing profiles
-      OpenstudioStandards::Schedules.schedule_ruleset_cleanup_profiles(sch)
+      OpenstudioStandards::Schedules.schedule_ruleset_cleanup_profiles(schedule_ruleset)
 
       # get initial hash of schedule days => rule indices
-      schedule_days = schedule_ruleset_get_schedule_day_rule_indices(sch)
+      schedule_days = schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
       # get all day schedule equivalent full load hours to tag
       daily_flhs = schedule_days.keys.map { |day_sch| schedule_day_get_equivalent_full_load_hours(day_sch) }
       # collect initial rule index => array of days used hash
-      sch_ruleset_days_used = schedule_ruleset_get_annual_days_used(sch)
+      sch_ruleset_days_used = schedule_ruleset_get_annual_days_used(schedule_ruleset)
 
       # match up schedule rule days with hours of operation days
       sch_day_map = {}
@@ -517,21 +528,21 @@ module OpenstudioStandards
           next if sch_index == -1 && hoo_index == -1
           # skip if rules already match
           if (sch_ruleset_days_used[sch_index] - day_group).empty?
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{sch.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
+            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{schedule_ruleset.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
             next
           end
           # create new rules
-          new_rules = OpenstudioStandards::Schedules.schedule_ruleset_create_rules_from_day_list(sch, day_group, schedule_day: schedule_days.key(sch_index))
+          new_rules = OpenstudioStandards::Schedules.schedule_ruleset_create_rules_from_day_list(schedule_ruleset, day_group, schedule_day: schedule_days.key(sch_index))
           new_rule_ct += new_rules.size
         end
       end
       # new rules are created at top of list - cleanup old rules
-      sch.scheduleRules[new_rule_ct..-1].each( &:remove ) unless new_rule_ct == 0
+      schedule_ruleset.scheduleRules[new_rule_ct..-1].each( &:remove ) unless new_rule_ct == 0
 
       # re-collect new schedule rules
-      schedule_days = schedule_ruleset_get_schedule_day_rule_indices(sch)
+      schedule_days = schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
       # re-collect new rule index => days used array
-      sch_ruleset_days_used = schedule_ruleset_get_annual_days_used(sch)
+      sch_ruleset_days_used = schedule_ruleset_get_annual_days_used(schedule_ruleset)
 
       # step through profiles and add additional properties to describe profiles
       schedule_days.each_with_index do |(schedule_day, current_rule_index), i|
@@ -644,7 +655,7 @@ module OpenstudioStandards
         if percent_change.abs > 0.05
           # @todo this estimation can have flaws. Fix or remove it, make sure to update for secondary logic (if we implement that here)
           # post application checks compares against actual instead of estimated values
-          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedule', "For day schedule #{schedule_day.name} in #{sch.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedule', "For day schedule #{schedule_day.name} in #{schedule_ruleset.name} there was a #{percent_change.round(4)}% change. Expected full load hours is #{daily_flh.round(4)}, but estimated value is #{est_daily_flh.round(4)}")
         end
 
         # puts "#{schedule_day.name}: par_val_time_hash: #{par_val_time_hash}"
@@ -847,7 +858,13 @@ module OpenstudioStandards
     # @param sun_start_time [OpenStudio::Time] Sunday start time.  If nil, no change will be made to this day.
     # @param sun_end_time [OpenStudio::Time] Sunday end time.  If greater than 24:00, hours of operation will wrap over midnight.
     # @return [Boolean] returns true if successful, false if not
-    def self.schedule_ruleset_set_hours_of_operation(schedule_ruleset, wkdy_start_time: nil, wkdy_end_time: nil, sat_start_time: nil, sat_end_time: nil, sun_start_time: nil, sun_end_time: nil)
+    def self.schedule_ruleset_set_hours_of_operation(schedule_ruleset,
+                                                     wkdy_start_time: nil,
+                                                     wkdy_end_time: nil,
+                                                     sat_start_time: nil,
+                                                     sat_end_time: nil,
+                                                     sun_start_time: nil,
+                                                     sun_end_time: nil)
       # Default day is assumed to represent weekdays
       if wkdy_start_time && wkdy_end_time
         schedule_day_set_hours_of_operation(schedule_ruleset.defaultDaySchedule, wkdy_start_time, wkdy_end_time)
@@ -880,16 +897,16 @@ module OpenstudioStandards
     # this will use parametric inputs contained in schedule and profiles along with inferred hours of operation to generate updated ruleset schedule profiles
     #
     # @author David Goldwasser
-    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @param ramp_frequency [Double] ramp frequency in minutes
     # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
     # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
-    # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
+    # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     def self.schedule_ruleset_apply_parametric_inputs(schedule_ruleset, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs = nil)
       # Check if parametric inputs were supplied and generate them if not
       if parametric_inputs.nil?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name}, no parametric inputs were not supplied so they will be generated now.")
-        parametric_inputs = model_setup_parametric_schedules(schedule.model, gather_data_only: true)
+        parametric_inputs = OpenstudioStandards::Schedules.model_setup_parametric_schedules(schedule.model, gather_data_only: true)
       end
 
       # Check that parametric inputs exist for this schedule after generation
@@ -984,7 +1001,7 @@ module OpenstudioStandards
         # puts hoo_end
 
         # update scheduleDay
-        schedule_day_adjust_from_parameters(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
+        OpenstudioStandards::Schedules.schedule_day_adjust_from_parameters(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
 
         # clone new rule if needed
         if clone_needed
@@ -1046,7 +1063,7 @@ module OpenstudioStandards
             hoo_end = hash[:hoo_end]
 
             # process new rule
-            schedule_day_adjust_from_parameters(sch_day_auto_gen, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
+            OpenstudioStandards::Schedules.schedule_day_adjust_from_parameters(sch_day_auto_gen, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
           end
 
         end
@@ -1072,7 +1089,7 @@ module OpenstudioStandards
     # adjust individual schedule profiles from parametric inputs
     #
     # @author David Goldwasser
-    # @param schedule_day [OpenStudio::Model::ScheduleDay] schedule day object
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
     # @param hoo_start [Double] hours of operation start
     # @param hoo_end [Double] hours of operation end
     # @param val_flr [Double] value floor
@@ -1080,7 +1097,7 @@ module OpenstudioStandards
     # @param ramp_frequency [Double] ramp frequency in minutes
     # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
     # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
-    # @return [OpenStudio::Model::ScheduleDay] schedule day
+    # @return [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
     # @api private
     def self.schedule_day_adjust_from_parameters(schedule_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
       # process hoo and floor/ceiling vars to develop formulas without variables
