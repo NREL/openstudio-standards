@@ -76,7 +76,6 @@ class TestSchedulesParametric < Minitest::Test
     assert_equal(hoo_default_vals.rindex(1.0), 17)
     assert_equal(hoo_default_vals.sum, 10)
     assert_equal(model.getBuilding.defaultScheduleSet.get.hoursofOperationSchedule.get, hours_of_operation_schedule)
-
   end
 
   def test_gather_inputs_parametric_schedules
@@ -147,8 +146,6 @@ class TestSchedulesParametric < Minitest::Test
     wknd_param_profile = clg_wknd_prop.select { |prop| prop.include? ('param_day_profile' ) }.first
     assert(wknd_param_profile.include?('hoo_start +'), "#{clg_sch.scheduleRules.first.daySchedule.name.get} missing hoo_start: #{clg_wknd_prop}")
     assert(wknd_param_profile.include?('hoo_start -'), "#{clg_sch.scheduleRules.first.daySchedule.name.get} missing hoo_end: #{clg_wknd_prop}")
-
-    # props.each{|pr| p pr}
   end
 
   def test_schedule_ruleset_apply_parametric_inputs
@@ -289,11 +286,6 @@ class TestSchedulesParametric < Minitest::Test
     OpenstudioStandards::CreateTypical.create_typical_building_from_model(@model,
                                                                           template,
                                                                           climate_zone: climate_zone,
-                                                                          # hvac_system_type: "VAV chiller with gas boiler reheat",
-                                                                          # hvac_delivery_type: "Inferred",
-                                                                          #  heating_fuel: "Inferred",
-                                                                          # service_water_heating_fuel: "Inferred",
-                                                                          # cooling_fuel: "Inferred",
                                                                           wkdy_op_hrs_start_time: wkdy_start,
                                                                           wkdy_op_hrs_duration: wkdy_dur,
                                                                           wknd_op_hrs_start_time: wknd_start,
@@ -329,7 +321,6 @@ class TestSchedulesParametric < Minitest::Test
     types << 'Outpatient'
 
     types.each do |type|
-
       create_simple_comstock_model_with_schedule_mod(type, 8.0, 12.0, 10.0, 6.0)
 
       osm_path = "#{run_dir}/#{type}_modified.osm"
@@ -361,10 +352,6 @@ class TestSchedulesParametric < Minitest::Test
       end
     end
   end
-
-
-
-
 end
 
 

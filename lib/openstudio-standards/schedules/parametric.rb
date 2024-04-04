@@ -521,7 +521,7 @@ module OpenstudioStandards
             next
           end
           # create new rules
-          new_rules = schedule_ruleset_create_rules_from_day_list(sch, day_group, schedule_day: schedule_days.key(sch_index))
+          new_rules = OpenstudioStandards::Schedules.schedule_ruleset_create_rules_from_day_list(sch, day_group, schedule_day: schedule_days.key(sch_index))
           new_rule_ct += new_rules.size
         end
       end

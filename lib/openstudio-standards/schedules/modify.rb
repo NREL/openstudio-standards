@@ -75,11 +75,12 @@ module OpenstudioStandards
     # @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
     # @param value_array [Array] Array of 24 values. Schedule times set based on value index. Identical values will be skipped.
     # @return [OpenStudio::Model::ScheduleDay]
-    def self.schedule_day_populate_from_array_of_vals(schedule_day, value_array)
+    def self.schedule_day_populate_from_array_of_values(schedule_day, value_array)
       schedule_day.clearValues
       value_array.each_with_index do |value, h|
         next if value == value_array[h + 1]
-        time = OpenStudio::Time.new(0, h+1, 0, 0)
+
+        time = OpenStudio::Time.new(0, h + 1, 0, 0)
         schedule_day.addValue(time, value)
       end
       return schedule_day
@@ -704,7 +705,7 @@ module OpenstudioStandards
       consec_days = days_used.chunk_while { |i, j| i + 1 == j }.to_a
 
       # split consec_days into sub arrays of consecutive weeks by checking that any value in next array differs by seven from a value in this array
-      consec_weeks = consec_days.chunk_while { |i, j| i.product(j).any? { |x, y| (x - y).abs == 7} }.to_a
+      consec_weeks = consec_days.chunk_while { |i, j| i.product(j).any? { |x, y| (x - y).abs == 7 } }.to_a
 
       # make new rule for blocks of consectutive weeks
       rules = []

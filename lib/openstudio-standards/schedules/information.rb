@@ -887,7 +887,7 @@ module OpenstudioStandards
       schedule_day_hash = {}
       schedule_day_hash[schedule_ruleset.defaultDaySchedule] = -1
       schedule_ruleset.scheduleRules.each { |rule| schedule_day_hash[rule.daySchedule] = rule.ruleIndex }
-      schedule_day_hash
+      return schedule_day_hash
     end
 
     # @!endgroup Information:ScheduleRuleset
