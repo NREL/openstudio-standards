@@ -332,7 +332,7 @@ module OpenstudioStandards
       area = OpenstudioStandards::Geometry.space_get_f_floor_area(space)
 
       if area.zero?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Area for #{surface.name} was calculated to be 0 m2, slab f-factor cannot be set.")
+        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::Construction', "Area for #{surface.name} was calculated to be 0 m2, slab f-factor cannot be set.")
         return false
       end
 
@@ -392,7 +392,7 @@ module OpenstudioStandards
       below_grade_wall_height = OpenstudioStandards::Geometry.space_get_below_grade_wall_height(space)
 
       if below_grade_wall_height.zero?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Below grade wall height for #{surface.name} was calculated to be 0 m2, below grade wall c-factor cannot be set.")
+        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::Construction', "Below grade wall height for #{surface.name} was calculated to be 0 m2, below grade wall c-factor cannot be set.")
         return false
       end
 

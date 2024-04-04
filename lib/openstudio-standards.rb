@@ -255,7 +255,6 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.CoilHeatingGasMultiStage"
   require_relative "#{stds}/Standards.CoilHeatingGas"
   require_relative "#{stds}/Standards.CoilHeatingWaterToAirHeatPumpEquationFit"
-  require_relative "#{stds}/Standards.Construction"
   require_relative "#{stds}/Standards.CoolingTower"
   require_relative "#{stds}/Standards.CoolingTowerSingleSpeed"
   require_relative "#{stds}/Standards.CoolingTowerTwoSpeed"
