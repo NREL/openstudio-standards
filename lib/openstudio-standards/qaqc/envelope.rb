@@ -69,10 +69,10 @@ module OpenstudioStandards
             if data.nil?
               puts "lookup for #{target_standard},#{intended_surface_type},#{standards_construction_type}"
               check_elems << OpenStudio::Attribute.new('flag', "Didn't find construction for #{standards_construction_type} #{intended_surface_type} for #{space_type.name}.")
-            elsif intended_surface_type.include? 'ExteriorWall' || 'ExteriorFloor' || 'ExteriorDoor'
+            elsif ['ExteriorWall', 'ExteriorFloor', 'ExteriorDoor'].include? intended_surface_type
               space_type_const_properties[intended_surface_type]['u_value'] = data['assembly_maximum_u_value']
               space_type_const_properties[intended_surface_type]['reflectance'] = 0.30 # hard coded value
-            elsif intended_surface_type.include? 'ExteriorRoof'
+            elsif intended_surface_type == 'ExteriorRoof'
               space_type_const_properties[intended_surface_type]['u_value'] = data['assembly_maximum_u_value']
               space_type_const_properties[intended_surface_type]['reflectance'] = 0.55 # hard coded value
             else
@@ -155,8 +155,6 @@ module OpenstudioStandards
                 when 'Floor'
                   intended_surface_type = 'ExteriorFloor'
                 end
-              else
-                # currently only used for surfaces with outdoor boundary condition
               end
               film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
               thermal_conductance = surface_detail[:construction].thermalConductance.get
@@ -229,8 +227,6 @@ module OpenstudioStandards
                 if boundary_condition.to_s == 'Outdoors'
                   # @todo add additional intended surface types
                   if surface_type.to_s == 'Door' then intended_surface_type = 'ExteriorDoor' end
-                else
-                  # currently only used for surfaces with outdoor boundary condition
                 end
                 film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
 
@@ -299,11 +295,11 @@ module OpenstudioStandards
 
             unless missing_surface_constructions.empty?
               check_elems << OpenStudio::Attribute.new('flag', "#{missing_surface_constructions.size} surfaces are missing constructions in #{space_type.name}. Spaces and can't be checked.")
-              end
+            end
 
             unless missing_sub_surface_constructions.empty?
               check_elems << OpenStudio::Attribute.new('flag', "#{missing_sub_surface_constructions.size} sub surfaces are missing constructions in #{space_type.name}. Spaces and can't be checked.")
-              end
+            end
 
             surface_details.uniq.each do |surface_detail|
               if surface_detail[:construction].thermalConductance.is_initialized
@@ -322,8 +318,7 @@ module OpenstudioStandards
                   when 'Floor'
                     intended_surface_type = 'ExteriorFloor'
                     standards_construction_type = 'Mass'
-                    end
-                  # currently only used for surfaces with outdoor boundary condition
+                  end
                 end
                 film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
                 thermal_conductance = surface_detail[:construction].thermalConductance.get
@@ -341,10 +336,10 @@ module OpenstudioStandards
                 if data.nil?
                   check_elems << OpenStudio::Attribute.new('flag', "Didn't find construction for #{standards_construction_type} #{intended_surface_type} for #{space.name}.")
                   next
-                elsif intended_surface_type.include? 'ExteriorWall' || 'ExteriorFloor' || 'ExteriorDoor'
+                elsif ['ExteriorWall', 'ExteriorFloor', 'ExteriorDoor'].include? intended_surface_type
                   assembly_maximum_u_value = data['assembly_maximum_u_value']
                   target_reflectance = 0.30
-                elsif intended_surface_type.include? 'ExteriorRoof'
+                elsif intended_surface_type == 'ExteriorRoof'
                   assembly_maximum_u_value = data['assembly_maximum_u_value']
                   target_reflectance = 0.55
                 else

@@ -1,8 +1,6 @@
 class Standard
   # @!group ScheduleRuleset
 
-
-  #
   # Return Array of weekday values from Array of all day values
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -376,5 +374,4 @@ class Standard
 
     return sch_rules
   end
-
 end
