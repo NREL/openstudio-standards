@@ -283,4 +283,36 @@ class TestConstructionsInformation < Minitest::Test
     construction_array = @constructions.construction_set_get_constructions(default_construction_set)
     assert(construction_array.size > 2)
   end
+
+  def test_model_get_constructions
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    building_type = 'PrimarySchool'
+    template = '90.1-2013'
+    climate_zone = 'ASHRAE 169-2013-4A'
+    @create.create_space_types_and_constructions(model, building_type, template, climate_zone)
+    roof_constructions = @constructions.model_get_constructions(model, 'Outdoors', 'ExteriorRoof')
+    assert_equal(1, roof_constructions.size)
+
+    # hard assign construction
+    mat1 = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.2, 1.729, 2243, 837)
+    mat1.setName('Material 1')
+    insulation = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.068, 0.0432, 91, 837)
+    insulation.setName('Insulation')
+    mat2 = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'MediumRough', 0.0127, 0.16, 785, 830)
+    mat2.setName('Material 2')
+    construction = OpenStudio::Model::Construction.new(model)
+    construction.setLayers([mat1, insulation, mat2])
+    construction.setName('New Construction')
+    surface = model.getSurfaceByName('Surface 6').get
+    surface.setConstruction(construction)
+    roof_constructions = @constructions.model_get_constructions(model, 'Outdoors', 'ExteriorRoof')
+    assert_equal(2, roof_constructions.size)
+  end
 end

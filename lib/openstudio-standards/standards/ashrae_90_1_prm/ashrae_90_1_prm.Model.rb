@@ -610,7 +610,7 @@ class ASHRAE901PRM < Standard
 
     # Modify all constructions of each type
     types_to_modify.each do |boundary_cond, surf_type, const_type|
-      constructions = model_find_constructions(model, boundary_cond, surf_type)
+      constructions = OpenstudioStandards::Constructions.model_get_constructions(model, boundary_cond, surf_type)
 
       constructions.sort.each do |const|
         standards_info = const.standardsInformation

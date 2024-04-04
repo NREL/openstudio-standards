@@ -312,5 +312,160 @@ module OpenstudioStandards
     end
 
     # @!endgroup Information:DefaultConstructionSet
+
+    # @!group Information:Model
+
+    # Get a unique list of constructions with a given boundary condition and surface type.
+    # Pulls from both default construction sets and hard-assigned constructions.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param boundary_condition [String] Surface boundary condition. Valid options are:
+    #   Adiabatic
+    #   Surface
+    #   Outdoors
+    #   Ground
+    # @param surface_type [String] Surface type to lookup. Valid options are:
+    #   AtticFloor
+    #   AtticWall
+    #   AtticRoof
+    #   DemisingFloor
+    #   DemisingWall
+    #   DemisingRoof
+    #   ExteriorFloor
+    #   ExteriorWall
+    #   ExteriorRoof
+    #   ExteriorWindow
+    #   ExteriorDoor
+    #   GlassDoor
+    #   GroundContactFloor
+    #   GroundContactWall
+    #   GroundContactRoof
+    #   InteriorFloor
+    #   InteriorWall
+    #   InteriorCeiling
+    #   InteriorPartition
+    #   InteriorWindow
+    #   InteriorDoor
+    #   OverheadDoor
+    #   Skylight
+    #   TubularDaylightDome
+    #   TubularDaylightDiffuser
+    # return [Array<OpenStudio::Model::ConstructionBase>] An array of all constructions matching the given boundary condition and surface type
+    def self.model_get_constructions(model, boundary_condition, surface_type)
+      constructions = []
+
+      # From default construction sets
+      model.getDefaultConstructionSets.sort.each do |const_set|
+        ext_surfs = const_set.defaultExteriorSurfaceConstructions
+        int_surfs = const_set.defaultInteriorSurfaceConstructions
+        gnd_surfs = const_set.defaultGroundContactSurfaceConstructions
+        ext_subsurfs = const_set.defaultExteriorSubSurfaceConstructions
+        int_subsurfs = const_set.defaultInteriorSubSurfaceConstructions
+
+        # Can't handle incomplete construction sets
+        if ext_surfs.empty? ||
+          int_surfs.empty? ||
+          gnd_surfs.empty? ||
+          ext_subsurfs.empty? ||
+          int_subsurfs.empty?
+
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Default construction set #{const_set.name} is incomplete; constructions from this set will not be reported.")
+          next
+        end
+
+        ext_surfs = ext_surfs.get
+        int_surfs = int_surfs.get
+        gnd_surfs = gnd_surfs.get
+        ext_subsurfs = ext_subsurfs.get
+        int_subsurfs = int_subsurfs.get
+
+        case surface_type
+          # Exterior Surfaces
+          when 'ExteriorWall', 'AtticWall'
+            constructions << ext_surfs.wallConstruction
+          when 'ExteriorFloor'
+            constructions << ext_surfs.floorConstruction
+          when 'ExteriorRoof', 'AtticRoof'
+            constructions << ext_surfs.roofCeilingConstruction
+          # Interior Surfaces
+          when 'InteriorWall', 'DemisingWall', 'InteriorPartition'
+            constructions << int_surfs.wallConstruction
+          when 'InteriorFloor', 'AtticFloor', 'DemisingFloor'
+            constructions << int_surfs.floorConstruction
+          when 'InteriorCeiling', 'DemisingRoof'
+            constructions << int_surfs.roofCeilingConstruction
+          # Ground Contact Surfaces
+          when 'GroundContactWall'
+            constructions << gnd_surfs.wallConstruction
+          when 'GroundContactFloor'
+            constructions << gnd_surfs.floorConstruction
+          when 'GroundContactRoof'
+            constructions << gnd_surfs.roofCeilingConstruction
+          # Exterior SubSurfaces
+          when 'ExteriorWindow'
+            constructions << ext_subsurfs.fixedWindowConstruction
+            constructions << ext_subsurfs.operableWindowConstruction
+          when 'ExteriorDoor'
+            constructions << ext_subsurfs.doorConstruction
+          when 'GlassDoor'
+            constructions << ext_subsurfs.glassDoorConstruction
+          when 'OverheadDoor'
+            constructions << ext_subsurfs.overheadDoorConstruction
+          when 'Skylight'
+            constructions << ext_subsurfs.skylightConstruction
+          when 'TubularDaylightDome'
+            constructions << ext_subsurfs.tubularDaylightDomeConstruction
+          when 'TubularDaylightDiffuser'
+            constructions << ext_subsurfs.tubularDaylightDiffuserConstruction
+          # Interior SubSurfaces
+          when 'InteriorWindow'
+            constructions << int_subsurfs.fixedWindowConstruction
+            constructions << int_subsurfs.operableWindowConstruction
+          when 'InteriorDoor'
+            constructions << int_subsurfs.doorConstruction
+        end
+      end
+
+      # Hard-assigned surfaces
+      model.getSurfaces.sort.each do |surface|
+        next unless surface.outsideBoundaryCondition == boundary_condition
+
+        if surface.surfaceType == 'Floor' || surface.surfaceType == 'Wall'
+          next unless surface_type.include?(surface.surfaceType)
+        elsif surface.surfaceType == 'RoofCeiling'
+          next unless surface_type.include?('Roof') || surface_type.include?('Ceiling')
+        end
+        constructions << surface.construction
+      end
+
+      # Hard-assigned subsurfaces
+      model.getSubSurfaces.sort.each do |surface|
+        next unless surface.outsideBoundaryCondition == boundary_condition
+
+        if surface.subSurfaceType == 'FixedWindow' || surface.subSurfaceType == 'OperableWindow'
+          next unless surface_type == 'ExteriorWindow'
+        elsif surface.subSurfaceType == 'Door'
+          next unless surface_type.include?('Door')
+        else
+          next unless surface.subSurfaceType == surface_type
+        end
+        constructions << surface.construction
+      end
+
+      # Throw out the empty constructions
+      all_constructions = []
+      constructions.uniq.each do |construction|
+        next if construction.empty?
+
+        all_constructions << construction.get
+      end
+
+      # return unique sorted ConstructionBases
+      all_constructions = all_constructions.uniq.sort
+
+      return all_constructions
+    end
+
+    # @!endgroup Information:Model
   end
 end

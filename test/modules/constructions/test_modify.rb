@@ -163,9 +163,8 @@ class TestConstructionsModify < Minitest::Test
     polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
     space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
     model.getSurfaces.each do |surface|
-      success = surface.setOutsideBoundaryCondition('Ground') if surface.surfaceType == 'Wall'
+      surface.setOutsideBoundaryCondition('Ground') if surface.surfaceType == 'Wall'
     end
-    #puts model
     below_grade_wall_height = OpenstudioStandards::Geometry.space_get_below_grade_wall_height(space)
     surface = model.getSurfaceByName('Surface 2').get
     basement_wall_construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
