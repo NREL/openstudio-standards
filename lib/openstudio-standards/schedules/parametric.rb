@@ -1274,12 +1274,10 @@ module OpenstudioStandards
       # if time is > 24 shift to front of array and adjust value
       rotate_steps = 0
       time_value_pairs.reverse.each_with_index do |time_value_pair, i|
-        if time_value_pair[0] > 24
-          rotate_steps -= 1
-          time_value_pair[0] -= 24
-        else
-          next
-        end
+        next unless time_value_pair[0] > 24
+
+        rotate_steps -= 1
+        time_value_pair[0] -= 24
       end
       time_value_pairs.rotate!(rotate_steps)
 
