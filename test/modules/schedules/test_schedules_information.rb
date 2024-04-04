@@ -471,4 +471,30 @@ class TestSchedulesInformation < Minitest::Test
     assert_equal(summer_weekends, annual_days_used[1])
     assert_equal(fall_weekends, annual_days_used[0])
   end
+
+  def test_schedule_ruleset_get_schedule_day_rule_indices
+    model = OpenStudio::Model::Model.new
+    model.getYearDescription.setCalendarYear(2018) # starts on a Monday
+    rules = []
+    rules << ['SpringWeekends', '1/1-5/31', 'Sat/Sun', [10, 0], [18, 1], [24, 0]]
+    rules << ['SummmerWeekday', '6/1-8/31', 'Mon/Tue/Wed/Thu/Fri', [9, 0], [14, 1], [24, 0]]
+    rules << ['SummerWeekend', '6/1-8/31', 'Sat/Sun', [24, 0]]
+    rules << ['FallWeekends', '9/1-12/31', 'Sat/Sun', [10, 0], [18, 1], [24, 0]]
+
+    test_options = {
+      'name' => 'Test Complex',
+      'winter_design_day' => [[24, 0]],
+      'summer_design_day' => [[24, 1]],
+      'default_day' => ['Test Complex Default', [8, 0], [16, 1], [24, 0]],
+      'rules' => rules
+    }
+    schedule_ruleset = @sch.create_complex_schedule(model, test_options)
+    rule_index_hash = @sch.schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
+
+    assert_equal(5, rule_index_hash.size)
+    rule_index_hash.keys.each { |k| assert(k.is_a?(OpenStudio::Model::ScheduleDay))}
+    assert_equal(-1, rule_index_hash[schedule_ruleset.defaultDaySchedule])
+    assert_equal(2, rule_index_hash[model.getScheduleDayByName('Test Complex SummmerWeekday').get])
+  end
+
 end
