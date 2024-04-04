@@ -510,8 +510,13 @@ module OpenstudioStandards
         day_map = {}
         sch_days.each do |day|
           # find the hour of operation rule that contains the day number
-          hoo_key = hours_of_operation.find { |_, val| val[:days_used].include?(day) }&.first
-          day_map[day] = hoo_key
+          hoo_keys = hours_of_operation.find { |_, val| val[:days_used].include?(day)}
+          unless hoo_keys.nil?
+            hoo_key = hoo_keys.first
+            day_map[day] = hoo_key
+          else
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.Schedule', "In #{__method__}, cannot find schedule #{schedule_days.key(sch_index).name.get} day #{day} in hour of operation profiles. Something went wrong.")
+          end
         end
         # group days with the same hour of operation index
         grouped_days = Hash.new { |h, k| h[k] = [] }
