@@ -47,6 +47,23 @@ class TestSchedulesModify < Minitest::Test
     assert_equal(hourly_values.rindex(0.0), 9-1)
   end
 
+  def test_schedule_day_populate_from_array_of_values
+    model = OpenStudio::Model::Model.new
+    schedule_day = OpenStudio::Model::ScheduleDay.new(model)
+    value_array = [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0]
+    schedule_day = @sch.schedule_day_populate_from_array_of_values(schedule_day, value_array)
+    assert(schedule_day.values.size == 3)
+    time_strings = schedule_day.times.map{|t| t.toString}
+    assert(time_strings == ['08:00:00', '18:00:00', '24:00:00'])
+
+    value_array = [0,0,0,0,1,1,1]
+    schedule_day = @sch.schedule_day_populate_from_array_of_values(schedule_day, value_array)
+    assert(schedule_day.values.size == 3)
+    time_strings = schedule_day.times.map{|t| t.toString}
+    assert(time_strings == ['04:00:00', '07:00:00', '24:00:00'])
+  end
+
+
   def test_schedule_ruleset_add_rule
     model = OpenStudio::Model::Model.new
     test_options = {
