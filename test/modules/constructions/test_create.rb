@@ -19,4 +19,16 @@ class TestConstructionsCreate < Minitest::Test
     assert_equal(2, model.getConstructions.size)
     assert_equal(6, model.getMaterials.size)
   end
+
+  def test_model_get_adiabatic_floor_construction
+    model = OpenStudio::Model::Model.new
+    @constructions.model_get_adiabatic_floor_construction(model)
+    assert(model.getConstructionByName('Adiabatic floor construction').is_initialized)
+  end
+
+  def test_model_get_adiabatic_wall_construction
+    model = OpenStudio::Model::Model.new
+    @constructions.model_get_adiabatic_wall_construction(model)
+    assert(model.getConstructionByName('Adiabatic wall construction').is_initialized)
+  end
 end
