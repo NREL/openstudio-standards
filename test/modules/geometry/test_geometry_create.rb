@@ -14,7 +14,7 @@ class TestGeometryCreate < Minitest::Test
   def test_space_create_point_at_center_of_floor
     space = @model.getSpaces[0]
     result = @geo.space_create_point_at_center_of_floor(space, 2.0)
-    assert_equal(result.z, 2.0)
+    assert_equal(2.0, result.z)
   end
 
   def test_sub_surface_create_point_at_specific_height
