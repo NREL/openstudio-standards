@@ -43,6 +43,31 @@ module OpenstudioStandards
       return schedule_day
     end
 
+    # Set the hours of operation (0 or 1) for a ScheduleDay.
+    # Clears out existing time/value pairs and sets to supplied values.
+    #
+    # @author Andrew Parker
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
+    # @param start_time [OpenStudio::Time] Start time.
+    # @param end_time [OpenStudio::Time] End time.  If greater than 24:00, hours of operation will wrap over midnight.
+    #
+    # @return [Void]
+    # @api private
+    def self.schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
+      schedule_day.clearValues
+      twenty_four_hours = OpenStudio::Time.new(0, 24, 0, 0)
+      if end_time < twenty_four_hours
+        # Operating hours don't wrap over midnight
+        schedule_day.addValue(start_time, 0) # 0 until start time
+        schedule_day.addValue(end_time, 1) # 1 from start time until end time
+        schedule_day.addValue(twenty_four_hours, 0) # 0 after end time
+      else
+        # Operating hours start on previous day
+        schedule_day.addValue(end_time - twenty_four_hours, 1) # 1 for hours started on the previous day
+        schedule_day.addValue(start_time, 0) # 0 from end of previous days hours until start of today's
+        schedule_day.addValue(twenty_four_hours, 1) # 1 from start of today's hours until midnight
+      end
+    end
     # @!endgroup Modify:ScheduleDay
 
     # @!group Modify:ScheduleRuleset
@@ -93,7 +118,8 @@ module OpenstudioStandards
       return sch_rule
     end
 
-    # Increase/decrease by percentage or static value
+    # Increase/decrease by percentage or static value.
+    # If the schedule has a scheduleTypeLimits object, the adjusted values will subject to the lower and upper bounds of the schedule type limits object.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
     # @param value [Double] Hash of name and time value pairs
@@ -105,6 +131,19 @@ module OpenstudioStandards
     def self.schedule_ruleset_simple_value_adjust(schedule_ruleset, value, modification_type = 'Multiplier')
       # gather profiles
       profiles = []
+      # positive infinity
+      upper_bound = Float::INFINITY
+      # negative infinity
+      lower_bound = -upper_bound
+      if schedule_ruleset.scheduleTypeLimits.is_initialized
+        schedule_type_limits = schedule_ruleset.scheduleTypeLimits.get
+        if schedule_type_limits.lowerLimitValue.is_initialized
+          lower_bound = schedule_type_limits.lowerLimitValue.get
+        end
+        if schedule_type_limits.upperLimitValue.is_initialized
+          upper_bound = schedule_type_limits.upperLimitValue.get
+        end
+      end
       default_profile = schedule_ruleset.to_ScheduleRuleset.get.defaultDaySchedule
       profiles << default_profile
       rules = schedule_ruleset.scheduleRules
@@ -120,10 +159,12 @@ module OpenstudioStandards
           case modification_type
           when 'Multiplier', 'Percentage'
             # percentage was used early on but Multiplier is preferable
-            profile.addValue(times[i], sch_value * value)
+            new_value = [lower_bound, [upper_bound, sch_value * value].min].max
+            profile.addValue(times[i], new_value)
           when 'Sum', 'Value'
             # value was used early on but Sum is preferable
-            profile.addValue(times[i], sch_value + value)
+            new_value = [lower_bound, [upper_bound, sch_value + value].min].max
+            profile.addValue(times[i], new_value)
           end
           i += 1
         end

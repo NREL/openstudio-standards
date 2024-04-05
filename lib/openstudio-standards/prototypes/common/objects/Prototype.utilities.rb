@@ -23,21 +23,6 @@ class Standard
     return model
   end
 
-  # load a sql file, exiting and erroring if a problem is found
-  #
-  # @param sql_path_string [String] file path to sql file
-  # @return [OpenStudio::SqlFile] sql file associated with the model, boolean false if not found
-  def safe_load_sql(sql_path_string)
-    sql_path = OpenStudio::Path.new(sql_path_string)
-    if OpenStudio.exists(sql_path)
-      sql = OpenStudio::SqlFile.new(sql_path)
-    else
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "#{sql_path} couldn't be found")
-      return false
-    end
-    return sql
-  end
-
   # Remove all resource objects in the model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -256,7 +241,7 @@ class Standard
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
-  def seer_to_cop_cooling_no_fan(seer)
+  def seer_to_cop_no_fan(seer)
     cop = -0.0076 * seer * seer + 0.3796 * seer
 
     return cop
@@ -267,7 +252,7 @@ class Standard
   #
   # @param cop [Double] COP
   # @return [Double] Seasonal Energy Efficiency Ratio
-  def cop_to_seer_cooling_no_fan(cop)
+  def cop_no_fan_to_seer(cop)
     delta = 0.3796**2 - 4.0 * 0.0076 * cop
     seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
 
@@ -275,24 +260,24 @@ class Standard
   end
 
   # Convert from SEER to COP (with fan) for cooling coils
-  # per the method specified in 90.1-2013 Appendix G
+  # per the method specified in Thornton et al. 2011
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
-  def seer_to_cop_cooling_with_fan(seer)
+  def seer_to_cop(seer)
     eer = -0.0182 * seer * seer + 1.1088 * seer
-    cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+    cop = eer_to_cop(eer)
 
     return cop
   end
 
   # Convert from COP to SEER (with fan) for cooling coils
-  # per the method specified in 90.1-2013 Appendix G
+  # per the method specified in Thornton et al. 2011
   #
   # @param cop [Double] Coefficient of Performance (COP)
   # @return [Double] seasonal energy efficiency ratio (SEER)
-  def cop_to_seer_cooling_with_fan(cop)
-    eer = cop_no_fan_to_eer(cop)
+  def cop_to_seer(cop)
+    eer = cop_to_eer(cop)
     delta = 1.1088**2 - 4.0 * 0.0182 * eer
     seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
 
@@ -319,18 +304,18 @@ class Standard
   #
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
-  def hspf_to_cop_heating_no_fan(hspf)
+  def hspf_to_cop_no_fan(hspf)
     cop = -0.0296 * hspf * hspf + 0.7134 * hspf
 
     return cop
   end
 
   # Convert from HSPF to COP (with fan) for heat pump heating coils
-  # @ref [References::ASHRAE9012013] Appendix G
+  # @ref ASHRAE RP-1197
   #
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
-  def hspf_to_cop_heating_with_fan(hspf)
+  def hspf_to_cop(hspf)
     cop = -0.0255 * hspf * hspf + 0.6239 * hspf
 
     return cop
@@ -345,11 +330,11 @@ class Standard
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop_no_fan(eer, capacity_w = nil)
     if capacity_w.nil?
-      # The PNNL Method.
+      # From Thornton et al. 2011
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildings per PNNL.
+      # assumed to be 0.12 for the reference buildings per Thornton et al. 2011.
       r = 0.12
-      cop = (eer / 3.413 + r) / (1 - r)
+      cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + r) / (1 - r)
     else
       # The 90.1-2013 method
       # Convert the capacity to Btu/hr
@@ -367,11 +352,11 @@ class Standard
   # @return [Double] Energy Efficiency Ratio (EER)
   def cop_no_fan_to_eer(cop, capacity_w = nil)
     if capacity_w.nil?
-      # The PNNL Method.
+      # From Thornton et al. 2011
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildngs per PNNL.
+      # assumed to be 0.12 for the reference buildngs per Thornton et al. 2011.
       r = 0.12
-      eer = 3.413 * (cop * (1 - r) - r)
+      eer = OpenStudio.convert(1.0, 'W', 'Btu/h').get * (cop * (1 - r) - r)
     else
       # The 90.1-2013 method
       # Convert the capacity to Btu/hr
@@ -396,6 +381,22 @@ class Standard
     eer = 0.0183 * ieer * ieer - 0.4552 * ieer + 13.21
 
     return eer_to_cop_no_fan(eer)
+  end
+
+  # Convert from EER to COP
+  #
+  # @param eer [Double] Energy Efficiency Ratio (EER)
+  # @return [Double] Coefficient of Performance (COP)
+  def eer_to_cop(eer)
+    return eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get
+  end
+
+  # Convert from COP to EER
+  #
+  # @param cop [Double] Coefficient of Performance (COP)
+  # @return [Double] Energy Efficiency Ratio (EER)
+  def cop_to_eer(cop)
+    return cop * OpenStudio.convert(1.0, 'W', 'Btu/h').get
   end
 
   # Convert from COP to kW/ton
@@ -448,47 +449,6 @@ class Standard
   # @return [Double] Combustion efficiency
   def thermal_eff_to_comb_eff(thermal_eff)
     return thermal_eff + 0.007
-  end
-
-  # Convert one infiltration rate at a given pressure
-  # to an infiltration rate at another pressure
-  # per method described here:  http://www.taskair.net/knowledge/Infiltration%20Modeling%20Guidelines%20for%20Commercial%20Building%20Energy%20Analysis.pdf
-  # where the infiltration coefficient is 0.65
-  #
-  # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
-  # @param intial_pressure_pa [Double] pressure rise at which initial infiltration rate was determined in Pa
-  # @param final_pressure_pa [Double] desired pressure rise to adjust infiltration rate to in Pa
-  # @param infiltration_coefficient [Double] infiltration coeffiecient
-  # @return [Double] adjusted infiltration rate in m^3/s
-  def adjust_infiltration_to_lower_pressure(initial_infiltration_rate_m3_per_s, intial_pressure_pa, final_pressure_pa, infiltration_coefficient = 0.65)
-    adjusted_infiltration_rate_m3_per_s = initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**infiltration_coefficient
-
-    return adjusted_infiltration_rate_m3_per_s
-  end
-
-  # Convert the infiltration rate at a 75 Pa to an infiltration rate at the typical value for the prototype buildings
-  # per method described here:  http://www.pnl.gov/main/publications/external/technical_reports/PNNL-18898.pdf
-  # Gowri K, DW Winiarski, and RE Jarnagin. 2009.
-  # Infiltration modeling guidelines for commercial building energy analysis.
-  # PNNL-18898, Pacific Northwest National Laboratory, Richland, WA.
-  #
-  # @param initial_infiltration_rate_m3_per_s [Double] initial infiltration rate in m^3/s
-  # @return [Double] adjusted infiltration rate in m^3/s
-  def adjust_infiltration_to_prototype_building_conditions(initial_infiltration_rate_m3_per_s)
-    # Details of these coefficients can be found in paper
-    alpha = 0.22 # unitless - terrain adjustment factor
-    intial_pressure_pa = 75.0 # 75 Pa
-    uh = 4.47 # m/s - wind speed
-    rho = 1.18 # kg/m^3 - air density
-    cs = 0.1617 # unitless - positive surface pressure coefficient
-    n = 0.65 # unitless - infiltration coefficient
-
-    # Calculate the typical pressure - same for all building types
-    final_pressure_pa = 0.5 * cs * rho * uh**2
-
-    adjusted_infiltration_rate_m3_per_s = (1.0 + alpha) * initial_infiltration_rate_m3_per_s * (final_pressure_pa / intial_pressure_pa)**n
-
-    return adjusted_infiltration_rate_m3_per_s
   end
 
   # Convert biquadratic curves that are a function of temperature

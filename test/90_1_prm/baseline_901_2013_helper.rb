@@ -337,22 +337,22 @@ module Baseline9012013
             seer = 14.0
             # Per PNNL, convert SEER to COP with fan
             eer = -0.0182 * seer * seer + 1.1088 * seer
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           elsif size >= 65000 && size < 135000
             eer = 11.0
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           elsif size >= 135000 && size < 240000
             eer = 10.8
             # Per PNNL, covert EER to COP using a capacity-agnostic formula
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           elsif size >= 240000 && size < 760000
             eer = 9.8
             # Per PNNL, covert EER to COP using a capacity-agnostic formula
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           else # size >= 760000
             eer = 9.5
             # Per PNNL, covert EER to COP using a capacity-agnostic formula
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           end
 
           if (coil_cop - cop).abs >= 0.1
@@ -806,14 +806,22 @@ module Baseline9012013
             next unless dd.dayType == 'SummerDesignDay'
             next unless dd.name.get.to_s.include?('WB=>MDB')
 
-            if dd.humidityIndicatingType == 'Wetbulb'
-              des_day_wb_si = dd.humidityIndicatingConditionsAtMaximumDryBulb
-              des_day_wb_ip << OpenStudio.convert(des_day_wb_si, 'C', 'F').get
-              puts "DD WB = #{des_day_wb_ip}"
+            if base_model.version < OpenStudio::VersionString.new('3.3.0')
+              if dd.humidityIndicatingType == 'Wetbulb'
+                des_day_wb_si = dd.humidityIndicatingConditionsAtMaximumDryBulb
+                des_day_wb_ip << OpenStudio.convert(des_day_wb_si, 'C', 'F').get
+                puts "DD WB = #{des_day_wb_ip}"
+              else
+                puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
+              end
             else
-              puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
+              if dd.humidityConditionType == 'Wetbulb' && dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+                des_day_wb_ip << OpenStudio.convert(dd.wetBulbOrDewPointAtMaximumDryBulb.get, 'C', 'F').get
+                puts "DD WB = #{des_day_wb_ip}"
+              else
+                puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
+              end
             end
-
           end
 
           if des_day_wb_ip.size == 0
@@ -2195,10 +2203,19 @@ module Baseline9012013
           design_day_name = design_day.name.get.to_s
           next unless design_day.dayType == "SummerDesignDay"
           next unless design_day_name.include? "WB=>MDB"
-          next unless design_day.humidityIndicatingType == "Wetbulb"
 
-          design_wb_c = design_day.humidityIndicatingConditionsAtMaximumDryBulb
-          design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
+          if model.version < OpenStudio::VersionString.new('3.3.0')
+            next unless design_day.humidityIndicatingType == "Wetbulb"
+            design_wb_c = design_day.humidityIndicatingConditionsAtMaximumDryBulb
+            design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
+          else
+            next unless design_day.humidityConditionType == "Wetbulb"
+            if design_day.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+              design_wb_c = design_day.wetBulbOrDewPointAtMaximumDryBulb
+              design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
+            end
+          end
+
           if design_wb_f_max.nil?
             design_wb_f_max = design_wb_f
           else

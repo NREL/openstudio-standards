@@ -94,30 +94,24 @@ module OpenstudioStandards
           # skip plenums
           next if std.thermal_zone_plenum?(thermal_zone)
 
+          # skip zones without thermostats
+          next unless thermal_zone.thermostatSetpointDualSetpoint.is_initialized
+
           # populate thermostat ranges
           model_clg_min = nil
-          if thermal_zone.thermostatSetpointDualSetpoint.is_initialized
-
-            thermostat = thermal_zone.thermostatSetpointDualSetpoint.get
-            if thermostat.coolingSetpointTemperatureSchedule.is_initialized
-
-              clg_sch = thermostat.coolingSetpointTemperatureSchedule.get
-              schedule_values = nil
-              if clg_sch.to_ScheduleRuleset.is_initialized
-                schedule_values = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(clg_sch.to_ScheduleRuleset.get)
-              elsif clg_sch.to_ScheduleConstant.is_initialized
-                schedule_values = OpenstudioStandards::Schedules.schedule_constant_get_min_max(clg_sch.to_ScheduleConstant.get)
-              end
-
-              unless schedule_values.nil?
-                model_clg_min = schedule_values['min']
-              end
+          thermostat = thermal_zone.thermostatSetpointDualSetpoint.get
+          if thermostat.coolingSetpointTemperatureSchedule.is_initialized
+            clg_sch = thermostat.coolingSetpointTemperatureSchedule.get
+            schedule_values = nil
+            if clg_sch.to_ScheduleRuleset.is_initialized
+              schedule_values = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(clg_sch.to_ScheduleRuleset.get)
+            elsif clg_sch.to_ScheduleConstant.is_initialized
+              schedule_values = OpenstudioStandards::Schedules.schedule_constant_get_min_max(clg_sch.to_ScheduleConstant.get)
             end
 
-          else
-            # go to next zone if not conditioned
-            next
-
+            unless schedule_values.nil?
+              model_clg_min = schedule_values['min']
+            end
           end
 
           # flag if there is setpoint schedule can't be inspected (isn't ruleset)
@@ -238,10 +232,9 @@ module OpenstudioStandards
       std = Standard.build(target_standard)
 
       begin
-        unmet_heating_hrs = std.model_annual_occupied_unmet_heating_hours(@model)
-        unmet_cooling_hrs = std.model_annual_occupied_unmet_cooling_hours(@model)
-        unmet_hrs = std.model_annual_occupied_unmet_hours(@model)
-
+        unmet_heating_hrs = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_heating_hours(@model)
+        unmet_cooling_hrs = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_cooling_hours(@model)
+        unmet_hrs = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(@model)
         if unmet_hrs
           if unmet_hrs > max_unmet_hrs
             if expect_clg_unmet_hrs && expect_htg_unmet_hrs

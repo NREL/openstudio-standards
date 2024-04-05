@@ -77,10 +77,9 @@ module OpenstudioStandards
 
         # get ashrae climate zone from model
         model_climate_zone = nil
-        climateZones = @model.getClimateZones
-        climateZones.climateZones.each do |climateZone|
-          if climateZone.institution == 'ASHRAE'
-            model_climate_zone = climateZone.value
+        @model.getClimateZones.climateZones.each do |climate_zone|
+          if climate_zone.institution == 'ASHRAE'
+            model_climate_zone = climate_zone.value
             next
           end
         end

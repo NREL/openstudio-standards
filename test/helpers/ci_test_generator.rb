@@ -1221,7 +1221,7 @@ class $(classname) < Minitest::Test
       if File.exist?("#{model_dir}/final.osm")
 
         model = OpenStudio::Model::Model.new
-        sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
+        sql = OpenstudioStandards::SqlFile.sql_file_safe_load("#{model_dir}/AR/run/eplusout.sql")
         model.setSqlFile(sql)
 
       # If not created, make and run annual simulation
@@ -1250,7 +1250,7 @@ class $(classname) < Minitest::Test
       end
 
       # Check the conditioned floor area
-      errs << "For #{type_desc} there was no conditioned area." if standard.model_net_conditioned_floor_area(model) == 0
+      errs << "For #{type_desc} there was no conditioned area." if model.building.get.conditionedFloorArea.get.zero?
 
       # Check the unmet hours
       unmet_hrs = standard.model_annual_occupied_unmet_hours(model)
