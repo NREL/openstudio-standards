@@ -77,7 +77,11 @@ module OpenstudioStandards
     # @return [OpenStudio::Model::ScheduleDay]
     def self.schedule_day_populate_from_array_of_values(schedule_day, value_array)
       schedule_day.clearValues
-      value_array.each_with_index do |value, h|
+      if value_array.size != 24
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Modify', "#{__method__} expects value_array to contain 24 values, instead #{value_array.size} values were given. Resulting schedule will use first #{[24, value_array.size].min} values")
+      end
+
+      value_array[0..23].each_with_index do |value, h|
         next if value == value_array[h + 1]
 
         time = OpenStudio::Time.new(0, h + 1, 0, 0)
