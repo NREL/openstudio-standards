@@ -292,7 +292,7 @@ class Standard
   # @param cop [Double] Coefficient of Performance (COP)
   # @return [Double] seasonal energy efficiency ratio (SEER)
   def cop_to_seer_cooling_with_fan(cop)
-    eer = cop_to_eer(cop)
+    eer = cop_no_fan_to_eer(cop)
     delta = 1.1088**2 - 4.0 * 0.0182 * eer
     seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
 
@@ -336,14 +336,14 @@ class Standard
     return cop
   end
 
-  # Convert from EER to COP
+  # Convert from EER to COP (no fan)
   # @ref [References::USDOEPrototypeBuildings] If capacity is not supplied, use DOE Prototype Building method.
   # @ref [References::ASHRAE9012013] If capacity is supplied, use the 90.1-2013 method
   #
   # @param eer [Double] Energy Efficiency Ratio (EER)
   # @param capacity_w [Double] the heating capacity at AHRI rating conditions, in W
   # @return [Double] Coefficient of Performance (COP)
-  def eer_to_cop(eer, capacity_w = nil)
+  def eer_to_cop_no_fan(eer, capacity_w = nil)
     if capacity_w.nil?
       # The PNNL Method.
       # r is the ratio of supply fan power to total equipment power at the rating condition,
@@ -360,12 +360,12 @@ class Standard
     return cop
   end
 
-  # Convert from COP to EER
+  # Convert from COP (no fan) to EER
   # @ref [References::USDOEPrototypeBuildings]
   #
   # @param cop [Double] COP
   # @return [Double] Energy Efficiency Ratio (EER)
-  def cop_to_eer(cop, capacity_w = nil)
+  def cop_no_fan_to_eer(cop, capacity_w = nil)
     if capacity_w.nil?
       # The PNNL Method.
       # r is the ratio of supply fan power to total equipment power at the rating condition,
@@ -380,6 +380,22 @@ class Standard
     end
 
     return eer
+  end
+
+  # Convert from IEER to COP (no fan)
+  #
+  # @note IEER is a weighted-average efficiency metrics at different load percentages, operataional and environemental conditions
+  # @note IEER should be modeled by using performance curves that match a targeted efficiency values
+  # @note This method estimates what a reasonable full load rated EER would be for a targeted IEER value
+  # @note The regression used in this method is based on a survey of over 1,000 rated AHRI units with IEER ranging from 11.8 to 25.6
+  # @todo Implement methods to handle IEER modeling
+  #
+  # @param ieer [Double] Energy Efficiency Ratio (EER)
+  # @return [Double] Coefficient of Performance (COP)
+  def ieer_to_cop_no_fan(ieer)
+    eer = 0.0183 * ieer * ieer - 0.4552 * ieer + 13.21
+
+    return eer_to_cop_no_fan(eer)
   end
 
   # Convert from COP to kW/ton

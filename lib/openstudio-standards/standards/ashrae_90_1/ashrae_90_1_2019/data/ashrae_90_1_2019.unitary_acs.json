@@ -3,7 +3,7 @@
     {
       "equipment_type": "PTAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": "Standard Size",
       "electric_power_phase": null,
@@ -27,7 +27,7 @@
     {
       "equipment_type": "PTAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": "Standard Size",
       "electric_power_phase": null,
@@ -51,7 +51,7 @@
     {
       "equipment_type": "PTAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": "Standard Size",
       "electric_power_phase": null,
@@ -75,7 +75,7 @@
     {
       "equipment_type": "PTAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": "Nonstandard Size",
       "electric_power_phase": null,
@@ -99,7 +99,7 @@
     {
       "equipment_type": "PTAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": "Nonstandard Size",
       "electric_power_phase": null,
@@ -123,7 +123,7 @@
     {
       "equipment_type": "PTAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": "Nonstandard Size",
       "electric_power_phase": null,
@@ -147,7 +147,7 @@
     {
       "equipment_type": "SPVAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": null,
@@ -171,7 +171,7 @@
     {
       "equipment_type": "SPVAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": null,
@@ -195,7 +195,7 @@
     {
       "equipment_type": "SPVAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": null,
@@ -219,7 +219,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle With Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -243,7 +243,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle With Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -267,7 +267,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle With Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -291,7 +291,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle With Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -315,7 +315,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle With Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -339,7 +339,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle With Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -363,7 +363,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle Without Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -387,7 +387,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle Without Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -411,7 +411,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle Without Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -435,7 +435,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle Without Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -459,7 +459,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle Without Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -483,7 +483,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Without Reverse Cycle Without Louvered Sides",
       "application": null,
       "electric_power_phase": null,
@@ -507,7 +507,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Casement Only",
       "application": null,
       "electric_power_phase": null,
@@ -531,7 +531,7 @@
     {
       "equipment_type": "Room Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Casement Slider",
       "application": null,
       "electric_power_phase": null,
@@ -555,7 +555,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 3,
@@ -579,7 +579,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 3,
@@ -795,7 +795,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 3,
@@ -819,7 +819,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 3,
@@ -1419,7 +1419,7 @@
     {
       "equipment_type": "Space constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 3,
@@ -1443,7 +1443,7 @@
     {
       "equipment_type": "Space constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 3,
@@ -1467,7 +1467,7 @@
     {
       "equipment_type": "Space constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 3,
@@ -1491,7 +1491,7 @@
     {
       "equipment_type": "Space constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 3,
@@ -1515,7 +1515,7 @@
     {
       "equipment_type": "Small Duct High Velocity",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 3,
@@ -1539,7 +1539,7 @@
     {
       "equipment_type": "Small Duct High Velocity",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 3,
@@ -1563,7 +1563,7 @@
     {
       "equipment_type": "Condensing Units",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": null,
@@ -1587,7 +1587,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "WaterCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": null,
@@ -1707,7 +1707,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "WaterCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": null,
@@ -2019,7 +2019,7 @@
     {
       "equipment_type": "Condensing Units",
       "cooling_type": "WaterCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": null,
@@ -2043,7 +2043,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "EvaporativelyCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": null,
@@ -2163,7 +2163,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "EvaporativelyCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": null,
@@ -2475,7 +2475,7 @@
     {
       "equipment_type": "Condensing Units",
       "cooling_type": "EvaporativelyCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": null,
@@ -2499,7 +2499,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2523,7 +2523,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2547,7 +2547,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2571,7 +2571,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2595,7 +2595,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2619,7 +2619,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2643,7 +2643,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2667,7 +2667,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2691,7 +2691,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2715,7 +2715,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2739,7 +2739,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2763,7 +2763,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": 1,
@@ -2787,7 +2787,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 1,
@@ -2811,7 +2811,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 1,
@@ -2835,7 +2835,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 1,
@@ -2859,7 +2859,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 1,
@@ -2883,7 +2883,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 1,
@@ -2907,7 +2907,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": 1,
@@ -2931,7 +2931,7 @@
     {
       "equipment_type": "Space Constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": 1,
@@ -2955,7 +2955,7 @@
     {
       "equipment_type": "Space Constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": 1,
@@ -2979,7 +2979,7 @@
     {
       "equipment_type": "Space Constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": 1,
@@ -3003,7 +3003,7 @@
     {
       "equipment_type": "Space Constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": 1,
@@ -3027,7 +3027,7 @@
     {
       "equipment_type": "Space Constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": 1,
@@ -3051,7 +3051,7 @@
     {
       "equipment_type": "Space Constrained",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": 1,

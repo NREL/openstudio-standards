@@ -3,7 +3,7 @@
     {
       "equipment_type": "PTAC",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": null,
       "application": null,
       "electric_power_phase": null,
@@ -27,7 +27,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": null,
@@ -51,7 +51,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": null,
@@ -75,7 +75,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": null,
@@ -99,7 +99,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": null,
@@ -123,7 +123,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "application": null,
       "electric_power_phase": null,
@@ -147,7 +147,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": null,
@@ -171,7 +171,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": null,
@@ -195,7 +195,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": null,
@@ -219,7 +219,7 @@
     {
       "equipment_type": "Air Conditioners",
       "cooling_type": "AirCooled",
-      "heating_type": null,
+      "heating_type": "Any",
       "subcategory": "Split System",
       "application": null,
       "electric_power_phase": null,

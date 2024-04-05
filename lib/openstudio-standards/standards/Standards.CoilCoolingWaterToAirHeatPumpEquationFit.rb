@@ -42,7 +42,7 @@ class Standard
 
     # Look up the efficiency characteristics
     if computer_room_air_conditioner
-      equipment_type = 'unitary_acs'
+      equipment_type = 'computer_room_acs'
     else
       equipment_type = 'water_source_heat_pumps'
     end
@@ -61,8 +61,8 @@ class Standard
     # If specified as EER (heat pump)
     unless coil_props['minimum_full_load_efficiency'].nil?
       min_eer = coil_props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer, capacity_w = nil)
-      new_comp_name = "#{coil_cooling_water_to_air_heat_pump.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
+      cop = eer_to_cop_no_fan(min_eer, capacity_w = nil)
+      new_comp_name = "#{coil_cooling_water_to_air_heat_pump.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer.to_f.round(1)}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{template}: #{coil_cooling_water_to_air_heat_pump.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 

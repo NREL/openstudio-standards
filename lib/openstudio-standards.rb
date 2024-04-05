@@ -211,6 +211,7 @@ module OpenstudioStandards
   # Files with modules
   require_relative "#{stds}/Standards.Fan"
   require_relative "#{stds}/Standards.CoilDX"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoilDX"
   require_relative "#{stds}/Standards.Pump"
   require_relative "#{stds}/Standards.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTower"
