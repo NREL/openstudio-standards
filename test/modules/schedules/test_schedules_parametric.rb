@@ -72,9 +72,9 @@ class TestSchedulesParametric < Minitest::Test
 
     hoo_default_vals = @sch.schedule_day_get_hourly_values(hours_of_operation_schedule.defaultDaySchedule)
     p hoo_default_vals
-    assert_equal(hoo_default_vals.index(1.0), 8)
-    assert_equal(hoo_default_vals.rindex(1.0), 17)
-    assert_equal(hoo_default_vals.sum, 10)
+    assert_equal(8, hoo_default_vals.index(1.0))
+    assert_equal(17, hoo_default_vals.rindex(1.0))
+    assert_equal(10, hoo_default_vals.sum)
     assert_equal(model.getBuilding.defaultScheduleSet.get.hoursofOperationSchedule.get, hours_of_operation_schedule)
   end
 
@@ -193,11 +193,11 @@ class TestSchedulesParametric < Minitest::Test
     ppl_sch = @sch.schedule_ruleset_apply_parametric_inputs(ppl_sch, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs)
 
     default_vals = @sch.schedule_day_get_hourly_values(ppl_sch.defaultDaySchedule)
-    assert_equal(default_vals.index(0.8), 7)
-    assert_equal(default_vals.rindex(0.8), 19)
+    assert_equal(7, default_vals.index(0.8))
+    assert_equal(19, default_vals.rindex(0.8))
     weekend_vals = @sch.schedule_day_get_hourly_values(ppl_sch.scheduleRules.first.daySchedule)
-    assert_equal(weekend_vals.index(1), 10)
-    assert_equal(weekend_vals.rindex(1), 13)
+    assert_equal(10, weekend_vals.index(1))
+    assert_equal(13, weekend_vals.rindex(1))
   end
 
   def create_simple_comstock_model_with_schedule_mod(type, wkdy_start, wkdy_dur, wknd_start, wknd_dur)

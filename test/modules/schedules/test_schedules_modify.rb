@@ -37,15 +37,15 @@ class TestSchedulesModify < Minitest::Test
     end_time = OpenStudio::Time.new(0,18,0,0)
     @sch.schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
     hourly_values = @sch.schedule_day_get_hourly_values(schedule_day)
-    assert_equal(hourly_values.index(1.0), 9)
-    assert_equal(hourly_values.rindex(1.0), 18-1)
+    assert_equal(9, hourly_values.index(1.0))
+    assert_equal(18-1, hourly_values.rindex(1.0))
     # test fromprevious day
     start_time = OpenStudio::Time.new(0,9,0,0)
     end_time = OpenStudio::Time.new(0,28,0,0)
     @sch.schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
     hourly_values = @sch.schedule_day_get_hourly_values(schedule_day)
-    assert_equal(hourly_values.index(0.0), 28-24)
-    assert_equal(hourly_values.rindex(0.0), 9-1)
+    assert_equal(28-24, hourly_values.index(0.0))
+    assert_equal(9-1, hourly_values.rindex(0.0))
   end
 
   def test_schedule_day_populate_from_array_of_values
@@ -160,7 +160,7 @@ class TestSchedulesModify < Minitest::Test
     basic_shift = { 'shift_hoo' => 2.0 }
     schedule = @sch.schedule_ruleset_adjust_hours_of_operation(schedule, basic_shift)
     hourly_values = @sch.schedule_day_get_hourly_values(schedule.defaultDaySchedule)
-    assert_equal(hourly_values.index(3.0), 8+2)
+    assert_equal(8+2, hourly_values.index(3.0))
   end
 
   def test_schedule_ruleset_cleanup_profiles

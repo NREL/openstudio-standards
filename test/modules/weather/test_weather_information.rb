@@ -25,19 +25,19 @@ class TestWeatherInformation < Minitest::Test
     # test ASHRAE climate zone
     @weather.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
     result = @weather.model_get_climate_zone(model)
-    assert_equal(result, 'ASHRAE 169-2013-4A')
+    assert_equal('ASHRAE 169-2013-4A', result)
 
     # test CEC climate zone
     @weather.model_set_climate_zone(model, 'CEC T24-CEC3')
     result = @weather.model_get_climate_zone(model)
-    assert_equal(result, 'CEC T24-CEC3')
+    assert_equal('CEC T24-CEC3', result)
   end
 
   def test_model_get_ashrae_climate_zone_number
     model = OpenStudio::Model::Model.new
     @weather.model_set_climate_zone(model, 'ASHRAE 169-2013-4A')
     result = @weather.model_get_ashrae_climate_zone_number(model)
-    assert_equal(result, 4)
+    assert_equal(4, result)
   end
 
   def test_model_get_full_weather_file_path

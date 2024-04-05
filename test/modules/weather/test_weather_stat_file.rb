@@ -28,11 +28,11 @@ class TestWeatherStatFile < Minitest::Test
       # pp JSON.parse(json)
       assert_in_delta(stat_file.lat, 47.46, 0.01)
       assert_in_delta(stat_file.lon, -122.31, 0.01)
-      assert_equal(stat_file.gmt, -8.0)
-      assert_equal(stat_file.heating_design_info.size, 15)
-      assert_equal(stat_file.cooling_design_info.size, 32)
-      assert_equal(stat_file.extremes_design_info.size, 16)
-      assert_equal(stat_file.monthly_dry_bulb.size, 12)
+      assert_equal(-8.0, stat_file.gmt)
+      assert_equal(15, stat_file.heating_design_info.size)
+      assert_equal(32, stat_file.cooling_design_info.size)
+      assert_equal(16, stat_file.extremes_design_info.size)
+      assert_equal(12, stat_file.monthly_dry_bulb.size)
     end
   end
 end
