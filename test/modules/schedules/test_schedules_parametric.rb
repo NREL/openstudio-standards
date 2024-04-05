@@ -78,7 +78,7 @@ class TestSchedulesParametric < Minitest::Test
     assert_equal(model.getBuilding.defaultScheduleSet.get.hoursofOperationSchedule.get, hours_of_operation_schedule)
   end
 
-  def test_gather_inputs_parametric_schedules
+  def test_schedule_ruleset_get_parametric_inputs
     model = OpenStudio::Model::Model.new
     model.getYearDescription.setCalendarYear(2018)
 
@@ -117,9 +117,9 @@ class TestSchedulesParametric < Minitest::Test
     @sch.model_infer_hours_of_operation_building(model)
     hours_of_operation = @spaces.spaces_hours_of_operation(model.getSpaces)
 
-    parametric_inputs = @sch.gather_inputs_parametric_schedules(lght_sch, lght, {}, hours_of_operation, ramp:true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
+    parametric_inputs = @sch.schedule_ruleset_get_parametric_inputs(lght_sch, lght, {}, hours_of_operation, ramp:true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
 
-    parametric_inputs = @sch.gather_inputs_parametric_schedules(clg_sch, nil, {}, hours_of_operation, ramp: true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
+    parametric_inputs = @sch.schedule_ruleset_get_parametric_inputs(clg_sch, nil, {}, hours_of_operation, ramp: true, min_ramp_dur_hr: 2.0, gather_data_only: false, hoo_var_method: 'hours')
 
     # collect additional properties
     props = get_additional_properties(lght_sch.defaultDaySchedule.additionalProperties)

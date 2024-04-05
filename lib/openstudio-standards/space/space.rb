@@ -483,27 +483,28 @@ module OpenstudioStandards
     # @!endgroup Space
 
     # @!group SpaceLoadInstance
+
     # method to process load instance schedules for model_setup_parametric_schedules
     #
     # @author David Goldwasser
-    # @param load_inst [OpenStudio::Model::SpaceLoadInstance]
+    # @param space_load_instance [OpenStudio::Model::SpaceLoadInstance] OpenStudio SpaceLoadInstance object
     # @param parametric_inputs [Hash]
     # @param hours_of_operation [Hash]
     # @param gather_data_only [Boolean]
     # @return [Hash]
-    def self.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
-      if load_inst.class.to_s == 'OpenStudio::Model::People'
-        opt_sch = load_inst.numberofPeopleSchedule
-      elsif load_inst.class.to_s == 'OpenStudio::Model::DesignSpecificationOutdoorAir'
-        opt_sch = load_inst.outdoorAirFlowRateFractionSchedule
+    def self.space_load_instance_get_parametric_schedule_inputs(space_load_instance, parametric_inputs, hours_of_operation, gather_data_only)
+      if space_load_instance.class.to_s == 'OpenStudio::Model::People'
+        opt_sch = space_load_instance.numberofPeopleSchedule
+      elsif space_load_instance.class.to_s == 'OpenStudio::Model::DesignSpecificationOutdoorAir'
+        opt_sch = space_load_instance.outdoorAirFlowRateFractionSchedule
       else
-        opt_sch = load_inst.schedule
+        opt_sch = space_load_instance.schedule
       end
       if !opt_sch.is_initialized || !opt_sch.get.to_ScheduleRuleset.is_initialized
         return nil
       end
 
-      OpenstudioStandards::Schedules.gather_inputs_parametric_schedules(opt_sch.get.to_ScheduleRuleset.get, load_inst, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
+      OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(opt_sch.get.to_ScheduleRuleset.get, space_load_instance, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
 
       return parametric_inputs
     end
