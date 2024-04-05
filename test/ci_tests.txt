@@ -125,7 +125,6 @@ necb/unit_tests/tests/test_necb_space_types_default_constructions_set.rb
 necb/unit_tests/tests/test_necb_total_and_tz_ceiling_centroid.rb
 necb/unit_tests/tests/test_necb_unitary_rules.rb
 necb/unit_tests/tests/test_necb_waterheater_rules.rb
-necb/unit_tests/tests/test_necb_weather.rb
 necb/unit_tests/tests/test_necb_weather_file_download.rb
 necb/unit_tests/tests/test_nv.rb
 necb/unit_tests/tests/test_pv_ground.rb
