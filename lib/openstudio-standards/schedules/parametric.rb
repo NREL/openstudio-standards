@@ -391,9 +391,10 @@ module OpenstudioStandards
     #
     # @author David Goldwasser
     # @param space_space_types [Array] array of OpenStudio::Model::Space or OpenStudio::Model::SpaceType objects
-    # @param parametric_inputs [Hash]
-    # @param gather_data_only [Boolean]
-    # @return [Hash]
+    # @param parametric_inputs [Hash] parametric inputs hash of ScheduleRuleset => {floor: schedule floor, ceiling: schedule ceiling, target: load instance, hoo_inputs: hours_of_operation hash}
+    # @param gather_data_only [Boolean] if true, no changes will be made to schedules
+    # @return [Hash] parametric inputs hash of ScheduleRuleset => {floor: schedule floor, ceiling: schedule ceiling, target: load instance, hoo_inputs: hours_of_operation hash}.
+    #   parametric formulas are encoded in AdditionalProperties objects attached to the ScheduleRuleset
     def self.gather_inputs_parametric_space_space_type_schedules(space_space_types, parametric_inputs, gather_data_only)
       space_space_types.each do |space_type|
         # get hours of operation for space type once
@@ -463,11 +464,11 @@ module OpenstudioStandards
     #     days_used: [Array] annual day indices
     #     }
     #   }
-    # @param ramp [Boolean]
-    # @param min_ramp_dur_hr [Double]
-    # @param gather_data_only [Boolean]
+    # @param ramp [Boolean] flag to add intermediate values ramp between input schedule values
+    # @param min_ramp_dur_hr [Double] minimum time difference to ramp between
+    # @param gather_data_only [Boolean] if true, no changes are made to schedules
     # @param hoo_var_method [String] accepts hours and fractional. Any other value value will result in hoo variables not being applied
-    # @return [Hash]
+    # @return [Hash] parametric inputs hash of ScheduleRuleset => {floor: schedule floor, ceiling: schedule ceiling, target: load instance, hoo_inputs: hours_of_operation hash}
     def self.gather_inputs_parametric_schedules(schedule_ruleset, load_instance, parametric_inputs, hours_of_operation,
                                                 ramp: true,
                                                 min_ramp_dur_hr: 2.0,
