@@ -147,6 +147,20 @@ class TestSpace < Minitest::Test
     ppl3.setNumberofPeopleSchedule(ppl_sch3)
     ppl3.setSpace(space2)
 
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 10.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space3 = OpenStudio::Model::Space.fromFloorPrint(polygon, 1.0, model).get
+
+    # space with no people
+    zero_schedule = @space.spaces_get_occupancy_schedule([space3], sch_name: 'test empty occupancy frac')
+    zero_min_max = @sch.schedule_get_min_max(zero_schedule)
+    assert_equal(0.0, zero_min_max['min'])
+    assert_equal(0.0, zero_min_max['max'])
+
     # fractional values
     occ_sch_fracs = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy frac', occupied_percentage_threshold: nil, threshold_calc_method: nil)
     puts "Fractional Values: #{occ_sch_fracs.scheduleRules.size} Schedule Rules"
