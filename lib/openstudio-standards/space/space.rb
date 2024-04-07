@@ -346,6 +346,11 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Finding space schedules for #{sch_name}.")
       end
 
+      # create schedule
+      if sch_name.nil?
+        sch_name = "#{spaces.size} space(s) Occ Sch"
+      end
+
       # Get all the occupancy schedules in spaces.
       # Include people added via the SpaceType and hard-assigned to the Space itself.
       occ_schedules_num_occ = {} # hash of People ScheduleRuleset => design occupancy for that People object
@@ -395,7 +400,13 @@ module OpenstudioStandards
       # total occupancy from all people
       total_design_occ = occ_schedules_num_occ.values.sum
 
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "   Total #{total_design_occ.round} people in #{spaces.size} spaces.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Total #{total_design_occ.round} people in #{spaces.size} spaces.")
+
+      # if design occupancy is zero, return zero schedule
+      if total_design_occ.zero?
+        schedule_ruleset = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(spaces[0].model, 0.0, name: sch_name)
+        return schedule_ruleset
+      end
 
       # get one 8760 array of the sum of each schedule's hourly occupancy
       combined_hourly_occ = all_schedule_hourly_occ.transpose.map(&:sum)
@@ -439,9 +450,6 @@ module OpenstudioStandards
       end
 
       # create schedule
-      if sch_name.nil?
-        sch_name = "#{spaces.size} space(s) Occ Sch"
-      end
       schedule_ruleset = OpenStudio::Model::ScheduleRuleset.new(spaces[0].model)
       schedule_ruleset.setName(sch_name.to_s)
       # add properties to schedule
