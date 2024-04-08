@@ -232,6 +232,20 @@ class TestSpace < Minitest::Test
     ppl3.setNumberofPeopleSchedule(ppl_sch3)
     ppl3.setSpace(space2)
 
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 10.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space3 = OpenStudio::Model::Space.fromFloorPrint(polygon, 1.0, model).get
+
+    # space with no people
+    zero_schedule = @space.spaces_get_occupancy_schedule([space3], sch_name: 'test empty occupancy frac')
+    zero_min_max = @sch.schedule_get_min_max(zero_schedule)
+    assert_equal(0.0, zero_min_max['min'])
+    assert_equal(0.0, zero_min_max['max'])
+
     # fractional values
     occ_sch_fracs = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy frac', occupied_percentage_threshold: nil, threshold_calc_method: nil)
     # puts "Fractional Values: #{occ_sch_fracs.scheduleRules.size} Schedule Rules"
@@ -257,10 +271,10 @@ class TestSpace < Minitest::Test
     assert_equal(11, summer_wkdy_hrly_vals.rindex(0.625))
     assert_equal(12, summer_wkdy_hrly_vals.index(0.875))
     assert_equal(15, summer_wkdy_hrly_vals.rindex(0.875))
-    assert_equal(17, summer_wkdy_hrly_vals.rindex(0.538))
-    assert_equal(19, summer_wkdy_hrly_vals.rindex(0.163))
+    assert_equal(17, summer_wkdy_hrly_vals.rindex(0.5375))
+    assert_equal(19, summer_wkdy_hrly_vals.rindex(0.1625))
 
-    assert_in_delta(2290.28, @sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_fracs), 0.01)
+    assert_in_delta(@sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_fracs), 2290.15, 0.01)
 
     # not normalized
     occ_sch_values = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy threshold', occupied_percentage_threshold: 0.3, threshold_calc_method: nil)

@@ -160,8 +160,8 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
         msg = "#{self.class.name}::#{__method__}. Condenser Water Loop exitT is different from expected value"
         assert_in_delta(expected_exitT, exitT, 0.01, msg)
 
-        # Check the supply loop. There should be a variable speed pump. Check confirms that we do not have a
-        #  constant speed pump as there is no other easy way to extract just the pump.
+        # Check the supply loop. There should be a variable speed pump. Check confirms that we do not have a constant
+        # speed pump as there is no other easy way to extract just the pump.
         supply_comps = iloop.supplyComponents
         supply_comps.each do |icomp|
           if icomp.to_PumpConstantSpeed.is_initialized
