@@ -470,10 +470,10 @@ module OpenstudioStandards
     # @param hoo_var_method [String] accepts hours and fractional. Any other value value will result in hoo variables not being applied
     # @return [Hash] parametric inputs hash of ScheduleRuleset => {floor: schedule floor, ceiling: schedule ceiling, target: load instance, hoo_inputs: hours_of_operation hash}
     def self.schedule_ruleset_get_parametric_inputs(schedule_ruleset, space_load_instance, parametric_inputs, hours_of_operation,
-                                                ramp: true,
-                                                min_ramp_dur_hr: 2.0,
-                                                gather_data_only: false,
-                                                hoo_var_method: 'hours')
+                                                    ramp: true,
+                                                    min_ramp_dur_hr: 2.0,
+                                                    gather_data_only: false,
+                                                    hoo_var_method: 'hours')
       if parametric_inputs.key?(schedule_ruleset)
         if hours_of_operation != parametric_inputs[schedule_ruleset][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
           # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedule', "#{space_load_instance.name} uses #{schedule_ruleset.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[schedule_ruleset][:target].name}.")
@@ -511,17 +511,17 @@ module OpenstudioStandards
         day_map = {}
         sch_days.each do |day|
           # find the hour of operation rule that contains the day number
-          hoo_keys = hours_of_operation.find { |_, val| val[:days_used].include?(day)}
-          unless hoo_keys.nil?
-            hoo_key = hoo_keys.first
-            day_map[day] = hoo_key
-          else
+          hoo_keys = hours_of_operation.find { |_, val| val[:days_used].include?(day) }
+          if hoo_keys.nil?
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Parametric.Schedule', "In #{__method__}, cannot find schedule #{schedule_days.key(sch_index).name.get} day #{day} in hour of operation profiles. Something went wrong.")
           end
+
+          hoo_key = hoo_keys.first
+          day_map[day] = hoo_key
         end
         # group days with the same hour of operation index
         grouped_days = Hash.new { |h, k| h[k] = [] }
-        day_map.each { |day, hoo_idx| grouped_days[hoo_idx] << day}
+        day_map.each { |day, hoo_idx| grouped_days[hoo_idx] << day }
         # group by schedule rule index
         sch_day_map[sch_index] = grouped_days
       end
@@ -532,6 +532,7 @@ module OpenstudioStandards
         hoo_group.each do |hoo_index, day_group|
           # skip common default days
           next if sch_index == -1 && hoo_index == -1
+
           # skip if rules already match
           if (sch_ruleset_days_used[sch_index] - day_group).empty?
             OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{schedule_ruleset.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
@@ -543,7 +544,7 @@ module OpenstudioStandards
         end
       end
       # new rules are created at top of list - cleanup old rules
-      schedule_ruleset.scheduleRules[new_rule_ct..-1].each( &:remove ) unless new_rule_ct == 0
+      schedule_ruleset.scheduleRules[new_rule_ct..-1].each(&:remove) unless new_rule_ct == 0
 
       # re-collect new schedule rules
       schedule_days = OpenstudioStandards::Schedules.schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
@@ -552,7 +553,6 @@ module OpenstudioStandards
 
       # step through profiles and add additional properties to describe profiles
       schedule_days.each_with_index do |(schedule_day, current_rule_index), i|
-
         hoo_target_index = nil
 
         days_used = sch_ruleset_days_used[current_rule_index]
@@ -799,9 +799,7 @@ module OpenstudioStandards
               else
                 time = 'hoo_end + 0'
               end
-
             end
-
           end
 
           # populate string
