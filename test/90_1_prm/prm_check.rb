@@ -1008,8 +1008,9 @@ class AppendixGPRMTests < Minitest::Test
             end
           end
         end
-
-        assert((num_zones_target == 1 && num_zones_mz > 1 && (fan_hrs_per_week_target - fan_hrs_per_week_mz).abs < 5), 'Split PSZ from MZ system fails for high internal gain zone.')
+        assert(num_zones_target == 1, "Split PSZ from MZ system fails for high internal gain zone. Expected 'Perimeter_bot_ZN_1 ZN' to be isolated as one zone, but num_zones_target is #{num_zones_target}")
+        assert(num_zones_mz > 1, 'Split PSZ from MZ system fails for high internal gain zone. Expected multiple zones to be on multiple zone system.')
+        assert((fan_hrs_per_week_target - fan_hrs_per_week_mz).abs < 5, "Split PSZ from MZ system fails for high internal gain zone. Expected fan schedule on the PSZ system with #{fan_hrs_per_week_target} system hours to be roughly the same as the MZ system with #{fan_hrs_per_week_mz} system hours.")
       elsif building_type == 'MediumOffice' && mod_str == 'remove_transformer_change_to_long_occ_sch_Perimeter_bot_ZN_1 ZN'
         # This mod should isolate Perimeter_bot_ZN_1 ZN to PSZ
         # Fan schedule for the PSZ should be 24/7, while fan schedule for MZ system should be 92 hrs/wk
@@ -1029,8 +1030,9 @@ class AppendixGPRMTests < Minitest::Test
             end
           end
         end
-
-        assert((num_zones_target == 1 && num_zones_mz > 1 && fan_hrs_per_week_target > fan_hrs_per_week_mz), "Split PSZ from MZ system fails for high internal gain zone. Target zone fan hrs/wk = #{fan_hrs_per_week_target}; MZ fan hrs/wk = #{fan_hrs_per_week_mz}")
+        assert(num_zones_target == 1, "Split PSZ from MZ system fails for high internal gain zone. Expected 'Perimeter_bot_ZN_1 ZN' to be isolated as one zone, but num_zones_target is #{num_zones_target}")
+        assert(num_zones_mz > 1, 'Split PSZ from MZ system fails for high internal gain zone. Expected multiple zones to be on multiple zone system.')
+        assert(fan_hrs_per_week_target > fan_hrs_per_week_mz, "Split PSZ from MZ system fails for high internal gain zone. Target zone fan hrs/wk = #{fan_hrs_per_week_target}; MZ fan hrs/wk = #{fan_hrs_per_week_mz}.")
       end
     end
   end
