@@ -336,8 +336,7 @@ module Baseline9012013
           if size < 65000
             seer = 14.0
             # Per PNNL, convert SEER to COP with fan
-            eer = -0.0182 * seer * seer + 1.1088 * seer
-            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
+            cop = -0.0076 * seer * seer + 0.3796 * seer
           elsif size >= 65000 && size < 135000
             eer = 11.0
             cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
