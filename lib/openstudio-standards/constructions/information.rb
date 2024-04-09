@@ -364,10 +364,10 @@ module OpenstudioStandards
 
         # Can't handle incomplete construction sets
         if ext_surfs.empty? ||
-          int_surfs.empty? ||
-          gnd_surfs.empty? ||
-          ext_subsurfs.empty? ||
-          int_subsurfs.empty?
+           int_surfs.empty? ||
+           gnd_surfs.empty? ||
+           ext_subsurfs.empty? ||
+           int_subsurfs.empty?
 
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Default construction set #{const_set.name} is incomplete; constructions from this set will not be reported.")
           next

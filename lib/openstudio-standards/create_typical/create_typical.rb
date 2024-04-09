@@ -667,12 +667,12 @@ module OpenstudioStandards
                 pri_sec_zone_lists = standard.model_differentiate_primary_secondary_thermal_zones(model, story_group)
                 system_zones = pri_sec_zone_lists['primary']
 
-              # if the primary system type is PTAC, filter to cooled zones to prevent sizing error if no cooling
-              if sys_type == 'PTAC'
-                heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
-                cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
-                system_zones = heated_and_cooled_zones + cooled_only_zones
-              end
+                # if the primary system type is PTAC, filter to cooled zones to prevent sizing error if no cooling
+                if sys_type == 'PTAC'
+                  heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                  cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                  system_zones = heated_and_cooled_zones + cooled_only_zones
+                end
 
                 # Add the primary system to the primary zones
                 unless standard.model_add_hvac_system(model, sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
@@ -680,21 +680,21 @@ module OpenstudioStandards
                   return false
                 end
 
-              # Add the secondary system to the secondary zones (if any)
-              if !pri_sec_zone_lists['secondary'].empty?
-                system_zones = pri_sec_zone_lists['secondary']
-                if (sec_sys_type == 'PTAC') || (sec_sys_type == 'PSZ-AC')
-                  heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
-                  cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
-                  system_zones = heated_and_cooled_zones + cooled_only_zones
-                end
-                unless standard.model_add_hvac_system(model, sec_sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
-                  OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{sys_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
-                  return false
+                # Add the secondary system to the secondary zones (if any)
+                if !pri_sec_zone_lists['secondary'].empty?
+                  system_zones = pri_sec_zone_lists['secondary']
+                  if (sec_sys_type == 'PTAC') || (sec_sys_type == 'PSZ-AC')
+                    heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                    cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                    system_zones = heated_and_cooled_zones + cooled_only_zones
+                  end
+                  unless standard.model_add_hvac_system(model, sec_sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
+                    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{sys_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
+                    return false
+                  end
                 end
               end
             end
-          end
 
           else
             # HVAC system_type specified
