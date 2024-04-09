@@ -480,7 +480,7 @@ module OpenstudioStandards
       # get nested array of 8760 values of the total occupancy at each hour of each schedule
       all_schedule_hourly_occ = []
       occ_schedules_num_occ.each do |occ_sch, num_occ|
-        all_schedule_hourly_occ << OpenstudioStandards::Schedules.schedule_get_hourly_values(occ_sch).map { |i| i * num_occ }
+        all_schedule_hourly_occ << OpenstudioStandards::Schedules.schedule_get_hourly_values(occ_sch).map { |i| (i * num_occ).round(6) }
       end
 
       # total occupancy from all people

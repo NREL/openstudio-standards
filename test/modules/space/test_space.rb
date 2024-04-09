@@ -336,5 +336,40 @@ class TestSpace < Minitest::Test
     assert_equal(17, summer_wkdy_hrly_vals.rindex(1.0))
 
     assert_equal(2610, @sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_annual))
+
+    # test for equivalency with 90.1 PRM method
+    model.getYearDescription.setCalendarYear(2006)
+    sch4_opts = {
+      'name' => 'OfficeMedium BLDG_OCC_SCH',
+      'default_day' => ['Default', [6.0, 0],[18.0, 0.05], [24.0, 0.0]],
+      'rules' => [
+        ['Saturday', '1/1-12/31', 'Sat', [6, 0],[8, 0.1],[12,0.3], [17,0.1],[19,0.05],[24,0]],
+        ['Weekdays', '1/1-12/31', 'Mon/Tue/Wed/Thu/Fri', [6,0],[7,0.1],[8,0.2],[12,0.95],[13,0.5],[17,0.95],[18,0.3],[22,0.1],[24,0.05]]
+      ]
+    }
+
+    ppl_sch4 = @sch.create_complex_schedule(model, sch4_opts)
+    space4 = OpenStudio::Model::Space.new(model)
+    # need a spacetype to compare to PRM
+    st = OpenStudio::Model::SpaceType.new(model)
+    space4.setSpaceType(st)
+    ppl_def4 = OpenStudio::Model::PeopleDefinition.new(model)
+    ppl_def4.setNumberofPeople(21.15)
+    ppl4 = OpenStudio::Model::People.new(ppl_def4)
+    ppl4.setNumberofPeopleSchedule(ppl_sch4)
+    ppl4.setSpace(space4)
+    occ_sch = @space.spaces_get_occupancy_schedule([space4], sch_name: 'test occupancy frac', occupied_percentage_threshold: 0.1, threshold_calc_method: nil)
+
+    std = Standard.build('90.1-PRM-2019')
+    zone = OpenStudio::Model::ThermalZone.new(model)
+    zone.setName('Perimeter_bot_ZN_1 ZN')
+    space4.setThermalZone(zone)
+
+    prm_eflh = std.thermal_zone_get_annual_operating_hours(model, zone, nil)
+
+    oss_eflh = @sch.schedule_get_hourly_values(occ_sch)
+
+    assert((prm_eflh.sum - oss_eflh.sum).abs.round(2) <= 0.001)
+
   end
 end
