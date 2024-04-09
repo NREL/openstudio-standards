@@ -2356,7 +2356,7 @@ class Standard
   #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
   # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
   #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
-  # @param fan_motor_hp [Double] fan motor brake horsepower.
+  # @param fan_motor_bhp [Double] fan motor brake horsepower.
   # @param volume [Double] Equipment storage capacity in gallons.
   # @param capacity_per_volume [Double] Equipment capacity per storage capacity in Btu/h/gal.
   # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
