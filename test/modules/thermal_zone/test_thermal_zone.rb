@@ -252,7 +252,7 @@ class TestThermalZone < Minitest::Test
     std.model_add_loads(model)
     thermal_zone = model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
     occ_sch = @zone.thermal_zone_get_occupancy_schedule(thermal_zone)
-    assert_equal(0.95, occ_sch.defaultDaySchedule.values.max)
+    assert_in_delta(0.95, occ_sch.defaultDaySchedule.values.max, 0.0001)
   end
 
   def test_thermal_zones_get_occupancy_schedule
@@ -262,7 +262,7 @@ class TestThermalZone < Minitest::Test
     thermal_zone1 = model.getThermalZoneByName('TZ-Aux_Gym_ZN_1_FLR_1').get
     thermal_zone2 = model.getThermalZoneByName('TZ-Mult_Class_1_Pod_1_ZN_1_FLR_1').get
     occ_sch = @zone.thermal_zones_get_occupancy_schedule([thermal_zone1, thermal_zone2])
-    assert_in_delta(0.70328, occ_sch.defaultDaySchedule.values.max, , 0.0001)
+    assert_in_delta(0.70328, occ_sch.defaultDaySchedule.values.max, 0.0001)
   end
 
   def test_thermal_zone_get_outdoor_airflow_rate
