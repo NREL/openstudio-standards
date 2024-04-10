@@ -1378,7 +1378,7 @@ class Standard
     space.model.getAirLoopHVACReturnPlenums.each do |return_air_plenum|
       if return_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
         # Determine if residential
-        res = thermal_zone_residential?(zone.get) ? true : false
+        res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone.get) ? true : false
 
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned (return air plenum).")
         cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
@@ -1391,7 +1391,7 @@ class Standard
     space.model.getAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
       if supply_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
         # Determine if residential
-        res = thermal_zone_residential?(zone.get) ? true : false
+        res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone.get) ? true : false
 
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned (supply air plenum).")
         cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
@@ -1454,7 +1454,7 @@ class Standard
       end
 
       # Determine if residential
-      res = thermal_zone_residential?(zone.get) ? true : false
+      res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone.get) ? true : false
 
       return cond_cat unless cond_ua > otr_ua
 
@@ -1463,92 +1463,6 @@ class Standard
     end
 
     return cond_cat
-  end
-
-  # Determines heating status.
-  # If the space's zone has a thermostat with a maximum heating setpoint above 5C (41F), counts as heated.
-  #
-  # @author Andrew Parker, Julien Marrec
-  # @param space [OpenStudio::Model::Space] space object
-  # @return [Boolean] returns true if heated, false if not
-  def space_heated?(space)
-    # Get the zone this space is inside
-    zone = space.thermalZone
-
-    # Assume unheated if not assigned to a zone
-    if zone.empty?
-      return false
-    end
-
-    # Get the category from the zone
-    htd = thermal_zone_heated?(zone.get)
-
-    return htd
-  end
-
-  # Determines cooling status.
-  # If the space's zone has a thermostat with a minimum cooling setpoint above 33C (91F), counts as cooled.
-  #
-  # @author Andrew Parker, Julien Marrec
-  # @param space [OpenStudio::Model::Space] space object
-  # @return [Boolean] returns true if cooled, false if not
-  def space_cooled?(space)
-    # Get the zone this space is inside
-    zone = space.thermalZone
-
-    # Assume uncooled if not assigned to a zone
-    if zone.empty?
-      return false
-    end
-
-    # Get the category from the zone
-    cld = thermal_zone_cooled?(zone.get)
-
-    return cld
-  end
-
-  # Determine the design internal load (W) for this space without space multipliers.
-  # This include People, Lights, Electric Equipment, and Gas Equipment.
-  # It assumes 100% of the wattage is converted to heat, and that the design peak schedule value is 1 (100%).
-  #
-  # @param space [OpenStudio::Model::Space] space object
-  # @return [Double] the design internal load, in W
-  def space_design_internal_load(space)
-    load_w = 0.0
-
-    # People
-    space.people.each do |people|
-      w_per_person = 125 # Initial assumption
-      act_sch = people.activityLevelSchedule
-      if act_sch.is_initialized
-        if act_sch.get.to_ScheduleRuleset.is_initialized
-          act_sch = act_sch.get.to_ScheduleRuleset.get
-          w_per_person = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(act_sch)['max']
-        else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
-        end
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Space', "#{space.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
-      end
-
-      num_ppl = people.getNumberOfPeople(space.floorArea)
-
-      ppl_w = num_ppl * w_per_person
-
-      load_w += ppl_w
-    end
-
-    # Lights
-    load_w += space.lightingPower
-
-    # Electric Equipment
-    load_w += space.electricEquipmentPower
-
-    # Gas Equipment
-    load_w += space.gasEquipmentPower
-
-    OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "#{space.name} has #{load_w.round}W of design internal loads.")
-
-    return load_w
   end
 
   # Create annual array of occupancy for the space: 1 = occupied, 0 = unoccupied
@@ -1830,9 +1744,7 @@ class Standard
   # @param ppl_total [Numeric] total number of people in the space
   # @param load_values [Array] 8760 array of load values for the equipment type
   # @param return_noncoincident_value [Boolean] return a single peak value if true; return 8760 gain profile if false
-  #
   # @return [Array] load values array; if return_noncoincident_value is true, array has only one value
-  #
   def space_get_loads_for_all_equips(model, space, equips, eqp_type, ppl_total, load_values, return_noncoincident_value)
     space_name = space.name.get
     space_type_name = space.spaceType.get.name.get
@@ -1868,9 +1780,7 @@ class Standard
   # @param ppl_total [Numeric] total number of people in the space
   # @param load_values [Array] 8760 array of load values for the equipment type
   # @param return_noncoincident_value [Boolean] return a single peak value if true; return 8760 gain profile if false
-  #
   # @return [Array] load values array; if return_noncoincident_value is true, array has only one value
-  #
   def space_get_equip_annual_array(model, space, equip, eqp_type, ppl_total, load_values, return_noncoincident_value)
     # Get load schedule and load lost value depending on equipment type
     case eqp_type

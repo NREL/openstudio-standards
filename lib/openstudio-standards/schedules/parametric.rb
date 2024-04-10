@@ -387,14 +387,26 @@ module OpenstudioStandards
 
     # @!group Parametric:Spaces
 
-    # Gathers parametric inputs for all loads objects associated with spaces/space types in provided array
+    # Gathers parametric inputs for all loads objects associated with spaces/space types in provided array.
+    # Parametric formulas are encoded in AdditionalProperties objects attached to the ScheduleRuleset.
     #
     # @author David Goldwasser
     # @param spaces_space_types [Array] array of OpenStudio::Model::Space or OpenStudio::Model::SpaceType objects
-    # @param parametric_inputs [Hash] parametric inputs hash of ScheduleRuleset => {floor: schedule floor, ceiling: schedule ceiling, target: load instance, hoo_inputs: hours_of_operation hash}
+    # @param parametric_inputs [Hash] parametric inputs hash of ScheduleRuleset, example:
+    #   {
+    #     floor: schedule floor,
+    #     ceiling: schedule ceiling,
+    #     target: load instance,
+    #     hoo_inputs: hours_of_operation hash
+    #   }
     # @param gather_data_only [Boolean] if true, no changes will be made to schedules
-    # @return [Hash] parametric inputs hash of ScheduleRuleset => {floor: schedule floor, ceiling: schedule ceiling, target: load instance, hoo_inputs: hours_of_operation hash}.
-    #   parametric formulas are encoded in AdditionalProperties objects attached to the ScheduleRuleset
+    # @return [Hash] parametric inputs hash of ScheduleRuleset, example:
+    #   {
+    #     floor: schedule floor,
+    #     ceiling: schedule ceiling,
+    #     target: load instance,
+    #     hoo_inputs: hours_of_operation hash
+    #   }
     def self.spaces_space_types_get_parametric_schedule_inputs(spaces_space_types, parametric_inputs, gather_data_only)
       spaces_space_types.each do |space_type|
         # get hours of operation for space type once
@@ -457,18 +469,25 @@ module OpenstudioStandards
     # @param space_load_instance [OpenStudio::Model::SpaceLoadInstance] OpenStudio SpaceLoadInstance object
     # @param parametric_inputs [Hash]
     # @param hours_of_operation [Hash] hash, example:
-    #   { profile_index: {
-    #     hoo_start: [float] rule operation start hour,
-    #     hoo_end: [float] rule operation end hour,
-    #     hoo_hours: [float] rule operation duration hours,
-    #     days_used: [Array] annual day indices
+    #   {
+    #     profile_index: {
+    #       hoo_start: [float] rule operation start hour,
+    #       hoo_end: [float] rule operation end hour,
+    #       hoo_hours: [float] rule operation duration hours,
+    #       days_used: [Array] annual day indices
     #     }
     #   }
     # @param ramp [Boolean] flag to add intermediate values ramp between input schedule values
     # @param min_ramp_dur_hr [Double] minimum time difference to ramp between
     # @param gather_data_only [Boolean] if true, no changes are made to schedules
     # @param hoo_var_method [String] accepts hours and fractional. Any other value value will result in hoo variables not being applied
-    # @return [Hash] parametric inputs hash of ScheduleRuleset => {floor: schedule floor, ceiling: schedule ceiling, target: load instance, hoo_inputs: hours_of_operation hash}
+    # @return [Hash] parametric inputs hash of ScheduleRuleset, example:
+    #   {
+    #     floor: schedule floor,
+    #     ceiling: schedule ceiling,
+    #     target: load instance,
+    #     hoo_inputs: hours_of_operation hash
+    #   }
     def self.schedule_ruleset_get_parametric_inputs(schedule_ruleset, space_load_instance, parametric_inputs, hours_of_operation,
                                                     ramp: true,
                                                     min_ramp_dur_hr: 2.0,

@@ -107,6 +107,92 @@ module OpenstudioStandards
       return is_res
     end
 
+    # Determines heating status.
+    # If the space's zone has a thermostat with a maximum heating setpoint above 5C (41F), counts as heated.
+    #
+    # @author Andrew Parker, Julien Marrec
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Boolean] returns true if heated, false if not
+    def self.space_heated?(space)
+      # Get the zone this space is inside
+      zone = space.thermalZone
+
+      # Assume unheated if not assigned to a zone
+      if zone.empty?
+        return false
+      end
+
+      # Get the category from the zone
+      htd = OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone.get)
+
+      return htd
+    end
+
+    # Determines cooling status.
+    # If the space's zone has a thermostat with a minimum cooling setpoint above 33C (91F), counts as cooled.
+    #
+    # @author Andrew Parker, Julien Marrec
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Boolean] returns true if cooled, false if not
+    def self.space_cooled?(space)
+      # Get the zone this space is inside
+      zone = space.thermalZone
+
+      # Assume uncooled if not assigned to a zone
+      if zone.empty?
+        return false
+      end
+
+      # Get the category from the zone
+      cld = OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone.get)
+
+      return cld
+    end
+
+    # Determine the design internal load (W) for this space without space multipliers.
+    # This include People, Lights, Electric Equipment, and Gas Equipment.
+    # It assumes 100% of the wattage is converted to heat, and that the design peak schedule value is 1 (100%).
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Double] the design internal load, in W
+    def self.space_get_design_internal_load(space)
+      load_w = 0.0
+
+      # People
+      space.people.each do |people|
+        w_per_person = 125 # Initial assumption
+        act_sch = people.activityLevelSchedule
+        if act_sch.is_initialized
+          if act_sch.get.to_ScheduleRuleset.is_initialized
+            act_sch = act_sch.get.to_ScheduleRuleset.get
+            w_per_person = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(act_sch)['max']
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+          end
+          OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{space.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
+        end
+
+        num_ppl = people.getNumberOfPeople(space.floorArea)
+
+        ppl_w = num_ppl * w_per_person
+
+        load_w += ppl_w
+      end
+
+      # Lights
+      load_w += space.lightingPower
+
+      # Electric Equipment
+      load_w += space.electricEquipmentPower
+
+      # Gas Equipment
+      load_w += space.gasEquipmentPower
+
+      OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "#{space.name} has #{load_w.round}W of design internal loads.")
+
+      return load_w
+    end
+
     # @todo add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
     # @todo ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
     # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
@@ -115,7 +201,7 @@ module OpenstudioStandards
     #
     # Retrieves the default occupancy schedule assigned to the space
     # @author David Goldwasser
-    # @param space [OpenStudio::Model::Space] space object
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
     # @return [Hash]: see example
     # @example: {
     #   schedule: space hours_of_operation schedule,
@@ -290,7 +376,7 @@ module OpenstudioStandards
     # expand hours of operation. When hours of operation do not overlap for two spaces, add logic to remove all but largest gap
     #
     # @author David Goldwasser
-    # @param spaces [Array<OpenStudio::Model::Space>] takes array of spaces
+    # @param spaces [Array<OpenStudio::Model::Space>] An array of OpenStudio Space objects
     # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
     def self.spaces_hours_of_operation(spaces)
       hours_of_operation_array = []

@@ -56,6 +56,91 @@ class TestSpace < Minitest::Test
     assert_equal(true, @space.space_residential?(space2))
   end
 
+  def test_space_heated?
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space1 = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    space1.setThermalZone(thermal_zone)
+    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
+    thermal_zone.setThermostatSetpointDualSetpoint(thermostat)
+    htg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 20.0,
+                                                         name: 'Heating Setpoint Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    clg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 24.0,
+                                                         name: 'Cooling Setpoint Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
+    thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
+    assert_equal(true, @space.space_heated?(space1))
+
+    # test unconditioned (<41F)
+    htg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 4.0,
+                                                         name: 'Unconditioned Heating Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
+    assert_equal(false, @space.space_heated?(space1))
+  end
+
+  def test_space_cooled?
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space1 = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    space1.setThermalZone(thermal_zone)
+    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
+    thermal_zone.setThermostatSetpointDualSetpoint(thermostat)
+    htg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 20.0,
+                                                         name: 'Heating Setpoint Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    clg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 24.0,
+                                                         name: 'Cooling Setpoint Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
+    thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
+    assert_equal(true, @space.space_cooled?(space1))
+
+    # test unconditioned (>91F)
+    clg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 35.0,
+                                                         name: 'Unconditioned Cooling Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
+    assert_equal(false, @space.space_cooled?(space1))
+  end
+
+  def test_space_get_design_internal_load
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space1 = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    assert_equal(0.0, @space.space_get_design_internal_load(space1))
+
+    # create space type and set standards info
+    space_type = OpenStudio::Model::SpaceType.new(model)
+    space_type.setStandardsBuildingType('PrimarySchool')
+    space_type.setStandardsSpaceType('Classroom')
+    space1.setSpaceType(space_type)
+
+    # add loads
+    std = Standard.build('90.1-2013')
+    std.model_add_loads(model)
+    assert_in_delta(708.67, @space.space_get_design_internal_load(space1), 0.1)
+  end
+
   def test_space_hours_of_operation
     model = OpenStudio::Model::Model.new
     model.getYearDescription.setCalendarYear(2018)
@@ -163,7 +248,7 @@ class TestSpace < Minitest::Test
 
     # fractional values
     occ_sch_fracs = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy frac', occupied_percentage_threshold: nil, threshold_calc_method: nil)
-    puts "Fractional Values: #{occ_sch_fracs.scheduleRules.size} Schedule Rules"
+    # puts "Fractional Values: #{occ_sch_fracs.scheduleRules.size} Schedule Rules"
 
     spring_wkdy = occ_sch_fracs.getDaySchedules(OpenStudio::Date.new('2018-Apr-10'),OpenStudio::Date.new('2018-Apr-10')).first
     spring_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wkdy)

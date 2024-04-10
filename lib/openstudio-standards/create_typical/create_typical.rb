@@ -669,8 +669,8 @@ module OpenstudioStandards
 
                 # if the primary system type is PTAC, filter to cooled zones to prevent sizing error if no cooling
                 if sys_type == 'PTAC'
-                  heated_and_cooled_zones = system_zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-                  cooled_only_zones = system_zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
+                  heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                  cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
                   system_zones = heated_and_cooled_zones + cooled_only_zones
                 end
 
@@ -684,8 +684,8 @@ module OpenstudioStandards
                 if !pri_sec_zone_lists['secondary'].empty?
                   system_zones = pri_sec_zone_lists['secondary']
                   if (sec_sys_type == 'PTAC') || (sec_sys_type == 'PSZ-AC')
-                    heated_and_cooled_zones = system_zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-                    cooled_only_zones = system_zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
+                    heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                    cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
                     system_zones = heated_and_cooled_zones + cooled_only_zones
                   end
                   unless standard.model_add_hvac_system(model, sec_sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
