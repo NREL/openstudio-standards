@@ -203,7 +203,8 @@ namespace :data do
 
     schedules_notes_filter = [
       # Regex, template assignment
-      [/ACM/i, '179d-90.1-2007']
+      [/ACM/i, '179d-90.1-2007'],
+      [/179D/i, '179d-90.1-2007']
     ]
     export_spreadsheet_to_json(
       ['OpenStudio_Standards-ashrae_90_1(space_types)'],
