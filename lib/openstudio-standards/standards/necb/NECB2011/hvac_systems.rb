@@ -2282,7 +2282,9 @@ class NECB2011
       end
     end
     sys_name = ''
-    name_parts.each { |part| sys_name += "#{part}|" }
+	# Joins the elements of the 'name_parts' array into a single string with '|' as the separator
+    # and assigns the result to the variable 'sys_name' without the addition of an extra | at the end of the name.
+    sys_name = name_parts.join('|')
 
     # Check if the last part of the system name is an integer.  If it is, then remove the last part from the system name.
     check_int = begin

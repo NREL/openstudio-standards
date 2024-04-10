@@ -1,0 +1,115 @@
+{
+  "VarType": "Vintage",
+  "NECB2011": {
+    "VarType": "TestCase",
+    "Reference": "NECB 2011 p3 5.2.10.1",
+    "case-1": {
+      "Sys_3_PSZ Thermal Zone 3": {
+        "name": "Sys_3_PSZ Thermal Zone 3",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 82.859074457796,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 5": {
+        "name": "Sys_3_PSZ Thermal Zone 5",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 171.505666056816,
+        "has_hrv": true
+      },
+      "Sys_3_PSZ Thermal Zone 1": {
+        "name": "Sys_3_PSZ Thermal Zone 1",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 82.859074457796,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 2": {
+        "name": "Sys_3_PSZ Thermal Zone 2",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 36.085676513796,
+        "has_hrv": false
+      },
+      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 36.085676513796,
+        "has_hrv": false
+      }
+    }
+  },
+  "NECB2015": {
+    "VarType": "TestCase",
+    "Reference": "NECB 2015 p1 5.2.10.1.(1)",
+    "case-1": {
+      "Sys_3_PSZ Thermal Zone 5": {
+        "name": "Sys_3_PSZ Thermal Zone 5",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 171.505666056816,
+        "has_hrv": true
+      },
+      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 36.085676513796,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 1": {
+        "name": "Sys_3_PSZ Thermal Zone 1",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 82.859074457796,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 2": {
+        "name": "Sys_3_PSZ Thermal Zone 2",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 36.085676513796,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 3": {
+        "name": "Sys_3_PSZ Thermal Zone 3",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 82.859074457796,
+        "has_hrv": false
+      }
+    }
+  },
+  "NECB2017": {
+    "VarType": "TestCase",
+    "Reference": "NECB 2017 p2 A-5.2.10.4",
+    "case-1": {
+      "Sys_3_PSZ Thermal Zone 5": {
+        "name": "Sys_3_PSZ Thermal Zone 5",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 171.505666056816,
+        "has_hrv": true
+      },
+      "sys_3|mixed|shr>erv|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none": {
+        "name": "sys_3|mixed|shr>erv|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 36.085676513796,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 2": {
+        "name": "Sys_3_PSZ Thermal Zone 2",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 36.085676513796,
+        "has_hrv": true
+      },
+      "Sys_3_PSZ Thermal Zone 1": {
+        "name": "Sys_3_PSZ Thermal Zone 1",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 82.859074457796,
+        "has_hrv": true
+      },
+      "Sys_3_PSZ Thermal Zone 3": {
+        "name": "Sys_3_PSZ Thermal Zone 3",
+        "multiplier_factor": 35.0,
+        "exhaust_heat_content": 82.859074457796,
+        "has_hrv": true
+      }
+    }
+  },
+  "NECB2020": {
+    "VarType": "",
+    "Reference": "NECB 2020 p1 Table 5.2.10.4."
+  }
+}
