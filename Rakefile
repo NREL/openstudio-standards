@@ -1,6 +1,8 @@
 require 'bundler/gem_tasks'
-require 'json'
 require 'fileutils'
+require 'json'
+require 'pathname'
+
 begin
   Bundler.setup
 rescue Bundler::BundlerError => e
@@ -194,7 +196,10 @@ namespace :data do
     # The spreadsheet OpenStudio_Standards-ashrae_90_1(space_types).xlsx must
     # be downloaded from the 179d_external folder in the data/standards folder
 
-    Dir.mkdir("#{__dir__}/lib/openstudio-standards/standards/ashrae_90_1/179d_ashrae_90_1_2007")
+    # I guess the spreadsheet should be named OpenStudio_Standards-ashrae_90_1-ALL-179d(space_types).xlsx
+    # but rather than fight it, I'll just move things around
+    d = Pathname.new("#{__dir__}/lib/openstudio-standards/standards/ashrae_90_1/179d_ashrae_90_1_2007")
+    FileUtils.mkdir_p(d)
 
     schedules_notes_filter = [
       # Regex, template assignment
@@ -206,6 +211,17 @@ namespace :data do
       skip_templates: ['90.1-2007'],
       schedules_notes_filter: schedules_notes_filter
     )
+
+    proper_dir = Pathname.new("#{__dir__}/lib/openstudio-standards/standards/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007")
+    FileUtils.mkdir_p(proper_dir)
+    d.glob('**/*.json').each do |f|
+      target_f = proper_dir / f.relative_path_from(d)
+      FileUtils.mkdir_p(target_f.parent)
+      FileUtils.mv(f, target_f)
+    end
+    FileUtils.rm_f(d)
+    puts "Moved files to #{proper_dir}"
+    puts proper_dir.glob("**/*.json")
   end
 
 end
