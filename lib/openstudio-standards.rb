@@ -16,8 +16,10 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/geometry/modify'
 
   # Construction Module
+  require_relative 'openstudio-standards/constructions/create'
   require_relative 'openstudio-standards/constructions/information'
   require_relative 'openstudio-standards/constructions/modify'
+  require_relative 'openstudio-standards/constructions/materials/information'
   require_relative 'openstudio-standards/constructions/materials/modify'
 
   # Infiltration Module
@@ -34,6 +36,9 @@ module OpenstudioStandards
 
   # Space Module
   require_relative 'openstudio-standards/space/space'
+
+  # Thermal Zone Module
+  require_relative 'openstudio-standards/thermal_zone/thermal_zone'
 
   # HVAC Module
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
@@ -61,6 +66,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/sql_file/sql_file'
   require_relative 'openstudio-standards/sql_file/unmet_hours'
   require_relative 'openstudio-standards/sql_file/energy_use'
+  require_relative 'openstudio-standards/sql_file/fenestration'
 
   # Weather Module
   require_relative 'openstudio-standards/weather/information'
@@ -249,7 +255,6 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.CoilHeatingGasMultiStage"
   require_relative "#{stds}/Standards.CoilHeatingGas"
   require_relative "#{stds}/Standards.CoilHeatingWaterToAirHeatPumpEquationFit"
-  require_relative "#{stds}/Standards.Construction"
   require_relative "#{stds}/Standards.CoolingTower"
   require_relative "#{stds}/Standards.CoolingTowerSingleSpeed"
   require_relative "#{stds}/Standards.CoolingTowerTwoSpeed"

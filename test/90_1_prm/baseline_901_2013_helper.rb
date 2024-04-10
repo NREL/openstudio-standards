@@ -158,12 +158,8 @@ module Baseline9012013
   # or accreditation standards, whichever is larger.
   # @author Eric Ringold, Ambient Energy
   def check_min_vav_setpoints(model)
-
-    standard = Standard.build('90.1-2013')
-
     min_good = []
     min_bad = []
-
     vent_driven = []
     oa_driven = []
     fixed_min_driven = []
@@ -185,7 +181,7 @@ module Baseline9012013
           end
 
           #get outdoor air rate from DSOA
-          min_oa_flow = standard.thermal_zone_outdoor_airflow_rate(zone)
+          min_oa_flow = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
 
           # larger of fixed 20% fraction and fraction based
           # on minimum OA requirement
@@ -336,8 +332,7 @@ module Baseline9012013
           if size < 65000
             seer = 14.0
             # Per PNNL, convert SEER to COP with fan
-            eer = -0.0182 * seer * seer + 1.1088 * seer
-            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
+            cop = -0.0076 * seer * seer + 0.3796 * seer
           elsif size >= 65000 && size < 135000
             eer = 11.0
             cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
@@ -391,7 +386,7 @@ module Baseline9012013
     # get proposed ventilation from designSpecificationOutdoorAir
     zone_oa = {}
     proposed_model.getThermalZones.sort.each do |zone|
-      oa_rate = standard.thermal_zone_outdoor_airflow_rate(zone)
+      oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
       zone_oa["#{zone.name.get}"] = oa_rate
     end
 
@@ -404,7 +399,7 @@ module Baseline9012013
       if bzone.is_initialized
         bzone = bzone.get
         #puts bzone.name
-        oa_rate = standard.thermal_zone_outdoor_airflow_rate(bzone)
+        oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(bzone)
         # compare baseline and proposed rates
         if (oa_rate - zone_oa[k]).abs <= 0.0001
           #puts "#{bzone.name} MEETS Requirement with Prop OA: #{zone_oa[k]}, Base OA: #{oa_rate}"

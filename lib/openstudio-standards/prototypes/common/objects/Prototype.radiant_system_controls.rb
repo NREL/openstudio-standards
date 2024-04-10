@@ -256,9 +256,9 @@ class Standard
     if use_zone_occupancy_for_control
 
       # get annual occupancy schedule for zone
-      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone,
-                                                                 sch_name: "#{zone.name} Radiant System Occupied Schedule",
-                                                                 occupied_percentage_threshold: occupied_percentage_threshold)
+      occ_schedule_ruleset = OpenstudioStandards::ThermalZone.thermal_zone_get_occupancy_schedule(zone,
+                                                                                                  sch_name: "#{zone.name} Radiant System Occupied Schedule",
+                                                                                                  occupied_percentage_threshold: occupied_percentage_threshold)
     else
 
       occ_schedule_ruleset = model.getScheduleRulesetByName('Whole Building Radiant System Occupied Schedule')
