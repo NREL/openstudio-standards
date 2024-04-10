@@ -187,6 +187,27 @@ namespace :data do
   task 'export:jsons' do
     export_spreadsheet_to_json(spreadsheets_ashrae, dataset_type: 'data_lib')
   end
+
+  desc 'Generate 179D JSONs from OpenStudio_Standards spreadsheets'
+  task 'update:179d' do
+
+    # The spreadsheet OpenStudio_Standards-ashrae_90_1(space_types).xlsx must
+    # be downloaded from the 179d_external folder in the data/standards folder
+
+    Dir.mkdir("#{__dir__}/lib/openstudio-standards/standards/ashrae_90_1/179d_ashrae_90_1_2007")
+
+    schedules_notes_filter = [
+      # Regex, template assignment
+      [/ACM/i, '179d-90.1-2007']
+    ]
+    export_spreadsheet_to_json(
+      ['OpenStudio_Standards-ashrae_90_1(space_types)'],
+      dataset_type: 'os_stds',
+      skip_templates: ['90.1-2007'],
+      schedules_notes_filter: schedules_notes_filter
+    )
+  end
+
 end
 
 # Tasks to export libraries packaged with
