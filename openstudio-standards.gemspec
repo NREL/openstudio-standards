@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'bundler', '~> 2.1'
   else
     spec.add_development_dependency 'parallel_tests', '~> 3.7.0'
-    spec.add_development_dependency 'nokogiri', '~> 1.11'
+    spec.add_development_dependency 'nokogiri', '1.15.6'
     spec.add_development_dependency 'bundler', '~> 2.1.4'
   end
   spec.add_development_dependency 'rake', '~> 12.3.1'
