@@ -97,9 +97,9 @@ class ASHRAE9012010 < ASHRAE901
   # @param areas [Hash] a hash of daylighted areas
   # @param sorted_windows [Hash] a hash of windows, sorted by priority
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
-  # @param req_top_ctrl [Bool] if toplighting controls are required
-  # @param req_pri_ctrl [Bool] if primary sidelighting controls are required
-  # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
+  # @param req_top_ctrl [Boolean] if toplighting controls are required
+  # @param req_pri_ctrl [Boolean] if primary sidelighting controls are required
+  # @param req_sec_ctrl [Boolean] if secondary sidelighting controls are required
   # @return [Array] array of 4 items
   #   [sensor 1 fraction, sensor 2 fraction, sensor 1 window, sensor 2 window]
   def space_daylighting_fractions_and_windows(space,
@@ -161,7 +161,7 @@ class ASHRAE9012010 < ASHRAE901
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.
-  def space_infiltration_rate_75_pa(space)
+  def space_infiltration_rate_75_pa(space = nil)
     basic_infil_rate_cfm_per_ft2 = 1.0
     return basic_infil_rate_cfm_per_ft2
   end

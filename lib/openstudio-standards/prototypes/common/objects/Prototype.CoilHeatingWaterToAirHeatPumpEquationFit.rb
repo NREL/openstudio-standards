@@ -56,16 +56,67 @@ class Standard
         htg_coil.setHeatingPowerConsumptionCoefficient4(-0.177653510577989)
         htg_coil.setHeatingPowerConsumptionCoefficient5(-0.103079864171839)
       else
-        htg_coil.heatingCapacityCurve.setCoefficient1Constant(0.237847462869254)
-        htg_coil.heatingCapacityCurve.setCoefficient2w(-3.35823796081626)
-        htg_coil.heatingCapacityCurve.setCoefficient3x(3.80640467406376)
-        htg_coil.heatingCapacityCurve.setCoefficient4y(0.179200417311554)
-        htg_coil.heatingCapacityCurve.setCoefficient5z(0.12860719846082)
-        htg_coil.heatingPowerConsumptionCurve.setCoefficient1Constant(-3.79175529243238)
-        htg_coil.heatingPowerConsumptionCurve.setCoefficient2w(3.38799239505527)
-        htg_coil.heatingPowerConsumptionCurve.setCoefficient3x(1.5022612076303)
-        htg_coil.heatingPowerConsumptionCurve.setCoefficient4y(-0.177653510577989)
-        htg_coil.heatingPowerConsumptionCurve.setCoefficient5z(-0.103079864171839)
+        if model.getCurveByName('Water to Air Heat Pump Heating Capacity Curve').is_initialized
+          heating_capacity_curve = model.getCurveByName('Water to Air Heat Pump Heating Capacity Curve').get
+          heating_capacity_curve = heating_capacity_curve.to_CurveQuadLinear.get
+        else
+          heating_capacity_curve = OpenStudio::Model::CurveQuadLinear.new(model)
+          heating_capacity_curve.setName('Water to Air Heat Pump Heating Capacity Curve')
+          heating_capacity_curve.setCoefficient1Constant(0.237847462869254)
+          heating_capacity_curve.setCoefficient2w(-3.35823796081626)
+          heating_capacity_curve.setCoefficient3x(3.80640467406376)
+          heating_capacity_curve.setCoefficient4y(0.179200417311554)
+          heating_capacity_curve.setCoefficient5z(0.12860719846082)
+          heating_capacity_curve.setMinimumValueofw(-100)
+          heating_capacity_curve.setMaximumValueofw(100)
+          heating_capacity_curve.setMinimumValueofx(-100)
+          heating_capacity_curve.setMaximumValueofx(100)
+          heating_capacity_curve.setMinimumValueofy(0)
+          heating_capacity_curve.setMaximumValueofy(100)
+          heating_capacity_curve.setMinimumValueofz(0)
+          heating_capacity_curve.setMaximumValueofz(100)
+        end
+        htg_coil.setHeatingCapacityCurve(heating_capacity_curve)
+
+        if model.getCurveByName('Water to Air Heat Pump Heating Power Consumption Curve').is_initialized
+          heating_power_consumption_curve = model.getCurveByName('Water to Air Heat Pump Heating Power Consumption Curve').get
+          heating_power_consumption_curve = heating_power_consumption_curve.to_CurveQuadLinear.get
+        else
+          heating_power_consumption_curve = OpenStudio::Model::CurveQuadLinear.new(model)
+          heating_power_consumption_curve.setName('Water to Air Heat Pump Heating Power Consumption Curve')
+          heating_power_consumption_curve.setCoefficient1Constant(-3.79175529243238)
+          heating_power_consumption_curve.setCoefficient2w(3.38799239505527)
+          heating_power_consumption_curve.setCoefficient3x(1.5022612076303)
+          heating_power_consumption_curve.setCoefficient4y(-0.177653510577989)
+          heating_power_consumption_curve.setCoefficient5z(-0.103079864171839)
+          heating_power_consumption_curve.setMinimumValueofw(-100)
+          heating_power_consumption_curve.setMaximumValueofw(100)
+          heating_power_consumption_curve.setMinimumValueofx(-100)
+          heating_power_consumption_curve.setMaximumValueofx(100)
+          heating_power_consumption_curve.setMinimumValueofy(0)
+          heating_power_consumption_curve.setMaximumValueofy(100)
+          heating_power_consumption_curve.setMinimumValueofz(0)
+          heating_power_consumption_curve.setMaximumValueofz(100)
+        end
+        htg_coil.setHeatingPowerConsumptionCurve(heating_power_consumption_curve)
+      end
+
+      # part load fraction correlation curve added as a required curve in OS v3.7.0
+      if model.version > OpenStudio::VersionString.new('3.6.1')
+        if model.getCurveByName('Water to Air Heat Pump Part Load Fraction Correlation Curve').is_initialized
+          part_load_correlation_curve = model.getCurveByName('Water to Air Heat Pump Part Load Fraction Correlation Curve').get
+          part_load_correlation_curve = part_load_correlation_curve.to_CurveLinear.get
+        else
+          part_load_correlation_curve = OpenStudio::Model::CurveLinear.new(model)
+          part_load_correlation_curve.setName('Water to Air Heat Pump Part Load Fraction Correlation Curve')
+          part_load_correlation_curve.setCoefficient1Constant(0.833746458696111)
+          part_load_correlation_curve.setCoefficient2x(0.166253541303889)
+          part_load_correlation_curve.setMinimumValueofx(0)
+          part_load_correlation_curve.setMaximumValueofx(1)
+          part_load_correlation_curve.setMinimumCurveOutput(0)
+          part_load_correlation_curve.setMaximumCurveOutput(1)
+        end
+        htg_coil.setPartLoadFractionCorrelationCurve(part_load_correlation_curve)
       end
     end
 

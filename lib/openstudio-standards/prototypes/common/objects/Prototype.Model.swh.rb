@@ -4,7 +4,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [String] building type
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_swh(model, building_type, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
 
@@ -544,13 +544,13 @@ class Standard
       water_use_equip_sch = water_use_equip_sch.get
       if water_use_equip_sch.to_ScheduleRuleset.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get
-        max_sch_value = schedule_ruleset_annual_min_max_value(water_use_equip_sch)['max']
+        max_sch_value = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(water_use_equip_sch)['max']
       elsif water_use_equip_sch.to_ScheduleConstant.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleConstant.get
-        max_sch_value = schedule_constant_annual_min_max_value(water_use_equip_sch)['max']
+        max_sch_value = OpenstudioStandards::Schedules.schedule_constant_get_min_max(water_use_equip_sch)['max']
       elsif water_use_equip_sch.to_ScheduleCompact.is_initialized
         water_use_equip_sch = water_use_equip_sch.to_ScheduleCompact.get
-        max_sch_value = schedule_compact_annual_min_max_value(water_use_equip_sch)['max']
+        max_sch_value = OpenstudioStandards::Schedules.schedule_compact_get_min_max(water_use_equip_sch)['max']
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The peak flow rate fraction for #{water_use_equip_sch.name} could not be determined, assuming 1 for water heater sizing purposes.")
         max_sch_value = 1.0

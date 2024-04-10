@@ -1,6 +1,10 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+#require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
+# *** This test needs a significant re-write to make use of standard naming and paths ***
 
 class NECB_PVground_Tests < Minitest::Test
 
@@ -39,8 +43,8 @@ class NECB_PVground_Tests < Minitest::Test
     # 'SmallHotel',
     # 'Warehouse'
     ]
-    @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
-    @primary_heating_fuels = ['DefaultFuel']
+    @epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
+    @primary_heating_fuels = ['NaturalGas']
 
     @pv_ground_types = ['add_pv_ground']
     pv_ground_total_area_pv_panels_m2 = 'NECB_Default'

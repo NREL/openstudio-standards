@@ -5,8 +5,52 @@ require_relative 'openstudio-standards/version'
 module OpenstudioStandards
   require 'json' # Used to load standards JSON files
 
-  # HVAC sizing
-  require_relative 'openstudio-standards/hvac_sizing/Siz.Model'
+  # Load Modules
+
+  # Geometry Module
+  require_relative 'openstudio-standards/geometry/create'
+  require_relative 'openstudio-standards/geometry/create_bar'
+  require_relative 'openstudio-standards/geometry/modify'
+  require_relative 'openstudio-standards/geometry/information'
+
+  # Construction Module
+  require_relative 'openstudio-standards/constructions/information'
+  require_relative 'openstudio-standards/constructions/modify'
+  require_relative 'openstudio-standards/constructions/materials/modify'
+
+  # Daylighting Module
+  require_relative 'openstudio-standards/daylighting/space'
+
+  # Schedules Module
+  require_relative 'openstudio-standards/schedules/create'
+  require_relative 'openstudio-standards/schedules/modify'
+  require_relative 'openstudio-standards/schedules/information'
+  require_relative 'openstudio-standards/schedules/parametric'
+
+  # HVAC Module
+  require_relative 'openstudio-standards/hvac/cbecs_hvac'
+
+  # CreateTypical Module
+  require_relative 'openstudio-standards/create_typical/enumerations'
+  require_relative 'openstudio-standards/create_typical/space_type_ratios'
+  require_relative 'openstudio-standards/create_typical/create_typical'
+  require_relative 'openstudio-standards/create_typical/space_type_blend'
+
+  # QAQC Module
+  require_relative 'openstudio-standards/qaqc/calibration'
+  require_relative 'openstudio-standards/qaqc/envelope'
+  require_relative 'openstudio-standards/qaqc/eui'
+  require_relative 'openstudio-standards/qaqc/hvac'
+  require_relative 'openstudio-standards/qaqc/internal_loads'
+  require_relative 'openstudio-standards/qaqc/schedules'
+  require_relative 'openstudio-standards/qaqc/service_water_heating'
+  require_relative 'openstudio-standards/qaqc/weather_files'
+  require_relative 'openstudio-standards/qaqc/zone_conditions'
+  require_relative 'openstudio-standards/qaqc/create_results'
+  require_relative 'openstudio-standards/qaqc/reporting'
+
+  # Weather Module
+  require_relative 'openstudio-standards/weather/information'
 
   # Weather data
   require_relative 'openstudio-standards/weather/Weather.Model'
@@ -22,6 +66,10 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/simulation'
   require_relative 'openstudio-standards/utilities/hash'
   require_relative 'openstudio-standards/utilities/sqlfile'
+  require_relative 'openstudio-standards/utilities/schedule_translator'
+  require_relative 'openstudio-standards/utilities/array'
+  require_relative 'openstudio-standards/utilities/object_info'
+  require_relative 'openstudio-standards/utilities/assertion'
 
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'
@@ -30,6 +78,7 @@ module OpenstudioStandards
   # Standards classes
   require_relative "#{stds}/standard"
   # NECB2011 Code
+  require_relative "#{stds}/necb/NECB2011/system_fuels"
   require_relative "#{stds}/necb/NECB2011/necb_2011"
   require_relative "#{stds}/necb/NECB2011/building_envelope"
   require_relative "#{stds}/necb/NECB2011/lighting"
@@ -73,7 +122,6 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/NECB2015/qaqc/necb_2015_qaqc.rb"
   require_relative "#{stds}/necb/common/btap_data.rb"
   require_relative "#{stds}/necb/common/btap_datapoint.rb"
-
 
   # ECM development
   require_relative "#{stds}/necb/ECMS/ecms.rb"
@@ -172,6 +220,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTower"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Fan"
 
   # Model Objects
   require_relative "#{stds}/Standards.AirLoopHVAC"
@@ -210,8 +259,6 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.Pump"
   require_relative "#{stds}/Standards.PumpConstantSpeed"
   require_relative "#{stds}/Standards.PumpVariableSpeed"
-  require_relative "#{stds}/Standards.ScheduleCompact"
-  require_relative "#{stds}/Standards.ScheduleConstant"
   require_relative "#{stds}/Standards.ScheduleRuleset"
   require_relative "#{stds}/Standards.Space"
   require_relative "#{stds}/Standards.SpaceType"
@@ -258,6 +305,38 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.WaterHeaterMixed"
+  # 90.1-PRM Common
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Model"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Space"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirTerminalSingleDuctParallelPIUReheat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ZoneHVACComponent"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlantLoop"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanConstantVolume"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanOnOff"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.FanZoneExhaust"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilDX"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilCoolingDXSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilCoolingDXTwoSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilHeatingDXSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.CoilHeatingGas"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.BoilerHotWater"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ChillerElectricEIR"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.HeatExchangerSensLat"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.PlanarSurface"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.ThermalZone"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.SpaceType"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Surface"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.DesignSpecificationOutdoorAir"
+  require_relative "#{stds}/ashrae_90_1_prm/userdata_csv/userdata_enums.rb"
+  require_relative "#{stds}/ashrae_90_1_prm/userdata_csv/ashrae_90_1_prm.UserData"
+
+  # 90.1-PRM-2019
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.Model"
   # 90.1-2016
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirTerminalSingleDuctVAVReheat"
@@ -319,6 +398,26 @@ module OpenstudioStandards
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
   require_relative "#{stds}/deer/deer.Space"
   require_relative "#{stds}/deer/deer.PlanarSurface"
+  # DEER 2003
+  require_relative "#{stds}/deer/deer_2003/deer_2003.ThermalZone"
+  # DEER 2007
+  require_relative "#{stds}/deer/deer_2007/deer_2007.ThermalZone"
+  # DEER 2011
+  require_relative "#{stds}/deer/deer_2011/deer_2011.ThermalZone"
+  # DEER 2014
+  require_relative "#{stds}/deer/deer_2014/deer_2014.Space"
+  require_relative "#{stds}/deer/deer_2014/deer_2014.ThermalZone"
+  # DEER 2015
+  require_relative "#{stds}/deer/deer_2015/deer_2015.Space"
+  require_relative "#{stds}/deer/deer_2015/deer_2015.ThermalZone"
+  # DEER 2017
+  require_relative "#{stds}/deer/deer_2017/deer_2017.Space"
+  require_relative "#{stds}/deer/deer_2017/deer_2017.ThermalZone"
+  # DEER 2020
+  require_relative "#{stds}/deer/deer_2020/deer_2020.AirLoopHVAC"
+  require_relative "#{stds}/deer/deer_2020/deer_2020.FanVariableVolume"
+  require_relative "#{stds}/deer/deer_2020/deer_2020.Space"
+  require_relative "#{stds}/deer/deer_2020/deer_2020.ThermalZone"
   # CBES Common
   require_relative "#{stds}/cbes/cbes.AirLoopHVAC"
   require_relative "#{stds}/cbes/cbes.Model"
@@ -462,7 +561,6 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanVariableVolume"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.HeatExchangerAirToAirSensibleAndLatent"
-  require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.hvac_systems"
   # ZE AEDG Multifamily

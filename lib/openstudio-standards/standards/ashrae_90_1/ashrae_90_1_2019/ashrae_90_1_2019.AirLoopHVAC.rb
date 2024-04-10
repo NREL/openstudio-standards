@@ -1,6 +1,38 @@
 class ASHRAE9012019 < ASHRAE901
   # @!group AirLoopHVAC
 
+  # Determine the prototypical economizer type for the model.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
+  # @return [String] the economizer type.  Possible values are:
+  #   'NoEconomizer'
+  #   'FixedDryBulb'
+  #   'FixedEnthalpy'
+  #   'DifferentialDryBulb'
+  #   'DifferentialEnthalpy'
+  #   'FixedDewPointAndDryBulb'
+  #   'ElectronicEnthalpy'
+  #   'DifferentialDryBulbAndEnthalpy'
+  def model_economizer_type(model, climate_zone)
+    economizer_type = case climate_zone
+                      when 'ASHRAE 169-2006-0A',
+                          'ASHRAE 169-2006-1A',
+                          'ASHRAE 169-2006-2A',
+                          'ASHRAE 169-2006-3A',
+                          'ASHRAE 169-2006-4A',
+                          'ASHRAE 169-2013-0A',
+                          'ASHRAE 169-2013-1A',
+                          'ASHRAE 169-2013-2A',
+                          'ASHRAE 169-2013-3A',
+                          'ASHRAE 169-2013-4A'
+                        'DifferentialEnthalpy'
+                      else
+                        'DifferentialDryBulb'
+                      end
+    return economizer_type
+  end
+
   # Determine the limits for the type of economizer present on the AirLoopHVAC, if any.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
@@ -50,7 +82,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
     return true
   end
@@ -60,7 +92,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] Returns true if allowable, if the system has no economizer or no OA system.
+  # @return [Boolean] Returns true if allowable, if the system has no economizer or no OA system.
   #   Returns false if the economizer type is not allowable.
   def air_loop_hvac_economizer_type_allowable?(air_loop_hvac, climate_zone)
     # EnergyPlus economizer types
@@ -148,7 +180,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   # @todo Add exception logic for systems with AIA healthcare ventilation requirements dual duct systems
   def air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
     multizone_opt_required = false
@@ -295,7 +327,7 @@ class ASHRAE9012019 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
     is_sat_reset_required = false
 
@@ -416,7 +448,7 @@ class ASHRAE9012019 < ASHRAE901
       ann_op_hrs = 8760.0
     elsif avail_sch.to_ScheduleRuleset.is_initialized
       avail_sch = avail_sch.to_ScheduleRuleset.get
-      ann_op_hrs = schedule_ruleset_annual_hours_above_value(avail_sch, 0.0)
+      ann_op_hrs = OpenstudioStandards::Schedules.schedule_ruleset_get_hours_above_value(avail_sch, 0.0)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "For #{air_loop_hvac.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
     end
@@ -428,12 +460,12 @@ class ASHRAE9012019 < ASHRAE901
         'climate_zone' => climate_zone,
         'under_8000_hours' => true,
         'nontransient_dwelling' => false,
-        'enthalpy_recovery_ratio_design_conditions' => "Cooling"
+        'enthalpy_recovery_ratio_design_conditions' => 'Cooling'
       }
       energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
       if energy_recovery_limits.nil?
         # Repeat the search for heating
-        search_criteria['enthalpy_recovery_ratio_design_conditions'] = "Heating"
+        search_criteria['enthalpy_recovery_ratio_design_conditions'] = 'Heating'
         energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
         if energy_recovery_limits.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
@@ -464,7 +496,7 @@ class ASHRAE9012019 < ASHRAE901
       # Check if air loop serves a non-transient dwelling unit,
       # currently non-transient dwelling units are residential
       # spaces in the apartment prototypes
-      building_data = model_get_building_climate_zone_and_building_type(air_loop_hvac.model)
+      building_data = model_get_building_properties(air_loop_hvac.model)
       building_type = building_data['building_type']
       nontrans_dwel = false
       if building_type == 'MidriseApartment' || building_type == 'HighriseApartment'
@@ -481,12 +513,12 @@ class ASHRAE9012019 < ASHRAE901
         'climate_zone' => climate_zone,
         'under_8000_hours' => false,
         'nontransient_dwelling' => nontrans_dwel,
-        'enthalpy_recovery_ratio_design_conditions' => "Cooling"
+        'enthalpy_recovery_ratio_design_conditions' => 'Cooling'
       }
       energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
       if energy_recovery_limits.nil?
         # Repeat the search for heating
-        search_criteria['enthalpy_recovery_ratio_design_conditions'] = "Heating"
+        search_criteria['enthalpy_recovery_ratio_design_conditions'] = 'Heating'
         energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
         if energy_recovery_limits.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
@@ -525,7 +557,7 @@ class ASHRAE9012019 < ASHRAE901
   # system outdoor air flow following ASHRAE Std. 62.1-2019
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def air_loop_hvac_adjust_minimum_vav_damper_positions(air_loop_hvac)
     # Do not apply the adjustment to some of the system in
@@ -553,7 +585,11 @@ class ASHRAE9012019 < ASHRAE901
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: v_ou = #{v_ou_cfm.round} cfm.")
 
     # Retrieve the sum of the zone minimum primary airflow
-    vpz_min_sum = air_loop_hvac.autosizeSumMinimumHeatingAirFlowRates
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', 'Required AirLoopHVAC method .autosizedSumMinimumHeatingAirFlowRates is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+    else
+      vpz_min_sum = air_loop_hvac.autosizedSumMinimumHeatingAirFlowRates
+    end
 
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
@@ -569,6 +605,12 @@ class ASHRAE9012019 < ASHRAE901
       # max of heating and cooling
       # design air flow rates
       v_pz = 0.0
+
+      # error if zone autosized methods are not available
+      if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.6.0')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', 'Required ThermalZone methods .autosizedCoolingDesignAirFlowRate and .autosizedHeatingDesignAirFlowRate are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+      end
+
       clg_dsn_flow = zone.autosizedCoolingDesignAirFlowRate
       if clg_dsn_flow.is_initialized
         clg_dsn_flow = clg_dsn_flow.get
@@ -576,7 +618,7 @@ class ASHRAE9012019 < ASHRAE901
           v_pz = clg_dsn_flow
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} clg_dsn_flow could not be found.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} clg_dsn_flow could not be found.")
       end
       htg_dsn_flow = zone.autosizedHeatingDesignAirFlowRate
       if htg_dsn_flow.is_initialized
@@ -585,7 +627,7 @@ class ASHRAE9012019 < ASHRAE901
           v_pz = htg_dsn_flow
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} htg_dsn_flow could not be found.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} htg_dsn_flow could not be found.")
       end
 
       # Zone ventilation efficiency calculation is computed
@@ -624,6 +666,7 @@ class ASHRAE9012019 < ASHRAE901
       max_oa_frac_sch_type = 'Schedule:Constant'
       oa_ctrl.setMaximumFractionofOutdoorAirSchedule(max_oa_frac_sch)
     else
+      max_oa_frac_sch = max_oa_frac_sch.get
       if max_oa_frac_sch.to_ScheduleRuleset.is_initialized
         max_oa_frac_sch = max_oa_frac_sch.to_ScheduleRuleset.get
         max_oa_frac_sch_type = 'Schedule:Year'
@@ -640,46 +683,49 @@ class ASHRAE9012019 < ASHRAE901
     # Controller:MechanicalVentilation object
     # to the design v_ot using the maximum OA
     # fraction schedule
+    # In newer EnergyPlus versions, this is handled by Standard62.1VentilationRateProcedureWithLimit
+    # in the Controller:MechanicalVentilation object
+    if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.3.0')
+      # Add EMS sensors
+      # OA mass flow calculated by the Controller:MechanicalVentilation
+      air_loop_hvac_name_ems = "EMS_#{air_loop_hvac.name.to_s.gsub(' ', '_')}"
+      oa_vrp_mass_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Air System Outdoor Air Mechanical Ventilation Requested Mass Flow Rate')
+      oa_vrp_mass_flow.setKeyName(air_loop_hvac.name.to_s)
+      oa_vrp_mass_flow.setName("#{air_loop_hvac_name_ems}_OA_VRP")
+      # Actual sensed OA mass flow
+      oa_mass_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Air System Outdoor Air Mass Flow Rate')
+      oa_mass_flow.setKeyName(air_loop_hvac.name.to_s)
+      oa_mass_flow.setName("#{air_loop_hvac_name_ems}_OA")
+      # Actual sensed volumetric OA flow
+      oa_vol_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'System Node Standard Density Volume Flow Rate')
+      oa_vol_flow.setKeyName("#{air_loop_hvac.name} Mixed Air Node")
+      oa_vol_flow.setName("#{air_loop_hvac_name_ems}_SUPPLY_FLOW")
 
-    # Add EMS sensors
-    # OA mass flow calculated by the Controller:MechanicalVentilation
-    air_loop_hvac_name_ems = "EMS_#{air_loop_hvac.name.to_s.gsub(' ', '_')}"
-    oa_vrp_mass_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Air System Outdoor Air Mechanical Ventilation Requested Mass Flow Rate')
-    oa_vrp_mass_flow.setKeyName(air_loop_hvac.name.to_s)
-    oa_vrp_mass_flow.setName("#{air_loop_hvac_name_ems}_OA_VRP")
-    # Actual sensed OA mass flow
-    oa_mass_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Air System Outdoor Air Mass Flow Rate')
-    oa_mass_flow.setKeyName(air_loop_hvac.name.to_s)
-    oa_mass_flow.setName("#{air_loop_hvac_name_ems}_OA")
-    # Actual sensed volumetric OA flow
-    oa_vol_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'System Node Standard Density Volume Flow Rate')
-    oa_vol_flow.setKeyName("#{air_loop_hvac.name} Mixed Air Node")
-    oa_vol_flow.setName("#{air_loop_hvac_name_ems}_SUPPLY_FLOW")
+      # Add EMS actuator
+      max_oa_fraction = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_frac_sch, max_oa_frac_sch_type, 'Schedule Value')
+      max_oa_fraction.setName("#{air_loop_hvac_name_ems}_MAX_OA_FRAC")
 
-    # Add EMS actuator
-    max_oa_fraction = OpenStudio::Model::EnergyManagementSystemActuator.new(max_oa_frac_sch, max_oa_frac_sch_type, 'Schedule Value')
-    max_oa_fraction.setName("#{air_loop_hvac_name_ems}_MAX_OA_FRAC")
+      # Add EMS program
+      max_oa_ems_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
+      max_oa_ems_prog.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
+      max_oa_ems_prog_body = <<-EMS
+      IF #{air_loop_hvac_name_ems}_OA > #{air_loop_hvac_name_ems}_OA_VRP,
+      SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = NULL,
+      ELSE,
+      IF #{air_loop_hvac_name_ems}_SUPPLY_FLOW > 0,
+      SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = #{v_ot} / #{air_loop_hvac_name_ems}_SUPPLY_FLOW,
+      ELSE,
+      SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = NULL,
+      ENDIF,
+      ENDIF
+      EMS
+      max_oa_ems_prog.setBody(max_oa_ems_prog_body)
 
-    # Add EMS program
-    max_oa_ems_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(air_loop_hvac.model)
-    max_oa_ems_prog.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
-    max_oa_ems_prog_body = <<-EMS
-    IF #{air_loop_hvac_name_ems}_OA > #{air_loop_hvac_name_ems}_OA_VRP,
-    SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = NULL,
-    ELSE,
-    IF #{air_loop_hvac_name_ems}_SUPPLY_FLOW > 0,
-    SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = #{v_ot} / #{air_loop_hvac_name_ems}_SUPPLY_FLOW,
-    ELSE,
-    SET #{air_loop_hvac_name_ems}_MAX_OA_FRAC = NULL,
-    ENDIF,
-    ENDIF
-    EMS
-    max_oa_ems_prog.setBody(max_oa_ems_prog_body)
-
-    max_oa_ems_prog_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
-    max_oa_ems_prog_manager.setName("SET_#{air_loop_hvac.name.to_s.gsub(' ', '_')}_MAX_OA_FRAC")
-    max_oa_ems_prog_manager.setCallingPoint('InsideHVACSystemIterationLoop')
-    max_oa_ems_prog_manager.addProgram(max_oa_ems_prog)
+      max_oa_ems_prog_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(air_loop_hvac.model)
+      max_oa_ems_prog_manager.setName("SET_#{air_loop_hvac.name.to_s.gsub(' ', '_')}_MAX_OA_FRAC")
+      max_oa_ems_prog_manager.setCallingPoint('InsideHVACSystemIterationLoop')
+      max_oa_ems_prog_manager.addProgram(max_oa_ems_prog)
+    end
 
     # Hard-size the sizing:system
     # object with the calculated min OA flow rate
@@ -696,8 +742,8 @@ class ASHRAE9012019 < ASHRAE901
   # by scheduling air terminal dampers (so load can
   # still be met) and cycling unitary system fans
   #
-  # @param air_loop_hvac [OpenStudio::model::AirLoopHVAC] OpenStudio AirLoopHVAC object
-  # @param standby_mode_space [Array] List of all spaces required to have standby mode controls
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] OpenStudio AirLoopHVAC object
+  # @param standby_mode_spaces [Array<OpenStudio::Model::Space>] List of all spaces required to have standby mode controls
   # @return [Boolean] true if sucessful, false otherwise
   def air_loop_hvac_standby_mode_occupancy_control(air_loop_hvac, standby_mode_spaces)
     if air_loop_hvac_include_unitary_system?(air_loop_hvac)
@@ -737,7 +783,7 @@ class ASHRAE9012019 < ASHRAE901
                 air_terminal.setConstantMinimumAirFlowFraction(0)
               end
               air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
-              air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(model_add_constant_schedule_ruleset(air_loop_hvac.model, mdp_org, name = "#{air_terminal.name} - MDP", sch_type_limit: 'Fraction'), '12' => 0.1))
+              air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(OpenstudioStandards::Schedules.create_constant_schedule_ruleset(air_loop_hvac.model, mdp_org, name: "#{air_terminal.name} - MDP", schedule_type_limit: 'Fraction'), '12' => 0.1))
             elsif air_terminal.zoneMinimumAirFlowInputMethod == 'Scheduled'
               air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(air_terminal.minimumAirFlowFractionSchedule.get, '12' => 0.1))
             else

@@ -115,7 +115,7 @@ class StandardsData
   # desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
-  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param table_name [String] table name
   # @param search_criteria [Hash] hash of search criteria
   # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
   #   the objects will only be returned if the specified capacity is between
@@ -125,7 +125,7 @@ class StandardsData
   #   rules = model_find_objects(self, standards_data['schedules'], {'name'=>schedule_name})
   #   if rules.size == 0
   #     OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
-  #     return false #TODO change to return empty optional schedule:ruleset?
+  #     return false # @todo change to return empty optional schedule:ruleset?
   #   end
   def model_find_objects(table_name: , search_criteria: {}, capacity:nil)
     #    matching_objects = hash_of_objects.clone
@@ -247,7 +247,7 @@ class StandardsData
   # the minimum_capacity and maximum_capacity values.
   #
   #
-  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param table_name [String] table name
   # @param search_criteria [Hash] hash of search criteria
   # @param capacity [Double] capacity of the object in question.  If capacity is supplied,
   #   the objects will only be returned if the specified capacity is between

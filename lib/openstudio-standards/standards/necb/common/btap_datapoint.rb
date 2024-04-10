@@ -9,6 +9,7 @@ require 'git-revision'
 class BTAPDatapoint
   def initialize(input_folder: nil,
                  output_folder: nil,
+                 weather_folder: nil,
                  input_folder_cache: File.join(__dir__, 'input_cache'))
     @failed = false
 
@@ -19,7 +20,10 @@ class BTAPDatapoint
     if output_folder.nil?
       output_folder = File.join(__dir__, 'output')
     end
-
+    # Create an empty weather folder if one doesn't exist.  This is to avoid issues later.
+    if weather_folder.nil?
+      weather_folder = File.join(__dir__, 'weather')
+    end
     puts("INPUT FOLDER:#{input_folder}")
     puts("OUTPUT FOLDER:#{output_folder}")
 
@@ -76,6 +80,11 @@ class BTAPDatapoint
     @options[:btap_costing_git_revision] = Git::Revision.commit_short
     @options[:os_git_revision] = OpenstudioStandards.git_revision
 
+    # Get users' inputs for the parameters needed for the calculation af net present value
+    @npv_start_year = @options[:npv_start_year]
+    @npv_end_year = @options[:npv_end_year]
+    @npv_discount_rate = @options[:npv_discount_rate]
+
     # Save configuration to temp folder.
     File.open(File.join(@dp_temp_folder, 'run_options.yml'), 'w') { |file| file.write(@options.to_yaml) }
     begin
@@ -110,8 +119,11 @@ class BTAPDatapoint
         # Otherwise modify osm input with options.
         @standard.model_apply_standard(model: model,
                                        epw_file: @options[:epw_file],
+                                       custom_weather_folder: weather_folder,
                                        sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
                                        primary_heating_fuel: @options[:primary_heating_fuel],
+                                       necb_reference_hp: @options[:necb_reference_hp],
+                                       necb_reference_hp_supp_fuel: @options[:necb_reference_hp_supp_fuel],
                                        dcv_type: @options[:dcv_type], # Four options: @options[: (1) 'NECB_Default', (2) 'No DCV', (3) 'Occupancy-based DCV' , (4) 'CO2-based DCV'
                                        lights_type: @options[:lights_type], # Two options: @options[: (1) 'NECB_Default', (2) 'LED'
                                        lights_scale: @options[:lights_scale],
@@ -162,7 +174,10 @@ class BTAPDatapoint
                                        output_meters: @options[:output_meters],
                                        airloop_economizer_type: @options[:airloop_economizer_type],
                                        shw_scale: @options[:shw_scale],
-                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option])
+                                       baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
+                                       tbd_option: @options[:tbd_option],
+                                       necb_hdd: @options[:necb_hdd]
+                                       )
       end
 
       # Save model to to disk.
@@ -217,7 +232,7 @@ class BTAPDatapoint
         model.setSqlFile(sql)
 
         @cost_result = nil
-        if @options[:enable_costing] == true
+        if defined?(BTAPCosting)
           # Perform costing
           costing = BTAPCosting.new
           costing.load_database
@@ -232,7 +247,10 @@ class BTAPDatapoint
         @btap_data = BTAPData.new(model: model,
                                   runner: nil,
                                   cost_result: @cost_result,
-                                  qaqc: @qaqc).btap_data
+                                  qaqc: @qaqc,
+                                  npv_start_year: @npv_start_year,
+                                  npv_end_year: @npv_end_year,
+                                  npv_discount_rate: @npv_discount_rate).btap_data
 
         # Write Files
         File.open(File.join(@dp_temp_folder, 'btap_data.json'), 'w') { |f| f.write(JSON.pretty_generate(@btap_data.sort.to_h, allow_nan: true)) }
@@ -380,7 +398,16 @@ class BTAPDatapoint
         FROM ReportDataDictionary
         WHERE ReportDataDictionaryIndex == #{rdd_index}
       "
-      key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+
+      # In some cases KeyValue has a value and sometimes it does not.  In some cases KeyValue is null.  If the command
+      # below is run and KeyValue is null then the command fails and returns an error.  The fix below assumes that if
+      # the command below fails it is because KeyValue is null.  In that case the "key_value" variable is set to a
+      # blank.
+      begin
+        key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+      rescue StandardError => bang
+        key_value = ""
+      end
 
       #Get Units
       query = "

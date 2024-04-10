@@ -8,9 +8,10 @@ class NECB2020
   # modifications.  For others, it will not.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
 
   def apply_standard_construction_properties(model:,
+                                             necb_hdd: true,
                                              runner: nil,
                                              # ext surfaces
                                              ext_wall_cond: nil,
@@ -56,17 +57,17 @@ class NECB2020
         return false
       end
 
-      # hdd required to get correct conductance values from the json file.
-      hdd = get_necb_hdd18(model)
+      # hdd required to get correct conductance values from the json file. 
+      hdd = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
 	  
       # Lambdas are preferred over methods in methods for small utility methods.
       correct_cond = lambda do |conductivity, surface_type|
-        return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity == 'NECB_Default' ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
+        return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity == "NECB_Default" ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
       end
 
       # Converts trans and vis to nil if requesting default.. or casts the string to a float.
       correct_vis_trans = lambda do |value|
-        return value.nil? || value.to_f <= 0.0 || value == 'NECB_Default' ? nil : value.to_f
+        return value.nil? || value.to_f <= 0.0 || value == "NECB_Default" ? nil : value.to_f
       end
 
       BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set!(model: model,

@@ -24,11 +24,11 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_4_Test_FO2_G_HW < MiniTest::Test
+class NECB_HVAC_System_4_Test_FO2_G_HW < Minitest::Test
 
   def test_necb_hvac_system_4_fuel_oil2_gas_hot_water()
     vintage = ['NECB2011']
-    weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
+    weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
     template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = 'system_4'
     vintage = 'NECB2011'

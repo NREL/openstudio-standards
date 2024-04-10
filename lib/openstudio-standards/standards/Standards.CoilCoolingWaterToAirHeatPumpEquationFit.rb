@@ -22,7 +22,7 @@ class Standard
   # Finds lookup object in standards and return efficiency
   #
   # @param coil_cooling_water_to_air_heat_pump [OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit] coil cooling object
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_cooling_water_to_air_heat_pump_standard_minimum_cop(coil_cooling_water_to_air_heat_pump, rename = false, computer_room_air_conditioner = false)
     search_criteria = {}
@@ -103,7 +103,6 @@ class Standard
   # @param sql_db_vars_map [Hash] hash map
   # @return [Hash] hash of coil objects
   def coil_cooling_water_to_air_heat_pump_apply_efficiency_and_curves(coil_cooling_water_to_air_heat_pump, sql_db_vars_map)
-
     # Get the search criteria
     search_criteria = {}
     search_criteria['template'] = template

@@ -1,274 +1,6 @@
 class Standard
   # @!group ScheduleRuleset
 
-  # Returns the min and max value for this schedule_day object
-  #
-  # @param day_sch [OpenStudio::Model::ScheduleDay] schedule day object
-  # @return [Double] day full load hours
-  def day_schedule_equivalent_full_load_hrs(day_sch)
-    # Determine the full load hours for just one day
-    daily_flh = 0
-    values = day_sch.values
-    times = day_sch.times
-
-    previous_time_decimal = 0
-    times.each_with_index do |time, i|
-      time_decimal = (time.days * 24.0) + time.hours + (time.minutes / 60.0) + (time.seconds / 3600.0)
-      duration_of_value = time_decimal - previous_time_decimal
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Value of #{values[i]} for #{duration_of_value} hours")
-      daily_flh += values[i] * duration_of_value
-      previous_time_decimal = time_decimal
-    end
-
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{daily_flh.round(2)} EFLH per day")
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Used #{number_of_days_sch_used} days per year")
-
-    return daily_flh
-  end
-
-  # Returns the equivalent full load hours (EFLH) for this schedule.
-  # For example, an always-on fractional schedule
-  # (always 1.0, 24/7, 365) would return a value of 8760.
-  #
-  # @author Andrew Parker, NREL.  Matt Leach, NORESCO.
-  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  # @return [Double] The total number of full load hours for this schedule.
-  def schedule_ruleset_annual_equivalent_full_load_hrs(schedule_ruleset)
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating total annual EFLH for schedule: #{self.name}")
-
-    # Define the start and end date
-    year_start_date = nil
-    year_end_date = nil
-    if schedule_ruleset.model.yearDescription.is_initialized
-      year_description = schedule_ruleset.model.yearDescription.get
-      year = year_description.assumedYear
-      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
-      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', 'Year description is not specified. Full load hours calculation will assume 2009, the default year OS uses.')
-      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
-      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
-    end
-
-    # Get the ordered list of all the day schedules
-    # that are used by this schedule ruleset
-    day_schs = schedule_ruleset.getDaySchedules(year_start_date, year_end_date)
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "***Day Schedules Used***")
-    day_schs.uniq.each do |day_sch|
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{day_sch.name.get}")
-    end
-
-    # Get a 365-value array of which schedule is used on each day of the year,
-    day_schs_used_each_day = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
-    if !day_schs_used_each_day.length == 365
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "#{schedule_ruleset.name} does not have 365 daily schedules accounted for, cannot accurately calculate annual EFLH.")
-      return 0
-    end
-
-    # Create a map that shows how many days each schedule is used
-    day_sch_freq = day_schs_used_each_day.group_by { |n| n }
-
-    # Build a hash that maps schedule day index to schedule day
-    schedule_index_to_day = {}
-    day_schs.each_with_index do |day_sch, i|
-      schedule_index_to_day[day_schs_used_each_day[i]] = day_sch
-    end
-
-    # Loop through each of the schedules that is used, figure out the
-    # full load hours for that day, then multiply this by the number
-    # of days that day schedule applies and add this to the total.
-    annual_flh = 0
-    max_daily_flh = 0
-    default_day_sch = schedule_ruleset.defaultDaySchedule
-    day_sch_freq.each do |freq|
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", freq.inspect
-      # exit
-
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Schedule Index = #{freq[0]}"
-      sch_index = freq[0]
-      number_of_days_sch_used = freq[1].size
-
-      # Get the day schedule at this index
-      day_sch = nil
-      day_sch = if sch_index == -1 # If index = -1, this day uses the default day schedule (not a rule)
-                  default_day_sch
-                else
-                  schedule_index_to_day[sch_index]
-                end
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating EFLH for: #{day_sch.name}")
-
-      daily_flh = day_schedule_equivalent_full_load_hrs(day_sch)
-
-      # Multiply the daily EFLH by the number
-      # of days this schedule is used per year
-      # and add this to the overall total
-      annual_flh += daily_flh * number_of_days_sch_used
-    end
-
-    # Warn if the max daily EFLH is more than 24,
-    # which would indicate that this isn't a
-    # fractional schedule.
-    if max_daily_flh > 24
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', "#{schedule_ruleset.name} has more than 24 EFLH in one day schedule, indicating that it is not a fractional schedule.")
-    end
-
-    return annual_flh
-  end
-
-  # Returns the min and max value for this schedule.
-  # It doesn't evaluate design days only run-period conditions
-  #
-  # @author David Goldwasser, NREL.
-  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  # @return [Hash] Hash has two keys, min and max.
-  def schedule_ruleset_annual_min_max_value(schedule_ruleset)
-    # gather profiles
-    profiles = []
-    profiles << schedule_ruleset.defaultDaySchedule
-    rules = schedule_ruleset.scheduleRules
-    rules.each do |rule|
-      profiles << rule.daySchedule
-    end
-
-    # test profiles
-    min = nil
-    max = nil
-    profiles.each do |profile|
-      profile.values.each do |value|
-        if min.nil?
-          min = value
-        else
-          min = value if min > value
-        end
-        if max.nil?
-          max = value
-        else
-          max = value if max < value
-        end
-      end
-    end
-    result = { 'min' => min, 'max' => max }
-
-    return result
-  end
-
-  # Returns the total number of hours where the schedule is greater than the specified value.
-  #
-  # @author Andrew Parker, NREL.
-  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  # @param lower_limit [Double] the lower limit.  Values equal to the limit will not be counted.
-  # @return [Double] The total number of hours this schedule is above the specified value.
-  def schedule_ruleset_annual_hours_above_value(schedule_ruleset, lower_limit)
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating total annual hours above #{lower_limit} for schedule: #{self.name}")
-
-    # Define the start and end date
-    year_start_date = nil
-    year_end_date = nil
-    if schedule_ruleset.model.yearDescription.is_initialized
-      year_description = schedule_ruleset.model.yearDescription.get
-      year = year_description.assumedYear
-      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
-      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ScheduleRuleset', 'Year description is not specified. Annual hours above value calculation will assume 2009, the default year OS uses.')
-      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, 2009)
-      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, 2009)
-    end
-
-    # Get the ordered list of all the day schedules
-    # that are used by this schedule ruleset
-    day_schs = schedule_ruleset.getDaySchedules(year_start_date, year_end_date)
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "***Day Schedules Used***")
-    day_schs.uniq.each do |day_sch|
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{day_sch.name.get}")
-    end
-
-    # Get a 365-value array of which schedule is used on each day of the year,
-    day_schs_used_each_day = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
-    if !day_schs_used_each_day.length == 365
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ScheduleRuleset', "#{schedule_ruleset.name} does not have 365 daily schedules accounted for, cannot accurately calculate annual EFLH.")
-      return 0
-    end
-
-    # Create a map that shows how many days each schedule is used
-    day_sch_freq = day_schs_used_each_day.group_by { |n| n }
-
-    # Build a hash that maps schedule day index to schedule day
-    schedule_index_to_day = {}
-    day_schs.each_with_index do |day_sch, i|
-      schedule_index_to_day[day_schs_used_each_day[i]] = day_sch
-    end
-
-    # Loop through each of the schedules that is used, figure out the
-    # hours for that day, then multiply this by the number
-    # of days that day schedule applies and add this to the total.
-    annual_hrs = 0
-    default_day_sch = schedule_ruleset.defaultDaySchedule
-    day_sch_freq.each do |freq|
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", freq.inspect
-      # exit
-
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Schedule Index = #{freq[0]}"
-      sch_index = freq[0]
-      number_of_days_sch_used = freq[1].size
-
-      # Get the day schedule at this index
-      day_sch = nil
-      day_sch = if sch_index == -1 # If index = -1, this day uses the default day schedule (not a rule)
-                  default_day_sch
-                else
-                  schedule_index_to_day[sch_index]
-                end
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "Calculating hours above #{lower_limit} for: #{day_sch.name}")
-
-      # Determine the hours for just one day
-      daily_hrs = 0
-      values = day_sch.values
-      times = day_sch.times
-
-      previous_time_decimal = 0
-      times.each_with_index do |time, i|
-        time_decimal = (time.days * 24.0) + time.hours + (time.minutes / 60.0) + (time.seconds / 3600.0)
-        duration_of_value = time_decimal - previous_time_decimal
-        # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Value of #{values[i]} for #{duration_of_value} hours")
-        daily_hrs += values[i] * duration_of_value
-        previous_time_decimal = time_decimal
-      end
-
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  #{daily_hrs.round(2)} hours above #{lower_limit} per day")
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ScheduleRuleset", "  Used #{number_of_days_sch_used} days per year")
-
-      # Multiply the daily hours by the number
-      # of days this schedule is used per year
-      # and add this to the overall total
-      annual_hrs += daily_hrs * number_of_days_sch_used
-    end
-
-    return annual_hrs
-  end
-
-  # Returns the averaged hourly values of the ruleset schedule for all hours of the year
-  #
-  # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
-  # @return [Array<Double>] An array of hourly values over the whole year
-  def schedule_ruleset_annual_hourly_values(schedule_ruleset)
-    schedule_values = []
-    year_description = schedule_ruleset.model.getYearDescription
-    (1..365).each do |i|
-      date = year_description.makeDate(i)
-      day_sch = schedule_ruleset.getDaySchedules(date, date)[0]
-      (0..23).each do |j|
-        # take average value over the hour
-        value_15 = day_sch.getValue(OpenStudio::Time.new(0, j, 15, 0))
-        value_30 = day_sch.getValue(OpenStudio::Time.new(0, j, 30, 0))
-        value_45 = day_sch.getValue(OpenStudio::Time.new(0, j, 45, 0))
-        avg = (value_15 + value_30 + value_45).to_f / 3.0
-        schedule_values << avg.round(5)
-      end
-    end
-    return schedule_values
-  end
-
   # Remove unused profiles and set most prevalent profile as default
   # When moving profile that isn't lowest priority to default need to address possible issues with overlapping rules dates or days of week
   # method expands on functionality of RemoveUnusedDefaultProfiles measure
@@ -358,13 +90,13 @@ class Standard
       end
 
       # get values for new default profile
-      new_default_daySchedule = rule_vector[new_default_index].daySchedule
-      new_default_daySchedule_values = new_default_daySchedule.values
-      new_default_daySchedule_times = new_default_daySchedule.times
+      new_default_day_schedule = rule_vector[new_default_index].daySchedule
+      new_default_day_schedule_values = new_default_day_schedule.values
+      new_default_day_schedule_times = new_default_day_schedule.times
 
       # update values and times for default profile
-      for i in 0..(new_default_daySchedule_values.size - 1)
-        old_default_schedule_day.addValue(new_default_daySchedule_times[i], new_default_daySchedule_values[i])
+      for i in 0..(new_default_day_schedule_values.size - 1)
+        old_default_schedule_day.addValue(new_default_day_schedule_times[i], new_default_day_schedule_values[i])
       end
 
       # remove rule object that has become the default. Also try to remove the ScheduleDay
@@ -379,8 +111,8 @@ class Standard
   # @author David Goldwasser
   # @param schedule [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   # @param ramp_frequency [Double] ramp frequency in minutes
-  # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
-  # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
+  # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
+  # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
   # @return [OpenStudio::Model::ScheduleRuleset] schedule ruleset object
   def schedule_apply_parametric_inputs(schedule, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order, parametric_inputs = nil)
     # Check if parametric inputs were supplied and generate them if not
@@ -405,7 +137,7 @@ class Standard
     hours_of_operation = parametric_inputs[schedule][:hoo_inputs]
     # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name} hours_of_operation = #{hours_of_operation.name}.")
 
-    starting_aeflh = schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
+    starting_aeflh = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule)
 
     # store floor and ceiling value
     val_flr = nil
@@ -551,7 +283,7 @@ class Standard
     # @todo should they have their own formula, or should this be hard coded logic by schedule type
 
     # check orig vs. updated aeflh
-    final_aeflh = schedule_ruleset_annual_equivalent_full_load_hrs(schedule)
+    final_aeflh = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule)
     percent_change = ((starting_aeflh - final_aeflh) / starting_aeflh) * 100.0
     if percent_change.abs > 0.05
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ScheduleRuleset', "For #{schedule.name}, applying parametric schedules made a #{percent_change.round(1)}% change in annual equivalent full load hours. (from #{starting_aeflh.round(2)} to #{final_aeflh.round(2)})")
@@ -575,7 +307,7 @@ class Standard
   # @param sat_end_time [OpenStudio::Time] Saturday end time.  If greater than 24:00, hours of operation will wrap over midnight.
   # @param sun_start_time [OpenStudio::Time] Sunday start time.  If nil, no change will be made to this day.
   # @param sun_end_time [OpenStudio::Time] Sunday end time.  If greater than 24:00, hours of operation will wrap over midnight.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def schedule_ruleset_set_hours_of_operation(schedule_ruleset, wkdy_start_time: nil, wkdy_end_time: nil, sat_start_time: nil, sat_end_time: nil, sun_start_time: nil, sun_end_time: nil)
     # Default day is assumed to represent weekdays
     if wkdy_start_time && wkdy_end_time
@@ -604,6 +336,412 @@ class Standard
     end
 
     return true
+  end
+
+  #
+  # Return Array of weekday values from Array of all day values
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param values [Array] hourly time-series values of all days
+  # @param value_includes_holiday [Boolean] whether the input values include a day of holiday at the end of the array
+  #
+  # @return [Array] hourly time-series values in weekdays
+  #
+  def get_weekday_values_from_8760(model, values, value_includes_holiday = true)
+    start_day = model.getYearDescription.dayofWeekforStartDay
+    start_day_map = {
+      'Sunday' => 0,
+      'Monday' => 1,
+      'Tuesday' => 2,
+      'Wednesday' => 3,
+      'Thursday' => 4,
+      'Friday' => 5,
+      'Saturday' => 6
+    }
+    start_day_num = start_day_map[start_day]
+    weekday_values = []
+    day_of_week = start_day_num
+    num_of_days = values.size / 24
+    if value_includes_holiday
+      num_of_days -= 1
+    end
+
+    for day_i in 1..num_of_days do
+      if day_of_week >= 1 && day_of_week <= 5
+        weekday_values += values.slice!(0, 24)
+      end
+      day_of_week += 1
+      # reset day of week
+      if day_of_week == 7
+        day_of_week = 0
+      end
+    end
+
+    return weekday_values
+  end
+
+  # Create a ScheduleRuleset object from an 8760 sequential array of values for a
+  # Values array will actually include 24 extra values if model year is a leap year
+  # Values array will also include 24 values at end of array representing the holiday day schedule
+  # @author Doug Maddox, PNNL
+  # @param model [Object]
+  # @param values [Array<Double>] array of annual values (8760 +/ 24) + holiday values (24)
+  # @param sch_name [String] name of schedule to be created
+  # @param sch_type_limits [Object] ScheduleTypeLimits object
+  # @return [Object] ScheduleRuleset
+  def make_ruleset_sched_from_8760(model, values, sch_name, sch_type_limits)
+    # Build array of arrays: each top element is a week, each sub element is an hour of week
+    all_week_values = []
+    hr_of_yr = -1
+    (0..51).each do |iweek|
+      week_values = []
+      (0..167).each do |hr_of_wk|
+        hr_of_yr += 1
+        week_values[hr_of_wk] = values[hr_of_yr]
+      end
+      all_week_values << week_values
+    end
+
+    # Extra week for days 365 and 366 (if applicable) of year
+    # since 52 weeks is 364 days
+    hr_of_yr += 1
+    last_hr = values.size - 1
+    iweek = 52
+    week_values = []
+    hr_of_wk = -1
+    (hr_of_yr..last_hr).each do |ihr_of_yr|
+      hr_of_wk += 1
+      week_values[hr_of_wk] = values[ihr_of_yr]
+    end
+    all_week_values << week_values
+
+    # Build ruleset schedules for first week
+    yd = model.getYearDescription
+    start_date = yd.makeDate(1, 1)
+    one_day = OpenStudio::Time.new(1.0)
+    seven_days = OpenStudio::Time.new(7.0)
+    end_date = start_date + seven_days - one_day
+
+    # Create new ruleset schedule
+    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
+    sch_ruleset.setName(sch_name)
+    sch_ruleset.setScheduleTypeLimits(sch_type_limits)
+
+    # Make week schedule for first week
+    num_week_scheds = 1
+    week_sch_name = sch_name + '_ws' + num_week_scheds.to_s
+    week_1_rules = make_week_ruleset_sched_from_168(model, sch_ruleset, all_week_values[1], start_date, end_date, week_sch_name)
+    week_n_rules = week_1_rules
+    all_week_rules = []
+    all_week_rules << week_1_rules
+    iweek_previous_week_rule = 0
+
+    # temporary loop for debugging
+    week_n_rules.each do |sch_rule|
+      day_rule = sch_rule.daySchedule
+      xtest = 1
+    end
+
+    # For each subsequent week, check if it is same as previous
+    # If same, then append to Schedule:Rule of previous week
+    # If different, then create new Schedule:Rule
+    (1..51).each do |iweek|
+      is_a_match = true
+      start_date = end_date + one_day
+      end_date += seven_days
+      (0..167).each do |ihr|
+        if all_week_values[iweek][ihr] != all_week_values[iweek_previous_week_rule][ihr]
+          is_a_match = false
+          break
+        end
+      end
+      if is_a_match
+        # Update the end date for the Rules of the previous week to include this week
+        all_week_rules[iweek_previous_week_rule].each do |sch_rule|
+          sch_rule.setEndDate(end_date)
+        end
+      else
+        # Create a new week schedule for this week
+        num_week_scheds += 1
+        week_sch_name = sch_name + '_ws' + num_week_scheds.to_s
+        week_n_rules = make_week_ruleset_sched_from_168(model, sch_ruleset, all_week_values[iweek], start_date, end_date, week_sch_name)
+        all_week_rules << week_n_rules
+        # Set this week as the reference for subsequent weeks
+        iweek_previous_week_rule = iweek
+      end
+    end
+
+    # temporary loop for debugging
+    week_n_rules.each do |sch_rule|
+      day_rule = sch_rule.daySchedule
+      xtest = 1
+    end
+
+    # Need to handle week 52 with days 365 and 366
+    # For each of these days, check if it matches a day from the previous week
+    iweek = 52
+    # First handle day 365
+    end_date += one_day
+    start_date = end_date
+    match_was_found = false
+    # week_n is the previous week
+    week_n_rules.each do |sch_rule|
+      day_rule = sch_rule.daySchedule
+      is_match = true
+      # Need a 24 hour array of values for the day rule
+      ihr_start = 0
+      day_values = []
+      day_rule.times.each do |time|
+        now_value = day_rule.getValue(time).to_f
+        until_ihr = time.totalHours.to_i - 1
+        (ihr_start..until_ihr).each do |ihr|
+          day_values << now_value
+        end
+      end
+      (0..23).each do |ihr|
+        if day_values[ihr] != all_week_values[iweek][ihr + ihr_start]
+          # not matching for this day_rule
+          is_match = false
+          break
+        end
+      end
+      if is_match
+        match_was_found = true
+        # Extend the schedule period to include this day
+        sch_rule.setEndDate(end_date)
+        break
+      end
+    end
+    if match_was_found == false
+      # Need to add a new rule
+      day_of_week = start_date.dayOfWeek.valueName
+      day_names = [day_of_week]
+      day_sch_name = sch_name + '_Day_365'
+      day_sch_values = []
+      (0..23).each do |ihr|
+        day_sch_values << all_week_values[iweek][ihr]
+      end
+      # sch_rule is a sub-component of the ScheduleRuleset
+      sch_rule = add_one_ruleset_sch_rule(model, sch_ruleset, start_date, end_date, day_sch_values, day_sch_name, day_names)
+      week_n_rules = sch_rule
+    end
+
+    # Handle day 366, if leap year
+    # Last day in this week is the holiday schedule
+    # If there are three days in this week, then the second is day 366
+    if all_week_values[iweek].size == 24 * 3
+      ihr_start = 23
+      end_date += one_day
+      start_date = end_date
+      match_was_found = false
+      # week_n is the previous week
+      # which would be the week based on day 356, if that was its own week
+      week_n_rules.each do |sch_rule|
+        day_rule = sch_rule.daySchedule
+        is_match = true
+        day_rule.times.each do |ihr|
+          if day_rule.getValue(ihr).to_f != all_week_values[iweek][ihr + ihr_start]
+            # not matching for this day_rule
+            is_match = false
+            break
+          end
+        end
+        if is_match
+          match_was_found = true
+          # Extend the schedule period to include this day
+          sch_rule.setEndDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(end_date.month.to_i), end_date.day.to_i))
+          break
+        end
+      end
+      if match_was_found == false
+        # Need to add a new rule
+        # sch_rule is a sub-component of the ScheduleRuleset
+
+        day_of_week = start_date.dayOfWeek.valueName
+        day_names = [day_of_week]
+        day_sch_name = sch_name + '_Day_366'
+        day_sch_values = []
+        (0..23).each do |ihr|
+          day_sch_values << all_week_values[iweek][ihr]
+        end
+        sch_rule = add_one_ruleset_sch_rule(model, sch_ruleset, start_date, end_date, day_sch_values, day_sch_name, day_names)
+        week_n_rules = sch_rule
+      end
+
+      # Last day in values array is the holiday schedule
+      # @todo add holiday schedule when implemented in OpenStudio SDK
+    end
+
+    # Need to handle design days
+    # Find schedule with the most operating hours in a day,
+    # and apply that to both cooling and heating design days
+    hr_of_yr = -1
+    max_eflh = 0
+    ihr_max = -1
+    (0..364).each do |iday|
+      eflh = 0
+      ihr_start = hr_of_yr + 1
+      (0..23).each do |ihr|
+        hr_of_yr += 1
+        eflh += 1 if values[hr_of_yr] > 0
+      end
+      if eflh > max_eflh
+        max_eflh = eflh
+        # store index to first hour of day with max on hours
+        ihr_max = ihr_start
+      end
+    end
+    # Create the schedules for the design days
+    day_sch = OpenStudio::Model::ScheduleDay.new(model)
+    day_sch.setName(sch_name + 'Winter Design Day')
+    (0..23).each do |ihr|
+      hr_of_yr = ihr_max + ihr
+      next if values[hr_of_yr] == values[hr_of_yr + 1]
+
+      day_sch.addValue(OpenStudio::Time.new(0, ihr + 1, 0, 0), values[hr_of_yr])
+    end
+    sch_ruleset.setWinterDesignDaySchedule(day_sch)
+
+    day_sch = OpenStudio::Model::ScheduleDay.new(model)
+    day_sch.setName(sch_name + 'Summer Design Day')
+    (0..23).each do |ihr|
+      hr_of_yr = ihr_max + ihr
+      next if values[hr_of_yr] == values[hr_of_yr + 1]
+
+      day_sch.addValue(OpenStudio::Time.new(0, ihr + 1, 0, 0), values[hr_of_yr])
+    end
+    sch_ruleset.setSummerDesignDaySchedule(day_sch)
+
+    return sch_ruleset
+  end
+
+  # Create a ScheduleRules object from an hourly array of values for a week
+  # @author Doug Maddox, PNNL
+  # @param model [Object]
+  # @param sch_ruleset [Object] ScheduleRuleset object
+  # @param values [Array<Double>] array of hourly values for week (168)
+  # @param start_date [Date] start date of week period
+  # @param end_date [Date] end date of week period
+  # @param sch_name [String] name of parent ScheduleRuleset object
+  # @return [Array<Object>] array of ScheduleRules objects
+  def make_week_ruleset_sched_from_168(model, sch_ruleset, values, start_date, end_date, sch_name)
+    one_day = OpenStudio::Time.new(1.0)
+    now_date = start_date - one_day
+    days_of_week = []
+    values_by_day = []
+    # Organize data into days
+    # create a 2-D array values_by_day[iday][ihr]
+    hr_of_wk = -1
+    (0..6).each do |iday|
+      hr_values = []
+      (0..23).each do |hr_of_day|
+        hr_of_wk += 1
+        hr_values << values[hr_of_wk]
+      end
+      values_by_day << hr_values
+      now_date += one_day
+      days_of_week << now_date.dayOfWeek.valueName
+    end
+
+    # Make list of unique day schedules
+    # First one is automatically unique
+    # Store indexes to days with the same sched in array of arrays
+    # day_sched_idays[0] << 0
+    day_sched = {}
+    day_sched['day_idx_list'] = [0]
+    day_sched['hr_values'] = values_by_day[0]
+    day_scheds = []
+    day_scheds << day_sched
+
+    # Check each day with the cumulative list of day_scheds and add new, if unique
+    (1..6).each do |iday|
+      match_was_found = false
+      day_scheds.each do |day_sched|
+        # Compare each jday to the current iday and check for a match
+        is_a_match = true
+        (0..23).each do |ihr|
+          if day_sched['hr_values'][ihr] != values_by_day[iday][ihr]
+            # this hour is not a match
+            is_a_match = false
+            break
+          end
+        end
+        if is_a_match
+          # Add the day index to the list for this day_sched
+          day_sched['day_idx_list'] << iday
+          match_was_found = true
+          break
+        end
+      end
+      if match_was_found == false
+        # Add a new day type
+        day_sched = {}
+        day_sched['day_idx_list'] = [iday]
+        day_sched['hr_values'] = values_by_day[iday]
+        day_scheds << day_sched
+      end
+    end
+
+    # Add the Rule and Day objects
+    sch_rules = []
+    iday_sch = 0
+    day_scheds.each do |day_sched|
+      iday_sch += 1
+
+      day_names = []
+      day_sched['day_idx_list'].each do |idx|
+        day_names << days_of_week[idx]
+      end
+      day_sch_name = "#{sch_name} Day #{iday_sch}"
+      day_sch_values = day_sched['hr_values']
+      sch_rule = add_one_ruleset_sch_rule(model, sch_ruleset, start_date, end_date, day_sch_values, day_sch_name, day_names)
+
+      sch_rules << sch_rule
+    end
+
+    return sch_rules
+  end
+
+  # Create a ScheduleRules object from an hourly array of values for a week
+  # @author Doug Maddox, PNNL
+  # @param model [Object]
+  # @param sch_ruleset [Object] ScheduleRuleset object
+  # @param values [Array<Double>] array of hourly values for day (24)
+  # @param start_date [Date] start date of week period
+  # @param end_date [Date] end date of week period
+  # @param sch_name [String] name of ScheduleDay object
+  # @param day_names [Array<String>] list of days of week for which this day type is applicable
+  # @return [Object] ScheduleDay object
+  def add_one_ruleset_sch_rule(model, sch_ruleset, start_date, end_date, values, sch_name, day_names)
+    # sch_rule is a sub-component of the ScheduleRuleset
+    sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
+    # Set the dates when the rule applies
+    sch_rule.setStartDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(start_date.monthOfYear.value.to_i), start_date.dayOfMonth.to_i))
+    sch_rule.setStartDate(start_date)
+    sch_rule.setEndDate(end_date)
+
+    # Set the days for which the rule applies
+    day_names.each do |day_of_week|
+      sch_rule.setApplySunday(true) if day_of_week == 'Sunday'
+      sch_rule.setApplyMonday(true) if day_of_week == 'Monday'
+      sch_rule.setApplyTuesday(true) if day_of_week == 'Tuesday'
+      sch_rule.setApplyWednesday(true) if day_of_week == 'Wednesday'
+      sch_rule.setApplyThursday(true) if day_of_week == 'Thursday'
+      sch_rule.setApplyFriday(true) if day_of_week == 'Friday'
+      sch_rule.setApplySaturday(true) if day_of_week == 'Saturday'
+    end
+
+    # Create the day schedule and add hourly values
+    day_sch = sch_rule.daySchedule
+    # day_sch = OpenStudio::Model::ScheduleDay.new(model)
+    day_sch.setName(sch_name)
+    (0..23).each do |ihr|
+      next if values[ihr] == values[ihr + 1]
+
+      day_sch.addValue(OpenStudio::Time.new(0, ihr + 1, 0, 0), values[ihr])
+    end
+
+    return sch_rule
   end
 
   private
@@ -643,8 +781,8 @@ class Standard
   # @param val_flr [Double] value floor
   # @param val_clg [Double] value ceiling
   # @param ramp_frequency [Double] ramp frequency in minutes
-  # @param infer_hoo_for_non_assigned_objects [Bool] attempt to get hoo for objects like swh with and exterior lighting
-  # @param error_on_out_of_order [Bool] true will error if applying formula creates out of order values
+  # @param infer_hoo_for_non_assigned_objects [Boolean] attempt to get hoo for objects like swh with and exterior lighting
+  # @param error_on_out_of_order [Boolean] true will error if applying formula creates out of order values
   # @return [OpenStudio::Model::ScheduleDay] schedule day
   # @api private
   def process_hrs_of_operation_hash(sch_day, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, infer_hoo_for_non_assigned_objects, error_on_out_of_order)
@@ -861,7 +999,7 @@ class Standard
     # @todo apply secondary logic
 
     # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
-    sch_day.setInterpolatetoTimestep(true)
+    # sch_day.setInterpolatetoTimestep(true)
 
     return sch_day
   end

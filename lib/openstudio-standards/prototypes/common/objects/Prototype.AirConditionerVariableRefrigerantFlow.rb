@@ -10,7 +10,7 @@ class Standard
   # @param type [String] the type of unit to reference for the correct curve set
   # @param cooling_cop [Double] rated cooling coefficient of performance
   # @param heating_cop [Double] rated heating coefficient of performance
-  # @param heat_recovery [Bool] does the unit have heat recovery
+  # @param heat_recovery [Boolean] does the unit have heat recovery
   # @param defrost_strategy [String] type of defrost strategy. options are ReverseCycle or Resistive
   # @param condenser_type [String] type of condenser
   #   options are AirCooled (default), WaterCooled, and EvaporativelyCooled.

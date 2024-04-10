@@ -12,17 +12,17 @@ end
 require 'rake/testtask'
 namespace :test do
   full_file_list = nil
-  if File.exist?('test/circleci_tests.txt')
+  if File.exist?('test/ci_tests.txt')
     # load test files from file.
-    full_file_list = FileList.new(File.readlines('test/circleci_tests.txt'))
+    full_file_list = FileList.new(File.readlines('test/ci_tests.txt'))
     # Select only .rb files that exist
     full_file_list.select! { |item| item.include?('rb') && File.exist?(File.absolute_path("test/#{item.strip}")) }
     full_file_list.map! { |item| File.absolute_path("test/#{item.strip}") }
-    File.open('test/circleci_tests.json', 'w') do |f|
+    File.open('test/ci_tests.json', 'w') do |f|
       f.write(JSON.pretty_generate(full_file_list.to_a))
     end
   else
-    puts 'Could not find list of files to test at test/circleci_tests.txt'
+    puts 'Could not find list of files to test at test/ci_tests.txt'
     return false
   end
 
@@ -33,22 +33,6 @@ namespace :test do
     FileUtils.rm_rf(report_dir) if Dir.exist?(report_dir)
     Dir.mkdir(report_dir)
     file_list = FileList.new('test/parallel_run_all_tests_locally.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = false
-  end
-
-  desc 'parallel_run_necb_building_regression_tests'
-  Rake::TestTask.new('parallel_run_necb_building_regression_tests_locally') do |t|
-    file_list = FileList.new('test/necb/building_regression_tests/locally_run_tests.rb')
-    t.libs << 'test'
-    t.test_files = file_list
-    t.verbose = false
-  end
-
-  desc 'parallel_run_necb_system_tests_tests'
-  Rake::TestTask.new('parallel_run_necb_system_tests_tests_locally') do |t|
-    file_list = FileList.new('test/necb/system_tests/locally_run_tests.rb')
     t.libs << 'test'
     t.test_files = file_list
     t.verbose = false
@@ -152,7 +136,9 @@ namespace :data do
   # as data may be overwritten when parsing later spreadsheets.
   spreadsheets_ashrae = [
     'OpenStudio_Standards-ashrae_90_1',
-    'OpenStudio_Standards-ashrae_90_1(space_types)'
+    'OpenStudio_Standards-ashrae_90_1(space_types)',
+    'OpenStudio_Standards-ashrae_90_1_prm',
+    'OpenStudio_Standards-ashrae_90_1_prm(space_types)'
   ]
 
   spreadsheets_deer = [

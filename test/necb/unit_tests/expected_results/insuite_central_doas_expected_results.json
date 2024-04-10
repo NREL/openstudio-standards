@@ -1,9 +1,9 @@
 [
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "HighriseApartment",
-    "primary_heating_fuel": "DefaultFuel",
+    "primary_heating_fuel": "NaturalGas",
     "doas_type": "one_sys_per_bldg",
     "airloop - 0.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none|",
     "airloop - 1.0": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
@@ -11,9 +11,9 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "HighriseApartment",
-    "primary_heating_fuel": "DefaultFuel",
+    "primary_heating_fuel": "NaturalGas",
     "doas_type": "one_sys_per_dwelling_unit",
     "airloop - 0.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none|",
     "airloop - 1.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 1",
@@ -100,9 +100,9 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeHotel",
-    "primary_heating_fuel": "DefaultFuel",
+    "primary_heating_fuel": "NaturalGas",
     "doas_type": "one_sys_per_bldg",
     "airloop - 0.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none|",
     "airloop - 1.0": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
@@ -115,9 +115,9 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeHotel",
-    "primary_heating_fuel": "DefaultFuel",
+    "primary_heating_fuel": "NaturalGas",
     "doas_type": "one_sys_per_dwelling_unit",
     "airloop - 0.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none|",
     "airloop - 1.0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 1",

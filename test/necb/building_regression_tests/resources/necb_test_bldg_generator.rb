@@ -17,7 +17,7 @@ class String
 end
 
 class GeneratorNECBRegressionTests
-  # default loation circleci_tests.txt file when run on
+  # default location ci_tests.txt file when run on
 
   def initialize()
     @file_out_dir = File.absolute_path(File.join(__dir__, "..", 'tests'))
@@ -38,14 +38,15 @@ class GeneratorNECBRegressionTests
     reset_folder(@file_out_dir)
 
     @epw_files = [
-        'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
+        'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
     ]
     @templates = [
         'NECB2011',
         'NECB2015',
         'NECB2017',
         'BTAPPRE1980',
-        'BTAP1980TO2010'
+        'BTAP1980TO2010',
+        'NECB2020',
     ]
     @building_types = [
         "FullServiceRestaurant",
@@ -65,12 +66,15 @@ class GeneratorNECBRegressionTests
         "SmallOffice",
         "Warehouse",
         "LowriseApartment"
-
     ]
     @primary_heating_fuels =
         [
             'NaturalGas',
             'Electricity',
+            'NaturalGasHPGasBackup',
+            'NaturalGasHPElecBackupMixed',
+            'ElectricityHPElecBackup',
+            'ElectricityHPGasBackupMixed'
         ]
 
     @run_simulation = false

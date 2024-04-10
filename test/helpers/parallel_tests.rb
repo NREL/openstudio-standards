@@ -6,9 +6,6 @@ require 'open3'
 
 ProcessorsUsed = (Parallel.processor_count - 1).floor
 
-
-
-
 class String
   # colorization
   def colorize(color_code)
@@ -40,7 +37,6 @@ class String
   end
 end
 
-
 def write_results(result, test_file, test_name)
   test_file_output = File.join(@test_output_folder, "#{File.basename(test_file)}_#{test_name}_test_output.json")
   File.delete(test_file_output) if File.exist?(test_file_output)
@@ -59,7 +55,6 @@ def write_results(result, test_file, test_name)
                   "std_err" => result[1].split(/\r?\n/)
               }
     }
-
 
     #puts test_file_output
     File.open(test_file_output, 'w') {|f| f.write(JSON.pretty_generate(output))}
@@ -119,7 +114,7 @@ class ParallelTests
     end
 
     puts "Running #{test_files_and_test_names.size} tests from #{@full_file_list.size} tests suites in parallel using #{processors} of #{Parallel.processor_count} available cpus."
-    puts "To increase or decrease the ProcessorsUsed, please edit the test/test_run_all_locally.rb file."
+    puts "To increase or decrease the ProcessorsUsed, please edit the test/helpers/parallel_tests.rb file."
     timings_json = Hash.new()
     Parallel.each(test_files_and_test_names, in_threads: (processors),progress: "Progress :") do |test_file_test_name|
       test_file = test_file_test_name[0]
@@ -154,7 +149,7 @@ class ParallelTests
         timings_json[file_name.to_s]['total'] = timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
       end
     end
-    #File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') {|file| file.puts(JSON.pretty_generate(timings_json.sort {|a, z| a <=> z}.to_h))}
+    # File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') {|file| file.puts(JSON.pretty_generate(timings_json.sort {|a, z| a <=> z}.to_h))}
     return did_all_tests_pass
   end
 end

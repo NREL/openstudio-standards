@@ -108,7 +108,9 @@ class Standard
       ref_case.setCaseAntiSweatHeaterPowerperUnitLength(anti_sweat_power)
     end
     ref_case.setFractionofAntiSweatHeaterEnergytoCase(fractionofantisweatheaterenergytocase)
-    ref_case.setFractionofLightingEnergytoCase(fraction_of_lighting_energy_to_case)
+    if props['fraction_of_lighting_energy_to_case']
+      ref_case.setFractionofLightingEnergytoCase(fraction_of_lighting_energy_to_case)
+    end
     if props['minimum_anti_sweat_heater_power_per_unit_length']
       ref_case.setMinimumAntiSweatHeaterPowerperUnitLength(minimum_anti_sweat_heater_power_per_unit_length)
     end
@@ -221,6 +223,8 @@ class Standard
     end
     if props['reachin_door_area']
       reachin_door_area = OpenStudio.convert(props['reachin_door_area'], 'ft^2', 'm^2').get
+    else
+      reachin_door_area = 0.0
     end
     if props['total_insulated_surface_area']
       total_insulated_surface_area = OpenStudio.convert(props['total_insulated_surface_area'], 'ft^2', 'm^2').get
@@ -249,9 +253,6 @@ class Standard
     end
     if total_insulated_surface_area.nil?
       total_insulated_surface_area = 1.7226 * floor_surface_area + 28.653
-    end
-    if reachin_door_area.nil?
-      reachin_door_area = reachin_door_area_mult * floor_surface_area
     end
     if fan_power.nil?
       fan_power = fan_power_mult * rated_cooling_capacity
@@ -520,7 +521,7 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param building_type [String] building type
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_typical_refrigeration(model, building_type)
     # Define system category and scaling factor
     floor_area_ft2 = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
@@ -838,7 +839,7 @@ class Standard
   # @todo Should probably use the model_add_refrigeration_walkin and lookups from the spreadsheet instead of hard-coded values
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_walkin_freezer_latent_case_credit_curve(model)
     latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
     return latent_case_credit_curve_name
@@ -855,7 +856,7 @@ class Standard
   # @param walkins [Array<Hashs>] an array of walkins with keys:
   #   walkin_type, space_names, and number_of_walkins
   # @param thermal_zone [OpenStudio::Model::ThermalZone] the thermal zone where the refrigeration piping is located
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_refrigeration_system(model,
                                      compressor_type,
                                      system_name,

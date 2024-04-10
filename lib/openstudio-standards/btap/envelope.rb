@@ -27,7 +27,7 @@ module BTAP
 
       #This method removes all materials from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::Model::Model] A model object
       def self.remove_all_materials(model)
         model.getMaterials().each do |item|
           item.remove
@@ -36,28 +36,28 @@ module BTAP
 
       #This method removes all constructions from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::Model::Model] A model object
       def self.remove_all_constructions(model)
         model.getConstructions().each { |item| item.remove }
       end
 
       #This method removes all default surface constructions from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::Model::Model] A model object
       def self.remove_all_default_surface_constructions(model)
         model.getDefaultSurfaceConstructionss().each { |item| item.remove }
       end
 
       #This method removes all default subsurface constructions from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::Model::Model] A model object
       def self.remove_all_default_subsurface_constructions(model)
         model.getDefaultSubSurfaceConstructionss().each { |item| item.remove }
       end
 
       #This method removes all default construction sets from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::Model::Model] A model object
       def self.remove_all_default_construction_sets(model)
         model.getDefaultConstructionSets().each { |item| item.remove }
         model.building.get.resetDefaultConstructionSet()
@@ -66,11 +66,11 @@ module BTAP
 
       #This method assignes interior surface construction to adiabatic surfaces from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::Model::Model] A model object
       def self.assign_interior_surface_construction_to_adiabatic_surfaces(model, runner = nil)
         BTAP::runner_register("Info", "assign_interior_surface_construction_to_adiabatic_surfaces", runner)
         unless model.building.get.defaultConstructionSet.empty? or model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.empty? or model.building.get.defaultConstructionSet.get.defaultInteriorSurfaceConstructions.get.wallConstruction.empty?
-          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in Openstudio that leave these surfaces unassigned by the default construction set.
+          #Give adiabatic surfaces a construction. Does not matter what. This is a bug in OpenStudio that leave these surfaces unassigned by the default construction set.
 
           all_adiabatic_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces, "Adiabatic")
 
@@ -90,7 +90,7 @@ module BTAP
 
       #This method removes all thermal mass definitions from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::Model::Model] A model object
       def self.remove_all_thermal_mass_definitions(model)
         model.getInternalMassDefinitions.sort.each { |item| item.remove }
         model.getInternalMasss.sort.each { |item| item.remove }
@@ -98,7 +98,7 @@ module BTAP
 
       #This method removes all envelope information from model.
       #@author phylroy.lopez@nrcan.gc.ca
-      #@param model [OpenStudio::model::Model] A model object
+      #@param model [OpenStudio::Model::Model] A model object
       def self.remove_all_envelope_information(model)
         BTAP::Resources::Envelope::remove_all_materials(model)
         BTAP::Resources::Envelope::remove_all_default_construction_sets(model)
@@ -504,13 +504,13 @@ module BTAP
 
             #This method will test find and set insulation layer.
             # @author Phylroy A. Lopez <plopez@nrcan.gc.ca>
-            def test_find_and_set_insulaton_layer()
+            def test_find_and_set_insulation_layer()
               construction = BTAP::Resources::Envelope::Constructions::create_construction(@model, "test construction", [@opaque, @air_gap, @insulation, @massless, @opaque])
 
               #check insulation was not set.
               assert((construction.insulation().empty?))
               #now set it.
-              BTAP::Resources::Envelope::Constructions::find_and_set_insulaton_layer(@model, [construction])
+              BTAP::Resources::Envelope::Constructions::find_and_set_insulation_layer(@model, [construction])
               #Now check that it found the insulation  value.
               assert(construction.insulation().get == @insulation)
             end
@@ -544,7 +544,7 @@ module BTAP
         #@param model [OpenStudio::Model::Model]
         #@param constructions_array [BTAP::Common::validate_array]
         #@return <String> insulating_layers
-        def self.find_and_set_insulaton_layer(model, constructions_array)
+        def self.find_and_set_insulation_layer(model, constructions_array)
           constructions_array = BTAP::Common::validate_array(model, constructions_array, "Construction")
           insulating_layers = Array.new()
           constructions_array.each do |construction|
@@ -619,7 +619,7 @@ module BTAP
 
           if conductance.kind_of?(Float)
             #re-find insulation layer
-            find_and_set_insulaton_layer(model, new_construction)
+            find_and_set_insulation_layer(model, new_construction)
 
             #Determine how low the resistance can be set. Subtract exisiting insulation
             #Values from the total resistance to see how low we can go.

@@ -12,8 +12,7 @@
 :door_construction_cond: NECB_Default
 :ecm_system_name: NECB_Default
 :electrical_loads_scale: NECB_Default
-:enable_costing: false
-:epw_file: CAN_QC_Montreal-Trudeau.Intl.AP.716270_CWEC2016.epw
+:epw_file:  CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw
 :erv_package: NECB_Default
 :ext_floor_cond: NECB_Default
 :ext_roof_cond: NECB_Default
@@ -55,6 +54,10 @@
 :skylight_solar_trans: NECB_Default
 :srr_set: NECB_Default
 :template: NECB2017
+:npv_start_year: NECB_Default
+:npv_end_year: NECB_Default
+:npv_discount_rate: NECB_Default
+:tbd_option: NECB_Default
 :output_variables: [
   {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}
 ]

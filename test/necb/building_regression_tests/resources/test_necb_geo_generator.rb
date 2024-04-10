@@ -101,7 +101,7 @@ class GeoTest < Minitest::Test
 
     standard.model_create_thermal_zones(model)
     standard.model_apply_standard(model: model,
-                                  epw_file: 'CAN_AB_Fort.McMurray.AP.716890_CWEC2016.epw',
+                                  epw_file: 'CAN_AB_Fort.Mcmurray.AP.716890_CWEC2020.epw',
                                   sizing_run_dir: run_dir,
                                   new_auto_zoner: true)
 

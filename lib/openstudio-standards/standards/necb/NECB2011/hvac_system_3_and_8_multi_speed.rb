@@ -150,12 +150,14 @@ class NECB2011
     supply_inlet_node = air_loop.supplyInletNode
 
     if (heating_coil_type == 'Gas') || (heating_coil_type == 'Electric')
+      # This method will seem like an error in number of args..but this is due to swig voodoo.
       air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.new(model, fan, htg_coil, clg_coil, supplemental_htg_coil)
       air_to_air_heatpump.setControllingZoneorThermostatLocation(control_zone)
       air_to_air_heatpump.setNumberofSpeedsforHeating(1)
       air_to_air_heatpump.setNumberofSpeedsforCooling(2)
       air_to_air_heatpump.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(system_data[:MinimumOutdoorDryBulbTemperatureforCompressorOperation])
     elsif heating_coil_type == 'DX'
+      # This method will seem like an error in number of args..but this is due to swig voodoo.
       air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model, always_on, fan, htg_coil, clg_coil, supplemental_htg_coil)
       air_to_air_heatpump.setControllingZone(zone)
     end

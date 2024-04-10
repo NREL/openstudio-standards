@@ -1,6 +1,10 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
+# *** Needs a re-write to use std paths etc ***
 
 class NECB_insuite_central_doas_Tests < Minitest::Test
 
@@ -39,9 +43,9 @@ class NECB_insuite_central_doas_Tests < Minitest::Test
         # 'Warehouse'
     ]
     @epw_files = [
-        'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw'
+        'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
     ]
-    @primary_heating_fuels = ['DefaultFuel']
+    @primary_heating_fuels = ['NaturalGas']
 
     @baseline_system_zones_map_options = [ # DOAS system types
       'one_sys_per_dwelling_unit',

@@ -99,10 +99,10 @@ class NECB2011
   # Per PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
   # Appendix A: Service Water Heating
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
     # Get the capacity of the water heater
-    # TODO add capability to pull autosized water heater capacity
+    # @todo add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
     capacity_w = water_heater_mixed.heaterMaximumCapacity
     if capacity_w.empty?
@@ -115,7 +115,7 @@ class NECB2011
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Get the volume of the water heater
-    # TODO add capability to pull autosized water heater volume
+    # @todo add capability to pull autosized water heater volume
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
     volume_m3 = water_heater_mixed.tankVolume
     if volume_m3.empty?
@@ -197,14 +197,13 @@ class NECB2011
 
     # Convert to SI
     ua_btu_per_hr_per_c = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
-
     # Set the water heater properties
     # Efficiency
     water_heater_mixed.setHeaterThermalEfficiency(water_heater_eff)
     # Skin loss
     water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
     water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
-    # TODO: Parasitic loss (pilot light)
+    # @todo Parasitic loss (pilot light)
     # PNNL document says pilot lights were removed, but IDFs
     # still have the on/off cycle parasitic fuel consumptions filled in
     water_heater_mixed.setOnCycleParasiticFuelType(fuel_type)
@@ -222,7 +221,7 @@ class NECB2011
 
     # Append the name with standards information
     water_heater_mixed.setName("#{water_heater_mixed.name} #{water_heater_eff.round(3)} Therm Eff")
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_eff.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr-R")
     return true
   end
 
@@ -263,14 +262,14 @@ class NECB2011
     model.getSpaces.sort.each do |space|
       space_peak_flow = 0
       data = nil
-      space_type_name = space.spaceType.get.nameString
+      space_type_name = space.spaceType.get.standardsSpaceType.get.to_s
       tank_temperature = 60
       # find the specific space_type properties from standard.json
       space_types_table.each do |space_type|
-        if space_type_name == (space_type['building_type'] + ' ' + space_type['space_type'])
+        if (space_type['building_type'] + ' ' + space_type_name) == (space_type['building_type'] + ' ' + space_type['space_type'])
           break if space_type['necb_hvac_system_selection_type'] == '- undefined -'
           # If there is no service hot water load.. Don't bother adding anything.
-          break if space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0 || space_type['service_water_heating_schedule'].nil?
+          break if (space_type['service_water_heating_peak_flow_per_area'].to_f == 0.0 && space_type['service_water_heating_peak_flow_rate'].to_f == 0.0) || space_type['service_water_heating_schedule'].nil?
 
           # If there is a service hot water load collect the space information
           data = space_type
@@ -280,7 +279,6 @@ class NECB2011
       # If there is no service hot water load.. Don't bother adding anything.
       # Skip space types with no data
       next if data.nil?
-
       space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
       # Calculate the peak shw flow rate for the space.  Peak flow from JSON file is in US Gal/hr/ft^2
       # space_peak_flow_ind is the peak flow rate for the space while space_peak_flow is the peak flow
@@ -447,13 +445,15 @@ class NECB2011
   # space that has a demand for shw.  It calculates the x, y, and z components of the vector between the shw space and the
   # spaces with demand for shw.  The distance of the piping run is calculated by adding the x, y, and z components of the
   # vector (rather than the magnitude of the vector).  For the purposes of calculating pressure loss along the pipe bends,
-  # and other minor losses are accounted by doubling the calculated length of the pipe.  the pipe diameter is defaulted to
-  # 0.01905m (3/4") as recommended by Mike Lubun.  The default kinematic viscosity of water is assumed to be that at
-  # 60 C (in m^2/s).  The default density of water is assumed to be 983 kg/m^3 as per https://hypertextbook.com/facts/2007/AllenMa.shtml
-  # accessed 2018-07-27.  The pipe is assumed to be made out of PVC and have a roughness height of 1.5*10^-6 m as per
+  # and other minor losses are accounted by doubling the calculated length of the pipe.  The default kinematic viscosity 
+  # of water is assumed to be that at 60 C (in m^2/s).  The default density of water is assumed to be 983 kg/m^3 as per 
+  # https://hypertextbook.com/facts/2007/AllenMa.shtml accessed 2018-07-27.  The pipe is assumed to be made out of PVC and 
+  # have a roughness height of 1.5*10^-6 m as per:
   # www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on 2018-07-25.
+  # The default maximum velocity is from the table from 'The Engineering Toolbox' link:
+  # https://www.engineeringtoolbox.com/flow-velocity-water-pipes-d_385.html
   # Chris Kirney 2018-07-27.
-  def auto_size_shw_pump_head(model, default: true, pipe_dia_m: 0.01905, kin_visc_SI: 0.000004736, density_SI: 983, pipe_rough_m: 0.0000015)
+  def auto_size_shw_pump_head(model, default: true, pipe_vel: 1.75, kin_visc_SI: 0.000004736, density_SI: 983, pipe_rough_m: 0.0000015)
     return 179532 if default
 
     mech_room, cond_spaces = find_mech_room(model)
@@ -513,7 +513,8 @@ class NECB2011
       #          2018-07-25.  I assume 3/4" pipe because that is what Mike Lubun says is used in most cases (unless it
       #          it is for process water but we assume that is not the case).
       # Determine the bulk velocity of the shw through the pipe.
-      pipe_vel = 4 * total_peak_flow / (Math::PI * (pipe_dia_m**2))
+      # find pipe diameter for the peak flow
+      pipe_dia_m = (4.0 * total_peak_flow / (Math::PI * pipe_vel))**0.5
       # Get the Reynolds number.
       re_pipe = (pipe_vel * pipe_dia_m) / kin_visc_SI
       # Step 2:  Figure out what the Darcy-Weisbach friction factor is.

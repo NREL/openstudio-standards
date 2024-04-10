@@ -24,13 +24,13 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_2_Test_FO2_S_DX_FPFC < MiniTest::Test
+class NECB_HVAC_System_2_Test_FO2_S_DX_FPFC < Minitest::Test
 
 
   #System #2
   #Sizing Convergence Errors when mua_cooling_types = DX
   def test_necb_hvac_system_2_fuel_oil2_scroll_dx_fpfc()
-    weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
+    weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
     template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = 'system_2'
     vintage = 'NECB2011'

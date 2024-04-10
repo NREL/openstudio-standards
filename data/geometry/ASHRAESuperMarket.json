@@ -205,18 +205,16 @@
   },
   {
     "type": "Refrigeration_system",
-    "compressor_type": "Low Temp",
+    "compressor_type": "SuperMarket Low Temp",
     "cases": [
       {
-        "case_type": "Ice Cream Reach-Ins",
-        "lighting_schedule": "",
-        "restocking_schedule": "RestaurantFastFood Kitchen_Case:1_WALKINFREEZER_WalkInStockingSched",
+        "case_type": "SuperMarket Ice Cream Reach-Ins",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Ice Cream Coffins",
+        "case_type": "SuperMarket Ice Cream Coffins",
         "space_names": [
           "Main Sales"
         ]
@@ -224,7 +222,7 @@
     ],
     "walkins": [
       {
-        "walkin_type": "Grocery Freezer",
+        "walkin_type": "SuperMarket Grocery Freezer",
         "space_names": [
           "Active Storage"
         ],
@@ -235,14 +233,13 @@
     "space_names": [
       "Main Sales"
     ]
-    //  }
   },
   {
     "type": "Refrigeration_system",
-    "compressor_type": "Low Temp",
+    "compressor_type": "SuperMarket Low Temp",
     "cases": [
       {
-        "case_type": "Frozen Food Reach-Ins",
+        "case_type": "SuperMarket Frozen Food Reach-Ins",
         "space_names": [
           "Main Sales"
         ]
@@ -250,7 +247,7 @@
     ],
     "walkins": [
       {
-        "walkin_type": "Bakery Freezer",
+        "walkin_type": "SuperMarket Bakery Freezer",
         "space_names": [
           "Bakery"
         ],
@@ -264,34 +261,34 @@
   },
   {
     "type": "Refrigeration_system",
-    "compressor_type": "Med Temp",
+    "compressor_type": "SuperMarket Med Temp",
     "cases": [
       {
-        "case_type": "Deli Cases",
+        "case_type": "SuperMarket Deli Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Dairy Cases",
+        "case_type": "SuperMarket Dairy Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Dairy_Meat Cases",
+        "case_type": "SuperMarket Dairy Meat Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Dairy_Meat Cases",
+        "case_type": "SuperMarket Meat Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Service Meat Cases",
+        "case_type": "SuperMarket Service Meat Cases",
         "space_names": [
           "Main Sales"
         ]
@@ -299,14 +296,14 @@
     ],
     "walkins": [
       {
-        "walkin_type": "Dairy Cooler",
+        "walkin_type": "SuperMarket Dairy Cooler",
         "space_names": [
           "Active Storage"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Beer Cooler",
+        "walkin_type": "SuperMarket Beer Cooler",
         "space_names": [
           "Active Storage"
         ],
@@ -320,52 +317,46 @@
   },
   {
     "type": "Refrigeration_system",
-    "compressor_type": "Med Temp",
+    "compressor_type": "SuperMarket Med Temp",
     "cases": [
       {
-        "case_type": "Beverage Cases",
+        "case_type": "SuperMarket Beverage Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Deli Cases",
+        "case_type": "SuperMarket Service Deli Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Salad Cases",
-        "space_names": [
-          "Main Sales"
-        ]
-      },
-//      {
-//        "case_type": "Produce Cases Low",
-//        "space_names": [
-//          "Main Sales"
-//        ]
-//      },
-      {
-        "case_type": "Produce Islands",
+        "case_type": "SuperMarket Salad Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Floral Cases",
+        "case_type": "SuperMarket Produce Islands",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Service Bakery Cases",
+        "case_type": "SuperMarket Floral Cases",
         "space_names": [
           "Main Sales"
         ]
       },
       {
-        "case_type": "Prepared Foods Cases",
+        "case_type": "SuperMarket Service Bakery Cases",
+        "space_names": [
+          "Main Sales"
+        ]
+      },
+      {
+        "case_type": "SuperMarket Prepared Foods Cases",
         "space_names": [
           "Main Sales"
         ]
@@ -373,42 +364,42 @@
     ],
     "walkins": [
       {
-        "walkin_type": "Meat Cooler",
+        "walkin_type": "SuperMarket Meat Cooler",
         "space_names": [
           "Active Storage"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Meat Prep",
+        "walkin_type": "SuperMarket Meat Prep",
         "space_names": [
           "Deli"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Bloom Box",
+        "walkin_type": "SuperMarket Bloom Box",
         "space_names": [
           "Active Storage"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Deli Cooler",
+        "walkin_type": "SuperMarket Deli Cooler",
         "space_names": [
           "Deli"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Produce Cooler",
+        "walkin_type": "SuperMarket Produce Cooler",
         "space_names": [
           "Active Storage"
         ],
         "number_of_walkins": 1
       },
       {
-        "walkin_type": "Fish Cooler",
+        "walkin_type": "SuperMarket Fish Cooler",
         "space_names": [
           "Active Storage"
         ],

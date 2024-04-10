@@ -12,11 +12,11 @@ class Standard
   #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
-  # @param target_includes_int_film_coefficients [Bool] if true, subtracts off standard film interior coefficients from your
+  # @param target_includes_int_film_coefficients [Boolean] if true, subtracts off standard film interior coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @param target_includes_ext_film_coefficients [Bool] if true, subtracts off standard exterior film coefficients from your
+  # @param target_includes_ext_film_coefficients [Boolean] if true, subtracts off standard exterior film coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo Put in Phlyroy's logic for inferring the insulation layer of a construction
   def construction_set_u_value(construction, target_u_value_ip, insulation_layer_name = nil, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
@@ -31,7 +31,7 @@ class Standard
     if insulation_layer_name.nil? && target_u_value_ip == 0.0
       # Do nothing if the construction already doesn't have an insulation layer
     elsif insulation_layer_name.nil?
-      insulation_layer_name = find_and_set_insulaton_layer(construction).name
+      insulation_layer_name = find_and_set_insulation_layer(construction).name
     end
 
     # Remove the insulation layer if the specified U-value is zero.
@@ -134,11 +134,11 @@ class Standard
   #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
   #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
   #   'GroundContactWall', 'GroundContactRoof'
-  # @param target_includes_int_film_coefficients [Bool] if true, subtracts off standard film interior coefficients from your
+  # @param target_includes_int_film_coefficients [Boolean] if true, subtracts off standard film interior coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @param target_includes_ext_film_coefficients [Bool] if true, subtracts off standard exterior film coefficients from your
+  # @param target_includes_ext_film_coefficients [Boolean] if true, subtracts off standard exterior film coefficients from your
   #   target_u_value before modifying insulation thickness.  Film values from 90.1-2010 A9.4.1 Air Films
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_glazing_u_value(construction, target_u_value_ip, intended_surface_type = 'ExteriorWall', target_includes_int_film_coefficients, target_includes_ext_film_coefficients)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting U-Value for #{construction.name}.")
 
@@ -186,8 +186,8 @@ class Standard
     # This is the desired R-value of the insulation.
     ins_r_value_si = target_r_value_si - film_coeff_r_value_si
     if ins_r_value_si <= 0.0
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R; U-value will not be modified.")
-      return false
+      ins_r_value_si = 0.001
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "Requested U-value of #{target_u_value_ip} Btu/ft^2*hr*R for #{construction.name} is too high given the film coefficients of U-#{film_coeff_u_value_ip.round(2)} Btu/ft^2*hr*R.")
     end
     ins_u_value_si = 1.0 / ins_r_value_si
 
@@ -202,15 +202,11 @@ class Standard
     # Set the U-value of the insulation layer
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     glass_layer.setUFactor(ins_u_value_si)
-    glass_layer.setName("#{glass_layer.name} U-#{ins_u_value_ip.round(2)}")
 
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_r_value_ip = #{ins_r_value_ip.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_ip = #{ins_u_value_ip.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---ins_u_value_si = #{ins_u_value_si.round(2)} for #{construction.name}.")
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "---glass_layer = #{glass_layer.name} u_factor_si = #{glass_layer.uFactor.round(2)}.")
-
-    # Modify the construction name
-    construction.setName("#{construction.name} U-#{target_u_value_ip.round(2)}")
 
     return true
   end
@@ -219,7 +215,7 @@ class Standard
   #
   # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_shgc [Double] Solar Heat Gain Coefficient
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_glazing_shgc(construction, target_shgc)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Construction', "Setting SHGC for #{construction.name}.")
 
@@ -232,10 +228,6 @@ class Standard
     # Set the SHGC
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     glass_layer.setSolarHeatGainCoefficient(target_shgc)
-    glass_layer.setName("#{glass_layer.name} SHGC #{target_shgc.round(2)}")
-
-    # Modify the construction name
-    construction.setName("#{construction.name} SHGC #{target_shgc.round(2)}")
 
     return true
   end
@@ -244,7 +236,7 @@ class Standard
   # as indicated by having a single layer of type SimpleGlazing.
   #
   # @param construction [OpenStudio::Model::Construction] construction object
-  # @return [Bool] returns true if it is a simple glazing, false if not
+  # @return [Boolean] returns true if it is a simple glazing, false if not
   def construction_simple_glazing?(construction)
     # Not simple if more than 1 layer
     if construction.layers.length > 1
@@ -252,6 +244,7 @@ class Standard
     end
 
     # Not simple unless the layer is a SimpleGlazing material
+    # if construction.layers.first.to_SimpleGlazing.empty?
     if construction.layers.first.to_SimpleGlazing.empty?
       return false
     end
@@ -268,7 +261,7 @@ class Standard
   # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_f_factor_ip [Double] F-Factor
   # @param insulation_layer_name [String] The name of the insulation layer in this construction
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_slab_f_factor(construction, target_f_factor_ip, insulation_layer_name = nil)
     # Regression from table A6.3 unheated, fully insulated slab
     r_value_ip = 1.0248 * target_f_factor_ip**-2.186
@@ -283,6 +276,39 @@ class Standard
     return true
   end
 
+  # Set the surface specific F-factor parameters of a construction
+  #
+  # @param construction [OpenStudio::Model::FFactorGroundFloorConstruction] OpenStudio F-factor construction object
+  # @param target_f_factor_ip [Float] Targeted F-Factor in IP units
+  # @param surface [OpenStudio::Model::Surface] OpenStudio surface object
+  # @return [Boolean] returns true if successful, false if not
+  def construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
+    # Get space associated with surface
+    space = surface.space.get
+
+    # Find this space's exposed floor area and perimeter. NOTE: this assumes only only floor per space.
+    perimeter, area = model_get_f_floor_geometry(space)
+
+    if area == 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Area for #{surface.name} was calculated to be 0 m2, slab f-factor cannot be set.")
+      return false
+    end
+
+    # Change construction name
+    construction.setName("#{construction.name}_#{surface.name}_#{target_f_factor_ip}")
+
+    # Set properties
+    f_factor_si = target_f_factor_ip * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
+    construction.setFFactor(f_factor_si)
+    construction.setArea(area)
+    construction.setPerimeterExposed(perimeter)
+
+    # Set surface outside boundary condition
+    surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
+
+    return true
+  end
+
   # Set the C-Factor of an underground wall to a specified value.
   # Assumes continuous exterior insulation and modifies
   # the insulation layer according to the values from 90.1-2004
@@ -291,7 +317,7 @@ class Standard
   # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_c_factor_ip [Double] C-Factor
   # @param insulation_layer_name [String] The name of the insulation layer in this construction
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_underground_wall_c_factor(construction, target_c_factor_ip, insulation_layer_name = nil)
     # Regression from table A4.2 continuous exterior insulation
     r_value_ip = 0.775 * target_c_factor_ip**-1.067
@@ -304,6 +330,36 @@ class Standard
     construction.setName("#{construction.name} C-#{target_c_factor_ip.round(3)}")
 
     return true
+  end
+
+  # Set the surface specific C-factor parameters of a construction
+  #
+  # @param construction [OpenStudio::Model::CFactorUndergroundWallConstruction] OpenStudio C-factor construction object
+  # @param target_c_factor_ip [Float] Targeted C-Factor in IP units
+  # @param surface [OpenStudio::Model::Surface] OpenStudio surface object
+  # @return [Boolean] returns true if successful, false if not
+  def construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
+    # Get space associated with surface
+    space = surface.space.get
+
+    # Get height of the first below grade wall in this space.
+    below_grade_wall_height = model_get_space_below_grade_wall_height(space)
+
+    if below_grade_wall_height == 0
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Below grade wall height for #{surface.name} was calculated to be 0 m2, below grade wall c-factor cannot be set.")
+      return false
+    end
+
+    # Change construction name
+    construction.setName("#{construction.name}_#{surface.name}_#{target_c_factor_ip}")
+
+    # Set properties
+    c_factor_si = target_c_factor_ip * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
+    construction.setCFactor(c_factor_si)
+    construction.setHeight(below_grade_wall_height)
+
+    # Set surface outside boundary condition
+    surface.setOutsideBoundaryCondition('GroundFCfactorMethod')
   end
 
   # Get the SHGC as calculated by EnergyPlus.
@@ -462,6 +518,123 @@ class Standard
     return u_factor_w_per_m2_k
   end
 
+  # Calculate the fenestration U-Factor base on the glass, frame,
+  # and divider performance and area calculated by EnergyPlus.
+  #
+  # @param construction [OpenStudio:Model:Construction] OpenStudio Construction object
+  # @return [Double] the U-Factor in W/m^2*K
+  def construction_calculated_fenestration_u_factor_w_frame(construction)
+    construction_name = construction.name.get.to_s
+
+    u_factor_w_per_m2_k = nil
+
+    sql = construction.model.sqlFile
+
+    if sql.is_initialized
+      sql = sql.get
+
+      row_query = "SELECT RowName
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND Value='#{construction_name.upcase}'"
+
+      row_id = sql.execAndReturnFirstString(row_query)
+
+      if row_id.is_initialized
+        row_id = row_id.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Construction', "U-Factor row ID not found for construction: #{construction_name}.")
+        row_id = 9999
+      end
+
+      # Glass U-Factor
+      glass_u_factor_query = "SELECT Value
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND ColumnName='Glass U-Factor'
+                  AND RowName='#{row_id}'"
+
+      glass_u_factor_w_per_m2_k = sql.execAndReturnFirstDouble(glass_u_factor_query)
+
+      glass_u_factor_w_per_m2_k = glass_u_factor_w_per_m2_k.is_initialized ? glass_u_factor_w_per_m2_k.get : 0.0
+
+      # Glass area
+      glass_area_query = "SELECT Value
+                          FROM tabulardatawithstrings
+                          WHERE ReportName='EnvelopeSummary'
+                          AND ReportForString='Entire Facility'
+                          AND TableName='Exterior Fenestration'
+                          AND ColumnName='Glass Area'
+                          AND RowName='#{row_id}'"
+
+      glass_area_m2 = sql.execAndReturnFirstDouble(glass_area_query)
+
+      glass_area_m2 = glass_area_m2.is_initialized ? glass_area_m2.get : 0.0
+
+      # Frame conductance
+      frame_conductance_query = "SELECT Value
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND ColumnName='Frame Conductance'
+                  AND RowName='#{row_id}'"
+
+      frame_conductance_w_per_m2_k = sql.execAndReturnFirstDouble(frame_conductance_query)
+
+      frame_conductance_w_per_m2_k = frame_conductance_w_per_m2_k.is_initialized ? frame_conductance_w_per_m2_k.get : 0.0
+
+      # Frame area
+      frame_area_query = "SELECT Value
+                          FROM tabulardatawithstrings
+                          WHERE ReportName='EnvelopeSummary'
+                          AND ReportForString='Entire Facility'
+                          AND TableName='Exterior Fenestration'
+                          AND ColumnName='Frame Area'
+                          AND RowName='#{row_id}'"
+
+      frame_area_m2 = sql.execAndReturnFirstDouble(frame_area_query)
+
+      frame_area_m2 = frame_area_m2.is_initialized ? frame_area_m2.get : 0.0
+
+      # Divider conductance
+      divider_conductance_query = "SELECT Value
+                  FROM tabulardatawithstrings
+                  WHERE ReportName='EnvelopeSummary'
+                  AND ReportForString='Entire Facility'
+                  AND TableName='Exterior Fenestration'
+                  AND ColumnName='Divider Conductance'
+                  AND RowName='#{row_id}'"
+
+      divider_conductance_w_per_m2_k = sql.execAndReturnFirstDouble(divider_conductance_query)
+
+      divider_conductance_w_per_m2_k = divider_conductance_w_per_m2_k.is_initialized ? divider_conductance_w_per_m2_k.get : 0.0
+
+      # Divider area
+      divider_area_query = "SELECT Value
+                          FROM tabulardatawithstrings
+                          WHERE ReportName='EnvelopeSummary'
+                          AND ReportForString='Entire Facility'
+                          AND TableName='Exterior Fenestration'
+                          AND ColumnName='Divder Area'
+                          AND RowName='#{row_id}'"
+
+      divider_area_m2 = sql.execAndReturnFirstDouble(divider_area_query)
+
+      divider_area_m2 = divider_area_m2.is_initialized ? divider_area_m2.get : 0.0
+
+      u_factor_w_per_m2_k = (glass_u_factor_w_per_m2_k * glass_area_m2 + frame_conductance_w_per_m2_k * frame_area_m2 + divider_conductance_w_per_m2_k * divider_area_m2) / (glass_area_m2 + frame_area_m2 + divider_area_m2)
+    else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', 'Model has no sql file containing results, cannot lookup data.')
+    end
+
+    return u_factor_w_per_m2_k
+  end
+
   # find and get the insulation layer for a construction
   #
   # @param construction [OpenStudio::Model::Construction] construction object
@@ -502,10 +675,10 @@ class Standard
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param values [Hash] has of values
-  # @param is_percentage [Bool] toggle is percentage
+  # @param is_percentage [Boolean] toggle is percentage
   # @return [Hash] json information
   def change_construction_properties_in_model(model, values, is_percentage = false)
-    puts JSON.pretty_generate(values)
+    # puts JSON.pretty_generate(values)
     # copy orginal model for reporting.
     before_measure_model = BTAP::FileIO.deep_copy(model)
     # report change as Info
@@ -564,8 +737,8 @@ class Standard
   # @param conductance [Double] conductance value in SI
   # @param shgc [Double] solar heat gain coefficient value, unitless
   # @param tvis [Double] visible transmittance
-  # @param is_percentage [Bool] toggle is percentage
-  # @return [Bool] returns true if successful, false if not
+  # @param is_percentage [Boolean] toggle is percentage
+  # @return [Boolean] returns true if successful, false if not
   def apply_changes_to_surface_construction(model, surface, conductance = nil, shgc = nil, tvis = nil, is_percentage = false)
     # If user has no changes...do nothing and return true.
     return true if conductance.nil? && shgc.nil? && tvis.nil?
@@ -695,7 +868,7 @@ class Standard
   #
   # @param construction [OpenStudio::Model::Construction] construction object
   # @param target_tvis [Double] Visible Transmittance
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def construction_set_glazing_tvis(construction, target_tvis)
     if target_tvis >= 1.0
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Construction', "Can only set the Tvis can only be set to less than 1.0. #{target_tvis} is greater than 1.0")
@@ -713,10 +886,7 @@ class Standard
     # Set the Tvis
     glass_layer = construction.layers.first.to_SimpleGlazing.get
     glass_layer.setVisibleTransmittance(target_tvis)
-    glass_layer.setName("#{glass_layer.name} TVis #{target_tvis.round(3)}")
 
-    # Modify the construction name
-    construction.setName("#{construction.name} TVis #{target_tvis.round(2)}")
     return true
   end
 end

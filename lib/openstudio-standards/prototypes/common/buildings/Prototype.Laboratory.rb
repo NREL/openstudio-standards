@@ -4,12 +4,21 @@ module Laboratory
   # hvac adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
+
+    # get the fume hood space type and exhaust ACH
+    fume_hood_exhaust_ach = nil
+    model.getSpaceTypes.each do |spc_type|
+      next unless spc_type.name.get.to_s.downcase.include? 'fume hood'
+
+      spc_type_properties = space_type_get_standards_data(spc_type)
+      fume_hood_exhaust_ach = spc_type_properties['ventilation_air_changes'].to_f
+    end
 
     # For fume hood, the OA rate varies with the fume hood schedule
     # So add "Proportional Control Minimum Outdoor Air Flow Rate Schedule"
@@ -19,6 +28,11 @@ module Laboratory
 
       ventilation = space.designSpecificationOutdoorAir.get
       ventilation.setOutdoorAirFlowRateFractionSchedule(model_add_schedule(model, 'Lab_FumeHood_Sch'))
+
+      # add exhaust fan to fume hood zone
+      fume_hood_zone_volume = space.volume
+      flow_rate_fume_hood = fume_hood_zone_volume * fume_hood_exhaust_ach / 3600.0
+      model_add_exhaust_fan(model, [space.thermalZone.get], flow_rate: flow_rate_fume_hood, flow_fraction_schedule_name: 'Lab_FumeHood_Sch')
     end
 
     # adjust doas sizing
@@ -38,12 +52,6 @@ module Laboratory
       end
     end
 
-    # @todo add exhaust fan to fume hood zone
-    #   search_criteria = ...
-    #   fume_hood_space = model_find_object(standards_data['Space Types'], search_criteria)
-    #   fume_hood_zone_volume = fume_hood_space.getVolume...
-    #   flow_rate_fume_hood = fume_hood_zone_volume * fume_hood_space['Ventilation_Air_Changes...']
-    #   model_add_exhaust_fan(model, thermal_zones, flow_rate=flow_rate_fume_hood,  flow_fraction_schedule_name='Lab_FumeHood_Sch')
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished building type specific adjustments')
     return true
   end
@@ -51,7 +59,7 @@ module Laboratory
   # lab zones don't have economizer, the air flow rate is determined by the ventilation requirement
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_modify_oa_controller(model)
     model.getAirLoopHVACs.sort.each do |air_loop|
       oa_sys = air_loop.airLoopHVACOutdoorAirSystem.get
@@ -66,10 +74,10 @@ module Laboratory
   # swh adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
@@ -77,10 +85,10 @@ module Laboratory
   # geometry adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
