@@ -7,7 +7,7 @@ class ACM179dASHRAE9012007
     building_level_bt = nil
     if building.standardsBuildingType.is_initialized
       building_level_bt =building.standardsBuildingType.get
-      OpenStudio.logFree(OpenStudio::Debug, "openstudio.standards.Model", "found Building level standardsBuildingType = #{building_level_bt}")
+      OpenStudio.logFree(OpenStudio::Debug, "openstudio.standards.Model", "found Building level standardsBuildingType = '#{building_level_bt}'")
     end
 
 
@@ -17,7 +17,7 @@ class ACM179dASHRAE9012007
         next
       end
       bldg_type = space_type.standardsBuildingType.get
-      OpenStudio.logFree(OpenStudio::Debug, "openstudio.standards.Model", "found building type for #{space_type.name} = #{bldg_type}")
+      OpenStudio.logFree(OpenStudio::Debug, "openstudio.standards.Model", "found building type for Space Type '#{space_type.name}' = '#{bldg_type}'")
       if building_types.key?(bldg_type)
         building_types[bldg_type] += space_type.floorArea
       else
@@ -30,7 +30,7 @@ class ACM179dASHRAE9012007
         OpenStudio.logFree(OpenStudio::Error, "openstudio.standards.Model", "Cannot identify a single building type in model, none of your #{model.getSpaceTypes.size} SpaceTypes have a standardsBuildingType assigned and neither does the Building")
         raise "No Primary Building Type found"
       else
-        OpenStudio.logFree(OpenStudio::Info, "openstudio.standards.Model", "No area determination based on space types found, using Building level standardsBuildingType = #{building_level_bt}")
+        OpenStudio.logFree(OpenStudio::Info, "openstudio.standards.Model", "No area determination based on space types found, using Building level standardsBuildingType = '#{building_level_bt}'")
         return building_level_bt
       end
     end
@@ -38,12 +38,12 @@ class ACM179dASHRAE9012007
     space_type_level_bt = building_types.max_by{|k, v| v}.first
     if !building_level_bt.nil?
       if building_level_bt != space_type_level_bt
-        OpenStudio.logFree(OpenStudio::Warn, "openstudio.standards.Model", "The Building has standardsBuildingType #{building_level_bt} while the area determination based on space types has #{space_type_level_bt}. Preferring the Space Type one.")
+        OpenStudio.logFree(OpenStudio::Warn, "openstudio.standards.Model", "The Building has standardsBuildingType '#{building_level_bt}' while the area determination based on space types has '#{space_type_level_bt}'. Preferring the Space Type one")
       end
       return space_type_level_bt
     end
 
-    OpenStudio.logFree(OpenStudio::Info, "openstudio.standards.Model", "Building doesn't have a standardsBuildingType #{building_level_bt}, using the area determination based on space types = #{space_type_level_bt}.")
+    OpenStudio.logFree(OpenStudio::Info, "openstudio.standards.Model", "Building doesn't have a standardsBuildingType, using the area determination based on space types = '#{space_type_level_bt}'")
     return space_type_level_bt
   end
 
