@@ -192,8 +192,10 @@ module OpenstudioStandards
     # Determine the weighted average conductance for a set of planar surfaces (surfaces or sub surfaces)
     #
     # @param surfaces [Array<OpenStudio::Model::PlanarSurface>] Array of OpenStudio PlanarSurface objects
-    # @return [Double] thermal conductance in W/m^2*K
+    # @return [Double] thermal conductance in W/m^2*K, or nil if not available
     def self.surfaces_get_conductance(surfaces)
+      return nil if surfaces.empty?
+
       total_area = 0.0
       temp = 0.0
       surfaces.each do |surface|
@@ -204,6 +206,8 @@ module OpenstudioStandards
         temp += surface.netArea * surface_conductance
         total_area += surface.netArea
       end
+      return nil if temp.zero?
+
       average_conductance = total_area.zero? ? 0.0 : temp / total_area
       return average_conductance
     end
