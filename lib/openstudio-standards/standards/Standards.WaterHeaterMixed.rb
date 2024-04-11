@@ -198,7 +198,7 @@ class Standard
     return true
   end
 
-  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] OpenStudio WaterHeaterMixed object
   # @param fuel_type [Float] water heater fuel type
   # @param capacity_btu_per_hr [Float] water heater capacity in Btu/h
   # @param volume_gal [Float] water heater gallons of storage
