@@ -10773,31 +10773,3 @@ OS:Daylighting:Control,
   ,                                       !- Minimum Light Output Fraction for Continuous Dimming Control
   2;                                      !- Number of Stepped Control Steps
 
-OS:SizingPeriod:DesignDay,
-  {a6f0c3ba-59a7-4cd6-93e7-5befa4c33265}, !- Handle
-  Calgary Intl AP Ann Clg .4% Condns WB=>MDB, !- Name
-  25.5,                                   !- Maximum Dry-Bulb Temperature {C}
-  12.3,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
-  88961,                                  !- Barometric Pressure {Pa}
-  4.5,                                    !- Wind Speed {m/s}
-  160,                                    !- Wind Direction {deg}
-  ,                                       !- Sky Clearness
-  No,                                     !- Rain Indicator
-  No,                                     !- Snow Indicator
-  21,                                     !- Day of Month
-  7,                                      !- Month
-  SummerDesignDay,                        !- Day Type
-  No,                                     !- Daylight Saving Time Indicator
-  Wetbulb,                                !- Humidity Condition Type
-  ,                                       !- Humidity Condition Day Schedule Name
-  17.8,                                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-  ,                                       !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-  ,                                       !- Enthalpy at Maximum Dry-Bulb {J/kg}
-  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
-  ,                                       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-  ASHRAETau,                              !- Solar Model Indicator
-  ,                                       !- Beam Solar Day Schedule Name
-  ,                                       !- Diffuse Solar Day Schedule Name
-  0.34,                                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance {dimensionless}
-  2.419;                                  !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance {dimensionless}
-

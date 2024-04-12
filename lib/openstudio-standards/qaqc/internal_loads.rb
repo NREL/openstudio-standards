@@ -378,12 +378,12 @@ module OpenstudioStandards
               unless OpenstudioStandards::Space.space_plenum?(space)
                 all_spaces_plenums = false
                 break
-                end
+              end
             end
 
             unless all_spaces_plenums
               check_elems << OpenStudio::Attribute.new('flag', "Unexpected standards type for #{space_type.name}, can't validate schedules.")
-              end
+            end
 
             next
           end

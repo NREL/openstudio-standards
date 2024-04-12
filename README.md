@@ -3,12 +3,12 @@
 openstudio-standards is a Ruby Gem library that extends the [OpenStudio SDK](https://www.openstudio.net/).
 It has four main use-cases:
 
-1. Provide higher level methods to help BEM users and developers to create OpenStudio models from existing geometry, or programmatically generated geometry
+1. Provide methods to create OpenStudio models from geometry templates, user geometry, or programmatically generated geometry
 2. Create typical building models in OpenStudio format
 3. Create a code baseline model from a proposed model
 4. Check a model against a code/standard
 
-openstudio-standards previously supported making the DOE/PNNL prototype buildings in OpenStudio format. This has since been deprecated, as the DOE/PNNL prototypes are intended for specific code comparisons under the Energy Policy Act and are not intended to accurately represent typical existing or new buildings. While openstudio-standards still creates typical buildings, these are not the same as the DOE/PNNL prototypes.
+openstudio-standards previously supported making the DOE/PNNL prototype buildings in OpenStudio format. This has since been deprecated, as the DOE/PNNL prototypes are intended for specific code comparisons under the Energy Policy Act and are not intended to accurately represent typical existing or new buildings. While openstudio-standards still creates typical buildings, these are not identical to the DOE/PNNL prototypes.
 
 ## Overview of Main Features
 If you are looking for a high-level overview of the features of this library, see the [Features](docs/Features.md) page.
