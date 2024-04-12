@@ -204,9 +204,9 @@ class Standard
 
     thermal_zone = zone_hvac_component.thermalZone.get
     occ_threshold = zone_hvac_unoccupied_threshold
-    occ_sch = thermal_zones_get_occupancy_schedule([thermal_zone],
-                                                   sch_name: "#{zone_hvac_component.name} Occ Sch",
-                                                   occupied_percentage_threshold: occ_threshold)
+    occ_sch = OpenstudioStandards::ThermalZone.thermal_zone_get_occupancy_schedule(thermal_zone,
+                                                                                   sch_name: "#{zone_hvac_component.name} Occ Sch",
+                                                                                   occupied_percentage_threshold: occ_threshold)
     zone_hvac_component.setSupplyAirFanOperatingModeSchedule(occ_sch)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation.  Setting fan operating mode schedule to align with zone occupancy schedule.")
 

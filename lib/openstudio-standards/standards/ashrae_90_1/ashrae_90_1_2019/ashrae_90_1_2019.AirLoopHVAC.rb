@@ -501,7 +501,7 @@ class ASHRAE9012019 < ASHRAE901
       nontrans_dwel = false
       if building_type == 'MidriseApartment' || building_type == 'HighriseApartment'
         air_loop_hvac.thermalZones.each do |zone|
-          next unless thermal_zone_residential?(zone)
+          next unless OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone)
 
           nontrans_dwel = true
         end
@@ -577,7 +577,7 @@ class ASHRAE9012019 < ASHRAE901
     air_loop_hvac.thermalZones.each do |zone|
       # Vou is the system uncorrected outdoor airflow:
       # Zone airflow is multiplied by the zone multiplier
-      v_ou += thermal_zone_outdoor_airflow_rate(zone) * zone.multiplier.to_f
+      v_ou += OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone) * zone.multiplier.to_f
     end
 
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
@@ -593,7 +593,7 @@ class ASHRAE9012019 < ASHRAE901
 
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
-      v_bz = thermal_zone_outdoor_airflow_rate(zone)
+      v_bz = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
 
       # Zone air distribution, assumed 1 per PNNL
       e_z = 1.0

@@ -1303,7 +1303,7 @@ class Standard
     # Check the total OA requirement for all zones on the system
     tot_oa_req = 0
     thermal_zones.each do |zone|
-      tot_oa_req += thermal_zone_outdoor_airflow_rate(zone)
+      tot_oa_req += OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
       break if tot_oa_req > 0
     end
 
@@ -1536,7 +1536,7 @@ class Standard
     # Check the total OA requirement for all zones on the system
     tot_oa_req = 0
     thermal_zones.each do |zone|
-      tot_oa_req += thermal_zone_outdoor_airflow_rate(zone)
+      tot_oa_req += OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
     end
 
     # If the total OA requirement is zero do not add the DOAS system because the simulations will fail
@@ -1719,7 +1719,7 @@ class Standard
     # add thermal zones to airloop
     thermal_zones.each do |zone|
       # skip zones with no outdoor air flow rate
-      unless thermal_zone_outdoor_airflow_rate(zone) > 0
+      unless OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone) > 0
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name} has no outdoor air flow rate and will not be added to #{air_loop.name}")
         next
       end
@@ -2011,7 +2011,8 @@ class Standard
         terminal.setDamperHeatingAction('Normal')
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, oa_rate)
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -2030,7 +2031,8 @@ class Standard
           terminal.setZoneMinimumAirFlowInputMethod('Constant')
         end
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, oa_rate)
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -2371,7 +2373,8 @@ class Standard
       terminal.setDamperHeatingAction('Normal')
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+      oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, oa_rate)
 
       unless return_plenum.nil?
         zone.setReturnPlenum(return_plenum)
@@ -2677,7 +2680,8 @@ class Standard
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+      oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, oa_rate)
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -5256,8 +5260,6 @@ class Standard
                                          slab_oat_low: slab_oat_low,
                                          slab_sp_at_oat_high: slab_sp_at_oat_high,
                                          slab_oat_high: slab_oat_high)
-      else
-        # 'none'; use energyplus default controls
       end
     end
     return radiant_loops
@@ -5655,7 +5657,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding ERV for #{zone.name}.")
 
       # Determine the OA requirement for this zone
-      min_oa_flow_m3_per_s_per_m2 = thermal_zone_outdoor_airflow_rate_per_area(zone)
+      min_oa_flow_m3_per_s_per_m2 = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
       supply_fan = create_fan_by_name(model,
                                       'ERV_Supply_Fan',
                                       fan_name: "#{zone.name} ERV Supply Fan")

@@ -174,19 +174,19 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
         # Determine the weighted average conductances by surface type.
         ## exterior surfaces.
-        outdoor_walls_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_walls)
-        outdoor_roofs_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_roofs)
-        outdoor_floors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_floors)
+        outdoor_walls_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls)
+        outdoor_roofs_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs)
+        outdoor_floors_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors)
         ## Ground surfaces.
-        ground_walls_average_conductances = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_walls)
-        ground_roofs_average_conductances = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_roofs)
-        ground_floors_average_conductances = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_floors)
+        ground_walls_average_conductances = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls)
+        ground_roofs_average_conductances = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs)
+        ground_floors_average_conductances = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors)
         ## Sub surfaces.
-        windows_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(windows)
-        windows_average_shgc = BTAP::Geometry::Surfaces::get_weighted_average_surface_shgc(windows)
-        skylights_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(skylights)
-        doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(doors)
-        #overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
+        windows_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(windows)
+        windows_average_shgc = OpenstudioStandards::Constructions.surfaces_get_solar_transmittance(windows)
+        skylights_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(skylights)
+        doors_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(doors)
+        #overhead_doors_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors)
 
         # SRR and FDWR.
         srr_info = standard.find_exposed_conditioned_roof_surfaces(@model)
@@ -194,8 +194,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
         # Output conductances.
         def roundOrNA(data, figs = 4)
-          if data == 'NA'
-            return data
+          if data.nil? || data == 'NA'
+            return 'NA'
           end
           return data.round(figs)
         end

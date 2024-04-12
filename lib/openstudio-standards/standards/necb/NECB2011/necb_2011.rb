@@ -2392,7 +2392,7 @@ class NECB2011 < Standard
       end
     end
     if future_file
-      # Rename the non-ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
+      # Rename the non ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
       # because the ASHRAE .ddy file includes sizing information not included in the regular .ddy file for future
       # weather data files.  Unfortunately, openstudio-standards just looks for the regular .ddy file for sizing
       # information which is why the switch is done.
