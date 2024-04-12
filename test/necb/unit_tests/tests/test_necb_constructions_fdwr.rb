@@ -194,8 +194,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
         # Output conductances.
         def roundOrNA(data, figs = 4)
-          if data == 'NA'
-            return data
+          if data.nil? || data == 'NA'
+            return 'NA'
           end
           return data.round(figs)
         end

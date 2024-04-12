@@ -1896,6 +1896,7 @@ Standard.class_eval do
     simple_glazing_mat.setThickness(0.003)
     simple_glazing_mat.setVisibleTransmittance(0.16)
     standard_glazing_mat = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
+    standard_glazing_mat.setSolarTransmittanceatNormalIncidence(0.5)
 
     # Define Constructions
     # # Surfaces
