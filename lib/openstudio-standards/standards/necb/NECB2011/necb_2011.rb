@@ -392,6 +392,7 @@ class NECB2011 < Standard
                            airloop_economizer_type: nil,
                            baseline_system_zones_map_option: nil,
                            necb_hdd: true)
+    primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel)
     self.fuel_type_set = SystemFuels.new()
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
@@ -2407,6 +2408,12 @@ class NECB2011 < Standard
     end
     # Return true if everything worked out
     return true
+  end
+
+  # This method is defined and used by the vintage classes to address he issue with the heat pump fuel types.  This
+  # method does nothing when creating NECB reference buildings.
+  def validate_primary_heating_fuel(primary_heating_fuel:)
+    return primary_heating_fuel
   end
 
 end

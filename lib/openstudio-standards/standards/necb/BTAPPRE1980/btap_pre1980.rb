@@ -85,4 +85,21 @@ class BTAPPRE1980 < NECB2011
   def set_occ_sensor_spacetypes(model, space_type_map)
     return true
   end
+
+  # This method sets the primary heating fuel to either NaturalGas or Electricity if a HP fuel type is set.
+  def validate_primary_heating_fuel(primary_heating_fuel:)
+    return ecm_system_name, primary_heating_fuel if primary_heating_fuel == 'NaturalGas' || primary_heating_fuel == 'Electricity' || primary_heating_fuel == 'FuelOilNo2'
+    case primary_heating_fuel
+    when "NaturalGasHPGasBackup"
+      primary_heating_fuel = 'NaturalGas'
+    when "NaturalGasHPElecBackupMixed"
+      primary_heating_fuel = 'NaturalGas'
+    when "ElectricityHPElecBackup"
+      primary_heating_fuel = 'Electricity'
+    when "ElectricityHPGasBackupMixed"
+      primary_heating_fuel = 'Electricity'
+    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Attemted to apply an NECB HP primary_heating_fuel to a vintage building type.  Replacing the selected primary_heating_fuel with #{primary_heating_fuel}.")
+    return primary_heating_fuel
+  end
 end
