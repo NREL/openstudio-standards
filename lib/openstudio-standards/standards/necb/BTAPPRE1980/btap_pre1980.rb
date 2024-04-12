@@ -88,7 +88,7 @@ class BTAPPRE1980 < NECB2011
 
   # This method sets the primary heating fuel to either NaturalGas or Electricity if a HP fuel type is set.
   def validate_primary_heating_fuel(primary_heating_fuel:)
-    return ecm_system_name, primary_heating_fuel if primary_heating_fuel == 'NaturalGas' || primary_heating_fuel == 'Electricity' || primary_heating_fuel == 'FuelOilNo2'
+    return primary_heating_fuel unless primary_heating_fuel == 'NaturalGasHPGasBackup' || primary_heating_fuel == 'NaturalGasHPElecBackupMixed' || primary_heating_fuel == 'ElectricityHPElecBackup' || primary_heating_fuel == 'ElectricityHPGasBackupMixed'
     case primary_heating_fuel
     when "NaturalGasHPGasBackup"
       primary_heating_fuel = 'NaturalGas'
