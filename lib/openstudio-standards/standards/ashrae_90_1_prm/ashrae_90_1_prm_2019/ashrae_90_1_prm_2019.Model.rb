@@ -95,6 +95,18 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     end
     else
     # Todo: service water heater with multiple building area type
+    # Assume only one water heater in the model
+    water_heaters = []
+    model.getWaterHeaterMixeds.sort.each do |water_heater|
+      water_heaters.push(water_heater)
+    end
+    water_heater_thermal_zone = water_heaters[0].ambientTemperatureThermalZone.get
+    service_water_temperature = water_heaters[0].maximumTemperatureLimit.get
+    water_heater_capacity = water_heaters[0].heaterMaximumCapacity.get
+    water_heater_volume = water_heaters[0].tankVolume.get
+    parasitic_fuel_consumption_rate = water_heaters[0].offCycleParasiticFuelConsumptionRate
+
+
     # 1. Remove current swh loop
     model.getPlantLoops.sort.each do |loop|
       # Don't remove loops except service water heating loops
@@ -106,19 +118,10 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
     building_type_swh_unique.each do |building_type_swh|
       system_name = 'Service Water Loop ' + building_type_swh
-      # get the water heater info sub-hash
-      original_water_heater_info = original_water_heater_info_hash[original_water_heater_info_hash.keys[0]]
-      water_heater_thermal_zone = original_water_heater_info['Ambient Temperature Thermal Zone Name']
-      # wather_heater_thermal_zone = model.getThermalZoneByName(thermal_zone_name).get
-      # puts wather_heater_thermal_zone
-      service_water_temperature = original_water_heater_info['Maximum Temperature Limit {C}'].to_f
       # todo: Hard coded now, implement in the future, may have multiple pumps in a building
       service_water_pump_head = 29891
       service_water_pump_motor_efficiency = 0.7
-      water_heater_capacity = original_water_heater_info['Heater Maximum Capacity {W}'].to_f
-      water_heater_volume = original_water_heater_info['Tank Volume {m3}'].to_f
       water_heater_fuel = water_heater_mixed_apply_prm_baseline_fuel_type(building_type_swh)
-      parasitic_fuel_consumption_rate = original_water_heater_info['Off Cycle Parasitic Fuel Consumption Rate {W}'].to_f
       model_add_swh_loop(model,
              system_name,
              water_heater_thermal_zone,
@@ -139,3 +142,4 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     return true
   end
 end
+
