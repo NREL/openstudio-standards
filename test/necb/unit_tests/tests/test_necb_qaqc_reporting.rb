@@ -43,7 +43,7 @@ class NECB_QAQC_Repoprting < Minitest::Test
       File.write(qaqc_expected_results, JSON.pretty_generate(qaqc))
     end
     File.write(qaqc_test_results, JSON.pretty_generate(qaqc))
-    msg = "The qaqc_report_expected_results.json differs from the qaqc_report_expected_results.json.  Please review the results."
+    msg = "The qaqc_report_test_results.json differs from the qaqc_report_expected_results.json.  Please review the results."
     file_compare(expected_results_file: qaqc_expected_results, test_results_file: qaqc_test_results, msg: msg)
   end
 end
