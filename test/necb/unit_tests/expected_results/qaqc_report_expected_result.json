@@ -74,7 +74,7 @@
       ]
     }
   ],
-  "os_standards_revision": "f516f9b50",
+  "os_standards_revision": "test",
   "os_standards_version": "0.6.0.rc1",
   "openstudio_version": "3.7.0+d5269793f1",
   "energyplus_version": "23.2.0",
