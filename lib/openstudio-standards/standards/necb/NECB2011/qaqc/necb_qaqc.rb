@@ -541,7 +541,7 @@ class NECB2011
     constructions = []
     outdoor_subsurfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
@@ -558,7 +558,7 @@ class NECB2011
     constructions = []
     outdoor_surfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
@@ -575,7 +575,7 @@ class NECB2011
     constructions = []
     ground_surfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
