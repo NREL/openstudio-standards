@@ -5920,6 +5920,7 @@ class Standard
     #
     # enthalpy_recovery_ratio = nil will trigger an ERV with no effectiveness that only provides OA
     enthalpy_recovery_ratio = nil
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
     case template
       when '90.1-2019'
         search_criteria = {
@@ -6047,7 +6048,7 @@ class Standard
     supply_fan.setPressureRise(233.6875)
 
     unit_ventilator = OpenStudio::Model::ZoneHVACUnitVentilator.new(model, supply_fan)
-    unit_ventilator.setName("#{thermal_zone.name} ERV")
+    unit_ventilator.setName("#{thermal_zone.name} Unit Ventilator")
     unit_ventilator.addToThermalZone(thermal_zone)
     fan_zone_exhaust = create_fan_zone_exhaust(model,
                                                fan_name: "#{thermal_zone.name} Exhaust Fan",

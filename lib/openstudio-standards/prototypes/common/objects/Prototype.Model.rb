@@ -1613,9 +1613,9 @@ Standard.class_eval do
               'ASHRAE 169-2013-5A',
               'ASHRAE 169-2013-5B',
               'ASHRAE 169-2013-5C'
-              if thermal_zone.floorArea <= OpenStudio.convert(500.0, 'ft^2', 'm^2').get
+              if zone.floorArea <= OpenStudio.convert(500.0, 'ft^2', 'm^2').get
                 has_erv = false
-                OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Energy recovery will not be modeled for the ERV serving #{thermal_zone.name}.")
+                OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Energy recovery will not be modeled for the ERV serving #{zone.name}.")
               end
             end
           end
