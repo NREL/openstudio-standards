@@ -51,8 +51,13 @@ class Standard
     htg_coil.setGasBurnerEfficiency(efficiency)
 
     # defaults
-    htg_coil.setParasiticElectricLoad(0)
-    htg_coil.setParasiticGasLoad(0)
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      htg_coil.setParasiticElectricLoad(0.0)
+      htg_coil.setParasiticGasLoad(0.0)
+    else
+      htg_coil.setOnCycleParasiticElectricLoad(0.0)
+      htg_coil.setOffCycleParasiticGasLoad(0.0)
+    end
 
     return htg_coil
   end
