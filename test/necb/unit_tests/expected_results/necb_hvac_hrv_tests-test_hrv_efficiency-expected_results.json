@@ -1,115 +1,217 @@
 {
   "VarType": "Vintage",
-  "NECB2011": {
-    "VarType": "TestCase",
-    "Reference": "NECB 2011 p3 5.2.10.1",
-    "case-1": {
-      "Sys_3_PSZ Thermal Zone 3": {
-        "name": "Sys_3_PSZ Thermal Zone 3",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 82.859074457796,
-        "has_hrv": false
-      },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "name": "Sys_3_PSZ Thermal Zone 5",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 171.505666056816,
-        "has_hrv": true
-      },
-      "Sys_3_PSZ Thermal Zone 1": {
-        "name": "Sys_3_PSZ Thermal Zone 1",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 82.859074457796,
-        "has_hrv": false
-      },
-      "Sys_3_PSZ Thermal Zone 2": {
-        "name": "Sys_3_PSZ Thermal Zone 2",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 36.085676513796,
-        "has_hrv": false
-      },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 36.085676513796,
-        "has_hrv": false
-      }
-    }
-  },
-  "NECB2015": {
-    "VarType": "TestCase",
-    "Reference": "NECB 2015 p1 5.2.10.1.(1)",
-    "case-1": {
-      "Sys_3_PSZ Thermal Zone 5": {
-        "name": "Sys_3_PSZ Thermal Zone 5",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 171.505666056816,
-        "has_hrv": true
-      },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 36.085676513796,
-        "has_hrv": false
-      },
-      "Sys_3_PSZ Thermal Zone 1": {
-        "name": "Sys_3_PSZ Thermal Zone 1",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 82.859074457796,
-        "has_hrv": false
-      },
-      "Sys_3_PSZ Thermal Zone 2": {
-        "name": "Sys_3_PSZ Thermal Zone 2",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 36.085676513796,
-        "has_hrv": false
-      },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "name": "Sys_3_PSZ Thermal Zone 3",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 82.859074457796,
-        "has_hrv": false
-      }
-    }
-  },
   "NECB2017": {
     "VarType": "TestCase",
-    "Reference": "NECB 2017 p2 A-5.2.10.4",
-    "case-1": {
-      "Sys_3_PSZ Thermal Zone 5": {
-        "name": "Sys_3_PSZ Thermal Zone 5",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 171.505666056816,
-        "has_hrv": true
+    "Climate zone 4": {
+      "Sys_3_PSZ Thermal Zone 3": {
+        "city_name": "Victoria",
+        "flow": 0.0938,
+        "oaf": 0.261,
+        "has_hrv": false
       },
-      "sys_3|mixed|shr>erv|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none": {
-        "name": "sys_3|mixed|shr>erv|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 36.085676513796,
+      "Sys_3_PSZ Thermal Zone 5": {
+        "city_name": "Victoria",
+        "flow": 0.194,
+        "oaf": 0.468,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 1": {
+        "city_name": "Victoria",
+        "flow": 0.0938,
+        "oaf": 0.146,
         "has_hrv": false
       },
       "Sys_3_PSZ Thermal Zone 2": {
-        "name": "Sys_3_PSZ Thermal Zone 2",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 36.085676513796,
-        "has_hrv": true
+        "city_name": "Victoria",
+        "flow": 0.0409,
+        "oaf": 0.0998,
+        "has_hrv": false
+      },
+      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
+        "city_name": "Victoria",
+        "flow": 0.0409,
+        "oaf": 0.116,
+        "has_hrv": false
+      }
+    },
+    "Climate zone 5": {
+      "Sys_3_PSZ Thermal Zone 5": {
+        "city_name": "Toronto",
+        "flow": 0.194,
+        "oaf": 0.311,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
+      },
+      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
+        "city_name": "Toronto",
+        "flow": 0.0409,
+        "oaf": 0.109,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
       },
       "Sys_3_PSZ Thermal Zone 1": {
-        "name": "Sys_3_PSZ Thermal Zone 1",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 82.859074457796,
-        "has_hrv": true
+        "city_name": "Toronto",
+        "flow": 0.0938,
+        "oaf": 0.146,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
+      },
+      "Sys_3_PSZ Thermal Zone 2": {
+        "city_name": "Toronto",
+        "flow": 0.0409,
+        "oaf": 0.0977,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
       },
       "Sys_3_PSZ Thermal Zone 3": {
-        "name": "Sys_3_PSZ Thermal Zone 3",
-        "multiplier_factor": 35.0,
-        "exhaust_heat_content": 82.859074457796,
-        "has_hrv": true
+        "city_name": "Toronto",
+        "flow": 0.0938,
+        "oaf": 0.168,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
       }
     }
   },
   "NECB2020": {
-    "VarType": "",
-    "Reference": "NECB 2020 p1 Table 5.2.10.4."
+    "VarType": "TestCase",
+    "Climate zone 4": {
+      "Sys_3_PSZ Thermal Zone 5": {
+        "city_name": "Victoria",
+        "flow": 0.194,
+        "oaf": 0.468,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 1": {
+        "city_name": "Victoria",
+        "flow": 0.0938,
+        "oaf": 0.146,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 2": {
+        "city_name": "Victoria",
+        "flow": 0.0409,
+        "oaf": 0.0998,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 3": {
+        "city_name": "Victoria",
+        "flow": 0.0938,
+        "oaf": 0.261,
+        "has_hrv": false
+      },
+      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
+        "city_name": "Victoria",
+        "flow": 0.0409,
+        "oaf": 0.116,
+        "has_hrv": false
+      }
+    },
+    "Climate zone 5": {
+      "Sys_3_PSZ Thermal Zone 5": {
+        "city_name": "Toronto",
+        "flow": 0.194,
+        "oaf": 0.311,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
+      },
+      "Sys_3_PSZ Thermal Zone 2": {
+        "city_name": "Toronto",
+        "flow": 0.0409,
+        "oaf": 0.0977,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
+      },
+      "Sys_3_PSZ Thermal Zone 1": {
+        "city_name": "Toronto",
+        "flow": 0.0938,
+        "oaf": 0.146,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
+      },
+      "Sys_3_PSZ Thermal Zone 3": {
+        "city_name": "Toronto",
+        "flow": 0.0938,
+        "oaf": 0.168,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
+      },
+      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
+        "city_name": "Toronto",
+        "flow": 0.0409,
+        "oaf": 0.109,
+        "has_hrv": true,
+        "latent_effectiveness_100_cooling": 0.5,
+        "latent_effectiveness_100_heating": 0.5,
+        "latent_effectiveness_75_cooling": 0.5,
+        "latent_effectiveness_75_heating": 0.5,
+        "sensible_effectiveness_100_cooling": 0.5,
+        "sensible_effectiveness_100_heating": 0.5,
+        "sensible_effectiveness_75_cooling": 0.5,
+        "sensible_effectiveness_75_heating": 0.5
+      }
+    }
   }
 }

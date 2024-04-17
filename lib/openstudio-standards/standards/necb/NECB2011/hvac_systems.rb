@@ -2266,7 +2266,7 @@ class NECB2011
     if sys_oa.is_a? String then name_parts[1] = sys_oa end
     for i in 0..name_parts.size - 1
       if (name_parts[i].include? 'shr>') && (sys_hr.is_a? String)
-        name_parts[i] = "shr>#{sys_hr}"
+       # name_parts[i] = "shr>#{sys_hr}"
       elsif (name_parts[i].include? 'sh>') && (sys_htg.is_a? String)
         name_parts[i] = "sh>#{sys_htg}"
       elsif (name_parts[i].include? 'sc>') && (sys_clg.is_a? String)
