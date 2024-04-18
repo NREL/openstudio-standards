@@ -55,6 +55,32 @@ class ACM179dASHRAE9012007
     @primary_building_types_memoized[model] ||= ACM179dASHRAE9012007.__model_get_primary_building_type(model)
   end
 
+  # **NOTE**: Patched to check also number of floors
+  # remap office to one of the prototype buildings
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param floor_area [Double] floor area (m^2)
+  # @return [String] SmallOffice, MediumOffice, LargeOffice
+  def model_remap_office(model, floor_area)
+    floor_area_sqft = OpenStudio.convert(floor_area, 'm^2', 'ft^2').get
+    num_floors = model.getBuilding.buildingStories.size
+    if floor_area_sqft < 25_000
+      if num_floors <= 3
+        return 'SmallOffice'
+      else
+        return 'MediumOffice'
+      end
+    elsif floor_area_sqft < 150_000
+      if num_floors <= 5
+        return 'MediumOffice'
+      else
+        return 'LargeOffice'
+      end
+    else
+      return 'LargeOffice'
+    end
+  end
+
   # Patched to prefer the space area method above instead of just relying on
   # Building object
   def model_get_building_properties(model, remap_office = true)
