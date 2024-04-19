@@ -74,16 +74,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # Get the building area type from the additional properties of wateruse_equipment
     wateruse_equipment_hash = {}
     model.getWaterUseEquipments.each do |wateruse_equipment|
-      wateruse_equipment_def = wateruse_equipment.waterUseEquipmentDefinition
-      wateruse_target_temp_schedule = wateruse_equipment_def.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule()
-      wateruse_temperature_array = []
-      wateruse_target_temp_schedule.times().each do |time|
-        wateruse_temperature_array << wateruse_target_temp_schedule.getValue(time)
-      end
-      wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = {building_type: get_additional_property_as_string(wateruse_equipment, 'building_type_swh'),
-                                                                   peak_flowrate: wateruse_equipment_def.peakFlowRate,
-                                                                   flowrate_schedule: wateruse_equipment.flowRateFractionSchedule.get,
-                                                                   water_use_temperature: wateruse_temperature_array.max}
+      wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = get_additional_property_as_string(wateruse_equipment, 'building_type_swh')
     end
 
     building_type_list = []
