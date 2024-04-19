@@ -229,6 +229,6 @@
         ["SmallOffice", "90.1-2019", "ASHRAE 169-2013-2A", "userdata_default_test", []]
     ],
     "swh_multiple_building_type": [
-        ["MediumOffice", "90.1-2019", "ASHRAE 169-2013-2A", "userdata_swh_multiple_building_type", [["remove_transformer", []]]]
+        ["MidriseApartment", "90.1-2019", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]]
     ]
 }

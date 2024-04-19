@@ -74,12 +74,31 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # Get the building area type from the additional properties of wateruse_equipment
     wateruse_equipment_hash = {}
     model.getWaterUseEquipments.each do |wateruse_equipment|
-      wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = get_additional_property_as_string(wateruse_equipment, 'building_type_swh')
+      wateruse_equipment_def = wateruse_equipment.waterUseEquipmentDefinition
+      wateruse_target_temp_schedule = wateruse_equipment_def.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule()
+      wateruse_temperature_array = []
+      wateruse_target_temp_schedule.times().each do |time|
+        wateruse_temperature_array << wateruse_target_temp_schedule.getValue(time)
+      end
+      wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = {building_type: get_additional_property_as_string(wateruse_equipment, 'building_type_swh'),
+                                                                   peak_flowrate: wateruse_equipment_def.peakFlowRate,
+                                                                   flowrate_schedule: wateruse_equipment.flowRateFractionSchedule.get,
+                                                                   water_use_temperature: wateruse_temperature_array.max}
     end
 
+    building_type_list = []
     # If there is additional properties, get the uniq building area type numbers.
     if wateruse_equipment_hash
-      building_area_type_number = wateruse_equipment_hash.values.uniq.length
+      wateruse_equipment_hash.each do |name, sub_hash|
+        sub_hash.each do|key, value|
+          building_type_list << value
+        end
+      end
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "No water use equipments are found in the model. Cannot apply baseline swh loops.")
+    end
+    if building_type_list
+      building_area_type_number = building_type_list.uniq.size
     else
       building_area_type_number = 1
     end
@@ -106,38 +125,49 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     water_heater_volume = water_heaters[0].tankVolume.get
     parasitic_fuel_consumption_rate = water_heaters[0].offCycleParasiticFuelConsumptionRate
 
+    model.getWaterUseEquipments.each do |wateruse_equipment|
+      wateruse_equipment_def = wateruse_equipment.waterUseEquipmentDefinition
+      wateruse_target_temp_schedule = wateruse_equipment_def.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule()
+      wateruse_temperature_array = []
+      wateruse_target_temp_schedule.times().each do |time|
+        wateruse_temperature_array << wateruse_target_temp_schedule.getValue(time)
+      end
+      wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = {peak_flowrate: wateruse_equipment_def.peakFlowRate,
+                                                                   flowrate_schedule: wateruse_equipment.flowRateFractionSchedule.get,
+                                                                   water_use_temperature: wateruse_temperature_array.max}
+    end
 
     # 1. Remove current swh loop
-    model.getPlantLoops.sort.each do |loop|
-      # Don't remove loops except service water heating loops
-      next unless plant_loop_swh_loop?(loop)
-      loop.remove
-    end
+    # model.getPlantLoops.sort.each do |loop|
+    #   # Don't remove loops except service water heating loops
+    #   next unless plant_loop_swh_loop?(loop)
+    #   loop.remove
+    # end
     # 2. Create new swh loops based on building area type
-    building_type_swh_unique = wateruse_equipment_hash.values.uniq
+    # building_type_swh_unique = wateruse_equipment_hash.values.uniq
 
-    building_type_swh_unique.each do |building_type_swh|
-      system_name = 'Service Water Loop ' + building_type_swh
-      # todo: Hard coded now, implement in the future, may have multiple pumps in a building
-      service_water_pump_head = 29891
-      service_water_pump_motor_efficiency = 0.7
-      water_heater_fuel = water_heater_mixed_apply_prm_baseline_fuel_type(building_type_swh)
-      model_add_swh_loop(model,
-             system_name,
-             water_heater_thermal_zone,
-             service_water_temperature,
-             service_water_pump_head,
-             service_water_pump_motor_efficiency,
-             water_heater_capacity,
-             water_heater_volume,
-             water_heater_fuel,
-             parasitic_fuel_consumption_rate,
-             add_pipe_losses = false,
-             floor_area_served = 465,
-             number_of_stories = 1,
-             pipe_insulation_thickness = 0.0127, # 1/2in
-             number_water_heaters = 1)
-    end
+    # building_type_swh_unique.each do |building_type_swh|
+    #   system_name = 'Service Water Loop ' + building_type_swh
+    #   # todo: Hard coded now, implement in the future, may have multiple pumps in a building
+    #   service_water_pump_head = 29891
+    #   service_water_pump_motor_efficiency = 0.7
+    #   water_heater_fuel = water_heater_mixed_apply_prm_baseline_fuel_type(building_type_swh)
+    #   model_add_swh_loop(model,
+    #          system_name,
+    #          water_heater_thermal_zone,
+    #          service_water_temperature,
+    #          service_water_pump_head,
+    #          service_water_pump_motor_efficiency,
+    #          water_heater_capacity,
+    #          water_heater_volume,
+    #          water_heater_fuel,
+    #          parasitic_fuel_consumption_rate,
+    #          add_pipe_losses = false,
+    #          floor_area_served = 465,
+    #          number_of_stories = 1,
+    #          pipe_insulation_thickness = 0.0127, # 1/2in
+    #          number_water_heaters = 1)
+    # end
     end
     return true
   end
