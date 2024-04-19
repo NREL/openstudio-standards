@@ -65,100 +65,106 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   def model_apply_baseline_swh_loops(model,
                                      building_type,
                                      swh_building_type = 'All others')
-    # Get the original water heater information
-    original_water_heater_info_hash = {}
-    model.getWaterHeaterMixeds.sort.each do |water_heater|
-      original_water_heater_info_hash = {water_heater.name.get.to_s => model_get_object_hash(water_heater)}
-    end
-
-    # Get the building area type from the additional properties of wateruse_equipment
-    wateruse_equipment_hash = {}
-    model.getWaterUseEquipments.each do |wateruse_equipment|
-      wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = get_additional_property_as_string(wateruse_equipment, 'building_type_swh')
-    end
 
     building_type_list = []
     # If there is additional properties, get the uniq building area type numbers.
-    if wateruse_equipment_hash
-      wateruse_equipment_hash.each do |name, sub_hash|
-        sub_hash.each do|key, value|
-          building_type_list << value
-        end
-      end
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "No water use equipments are found in the model. Cannot apply baseline swh loops.")
+    model.getWaterUseEquipments.each do |wateruse_equipment|
+      building_type_list << get_additional_property_as_string(wateruse_equipment, 'building_type_swh')
     end
-    if building_type_list
-      building_area_type_number = building_type_list.uniq.size
-    else
-      building_area_type_number = 1
-    end
-
+    building_area_type_number = building_type_list.uniq.size
 
     # Apply baseline swh loops
     if building_area_type_number == 1
       # One building area type
       # Modify the service water heater
-    model.getWaterHeaterMixeds.sort.each do |water_heater|
-      model_apply_water_heater_prm_parameter(water_heater,
-                                             swh_building_type)
-    end
-    else
-    # Todo: service water heater with multiple building area type
-    # Assume only one water heater in the model
-    water_heaters = []
-    model.getWaterHeaterMixeds.sort.each do |water_heater|
-      water_heaters.push(water_heater)
-    end
-    water_heater_thermal_zone = water_heaters[0].ambientTemperatureThermalZone.get
-    service_water_temperature = water_heaters[0].maximumTemperatureLimit.get
-    water_heater_capacity = water_heaters[0].heaterMaximumCapacity.get
-    water_heater_volume = water_heaters[0].tankVolume.get
-    parasitic_fuel_consumption_rate = water_heaters[0].offCycleParasiticFuelConsumptionRate
-
-    model.getWaterUseEquipments.each do |wateruse_equipment|
-      wateruse_equipment_def = wateruse_equipment.waterUseEquipmentDefinition
-      wateruse_target_temp_schedule = wateruse_equipment_def.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule()
-      wateruse_temperature_array = []
-      wateruse_target_temp_schedule.times().each do |time|
-        wateruse_temperature_array << wateruse_target_temp_schedule.getValue(time)
+      model.getWaterHeaterMixeds.sort.each do |water_heater|
+        model_apply_water_heater_prm_parameter(water_heater,
+                                               swh_building_type)
       end
-      wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = {peak_flowrate: wateruse_equipment_def.peakFlowRate,
-                                                                   flowrate_schedule: wateruse_equipment.flowRateFractionSchedule.get,
-                                                                   water_use_temperature: wateruse_temperature_array.max}
-    end
+    else
+      # Todo: service water heater with multiple building area type
+      # Assume only one water heater in the model
+      # create a hash to store water heater information
+      water_heater_hash = {}
+      model.getWaterHeaterMixeds.sort.each do |water_heater|
+        water_heater_hash[water_heater.name.get.to_s] = {"water_heater_thermal_zone"=> water_heater.ambientTemperatureThermalZone.get,
+                                                         "service_water_temperature"=> water_heater.maximumTemperatureLimit.get,
+                                                         "water_heater_capacity"=> water_heater.heaterMaximumCapacity.get,
+                                                         "water_heater_volume"=> water_heater.tankVolume.get,
+                                                         "parasitic_fuel_consumption_rate"=> water_heater.offCycleParasiticFuelConsumptionRate}
+      end
+      # create a hash to store wateruse_equipment information
+      wateruse_equipment_hash = {}
+      model.getWaterUseEquipments.each do |wateruse_equipment|
+        wateruse_equipment_def = wateruse_equipment.waterUseEquipmentDefinition
+        wateruse_target_temp_schedule = wateruse_equipment_def.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule()
+        wateruse_temperature_array = []
+        wateruse_target_temp_schedule.times().each do |time|
+          wateruse_temperature_array << wateruse_target_temp_schedule.getValue(time)
+        end
+        wateruse_equipment_hash[wateruse_equipment.name.get.to_s] = {"building_type"=>get_additional_property_as_string(wateruse_equipment, 'building_type_swh'),
+                                                                     "peak_flowrate"=> wateruse_equipment_def.peakFlowRate,
+                                                                     "flowrate_schedule"=> wateruse_equipment.flowRateFractionSchedule.get.name.get,
+                                                                     "water_use_temperature"=> wateruse_temperature_array.max}
+      end
 
-    # 1. Remove current swh loop
-    # model.getPlantLoops.sort.each do |loop|
-    #   # Don't remove loops except service water heating loops
-    #   next unless plant_loop_swh_loop?(loop)
-    #   loop.remove
-    # end
-    # 2. Create new swh loops based on building area type
-    # building_type_swh_unique = wateruse_equipment_hash.values.uniq
+      # 1. Remove current swh loop
+      model.getPlantLoops.sort.each do |loop|
+        # Don't remove loops except service water heating plant loops
+        next unless plant_loop_swh_loop?(loop)
+        # Not sure how to find the pump of the service water heating plant loop
+        loop.remove
+      end
+      # 2. Create new swh loops based on building area type
+      building_type_swh_unique = building_type_list.uniq
 
-    # building_type_swh_unique.each do |building_type_swh|
-    #   system_name = 'Service Water Loop ' + building_type_swh
-    #   # todo: Hard coded now, implement in the future, may have multiple pumps in a building
-    #   service_water_pump_head = 29891
-    #   service_water_pump_motor_efficiency = 0.7
-    #   water_heater_fuel = water_heater_mixed_apply_prm_baseline_fuel_type(building_type_swh)
-    #   model_add_swh_loop(model,
-    #          system_name,
-    #          water_heater_thermal_zone,
-    #          service_water_temperature,
-    #          service_water_pump_head,
-    #          service_water_pump_motor_efficiency,
-    #          water_heater_capacity,
-    #          water_heater_volume,
-    #          water_heater_fuel,
-    #          parasitic_fuel_consumption_rate,
-    #          add_pipe_losses = false,
-    #          floor_area_served = 465,
-    #          number_of_stories = 1,
-    #          pipe_insulation_thickness = 0.0127, # 1/2in
-    #          number_water_heaters = 1)
-    # end
+      building_type_swh_unique.each do |building_type_swh|
+        system_name = 'Service Water Loop ' + building_type_swh
+        # todo: Hard coded now, implement in the future, may have multiple pumps in a building
+        service_water_pump_head = 29891
+        service_water_pump_motor_efficiency = 0.7
+        water_heater_fuel = water_heater_mixed_apply_prm_baseline_fuel_type(building_type_swh)
+        water_heater_info = water_heater_hash.first[1]
+        swh_loop = model_add_swh_loop(model,
+                           system_name,
+                           water_heater_info['water_heater_thermal_zone'],
+                           water_heater_info['service_water_temperature'],
+                           service_water_pump_head,
+                           service_water_pump_motor_efficiency,
+                           water_heater_info['water_heater_capacity'],
+                           water_heater_info['water_heater_volume'],
+                           water_heater_fuel,
+                           water_heater_info['parasitic_fuel_consumption_rate'],
+                           add_pipe_losses = false,
+                           floor_area_served = 465,
+                           number_of_stories = 1,
+                           pipe_insulation_thickness = 0.0127, # 1/2in
+                           number_water_heaters = 1)
+        wateruse_equipment_hash.each_pair do |wateruse_equipment, info_hash|
+          if info_hash['building_type'] == building_type_swh
+            use_name = wateruse_equipment + ' ' + info_hash['building_type']
+            peak_flowrate = info_hash['peak_flowrate'].to_f
+            flowrate_schedule = info_hash['flowrate_schedule']
+            water_use_temperature = info_hash['water_use_temperature'].to_f
+            space_name = nil
+            model_add_swh_end_uses(model,
+                                   use_name,
+                                   swh_loop,
+                                   peak_flowrate,
+                                   flowrate_schedule,
+                                   water_use_temperature,
+                                   space_name,
+                                   frac_sensible: 0.2,
+                                   frac_latent: 0.05)
+          end
+        end
+        model.getWaterHeaterMixeds.sort.each do |water_heater|
+          if water_heater.name.get.to_s.include?(building_type_swh)
+            model_apply_water_heater_prm_parameter(water_heater,
+                                                   building_type_swh)
+          end
+        end
+      end
     end
     return true
   end
