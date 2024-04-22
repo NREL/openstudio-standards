@@ -33,10 +33,9 @@ module BTAP
     #
     #   - range of clear-field Uo factors
     #   - range of PSI factors (i.e. MAJOR thermal bridging), e.g. corners
-    #   - costing parameters
     #
-    # NOTE: This module is to be replaced with roo-based spreadsheet parsing,
-    #       generating a BTAP costing JSON file. TO DO.
+    # NOTE: This module is to be adapted once new BTAP structure/envelope data
+    #       model/classes are in place, including file formats (e.g. CSV, JSON).
     #
     # Ref: EVOKE BTAP costing spreadsheet modifications (2022), synced with:
     #      - Building Envelope Thermal Bridging Guide (BETBG)
@@ -52,6 +51,9 @@ module BTAP
     # Not all of these sub-variants are currently used within BTAP, e.g.
     # "BTAP-ExteriorWall-WoodFramed-1" is unused. BTAP/TBD data is limited
     # to the following wall constructions (paired LP & HP variants).
+    #
+    # NOTE: This will soon be revised, largely inferred from building structure
+    #       selection.
     #
     # ---- (Basic) Low Performance (LP) assemblies
     #
@@ -152,9 +154,9 @@ module BTAP
     # compliant, combination. Why? Improved Uo construction variants are
     # necessarily required, given:
     #
-    #   Ut = Uo + ( ∑psi  L )/A + ( ∑khi  n )/A   (ref: rd2.github.io/tbd)
+    #   Ut = Uo + ( ∑psi x L )/A + ( ∑khi x n )/A   (ref: rd2.github.io/tbd)
     #
-    # If one ignores linear ("( ∑psi  L )/A") and point ("( ∑khi  n )/A")
+    # If one ignores linear ("( ∑psi x L )/A") and point ("( ∑khi x n )/A")
     # conductances, Ut simply equates to Uo. Yet for ANY added linear or
     # point conductance, Uo factors must necessarily be lower than required
     # NECB2017 or NECB2020 Ut factors. EVOKE's 2022 contribution extends
@@ -204,7 +206,7 @@ module BTAP
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
     # There are 3x exceptions to the aforementioned iterative solution,
-    # hopefully to correct (TO-DO):
+    # hopefully to correct (TODO):
     #
     #   - Steel-framed construction: the selected HP variant has metal
     #     cladding. The only LP steel-framed BTAP option is wood-clad -
@@ -225,7 +227,7 @@ module BTAP
     #     respectively. This is expected to change in the future ...
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # Preset BTAP/TBD wall construction parameters.
+    # Preset BTAP/TBD wall construction parameters (to be revised ... TODO).
     #   :sptypes   : BTAP/TBD Hash of linked NECB SpaceTypes (symbols)
     #   :uos       : BTAP/TBD Hash of associated of Uo sub-variants
     #   :lp or :hp : low- or high-performance attribute
@@ -249,86 +251,80 @@ module BTAP
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
     # A construction sub-variant is identified strictly by its Uo factor:
     #
-    #   e.g. "314" describes a Uo factor of 0.314 W/m2.K
-    #
-    # Listed items for each sub-variant are layer identifiers (for BTAP
-    # costing only). For the moment, they are listed integers (but should
-    # be expanded - e.g. as Hash keys - to hold additional costing metadata,
-    # e.g. $/m2). This should be (soon) removed from BTAP/TBD data.
-    #
-    # NOTE: Missing gypsum finish for WOOD7 Uo 0.130?
+    #   e.g. "314" describes a Uo factor of 0.314 W/m2.K.
+    @@data[MASS2][:uos]["314"] = []
+    @@data[MASS2][:uos]["278"] = []
+    @@data[MASS2][:uos]["247"] = []
+    @@data[MASS2][:uos]["210"] = []
+    @@data[MASS2][:uos]["183"] = []
+    @@data[MASSB][:uos]["130"] = []
+    @@data[MASSB][:uos]["100"] = []
 
-    @@data[MASS2][:uos]["314"] = [ 24, 25, 26, 27, 28,134, 20, 21,139,141   ]
-    @@data[MASS2][:uos]["278"] = [ 24, 25, 26, 27, 28, 42, 20, 21,139,141   ]
-    @@data[MASS2][:uos]["247"] = [ 24, 25, 26, 27, 28, 58, 20, 21,139,141   ]
-    @@data[MASS2][:uos]["210"] = [ 24, 25, 26, 27, 28, 55, 20, 21,139,141   ]
-    @@data[MASS2][:uos]["183"] = [ 24, 25, 26, 27, 28, 68, 20, 21,139,141   ]
-    @@data[MASSB][:uos]["130"] = [  1, 11, 24,160,164,179,141               ]
-    @@data[MASSB][:uos]["100"] = [  1, 11, 24,160,165,179,141               ]
+    @@data[MASS4][:uos]["314"] = []
+    @@data[MASS4][:uos]["278"] = []
+    @@data[MASS4][:uos]["247"] = []
+    @@data[MASS4][:uos]["210"] = []
+    @@data[MASS4][:uos]["183"] = []
+    @@data[MASS8][:uos]["130"] = []
+    @@data[MASS8][:uos]["100"] = []
 
-    @@data[MASS4][:uos]["314"] = [  1, 11, 43,  6, 92, 41                   ]
-    @@data[MASS4][:uos]["278"] = [  1, 11, 69,  6, 41,150                   ]
-    @@data[MASS4][:uos]["247"] = [  1, 11, 43,  6, 58, 41                   ]
-    @@data[MASS4][:uos]["210"] = [  1, 11, 43,  6,134, 41                   ]
-    @@data[MASS4][:uos]["183"] = [  1, 11, 49, 80, 41                       ]
-    @@data[MASS8][:uos]["130"] = [  1, 11,168,195                           ]
-    @@data[MASS8][:uos]["100"] = [  1, 11,168,195                           ]
+    @@data[MASS6][:uos]["314"] = []
+    @@data[MASS6][:uos]["278"] = []
+    @@data[MASS6][:uos]["247"] = []
+    @@data[MASSC][:uos]["210"] = []
+    @@data[MASSC][:uos]["183"] = []
+    @@data[MASSC][:uos]["130"] = []
+    @@data[MASSC][:uos]["100"] = []
+    @@data[MASSC][:uos]["080"] = []
 
-    @@data[MASS6][:uos]["314"] = [ 24, 25, 26, 27, 28,134, 20, 21,139,141                    ]
-    @@data[MASS6][:uos]["278"] = [ 24, 25, 26, 27, 28, 42, 20, 21,139,141                    ]
-    @@data[MASS6][:uos]["247"] = [ 24, 25, 26, 27, 28, 58, 20, 21,139,141                    ]
-    @@data[MASSC][:uos]["210"] = [  1, 11,160, 24, 25, 26, 27, 28,172,181,162,196,180,141    ]
-    @@data[MASSC][:uos]["183"] = [  1, 11,160, 24, 25, 26, 27, 28,172,182,163,196,180,141    ]
-    @@data[MASSC][:uos]["130"] = [  1, 11,160, 24, 25, 26, 27, 28,172,185,165,196,180,141    ]
-    @@data[MASSC][:uos]["100"] = [  1, 11,160, 24, 25, 26, 27, 28,172,186,163,165,196,180,141]
-    @@data[MASSC][:uos]["080"] = [  1, 11,160, 24, 25, 26, 27, 28,172,188,165,165,196,180,141]
+    @@data[MTAL1][:uos]["314"] = []
+    @@data[MTAL1][:uos]["278"] = []
+    @@data[MTAL1][:uos]["247"] = []
+    @@data[MTAL1][:uos]["210"] = []
+    @@data[MTAL1][:uos]["183"] = []
+    @@data[MTALD][:uos]["130"] = []
+    @@data[MTALD][:uos]["100"] = []
 
-    @@data[MTAL1][:uos]["314"] = [  1, 11, 43,  6, 56,150, 48                ]
-    @@data[MTAL1][:uos]["278"] = [  1, 11, 43,  6, 48, 55                    ]
-    @@data[MTAL1][:uos]["247"] = [  1, 11, 43, 56,  6, 48, 59                ]
-    @@data[MTAL1][:uos]["210"] = [  1, 11, 43, 63,  6, 48, 59                ]
-    @@data[MTAL1][:uos]["183"] = [  1, 11, 43, 58,  6, 48, 59                ]
-    @@data[MTALD][:uos]["130"] = [ 11,160,204,203,205,204,174,173,180,  1    ]
-    @@data[MTALD][:uos]["100"] = [ 11,160,204,203,205,204,174,174,180,  1    ]
+    @@data[WOOD5][:uos]["314"] = []
+    @@data[WOOD5][:uos]["278"] = []
+    @@data[WOOD5][:uos]["247"] = []
+    @@data[WOOD5][:uos]["210"] = []
+    @@data[WOOD5][:uos]["183"] = []
+    @@data[WOOD7][:uos]["130"] = []
 
-    @@data[WOOD5][:uos]["314"] = [138,  3, 43,  5,  6,153, 20, 21,139,141,  1]
-    @@data[WOOD5][:uos]["278"] = [138,  3, 53, 56,  5,  6, 20, 21,139,141,  1]
-    @@data[WOOD5][:uos]["247"] = [138,  3,  4,  5, 56,  6, 20, 21,139,141,  1]
-    @@data[WOOD5][:uos]["210"] = [138,  3, 53,  5, 56,  6, 20, 21,139,141,  1]
-    @@data[WOOD5][:uos]["183"] = [138,  3, 53,  5, 67,  6, 20, 21,139,141,  1]
-    @@data[WOOD7][:uos]["130"] = [138,160, 56,163,197, 20, 21,139,141,  1    ] # < added '1' for gypsum finish
+    @@data[STEL1][:uos]["314"] = []
+    @@data[STEL1][:uos]["278"] = []
+    @@data[STEL2][:uos]["247"] = []
+    @@data[STEL2][:uos]["210"] = []
+    @@data[STEL2][:uos]["183"] = []
+    @@data[STEL2][:uos]["130"] = []
+    @@data[STEL2][:uos]["100"] = []
+    @@data[STEL2][:uos]["080"] = []
 
-    @@data[STEL1][:uos]["314"] = [ 11,  3, 43,153,  6,  7,141,  9, 10,  1        ]
-    @@data[STEL1][:uos]["278"] = [ 11,  3, 53,  5, 56,  6,  7,141,  9, 10,  1    ]
-    @@data[STEL2][:uos]["247"] = [ 11,  3, 53,  5, 63,  6,  7,141,  9, 10,  1    ]
-    @@data[STEL2][:uos]["210"] = [ 11,  3, 53,  5, 67,  6,  7,141,  9, 10,  1    ]
-    @@data[STEL2][:uos]["183"] = [ 11,  3, 53,  5, 56, 67,  6,  7,141,  9, 10,  1]
-    @@data[STEL2][:uos]["130"] = [ 11,  3, 43,171,172,164,163,186,196,180,141,  1]
-    @@data[STEL2][:uos]["100"] = [ 11,  3, 43,171,172,165,163,187,197,180,141,  1]
-    @@data[STEL2][:uos]["080"] = [ 11,  3, 43,171,172,165,165,188,197,180,141,  1]
+    @@data[FLOOR][:uos]["227"] = []
+    @@data[FLOOR][:uos]["183"] = []
+    @@data[FLOOR][:uos]["162"] = []
+    @@data[FLOOR][:uos]["142"] = []
+    @@data[FLOOR][:uos]["116"] = []
+    @@data[FLOOR][:uos]["101"] = []
 
-    @@data[FLOOR][:uos]["227"] = [117,145,118,  3, 99,  6,119    ]
-    @@data[FLOOR][:uos]["183"] = [117,145,118,  3, 99, 56,  6,119]
-    @@data[FLOOR][:uos]["162"] = [117,145,118,  3, 99, 67,  6,119]
-    @@data[FLOOR][:uos]["142"] = [117,145,118,  3, 68, 56,  6,119]
-    @@data[FLOOR][:uos]["116"] = [117,145,118,  3,157,  6,157,  6]
-    @@data[FLOOR][:uos]["101"] = [117,145,118,  3,157,158,  6,119]
-
-    @@data[ROOFS][:uos]["227"] = [ 94, 97, 71, 92, 93]
-    @@data[ROOFS][:uos]["193"] = [ 94, 97, 80, 80, 93]
-    @@data[ROOFS][:uos]["183"] = [ 94, 97,134,134, 93]
-    @@data[ROOFS][:uos]["162"] = [ 94, 97,102,153, 93]
-    @@data[ROOFS][:uos]["156"] = [ 94, 97,134, 91, 93]
-    @@data[ROOFS][:uos]["142"] = [ 94, 97,106, 93    ]
-    @@data[ROOFS][:uos]["138"] = [ 94, 97,106, 93    ] # same as :142 ?
-    @@data[ROOFS][:uos]["121"] = [ 94, 97,106,150, 93]
-    @@data[ROOFS][:uos]["100"] = [ 94, 97,106,106, 93]
+    @@data[ROOFS][:uos]["227"] = []
+    @@data[ROOFS][:uos]["193"] = []
+    @@data[ROOFS][:uos]["183"] = []
+    @@data[ROOFS][:uos]["162"] = []
+    @@data[ROOFS][:uos]["156"] = []
+    @@data[ROOFS][:uos]["142"] = []
+    @@data[ROOFS][:uos]["138"] = []
+    @@data[ROOFS][:uos]["121"] = []
+    @@data[ROOFS][:uos]["100"] = []
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
     # In BTAP costing, each NECB building/space type is linked to a default
     # construction set, which holds one of the preceding wall options. This
     # linkage is now extended to OpenStudio models (not just costing),
     # given the construction-specific nature of MAJOR thermal bridging.
+    #
+    # NOTE: Expect radical changes to the NECB building/space type model (TODO).
     #
     # Each of these wall options holds NECB building (or space) type keywords
     # (see below). The default (fall back) keyword is :office. String pattern
@@ -429,677 +425,282 @@ module BTAP
     end
 
     # Thermal bridge types :balcony, :party and :joint are NOT expected to
-    # be processed within BTAP. They are not costed out either. At some
-    # point, it may become wise to do so (notably for cantilevered balconies
-    # in MURBs). Default, generic BETBG PSI factors are nonetheless provided
-    # here (just in case):
+    # be processed soon within BTAP. They are not costed out either, nor are
+    # carbon intensities associated to them. At some point, it may be wise to do
+    # so (notably for cantilevered balconies in MURBs). Default, generic BETBG
+    # PSI factors are nonetheless provided here (just in case):
     #
     #   - for the "bad" BTAP cases, retained values are those of the
     #     generic "bad" BETBG set
     #   - while "good" BTAP values are those of the generic BETBG
     #     "efficient" set
-
+    @@data[MASS2][ :bad][:id          ] = MASS2_BAD
     @@data[MASS2][ :bad][:rimjoist    ] = { psi: 0.470 }
     @@data[MASS2][ :bad][:parapet     ] = { psi: 0.500 }
-    @@data[MASS2][ :bad][:head        ] = { psi: 0.350 }
-    @@data[MASS2][ :bad][:jamb        ] = { psi: 0.350 }
-    @@data[MASS2][ :bad][:sill        ] = { psi: 0.350 }
+    @@data[MASS2][ :bad][:fenestration] = { psi: 0.350 }
+    @@data[MASS2][ :bad][:door        ] = { psi: 0.000 }
     @@data[MASS2][ :bad][:corner      ] = { psi: 0.150 }
     @@data[MASS2][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[MASS2][ :bad][:party       ] = { psi: 0.850 }
     @@data[MASS2][ :bad][:grade       ] = { psi: 0.520 }
     @@data[MASS2][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[MASS2][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[MASS2][:good][:id          ] = MASS2_GOOD
     @@data[MASS2][:good][:rimjoist    ] = { psi: 0.100 }
     @@data[MASS2][:good][:parapet     ] = { psi: 0.230 }
-    @@data[MASS2][:good][:head        ] = { psi: 0.078 }
-    @@data[MASS2][:good][:jamb        ] = { psi: 0.078 }
-    @@data[MASS2][:good][:sill        ] = { psi: 0.078 }
+    @@data[MASS2][:good][:fenestration] = { psi: 0.078 }
+    @@data[MASS2][:good][:door        ] = { psi: 0.000 }
     @@data[MASS2][:good][:corner      ] = { psi: 0.090 }
     @@data[MASS2][:good][:balcony     ] = { psi: 0.200 }
     @@data[MASS2][:good][:party       ] = { psi: 0.200 }
     @@data[MASS2][:good][:grade       ] = { psi: 0.090 }
     @@data[MASS2][:good][:joint       ] = { psi: 0.100 }
-    @@data[MASS2][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[MASSB][ :bad][:id          ] = MASSB_BAD
     @@data[MASSB][ :bad][:rimjoist    ] = { psi: 0.470 }
     @@data[MASSB][ :bad][:parapet     ] = { psi: 0.500 }
-    @@data[MASSB][ :bad][:head        ] = { psi: 0.350 }
-    @@data[MASSB][ :bad][:jamb        ] = { psi: 0.350 }
-    @@data[MASSB][ :bad][:sill        ] = { psi: 0.350 }
+    @@data[MASSB][ :bad][:fenestration] = { psi: 0.350 }
+    @@data[MASSB][ :bad][:door        ] = { psi: 0.000 }
     @@data[MASSB][ :bad][:corner      ] = { psi: 0.150 }
     @@data[MASSB][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[MASSB][ :bad][:party       ] = { psi: 0.850 }
     @@data[MASSB][ :bad][:grade       ] = { psi: 0.520 }
     @@data[MASSB][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[MASSB][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[MASSB][:good][:id          ] = MASSB_GOOD
     @@data[MASSB][:good][:rimjoist    ] = { psi: 0.100 }
     @@data[MASSB][:good][:parapet     ] = { psi: 0.230 }
-    @@data[MASSB][:good][:head        ] = { psi: 0.078 }
-    @@data[MASSB][:good][:jamb        ] = { psi: 0.078 }
-    @@data[MASSB][:good][:sill        ] = { psi: 0.078 }
+    @@data[MASSB][:good][:fenestration] = { psi: 0.078 }
+    @@data[MASSB][:good][:door        ] = { psi: 0.000 }
     @@data[MASSB][:good][:corner      ] = { psi: 0.090 }
     @@data[MASSB][:good][:balcony     ] = { psi: 0.200 }
     @@data[MASSB][:good][:party       ] = { psi: 0.200 }
     @@data[MASSB][:good][:grade       ] = { psi: 0.090 }
     @@data[MASSB][:good][:joint       ] = { psi: 0.100 }
-    @@data[MASSB][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[MASS4][ :bad][:id          ] = MASS4_BAD
     @@data[MASS4][ :bad][:rimjoist    ] = { psi: 0.200 }
     @@data[MASS4][ :bad][:parapet     ] = { psi: 0.650 }
-    @@data[MASS4][ :bad][:head        ] = { psi: 0.078 }
-    @@data[MASS4][ :bad][:jamb        ] = { psi: 0.078 }
-    @@data[MASS4][ :bad][:sill        ] = { psi: 0.078 }
+    @@data[MASS4][ :bad][:fenestration] = { psi: 0.078 }
+    @@data[MASS4][ :bad][:door        ] = { psi: 0.000 }
     @@data[MASS4][ :bad][:corner      ] = { psi: 0.370 }
     @@data[MASS4][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[MASS4][ :bad][:party       ] = { psi: 0.850 }
     @@data[MASS4][ :bad][:grade       ] = { psi: 0.800 }
     @@data[MASS4][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[MASS4][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[MASS4][:good][:id          ] = MASS4_GOOD
     @@data[MASS4][:good][:rimjoist    ] = { psi: 0.020 }
     @@data[MASS4][:good][:parapet     ] = { psi: 0.240 }
-    @@data[MASS4][:good][:head        ] = { psi: 0.078 }
-    @@data[MASS4][:good][:jamb        ] = { psi: 0.078 }
-    @@data[MASS4][:good][:sill        ] = { psi: 0.078 }
+    @@data[MASS4][:good][:fenestration] = { psi: 0.078 }
+    @@data[MASS4][:good][:door        ] = { psi: 0.000 }
     @@data[MASS4][:good][:corner      ] = { psi: 0.160 }
     @@data[MASS4][:good][:balcony     ] = { psi: 0.200 }
     @@data[MASS4][:good][:party       ] = { psi: 0.200 }
     @@data[MASS4][:good][:grade       ] = { psi: 0.320 }
     @@data[MASS4][:good][:joint       ] = { psi: 0.100 }
-    @@data[MASS4][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[MASS8][ :bad][:id          ] = MASS8_BAD
     @@data[MASS8][ :bad][:rimjoist    ] = { psi: 0.200 }
     @@data[MASS8][ :bad][:parapet     ] = { psi: 0.650 }
-    @@data[MASS8][ :bad][:head        ] = { psi: 0.078 }
-    @@data[MASS8][ :bad][:jamb        ] = { psi: 0.078 }
-    @@data[MASS8][ :bad][:sill        ] = { psi: 0.078 }
+    @@data[MASS8][ :bad][:fenestration] = { psi: 0.078 }
+    @@data[MASS8][ :bad][:door        ] = { psi: 0.000 }
     @@data[MASS8][ :bad][:corner      ] = { psi: 0.370 }
     @@data[MASS8][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[MASS8][ :bad][:party       ] = { psi: 0.850 }
     @@data[MASS8][ :bad][:grade       ] = { psi: 0.800 }
     @@data[MASS8][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[MASS8][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[MASS8][:good][:id          ] = MASS8_GOOD
     @@data[MASS8][:good][:rimjoist    ] = { psi: 0.020 }
     @@data[MASS8][:good][:parapet     ] = { psi: 0.240 }
-    @@data[MASS8][:good][:head        ] = { psi: 0.078 }
-    @@data[MASS8][:good][:jamb        ] = { psi: 0.078 }
-    @@data[MASS8][:good][:sill        ] = { psi: 0.078 }
+    @@data[MASS8][:good][:fenestration] = { psi: 0.078 }
+    @@data[MASS8][:good][:door        ] = { psi: 0.000 }
     @@data[MASS8][:good][:corner      ] = { psi: 0.160 }
     @@data[MASS8][:good][:balcony     ] = { psi: 0.200 }
     @@data[MASS8][:good][:party       ] = { psi: 0.200 }
     @@data[MASS8][:good][:grade       ] = { psi: 0.320 }
     @@data[MASS8][:good][:joint       ] = { psi: 0.100 }
-    @@data[MASS8][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[MASS6][ :bad][:id          ] = MASS6_BAD
     @@data[MASS6][ :bad][:rimjoist    ] = { psi: 0.470 }
     @@data[MASS6][ :bad][:parapet     ] = { psi: 0.500 }
-    @@data[MASS6][ :bad][:head        ] = { psi: 0.350 }
-    @@data[MASS6][ :bad][:jamb        ] = { psi: 0.350 }
-    @@data[MASS6][ :bad][:sill        ] = { psi: 0.350 }
+    @@data[MASS6][ :bad][:fenestration] = { psi: 0.350 }
+    @@data[MASS6][ :bad][:door        ] = { psi: 0.000 }
     @@data[MASS6][ :bad][:corner      ] = { psi: 0.150 }
     @@data[MASS6][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[MASS6][ :bad][:party       ] = { psi: 0.850 }
     @@data[MASS6][ :bad][:grade       ] = { psi: 0.520 }
     @@data[MASS6][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[MASS6][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[MASS6][:good][:id          ] = MASS6_GOOD
     @@data[MASS6][:good][:rimjoist    ] = { psi: 0.100 }
     @@data[MASS6][:good][:parapet     ] = { psi: 0.230 }
-    @@data[MASS6][:good][:head        ] = { psi: 0.078 }
-    @@data[MASS6][:good][:jamb        ] = { psi: 0.078 }
-    @@data[MASS6][:good][:sill        ] = { psi: 0.078 }
+    @@data[MASS6][:good][:fenestration] = { psi: 0.078 }
+    @@data[MASS6][:good][:door        ] = { psi: 0.000 }
     @@data[MASS6][:good][:corner      ] = { psi: 0.090 }
     @@data[MASS6][:good][:balcony     ] = { psi: 0.200 }
     @@data[MASS6][:good][:party       ] = { psi: 0.200 }
     @@data[MASS6][:good][:grade       ] = { psi: 0.090 }
     @@data[MASS6][:good][:joint       ] = { psi: 0.100 }
-    @@data[MASS6][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[MASSC][ :bad][:id          ] = MASSC_BAD
     @@data[MASSC][ :bad][:rimjoist    ] = { psi: 0.170 }
     @@data[MASSC][ :bad][:parapet     ] = { psi: 0.500 }
-    @@data[MASSC][ :bad][:head        ] = { psi: 0.350 }
-    @@data[MASSC][ :bad][:jamb        ] = { psi: 0.350 }
-    @@data[MASSC][ :bad][:sill        ] = { psi: 0.350 }
+    @@data[MASSC][ :bad][:fenestration] = { psi: 0.350 }
+    @@data[MASSC][ :bad][:door        ] = { psi: 0.000 }
     @@data[MASSC][ :bad][:corner      ] = { psi: 0.150 }
     @@data[MASSC][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[MASSC][ :bad][:party       ] = { psi: 0.850 }
     @@data[MASSC][ :bad][:grade       ] = { psi: 0.720 }
     @@data[MASSC][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[MASSC][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[MASSC][:good][:id          ] = MASSC_GOOD
     @@data[MASSC][:good][:rimjoist    ] = { psi: 0.017 }
     @@data[MASSC][:good][:parapet     ] = { psi: 0.230 }
-    @@data[MASSC][:good][:head        ] = { psi: 0.078 }
-    @@data[MASSC][:good][:jamb        ] = { psi: 0.078 }
-    @@data[MASSC][:good][:sill        ] = { psi: 0.078 }
+    @@data[MASSC][:good][:fenestration] = { psi: 0.078 }
+    @@data[MASSC][:good][:door        ] = { psi: 0.000 }
     @@data[MASSC][:good][:corner      ] = { psi: 0.090 }
     @@data[MASSC][:good][:balcony     ] = { psi: 0.200 }
     @@data[MASSC][:good][:party       ] = { psi: 0.200 }
     @@data[MASSC][:good][:grade       ] = { psi: 0.470 }
     @@data[MASSC][:good][:joint       ] = { psi: 0.100 }
-    @@data[MASSC][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[MTAL1][ :bad][:id          ] = MTAL1_BAD
     @@data[MTAL1][ :bad][:rimjoist    ] = { psi: 0.320 }
     @@data[MTAL1][ :bad][:parapet     ] = { psi: 0.420 }
-    @@data[MTAL1][ :bad][:head        ] = { psi: 0.520 }
-    @@data[MTAL1][ :bad][:jamb        ] = { psi: 0.520 }
-    @@data[MTAL1][ :bad][:sill        ] = { psi: 0.520 }
+    @@data[MTAL1][ :bad][:fenestration] = { psi: 0.520 }
+    @@data[MTAL1][ :bad][:door        ] = { psi: 0.000 }
     @@data[MTAL1][ :bad][:corner      ] = { psi: 0.150 }
     @@data[MTAL1][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[MTAL1][ :bad][:party       ] = { psi: 0.850 }
     @@data[MTAL1][ :bad][:grade       ] = { psi: 0.700 }
     @@data[MTAL1][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[MTAL1][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[MTAL1][:good][:id          ] = MTAL1_GOOD
     @@data[MTAL1][:good][:rimjoist    ] = { psi: 0.030 }
     @@data[MTAL1][:good][:parapet     ] = { psi: 0.350 }
-    @@data[MTAL1][:good][:head        ] = { psi: 0.078 }
-    @@data[MTAL1][:good][:jamb        ] = { psi: 0.078 }
-    @@data[MTAL1][:good][:sill        ] = { psi: 0.078 }
+    @@data[MTAL1][:good][:fenestration] = { psi: 0.078 }
+    @@data[MTAL1][:good][:door        ] = { psi: 0.000 }
     @@data[MTAL1][:good][:corner      ] = { psi: 0.070 }
     @@data[MTAL1][:good][:balcony     ] = { psi: 0.200 }
     @@data[MTAL1][:good][:party       ] = { psi: 0.200 }
     @@data[MTAL1][:good][:grade       ] = { psi: 0.500 }
     @@data[MTAL1][:good][:joint       ] = { psi: 0.100 }
-    @@data[MTAL1][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[MTALD][ :bad][:id          ] = MTALD_BAD
     @@data[MTALD][ :bad][:rimjoist    ] = { psi: 0.320 }
     @@data[MTALD][ :bad][:parapet     ] = { psi: 0.420 }
-    @@data[MTALD][ :bad][:head        ] = { psi: 0.520 }
-    @@data[MTALD][ :bad][:jamb        ] = { psi: 0.520 }
-    @@data[MTALD][ :bad][:sill        ] = { psi: 0.520 }
+    @@data[MTALD][ :bad][:fenestration] = { psi: 0.520 }
+    @@data[MTALD][ :bad][:door        ] = { psi: 0.000 }
     @@data[MTALD][ :bad][:corner      ] = { psi: 0.150 }
     @@data[MTALD][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[MTALD][ :bad][:party       ] = { psi: 0.850 }
     @@data[MTALD][ :bad][:grade       ] = { psi: 0.700 }
     @@data[MTALD][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[MTALD][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[MTALD][:good][:id          ] = MTALD_GOOD
     @@data[MTALD][:good][:rimjoist    ] = { psi: 0.030 }
     @@data[MTALD][:good][:parapet     ] = { psi: 0.350 }
-    @@data[MTALD][:good][:head        ] = { psi: 0.078 }
-    @@data[MTALD][:good][:jamb        ] = { psi: 0.078 }
-    @@data[MTALD][:good][:sill        ] = { psi: 0.078 }
+    @@data[MTALD][:good][:fenestration] = { psi: 0.078 }
+    @@data[MTALD][:good][:door        ] = { psi: 0.000 }
     @@data[MTALD][:good][:corner      ] = { psi: 0.070 }
     @@data[MTALD][:good][:balcony     ] = { psi: 0.200 }
     @@data[MTALD][:good][:party       ] = { psi: 0.200 }
     @@data[MTALD][:good][:grade       ] = { psi: 0.500 }
     @@data[MTALD][:good][:joint       ] = { psi: 0.100 }
-    @@data[MTALD][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[WOOD5][ :bad][:id          ] = WOOD5_BAD
     @@data[WOOD5][ :bad][:rimjoist    ] = { psi: 0.050 }
     @@data[WOOD5][ :bad][:parapet     ] = { psi: 0.050 }
-    @@data[WOOD5][ :bad][:head        ] = { psi: 0.270 }
-    @@data[WOOD5][ :bad][:jamb        ] = { psi: 0.270 }
-    @@data[WOOD5][ :bad][:sill        ] = { psi: 0.270 }
+    @@data[WOOD5][ :bad][:fenestration] = { psi: 0.270 }
+    @@data[WOOD5][ :bad][:door        ] = { psi: 0.000 }
     @@data[WOOD5][ :bad][:corner      ] = { psi: 0.040 }
     @@data[WOOD5][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[WOOD5][ :bad][:party       ] = { psi: 0.850 }
     @@data[WOOD5][ :bad][:grade       ] = { psi: 0.550 }
     @@data[WOOD5][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[WOOD5][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[WOOD5][:good][:id          ] = WOOD5_GOOD
     @@data[WOOD5][:good][:rimjoist    ] = { psi: 0.030 }
     @@data[WOOD5][:good][:parapet     ] = { psi: 0.050 }
-    @@data[WOOD5][:good][:head        ] = { psi: 0.078 }
-    @@data[WOOD5][:good][:jamb        ] = { psi: 0.078 }
-    @@data[WOOD5][:good][:sill        ] = { psi: 0.078 }
+    @@data[WOOD5][:good][:fenestration] = { psi: 0.078 }
+    @@data[WOOD5][:good][:door        ] = { psi: 0.000 }
     @@data[WOOD5][:good][:corner      ] = { psi: 0.040 }
     @@data[WOOD5][:good][:balcony     ] = { psi: 0.200 }
     @@data[WOOD5][:good][:party       ] = { psi: 0.200 }
     @@data[WOOD5][:good][:grade       ] = { psi: 0.090 }
     @@data[WOOD5][:good][:joint       ] = { psi: 0.100 }
-    @@data[WOOD5][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[WOOD7][ :bad][:id          ] = WOOD7_BAD
     @@data[WOOD7][ :bad][:rimjoist    ] = { psi: 0.050 }
     @@data[WOOD7][ :bad][:parapet     ] = { psi: 0.050 }
-    @@data[WOOD7][ :bad][:head        ] = { psi: 0.270 }
-    @@data[WOOD7][ :bad][:jamb        ] = { psi: 0.270 }
-    @@data[WOOD7][ :bad][:sill        ] = { psi: 0.270 }
+    @@data[WOOD7][ :bad][:fenestration] = { psi: 0.270 }
+    @@data[WOOD7][ :bad][:door        ] = { psi: 0.000 }
     @@data[WOOD7][ :bad][:corner      ] = { psi: 0.040 }
     @@data[WOOD7][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[WOOD7][ :bad][:party       ] = { psi: 0.850 }
     @@data[WOOD7][ :bad][:grade       ] = { psi: 0.550 }
     @@data[WOOD7][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[WOOD7][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[WOOD7][:good][:id          ] = WOOD7_GOOD
     @@data[WOOD7][:good][:rimjoist    ] = { psi: 0.030 }
     @@data[WOOD7][:good][:parapet     ] = { psi: 0.050 }
-    @@data[WOOD7][:good][:head        ] = { psi: 0.078 }
-    @@data[WOOD7][:good][:jamb        ] = { psi: 0.078 }
-    @@data[WOOD7][:good][:sill        ] = { psi: 0.078 }
+    @@data[WOOD7][:good][:fenestration] = { psi: 0.078 }
+    @@data[WOOD7][:good][:door        ] = { psi: 0.000 }
     @@data[WOOD7][:good][:corner      ] = { psi: 0.040 }
     @@data[WOOD7][:good][:balcony     ] = { psi: 0.200 }
     @@data[WOOD7][:good][:party       ] = { psi: 0.200 }
     @@data[WOOD7][:good][:grade       ] = { psi: 0.090 }
     @@data[WOOD7][:good][:joint       ] = { psi: 0.100 }
-    @@data[WOOD7][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[STEL1][ :bad][:id          ] = STEL1_BAD
     @@data[STEL1][ :bad][:rimjoist    ] = { psi: 0.280 }
     @@data[STEL1][ :bad][:parapet     ] = { psi: 0.650 }
-    @@data[STEL1][ :bad][:head        ] = { psi: 0.270 }
-    @@data[STEL1][ :bad][:jamb        ] = { psi: 0.270 }
-    @@data[STEL1][ :bad][:sill        ] = { psi: 0.270 }
+    @@data[STEL1][ :bad][:fenestration] = { psi: 0.270 }
+    @@data[STEL1][ :bad][:door        ] = { psi: 0.000 }
     @@data[STEL1][ :bad][:corner      ] = { psi: 0.150 }
     @@data[STEL1][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[STEL1][ :bad][:party       ] = { psi: 0.850 }
     @@data[STEL1][ :bad][:grade       ] = { psi: 0.720 }
     @@data[STEL1][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[STEL1][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[STEL1][:good][:id          ] = STEL1_GOOD
     @@data[STEL1][:good][:rimjoist    ] = { psi: 0.090 }
     @@data[STEL1][:good][:parapet     ] = { psi: 0.350 }
-    @@data[STEL1][:good][:head        ] = { psi: 0.078 }
-    @@data[STEL1][:good][:jamb        ] = { psi: 0.078 }
-    @@data[STEL1][:good][:sill        ] = { psi: 0.078 }
+    @@data[STEL1][:good][:fenestration] = { psi: 0.078 }
+    @@data[STEL1][:good][:door        ] = { psi: 0.000 }
     @@data[STEL1][:good][:corner      ] = { psi: 0.090 }
     @@data[STEL1][:good][:balcony     ] = { psi: 0.200 }
     @@data[STEL1][:good][:party       ] = { psi: 0.200 }
     @@data[STEL1][:good][:grade       ] = { psi: 0.470 }
     @@data[STEL1][:good][:joint       ] = { psi: 0.100 }
-    @@data[STEL1][:good][:transition  ] = { psi: 0.000 }
 
+    @@data[STEL2][ :bad][:id          ] = STEL2_BAD
     @@data[STEL2][ :bad][:rimjoist    ] = { psi: 0.280 }
     @@data[STEL2][ :bad][:parapet     ] = { psi: 0.650 }
-    @@data[STEL2][ :bad][:head        ] = { psi: 0.270 }
-    @@data[STEL2][ :bad][:jamb        ] = { psi: 0.270 }
-    @@data[STEL2][ :bad][:sill        ] = { psi: 0.270 }
+    @@data[STEL2][ :bad][:fenestration] = { psi: 0.270 }
+    @@data[STEL2][ :bad][:door        ] = { psi: 0.000 }
     @@data[STEL2][ :bad][:corner      ] = { psi: 0.150 }
     @@data[STEL2][ :bad][:balcony     ] = { psi: 1.000 }
     @@data[STEL2][ :bad][:party       ] = { psi: 0.850 }
     @@data[STEL2][ :bad][:grade       ] = { psi: 0.720 }
     @@data[STEL2][ :bad][:joint       ] = { psi: 0.300 }
-    @@data[STEL2][ :bad][:transition  ] = { psi: 0.000 }
 
+    @@data[STEL2][:good][:id          ] = STEL2_GOOD
     @@data[STEL2][:good][:rimjoist    ] = { psi: 0.090 }
     @@data[STEL2][:good][:parapet     ] = { psi: 0.100 }
-    @@data[STEL2][:good][:head        ] = { psi: 0.078 }
-    @@data[STEL2][:good][:jamb        ] = { psi: 0.078 }
-    @@data[STEL2][:good][:sill        ] = { psi: 0.078 }
+    @@data[STEL2][:good][:fenestration] = { psi: 0.078 }
+    @@data[STEL2][:good][:door        ] = { psi: 0.000 }
     @@data[STEL2][:good][:corner      ] = { psi: 0.090 }
     @@data[STEL2][:good][:balcony     ] = { psi: 0.200 }
     @@data[STEL2][:good][:party       ] = { psi: 0.200 }
     @@data[STEL2][:good][:grade       ] = { psi: 0.470 }
     @@data[STEL2][:good][:joint       ] = { psi: 0.100 }
-    @@data[STEL2][:good][:transition  ] = { psi: 0.000 }
-
-    # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # Extend for BTAP costing.
-    @@data.values.each do |construction|
-      construction[:good].values.each { |bridge| bridge[:mat] = {} }
-      construction[ :bad].values.each { |bridge| bridge[:mat] = {} }
-    end
-
-    # BTAP costed "materials" (Hash keywords in double quotations) for MAJOR
-    # thermal bridges. Corresponding Hash values are multipliers.
-    #
-    # NOTE: "0" as a NIL placeholder (no cost associated to thermal bridge).
-    @@data[MASS2][ :bad][:id          ] = MASS2_BAD
-    @@data[MASS2][ :bad][:rimjoist    ][:mat][ "21"] =  1.000
-    @@data[MASS2][ :bad][:rimjoist    ][:mat]["172"] =  0.250
-    @@data[MASS2][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[MASS2][ :bad][:head        ][:mat]["139"] =  0.750
-    @@data[MASS2][ :bad][:jamb        ][:mat]["139"] =  0.750
-    @@data[MASS2][ :bad][:sill        ][:mat]["139"] =  0.750
-    @@data[MASS2][ :bad][:corner      ][:mat][  "0"] =  1.000
-    @@data[MASS2][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASS2][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[MASS2][ :bad][:grade       ][:mat][ "21"] =  1.000
-    @@data[MASS2][ :bad][:grade       ][:mat]["139"] =  0.500
-    @@data[MASS2][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[MASS2][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASS2][:good][:id          ] = MASS2_GOOD
-    @@data[MASS2][:good][:rimjoist    ][:mat]["189"] =  1.000
-    @@data[MASS2][:good][:rimjoist    ][:mat]["172"] =  0.500
-    @@data[MASS2][:good][:parapet     ][:mat][ "57"] =  3.300
-    @@data[MASS2][:good][:parapet     ][:mat]["139"] =  1.000
-    @@data[MASS2][:good][:head        ][:mat]["139"] =  0.500
-    @@data[MASS2][:good][:jamb        ][:mat]["139"] =  0.500
-    @@data[MASS2][:good][:sill        ][:mat]["139"] =  0.500
-    @@data[MASS2][:good][:corner      ][:mat][  "0"] =  1.000
-    @@data[MASS2][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASS2][:good][:party       ][:mat][   ""] =  1.000
-    @@data[MASS2][:good][:grade       ][:mat]["189"] =  1.000
-    @@data[MASS2][:good][:grade       ][:mat]["139"] =  0.500
-    @@data[MASS2][:good][:grade       ][:mat]["192"] =  0.500
-    @@data[MASS2][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[MASS2][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASSB][ :bad][:id          ] = MASSB_BAD
-    @@data[MASSB][ :bad][:rimjoist    ][:mat][ "21"] =  1.000
-    @@data[MASSB][ :bad][:rimjoist    ][:mat]["172"] =  0.250
-    @@data[MASSB][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[MASSB][ :bad][:head        ][:mat]["139"] =  0.750
-    @@data[MASSB][ :bad][:jamb        ][:mat]["139"] =  0.750
-    @@data[MASSB][ :bad][:sill        ][:mat]["139"] =  0.750
-    @@data[MASSB][ :bad][:corner      ][:mat][  "0"] =  1.000
-    @@data[MASSB][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASSB][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[MASSB][ :bad][:grade       ][:mat][ "21"] =  1.000
-    @@data[MASSB][ :bad][:grade       ][:mat]["139"] =  0.500
-    @@data[MASSB][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[MASSB][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASSB][:good][:id          ] = MASSB_GOOD
-    @@data[MASSB][:good][:rimjoist    ][:mat]["189"] =  1.000
-    @@data[MASSB][:good][:rimjoist    ][:mat]["172"] =  0.500
-    @@data[MASSB][:good][:parapet     ][:mat][ "57"] =  3.300
-    @@data[MASSB][:good][:parapet     ][:mat]["139"] =  1.000
-    @@data[MASSB][:good][:head        ][:mat]["139"] =  0.500
-    @@data[MASSB][:good][:jamb        ][:mat]["139"] =  0.500
-    @@data[MASSB][:good][:sill        ][:mat]["139"] =  0.500
-    @@data[MASSB][:good][:corner      ][:mat][  "0"] =  1.000
-    @@data[MASSB][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASSB][:good][:party       ][:mat][   ""] =  1.000
-    @@data[MASSB][:good][:grade       ][:mat]["189"] =  1.000
-    @@data[MASSB][:good][:grade       ][:mat]["139"] =  0.500
-    @@data[MASSB][:good][:grade       ][:mat]["192"] =  0.500
-    @@data[MASSB][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[MASSB][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASS4][ :bad][:id          ] = MASS4_BAD
-    @@data[MASS4][ :bad][:rimjoist    ][:mat][  "0"] =  1.000
-    @@data[MASS4][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[MASS4][ :bad][:head        ][:mat]["139"] =  0.250
-    @@data[MASS4][ :bad][:jamb        ][:mat]["139"] =  0.250
-    @@data[MASS4][ :bad][:sill        ][:mat]["139"] =  0.250
-    @@data[MASS4][ :bad][:corner      ][:mat]["141"] =  1.000
-    @@data[MASS4][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASS4][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[MASS4][ :bad][:grade       ][:mat]["139"] =  0.500
-    @@data[MASS4][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[MASS4][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASS4][:good][:id          ] = MASS4_GOOD
-    @@data[MASS4][:good][:rimjoist    ][:mat][  "0"] =  1.000
-    @@data[MASS4][:good][:parapet     ][:mat][ "57"] =  3.300
-    @@data[MASS4][:good][:parapet     ][:mat]["139"] =  1.000
-    @@data[MASS4][:good][:head        ][:mat]["139"] =  0.250
-    @@data[MASS4][:good][:head        ][:mat]["150"] =  0.083
-    @@data[MASS4][:good][:jamb        ][:mat]["139"] =  0.250
-    @@data[MASS4][:good][:jamb        ][:mat]["150"] =  0.083
-    @@data[MASS4][:good][:sill        ][:mat]["139"] =  0.250
-    @@data[MASS4][:good][:sill        ][:mat]["150"] =  0.083
-    @@data[MASS4][:good][:corner      ][:mat]["141"] =  1.250
-    @@data[MASS4][:good][:balcony     ][:mat][  "0"] =  1.000
-    @@data[MASS4][:good][:party       ][:mat][   ""] =  1.000
-    @@data[MASS4][:good][:grade       ][:mat]["192"] =  0.500
-    @@data[MASS4][:good][:grade       ][:mat]["139"] =  0.500
-    @@data[MASS4][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[MASS4][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASS8][ :bad][:id          ] = MASS8_BAD
-    @@data[MASS8][ :bad][:rimjoist    ][:mat][  "0"] =  1.000
-    @@data[MASS8][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[MASS8][ :bad][:head        ][:mat]["139"] =  0.250
-    @@data[MASS8][ :bad][:jamb        ][:mat]["139"] =  0.250
-    @@data[MASS8][ :bad][:sill        ][:mat]["139"] =  0.250
-    @@data[MASS8][ :bad][:corner      ][:mat]["141"] =  1.000
-    @@data[MASS8][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASS8][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[MASS8][ :bad][:grade       ][:mat]["139"] =  0.500
-    @@data[MASS8][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[MASS8][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASS8][:good][:id          ] = MASS8_GOOD
-    @@data[MASS8][:good][:rimjoist    ][:mat][  "0"] =  1.000
-    @@data[MASS8][:good][:parapet     ][:mat][ "57"] =  3.300
-    @@data[MASS8][:good][:parapet     ][:mat]["139"] =  1.000
-    @@data[MASS8][:good][:head        ][:mat]["139"] =  0.250
-    @@data[MASS8][:good][:head        ][:mat]["150"] =  0.083
-    @@data[MASS8][:good][:jamb        ][:mat]["139"] =  0.250
-    @@data[MASS8][:good][:jamb        ][:mat]["150"] =  0.083
-    @@data[MASS8][:good][:sill        ][:mat]["139"] =  0.250
-    @@data[MASS8][:good][:sill        ][:mat]["150"] =  0.083
-    @@data[MASS8][:good][:corner      ][:mat]["141"] =  1.250
-    @@data[MASS8][:good][:balcony     ][:mat][  "0"] =  1.000
-    @@data[MASS8][:good][:party       ][:mat][   ""] =  1.000
-    @@data[MASS8][:good][:grade       ][:mat]["192"] =  0.500
-    @@data[MASS8][:good][:grade       ][:mat]["139"] =  0.500
-    @@data[MASS8][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[MASS8][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASS6][ :bad][:id          ] = MASS6_BAD
-    @@data[MASS6][ :bad][:rimjoist    ][:mat][ "21"] =  1.000
-    @@data[MASS6][ :bad][:rimjoist    ][:mat]["172"] =  0.250
-    @@data[MASS6][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[MASS6][ :bad][:head        ][:mat]["139"] =  0.750
-    @@data[MASS6][ :bad][:jamb        ][:mat]["139"] =  0.750
-    @@data[MASS6][ :bad][:sill        ][:mat]["139"] =  0.750
-    @@data[MASS6][ :bad][:corner      ][:mat][  "0"] =  1.000
-    @@data[MASS6][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASS6][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[MASS6][ :bad][:grade       ][:mat][ "21"] =  1.000
-    @@data[MASS6][ :bad][:grade       ][:mat]["139"] =  0.500
-    @@data[MASS6][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[MASS6][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASS6][:good][:id          ] = MASS6_GOOD
-    @@data[MASS6][:good][:rimjoist    ][:mat]["189"] =  1.000
-    @@data[MASS6][:good][:rimjoist    ][:mat]["172"] =  0.500
-    @@data[MASS6][:good][:parapet     ][:mat][ "57"] =  3.300
-    @@data[MASS6][:good][:parapet     ][:mat]["139"] =  1.000
-    @@data[MASS6][:good][:head        ][:mat]["139"] =  0.500
-    @@data[MASS6][:good][:jamb        ][:mat]["139"] =  0.500
-    @@data[MASS6][:good][:sill        ][:mat]["139"] =  0.500
-    @@data[MASS6][:good][:corner      ][:mat][  "0"] =  1.000
-    @@data[MASS6][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASS6][:good][:party       ][:mat][   ""] =  1.000
-    @@data[MASS6][:good][:grade       ][:mat]["189"] =  1.000
-    @@data[MASS6][:good][:grade       ][:mat]["139"] =  0.500
-    @@data[MASS6][:good][:grade       ][:mat]["192"] =  0.500
-    @@data[MASS6][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[MASS6][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASSC][ :bad][:id          ] = MASSC_BAD
-    @@data[MASSC][ :bad][:rimjoist    ][:mat]["139"] = 10.000
-    @@data[MASSC][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[MASSC][ :bad][:head        ][:mat]["139"] =  0.750
-    @@data[MASSC][ :bad][:jamb        ][:mat]["139"] =  0.750
-    @@data[MASSC][ :bad][:sill        ][:mat]["139"] =  0.750
-    @@data[MASSC][ :bad][:corner      ][:mat][  "0"] =  1.000
-    @@data[MASSC][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASSC][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[MASSC][ :bad][:grade       ][:mat]["139"] =  0.000
-    @@data[MASSC][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[MASSC][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MASSC][:good][:id          ] = MASSC_GOOD
-    @@data[MASSC][:good][:rimjoist    ][:mat]["172"] =  0.500
-    @@data[MASSC][:good][:parapet     ][:mat][ "57"] =  3.300
-    @@data[MASSC][:good][:parapet     ][:mat]["139"] =  1.000
-    @@data[MASSC][:good][:head        ][:mat]["139"] =  0.500
-    @@data[MASSC][:good][:jamb        ][:mat]["139"] =  0.500
-    @@data[MASSC][:good][:sill        ][:mat]["139"] =  0.500
-    @@data[MASSC][:good][:corner      ][:mat][  "0"] =  1.000
-    @@data[MASSC][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[MASSC][:good][:party       ][:mat][   ""] =  1.000
-    @@data[MASSC][:good][:grade       ][:mat]["192"] =  1.000
-    @@data[MASSC][:good][:grade       ][:mat]["139"] =  1.000
-    @@data[MASSC][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[MASSC][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MTAL1][ :bad][:id          ] = MTAL1_BAD
-    @@data[MTAL1][ :bad][:rimjoist    ][:mat][  "0"] =  1.000
-    @@data[MTAL1][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[MTAL1][ :bad][:head        ][:mat]["139"] =  1.000
-    @@data[MTAL1][ :bad][:jamb        ][:mat]["139"] =  1.000
-    @@data[MTAL1][ :bad][:sill        ][:mat]["139"] =  1.000
-    @@data[MTAL1][ :bad][:corner      ][:mat]["191"] =  1.000
-    @@data[MTAL1][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[MTAL1][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[MTAL1][ :bad][:grade       ][:mat]["139"] =  0.500
-    @@data[MTAL1][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[MTAL1][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MTAL1][:good][:id          ] = MTAL1_GOOD
-    @@data[MTAL1][:good][:rimjoist    ][:mat][  "0"] =  1.000
-    @@data[MTAL1][:good][:parapet     ][:mat][ "57"] =  3.300
-    @@data[MTAL1][:good][:parapet     ][:mat]["139"] =  1.000
-    @@data[MTAL1][:good][:head        ][:mat]["139"] =  0.500
-    @@data[MTAL1][:good][:jamb        ][:mat]["139"] =  0.500
-    @@data[MTAL1][:good][:sill        ][:mat]["139"] =  0.500
-    @@data[MTAL1][:good][:corner      ][:mat]["191"] =  1.000
-    @@data[MTAL1][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[MTAL1][:good][:party       ][:mat][   ""] =  1.000
-    @@data[MTAL1][:good][:grade       ][:mat]["192"] =  0.500
-    @@data[MTAL1][:good][:grade       ][:mat]["139"] =  0.500
-    @@data[MTAL1][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[MTAL1][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MTALD][ :bad][:id          ] = MTALD_BAD
-    @@data[MTALD][ :bad][:rimjoist    ][:mat][  "0"] =  1.000
-    @@data[MTALD][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[MTALD][ :bad][:head        ][:mat]["139"] =  1.000
-    @@data[MTALD][ :bad][:jamb        ][:mat]["139"] =  1.000
-    @@data[MTALD][ :bad][:sill        ][:mat]["139"] =  1.000
-    @@data[MTALD][ :bad][:corner      ][:mat]["191"] =  1.000
-    @@data[MTALD][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[MTALD][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[MTALD][ :bad][:grade       ][:mat]["139"] =  0.500
-    @@data[MTALD][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[MTALD][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[MTALD][:good][:id          ] = MTALD_GOOD
-    @@data[MTALD][:good][:rimjoist    ][:mat][  "0"] =  1.000
-    @@data[MTALD][:good][:parapet     ][:mat][ "57"] =  3.300
-    @@data[MTALD][:good][:parapet     ][:mat]["139"] =  1.000
-    @@data[MTALD][:good][:head        ][:mat]["139"] =  0.500
-    @@data[MTALD][:good][:jamb        ][:mat]["139"] =  0.500
-    @@data[MTALD][:good][:sill        ][:mat]["139"] =  0.500
-    @@data[MTALD][:good][:corner      ][:mat]["191"] =  1.000
-    @@data[MTALD][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[MTALD][:good][:party       ][:mat][   ""] =  1.000
-    @@data[MTALD][:good][:grade       ][:mat]["192"] =  0.500
-    @@data[MTALD][:good][:grade       ][:mat]["139"] =  0.500
-    @@data[MTALD][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[MTALD][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[WOOD5][ :bad][:id          ] = WOOD5_BAD
-    @@data[WOOD5][ :bad][:rimjoist    ][:mat][ "21"] =  1.000
-    @@data[WOOD5][ :bad][:rimjoist    ][:mat]["172"] =  0.250
-    @@data[WOOD5][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[WOOD5][ :bad][:head        ][:mat][  "0"] =  1.000
-    @@data[WOOD5][ :bad][:jamb        ][:mat][  "0"] =  1.000
-    @@data[WOOD5][ :bad][:sill        ][:mat][  "0"] =  1.000
-    @@data[WOOD5][ :bad][:corner      ][:mat][  "0"] =  1.000
-    @@data[WOOD5][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[WOOD5][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[WOOD5][ :bad][:grade       ][:mat][ "21"] =  1.000
-    @@data[WOOD5][ :bad][:grade       ][:mat]["139"] =  0.500
-    @@data[WOOD5][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[WOOD5][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[WOOD5][:good][:id          ] = WOOD5_GOOD
-    @@data[WOOD5][:good][:rimjoist    ][:mat]["189"] =  1.000
-    @@data[WOOD5][:good][:rimjoist    ][:mat]["172"] =  0.500
-    @@data[WOOD5][:good][:parapet     ][:mat]["190"] =  0.500
-    @@data[WOOD5][:good][:head        ][:mat][  "0"] =  1.000
-    @@data[WOOD5][:good][:jamb        ][:mat][  "0"] =  1.000
-    @@data[WOOD5][:good][:sill        ][:mat][  "0"] =  1.000
-    @@data[WOOD5][:good][:corner      ][:mat][  "0"] =  1.000
-    @@data[WOOD5][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[WOOD5][:good][:party       ][:mat][   ""] =  1.000
-    @@data[WOOD5][:good][:grade       ][:mat]["189"] =  1.000
-    @@data[WOOD5][:good][:grade       ][:mat]["139"] =  0.500
-    @@data[WOOD5][:good][:grade       ][:mat]["192"] =  0.500
-    @@data[WOOD5][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[WOOD5][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[WOOD7][ :bad][:id          ] = WOOD7_BAD
-    @@data[WOOD7][ :bad][:rimjoist    ][:mat][ "21"] =  1.000
-    @@data[WOOD7][ :bad][:rimjoist    ][:mat]["172"] =  0.250
-    @@data[WOOD7][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[WOOD7][ :bad][:head        ][:mat][  "0"] =  1.000
-    @@data[WOOD7][ :bad][:jamb        ][:mat][  "0"] =  1.000
-    @@data[WOOD7][ :bad][:sill        ][:mat][  "0"] =  1.000
-    @@data[WOOD7][ :bad][:corner      ][:mat][  "0"] =  1.000
-    @@data[WOOD7][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[WOOD7][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[WOOD7][ :bad][:grade       ][:mat][ "21"] =  1.000
-    @@data[WOOD7][ :bad][:grade       ][:mat]["139"] =  0.500
-    @@data[WOOD7][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[WOOD7][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[WOOD7][:good][:id          ] = WOOD7_GOOD
-    @@data[WOOD7][:good][:rimjoist    ][:mat]["189"] =  1.000
-    @@data[WOOD7][:good][:rimjoist    ][:mat]["172"] =  0.500
-    @@data[WOOD7][:good][:parapet     ][:mat]["190"] =  0.500
-    @@data[WOOD7][:good][:head        ][:mat][  "0"] =  1.000
-    @@data[WOOD7][:good][:jamb        ][:mat][  "0"] =  1.000
-    @@data[WOOD7][:good][:sill        ][:mat][  "0"] =  1.000
-    @@data[WOOD7][:good][:corner      ][:mat][  "0"] =  1.000
-    @@data[WOOD7][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[WOOD7][:good][:party       ][:mat][   ""] =  1.000
-    @@data[WOOD7][:good][:grade       ][:mat]["189"] =  1.000
-    @@data[WOOD7][:good][:grade       ][:mat]["139"] =  0.500
-    @@data[WOOD7][:good][:grade       ][:mat]["192"] =  0.500
-    @@data[WOOD7][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[WOOD7][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[STEL1][ :bad][:id          ] = STEL1_BAD
-    @@data[STEL1][ :bad][:rimjoist    ][:mat]["139"] = 10.000
-    @@data[STEL1][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[STEL1][ :bad][:head        ][:mat]["139"] =  0.750
-    @@data[STEL1][ :bad][:jamb        ][:mat]["139"] =  0.750
-    @@data[STEL1][ :bad][:sill        ][:mat]["139"] =  0.750
-    @@data[STEL1][ :bad][:corner      ][:mat][  "0"] =  1.000
-    @@data[STEL1][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[STEL1][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[STEL1][ :bad][:grade       ][:mat]["139"] =  1.000
-    @@data[STEL1][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[STEL1][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[STEL1][:good][:id          ] = STEL1_GOOD
-    @@data[STEL1][:good][:rimjoist    ][:mat]["172"] =  0.500
-    @@data[STEL1][:good][:parapet     ][:mat][ "57"] =  3.300
-    @@data[STEL1][:good][:parapet     ][:mat]["139"] =  1.000
-    @@data[STEL1][:good][:head        ][:mat]["139"] =  0.500
-    @@data[STEL1][:good][:jamb        ][:mat]["139"] =  0.500
-    @@data[STEL1][:good][:sill        ][:mat]["139"] =  0.500
-    @@data[STEL1][:good][:corner      ][:mat][  "0"] =  1.000
-    @@data[STEL1][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[STEL1][:good][:party       ][:mat][   ""] =  1.000
-    @@data[STEL1][:good][:grade       ][:mat]["192"] =  1.000
-    @@data[STEL1][:good][:grade       ][:mat]["139"] =  1.000
-    @@data[STEL1][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[STEL1][:good][:transition  ][:mat][   ""] =  1.000
-
-    @@data[STEL2][ :bad][:id          ] = STEL2_BAD
-    @@data[STEL2][ :bad][:rimjoist    ][:mat]["139"] = 10.000
-    @@data[STEL2][ :bad][:parapet     ][:mat][  "0"] =  1.000
-    @@data[STEL2][ :bad][:head        ][:mat]["139"] =  0.750
-    @@data[STEL2][ :bad][:jamb        ][:mat]["139"] =  0.750
-    @@data[STEL2][ :bad][:sill        ][:mat]["139"] =  0.750
-    @@data[STEL2][ :bad][:corner      ][:mat][  "0"] =  1.000
-    @@data[STEL2][ :bad][:balcony     ][:mat][   ""] =  1.000
-    @@data[STEL2][ :bad][:party       ][:mat][   ""] =  1.000
-    @@data[STEL2][ :bad][:grade       ][:mat]["139"] =  1.000
-    @@data[STEL2][ :bad][:joint       ][:mat][   ""] =  1.000
-    @@data[STEL2][ :bad][:transition  ][:mat][   ""] =  1.000
-
-    @@data[STEL2][:good][:id          ] = STEL2_GOOD
-    @@data[STEL2][:good][:rimjoist    ][:mat]["172"] =  0.500
-    @@data[STEL2][:good][:parapet     ][:mat]["206"] =  1.000
-    @@data[STEL2][:good][:head        ][:mat]["139"] =  0.500
-    @@data[STEL2][:good][:jamb        ][:mat]["139"] =  0.500
-    @@data[STEL2][:good][:sill        ][:mat]["139"] =  0.500
-    @@data[STEL2][:good][:corner      ][:mat][  "0"] =  1.000
-    @@data[STEL2][:good][:balcony     ][:mat][   ""] =  1.000
-    @@data[STEL2][:good][:party       ][:mat][   ""] =  1.000
-    @@data[STEL2][:good][:grade       ][:mat]["192"] =  1.000
-    @@data[STEL2][:good][:grade       ][:mat]["139"] =  1.000
-    @@data[STEL2][:good][:joint       ][:mat][   ""] =  1.000
-    @@data[STEL2][:good][:transition  ][:mat][   ""] =  1.000
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
 
     ##
-    # Retrieve TBD building/space type keyword.
+    # Retrieve TBD building/space type keyword (to revise TODO).
     #
     # @param spacetype [String] NECB (or other) building/space type
     # @param stories [Integer] number of building stories
@@ -1178,7 +779,7 @@ module BTAP
     end
 
     ##
-    # Retrieve building/space type-specific assembly/construction.
+    # Retrieve building/space type-specific assembly/construction (to revise TODO).
     #
     # @param sptype [Symbol] BTAP/TBD spacetype
     # @param stypes [Symbol] :walls, :floors or :roofs
@@ -1256,18 +857,16 @@ module BTAP
         chx = @@data[assembly][:good  ] unless @@data[assembly].key?(quality)
       end
 
-      psi[:id        ] = chx[:id        ]
-      psi[:rimjoist  ] = chx[:rimjoist  ][:psi]
-      psi[:parapet   ] = chx[:parapet   ][:psi]
-      psi[:head      ] = chx[:head      ][:psi]
-      psi[:jamb      ] = chx[:jamb      ][:psi]
-      psi[:sill      ] = chx[:sill      ][:psi]
-      psi[:corner    ] = chx[:corner    ][:psi]
-      psi[:balcony   ] = chx[:balcony   ][:psi]
-      psi[:party     ] = chx[:party     ][:psi]
-      psi[:grade     ] = chx[:grade     ][:psi]
-      psi[:joint     ] = chx[:joint     ][:psi]
-      psi[:transition] = chx[:transition][:psi]
+      psi[:id          ] = chx[:id          ]
+      psi[:rimjoist    ] = chx[:rimjoist    ][:psi]
+      psi[:parapet     ] = chx[:parapet     ][:psi]
+      psi[:fenestration] = chx[:fenestration][:psi]
+      psi[:door        ] = chx[:door        ][:psi]
+      psi[:corner      ] = chx[:corner      ][:psi]
+      psi[:balcony     ] = chx[:balcony     ][:psi]
+      psi[:party       ] = chx[:party       ][:psi]
+      psi[:grade       ] = chx[:grade       ][:psi]
+      psi[:joint       ] = chx[:joint       ][:psi]
 
       psi
     end
@@ -1329,8 +928,8 @@ module BTAP
       # based on OpenStudio-Standards), and so TBD ends up tagging such spaces
       # as unconditioned. Consequently, TBD attempts to up/de-rate attic floors
       # - not sloped roof surfaces. The upstream BTAP solution will undoubtedly
-      # need revision. In the meantime, and in an effort to harmonize TBD with
-      # BTAP's current approach, an OpenStudio model may be temporarily
+      # need revision (TODO). In the meantime, and in an effort to harmonize TBD
+      # with BTAP's current approach, an OpenStudio model may be temporarily
       # modified prior to TBD processes, ensuring that each attic space is
       # temporarily mistaken as a conditioned plenum. The return variable of the
       # following method is a Hash holding temporarily-modified spaces,
@@ -1346,7 +945,7 @@ module BTAP
       initial  = true
       complies = false
       comply   = {}     # specific to :walls, :floors & :roofs
-      perform  = :lp    # Low-performance wall constructions (revise, TO-DO ...)
+      perform  = :lp    # Low-performance wall constructions (revise, TODO ...)
       quality  = :bad   # default PSI factors - BTAP users can reset to :good
       quality  = :good if argh.key?(:quality) && argh[:quality] == :good
       combo    = "#{perform.to_s}_#{quality.to_s}".to_sym # e.g. :lp_bad
@@ -1682,8 +1281,8 @@ module BTAP
       stories = model.getBuildingStorys.size unless stories.is_a?(Integer)
 
       @model[:stories] = stories
-      @model[:stories] = 1              if stories < 1
-      @model[:stories] = 999            if stories > 999
+      @model[:stories] = 1   if stories < 1
+      @model[:stories] = 999 if stories > 999
       @model[:spaces ] = {}
       @model[:sptypes] = {}
 
@@ -1770,7 +1369,7 @@ module BTAP
         return false                           unless ok
 
         argh[stypes][:uo] = uo
-        next                                   unless argh[stypes].key?(:ut)
+        next unless argh[stypes].key?(:ut)
 
         argh[stypes][:ut] = uo
       end
@@ -1831,7 +1430,7 @@ module BTAP
       schema = "https://github.com/rd2/tbd/blob/master/tbd.schema.json"
 
       input[:schema     ] = schema
-      input[:description] = "TBD input for BTAP"              # append run # ?
+      input[:description] = "TBD input for BTAP" # append run # ?
       input[:psis       ] = psis.values
 
       @model[:sptypes].values.each do |sptype|
@@ -1960,9 +1559,8 @@ module BTAP
     def get_material_quantities()
       material_quantities = {}
       csv = CSV.read("#{File.dirname(__FILE__)}/../../../data/inventory/thermal_bridging.csv", headers: true)
-      tally_edges  = @tally[:edges].transform_keys(&:to_s)
+      tally_edges = @tally[:edges].transform_keys(&:to_s)
 
-      #tally_edges = JSON.parse('{"edges":{"jamb":{"BTAP-ExteriorWall-SteelFramed-1 good":13.708557548340757},"sill":{"BTAP-ExteriorWall-SteelFramed-1 good":90.13000000000001},"head":{"BTAP-ExteriorWall-SteelFramed-1 good":90.13000000000001},"gradeconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":90.4348},"parapetconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":45.2174},"parapet":{"BTAP-ExteriorWall-SteelFramed-1 good":45.2174},"transition":{"BTAP-ExteriorWall-SteelFramed-1 good":71.16038874419307},"cornerconvex":{"BTAP-ExteriorWall-SteelFramed-1 good":12.1952}}}')['edges']
       tally_edges.each do |edge_type_full, value|
         edge_type = edge_type_full.delete_suffix('convex')
         if ['head', 'jamb', 'sill'].include?(edge_type)
@@ -2097,7 +1695,7 @@ end
 #       default fenestration layout. As a result, BTAP/TBD presumes continuous
 #       shelf angles, offset by the height difference between slab edge and
 #       window head. Loose lintels are however included in the clear field
-#       costing ($/m2), yet should be limited to doors (TO-DO). A more flexible,
+#       costing ($/m2), yet should be limited to doors (TODO). A more flexible,
 #       general solution would be required for 3rd-party OpenStudio models
 #       (without strip windows as a basic fenestration layout).
 #
@@ -2106,7 +1704,7 @@ end
 #       BTAP costing requires extending the areas (m2) of OpenStudio wall
 #       surfaces (along parapet edges) by 3'-6" (1.1 m) x parapet lengths, to
 #       account for the extra cost of completely wrapping the parapet in
-#       insulation for "good" (HP) details. See final TBD tally. TO-DO.
+#       insulation for "good" (HP) details. See final TBD tally. TODO.
 #
 # NOTE: Overview of current BTAP building/space type construction link, e.g.:
 #
@@ -2115,4 +1713,4 @@ end
 #
 #       ... yet all (public) washrooms, corridors, stairwells, etc. are
 #       steel-framed (regardless of building type). Overview of possible fixes.
-#       TO-DO.
+#       TODO.
