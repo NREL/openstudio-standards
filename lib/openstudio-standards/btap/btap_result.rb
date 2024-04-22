@@ -25,8 +25,6 @@ module BTAP
     # Create hash to store all the collected data.
     qaqc = {}
     error_warning=[]
-    qaqc[:os_standards_revision] = OpenstudioStandards::git_revision
-    qaqc[:os_standards_version] = OpenstudioStandards::VERSION
     # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get

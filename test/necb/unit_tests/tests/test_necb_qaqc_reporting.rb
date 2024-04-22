@@ -3,7 +3,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
-class NECB_QAQC_Repoprting < Minitest::Test
+class NECB_QAQC_Reporting < Minitest::Test
 
 
   def setup()
