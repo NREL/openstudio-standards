@@ -7,7 +7,6 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
 
   def initialize
     @template = '179d-90.1-2007'
-    @whole_building_space_type_name = 'WholeBuilding'
     load_standards_database
 
     # This is super weird, but this is for resolving ventilation and exhaust
