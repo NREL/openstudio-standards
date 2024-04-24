@@ -2759,8 +2759,8 @@ class ECMS
 
     # If specified as COP
     unless props['minimum_coefficient_of_performance_heating'].nil?
-      cop = props['minimum_coefficient_of_performance_heating']
-      cop = cop_heating_to_cop_heating_no_fan(min_eer)
+      cop_min = props['minimum_coefficient_of_performance_heating']
+      cop = cop_heating_to_cop_heating_no_fan(cop_min, capacity_w)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{cop}COP"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
