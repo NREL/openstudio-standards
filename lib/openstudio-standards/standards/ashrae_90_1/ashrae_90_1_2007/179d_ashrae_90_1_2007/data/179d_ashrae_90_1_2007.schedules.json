@@ -1,6 +1,118 @@
 {
   "schedules": [
     {
+      "name": "ACM_FullServiceRestaurant_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-2 Nonresidential, 179D",
+      "values": [
+        178.0
+      ]
+    },
+    {
+      "name": "ACM_Office_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-2 Nonresidential, 179D",
+      "values": [
+        134.0
+      ]
+    },
+    {
+      "name": "ACM_PrimarySchool_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-2 Nonresidential, 179D",
+      "values": [
+        122.0
+      ]
+    },
+    {
+      "name": "ACM_QuickServiceRestaurant_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-2 Nonresidential, 179D",
+      "values": [
+        178.0
+      ]
+    },
+    {
+      "name": "ACM_Retail_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-2 Nonresidential, 179D",
+      "values": [
+        140.0
+      ]
+    },
+    {
+      "name": "ACM_SmallHotel_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-2 Nonresidential, 179D",
+      "values": [
+        132.0
+      ]
+    },
+    {
+      "name": "ACM_StripMall_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-2 Nonresidential, 179D",
+      "values": [
+        140.0
+      ]
+    },
+    {
+      "name": "ACM_Warehouse_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-2 Nonresidential, 179D",
+      "values": [
+        197.0
+      ]
+    },
+    {
       "name": "Nonres_Cool_Sch",
       "template": "179d-90.1-2007",
       "category": "Cooling",
