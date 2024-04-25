@@ -57,7 +57,7 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     # Avoid the memoization by calling the static method instead
     # Space Type area method is prefered
     @model.getBuilding.setStandardsBuildingType("Office")
-    assert_equal('Warehouse', ACM179dASHRAE9012007.__model_get_primary_building_type(@model))
+    assert_equal('Warehouse', @standard.__model_get_primary_building_type(@model))
     assert_equal(0, log_errors.size)
     assert_equal(1, log_warnings.size)
     assert_match(
@@ -69,11 +69,11 @@ class ACM179dASHRAE9012007Test < Minitest::Test
 
     # When Space Type area not found, use building
     @model.getSpaceTypes.each(&:resetStandardsBuildingType)
-    assert_equal('Office', ACM179dASHRAE9012007.__model_get_primary_building_type(@model))
+    assert_equal('Office', @standard.__model_get_primary_building_type(@model))
 
     # When neither: it throws
     @model.getBuilding.resetStandardsBuildingType
-    assert_raises(RuntimeError, 'No Primary Building Type found') { ACM179dASHRAE9012007.__model_get_primary_building_type(@model) }
+    assert_raises(RuntimeError, 'No Primary Building Type found') { @standard.__model_get_primary_building_type(@model) }
     assert_equal(1, log_errors.size)
     assert_equal(0, log_warnings.size)
     assert_equal("Cannot identify a single building type in model, none of your 3 SpaceTypes have a standardsBuildingType assigned and neither does the Building",

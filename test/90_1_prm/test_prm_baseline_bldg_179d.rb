@@ -8,11 +8,11 @@ class ACM179dASHRAE9012007BaselineBuildingTest < Minitest::Test
     @standard = Standard.build(@standard_name)
   end
 
-  def get_expected_value_for_building_type(building_type, key)
+  def get_expected_value_for_building_type(base_model, building_type, key)
     search_criteria = {
       'template' => @standard.template,
       'building_type' => building_type,
-      'space_type' => @standard.whole_building_space_type_name,
+      'space_type' => @standard.whole_building_space_type_name(base_model, building_type),
     }
 
     space_type_properties = @standard.model_find_object(@standard.standards_data['space_types'], search_criteria)
@@ -43,7 +43,7 @@ class ACM179dASHRAE9012007BaselineBuildingTest < Minitest::Test
     prop_space_types = base_space_types.map(&:nameString).map{|n| prop_model.getSpaceTypeByName(n).get}
 
     # We check that the LPDs were changed
-    lighting_per_area_ip = get_expected_value_for_building_type(building_type, 'lighting_per_area')
+    lighting_per_area_ip = get_expected_value_for_building_type(base_model, building_type, 'lighting_per_area')
     assert_equal(0.8, lighting_per_area_ip)
     lighting_per_area_si = OpenStudio.convert(lighting_per_area_ip, 'W/ft^2', 'W/m^2').get
 
