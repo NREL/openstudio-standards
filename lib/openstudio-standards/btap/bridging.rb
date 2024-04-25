@@ -1,5 +1,5 @@
 # **************************************************************************** /
-# *  Copyright (c) 2008-2023, Natural Resources Canada
+# *  Copyright (c) 2008-2024, Natural Resources Canada
 # *  All rights reserved.
 # *
 # *  This library is free software; you can redistribute it and/or
@@ -206,7 +206,7 @@ module BTAP
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
     # There are 3x exceptions to the aforementioned iterative solution,
-    # hopefully to correct (TODO):
+    # hopefully to correct (@todo):
     #
     #   - Steel-framed construction: the selected HP variant has metal
     #     cladding. The only LP steel-framed BTAP option is wood-clad -
@@ -227,7 +227,7 @@ module BTAP
     #     respectively. This is expected to change in the future ...
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # Preset BTAP/TBD wall construction parameters (to be revised ... TODO).
+    # Preset BTAP/TBD wall construction parameters (to be revised ... @todo).
     #   :sptypes   : BTAP/TBD Hash of linked NECB SpaceTypes (symbols)
     #   :uos       : BTAP/TBD Hash of associated of Uo sub-variants
     #   :lp or :hp : low- or high-performance attribute
@@ -324,7 +324,7 @@ module BTAP
     # linkage is now extended to OpenStudio models (not just costing),
     # given the construction-specific nature of MAJOR thermal bridging.
     #
-    # NOTE: Expect radical changes to the NECB building/space type model (TODO).
+    # NOTE: Expect radical changes to the NECB building/space type model (@todo).
     #
     # Each of these wall options holds NECB building (or space) type keywords
     # (see below). The default (fall back) keyword is :office. String pattern
@@ -700,7 +700,7 @@ module BTAP
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
 
     ##
-    # Retrieve TBD building/space type keyword (to revise TODO).
+    # Retrieve TBD building/space type keyword (to revise @todo).
     #
     # @param spacetype [String] NECB (or other) building/space type
     # @param stories [Integer] number of building stories
@@ -779,7 +779,7 @@ module BTAP
     end
 
     ##
-    # Retrieve building/space type-specific assembly/construction (to revise TODO).
+    # Retrieve building/space type-specific assembly/construction (to revise @todo).
     #
     # @param sptype [Symbol] BTAP/TBD spacetype
     # @param stypes [Symbol] :walls, :floors or :roofs
@@ -928,7 +928,7 @@ module BTAP
       # based on OpenStudio-Standards), and so TBD ends up tagging such spaces
       # as unconditioned. Consequently, TBD attempts to up/de-rate attic floors
       # - not sloped roof surfaces. The upstream BTAP solution will undoubtedly
-      # need revision (TODO). In the meantime, and in an effort to harmonize TBD
+      # need revision (@todo). In the meantime, and in an effort to harmonize TBD
       # with BTAP's current approach, an OpenStudio model may be temporarily
       # modified prior to TBD processes, ensuring that each attic space is
       # temporarily mistaken as a conditioned plenum. The return variable of the
@@ -945,7 +945,7 @@ module BTAP
       initial  = true
       complies = false
       comply   = {}     # specific to :walls, :floors & :roofs
-      perform  = :lp    # Low-performance wall constructions (revise, TODO ...)
+      perform  = :lp    # Low-performance wall constructions (revise, @todo ...)
       quality  = :bad   # default PSI factors - BTAP users can reset to :good
       quality  = :good if argh.key?(:quality) && argh[:quality] == :good
       combo    = "#{perform.to_s}_#{quality.to_s}".to_sym # e.g. :lp_bad
@@ -1695,7 +1695,7 @@ end
 #       default fenestration layout. As a result, BTAP/TBD presumes continuous
 #       shelf angles, offset by the height difference between slab edge and
 #       window head. Loose lintels are however included in the clear field
-#       costing ($/m2), yet should be limited to doors (TODO). A more flexible,
+#       costing ($/m2), yet should be limited to doors (@todo). A more flexible,
 #       general solution would be required for 3rd-party OpenStudio models
 #       (without strip windows as a basic fenestration layout).
 #
@@ -1704,7 +1704,7 @@ end
 #       BTAP costing requires extending the areas (m2) of OpenStudio wall
 #       surfaces (along parapet edges) by 3'-6" (1.1 m) x parapet lengths, to
 #       account for the extra cost of completely wrapping the parapet in
-#       insulation for "good" (HP) details. See final TBD tally. TODO.
+#       insulation for "good" (HP) details. See final TBD tally. @todo.
 #
 # NOTE: Overview of current BTAP building/space type construction link, e.g.:
 #
@@ -1713,4 +1713,4 @@ end
 #
 #       ... yet all (public) washrooms, corridors, stairwells, etc. are
 #       steel-framed (regardless of building type). Overview of possible fixes.
-#       TODO.
+#       @todo.
