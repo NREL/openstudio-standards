@@ -41,7 +41,7 @@ class Standard
   end
 
   # set up template class variable.
-  def intialize
+  def initialize
     super()
   end
 
