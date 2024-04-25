@@ -48,10 +48,11 @@ class ACM179dASHRAE9012007
 
   def model_get_primary_building_type(model)
     # Maybe this is a premature optimization, but memoize the computation
-    @primary_building_types_memoized ||= Hash.new do |h, key|
-      h[key] = ACM179dASHRAE9012007.__model_get_primary_building_type(model)
-    end
-    @primary_building_types_memoized[model]
+    @primary_building_types_memoized ||= {}
+    # TODO: this will work if you pass the same model. But if you do sp.model
+    # then it changes everytime. Need to figure out a way to check if it points
+    # to the same model or not, or remove the memoization
+    @primary_building_types_memoized[model] ||= ACM179dASHRAE9012007.__model_get_primary_building_type(model)
   end
 
   # Patched to prefer the space area method above instead of just relying on

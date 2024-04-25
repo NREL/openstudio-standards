@@ -90,18 +90,56 @@ class ACM179dASHRAE9012007Test < Minitest::Test
       assert_equal('Warehouse', data['building_type'])
       assert_equal('WholeBuilding', data['space_type'])
       assert_equal('ASHRAE 90.1-2007', data['lighting_standard'])
-      assert_equal('Warehouse', data['lighting_primary_space_type'])
-      assert_equal('WholeBuilding', data['lighting_secondary_space_type'])
+      assert_equal('WholeBuilding', data['lighting_primary_space_type'])
+      assert_equal('Warehouse', data['lighting_secondary_space_type'])
     end
 
-    data = standard.space_type_get_standards_data(model.getSpaceTypes.first)
+    space_type = model.getSpaceTypes.select { |sp| sp.standardsSpaceType.get == 'Bulk' }.first
+
+    data_only_179d = standard.space_type_get_standards_data(space_type, extend_with_2007: false)
+    assert_empty(data_only_179d.select{|k, _| ['ventilation', 'exhaust'].any? { |x| k.include?(x) } })
+
+    std_2007 = Standard.build('90.1-2007')
+    data2007 = std_2007.space_type_get_standards_data(space_type)
+    refute_empty(data2007.select{|k, _| ['ventilation', 'exhaust'].any? { |x| k.include?(x) } })
+
+    # This is the merged data
+    data = standard.space_type_get_standards_data(space_type)
+    refute_empty(data.select{|k, _| ['ventilation', 'exhaust'].any? { |x| k.include?(x) } })
+
+    # All keys from 2007 and in our
+    assert_empty(data2007.keys - data.keys)
+
+    assert_includes(data.keys, 'space_type_2007')
+    enhanced_keys = data.keys - data_only_179d.keys - ['space_type_2007']
+    refute_empty(enhanced_keys)
+    assert_equal(25, enhanced_keys.size)
+
+    # Ensure all keys defined specifically in 179D are left untouched
+    data_only_179d.keys.each do |k|
+      if data_only_179d[k].nil?
+        assert_nil(data[k])
+      else
+        assert_equal(data_only_179d[k], data[k])
+      end
+    end
+    # Ensure all enhanced keys are directly from 2007
+    enhanced_keys.each do |k|
+      if data2007[k].nil?
+        assert_nil(data[k])
+      else
+        assert_equal(data2007[k], data[k])
+      end
+    end
 
     assert_equal('179d-90.1-2007', data['template'])
     assert_equal('Warehouse', data['building_type'])
     assert_equal('WholeBuilding', data['space_type'])
+    assert_equal('Bulk', data['space_type_2007'])
+
     assert_equal('ASHRAE 90.1-2007', data['lighting_standard'])
-    assert_equal('Warehouse', data['lighting_primary_space_type'])
-    assert_equal('WholeBuilding', data['lighting_secondary_space_type'])
+    assert_equal('WholeBuilding', data['lighting_primary_space_type'])
+    assert_equal('Warehouse', data['lighting_secondary_space_type'])
     assert_in_delta(0.8, data['lighting_per_area'])
     assert_nil(data['rcr_threshold'])
     assert_nil(data['lighting_per_person'])
@@ -138,15 +176,9 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     assert_nil(data['additional_gas_equipment_schedule'])
     assert_in_delta(5.0, data['occupancy_per_area'])
     assert_equal('Nonres_Occ_Sch', data['occupancy_schedule'])
-    assert_equal('Warehouse Office Activity Schedule', data['occupancy_activity_schedule'])
+    assert_equal('ACM_Warehouse_ACTIVITY_SCH', data['occupancy_activity_schedule'])
     assert_nil(data['is_residential'])
-    assert_equal('ACM 2005', data['ventilation_standard'])
-    assert_equal('Miscellaneous Spaces', data['ventilation_primary_space_type'])
-    assert_equal('Warehouses', data['ventilation_secondary_space_type'])
-    assert_in_delta(0.15, data['ventilation_per_area'])
-    assert_in_delta(0.0, data['ventilation_per_person'])
-    assert_nil(data['ventilation_air_changes'])
-    assert_nil(data['minimum_total_air_changes'])
+
     assert_in_delta(0.038, data['infiltration_per_exterior_area'])
     assert_nil(data['infiltration_per_exterior_wall_area'])
     assert_nil(data['infiltration_air_changes'])
@@ -156,14 +188,24 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     assert_equal('Warehouse_Cool_Sch', data['cooling_setpoint_schedule'])
     assert_nil(data['service_water_heating_peak_flow_rate'])
     assert_nil(data['service_water_heating_area'])
-    assert_nil(data['service_water_heating_peak_flow_per_area'])
+    assert_in_delta(0.0007, data['service_water_heating_peak_flow_per_area'])
     assert_nil(data['service_water_heating_system_type'])
     assert_nil(data['booster_water_heater_fraction'])
-    assert_nil(data['service_water_heating_target_temperature'])
+    assert_in_delta(140.0, data['service_water_heating_target_temperature'])
     assert_nil(data['booster_water_heating_target_temperature'])
     assert_nil(data['service_water_heating_fraction_sensible'])
     assert_nil(data['service_water_heating_fraction_latent'])
     assert_equal('Nonres_SWH_Sch', data['service_water_heating_schedule'])
+
+    # Enhanced from 2007, based on actual Space Type
+    assert_equal('ASHRAE 62.1-2004', data['ventilation_standard'])
+    assert_equal('Miscellaneous Spaces', data['ventilation_primary_space_type'])
+    assert_equal('Warehouses', data['ventilation_secondary_space_type'])
+    assert_in_delta(0.06, data['ventilation_per_area'])
+    assert_nil(data['ventilation_per_person'])
+    assert_nil(data['ventilation_air_changes'])
+    assert_nil(data['minimum_total_air_changes'])
+
     assert_nil(data['manual_continuous_dimming'])
     assert_nil(data['programmable_multilevel_dimming'])
     assert_nil(data['multilevel_occupancy_sensors'])
@@ -181,7 +223,7 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     assert_nil(data['exhaust_availability_schedule'])
     assert_nil(data['exhaust_flow_fraction_schedule'])
     assert_nil(data['balanced_exhaust_fraction_schedule'])
-    assert_equal('120_50_230', data['rgb'])
+    assert_equal('41_31_169', data['rgb'])
   end
 
 end

@@ -9,6 +9,10 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
     @template = '179d-90.1-2007'
     @whole_building_space_type_name = 'WholeBuilding'
     load_standards_database
+
+    # This is super weird, but this is for resolving ventilation and exhaust
+    # per the space type's... and merging with the rest
+    @std_2007 = ASHRAE9012007.new
   end
 
   # Loads the openstudio standards dataset for this standard.
