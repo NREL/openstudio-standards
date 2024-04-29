@@ -2266,7 +2266,7 @@ class NECB2011
 
   # Method to update the base system name based on the inputs provided.
   # Only the parts of the name with string inputs are updated
-  def update_sys_name(airloop,
+    def update_sys_name(airloop,
                       sys_abbr: nil,
                       sys_oa: nil,
                       sys_hr: nil,
@@ -2276,44 +2276,43 @@ class NECB2011
                       zone_htg: nil,
                       zone_clg: nil,
                       sys_rf: nil)
-    name_parts = airloop.name.to_s.split('|').reject(&:empty?)
-    if sys_abbr.is_a? String then
-      name_parts[0] = sys_abbr
-    end
-    if sys_oa.is_a? String then
-      name_parts[1] = sys_oa
-    end
-    for i in 0..name_parts.size - 1
-      if (name_parts[i].include? 'shr>') && (sys_hr.is_a? String)
-        name_parts[i] = "shr>#{sys_hr}"
-      elsif (name_parts[i].include? 'sh>') && (sys_htg.is_a? String)
-        name_parts[i] = "sh>#{sys_htg}"
-      elsif (name_parts[i].include? 'sc>') && (sys_clg.is_a? String)
-        name_parts[i] = "sc>#{sys_clg}"
-      elsif (name_parts[i].include? 'ssf') && (sys_sf.is_a? String)
-        name_parts[i] = "ssf>#{sys_sf}"
-      elsif (name_parts[i].include? 'zh>') && (zone_htg.is_a? String)
-        name_parts[i] = "zh>#{zone_htg}"
-      elsif (name_parts[i].include? 'zc>') && (zone_clg.is_a? String)
-        name_parts[i] = "zc>#{zone_clg}"
-      elsif (name_parts[i].include? 'srf>') && (sys_rf.is_a? String)
-        name_parts[i] = "srf>#{sys_rf}"
+    original_name = airloop.name.to_s
+    name_parts = original_name.split('|').reject(&:empty?)
+
+    # Update name parts based on provided parameters
+    name_parts[0] = sys_abbr if sys_abbr.is_a?(String)
+    name_parts[1] = sys_oa if sys_oa.is_a?(String)
+
+    name_parts.each_with_index do |part, index|
+      if part.include?('shr>') && sys_hr.is_a?(String)
+        # Skip updating 'shr>' part
+      elsif part.include?('sh>') && sys_htg.is_a?(String)
+        name_parts[index] = "sh>#{sys_htg}"
+      elsif part.include?('sc>') && sys_clg.is_a?(String)
+        name_parts[index] = "sc>#{sys_clg}"
+      elsif part.include?('ssf') && sys_sf.is_a?(String)
+        name_parts[index] = "ssf>#{sys_sf}"
+      elsif part.include?('zh>') && zone_htg.is_a?(String)
+        name_parts[index] = "zh>#{zone_htg}"
+      elsif part.include?('zc>') && zone_clg.is_a?(String)
+        name_parts[index] = "zc>#{zone_clg}"
+      elsif part.include?('srf>') && sys_rf.is_a?(String)
+        name_parts[index] = "srf>#{sys_rf}"
       end
     end
-    sys_name = ''
-    name_parts.each { |part| sys_name += "#{part}|" }
 
-    # Check if the last part of the system name is an integer.  If it is, then remove the last part from the system name.
-    check_int = begin
-                  Integer(name_parts.last.strip)
-                rescue StandardError
-                  nil
-                end
-    sys_name = sys_name.chop unless check_int.nil?
+    # Join name parts with '|' separator
+    updated_name = name_parts.join('|')
 
-    airloop.setName(sys_name)
+    # Append '|' at the end only if the modified name is different from the original name
+    updated_name += "|" if updated_name != original_name
+
+    # Remove the last part of the name if it's an integer
+    updated_name.chomp!('|') if updated_name.split('|').last.to_i.to_s == updated_name.split('|').last
+
+    airloop.setName(updated_name)
   end
-  
+
   def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_reference_hp = false)
     # Set Rated heating capacity = 50% cooling coil capacity at -8.3 C outdoor [8.4.4.13 (2)(c)]
 
