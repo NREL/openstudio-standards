@@ -353,7 +353,7 @@ module Outpatient
         if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
           air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
           vav_name = air_terminal.name.get
-          zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+          zone_oa_per_area = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
           case template
           # High OA zones
           # Determine whether or not to use the high minimum guess.

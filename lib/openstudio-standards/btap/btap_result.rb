@@ -25,8 +25,6 @@ module BTAP
     # Create hash to store all the collected data.
     qaqc = {}
     error_warning=[]
-    qaqc[:os_standards_revision] = OpenstudioStandards::git_revision
-    qaqc[:os_standards_version] = OpenstudioStandards::VERSION
     # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
@@ -201,16 +199,16 @@ module BTAP
     #Store Envelope data.
     qaqc[:envelope] = {}
 
-    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] 	= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_walls).round(4) if outdoor_walls.size > 0
-    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k]  = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_roofs).round(4) if outdoor_roofs.size > 0
-    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_floors).round(4) if outdoor_floors.size > 0
-    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k]  	= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_walls).round(4) if ground_walls.size > 0
-    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k]  	= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_roofs).round(4) if ground_roofs.size > 0
-    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k]  = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_floors).round(4) if ground_floors.size > 0
-    qaqc[:envelope][:windows_average_conductance_w_per_m2_k]  		= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(windows).round(4) if windows.size > 0
-    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k]  	= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(skylights).round(4) if skylights.size > 0
-    qaqc[:envelope][:doors_average_conductance_w_per_m2_k]  		= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(doors).round(4) if doors.size > 0
-    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors).round(4) if overhead_doors.size > 0
+    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] 	= OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls).round(4) if outdoor_walls.size > 0
+    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k]  = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs).round(4) if outdoor_roofs.size > 0
+    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors).round(4) if outdoor_floors.size > 0
+    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k]  	= OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls).round(4) if ground_walls.size > 0
+    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k]  	= OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs).round(4) if ground_roofs.size > 0
+    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k]  = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors).round(4) if ground_floors.size > 0
+    qaqc[:envelope][:windows_average_conductance_w_per_m2_k]  		= OpenstudioStandards::Constructions.surfaces_get_conductance(windows).round(4) if windows.size > 0
+    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k]  	= OpenstudioStandards::Constructions.surfaces_get_conductance(skylights).round(4) if skylights.size > 0
+    qaqc[:envelope][:doors_average_conductance_w_per_m2_k]  		= OpenstudioStandards::Constructions.surfaces_get_conductance(doors).round(4) if doors.size > 0
+    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors).round(4) if overhead_doors.size > 0
     qaqc[:envelope][:fdwr]  										= (BTAP::Geometry::get_fwdr(model) * 100.0).round(1)
     qaqc[:envelope][:srr]  											= (BTAP::Geometry::get_srr(model) * 100.0).round(1)
 
@@ -227,9 +225,9 @@ module BTAP
       qaqc[:envelope][:constructions][:exterior_fenestration] << construction_info
       construction_info[:name] = construction.name.get
       construction_info[:net_area_m2] = construction.getNetArea.round(2)
-      construction_info[:thermal_conductance_m2_w_per_k] = BTAP::Resources::Envelope::Constructions::get_conductance(construction).round(3)
-      construction_info[:solar_transmittance] = BTAP::Resources::Envelope::Constructions::get_shgc(model, construction).round(3)
-      construction_info[:visible_tranmittance] = BTAP::Resources::Envelope::Constructions::get_tvis(model,construction).round(3)
+      construction_info[:thermal_conductance_m2_w_per_k] = OpenstudioStandards::Constructions.construction_get_conductance(construction).round(3)
+      construction_info[:solar_transmittance] = OpenstudioStandards::Constructions.construction_get_solar_transmittance(construction).round(3)
+      construction_info[:visible_tranmittance] = OpenstudioStandards::Constructions.construction_get_visible_transmittance(construction).round(3)
     end
 
     #Exterior

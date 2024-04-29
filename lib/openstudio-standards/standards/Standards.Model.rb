@@ -745,7 +745,7 @@ class Standard
 
     model.getThermalZones.sort.each do |zone|
       # Skip plenums
-      if thermal_zone_plenum?(zone)
+      if OpenstudioStandards::ThermalZone.thermal_zone_plenum?(zone)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Zone #{zone.name} is a plenum.  It will not be assigned a baseline system.")
         next
       end
@@ -759,8 +759,8 @@ class Standard
       end
 
       # Skip unconditioned zones
-      heated = thermal_zone_heated?(zone)
-      cooled = thermal_zone_cooled?(zone)
+      heated = OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone)
+      cooled = OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone)
       if !heated && !cooled
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Zone #{zone.name} is unconditioned.  It will not be assigned a baseline system.")
         next
@@ -778,7 +778,7 @@ class Standard
       zn_hash['occ'] = thermal_zone_occupancy_type(zone)
 
       # Building type
-      zn_hash['bldg_type'] = thermal_zone_building_type(zone)
+      zn_hash['bldg_type'] = OpenstudioStandards::ThermalZone.thermal_zone_get_building_type(zone)
 
       # Fuel type
       # for 2013 and prior, baseline fuel = proposed fuel
@@ -961,7 +961,7 @@ class Standard
       heated_only_zones = []
       heated_cooled_zones = []
       gp['zones'].each do |zn|
-        if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
+        if OpenstudioStandards::ThermalZone.thermal_zone_heated?(zn['zone']) && !OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zn['zone'])
           heated_only_zones << zn
         else
           heated_cooled_zones << zn
@@ -1094,32 +1094,26 @@ class Standard
     heat_list = ''
     has_district_heat = false
     has_fuel_heat = false
-    has_elec_heat = false
-
-    # error if HVACComponent heating fuels method is not available
-    if model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Standards.Model', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
-    end
-
+    has_electric_heat = false
     zones.each do |zone|
-      htg_fuels = zone.heatingFuelTypes.map(&:valueName)
-      if htg_fuels.include?('DistrictHeating') || htg_fuels.include?('DistrictHeatingWater') || htg_fuels.include?('DistrictHeatingSteam')
+      if OpenstudioStandards::ThermalZone.thermal_zone_district_heat?(zone)
         has_district_heat = true
       end
-      other_heat = thermal_zone_fossil_or_electric_type(zone, '')
-      if other_heat == 'fossil'
+      if OpenstudioStandards::ThermalZone.thermal_zone_fossil_heat?(zone)
         has_fuel_heat = true
-      elsif other_heat == 'electric'
-        has_elec_heat = true
+      end
+      if OpenstudioStandards::ThermalZone.thermal_zone_electric_heat?(zone)
+        has_electric_heat = true
       end
     end
+
     if has_district_heat
       heat_list = 'districtheating'
     end
     if has_fuel_heat
       heat_list += '_fuel'
     end
-    if has_elec_heat
+    if has_electric_heat
       heat_list += '_electric'
     end
     return heat_list
@@ -2112,7 +2106,7 @@ class Standard
       area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
       data['area_ft2'] = area_ft2
       # Get the internal loads
-      int_load_w = thermal_zone_design_internal_load(zone) * zone.multiplier
+      int_load_w = OpenstudioStandards::ThermalZone.thermal_zone_get_design_internal_load(zone) * zone.multiplier
       # Normalize per-area
       int_load_w_per_m2 = int_load_w / area_m2
       int_load_btu_per_ft2 = OpenStudio.convert(int_load_w_per_m2, 'W/m^2', 'Btu/hr*ft^2').get
@@ -2362,7 +2356,7 @@ class Standard
   #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
   # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
   #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
-  # @param fan_motor_hp [Double] fan motor brake horsepower.
+  # @param fan_motor_bhp [Double] fan motor brake horsepower.
   # @param volume [Double] Equipment storage capacity in gallons.
   # @param capacity_per_volume [Double] Equipment capacity per storage capacity in Btu/h/gal.
   # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
@@ -3088,21 +3082,34 @@ class Standard
       if target_u_value_ip
 
         # Handle Opaque and Fenestration Constructions differently
-        # if construction.isFenestration && construction_simple_glazing?(construction)
+        # if construction.isFenestration && OpenstudioStandards::Constructions.construction_simple_glazing?(construction)
         if construction.isFenestration
-          if construction_simple_glazing?(construction)
+          if OpenstudioStandards::Constructions.construction_simple_glazing?(construction)
             # Set the U-Value and SHGC
-            construction_set_glazing_u_value(construction, target_u_value_ip.to_f, data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
-            construction_set_glazing_shgc(construction, target_shgc.to_f)
+            OpenstudioStandards::Constructions.construction_set_glazing_u_value(construction, target_u_value_ip.to_f,
+                                                                                target_includes_interior_film_coefficients: u_includes_int_film,
+                                                                                target_includes_exterior_film_coefficients: u_includes_ext_film)
+            simple_glazing = construction.layers.first.to_SimpleGlazing
+            unless simple_glazing.is_initialized && !target_shgc.nil?
+              simple_glazing.get.setSolarHeatGainCoefficient(target_shgc.to_f)
+            end
           else # if !data['intended_surface_type'] == 'ExteriorWindow' && !data['intended_surface_type'] == 'Skylight'
             # Set the U-Value
-            construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+            OpenstudioStandards::Constructions.construction_set_u_value(construction, target_u_value_ip.to_f,
+                                                                        insulation_layer_name: data['insulation_layer'],
+                                                                        intended_surface_type: data['intended_surface_type'],
+                                                                        target_includes_interior_film_coefficients: u_includes_int_film,
+                                                                        target_includes_exterior_film_coefficients: u_includes_ext_film)
             # else
             # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Not modifying U-value for #{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
           end
         else
           # Set the U-Value
-          construction_set_u_value(construction, target_u_value_ip.to_f, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+          OpenstudioStandards::Constructions.construction_set_u_value(construction, target_u_value_ip.to_f,
+                                                                      insulation_layer_name: data['insulation_layer'],
+                                                                      intended_surface_type: data['intended_surface_type'],
+                                                                      target_includes_interior_film_coefficients: u_includes_int_film,
+                                                                      target_includes_exterior_film_coefficients: u_includes_ext_film)
           # else
           # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Not modifying U-value for #{data['intended_surface_type']} u_val #{target_u_value_ip} f_fac #{target_f_factor_ip} c_fac #{target_c_factor_ip}")
         end
@@ -3113,10 +3120,14 @@ class Standard
         if surface.nil?
           # Set the F-Factor (only applies to slabs on grade)
           # @todo figure out what the prototype buildings did about ground heat transfer
-          # construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, data['insulation_layer'])
-          construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+          # OpenstudioStandards::Constructions.construction_set_slab_f_factor(construction, target_f_factor_ip.to_f, insulation_layer_name: data['insulation_layer'])
+          OpenstudioStandards::Constructions.construction_set_u_value(construction, 0.0,
+                                                                      insulation_layer_name: data['insulation_layer'],
+                                                                      intended_surface_type: data['intended_surface_type'],
+                                                                      target_includes_interior_film_coefficients: u_includes_int_film,
+                                                                      target_includes_exterior_film_coefficients: u_includes_ext_film)
         else
-          construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
+          OpenstudioStandards::Constructions.construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
         end
       elsif target_c_factor_ip && (data['intended_surface_type'] == 'GroundContactWall' || data['intended_surface_type'] == 'GroundContactRoof')
         # C-factor objects are unique to each surface, so a surface needs to be passed
@@ -3124,10 +3135,14 @@ class Standard
         if surface.nil?
           # Set the C-Factor (only applies to underground walls)
           # @todo figure out what the prototype buildings did about ground heat transfer
-          # construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, data['insulation_layer'])
-          construction_set_u_value(construction, 0.0, data['insulation_layer'], data['intended_surface_type'], u_includes_int_film, u_includes_ext_film)
+          # OpenstudioStandards::Constructions.construction_set_underground_wall_c_factor(construction, target_c_factor_ip.to_f, insulation_layer_name: data['insulation_layer'])
+          OpenstudioStandards::Constructions.construction_set_u_value(construction, 0.0,
+                                                                      insulation_layer_name: data['insulation_layer'],
+                                                                      intended_surface_type: data['intended_surface_type'],
+                                                                      target_includes_interior_film_coefficients: u_includes_int_film,
+                                                                      target_includes_exterior_film_coefficients: u_includes_ext_film)
         else
-          construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
+          OpenstudioStandards::Constructions.construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
         end
       end
 
@@ -4018,162 +4033,6 @@ class Standard
     return result
   end
 
-  # Get a unique list of constructions with given boundary condition and a given type of surface.
-  # Pulls from both default construction sets and hard-assigned constructions.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param boundary_condition [String] the desired boundary condition. valid choices are:
-  #   Adiabatic
-  #   Surface
-  #   Outdoors
-  #   Ground
-  # @param type [String] the type of surface to find. valid choices are:
-  #   AtticFloor
-  #   AtticWall
-  #   AtticRoof
-  #   DemisingFloor
-  #   DemisingWall
-  #   DemisingRoof
-  #   ExteriorFloor
-  #   ExteriorWall
-  #   ExteriorRoof
-  #   ExteriorWindow
-  #   ExteriorDoor
-  #   GlassDoor
-  #   GroundContactFloor
-  #   GroundContactWall
-  #   GroundContactRoof
-  #   InteriorFloor
-  #   InteriorWall
-  #   InteriorCeiling
-  #   InteriorPartition
-  #   InteriorWindow
-  #   InteriorDoor
-  #   OverheadDoor
-  #   Skylight
-  #   TubularDaylightDome
-  #   TubularDaylightDiffuser
-  # return [Array<OpenStudio::Model::ConstructionBase>] an array of all constructions.
-  def model_find_constructions(model, boundary_condition, type)
-    constructions = []
-
-    # From default construction sets
-    model.getDefaultConstructionSets.sort.each do |const_set|
-      ext_surfs = const_set.defaultExteriorSurfaceConstructions
-      int_surfs = const_set.defaultInteriorSurfaceConstructions
-      gnd_surfs = const_set.defaultGroundContactSurfaceConstructions
-      ext_subsurfs = const_set.defaultExteriorSubSurfaceConstructions
-      int_subsurfs = const_set.defaultInteriorSubSurfaceConstructions
-
-      # Can't handle incomplete construction sets
-      if ext_surfs.empty? ||
-         int_surfs.empty? ||
-         gnd_surfs.empty? ||
-         ext_subsurfs.empty? ||
-         int_subsurfs.empty?
-
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Space', "Default construction set #{const_set.name} is incomplete; constructions from this set will not be reported.")
-        next
-      end
-
-      ext_surfs = ext_surfs.get
-      int_surfs = int_surfs.get
-      gnd_surfs = gnd_surfs.get
-      ext_subsurfs = ext_subsurfs.get
-      int_subsurfs = int_subsurfs.get
-
-      case type
-        # Exterior Surfaces
-        when 'ExteriorWall', 'AtticWall'
-          constructions << ext_surfs.wallConstruction
-        when 'ExteriorFloor'
-          constructions << ext_surfs.floorConstruction
-        when 'ExteriorRoof', 'AtticRoof'
-          constructions << ext_surfs.roofCeilingConstruction
-        # Interior Surfaces
-        when 'InteriorWall', 'DemisingWall', 'InteriorPartition'
-          constructions << int_surfs.wallConstruction
-        when 'InteriorFloor', 'AtticFloor', 'DemisingFloor'
-          constructions << int_surfs.floorConstruction
-        when 'InteriorCeiling', 'DemisingRoof'
-          constructions << int_surfs.roofCeilingConstruction
-        # Ground Contact Surfaces
-        when 'GroundContactWall'
-          constructions << gnd_surfs.wallConstruction
-        when 'GroundContactFloor'
-          constructions << gnd_surfs.floorConstruction
-        when 'GroundContactRoof'
-          constructions << gnd_surfs.roofCeilingConstruction
-        # Exterior SubSurfaces
-        when 'ExteriorWindow'
-          constructions << ext_subsurfs.fixedWindowConstruction
-          constructions << ext_subsurfs.operableWindowConstruction
-        when 'ExteriorDoor'
-          constructions << ext_subsurfs.doorConstruction
-        when 'GlassDoor'
-          constructions << ext_subsurfs.glassDoorConstruction
-        when 'OverheadDoor'
-          constructions << ext_subsurfs.overheadDoorConstruction
-        when 'Skylight'
-          constructions << ext_subsurfs.skylightConstruction
-        when 'TubularDaylightDome'
-          constructions << ext_subsurfs.tubularDaylightDomeConstruction
-        when 'TubularDaylightDiffuser'
-          constructions << ext_subsurfs.tubularDaylightDiffuserConstruction
-        # Interior SubSurfaces
-        when 'InteriorWindow'
-          constructions << int_subsurfs.fixedWindowConstruction
-          constructions << int_subsurfs.operableWindowConstruction
-        when 'InteriorDoor'
-          constructions << int_subsurfs.doorConstruction
-      end
-    end
-
-    # Hard-assigned surfaces
-    model.getSurfaces.sort.each do |surf|
-      next unless surf.outsideBoundaryCondition == boundary_condition
-
-      surf_type = surf.surfaceType
-      if surf_type == 'Floor' || surf_type == 'Wall'
-        next unless type.include?(surf_type)
-      elsif surf_type == 'RoofCeiling'
-        next unless type.include?('Roof') || type.include?('Ceiling')
-      end
-      constructions << surf.construction
-    end
-
-    # Hard-assigned subsurfaces
-    model.getSubSurfaces.sort.each do |surf|
-      next unless surf.outsideBoundaryCondition == boundary_condition
-
-      surf_type = surf.subSurfaceType
-      if surf_type == 'FixedWindow' || surf_type == 'OperableWindow'
-        next unless type == 'ExteriorWindow'
-      elsif surf_type == 'Door'
-        next unless type.include?('Door')
-      else
-        next unless surf.subSurfaceType == type
-      end
-      constructions << surf.construction
-    end
-
-    # Throw out the empty constructions
-    all_constructions = []
-    constructions.uniq.each do |const|
-      next if const.empty?
-
-      all_constructions << const.get
-    end
-
-    # Only return the unique list (should already be uniq)
-    all_constructions = all_constructions.uniq
-
-    # ConstructionBase can be sorted
-    all_constructions = all_constructions.sort
-
-    return all_constructions
-  end
-
   # Go through the default construction sets and hard-assigned constructions.
   # Clone the existing constructions and set their intended surface type and standards construction type per the PRM.
   # For some standards, this will involve making modifications.  For others, it will not.
@@ -4250,7 +4109,7 @@ class Standard
 
     # Modify all constructions of each type
     types_to_modify.each do |boundary_cond, surf_type, const_type|
-      constructions = model_find_constructions(model, boundary_cond, surf_type)
+      constructions = OpenstudioStandards::Constructions.model_get_constructions(model, boundary_cond, surf_type)
 
       constructions.sort.each do |const|
         standards_info = const.standardsInformation
@@ -4517,8 +4376,8 @@ class Standard
         # If heated-only, will be assumed Semiheated.
         # The full-bore method is on the next line in case needed.
         # cat = thermal_zone_conditioning_category(space, template, climate_zone)
-        cooled = space_cooled?(space)
-        heated = space_heated?(space)
+        cooled = OpenstudioStandards::Space.space_cooled?(space)
+        heated = OpenstudioStandards::Space.space_heated?(space)
         cat = 'Unconditioned'
         # Unconditioned
         if !heated && !cooled

@@ -68,6 +68,28 @@ module OpenstudioStandards
         schedule_day.addValue(twenty_four_hours, 1) # 1 from start of today's hours until midnight
       end
     end
+
+    # Sets the values of a day schedule from an array of values
+    # Clears out existing time value pairs and sets to supplied values
+    #
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] The day schedule to set.
+    # @param value_array [Array] Array of 24 values. Schedule times set based on value index. Identical values will be skipped.
+    # @return [OpenStudio::Model::ScheduleDay]
+    def self.schedule_day_populate_from_array_of_values(schedule_day, value_array)
+      schedule_day.clearValues
+      if value_array.size != 24
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Modify', "#{__method__} expects value_array to contain 24 values, instead #{value_array.size} values were given. Resulting schedule will use first #{[24, value_array.size].min} values")
+      end
+
+      value_array[0..23].each_with_index do |value, h|
+        next if value == value_array[h + 1]
+
+        time = OpenStudio::Time.new(0, h + 1, 0, 0)
+        schedule_day.addValue(time, value)
+      end
+      return schedule_day
+    end
+
     # @!endgroup Modify:ScheduleDay
 
     # @!group Modify:ScheduleRuleset
@@ -671,6 +693,46 @@ module OpenstudioStandards
       end
 
       return schedule_ruleset
+    end
+
+    # creates a minimal set of ScheduleRules that applies to all days in a given array of day of year indices
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset]
+    # @param days_used [Array] array of day of year integers
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] optional day schedule to apply to new rule. A new default schedule will be created for each rule if nil
+    # @return [Array]
+    def self.schedule_ruleset_create_rules_from_day_list(schedule_ruleset, days_used, schedule_day: nil)
+      # get year from schedule_ruleset
+      year = schedule_ruleset.model.getYearDescription.assumedYear
+
+      # split day_used into sub arrays of consecutive days
+      consec_days = days_used.chunk_while { |i, j| i + 1 == j }.to_a
+
+      # split consec_days into sub arrays of consecutive weeks by checking that any value in next array differs by seven from a value in this array
+      consec_weeks = consec_days.chunk_while { |i, j| i.product(j).any? { |x, y| (x - y).abs == 7 } }.to_a
+
+      # make new rule for blocks of consectutive weeks
+      rules = []
+      consec_weeks.each do |week_group|
+        if schedule_day.nil?
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleRuleset', 'Creating new Rule Schedule from days_used vector with new Day Schedule')
+          rule = OpenStudio::Model::ScheduleRule.new(schedule_ruleset)
+        else
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleRuleset', "Creating new Rule Schedule from days_used vector with clone of Day Schedule: #{schedule_day.name.get}")
+          rule = OpenStudio::Model::ScheduleRule.new(schedule_ruleset, schedule_day)
+        end
+
+        # set day types and dates
+        dates = week_group.flatten.map { |d| OpenStudio::Date.fromDayOfYear(d, year) }
+        day_types = dates.map { |date| date.dayOfWeek.valueName }.uniq
+        day_types.each { |type| rule.send("setApply#{type}", true) }
+        rule.setStartDate(dates.min)
+        rule.setEndDate(dates.max)
+
+        rules << rule
+      end
+
+      return rules
     end
 
     # @!endgroup Modify:ScheduleRuleset

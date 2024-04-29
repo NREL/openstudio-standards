@@ -47,7 +47,7 @@ class DEER2020 < DEER
   # This method is a copy of what is in Standards.AirLoopHVAC.rb and ensures
   # ERVs will not prevent DCV from being applied to DEER models.
   #
-  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # return [Boolean] returns true if required, false if not
   def air_loop_hvac_dcv_required_when_erv(air_loop_hvac)
     dcv_required_when_erv_present = true

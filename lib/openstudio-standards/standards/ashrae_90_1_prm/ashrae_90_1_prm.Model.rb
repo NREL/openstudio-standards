@@ -610,7 +610,7 @@ class ASHRAE901PRM < Standard
 
     # Modify all constructions of each type
     types_to_modify.each do |boundary_cond, surf_type, const_type|
-      constructions = model_find_constructions(model, boundary_cond, surf_type)
+      constructions = OpenstudioStandards::Constructions.model_get_constructions(model, boundary_cond, surf_type)
 
       constructions.sort.each do |const|
         standards_info = const.standardsInformation
@@ -1389,7 +1389,7 @@ class ASHRAE901PRM < Standard
         air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
         air_loop_hvac.thermalZones.sort.each do |zone|
           unless baseline_thermal_zone_demand_control_ventilation_required?(zone)
-            thermal_zone_convert_oa_req_to_per_area(zone)
+            OpenstudioStandards::ThermalZone.thermal_zone_convert_outdoor_air_to_per_area(zone)
           end
         end
       end
@@ -2746,7 +2746,7 @@ class ASHRAE901PRM < Standard
 
     total_area_ft2 = 0
     zones.each do |zn|
-      if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
+      if OpenstudioStandards::ThermalZone.thermal_zone_heated?(zn['zone']) && !OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zn['zone'])
         # this will occur when there is no cooling tstat, or when min cooling setpoint is above 91 F
         heated_only_zones << zn['zone']
       elsif comp_room_loads[zn['zone'].name.get] > 0

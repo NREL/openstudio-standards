@@ -4,7 +4,6 @@ require_relative 'create_performance_rating_method_helper'
 class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
   def test_jmarrec
-
     model_name = 'model'
     standard = '90.1-2007'
     climate_zone = 'ASHRAE 169-2013--5A'
@@ -62,13 +61,10 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
       assert(unmet_heating_hours<300,"Unmet heating hours are above 300: #{unmet_heating_hours}")
       assert(unmet_cooling_hours<300,"Unmet cooling hours are above 300: #{unmet_cooling_hours}")
-
     end
-
   end
 
   def test_jmarrec_model_iterative
-
     # Create the baseline model
     #model = create_baseline_model('jmarrec', '90.1-2007', 'ASHRAE 169-2013--4A', 'MediumOffice', false)
 
@@ -127,15 +123,9 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
         puts z.name
       end
     end
-
-
-
-    
   end
 
-
   def test_residential_and_nonresidential_story_counts
-
     # Make a directory to save the resulting models
     test_dir = "#{File.dirname(__FILE__)}/output"
     if !Dir.exists?(test_dir)
@@ -156,13 +146,9 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     puts stories
-
-
   end
 
-
   def test_btap_cleaning
-
     model_name = 'jmarrec'
     standard = '90.1-2007'
 
@@ -186,14 +172,9 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     assert_equal(0, model.getAirConditionerVariableRefrigerantFlows.size)
     assert_equal(0, model.getZoneHVACTerminalUnitVariableRefrigerantFlows.size)
-
-
-
   end
 
-
   def test_debug_failing_find_constructions
-
     model_name = 'jmarrec'
     standard = '90.1-2007'
 
@@ -206,14 +187,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     boundary_cond = 'Outdoors'
     surf_type = 'ExteriorWall'
-    model_find_constructions(model, boundary_cond, surf_type)
+    OpenstudioStandards::Constructions.model_get_constructions(model, boundary_cond, surf_type)
     # Minitest::UnexpectedError: ArgumentError: comparison of OpenStudio::Model::OptionalConstructionBase with OpenStudio::Model::OptionalConstructionBase failed
-
-
-
-
   end
-
-
-
 end

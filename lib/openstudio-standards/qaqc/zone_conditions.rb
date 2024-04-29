@@ -29,7 +29,7 @@ module OpenstudioStandards
 
       begin
         @model.getThermalZones.sort.each do |zone|
-          next unless std.thermal_zone_plenum?(zone)
+          next unless OpenstudioStandards::ThermalZone.thermal_zone_plenum?(zone)
 
           # people
           num_people = zone.numberOfPeople
@@ -92,7 +92,7 @@ module OpenstudioStandards
         # loop through thermal zones
         @model.getThermalZones.sort.each do |thermal_zone|
           # skip plenums
-          next if std.thermal_zone_plenum?(thermal_zone)
+          next if OpenstudioStandards::ThermalZone.thermal_zone_plenum?(thermal_zone)
 
           # skip zones without thermostats
           next unless thermal_zone.thermostatSetpointDualSetpoint.is_initialized
@@ -182,7 +182,7 @@ module OpenstudioStandards
 
           # Check that the zone is heated (at a minimum) by checking that the heating setpoint is at least 41F.
           # Sometimes people include thermostats but use setpoints such that the system never comes on.
-          unless std.thermal_zone_heated?(zone)
+          unless OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone)
             check_elems << OpenStudio::Attribute.new('flag', "#{zone.name} has #{num_ppl} people but is not heated.  Zones containing people are expected to be conditioned, heated-only at a minimum.  Heating setpoint must be at least 41F to be considered heated.")
           end
         end

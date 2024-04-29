@@ -5,12 +5,12 @@ require 'openstudio-standards/version'
 Gem::Specification.new do |spec|
   spec.name          = 'openstudio-standards'
   spec.version       = OpenstudioStandards::VERSION
-  spec.authors       = ['Andrew Parker', 'Yixing Chen', 'Mark Adams', 'Kaiyu Sun', 'Mini Maholtra', 'David Goldwasser', 'Phylroy Lopez', 'Maria Mottillo', 'Kamel Haddad', 'Julien Marrec', 'Matt Leach', 'Matt Steen', 'Eric Ringold', 'Daniel Macumber', 'Matthew Dahlhausen', 'Jian Zhang', 'Doug Maddox', 'Yunyang Ye', 'Xuechen (Jerry) Lei', 'Juan Gonzalez Matamoros', 'Jeremy Lerond', 'Carlos Duarte']
-  spec.email         = ['andrew.parker@nrel.gov']
-  spec.homepage = 'http://openstudio.net'
-  spec.summary = 'Creates DOE Prototype building models and transforms proposed OpenStudio models to baseline OpenStudio models.'
-  spec.description = 'Creates DOE Prototype building models and transforms proposed models to baseline models for energy codes like ASHRAE 90.1 and the Canadian NECB.'
-  spec.license = 'Modified BSD License'
+  spec.authors       = ['Mark Adams', 'Yeonjin Bae', 'Carlo Bianchi', 'Jeff Blake', 'Yixing Chen', 'Matthew Dahlhausen', 'Carlos Duarte', 'Sarah Gilani', 'David Goldwasser', 'Kamel Haddad', 'Piljae Im', 'Chris Kirney', 'Matt Leach', 'Xuechen (Jerry) Lei', 'Jeremy Lerond', 'Nicholas Long', 'Phylroy Lopez', 'Iain MacDonald', 'Daniel Macumber', 'Doug Maddox', 'Mini Maholtra', 'Julien Marrec', 'Juan Gonzalez Matamoros', 'Maria Mottillo', 'Andrew Parker', 'Padmassun Rajakareyar', 'Eric Ringold', 'Matt Steen', 'Kaiyu Sun', 'Weilie Xu', 'Yunyang Ye', 'Jian Zhang']
+  spec.email         = ['matthew.dahlhausen@nrel.gov']
+  spec.homepage      = 'http://openstudio.net'
+  spec.summary       = 'Creates OpenStudio models of typical buildings, creates standard baselines from proposed models, and checks a model against a standard.'
+  spec.description   = 'The openstudio-standards library provides methods for programatically generating, modifying, and checking OpenStudio building energy models. It can create a typical building from user geometry, template geometry, or programmatically generated geometry. It can apply a building standard including ASHRAE 90.1 or NECB to a model. It can transform a proposed building model into a 90.1 Appendix G code baseline model. It can check a model against a building standard. It can generate represenative typical buildings, such as those used in ComStock.'
+  spec.license       = 'Modified BSD License'
 
   spec.required_ruby_version = '>= 2.0.0'
   spec.required_rubygems_version = '>= 1.3.6'
