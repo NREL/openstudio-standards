@@ -2277,11 +2277,15 @@ class NECB2011
                       zone_clg: nil,
                       sys_rf: nil)
     name_parts = airloop.name.to_s.split('|').reject(&:empty?)
-    if sys_abbr.is_a? String then name_parts[0] = sys_abbr end
-    if sys_oa.is_a? String then name_parts[1] = sys_oa end
+    if sys_abbr.is_a? String then
+      name_parts[0] = sys_abbr
+    end
+    if sys_oa.is_a? String then
+      name_parts[1] = sys_oa
+    end
     for i in 0..name_parts.size - 1
       if (name_parts[i].include? 'shr>') && (sys_hr.is_a? String)
-       # name_parts[i] = "shr>#{sys_hr}"
+        name_parts[i] = "shr>#{sys_hr}"
       elsif (name_parts[i].include? 'sh>') && (sys_htg.is_a? String)
         name_parts[i] = "sh>#{sys_htg}"
       elsif (name_parts[i].include? 'sc>') && (sys_clg.is_a? String)
@@ -2297,11 +2301,7 @@ class NECB2011
       end
     end
     sys_name = ''
-	# Joins the elements of the 'name_parts' array into a single string with '|' as the separator
-    # and assigns the result to the variable 'sys_name' without the addition of an extra | at the end of the name.
-    sys_name = name_parts.join('|')
-	   # Only append "|" at the end if the modified name is different from the original name
-    sys_name += "|" if sys_name != original_name
+    name_parts.each { |part| sys_name += "#{part}|" }
 
     # Check if the last part of the system name is an integer.  If it is, then remove the last part from the system name.
     check_int = begin
@@ -2313,7 +2313,7 @@ class NECB2011
 
     airloop.setName(sys_name)
   end
-
+  
   def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_reference_hp = false)
     # Set Rated heating capacity = 50% cooling coil capacity at -8.3 C outdoor [8.4.4.13 (2)(c)]
 
