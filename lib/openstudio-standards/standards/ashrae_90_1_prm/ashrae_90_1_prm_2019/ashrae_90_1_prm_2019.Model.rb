@@ -65,11 +65,79 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   def model_apply_baseline_swh_loops(model,
                                      building_type,
                                      swh_building_type = 'All others')
-    # Get the original water heater information
-    original_water_heater_info_hash = {}
-    model.getWaterHeaterMixeds.sort.each do |water_heater|
-      original_water_heater_info_hash = {water_heater.name.get.to_s => model_get_object_hash(water_heater)}
+    model.getPlantLoops.each do |plant_loop|
+      # Skip non service water heating loops
+      next unless plant_loop_swh_loop?(plant_loop)
+
+      # Rename the loop to avoid accidentally hooking up the HVAC systems to this loop later.
+      plant_loop.setName('Service Water Heating Loop')
+
+      htg_fuels, combination_system, storage_capacity, total_heating_capacity = plant_loop_swh_system_type(plant_loop)
+
+      electric = true
+      if htg_fuels.include?('NaturalGas') ||
+        htg_fuels.include?('PropaneGas') ||
+        htg_fuels.include?('FuelOilNo1') ||
+        htg_fuels.include?('FuelOilNo2') ||
+        htg_fuels.include?('Coal') ||
+        htg_fuels.include?('Diesel') ||
+        htg_fuels.include?('Gasoline')
+        electric = false
+      end
+
+      # Per Table G3.1 11.e, if the baseline system was a combination of heating and service water heating,
+      # delete all heating equipment and recreate a WaterHeater:Mixed.
+      if combination_system
+        a = plant_loop.supplyComponents
+        b = plant_loop.demandComponents
+        plantloop_components = a += b
+        plantloop_components.each do |component|
+          # Get the object type
+          obj_type = component.iddObjectType.valueName.to_s
+          next if ['OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'].include?(obj_type)
+
+          component.remove
+        end
+
+        water_heater = OpenStudio::Model::WaterHeaterMixed.new(model)
+        water_heater.setName('Baseline Water Heater')
+        water_heater.setHeaterMaximumCapacity(total_heating_capacity)
+        water_heater.setTankVolume(storage_capacity)
+        plant_loop.addSupplyBranchForComponent(water_heater)
+
+        if electric
+          # G3.1.11.b: If electric, WaterHeater:Mixed with electric resistance
+          water_heater.setHeaterFuelType('Electricity')
+          water_heater.setHeaterThermalEfficiency(1.0)
+        else
+          # @todo for now, just get the first fuel that isn't Electricity
+          # A better way would be to count the capacities associated
+          # with each fuel type and use the preponderant one
+          fuels = htg_fuels - ['Electricity']
+          fossil_fuel_type = fuels[0]
+          water_heater.setHeaterFuelType(fossil_fuel_type)
+          water_heater.setHeaterThermalEfficiency(0.8)
+        end
+        # If it's not a combination heating and service water heating system
+        # just change the fuel type of all water heaters on the system
+        # to electric resistance if it's electric
+      else
+        # Per Table G3.1 11.i, piping losses was deleted
+        plant_loop_adiabatic_pipes_only(plant_loop)
+
+        if electric
+          plant_loop.supplyComponents.each do |component|
+            next unless component.to_WaterHeaterMixed.is_initialized
+
+            water_heater = component.to_WaterHeaterMixed.get
+            # G3.1.11.b: If electric, WaterHeater:Mixed with electric resistance
+            water_heater.setHeaterFuelType('Electricity')
+            water_heater.setHeaterThermalEfficiency(1.0)
+          end
+        end
+      end
     end
+
 
     # Get the building area type from the additional properties of wateruse_equipment
     wateruse_equipment_hash = {}
@@ -93,30 +161,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       model_apply_water_heater_prm_parameter(water_heater,
                                              swh_building_type)
     end
-    # else
-      # Todo: service water heater with multiple building area type
 
-      # # 1. Remove current swh loop
-      # model.getPlantLoops.sort.each do |loop|
-      #   # Don't remove loops except service water heating loops
-      #   next unless plant_loop_swh_loop?(loop)
-      #   loop.remove
-      # end
-      # # 2. Create new swh loops based on building area type
-      # building_type_swh_unique = building_type_swh_hash.values.uniq
-      # building_type_swh_unique.each do |building_type_swh|
-      #   building_type_swh_hash_new = building_type_swh_hash.select{|key, value| value == building_type_swh}
-      #   model_add_swh_loop(model,
-      #                      building_type_swh,
-      #                      building_type_swh_hash_new,
-      #                      service_water_temperature,
-      #                      service_water_pump_head,
-      #                      service_water_pump_motor_efficiency,
-      #                      water_heater_capacity,
-      #                      water_heater_volume)
-      #
-      # end
-    # end
     return true
   end
 end
