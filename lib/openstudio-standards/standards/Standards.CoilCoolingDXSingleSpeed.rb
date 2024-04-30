@@ -195,21 +195,24 @@ class Standard
   def coil_cooling_dx_single_speed_apply_efficiency_and_curves(coil_cooling_dx_single_speed, sql_db_vars_map, necb_ref_hp = false)
     successfully_set_all_properties = true
 
-    # Get the search criteria.
-    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp)
-
-    # Get the capacity.
+    # Get the capacity
     capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed, necb_ref_hp)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
-    ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
-                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
-               else
-                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
-               end
+    # Get efficiencies data depending on whether it is a unitary AC or a heat pump
+    coil_efficiency_data = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+                             standards_data['heat_pumps']
+                           else
+                             standards_data['unitary_acs']
+                           end
+
+    # Get the search criteria
+    equipment_type = coil_efficiency_data[0].keys.include?('equipment_type') ? true : false
+    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp, equipment_type)
+
+    # Lookup efficiency
+    ac_props = model_find_object(coil_efficiency_data, search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?

@@ -158,8 +158,9 @@ module CoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
+  # @param equipment_type [Boolean] indicate that equipment_type should be in the search criteria.
   # @return [Hash] has for search criteria to be used for find object
-  def coil_dx_find_search_criteria(coil_dx, necb_ref_hp = false)
+  def coil_dx_find_search_criteria(coil_dx, necb_ref_hp = false, equipment_type = false)
     search_criteria = {}
     search_criteria['template'] = template
 
@@ -200,14 +201,16 @@ module CoilDX
     end
 
     # Get the equipment type
-    if coil_dx.airLoopHVAC.empty?
-      if coil_dx.containingZoneHVACComponent.is_initialized
-        containing_comp = coil_dx.containingZoneHVACComponent.get
-        # PTAC
-        if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-          search_criteria['equipment_type'] = 'PTAC'
-          search_criteria['subcategory'] = nil
-          search_criteria['heating_type'] = nil
+    if equipment_type
+      if coil_dx.airLoopHVAC.empty?
+        if coil_dx.containingZoneHVACComponent.is_initialized
+          containing_comp = coil_dx.containingZoneHVACComponent.get
+          # PTAC
+          if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+            search_criteria['equipment_type'] = 'PTAC'
+            search_criteria['subcategory'] = nil
+            search_criteria['heating_type'] = nil
+          end
         end
       end
     end
