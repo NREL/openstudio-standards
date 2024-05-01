@@ -6,13 +6,15 @@ class NECB2011 < Standard
 
   @template = new.class.name
   register_standard(@template)
-  attr_reader :tbd
-  attr_reader :template
+  attr_reader   :tbd
+  attr_reader   :activity
+  attr_reader   :structure
+  attr_reader   :template
   attr_accessor :standards_data
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
   attr_accessor :fuel_type_set
-  
+
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
     return variable if variable.kind_of?(Numeric)
@@ -137,11 +139,14 @@ class NECB2011 < Standard
     @standards_data = load_standards_database_new
     corrupt_standards_database
     @tbd = nil
+    @activity = nil
+    @structure = nil
     # puts "loaded these tables..."
     # puts @standards_data.keys.size
     # raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
   end
 
+  # @todo Would need revisiting.
   def get_all_spacetype_names
     return @standards_data['space_types'].map { |space_types| [space_types['building_type'], space_types['space_type']] }
   end
@@ -401,6 +406,7 @@ class NECB2011 < Standard
       space.autocalculateVolume
     end
 
+    assign_building_activity(model: model)
     apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
     apply_loads(model: model,
                 lights_type: lights_type,
@@ -776,10 +782,10 @@ class NECB2011 < Standard
     kiva_settings = model.getFoundationKivaSettings if !model.getFoundationKivas.empty?
   end
 
-  # check if two surfaces are in contact. For every two consecutive vertices on surface 1, 
-  # loop through two consecutive vertices of surface two. Then check whether the vertices 
-  # of surfaces 2 are on the same line as the vertices from surface 1. If the two vectors 
-  # defined by the two vertices on surface 1 and those on surface 2 overlap, then the two 
+  # check if two surfaces are in contact. For every two consecutive vertices on surface 1,
+  # loop through two consecutive vertices of surface two. Then check whether the vertices
+  # of surfaces 2 are on the same line as the vertices from surface 1. If the two vectors
+  # defined by the two vertices on surface 1 and those on surface 2 overlap, then the two
   # surfaces are in contact. If a side from surface 2 is in contact with a side from surface 1,
   # the length of the side from surface 2 is limited to the length of the side from surface 1.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
@@ -819,9 +825,9 @@ class NECB2011 < Standard
     return surfaces_in_contact
   end
 
-  # Loop through the layers of the construction of the surface and replace any massless material with 
-  # a standard one. The material used instead is from the EnergyPlus dataset file 'ASHRAE_2005_HOF_Materials.idf' 
-  # with the name: 'Insulation: Expanded polystyrene - extruded (smooth skin surface) (HCFC-142b exp.)'. 
+  # Loop through the layers of the construction of the surface and replace any massless material with
+  # a standard one. The material used instead is from the EnergyPlus dataset file 'ASHRAE_2005_HOF_Materials.idf'
+  # with the name: 'Insulation: Expanded polystyrene - extruded (smooth skin surface) (HCFC-142b exp.)'.
   # The thickness of the new material is based on the thermal resistance of the massless material it replaces.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def replace_massless_material_with_std_material(model,surf)
@@ -860,8 +866,8 @@ class NECB2011 < Standard
 
   end
 
-  # Find the exposed perimeter of a floor surface. For each side of the floor loop through 
-  # the walls and find the walls that share sides with the floor. Then sum the lengths of 
+  # Find the exposed perimeter of a floor surface. For each side of the floor loop through
+  # the walls and find the walls that share sides with the floor. Then sum the lengths of
   # the sides of the walls that come in contact with sides of the floor.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def get_surface_exp_per(floor,walls)
@@ -896,7 +902,7 @@ class NECB2011 < Standard
           vert3 = vert4
         end
       end
-      # increment the exposed perimeter of the floor. Limit the length of the walls in contact with the 
+      # increment the exposed perimeter of the floor. Limit the length of the walls in contact with the
       # side of the floor to the length of the side of the floor.
       floor_exp_per += [walls_exp_per,side_length].min
       vert1 = vert2
@@ -905,7 +911,7 @@ class NECB2011 < Standard
     return floor_exp_per
   end
 
-  # check that three vertices are on the same line. Also check that the vectors 
+  # check that three vertices are on the same line. Also check that the vectors
   # from vert1 and vert2 and from vert1 and vert3 are in the same direction.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def three_vertices_same_line_and_dir?(vert1,vert2,vert3)
@@ -936,7 +942,7 @@ class NECB2011 < Standard
 
     return same_line_same_dir
   end
-  
+
   # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
   #     # fdwr_set/srr_set settings:
   #     # 0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
@@ -952,8 +958,20 @@ class NECB2011 < Standard
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: necb_hdd)
+
+    # Denis: Needs revisiting @todo
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     # model_add_daylighting_controls(model) # to be removed after refactor.
+  end
+
+  ##
+  # Assigns BTAP building ACTIVITY (based on NECB 2011 building types).
+  #
+  # @param model [OpenStudio::Model::Model] a model
+  #
+  # @return [Symbol] BTAP building ACTIVITY (:office if failed, see logs)
+  def assign_building_activity(model: nil)
+    @activity = BTAP::Activity.new(model, 2011)
   end
 
   ##
@@ -1133,6 +1151,7 @@ class NECB2011 < Standard
   end
 
   # This method will validate that the space types in the model are indeed the correct NECB spacetypes names.
+  # Denis: Needs revisiting @todo
   def validate_and_upate_space_types(model)
     space_type_vintage = determine_spacetype_vintage(model)
     if space_type_vintage.nil?
@@ -1239,7 +1258,8 @@ class NECB2011 < Standard
     return true
   end
 
-  # @return [Boolean] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not.
+  # Denis: Needs revisiting @todo
   def set_occ_sensor_spacetypes(model, space_type_map)
     building_type = 'Space Function'
     space_type_map.each do |space_type_name, space_names|
@@ -1845,6 +1865,7 @@ class NECB2011 < Standard
     end
   end
 
+  # Denis: Needs revisiting @todo
   def set_lighting_per_area_led_lighting(space_type:, definition:, lighting_per_area_led_lighting:, lights_scale:)
     # puts "#{space_type.name.to_s} - 'space_height' - #{space_height.to_s}"
     occ_sens_lpd_frac = 1.0

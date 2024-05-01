@@ -23,6 +23,8 @@ require 'singleton'
 require 'find'
 require 'date'
 require_relative 'fileio'
+require_relative 'activity'
+require_relative 'structure'
 require_relative 'geometry'
 require_relative 'envelope'
 require_relative 'bridging'
@@ -359,4 +361,3 @@ module BTAP
   end
 end
 #module BTAP
-

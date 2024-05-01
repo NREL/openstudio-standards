@@ -21,6 +21,7 @@
 # functions. OpenStudio-Standards has TBD as a dependency, which itself extends
 # OSut. It's odd to pull OSut via TBD - likely a temporary solution (@todo).
 require "tbd"
+require_relative "activity"
 
 module BTAP
   # Building STRUCTURE parameters, ultimately driving BTAP definitions of e.g.:
@@ -102,9 +103,8 @@ module BTAP
   #
   # Note that there's a (growing?) need to contrast "metal" buildings against
   # the default "steel" post/beam option. Like a "wood" framed STRUCTURE or a
-  # load-bearing "cmu" wall, a "metal" building's perimeter STRUCTURE and
-  # envelope are indistinguishable, i.e. no mixing/matching between STRUCTURE
-  # and envelope.
+  # load-bearing "cmu" wall, a "metal" building's envelope structure and skin
+  # are indistinguishable, i.e. no mixing/matching of STRUCTURE vs envelope.
   #
   # There are of course several other (smaller scale) structural options,
   # often load-bearing envelopes like adobe/hemp/straw bale construction. Most
@@ -215,49 +215,51 @@ module BTAP
     # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
     # To simplify data management, building TYPES (e.g. those listed in Table
     # A-8.4.3.2.(2)-A of the NECB 2020) are proposed to fall into more general
-    # building CATEGORIES:
+    # building CATEGORIES (see activity.rb):
     #
-    #       CATEGORY   examples
-    # _______________  _______________________________________________________
-    #      "dwelling"  MURB, long-term stay, hotel, dormitory
-    #     "detention"  penitentiary
-    # "institutional"  office, museum, town hall, education, convention centre
-    #    "commercial"  dining, retail, gym, dealership, theatre, transportation
-    #    "industrial"  automotive, manufacturing, fire station, storage
-    #     "athletics"  ice arena, indoor soccer, indoor pool, gymnastics
+    #      CATEGORY   examples
+    # _____________  __________________________________________________________
+    #     "housing"  MURB, long-term stay, dormitory
+    #     "lodging"  hotel, motel, highway lodging
+    #      "public"  museum, hospital, school, theatre, terminal
+    #    "commerce"  office, dining, retail, fitness, dealership, theatre
+    #    "industry"  automotive, manufacturing, workshop, storage
+    #  "recreation"  gymnastics, ice arena, indoor soccer/pool
+    #      "robust"  penitentiary, parking garage (i.e. heavyduty, resistant)
     #
     # Each CATEGORY holds "small"-scale and "large"-scale STRUCTURE options by
     # defaults, depending on the characteristics of the building.
-    @@category                 = {}
-    @@category[:dwelling     ] = {small: :wood    , large: :concrete}
-    @@category[:detention    ] = {small: :concrete, large: :concrete}
-    @@category[:institutional] = {small: :steel   , large: :concrete}
-    @@category[:commercial   ] = {small: :steel   , large: :steel}
-    @@category[:industrial   ] = {small: :concrete, large: :metal}
-    @@category[:athletics    ] = {small: :metal   , large: :steel}
+    @@category               = {}
+    @@category[:housing   ] = {small: :wood    , large: :concrete}
+    @@category[:lodging   ] = {small: :wood    , large: :concrete}
+    @@category[:robust    ] = {small: :concrete, large: :concrete}
+    @@category[:public    ] = {small: :steel   , large: :concrete}
+    @@category[:commerce  ] = {small: :steel   , large: :steel}
+    @@category[:industry  ] = {small: :cmu     , large: :metal}
+    @@category[:recreation] = {small: :metal   , large: :steel}
 
     # What constitutes small- vs large-scale varies between CATEGORY, depending
-    # either on the maximum number of stories or the total building height.
-    # Categories "detention" and "commercial" do not vary.
-    @@category[:dwelling     ][:stories] =  5
-    @@category[:institutional][:stories] =  3
-    @@category[:industrial   ][:height ] =  4
-    @@category[:athletics    ][:height ] = 10
+    # either on the maximum number of stories, or the max floor-to-roof height
+    # of the tallest first story space.
+    @@category[:housing   ][:stories] =  4
+    @@category[:lodging   ][:stories] =  2
+    @@category[:public    ][:stories] =  2
+    @@category[:industry  ][:height ] =  4
+    @@category[:recreation][:height ] = 10
 
-    # For instance, (by default) a multi-unit residential buildings (MURB) would
-    # have a typical "wood" framed, load-bearing envelope/STRUCTURE up to (and
-    # including) 5 stories above-grade. This default STRUCTURE assignment
+    # For instance, a multi-unit residential buildings (MURB) would have a
+    # typical "wood" framed, load-bearing envelope/STRUCTURE up to (and
+    # including) 4 stories above-grade. This default STRUCTURE assignment
     # switches to reinforced "concrete" post + flat slab beyond 5 stories.
     # Building CATEGORIES that hold neither :stories nor :height key:value pairs
-    # simply retain the same STRUCTURE option by default (e.g. "detention",
-    # "commercial"), regardless of scale.
+    # simply retain the same STRUCTURE option by default, regardless of scale
+    # (e.g. "robust", "commerce").
     #
-    # This default STRUCTURE assignment (per building CATEGORY) does not imply
-    # one cannot investigate the pros/cons of CLT construction in MURBs, offices
-    # or athletic facilities. It rather reflects the current state of affairs
-    # (i.e. 'dominant' STRUCTURE option per building CATEGORY in large parts of
-    # the US and Canada). Users have the option of overriding these.
-    # ... more to come (@todo).
+    # Default STRUCTURE assignment per building CATEGORY does not preclude the
+    # investigation of e.g. "clt" construction in MURBs, offices or sporting
+    # facilities. It simply sets a reasonable reference set of constructions for
+    # in large parts of the US and Canada. Users have the option of overriding
+    # default assignments (@todo).
 
 
     ##
@@ -327,7 +329,7 @@ module BTAP
     # @param model [OpenStudio::Model::Model] a model
     # @param argh [Hash] BTAP STRUCTURE argument hash
     def initialize(model = nil, argh = {})
-      @category = :institutional
+      @category = :public
       @co2      = 0
       @feedback = {logs: []}
       lgs       = @feedback[:logs]
