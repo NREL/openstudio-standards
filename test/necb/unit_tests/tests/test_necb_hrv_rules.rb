@@ -31,32 +31,106 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     test_cases[:NECB2017] = { :Reference => "NECB 2017 p2 5.2.10.1.(1), Table 5.2.10.1.-B" }
     test_cases[:NECB2020] = { :Reference => "NECB 2020 p1 5.2.10.1.(1), Table 5.2.10.1.-B" }
 
+    # For compliance with NECB 2011 and NECB 2015, HRV is mandated when exhaust heat exceeds 150 kW.
     test_cases_hash = { :Vintage => ["NECB2011", "NECB2015"],
                         :TestCase => ["NO-HRV-Required"],
                         :TestPars => { :multiplier_factor => 1.0,
+                                       :oaf => 0.25,
+                                       :flow => 10.0,
                                        :weather_file_name => "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
+    # A multiplier of 80 is applied to simulate cases where exhaust heat surpasses the 150 kW threshold.
     test_cases_hash = { :Vintage => ["NECB2011", "NECB2015"],
                         :TestCase => ["HRV-Required"],
                         :TestPars => { :multiplier_factor => 80.0,
+                                       :oaf => 0.25,
+                                       :flow => 10.0,
                                        :weather_file_name => "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    # Define test cases.
+    # In compliance with NECB 2017 and NECB 2020 standards, HRV is mandated when the Heating Degree Days (HDD) surpass 3000;
+    # Otherwise, its necessity hinges on airflow thresholds. Subsequent test cases will encompass various air flow ranges.
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 4"],
+                        :TestCase => ["Climate zone 5"],
                         :TestPars => { :multiplier_factor => 1.0,
+                                       :oaf => 0.25,
+                                       :flow => 10.0,
+                                       :weather_file_name => "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
+                        :TestCase => ["Climate zone 4 - OAF 0.15 F 10 - Not required"],
+                        :TestPars => { :multiplier_factor => 1.0,
+                                       :oaf => 0.15,
+                                       :flow => 10.0,
                                        :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 5"],
+                        :TestCase => ["Climate zone 4 - OAF 0.25 F 10"],
                         :TestPars => { :multiplier_factor => 1.0,
-                                       :weather_file_name => "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw" } }
+                                       :oaf => 0.25,
+                                       :flow => 10.0,
+                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
+                        :TestCase => ["Climate zone 4 - OAF 0.35 F 5"],
+                        :TestPars => { :multiplier_factor => 1.0,
+                                       :oaf => 0.35,
+                                       :flow => 5.0,
+                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
+                        :TestCase => ["Climate zone 4 - OAF 0.45 F 3"],
+                        :TestPars => { :multiplier_factor => 1.0,
+                                       :oaf => 0.45,
+                                       :flow => 3.0,
+                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
+                        :TestCase => ["Climate zone 4 - OAF 0.55 F 2"],
+                        :TestPars => { :multiplier_factor => 1.0,
+                                       :oaf => 0.55,
+                                       :flow => 2.0,
+                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
+                        :TestCase => ["Climate zone 4 - OAF 0.65 F 1.6"],
+                        :TestPars => { :multiplier_factor => 1.0,
+                                       :oaf => 0.65,
+                                       :flow => 1.6,
+                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
+                        :TestCase => ["Climate zone 4 - OAF 0.75 F 1"],
+                        :TestPars => { :multiplier_factor => 1.0,
+                                       :oaf => 0.75,
+                                       :flow => 1.0,
+                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
+                        :TestCase => ["Climate zone 4 - OAF 0.55 F 1.4 - Not required"],
+                        :TestPars => { :multiplier_factor => 1.0,
+                                       :oaf => 0.55,
+                                       :flow => 1.4,
+                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -67,7 +141,6 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     file_root = "#{self.class.name}-#{__method__}".downcase
     test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
     File.write(test_result_file, JSON.pretty_generate(test_results))
-
     # Read expected results.
     file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
     expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
@@ -98,8 +171,10 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     city = weather_file_name.split('_')[2]
     city = city.split('.')[0]
     multiplier_factor = test_case[:multiplier_factor]
-    name = "#{vintage}_multiplier_factor_#{multiplier_factor}_#{city}_hrv"
-    name_short = "#{vintage}_#{multiplier_factor}_#{city}_hrv"
+    oaf = test_case[:oaf]
+    flow = test_case[:flow]
+    name = "#{vintage}_multiplier_factor_#{multiplier_factor}_#{oaf}_#{flow}_#{city}_hrv"
+    name_short = "#{vintage}_#{multiplier_factor}_#{oaf}_#{flow}_#{city}_hrv"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
     # Wrap test in begin/rescue/ensure.
@@ -136,6 +211,21 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
         end
       end
 
+      # Test the compliance with OA requirements outlined in NECB 2017 Table 5.2.10.1.-B for the Airflow Rate Thresholds
+      air_loops_hvac = model.getAirLoopHVACs
+      air_loops_hvac.each do |air_loop_hvac|
+        if vintage == "NECB2017" || vintage == "NECB2020"
+          designSupplyAirFlowRate = flow / oaf
+          air_loop_hvac.setDesignSupplyAirFlowRate(designSupplyAirFlowRate)
+          oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+          controller_oa = oa_system.getControllerOutdoorAir
+          controller_oa.setMinimumOutdoorAirFlowRate(flow)
+          # Had to increase the MaximumOutdoorAirFlowRate, otherwise E+ would fail by :
+          # "maximum outdoor air flow rate < minimum outdoor air flow rate"
+          controller_oa.setMaximumOutdoorAirFlowRate(flow * 1.2)
+        end
+      end
+
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
@@ -145,24 +235,60 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     # Extract the results for checking.
     results = Hash.new
 
-    # Code for the calculation of exhaust heat content is copied from the NECB2011 standard (hvac_systems.rb).
+    # Calculate the min_oa_flow_m3_per_s and the dsn_flow_m3_per_s
     air_loops_hvac = model.getAirLoopHVACs
-    air_loops_hvac.each do |air_loop_hvac|
-      hrv_present = false
 
+    # Sort air loops by name
+    sorted_air_loops_hvac = air_loops_hvac.sort_by { |air_loop_hvac| air_loop_hvac.name.get }
+    sorted_air_loops_hvac.each do |air_loop_hvac|
+      has_hrv = false
       exhaust_heat_content_kW = standard.calculate_exhaust_heat(air_loop_hvac)
+
+      air_loop_hvac_name = air_loop_hvac.name.get
+=begin
+      # Not sure if we need this, it only retrieves the flow and OAF values that we set earlier in the test?
+      if vintage == "NECB2017" || vintage == "NECB2020"
+        oa_system = nil
+        controller_oa = nil
+        #Get the minimum OA flow rate
+        min_oa_flow_m3_per_s = nil
+        #Get the AHU design supply air flow rate
+        dsn_flow_m3_per_s = nil
+        if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+          oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+          controller_oa = oa_system.getControllerOutdoorAir
+          min_oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
+          dsn_flow_m3_per_s = air_loop_hvac.designSupplyAirFlowRate.get
+        else
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV not applicable because it has no OA intake.")
+          return false
+        end
+        flow = min_oa_flow_m3_per_s
+        oaf = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
+      end
+=end
+
+      hdd = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get).hdd18
       has_hrv = standard.air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, 'NECB')
+      flow_L_per_s = OpenStudio.convert(flow, 'm^3/s', 'L/s').get
+      flow_ft3_per_min = OpenStudio.convert(flow, 'm^3/s', 'ft^3/min').get
       # Add this test case to results and return the hash.
       results[air_loop_hvac_name] = {
         vintage: vintage,
         city: city,
         multiplier_factor: multiplier_factor,
         exhaust_heat_content_kW: exhaust_heat_content_kW.signif(3),
+        oaf: oaf.signif(3),
+        flow_m3_per_s: flow.signif(3),
+        flow_L_per_s: flow_L_per_s.signif(3),
+        flow_ft3_per_min: flow_ft3_per_min.signif(3),
+        hdd: hdd,
         has_hrv: has_hrv
       }
+
       if has_hrv
         hrv_objs = model.getHeatExchangerAirToAirSensibleAndLatents.first
-        # Check if all effectiveness values
+        # Check all effectiveness values
         latentEffectivenessat100CoolingAirFlow = hrv_objs.latentEffectivenessat100CoolingAirFlow
         latentEffectivenessat100HeatingAirFlow = hrv_objs.latentEffectivenessat100HeatingAirFlow
         latentEffectivenessat75CoolingAirFlow = hrv_objs.latentEffectivenessat75CoolingAirFlow
@@ -184,7 +310,6 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       logger.info "Completed individual test: #{name}"
     end
     return results
-
   end
 end
 
