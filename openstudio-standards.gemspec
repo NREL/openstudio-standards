@@ -29,10 +29,14 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'parallel_tests', '~> 3.0.0'
     spec.add_development_dependency 'nokogiri', '<= 1.11.7' # updated to use more secure version
     spec.add_development_dependency 'bundler', '~> 2.1'
-  else
+  elsif RUBY_VERSION < '3.2'
     spec.add_development_dependency 'parallel_tests', '~> 3.7.0'
     spec.add_development_dependency 'nokogiri', '~> 1.11'
     spec.add_development_dependency 'bundler', '~> 2.1.4'
+  else
+    spec.add_development_dependency 'parallel_tests', '~> 3.7.0'
+    spec.add_development_dependency 'nokogiri', '~> 1.16'
+    spec.add_development_dependency 'bundler', '~> 2.4.10'
   end
   spec.add_development_dependency 'rake', '~> 12.3.1'
   spec.add_development_dependency 'yard', '~> 0.9'
