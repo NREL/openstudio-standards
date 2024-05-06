@@ -1816,19 +1816,19 @@ class NECB2011
       # Determine if space is heated or cooled via spacetype heating or cooling setpoints also checking if the space is
       # a plenum by checking if there is a hvac system associtated with it
       if sp_type_info['heating_setpoint_schedule'].nil?
-        heated = FALSE
+        heated = false
       else
-        heated = TRUE
+        heated = true
       end
       if sp_type_info['cooling_setpoint_schedule'].nil?
-        cooled = FALSE
+        cooled = false
       else
-        cooled = TRUE
+        cooled = true
       end
       if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type'])
-        not_plenum = FALSE
+        not_plenum = false
       else
-        not_plenum = TRUE
+        not_plenum = true
       end
       # If the spaces are heated or cooled and are not a plenum then continue
       if (heated || cooled) && not_plenum
