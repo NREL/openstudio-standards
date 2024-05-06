@@ -630,9 +630,9 @@ module OpenstudioStandards
                               'hydronic'
                             end
 
-          # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
-          min_area_m2 = OpenStudio.convert(20_000, 'ft^2', 'm^2').get
-          sys_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_occupancy_type(model, min_area_m2: min_area_m2)
+            # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
+            min_area_m2 = OpenStudio.convert(20_000, 'ft^2', 'm^2').get
+            sys_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_occupancy_type(model, min_area_m2: min_area_m2)
 
             # For each group, infer the HVAC system type.
             sys_groups.each do |sys_group|
@@ -656,8 +656,8 @@ module OpenstudioStandards
                                sys_type # same as primary system type
                              end
 
-            # group zones
-            story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
+              # group zones
+              story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
 
               # On each story, add the primary system to the primary zones
               # and add the secondary system to any zones that are different.
@@ -669,8 +669,8 @@ module OpenstudioStandards
 
                 # if the primary system type is PTAC, filter to cooled zones to prevent sizing error if no cooling
                 if sys_type == 'PTAC'
-                  heated_and_cooled_zones = system_zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-                  cooled_only_zones = system_zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
+                  heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                  cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
                   system_zones = heated_and_cooled_zones + cooled_only_zones
                 end
 
@@ -684,8 +684,8 @@ module OpenstudioStandards
                 if !pri_sec_zone_lists['secondary'].empty?
                   system_zones = pri_sec_zone_lists['secondary']
                   if (sec_sys_type == 'PTAC') || (sec_sys_type == 'PSZ-AC')
-                    heated_and_cooled_zones = system_zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-                    cooled_only_zones = system_zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
+                    heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                    cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
                     system_zones = heated_and_cooled_zones + cooled_only_zones
                   end
                   unless standard.model_add_hvac_system(model, sec_sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
@@ -696,14 +696,14 @@ module OpenstudioStandards
               end
             end
 
-        else
-          # HVAC system_type specified
-          # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
-          min_area_m2 = OpenStudio.convert(20_000, 'ft^2', 'm^2').get
-          sys_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_occupancy_type(model, min_area_m2: min_area_m2)
-          sys_groups.each do |sys_group|
-            # group zones
-            story_zone_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
+          else
+            # HVAC system_type specified
+            # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
+            min_area_m2 = OpenStudio.convert(20_000, 'ft^2', 'm^2').get
+            sys_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_occupancy_type(model, min_area_m2: min_area_m2)
+            sys_groups.each do |sys_group|
+              # group zones
+              story_zone_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
 
               # Add the user specified HVAC system for each story.
               # Single-zone systems will get one per zone.
@@ -714,9 +714,7 @@ module OpenstudioStandards
                 end
               end
             end
-
           end
-
         else
           # If user specified a mapping of HVAC systems to zones
           user_hvac_mapping['systems'].each do |system_hash|
@@ -736,7 +734,6 @@ module OpenstudioStandards
             end
           end
         end
-
       end
 
       # hours of operation

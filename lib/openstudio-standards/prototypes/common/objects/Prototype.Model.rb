@@ -246,89 +246,6 @@ Standard.class_eval do
     return true
   end
 
-  # Checks to see if the an adiabatic floor construction has been constructed in an OpenStudio model.
-  # If so, it returns it. If not, it constructs an adiabatic floor construction, adds it to the model,
-  # and then returns it.
-  # @return [OpenStudio::Model::Construction]
-  def model_get_adiabatic_floor_construction(model)
-    adiabatic_construction_name = 'Floor Adiabatic construction'
-
-    # Check if adiabatic floor construction already exists in the model
-    adiabatic_construct_exists = model.getConstructionByName(adiabatic_construction_name).is_initialized
-
-    # Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
-    return model.getConstructionByName(adiabatic_construction_name).get if adiabatic_construct_exists
-
-    # Assign construction to adiabatic construction
-    cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
-    cp02_carpet_pad.setName('CP02 CARPET PAD')
-    cp02_carpet_pad.setRoughness('VeryRough')
-    cp02_carpet_pad.setThermalResistance(0.21648)
-    cp02_carpet_pad.setThermalAbsorptance(0.9)
-    cp02_carpet_pad.setSolarAbsorptance(0.7)
-    cp02_carpet_pad.setVisibleAbsorptance(0.8)
-
-    normalweight_concrete_floor = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-    normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
-    normalweight_concrete_floor.setRoughness('MediumSmooth')
-    normalweight_concrete_floor.setThickness(0.1016)
-    normalweight_concrete_floor.setThermalConductivity(2.31)
-    normalweight_concrete_floor.setDensity(2322)
-    normalweight_concrete_floor.setSpecificHeat(832)
-
-    nonres_floor_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
-    nonres_floor_insulation.setName('Nonres_Floor_Insulation')
-    nonres_floor_insulation.setRoughness('MediumSmooth')
-    nonres_floor_insulation.setThermalResistance(2.88291975297193)
-    nonres_floor_insulation.setThermalAbsorptance(0.9)
-    nonres_floor_insulation.setSolarAbsorptance(0.7)
-    nonres_floor_insulation.setVisibleAbsorptance(0.7)
-
-    floor_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-    floor_adiabatic_construction.setName(adiabatic_construction_name)
-    floor_layers = OpenStudio::Model::MaterialVector.new
-    floor_layers << cp02_carpet_pad
-    floor_layers << normalweight_concrete_floor
-    floor_layers << nonres_floor_insulation
-    floor_adiabatic_construction.setLayers(floor_layers)
-
-    return floor_adiabatic_construction
-  end
-
-  # Checks to see if the an adiabatic wall construction has been constructed in an OpenStudio model.
-  # If so, it returns it. If not, it constructs an adiabatic wall construction, adds it to the model,
-  # and then returns it.
-  # @return [OpenStudio::Model::Construction]
-  def model_get_adiabatic_wall_construction(model)
-    adiabatic_construction_name = 'Wall Adiabatic construction'
-
-    # Check if adiabatic wall construction already exists in the model
-    adiabatic_construct_exists = model.getConstructionByName(adiabatic_construction_name).is_initialized
-
-    # Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
-    return model.getConstructionByName(adiabatic_construction_name).get if adiabatic_construct_exists
-
-    g01_13mm_gypsum_board = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-    g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
-    g01_13mm_gypsum_board.setRoughness('Smooth')
-    g01_13mm_gypsum_board.setThickness(0.0127)
-    g01_13mm_gypsum_board.setThermalConductivity(0.1600)
-    g01_13mm_gypsum_board.setDensity(800)
-    g01_13mm_gypsum_board.setSpecificHeat(1090)
-    g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
-    g01_13mm_gypsum_board.setSolarAbsorptance(0.7)
-    g01_13mm_gypsum_board.setVisibleAbsorptance(0.5)
-
-    wall_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-    wall_adiabatic_construction.setName(adiabatic_construction_name)
-    wall_layers = OpenStudio::Model::MaterialVector.new
-    wall_layers << g01_13mm_gypsum_board
-    wall_layers << g01_13mm_gypsum_board
-    wall_adiabatic_construction.setLayers(wall_layers)
-
-    return wall_adiabatic_construction
-  end
-
   # Adds code-minimum constructions based on the building type
   # as defined in the OpenStudio_Standards_construction_sets.json file.
   # Where there is a separate construction set specified for the
@@ -355,8 +272,8 @@ Standard.class_eval do
     end
 
     # Construct adiabatic constructions
-    floor_adiabatic_construction = model_get_adiabatic_floor_construction(model)
-    wall_adiabatic_construction = model_get_adiabatic_wall_construction(model)
+    floor_adiabatic_construction = OpenstudioStandards::Constructions.model_get_adiabatic_floor_construction(model)
+    wall_adiabatic_construction = OpenstudioStandards::Constructions.model_get_adiabatic_wall_construction(model)
 
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
     cp02_carpet_pad.setName('CP02 CARPET PAD')
@@ -671,8 +588,8 @@ Standard.class_eval do
       internal_mass_def.setConstruction(construction)
       model.getSpaces.each do |space|
         # only add internal mass objects to conditioned spaces
-        next unless space_cooled?(space)
-        next unless space_heated?(space)
+        next unless OpenstudioStandards::Space.space_cooled?(space)
+        next unless OpenstudioStandards::Space.space_heated?(space)
 
         internal_mass = OpenStudio::Model::InternalMass.new(internal_mass_def)
         internal_mass.setName("#{space.name} Mass")
@@ -1660,11 +1577,56 @@ Standard.class_eval do
         serves_res_spc = false
 
         air_loop_hvac.thermalZones.each do |zone|
-          next unless thermal_zone_residential?(zone)
+          next unless OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone)
+
+          # Exception 3 to 6.5.6.1.1
+          case template
+          when '90.1-2019'
+            case climate_zone
+            when 'ASHRAE 169-2006-0A',
+              'ASHRAE 169-2006-0B',
+              'ASHRAE 169-2006-1A',
+              'ASHRAE 169-2006-1B',
+              'ASHRAE 169-2006-2A',
+              'ASHRAE 169-2006-2B',
+              'ASHRAE 169-2006-3A',
+              'ASHRAE 169-2006-3B',
+              'ASHRAE 169-2006-3C',
+              'ASHRAE 169-2006-4A',
+              'ASHRAE 169-2006-4B',
+              'ASHRAE 169-2006-4C',
+              'ASHRAE 169-2006-5A',
+              'ASHRAE 169-2006-5B',
+              'ASHRAE 169-2006-5C',
+              'ASHRAE 169-2013-0A',
+              'ASHRAE 169-2013-0B',
+              'ASHRAE 169-2013-1A',
+              'ASHRAE 169-2013-1B',
+              'ASHRAE 169-2013-2A',
+              'ASHRAE 169-2013-2B',
+              'ASHRAE 169-2013-3A',
+              'ASHRAE 169-2013-3B',
+              'ASHRAE 169-2013-3C',
+              'ASHRAE 169-2013-4A',
+              'ASHRAE 169-2013-4B',
+              'ASHRAE 169-2013-4C',
+              'ASHRAE 169-2013-5A',
+              'ASHRAE 169-2013-5B',
+              'ASHRAE 169-2013-5C'
+              if zone.floorArea <= OpenStudio.convert(500.0, 'ft^2', 'm^2').get
+                has_erv = false
+                OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Energy recovery will not be modeled for the ERV serving #{zone.name}.")
+              end
+            end
+          end
 
           oa_cfm_per_ft2 = 0.0578940512546562
           oa_m3_per_m2 = OpenStudio.convert(OpenStudio.convert(oa_cfm_per_ft2, 'cfm', 'm^3/s').get, '1/ft^2', '1/m^2').get
-          model_add_residential_erv(model, zone, climate_zone, has_erv, oa_m3_per_m2)
+          if has_erv
+            model_add_residential_erv(model, zone, oa_m3_per_m2)
+          else
+            model_add_residential_ventilator(model, zone, oa_m3_per_m2)
+          end
 
           # Shut-off air loop level OA intake
           oa_controller = air_loop_hvac.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir
@@ -1973,54 +1935,13 @@ Standard.class_eval do
 
   def model_clear_and_set_example_constructions(model)
     # Define Materials
-    name = 'opaque material'
-    thickness = 0.012700
-    conductivity = 0.160000
-    opaque_mat = BTAP::Resources::Envelope::Materials::Opaque.create_opaque_material(model, name, thickness, conductivity)
-
-    name = 'insulation material'
-    thickness = 0.050000
-    conductivity = 0.043000
-    insulation_mat = BTAP::Resources::Envelope::Materials::Opaque.create_opaque_material(model, name, thickness, conductivity)
-
-    name = 'simple glazing test'
-    shgc = 0.250000
-    ufactor = 3.236460
-    thickness = 0.003000
-    visible_transmittance = 0.160000
-    simple_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_simple_glazing(model, name, shgc, ufactor, thickness, visible_transmittance)
-
-    name = 'Standard Glazing Test'
-    thickness = 0.003
-    conductivity = 0.9
-    solar_trans_normal = 0.84
-    front_solar_ref_normal = 0.075
-    back_solar_ref_normal = 0.075
-    vlt = 0.9
-    front_vis_ref_normal = 0.081
-    back_vis_ref_normal = 0.081
-    ir_trans_normal = 0.0
-    front_ir_emis = 0.84
-    back_ir_emis = 0.84
-    optical_data_type = 'SpectralAverage'
-    dirt_correction_factor = 1.0
-    is_solar_diffusing = false
-
-    standard_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_standard_glazing(model,
-                                                                                                      name,
-                                                                                                      thickness,
-                                                                                                      conductivity,
-                                                                                                      solar_trans_normal,
-                                                                                                      front_solar_ref_normal,
-                                                                                                      back_solar_ref_normal, vlt,
-                                                                                                      front_vis_ref_normal,
-                                                                                                      back_vis_ref_normal,
-                                                                                                      ir_trans_normal,
-                                                                                                      front_ir_emis,
-                                                                                                      back_ir_emis,
-                                                                                                      optical_data_type,
-                                                                                                      dirt_correction_factor,
-                                                                                                      is_solar_diffusing)
+    opaque_mat = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.0127, 0.16, 0.1, 100)
+    insulation_mat = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.05, 0.043, 0.1, 100)
+    simple_glazing_mat = OpenStudio::Model::SimpleGlazing.new(model, 3.236460, 0.25)
+    simple_glazing_mat.setThickness(0.003)
+    simple_glazing_mat.setVisibleTransmittance(0.16)
+    standard_glazing_mat = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
+    standard_glazing_mat.setSolarTransmittanceatNormalIncidence(0.5)
 
     # Define Constructions
     # # Surfaces

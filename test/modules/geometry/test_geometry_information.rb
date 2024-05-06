@@ -22,10 +22,10 @@ class TestGeometryInformation < Minitest::Test
 
   def test_aspect_ratio
     result = @geo.aspect_ratio(400.0, 80.0)
-    assert_equal(result, 1.0)
+    assert_equal(1.0, result)
 
     result = @geo.aspect_ratio(400.0, 160.0)
-    assert_equal(result.round(2), 13.93)
+    assert_equal(13.93, result.round(2))
   end
 
   def test_wall_and_floor_intersection_length
@@ -84,7 +84,7 @@ class TestGeometryInformation < Minitest::Test
 
     point = OpenStudio::Point3d.new(-2.0, 4.0, 0.0)
     result = @geo.surfaces_contain_point?(surfaces, point)
-    assert_equal(result, false)
+    assert_equal(false, result)
   end
 
   # Information:SubSurface

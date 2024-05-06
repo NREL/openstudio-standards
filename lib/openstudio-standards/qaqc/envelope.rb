@@ -156,7 +156,7 @@ module OpenstudioStandards
                   intended_surface_type = 'ExteriorFloor'
                 end
               end
-              film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
+              film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
               thermal_conductance = surface_detail[:construction].thermalConductance.get
               r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
               source_units = 'm^2*K/W'
@@ -194,9 +194,10 @@ module OpenstudioStandards
               # check for non opaque sub surfaces
               source_units = 'W/m^2*K'
               target_units = 'Btu/ft^2*h*R'
-              u_factor_si = std.construction_calculated_u_factor(sub_surface_detail[:construction].to_LayeredConstruction.get.to_Construction.get)
+              surface_construction = sub_surface_detail[:construction].to_LayeredConstruction.get
+              u_factor_si = OpenstudioStandards::Constructions.construction_get_conductance(surface_construction)
               u_factor_ip = OpenStudio.convert(u_factor_si, source_units, target_units).get
-              shgc = std.construction_calculated_solar_heat_gain_coefficient(sub_surface_detail[:construction].to_LayeredConstruction.get.to_Construction.get)
+              shgc = OpenstudioStandards::Constructions.construction_get_solar_transmittance(surface_construction)
 
               # stop if didn't find values (0 or infinity)
               next if target_u_value_ip[sub_surface_detail[:surface_type]] == 0.0
@@ -228,7 +229,7 @@ module OpenstudioStandards
                   # @todo add additional intended surface types
                   if surface_type.to_s == 'Door' then intended_surface_type = 'ExteriorDoor' end
                 end
-                film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
+                film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
 
                 thermal_conductance = sub_surface_detail[:construction].thermalConductance.get
                 r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
@@ -320,7 +321,7 @@ module OpenstudioStandards
                     standards_construction_type = 'Mass'
                   end
                 end
-                film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
+                film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
                 thermal_conductance = surface_detail[:construction].thermalConductance.get
                 r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
                 source_units = 'm^2*K/W'

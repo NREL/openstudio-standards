@@ -224,10 +224,6 @@ class NECB2011
     qaqc = {}
     qaqc[:sql_data] = get_sql_tables_to_json(model)
     error_warning = []
-    qaqc[:os_standards_revision] = OpenstudioStandards.git_revision
-    qaqc[:os_standards_version] = OpenstudioStandards::VERSION
-    qaqc[:openstudio_version] = os_version.strip
-    qaqc[:energyplus_version] = eplus_version.strip
     # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
@@ -482,16 +478,16 @@ class NECB2011
                                               qaqc[:envelope][:overhead_doors_area_m2]
 
     # Average Conductances by surface Type
-    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
-    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
-    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
-    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_walls).round(4) if !ground_walls.empty?
-    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_roofs).round(4) if !ground_roofs.empty?
-    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_floors).round(4) if !ground_floors.empty?
-    qaqc[:envelope][:windows_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(windows).round(4) if !windows.empty?
-    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(skylights).round(4) if !skylights.empty?
-    qaqc[:envelope][:doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(doors).round(4) if !doors.empty?
-    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(overhead_doors).round(4) if !overhead_doors.empty?
+    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
+    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
+    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
+    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls).round(4) if !ground_walls.empty?
+    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs).round(4) if !ground_roofs.empty?
+    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors).round(4) if !ground_floors.empty?
+    qaqc[:envelope][:windows_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(windows).round(4) if !windows.empty?
+    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(skylights).round(4) if !skylights.empty?
+    qaqc[:envelope][:doors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(doors).round(4) if !doors.empty?
+    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors).round(4) if !overhead_doors.empty?
 
     # #Average Conductances for building whole weight factors
     !outdoor_walls.empty? ? o_wall_cond_weight = qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] * qaqc[:envelope][:outdoor_walls_area_m2] : o_wall_cond_weight = 0
@@ -541,16 +537,16 @@ class NECB2011
     constructions = []
     outdoor_subsurfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
       qaqc[:envelope][:constructions][:exterior_fenestration] << construction_info
       construction_info[:name] = construction.name.get
       construction_info[:net_area_m2] = construction.getNetArea.round(2)
-      construction_info[:thermal_conductance_m2_w_per_k] = BTAP::Resources::Envelope::Constructions.get_conductance(construction).round(3)
-      construction_info[:solar_transmittance] = BTAP::Resources::Envelope::Constructions.get_shgc(model, construction).round(3)
-      construction_info[:visible_tranmittance] = BTAP::Resources::Envelope::Constructions.get_tvis(model, construction).round(3)
+      construction_info[:thermal_conductance_m2_w_per_k] = OpenstudioStandards::Constructions.construction_get_conductance(construction).round(3)
+      construction_info[:solar_transmittance] = OpenstudioStandards::Constructions.construction_get_solar_transmittance(construction).round(3)
+      construction_info[:visible_tranmittance] = OpenstudioStandards::Constructions.construction_get_visible_transmittance(construction).round(3)
     end
 
     # Exterior
@@ -558,7 +554,7 @@ class NECB2011
     constructions = []
     outdoor_surfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
@@ -575,7 +571,7 @@ class NECB2011
     constructions = []
     ground_surfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
