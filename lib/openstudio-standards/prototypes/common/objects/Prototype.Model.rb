@@ -1579,9 +1579,54 @@ Standard.class_eval do
         air_loop_hvac.thermalZones.each do |zone|
           next unless OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone)
 
+          # Exception 3 to 6.5.6.1.1
+          case template
+          when '90.1-2019'
+            case climate_zone
+            when 'ASHRAE 169-2006-0A',
+              'ASHRAE 169-2006-0B',
+              'ASHRAE 169-2006-1A',
+              'ASHRAE 169-2006-1B',
+              'ASHRAE 169-2006-2A',
+              'ASHRAE 169-2006-2B',
+              'ASHRAE 169-2006-3A',
+              'ASHRAE 169-2006-3B',
+              'ASHRAE 169-2006-3C',
+              'ASHRAE 169-2006-4A',
+              'ASHRAE 169-2006-4B',
+              'ASHRAE 169-2006-4C',
+              'ASHRAE 169-2006-5A',
+              'ASHRAE 169-2006-5B',
+              'ASHRAE 169-2006-5C',
+              'ASHRAE 169-2013-0A',
+              'ASHRAE 169-2013-0B',
+              'ASHRAE 169-2013-1A',
+              'ASHRAE 169-2013-1B',
+              'ASHRAE 169-2013-2A',
+              'ASHRAE 169-2013-2B',
+              'ASHRAE 169-2013-3A',
+              'ASHRAE 169-2013-3B',
+              'ASHRAE 169-2013-3C',
+              'ASHRAE 169-2013-4A',
+              'ASHRAE 169-2013-4B',
+              'ASHRAE 169-2013-4C',
+              'ASHRAE 169-2013-5A',
+              'ASHRAE 169-2013-5B',
+              'ASHRAE 169-2013-5C'
+              if zone.floorArea <= OpenStudio.convert(500.0, 'ft^2', 'm^2').get
+                has_erv = false
+                OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Energy recovery will not be modeled for the ERV serving #{zone.name}.")
+              end
+            end
+          end
+
           oa_cfm_per_ft2 = 0.0578940512546562
           oa_m3_per_m2 = OpenStudio.convert(OpenStudio.convert(oa_cfm_per_ft2, 'cfm', 'm^3/s').get, '1/ft^2', '1/m^2').get
-          model_add_residential_erv(model, zone, climate_zone, has_erv, oa_m3_per_m2)
+          if has_erv
+            model_add_residential_erv(model, zone, oa_m3_per_m2)
+          else
+            model_add_residential_ventilator(model, zone, oa_m3_per_m2)
+          end
 
           # Shut-off air loop level OA intake
           oa_controller = air_loop_hvac.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir

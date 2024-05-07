@@ -193,6 +193,11 @@ Standard.class_eval do
       sim_control.setDoHVACSizingSimulationforSizingPeriods(true)
       sim_control.setMaximumNumberofHVACSizingSimulationPasses(1)
     end
+    if model.version >= OpenStudio::VersionString.new('3.8.0')
+      sim_control.setDoZoneSizingCalculation(true)
+      sim_control.setDoSystemSizingCalculation(true)
+      sim_control.setDoPlantSizingCalculation(true)
+    end
 
     # check that all zones have surfaces.
     raise 'Error: Sizing Run Failed. Thermal Zones with no surfaces exist.' unless model_do_all_zones_have_surfaces?(model)
