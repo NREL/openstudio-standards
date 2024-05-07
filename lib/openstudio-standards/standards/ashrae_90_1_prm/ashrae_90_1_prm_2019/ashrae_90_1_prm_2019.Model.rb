@@ -73,9 +73,12 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     end
 
     # Apply baseline swh loops
+    # Single building area type
     if building_type_list.uniq.size <= 1
-      if building_type_list
-        swh_building_type = building_type_list.uniq[0]
+      if building_type_list.uniq.size == 1
+        swh_building_type_new = building_type_list.uniq[0]
+      else
+        swh_building_type_new = swh_building_type
       end
       model.getPlantLoops.each do |plant_loop|
         # Skip non service water heating loops
@@ -85,17 +88,6 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         plant_loop.setName('Service Water Heating Loop')
 
         htg_fuels, combination_system, storage_capacity, total_heating_capacity = plant_loop_swh_system_type(plant_loop)
-
-        electric = true
-        if htg_fuels.include?('NaturalGas') ||
-          htg_fuels.include?('PropaneGas') ||
-          htg_fuels.include?('FuelOilNo1') ||
-          htg_fuels.include?('FuelOilNo2') ||
-          htg_fuels.include?('Coal') ||
-          htg_fuels.include?('Diesel') ||
-          htg_fuels.include?('Gasoline')
-          electric = false
-        end
 
         # Per Table G3.1 11.e, if the baseline system was a combination of heating and service water heating,
         # delete all heating equipment and recreate a WaterHeater:Mixed.
@@ -116,7 +108,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           water_heater.setHeaterMaximumCapacity(total_heating_capacity)
           water_heater.setTankVolume(storage_capacity)
           model_apply_water_heater_prm_parameter(water_heater,
-                                                 swh_building_type)
+                                                 swh_building_type_new)
           plant_loop.addSupplyBranchForComponent(water_heater)
 
           # If it's not a combination heating and service water heating system
@@ -125,15 +117,11 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         else
           # Per Table G3.1 11.i, piping losses was deleted
           plant_loop_adiabatic_pipes_only(plant_loop)
-
-          if electric
-            plant_loop.supplyComponents.each do |component|
-              next unless component.to_WaterHeaterMixed.is_initialized
-
-              water_heater = component.to_WaterHeaterMixed.get
-              model_apply_water_heater_prm_parameter(water_heater,
-                                                     swh_building_type)
-            end
+          plant_loop.supplyComponents.each do |component|
+            next unless component.to_WaterHeaterMixed.is_initialized
+            water_heater = component.to_WaterHeaterMixed.get
+            model_apply_water_heater_prm_parameter(water_heater,
+                                                   swh_building_type_new)
           end
         end
       end

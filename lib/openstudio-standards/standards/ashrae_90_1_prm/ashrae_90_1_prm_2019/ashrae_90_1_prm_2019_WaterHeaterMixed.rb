@@ -14,7 +14,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       water_heater_mixed.setHeaterFuelType(new_fuel)
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, changed baseline water heater fuel from #{old_fuel} to #{new_fuel}.")
     end
-    return true
+    true
   end
   # Apply the prm fuel type to a water heater based on the
   # building area type.
