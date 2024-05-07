@@ -244,6 +244,7 @@ module OpenstudioStandards
   # 179D
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.Model"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.SpaceType"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.SubSurface"
 
   # 90.1-2010
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirLoopHVAC"
