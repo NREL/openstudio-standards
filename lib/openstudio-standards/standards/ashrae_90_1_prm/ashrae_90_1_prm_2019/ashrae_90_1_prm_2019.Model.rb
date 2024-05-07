@@ -107,13 +107,14 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           water_heater.setName('Baseline Water Heater')
           water_heater.setHeaterMaximumCapacity(total_heating_capacity)
           water_heater.setTankVolume(storage_capacity)
+          # Apply prm parameters
           model_apply_water_heater_prm_parameter(water_heater,
                                                  swh_building_type_new)
           plant_loop.addSupplyBranchForComponent(water_heater)
 
           # If it's not a combination heating and service water heating system
-          # just change the fuel type of all water heaters on the system
-          # to electric resistance if it's electric
+          # just apply prm parameters for all water heaters on the system
+
         else
           # Per Table G3.1 11.i, piping losses was deleted
           plant_loop_adiabatic_pipes_only(plant_loop)
