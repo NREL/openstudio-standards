@@ -1404,7 +1404,7 @@ class Standard
     # @todo apply secondary logic
 
     # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
-    sch_day.setInterpolatetoTimestep(true)
+    sch_day.setInterpolatetoTimestep('Average')
 
     return sch_day
   end
