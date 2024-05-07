@@ -224,10 +224,6 @@ class NECB2011
     qaqc = {}
     qaqc[:sql_data] = get_sql_tables_to_json(model)
     error_warning = []
-    qaqc[:os_standards_revision] = OpenstudioStandards.git_revision
-    qaqc[:os_standards_version] = OpenstudioStandards::VERSION
-    qaqc[:openstudio_version] = os_version.strip
-    qaqc[:energyplus_version] = eplus_version.strip
     # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
@@ -541,7 +537,7 @@ class NECB2011
     constructions = []
     outdoor_subsurfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
@@ -558,7 +554,7 @@ class NECB2011
     constructions = []
     outdoor_surfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
@@ -575,7 +571,7 @@ class NECB2011
     constructions = []
     ground_surfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
