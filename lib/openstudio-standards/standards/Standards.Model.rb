@@ -445,7 +445,7 @@ class Standard
         next if plant_loop_swh_loop?(plant_loop)
 
         plant_loop_apply_prm_number_of_boilers(plant_loop)
-        plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir)
+        plant_loop_apply_prm_number_of_chillers(model, plant_loop)
       end
 
       # Set the baseline number of cooling towers

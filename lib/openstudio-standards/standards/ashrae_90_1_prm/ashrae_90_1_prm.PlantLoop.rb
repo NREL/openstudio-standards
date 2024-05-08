@@ -91,21 +91,15 @@ class ASHRAE901PRM < Standard
   end
 
   # Splits the single chiller used for the initial sizing run
-  # into multiple separate chillers based on Appendix G.
-  #
+  # into multiple separate chillers based on Appendix G. Also applies
+  # EMS to stage chillers properly
   # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
-  # @param sizing_run_dir [String] sizing run directory
   # @return [Boolean] returns true if successful, false if not
-  def plant_loop_apply_prm_number_of_chillers(plant_loop, sizing_run_dir = nil)
+  def plant_loop_apply_prm_number_of_chillers(model, plant_loop)
     # Skip non-cooling plants & secondary cooling loop
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
     # If the loop is cooling but it is a secondary loop, then skip.
     return true if plant_loop.additionalProperties.hasFeature('is_secondary_loop')
-
-    # Determine the number and type of chillers
-    num_chillers = nil
-    chiller_cooling_type = nil
-    chiller_compressor_type = nil
 
     # Set the equipment to stage sequentially or uniformload if there is secondary loop
     if plant_loop.additionalProperties.hasFeature('is_primary_loop')
@@ -114,9 +108,53 @@ class ASHRAE901PRM < Standard
       plant_loop.setLoadDistributionScheme('SequentialLoad')
     end
 
+    # Get all existing chillers and pumps. Copy chiller properties needed when duplicating existing settings
+    chillers = []
+    pumps = []
+    default_cop = nil
+    condenser_water_loop = nil
+    dsgn_sup_wtr_temp_c = nil
+
+    plant_loop.supplyComponents.each do |sc|
+      if sc.to_ChillerElectricEIR.is_initialized
+        chiller = sc.to_ChillerElectricEIR.get
+
+        # Copy the last chillers COP, leaving chilled water temperature, and reference cooling tower. These will be the
+        # default for any extra chillers.
+        default_cop = chiller.referenceCOP
+        dsgn_sup_wtr_temp_c = chiller.referenceLeavingChilledWaterTemperature
+        condenser_water_loop = chiller.condenserWaterLoop
+        chillers << chiller
+
+      elsif sc.to_PumpConstantSpeed.is_initialized
+        pumps << sc.to_PumpConstantSpeed.get
+      elsif sc.to_PumpVariableSpeed.is_initialized
+        pumps << sc.to_PumpVariableSpeed.get
+      end
+    end
+
+    # Get existing plant loop pump. We'll copy this pumps parameters before removing it. Throw exception for multiple pumps on supply side
+    if pumps.size.zero?
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{pumps.size} pumps. A loop must have at least one pump.")
+      return false
+    elsif pumps.size > 1
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{pumps.size} pumps, cannot split up per performance rating method baseline requirements.")
+      return false
+    else
+      original_pump = pumps[0]
+    end
+
+    return true if chillers.empty?
+
     # Determine the capacity of the loop
     cap_w = plant_loop_total_cooling_capacity(plant_loop)
     cap_tons = OpenStudio.convert(cap_w, 'W', 'ton').get
+
+    # Throw exception for > 2,400 tons as this breaks our staging strategy cap of 3 chillers
+    if cap_tons > 2400
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, the total capacity (#{cap_w}) exceeded 2400 tons and would require more than 3 chillers. The existing code base cannot accommodate the staging required for this")
+    end
+
     if cap_tons <= 300
       num_chillers = 1
       chiller_cooling_type = 'WaterCooled'
@@ -135,116 +173,283 @@ class ASHRAE901PRM < Standard
       chiller_compressor_type = 'Centrifugal'
     end
 
-    # Get all existing chillers and pumps
-    chillers = []
-    pumps = []
-    plant_loop.supplyComponents.each do |sc|
-      if sc.to_ChillerElectricEIR.is_initialized
-        chillers << sc.to_ChillerElectricEIR.get
-      elsif sc.to_PumpConstantSpeed.is_initialized
-        pumps << sc.to_PumpConstantSpeed.get
-      elsif sc.to_PumpVariableSpeed.is_initialized
-        pumps << sc.to_PumpVariableSpeed.get
-      end
+    if chillers.length > num_chillers
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, the existing number of chillers exceeds the recommended amount. We have not accounted for this in the codebase yet.")
     end
 
-    # Ensure there is only 1 chiller to start
-    first_chiller = nil
-    return true if chillers.size.zero?
-
-    if chillers.size > 1
-      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
-    else
-      first_chiller = chillers[0]
-    end
-
-    # Ensure there is only 1 pump to start
-    orig_pump = nil
-    if pumps.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{pumps.size} pumps. A loop must have at least one pump.")
-      return false
-    elsif pumps.size > 1
-      OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{pumps.size} pumps, cannot split up per performance rating method baseline requirements.")
-      return false
-    else
-      orig_pump = pumps[0]
-    end
-
-    # Determine the per-chiller capacity
-    # and sizing factor
+    # Determine the per-chiller capacity and sizing factor
     per_chiller_sizing_factor = (1.0 / num_chillers).round(2)
-    # This is unused
-    per_chiller_cap_tons = cap_tons / num_chillers
     per_chiller_cap_w = cap_w / num_chillers
 
-    # Set the sizing factor and the chiller type: could do it on the first chiller before cloning it, but renaming warrants looping on chillers anyways
-
-    # Add any new chillers
-    final_chillers = [first_chiller]
-    (num_chillers - 1).times do
-      new_chiller = first_chiller.clone(plant_loop.model)
-      if new_chiller.to_ChillerElectricEIR.is_initialized
-        new_chiller = new_chiller.to_ChillerElectricEIR.get
-      else
-        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, could not clone chiller #{first_chiller.name}, cannot apply the performance rating method number of chillers.")
-        return false
-      end
-      # Connect the new chiller to the same CHW loop
-      # as the old chiller.
-      plant_loop.addSupplyBranchForComponent(new_chiller)
-      # Connect the new chiller to the same CW loop
-      # as the old chiller, if it was water-cooled.
-      cw_loop = first_chiller.secondaryPlantLoop
-      if cw_loop.is_initialized
-        cw_loop.get.addDemandBranchForComponent(new_chiller)
-      end
-
-      final_chillers << new_chiller
-    end
-
-    # If there is more than one cooling tower,
-    # add one pump to each chiller, assume chillers are equally sized
-    if final_chillers.size > 1
-      num_pumps = final_chillers.size
-      final_chillers.each do |chiller|
-        if orig_pump.to_PumpConstantSpeed.is_initialized
-          new_pump = OpenStudio::Model::PumpConstantSpeed.new(plant_loop.model)
-          new_pump.setName("#{chiller.name} Primary Pump")
-          # Will need to adjust the pump power after a sizing run
-          new_pump.setRatedPumpHead(orig_pump.ratedPumpHead / num_pumps)
-          new_pump.setMotorEfficiency(0.9)
-          new_pump.setPumpControlType('Intermittent')
-          chiller_inlet_node = chiller.connectedObject(chiller.supplyInletPort).get.to_Node.get
-          new_pump.addToNode(chiller_inlet_node)
-        elsif orig_pump.to_PumpVariableSpeed.is_initialized
-          new_pump = OpenStudio::Model::PumpVariableSpeed.new(plant_loop.model)
-          new_pump.setName("#{chiller.name} Primary Pump")
-          new_pump.setRatedPumpHead(orig_pump.ratedPumpHead / num_pumps)
-          new_pump.setCoefficient1ofthePartLoadPerformanceCurve(orig_pump.coefficient1ofthePartLoadPerformanceCurve)
-          new_pump.setCoefficient2ofthePartLoadPerformanceCurve(orig_pump.coefficient2ofthePartLoadPerformanceCurve)
-          new_pump.setCoefficient3ofthePartLoadPerformanceCurve(orig_pump.coefficient3ofthePartLoadPerformanceCurve)
-          new_pump.setCoefficient4ofthePartLoadPerformanceCurve(orig_pump.coefficient4ofthePartLoadPerformanceCurve)
-          chiller_inlet_node = chiller.connectedObject(chiller.supplyInletPort).get.to_Node.get
-          new_pump.addToNode(chiller_inlet_node)
-        end
-      end
-      # Remove the old pump
-      orig_pump.remove
-    end
-
     # Set the sizing factor and the chiller types
-    final_chillers.each_with_index do |final_chiller, i|
-      final_chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i + 1} of #{final_chillers.size}")
-      final_chiller.setSizingFactor(per_chiller_sizing_factor)
-      final_chiller.setReferenceCapacity(per_chiller_cap_w)
-      final_chiller.setCondenserType(chiller_cooling_type)
-      final_chiller.additionalProperties.setFeature('compressor_type', chiller_compressor_type)
+    # chillers.each_with_index do |chiller, i|
+    for i in 0..num_chillers - 1
+      # if not enough chillers exist, create a new one. Else reference the i'th chiller
+      if i <= chillers.length - 1
+        chiller = chillers[i]
+      else
+        chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
+        plant_loop.addSupplyBranchForComponent(chiller)
+        chiller.setReferenceLeavingChilledWaterTemperature(dsgn_sup_wtr_temp_c)
+        chiller.setLeavingChilledWaterLowerTemperatureLimit(OpenStudio.convert(36.0, 'F', 'C').get)
+        chiller.setReferenceEnteringCondenserFluidTemperature(OpenStudio.convert(95.0, 'F', 'C').get)
+        chiller.setMinimumPartLoadRatio(0.15)
+        chiller.setMaximumPartLoadRatio(1.0)
+        chiller.setOptimumPartLoadRatio(1.0)
+        chiller.setMinimumUnloadingRatio(0.25)
+        chiller.setChillerFlowMode('ConstantFlow')
+        chiller.setReferenceCOP(default_cop)
+
+        condenser_water_loop.get.addDemandBranchForComponent(chiller) if condenser_water_loop.is_initialized
+
+      end
+
+      chiller.setName("#{template} #{chiller_cooling_type} #{chiller_compressor_type} Chiller #{i + 1} of #{num_chillers}")
+      chiller.setSizingFactor(per_chiller_sizing_factor)
+      chiller.setReferenceCapacity(per_chiller_cap_w)
+      chiller.setCondenserType(chiller_cooling_type)
+      chiller.additionalProperties.setFeature('compressor_type', chiller_compressor_type)
+
+      # Add inlet pump
+      new_pump = OpenStudio::Model::PumpVariableSpeed.new(plant_loop.model)
+      new_pump.setName("#{chiller.name} Inlet Pump")
+      new_pump.setRatedPumpHead(original_pump.ratedPumpHead / num_chillers)
+      new_pump.setCoefficient1ofthePartLoadPerformanceCurve(original_pump.coefficient1ofthePartLoadPerformanceCurve)
+      new_pump.setCoefficient2ofthePartLoadPerformanceCurve(original_pump.coefficient2ofthePartLoadPerformanceCurve)
+      new_pump.setCoefficient3ofthePartLoadPerformanceCurve(original_pump.coefficient3ofthePartLoadPerformanceCurve)
+      new_pump.setCoefficient4ofthePartLoadPerformanceCurve(original_pump.coefficient4ofthePartLoadPerformanceCurve)
+      chiller_inlet_node = chiller.connectedObject(chiller.supplyInletPort).get.to_Node.get
+      new_pump.addToNode(chiller_inlet_node)
+
     end
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, there are #{final_chillers.size} #{chiller_cooling_type} #{chiller_compressor_type} chillers.")
+
+    # Remove original pump, dedicated chiller pumps have all been added
+    original_pump.remove
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, there are #{chillers.size} #{chiller_cooling_type} #{chiller_compressor_type} chillers.")
+
+    # Check for a heat exchanger fluid to fluid-- that lets you know if this is a primary loop
+    has_secondary_plant_loop = !plant_loop.demandComponents(OpenStudio::Model::HeatExchangerFluidToFluid.iddObjectType).empty?
+
+    if has_secondary_plant_loop
+      # Add EMS to stage chillers if there's a primary/secondary configuration
+      if num_chillers > 3
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name} has more than 3 chillers. We do not have an EMS strategy for that yet.")
+      elsif num_chillers > 1
+        add_ems_for_multiple_chiller_pumps_w_secondary_plant(model, plant_loop)
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "No EMS for multiple chillers required for  #{plant_loop.name}, as there's only 1 chiller.")
+      end
+    end
 
     return true
   end
 
+  # Adds EMS program for pumps serving 3 chillers on primary + secondary loop. This was due to an issue when modeling two
+  # dedicated loops. The headered pumps or dedicated constant speed pumps operate at full flow as long as there's a
+  # load on the loop unless this EMS is in place.
+  # @param model [OpenStudio::Model] OpenStudio model with plant loops
+  # @param primary_plant [OpenStudio::Model::PlantLoop] Primary chilled water loop with chillers
+  def add_ems_for_multiple_chiller_pumps_w_secondary_plant(model, primary_plant)
+
+    # Aggregate array of chillers on primary plant supply side
+    chiller_list = []
+
+    primary_plant.supplyComponents.each do |sc|
+      if sc.to_ChillerElectricEIR.is_initialized
+        chiller_list << sc.to_ChillerElectricEIR.get
+      end
+    end
+
+    num_of_chillers = chiller_list.length # Either 2 or 3
+
+    return if num_of_chillers <= 1
+
+    plant_name = primary_plant.name.to_s
+
+    # Make a variable to track the chilled water demand
+    chw_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Plant Supply Side Cooling Demand Rate')
+    chw_sensor.setKeyName(plant_name)
+    chw_sensor.setName("#{plant_name.gsub(/[-\s]+/, '_')}_CHW_DEMAND")
+
+    sorted_chiller_list = Array.new(num_of_chillers)
+
+    if num_of_chillers >= 3
+      chiller_list.each_with_index do |chiller, i|
+        sorted_chiller_list[0] = chiller if chiller.name.to_s.include? 'first_stage'
+        sorted_chiller_list[1] = chiller if chiller.name.to_s.include? 'second_stage_1'
+        sorted_chiller_list[2] = chiller if chiller.name.to_s.include? 'second_stage_2'
+      end
+    else
+      # 2 chiller setups are simply sorted such that the small chiller is staged first
+      if chiller_list[0].referenceCapacity.get > chiller_list[1].referenceCapacity.get
+        sorted_chiller_list[0] = chiller_list[1]
+        sorted_chiller_list[1] = chiller_list[0]
+      else
+        sorted_chiller_list[0] = chiller_list[0]
+        sorted_chiller_list[1] = chiller_list[1]
+      end
+
+    end
+
+
+    # Make pump specific parameters for EMS. Use counter
+    sorted_chiller_list.each_with_index do |chiller, i|
+
+      # Get chiller pump
+      pump_name = "#{chiller.name} Inlet Pump"
+      pump = model.getPumpVariableSpeedByName(pump_name).get
+
+      # Set EMS names
+      ems_pump_flow_name   =      "CHILLER_PUMP_#{i + 1}_FLOW"
+      ems_pump_status_name =      "CHILLER_PUMP_#{i + 1}_STATUS"
+      ems_pump_design_flow_name = "CHILLER_PUMP_#{i + 1}_DES_FLOW"
+
+      # ---- Actuators ----
+
+      # Pump Flow Actuator
+      actuator_pump_flow = OpenStudio::Model::EnergyManagementSystemActuator.new(pump, 'Pump', 'Pump Mass Flow Rate')
+      actuator_pump_flow.setName(ems_pump_flow_name)
+
+      # Pump Status Actuator
+      actuator_pump_status = OpenStudio::Model::EnergyManagementSystemActuator.new(pump,
+                                                                                   'Plant Component Pump:VariableSpeed',
+                                                                                   'On/Off Supervisory')
+      actuator_pump_status.setName(ems_pump_status_name)
+
+      # ---- Internal Variable ----
+
+      internal_variable = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Pump Maximum Mass Flow Rate')
+      internal_variable.setInternalDataIndexKeyName(pump_name)
+      internal_variable.setName(ems_pump_design_flow_name)
+
+    end
+
+    # Write EMS program
+    if num_of_chillers > 3
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "EMS Code for multiple chiller pump has not been written for greater than 2 chillers. This has #{num_of_chillers} chillers")
+    elsif num_of_chillers == 3
+      add_ems_program_for_3_pump_chiller_plant(model, sorted_chiller_list, primary_plant)
+    elsif num_of_chillers == 2
+      add_ems_program_for_2_pump_chiller_plant(model, sorted_chiller_list, primary_plant)
+    end
+
+  end
+
+  # Adds EMS program for pumps serving 2 chillers on primary + secondary loop. This was due to an issue when modeling two
+  # dedicated loops. The headered pumps or dedicated constant speed pumps operate at full flow as long as there's a
+  # load on the loop unless this EMS is in place.
+  # @param model [OpenStudio::Model] OpenStudio model with plant loops
+  # @param sorted_chiller_list [Array] Array of chillers in primary_plant sorted by capacity
+  # @param primary_plant [OpenStudio::Model::PlantLoop] Primary chilled water loop with chillers
+  def add_ems_program_for_2_pump_chiller_plant(model, sorted_chiller_list, primary_plant)
+
+    plant_name = primary_plant.name.to_s
+
+    # Break out sorted chillers and get their respective capacities
+    small_chiller = sorted_chiller_list[0]
+    large_chiller = sorted_chiller_list[1]
+
+    capacity_small_chiller = small_chiller.referenceCapacity.get
+    capacity_large_chiller = large_chiller.referenceCapacity.get
+
+    chw_demand = "#{primary_plant.name.to_s.gsub(/[-\s]+/, '_')}_CHW_DEMAND"
+
+    ems_pump_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    ems_pump_program.setName("#{plant_name.gsub(/[-\s]+/, '_')}_Pump_EMS")
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_STATUS = NULL,  !- Program Line 1')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = NULL,  !- Program Line 2')
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_FLOW = NULL,  !- A3')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = NULL,  !- A4')
+    ems_pump_program.addLine("IF #{chw_demand} <= #{0.8 * capacity_small_chiller},  !- A5")
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = 0,  !- A6')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = 0,  !- A7')
+    ems_pump_program.addLine("ELSEIF #{chw_demand} <= #{capacity_large_chiller},  !- A8")
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_STATUS = 0,  !- A9')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = 1,  !- A10')
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_FLOW = 0,  !- A11')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = CHILLER_PUMP_2_DES_FLOW,  !- A12')
+    ems_pump_program.addLine("ELSEIF #{chw_demand} > #{capacity_small_chiller + capacity_large_chiller},  !- A13")
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_STATUS = 1,  !- A14')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = 1,  !- A15')
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_FLOW = CHILLER_PUMP_1_DES_FLOW,  !- A16')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = CHILLER_PUMP_2_DES_FLOW,  !- A17')
+    ems_pump_program.addLine('ENDIF  !- A18')
+
+    ems_pump_program_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    ems_pump_program_manager.setName("#{plant_name.gsub(/[-\s]+/, '_')}_Pump_Program_Manager")
+    ems_pump_program_manager.setCallingPoint('InsideHVACSystemIterationLoop')
+    ems_pump_program_manager.addProgram(ems_pump_program)
+
+  end
+
+  def add_ems_program_for_3_pump_chiller_plant(model, sorted_chiller_list, primary_plant)
+
+    plant_name = primary_plant.name.to_s
+
+    # Break out sorted chillers and get their respective capacities
+    primary_chiller = sorted_chiller_list[0]
+    medium_chiller = sorted_chiller_list[1]
+    large_chiller = sorted_chiller_list[2]
+
+    capacity_80_pct_small = 0.8 * primary_chiller.referenceCapacity.get
+    capacity_medium_chiller = medium_chiller.referenceCapacity.get
+    capacity_large_chiller = large_chiller.referenceCapacity.get
+
+    if capacity_80_pct_small >= capacity_medium_chiller
+      first_stage_capacity = capacity_medium_chiller
+    else
+      first_stage_capacity = capacity_80_pct_small
+    end
+
+    chw_demand = "#{primary_plant.name.to_s.gsub(/[-\s]+/, '_')}_CHW_DEMAND"
+
+    ems_pump_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    ems_pump_program.setName("#{plant_name.gsub(/[-\s]+/, '_')}_Pump_EMS")
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_STATUS = NULL,  !- Program Line 1')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = NULL,  !- Program Line 2')
+    ems_pump_program.addLine('SET CHILLER_PUMP_3_STATUS = NULL,  !- A4')
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_FLOW = NULL,  !- A5')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = NULL,  !- A6')
+    ems_pump_program.addLine('SET CHILLER_PUMP_3_FLOW = NULL,  !- A7')
+    ems_pump_program.addLine("IF #{chw_demand} <= #{first_stage_capacity},  !- A8")
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = 0,  !- A9')
+    ems_pump_program.addLine('SET CHILLER_PUMP_3_STATUS = 0,  !- A10')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = 0,  !- A11')
+    ems_pump_program.addLine('SET CHILLER_PUMP_3_FLOW = 0,  !- A12')
+
+    if capacity_80_pct_small < capacity_medium_chiller
+      ems_pump_program.addLine("ELSEIF #{chw_demand} <= #{capacity_medium_chiller},  !- A13")
+      ems_pump_program.addLine('SET CHILLER_PUMP_1_STATUS = 0,  !- A14')
+      ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = 1,  !- A15')
+      ems_pump_program.addLine('SET CHILLER_PUMP_3_STATUS = 0,  !- A16')
+      ems_pump_program.addLine('SET CHILLER_PUMP_1_FLOW = 0,  !- A17')
+      ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = CHILLER_PUMP_2_DES_FLOW,  !- A18')
+      ems_pump_program.addLine('SET CHILLER_PUMP_3_FLOW = 0,  !- A19')
+    end
+
+    ems_pump_program.addLine("ELSEIF #{chw_demand} <= #{capacity_medium_chiller + capacity_large_chiller},  !- A20")
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_STATUS = 0,  !- A21')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = 1,  !- A22')
+    ems_pump_program.addLine('SET CHILLER_PUMP_3_STATUS = 1,  !- A23')
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_FLOW = 0,  !- A24')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = CHILLER_PUMP_2_DES_FLOW,  !- A25')
+    ems_pump_program.addLine('SET CHILLER_PUMP_3_FLOW = CHILLER_PUMP_3_DES_FLOW,  !- A26')
+    ems_pump_program.addLine("ELSEIF #{chw_demand} > #{capacity_medium_chiller + capacity_large_chiller},  !- A27")
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_STATUS = 1,  !- A28')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = 1,  !- A29')
+    ems_pump_program.addLine('SET CHILLER_PUMP_3_STATUS = 1,  !- A30')
+    ems_pump_program.addLine('SET CHILLER_PUMP_1_FLOW = CHILLER_PUMP_1_DES_FLOW,  !- A31')
+    ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = CHILLER_PUMP_2_DES_FLOW,  !- A32')
+    ems_pump_program.addLine('SET CHILLER_PUMP_3_FLOW = CHILLER_PUMP_3_DES_FLOW,  !- A33')
+    ems_pump_program.addLine('ENDIF  !- A34')
+
+    ems_pump_program_manager = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    ems_pump_program_manager.setName("#{plant_name.gsub(/[-\s]+/, '_')}_Pump_Program_Manager")
+    ems_pump_program_manager.setCallingPoint('InsideHVACSystemIterationLoop')
+    ems_pump_program_manager.addProgram(ems_pump_program)
+
+  end
   # Apply prm baseline pump power
   # @note I think it makes more sense to sense the motor efficiency right there...
   #   But actually it's completely irrelevant...

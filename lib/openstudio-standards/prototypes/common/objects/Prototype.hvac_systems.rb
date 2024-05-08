@@ -309,10 +309,15 @@ class Standard
         secondary_chilled_water_loop.setName(secondary_loop_name)
         chw_sizing_control(model, secondary_chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
         chilled_water_loop.additionalProperties.setFeature('is_primary_loop', true)
+        chilled_water_loop.additionalProperties.setFeature('secondary_loop_name', secondary_chilled_water_loop.name.to_s)
         secondary_chilled_water_loop.additionalProperties.setFeature('is_secondary_loop', true)
-        # primary chilled water pump
+        # primary chilled water pumps are added when adding chillers
         # Add Constant pump, in plant loop, the number of chiller adjustment will assign pump to each chiller
-        pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        #pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        pri_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+        pump_variable_speed_set_control_type(pri_chw_pump, control_type = 'Riding Curve')
+        # This pump name is important for function add_ems_for_multiple_chiller_pumps_w_secondary_plant. If you update
+        # it here, you must update the logic there to account for this
         pri_chw_pump.setName("#{chilled_water_loop.name} Primary Pump")
         # Will need to adjust the pump power after a sizing run
         pri_chw_pump.setRatedPumpHead(OpenStudio.convert(15.0, 'ftH_{2}O', 'Pa').get / num_chillers)
@@ -375,11 +380,36 @@ class Standard
       dist_clg.autosizeNominalCapacity
       chilled_water_loop.addSupplyBranchForComponent(dist_clg)
     else
+
+      # use default efficiency from 90.1-2019
+      # 1.188 kw/ton for a 150 ton AirCooled chiller
+      # 0.66 kw/ton for a 150 ton Water Cooled positive displacement chiller
+      case chiller_cooling_type
+      when 'AirCooled'
+        default_cop = kw_per_ton_to_cop(1.188)
+      when 'WaterCooled'
+        default_cop = kw_per_ton_to_cop(0.66)
+      else
+        default_cop = kw_per_ton_to_cop(0.66)
+      end
+
+      # Create list of consolidated chiller names. This will reduce the number of chillers to no greater than 3 chillers
+      chiller_name_list = ["#{chiller_condenser_type}_first_stage"]
+      if num_chillers > 3
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "EMS Code for multiple chiller pump has not been written for greater than 3 chillers. This has #{num_of_chillers} chillers")
+      elsif num_chillers == 3
+        chiller_name_list << "#{chiller_condenser_type}_second_stage_1"
+        chiller_name_list << "#{chiller_condenser_type}_second_stage_2"
+      elsif num_chillers == 2
+        chiller_name_list << "#{chiller_condenser_type}_second_stage"
+      end
+
       # make the correct type of chiller based these properties
-      chiller_sizing_factor = (1.0 / num_chillers).round(2)
-      num_chillers.times do |i|
+      chiller_sizing_factor = (1.0 / chiller_name_list.length).round(2)
+
+      chiller_name_list.each do |chiller_name|
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
-        chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
+        chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_name}")
         chilled_water_loop.addSupplyBranchForComponent(chiller)
         dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
         chiller.setReferenceLeavingChilledWaterTemperature(dsgn_sup_wtr_temp_c)
@@ -391,18 +421,6 @@ class Standard
         chiller.setMinimumUnloadingRatio(0.25)
         chiller.setChillerFlowMode('ConstantFlow')
         chiller.setSizingFactor(chiller_sizing_factor)
-
-        # use default efficiency from 90.1-2019
-        # 1.188 kw/ton for a 150 ton AirCooled chiller
-        # 0.66 kw/ton for a 150 ton Water Cooled positive displacement chiller
-        case chiller_cooling_type
-        when 'AirCooled'
-          default_cop = kw_per_ton_to_cop(1.188)
-        when 'WaterCooled'
-          default_cop = kw_per_ton_to_cop(0.66)
-        else
-          default_cop = kw_per_ton_to_cop(0.66)
-        end
         chiller.setReferenceCOP(default_cop)
 
         # connect the chiller to the condenser loop if one was supplied
