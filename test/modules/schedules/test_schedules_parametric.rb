@@ -5,7 +5,7 @@ class TestSchedulesParametric < Minitest::Test
   def setup
     # setup test output dirs
     @test_dir = File.expand_path("#{__dir__}/output/")
-    if !Dir.exists?(@test_dir)
+    if !Dir.exist?(@test_dir)
       Dir.mkdir(@test_dir)
     end
 

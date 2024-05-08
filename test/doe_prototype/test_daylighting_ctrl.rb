@@ -6,12 +6,12 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
   def self.model_test(template, building_type, climate_zone)
     epw_file_name = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
     @test_dir = "#{Dir.pwd}/output"
-    if !Dir.exists?(@test_dir)
+    if !Dir.exist?(@test_dir)
       Dir.mkdir(@test_dir)
     end
     model_name = "#{building_type}-#{template}-#{climate_zone}"
     run_dir = "#{@test_dir}/#{model_name}"
-    if !Dir.exists?(run_dir)
+    if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
     end
     prototype_creator = Standard.build("#{template}_#{building_type}")

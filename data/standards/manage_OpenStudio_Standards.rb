@@ -204,7 +204,7 @@ end
 def check_google_drive_configuration
   require 'google_drive'
   client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
-  unless File.exists? client_config_path
+  unless File.exist? client_config_path
     puts "Unable to locate client_secret.json file at #{client_config_path}."
     return false
   end
@@ -228,7 +228,7 @@ end
 def download_google_spreadsheets(spreadsheet_titles)
   require 'google_drive'
   client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
-  unless File.exists? client_config_path
+  unless File.exist? client_config_path
     puts "Unable to locate client_secret.json file at #{client_config_path}."
     return false
   end

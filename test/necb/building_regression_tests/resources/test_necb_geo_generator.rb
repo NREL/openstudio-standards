@@ -112,7 +112,7 @@ class GeoTest < Minitest::Test
     #To do.. you should remove the old runs in this folder.
     vintages = ['NECB2011', 'NECB2015', 'NECB2017']
     test_dir = "#{File.dirname(__FILE__)}/models/geo_test"
-    if Dir.exists?(test_dir)
+    if Dir.exist?(test_dir)
       FileUtils.rm_rf(test_dir)
     end
     Dir.mkdir(test_dir)
@@ -120,7 +120,7 @@ class GeoTest < Minitest::Test
     # For debugging just using .first (would be good to see what happend with .last )
     vintages.each do |vintage|
       vintage_dir = "#{test_dir}/#{vintage}"
-      if Dir.exists?(vintage_dir)
+      if Dir.exist?(vintage_dir)
         Dir.mkdir(vintage_dir)
       end
       array_of_array_of_space_types = determine_space_types_to_test(standard: vintage, range:20)
@@ -130,7 +130,7 @@ class GeoTest < Minitest::Test
         #name = SecureRandom.uuid.to_s
 
         run_dir = "#{test_dir}/#{vintage}/building#{index}"
-        if Dir.exists?(run_dir)
+        if Dir.exist?(run_dir)
           Dir.mkdir(run_dir)
         end
         #create the model
