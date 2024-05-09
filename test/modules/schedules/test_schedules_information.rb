@@ -260,9 +260,7 @@ class TestSchedulesInformation < Minitest::Test
     schedule_day.addValue(OpenStudio::Time.new(0, 11, 0, 0), 0.6)
     schedule_day.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
     result = @sch.schedule_day_get_hourly_values(schedule_day)
-    p "Result:   #{result}"
     expected_array = Array.new(9, 1.0).concat([0.66, 0.6]).concat(Array.new(13, 1.0))
-    p "Expected: #{expected_array}"
     assert(expected_array.difference(result).empty?)
     assert_equal(9, result.index(0.66))
     assert_equal(10, result.rindex(0.6))
