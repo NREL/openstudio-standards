@@ -909,7 +909,7 @@ module BTAP
         #@return [Boolean] optional_construction_set
         def self.get_construction_set_from_library(construction_library_file, construction_set_name)
           #Load Contruction osm library.
-          if File.exists?(construction_library_file)
+          if File.exist?(construction_library_file)
             construction_lib = BTAP::FileIO::load_osm(construction_library_file)
             #Get construction set..
             optional_construction_set = construction_lib.getDefaultConstructionSetByName(construction_set_name)

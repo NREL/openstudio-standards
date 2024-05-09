@@ -4,7 +4,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
 
   # Make a directory to save the resulting models
   test_dir = "#{File.dirname(__FILE__)}/output"
-  if !Dir.exists?(test_dir)
+  if !Dir.exist?(test_dir)
     Dir.mkdir(test_dir)
   end
 
@@ -84,7 +84,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
 
   # Create a directory for the test result
   osm_directory = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}"
-  if !Dir.exists?(osm_directory)
+  if !Dir.exist?(osm_directory)
     Dir.mkdir(osm_directory)
   end
 

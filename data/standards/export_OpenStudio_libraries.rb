@@ -438,9 +438,9 @@ def export_openstudio_libraries
 
       # Save the library
       pkg_dir = "#{__dir__}/../../pkg"
-      Dir.mkdir(pkg_dir) unless Dir.exists?(pkg_dir)
+      Dir.mkdir(pkg_dir) unless Dir.exist?(pkg_dir)
       osm_lib_dir = "#{pkg_dir}/libraries"
-      Dir.mkdir(osm_lib_dir) unless Dir.exists?(osm_lib_dir)
+      Dir.mkdir(osm_lib_dir) unless Dir.exist?(osm_lib_dir)
       library_path = "#{osm_lib_dir}/#{template_name.gsub(/\W/,'_')}.osm"
       puts "* Saving library #{library_path}"
       model.save(OpenStudio::Path.new(library_path), true)
