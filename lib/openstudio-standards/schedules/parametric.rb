@@ -1341,6 +1341,11 @@ module OpenstudioStandards
 
       # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
       # sch_day.setInterpolatetoTimestep(true)
+      # if model.version < OpenStudio::VersionString.new('3.8.0')
+      #   day_sch.setInterpolatetoTimestep(true)
+      # else
+      #   day_sch.setInterpolatetoTimestep('Average')
+      # end
 
       return schedule_day
     end
