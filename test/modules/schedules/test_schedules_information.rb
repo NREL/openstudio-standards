@@ -252,7 +252,7 @@ class TestSchedulesInformation < Minitest::Test
 
   def test_schedule_day_get_hourly_values
     model = OpenStudio::Model::Model.new
-    # model.getTimestep.setNumberOfTimestepsPerHour(10)
+    model.getTimestep.setNumberOfTimestepsPerHour(10)
     schedule_day = OpenStudio::Model::ScheduleDay.new(model)
     schedule_day.addValue(OpenStudio::Time.new(0, 9, 0, 0), 1.0)
     schedule_day.addValue(OpenStudio::Time.new(0, 9, 6, 0), 0.2)
