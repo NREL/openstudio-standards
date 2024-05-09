@@ -69,7 +69,10 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     building_type_list = []
     # Get the uniq building area type numbers.
     model.getWaterUseEquipments.each do |wateruse_equipment|
-      building_type_list << get_additional_property_as_string(wateruse_equipment, 'building_type_swh')
+      additional_property = get_additional_property_as_string(wateruse_equipment, 'building_type_swh', default = nil)
+      unless additional_property.nil?
+        building_type_list << additional_property
+      end
     end
 
     # Apply baseline swh loops
@@ -126,7 +129,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           end
         end
       end
-    else
+      # else
       # Todo: Multiple building type
     end
 
