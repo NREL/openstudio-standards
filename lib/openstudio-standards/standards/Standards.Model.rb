@@ -2791,6 +2791,11 @@ class Standard
         day_sch = sch_ruleset.defaultDaySchedule
         day_sch.setName("#{schedule_name} Default")
         model_add_vals_to_sch(model, day_sch, sch_type, values)
+        if model.version < OpenStudio::VersionString.new('3.8.0')
+          day_sch.setInterpolatetoTimestep(false)
+        else
+          day_sch.setInterpolatetoTimestep('No')
+        end
       end
 
       # Winter Design Day
@@ -2800,6 +2805,11 @@ class Standard
         day_sch = sch_ruleset.winterDesignDaySchedule
         day_sch.setName("#{schedule_name} Winter Design Day")
         model_add_vals_to_sch(model, day_sch, sch_type, values)
+        if model.version < OpenStudio::VersionString.new('3.8.0')
+          day_sch.setInterpolatetoTimestep(false)
+        else
+          day_sch.setInterpolatetoTimestep('No')
+        end
       end
 
       # Summer Design Day
@@ -2809,6 +2819,11 @@ class Standard
         day_sch = sch_ruleset.summerDesignDaySchedule
         day_sch.setName("#{schedule_name} Summer Design Day")
         model_add_vals_to_sch(model, day_sch, sch_type, values)
+        if model.version < OpenStudio::VersionString.new('3.8.0')
+          day_sch.setInterpolatetoTimestep(false)
+        else
+          day_sch.setInterpolatetoTimestep('No')
+        end
       end
 
       # Other days (weekdays, weekends, etc)
@@ -2827,6 +2842,11 @@ class Standard
         day_sch = sch_rule.daySchedule
         day_sch.setName("#{schedule_name} #{day_types} Day")
         model_add_vals_to_sch(model, day_sch, sch_type, values)
+        if model.version < OpenStudio::VersionString.new('3.8.0')
+          day_sch.setInterpolatetoTimestep(false)
+        else
+          day_sch.setInterpolatetoTimestep('No')
+        end
 
         # Set the dates when the rule applies
         sch_rule.setStartDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(start_date.month.to_i), start_date.day.to_i))
