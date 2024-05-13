@@ -325,7 +325,7 @@ class Standard
 
       # Modify the service water heating loops per the baseline rules
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Cleaning up Service Water Heating Loops ***')
-      model_apply_baseline_swh_loops(model, building_type)
+      model_apply_baseline_swh_loops(model, building_type, swh_building_type)
 
       # Determine the baseline HVAC system type for each of the groups of zones and add that system type.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Baseline HVAC Systems ***')
@@ -5556,7 +5556,9 @@ class Standard
   # @param building_type [String] the building type
   # @return [Boolean] returns true if successful, false if not
   # @author Julien Marrec
-  def model_apply_baseline_swh_loops(model, building_type)
+  def model_apply_baseline_swh_loops(model,
+                                     building_type,
+                                     swh_building_type = 'All others')
     model.getPlantLoops.sort.each do |plant_loop|
       # Skip non service water heating loops
       next unless plant_loop_swh_loop?(plant_loop)
