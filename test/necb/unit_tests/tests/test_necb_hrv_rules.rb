@@ -243,31 +243,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     sorted_air_loops_hvac.each do |air_loop_hvac|
       has_hrv = false
       exhaust_heat_content_kW = standard.calculate_exhaust_heat(air_loop_hvac)
-
       air_loop_hvac_name = air_loop_hvac.name.get
-=begin
-      # Not sure if we need this, it only retrieves the flow and OAF values that we set earlier in the test?
-      if vintage == "NECB2017" || vintage == "NECB2020"
-        oa_system = nil
-        controller_oa = nil
-        #Get the minimum OA flow rate
-        min_oa_flow_m3_per_s = nil
-        #Get the AHU design supply air flow rate
-        dsn_flow_m3_per_s = nil
-        if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
-          oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
-          controller_oa = oa_system.getControllerOutdoorAir
-          min_oa_flow_m3_per_s = controller_oa.minimumOutdoorAirFlowRate.get
-          dsn_flow_m3_per_s = air_loop_hvac.designSupplyAirFlowRate.get
-        else
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV not applicable because it has no OA intake.")
-          return false
-        end
-        flow = min_oa_flow_m3_per_s
-        oaf = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
-      end
-=end
-
       hdd = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get).hdd18
       has_hrv = standard.air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, 'NECB')
       flow_L_per_s = OpenStudio.convert(flow, 'm^3/s', 'L/s').get
