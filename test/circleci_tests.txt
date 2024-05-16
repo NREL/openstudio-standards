@@ -1,5 +1,6 @@
 90_1_general/test_179d.rb
 90_1_general/test_179d_building_type.rb
+90_1_general/test_179d_sub_surface_get_window_property.rb
 
 90_1_prm/test_prm_baseline_bldg_179d.rb
 
