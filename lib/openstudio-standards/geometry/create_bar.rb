@@ -390,7 +390,7 @@ module OpenstudioStandards
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
       bounding_area = bounding_length * bounding_width
-      footprint_area = envelope_data_hash[:building_floor_area] / envelope_data_hash[:effective_num_stories].to_f
+      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
       area_multiplier = footprint_area / bounding_area
       edge_multiplier = Math.sqrt(area_multiplier)
       bar[:length] = bounding_length * edge_multiplier
@@ -408,7 +408,7 @@ module OpenstudioStandards
 
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
-      footprint_area = envelope_data_hash[:building_floor_area] / envelope_data_hash[:effective_num_stories].to_f
+      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
 
       if bounding_length >= bounding_width
         bar[:length] = bounding_length
@@ -430,7 +430,7 @@ module OpenstudioStandards
 
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
-      a = envelope_data_hash[:building_floor_area] / envelope_data_hash[:effective_num_stories].to_f
+      a = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
       p = envelope_data_hash[:building_perimeter]
 
       if bounding_length >= bounding_width
