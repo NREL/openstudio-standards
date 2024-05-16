@@ -190,7 +190,7 @@ module OpenstudioStandards
       building_overhang_area_w = 0.0
 
       # loop through stories based on mine z height of surfaces.
-      sorted_stories = sort_building_stories_and_get_min_multiplier(model).sort_by { |k, v| v }
+      sorted_stories = OpenstudioStandards::Geometry.model_sort_building_stories_and_get_min_multiplier(model).sort_by { |k, v| v }
       sorted_stories.each do |story, story_min_z|
         story_min_multiplier = nil
         story_footprint = nil
