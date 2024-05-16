@@ -9,6 +9,13 @@ class ACM179dASHRAE9012007
     end
     sql_file = sql_file.get
 
+    # get window type
+    window_type = sub_surface.subSurfaceType
+    unless ['window', 'skylight'].any? {|x| window_type.downcase.include?(x) }
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SubSurface', 'SubSurface is a not a window or skylight.')
+      return nil
+    end
+
     sub_surface_name = sub_surface.name.to_s
 
     # get SHGC
@@ -35,8 +42,7 @@ class ACM179dASHRAE9012007
       surface_type = surface_.get.surfaceType
     end
 
-    # get window type
-    window_type = sub_surface.subSurfaceType
+
 
     window_property = {
       'name' => sub_surface_name,
