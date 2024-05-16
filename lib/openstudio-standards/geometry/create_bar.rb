@@ -365,10 +365,10 @@ module OpenstudioStandards
         end
       end
 
-      envelope_data_hash[:building_overhang_proj_factor_n] = building_overhang_area_n / ext_surfaces_hash['northWindow']
-      envelope_data_hash[:building_overhang_proj_factor_s] = building_overhang_area_s / ext_surfaces_hash['southWindow']
-      envelope_data_hash[:building_overhang_proj_factor_e] = building_overhang_area_e / ext_surfaces_hash['eastWindow']
-      envelope_data_hash[:building_overhang_proj_factor_w] = building_overhang_area_w / ext_surfaces_hash['westWindow']
+      envelope_data_hash[:building_overhang_proj_factor_n] = building_overhang_area_n / ext_surfaces_hash['north_window']
+      envelope_data_hash[:building_overhang_proj_factor_s] = building_overhang_area_s / ext_surfaces_hash['south_window']
+      envelope_data_hash[:building_overhang_proj_factor_e] = building_overhang_area_e / ext_surfaces_hash['east_window']
+      envelope_data_hash[:building_overhang_proj_factor_w] = building_overhang_area_w / ext_surfaces_hash['west_window']
 
       # warn for spaces that are not on a story (in future could infer stories for these)
       model.getSpaces.sort.each do |space|
