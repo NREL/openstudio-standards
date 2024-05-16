@@ -63,7 +63,7 @@ SELECT Value FROM TabularDataWithStrings
 
     # OpenStudio SDK has only methods for querying the assembly values
     # (SubSurface::assemblySHGC / assemblyUFactor)
-    # When do you do have a frame, these are empty (0.0) though!
+    # When you do not have a frame, these are empty (0.0) though!
     # Since we reimplement the get_exterior_fenestration_value, might as well
     # use it for everything for clarity and consistency
     if sub_surface.windowPropertyFrameAndDivider.is_initialized
@@ -74,7 +74,7 @@ SELECT Value FROM TabularDataWithStrings
       window_u_value = get_exterior_fenestration_value(sub_surface, 'Glass U-Factor')
     end
 
-    # get opening area, including the frame (with is added to the sub_surface vertices)
+    # get opening area, including the frame (width is added to the sub_surface vertices)
     window_area = get_exterior_fenestration_value(sub_surface, 'Area of Multiplied Openings')
 
     # get surface type
