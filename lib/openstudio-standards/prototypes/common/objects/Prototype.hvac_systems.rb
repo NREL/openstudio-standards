@@ -5181,8 +5181,7 @@ class Standard
                 surface.setConstruction(radiant_interior_floor_slab_construction)
 
                 # also assign construction to adjacent surface
-                adjacent_surface = surface.adjacentSurface
-                if adjacent_surface.is_initialized
+                if surface.adjacentSurface.is_initialized
                   adjacent_surface = surface.adjacentSurface.get
                   adjacent_surface.setConstruction(rev_radiant_interior_floor_slab_construction)
                 end
@@ -5196,8 +5195,7 @@ class Standard
                 surface.setConstruction(radiant_interior_ceiling_slab_construction)
 
                 # also assign construction to adjacent surface
-                adjacent_surface = surface.adjacentSurface
-                if adjacent_surface.is_initialized
+                if surface.adjacentSurface.is_initialized
                   adjacent_surface = surface.adjacentSurface.get
                   adjacent_surface.setConstruction(rev_radiant_interior_ceiling_slab_construction)
                 end
