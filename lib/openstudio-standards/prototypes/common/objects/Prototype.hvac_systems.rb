@@ -5173,16 +5173,19 @@ class Standard
         space.surfaces.each do |surface|
           if radiant_type == 'floor'
             if surface.surfaceType == 'Floor'
-              if surface.outsideBoundaryCondition == 'Ground'
+              if surface.outsideBoundaryCondition.include? 'Ground'
                 surface.setConstruction(radiant_ground_slab_construction)
               elsif surface.outsideBoundaryCondition == 'Outdoors'
                 surface.setConstruction(radiant_exterior_slab_construction)
               else # interior floor
                 surface.setConstruction(radiant_interior_floor_slab_construction)
 
-                # also assign construciton to adjacent surface
-                adjacent_surface = surface.adjacentSurface.get
-                adjacent_surface.setConstruction(rev_radiant_interior_floor_slab_construction)
+                # also assign construction to adjacent surface
+                adjacent_surface = surface.adjacentSurface
+                if adjacent_surface.is_initialized
+                  adjacent_surface = surface.adjacentSurface.get
+                  adjacent_surface.setConstruction(rev_radiant_interior_floor_slab_construction)
+                end
               end
             end
           elsif radiant_type == 'ceiling'
@@ -5192,9 +5195,12 @@ class Standard
               else # interior ceiling
                 surface.setConstruction(radiant_interior_ceiling_slab_construction)
 
-                # also assign construciton to adjacent surface
-                adjacent_surface = surface.adjacentSurface.get
-                adjacent_surface.setConstruction(rev_radiant_interior_ceiling_slab_construction)
+                # also assign construction to adjacent surface
+                adjacent_surface = surface.adjacentSurface
+                if adjacent_surface.is_initialized
+                  adjacent_surface = surface.adjacentSurface.get
+                  adjacent_surface.setConstruction(rev_radiant_interior_ceiling_slab_construction)
+                end
               end
             end
           end
