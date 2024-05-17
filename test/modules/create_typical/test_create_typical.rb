@@ -3,6 +3,7 @@ require_relative '../../helpers/minitest_helper'
 class TestCreateTypical < Minitest::Test
   def setup
     @create = OpenstudioStandards::CreateTypical
+    FileUtils.mkdir "#{__dir__}/output" unless Dir.exist? "#{__dir__}/output"
   end
 
   def test_create_typical_building_from_model
@@ -14,7 +15,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output"
+    output_dir = "#{__dir__}/output/test_create_typical_building_from_model"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -36,7 +37,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output"
+    output_dir = "#{__dir__}/output/test_create_typical_deer_building_from_model"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -74,7 +75,7 @@ class TestCreateTypical < Minitest::Test
     hvac_mapping_hash = JSON.parse(hvac_zone_json)
 
     # set output directory
-    output_dir = "#{__dir__}/output"
+    output_dir = "#{__dir__}/output/test_create_typical_building_from_model_with_hvac_mapping"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical with zone mapping
@@ -103,7 +104,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output"
+    output_dir = "#{__dir__}/output/test_create_typical_ese_op_hrs_overnight"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
