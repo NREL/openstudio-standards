@@ -244,9 +244,17 @@ module OpenstudioStandards
       fuel_type_map = {
         OpenStudio::EndUseFuelType.new('Electricity').value => OpenStudio::FuelType.new('Electricity'),
         OpenStudio::EndUseFuelType.new('Gas').value => OpenStudio::FuelType.new('Gas'),
+        OpenStudio::EndUseFuelType.new('Gasoline').value => OpenStudio::FuelType.new('Gasoline'),
         OpenStudio::EndUseFuelType.new('Diesel').value => OpenStudio::FuelType.new('Diesel'),
+        OpenStudio::EndUseFuelType.new('Coal').value => OpenStudio::FuelType.new('Coal'), 
+        OpenStudio::EndUseFuelType.new('FuelOil_1').value => OpenStudio::FuelType.new('FuelOil_1'), 
+        OpenStudio::EndUseFuelType.new('FuelOil_2').value => OpenStudio::FuelType.new('FuelOil_2'), 
+        OpenStudio::EndUseFuelType.new('Propane').value => OpenStudio::FuelType.new('Propane'), 
+        OpenStudio::EndUseFuelType.new('OtherFuel_1').value => OpenStudio::FuelType.new('OtherFuel_1'), 
+        OpenStudio::EndUseFuelType.new('OtherFuel_2').value => OpenStudio::FuelType.new('OtherFuel_2'), 
         OpenStudio::EndUseFuelType.new('DistrictCooling').value => OpenStudio::FuelType.new('DistrictCooling'),
         OpenStudio::EndUseFuelType.new('DistrictHeating').value => OpenStudio::FuelType.new('DistrictHeating'),
+        OpenStudio::EndUseFuelType.new('DistrictHeatingSteam').value => OpenStudio::FuelType.new('DistrictHeatingSteam'),
         OpenStudio::EndUseFuelType.new('Water').value => OpenStudio::FuelType.new('Water')
       }
 
@@ -254,9 +262,17 @@ module OpenstudioStandards
       fuel_type_alias_map = {
         OpenStudio::EndUseFuelType.new('Electricity').value => 'electricity',
         OpenStudio::EndUseFuelType.new('Gas').value => 'gas',
+        OpenStudio::EndUseFuelType.new('Gasoline').value => 'gas', # not sure why gas instead of gasoline
+        OpenStudio::EndUseFuelType.new('Diesel').value => 'diesel',
+        OpenStudio::EndUseFuelType.new('Coal').value => 'coal',
+        OpenStudio::EndUseFuelType.new('FuelOil_1').value => 'fuel_oil_1',
+        OpenStudio::EndUseFuelType.new('FuelOil_2').value => 'fuel_oil_2',
+        OpenStudio::EndUseFuelType.new('Propane').value => 'propane',
         OpenStudio::EndUseFuelType.new('OtherFuel_1').value => 'other_energy',
+        OpenStudio::EndUseFuelType.new('OtherFuel_2').value => 'other_fuel_2',
         OpenStudio::EndUseFuelType.new('DistrictCooling').value => 'district_cooling',
         OpenStudio::EndUseFuelType.new('DistrictHeating').value => 'district_heating',
+        OpenStudio::EndUseFuelType.new('DistrictHeatingSteam').value => 'district_heating_steam',
         OpenStudio::EndUseFuelType.new('Water').value => 'water'
       }
 
@@ -283,12 +299,24 @@ module OpenstudioStandards
       end
 
       # other_energy
-      other_energy = sql_file.otherFuelTotalEndUses
-      if other_energy.is_initialized
-        cons_elems << OpenStudio::Attribute.new('other_energy', other_energy.get, 'GJ')
-      else
-        cons_elems << OpenStudio::Attribute.new('other_energy', 0.0, 'GJ')
+      other_fuels = ['gasoline', 'diesel', 'coal', 'fuelOilNo1', 'fuelOilNo2', 'propane', 'otherFuel1', 'otherFuel2']
+      other_energy_total = 0.0
+      other_fuels.each do |fuel|
+        other_energy = sql_file.instance_eval(fuel + 'TotalEndUses')
+        if other_energy.is_initialized
+          # sum up all of the "other" fuels
+          other_energy_total += other_energy.get
+        end
       end
+      cons_elems << OpenStudio::Attribute.new('other_energy', other_energy_total, 'GJ')
+
+      # # other_energy
+      # other_energy = sql_file.otherFuelTotalEndUses
+      # if other_energy.is_initialized
+      #   cons_elems << OpenStudio::Attribute.new('other_energy', other_energy.get, 'GJ')
+      # else
+      #   cons_elems << OpenStudio::Attribute.new('other_energy', 0.0, 'GJ')
+      # end
 
       # district_cooling
       district_cooling = sql_file.districtCoolingTotalEndUses
@@ -854,7 +882,12 @@ module OpenstudioStandards
         # loop through all the fuel types
         end_use_fuel_types.each do |end_use_fuel_type|
           # get the annual total cost for this fuel type
-          ann_cost = annual_utility_cost_map[end_use_fuel_type.valueName] # todo figure out why nill for Gasoline, causes error few lines below
+          #  Only Electricity, Gas, DistrictCooling,DistrictHeating, Water and OtherFuel_1 are defined in map so check value first
+          if annual_utility_cost_map.key?(end_use_fuel_type.valueName)
+            ann_cost = annual_utility_cost_map[end_use_fuel_type.valueName]
+          else
+            ann_cost = 0.0
+          end
           # get the total annual usage for this fuel type in all end use categories
           # loop through all end uses, adding the annual usage value to the aggregator
           ann_usg = 0.0
