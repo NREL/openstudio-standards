@@ -32,7 +32,7 @@ module OpenstudioStandards
     #         'end_hr' => 18
     #       }
     # @return [OpenStudio::AttributeVector] a vector of results needed by EDAPT
-    def self.make_qaqc_results_vector(sql_file,
+    def self.make_qaqc_results_vector(sql_file_create_qaqc_results_vector,
                                       skip_weekends = true,
                                       skip_holidays = true,
                                       start_mo = 'June',
@@ -52,7 +52,7 @@ module OpenstudioStandards
 
       # floor_area
       floor_area_query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='AnnualBuildingUtilityPerformanceSummary' AND ReportForString='Entire Facility' AND TableName='Building Area' AND RowName='Net Conditioned Building Area' AND ColumnName='Area' AND Units='m2'"
-      floor_area = sql_file.execAndReturnFirstDouble(floor_area_query)
+      floor_area = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(floor_area_query)
       if floor_area.is_initialized
         result_elems << OpenStudio::Attribute.new('floor_area', floor_area.get, 'm^2')
       else
@@ -62,7 +62,7 @@ module OpenstudioStandards
 
       # inflation approach
       inf_appr_query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='Life-Cycle Cost Report' AND ReportForString='Entire Facility' AND TableName='Life-Cycle Cost Parameters' AND RowName='Inflation Approach' AND ColumnName='Value'"
-      inf_appr = sql_file.execAndReturnFirstString(inf_appr_query)
+      inf_appr = sql_file_create_qaqc_results_vector.execAndReturnFirstString(inf_appr_query)
       if inf_appr.is_initialized
         if inf_appr.get == 'ConstantDollar'
           inf_appr = 'Constant Dollar'
@@ -80,7 +80,7 @@ module OpenstudioStandards
 
       # base year
       base_yr_query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='Life-Cycle Cost Report' AND ReportForString='Entire Facility' AND TableName='Life-Cycle Cost Parameters' AND RowName='Base Date' AND ColumnName='Value'"
-      base_yr = sql_file.execAndReturnFirstString(base_yr_query)
+      base_yr = sql_file_create_qaqc_results_vector.execAndReturnFirstString(base_yr_query)
       if base_yr.is_initialized
         if base_yr.get =~ /\d\d\d\d/
           base_yr = base_yr.get.match(/\d\d\d\d/)[0].to_f
@@ -95,7 +95,7 @@ module OpenstudioStandards
 
       # analysis length
       length_yrs_query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='Life-Cycle Cost Report' AND ReportForString='Entire Facility' AND TableName='Life-Cycle Cost Parameters' AND RowName='Length of Study Period in Years' AND ColumnName='Value'"
-      length_yrs = sql_file.execAndReturnFirstInt(length_yrs_query)
+      length_yrs = sql_file_create_qaqc_results_vector.execAndReturnFirstInt(length_yrs_query)
       if length_yrs.is_initialized
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.QAQC', "Analysis length = #{length_yrs.get} yrs")
         length_yrs = length_yrs.get
@@ -147,7 +147,7 @@ module OpenstudioStandards
 
         # capital cash flow
         cap_cash_query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='Life-Cycle Cost Report' AND ReportForString='Entire Facility' AND TableName='Capital Cash Flow by Category (Without Escalation)' AND RowName='#{yr}' AND ColumnName='Total'"
-        cap_cash = sql_file.execAndReturnFirstDouble(cap_cash_query)
+        cap_cash = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(cap_cash_query)
         if cap_cash.is_initialized
           ann_cap_cash += cap_cash.get
           ann_tot_cash += cap_cash.get
@@ -157,7 +157,7 @@ module OpenstudioStandards
         om_types = ['Maintenance', 'Repair', 'Operation', 'Replacement', 'MinorOverhaul', 'MajorOverhaul', 'OtherOperational']
         om_types.each do |om_type|
           om_cash_query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='Life-Cycle Cost Report' AND ReportForString='Entire Facility' AND TableName='Operating Cash Flow by Category (Without Escalation)' AND RowName='#{yr}' AND ColumnName='#{om_type}'"
-          om_cash = sql_file.execAndReturnFirstDouble(om_cash_query)
+          om_cash = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(om_cash_query)
           if om_cash.is_initialized
             ann_om_cash += om_cash.get
             ann_tot_cash += om_cash.get
@@ -166,7 +166,7 @@ module OpenstudioStandards
 
         # energy cash flow
         energy_cash_query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='Life-Cycle Cost Report' AND ReportForString='Entire Facility' AND TableName='Operating Cash Flow by Category (Without Escalation)' AND RowName='#{yr}' AND ColumnName='Energy'"
-        energy_cash = sql_file.execAndReturnFirstDouble(energy_cash_query)
+        energy_cash = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(energy_cash_query)
         if energy_cash.is_initialized
           ann_energy_cash += energy_cash.get
           ann_tot_cash += energy_cash.get
@@ -174,7 +174,7 @@ module OpenstudioStandards
 
         # water cash flow
         water_cash_query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='Life-Cycle Cost Report' AND ReportForString='Entire Facility' AND TableName='Operating Cash Flow by Category (Without Escalation)' AND RowName='#{yr}' AND ColumnName='Water'"
-        water_cash = sql_file.execAndReturnFirstDouble(water_cash_query)
+        water_cash = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(water_cash_query)
         if water_cash.is_initialized
           ann_water_cash += water_cash.get
           ann_tot_cash += water_cash.get
@@ -283,7 +283,7 @@ module OpenstudioStandards
       cons_elems = OpenStudio::AttributeVector.new
 
       # electricity
-      electricity = sql_file.electricityTotalEndUses
+      electricity = sql_file_create_qaqc_results_vector.electricityTotalEndUses
       if electricity.is_initialized
         cons_elems << OpenStudio::Attribute.new('electricity', electricity.get, 'GJ')
       else
@@ -291,7 +291,7 @@ module OpenstudioStandards
       end
 
       # gas
-      gas = sql_file.naturalGasTotalEndUses
+      gas = sql_file_create_qaqc_results_vector.naturalGasTotalEndUses
       if gas.is_initialized
         cons_elems << OpenStudio::Attribute.new('gas', gas.get, 'GJ')
       else
@@ -302,7 +302,7 @@ module OpenstudioStandards
       other_fuels = ['gasoline', 'diesel', 'coal', 'fuelOilNo1', 'fuelOilNo2', 'propane', 'otherFuel1', 'otherFuel2']
       other_energy_total = 0.0
       other_fuels.each do |fuel|
-        other_energy = sql_file.instance_eval(fuel + 'TotalEndUses')
+        other_energy = sql_file_create_qaqc_results_vector.instance_eval(fuel + 'TotalEndUses')
         if other_energy.is_initialized
           # sum up all of the "other" fuels
           other_energy_total += other_energy.get
@@ -311,7 +311,7 @@ module OpenstudioStandards
       cons_elems << OpenStudio::Attribute.new('other_energy', other_energy_total, 'GJ')
 
       # # other_energy
-      # other_energy = sql_file.otherFuelTotalEndUses
+      # other_energy = sql_file_create_qaqc_results_vector.otherFuelTotalEndUses
       # if other_energy.is_initialized
       #   cons_elems << OpenStudio::Attribute.new('other_energy', other_energy.get, 'GJ')
       # else
@@ -319,7 +319,7 @@ module OpenstudioStandards
       # end
 
       # district_cooling
-      district_cooling = sql_file.districtCoolingTotalEndUses
+      district_cooling = sql_file_create_qaqc_results_vector.districtCoolingTotalEndUses
       if district_cooling.is_initialized
         cons_elems << OpenStudio::Attribute.new('district_cooling', district_cooling.get, 'GJ')
       else
@@ -327,7 +327,7 @@ module OpenstudioStandards
       end
 
       # district_heating
-      district_heating = sql_file.districtHeatingTotalEndUses
+      district_heating = sql_file_create_qaqc_results_vector.districtHeatingTotalEndUses
       if district_heating.is_initialized
         cons_elems << OpenStudio::Attribute.new('district_heating', district_heating.get, 'GJ')
       else
@@ -335,7 +335,7 @@ module OpenstudioStandards
       end
 
       # water
-      water = sql_file.waterTotalEndUses
+      water = sql_file_create_qaqc_results_vector.waterTotalEndUses
       if water.is_initialized
         cons_elems << OpenStudio::Attribute.new('water', water.get, 'm^3')
       else
@@ -350,8 +350,8 @@ module OpenstudioStandards
 
       # get the weather file run period (as opposed to design day run period)
       ann_env_pd = nil
-      sql_file.availableEnvPeriods.each do |env_pd|
-        env_type = sql_file.environmentType(env_pd)
+      sql_file_create_qaqc_results_vector.availableEnvPeriods.each do |env_pd|
+        env_type = sql_file_create_qaqc_results_vector.environmentType(env_pd)
         if env_type.is_initialized
           if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
             ann_env_pd = env_pd
@@ -370,8 +370,8 @@ module OpenstudioStandards
 
         # get the annual hours simulated
         hrs_sim = '(0 - no partial annual simulation)'
-        if sql_file.hoursSimulated.is_initialized
-          hrs_sim = sql_file.hoursSimulated.get
+        if sql_file_create_qaqc_results_vector.hoursSimulated.is_initialized
+          hrs_sim = sql_file_create_qaqc_results_vector.hoursSimulated.get
           if hrs_sim != 8760
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.QAQC', "Simulation was only #{hrs_sim} hrs; EDA requires an annual simulation (8760 hrs)")
             return OpenStudio::Attribute.new('report', result_elems)
@@ -379,7 +379,7 @@ module OpenstudioStandards
         end
 
         # Get the electricity timeseries to determine the year used
-        elec = sql_file.timeSeries(ann_env_pd, 'Zone Timestep', 'Electricity:Facility', '')
+        elec = sql_file_create_qaqc_results_vector.timeSeries(ann_env_pd, 'Zone Timestep', 'Electricity:Facility', '')
         timeseries_yr = nil
         if elec.is_initialized
           timeseries_yr = elec.get.dateTimes[0].date.year
@@ -399,7 +399,7 @@ module OpenstudioStandards
 
         # Get the day type timeseries.
         day_types = nil
-        day_type_indices = sql_file.timeSeries(ann_env_pd, 'Zone Timestep', 'Site Day Type Index', 'Environment')
+        day_type_indices = sql_file_create_qaqc_results_vector.timeSeries(ann_env_pd, 'Zone Timestep', 'Site Day Type Index', 'Environment')
         if day_type_indices.is_initialized
           # Put values into array
           day_types = []
@@ -492,7 +492,7 @@ module OpenstudioStandards
         end
 
         # electricity time-of-use periods
-        elec = sql_file.timeSeries(ann_env_pd, 'Zone Timestep', 'Electricity:Facility', '')
+        elec = sql_file_create_qaqc_results_vector.timeSeries(ann_env_pd, 'Zone Timestep', 'Electricity:Facility', '')
         if elec.is_initialized && day_types
           elec = elec.get
           # Put timeseries into array
@@ -564,7 +564,7 @@ module OpenstudioStandards
         end
 
         # electricity_annual_avg_peak_demand
-        val = sql_file.electricityTotalEndUses
+        val = sql_file_create_qaqc_results_vector.electricityTotalEndUses
         if val.is_initialized
           ann_elec_gj = OpenStudio::Quantity.new(val.get, gigajoule_unit)
           ann_hrs = OpenStudio::Quantity.new(hrs_sim, hrs_unit)
@@ -578,7 +578,7 @@ module OpenstudioStandards
         # district_cooling_peak_demand
         district_cooling_peak_demand = -1.0
         ann_dist_clg_peak_demand_time = nil
-        dist_clg = sql_file.timeSeries(ann_env_pd, 'Zone Timestep', 'DistrictCooling:Facility', '')
+        dist_clg = sql_file_create_qaqc_results_vector.timeSeries(ann_env_pd, 'Zone Timestep', 'DistrictCooling:Facility', '')
         # deduce the timestep based on the hours simulated and the number of datapoints in the timeseries
         if dist_clg.is_initialized && day_types
           dist_clg = dist_clg.get
@@ -651,7 +651,7 @@ module OpenstudioStandards
         end
 
         # district cooling time-of-use periods
-        dist_clg = sql_file.timeSeries(ann_env_pd, 'Zone Timestep', 'DistrictCooling:Facility', '')
+        dist_clg = sql_file_create_qaqc_results_vector.timeSeries(ann_env_pd, 'Zone Timestep', 'DistrictCooling:Facility', '')
         if dist_clg.is_initialized && day_types
           dist_clg = dist_clg.get
           # Put timeseries into array
@@ -742,7 +742,7 @@ module OpenstudioStandards
       annual_utility_cost_map = {}
 
       # electricity
-      electricity = sql_file.annualTotalCost(OpenStudio::FuelType.new('Electricity'))
+      electricity = sql_file_create_qaqc_results_vector.annualTotalCost(OpenStudio::FuelType.new('Electricity'))
       if electricity.is_initialized
         utility_cost_elems << OpenStudio::Attribute.new('electricity', electricity.get, 'dollars')
         annual_utility_cost_map[OpenStudio::EndUseFuelType.new('Electricity').valueName] = electricity.get
@@ -756,20 +756,20 @@ module OpenstudioStandards
       electric_demand_charge = 0.0
 
       electric_rate_query = "SELECT value FROM tabulardatawithstrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-3. Energy Type Summary' AND RowName='Electricity' AND ColumnName='Utility Rate'"
-      electric_rate_name = sql_file.execAndReturnFirstString(electric_rate_query)
+      electric_rate_name = sql_file_create_qaqc_results_vector.execAndReturnFirstString(electric_rate_query)
       if electric_rate_name.is_initialized
         electric_rate_name = electric_rate_name.get.strip
 
         # electricity_consumption_charge
         electric_consumption_charge_query = "SELECT value FROM tabulardatawithstrings WHERE ReportName='Tariff Report' AND ReportForString='#{electric_rate_name}' AND TableName='Categories' AND RowName='EnergyCharges (~~$~~)' AND ColumnName='Sum'"
-        val = sql_file.execAndReturnFirstDouble(electric_consumption_charge_query)
+        val = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(electric_consumption_charge_query)
         if val.is_initialized
           electric_consumption_charge = val.get
         end
 
         # electricity_demand_charge
         electric_demand_charge_query = "SELECT value FROM tabulardatawithstrings WHERE ReportName='Tariff Report' AND ReportForString='#{electric_rate_name}' AND TableName='Categories' AND RowName='DemandCharges (~~$~~)' AND ColumnName='Sum'"
-        val = sql_file.execAndReturnFirstDouble(electric_demand_charge_query)
+        val = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(electric_demand_charge_query)
         if val.is_initialized
           electric_demand_charge = val.get
         end
@@ -779,7 +779,7 @@ module OpenstudioStandards
       utility_cost_elems << OpenStudio::Attribute.new('electricity_demand_charge', electric_demand_charge, 'dollars')
 
       # gas
-      gas = sql_file.annualTotalCost(OpenStudio::FuelType.new('Gas'))
+      gas = sql_file_create_qaqc_results_vector.annualTotalCost(OpenStudio::FuelType.new('Gas'))
       if gas.is_initialized
         annual_utility_cost_map[OpenStudio::EndUseFuelType.new('Gas').valueName] = gas.get
       else
@@ -790,13 +790,13 @@ module OpenstudioStandards
       district_cooling_charge = 0.0
 
       district_cooling_rate_query = "SELECT value FROM tabulardatawithstrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-3. Energy Type Summary' AND RowName='District Cooling' AND ColumnName='Utility Rate'"
-      district_cooling_rate_name = sql_file.execAndReturnFirstString(district_cooling_rate_query)
+      district_cooling_rate_name = sql_file_create_qaqc_results_vector.execAndReturnFirstString(district_cooling_rate_query)
       if district_cooling_rate_name.is_initialized
         district_cooling_rate_name = district_cooling_rate_name.get.strip
 
         # district_cooling_charge
         district_cooling_charge_query = "SELECT value FROM tabulardatawithstrings WHERE ReportName='Tariff Report' AND ReportForString='#{district_cooling_rate_name}' AND TableName='Categories' AND RowName='Basis (~~$~~)' AND ColumnName='Sum'"
-        val = sql_file.execAndReturnFirstDouble(district_cooling_charge_query)
+        val = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(district_cooling_charge_query)
         if val.is_initialized
           district_cooling_charge = val.get
         end
@@ -808,13 +808,13 @@ module OpenstudioStandards
       district_heating_charge = 0.0
 
       district_heating_rate_query = "SELECT value FROM tabulardatawithstrings WHERE ReportName='LEEDsummary' AND ReportForString='Entire Facility' AND TableName='EAp2-3. Energy Type Summary' AND RowName='District Heating' AND ColumnName='Utility Rate'"
-      district_heating_rate_name = sql_file.execAndReturnFirstString(district_heating_rate_query)
+      district_heating_rate_name = sql_file_create_qaqc_results_vector.execAndReturnFirstString(district_heating_rate_query)
       if district_heating_rate_name.is_initialized
         district_heating_rate_name = district_heating_rate_name.get.strip
 
         # district_heating_charge
         district_heating_charge_query = "SELECT value FROM tabulardatawithstrings WHERE ReportName='Tariff Report' AND ReportForString='#{district_heating_rate_name}' AND TableName='Categories' AND RowName='Basis (~~$~~)' AND ColumnName='Sum'"
-        val = sql_file.execAndReturnFirstDouble(district_heating_charge_query)
+        val = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(district_heating_charge_query)
         if val.is_initialized
           district_heating_charge = val.get
         end
@@ -823,7 +823,7 @@ module OpenstudioStandards
       annual_utility_cost_map[OpenStudio::EndUseFuelType.new('DistrictHeating').valueName] = district_heating_charge
 
       # water
-      water = sql_file.annualTotalCost(OpenStudio::FuelType.new('Water'))
+      water = sql_file_create_qaqc_results_vector.annualTotalCost(OpenStudio::FuelType.new('Water'))
       if water.is_initialized
         annual_utility_cost_map[OpenStudio::EndUseFuelType.new('Water').valueName] = water.get
       else
@@ -832,7 +832,7 @@ module OpenstudioStandards
 
       # total
       total_query = "SELECT Value from tabulardatawithstrings where (reportname = 'Economics Results Summary Report') and (ReportForString = 'Entire Facility') and (TableName = 'Annual Cost') and (ColumnName ='Total') and (((RowName = 'Cost') and (Units = '~~$~~')) or (RowName = 'Cost (~~$~~)'))"
-      total = sql_file.execAndReturnFirstDouble(total_query)
+      total = sql_file_create_qaqc_results_vector.execAndReturnFirstDouble(total_query)
 
       # other_energy
       # Subtract off the already accounted for fuel types from the total
@@ -877,8 +877,8 @@ module OpenstudioStandards
       end
 
       # only attempt to get monthly data if enduses table is available
-      if sql_file.endUses.is_initialized
-        end_uses_table = sql_file.endUses.get
+      if sql_file_create_qaqc_results_vector.endUses.is_initialized
+        end_uses_table = sql_file_create_qaqc_results_vector.endUses.get
         # loop through all the fuel types
         end_use_fuel_types.each do |end_use_fuel_type|
           # get the annual total cost for this fuel type
@@ -941,7 +941,7 @@ module OpenstudioStandards
           # in each end use, loop through months and get monthly enedy consumption
           months.each_with_index do |month, i|
             mon_energy_cons = 0.0
-            val = sql_file.energyConsumptionByMonth(end_use_fuel_type, end_use_cat, month)
+            val = sql_file_create_qaqc_results_vector.energyConsumptionByMonth(end_use_fuel_type, end_use_cat, month)
             if val.is_initialized
               monthly_consumption_j = OpenStudio::Quantity.new(val.get, joule_unit)
               monthly_consumption_gj = OpenStudio.convert(monthly_consumption_j, gigajoule_unit).get.value
@@ -984,7 +984,7 @@ module OpenstudioStandards
           # in each end use, loop through months and get monthly enedy consumption
           months.each_with_index do |month, month_index|
             mon_peak_demand = 0.0
-            val = sql_file.peakEnergyDemandByMonth(end_use_fuel_type, end_use_cat, month)
+            val = sql_file_create_qaqc_results_vector.peakEnergyDemandByMonth(end_use_fuel_type, end_use_cat, month)
             if val.is_initialized
               mon_peak_demand_w = OpenStudio::Quantity.new(val.get, watt_unit)
               mon_peak_demand = OpenStudio.convert(mon_peak_demand_w, kilowatt_unit).get.value
