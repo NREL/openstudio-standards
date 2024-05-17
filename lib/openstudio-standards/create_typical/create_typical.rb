@@ -144,7 +144,7 @@ module OpenstudioStandards
 
         # check that weekday start time plus duration does not exceed 24 hrs
         if (wkdy_op_hrs_start_time_hr + wkdy_op_hrs_duration_hr + (wkdy_op_hrs_start_time_min + wkdy_op_hrs_duration_min) / 60.0) > 24.0
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Weekday start time of #{wkdy_op_hrs_start} plus duration of #{wkdy_op_hrs_duration} is more than 24 hrs, hours of operation overlap midnight.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Weekday start time of #{wkdy_op_hrs_start_time} plus duration of #{wkdy_op_hrs_duration} is more than 24 hrs, hours of operation overlap midnight.")
         end
       end
 

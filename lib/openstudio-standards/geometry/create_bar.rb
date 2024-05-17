@@ -190,7 +190,7 @@ module OpenstudioStandards
       building_overhang_area_w = 0.0
 
       # loop through stories based on mine z height of surfaces.
-      sorted_stories = sort_building_stories_and_get_min_multiplier(model).sort_by { |k, v| v }
+      sorted_stories = OpenstudioStandards::Geometry.model_sort_building_stories_and_get_min_multiplier(model).sort_by { |k, v| v }
       sorted_stories.each do |story, story_min_z|
         story_min_multiplier = nil
         story_footprint = nil
@@ -365,10 +365,10 @@ module OpenstudioStandards
         end
       end
 
-      envelope_data_hash[:building_overhang_proj_factor_n] = building_overhang_area_n / ext_surfaces_hash['northWindow']
-      envelope_data_hash[:building_overhang_proj_factor_s] = building_overhang_area_s / ext_surfaces_hash['southWindow']
-      envelope_data_hash[:building_overhang_proj_factor_e] = building_overhang_area_e / ext_surfaces_hash['eastWindow']
-      envelope_data_hash[:building_overhang_proj_factor_w] = building_overhang_area_w / ext_surfaces_hash['westWindow']
+      envelope_data_hash[:building_overhang_proj_factor_n] = building_overhang_area_n / ext_surfaces_hash['north_window']
+      envelope_data_hash[:building_overhang_proj_factor_s] = building_overhang_area_s / ext_surfaces_hash['south_window']
+      envelope_data_hash[:building_overhang_proj_factor_e] = building_overhang_area_e / ext_surfaces_hash['east_window']
+      envelope_data_hash[:building_overhang_proj_factor_w] = building_overhang_area_w / ext_surfaces_hash['west_window']
 
       # warn for spaces that are not on a story (in future could infer stories for these)
       model.getSpaces.sort.each do |space|
@@ -390,7 +390,7 @@ module OpenstudioStandards
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
       bounding_area = bounding_length * bounding_width
-      footprint_area = envelope_data_hash[:building_floor_area] / envelope_data_hash[:effective_num_stories].to_f
+      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
       area_multiplier = footprint_area / bounding_area
       edge_multiplier = Math.sqrt(area_multiplier)
       bar[:length] = bounding_length * edge_multiplier
@@ -408,7 +408,7 @@ module OpenstudioStandards
 
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
-      footprint_area = envelope_data_hash[:building_floor_area] / envelope_data_hash[:effective_num_stories].to_f
+      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
 
       if bounding_length >= bounding_width
         bar[:length] = bounding_length
@@ -430,7 +430,7 @@ module OpenstudioStandards
 
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
-      a = envelope_data_hash[:building_floor_area] / envelope_data_hash[:effective_num_stories].to_f
+      a = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
       p = envelope_data_hash[:building_perimeter]
 
       if bounding_length >= bounding_width
