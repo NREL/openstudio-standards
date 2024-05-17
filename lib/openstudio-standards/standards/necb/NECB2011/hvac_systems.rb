@@ -385,7 +385,7 @@ class NECB2011
     heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(erv_info['LatentEffectivenessat100HeatingAirFlow'])
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(erv_info['SensibleEffectivenessat100CoolingAirFlow'])
     heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(erv_info['LatentEffectivenessat100CoolingAirFlow'])
-    if model.version < OpenStudio::VersionString.new('3.8.0')
+    if heat_exchanger_air_to_air_sensible_and_latent.model.version < OpenStudio::VersionString.new('3.8.0')
       heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow'])

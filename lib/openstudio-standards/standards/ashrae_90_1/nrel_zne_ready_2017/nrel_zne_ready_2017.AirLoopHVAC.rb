@@ -812,7 +812,7 @@ class NRELZNEReady2017 < ASHRAE901
         erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
         erv.setSensibleEffectivenessat75HeatingAirFlow(0.887)
         erv.setSensibleEffectivenessat75CoolingAirFlow(0.887)
-        if model.version < OpenStudio::VersionString.new('3.8.0')
+        if erv.model.version < OpenStudio::VersionString.new('3.8.0')
           erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
           erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
         end
@@ -834,7 +834,7 @@ class NRELZNEReady2017 < ASHRAE901
         erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
         erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
         erv.setSensibleEffectivenessat75CoolingAirFlow(0.78)
-        if model.version < OpenStudio::VersionString.new('3.8.0')
+        if erv.model.version < OpenStudio::VersionString.new('3.8.0')
           erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
           erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
         end
