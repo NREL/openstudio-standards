@@ -97,7 +97,7 @@ module OpenstudioStandards
       length_yrs_query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='Life-Cycle Cost Report' AND ReportForString='Entire Facility' AND TableName='Life-Cycle Cost Parameters' AND RowName='Length of Study Period in Years' AND ColumnName='Value'"
       length_yrs = sql_file.execAndReturnFirstInt(length_yrs_query)
       if length_yrs.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, "Analysis length = #{length_yrs.get} yrs")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.QAQC', "Analysis length = #{length_yrs.get} yrs")
         length_yrs = length_yrs.get
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.QAQC', 'Could not determine analysis length')
@@ -244,7 +244,7 @@ module OpenstudioStandards
       fuel_type_map = {
         OpenStudio::EndUseFuelType.new('Electricity').value => OpenStudio::FuelType.new('Electricity'),
         OpenStudio::EndUseFuelType.new('Gas').value => OpenStudio::FuelType.new('Gas'),
-        OpenStudio::EndUseFuelType.new('AdditionalFuel').value => OpenStudio::FuelType.new('Diesel'), # TODO: add other fuel types
+        OpenStudio::EndUseFuelType.new('Diesel').value => OpenStudio::FuelType.new('Diesel'),
         OpenStudio::EndUseFuelType.new('DistrictCooling').value => OpenStudio::FuelType.new('DistrictCooling'),
         OpenStudio::EndUseFuelType.new('DistrictHeating').value => OpenStudio::FuelType.new('DistrictHeating'),
         OpenStudio::EndUseFuelType.new('Water').value => OpenStudio::FuelType.new('Water')
@@ -254,7 +254,7 @@ module OpenstudioStandards
       fuel_type_alias_map = {
         OpenStudio::EndUseFuelType.new('Electricity').value => 'electricity',
         OpenStudio::EndUseFuelType.new('Gas').value => 'gas',
-        OpenStudio::EndUseFuelType.new('AdditionalFuel').value => 'other_energy',
+        OpenStudio::EndUseFuelType.new('OtherFuel_1').value => 'other_energy',
         OpenStudio::EndUseFuelType.new('DistrictCooling').value => 'district_cooling',
         OpenStudio::EndUseFuelType.new('DistrictHeating').value => 'district_heating',
         OpenStudio::EndUseFuelType.new('Water').value => 'water'
@@ -815,16 +815,16 @@ module OpenstudioStandards
       end
       if total.is_initialized
         other_val = total.get - prev_tot
-        annual_utility_cost_map[OpenStudio::EndUseFuelType.new('AdditionalFuel').valueName] = other_val
+        annual_utility_cost_map[OpenStudio::EndUseFuelType.new('OtherFuel_1').valueName] = other_val
       else
-        annual_utility_cost_map[OpenStudio::EndUseFuelType.new('AdditionalFuel').valueName] = 0.0
+        annual_utility_cost_map[OpenStudio::EndUseFuelType.new('OtherFuel_1').valueName] = 0.0
       end
 
       # export remaining costs in the correct order
       # gas
       utility_cost_elems << OpenStudio::Attribute.new('gas', annual_utility_cost_map[OpenStudio::EndUseFuelType.new('Gas').valueName], 'dollars')
       # other_energy
-      utility_cost_elems << OpenStudio::Attribute.new('other_energy', annual_utility_cost_map[OpenStudio::EndUseFuelType.new('AdditionalFuel').valueName], 'dollars')
+      utility_cost_elems << OpenStudio::Attribute.new('other_energy', annual_utility_cost_map[OpenStudio::EndUseFuelType.new('OtherFuel_1').valueName], 'dollars')
       # district_cooling
       utility_cost_elems << OpenStudio::Attribute.new('district_cooling', annual_utility_cost_map[OpenStudio::EndUseFuelType.new('DistrictCooling').valueName], 'dollars')
       # district_heating
@@ -854,7 +854,7 @@ module OpenstudioStandards
         # loop through all the fuel types
         end_use_fuel_types.each do |end_use_fuel_type|
           # get the annual total cost for this fuel type
-          ann_cost = annual_utility_cost_map[end_use_fuel_type.valueName]
+          ann_cost = annual_utility_cost_map[end_use_fuel_type.valueName] # todo figure out why nill for Gasoline, causes error few lines below
           # get the total annual usage for this fuel type in all end use categories
           # loop through all end uses, adding the annual usage value to the aggregator
           ann_usg = 0.0
