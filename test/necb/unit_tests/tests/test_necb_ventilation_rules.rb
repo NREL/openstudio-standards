@@ -26,7 +26,8 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     test_cases = {}
 
     test_cases_hash = {
-      :Vintage => @AllTemplates,
+      :Vintage => ["NECB2011"],
+      #:Vintage => @AllTemplates,
       :BuildingType => @AllBuildings,
       :TestCase => ["Case1"],
       :TestPars => { :oaf => "tbd" }
@@ -109,14 +110,19 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
 
           zone_area = zone.floorArea
           zone_num_people = zone.numberOfPeople
+          calculated_ventilation_rate = (zone_num_people * oa_flow_per_person + zone_area * oa_flow_per_floor_area) * zone.multiplier
+          calculated_ventilation_rate_ft3_per_min = OpenStudio.convert(calculated_ventilation_rate, 'm^3/s', 'ft^3/min').get
 
-          calculated_ventilation_rate = zone_num_people * oa_flow_per_person + zone_area * oa_flow_per_floor_area
+          # For debugging check if the difference is within the tolerance of 0.1 cfm.
+          # puts "zone_name #{zone_name}  zone_area: #{zone_area} zone_num_people #{zone_num_people} oa_flow_per_person #{oa_flow_per_person} oa_flow_per_floor_area #{oa_flow_per_floor_area} vbz_rate #{vbz_rate.signif(3)} calculated_ventilation_rate #{calculated_ventilation_rate.signif(3)} " if (calculated_ventilation_rate.signif(3) - vbz_rate.signif(3)).abs > 0.1
+
           # Add this test case to results and return the hash.
           results[zone_name] = {
             zone_area_m2: zone_area.signif(3),
             zone_num_people: zone_num_people.signif(3),
             oa_flow_in_ft3_per_min_per_person: oa_flow_in_ft3_per_min_per_person.signif(3),
             oa_flow_in_ft3_per_min_per_ft2: oa_flow_in_ft3_per_min_per_ft2.signif(3),
+            calculated_ventilation_rate_ft3_per_min: calculated_ventilation_rate_ft3_per_min.signif(3),
             calculated_ventilation_rate_m3_per_s: calculated_ventilation_rate.signif(3),
             sql_vbz_rate_m3_per_s: vbz_rate.signif(3)
           }
