@@ -250,10 +250,10 @@ class NECB2011
           oa_flow_air_changes = 0.0
 
           # Assign values conditionally
-          outdoorAirFlowRate = outdoor_air.outdoorAirFlowRate if outdoor_air.outdoorAirFlowRate > 0.0
-          oa_flow_per_floor_area = outdoor_air.outdoorAirFlowperFloorArea * space.floorArea if outdoor_air.outdoorAirFlowperFloorArea > 0.0
-          oa_flow_per_person = outdoor_air.outdoorAirFlowperPerson * space.numberOfPeople if outdoor_air.outdoorAirFlowperPerson > 0.0
-          oa_flow_ach = outdoor_air.outdoorAirFlowAirChangesperHour if outdoor_air.outdoorAirFlowAirChangesperHour > 0.0
+          outdoorAirFlowRate = outdoor_air.outdoorAirFlowRate * zone.multiplier if outdoor_air.outdoorAirFlowRate > 0.0
+          oa_flow_per_floor_area = outdoor_air.outdoorAirFlowperFloorArea * space.floorArea * zone.multiplier if outdoor_air.outdoorAirFlowperFloorArea > 0.0
+          oa_flow_per_person = outdoor_air.outdoorAirFlowperPerson * space.numberOfPeople * zone.multiplier if outdoor_air.outdoorAirFlowperPerson > 0.0
+          oa_flow_ach = outdoor_air.outdoorAirFlowAirChangesperHour * zone.multiplier if outdoor_air.outdoorAirFlowAirChangesperHour > 0.0
           oa_flow_air_changes = oa_flow_ach * space.volume / 3600.0
 
           # Calculate outdoor air flow based on method
