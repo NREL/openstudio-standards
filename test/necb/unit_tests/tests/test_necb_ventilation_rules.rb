@@ -26,8 +26,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     test_cases = {}
 
     test_cases_hash = {
-      :Vintage => ["NECB2011"],
-      #:Vintage => @AllTemplates,
+      :Vintage => @AllTemplates,
       :BuildingType => @AllBuildings,
       :TestCase => ["Case1"],
       :TestPars => { :oaf => "tbd" }
@@ -44,10 +43,10 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     File.write(test_result_file, JSON.pretty_generate(test_results))
     # Read expected results.
     file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
-    # expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
+    expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
     # Check if test results match expected.
-    # msg = "Ventilation test results do not match what is expected in test"
-    # compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
+    msg = "Ventilation test results do not match what is expected in test"
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
   end
 
@@ -69,6 +68,10 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     name_short = "#{vintage}_#{building_type}_ventilation"
     output_folder = method_output_folder("#{test_name}/#{name_short}/")
     logger.info "Starting individual test: #{name}"
+	
+	# Create a directory to save a text file listing all the failed cases
+    failed_model_dir = File.join(@top_output_folder, test_name.to_s)
+    Dir.mkdir(failed_model_dir) unless Dir.exist?(failed_model_dir)
     # Wrap test in begin/rescue/ensure.
     begin
       epw_file = "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw"
@@ -78,9 +81,14 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
                                                     epw_file: epw_file,
                                                     primary_heating_fuel: fueltype,
                                                     sizing_run_dir: output_folder)
-
-    rescue => error
+													
+    rescue StandardError => error
+     # Create a txt file to indicate the buildings with failed model creation.
+      File.open(File.join(failed_model_dir, 'model_creation_failed.txt'), 'a') do |file|
+        file.write("Model creation failed for #{vintage} #{building_type}\n")
+      end
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      return {}
     end
 
     # Extract the results for checking.
@@ -114,8 +122,8 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
           calculated_ventilation_rate_ft3_per_min = OpenStudio.convert(calculated_ventilation_rate, 'm^3/s', 'ft^3/min').get
 
           # For debugging check if the difference is within the tolerance of 0.1 cfm.
-          # puts "zone_name #{zone_name}  zone_area: #{zone_area} zone_num_people #{zone_num_people} oa_flow_per_person #{oa_flow_per_person} oa_flow_per_floor_area #{oa_flow_per_floor_area} vbz_rate #{vbz_rate.signif(3)} calculated_ventilation_rate #{calculated_ventilation_rate.signif(3)} " if (calculated_ventilation_rate.signif(3) - vbz_rate.signif(3)).abs > 0.1
-
+          File.open(File.join(failed_model_dir, 'ventilation_rate_error.txt'), 'a') { |file| file.write("Ventilation rate error for #{zone_name} calculated_ventilation_rate: #{calculated_ventilation_rate.signif(3)} vbz_rate: #{vbz_rate.signif(3)}") } if (calculated_ventilation_rate.signif(3) - vbz_rate.signif(3)).abs > 0.1
+         
           # Add this test case to results and return the hash.
           results[zone_name] = {
             zone_area_m2: zone_area.signif(3),
@@ -130,7 +138,6 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
       end
     end
     logger.info "Completed individual test: #{name}"
-    # end
     return results
   end
 end
