@@ -1,14 +1,13 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
 require_relative '../../../helpers/compare_models_helper'
-require_relative '../resources/regression_helper'
+require_relative '../resources/generalized_regression_tester'
 
-class Test_FullServiceRestaurant_NECB2011_Electricity < NECBRegressionHelper
+class Test_FullServiceRestaurant_NECB2011_Electricity < GeneralizedRegressionHelper
 def setup()
 super()
 end
 def test_NECB2011_FullServiceRestaurant_regression_Electricity()
-result, diff = create_model_and_regression_test(building_type: 'FullServiceRestaurant',primary_heating_fuel: 'Electricity', epw_file:  'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw',template: 'NECB2011', run_simulation: false)
+result, diff = create_model_and_regression_tests(building_type: 'FullServiceRestaurant', primary_heating_fuel: 'Electricity', epw_file: 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw', template: 'NECB2011', run_simulation: false)
 if result == false
 puts "JSON terse listing of diff-errors."
 puts diff
