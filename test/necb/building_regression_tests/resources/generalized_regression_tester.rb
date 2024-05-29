@@ -33,8 +33,7 @@ class GeneralizedRegressionHelper < NECBRegressionHelper
     # These will take precedence over the previously defined parameters if there are any
     @param_groups =
     {
-      # TODO For now this is sample input, should take a hash of this format as argument
-      # TODO somewhere
+      # TODO These should be taken from a test class
       template:
         [
           "NECB2011",
@@ -54,33 +53,11 @@ class GeneralizedRegressionHelper < NECBRegressionHelper
     }
   end
 
-  def create_model_and_regression_tests(
-    building_type:           @building_type,
-    epw_file:                @epw_file,
-    template:                @template,
-    test_dir:                @test_dir,
-    expected_results_folder: @expected_results_folder,
-    run_simulation:          @run_simulation,
-    primary_heating_fuel:    @primary_heating_fuel,
-    reference_hp:            @reference_hp
-  )
-    @building_type           = building_type
-    @epw_file                = epw_file
-    @template                = template
-    @test_dir                = test_dir
-    @expected_results_folder = expected_results_folder
-    @primary_heating_fuel    = primary_heating_fuel
-    @reference_hp            = reference_hp
+  # TODO These should be taken from a test class
 
-    # Create a model of the input model
-    # TODO Should the input model support more than just these variables?
-    self.create_model(
-      building_type:         @building_type,
-      epw_file:              @epw_file,
-      template:              @template,
-      test_dir:              @test_dir,
-      primary_heating_fuel:  @primary_heating_fuel
-    )
+  # TODO Each combination should be its own test
+
+  def create_model_and_regression_tests(params: @params)
 
     # Create all the combinations for each vintage
     # Merge the default parameters with the param_groups
