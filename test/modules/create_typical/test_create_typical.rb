@@ -3,6 +3,7 @@ require_relative '../../helpers/minitest_helper'
 class TestCreateTypical < Minitest::Test
   def setup
     @create = OpenstudioStandards::CreateTypical
+    FileUtils.mkdir "#{__dir__}/output" unless Dir.exist? "#{__dir__}/output"
   end
 
   def test_create_typical_building_from_model
@@ -14,7 +15,29 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output"
+    output_dir = "#{__dir__}/output/test_create_typical_building_from_model"
+    FileUtils.mkdir output_dir unless Dir.exist? output_dir
+
+    # apply create typical
+    starting_size = model.getModelObjects.size
+    result = @create.create_typical_building_from_model(model, template,
+                                                        climate_zone: climate_zone,
+                                                        sizing_run_directory: output_dir)
+    ending_size = model.getModelObjects.size
+    assert(result)
+    assert(starting_size < ending_size)
+  end
+
+  def test_create_typical_deer_building_from_model
+    # load model and set up weather file
+    template = 'DEER Pre-1975'
+    climate_zone = 'CEC T24-CEC3'
+    std = Standard.build(template)
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/DEER_ESe.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+
+    # set output directory
+    output_dir = "#{__dir__}/output/test_create_typical_deer_building_from_model"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -52,7 +75,7 @@ class TestCreateTypical < Minitest::Test
     hvac_mapping_hash = JSON.parse(hvac_zone_json)
 
     # set output directory
-    output_dir = "#{__dir__}/output"
+    output_dir = "#{__dir__}/output/test_create_typical_building_from_model_with_hvac_mapping"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical with zone mapping
@@ -70,5 +93,34 @@ class TestCreateTypical < Minitest::Test
     assert(starting_size < ending_size)
     assert(ptacs.length==4)
     assert(psz_ac.length==1)
+  end
+
+  def test_create_typical_ese_op_hrs_overnight
+    # load model and set up weather file
+    template = 'DEER Pre-1975'
+    climate_zone = 'CEC T24-CEC3'
+    std = Standard.build(template)
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/DEER_ESe.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+
+    # set output directory
+    output_dir = "#{__dir__}/output/test_create_typical_ese_op_hrs_overnight"
+    FileUtils.mkdir output_dir unless Dir.exist? output_dir
+
+    # apply create typical
+    starting_size = model.getModelObjects.size
+    result = @create.create_typical_building_from_model(model,
+                                                        template,
+                                                        climate_zone: climate_zone,
+                                                        modify_wkdy_op_hrs: true,
+                                                        wkdy_op_hrs_start_time: 12.50,
+                                                        wkdy_op_hrs_duration: 13.0,
+                                                        modify_wknd_op_hrs: true,
+                                                        wknd_op_hrs_start_time: 8.00,
+                                                        wknd_op_hrs_duration: 6.00,
+                                                        sizing_run_directory: output_dir)
+    ending_size = model.getModelObjects.size
+    assert(result)
+    assert(starting_size < ending_size)
   end
 end

@@ -320,7 +320,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
       building_type = 'FullServiceRestaurant' # Does not use this...
       climate_zone = 'NECB HDD Method'
 
-      if !Dir.exists?(sizing_dir)
+      if !Dir.exist?(sizing_dir)
         FileUtils.mkdir_p(sizing_dir)
       end
       # Perform a sizing run
@@ -470,7 +470,7 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -617,7 +617,7 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -760,7 +760,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -902,7 +902,7 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -1058,7 +1058,7 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -1390,7 +1390,7 @@ class Test$(building_type) < CreateDOEPrototypeBuildingTest
 
 
     run_dir = "#{@test_dir}/#{model_name}"
-    if !Dir.exists?(run_dir)
+    if !Dir.exist?(run_dir)
       Dir.mkdir(run_dir)
     end
     full_sim_dir = "#{run_dir}/AnnualRun"

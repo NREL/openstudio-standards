@@ -112,7 +112,7 @@ class BTAPDatapoint
         epw_file = @options[:epw_file]
         epw_dir = nil
         local_epw_file_path = File.join(input_folder_cache,@options[:epw_file])
-        epw_dir = input_folder_cache if File.exists? local_epw_file_path
+        epw_dir = input_folder_cache if File.exist? local_epw_file_path
         weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
         OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       else

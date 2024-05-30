@@ -60,10 +60,10 @@ class NECBRegressionHelper < Minitest::Test
 
     @run_dir = "#{test_dir}/#{@model_name}"
     #create folders
-    if !Dir.exists?(test_dir)
+    if !Dir.exist?(test_dir)
       Dir.mkdir(test_dir)
     end
-    if !Dir.exists?(@run_dir)
+    if !Dir.exist?(@run_dir)
       Dir.mkdir(@run_dir)
     end
     puts "========================model_name =================== #{@model_name}"
@@ -114,7 +114,7 @@ class NECBRegressionHelper < Minitest::Test
     end
     #Write out diff or error message
     diff_file = "#{expected_results_folder}#{@model_name}_diffs.json"
-    FileUtils.rm(diff_file) if File.exists?(diff_file)
+    FileUtils.rm(diff_file) if File.exist?(diff_file)
     if diffs.size > 0
       File.write(diff_file, JSON.pretty_generate(diffs))
       puts "There were #{diffs.size} differences/errors in #{expected_osm_file} #{@template} #{@epw_file}"
