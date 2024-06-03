@@ -23,7 +23,7 @@ class NECBRegressionHelper < Minitest::Test
                                        test_dir: @test_dir,
                                        expected_results_folder: @expected_results_folder,
                                        run_simulation: @run_simulation,
-                                       primary_heating_fuel: @primary_heating_fuel,
+                                       primary_heating_fuel: @primary_heating_fuel
   )
     @epw_file = epw_file
     @template = template
