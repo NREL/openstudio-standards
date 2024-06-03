@@ -407,9 +407,11 @@ class Standard
       # make the correct type of chiller based these properties
       chiller_sizing_factor = (1.0 / chiller_name_list.length).round(2)
 
+      # Create chillers and set plant operation scheme
       chiller_name_list.each do |chiller_name|
+        chiller_name = "#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_name}"
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
-        chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_name}")
+        chiller.setName(chiller_name)
         chilled_water_loop.addSupplyBranchForComponent(chiller)
         dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
         chiller.setReferenceLeavingChilledWaterTemperature(dsgn_sup_wtr_temp_c)

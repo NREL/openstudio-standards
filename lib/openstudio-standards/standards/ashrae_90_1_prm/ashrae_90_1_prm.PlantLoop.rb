@@ -334,6 +334,98 @@ class ASHRAE901PRM < Standard
       add_ems_program_for_2_pump_chiller_plant(model, sorted_chiller_list, primary_plant)
     end
 
+    # Update chilled water loop operation scheme to work with updated EMS ranges
+    stage_chilled_water_loop_operation_schemes(model, primary_plant)
+
+  end
+
+  def stage_chilled_water_loop_operation_schemes(model, chilled_water_loop)
+
+    # Initialize array of cooling plant systems
+    chillers = []
+
+    # Gets all associated chillers from the supply side and adds them to the chillers list
+    chilled_water_loop.supplyComponents(OpenStudio::Model::ChillerElectricEIR.iddObjectType).each do |chiller|
+      chillers << chiller.to_ChillerElectricEIR.get
+    end
+
+    # Skip those without chillers or only 1 (i.e., nothing to stage)
+    return if chillers.empty?
+    return if chillers.length == 1
+
+    # Sort chillers by capacity
+    sorted_chillers = chillers.sort_by { |chiller| chiller.referenceCapacity.get }
+
+    primary_chiller = sorted_chillers[0]
+    secondary_1_chiller = sorted_chillers[1]
+    secondary_2_chiller = sorted_chillers[2] if chillers.length == 3
+
+    equip_operation_cool_load = OpenStudio::Model::PlantEquipmentOperationCoolingLoad.new(model)
+
+    # Calculate load ranges into the PlantEquipmentOperation:CoolingLoad
+    loading_factor = 0.8
+    # # when the capacity of primary chiller is larger than the capacity of secondary chiller - the loading factor
+    # # will need to be adjusted to avoid load range intersect.
+    # if secondary_1_chiller.referenceCapacity.get <= primary_chiller.referenceCapacity.get * loading_factor
+    #   # Adjustment_factor can creates a bandwidth for step 2 staging strategy.
+    #   # set adjustment_factor = 1.0 means the step 2 staging strategy is skipped
+    #   adjustment_factor = 1.0
+    #   loading_factor = secondary_1_chiller.referenceCapacity.get / primary_chiller.referenceCapacity.get * adjustment_factor
+    # end
+
+    if chillers.length == 3
+
+      # Add four ranges for small, medium, and large chiller capacities
+      # 1: 0 W -> 80% of smallest chiller capacity
+      # 2: 80% of primary chiller -> medium size chiller capacity
+      # 3: medium chiller capacity -> medium + large chiller capacity
+      # 4: medium + large chiller capacity -> infinity
+      # Control strategy first stage
+      equipment_list = [primary_chiller]
+      range = primary_chiller.referenceCapacity.get * loading_factor
+      equip_operation_cool_load.addLoadRange(range, equipment_list)
+
+      # Control strategy second stage
+      equipment_list = [secondary_1_chiller]
+      range = secondary_1_chiller.referenceCapacity.get
+      equip_operation_cool_load.addLoadRange(range, equipment_list)
+
+      # Control strategy third stage
+      equipment_list = [secondary_1_chiller, secondary_2_chiller]
+      range = secondary_1_chiller.referenceCapacity.get + secondary_2_chiller.referenceCapacity.get
+      equip_operation_cool_load.addLoadRange(range, equipment_list)
+
+      equipment_list = [primary_chiller, secondary_1_chiller, secondary_2_chiller]
+      range = 999999999
+      equip_operation_cool_load.addLoadRange(range, equipment_list)
+
+    elsif chillers.length == 2
+
+      # Add three ranges for primary and secondary chiller capacities
+      # 1: 0 W -> 80% of smallest chiller capacity
+      # 2: 80% of primary chiller -> secondary chiller capacity
+      # 3: secondary chiller capacity -> infinity
+      # Control strategy first stage
+      equipment_list = [primary_chiller]
+      range = primary_chiller.referenceCapacity.get * loading_factor
+      equip_operation_cool_load.addLoadRange(range, equipment_list)
+
+      # Control strategy second stage
+      equipment_list = [secondary_1_chiller]
+      range = secondary_1_chiller.referenceCapacity.get
+      equip_operation_cool_load.addLoadRange(range, equipment_list)
+
+      # Control strategy third stage
+      equipment_list = [primary_chiller, secondary_1_chiller]
+      range = 999999999
+      equip_operation_cool_load.addLoadRange(range, equipment_list)
+
+    else
+      raise "Failed to stage chillers, #{chillers.length} chillers found in the loop.Logic for staging chillers has only been done for either 2 or 3 chillers"
+    end
+
+    chilled_water_loop.setPlantEquipmentOperationCoolingLoad(equip_operation_cool_load)
+
   end
 
   # Adds EMS program for pumps serving 2 chillers on primary + secondary loop. This was due to an issue when modeling two
@@ -369,7 +461,7 @@ class ASHRAE901PRM < Standard
     ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = 1,  !- A10')
     ems_pump_program.addLine('SET CHILLER_PUMP_1_FLOW = 0,  !- A11')
     ems_pump_program.addLine('SET CHILLER_PUMP_2_FLOW = CHILLER_PUMP_2_DES_FLOW,  !- A12')
-    ems_pump_program.addLine("ELSEIF #{chw_demand} > #{capacity_small_chiller + capacity_large_chiller},  !- A13")
+    ems_pump_program.addLine("ELSEIF #{chw_demand} > #{capacity_large_chiller},  !- A13")
     ems_pump_program.addLine('SET CHILLER_PUMP_1_STATUS = 1,  !- A14')
     ems_pump_program.addLine('SET CHILLER_PUMP_2_STATUS = 1,  !- A15')
     ems_pump_program.addLine('SET CHILLER_PUMP_1_FLOW = CHILLER_PUMP_1_DES_FLOW,  !- A16')
