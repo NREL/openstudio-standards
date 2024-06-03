@@ -2,6 +2,8 @@ class ACM179dASHRAE9012007
   # @!group PlantLoop
 
   # Applies the chilled water pumping controls to the loop based on Appendix G.
+  # NOTE: 179D overrides it only because there is a bug related to control_type for Headered Pumps
+  # Backports: https://github.com/NREL/openstudio-standards/pull/1749
   #
   # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
   # @return [Bool] returns true if successful, false if not
@@ -55,7 +57,7 @@ class ACM179dASHRAE9012007
         pump_variable_speed_set_control_type(pump, pri_control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, pri_control_type)
+        headered_pump_variable_speed_set_control_type(pump, pri_control_type) # NOTE: fix here
       end
     end
 
@@ -66,11 +68,10 @@ class ACM179dASHRAE9012007
         pump_variable_speed_set_control_type(pump, sec_control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, pri_control_type)
+        headered_pump_variable_speed_set_control_type(pump, pri_control_type) # NOTE: fix here
       end
     end
 
     return true
   end
-
 end
