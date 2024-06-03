@@ -34,14 +34,7 @@ def generate_model_name(params)
   template             = params[:template]
   primary_heating_fuel = params[:primary_heating_fuel]
   ecm_system_name      = params[:ecm_system_name]
-
-  # rescue => exception
-  #   err_file = "#{err_folder}#{@model_name}_diffs.json"
-  #   error = "#{exception.backtrace.first}: #{exception.message} (#{exception.class})"
-  #   exception.backtrace.drop(1).map {|s| "\n#{s}"}.each {|bt| error << bt.to_s}
-  #   File.write(err_file, JSON.pretty_generate(error))
-  # end
-
+  
   if !(params.key?(:ecm_system_name))
     return "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw')}"
   else
@@ -75,29 +68,26 @@ class GeneralizedTestCreator < GeneralizedRegressionHelper
       template:
         [
           "NECB2011",
-          # "NECB2015"
-          # "NECB2017",
-          # "NECB2020"
+          "NECB2015",
+          "NECB2017",
+          "NECB2020"
         ],
       primary_heating_fuel:
         [
-          "Bolegda",
           "Electricity",
-          # "NaturalGas",
+          "NaturalGas",
+        ],
+      ecm_system_name:
+        [
+          "HS11_ASHP_PTHP"
         ]
-      # ecm_system_name:
-      #   [
-      #     "HS11_ASHP_PTHP"
-      #   ]
     }
 
   if @json_dir != nil
-    @params = JSON.load(File.open(@json_dir, "r"))
+    @params = JSON.load(File.open(@json_dir, "r")).transform_keys(&:to_sym)
   end
 
   @params = @params_default.merge(@params)
-
-  # p("HERE ARE THE PARAMETERS", @params)
 
   # This is the function that creates each combination of model according to
   # the params function argument
@@ -151,6 +141,7 @@ class GeneralizedTestCreator < GeneralizedRegressionHelper
   # TODO Figure out if this workaround is necessary
   # Defining methods involving external variables seems to only work intuitively with iterators
   model_list.each do |key_model_name, value_model_params|
+
     # Metaprogramming to generate test methods for each combination of parameters
     # Minitest requires each test to be a method starting with "test_"
     define_method("test_#{key_model_name}") do
