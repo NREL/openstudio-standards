@@ -2082,7 +2082,7 @@ class BTAPData
 
     f = File.open(epw_file.path.to_s, "r")
 
-    # Regex which seperates comma-seperated values into a list
+    # Regex which separates comma-seperated values into a list
     regex_csv = /[^,]+/
 
     # Regex which looks for numbers
