@@ -438,10 +438,77 @@ module OpenstudioStandards
     # @param base_humidity_ratio [Double] base humidity ratio, default is 0.010
     # @return [Double] dehumdification degree days
     def self.epw_file_get_dehumidification_degree_days(epw_file, base_humidity_ratio: 0.010)
-      db_temps_c = epw_file.getTimeSeries('Dry Bulb Temperature').get.values
+
+      # ********************* #
+      # *** Leap year fix *** #
+      # ********************* #
+
+      f = File.open(epw_file.path.to_s, "r")
+
+      regex_csv = /[^,\s][^\,]*[^,\s]*/
+      regex_num = /^[-+]?[1-9]([0-9]*)?$/
+
+      leap_years = []
+
+      year = 1980
+      while year < 2024
+        leap_years << year
+        year += 4
+      end
+
+      i = 0
+      while !(f.readline[0] =~ regex_num)
+        i += 1
+      end
+
+      lines = IO.readlines(f)[i..-1]
+      feb   = '2'
+      left  = 0
+      right = (f.read.count("\n") + 1) / 2
+
+      # Binary search to determine an entry containing February
+      while left <= right
+        ptr = (left + right) / 2
+        month = lines[ptr][5]
+        if month < feb
+          left = ptr + 1
+        elsif month > feb
+          right = ptr - 1
+        else
+          break
+        end
+      end
+
+      # If the february month is in a leap year, access the data directly instead of using the OpenStudio API.
+      if true #leap_years.include?(Integer(lines[ptr][0..3]))
+
+        db_temps_c    = lines.map {|line| Float(line.scan(regex_csv)[6])}
+        rh_values     = lines.map {|line| Float(line.scan(regex_csv)[8])}
+        atm_p_values  = lines.map {|line| Float(line.scan(regex_csv)[9])}
+        # db_temps_c   = OpenStudio::Vector.new
+        # lines.map {|line| Float(line.scan(regex_csv)[6])}.each do |value|
+        #   db_temps_c.append(value)
+        # end
+
+        # rh_values    = OpenStudio::Vector.new
+        # lines.map {|line| Float(line.scan(regex_csv)[8])}.each do |value|
+        #   rh_values.append(value)
+        # end
+        # atm_p_values = OpenStudio::Vector.new
+        # lines.map {|line| Float(line.scan(regex_csv)[9])}.each do |value|
+        #   atm_p_values.append(value)
+        # end
+
+      else
+        db_temps_c   = epw_file.getTimeSeries('Dry Bulb Temperature').get.values
+        rh_values    = epw_file.getTimeSeries('Relative Humidity').get.values
+        atm_p_values = epw_file.getTimeSeries('Atmospheric Station Pressure').get.values
+      end
+
+      # ********************* #
+
       db_temps_k = db_temps_c.map { |v| v + 273.15 }
-      rh_values = epw_file.getTimeSeries('Relative Humidity').get.values
-      atm_p_values = epw_file.getTimeSeries('Atmospheric Station Pressure').get.values
+
 
       # coefficients for the calculation of pws (Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS)
       c1 = -5.6745359E+03

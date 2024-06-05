@@ -2075,8 +2075,54 @@ class BTAPData
     dehumidification_degree_days = OpenstudioStandards::Weather.epw_file_get_dehumidification_degree_days(epw_file)
 
     ### annual global horizontal irradiance (GHI)
-    ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get
-    annual_ghi_kwh_per_m_sq = ghi_timeseries.values.sum / 1000.0
+
+    # ********************* #
+    # *** Leap year fix *** #
+    # ********************* #
+
+    f = File.open(epw_file.path.to_s, "r")
+
+    regex_csv = /[^,\s][^\,]*[^,\s]*/
+    regex_num = /^[-+]?[1-9]([0-9]*)?$/
+
+    leap_years = []
+
+    year = 1980
+    while year < 2024
+      leap_years << year
+      year += 4
+    end
+
+    i = 0
+    while !(f.readline[0] =~ regex_num)
+      i += 1
+    end
+
+    lines = IO.readlines(f)[i..-1]
+    feb   = '2'
+    left  = 0
+    right = (f.read.count("\n") + 1) / 2
+
+    # Binary search to determine an entry containing February
+    while left <= right
+      ptr = (left + right) / 2
+      month = lines[ptr][5]
+      if month < feb
+        left = ptr + 1
+      elsif month > feb
+        right = ptr - 1
+      else
+        break
+      end
+    end
+
+    # If the february month is in a leap year, access the data directly instead of using the OpenStudio API.
+    if true #leap_years.include?(Integer(lines[ptr][0..3]))
+      ghi_timeseries = lines.map {|line| Float(line.scan(regex_csv)[13])}
+    else
+      ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get.values
+    end
+    annual_ghi_kwh_per_m_sq = ghi_timeseries.sum / 1000.0
 
     ### THD-1 Temperature at the colder of the two heating design conditions in PHIUS, 2021
     ### ('Heating design temperature' in REF: Wright (2019))
