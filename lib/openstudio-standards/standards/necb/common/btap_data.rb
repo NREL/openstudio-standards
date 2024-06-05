@@ -2088,8 +2088,8 @@ class BTAPData
     leap_years = []
 
     year = 1980
-    while year < 2024
-      leap_years << year
+    while year <= 2024
+      leap_years << String(year)
       year += 4
     end
 
@@ -2100,24 +2100,28 @@ class BTAPData
 
     lines = IO.readlines(f)[i..-1]
     feb   = '2'
-    left  = 0
-    right = (f.read.count("\n") + 1) / 2
 
-    # Binary search to determine an entry containing February
-    while left <= right
-      ptr = (left + right) / 2
-      month = lines[ptr][5]
-      if month < feb
-        left = ptr + 1
-      elsif month > feb
-        right = ptr - 1
-      else
-        break
+    # Find the first day in february
+    leap_index = lines.find_index { |line| line[5] == feb }
+
+    # Determines if the february month has a leap day
+    has_leap_day = false
+
+    # Is the date on a leap year?
+    if leap_years.include?(lines[leap_index][0..3])
+      day = lines[leap_index][7]
+      inc = 0
+
+      while lines[leap_index][7] == day
+        leap_index += 1
+        inc        += 1
       end
+
+      has_leap_day = lines[leap_index + inc * 27][7..8] == '29'
     end
 
-    # If the february month is in a leap year, access the data directly instead of using the OpenStudio API.
-    if true #leap_years.include?(Integer(lines[ptr][0..3]))
+    if !has_leap_day
+      # If the february month is in a leap year, access the data directly instead of using the OpenStudio API.
       ghi_timeseries = lines.map {|line| Float(line.scan(regex_csv)[13])}
     else
       ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get.values
