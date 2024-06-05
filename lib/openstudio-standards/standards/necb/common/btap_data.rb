@@ -2080,15 +2080,8 @@ class BTAPData
     # *** Leap year fix *** #
     # ********************* #
 
-    f = File.open(epw_file.path.to_s, "r")
-
-    # Regex which separates comma-seperated values into a list
-    regex_csv = /[^,]+/
-
-    # Regex which looks for numbers
-    regex_num = /[0-9]/
-
-    leap_years = []
+    leap_years   = []
+    has_leap_day = false
 
     year = 1980
     while year <= 2024
@@ -2096,35 +2089,36 @@ class BTAPData
       year += 4
     end
 
-    i = 0
-    while !(f.readline[0] =~ regex_num)
-      i += 1
-    end
-
-    lines = IO.readlines(f)[i..-1]
-    feb   = '2'
-
     # Find the first day in february
-    leap_index = lines.find_index { |line| line[5] == feb }
+    feb_index = epw_file.data.find_index { |entry| entry.date.monthOfYear.value == 2}
 
-    # Determines if the february month has a leap day
-    has_leap_day = false
+    # Determine if the year representing february is a leap year
+    if leap_years.include?(epw_file.data[feb_index].year)
 
-    # Is the date on a leap year?
-    if leap_years.include?(lines[leap_index][0..3])
-      day = lines[leap_index][7]
+      day = epw_file.data[feb_index].date.dayOfMonth
       inc = 0
 
-      while lines[leap_index][7] == day
-        leap_index += 1
-        inc        += 1
+      while epw_file.data[feb_index].date.dayOfMonth == day
+        feb_index += 1
+        inc       += 1
       end
 
-      has_leap_day = lines[leap_index + inc * 27][7..8] == '29'
+      has_leap_day = epw_file.data[feb_index + inc * 28].date.dayOfMonth == 29
     end
 
     if !has_leap_day
-      # If the february month is in a leap year, access the data directly instead of using the OpenStudio API.
+      # Access the data directly instead of using the OpenStudio API.
+
+      regex_csv = /[^,]+/
+      regex_num = /[0-9]/
+      f         = File.open(epw_file.path.to_s, "r")
+      i         = 0
+
+      until f.readline[0] =~ regex_num
+        i += 1
+      end
+
+      lines         = IO.readlines(f)[i..-1]
       ghi_timeseries = lines.map {|line| Float(line.scan(regex_csv)[13])}
     else
       ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get.values
