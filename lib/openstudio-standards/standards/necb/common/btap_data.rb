@@ -2082,8 +2082,11 @@ class BTAPData
 
     f = File.open(epw_file.path.to_s, "r")
 
-    regex_csv = /[^,\s][^\,]*[^,\s]*/
-    regex_num = /^[-+]?[1-9]([0-9]*)?$/
+    # Regex which seperates comma-seperated values into a list
+    regex_csv = /[^,]+/
+
+    # Regex which looks for numbers
+    regex_num = /[0-9]/
 
     leap_years = []
 
