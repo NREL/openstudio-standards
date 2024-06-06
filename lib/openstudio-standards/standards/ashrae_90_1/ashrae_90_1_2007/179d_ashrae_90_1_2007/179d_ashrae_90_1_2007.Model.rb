@@ -74,7 +74,7 @@ class ACM179dASHRAE9012007
     if remap_retail
       if building_type == 'StripMall'
         return 'RetailStripmall'
-      elsif  building_type == 'Retail'
+      elsif building_type == 'Retail'
         return 'RetailStandalone'
       end
     end
@@ -180,7 +180,7 @@ class ACM179dASHRAE9012007
     search_criteria = {
       'template' => template,
       'building_type' => standards_building_type,
-      'space_type' => whole_building_space_type_name(model, standards_building_type),
+      'space_type' => whole_building_space_type_name(model, standards_building_type)
     }
 
     # lookup space type properties
@@ -197,5 +197,68 @@ class ACM179dASHRAE9012007
     end
 
     return space_type_properties
+  end
+
+  HVAC_AVAILABILITY_SCHEDULE_MAP = {
+    # This is a map of HVAC Type to An array of methods
+    # Type => [[:getter, :setter], [:getter, :setter]]
+    'AirLoopHVAC' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACBaseboardConvectiveElectric' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACBaseboardConvectiveWater' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACBaseboardRadiantConvectiveElectric' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACBaseboardRadiantConvectiveWater' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACCoolingPanelRadiantConvectiveWater' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACDehumidifierDX' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACEnergyRecoveryVentilator' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACFourPipeFanCoil' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACHighTemperatureRadiant' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACIdealLoadsAirSystem' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACLowTemperatureRadiantElectric' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACLowTempRadiantConstFlow' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACLowTempRadiantVarFlow' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACPackagedTerminalAirConditioner' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACPackagedTerminalHeatPump' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACUnitHeater' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACUnitVentilator' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'ZoneHVACWaterToAirHeatPump' => [[:availabilitySchedule, :setAvailabilitySchedule]],
+    'AirLoopHVACUnitarySystem' => [
+      # TODO
+      # [:availabilitySchedule, :setAvailabilitySchedule],
+      [:supplyAirFanOperatingModeSchedule, :setSupplyAirFanOperatingModeSchedule]
+    ]
+  }.freeze
+
+  def model_apply_acm_hvac_availability_schedule(model)
+    data = model_get_standards_data(model, throw_if_not_found: true)
+    acm_fan_sch_name = data['hvac_operation_schedule']
+    acm_fan_sch = nil
+
+    count_availability = 0
+    HVAC_AVAILABILITY_SCHEDULE_MAP.each do |hvac_type, methods|
+      objects = model.send("get#{hvac_type}s")
+      next if objects.empty?
+
+      if acm_fan_sch.nil?
+        acm_fan_sch = model_add_schedule(model, acm_fan_sch_name)
+        model.getBuilding.additionalProperties.setFeature('acm_fan_sch', acm_fan_sch_name)
+      end
+
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model_apply_acm_hvac_availability_schedule', "HVAC - found #{objects.size} #{hvac_type} object(s)")
+      objects.each do |obj|
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model_apply_acm_hvac_availability_schedule', "HVAC - overriding availability schedule in '#{obj.nameString}' to #{acm_fan_sch.nameString}")
+        methods.each do |_getter, setter|
+          raise "HVAC_AVAILABILITY_SCHEDULE_MAP is out of date, #{obj.briefDescription} does not respond to #{setter}" unless obj.respond_to?(setter)
+
+          ret = obj.send(setter, acm_fan_sch)
+          if !ret
+            OpenStudio.logFree(OpenStudio::Warning, 'openstudio.model_apply_acm_hvac_availability_schedule', "Failed to apply availability schedule via #{setter} for #{obj.briefDescription}")
+          end
+        end
+        count_availability += 1
+      end
+    end
+
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model_apply_acm_hvac_availability_schedule', "Applied availablity schedule '#{acm_fan_sch_name}' to #{count_availability} objects.")
+    return count_availability > 0
   end
 end
