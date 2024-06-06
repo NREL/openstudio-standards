@@ -80,6 +80,18 @@ class ACM179dASHRAE9012007Test < Minitest::Test
                  log_errors.first)
   end
 
+  def test_model_get_standards_data
+    assert_equal('Warehouse', standard.model_get_primary_building_type(model))
+
+    data = standard.model_get_standards_data(model)
+    assert_equal('179d-90.1-2007', data['template'])
+    assert_equal('Warehouse', data['building_type'])
+    assert_equal('WholeBuilding', data['space_type'])
+    assert_equal('ASHRAE 90.1-2007', data['lighting_standard'])
+    assert_equal('WholeBuilding', data['lighting_primary_space_type'])
+    assert_equal('Warehouse', data['lighting_secondary_space_type'])
+    assert_equal('Nonres_HVAC_Sch', data['hvac_operation_schedule'])
+  end
 
   def test_space_type_get_standards_data
     assert_equal('Warehouse', standard.model_get_primary_building_type(model))

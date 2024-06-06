@@ -166,4 +166,36 @@ class ACM179dASHRAE9012007
 
     return sys_num
   end
+
+  # Returns standards data for selected model
+  # This will check the building primary type instead
+  #
+  # @param model [OpenStudio::Model::Model] the model
+  # @return [hash] hash of internal loads for different load types
+  def model_get_standards_data(model, throw_if_not_found: false)
+    # This returns 'Office' for eg
+    standards_building_type = model_get_primary_building_type(model, remap_office: false)
+
+    # populate search hash
+    search_criteria = {
+      'template' => template,
+      'building_type' => standards_building_type,
+      'space_type' => whole_building_space_type_name(model, standards_building_type),
+    }
+
+    # lookup space type properties
+    space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
+
+    if space_type_properties.nil?
+      msg = "Space type properties lookup failed: #{search_criteria}."
+      if throw_if_not_found
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SpaceType', msg)
+        raise msg
+      end
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', msg)
+      space_type_properties = {}
+    end
+
+    return space_type_properties
+  end
 end
