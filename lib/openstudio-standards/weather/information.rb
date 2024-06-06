@@ -438,10 +438,64 @@ module OpenstudioStandards
     # @param base_humidity_ratio [Double] base humidity ratio, default is 0.010
     # @return [Double] dehumdification degree days
     def self.epw_file_get_dehumidification_degree_days(epw_file, base_humidity_ratio: 0.010)
-      db_temps_c = epw_file.getTimeSeries('Dry Bulb Temperature').get.values
+
+      # ********************* #
+      # *** Leap year fix *** #
+      # ********************* #
+
+      leap_years   = []
+      has_leap_day = false
+
+      year = 1980
+      while year <= 2024
+        leap_years << String(year)
+        year += 4
+      end
+
+      # Find the first day in february
+      feb_index = epw_file.data.find_index { |entry| entry.date.monthOfYear.value == 2}
+
+      # Determine if the year representing february is a leap year
+      if leap_years.include?(epw_file.data[feb_index].year)
+
+        day = epw_file.data[feb_index].date.dayOfMonth
+        inc = 0
+
+        while epw_file.data[feb_index].date.dayOfMonth == day
+          feb_index += 1
+          inc       += 1
+        end
+
+        has_leap_day = epw_file.data[feb_index + inc * 28].date.dayOfMonth == 29
+      end
+
+      if !has_leap_day
+        # Access the data directly instead of using the OpenStudio API.
+
+        regex_csv = /[^,]+/
+        regex_num = /[0-9]/
+        f         = File.open(epw_file.path.to_s, "r")
+        i         = 0
+
+        until f.readline[0] =~ regex_num
+          i += 1
+        end
+
+        lines         = IO.readlines(f)[i..-1]
+
+        db_temps_c    = lines.map { |line| Float(line.scan(regex_csv)[6]) }
+        rh_values     = lines.map { |line| Float(line.scan(regex_csv)[8]) }
+        atm_p_values  = lines.map { |line| Float(line.scan(regex_csv)[9]) }
+      else
+        db_temps_c   = epw_file.getTimeSeries('Dry Bulb Temperature').get.values
+        rh_values    = epw_file.getTimeSeries('Relative Humidity').get.values
+        atm_p_values = epw_file.getTimeSeries('Atmospheric Station Pressure').get.values
+      end
+
+      # ********************* #
+
       db_temps_k = db_temps_c.map { |v| v + 273.15 }
-      rh_values = epw_file.getTimeSeries('Relative Humidity').get.values
-      atm_p_values = epw_file.getTimeSeries('Atmospheric Station Pressure').get.values
+
 
       # coefficients for the calculation of pws (Reference: ASHRAE Handbook - Fundamentals > CHAPTER 1. PSYCHROMETRICS)
       c1 = -5.6745359E+03
