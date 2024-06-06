@@ -226,4 +226,35 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     assert_equal('41_31_169', data['rgb'])
   end
 
+  TEST_BASELINE_SYS_NUM_DATA = [
+      # area_type, area_ft2, num_stories, expected
+      ['residential', 24_999, 1, '1_or_2'],
+      ['residential', 24_999, 10, '1_or_2'],
+
+      ['nonresidential', 24_900, 3, '3_or_4'],
+
+      ['nonresidential', 24_900, 4, '5_or_6'],
+      ['nonresidential', 24_900, 5, '5_or_6'],
+      ['nonresidential', 75_000, 4, '5_or_6'],
+      ['nonresidential', 75_900, 5, '5_or_6'],
+
+      ['nonresidential', 24_900, 10, '7_or_8'],
+      ['nonresidential', 150_001, 1, '7_or_8'],
+      ['nonresidential', 150_001, 10, '7_or_8'],
+
+      ['heatedonly', 24_900, 1, '9_or_10'],
+      ['heatedonly', 150_001, 1, '9_or_10'],
+      ['heatedonly', 150_001, 10, '9_or_10'],
+  ]
+  TEST_BASELINE_SYS_NUM_DATA.each do |area_type, area_ft2, num_stories, expected_system_number|
+    define_method("test_model_prm_baseline_system_number_#{area_type}_#{area_ft2.to_i}sqft_#{num_stories}floors") do
+      _model = nil
+      _climate_zone = nil
+      _fuel_type = nil
+      custom = ''
+
+      assert_equal(expected_system_number, @standard.model_prm_baseline_system_number(_model, _climate_zone, area_type, _fuel_type, area_ft2, num_stories, custom))
+    end
+  end
+
 end
