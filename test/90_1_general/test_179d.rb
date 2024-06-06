@@ -80,6 +80,18 @@ class ACM179dASHRAE9012007Test < Minitest::Test
                  log_errors.first)
   end
 
+  def test_model_get_standards_data
+    assert_equal('Warehouse', standard.model_get_primary_building_type(model))
+
+    data = standard.model_get_standards_data(model)
+    assert_equal('179d-90.1-2007', data['template'])
+    assert_equal('Warehouse', data['building_type'])
+    assert_equal('WholeBuilding', data['space_type'])
+    assert_equal('ASHRAE 90.1-2007', data['lighting_standard'])
+    assert_equal('WholeBuilding', data['lighting_primary_space_type'])
+    assert_equal('Warehouse', data['lighting_secondary_space_type'])
+    assert_equal('Nonres_HVAC_Sch', data['hvac_operation_schedule'])
+  end
 
   def test_space_type_get_standards_data
     assert_equal('Warehouse', standard.model_get_primary_building_type(model))
@@ -254,6 +266,148 @@ class ACM179dASHRAE9012007Test < Minitest::Test
       custom = ''
 
       assert_equal(expected_system_number, @standard.model_prm_baseline_system_number(_model, _climate_zone, area_type, _fuel_type, area_ft2, num_stories, custom))
+    end
+  end
+
+  def test_zone_hvac_component_apply_standard_controls
+    fan = OpenStudio::Model::FanSystemModel.new(model)
+    heating_coil = OpenStudio::Model::CoilHeatingWater.new(model)
+    cooling_coil = OpenStudio::Model::CoilCoolingWater.new(model)
+    four_pipe_fan_coil = OpenStudio::Model::ZoneHVACFourPipeFanCoil.new(model, model.alwaysOnDiscreteSchedule, fan, cooling_coil, heating_coil)
+    four_pipe_fan_coil.addToThermalZone(model.getThermalZones.first)
+
+    assert_empty(four_pipe_fan_coil.supplyAirFanOperatingModeSchedule)
+
+    four_pipe_fan_coil.setMaximumOutdoorAirFlowRate(0.0)
+    standard.zone_hvac_component_apply_standard_controls(four_pipe_fan_coil.to_ZoneHVACComponent.get)
+    assert_empty(four_pipe_fan_coil.supplyAirFanOperatingModeSchedule)
+
+    four_pipe_fan_coil.autosizeMaximumOutdoorAirFlowRate
+    assert_empty(four_pipe_fan_coil.maximumOutdoorAirFlowRate)
+    assert four_pipe_fan_coil.isMaximumOutdoorAirFlowRateAutosized
+    standard.zone_hvac_component_apply_standard_controls(four_pipe_fan_coil.to_ZoneHVACComponent.get)
+    refute_empty(four_pipe_fan_coil.supplyAirFanOperatingModeSchedule)
+
+    four_pipe_fan_coil.resetSupplyAirFanOperatingModeSchedule
+    four_pipe_fan_coil.setMaximumOutdoorAirFlowRate(0.1)
+    standard.zone_hvac_component_apply_standard_controls(four_pipe_fan_coil.to_ZoneHVACComponent.get)
+    refute_empty(four_pipe_fan_coil.supplyAirFanOperatingModeSchedule)
+  end
+
+  def test_model_apply_acm_hvac_availability_schedule
+    model = OpenStudio::Model.exampleModel
+
+    building = model.getBuilding
+    building.setStandardsBuildingType('PrimarySchool')
+
+    _airloophvac = OpenStudio::Model::AirLoopHVAC.new(model)
+
+    _baseboardconvectiveelectric = OpenStudio::Model::ZoneHVACBaseboardConvectiveElectric.new(model)
+
+    baseboardconvectivewater_coil = OpenStudio::Model::CoilHeatingWaterBaseboard.new(model)
+    _baseboardconvectivewater = OpenStudio::Model::ZoneHVACBaseboardConvectiveWater.new(model, model.alwaysOnDiscreteSchedule, baseboardconvectivewater_coil)
+
+    _baseboardradiantconvectiveelectric = OpenStudio::Model::ZoneHVACBaseboardRadiantConvectiveElectric.new(model)
+
+    _baseboardradiantconvectivewater = OpenStudio::Model::ZoneHVACBaseboardRadiantConvectiveWater.new(model)
+
+    _coolingpanelradiantconvectivewater = OpenStudio::Model::ZoneHVACCoolingPanelRadiantConvectiveWater.new(model)
+
+    _dehumidifierdx = OpenStudio::Model::ZoneHVACDehumidifierDX.new(model)
+
+    _energyrecoveryventilator = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model)
+
+    fourPipeFan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
+    fourPipeHeat = OpenStudio::Model::CoilHeatingWater.new(model, model.alwaysOnDiscreteSchedule)
+    fourPipeCool = OpenStudio::Model::CoilCoolingWater.new(model, model.alwaysOnDiscreteSchedule)
+    _fourPipeFanCoil = OpenStudio::Model::ZoneHVACFourPipeFanCoil.new(model, model.alwaysOnDiscreteSchedule,
+                                                                     fourPipeFan, fourPipeCool, fourPipeHeat)
+
+    _hightemperatureradiant = OpenStudio::Model::ZoneHVACHighTemperatureRadiant.new(model)
+
+    _idealloadsairsystem = OpenStudio::Model::ZoneHVACIdealLoadsAirSystem.new(model)
+
+    lowtemperatureradiantelectric_tempSched = OpenStudio::Model::ScheduleConstant.new(model)
+    lowtemperatureradiantelectric_tempSched.setValue(10.0)
+    _lowtemperatureradiantelectric = OpenStudio::Model::ZoneHVACLowTemperatureRadiantElectric.new(model, model.alwaysOnDiscreteSchedule, lowtemperatureradiantelectric_tempSched)
+
+    lowtempradiantconstflow_coolingHighWaterTempSched = OpenStudio::Model::ScheduleConstant.new(model)
+    lowtempradiantconstflow_coolingLowWaterTempSched = OpenStudio::Model::ScheduleConstant.new(model)
+    lowtempradiantconstflow_coolingHighControlTempSched = OpenStudio::Model::ScheduleConstant.new(model)
+    lowtempradiantconstflow_coolingLowControlTempSched = OpenStudio::Model::ScheduleConstant.new(model)
+    lowtempradiantconstflow_heatingHighWaterTempSched = OpenStudio::Model::ScheduleConstant.new(model)
+    lowtempradiantconstflow_heatingLowWaterTempSched = OpenStudio::Model::ScheduleConstant.new(model)
+    lowtempradiantconstflow_heatingHighControlTempSched = OpenStudio::Model::ScheduleConstant.new(model)
+    lowtempradiantconstflow_heatingLowControlTempSched = OpenStudio::Model::ScheduleConstant.new(model)
+
+    lowtempradiantconstflow_coolingHighWaterTempSched.setValue(15.0)
+    lowtempradiantconstflow_coolingLowWaterTempSched.setValue(10.0)
+    lowtempradiantconstflow_coolingHighControlTempSched.setValue(25.0)
+    lowtempradiantconstflow_coolingLowControlTempSched.setValue(21.0)
+    lowtempradiantconstflow_heatingHighWaterTempSched.setValue(50.0)
+    lowtempradiantconstflow_heatingLowWaterTempSched.setValue(30.0)
+    lowtempradiantconstflow_heatingHighControlTempSched.setValue(20.0)
+    lowtempradiantconstflow_heatingLowControlTempSched.setValue(17.0)
+    lowtempradiantconstflow_heat_coil = OpenStudio::Model::CoilHeatingLowTempRadiantConstFlow.new(model, lowtempradiantconstflow_heatingHighWaterTempSched, lowtempradiantconstflow_heatingLowWaterTempSched, lowtempradiantconstflow_heatingHighControlTempSched, lowtempradiantconstflow_heatingLowControlTempSched)
+    lowtempradiantconstflow_cool_coil = OpenStudio::Model::CoilCoolingLowTempRadiantConstFlow.new(model, lowtempradiantconstflow_coolingHighWaterTempSched, lowtempradiantconstflow_coolingLowWaterTempSched, lowtempradiantconstflow_coolingHighControlTempSched, lowtempradiantconstflow_coolingLowControlTempSched)
+    _lowtempradiantconstflow = OpenStudio::Model::ZoneHVACLowTempRadiantConstFlow.new(model, model.alwaysOnDiscreteSchedule, lowtempradiantconstflow_heat_coil, lowtempradiantconstflow_cool_coil, 200.0)
+
+    _lowtempradiantvarflow = OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow.new(model)
+
+    ptac_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model)
+    ptac_clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
+    ptac_fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
+    _ptac = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model, model.alwaysOffDiscreteSchedule, ptac_fan, ptac_htg_coil, ptac_clg_coil)
+
+    pthp_htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model)
+    pthp_clg_coil = OpenStudio::Model::CoilCoolingDXSingleSpeed.new(model)
+    pthp_fan = OpenStudio::Model::FanOnOff.new(model, model.alwaysOnDiscreteSchedule)
+    pthp_supp_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model)
+    _pthp = OpenStudio::Model::ZoneHVACPackagedTerminalHeatPump.new(model, model.alwaysOffDiscreteSchedule, pthp_fan, pthp_htg_coil, pthp_clg_coil, pthp_supp_htg_coil)
+
+    unitheater_fan = OpenStudio::Model::FanConstantVolume.new(model, model.alwaysOnDiscreteSchedule)
+    unitheater_coil = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
+    _unitheater = OpenStudio::Model::ZoneHVACUnitHeater.new(model, model.alwaysOnDiscreteSchedule, unitheater_fan, unitheater_coil)
+
+    _unitventilator = OpenStudio::Model::ZoneHVACUnitVentilator.new(model)
+
+    wtahp_fan = OpenStudio::Model::FanOnOff.new(model)
+    wtahp_DXHC = OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit.new(model)
+    wtahp_DXCC = OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit.new(model)
+    wtahp_supplementalHC = OpenStudio::Model::CoilHeatingElectric.new(model, model.alwaysOnDiscreteSchedule)
+    _wtahp = OpenStudio::Model::ZoneHVACWaterToAirHeatPump.new(model, model.alwaysOnDiscreteSchedule, wtahp_fan, wtahp_DXHC, wtahp_DXCC, wtahp_supplementalHC)
+
+    _airloophvacunitarysystem = OpenStudio::Model::AirLoopHVACUnitarySystem.new(model)
+
+    avail_sch = OpenStudio::Model::ScheduleConstant.new(model)
+
+    ACM179dASHRAE9012007::HVAC_AVAILABILITY_SCHEDULE_MAP.each do |hvac_type, methods|
+      objects = model.send("get#{hvac_type}s")
+      refute_empty objects, "Missing object of type #{hvac_type} in model"
+      obj = objects.first
+      methods.each do |getter, setter|
+        assert obj.respond_to?(getter)
+        assert obj.respond_to?(setter)
+        assert obj.send(setter, avail_sch)
+      end
+    end
+
+    assert standard.model_apply_acm_hvac_availability_schedule(model)
+
+    ACM179dASHRAE9012007::HVAC_AVAILABILITY_SCHEDULE_MAP.each do |hvac_type, methods|
+      objects = model.send("get#{hvac_type}s")
+      refute_empty objects, "Missing object of type #{hvac_type} in model"
+      objects.each do |obj|
+        methods.each do |getter, _|
+          new_avail_sch = obj.send(getter)
+          # if new_avail_sch.class.name.include?('OptionalSchedule')
+          if new_avail_sch.respond_to?(:get)
+            new_avail_sch = new_avail_sch.get
+          end
+          refute_equal(avail_sch, new_avail_sch, "#{obj.briefDescription}: #{getter}")
+          assert_equal('SchoolPrimary_HVAC_Sch', new_avail_sch.nameString, "#{obj.briefDescription}: #{getter}")
+        end
+      end
     end
   end
 
