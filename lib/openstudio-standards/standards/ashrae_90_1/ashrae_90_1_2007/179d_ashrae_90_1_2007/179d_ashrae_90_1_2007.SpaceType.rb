@@ -26,7 +26,6 @@ class ACM179dASHRAE9012007
   #        define (ventilation, exhaust, lighting control) from ASHRAE9012007
   # @return [hash] hash of internal loads for different load types
   def space_type_get_standards_data(space_type, extend_with_2007: true, throw_if_not_found: false)
-
     space_type_properties = model_get_standards_data(space_type.model, throw_if_not_found: throw_if_not_found)
 
     if !extend_with_2007
@@ -36,7 +35,7 @@ class ACM179dASHRAE9012007
     # This merges the ventilation, exhaust and lighting controls
     data2007 = @std_2007.space_type_get_standards_data(space_type)
     if data2007.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Space type properties from ASHRAE 90.1-2007 lookup failed")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', 'Space type properties from ASHRAE 90.1-2007 lookup failed')
     else
       space_type_properties = data2007.merge(space_type_properties)
       space_type_properties['space_type_2007'] = data2007['space_type']

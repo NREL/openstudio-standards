@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ACM179dASHRAE9012007
-
   def get_exterior_fenestration_value(sub_surface, column_name)
     known_columns = [
       'Construction',
@@ -24,24 +23,24 @@ class ACM179dASHRAE9012007
       'Parent Surface',
       'Azimuth',
       'Tilt',
-      'Cardinal Direction',
+      'Cardinal Direction'
     ]
     raise "Unknown column '#{column_name}'. Available: #{known_columns}" unless known_columns.include?(column_name)
 
-    sql_query = """
+    sql_query = ''"
 SELECT Value FROM TabularDataWithStrings
   WHERE ReportName='EnvelopeSummary'
     AND ReportForString='Entire Facility'
     AND TableName='Exterior Fenestration'
-    AND RowName='#{sub_surface.nameString().upcase}'
+    AND RowName='#{sub_surface.nameString.upcase}'
     AND ColumnName='#{column_name}'
-"""
+"''
 
     val_ = sub_surface.model.sqlFile.get.execAndReturnFirstDouble(sql_query)
     raise "Query failed: #{sql_query}" if val_.empty?
+
     return val_.get
   end
-
 
   def sub_surface_get_window_property(sub_surface)
     sql_file = sub_surface.model.sqlFile
@@ -53,13 +52,12 @@ SELECT Value FROM TabularDataWithStrings
 
     # get window type
     window_type = sub_surface.subSurfaceType
-    unless ['window', 'skylight'].any? {|x| window_type.downcase.include?(x) }
+    unless ['window', 'skylight'].any? { |x| window_type.downcase.include?(x) }
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SubSurface', 'SubSurface is a not a window or skylight.')
       return nil
     end
 
     sub_surface_name = sub_surface.name.to_s
-
 
     # OpenStudio SDK has only methods for querying the assembly values
     # (SubSurface::assemblySHGC / assemblyUFactor)
