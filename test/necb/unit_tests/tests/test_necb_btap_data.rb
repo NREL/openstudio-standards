@@ -23,7 +23,6 @@ class NECB_BTAP_Data_Reporting < Minitest::Test
     # Generate the osm files for all relevant cases to generate the test data for system 6
     building_type = 'FullServiceRestaurant'
     primary_heating_fuel = 'NaturalGas'
-    # epw_file = 'CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw'
     epw_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
     # Generate osm file.
     model = standard.model_create_prototype_model(building_type: building_type,
