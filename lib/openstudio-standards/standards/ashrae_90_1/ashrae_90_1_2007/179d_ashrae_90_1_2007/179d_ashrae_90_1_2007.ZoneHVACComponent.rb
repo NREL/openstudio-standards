@@ -67,7 +67,7 @@ class ACM179dASHRAE9012007
 
     # if supply air fan operating schedule is always off,
     # override to provide ventilation during occupied hours
-    # ! 179D disable due to overidde with acm schedule
+    # NOTE: 179D disable due to override with acm schedule
     # unless existing_sch.nil?
     #   if existing_sch.name.is_initialized
     #     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation, and schedule is set to always on; keeping always on schedule.")
@@ -80,13 +80,13 @@ class ACM179dASHRAE9012007
     # occ_sch = thermal_zones_get_occupancy_schedule([thermal_zone],
     #                                                sch_name: "#{zone_hvac_component.name} Occ Sch",
     #                                                occupied_percentage_threshold: occ_threshold)
-    ## using 179d acm schedule
-    model = zone_hvac_component.model
-    building = model.getBuilding
-    acm_schedule_name = building.additionalProperties.getFeatureAsString('acm_fan_sch').get
-    occ_sch = model_add_schedule(model, acm_schedule_name)
-    zone_hvac_component.setSupplyAirFanOperatingModeSchedule(occ_sch)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation.  Setting fan operating mode schedule to align with zone occupancy schedule.")
+    ## NOTE: using 179d acm schedule
+    data = model_get_standards_data(zone_hvac_component.model, throw_if_not_found: true)
+    acm_fan_sch_name = data['hvac_operation_schedule']
+    zone_hvac_component.model.getBuilding.additionalProperties.setFeature('acm_fan_sch', acm_fan_sch_name)
+    acm_fan_sch = model_add_schedule(zone_hvac_component.model, acm_fan_sch_name)
+    zone_hvac_component.setSupplyAirFanOperatingModeSchedule(acm_fan_sch)
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation.  Setting fan operating mode schedule to ACM schedule '#{acm_fan_sch_name}'.")
 
     return true
   end
@@ -115,7 +115,8 @@ class ACM179dASHRAE9012007
       return true
     end
 
-    # Standby mode occupancy control - TODO check if it works right
+    # Standby mode occupancy control - NOTE: overriding because there was a
+    # logic error, cf https://github.com/NREL/openstudio-standards/issues/1753
     return true if zone_hvac_component.thermalZone.empty?
 
     thermal_zone = zone_hvac_component.thermalZone.get

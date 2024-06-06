@@ -269,4 +269,28 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     end
   end
 
+  def test_zone_hvac_component_apply_standard_controls
+    fan = OpenStudio::Model::FanSystemModel.new(model)
+    heating_coil = OpenStudio::Model::CoilHeatingWater.new(model)
+    cooling_coil = OpenStudio::Model::CoilCoolingWater.new(model)
+    four_pipe_fan_coil = OpenStudio::Model::ZoneHVACFourPipeFanCoil.new(model, model.alwaysOnDiscreteSchedule, fan, cooling_coil, heating_coil)
+    four_pipe_fan_coil.addToThermalZone(model.getThermalZones.first)
+
+    assert_empty(four_pipe_fan_coil.supplyAirFanOperatingModeSchedule)
+
+    four_pipe_fan_coil.setMaximumOutdoorAirFlowRate(0.0)
+    standard.zone_hvac_component_apply_standard_controls(four_pipe_fan_coil.to_ZoneHVACComponent.get)
+    assert_empty(four_pipe_fan_coil.supplyAirFanOperatingModeSchedule)
+
+    four_pipe_fan_coil.autosizeMaximumOutdoorAirFlowRate
+    assert_empty(four_pipe_fan_coil.maximumOutdoorAirFlowRate)
+    assert four_pipe_fan_coil.isMaximumOutdoorAirFlowRateAutosized
+    standard.zone_hvac_component_apply_standard_controls(four_pipe_fan_coil.to_ZoneHVACComponent.get)
+    refute_empty(four_pipe_fan_coil.supplyAirFanOperatingModeSchedule)
+
+    four_pipe_fan_coil.resetSupplyAirFanOperatingModeSchedule
+    four_pipe_fan_coil.setMaximumOutdoorAirFlowRate(0.1)
+    standard.zone_hvac_component_apply_standard_controls(four_pipe_fan_coil.to_ZoneHVACComponent.get)
+    refute_empty(four_pipe_fan_coil.supplyAirFanOperatingModeSchedule)
+  end
 end
