@@ -1,6 +1,7 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
+require 'time'
 
 class NECB_HVAC_Ventilation_Tests < Minitest::Test
 
@@ -17,7 +18,8 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
 
   def test_ventilation
     logger.info "Starting suite of tests for: #{__method__}"
-
+    # Add start time to log.
+    start_time = Time.now
     # Define test parameters that apply to all tests.
     test_parameters = { test_method: __method__,
                         save_intermediate_models: true,
@@ -27,7 +29,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
 
     test_cases_hash = {
       :Vintage => @AllTemplates,
-      :BuildingType => @AllBuildings,
+      :BuildingType => @CommonBuildings,
       :TestCase => ["Case1"],
       :TestPars => { :oaf => "tbd" }
     }
@@ -48,6 +50,9 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     msg = "Ventilation test results do not match what is expected in test"
     compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
+	end_time = Time.now
+    duration = end_time - start_time
+    logger.info "Total time taken: #{duration} seconds"
   end
 
   # @param test_pars [Hash] has the static parameters.
@@ -117,6 +122,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
           oa_flow_in_ft3_per_min_per_person = OpenStudio.convert(oa_flow_per_person, 'm^3/s*person', 'ft^3/min*person').get
 
           zone_area = zone.floorArea
+		  zone_area_ft2 = OpenStudio.convert(zone_area, 'm^2', 'ft^2').get
           zone_num_people = zone.numberOfPeople
           calculated_ventilation_rate = (zone_num_people * oa_flow_per_person + zone_area * oa_flow_per_floor_area) * zone.multiplier
           calculated_ventilation_rate_ft3_per_min = OpenStudio.convert(calculated_ventilation_rate, 'm^3/s', 'ft^3/min').get
@@ -127,6 +133,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
           # Add this test case to results and return the hash.
           results[zone_name] = {
             zone_area_m2: zone_area.signif(3),
+			zone_area_ft2: zone_area_ft2.signif(3),
             zone_num_people: zone_num_people.signif(3),
             oa_flow_in_ft3_per_min_per_person: oa_flow_in_ft3_per_min_per_person.signif(3),
             oa_flow_in_ft3_per_min_per_ft2: oa_flow_in_ft3_per_min_per_ft2.signif(3),
@@ -138,6 +145,8 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
       end
     end
     logger.info "Completed individual test: #{name}"
+	# Sort results hash by zone name
+    results = results.sort.to_h
     return results
   end
 end

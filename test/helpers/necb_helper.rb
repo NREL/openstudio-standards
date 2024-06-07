@@ -3,6 +3,7 @@ require 'logger'
 require 'fileutils'
 require 'pathname'
 require 'json'
+require 'parallel'
 #require 'hashdiff'
 
 # Add significant digits capability to float amd integer class to tidy up reporting.
@@ -103,7 +104,7 @@ module NecbHelper
     expected_results_template = Hash.new
     test_cases_loop_hash.reverse_each do |loop_k, loop_v|
       logger.debug "loop key: #{loop_k}, loop value: #{loop_v}"
-      if loop_k.to_s == "TestPars" then 
+      if loop_k.to_s == "TestPars" then
         loop_v.each {|key, value| expected_results_template[key] = value}
       else
         temp = Hash.new
@@ -134,8 +135,7 @@ module NecbHelper
     logger.debug "\nMerged hash:\n#{JSON.pretty_generate(test_cases_hash)}"
     return test_cases_hash
   end
-    
-
+  
   # Method used to recursively parse the expected json to figure out the test cases and then run them
   # (adapted template design pattern).
   # The test_pars hash is used by the recursion to remember what condition is being tested in a nested hash. It already 
@@ -153,43 +153,44 @@ module NecbHelper
     var_type = test_cases[:VarType].to_s
     test_results = Hash.new
     test_results[:VarType] = var_type
-    logger.debug "Parsing test cases for VarType #{var_type}"
-    if test_cases.key?(:Reference) then test_results[:Reference] = test_cases[:Reference] end
+    test_results[:Reference] = test_cases[:Reference] if test_cases.key?(:Reference)
 
-    # If at the 'TestCase' level then stop recursion and run the test defined in the current hash.
     if var_type == "TestCase"
+	  # Process test cases in parallel
+      results = Parallel.map(test_cases.reject { |key, _| [:VarType, :Reference].include?(key) }) do |key, value|
+        begin
+          logger.debug "Initiating test case #{key}"
+          logger.debug  "Current test: #{value}"
 
-      # This hash is the test case. The key is the short name (usually something like 'case-1', and it is unique).
-      # The value of the hash has the test specific inputs and the result.
-      test_cases.each do |key, value|
-        next if key == :VarType # Skip to next. This is less expensive than using the except method chained before the each.
-        next if key == :Reference # Skip to next. 
-        logger.info  "Initiating test case #{key}"
-        logger.debug  "Test case: #{test_pars}"
-        logger.debug  "Current test: #{value}"
+          method_name = "do_#{test_pars[:test_method]}"
+          case_results = send(method_name, test_pars: test_pars, test_case: value)
 
-        # Run this test case. By default call the do_testMethod method.
-        method_name = "do_#{test_pars[:test_method]}"
-        case_results = self.send(method_name, test_pars: test_pars, test_case: value)
-        logger.debug  "Test case results: #{case_results}"
-        test_results[key] = case_results
-      end
-    else
-
-      # Recursively go through the variables defined in the json file and find the test cases.
-      test_cases.each do |key, value|
-        next if key == :VarType
-        next if key == :Reference
-        logger.debug  "Test case k,v: #{key}, #{value}"
-        if value.is_a? Hash
-          test_pars[var_type.to_sym] = key.to_s
-          test_results[key] = do_test_cases(test_cases: value, test_pars: test_pars)
+          [key, case_results]
+        rescue => e
+          logger.debug "Error in test case #{key}: #{e.message}"
+          [key, { error: e.message }]
         end
       end
+	  # Collect results from all parallel executions
+      results.each { |key, value| test_results[key] = value }
+    else
+	  # Recursively process nested test cases in parallel
+      results = Parallel.map(test_cases.reject { |key, _| [:VarType, :Reference].include?(key) }) do |key, value|
+        begin
+          if value.is_a? Hash
+            new_test_pars = test_pars.merge(var_type.to_sym => key.to_s)
+            [key, do_test_cases(test_cases: value, test_pars: new_test_pars)]
+          end
+        rescue => e
+          logger.debug  "Error in test case #{key}: #{e.message}"
+          [key, { error: e.message }]
+        end
+      end
+      results.each { |key, value| test_results[key] = value if key }
     end
-    logger.debug  "All test results: #{test_results}"
-    return test_results
+    test_results
   end
+
 
   # Method to recover existing template (or create on if it has not been instantiated).
   def get_standard(template)
@@ -213,11 +214,11 @@ module NecbHelper
   #   sql_db_vars_map - ???
   #   save_model_versions - logical to trigger saving of osm files before and after standards applied
   #   output_dir - folder where the models are saved to (if requested)
-  def run_sizing(model:, 
-                 template: 'NECB2011', 
+  def run_sizing(model:,
+                 template: 'NECB2011',
                  second_run: false,
                  necb_ref_hp: false,
-                 sql_db_vars_map: nil, 
+                 sql_db_vars_map: nil,
                  save_model_versions: false,
                  output_dir: nil)
 
@@ -267,11 +268,11 @@ module NecbHelper
 
     # Second sizing run (if requested).
     if second_run
-      
+
       # Save model before sizing run 2.
       BTAP::FileIO.save_osm(model, "#{output_dir}/pre-sizing2.osm") if save_model_versions
 
-      # Do another sizing run after applying the hvac assumptions and efficiency standards 
+      # Do another sizing run after applying the hvac assumptions and efficiency standards
       #  to properly apply the pump rules.
       sizing_folder = "#{output_dir}/SR2"
       if standard.model_run_sizing_run(model, sizing_folder) == false
@@ -289,8 +290,8 @@ module NecbHelper
   # Check if two files are identical with some added smarts.
   # (used in place of simple ruby methods)
   def compare_results(expected_results:, test_results:, msg: "Files do not match", type: nil)
-  
-    if type == "json_data" 
+
+    if type == "json_data"
 
       # Compare two json classes.
       #diff = hashdiff.diff(expected_results, test_results)
@@ -299,7 +300,7 @@ module NecbHelper
       if !diff.nil?
         diff.each do |e|
           if e[0]=="-"
-            if e[2].nil? 
+            if e[2].nil?
               error_msg << "test results missing #{e[1]}.\n"
             else
               error_msg << "test results missing #{JSON.pretty_generate(e[2])} in #{e[1]}.\n"
@@ -321,7 +322,7 @@ module NecbHelper
 
       # Open files and compare the line by line. Remove line endings before checking strings (this can be an issue when running in docker).
       same = true
-      fe = File.open(expected_results, 'rb') 
+      fe = File.open(expected_results, 'rb')
       ft = File.open(test_results, 'rb')
       comp_lines_str = ""
       fe.each.zip(ft.each).each do |le, lt|
@@ -349,12 +350,12 @@ module NecbHelper
   # @note Derived from Hashdiff gem (https://github.com/liufengyun/hashdiff/tree/master). Extracted core functionality that is used above.
   module CompareJSON
     def self.diff(obj1, obj2, prefix = '')
-      
+
       return [] if obj1.nil? && obj2.nil?
 
       return [['~', prefix, obj1, obj2]] if obj1.nil? || obj2.nil?
 
-      return LcsCompareArrays.call(obj1, obj2, prefix) if obj1.is_a?(Array) 
+      return LcsCompareArrays.call(obj1, obj2, prefix) if obj1.is_a?(Array)
 
       return CompareHashes.call(obj1, obj2, prefix) if obj1.is_a?(Hash)
 
@@ -368,7 +369,7 @@ module NecbHelper
 
       [['~', prefix, obj1, obj2]]
     end
-    
+
     class CompareHashes
       class << self
         def call(obj1, obj2, prefix = '')
@@ -493,7 +494,7 @@ module NecbHelper
 
       change_set
     end
-    
+
     # Calculate array difference using LCS algorithm
     # http://en.wikipedia.org/wiki/Longest_common_subsequence_problem
     def self.lcs(arraya, arrayb, prefix = '')

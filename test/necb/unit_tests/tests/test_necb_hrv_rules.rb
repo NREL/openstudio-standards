@@ -285,6 +285,8 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       end
       logger.info "Completed individual test: #{name}"
     end
+	# Sort results hash by zone name
+    results = results.sort.to_h
     return results
   end
 end
