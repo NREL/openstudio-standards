@@ -1,4 +1,3 @@
-require 'json'
 require_relative 'regression_helper'
 
 =begin
@@ -11,7 +10,7 @@ Helper functions used to facilitate tests for the parametric test creator
 
 class ParametricRegressionHelper < NECBRegressionHelper
   def setup()
-    # *** Setup variables are inherited from regression_helper.rb ***
+    # Setup variables are inherited from regression_helper.rb
     super
   end
 
@@ -26,8 +25,6 @@ class ParametricRegressionHelper < NECBRegressionHelper
       end
     return result, diff
   end
-
-
 
   def create_model_from_hash(model_name, model_params)
 
