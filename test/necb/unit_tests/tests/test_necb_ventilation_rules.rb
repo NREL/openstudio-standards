@@ -122,7 +122,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
           oa_flow_in_ft3_per_min_per_person = OpenStudio.convert(oa_flow_per_person, 'm^3/s*person', 'ft^3/min*person').get
 
           zone_area = zone.floorArea
-		  zone_area_ft2 = OpenStudio.convert(zone_area, 'm^2', 'ft^2').get
+	  zone_area_ft2 = OpenStudio.convert(zone_area, 'm^2', 'ft^2').get
           zone_num_people = zone.numberOfPeople
           calculated_ventilation_rate = (zone_num_people * oa_flow_per_person + zone_area * oa_flow_per_floor_area) * zone.multiplier
           calculated_ventilation_rate_ft3_per_min = OpenStudio.convert(calculated_ventilation_rate, 'm^3/s', 'ft^3/min').get
@@ -133,7 +133,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
           # Add this test case to results and return the hash.
           results[zone_name] = {
             zone_area_m2: zone_area.signif(3),
-			zone_area_ft2: zone_area_ft2.signif(3),
+	    zone_area_ft2: zone_area_ft2.signif(3),
             zone_num_people: zone_num_people.signif(3),
             oa_flow_in_ft3_per_min_per_person: oa_flow_in_ft3_per_min_per_person.signif(3),
             oa_flow_in_ft3_per_min_per_ft2: oa_flow_in_ft3_per_min_per_ft2.signif(3),
