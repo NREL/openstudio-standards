@@ -3,14 +3,13 @@ require_relative 'regression_helper'
 
 =begin
 
-Generalized Regression Helper
+Parametric Regression Helper
 
-Helper functions used to facilitate tests for the generalized test creator
+Helper functions used to facilitate tests for the parametric test creator
 
 =end
 
-class GeneralizedRegressionHelper < NECBRegressionHelper
-
+class ParametricRegressionHelper < NECBRegressionHelper
   def setup()
     # *** Setup variables are inherited from regression_helper.rb ***
     super
