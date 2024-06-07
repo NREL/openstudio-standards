@@ -5,6 +5,22 @@ module OpenstudioStandards
     # Methods to create HVAC component objects
 
     # creates HeatExchangerAirToAirSensibleAndLatent object with user-input effectiveness values
+    #
+    # @param model [<OpenStudio::Model::Model>] OpenStudio model
+    # @param name [String]
+    # @param type [String] Heat Exchanger Type. One of 'Plate', 'Rotary'
+    # @param economizer_lockout [Boolean] whether hx is locked out during economizing
+    # @param supply_air_outlet_temperature_control [Boolean]
+    # @param frost_control_type [String] HX frost control type. One of 'None', 'ExhaustAirRecirculation', 'ExhaustOnly', 'MinimumExhaustTemperature'
+    # @param sensible_heating_100_eff [Float]
+    # @param sensible_heating_75_eff [Float]
+    # @param latent_heating_100_eff [Float]
+    # @param latent_heating_75_eff [Float]
+    # @param sensible_cooling_100_eff [Float]
+    # @param sensible_cooling_75_eff [Float]
+    # @param latent_cooling_100_eff [Float]
+    # @param latent_cooling_75_eff [Float]
+    # @return [<OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent>]
     def self.create_hx_air_to_air_sensible_and_latent(model,
                                                       name: nil,
                                                       type: nil,
@@ -51,25 +67,6 @@ module OpenstudioStandards
       effectiveness_inputs['Sensible Cooling'][1.0] = sensible_cooling_100_eff.to_f unless sensible_cooling_100_eff.nil?
       effectiveness_inputs['Latent Cooling'][0.75] = latent_cooling_75_eff.to_f unless latent_cooling_75_eff.nil?
       effectiveness_inputs['Latent Cooling'][1.0] = latent_cooling_100_eff.to_f unless latent_cooling_100_eff.nil?
-
-      # effectiveness_inputs = {
-      #   "Sensible Heating" => {
-      #     0.75 => sensible_heating_75_eff.to_f,
-      #     1.0 => sensible_heating_100_eff.to_f
-      #   },
-      #   "Latent Heating" => {
-      #     0.75 => latent_heating_75_eff.to_f,
-      #     1.0 => latent_heating_100_eff.to_f
-      #   },
-      #   "Sensible Cooling" => {
-      #     0.75 => sensible_cooling_75_eff.to_f,
-      #     1.0 => sensible_cooling_100_eff.to_f
-      #   },
-      #   "Latent Cooling" => {
-      #     0.75 => latent_cooling_75_eff.to_f,
-      #     1.0 => latent_cooling_100_eff.to_f
-      #   }
-      # }
 
       if effectiveness_inputs.values.all?{|v| v.empty?}
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Hvac', 'Creating HX with historical effectiveness curves')
