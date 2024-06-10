@@ -1,7 +1,7 @@
 module OpenstudioStandards
   # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
-    #@!group Component:Modify
+    # @!group Component:Modify
     # Methods to modify HVAC Component objects
 
     # Applies historical default or user-input effectiveness values to a HeatExchanger:AirToAir:SensibleAndLatent object
@@ -31,15 +31,12 @@ module OpenstudioStandards
         end
 
         lookup_table = OpenstudioStandards::HVAC.create_hx_effectiveness_table(hx, type, values_hash)
-        type_a = type.split(' ')
-        hx.send("set#{type_a[0]}Effectivenessat100#{type_a[1]}AirFlow",values_hash[1.0])
+        type_a = type.split
+        hx.send("set#{type_a[0]}Effectivenessat100#{type_a[1]}AirFlow", values_hash[1.0])
         hx.send("set#{type_a[0]}Effectivenessof#{type_a[1]}AirFlowCurve", lookup_table)
       end
 
       return hx
     end
-
-
   end
-
 end
