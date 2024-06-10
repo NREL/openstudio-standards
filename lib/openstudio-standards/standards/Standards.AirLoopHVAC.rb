@@ -1894,14 +1894,27 @@ class Standard
   # @param heat_exchanger_type [String] heat exchanger type Rotary or Plate
   # @return [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
   def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv, erv_type: 'ERV', heat_exchanger_type: 'Rotary')
-    erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
-    erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
-    erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
-    erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
-    erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    if erv.model.version < OpenStudio::VersionString('3.8.0')
+      erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
+      erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
+      erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
+      erv.setLatentEffectivenessat75HeatingAirFlow(0.6)
+      erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+      erv.setLatentEffectivenessat100CoolingAirFlow(0.6)
+      erv.setSensibleEffectivenessat75CoolingAirFlow(0.75)
+      erv.setLatentEffectivenessat75CoolingAirFlow(0.6)
+    else
+      values = Hash.new{|hash, key| hash[key] = Hash.new}
+      values['Sensible Heating'][0.75] = 0.7
+      values['Sensible Heating'][1.0] = 0.7
+      values['Latent Heating'][0.75] = 0.6
+      values['Latent Heating'][1.0] = 0.6
+      values['Sensible Cooling'][0.75] = 0.75
+      values['Sensible Cooling'][1.0] = 0.75
+      values['Latent Cooling'][0.75] = 0.6
+      values['Latent Cooling'][1.0] = 0.6
+      erv = OpenstudioStandards.heat_exchanger_air_to_air_set_effectiveness_values(erv, defaults: false, values: values)
+    end
     return erv
   end
 

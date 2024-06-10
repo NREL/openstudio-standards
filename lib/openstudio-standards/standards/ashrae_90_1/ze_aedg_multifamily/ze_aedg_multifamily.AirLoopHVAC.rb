@@ -803,48 +803,94 @@ class ZEAEDGMultifamily < ASHRAE901
   # @param heat_exchanger_type [String] heat exchanger type Rotary or Plate
   # @return [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
   def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv, erv_type: 'ERV', heat_exchanger_type: 'Rotary')
-    if heat_exchanger_type == 'Plate'
-      # based on Zehnder ComfoAir
-      if erv_type == 'HRV'
-        erv.setSensibleEffectivenessat100HeatingAirFlow(0.865)
-        erv.setLatentEffectivenessat100HeatingAirFlow(0.0)
-        erv.setSensibleEffectivenessat75HeatingAirFlow(0.887)
-        erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
-        erv.setSensibleEffectivenessat100CoolingAirFlow(0.865)
-        erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
-        erv.setSensibleEffectivenessat75CoolingAirFlow(0.887)
-        erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+    if erv.model.version < OpenStudio::VersionString.new('3.8.0')
+      if heat_exchanger_type == 'Plate'
+        # based on Zehnder ComfoAir
+        if erv_type == 'HRV'
+          erv.setSensibleEffectivenessat100HeatingAirFlow(0.865)
+          erv.setLatentEffectivenessat100HeatingAirFlow(0.0)
+          erv.setSensibleEffectivenessat75HeatingAirFlow(0.887)
+          erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
+          erv.setSensibleEffectivenessat100CoolingAirFlow(0.865)
+          erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
+          erv.setSensibleEffectivenessat75CoolingAirFlow(0.887)
+          erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+        else
+          erv.setSensibleEffectivenessat100HeatingAirFlow(0.755)
+          erv.setLatentEffectivenessat100HeatingAirFlow(0.564)
+          erv.setSensibleEffectivenessat75HeatingAirFlow(0.791)
+          erv.setLatentEffectivenessat75HeatingAirFlow(0.625)
+          erv.setSensibleEffectivenessat100CoolingAirFlow(0.755)
+          erv.setLatentEffectivenessat100CoolingAirFlow(0.564)
+          erv.setSensibleEffectivenessat75CoolingAirFlow(0.791)
+          erv.setLatentEffectivenessat75CoolingAirFlow(0.625)
+        end
       else
-        erv.setSensibleEffectivenessat100HeatingAirFlow(0.755)
-        erv.setLatentEffectivenessat100HeatingAirFlow(0.564)
-        erv.setSensibleEffectivenessat75HeatingAirFlow(0.791)
-        erv.setLatentEffectivenessat75HeatingAirFlow(0.625)
-        erv.setSensibleEffectivenessat100CoolingAirFlow(0.755)
-        erv.setLatentEffectivenessat100CoolingAirFlow(0.564)
-        erv.setSensibleEffectivenessat75CoolingAirFlow(0.791)
-        erv.setLatentEffectivenessat75CoolingAirFlow(0.625)
+        if erv_type == 'HRV'
+          erv.setSensibleEffectivenessat100HeatingAirFlow(0.75)
+          erv.setLatentEffectivenessat100HeatingAirFlow(0.0)
+          erv.setSensibleEffectivenessat75HeatingAirFlow(0.79)
+          erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
+          erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+          erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
+          erv.setSensibleEffectivenessat75CoolingAirFlow(0.78)
+          erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+        else
+          erv.setSensibleEffectivenessat100HeatingAirFlow(0.75)
+          erv.setLatentEffectivenessat100HeatingAirFlow(0.74)
+          erv.setSensibleEffectivenessat75HeatingAirFlow(0.79)
+          erv.setLatentEffectivenessat75HeatingAirFlow(0.79)
+          erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
+          erv.setLatentEffectivenessat100CoolingAirFlow(0.74)
+          erv.setSensibleEffectivenessat75CoolingAirFlow(0.78)
+          erv.setLatentEffectivenessat75CoolingAirFlow(0.78)
+        end
       end
     else
-      if erv_type == 'HRV'
-        erv.setSensibleEffectivenessat100HeatingAirFlow(0.75)
-        erv.setLatentEffectivenessat100HeatingAirFlow(0.0)
-        erv.setSensibleEffectivenessat75HeatingAirFlow(0.79)
-        erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
-        erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
-        erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
-        erv.setSensibleEffectivenessat75CoolingAirFlow(0.78)
-        erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+      values = Hash.new{|hash, key| hash[key] = Hash.new}
+      if heat_exchanger_type == 'Plate'
+        if erv_type == 'HRV'
+          values['Sensible Heating'][0.75] = 0.887
+          values['Sensible Heating'][1.0] = 0.865
+          values['Latent Heating'][0.75] = 0.0
+          values['Latent Heating'][1.0] = 0.0
+          values['Sensible Cooling'][0.75] = 0.887
+          values['Sensible Cooling'][1.0] = 0.865
+          values['Latent Cooling'][0.75] = 0.0
+          values['Latent Cooling'][1.0] = 0.0
+        else
+          values['Sensible Heating'][0.75] = 0.791
+          values['Sensible Heating'][1.0] = 0.755
+          values['Latent Heating'][0.75] = 0.625
+          values['Latent Heating'][1.0] = 0.564
+          values['Sensible Cooling'][0.75] = 0.791
+          values['Sensible Cooling'][1.0] = 0.755
+          values['Latent Cooling'][0.75] = 0.625
+          values['Latent Cooling'][1.0] = 0.564
       else
-        erv.setSensibleEffectivenessat100HeatingAirFlow(0.75)
-        erv.setLatentEffectivenessat100HeatingAirFlow(0.74)
-        erv.setSensibleEffectivenessat75HeatingAirFlow(0.79)
-        erv.setLatentEffectivenessat75HeatingAirFlow(0.79)
-        erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
-        erv.setLatentEffectivenessat100CoolingAirFlow(0.74)
-        erv.setSensibleEffectivenessat75CoolingAirFlow(0.78)
-        erv.setLatentEffectivenessat75CoolingAirFlow(0.78)
+        if erv_type == 'HRV'
+          values['Sensible Heating'][0.75] = 0.79
+          values['Sensible Heating'][1.0] = 0.75
+          values['Latent Heating'][0.75] = 0.0
+          values['Latent Heating'][1.0] = 0.0
+          values['Sensible Cooling'][0.75] = 0.78
+          values['Sensible Cooling'][1.0] = 0.75
+          values['Latent Cooling'][0.75] = 0.0
+          values['Latent Cooling'][1.0] = 0.0
+        else
+          values['Sensible Heating'][0.75] = 0.79
+          values['Sensible Heating'][1.0] = 0.75
+          values['Latent Heating'][0.75] = 0.74
+          values['Latent Heating'][1.0] = 0.79
+          values['Sensible Cooling'][0.75] = 0.78
+          values['Sensible Cooling'][1.0] = 0.75
+          values['Latent Cooling'][0.75] = 0.78
+          values['Latent Cooling'][1.0] = 0.74
+        end
       end
+      OpenstudioStandards.heat_exchanger_air_to_air_set_effectiveness_values(erv, defaults: false, values: values)
     end
+
 
     return erv
   end

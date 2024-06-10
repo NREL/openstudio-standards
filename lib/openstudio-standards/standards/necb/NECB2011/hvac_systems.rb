@@ -298,21 +298,21 @@ class NECB2011
     end
 
     # Create an ERV
+    erv = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(air_loop_hvac.model,
+                                                                            name: "#{air_loop_hvac.name} ERV",
+                                                                            type: "Rotary",
+                                                                            economizer_lockout: true,
+                                                                            supply_air_outlet_temperature_control: true,
+                                                                            frost_control_type: 'ExhaustOnly'
+                                                                            sensible_heating_100_eff: 0.5,
+                                                                            sensible_heating_75_eff: 0.5,
+                                                                            latent_heating_100_eff: 0.5,
+                                                                            latent_heating_75_eff: 0.5,
+                                                                            sensible_cooling_100_eff: 0.5,
+                                                                            sensible_cooling_75_eff: 0.5,
+                                                                            latent_cooling_100_eff: 0.5,
+                                                                            latent_cooling_75_eff: 0.5)
 
-    erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(air_loop_hvac.model)
-    erv.setName("#{air_loop_hvac.name} ERV")
-    erv.setSensibleEffectivenessat100HeatingAirFlow(0.5)
-    erv.setLatentEffectivenessat100HeatingAirFlow(0.5)
-    erv.setSensibleEffectivenessat75HeatingAirFlow(0.5)
-    erv.setLatentEffectivenessat75HeatingAirFlow(0.5)
-    erv.setSensibleEffectivenessat100CoolingAirFlow(0.5)
-    erv.setLatentEffectivenessat100CoolingAirFlow(0.5)
-    erv.setSensibleEffectivenessat75CoolingAirFlow(0.5)
-    erv.setLatentEffectivenessat75CoolingAirFlow(0.5)
-    erv.setSupplyAirOutletTemperatureControl(true)
-    erv.setHeatExchangerType('Rotary')
-    erv.setFrostControlType('ExhaustOnly')
-    erv.setEconomizerLockout(true)
     erv.setThresholdTemperature(-23.3) # -10F
     erv.setInitialDefrostTimeFraction(0.167)
     erv.setRateofDefrostTimeFractionIncrease(1.44)
@@ -381,20 +381,26 @@ class NECB2011
     raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['tables']['erv']['table'].map { |item| item['erv_name'] }}") if erv_info.nil?
 
     heat_exchanger_air_to_air_sensible_and_latent.setHeatExchangerType(erv_info['HeatExchangerType'])
-    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(erv_info['LatentEffectivenessat100HeatingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(erv_info['SensibleEffectivenessat100CoolingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(erv_info['LatentEffectivenessat100CoolingAirFlow'])
     if heat_exchanger_air_to_air_sensible_and_latent.model.version < OpenStudio::VersionString.new('3.8.0')
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(erv_info['LatentEffectivenessat100HeatingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(erv_info['SensibleEffectivenessat100CoolingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(erv_info['LatentEffectivenessat100CoolingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow'])
     else
-      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow']) unless erv_info['SensibleEffectivenessat75HeatingAirFlow'].zero?
-      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow']) unless erv_info['LatentEffectivenessat75HeatingAirFlow'].zero?
-      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow']) unless erv_info['SensibleEffectivenessat75CoolingAirFlow'].zero?
-      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow']) unless erv_info['LatentEffectivenessat75CoolingAirFlow'].zero?
+      values = Hash.new{|hash, key| hash[key] = Hash.new}
+      values['Sensible Heating'][0.75] = erv_info['SensibleEffectivenessat75HeatingAirFlow']
+      values['Sensible Heating'][1.0] = erv_info['SensibleEffectivenessat100HeatingAirFlow']
+      values['Latent Heating'][0.75] = erv_info['LatentEffectivenessat75HeatingAirFlow']
+      values['Latent Heating'][1.0] = erv_info['LatentEffectivenessat100HeatingAirFlow']
+      values['Sensible Cooling'][0.75] = erv_info['SensibleEffectivenessat75CoolingAirFlow']
+      values['Sensible Cooling'][1.0] = erv_info['SensibleEffectivenessat100CoolingAirFlow']
+      values['Latent Cooling'][0.75] = erv_info['LatentEffectivenessat75CoolingAirFlow']
+      values['Latent Cooling'][1.0] = erv_info['LatentEffectivenessat100CoolingAirFlow']
+      heat_exchanger_air_to_air_sensible_and_latent = OpenstudioStandards.heat_exchanger_air_to_air_set_effectiveness_values(heat_exchanger_air_to_air_sensible_and_latent, defaults: false, values: values)
     end
     heat_exchanger_air_to_air_sensible_and_latent.setSupplyAirOutletTemperatureControl(erv_info['SupplyAirOutletTemperatureControl'])
     heat_exchanger_air_to_air_sensible_and_latent.setFrostControlType(erv_info['FrostControlType'])
