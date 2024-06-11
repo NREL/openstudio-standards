@@ -1,4 +1,4 @@
-require_relative '../libs.rb'
+require_relative '../libs'
 class BTAP_CLI_Test < Minitest::Test
   def test_cli
     input_folder = File.join(__dir__, '..', 'input')

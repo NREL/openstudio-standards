@@ -201,7 +201,7 @@ end
 require 'yard'
 desc 'Generate the documentation'
 YARD::Rake::YardocTask.new(:doc) do |t|
-  require_relative 'lib/openstudio-standards/prototypes/common/prototype_metaprogramming.rb'
+  require_relative 'lib/openstudio-standards/prototypes/common/prototype_metaprogramming'
   # Generate temporary building type class files so that
   # the documentation shows these classes
   save_meta_classes_to_file
