@@ -492,7 +492,7 @@
       "occupancy_per_area": 20.0,
       "occupancy_schedule": "Res_Occ_Sch",
       "occupancy_activity_schedule": "ACM_SmallHotel_ACTIVITY_SCH",
-      "is_residential": null,
+      "is_residential": "Yes",
       "infiltration_per_exterior_area": 0.038,
       "infiltration_per_exterior_wall_area": null,
       "infiltration_air_changes": null,
