@@ -6,6 +6,7 @@ require 'csv'
 # @abstract
 class ASHRAE901PRM < Standard
   def initialize
+    super()
     load_standards_database
     @sizing_run_dir = Dir.pwd
   end
