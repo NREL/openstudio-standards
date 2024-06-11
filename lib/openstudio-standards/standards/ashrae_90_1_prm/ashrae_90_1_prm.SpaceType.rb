@@ -61,7 +61,7 @@ class ASHRAE901PRM < Standard
 
     # Pre-process the light instances in the space type
     # Remove all regulated instances but leave one in the space type
-    if regulated_lights.size.zero?
+    if regulated_lights.empty?
       definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
       definition.setName("#{space_type.name} Lights Definition")
       instance = OpenStudio::Model::Lights.new(definition)
@@ -554,7 +554,7 @@ class ASHRAE901PRM < Standard
       space_area = space.floorArea
       space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
       # calculate the new lpd values
-      space_lighting_per_area = lighting_per_length * space_height + lighting_per_area
+      space_lighting_per_area = (lighting_per_length * space_height) + lighting_per_area
 
       # Adjust the occupancy control sensor reduction factor from dataset
       if manon_or_partauto == 1

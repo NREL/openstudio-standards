@@ -195,7 +195,7 @@ module OpenstudioStandards
           # check reasonableness of supply air temperatures when supply air flow rate is operating
           flow_tolerance = OpenStudio.convert(10.0, 'cfm', 'm^3/s').get
           operating_temperatures = temperatures.select.with_index { |_t, k| flowrates[k] > flow_tolerance }
-          operating_temperatures = operating_temperatures.map { |t| (t * 1.8 + 32.0) }
+          operating_temperatures = operating_temperatures.map { |t| ((t * 1.8) + 32.0) }
 
           next if operating_temperatures.empty?
 
@@ -1328,7 +1328,7 @@ module OpenstudioStandards
 
           # check reasonableness of supply water temperatures when supply water flow rate is operating
           operating_temperatures = temperatures.select.with_index { |_t, k| flowrates[k] > 1e-8 }
-          operating_temperatures = operating_temperatures.map { |t| (t * 1.8 + 32.0) }
+          operating_temperatures = operating_temperatures.map { |t| ((t * 1.8) + 32.0) }
 
           if operating_temperatures.empty?
             check_elems << OpenStudio::Attribute.new('flag', "Warning: Flowrates are all zero in supply node timeseries for '#{plant_loop.name}'")

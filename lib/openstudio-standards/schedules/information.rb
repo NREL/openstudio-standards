@@ -207,7 +207,7 @@ module OpenstudioStandards
       end
 
       # Error if no values were found
-      if vals.size.zero?
+      if vals.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Could not find any value in #{schedule_compact.name} when determining min and max.")
         result = { 'min' => nil, 'max' => nil }
         return result
@@ -250,7 +250,7 @@ module OpenstudioStandards
       end
 
       # Error if no values were found
-      if vals.size.zero?
+      if vals.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Could not find any value in #{schedule_compact.name} design day schedule when determining min and max.")
         result = { 'min' => nil, 'max' => nil }
         return result

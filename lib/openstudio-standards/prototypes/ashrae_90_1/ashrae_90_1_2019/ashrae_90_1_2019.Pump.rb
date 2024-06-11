@@ -19,7 +19,7 @@ class ASHRAE9012019 < ASHRAE901
     # Don't attempt to look up motor efficiency
     # for zero-hp pumps (required for circulation-pump-free
     # service water heating systems).
-    return [1.0, 0] if motor_bhp == 0.0
+    return [1.0, 0] if motor_bhp.abs < 0.01
 
     # Lookup the minimum motor efficiency
     motors = standards_data['motors']

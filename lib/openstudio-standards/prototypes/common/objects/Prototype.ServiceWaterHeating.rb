@@ -227,7 +227,7 @@ class Standard
       end
       default_water_heater_ambient_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                                               OpenStudio.convert(indoor_temp, 'F', 'C').get,
-                                                                                                              name: 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s + 'f',
+                                                                                                              name: "Water Heater Ambient Temp Schedule #{indoor_temp}F",
                                                                                                               schedule_type_limit: 'Temperature')
       default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       water_heater.setAmbientTemperatureIndicator('Schedule')
@@ -245,7 +245,8 @@ class Standard
     water_heater.setHeaterMaximumCapacity(OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'W').get)
     water_heater.setOffCycleParasiticHeatFractiontoTank(0.8)
     water_heater.setIndirectWaterHeatingRecoveryTime(1.5) # 1.5hrs
-    if water_heater_fuel == 'Electricity'
+    case water_heater_fuel
+    when 'Electricity'
       water_heater.setHeaterFuelType('Electricity')
       water_heater.setHeaterThermalEfficiency(1.0)
       water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
@@ -254,7 +255,7 @@ class Standard
       water_heater.setOnCycleParasiticFuelType('Electricity')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053)
-    elsif water_heater_fuel == 'Natural Gas' || water_heater_fuel == 'NaturalGas'
+    when 'Natural Gas', 'NaturalGas'
       water_heater.setHeaterFuelType('Gas')
       water_heater.setHeaterThermalEfficiency(0.78)
       water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
@@ -263,7 +264,7 @@ class Standard
       water_heater.setOnCycleParasiticFuelType('Gas')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
-    elsif water_heater_fuel == 'HeatPump'
+    when 'HeatPump'
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Simple workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
       # Make a part-load efficiency modifier curve with a value above 1, which
       # is multiplied by the nominal efficiency of 100% to represent
@@ -353,7 +354,7 @@ class Standard
     # calculate tank height and radius
     water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity, 'W', 'kBtu/hr').get
     hpwh_vol_gal = OpenStudio.convert(water_heater_volume, 'm^3', 'gal').get
-    tank_height = 0.0188 * hpwh_vol_gal + 0.0935 # linear relationship that gets GE height at 50 gal and AO Smith height at 80 gal
+    tank_height = (0.0188 * hpwh_vol_gal) + 0.0935 # linear relationship that gets GE height at 50 gal and AO Smith height at 80 gal
     tank_radius = (0.9 * water_heater_volume / (Math::PI * tank_height))**0.5
     tank_surface_area = 2.0 * Math::PI * tank_radius * (tank_radius + tank_height)
     u_tank = (5.678 * tank_ua) / OpenStudio.convert(tank_surface_area, 'm^2', 'ft^2').get
@@ -773,7 +774,7 @@ class Standard
       end
       default_water_heater_ambient_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                                               OpenStudio.convert(indoor_temp, 'F', 'C').get,
-                                                                                                              name: 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s,
+                                                                                                              name: "Water Heater Ambient Temp Schedule #{indoor_temp}F",
                                                                                                               schedule_type_limit: 'Temperature')
       default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       water_heater.setAmbientTemperatureIndicator('Schedule')
@@ -1019,8 +1020,7 @@ class Standard
     space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
 
     # If there is no service hot water load.. Don't bother adding anything.
-    if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
-       data['service_water_heating_peak_flow_rate'].to_f == 0.0
+    if data['service_water_heating_peak_flow_per_area'].to_f < 0.00001 && data['service_water_heating_peak_flow_rate'].to_f < 0.00001
       return nil
     end
 

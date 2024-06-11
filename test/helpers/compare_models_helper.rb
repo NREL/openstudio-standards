@@ -305,7 +305,7 @@ def find_object_matches_field_by_field(true_object, compare_model, alias_hash = 
     # Compare field by field
     obj_diffs = compare_objects_field_by_field(true_object, compare_object, alias_hash)
     # If there are no differences, this is an obvious match
-    if obj_diffs.size.zero?
+    if obj_diffs.empty?
       matching_objects << compare_object
       # puts "renamed: #{object_name(true_object)} matches #{object_name(compare_object)}"
       next

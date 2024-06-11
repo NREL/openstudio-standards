@@ -1,5 +1,5 @@
 require_relative '../libs'
-class BTAP_CLI_Test < Minitest::Test
+class BTAPCLITest < Minitest::Test
   def test_cli_local_osm
     input_folder = File.join(__dir__, '..', 'input')
     input_folder_cache = File.join(__dir__, '..', 'input_cache')

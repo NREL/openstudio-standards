@@ -16,7 +16,7 @@ class ASHRAE901PRM < Standard
     elsif reduction > 1.0
       # case increase the window
       surface_wwr = OpenstudioStandards::Geometry.surface_get_window_to_wall_ratio(surface)
-      if surface_wwr == 0.0
+      if surface_wwr < 0.0001
         # In this case, we are adding fenestration
         wwr_adjusted = reduction - 1.0
         # add the value to additional properties in case of readjusting WWR for doors

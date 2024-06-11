@@ -638,7 +638,7 @@ Standard.class_eval do
 
       # Add a thermostat
       space_type_name = space.spaceType.get.name.get
-      thermostat_name = space_type_name + ' Thermostat'
+      thermostat_name = "#{space_type_name} Thermostat"
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
       if thermostat.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
@@ -1785,7 +1785,7 @@ Standard.class_eval do
       ep_dir = OpenStudio.getEnergyPlusDirectory
       ep_path = OpenStudio.getEnergyPlusExecutable
       ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
-      idd_path = OpenStudio::Path.new(ep_dir.to_s + '/Energy+.idd')
+      idd_path = OpenStudio::Path.new("#{ep_dir.to_s}/Energy+.idd")
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
       # Make a run manager and queue up the sizing model_run(model)
@@ -2087,7 +2087,7 @@ Standard.class_eval do
         }
         econ_limits = model_find_object(standards_data['economizers'], search_criteria)
         minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
-        economizer_required = minimum_capacity_btu_per_hr.nil? ? false : true
+        economizer_required = minimum_capacity_btu_per_hr.nil?
       elsif @instvarbuilding_type == 'LargeOffice' && air_loop_hvac_include_wshp?(air_loop)
         # WSHP serving the IT closets are assumed to always be too
         # small to require an economizer
@@ -2318,7 +2318,7 @@ Standard.class_eval do
       source_zone_name, transfer_air_flow_cfm = target_and_source_zones[exhaust_fan_zone_name]
       source_zone = model.getThermalZoneByName(source_zone_name).get
       transfer_air_source_zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
-      transfer_air_source_zone_exhaust_fan.setName(source_zone.name.to_s + ' Dummy Transfer Air (Source) Fan')
+      transfer_air_source_zone_exhaust_fan.setName("#{source_zone.name.to_s} Dummy Transfer Air (Source) Fan")
       transfer_air_source_zone_exhaust_fan.setAvailabilitySchedule(exhaust_fan.availabilitySchedule.get)
       # Convert transfer air flow to m3/s
       transfer_air_flow_m3s = OpenStudio.convert(transfer_air_flow_cfm, 'cfm', 'm^3/s').get

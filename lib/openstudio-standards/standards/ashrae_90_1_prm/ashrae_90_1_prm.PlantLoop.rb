@@ -30,7 +30,7 @@ class ASHRAE901PRM < Standard
 
     # Ensure there is only 1 cooling tower to start
     orig_twr = nil
-    if clg_twrs.size.zero?
+    if clg_twrs.empty?
       return true
     elsif clg_twrs.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{clg_twrs.size} cooling towers, cannot split up per performance rating method baseline requirements.")
@@ -41,7 +41,7 @@ class ASHRAE901PRM < Standard
 
     # Ensure there is only 1 pump to start
     orig_pump = nil
-    if pumps.size.zero?
+    if pumps.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{pumps.size} pumps.  A loop must have at least one pump.")
       return false
     elsif pumps.size > 1
@@ -150,7 +150,7 @@ class ASHRAE901PRM < Standard
 
     # Ensure there is only 1 chiller to start
     first_chiller = nil
-    return true if chillers.size.zero?
+    return true if chillers.empty?
 
     if chillers.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
@@ -160,7 +160,7 @@ class ASHRAE901PRM < Standard
 
     # Ensure there is only 1 pump to start
     orig_pump = nil
-    if pumps.size.zero?
+    if pumps.empty?
       OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{pumps.size} pumps. A loop must have at least one pump.")
       return false
     elsif pumps.size > 1

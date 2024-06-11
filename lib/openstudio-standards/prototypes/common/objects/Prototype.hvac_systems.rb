@@ -629,7 +629,7 @@ class Standard
       end
 
       # if no design day objects are present in the model, attempt to load the .ddy file directly
-      if summer_oat_wbs_f.size.zero?
+      if summer_oat_wbs_f.empty?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', 'No valid WB=>MDB Summer Design Days were found in the model.  Attempting to load wet bulb sizing from the .ddy file directly.')
         if model.weatherFile.is_initialized && model.weatherFile.get.path.is_initialized
           weather_file_path = model.weatherFile.get.path.get.to_s
@@ -683,7 +683,7 @@ class Standard
 
       # if values are still absent, use the CTI rating condition 78F
       design_oat_wb_f = nil
-      if summer_oat_wbs_f.size.zero?
+      if summer_oat_wbs_f.empty?
         design_oat_wb_f = 78.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For condenser loop #{condenser_water_loop.name}, no design day OATwb conditions found.  CTI rating condition of 78F OATwb will be used for sizing cooling towers.")
       else
@@ -6495,13 +6495,13 @@ class Standard
     thermal_zones.each do |zone|
       # get existing 'sensors'
       exisiting_ems_sensors = model.getEnergyManagementSystemSensors
-      exisiting_ems_sensors_names = exisiting_ems_sensors.collect { |sensor| sensor.name.get + '-' + sensor.outputVariableOrMeterName }
+      exisiting_ems_sensors_names = exisiting_ems_sensors.collect { |sensor| "#{sensor.name.get}-#{sensor.outputVariableOrMeterName}" }
 
       # Create zone air temperature 'sensor' for the zone.
       zone_name = ems_friendly_name(zone.name)
       zone_air_sensor_name = "#{zone_name}_ctrl_temperature"
 
-      unless exisiting_ems_sensors_names.include? zone_air_sensor_name + '-Zone Air Temperature'
+      unless exisiting_ems_sensors_names.include?("#{zone_air_sensor_name}-Zone Air Temperature")
         zone_ctrl_temperature = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Air Temperature')
         zone_ctrl_temperature.setName(zone_air_sensor_name)
         zone_ctrl_temperature.setKeyName(zone.name.get)
@@ -6522,14 +6522,14 @@ class Standard
       zone_clg_thermostat_sensor_name = "#{zone_name}_upper_comfort_limit"
       zone_htg_thermostat_sensor_name = "#{zone_name}_lower_comfort_limit"
 
-      unless exisiting_ems_sensors_names.include? zone_clg_thermostat_sensor_name + '-Schedule Value'
+      unless exisiting_ems_sensors_names.include?("#{zone_clg_thermostat_sensor_name}-Schedule Value")
         # Upper comfort limit for the zone. Taken from existing thermostat schedules in the zone.
         zone_upper_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
         zone_upper_comfort_limit.setName(zone_clg_thermostat_sensor_name)
         zone_upper_comfort_limit.setKeyName(zone_clg_thermostat.name.get)
       end
 
-      unless exisiting_ems_sensors_names.include? zone_htg_thermostat_sensor_name + '-Schedule Value'
+      unless exisiting_ems_sensors_names.include?("#{zone_htg_thermostat_sensor_name}-Schedule Value")
         # Lower comfort limit for the zone. Taken from existing thermostat schedules in the zone.
         zone_lower_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
         zone_lower_comfort_limit.setName(zone_htg_thermostat_sensor_name)
@@ -7271,9 +7271,7 @@ class Standard
                                fan_pressure_rise: 4.0)
 
     when 'Water Source Heat Pumps'
-      if main_heat_fuel.include?('DistrictHeating') && cool_fuel == 'DistrictCooling'
-        condenser_loop = model_get_or_add_ambient_water_loop(model)
-      elsif main_heat_fuel == 'AmbientLoop' && cool_fuel == 'AmbientLoop'
+      if (main_heat_fuel.include?('DistrictHeating') && cool_fuel == 'DistrictCooling') || (main_heat_fuel == 'AmbientLoop' && cool_fuel == 'AmbientLoop')
         condenser_loop = model_get_or_add_ambient_water_loop(model)
       else
         condenser_loop = model_get_or_add_heat_pump_loop(model, main_heat_fuel, cool_fuel,

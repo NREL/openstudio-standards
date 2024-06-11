@@ -89,8 +89,9 @@ class ASHRAE901PRM < Standard
     # Mapping is between standards-defined enumerations and the
     # enumerations available in OpenStudio.
     stds_type = nil
-    # Windows and Glass Doors
-    if surf_type == 'ExteriorWindow' || surf_type == 'GlassDoor'
+    case surf_type
+    when 'ExteriorWindow', 'GlassDoor'
+      # Windows and Glass Doors
       stds_type = standards_info.fenestrationFrameType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -116,8 +117,8 @@ class ASHRAE901PRM < Standard
           return previous_construction_map
         end
       end
-    # Exterior Doors
-    elsif surf_type == 'ExteriorDoor'
+    when 'ExteriorDoor'
+      # Exterior Doors
       stds_type = standards_info.standardsConstructionType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -128,12 +129,12 @@ class ASHRAE901PRM < Standard
       else
         stds_type = 'Swinging'
       end
-    # Skylights
-    elsif surf_type == 'Skylight'
+    when 'Skylight'
+      # Skylights
       # There is only one type for AppendixG stable baseline
       stds_type = 'Any Skylight'
-    # All other surface types
     else
+      # All other surface types
       stds_type = standards_info.standardsConstructionType
       if stds_type.is_initialized
         stds_type = stds_type.get

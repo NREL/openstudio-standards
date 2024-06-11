@@ -23,7 +23,7 @@ module LargeOffice
     else
       transformer_efficiency = nil
     end
-    return true unless !transformer_efficiency.nil?
+    return true if transformer_efficiency.nil?
 
     # rename datacenter plug loads sub categories, there should be 2 data center plug load objects in large office
     model.getElectricEquipments.sort.each do |item|

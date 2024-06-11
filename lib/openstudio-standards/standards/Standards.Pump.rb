@@ -130,7 +130,7 @@ module Pump
     # Don't attempt to look up motor efficiency
     # for zero-hp pumps (required for circulation-pump-free
     # service water heating systems).
-    return [1.0, 0] if motor_bhp == 0.0
+    return [1.0, 0] if motor_bhp < 0.0001
 
     # Lookup the minimum motor efficiency
     motors = standards_data['motors']
@@ -182,8 +182,6 @@ module Pump
                         pump.ratedFlowRate.get
                       elsif pump.autosizedRatedFlowRate.is_initialized
                         pump.autosizedRatedFlowRate.get
-                      else
-                        pump.ratedFlowRate.get
                       end
                     elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
                       if pump.totalRatedFlowRate.is_initialized

@@ -39,7 +39,7 @@ class Standard
       fuel_type = 'fossil'
     elsif electric
       fuel_type = 'electric'
-    elsif htg_fuels.size.zero? && clg_fuels.size.zero?
+    elsif htg_fuels.empty? && clg_fuels.empty?
       fuel_type = 'unconditioned'
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, could not determine fuel type, assuming fossil.  Heating fuels = #{htg_fuels.join(', ')}; cooling fuels = #{clg_fuels.join(', ')}.")
@@ -126,7 +126,7 @@ class Standard
         # Air Loop
         if has_air_loop
           # Gas_Furnace (as air loop)
-          sys_type = if clg_fuels.size.zero?
+          sys_type = if clg_fuels.empty?
                        'Gas_Furnace'
                      # PSZ_AC
                      else
@@ -148,7 +148,7 @@ class Standard
         # Air Loop
         if has_air_loop
           # Electric_Furnace (as air loop)
-          sys_type = if clg_fuels.size.zero?
+          sys_type = if clg_fuels.empty?
                        'Electric_Furnace'
                      # PSZ_HP
                      else
@@ -737,7 +737,7 @@ class Standard
 
       # add exhaust fans
       zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(thermal_zone.model)
-      zone_exhaust_fan.setName(thermal_zone.name.to_s + ' Exhaust Fan')
+      zone_exhaust_fan.setName("#{thermal_zone.name} Exhaust Fan")
       zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
       zone_exhaust_fan.setFlowFractionSchedule(exhaust_flow_schedule)
       # not using zone_exhaust_fan.setFlowFractionSchedule. Exhaust fans are on when available
@@ -766,7 +766,7 @@ class Standard
 
         # add dummy exhaust fan to a transfer_air_source_zones
         transfer_air_source_zone_exhaust = OpenStudio::Model::FanZoneExhaust.new(thermal_zone.model)
-        transfer_air_source_zone_exhaust.setName(thermal_zone.name.to_s + ' Transfer Air Source')
+        transfer_air_source_zone_exhaust.setName("#{thermal_zone.name} Transfer Air Source")
         transfer_air_source_zone_exhaust.setAvailabilitySchedule(exhaust_schedule)
         # not using zone_exhaust_fan.setFlowFractionSchedule. Exhaust fans are on when available
         transfer_air_source_zone_exhaust.setMaximumFlowRate(transfer_air_zone_mixing_si)
