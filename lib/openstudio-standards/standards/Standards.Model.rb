@@ -123,9 +123,8 @@ class Standard
     end
     if create_proposed_model
       # Make the run directory if it doesn't exist
-      unless Dir.exist?(sizing_run_dir)
-        FileUtils.mkdir_p(sizing_run_dir)
-      end
+      FileUtils.mkdir_p(sizing_run_dir)
+
       # Save proposed model
       proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.osm"), true)
       forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new

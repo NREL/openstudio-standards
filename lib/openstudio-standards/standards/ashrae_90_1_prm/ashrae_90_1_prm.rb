@@ -96,12 +96,8 @@ class ASHRAE901PRM < Standard
 
     # Make folder for json files; remove pre-existing first, if needed
     json_path = "#{project_path}/user_data_json"
-    if !Dir.exist?(json_path)
-      Dir.mkdir(json_path)
-    else
-      FileUtils.rm_rf(json_path)
-      Dir.mkdir(json_path)
-    end
+    FileUtils.rm_rf(json_path)
+    FileUtils.mkdir_p(json_path)
 
     # Write all json files
     json_objs.each do |file_name, json_rows|

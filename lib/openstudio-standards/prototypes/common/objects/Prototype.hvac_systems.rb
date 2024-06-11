@@ -645,7 +645,7 @@ class Standard
                 f.flush
               end
               ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(temp_ddy_path).get
-              File.delete(temp_ddy_path) if File.exist?(temp_ddy_path)
+              FileUtils.rm_rf(temp_ddy_path)
             else
               OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file_path}")
             end

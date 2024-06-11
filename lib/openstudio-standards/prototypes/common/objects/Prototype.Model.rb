@@ -1717,9 +1717,7 @@ Standard.class_eval do
     # model_run(model)  in the current working directory
 
     # Make the directory if it doesn't exist
-    unless Dir.exist?(run_dir)
-      Dir.mkdir(run_dir)
-    end
+    FileUtils.mkdir_p(run_dir)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started simulation in '#{run_dir}'")
 
