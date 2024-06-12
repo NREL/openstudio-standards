@@ -313,7 +313,7 @@ class Standard
         secondary_chilled_water_loop.additionalProperties.setFeature('is_secondary_loop', true)
         # primary chilled water pumps are added when adding chillers
         # Add Constant pump, in plant loop, the number of chiller adjustment will assign pump to each chiller
-        #pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        # pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
         pri_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
         pump_variable_speed_set_control_type(pri_chw_pump, control_type = 'Riding Curve')
         # This pump name is important for function add_ems_for_multiple_chiller_pumps_w_secondary_plant. If you update
@@ -631,7 +631,6 @@ class Standard
       condenser_water_loop.model.getDesignDays.sort.each do |dd|
         next unless dd.dayType == 'SummerDesignDay'
         next unless dd.name.get.to_s.include?('WB=>MDB')
-
 
         if condenser_water_loop.model.version < OpenStudio::VersionString.new('3.3.0')
           if dd.humidityIndicatingType == 'Wetbulb'

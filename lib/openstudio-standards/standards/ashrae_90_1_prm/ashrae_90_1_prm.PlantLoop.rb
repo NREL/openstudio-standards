@@ -251,7 +251,6 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::Model] OpenStudio model with plant loops
   # @param primary_plant [OpenStudio::Model::PlantLoop] Primary chilled water loop with chillers
   def add_ems_for_multiple_chiller_pumps_w_secondary_plant(model, primary_plant)
-
     # Aggregate array of chillers on primary plant supply side
     chiller_list = []
 
@@ -292,10 +291,8 @@ class ASHRAE901PRM < Standard
 
     end
 
-
     # Make pump specific parameters for EMS. Use counter
     sorted_chiller_list.each_with_index do |chiller, i|
-
       # Get chiller pump
       pump_name = "#{chiller.name} Inlet Pump"
       pump = model.getPumpVariableSpeedByName(pump_name).get
@@ -322,7 +319,6 @@ class ASHRAE901PRM < Standard
       internal_variable = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Pump Maximum Mass Flow Rate')
       internal_variable.setInternalDataIndexKeyName(pump_name)
       internal_variable.setName(ems_pump_design_flow_name)
-
     end
 
     # Write EMS program
@@ -336,11 +332,9 @@ class ASHRAE901PRM < Standard
 
     # Update chilled water loop operation scheme to work with updated EMS ranges
     stage_chilled_water_loop_operation_schemes(model, primary_plant)
-
   end
 
   def stage_chilled_water_loop_operation_schemes(model, chilled_water_loop)
-
     # Initialize array of cooling plant systems
     chillers = []
 
@@ -425,7 +419,6 @@ class ASHRAE901PRM < Standard
     end
 
     chilled_water_loop.setPlantEquipmentOperationCoolingLoad(equip_operation_cool_load)
-
   end
 
   # Adds EMS program for pumps serving 2 chillers on primary + secondary loop. This was due to an issue when modeling two
@@ -435,7 +428,6 @@ class ASHRAE901PRM < Standard
   # @param sorted_chiller_list [Array] Array of chillers in primary_plant sorted by capacity
   # @param primary_plant [OpenStudio::Model::PlantLoop] Primary chilled water loop with chillers
   def add_ems_program_for_2_pump_chiller_plant(model, sorted_chiller_list, primary_plant)
-
     plant_name = primary_plant.name.to_s
 
     # Break out sorted chillers and get their respective capacities
@@ -472,11 +464,9 @@ class ASHRAE901PRM < Standard
     ems_pump_program_manager.setName("#{plant_name.gsub(/[-\s]+/, '_')}_Pump_Program_Manager")
     ems_pump_program_manager.setCallingPoint('InsideHVACSystemIterationLoop')
     ems_pump_program_manager.addProgram(ems_pump_program)
-
   end
 
   def add_ems_program_for_3_pump_chiller_plant(model, sorted_chiller_list, primary_plant)
-
     plant_name = primary_plant.name.to_s
 
     # Break out sorted chillers and get their respective capacities
@@ -540,8 +530,8 @@ class ASHRAE901PRM < Standard
     ems_pump_program_manager.setName("#{plant_name.gsub(/[-\s]+/, '_')}_Pump_Program_Manager")
     ems_pump_program_manager.setCallingPoint('InsideHVACSystemIterationLoop')
     ems_pump_program_manager.addProgram(ems_pump_program)
-
   end
+
   # Apply prm baseline pump power
   # @note I think it makes more sense to sense the motor efficiency right there...
   #   But actually it's completely irrelevant...
