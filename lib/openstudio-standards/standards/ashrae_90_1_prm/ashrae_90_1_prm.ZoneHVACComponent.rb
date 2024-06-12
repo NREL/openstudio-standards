@@ -79,7 +79,7 @@ class ASHRAE901PRM < Standard
         fan_efficacy_w_per_cfm = 0.3 # System 9, 10
       when 'Gas_Furnace', 'Electric_Furnace'
         # Zone heater cannot provide cooling
-        if nmc_flag & !zone_hvac_component.to_ZoneHVACUnitHeater.is_initialized
+        if nmc_flag && !zone_hvac_component.to_ZoneHVACUnitHeater.is_initialized
           fan_efficacy_w_per_cfm = 0.054
         else
           fan_efficacy_w_per_cfm = 0.3
