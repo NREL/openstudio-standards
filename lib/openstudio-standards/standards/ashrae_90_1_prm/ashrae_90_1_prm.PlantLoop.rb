@@ -334,6 +334,10 @@ class ASHRAE901PRM < Standard
     stage_chilled_water_loop_operation_schemes(model, primary_plant)
   end
 
+  # Updates a chilled water plant's operation scheme to match the EMS written by either
+  # add_ems_program_for_3_pump_chiller_plant or add_ems_program_for_2_pump_chiller_plant
+  # @param model [OpenStudio::Model] OpenStudio model with plant loops
+  # @param chilled_water_loop [OpenStudio::Model::PlantLoop] chilled water loop
   def stage_chilled_water_loop_operation_schemes(model, chilled_water_loop)
     # Initialize array of cooling plant systems
     chillers = []
