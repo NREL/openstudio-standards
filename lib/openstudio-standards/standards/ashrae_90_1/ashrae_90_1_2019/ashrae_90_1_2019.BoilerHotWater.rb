@@ -6,10 +6,7 @@ class ASHRAE9012019 < ASHRAE901
   def boiler_get_eff_fplr(boiler_hot_water)
     capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-    if capacity_btu_per_hr >= 1_000_000
-      return 'Boiler with Minimum Turndown'
-    else
-      return 'Boiler with No Minimum Turndown'
-    end
+    fplr = capacity_btu_per_hr >= 1_000_000 ? 'Boiler with Minimum Turndown' : 'Boiler with No Minimum Turndown'
+    return fplr
   end
 end

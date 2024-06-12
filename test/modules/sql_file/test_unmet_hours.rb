@@ -8,31 +8,24 @@ class TestUnmetHours < Minitest::Test
     climate_zone = 'ASHRAE 169-2013-4A'
     std = Standard.build(template)
 
-    # run simulation if no .sql file present
-    if File.exist?(@sql_file_path)
-      @model = std.safe_load_model('output/AR/run/in.osm')
-      sql = OpenStudio::SqlFile.new(@sql_file_path)
-      @model.setSqlFile(sql)
-    else
-      # load model and set weather file
-      @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../doe_prototype/regression_models/PrimarySchool-90.1-2013-ASHRAE 169-2013-4A_expected_result.osm")
-      weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
-      epw_file = OpenStudio::EpwFile.new(weather_file_path)
-      OpenStudio::Model::WeatherFile.setWeatherFile(@model, epw_file)
+    # load model and set weather file
+    @model = std.safe_load_model("#{File.dirname(__FILE__)}/../../doe_prototype/regression_models/PrimarySchool-90.1-2013-ASHRAE 169-2013-4A_expected_result.osm")
+    weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+    epw_file = OpenStudio::EpwFile.new(weather_file_path)
+    OpenStudio::Model::WeatherFile.setWeatherFile(@model, epw_file)
 
-      # add extra output variables to test the detailed methods
-      output_var = OpenStudio::Model::OutputVariable.new('Zone Air Temperature', @model)
-      output_var.setReportingFrequency('Hourly')
-      output_var = OpenStudio::Model::OutputVariable.new('Zone Thermostat Heating Setpoint Temperature', @model)
-      output_var.setReportingFrequency('Hourly')
-      output_var = OpenStudio::Model::OutputVariable.new('Zone Thermostat Cooling Setpoint Temperature', @model)
-      output_var.setReportingFrequency('Hourly')
+    # add extra output variables to test the detailed methods
+    output_var = OpenStudio::Model::OutputVariable.new('Zone Air Temperature', @model)
+    output_var.setReportingFrequency('Hourly')
+    output_var = OpenStudio::Model::OutputVariable.new('Zone Thermostat Heating Setpoint Temperature', @model)
+    output_var.setReportingFrequency('Hourly')
+    output_var = OpenStudio::Model::OutputVariable.new('Zone Thermostat Cooling Setpoint Temperature', @model)
+    output_var.setReportingFrequency('Hourly')
 
-      # run simulation to create the .sql file
-      std.model_run_simulation_and_log_errors(@model, 'output/AR')
-      sql = OpenStudio::SqlFile.new(@sql_file_path)
-      @model.setSqlFile(sql)
-    end
+    # run simulation to create the .sql file
+    std.model_run_simulation_and_log_errors(@model, 'output/AR')
+    sql = OpenStudio::SqlFile.new(@sql_file_path)
+    @model.setSqlFile(sql)
   end
 
   def test_model_get_annual_occupied_unmet_heating_hours_detailed

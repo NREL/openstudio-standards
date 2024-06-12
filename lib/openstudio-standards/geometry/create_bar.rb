@@ -190,7 +190,7 @@ module OpenstudioStandards
       building_overhang_area_w = 0.0
 
       # loop through stories based on mine z height of surfaces.
-      sorted_stories = sort_building_stories_and_get_min_multiplier(model).sort_by { |k, v| v }
+      sorted_stories = OpenstudioStandards::Geometry.model_sort_building_stories_and_get_min_multiplier(model).sort_by { |k, v| v }
       sorted_stories.each do |story, story_min_z|
         story_min_multiplier = nil
         story_footprint = nil
@@ -328,9 +328,9 @@ module OpenstudioStandards
         envelope_data_hash[:stories][story][:story_multiplied_exterior_roof_area] = story_multiplied_exterior_roof_area
 
         # get perimeter and adiabatic walls that appear to be party walls
-        perimeter_and_party_walls = OpenstudioStandards::Geometry.story_get_exterior_wall_perimeter(story,
-                                                                                                    multiplier_adjustment: story_min_multiplier,
-                                                                                                    bounding_box: bounding_box)
+        perimeter_and_party_walls = OpenstudioStandards::Geometry.building_story_get_exterior_wall_perimeter(story,
+                                                                                                             multiplier_adjustment: story_min_multiplier,
+                                                                                                             bounding_box: bounding_box)
         envelope_data_hash[:stories][story][:story_perimeter] = perimeter_and_party_walls[:perimeter]
         envelope_data_hash[:stories][story][:story_party_walls] = []
         east = false
@@ -365,10 +365,10 @@ module OpenstudioStandards
         end
       end
 
-      envelope_data_hash[:building_overhang_proj_factor_n] = building_overhang_area_n / ext_surfaces_hash['northWindow']
-      envelope_data_hash[:building_overhang_proj_factor_s] = building_overhang_area_s / ext_surfaces_hash['southWindow']
-      envelope_data_hash[:building_overhang_proj_factor_e] = building_overhang_area_e / ext_surfaces_hash['eastWindow']
-      envelope_data_hash[:building_overhang_proj_factor_w] = building_overhang_area_w / ext_surfaces_hash['westWindow']
+      envelope_data_hash[:building_overhang_proj_factor_n] = building_overhang_area_n / ext_surfaces_hash['north_window']
+      envelope_data_hash[:building_overhang_proj_factor_s] = building_overhang_area_s / ext_surfaces_hash['south_window']
+      envelope_data_hash[:building_overhang_proj_factor_e] = building_overhang_area_e / ext_surfaces_hash['east_window']
+      envelope_data_hash[:building_overhang_proj_factor_w] = building_overhang_area_w / ext_surfaces_hash['west_window']
 
       # warn for spaces that are not on a story (in future could infer stories for these)
       model.getSpaces.sort.each do |space|
@@ -390,7 +390,7 @@ module OpenstudioStandards
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
       bounding_area = bounding_length * bounding_width
-      footprint_area = envelope_data_hash[:building_floor_area] / envelope_data_hash[:effective_num_stories].to_f
+      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
       area_multiplier = footprint_area / bounding_area
       edge_multiplier = Math.sqrt(area_multiplier)
       bar[:length] = bounding_length * edge_multiplier
@@ -408,7 +408,7 @@ module OpenstudioStandards
 
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
-      footprint_area = envelope_data_hash[:building_floor_area] / envelope_data_hash[:effective_num_stories].to_f
+      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
 
       if bounding_length >= bounding_width
         bar[:length] = bounding_length
@@ -430,7 +430,7 @@ module OpenstudioStandards
 
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
-      a = envelope_data_hash[:building_floor_area] / envelope_data_hash[:effective_num_stories].to_f
+      a = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
       p = envelope_data_hash[:building_perimeter]
 
       if bounding_length >= bounding_width
@@ -1187,43 +1187,42 @@ module OpenstudioStandards
       end
 
       # @todo should be able to remove this fix after OpenStudio intersection issue is fixed. At that time turn the above message into an error with return false after it
-      if match_error
+      return true unless match_error
 
-        # identify z value of top and bottom story
-        bottom_story = nil
-        top_story = nil
-        new_spaces.each do |space|
-          story = space.buildingStory.get
-          nom_z = story.nominalZCoordinate.get
-          if bottom_story.nil?
-            bottom_story = nom_z
-          elsif bottom_story > nom_z
-            bottom_story = nom_z
-          end
-          if top_story.nil?
-            top_story = nom_z
-          elsif top_story < nom_z
-            top_story = nom_z
+      # identify z value of top and bottom story
+      bottom_story = nil
+      top_story = nil
+      new_spaces.each do |space|
+        story = space.buildingStory.get
+        nom_z = story.nominalZCoordinate.get
+        if bottom_story.nil?
+          bottom_story = nom_z
+        elsif bottom_story > nom_z
+          bottom_story = nom_z
+        end
+        if top_story.nil?
+          top_story = nom_z
+        elsif top_story < nom_z
+          top_story = nom_z
+        end
+      end
+
+      # change boundary condition and intersection as needed.
+      new_spaces.each do |space|
+        if space.buildingStory.get.nominalZCoordinate.get > bottom_story
+          # change floors
+          space.surfaces.each do |surface|
+            next if !(surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground')
+
+            surface.setOutsideBoundaryCondition('Adiabatic')
           end
         end
+        if space.buildingStory.get.nominalZCoordinate.get < top_story
+          # change ceilings
+          space.surfaces.each do |surface|
+            next if !(surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Outdoors')
 
-        # change boundary condition and intersection as needed.
-        new_spaces.each do |space|
-          if space.buildingStory.get.nominalZCoordinate.get > bottom_story
-            # change floors
-            space.surfaces.each do |surface|
-              next if !(surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition == 'Ground')
-
-              surface.setOutsideBoundaryCondition('Adiabatic')
-            end
-          end
-          if space.buildingStory.get.nominalZCoordinate.get < top_story
-            # change ceilings
-            space.surfaces.each do |surface|
-              next if !(surface.surfaceType == 'RoofCeiling' && surface.outsideBoundaryCondition == 'Outdoors')
-
-              surface.setOutsideBoundaryCondition('Adiabatic')
-            end
+            surface.setOutsideBoundaryCondition('Adiabatic')
           end
         end
       end
@@ -1346,7 +1345,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Creating Space Types for #{building_type}.")
 
         # mapping building_type name is needed for a few methods
-        temp_standard = Standard.build('90.1-2013')
+        temp_standard = Standard.build(args[:template])
         building_type = temp_standard.model_get_lookup_name(building_type)
 
         # create space_type_map from array
@@ -1922,7 +1921,7 @@ module OpenstudioStandards
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "ns_wall_area_ip: #{wall_ns_ip} ft^2")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "ew_wall_area_ip: #{wall_ew_ip} ft^2")
       # for now using perimeter of ground floor and average story area (building area / num_stories)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "floor_area_to_perim_ratio: #{model.getBuilding.floorArea / (OpenstudioStandards::Geometry.model_get_perimeter_length(model) * num_stories)}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "floor_area_to_perim_ratio: #{model.getBuilding.floorArea / (OpenstudioStandards::Geometry.model_get_perimeter(model) * num_stories)}")
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "bar_width: #{OpenStudio.convert(bars['primary'][:width], 'm', 'ft').get} ft")
 
       if args[:party_wall_fraction] > 0 || args[:party_wall_stories_north] > 0 || args[:party_wall_stories_south] > 0 || args[:party_wall_stories_east] > 0 || args[:party_wall_stories_west] > 0

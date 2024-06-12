@@ -159,7 +159,7 @@ module HighriseApartment
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 end

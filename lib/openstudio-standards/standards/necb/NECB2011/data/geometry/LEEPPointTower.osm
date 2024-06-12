@@ -19477,7 +19477,7 @@ OS:Facility,
 
 OS:Building,
   {3259ed3c-9915-470d-a5cf-b8c3a604c36c}, !- Handle
-  LEEPPointTower,                         !- Name
+  Point Tower,                            !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -19487,7 +19487,7 @@ OS:Building,
   23,                                     !- Standards Number of Stories
   23,                                     !- Standards Number of Above Ground Stories
   ,                                       !- Standards Template
-  LEEPPointTower,                         !- Standards Building Type
+  ,                                       !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable
   ;                                       !- Nominal Floor to Ceiling Height {m}
@@ -21368,7 +21368,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   30.2798666769826,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {d8f9e982-d920-4785-bf27-692019e32ed9}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -21486,7 +21486,7 @@ OS:Space,
   42.8546923335664,                       !- X Origin {m}
   21.1998666769826,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {4bc8dbe9-9624-41e4-bc00-b364f3162fb0}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -21604,7 +21604,7 @@ OS:Space,
   42.8546923335664,                       !- X Origin {m}
   21.1998666769826,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {fb1265a1-6c54-4cb8-a961-c7e0171f0b1d}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -21760,7 +21760,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   30.2798666769826,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {0b320bfc-54e2-49a4-8015-16b40cdf27b2}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -21878,7 +21878,7 @@ OS:Space,
   42.8546923335654,                       !- X Origin {m}
   21.1998666769826,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {bc505373-2815-4223-9718-796b7484af77}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -21996,7 +21996,7 @@ OS:Space,
   42.8546923335654,                       !- X Origin {m}
   21.1998666769826,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {1118015e-8ff3-4d7d-a2a8-c7bd99493bb9}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -22152,7 +22152,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   30.2798666769826,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {04749ff8-5c60-423d-afbb-82cf1343e89c}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -22270,7 +22270,7 @@ OS:Space,
   42.8546923335654,                       !- X Origin {m}
   21.1998666769826,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {dc1d4c5e-cdb8-4af9-87fc-2b4ae95b9763}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -22388,7 +22388,7 @@ OS:Space,
   42.8546923335654,                       !- X Origin {m}
   21.1998666769826,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {fe6e0721-ac81-499e-9d68-9c142280a2d4}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -22547,7 +22547,7 @@ OS:Space,
   53.1759172481894,                       !- X Origin {m}
   27.8098666769826,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {fa652363-e937-45d0-a6d8-1b7edc67032d}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -22682,7 +22682,7 @@ OS:Space,
   53.1759172481894,                       !- X Origin {m}
   27.8098666769826,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {fff1dc89-a09f-40a0-b540-dc0283476a79}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -22817,7 +22817,7 @@ OS:Space,
   53.1759172481893,                       !- X Origin {m}
   27.8098666769826,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {1bef0dda-8fb7-4d07-871a-6e876ed68005}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -23382,7 +23382,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   30.2798666769826,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {fd3605f3-c9c6-4099-a153-6a8c9f5e89e8}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -23517,7 +23517,7 @@ OS:Space,
   44.8618717447664,                       !- X Origin {m}
   33.3873329572218,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {dac8875f-912d-46fc-9bc2-3509a9234af5}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -23813,7 +23813,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   30.2798666769826,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {37d9b9ac-b66d-499c-801c-6d30f2ed5021}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -23948,7 +23948,7 @@ OS:Space,
   44.8618717447654,                       !- X Origin {m}
   33.3873329572218,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {afef16d0-2c53-49ba-ae67-ca602931488d}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -24244,7 +24244,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   30.2798666769826,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {6d1fdbb6-948d-41f8-b01c-a53350137d1d}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -24379,7 +24379,7 @@ OS:Space,
   44.8618717447656,                       !- X Origin {m}
   33.3873329572218,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {15404e36-293f-4ba0-928f-a39043f6c3cb}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -24911,7 +24911,7 @@ OS:Space,
   39.9747205202064,                       !- X Origin {m}
   41.0447317979393,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {c6933530-94bb-4f74-aba4-356e1b7ba0b5}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -25046,7 +25046,7 @@ OS:Space,
   39.9747205202064,                       !- X Origin {m}
   41.0447317979393,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {31c7e2a4-e133-4600-8ac5-29bcc5f612b3}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -25164,7 +25164,7 @@ OS:Space,
   39.9747205202064,                       !- X Origin {m}
   41.0447317979393,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {8dec0d12-119a-4499-8cae-81d7f4492b6f}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -25299,7 +25299,7 @@ OS:Space,
   39.9747205202064,                       !- X Origin {m}
   41.0447317979393,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {0e8ab4a2-bc5d-4528-a264-02ced3859f35}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -25417,7 +25417,7 @@ OS:Space,
   39.9747205202064,                       !- X Origin {m}
   41.0447317979393,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {dce9b1c9-0b14-4c92-8b99-5f836187b450}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -25552,7 +25552,7 @@ OS:Space,
   39.9747205202064,                       !- X Origin {m}
   41.0447317979393,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {8b0c0d86-b794-477d-9262-e13a3a413ff3}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -25670,7 +25670,7 @@ OS:Space,
   44.8618717447664,                       !- X Origin {m}
   33.3873329572218,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {28655df2-525b-45cf-981b-b9bf4df5bf97}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -25788,7 +25788,7 @@ OS:Space,
   44.8618717447654,                       !- X Origin {m}
   33.3873329572218,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {25abbff0-c5ab-4539-b537-807f224cf9e7}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -25906,7 +25906,7 @@ OS:Space,
   44.8618717447656,                       !- X Origin {m}
   33.3873329572218,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {8bf71301-1472-4d18-a545-a659bf6ecd70}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -26024,7 +26024,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   42.7097317979393,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {5df73728-35a1-45e2-b735-843035d0b57a}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -26159,7 +26159,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   42.7097317979393,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {b562ca0d-c616-4549-bccc-ced8f6e28a87}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -26294,7 +26294,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   42.7097317979393,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {f4384ed8-75c5-4c33-adde-ba3f5c268192}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -26429,7 +26429,7 @@ OS:Space,
   53.1759172481894,                       !- X Origin {m}
   44.3747317979393,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {5f8e7203-280b-419c-ae4e-2b7ca00e3fce}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -26547,7 +26547,7 @@ OS:Space,
   53.1759172481894,                       !- X Origin {m}
   44.3747317979393,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {356b9625-8147-4b52-a920-06e11bfcc43a}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -26665,7 +26665,7 @@ OS:Space,
   53.1759172481893,                       !- X Origin {m}
   44.3747317979393,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {da8a3dcf-dae6-40dc-998d-9c5765a56911}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -26783,7 +26783,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   51.3998666769826,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {5ac17a5f-7b89-48e9-b13b-bfd02729cb24}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -26918,7 +26918,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   51.3998666769826,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {1907c47d-a778-4888-bd83-053cb35fc554}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -27053,7 +27053,7 @@ OS:Space,
   30.7602989445344,                       !- X Origin {m}
   51.3998666769826,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {3eb08aff-7e1c-4103-a6e5-617d91d0ca7c}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -27188,7 +27188,7 @@ OS:Space,
   44.8618717447664,                       !- X Origin {m}
   44.3747317979393,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {94bd9007-9843-498f-87cd-ce9acd379326}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -27306,7 +27306,7 @@ OS:Space,
   44.8618717447664,                       !- X Origin {m}
   51.3998666769826,                       !- Y Origin {m}
   3,                                      !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {4b79d28a-98f6-4e28-af7c-66a4003b20c9}, !- Building Story Name
   {1ddc3e58-4877-4065-90ee-3ad43c34a809}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -27424,7 +27424,7 @@ OS:Space,
   44.8618717447654,                       !- X Origin {m}
   44.3747317979393,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {5b1060ac-66cb-4f4d-a07d-1349f469b7f8}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -27542,7 +27542,7 @@ OS:Space,
   44.8618717447654,                       !- X Origin {m}
   51.3998666769826,                       !- Y Origin {m}
   36,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {bc0f6152-6a7b-4bc9-a6c0-36fee7984ab1}, !- Building Story Name
   {8bc640e5-0a0f-4e6c-b9ee-3e7765c4452b}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -27660,7 +27660,7 @@ OS:Space,
   44.8618717447656,                       !- X Origin {m}
   44.3747317979393,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {71b1b6dc-cb3d-4c75-8c4d-c2f5cd6be669}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -27778,7 +27778,7 @@ OS:Space,
   44.8618717447656,                       !- X Origin {m}
   51.3998666769826,                       !- Y Origin {m}
   69,                                     !- Z Origin {m}
-  {05252294-afe4-46d6-849d-377cb14bd128}, !- Building Story Name
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Building Story Name
   {7877a9d4-0ba2-4a25-b511-eded0da133d5}, !- Thermal Zone Name
   ,                                       !- Part of Total Floor Area
   ,                                       !- Design Specification Outdoor Air Object Name
@@ -38213,4 +38213,20 @@ OS:WeatherFile,
   506B98BD,                               !- Checksum
   ,                                       !- Start Date Actual Year
   Sunday;                                 !- Start Day of Week
+
+OS:BuildingStory,
+  {f7dff6d5-0c4b-4cf6-b7e8-0673c686793f}, !- Handle
+  Building Story 4,                       !- Name
+  ,                                       !- Nominal Z Coordinate {m}
+  ,                                       !- Nominal Floor to Floor Height {m}
+  ,                                       !- Default Construction Set Name
+  ,                                       !- Default Schedule Set Name
+  {f2eee316-5f90-4491-8dc8-46d38d9ffd24}; !- Group Rendering Name
+
+OS:Rendering:Color,
+  {f2eee316-5f90-4491-8dc8-46d38d9ffd24}, !- Handle
+  Rendering Color 337,                    !- Name
+  153,                                    !- Rendering Red Value
+  204,                                    !- Rendering Green Value
+  50;                                     !- Rendering Blue Value
 

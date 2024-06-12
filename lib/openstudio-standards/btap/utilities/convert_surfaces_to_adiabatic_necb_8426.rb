@@ -81,8 +81,7 @@ def get_schedule_max_delta_t(model, surface)
       next
     end
 
-    surf = BTAP::Geometry::Surfaces.get_surfaces_from_spaces([space])
-    surf.each do |surf|
+    space.surfaces.each do |surf|
       unless surf.adjacentSurface.empty?
         adj_surface = surf.adjacentSurface.get
         if adj_surface == surface
@@ -189,8 +188,7 @@ class TestNECBSurfaces8426Custom < CreateDOEPrototypeBuildingTest
         hash[:"Space: #{space.name}"] = {}
         hash[:"Space: #{space.name}"][:"With Adjacent Surface"] = {}
         hash[:"Space: #{space.name}"][:"No Adjacent surface"] = []
-        surfaces = BTAP::Geometry::Surfaces.get_surfaces_from_spaces([space])
-        surfaces.each do |surface|
+        space.surfaces.each do |surface|
           max_delta_t = get_schedule_max_delta_t(model, surface)
           if max_delta_t.nil?
             hash[:"Space: #{space.name}"][:"No Adjacent surface"] << surface.name

@@ -1,121 +1,6 @@
 class Standard
   # @!group SubSurface
 
-  # Reduce the area of the subsurface by shrinking it toward the centroid.
-  # @author Julien Marrec
-  #
-  # @param sub_surface [OpenStudio::Model::SubSurface] sub surface object
-  # @param percent_reduction [Double] the fractional amount to reduce the area
-  # @return [Boolean] returns true if successful, false if not
-  def sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(sub_surface, percent_reduction)
-    # if percent_reduction > 1=> percent increase instead of reduction
-    mult = percent_reduction <= 1 ? 1 - percent_reduction : percent_reduction
-    scale_factor = mult**0.5
-
-    # Get the centroid (Point3d)
-    g = sub_surface.centroid
-
-    # Create an array to collect the new vertices
-    new_vertices = []
-
-    # Loop on vertices (Point3ds)
-    sub_surface.vertices.each do |vertex|
-      # Point3d - Point3d = Vector3d
-      # Vector from centroid to vertex (GA, GB, GC, etc)
-      centroid_vector = vertex - g
-
-      # Resize the vector (done in place) according to scale_factor
-      centroid_vector.setLength(centroid_vector.length * scale_factor)
-
-      # Move the vertex toward the centroid
-      vertex = g + centroid_vector
-
-      new_vertices << vertex
-    end
-
-    # Assign the new vertices to the self
-    sub_surface.setVertices(new_vertices)
-  end
-
-  # Reduce the area of the subsurface by raising the sill height.
-  #
-  # @param sub_surface [OpenStudio::Model::SubSurface] sub surface object
-  # @param percent_reduction [Double] the fractional amount to reduce the area.
-  # @return [Boolean] returns true if successful, false if not
-  def sub_surface_reduce_area_by_percent_by_raising_sill(sub_surface, percent_reduction)
-    mult = 1 - percent_reduction
-
-    # Calculate the original area
-    area_original = sub_surface.netArea
-
-    # Find the min and max z values
-    min_z_val = 99_999
-    max_z_val = -99_999
-    sub_surface.vertices.each do |vertex|
-      # Min z value
-      if vertex.z < min_z_val
-        min_z_val = vertex.z
-      end
-      # Max z value
-      if vertex.z > max_z_val
-        max_z_val = vertex.z
-      end
-    end
-
-    # Calculate the window height
-    height = max_z_val - min_z_val
-
-    # Calculate the new sill height
-    new_sill_z = max_z_val - (height * mult)
-
-    # Reset the z value of the lowest points
-    new_vertices = []
-    sub_surface.vertices.each do |vertex|
-      new_x = vertex.x
-      new_y = vertex.y
-      new_z = vertex.z
-      if new_z == min_z_val
-        new_z = new_sill_z
-      end
-      new_vertices << OpenStudio::Point3d.new(new_x, new_y, new_z)
-    end
-
-    # Reset the vertices
-    sub_surface.setVertices(new_vertices)
-
-    return true
-  end
-
-  # Determine if the sub surface is a vertical rectangle,
-  # meaning a rectangle where the bottom is parallel to the ground.
-  #
-  # @param sub_surface [OpenStudio::Model::SubSurface] sub surface object
-  # @return [Boolean] returns true if the surface is a vertical rectangle, false if not
-  def sub_surface_vertical_rectangle?(sub_surface)
-    # Get the vertices once
-    verts = sub_surface.vertices
-
-    # Check for 4 vertices
-    return false unless verts.size == 4
-
-    # Check if the 2 lowest z-values
-    # are the same
-    z_vals = []
-    verts.each do |vertex|
-      z_vals << vertex.z
-    end
-    z_vals = z_vals.sort
-    return false unless z_vals[0] == z_vals[1]
-
-    # Check if the diagonals are equal length
-    diag_a = verts[0] - verts[2]
-    diag_b = verts[1] - verts[3]
-    return false unless diag_a.length == diag_b.length
-
-    # If here, we have a rectangle
-    return true
-  end
-
   # This method adds a subsurface (a window or a skylight depending on the surface) to the centroid of a surface.  The
   # shape of the subsurface is the same as the surface but is scaled so the area of the subsurface is the defined
   # fraction of the surface (set by area_fraction).  Note that this only works for surfaces that do not fold into
@@ -126,7 +11,8 @@ class Standard
   # @return [Boolean] returns true if successful, false if not
   def sub_surface_create_centered_subsurface_from_scaled_surface(surface, area_fraction)
     # Get rid of all existing subsurfaces.
-    remove_all_subsurfaces(surface: surface)
+    surface.subSurfaces.sort.each(&:remove)
+
     # What is the centroid of the surface.
     surf_cent = surface.centroid
     scale_factor = Math.sqrt(area_fraction)
@@ -177,8 +63,10 @@ class Standard
   def sub_surface_create_scaled_subsurfaces_from_surface(surface:, area_fraction:, construction:)
     # Set geometry tolerences:
     geometry_tolerence = 12
-    # Get rid of all existing subsurfaces.
-    remove_all_subsurfaces(surface: surface)
+
+    # Get rid of all existing subsurfaces
+    surface.subSurfaces.sort.each(&:remove)
+
     # Return vertices of smaller surfaces that fit inside this surface.  This is done in case the surface is
     # concave.
 
@@ -253,34 +141,6 @@ class Standard
       # There is now only one surface on the subsurface.  Enforce this
       new_sub_surface.setMultiplier(1)
     end
-    return true
-  end
-
-  # This just uses applies 'setWindowToWallRatio' method from the OpenStudio SDK.  The only addition is that it changes
-  # the name of the window to be the surface name plus the subsurface type (always 'fixedwindow').
-  #
-  # @param surface [OpenStudio::Model::Surface] surface object
-  # @param area_fraction [Double] fraction of area of the larger surface
-  # @param construction [OpenStudio::Model::Construction] construction to use for the new surface
-  # @return [Boolean] returns true if successful, false if not
-  def set_window_to_wall_ratio_set_name(surface:, area_fraction:, construction:)
-    surface.setWindowToWallRatio(area_fraction)
-    surface.subSurfaces.sort.each do |sub_surf|
-      sub_surf.setSubSurfaceType('FixedWindow')
-      sub_surf.setConstruction(construction)
-      new_name = surface.name.to_s + '_' + sub_surf.subSurfaceType.to_s
-      sub_surf.setName(new_name)
-    end
-    return true
-  end
-
-  # This removes all of the subsurfaces from a surface.
-  # Is a preparation for replaceing windows or clearing doors before adding windows.
-  #
-  # @param surface [OpenStudio::Model::Surface] surface object
-  # @return [Boolean] returns true if successful, false if not
-  def remove_all_subsurfaces(surface:)
-    surface.subSurfaces.sort.each(&:remove)
     return true
   end
 end

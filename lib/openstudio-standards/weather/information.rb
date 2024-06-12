@@ -246,32 +246,32 @@ module OpenstudioStandards
     # @return [Array<Regexp>] list of regular expressions matching design day names to import.
     def self.ddy_regex_lookup(category)
       ddy_regex_map = {
-        'All Heating'=> /Htg/,
-        'Heating DB'=> /Htg.* DB/,
-        'Heating 99.6%'=> /Htg.*99.6%/,
-        'Heating 99%'=> /Htg.*99%/,
-        'Heating Wind'=> /Htg Wind/,
-        'All Cooling'=> / (0?\.4|1|2|5)\.?0?%/,
-        'Annual Cooling'=> /Ann Clg/,
-        'All Cooling DB'=> /DB=>MC?WB/,
-        'All Cooling WB'=> /WB=>MC?DB/,
-        'All Cooling DP'=> /Clg.* DP/,
-        'All Cooling Enth'=> /Clg.* Enth/,
-        'Annual Cooling DB'=> /Clg.* DB/,
-        'Annual Cooling WB'=> /Clg.* WB/,
-        'Annual Cooling DP'=> /Clg.* DP/,
-        'Annual Cooling Enth'=> /Clg.* Enth/,
-        'Cooling 0.4%'=> /.4%/,
-        'Cooling 2%'=> /2%/,
-        'Cooling 5%'=> /5%/,
-        'Annual Cooling 0.4%'=> /Ann.*.4%/,
-        'Annual Cooling 2%'=> /Ann.*2%/,
-        'Monthly Cooling'=> /Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/,
-        'Monthly 0.4%'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*0?.4/,
-        'Monthly 2%'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*2%/,
-        'Monthly 5%'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*5%/,
-        'Monthly DB'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*DB=>MC?WB/,
-        'Monthly WB'=> /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*WB=>MC?DB/,
+        'All Heating' => /Htg/,
+        'Heating DB' => /Htg.* DB/,
+        'Heating 99.6%' => /Htg.*99.6%/,
+        'Heating 99%' => /Htg.*99%/,
+        'Heating Wind' => /Htg Wind/,
+        'All Cooling' => / (0?\.4|1|2|5)\.?0?%/,
+        'Annual Cooling' => /Ann Clg/,
+        'All Cooling DB' => /DB=>MC?WB/,
+        'All Cooling WB' => /WB=>MC?DB/,
+        'All Cooling DP' => /Clg.* DP/,
+        'All Cooling Enth' => /Clg.* Enth/,
+        'Annual Cooling DB' => /Clg.* DB/,
+        'Annual Cooling WB' => /Clg.* WB/,
+        'Annual Cooling DP' => /Clg.* DP/,
+        'Annual Cooling Enth' => /Clg.* Enth/,
+        'Cooling 0.4%' => /.4%/,
+        'Cooling 2%' => /2%/,
+        'Cooling 5%' => /5%/,
+        'Annual Cooling 0.4%' => /Ann.*.4%/,
+        'Annual Cooling 2%' => /Ann.*2%/,
+        'Monthly Cooling' => /Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/,
+        'Monthly 0.4%' => /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*0?.4/,
+        'Monthly 2%' => /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*2%/,
+        'Monthly 5%' => /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*5%/,
+        'Monthly DB' => /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*DB=>MC?WB/,
+        'Monthly WB' => /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*WB=>MC?DB/
       }
       valid = ddy_regex_map.keys
       unless valid.include?(category)
@@ -299,8 +299,8 @@ module OpenstudioStandards
 
     # Returns the ASHRAE climate zone based on degree days
     #
-    # @param hdd18 [Double] Cooling Degree Days, 18°C base
-    # @param cdd10 [Double] Cooling Degree Days, 10°C base
+    # @param hdd18 [Double] Cooling Degree Days, 18C base
+    # @param cdd10 [Double] Cooling Degree Days, 10C base
     # @return [String] full climate zone string, e.g. 'ASHRAE 169-2013-4A'
     # @todo support Humid (A) / Dry (B) distinctions based on precipitation per Section A3 of ASHRAE 169
     def self.get_climate_zone_from_degree_days(hdd18, cdd10)
@@ -372,7 +372,7 @@ module OpenstudioStandards
       time_zone_longitude_degrees = 15.0 * weather_file.timeZone
 
       # day of year
-      day_of_year = Date.new(y=2009, m=design_day.month, d=design_day.dayOfMonth).yday
+      day_of_year = Date.new(y = 2009, m = design_day.month, d = design_day.dayOfMonth).yday
 
       # equation of time
       gamma_degrees = 360 * (day_of_year - 1) / 365.0
@@ -399,7 +399,7 @@ module OpenstudioStandards
       global_irradiance_array = []
       (0..23).to_a.each do |local_standard_time_hour|
         # apparent solar time
-        apparent_solar_time = local_standard_time_hour + (equation_of_time_minutes / 60.0) + (site_longitude_degrees - time_zone_longitude_degrees)/15.0
+        apparent_solar_time = local_standard_time_hour + (equation_of_time_minutes / 60.0) + (site_longitude_degrees - time_zone_longitude_degrees) / 15.0
 
         # hour angle
         hour_angle_degrees = 15.0 * (apparent_solar_time - 12.0)
@@ -412,7 +412,7 @@ module OpenstudioStandards
         # equation 16 air mass
         # equation 17 and 18 irradiance calculation
         if solar_altitude_degrees > 0
-          air_mass = 1 / (Math.sin(solar_altitude_radians) + 0.50572 * (6.07995 + solar_altitude_degrees)**(-1.6364))
+          air_mass = 1 / (Math.sin(solar_altitude_radians) + 0.50572 * (6.07995 + solar_altitude_degrees)**-1.6364)
           beam_normal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_b * air_mass**ab)
           diffuse_horizontal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_d * air_mass**ad)
         else
@@ -471,16 +471,16 @@ module OpenstudioStandards
       end
 
       # calculate partial pressure of water vapor (Pa)
-      pp_values = sp_values.zip(rh_values).map{ |sp, rh| sp * rh / 100.0 }
+      pp_values = sp_values.zip(rh_values).map { |sp, rh| sp * rh / 100.0 }
 
       # calculate total pressure (Pa)
-      tp_values = pp_values.zip(atm_p_values).map{ |pp, atm| pp + atm }
+      tp_values = pp_values.zip(atm_p_values).map { |pp, atm| pp + atm }
 
       # calculate humidity ratio
-      hr_values = pp_values.zip(tp_values).map{ |pp, tp| (0.621945 * pp) / (tp - pp)}
+      hr_values = pp_values.zip(tp_values).map { |pp, tp| (0.621945 * pp) / (tp - pp) }
 
       # calculate dehumidification degree days based on humidity ratio values above the base
-      hr_values_above_base = hr_values.map{ |hr| hr > base_humidity_ratio ? hr : 0.0}
+      hr_values_above_base = hr_values.map { |hr| hr > base_humidity_ratio ? hr : 0.0 }
       dehumidification_degree_days = hr_values_above_base.sum / 24.0
 
       return dehumidification_degree_days

@@ -169,7 +169,7 @@ module Outpatient
         model.getSpaces.sort.each do |space|
           space_type = space.spaceType.get
           # Skip interior spaces
-          next if space_exterior_wall_and_window_area(space) <= 0
+          next if OpenstudioStandards::Geometry.space_get_exterior_wall_and_subsurface_area(space) <= 0
           # Skip spaces that have no infiltration objects to adjust
           next if space_type.spaceInfiltrationDesignFlowRates.size <= 0
 
@@ -353,7 +353,7 @@ module Outpatient
         if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
           air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
           vav_name = air_terminal.name.get
-          zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+          zone_oa_per_area = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
           case template
           # High OA zones
           # Determine whether or not to use the high minimum guess.
@@ -504,7 +504,7 @@ module Outpatient
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 

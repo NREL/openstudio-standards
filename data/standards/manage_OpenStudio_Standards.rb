@@ -117,7 +117,7 @@ def unique_properties(sheet_name)
          when 'unitary_acs'
            ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'water_heaters'
-           ['template', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'equipment_type', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'minimum_storage', 'maximum_storage', 'minimum_capacity_per_storage', 'maximum_capacity_per_storage', 'draw_profile', 'start_date', 'end_date']
          when 'elevators'
            ['template', 'building_type']
          when 'refrigeration_system_lineup', 'refrigeration_system'
@@ -204,7 +204,7 @@ end
 def check_google_drive_configuration
   require 'google_drive'
   client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
-  unless File.exists? client_config_path
+  unless File.exist? client_config_path
     puts "Unable to locate client_secret.json file at #{client_config_path}."
     return false
   end
@@ -228,7 +228,7 @@ end
 def download_google_spreadsheets(spreadsheet_titles)
   require 'google_drive'
   client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
-  unless File.exists? client_config_path
+  unless File.exist? client_config_path
     puts "Unable to locate client_secret.json file at #{client_config_path}."
     return false
   end

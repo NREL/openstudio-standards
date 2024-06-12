@@ -109,8 +109,6 @@ class ASHRAE901PRM < Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [Double] Building envelope area in m2
   def model_building_envelope_area(model)
-    # Get climate zone
-    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
     # Get the space building envelope area
     # According to the 90.1 definition, building envelope include:
     # - "the elements of a building that separate conditioned spaces from the exterior"
@@ -120,7 +118,7 @@ class ASHRAE901PRM < Standard
     #    from conditioned spaces."
     building_envelope_area_m2 = 0
     model.getSpaces.each do |space|
-      building_envelope_area_m2 += space_envelope_area(space, climate_zone)
+      building_envelope_area_m2 += OpenstudioStandards::Geometry.space_get_envelope_area(space)
     end
     if building_envelope_area_m2 == 0.0
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Calculated building envelope area is 0 m2, no infiltration will be added.')
@@ -612,7 +610,7 @@ class ASHRAE901PRM < Standard
 
     # Modify all constructions of each type
     types_to_modify.each do |boundary_cond, surf_type, const_type|
-      constructions = model_find_constructions(model, boundary_cond, surf_type)
+      constructions = OpenstudioStandards::Constructions.model_get_constructions(model, boundary_cond, surf_type)
 
       constructions.sort.each do |const|
         standards_info = const.standardsInformation
@@ -698,7 +696,7 @@ class ASHRAE901PRM < Standard
 
           # Reduce the size of the skylight
           red = 1.0 - mult
-          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
     end
@@ -1391,7 +1389,7 @@ class ASHRAE901PRM < Standard
         air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
         air_loop_hvac.thermalZones.sort.each do |zone|
           unless baseline_thermal_zone_demand_control_ventilation_required?(zone)
-            thermal_zone_convert_oa_req_to_per_area(zone)
+            OpenstudioStandards::ThermalZone.thermal_zone_convert_outdoor_air_to_per_area(zone)
           end
         end
       end
@@ -1524,8 +1522,8 @@ class ASHRAE901PRM < Standard
 
   # A function to load water use equipment from user data csv files
   # The file name is userdata_wateruse_equipment.csv
-  # @param [OpenStudio::Model::Model] model
-  # @param [String] SWH building type
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  # @param default_swh_building_type [String] SWH building type
   def handle_wateruse_equipment_user_input_data(model, default_swh_building_type)
     user_data_wateruse_equipment = get_userdata(UserDataFiles::WATERUSE_EQUIPMENT)
     user_data_building = get_userdata(UserDataFiles::BUILDING)
@@ -2349,7 +2347,7 @@ class ASHRAE901PRM < Standard
         next if surface.surfaceType != 'Wall'
         next if surface.outsideBoundaryCondition != 'Outdoors'
 
-        orientation = surface_cardinal_direction(surface)
+        orientation = OpenstudioStandards::Geometry.surface_get_cardinal_direction(surface)
         surface.subSurfaces.each do |subsurface|
           subsurface_type = subsurface.subSurfaceType.to_s.downcase
           # Do not count doors
@@ -2483,8 +2481,8 @@ class ASHRAE901PRM < Standard
                                       total_plenum_wall_m2: 0.0)
 
     surface_name = surface.name.get
-    surface_wwr = surface_get_wwr(surface)
-    surface_dr = surface_get_door_ratio(surface)
+    surface_wwr = OpenstudioStandards::Geometry.surface_get_window_to_wall_ratio(surface)
+    surface_dr = OpenstudioStandards::Geometry.surface_get_door_to_wall_ratio(surface)
 
     if multiplier < 1.0
       # Case when reduction is required
@@ -2748,7 +2746,7 @@ class ASHRAE901PRM < Standard
 
     total_area_ft2 = 0
     zones.each do |zn|
-      if thermal_zone_heated?(zn['zone']) && !thermal_zone_cooled?(zn['zone'])
+      if OpenstudioStandards::ThermalZone.thermal_zone_heated?(zn['zone']) && !OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zn['zone'])
         # this will occur when there is no cooling tstat, or when min cooling setpoint is above 91 F
         heated_only_zones << zn['zone']
       elsif comp_room_loads[zn['zone'].name.get] > 0
@@ -2920,8 +2918,7 @@ class ASHRAE901PRM < Standard
     # Determine the number of stories spanned by each group and report out info.
     final_groups.each do |group|
       # Determine the number of stories this group spans
-      num_stories = model_num_stories_spanned(model, group['zones'])
-      group['stories'] = num_stories
+      group['stories'] = OpenstudioStandards::Geometry.thermal_zones_get_number_of_stories_spanned(group['zones'])
       # Report out the final grouping
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['occ']}, fuel = #{group['fuel']}, area = #{group['group_area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
       group['zones'].sort.each_slice(5) do |zone_list|

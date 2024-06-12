@@ -279,7 +279,7 @@ class Standard
     building_type = building_type_hash.key(building_type_hash.values.max)
 
     # determine blended occupancy schedule
-    occ_schedule = spaces_get_occupancy_schedule(model.getSpaces)
+    occ_schedule = OpenstudioStandards::Space.spaces_get_occupancy_schedule(model.getSpaces)
 
     # get total number of people in building
     max_occ_in_spaces = 0

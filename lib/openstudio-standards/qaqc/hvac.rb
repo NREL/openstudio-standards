@@ -359,7 +359,7 @@ module OpenstudioStandards
         @model.getThermalZones.each do |zone|
           is_plenum = false
           zone.spaces.each do |space|
-            if std.space_plenum?(space)
+            if OpenstudioStandards::Space.space_plenum?(space)
               is_plenum = true
             end
           end
@@ -607,7 +607,7 @@ module OpenstudioStandards
         # check ChillerElectricEIR objects (will also have curve check in different script)
         @model.getChillerElectricEIRs.sort.each do |component|
           # eff values from model
-          reference_COP = component.referenceCOP
+          reference_cop = component.referenceCOP
 
           # get eff values from standards (if name doesn't have expected strings find object returns first object of multiple)
           standard_minimum_full_load_efficiency = std.chiller_electric_eir_standard_minimum_full_load_efficiency(component)
@@ -615,17 +615,17 @@ module OpenstudioStandards
           # check actual against target
           if standard_minimum_full_load_efficiency.nil?
             check_elems <<  OpenStudio::Attribute.new('flag', "Can't find target full load efficiency for #{component.name}.")
-          elsif reference_COP < standard_minimum_full_load_efficiency * (1.0 - min_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "COP of #{reference_COP.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_full_load_efficiency.round(2)}.")
-          elsif reference_COP > standard_minimum_full_load_efficiency * (1.0 + max_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "COP  of #{reference_COP.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_full_load_efficiency.round(2)}.")
+          elsif reference_cop < standard_minimum_full_load_efficiency * (1.0 - min_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "COP of #{reference_cop.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_full_load_efficiency.round(2)}.")
+          elsif reference_cop > standard_minimum_full_load_efficiency * (1.0 + max_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "COP  of #{reference_cop.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_full_load_efficiency.round(2)}.")
           end
         end
 
         # check CoilCoolingDXSingleSpeed objects (will also have curve check in different script)
         @model.getCoilCoolingDXSingleSpeeds.each do |component|
           # eff values from model
-          rated_COP = component.ratedCOP.get
+          rated_cop = component.ratedCOP.get
 
           # get eff values from standards
           standard_minimum_cop = std.coil_cooling_dx_single_speed_standard_minimum_cop(component)
@@ -633,18 +633,18 @@ module OpenstudioStandards
           # check actual against target
           if standard_minimum_cop.nil?
             check_elems <<  OpenStudio::Attribute.new('flag', "Can't find target COP for #{component.name}.")
-          elsif rated_COP < standard_minimum_cop * (1.0 - min_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "The COP of #{rated_COP.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
-          elsif rated_COP > standard_minimum_cop * (1.0 + max_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "The COP of  #{rated_COP.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
+          elsif rated_cop < standard_minimum_cop * (1.0 - min_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "The COP of #{rated_cop.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
+          elsif rated_cop > standard_minimum_cop * (1.0 + max_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "The COP of  #{rated_cop.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
           end
         end
 
         # check CoilCoolingDXTwoSpeed objects (will also have curve check in different script)
         @model.getCoilCoolingDXTwoSpeeds.sort.each do |component|
           # eff values from model
-          rated_high_speed_COP = component.ratedHighSpeedCOP.get
-          rated_low_speed_COP = component.ratedLowSpeedCOP.get
+          rated_high_speed_cop = component.ratedHighSpeedCOP.get
+          rated_low_speed_cop = component.ratedLowSpeedCOP.get
 
           # get eff values from standards
           standard_minimum_cop = std.coil_cooling_dx_two_speed_standard_minimum_cop(component)
@@ -652,17 +652,17 @@ module OpenstudioStandards
           # check actual against target
           if standard_minimum_cop.nil?
             check_elems <<  OpenStudio::Attribute.new('flag', "Can't find target COP for #{component.name}.")
-          elsif rated_high_speed_COP < standard_minimum_cop * (1.0 - min_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "The high speed COP of #{rated_high_speed_COP.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
-          elsif rated_high_speed_COP > standard_minimum_cop * (1.0 + max_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "The high speed COP of  #{rated_high_speed_COP.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
+          elsif rated_high_speed_cop < standard_minimum_cop * (1.0 - min_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "The high speed COP of #{rated_high_speed_cop.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
+          elsif rated_high_speed_cop > standard_minimum_cop * (1.0 + max_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "The high speed COP of  #{rated_high_speed_cop.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
           end
           if standard_minimum_cop.nil?
             check_elems <<  OpenStudio::Attribute.new('flag', "Can't find target COP for #{component.name}.")
-          elsif rated_low_speed_COP < standard_minimum_cop * (1.0 - min_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "The low speed COP of #{rated_low_speed_COP.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
-          elsif rated_low_speed_COP > standard_minimum_cop * (1.0 + max_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "The low speed COP of  #{rated_low_speed_COP.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
+          elsif rated_low_speed_cop < standard_minimum_cop * (1.0 - min_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "The low speed COP of #{rated_low_speed_cop.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
+          elsif rated_low_speed_cop > standard_minimum_cop * (1.0 + max_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "The low speed COP of  #{rated_low_speed_cop.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
           end
         end
 
@@ -670,7 +670,7 @@ module OpenstudioStandards
         # @todo need to test this once json file populated for this data
         @model.getCoilHeatingDXSingleSpeeds.sort.each do |component|
           # eff values from model
-          rated_COP = component.ratedCOP
+          rated_cop = component.ratedCOP
 
           # get eff values from standards
           standard_minimum_cop = std.coil_heating_dx_single_speed_standard_minimum_cop(component)
@@ -678,10 +678,10 @@ module OpenstudioStandards
           # check actual against target
           if standard_minimum_cop.nil?
             check_elems <<  OpenStudio::Attribute.new('flag', "Can't find target COP for #{component.name}.")
-          elsif rated_COP < standard_minimum_cop * (1.0 - min_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "The COP of #{rated_COP.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
-          elsif rated_COP > standard_minimum_cop * (1.0 + max_pass_pct)
-            check_elems <<  OpenStudio::Attribute.new('flag', "The COP of  #{rated_COP.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_cop.round(2)}. for #{target_standard}")
+          elsif rated_cop < standard_minimum_cop * (1.0 - min_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "The COP of #{rated_cop.round(2)} for #{component.name} is more than #{min_pass_pct * 100} % below the expected value of #{standard_minimum_cop.round(2)} for #{target_standard}.")
+          elsif rated_cop > standard_minimum_cop * (1.0 + max_pass_pct)
+            check_elems <<  OpenStudio::Attribute.new('flag', "The COP of  #{rated_cop.round(2)} for #{component.name} is more than #{max_pass_pct * 100} % above the expected value of #{standard_minimum_cop.round(2)}. for #{target_standard}")
           end
         end
 
@@ -834,9 +834,9 @@ module OpenstudioStandards
         # check getChillerElectricEIRs objects (will also have curve check in different script)
         @model.getChillerElectricEIRs.sort.each do |component|
           # get curve and evaluate
-          electric_input_to_cooling_output_ratio_function_of_PLR = component.electricInputToCoolingOutputRatioFunctionOfPLR
-          curve_40_pct = electric_input_to_cooling_output_ratio_function_of_PLR.evaluate(0.4)
-          curve_80_pct = electric_input_to_cooling_output_ratio_function_of_PLR.evaluate(0.8)
+          electric_input_to_cooling_output_ratio_function_of_plr = component.electricInputToCoolingOutputRatioFunctionOfPLR
+          curve_40_pct = electric_input_to_cooling_output_ratio_function_of_plr.evaluate(0.4)
+          curve_80_pct = electric_input_to_cooling_output_ratio_function_of_plr.evaluate(0.8)
 
           # find ac properties
           search_criteria = std.chiller_electric_eir_find_search_criteria(component)

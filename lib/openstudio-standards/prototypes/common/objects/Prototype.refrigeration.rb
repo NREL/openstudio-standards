@@ -391,7 +391,7 @@ class Standard
     display_case_zone = nil
     display_case_zone_area_m2 = 0
     model.getThermalZones.each do |zone|
-      space_type = thermal_zone_majority_space_type(zone)
+      space_type = OpenstudioStandards::ThermalZone.thermal_zone_get_space_type(zone)
       next if space_type.empty?
 
       space_type = space_type.get
@@ -458,7 +458,7 @@ class Standard
     walkin_zone = nil
     walkin_zone_area_m2 = 0
     model.getThermalZones.each do |zone|
-      space_type = thermal_zone_majority_space_type(zone)
+      space_type = OpenstudioStandards::ThermalZone.thermal_zone_get_space_type(zone)
       next if space_type.empty?
 
       space_type = space_type.get

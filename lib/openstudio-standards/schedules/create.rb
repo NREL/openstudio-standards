@@ -169,8 +169,7 @@ module OpenstudioStandards
       end
 
       # Winter Design Day
-      winter_dsn_day = OpenStudio::Model::ScheduleDay.new(model)
-      sch_ruleset.setWinterDesignDaySchedule(winter_dsn_day)
+      sch_ruleset.setWinterDesignDaySchedule(sch_ruleset.winterDesignDaySchedule)
       winter_dsn_day = sch_ruleset.winterDesignDaySchedule
       winter_dsn_day.setName("#{sch_ruleset.name} Winter Design Day")
       options['winter_time_value_pairs'].each do |k, v|
@@ -180,8 +179,7 @@ module OpenstudioStandards
       end
 
       # Summer Design Day
-      summer_dsn_day = OpenStudio::Model::ScheduleDay.new(model)
-      sch_ruleset.setSummerDesignDaySchedule(summer_dsn_day)
+      sch_ruleset.setSummerDesignDaySchedule(sch_ruleset.summerDesignDaySchedule)
       summer_dsn_day = sch_ruleset.summerDesignDaySchedule
       summer_dsn_day.setName("#{sch_ruleset.name} Summer Design Day")
       options['summer_time_value_pairs'].each do |k, v|
@@ -224,8 +222,7 @@ module OpenstudioStandards
 
       # Winter Design Day
       unless options['winter_design_day'].nil?
-        winter_dsn_day = OpenStudio::Model::ScheduleDay.new(model)
-        sch_ruleset.setWinterDesignDaySchedule(winter_dsn_day)
+        sch_ruleset.setWinterDesignDaySchedule(sch_ruleset.winterDesignDaySchedule)
         winter_dsn_day = sch_ruleset.winterDesignDaySchedule
         winter_dsn_day.setName("#{sch_ruleset.name} Winter Design Day")
         options['winter_design_day'].each do |data_pair|
@@ -237,8 +234,7 @@ module OpenstudioStandards
 
       # Summer Design Day
       unless options['summer_design_day'].nil?
-        summer_dsn_day = OpenStudio::Model::ScheduleDay.new(model)
-        sch_ruleset.setSummerDesignDaySchedule(summer_dsn_day)
+        sch_ruleset.setSummerDesignDaySchedule(sch_ruleset.summerDesignDaySchedule)
         summer_dsn_day = sch_ruleset.summerDesignDaySchedule
         summer_dsn_day.setName("#{sch_ruleset.name} Summer Design Day")
         options['summer_design_day'].each do |data_pair|

@@ -241,7 +241,7 @@ class Standard
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
-  def seer_to_cop_cooling_no_fan(seer)
+  def seer_to_cop_no_fan(seer)
     cop = -0.0076 * seer * seer + 0.3796 * seer
 
     return cop
@@ -252,7 +252,7 @@ class Standard
   #
   # @param cop [Double] COP
   # @return [Double] Seasonal Energy Efficiency Ratio
-  def cop_to_seer_cooling_no_fan(cop)
+  def cop_no_fan_to_seer(cop)
     delta = 0.3796**2 - 4.0 * 0.0076 * cop
     seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
 
@@ -260,23 +260,23 @@ class Standard
   end
 
   # Convert from SEER to COP (with fan) for cooling coils
-  # per the method specified in 90.1-2013 Appendix G
+  # per the method specified in Thornton et al. 2011
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
-  def seer_to_cop_cooling_with_fan(seer)
+  def seer_to_cop(seer)
     eer = -0.0182 * seer * seer + 1.1088 * seer
-    cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + 0.12) / (1 - 0.12)
+    cop = eer_to_cop(eer)
 
     return cop
   end
 
   # Convert from COP to SEER (with fan) for cooling coils
-  # per the method specified in 90.1-2013 Appendix G
+  # per the method specified in Thornton et al. 2011
   #
   # @param cop [Double] Coefficient of Performance (COP)
   # @return [Double] seasonal energy efficiency ratio (SEER)
-  def cop_to_seer_cooling_with_fan(cop)
+  def cop_to_seer(cop)
     eer = cop_to_eer(cop)
     delta = 1.1088**2 - 4.0 * 0.0182 * eer
     seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
@@ -304,18 +304,18 @@ class Standard
   #
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
-  def hspf_to_cop_heating_no_fan(hspf)
+  def hspf_to_cop_no_fan(hspf)
     cop = -0.0296 * hspf * hspf + 0.7134 * hspf
 
     return cop
   end
 
   # Convert from HSPF to COP (with fan) for heat pump heating coils
-  # @ref [References::ASHRAE9012013] Appendix G
+  # @ref ASHRAE RP-1197
   #
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
-  def hspf_to_cop_heating_with_fan(hspf)
+  def hspf_to_cop(hspf)
     cop = -0.0255 * hspf * hspf + 0.6239 * hspf
 
     return cop
@@ -330,9 +330,9 @@ class Standard
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop_no_fan(eer, capacity_w = nil)
     if capacity_w.nil?
-      # The PNNL Method.
+      # From Thornton et al. 2011
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildings per PNNL.
+      # assumed to be 0.12 for the reference buildings per Thornton et al. 2011.
       r = 0.12
       cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + r) / (1 - r)
     else
@@ -350,11 +350,11 @@ class Standard
   #
   # @param cop [Double] COP
   # @return [Double] Energy Efficiency Ratio (EER)
-  def cop_to_eer_no_fan(cop, capacity_w = nil)
+  def cop_no_fan_to_eer(cop, capacity_w = nil)
     if capacity_w.nil?
-      # The PNNL Method.
+      # From Thornton et al. 2011
       # r is the ratio of supply fan power to total equipment power at the rating condition,
-      # assumed to be 0.12 for the reference buildngs per PNNL.
+      # assumed to be 0.12 for the reference buildngs per Thornton et al. 2011.
       r = 0.12
       eer = OpenStudio.convert(1.0, 'W', 'Btu/h').get * (cop * (1 - r) - r)
     else
@@ -369,7 +369,7 @@ class Standard
 
   # Convert from EER to COP
   #
-  # @param cop [Double] Energy Efficiency Ratio (EER)
+  # @param eer [Double] Energy Efficiency Ratio (EER)
   # @return [Double] Coefficient of Performance (COP)
   def eer_to_cop(eer)
     return eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get
@@ -618,72 +618,6 @@ class Standard
     curve.setMinimumCurveOutput(min_out) unless min_out.nil?
     curve.setMaximumCurveOutput(max_out) unless max_out.nil?
     return curve
-  end
-
-  # Gives the total R-value of the interior and exterior (if applicable)
-  # film coefficients for a particular type of surface.
-  # @ref [References::ASHRAE9012010] A9.4.1 Air Films
-  #
-  # @param intended_surface_type [String]
-  #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
-  #   'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor', 'DemisingRoof',
-  #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
-  #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
-  #   'GroundContactWall', 'GroundContactRoof'
-  # @param int_film [Boolean] if true, interior film coefficient will be included in result
-  # @param ext_film [Boolean] if true, exterior film coefficient will be included in result
-  # @return [Double] Returns the R-Value of the film coefficients [m^2*K/W]
-  def film_coefficients_r_value(intended_surface_type, int_film, ext_film)
-    # Return zero if both interior and exterior are false
-    return 0.0 if !int_film && !ext_film
-
-    # Film values from 90.1-2010 A9.4.1 Air Films
-    film_ext_surf_r_ip = 0.17
-    film_semi_ext_surf_r_ip = 0.46
-    film_int_surf_ht_flow_up_r_ip = 0.61
-    film_int_surf_ht_flow_dwn_r_ip = 0.92
-    fil_int_surf_vertical_r_ip = 0.68
-
-    film_ext_surf_r_si = OpenStudio.convert(film_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    film_semi_ext_surf_r_si = OpenStudio.convert(film_semi_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    film_int_surf_ht_flow_up_r_si = OpenStudio.convert(film_int_surf_ht_flow_up_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    film_int_surf_ht_flow_dwn_r_si = OpenStudio.convert(film_int_surf_ht_flow_dwn_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    fil_int_surf_vertical_r_si = OpenStudio.convert(fil_int_surf_vertical_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-
-    film_r_si = 0.0
-    case intended_surface_type
-    when 'AtticFloor'
-      film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otheriwse
-    when 'AtticWall', 'AtticRoof'
-      film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otherwise
-    when 'DemisingFloor', 'InteriorFloor'
-      film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
-      film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
-    when 'InteriorCeiling'
-      film_r_si += film_int_surf_ht_flow_dwn_r_si if ext_film # Outside
-      film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
-    when 'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor'
-      film_r_si += fil_int_surf_vertical_r_si if ext_film # Outside
-      film_r_si += fil_int_surf_vertical_r_si if int_film # Inside
-    when 'DemisingRoof', 'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser'
-      film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
-    when 'ExteriorFloor'
-      film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
-    when 'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor'
-      film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += fil_int_surf_vertical_r_si if int_film # Inside
-    when 'GroundContactFloor'
-      film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
-    when 'GroundContactWall'
-      film_r_si += fil_int_surf_vertical_r_si if int_film # Inside
-    when 'GroundContactRoof'
-      film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
-    end
-    return film_r_si
   end
 
   # Sets VAV reheat and VAV no reheat terminals on an air loop to control for outdoor air

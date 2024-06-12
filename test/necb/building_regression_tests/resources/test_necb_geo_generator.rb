@@ -64,24 +64,23 @@ class GeoTest < Minitest::Test
 
 
   def create_building_with_space_types(standard:, all_spacetypes:, run_dir:)
-    #creating an empty model object
+    # creating an empty model object
     model = OpenStudio::Model::Model.new()
     standard = Standard.build(standard)
     number_of_floors = (all_spacetypes.size) / 5
     model.getBuilding.setStandardsNumberOfStories(number_of_floors)
     model.getBuilding.setStandardsNumberOfAboveGroundStories(number_of_floors)
 
-    #Create Geometry shell.
-    BTAP::Geometry::Wizards::create_shape_rectangle(model,
-                                                    100.0,
-                                                    100.0,
-                                                    number_of_floors,
-                                                    0,
-                                                    3.8,
-                                                    1,
-                                                    25,
-                                                    0.0,
-    )
+    # Create Geometry shell
+    OpenstudioStandards::Geometry.create_shape_rectangle(model,
+                                                         100.0,
+                                                         100.0,
+                                                         number_of_floors,
+                                                         0,
+                                                         3.8,
+                                                         1,
+                                                         25,
+                                                         0.0)
 
     #Array to store spacetypes by name.
     space_type_objects = []
@@ -113,7 +112,7 @@ class GeoTest < Minitest::Test
     #To do.. you should remove the old runs in this folder.
     vintages = ['NECB2011', 'NECB2015', 'NECB2017']
     test_dir = "#{File.dirname(__FILE__)}/models/geo_test"
-    if Dir.exists?(test_dir)
+    if Dir.exist?(test_dir)
       FileUtils.rm_rf(test_dir)
     end
     Dir.mkdir(test_dir)
@@ -121,7 +120,7 @@ class GeoTest < Minitest::Test
     # For debugging just using .first (would be good to see what happend with .last )
     vintages.each do |vintage|
       vintage_dir = "#{test_dir}/#{vintage}"
-      if Dir.exists?(vintage_dir)
+      if Dir.exist?(vintage_dir)
         Dir.mkdir(vintage_dir)
       end
       array_of_array_of_space_types = determine_space_types_to_test(standard: vintage, range:20)
@@ -131,7 +130,7 @@ class GeoTest < Minitest::Test
         #name = SecureRandom.uuid.to_s
 
         run_dir = "#{test_dir}/#{vintage}/building#{index}"
-        if Dir.exists?(run_dir)
+        if Dir.exist?(run_dir)
           Dir.mkdir(run_dir)
         end
         #create the model

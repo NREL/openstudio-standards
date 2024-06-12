@@ -442,7 +442,7 @@ class NECB2011
       next unless space.thermalZone.empty?
 
       # find adjacent spaces to the current space.
-      adj_spaces = space_get_adjacent_spaces_with_shared_wall_areas(space, true)
+      adj_spaces = OpenstudioStandards::Geometry.space_get_adjacent_spaces_with_shared_wall_areas(space, true)
       adj_spaces = adj_spaces.map { |key, value| key }
 
       # find unassigned adjacent wild spaces that have not been assigned that have the same multiplier these will be
@@ -926,8 +926,8 @@ class NECB2011
       when 4
         group_similar_zones_together(sys_zones).each do |curr_zones|
           add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
-                                                                       necb_reference_hp: necb_reference_hp,       
-                                                                       necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,   
+                                                                       necb_reference_hp: necb_reference_hp,
+                                                                       necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                        zones: curr_zones,
                                                                        heating_coil_type: heating_coil_type_sys4,
                                                                        baseboard_type: baseboard_type,
@@ -1104,8 +1104,8 @@ class NECB2011
           # Create a separate air loop for each unit.
           sys_zones.each do |zone|
             add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating(model: model,
-                                                                                  necb_reference_hp: necb_reference_hp,    
-                                                                                  necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,        
+                                                                                  necb_reference_hp: necb_reference_hp,
+                                                                                  necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                                   zones: [zone],
                                                                                   heating_coil_type: heating_coil_type_sys3,
                                                                                   baseboard_type: baseboard_type,
@@ -1134,7 +1134,7 @@ class NECB2011
 
     add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                  necb_reference_hp: necb_reference_hp,
-                                                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, 
+                                                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                  zones: wet_tz,
                                                                  heating_coil_type: heating_coil_type_sys4,
                                                                  baseboard_type: baseboard_type,
@@ -1150,7 +1150,7 @@ class NECB2011
   # All wet spaces will be on their own system 4 AHU.
   def auto_system_storage_spaces(baseboard_type:,
                                  necb_reference_hp:false,
-                                 necb_reference_hp_supp_fuel:'DefaultFuel', 
+                                 necb_reference_hp_supp_fuel:'DefaultFuel',
                                  boiler_fueltype:,
                                  heating_coil_type_sys4:,
                                  model:)
@@ -1165,7 +1165,7 @@ class NECB2011
     # create a system 4 for the  zones.
     add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                  necb_reference_hp: necb_reference_hp,
-                                                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, 
+                                                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                  zones: tz,
                                                                  heating_coil_type: heating_coil_type_sys4,
                                                                  baseboard_type: baseboard_type,
@@ -1181,7 +1181,7 @@ class NECB2011
   # All wild spaces will be on a single system 4 ahu with the largests heating load zone being the control zone.
   def auto_system_wild_spaces(baseboard_type:,
                               necb_reference_hp:false,
-                              necb_reference_hp_supp_fuel:'Defaultfuel', 
+                              necb_reference_hp_supp_fuel:'Defaultfuel',
                               heating_coil_type_sys4:,
                               model:)
 
@@ -1195,7 +1195,7 @@ class NECB2011
     # create a system 4 for the wild zones.
     add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                  necb_reference_hp: necb_reference_hp,
-                                                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, 
+                                                                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                  zones: zones,
                                                                  heating_coil_type: heating_coil_type_sys4,
                                                                  baseboard_type: baseboard_type,

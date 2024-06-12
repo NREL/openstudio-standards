@@ -1187,7 +1187,7 @@ class NECB2011 < Standard
     # Remove infiltration rates set at the space object.
     space.spaceInfiltrationDesignFlowRates.each(&:remove)
 
-    exterior_wall_and_roof_and_subsurface_area = space_exterior_wall_and_roof_and_subsurface_area(space) # To do
+    exterior_wall_and_roof_and_subsurface_area = OpenstudioStandards::Geometry.space_get_exterior_wall_and_subsurface_and_roof_area(space) # To do
     # Don't create an object if there is no exterior wall area
     if exterior_wall_and_roof_and_subsurface_area <= 0.0
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
@@ -2392,7 +2392,7 @@ class NECB2011 < Standard
       end
     end
     if future_file
-      # Rename the non-ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
+      # Rename the non ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
       # because the ASHRAE .ddy file includes sizing information not included in the regular .ddy file for future
       # weather data files.  Unfortunately, openstudio-standards just looks for the regular .ddy file for sizing
       # information which is why the switch is done.

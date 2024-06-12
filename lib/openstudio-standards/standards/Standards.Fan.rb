@@ -94,7 +94,7 @@ module Fan
                               else
                                 OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "The maximum flow rate for exhaust fan '#{fan.name}' was not specified.")
                               end
-    end
+                            end
     return dsn_air_flow_m3_per_s
   end
 

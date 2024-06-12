@@ -22,6 +22,7 @@ lib/openstudio-standards/schedules/**/*.rb
 lib/openstudio-standards/space/**/*.rb
 lib/openstudio-standards/sql_file/**/*.rb
 lib/openstudio-standards/standards/**/*.rb
+lib/openstudio-standards/thermal_zone/**/*.rb
 lib/openstudio-standards/utilities/**/*.rb
 lib/openstudio-standards/weather/**/*.rb
 -

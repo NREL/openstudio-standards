@@ -193,6 +193,11 @@ Standard.class_eval do
       sim_control.setDoHVACSizingSimulationforSizingPeriods(true)
       sim_control.setMaximumNumberofHVACSizingSimulationPasses(1)
     end
+    if model.version >= OpenStudio::VersionString.new('3.8.0')
+      sim_control.setDoZoneSizingCalculation(true)
+      sim_control.setDoSystemSizingCalculation(true)
+      sim_control.setDoPlantSizingCalculation(true)
+    end
 
     # check that all zones have surfaces.
     raise 'Error: Sizing Run Failed. Thermal Zones with no surfaces exist.' unless model_do_all_zones_have_surfaces?(model)
@@ -217,7 +222,8 @@ Standard.class_eval do
   def model_do_all_zones_have_surfaces?(model)
     # Check to see if all zones have surfaces.
     model.getThermalZones.each do |zone|
-      if BTAP::Geometry::Surfaces.get_surfaces_from_thermal_zones([zone]).empty?
+      surfaces = zone.spaces.sort.flat_map(&:surfaces)
+      if surfaces.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Thermal zone #{zone.name} does not contain surfaces.\n")
         return false
       end

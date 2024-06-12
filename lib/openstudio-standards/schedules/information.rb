@@ -830,6 +830,66 @@ module OpenstudioStandards
       return { 'start_time' => start_time, 'end_time' => end_time }
     end
 
+    # Returns the day schedules associated with a schedule ruleset
+    # Optionally includes summer and winter design days
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param include_design_days [Bool] include summer and winter design day profiles
+    #   Defaults to false
+    # @return [Array<OpenStudio::Model::ScheduleDay>] array of day schedules
+    def self.schedule_ruleset_get_day_schedules(schedule_ruleset, include_design_days: false)
+      profiles = []
+      profiles << schedule_ruleset.defaultDaySchedule
+      schedule_ruleset.scheduleRules.each do |rule|
+        profiles << rule.daySchedule
+      end
+
+      if include_design_days
+
+        if schedule_ruleset.isSummerDesignDayScheduleDefaulted
+          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_day_schedules called for #{schedule_ruleset.name.get} with include_design_days: true, but the summer design day is defaulted. Duplicate design day will not be added.")
+        else
+          profiles << rule.summerDesignDaySchedule
+        end
+
+        if schedule_ruleset.isWinterDesignDayScheduleDefaulted
+          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_day_schedules called for #{schedule_ruleset.name.get} with include_design_days: true, but the winter design day is defaulted. Duplicate design day will not be added.")
+        else
+          profiles << rule.winterDesignDaySchedule
+        end
+
+      end
+
+      return profiles
+    end
+
+    # Return the annual days of year that covered by each rule of a schedule ruleset
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @return [Hash] hash of rule_index => [days_used]. Default day has rule_index = -1
+    def self.schedule_ruleset_get_annual_days_used(schedule_ruleset)
+      year_description = schedule_ruleset.model.getYearDescription
+      year = year_description.assumedYear
+      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+      sch_indices_vector = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
+      days_used_hash = Hash.new { |h, k| h[k] = [] }
+      sch_indices_vector.uniq.sort.each do |rule_i|
+        sch_indices_vector.each_with_index { |rule, i| days_used_hash[rule_i] << i + 1 if rule_i == rule }
+      end
+      return days_used_hash
+    end
+
+    # Returns the rule indices associated with defaultDay and Rule days for a given ScheduleRuleset
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @return [Hash] hash of ScheduleDay => rule index. Default day has rule index of -1
+    def self.schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
+      schedule_day_hash = {}
+      schedule_day_hash[schedule_ruleset.defaultDaySchedule] = -1
+      schedule_ruleset.scheduleRules.each { |rule| schedule_day_hash[rule.daySchedule] = rule.ruleIndex }
+      return schedule_day_hash
+    end
+
     # @!endgroup Information:ScheduleRuleset
   end
 end

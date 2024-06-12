@@ -5,8 +5,8 @@ include(NecbHelper)
 # This class will perform tests that are HDD driven, A Test model will be created
 # that will have all of OpenStudios surface types with different contructions. All
 # components are created from scratch to ensure model are up to date and we will
-# not run into version issues with the test. 
-## to specifically test aspects of the NECB2011 code that are HDD dependant. 
+# not run into version issues with the test.
+## to specifically test aspects of the NECB2011 code that are HDD dependant.
 class NECB_Constructions_FDWR_Tests < Minitest::Test
 
   def setup()
@@ -25,22 +25,25 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
   ]
 
   # Create scaffolding to create a model with windows, then reset to appropriate values.
-  # Will require large windows and constructions that have high U-values.    
+  # Will require large windows and constructions that have high U-values.
   def create_base_model()
 
-    #Create new model for testing. 
+    #Create new model for testing.
     @model = OpenStudio::Model::Model.new
-    #Create Geometry that will be used for all tests.  
+    #Create Geometry that will be used for all tests.
 
     #Below ground story to tests all ground surfaces including roof.
     length = 100.0; width = 100.0; num_above_ground_floors = 0; num_under_ground_floors = 1; floor_to_floor_height = 3.8; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = -10.0
-    @below_ground_floors = BTAP::Geometry::Wizards::create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+
+    OpenstudioStandards::Geometry.create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+    @below_ground_floors = OpenstudioStandards::Geometry.model_get_building_stories_below_ground(@model)
 
     #Above ground story to test all above outdoors surfaces including floor.
     length = 100.0; width = 100.0; num_above_ground_floors = 3; num_under_ground_floors = 0; floor_to_floor_height = 3.8; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-    @above_ground_floors = BTAP::Geometry::Wizards::create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+    OpenstudioStandards::Geometry.create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+    @above_ground_floors = OpenstudioStandards::Geometry.model_get_building_stories_above_ground(@model)
 
-    #Find all outdoor surfaces. 
+    #Find all outdoor surfaces.
     outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(@model.getSurfaces(), "Outdoors")
     @outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
     @outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
@@ -52,7 +55,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     subsurfaces = []
     counter = 0
     @outdoor_walls.each { |wall| subsurfaces << wall.setWindowToWallRatio(0.60) }
-    #ensure all wall subsurface types are represented. 
+    #ensure all wall subsurface types are represented.
     subsurfaces.each do |subsurface|
       counter = counter + 1
 
@@ -74,7 +77,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
     pattern = OpenStudio::Model::generateSkylightPattern(@model.getSpaces, @model.getSpaces[0].directionofRelativeNorth, 0.10, 4.0, 4.0) # ratio, x value, y value
     subsurfaces = OpenStudio::Model::applySkylightPattern(pattern, @model.getSpaces, OpenStudio::Model::OptionalConstructionBase.new)
 
-    #ensure all roof subsurface types are represented. 
+    #ensure all roof subsurface types are represented.
     subsurfaces.each do |subsurface|
       counter = counter + 1
       case counter
@@ -92,21 +95,21 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
     standard = get_standard("NECB2011")
     standard.model_clear_and_set_example_constructions(@model)
-    #Ensure that building is Conditioned add spacetype to each space. 
+    #Ensure that building is Conditioned add spacetype to each space.
 
   end
 
-  # Tests to ensure that the U-Values of the construction are set correctly. This 
-  # test will set up  
-  # for all HDDs 
+  # Tests to ensure that the U-Values of the construction are set correctly. This
+  # test will set up
+  # for all HDDs
   # NECB2011 8.4.4.1
-  # @return [Boolean] true if successful. 
+  # @return [Boolean] true if successful.
   def test_necb_hdd_envelope_rules()
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
 
-    # Create report string. 
+    # Create report string.
     @json_test_output = {}
 
     # Iterate through the vintage templates 'NECB2011', etc..
@@ -148,7 +151,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
         # Store hdd for classifing results.
         @hdd = standard.get_necb_hdd18(model: @model, necb_hdd: true)
-		
+
         # Set the infiltration rate at each space.
         @model.getSpaces.sort.each do |space|
           standard.space_apply_infiltration_rate(space)
@@ -159,7 +162,7 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
         outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
         outdoor_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Floor")
-        outdoor_subsurfaces = BTAP::Geometry::Surfaces::get_subsurfaces_from_surfaces(outdoor_surfaces)
+        outdoor_subsurfaces = outdoor_surfaces.flat_map(&:subSurfaces)
         windows = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["FixedWindow", "OperableWindow"])
         skylights = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["Skylight", "TubularDaylightDiffuser", "TubularDaylightDome"])
         doors = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(outdoor_subsurfaces, ["Door", "GlassDoor"])
@@ -169,21 +172,21 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
         ground_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling")
         ground_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor")
 
-        # Determine the weighted average conductances by surface type. 
+        # Determine the weighted average conductances by surface type.
         ## exterior surfaces.
-        outdoor_walls_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_walls)
-        outdoor_roofs_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_roofs)
-        outdoor_floors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_floors)
+        outdoor_walls_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls)
+        outdoor_roofs_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs)
+        outdoor_floors_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors)
         ## Ground surfaces.
-        ground_walls_average_conductances = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_walls)
-        ground_roofs_average_conductances = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_roofs)
-        ground_floors_average_conductances = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_floors)
+        ground_walls_average_conductances = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls)
+        ground_roofs_average_conductances = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs)
+        ground_floors_average_conductances = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors)
         ## Sub surfaces.
-        windows_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(windows)
-        windows_average_shgc = BTAP::Geometry::Surfaces::get_weighted_average_surface_shgc(windows)
-        skylights_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(skylights)
-        doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(doors)
-        #overhead_doors_average_conductance = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors)
+        windows_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(windows)
+        windows_average_shgc = OpenstudioStandards::Constructions.surfaces_get_solar_transmittance(windows)
+        skylights_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(skylights)
+        doors_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(doors)
+        #overhead_doors_average_conductance = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors)
 
         # SRR and FDWR.
         srr_info = standard.find_exposed_conditioned_roof_surfaces(@model)
@@ -191,8 +194,8 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
         # Output conductances.
         def roundOrNA(data, figs = 4)
-          if data == 'NA'
-            return data
+          if data.nil? || data == 'NA'
+            return 'NA'
           end
           return data.round(figs)
         end
@@ -214,18 +217,19 @@ class NECB_Constructions_FDWR_Tests < Minitest::Test
 
         # Infiltration test.
         # Get the effective infiltration rate through the walls and roof only.
-        sorted_spaces = BTAP::Geometry::Spaces::get_spaces_from_storeys(@model, @above_ground_floors).sort_by { |space| space.name.get }
+        sorted_spaces = @above_ground_floors.flat_map(&:spaces).sort_by { |space| space.name.get }
+
         # Need to sort spaces otherwise the output order is random.
         @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'] = {}
         sorted_spaces.each do |space|
           assert(space.spaceInfiltrationDesignFlowRates.size <= 1, "There should be no more than one infiltration object per space in the reference/budget building#{space.spaceInfiltrationDesignFlowRates}")
-          
-          # If space rightfully does not have an infiltration rate (no exterior surfaces) output an NA. 
+
+          # If space rightfully does not have an infiltration rate (no exterior surfaces) output an NA.
           if space.spaceInfiltrationDesignFlowRates.size == 0
             @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'][space.name] = "NA,"
           else
-            # Do some math to determine the effective infiltration rate of the walls and roof only as per NECB. 
-            wall_roof_infiltration_rate = space.spaceInfiltrationDesignFlowRates[0].flowperExteriorSurfaceArea.get * space.exteriorArea / standard.space_exterior_wall_and_roof_and_subsurface_area(space)
+            # Do some math to determine the effective infiltration rate of the walls and roof only as per NECB.
+            wall_roof_infiltration_rate = space.spaceInfiltrationDesignFlowRates[0].flowperExteriorSurfaceArea.get * space.exteriorArea / OpenstudioStandards::Geometry.space_get_exterior_wall_and_subsurface_and_roof_area(space)
             # Output effective infiltration rate
             @json_test_output[template][@hdd]['Wall/Roof infil rate (L/s/m2)'][space.name] = "#{(wall_roof_infiltration_rate * 1000).round(3)},"
 

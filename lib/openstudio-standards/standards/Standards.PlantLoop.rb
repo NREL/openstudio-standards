@@ -667,9 +667,9 @@ class Standard
         case sc.iddObjectType.valueName.to_s
         when 'OS_DistrictHeating'
           dist_htg = sc.to_DistrictHeating.get
-        when 'OS_DistrictHeatingWater'
+        when 'OS_DistrictHeating_Water'
           dist_htg = sc.to_DistrictHeatingWater.get
-        when 'OS_DistrictHeatingSteam'
+        when 'OS_DistrictHeating_Steam'
           dist_htg = sc.to_DistrictHeatingSteam.get
         end
         if dist_htg.nominalCapacity.is_initialized
@@ -831,7 +831,7 @@ class Standard
         pump_variable_speed_set_control_type(pump, pri_control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, control_type)
+        headered_pumps_variable_speed_set_control_type(pump, pri_control_type)
       end
     end
 
@@ -842,7 +842,7 @@ class Standard
         pump_variable_speed_set_control_type(pump, sec_control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, control_type)
+        headered_pumps_variable_speed_set_control_type(pump, sec_control_type)
       end
     end
 
@@ -904,7 +904,7 @@ class Standard
         pump_variable_speed_set_control_type(pump, control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, control_type)
+        headered_pumps_variable_speed_set_control_type(pump, control_type)
       end
     end
 
@@ -1390,7 +1390,7 @@ class Standard
       obj_type = component.iddObjectType.valueName.to_s
 
       case obj_type
-        when 'OS_DistrictHeating', 'OS_DistrictHeatingWater', 'OS_DistrictHeatingSteam'
+        when 'OS_DistrictHeating', 'OS_DistrictHeating_Water', 'OS_DistrictHeating_Steam'
           primary_fuels << 'DistrictHeating'
           combination_system = false
         when 'OS_HeatPump_WaterToWater_EquationFit_Heating'

@@ -54,15 +54,8 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, fuel type of #{fuel_type} is not yet supported, standard will not be applied.")
     end
 
-    # Get the water heater properties
-    search_criteria = {}
-    search_criteria['template'] = template
-    search_criteria['fuel_type'] = fuel_type
-    wh_props = model_find_object(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
-    unless wh_props
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, cannot find water heater properties, cannot apply efficiency standard.")
-      return false
-    end
+    wh_props = water_heater_mixed_get_efficiency_requirement(water_heater_mixed, fuel_type, capacity_btu_per_hr, volume_gal)
+    return false if wh_props == {}
 
     # Calculate the water heater efficiency and
     # skin loss coefficient (UA) using different methods,
@@ -70,7 +63,6 @@ class Standard
     water_heater_efficiency = nil
     ua_btu_per_hr_per_f = nil
 
-    # Rarely specified by thermal efficiency alone
     if wh_props['thermal_efficiency'] && !wh_props['standby_loss_capacity_allowance']
       thermal_efficiency = wh_props['thermal_efficiency']
       water_heater_efficiency = thermal_efficiency
@@ -98,20 +90,25 @@ class Standard
         vol_drt = wh_props['uniform_energy_factor_volume_allowance']
         uniform_energy_factor = base_uniform_energy_factor - (vol_drt * volume_gal)
       end
-      energy_factor = water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
+      energy_factor = water_heater_convert_uniform_energy_factor_to_energy_factor(water_heater_mixed, fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
       water_heater_efficiency, ua_btu_per_hr_per_f = water_heater_convert_energy_factor_to_thermal_efficiency_and_ua(fuel_type, energy_factor, capacity_btu_per_hr)
       # Two booster water heaters
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
     end
 
     # Typically specified this way for large electric water heaters
-    if wh_props['standby_loss_base'] && wh_props['standby_loss_volume_allowance']
+    if wh_props['standby_loss_base'] && (wh_props['standby_loss_volume_allowance'] || wh_props['standby_loss_square_root_volume_allowance'])
       # Fixed water heater efficiency per PNNL
       water_heater_efficiency = 1.0
       # Calculate the max allowable standby loss (SL)
       sl_base = wh_props['standby_loss_base']
-      sl_drt = wh_props['standby_loss_volume_allowance']
-      sl_btu_per_hr = sl_base + (sl_drt * Math.sqrt(volume_gal))
+      if wh_props['standby_loss_square_root_volume_allowance']
+        sl_drt = wh_props['standby_loss_square_root_volume_allowance']
+        sl_btu_per_hr = sl_base + (sl_drt * Math.sqrt(volume_gal))
+      else # standby_loss_volume_allowance
+        sl_drt = wh_props['standby_loss_volume_allowance']
+        sl_btu_per_hr = sl_base + (sl_drt * volume_gal)
+      end
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = @instvarbuilding_type == 'MidriseApartment' ? sl_btu_per_hr / 70 * 23 :  sl_btu_per_hr / 70
       ua_btu_per_hr_per_f = water_heater_mixed.name.to_s.include?('Booster') ? ua_btu_per_hr_per_f * 2 : ua_btu_per_hr_per_f
@@ -124,21 +121,28 @@ class Standard
       # Calculate the percent loss per hr
       hr_loss_base = wh_props['hourly_loss_base']
       hr_loss_allow = wh_props['hourly_loss_volume_allowance']
-      hrly_loss_pct = hr_loss_base + (hr_loss_allow / volume_gal) / 100.0
+      hrly_loss_pct = hr_loss_base + hr_loss_allow / volume_gal
       # Convert to Btu/hr, assuming:
       # Water at 120F, density = 8.25 lb/gal
       # 1 Btu to raise 1 lb of water 1 F
       # Therefore 8.25 Btu / gal of water * deg F
       # 70F delta-T between water and zone
-      hrly_loss_btu_per_hr = hrly_loss_pct * volume_gal * 8.25 * 70
+      hrly_loss_btu_per_hr = (hrly_loss_pct / 100) * volume_gal * 8.25 * 70
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = hrly_loss_btu_per_hr / 70
     end
 
     # Typically specified this way for large natural gas water heaters
-    if wh_props['standby_loss_capacity_allowance'] && wh_props['standby_loss_volume_allowance'] && wh_props['thermal_efficiency']
+    if wh_props['standby_loss_capacity_allowance'] && (wh_props['standby_loss_volume_allowance'] || wh_props['standby_loss_square_root_volume_allowance']) && wh_props['thermal_efficiency']
       sl_cap_adj = wh_props['standby_loss_capacity_allowance']
-      sl_vol_drt = wh_props['standby_loss_volume_allowance']
+      if !wh_props['standby_loss_volume_allowance'].nil?
+        sl_vol_drt = wh_props['standby_loss_volume_allowance']
+      elsif !wh_props['standby_loss_square_root_volume_allowance'].nil?
+        sl_vol_drt = wh_props['standby_loss_square_root_volume_allowance']
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, could not retrieve the standby loss volume allowance.")
+        return false
+      end
       et = wh_props['thermal_efficiency']
       # Estimate storage tank volume
       tank_volume = volume_gal > 100 ? (volume_gal - 100).round(0) : 0
@@ -192,6 +196,56 @@ class Standard
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{template}: #{water_heater_mixed.name}; thermal efficiency = #{water_heater_efficiency.round(3)}, skin-loss UA = #{ua_btu_per_hr_per_f.round}Btu/hr-R")
 
     return true
+  end
+
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] OpenStudio WaterHeaterMixed object
+  # @param fuel_type [Float] water heater fuel type
+  # @param capacity_btu_per_hr [Float] water heater capacity in Btu/h
+  # @param volume_gal [Float] water heater gallons of storage
+  # @return [Hash] returns a hash wwith the applicable efficiency requirements
+  def water_heater_mixed_get_efficiency_requirement(water_heater_mixed, fuel_type, capacity_btu_per_hr, volume_gal)
+    # Get the water heater properties
+    search_criteria = {}
+    search_criteria['template'] = template
+    search_criteria['fuel_type'] = fuel_type
+    search_criteria['equipment_type'] = 'Storage Water Heaters'
+
+    # Search base on capacity first
+    wh_props_capacity = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
+    wh_props_capacity_and_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal.round(0))
+    wh_props_capacity_and_capacity_btu_per_hr = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, nil, capacity_btu_per_hr)
+    wh_props_capacity_and_volume_and_capacity_per_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal, capacity_btu_per_hr / volume_gal)
+
+    # We consider that the lookup is successful if only one set of record is returned
+    if wh_props_capacity.size == 1
+      wh_props = wh_props_capacity[0]
+    elsif wh_props_capacity_and_volume.size == 1
+      wh_props = wh_props_capacity_and_volume[0]
+    elsif wh_props_capacity_and_capacity_btu_per_hr == 1
+      wh_props = wh_props_capacity_and_capacity_btu_per_hr[0]
+    elsif wh_props_capacity_and_volume_and_capacity_per_volume == 1
+      wh_props = wh_props_capacity_and_volume_and_capacity_per_volume[0]
+    else
+      # Search again with additional criteria
+      search_criteria = water_heater_mixed_additional_search_criteria(water_heater_mixed, search_criteria)
+      wh_props_capacity = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr)
+      wh_props_capacity_and_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal.round(0))
+      wh_props_capacity_and_capacity_btu_per_hr = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, nil, capacity_btu_per_hr)
+      wh_props_capacity_and_volume_and_capacity_per_volume = model_find_objects(standards_data['water_heaters'], search_criteria, capacity_btu_per_hr, nil, nil, nil, nil, volume_gal, capacity_btu_per_hr / volume_gal)
+      if wh_props_capacity.size == 1
+        wh_props = wh_props_capacity[0]
+      elsif wh_props_capacity_and_volume.size == 1
+        wh_props = wh_props_capacity_and_volume[0]
+      elsif wh_props_capacity_and_capacity_btu_per_hr == 1
+        wh_props = wh_props_capacity_and_capacity_btu_per_hr[0]
+      elsif wh_props_capacity_and_volume_and_capacity_per_volume == 1
+        wh_props = wh_props_capacity_and_volume_and_capacity_per_volume[0]
+      else
+        return {}
+      end
+    end
+
+    return wh_props
   end
 
   # Applies the correct fuel type for the water heaters
@@ -257,12 +311,13 @@ class Standard
 
   # Convert Uniform Energy Factor (UEF) to Energy Factor (EF)
   #
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
   # @param fuel_type [String] water heater fuel type
   # @param uniform_energy_factor [Float] water heater Uniform Energy Factor (UEF)
   # @param capacity_btu_per_hr [Float] water heater capacity
   # @param volume_gal [Float] water heater storage volume in gallons
   # @return [Float] returns Energy Factor (EF)
-  def water_heater_convert_uniform_energy_factor_to_energy_factor(fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
+  def water_heater_convert_uniform_energy_factor_to_energy_factor(water_heater_mixed, fuel_type, uniform_energy_factor, capacity_btu_per_hr, volume_gal)
     # Get water heater sub type
     sub_type = water_heater_determine_sub_type(fuel_type, capacity_btu_per_hr, volume_gal)
 
@@ -318,5 +373,14 @@ class Standard
     end
 
     return water_heater_efficiency, ua_btu_per_hr_per_f
+  end
+
+  # Add additional search criteria for water heater lookup efficiency.
+  #
+  # @param water_heater_mixed [OpenStudio::Model::WaterHeaterMixed] water heater mixed object
+  # @param search_criteria [Hash] search criteria for looking up water heater data
+  # @return [Hash] updated search criteria
+  def water_heater_mixed_additional_search_criteria(water_heater_mixed, search_criteria)
+    return search_criteria
   end
 end

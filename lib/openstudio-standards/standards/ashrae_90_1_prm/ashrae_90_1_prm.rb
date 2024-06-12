@@ -71,7 +71,7 @@ class ASHRAE901PRM < Standard
     # Read all valid files in user_data_folder and load into json array
     unless user_data_path == ''
       user_data_validation_outcome = true
-      Dir.glob("#{user_data_path}/*.csv").each do |csv_full_name|
+      Dir.glob("#{user_data_path.gsub('\\', '/')}/*.csv").each do |csv_full_name|
         csv_file_name = File.basename(csv_full_name, File.extname(csv_full_name))
         if json_objs.key?(csv_file_name)
           # Load csv file into array of hashes

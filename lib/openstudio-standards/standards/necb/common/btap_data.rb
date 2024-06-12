@@ -295,7 +295,7 @@ class BTAPData
     outdoor_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Wall')
     outdoor_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'RoofCeiling')
     outdoor_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Floor')
-    outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
+    outdoor_subsurfaces = outdoor_surfaces.flat_map(&:subSurfaces)
     ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     ground_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Wall')
     ground_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'RoofCeiling')
@@ -334,16 +334,16 @@ class BTAPData
                                       data['overhead_doors_area_m_sq']
 
     # Average Conductances by surface Type
-    data['outdoor_walls_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
-    data['outdoor_roofs_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
-    data['outdoor_floors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
-    data['ground_walls_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_walls).round(4) if !ground_walls.empty?
-    data['ground_roofs_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_roofs).round(4) if !ground_roofs.empty?
-    data['ground_floors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_floors).round(4) if !ground_floors.empty?
-    data['windows_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(windows).round(4) if !windows.empty?
-    data['skylights_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(skylights).round(4) if !skylights.empty?
-    data['doors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(doors).round(4) if !doors.empty?
-    data['overhead_doors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(overhead_doors).round(4) if !overhead_doors.empty?
+    data['outdoor_walls_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
+    data['outdoor_roofs_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
+    data['outdoor_floors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
+    data['ground_walls_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls).round(4) if !ground_walls.empty?
+    data['ground_roofs_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs).round(4) if !ground_roofs.empty?
+    data['ground_floors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors).round(4) if !ground_floors.empty?
+    data['windows_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(windows).round(4) if !windows.empty?
+    data['skylights_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(skylights).round(4) if !skylights.empty?
+    data['doors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(doors).round(4) if !doors.empty?
+    data['overhead_doors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors).round(4) if !overhead_doors.empty?
 
     # #Average Conductances for building whole weight factors
     !outdoor_walls.empty? ? o_wall_cond_weight = data['outdoor_walls_average_conductance_w_per_m_sq_k'] * data['outdoor_walls_area_m_sq'] : o_wall_cond_weight = 0

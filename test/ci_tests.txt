@@ -1,6 +1,7 @@
-
-modules/constructions/test_constructions.rb
 modules/constructions/test_materials.rb
+modules/constructions/test_create.rb
+modules/constructions/test_information.rb
+modules/constructions/test_modify.rb
 modules/create_typical/test_space_type_ratios.rb
 modules/create_typical/test_enumerations.rb
 modules/create_typical/test_create_typical.rb
@@ -14,9 +15,9 @@ modules/infiltration/test_infiltration.rb
 modules/schedules/test_schedules_create.rb
 modules/schedules/test_schedules_information.rb
 modules/schedules/test_schedules_modify.rb
-modules/sql_file/test_sql_file.rb
-modules/sql_file/test_unmet_hours.rb
-modules/sql_file/test_energy_use.rb
+modules/schedules/test_schedules_parametric.rb
+modules/space/test_space.rb
+modules/thermal_zone/test_thermal_zone.rb
 modules/weather/test_weather_information.rb
 modules/weather/test_weather_modify.rb
 modules/weather/test_weather_stat_file.rb
@@ -27,6 +28,7 @@ os_stds_methods/test_daylighting_controls.rb
 os_stds_methods/test_space_type.rb
 os_stds_methods/test_misc.rb
 os_stds_methods/test_radiant_controls.rb
+os_stds_methods/test_minimum_efficiency_lookups.rb
 
 90_1_prm/test_prm_baseline_bldg.rb
 90_1_prm/test_prm_baseline_bldg4.rb
@@ -87,7 +89,6 @@ doe_prototype/test_add_refrigeration.rb
 doe_prototype/test_add_swh.rb
 doe_prototype/test_effective_num_stories.rb
 doe_prototype/test_space_type_hash.rb
-doe_prototype/test_swh.rb
 doe_prototype/test_sim_control.rb
 
 cbes_prototype/test_small_office.rb
@@ -95,7 +96,6 @@ cbes_prototype/test_medium_office.rb
 cbes_prototype/test_retail_standalone.rb
 
 # NECB unit tests (in alphebetical order)
-necb/unit_tests/tests/test_btap_geometry_wizards.rb
 necb/unit_tests/tests/test_daylighting_sensor_control.rb
 necb/unit_tests/tests/test_dcv.rb
 necb/unit_tests/tests/test_ecm_hs14_cgshp_fancoils.rb
@@ -127,12 +127,12 @@ necb/unit_tests/tests/test_necb_space_types_default_constructions_set.rb
 necb/unit_tests/tests/test_necb_total_and_tz_ceiling_centroid.rb
 necb/unit_tests/tests/test_necb_unitary_rules.rb
 necb/unit_tests/tests/test_necb_waterheater_rules.rb
-necb/unit_tests/tests/test_necb_weather.rb
 necb/unit_tests/tests/test_necb_weather_file_download.rb
 necb/unit_tests/tests/test_nv.rb
 necb/unit_tests/tests/test_pv_ground.rb
 necb/unit_tests/tests/test_remove_duplicate_materials_and_constructions.rb
 necb/unit_tests/tests/test_necb_weather_hdd.rb
+necb/unit_tests/tests/test_necb_qaqc_reporting.rb
 #necb/unit_tests/tests/test_space_type_vintage_map.rb
 
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_hydronic_fpfc.rb
