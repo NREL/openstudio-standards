@@ -12278,7 +12278,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Day,
   {80e79aba-facf-45ce-9a3b-ccf2acebf5dc}, !- Handle
-  Water Heater Ambient Temp Schedule - 70.0f Default, !- Name
+  Water Heater Ambient Temp Schedule 70.0F Default, !- Name
   {5122110e-1213-4d61-b03a-64538499d180}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
