@@ -82,6 +82,7 @@ module OpenstudioStandards
     # This method will remove any existing infiltration objects (OS:SpaceInfiltration:DesignFlowRate and OS:SpaceInfiltration:EffectiveLeakageArea). Every zone will then get two OS:SpaceInfiltration:DesignFlowRate objects that add infiltration using the 'Flow per Exterior Surface Area' input option, one infiltration object when the HVAC system is on and one object when the HVAC system is off. The method assumes that HVAC operation is set by a schedule, though it may not reflect actual simulation/operation when fan operation may depend on internal loads and temperature setpoints. By default, interior zones will receive no infiltration. The user may enter a design building envelope airtightness at a specific design pressure, and whether the design value represents a 4-sided, 5-sided, or 6-sided normalization.  By default, the method assumes an airtightness design value of 13.8 (m^3/h-m^2) at 75 Pa. The method assumes that infiltration is evenly distributed across the entire building envelope, including the roof. The user may select the HVAC system operating schedule in the model, or infer it based on the availability schedule of the air loop that serves the largest amount of floor area. The method will make a copy of the HVAC operating schedule, 'Infiltration HVAC On Schedule', which is used with the HVAC on infiltration correlations.  The method will also make an 'Infiltration HVAC Off Schedule' with inverse operation, used with the HVAC off infiltration correlations. OS:SpaceInfiltration:DesignFlowRate object coefficients (A, B, C, and D) come from Ng et al. (2018). The user may select the Building Type and Climate Zone, or the method will infer them from the model.
     # @author Matthew Dahlhausen <matthew.dahlhausen@nrel.gov>
     #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param airtightness_value [Double] Airtightness design value (m^3/h-m^2).
     #   The airtightness design value from a building pressurization test. Use 5.0 (m^3/h-m^2) as a default for buildings with air barriers. Convert (cfm/ft^2) to (m^3/h-m^2) by multiplying by 18.288 (m-min/ft-hr). (0.3048 m/ft)*(60 min/hr) = 18.288 (m-min/ft-hr).'
     # @param airtightness_pressure [Double] Airtightness design pressure (Pa).
@@ -179,7 +180,7 @@ module OpenstudioStandards
 
       # creating infiltration schedules based on hvac schedule
       if hvac_schedule.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Infiltration', 'Unable to determine the HVAC schedule. Treating the building as if there is no HVAC system with outdoor air.  If this is not the case, input a schedule argument, or assign one to an air loop in the model.')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Infiltration', 'Unable to determine the building HVAC schedule. Treating the building as if there is no HVAC system with outdoor air. This may be appropriate for design sizing, particularly heating design sizing. If this is not the case, input a schedule argument, or assign one to an air loop in the model.')
         on_schedule = OpenStudio::Model::ScheduleConstant.new(model)
         on_schedule.setName('Infiltration HVAC On Schedule')
         on_schedule.setValue(0.0)
@@ -281,6 +282,81 @@ module OpenstudioStandards
       end
 
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Infiltration', "The modeled finished with #{model.getSpaceInfiltrationDesignFlowRates.size} infiltration objects.")
+
+      return true
+    end
+
+    # Loops through SpaceInfiltrationDesignFlowRate objects and adjusts the infiltration schedules to account building HVAC operation
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param hvac_schedule [OpenStudio::Model::Schedule] OpenStudio Schedule object for the HVAC Operating Schedule. Default will look up from model.
+    # @return [Boolean] returns true if successful, false if not
+    def self.model_set_nist_infiltration_schedules(model, hvac_schedule: nil)
+      # delete existing schedules if present
+      on_schedule = model.getScheduleByName('Infiltration HVAC On Schedule')
+      on_schedule.get.remove if on_schedule.is_initialized
+      off_schedule = model.getScheduleByName('Infiltration HVAC Off Schedule')
+      off_schedule.get.remove if off_schedule.is_initialized
+
+      # validate hvac schedule
+      if hvac_schedule.nil?
+        hvac_schedule = OpenstudioStandards::Schedules.model_get_hvac_schedule(model)
+      else
+        unless hvac_schedule.to_Schedule.is_initialized
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Infiltration', "HVAC schedule argument #{hvac_schedule} not found in the model or is not a Schedule object. It may have been removed by another measure.")
+          return false
+        end
+        hvac_schedule = hvac_schedule.to_Schedule.get
+        if hvac_schedule.to_ScheduleRuleset.is_initialized
+          hvac_schedule = hvac_schedule.to_ScheduleRuleset.get
+        elsif hvac_schedule.to_ScheduleConstant.is_initialized
+          hvac_schedule = hvac_schedule.to_ScheduleConstant.get
+        else
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Infiltration', "HVAC schedule argument #{hvac_schedule} is not a Schedule Constant or Schedule Ruleset object.")
+          return false
+        end
+
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Infiltration', "Using HVAC schedule #{hvac_schedule.name} from user arguments to determine infiltration on/off schedule.")
+      end
+
+      # creating infiltration schedules based on hvac schedule
+      if hvac_schedule.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Infiltration', 'Unable to determine the HVAC schedule. Treating the building as if there is no HVAC system with outdoor air.  If this is not the case, input a schedule argument, or assign one to an air loop in the model.')
+        on_schedule = OpenStudio::Model::ScheduleConstant.new(model)
+        on_schedule.setName('Infiltration HVAC On Schedule')
+        on_schedule.setValue(0.0)
+        off_schedule = OpenStudio::Model::ScheduleConstant.new(model)
+        off_schedule.setName('Infiltration HVAC Off Schedule')
+        off_schedule.setValue(1.0)
+      elsif hvac_schedule.to_ScheduleConstant.is_initialized
+        hvac_schedule = hvac_schedule.to_ScheduleConstant.get
+        on_schedule = OpenStudio::Model::ScheduleConstant.new(model)
+        on_schedule.setName('Infiltration HVAC On Schedule')
+        on_schedule.setValue(hvac_schedule.value)
+        off_schedule = OpenStudio::Model::ScheduleConstant.new(model)
+        off_schedule.setName('Infiltration HVAC Off Schedule')
+        if hvac_schedule.value > 0
+          off_schedule.setValue(0.0)
+        else
+          off_schedule.setValue(1.0)
+        end
+      elsif hvac_schedule.to_ScheduleRuleset.is_initialized
+        hvac_schedule = hvac_schedule.to_ScheduleRuleset.get
+        on_schedule = hvac_schedule.clone.to_ScheduleRuleset.get
+        on_schedule.setName('Infiltration HVAC On Schedule')
+        off_schedule = OpenstudioStandards::Schedules.create_inverted_schedule_ruleset(hvac_schedule, schedule_name: 'Infiltration HVAC Off Schedule')
+      end
+
+
+      model.getSpaceInfiltrationDesignFlowRates.each do |infil|
+        if infil.name.get.include?('HVAC On Infiltration')
+          infil.setSchedule(on_schedule)
+        end
+
+        if infil.name.get.include?('HVAC Off Infiltration')
+          infil.setSchedule(off_schedule)
+        end
+      end
 
       return true
     end
