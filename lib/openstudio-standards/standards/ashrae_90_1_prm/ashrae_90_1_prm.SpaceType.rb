@@ -27,10 +27,8 @@ class ASHRAE901PRM < Standard
       return false
     end
 
-    if space_type.standardsSpaceType.is_initialized
-      if space_type.standardsSpaceType.get.downcase.include?('plenum')
-        return false
-      end
+    if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+      return false
     end
 
     # Save information about lighting exceptions before removing extra lights objects
@@ -654,8 +652,7 @@ class ASHRAE901PRM < Standard
         space_area = space.floorArea
         space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
         # calculate and add new lpd values
-        user_space_type_lighting_per_area = (lighting_per_length * space_height +
-          lighting_per_area) * sub_space_type_frac
+        user_space_type_lighting_per_area = ((lighting_per_length * space_height) + lighting_per_area) * sub_space_type_frac
         space_lighting_per_area += user_space_type_lighting_per_area
 
         # Adjust the occupancy control sensor reduction factor from dataset

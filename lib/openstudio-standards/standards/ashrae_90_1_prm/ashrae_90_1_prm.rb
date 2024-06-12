@@ -291,7 +291,7 @@ class ASHRAE901PRM < Standard
         return false
       end
       # Fan power credits, exhaust air energy recovery
-      user_zone_hvac.keys.each do |info_key|
+      user_zone_hvac.each_key do |info_key|
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_zone_hvac, info_key)
@@ -332,7 +332,7 @@ class ASHRAE901PRM < Standard
         return false
       end
       # Fan power credits, exhaust air energy recovery
-      user_airloop.keys.each do |info_key|
+      user_airloop.each_key do |info_key|
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_airloop, info_key)
@@ -426,7 +426,7 @@ class ASHRAE901PRM < Standard
       end
 
       # Fan power credits, exhaust air energy recovery
-      user_airloop.keys.each do |info_key|
+      user_airloop.each_key do |info_key|
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_airloop, info_key)

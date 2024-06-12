@@ -56,38 +56,39 @@ class ASHRAE901PRM < Standard
 
     final_twrs = [orig_twr]
 
-    # If there is more than one chiller,
-    # replace the original pump with a headered pump
-    # of the same type and properties.
-    if num_chillers > 1
-      num_pumps = num_chillers
-      new_pump = nil
-      if orig_pump.to_PumpConstantSpeed.is_initialized
-        new_pump = OpenStudio::Model::HeaderedPumpsConstantSpeed.new(plant_loop.model)
-        new_pump.setNumberofPumpsinBank(num_pumps)
-        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
-        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
-        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
-        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
-        new_pump.setPumpControlType(orig_pump.pumpControlType)
-      elsif orig_pump.to_PumpVariableSpeed.is_initialized
-        new_pump = OpenStudio::Model::HeaderedPumpsVariableSpeed.new(plant_loop.model)
-        new_pump.setNumberofPumpsinBank(num_pumps)
-        new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
-        new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
-        new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
-        new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
-        new_pump.setPumpControlType(orig_pump.pumpControlType)
-        new_pump.setCoefficient1ofthePartLoadPerformanceCurve(orig_pump.coefficient1ofthePartLoadPerformanceCurve)
-        new_pump.setCoefficient2ofthePartLoadPerformanceCurve(orig_pump.coefficient2ofthePartLoadPerformanceCurve)
-        new_pump.setCoefficient3ofthePartLoadPerformanceCurve(orig_pump.coefficient3ofthePartLoadPerformanceCurve)
-        new_pump.setCoefficient4ofthePartLoadPerformanceCurve(orig_pump.coefficient4ofthePartLoadPerformanceCurve)
-      end
-      # Remove the old pump
-      orig_pump.remove
-      # Attach the new headered pumps
-      new_pump.addToNode(plant_loop.supplyInletNode)
+    # return unless there is more than one chiller
+    return true unless num_chillers > 1
+
+    # If there is more than one chiller, replace the original pump with a headered pump of the same type and properties.
+    num_pumps = num_chillers
+    new_pump = nil
+    if orig_pump.to_PumpConstantSpeed.is_initialized
+      new_pump = OpenStudio::Model::HeaderedPumpsConstantSpeed.new(plant_loop.model)
+      new_pump.setNumberofPumpsinBank(num_pumps)
+      new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+      new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+      new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+      new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+      new_pump.setPumpControlType(orig_pump.pumpControlType)
+    elsif orig_pump.to_PumpVariableSpeed.is_initialized
+      new_pump = OpenStudio::Model::HeaderedPumpsVariableSpeed.new(plant_loop.model)
+      new_pump.setNumberofPumpsinBank(num_pumps)
+      new_pump.setName("#{orig_pump.name} Bank of #{num_pumps}")
+      new_pump.setRatedPumpHead(orig_pump.ratedPumpHead)
+      new_pump.setMotorEfficiency(orig_pump.motorEfficiency)
+      new_pump.setFractionofMotorInefficienciestoFluidStream(orig_pump.fractionofMotorInefficienciestoFluidStream)
+      new_pump.setPumpControlType(orig_pump.pumpControlType)
+      new_pump.setCoefficient1ofthePartLoadPerformanceCurve(orig_pump.coefficient1ofthePartLoadPerformanceCurve)
+      new_pump.setCoefficient2ofthePartLoadPerformanceCurve(orig_pump.coefficient2ofthePartLoadPerformanceCurve)
+      new_pump.setCoefficient3ofthePartLoadPerformanceCurve(orig_pump.coefficient3ofthePartLoadPerformanceCurve)
+      new_pump.setCoefficient4ofthePartLoadPerformanceCurve(orig_pump.coefficient4ofthePartLoadPerformanceCurve)
     end
+    # Remove the old pump
+    orig_pump.remove
+    # Attach the new headered pumps
+    new_pump.addToNode(plant_loop.supplyInletNode)
+
+    return true
   end
 
   # Splits the single chiller used for the initial sizing run

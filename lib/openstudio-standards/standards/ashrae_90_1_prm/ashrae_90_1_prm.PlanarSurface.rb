@@ -35,9 +35,7 @@ class ASHRAE901PRM < Standard
 
     # Skip surfaces that don't have a construction
     # return previous_construction_map if planar_surface.construction.empty?
-    if !planar_surface.construction.empty?
-      construction = planar_surface.construction.get
-    else
+    if planar_surface.construction.empty?
       # Get appropriate default construction if not defined inside surface object
       construction = nil
       space_type = space.spaceType.get
@@ -62,6 +60,8 @@ class ASHRAE901PRM < Standard
       prm_raise(construction,
                 @sizing_run_dir,
                 "Failed to find defaultConstructionSet for #{planar_surface.name.get}. Check inputs.")
+    else
+      construction = planar_surface.construction.get
     end
 
     # Determine if residential or nonresidential
@@ -110,11 +110,11 @@ class ASHRAE901PRM < Standard
           return previous_construction_map
         end
       else
-        if !wwr_building_type.nil?
-          stds_type = 'Any Vertical Glazing'
-        else
+        if wwr_building_type.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration frame type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
           return previous_construction_map
+        else
+          stds_type = 'Any Vertical Glazing'
         end
       end
     when 'ExteriorDoor'
