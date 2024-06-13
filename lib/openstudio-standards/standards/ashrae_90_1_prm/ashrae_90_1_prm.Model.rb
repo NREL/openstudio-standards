@@ -1963,8 +1963,8 @@ class ASHRAE901PRM < Standard
       end
 
       # mark unmarked zones
-      unless zone.additionalProperties.hasFeature('has_health_safety_night_cycle_exception')
-        zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', false)
+      unless thermal_zone.additionalProperties.hasFeature('has_health_safety_night_cycle_exception')
+        thermal_zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', false)
       end
     end
   end
