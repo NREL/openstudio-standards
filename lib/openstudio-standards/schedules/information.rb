@@ -293,7 +293,8 @@ module OpenstudioStandards
     def self.schedule_day_get_min_max(schedule_day)
       min = nil
       max = nil
-      schedule_day.values.each do |value|
+      values = schedule_day.values
+      values.each do |value|
         if min.nil?
           min = value
         else
@@ -447,7 +448,8 @@ module OpenstudioStandards
       min = nil
       max = nil
       day_schedules.each do |day_schedule|
-        day_schedule.values.each do |value|
+        values = day_schedule.values
+        values.each do |value|
           if min.nil?
             min = value
           else
@@ -490,7 +492,8 @@ module OpenstudioStandards
 
       min = nil
       max = nil
-      schedule.values.each do |value|
+      values = schedule.values
+      values.each do |value|
         if min.nil?
           min = value
         else
@@ -874,7 +877,7 @@ module OpenstudioStandards
       sch_indices_vector = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
       days_used_hash = Hash.new { |h, k| h[k] = [] }
       sch_indices_vector.uniq.sort.each do |rule_i|
-        sch_indices_vector.each_with_index { |rule, i| days_used_hash[rule_i] << i + 1 if rule_i == rule }
+        sch_indices_vector.each_with_index { |rule, i| days_used_hash[rule_i] << (i + 1) if rule_i == rule }
       end
       return days_used_hash
     end
@@ -891,5 +894,108 @@ module OpenstudioStandards
     end
 
     # @!endgroup Information:ScheduleRuleset
+
+    # @!group Information:Model
+
+    # Get the predominant air loop HVAC schedule in the model by floor area served.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @return [OpenStudio::Model::Schedule] OpenStudio Schedule object
+    def self.model_get_hvac_schedule(model)
+      # lookup from model, using largest air loop
+      # check multiple kinds of systems, including unitary systems
+      hvac_schedule = nil
+      largest_area = 0.0
+
+      model.getAirLoopHVACs.each do |air_loop|
+        air_loop_area = 0.0
+        air_loop.thermalZones.each { |tz| air_loop_area += tz.floorArea }
+        if air_loop_area > largest_area
+          hvac_schedule = air_loop.availabilitySchedule
+          largest_area = air_loop_area
+        end
+      end
+
+      model.getAirLoopHVACUnitarySystems.each do |unitary|
+        next unless unitary.thermalZone.is_initialized
+
+        air_loop_area = unitary.thermalZone.get.floorArea
+        if air_loop_area > largest_area
+          if unitary.availabilitySchedule.is_initialized
+            hvac_schedule = unitary.availabilitySchedule.get
+          else
+            hvac_schedule = model.alwaysOnDiscreteSchedule
+          end
+          largest_area = air_loop_area
+        end
+      end
+
+      model.getAirLoopHVACUnitaryHeatPumpAirToAirs.each do |unitary|
+        next unless unitary.controllingZone.is_initialized
+
+        air_loop_area = unitary.controllingZone.get.floorArea
+        if air_loop_area > largest_area
+          hvac_schedule = unitary.availabilitySchedule.get
+          largest_area = air_loop_area
+        end
+      end
+
+      model.getAirLoopHVACUnitaryHeatPumpAirToAirMultiSpeeds.each do |unitary|
+        next unless unitary.controllingZoneorThermostatLocation.is_initialized
+
+        air_loop_area = unitary.controllingZoneorThermostatLocation.get.floorArea
+        if air_loop_area > largest_area
+          if unitary.availabilitySchedule.is_initialized
+            hvac_schedule = unitary.availabilitySchedule.get
+          else
+            hvac_schedule = model.alwaysOnDiscreteSchedule
+          end
+          largest_area = air_loop_area
+        end
+      end
+
+      model.getFanZoneExhausts.each do |fan|
+        next unless fan.thermalZone.is_initialized
+
+        air_loop_area = fan.thermalZone.get.floorArea
+        if air_loop_area > largest_area
+          if fan.availabilitySchedule.is_initialized
+            hvac_schedule = fan.availabilitySchedule.get
+          else
+            hvac_schedule = model.alwaysOnDiscreteSchedule
+          end
+          largest_area = air_loop_area
+        end
+      end
+
+      building_area = model.getBuilding.floorArea
+      if largest_area < 0.05 * building_area
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Schedules', "The largest airloop or HVAC system serves #{largest_area.round(1)} m^2, which is less than 5% of the building area #{building_area.round(1)} m^2. Attempting to use building hours of operation schedule instead.")
+        default_schedule_set = model.getBuilding.defaultScheduleSet
+        if default_schedule_set.is_initialized
+          default_schedule_set = default_schedule_set.get
+          hoo = default_schedule_set.hoursofOperationSchedule
+          if hoo.is_initialized
+            hvac_schedule = hoo.get
+            largest_area = building_area
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules', 'Unable to determine building hours of operation schedule. Treating the building as if there is no HVAC system schedule.')
+            hvac_schedule = nil
+          end
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules', 'Unable to determine building hours of operation schedule. Treating the building as if there is no HVAC system schedule.')
+          hvac_schedule = nil
+        end
+      end
+
+      unless hvac_schedule.nil?
+        area_fraction = 100.0 * largest_area / building_area
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Schedules', "Using schedule #{hvac_schedule.name} serving area #{largest_area.round(1)} m^2, #{area_fraction.round(0)}% of building area #{building_area.round(1)} m^2 as the building HVAC operation schedule.")
+      end
+
+      return hvac_schedule
+    end
+
+    # @!endgroup Information:Model
   end
 end

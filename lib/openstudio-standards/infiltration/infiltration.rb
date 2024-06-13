@@ -15,7 +15,7 @@ module OpenstudioStandards
                                                  initial_pressure: 75.0,
                                                  final_pressure: 4.0,
                                                  infiltration_coefficient: 0.65)
-      adjusted_infiltration_rate = infiltration_rate * (final_pressure / initial_pressure)**infiltration_coefficient
+      adjusted_infiltration_rate = infiltration_rate * ((final_pressure / initial_pressure)**infiltration_coefficient)
 
       return adjusted_infiltration_rate
     end
@@ -34,8 +34,8 @@ module OpenstudioStandards
       n = 0.65 # infiltration coefficient, unitless
 
       # Calculate the typical pressure - same for all building types
-      final_pressure_pa = 0.5 * cs * rho * uh**2
-      adjusted_infiltration_rate = (1.0 + alpha) * infiltration_rate * (final_pressure_pa / initial_pressure)**n
+      final_pressure_pa = 0.5 * cs * rho * (uh**2)
+      adjusted_infiltration_rate = (1.0 + alpha) * infiltration_rate * ((final_pressure_pa / initial_pressure)**n)
 
       return adjusted_infiltration_rate
     end
