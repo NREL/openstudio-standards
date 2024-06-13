@@ -20471,7 +20471,7 @@ OS:WaterHeater:Sizing,
 
 OS:Schedule:Ruleset,
   {930d8fa8-208a-4f12-88d5-e6489723540b}, !- Handle
-  Water Heater Ambient Temp Schedule - 70.0f, !- Name
+  Water Heater Ambient Temp Schedule 70.0F, !- Name
   {fffb4afa-161e-4041-8343-b9b7eced5da7}, !- Schedule Type Limits Name
   {65e68ce2-4c8b-4306-b90c-bc49a7f3e6ef}; !- Default Day Schedule Name
 
