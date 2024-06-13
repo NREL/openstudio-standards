@@ -24,6 +24,7 @@ module OpenstudioStandards
 
   # Infiltration Module
   require_relative 'openstudio-standards/infiltration/infiltration'
+  require_relative 'openstudio-standards/infiltration/nist_infiltration'
 
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
