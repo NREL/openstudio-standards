@@ -2,8 +2,7 @@ require 'csv'
 require 'date'
 
 class Standard
-  attr_accessor :space_multiplier_map
-  attr_accessor :standards_data
+  attr_accessor :space_multiplier_map, :standards_data
 
   # returns the space multiplier map
 
