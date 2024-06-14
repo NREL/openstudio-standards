@@ -2087,7 +2087,7 @@ Standard.class_eval do
         }
         econ_limits = model_find_object(standards_data['economizers'], search_criteria)
         minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
-        economizer_required = minimum_capacity_btu_per_hr.nil?
+        economizer_required = !minimum_capacity_btu_per_hr.nil?
       elsif @instvarbuilding_type == 'LargeOffice' && air_loop_hvac_include_wshp?(air_loop)
         # WSHP serving the IT closets are assumed to always be too
         # small to require an economizer
