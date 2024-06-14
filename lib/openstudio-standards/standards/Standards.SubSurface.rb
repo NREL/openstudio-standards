@@ -42,7 +42,7 @@ class Standard
     new_sub_surface.setSurface(surface)
     # Set the name of the subsurface to be the surface name plus the subsurface type (likely either 'fixedwindow' or
     # 'skylight').
-    new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s
+    new_name = "#{surface.name}_#{new_sub_surface.subSurfaceType}"
     new_sub_surface.setName(new_name)
     # There is now only one surface on the subsurface.  Enforce this
     new_sub_surface.setMultiplier(1)
@@ -129,9 +129,9 @@ class Standard
       new_sub_surface.setSurface(surface)
       # Set the name of the subsurface to be the surface name plus the subsurface type (likely either 'fixedwindow' or
       # 'skylight').  If there will be more than one subsurface then add a counter at the end.
-      new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s
+      new_name = "#{surface.name}_#{new_sub_surface.subSurfaceType}"
       if new_surfaces.length > 1
-        new_name = surface.name.to_s + '_' + new_sub_surface.subSurfaceType.to_s + '_' + index.to_s
+        new_name = "#{surface.name}_#{new_sub_surface.subSurfaceType}_#{index}"
       end
       # Set the skylight type to 'Skylight'
       new_sub_surface.setSubSurfaceType('Skylight')

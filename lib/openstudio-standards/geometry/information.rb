@@ -11,8 +11,8 @@ module OpenstudioStandards
     # @param perimeter [Double] perimeter
     # @return [Double] aspect ratio
     def self.aspect_ratio(area, perimeter)
-      length = 0.25 * (perimeter + Math.sqrt(perimeter**2 - 16 * area))
-      width = 0.25 * (perimeter - Math.sqrt(perimeter**2 - 16 * area))
+      length = 0.25 * (perimeter + Math.sqrt((perimeter**2) - (16 * area)))
+      width = 0.25 * (perimeter - Math.sqrt((perimeter**2) - (16 * area)))
       aspect_ratio = length / width
 
       return aspect_ratio
@@ -448,7 +448,7 @@ module OpenstudioStandards
       # now sort by areas.
       area_index = []
       array_hash = {}
-      return array_hash if spaces.size.zero?
+      return array_hash if spaces.empty?
 
       # iterate through each surface in the space
       space.surfaces.each do |surface|
@@ -832,7 +832,7 @@ module OpenstudioStandards
 
       # If there are no spaces on this story, assume
       # a multiplier of 1
-      if multipliers.size.zero?
+      if multipliers.empty?
         return floor_multiplier
       end
 
@@ -867,7 +867,7 @@ module OpenstudioStandards
         # loop through space surfaces to find min z value
         space.surfaces.each do |surface|
           surface.vertices.each do |vertex|
-            z_heights << vertex.z + z_origin
+            z_heights << (vertex.z + z_origin)
           end
         end
       end

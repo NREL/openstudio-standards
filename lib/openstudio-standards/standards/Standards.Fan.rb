@@ -250,7 +250,7 @@ module Fan
     # airflow required for a particular system, typically
     # heated-only spaces with high internal gains
     # and no OA requirements such as elevator shafts.
-    return [fan_motor_eff, 0] if motor_bhp == 0.0
+    return [fan_motor_eff, 0] if motor_bhp < 0.0001
 
     # Lookup the minimum motor efficiency
     motors = standards_data['motors']
@@ -276,7 +276,7 @@ module Fan
 
       nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
       # If the biggest fan motor size is hit, use the highest category efficiency
-      if nominal_hp == 9999.0
+      if nominal_hp > 9998.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{fan.name}, there is no greater nominal HP.  Use the efficiency of the largest motor category.")
         nominal_hp = motor_bhp
       end
@@ -319,15 +319,7 @@ module Fan
         is_small = true
       # elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
       #   is_small = true
-      elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-        is_small = true
-      elsif zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
-        is_small = true
-      elsif zone_hvac.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
-        is_small = true
-      elsif zone_hvac.to_ZoneHVACWaterToAirHeatPump.is_initialized
-        is_small = true
-      elsif zone_hvac.to_ZoneHVACEnergyRecoveryVentilator.is_initialized
+      elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized || zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized || zone_hvac.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized || zone_hvac.to_ZoneHVACWaterToAirHeatPump.is_initialized || zone_hvac.to_ZoneHVACEnergyRecoveryVentilator.is_initialized
         is_small = true
       end
     # Powered VAV terminal

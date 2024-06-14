@@ -37559,7 +37559,7 @@ OS:Pump:VariableSpeed,
   ,                                       !- Rated Flow Rate {m3/s}
   0.001,                                  !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.825,                                  !- Motor Efficiency
+  1.0,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
   0,                                      !- Coefficient 1 of the Part Load Performance Curve
   3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
@@ -37692,7 +37692,7 @@ OS:WaterHeater:Sizing,
 
 OS:Schedule:Day,
   {3e16b26a-32c7-45a6-bc5f-33884bceb6ef}, !- Handle
-  Water Heater Ambient Temp Schedule - 71.6f Default, !- Name
+  Water Heater Ambient Temp Schedule 71.6F Default, !- Name
   {658f0bd0-912e-4f64-bae8-41e2440428e0}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1

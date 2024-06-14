@@ -38,10 +38,7 @@ end
 # @return [OpenStudio::Model::Component] the OpenStudio Object or exception raise
 def prm_get_optional_handler(component, log_dir, data_key, *remaining_keys)
   target_data = component.send(data_key)
-  prm_raise(target_data.is_initialized,
-            log_dir,
-            "Failed to retrieve data: #{data_key} from #{prm_get_component_name(component)}"
-            )
+  prm_raise(target_data.is_initialized, log_dir, "Failed to retrieve data: #{data_key} from #{prm_get_component_name(component)}")
   target_data_get = target_data.get
   return remaining_keys.length == 0 ? target_data_get : prm_get_optional_handler(target_data_get, log_dir, remaining_keys[0], *remaining_keys[1...])
 end

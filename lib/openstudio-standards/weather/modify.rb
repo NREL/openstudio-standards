@@ -268,7 +268,7 @@ module OpenstudioStandards
       ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file_path).get
 
       # warn if no design days in file
-      if ddy_model.getDesignDays.size.zero?
+      if ddy_model.getDesignDays.empty?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', 'No design days were found in the design day file.')
         return false
       end
@@ -284,7 +284,7 @@ module OpenstudioStandards
       end
 
       # Check to ensure that some design days were added
-      if model.getDesignDays.size.zero?
+      if model.getDesignDays.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.modify', "No design days were loaded, check syntax of .ddy file: #{ddy_file_path}.")
         return false
       end

@@ -29,7 +29,7 @@ class ASHRAE9012010 < ASHRAE901
 
     # Sidelighting
     # Check if the primary sidelit area < 250 ft2
-    if areas['primary_sidelighted_area'] == 0.0
+    if areas['primary_sidelighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
       req_pri_ctrl = false
     elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
@@ -49,7 +49,7 @@ class ASHRAE9012010 < ASHRAE901
 
     # Toplighting
     # Check if the toplit area < 900 ft2
-    if areas['toplighted_area'] == 0.0
+    if areas['toplighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
       req_top_ctrl = false
     elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get

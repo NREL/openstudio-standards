@@ -407,48 +407,16 @@ module OpenstudioStandards
     # @return [Array<String>] Allowable HVAC systems for the DEER building type
     def self.deer_building_type_to_hvac_systems(deer_building_type_short)
       case deer_building_type_short
-      when 'Asm'
+      when 'Asm', 'ERC', 'Gro', 'Mtl', 'MLI', 'RFF', 'RSD', 'RtL', 'RtS', 'SCn'
         ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'ECC'
+      when 'ECC', 'ESe', 'Htl', 'MBT', 'OfL', 'OfS', 'Rt3'
         ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
       when 'EPr'
         ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'WLHP']
-      when 'ERC'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'ESe'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'EUn'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG']
-      when 'Gro'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'Hsp'
+      when 'EUn', 'Hsp'
         ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG']
       when 'Nrs'
         ['DXEH', 'DXGF', 'DXHP', 'FPFC', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG']
-      when 'Htl'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'Mtl'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'MBT'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'MLI'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'OfL'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'OfS'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'RFF'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'RSD'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'Rt3'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'RtL'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'RtS'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'SCn'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
       when 'SUn'
         ['Unc']
       when 'WRf'

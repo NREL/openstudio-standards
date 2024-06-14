@@ -321,7 +321,7 @@ class Standard
 
     # Use the value from the design days or 78F, the CTI rating condition, if no design day information is available.
     design_oat_wb_f = nil
-    if summer_oat_wbs_f.size.zero?
+    if summer_oat_wbs_f.empty?
       design_oat_wb_f = 78
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, no design day OATwb conditions were found.  CTI rating condition of 78F OATwb will be used for sizing cooling towers.")
     else
@@ -940,7 +940,7 @@ class Standard
 
     # Ensure there is only 1 boiler to start
     first_boiler = nil
-    return true if boilers.size.zero?
+    return true if boilers.empty?
 
     if boilers.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{boilers.size}, cannot split up per performance rating method baseline requirements.")
@@ -1025,7 +1025,7 @@ class Standard
 
     # Ensure there is only 1 chiller to start
     first_chiller = nil
-    return true if chillers.size.zero?
+    return true if chillers.empty?
 
     if chillers.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
@@ -1035,7 +1035,7 @@ class Standard
 
     # Ensure there is only 1 pump to start
     orig_pump = nil
-    if pumps.size.zero?
+    if pumps.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{pumps.size} pumps.  A loop must have at least one pump.")
       return false
     elsif pumps.size > 1
@@ -1155,7 +1155,7 @@ class Standard
 
     # Ensure there is only 1 cooling tower to start
     orig_twr = nil
-    return true if clg_twrs.size.zero?
+    return true if clg_twrs.empty?
 
     if clg_twrs.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{clg_twrs.size} cooling towers, cannot split up per performance rating method baseline requirements.")
@@ -1166,7 +1166,7 @@ class Standard
 
     # Ensure there is only 1 pump to start
     orig_pump = nil
-    if pumps.size.zero?
+    if pumps.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{pumps.size} pumps.  A loop must have at least one pump.")
       return false
     elsif pumps.size > 1

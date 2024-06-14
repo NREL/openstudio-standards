@@ -123,9 +123,8 @@ class Standard
     end
     if create_proposed_model
       # Make the run directory if it doesn't exist
-      unless Dir.exist?(sizing_run_dir)
-        FileUtils.mkdir_p(sizing_run_dir)
-      end
+      FileUtils.mkdir_p(sizing_run_dir)
+
       # Save proposed model
       proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.osm"), true)
       forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
@@ -826,7 +825,7 @@ class Standard
     zones = model_zones_with_occ_and_fuel_type(model, custom)
 
     # Ensure that there is at least one conditioned zone
-    if zones.size.zero?
+    if zones.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
       return []
     end
@@ -2362,7 +2361,7 @@ class Standard
   # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
   # @example Find all the schedule rules that match the name
   #   rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
-  #   if rules.size.zero?
+  #   if rules.empty?
   #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false
   #   end
@@ -2411,7 +2410,7 @@ class Standard
       matching_capacity_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
 
       # If no object was found, round the capacity down in case the number fell between the limits in the json file.
-      if matching_capacity_objects.size.zero?
+      if matching_capacity_objects.empty?
         capacity *= 0.99
         # Skip objects whose minimum capacity is below or maximum capacity above the specified capacity
         matching_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
@@ -2432,7 +2431,7 @@ class Standard
       matching_volume_objects = matching_objects.reject { |object| volume.to_f < object['minimum_storage'].to_f || volume.to_f > object['maximum_storage'].to_f }
 
       # If no object was found, round the volume down in case the number fell between the limits in the json file.
-      if matching_volume_objects.size.zero?
+      if matching_volume_objects.empty?
         volume *= 0.99
         # Skip objects whose minimum volume is below or maximum volume above the specified volume
         matching_objects = matching_objects.reject { |object| volume.to_f <= object['minimum_storage'].to_f || volume.to_f >= object['maximum_storage'].to_f }
@@ -2453,7 +2452,7 @@ class Standard
       matching_capacity_per_volume_objects = matching_objects.reject { |object| capacity_per_volume.to_f <= object['minimum_capacity_per_storage'].to_f || capacity_per_volume.to_f >= object['maximum_capacity_per_storage'].to_f }
 
       # If no object was found, round the volume down in case the number fell between the limits in the json file.
-      if matching_capacity_per_volume_objects.size.zero?
+      if matching_capacity_per_volume_objects.empty?
         capacity_per_volume *= 0.99
         # Skip objects whose minimum capacity_per_volume is below or maximum capacity_per_volume above the specified capacity_per_volume
         matching_objects = matching_objects.reject { |object| capacity_per_volume.to_f <= object['minimum_capacity_per_storage'].to_f || capacity_per_volume.to_f >= object['maximum_capacity_per_storage'].to_f }
@@ -2477,7 +2476,7 @@ class Standard
       matching_capacity_objects = matching_capacity_objects.select { |object| object['type'].downcase == search_criteria['type'].downcase } if search_criteria.keys.include?('type')
 
       # If no object was found, round the fan_motor_bhp down in case the number fell between the limits in the json file.
-      if matching_capacity_objects.size.zero?
+      if matching_capacity_objects.empty?
         fan_motor_bhp *= 0.99
         # Skip objects whose minimum capacity is below or maximum capacity above the specified fan_motor_bhp
         matching_objects = matching_objects.reject { |object| fan_motor_bhp.to_f <= object['minimum_capacity'].to_f || fan_motor_bhp.to_f > object['maximum_capacity'].to_f }
@@ -2523,7 +2522,7 @@ class Standard
     end
 
     # Check the number of matching objects found
-    if matching_objects.size.zero?
+    if matching_objects.empty?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}.")
     end
 
@@ -2555,7 +2554,7 @@ class Standard
     matching_objects = model_find_objects(hash_of_objects, search_criteria, capacity, date, area, num_floors, fan_motor_bhp, volume, capacity_per_volume)
 
     # Check the number of matching objects found
-    if matching_objects.size.zero?
+    if matching_objects.empty?
       desired_object = nil
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find object search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}")
     elsif matching_objects.size == 1
@@ -2584,7 +2583,7 @@ class Standard
   # @return [Array] returns an array of hashes, one hash per object.  Array is empty if no results.
   # @example Find all the schedule rules that match the name
   #   rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
-  #   if rules.size.zero?
+  #   if rules.empty?
   #     OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
   #     return false
   #   end
@@ -2641,7 +2640,7 @@ class Standard
       matching_capacity_objects = matching_objects.reject { |object| capacity.to_f <= object['minimum_capacity'].to_f || capacity.to_f > object['maximum_capacity'].to_f }
 
       # If no object was found, round the capacity down in case the number fell between the limits in the json file.
-      if matching_capacity_objects.size.zero?
+      if matching_capacity_objects.empty?
         capacity *= 0.99
         search_criteria_matching_objects.each do |object|
           # Skip objects that don't have fields for minimum_capacity and maximum_capacity
@@ -2700,7 +2699,7 @@ class Standard
     end
 
     # Check the number of matching objects found
-    if matching_objects.size.zero?
+    if matching_objects.empty?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}.")
     end
 
@@ -2732,7 +2731,7 @@ class Standard
                                                    date: date)
 
     # Check the number of matching objects found
-    if matching_objects.size.zero?
+    if matching_objects.empty?
       desired_object = nil
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Find object search criteria returned no results. Search criteria: #{search_criteria}. Called from #{caller(0)[1]}")
     elsif matching_objects.size == 1
@@ -2768,7 +2767,7 @@ class Standard
 
     # Find all the schedule rules that match the name
     rules = model_find_objects(standards_data['schedules'], 'name' => schedule_name)
-    if rules.size.zero?
+    if rules.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find data for schedule: #{schedule_name}, will not be created.")
       return model.alwaysOnDiscreteSchedule
     end
@@ -4217,7 +4216,7 @@ class Standard
     end
 
     # List the unique array of constructions
-    if prev_created_consts.size.zero?
+    if prev_created_consts.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'None of the constructions in your proposed model have both Intended Surface Type and Standards Construction Type')
     else
       prev_created_consts.each do |surf_type, construction|
@@ -4555,7 +4554,7 @@ class Standard
             # turn negative to positive to get the correct adjustment factor.
             red = -red
             surface_wwr = OpenstudioStandards::Geometry.surface_get_window_to_wall_ratio(surface)
-            residual_fene += (0.9 - red * surface_wwr) * surface.grossArea
+            residual_fene += (0.9 - (red * surface_wwr)) * surface.grossArea
           end
           surface_adjust_fenestration_in_a_surface(surface, red, model)
         end
@@ -4862,40 +4861,29 @@ class Standard
     building_type = building_data['building_type']
 
     result = []
-    if building_type == 'FullServiceRestaurant'
+    case building_type
+    when 'FullServiceRestaurant'
       result << { units: 'meal', block: nil, max_hourly: 1.5, max_daily: 11.0, avg_day_unit: 2.4 }
-    elsif building_type == 'Hospital'
+    when 'Hospital', 'Outpatient', 'Retail', 'StripMall', 'SuperMarket', 'Warehouse', 'SmallDataCenterLowITE', 'SmallDataCenterHighITE', 'LargeDataCenterLowITE', 'LargeDataCenterHighITE', 'Laboratory'
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
-    elsif ['LargeHotel', 'SmallHotel'].include? building_type
+    when 'LargeHotel', 'SmallHotel'
       result << { units: 'unit', block: 20, max_hourly: 6.0, max_daily: 35.0, avg_day_unit: 24.0 }
       result << { units: 'unit', block: 60, max_hourly: 5.0, max_daily: 25.0, avg_day_unit: 14.0 }
       result << { units: 'unit', block: 100, max_hourly: 4.0, max_daily: 15.0, avg_day_unit: 10.0 }
-    elsif building_type == 'MidriseApartment'
+    when 'MidriseApartment'
       result << { units: 'unit', block: 20, max_hourly: 12.0, max_daily: 80.0, avg_day_unit: 42.0 }
       result << { units: 'unit', block: 50, max_hourly: 10.0, max_daily: 73.0, avg_day_unit: 40.0 }
       result << { units: 'unit', block: 75, max_hourly: 8.5, max_daily: 66.0, avg_day_unit: 38.0 }
       result << { units: 'unit', block: 100, max_hourly: 7.0, max_daily: 60.0, avg_day_unit: 37.0 }
       result << { units: 'unit', block: 200, max_hourly: 5.0, max_daily: 50.0, avg_day_unit: 35.0 }
-    elsif ['Office', 'LargeOffice', 'MediumOffice', 'SmallOffice', 'LargeOfficeDetailed', 'MediumOfficeDetailed', 'SmallOfficeDetailed'].include? building_type
+    when 'Office', 'LargeOffice', 'MediumOffice', 'SmallOffice', 'LargeOfficeDetailed', 'MediumOfficeDetailed', 'SmallOfficeDetailed'
       result << { units: 'person', block: nil, max_hourly: 0.4, max_daily: 2.0, avg_day_unit: 1.0 }
-    elsif building_type == 'Outpatient'
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
-    elsif building_type == 'PrimarySchool'
+    when 'PrimarySchool'
       result << { units: 'student', block: nil, max_hourly: 0.6, max_daily: 1.5, avg_day_unit: 0.6 }
-    elsif building_type == 'QuickServiceRestaurant'
+    when 'QuickServiceRestaurant'
       result << { units: 'meal', block: nil, max_hourly: 0.7, max_daily: 6.0, avg_day_unit: 0.7 }
-    elsif building_type == 'Retail'
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
-    elsif building_type == 'SecondarySchool'
+    when 'SecondarySchool'
       result << { units: 'student', block: nil, max_hourly: 1.0, max_daily: 3.6, avg_day_unit: 1.8 }
-    elsif building_type == 'StripMall'
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
-    elsif building_type == 'SuperMarket'
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
-    elsif building_type == 'Warehouse'
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
-    elsif ['SmallDataCenterLowITE', 'SmallDataCenterHighITE', 'LargeDataCenterLowITE', 'LargeDataCenterHighITE', 'Laboratory'].include? building_type
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "No SWH rules of thumbs for #{building_type}.")
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine hot water demand recommendations")
     end
@@ -4937,13 +4925,13 @@ class Standard
     climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
 
     internal_loads = {}
-    internal_loads['mech_vent_cfm'] = units_per_bldg * (0.01 * conditioned_floor_area + 7.5 * (bedrooms_per_unit + 1.0))
+    internal_loads['mech_vent_cfm'] = units_per_bldg * ((0.01 * conditioned_floor_area) + (7.5 * (bedrooms_per_unit + 1.0)))
     internal_loads['infiltration_ach'] = if ['1A', '1B', '2A', '2B'].include? climate_zone_value
                                            5.0
                                          else
                                            3.0
                                          end
-    internal_loads['igain_btu_per_day'] = units_per_bldg * (17_900.0 + 23.8 * conditioned_floor_area + 4104.0 * bedrooms_per_unit)
+    internal_loads['igain_btu_per_day'] = units_per_bldg * (17_900.0 + (23.8 * conditioned_floor_area) + (4104.0 * bedrooms_per_unit))
     internal_loads['internal_mass_lbs'] = total_floor_area * 8.0
 
     return internal_loads
@@ -5050,7 +5038,7 @@ class Standard
     end
 
     # Check the results
-    if possible_climate_zone_sets.size.zero?
+    if possible_climate_zone_sets.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Cannot find a climate zone set containing #{climate_zone}.  Make sure to use ASHRAE standards with ASHRAE climate zones and DEER or CA Title 24 standards with CEC climate zones.")
     elsif possible_climate_zone_sets.size > 2
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Found more than 2 climate zone sets containing #{climate_zone}; will return last matching climate zone set.")

@@ -13009,8 +13009,8 @@ OS:ThermalZone,
   {bacab35a-b040-43f2-9a5c-6b8404422b63}, !- Zone Return Air Port List
   {c9ec66ed-f57d-4d7b-b042-9a8df4238fd4}, !- Primary Daylighting Control Name
   0.224,                                  !- Fraction of Zone Controlled by Primary Daylighting Control
-  {be9bf86b-ea1e-4b28-b6c0-fb4699a551e3}, !- Secondary Daylighting Control Name
-  0,                                      !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
   ,                                       !- Group Rendering Name
   {7de12330-7ae2-4db6-86fe-8c72d8f8187f}, !- Thermostat Name
@@ -26746,25 +26746,6 @@ OS:Daylighting:Control,
   {55056c4d-a249-4d1d-b566-c5152b797e9a}, !- Space Name
   0.6596,                                 !- Position X-Coordinate {m}
   1.6544121,                              !- Position Y-Coordinate {m}
-  0.762,                                  !- Position Z-Coordinate {m}
-  ,                                       !- Psi Rotation Around X-Axis {deg}
-  ,                                       !- Theta Rotation Around Y-Axis {deg}
-  ,                                       !- Phi Rotation Around Z-Axis {deg}
-  323,                                    !- Illuminance Setpoint {lux}
-  Stepped,                                !- Lighting Control Type
-  0.3,                                    !- Minimum Input Power Fraction for Continuous Dimming Control
-  0.2,                                    !- Minimum Light Output Fraction for Continuous Dimming Control
-  3,                                      !- Number of Stepped Control Steps
-  1,                                      !- Probability Lighting will be Reset When Needed in Manual Stepped Control
-  ,                                       !- Number of Daylighting Views
-  22;                                     !- Maximum Allowable Discomfort Glare Index
-
-OS:Daylighting:Control,
-  {be9bf86b-ea1e-4b28-b6c0-fb4699a551e3}, !- Handle
-  Offices_ZN_1_FLR_1 Daylt Sensor 2,      !- Name
-  {55056c4d-a249-4d1d-b566-c5152b797e9a}, !- Space Name
-  0.6596,                                 !- Position X-Coordinate {m}
-  3.33389105,                             !- Position Y-Coordinate {m}
   0.762,                                  !- Position Z-Coordinate {m}
   ,                                       !- Psi Rotation Around X-Axis {deg}
   ,                                       !- Theta Rotation Around Y-Axis {deg}

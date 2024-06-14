@@ -143,7 +143,7 @@ module OpenstudioStandards
         end
 
         # check that weekday start time plus duration does not exceed 24 hrs
-        if (wkdy_op_hrs_start_time_hr + wkdy_op_hrs_duration_hr + (wkdy_op_hrs_start_time_min + wkdy_op_hrs_duration_min) / 60.0) > 24.0
+        if (wkdy_op_hrs_start_time_hr + wkdy_op_hrs_duration_hr + ((wkdy_op_hrs_start_time_min + wkdy_op_hrs_duration_min) / 60.0)) > 24.0
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Weekday start time of #{wkdy_op_hrs_start_time} plus duration of #{wkdy_op_hrs_duration} is more than 24 hrs, hours of operation overlap midnight.")
         end
       end
@@ -183,7 +183,7 @@ module OpenstudioStandards
         end
 
         # check that weekend start time plus duration does not exceed 24 hrs
-        if (wknd_op_hrs_start_time_hr + wknd_op_hrs_duration_hr + (wknd_op_hrs_start_time_min + wknd_op_hrs_duration_min) / 60.0) > 24.0
+        if (wknd_op_hrs_start_time_hr + wknd_op_hrs_duration_hr + ((wknd_op_hrs_start_time_min + wknd_op_hrs_duration_min) / 60.0)) > 24.0
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Weekend start time of #{wknd_op_hrs_start} plus duration of #{wknd_op_hrs_duration} is more than 24 hrs, hours of operation overlap midnight.")
         end
       end
@@ -286,7 +286,7 @@ module OpenstudioStandards
       # adjust F factor constructions to avoid simulation errors
       model.getFFactorGroundFloorConstructions.each do |cons|
         # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons = 0.15/1.95
-        if cons.area <= (0.135 + 0.03 + 0.15 / 1.95) * cons.perimeterExposed * cons.fFactor
+        if cons.area <= (0.135 + 0.03 + (0.15 / 1.95)) * cons.perimeterExposed * cons.fFactor
           # set minimum Rfic to > 1e-3
           new_area = 0.233 * cons.perimeterExposed * cons.fFactor
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)}.")

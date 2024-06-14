@@ -20,21 +20,21 @@ module OpenstudioStandards
       primary_p = 619.0 # wrote measure using calculate_perimeter method in os_lib_geometry
       primary_ns_ew_ratio = 2.829268293 # estimated from ratio of ns/ew total wall area
       primary_width = Math.sqrt(primary_footprint / primary_ns_ew_ratio)
-      primary_p_min = 2 * (primary_width + primary_width / primary_footprint)
+      primary_p_min = 2 * (primary_width + (primary_width / primary_footprint))
       primary_p_mult = primary_p / primary_p_min
 
       secondary_footprint = 210887.0 / 2.0 # floor area divided by area instead of true footprint 128112.0)
       secondary_p = 708.0 # wrote measure using calculate_perimeter method in os_lib_geometry
       secondary_ns_ew_ratio = 2.069230769 # estimated from ratio of ns/ew total wall area
       secondary_width = Math.sqrt(secondary_footprint / secondary_ns_ew_ratio)
-      secondary_p_min = 2 * (secondary_width + secondary_width / secondary_footprint)
+      secondary_p_min = 2 * (secondary_width + (secondary_width / secondary_footprint))
       secondary_p_mult = secondary_p / secondary_p_min
 
       outpatient_footprint = 40946.0 / 3.0 # floor area divided by area instead of true footprint 17872.0)
       outpatient_p = 537.0 # wrote measure using calculate_perimeter method in os_lib_geometry
       outpatient_ns_ew_ratio = 1.56448737 # estimated from ratio of ns/ew total wall area
       outpatient_width = Math.sqrt(outpatient_footprint / outpatient_ns_ew_ratio)
-      outpatient_p_min = 2 * (outpatient_width + outpatient_footprint / outpatient_width)
+      outpatient_p_min = 2 * (outpatient_width + (outpatient_footprint / outpatient_width))
       outpatient_p_mult = outpatient_p / outpatient_p_min
 
       # primary_aspet_ratio = OpenstudioStandards::Geometry.aspect_ratio(73958.0, 2060.0)
@@ -390,7 +390,7 @@ module OpenstudioStandards
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
       bounding_area = bounding_length * bounding_width
-      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
+      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade] + envelope_data_hash[:effective_num_stories_below_grade].to_f)
       area_multiplier = footprint_area / bounding_area
       edge_multiplier = Math.sqrt(area_multiplier)
       bar[:length] = bounding_length * edge_multiplier
@@ -408,7 +408,7 @@ module OpenstudioStandards
 
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
-      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
+      footprint_area = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade] + envelope_data_hash[:effective_num_stories_below_grade].to_f)
 
       if bounding_length >= bounding_width
         bar[:length] = bounding_length
@@ -430,15 +430,15 @@ module OpenstudioStandards
 
       bounding_length = envelope_data_hash[:building_max_xyz][0] - envelope_data_hash[:building_min_xyz][0]
       bounding_width = envelope_data_hash[:building_max_xyz][1] - envelope_data_hash[:building_min_xyz][1]
-      a = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade]. + envelope_data_hash[:effective_num_stories_below_grade].to_f)
+      a = envelope_data_hash[:building_floor_area] / (envelope_data_hash[:effective_num_stories_above_grade] + envelope_data_hash[:effective_num_stories_below_grade].to_f)
       p = envelope_data_hash[:building_perimeter]
 
       if bounding_length >= bounding_width
-        bar[:length] = 0.25 * (p + Math.sqrt(p**2 - 16 * a))
-        bar[:width] = 0.25 * (p - Math.sqrt(p**2 - 16 * a))
+        bar[:length] = 0.25 * (p + Math.sqrt((p**2) - (16 * a)))
+        bar[:width] = 0.25 * (p - Math.sqrt((p**2) - (16 * a)))
       else
-        bar[:length] = 0.25 * (p - Math.sqrt(p**2 - 16 * a))
-        bar[:width] = 0.25 * (p + Math.sqrt(p**2 - 16 * a))
+        bar[:length] = 0.25 * (p - Math.sqrt((p**2) - (16 * a)))
+        bar[:width] = 0.25 * (p + Math.sqrt((p**2) - (16 * a)))
       end
 
       return bar
@@ -509,7 +509,7 @@ module OpenstudioStandards
 
         # add in below grade levels (may want to add below grade multipliers at some point if we start running deep basements)
         eff_below.times do |i|
-          story_hash["B#{i + 1}"] = { space_origin_z: footprint_origin_point.z - typical_story_height * (i + 1), space_height: typical_story_height, multiplier: 1 }
+          story_hash["B#{i + 1}"] = { space_origin_z: footprint_origin_point.z - (typical_story_height * (i + 1)), space_height: typical_story_height, multiplier: 1 }
         end
       end
 
@@ -527,15 +527,15 @@ module OpenstudioStandards
           else
             string = "mid#{footprint_counter + 1}"
           end
-          story_hash[string] = { space_origin_z: footprint_origin_point.z + typical_story_height * effective_stories_counter + typical_story_height * (hash[:multiplier] - 1) / 2.0, space_height: typical_story_height, multiplier: hash[:multiplier] }
+          story_hash[string] = { space_origin_z: footprint_origin_point.z + (typical_story_height * effective_stories_counter) + (typical_story_height * (hash[:multiplier] - 1) / 2.0), space_height: typical_story_height, multiplier: hash[:multiplier] }
           footprint_counter += 1
           effective_stories_counter += hash[:multiplier]
         end
 
-        story_hash['top'] = { space_origin_z: footprint_origin_point.z + typical_story_height * (eff_above.ceil - 1), space_height: typical_story_height, multiplier: 1 }
+        story_hash['top'] = { space_origin_z: footprint_origin_point.z + (typical_story_height * (eff_above.ceil - 1)), space_height: typical_story_height, multiplier: 1 }
       elsif eff_above > 1
         story_hash['ground'] = { space_origin_z: footprint_origin_point.z, space_height: typical_story_height, multiplier: 1 }
-        story_hash['top'] = { space_origin_z: footprint_origin_point.z + typical_story_height * (eff_above.ceil - 1), space_height: typical_story_height, multiplier: 1 }
+        story_hash['top'] = { space_origin_z: footprint_origin_point.z + (typical_story_height * (eff_above.ceil - 1)), space_height: typical_story_height, multiplier: 1 }
       else # one story only
         story_hash['ground'] = { space_origin_z: footprint_origin_point.z, space_height: typical_story_height, multiplier: 1 }
       end
@@ -864,7 +864,7 @@ module OpenstudioStandards
         story.spaces.each do |space|
           next if !new_spaces.include?(space)
 
-          space.surfaces. each do |surface|
+          space.surfaces.each do |surface|
             # set floor to adiabatic if requited
             if adiabatic_floor && surface.surfaceType == 'Floor'
               surface.setOutsideBoundaryCondition('Adiabatic')
@@ -933,7 +933,7 @@ module OpenstudioStandards
                 surface.setWindowToWallRatio(wwr_w)
               end
             else
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', 'Unexpected value of facade: ' + absolute_azimuth + '.')
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', "Unexpected value of facade: #{absolute_azimuth}.")
               return false
             end
           end
@@ -1042,15 +1042,15 @@ module OpenstudioStandards
         top_story_length_facade_area = top_story_length * floor_height
         top_story_width_facade_area = top_story_width * floor_height
 
-        total_exterior_wall_area = 2 * (length + width) * (args[:num_stories_above_grade].ceil - 1.0) * floor_height + 2 * (top_story_length + top_story_width) * floor_height
+        total_exterior_wall_area = (2 * (length + width) * (args[:num_stories_above_grade].ceil - 1.0) * floor_height) + (2 * (top_story_length + top_story_width) * floor_height)
         target_party_wall_area = total_exterior_wall_area * args[:party_wall_fraction]
 
         width_counter = 0
         width_area = 0.0
         facade_area = typical_width_facade_area
-        until (width_area + facade_area >= target_party_wall_area) || (width_counter == args[:num_stories_above_grade].ceil * 2)
+        until (width_area + facade_area >= target_party_wall_area) || (width_counter == (args[:num_stories_above_grade].ceil * 2))
           # update facade area for top story
-          if width_counter == args[:num_stories_above_grade].ceil - 1 || width_counter == args[:num_stories_above_grade].ceil * 2 - 1
+          if width_counter == args[:num_stories_above_grade].ceil - 1 || ((width_counter == (args[:num_stories_above_grade].ceil * 2)) - 1)
             facade_area = top_story_width_facade_area
           else
             facade_area = typical_width_facade_area
@@ -1067,7 +1067,7 @@ module OpenstudioStandards
         facade_area = typical_length_facade_area
         until (length_area + facade_area >= target_party_wall_area) || (length_counter == args[:num_stories_above_grade].ceil * 2)
           # update facade area for top story
-          if length_counter == args[:num_stories_above_grade].ceil - 1 || length_counter == args[:num_stories_above_grade].ceil * 2 - 1
+          if length_counter == args[:num_stories_above_grade].ceil - 1 || ((length_counter == args[:num_stories_above_grade].ceil * 2) - 1)
             facade_area = top_story_length_facade_area
           else
             facade_area = typical_length_facade_area
@@ -1175,7 +1175,7 @@ module OpenstudioStandards
         # return false
 
         # not providing adiabatic work around when top story is partial story.
-        if args[:num_stories_above_grade].to_f != args[:num_stories_above_grade].ceil
+        if args[:num_stories_above_grade].to_i != args[:num_stories_above_grade].ceil
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', 'Ground exposed floor or Roof area is larger than footprint, likely inter-floor surface matching and intersection error.')
           return false
         else
@@ -1296,12 +1296,12 @@ module OpenstudioStandards
       # store list of defaulted items
       defaulted_args = []
 
-      if args[:ns_to_ew_ratio] == 0.0
+      if args[:ns_to_ew_ratio].abs < 0.01
         args[:ns_to_ew_ratio] = building_form_defaults[:aspect_ratio]
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "0.0 value for aspect ratio will be replaced with smart default for #{primary_building_type} of #{building_form_defaults[:aspect_ratio]}.")
       end
 
-      if args[:perim_mult] == 0.0
+      if args[:perim_mult].abs < 0.01
         # if this is not defined then use default of 1.0
         if !building_form_defaults.key?(:perim_mult)
           args[:perim_mult] = 1.0
@@ -1314,13 +1314,13 @@ module OpenstudioStandards
         return false
       end
 
-      if args[:floor_height] == 0.0
+      if args[:floor_height].abs < 0.01
         args[:floor_height] = building_form_defaults[:typical_story]
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "0.0 value for floor height will be replaced with smart default for #{primary_building_type} of #{building_form_defaults[:typical_story]}.")
         defaulted_args << 'floor_height'
       end
       # because of this can't set wwr to 0.0. If that is desired then we can change this to check for 1.0 instead of 0.0
-      if args[:wwr] == 0.0
+      if args[:wwr].abs < 0.01
         args[:wwr] = building_form_defaults[:wwr]
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "0.0 value for window to wall ratio will be replaced with smart default for #{primary_building_type} of #{building_form_defaults[:wwr]}.")
       end
@@ -1541,7 +1541,7 @@ module OpenstudioStandards
             args[:ns_to_ew_ratio] = length / width
           else
             # check if each bar would be longer then 15 feet, then set as dual bar and override perimeter multiplier
-            length_alt1 = ((args[:ns_to_ew_ratio] * footprint_si) / width + 2 * args[:ns_to_ew_ratio] * width - 2 * width) / (1 + args[:ns_to_ew_ratio])
+            length_alt1 = (((args[:ns_to_ew_ratio] * footprint_si) / width) + ((2 * (args[:ns_to_ew_ratio] * width)) - (2 * width))) / (1 + args[:ns_to_ew_ratio])
             length_alt2 = length - length_alt1
             if [length_alt1, length_alt2].min >= min_allow_size
               dual_bar = true
@@ -1564,7 +1564,7 @@ module OpenstudioStandards
 
       # calculations for dual bar, which later will be setup to run create_bar twice
       if dual_bar
-        min_perim = 2 * width + 2 * length
+        min_perim = (2 * width) + (2 * length)
         target_area = footprint_si
         target_perim = min_perim * args[:perim_mult]
         tol_testing = 0.00001
@@ -1578,18 +1578,18 @@ module OpenstudioStandards
         # C use stretched bar (requires model to miss ns/ew ratio)
 
         # custom quadratic equation to solve two bars with common width 2l^2 - p*l + 4a = 0
-        if target_perim**2 - 32 * footprint_si > 0
+        if ((target_perim**2) - (32 * footprint_si)) > 0
           if specified_bar_width_si > 0
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Ignoring perimeter multiplier argument and using use specified bar width.')
             dual_double_end_width = specified_bar_width_si
             dual_double_end_length = footprint_si / dual_double_end_width
           else
-            dual_double_end_length = 0.25 * (target_perim + Math.sqrt(target_perim**2 - 32 * footprint_si))
+            dual_double_end_length = 0.25 * (target_perim + Math.sqrt((target_perim**2) - (32 * footprint_si)))
             dual_double_end_width = footprint_si / dual_double_end_length
           end
 
           # now that stretched  bar is made, determine where to split it and rotate
-          bar_a_length = (args[:ns_to_ew_ratio] * (dual_double_end_length + dual_double_end_width) - dual_double_end_width) / (1 + args[:ns_to_ew_ratio])
+          bar_a_length = ((args[:ns_to_ew_ratio] * (dual_double_end_length + dual_double_end_width)) - dual_double_end_width) / (1 + args[:ns_to_ew_ratio])
           bar_b_length = dual_double_end_length - bar_a_length
           area_a = bar_a_length * dual_double_end_width
           area_b = bar_b_length * dual_double_end_width
@@ -1603,14 +1603,14 @@ module OpenstudioStandards
           dual_bar_calc_approach = 'dual_bar'
         else
           # adiabatic bar input calcs
-          if target_perim**2 - 16 * footprint_si > 0
-            adiabatic_dual_double_end_length = 0.25 * (target_perim + Math.sqrt(target_perim**2 - 16 * footprint_si))
+          if ((target_perim**2) - (16 * footprint_si)) > 0
+            adiabatic_dual_double_end_length = 0.25 * (target_perim + Math.sqrt((target_perim**2) - (16 * footprint_si)))
             adiabatic_dual_double_end_width = footprint_si / adiabatic_dual_double_end_length
             # test for unexpected
             unexpected = false
-            if (target_area - adiabatic_dual_double_end_length * adiabatic_dual_double_end_width).abs > tol_testing then unexpected = true end
+            if (target_area - (adiabatic_dual_double_end_length * adiabatic_dual_double_end_width)).abs > tol_testing then unexpected = true end
             if specified_bar_width_si == 0
-              if (target_perim - (adiabatic_dual_double_end_length * 2 + adiabatic_dual_double_end_width * 2)).abs > tol_testing then unexpected = true end
+              if (target_perim - ((adiabatic_dual_double_end_length * 2) + (adiabatic_dual_double_end_width * 2))).abs > tol_testing then unexpected = true end
             end
             if unexpected
               OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Geometry.Create', 'Unexpected values for dual rectangle adiabatic ends bar b.')
@@ -1634,29 +1634,29 @@ module OpenstudioStandards
 
         # apply prescribed approach for stretched or dual bar
         if dual_bar_calc_approach == 'dual_bar'
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Stretched  #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_length, 'm', 'ft').get, 0, true)} ft x #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_width, 'm', 'ft').get, 0, true)} ft rectangle has an area of #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_length * dual_double_end_width, 'm^2', 'ft^2').get, 0, true)} ft^2. When split in two the perimeter will be #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_length * 2 + dual_double_end_width * 4, 'm', 'ft').get, 0, true)} ft")
-          if (target_area - dual_double_end_length * dual_double_end_width).abs > tol_testing || (target_perim - (dual_double_end_length * 2 + dual_double_end_width * 4)).abs > tol_testing
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Stretched  #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_length, 'm', 'ft').get, 0, true)} ft x #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_width, 'm', 'ft').get, 0, true)} ft rectangle has an area of #{OpenStudio.toNeatString(OpenStudio.convert(dual_double_end_length * dual_double_end_width, 'm^2', 'ft^2').get, 0, true)} ft^2. When split in two the perimeter will be #{OpenStudio.toNeatString(OpenStudio.convert((dual_double_end_length * 2) + (dual_double_end_width * 4), 'm', 'ft').get, 0, true)} ft")
+          if (target_area - (dual_double_end_length * dual_double_end_width)).abs > tol_testing || (target_perim - ((dual_double_end_length * 2) + (dual_double_end_width * 4))).abs > tol_testing
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Geometry.Create', 'Unexpected values for dual rectangle.')
           end
 
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "For stretched split bar, to match target ns/ew aspect ratio #{OpenStudio.toNeatString(OpenStudio.convert(bar_a_length, 'm', 'ft').get, 0, true)} ft of bar should be horizontal, with #{OpenStudio.toNeatString(OpenStudio.convert(bar_b_length, 'm', 'ft').get, 0, true)} ft turned 90 degrees. Combined area is #{OpenStudio.toNeatString(OpenStudio.convert(area_a + area_b, 'm^2', 'ft^2').get, 0, true)} ft^2. Combined perimeter is #{OpenStudio.toNeatString(OpenStudio.convert(bar_a_length * 2 + bar_b_length * 2 + dual_double_end_width * 4, 'm', 'ft').get, 0, true)} ft")
-          if (target_area - (area_a + area_b)).abs > tol_testing || (target_perim - (bar_a_length * 2 + bar_b_length * 2 + dual_double_end_width * 4)).abs > tol_testing
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "For stretched split bar, to match target ns/ew aspect ratio #{OpenStudio.toNeatString(OpenStudio.convert(bar_a_length, 'm', 'ft').get, 0, true)} ft of bar should be horizontal, with #{OpenStudio.toNeatString(OpenStudio.convert(bar_b_length, 'm', 'ft').get, 0, true)} ft turned 90 degrees. Combined area is #{OpenStudio.toNeatString(OpenStudio.convert(area_a + area_b, 'm^2', 'ft^2').get, 0, true)} ft^2. Combined perimeter is #{OpenStudio.toNeatString(OpenStudio.convert((bar_a_length * 2) + (bar_b_length * 2) + (dual_double_end_width * 4), 'm', 'ft').get, 0, true)} ft")
+          if (target_area - (area_a + area_b)).abs > tol_testing || (target_perim - ((bar_a_length * 2) + (bar_b_length * 2) + (dual_double_end_width * 4))).abs > tol_testing
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Geometry.Create', 'Unexpected values for rotated dual rectangle')
           end
         elsif dual_bar_calc_approach == 'adiabatic_ends_bar_b'
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Can't hit target perimeter with two rectangles, need to make two ends adiabatic")
 
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "For dual bar with adiabatic ends on bar b, to reach target aspect ratio #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_bar_a_length, 'm', 'ft').get, 0, true)} ft of bar should be north/south, with #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_bar_b_length, 'm', 'ft').get, 0, true)} ft turned 90 degrees. Combined area is #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_area_a + adiabatic_area_b, 'm^2', 'ft^2').get, 0, true)} ft^2}. Combined perimeter is #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_bar_a_length * 2 + adiabatic_bar_b_length * 2 + adiabatic_dual_double_end_width * 2, 'm', 'ft').get, 0, true)} ft")
-          if (target_area - (adiabatic_area_a + adiabatic_area_b)).abs > tol_testing || (target_perim - (adiabatic_bar_a_length * 2 + adiabatic_bar_b_length * 2 + adiabatic_dual_double_end_width * 2)).abs > tol_testing
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "For dual bar with adiabatic ends on bar b, to reach target aspect ratio #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_bar_a_length, 'm', 'ft').get, 0, true)} ft of bar should be north/south, with #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_bar_b_length, 'm', 'ft').get, 0, true)} ft turned 90 degrees. Combined area is #{OpenStudio.toNeatString(OpenStudio.convert(adiabatic_area_a + adiabatic_area_b, 'm^2', 'ft^2').get, 0, true)} ft^2}. Combined perimeter is #{OpenStudio.toNeatString(OpenStudio.convert((adiabatic_bar_a_length * 2) + (adiabatic_bar_b_length * 2) + (adiabatic_dual_double_end_width * 2), 'm', 'ft').get, 0, true)} ft")
+          if (target_area - (adiabatic_area_a + adiabatic_area_b)).abs > tol_testing || (target_perim - ((adiabatic_bar_a_length * 2) + (adiabatic_bar_b_length * 2) + (adiabatic_dual_double_end_width * 2))).abs > tol_testing
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Geometry.Create', 'Unexpected values for rotated dual rectangle adiabatic ends bar b')
           end
         else
           # stretched bar
           dual_bar = false
 
-          stretched_length = 0.25 * (target_perim + Math.sqrt(target_perim**2 - 16 * footprint_si))
+          stretched_length = 0.25 * (target_perim + Math.sqrt((target_perim**2) - (16 * footprint_si)))
           stretched_width = footprint_si / stretched_length
-          if (target_area - stretched_length * stretched_width).abs > tol_testing || (target_perim - (stretched_length + stretched_width) * 2) > tol_testing
+          if (target_area - (stretched_length * stretched_width)).abs > tol_testing || (target_perim - ((stretched_length + stretched_width) * 2)) > tol_testing
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Geometry.Create', 'Unexpected values for single stretched')
           end
 
@@ -1708,7 +1708,7 @@ module OpenstudioStandards
           space_type_left = v[:floor_area]
 
           # do not go to next space type until this one is evaulate, which may span stories
-          until space_type_left == 0.0 || story_counter >= num_stories
+          until (space_type_left.abs < 0.01) || (story_counter >= num_stories)
 
             # use secondary footprint if any left
             if secondary_footprint_counter > 0.0
@@ -1717,7 +1717,7 @@ module OpenstudioStandards
               # confirm that the part of space type use or what is left is greater than min allowed value
               projected_space_type_left = space_type_left - hash_area
               test_a = hash_area >= pri_sec_min_area
-              test_b = projected_space_type_left >= pri_sec_min_area || projected_space_type_left == 0.0 ? true : false
+              test_b = (projected_space_type_left >= pri_sec_min_area) || (projected_space_type_left.abs < 0.01)
               test_c = k == space_types_hash.keys.last # if last space type accept sliver, no other space to infil
               if (test_a && test_b) || test_c
                 if space_types_hash_secondary.key?(k)
@@ -1812,9 +1812,9 @@ module OpenstudioStandards
           else
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Adiabatic ends added to secondary bar because target perimeter multiplier could not be met with two full rectangular footprints.')
           end
-          bars['secondary'][:center_of_footprint] = OpenStudio::Point3d.new(adiabatic_bar_a_length * 0.5 + adiabatic_dual_double_end_width * 0.5 + offset_val, adiabatic_bar_b_length * 0.5 + adiabatic_dual_double_end_width * 0.5 + offset_val, 0.0)
+          bars['secondary'][:center_of_footprint] = OpenStudio::Point3d.new((adiabatic_bar_a_length * 0.5) + (adiabatic_dual_double_end_width * 0.5) + offset_val, (adiabatic_bar_b_length * 0.5) + (adiabatic_dual_double_end_width * 0.5) + offset_val, 0.0)
         else
-          bars['secondary'][:center_of_footprint] = OpenStudio::Point3d.new(bar_a_length * 0.5 + dual_double_end_width * 0.5 + offset_val, bar_b_length * 0.5 + dual_double_end_width * 0.5 + offset_val, 0.0)
+          bars['secondary'][:center_of_footprint] = OpenStudio::Point3d.new((bar_a_length * 0.5) + (dual_double_end_width * 0.5) + offset_val, (bar_b_length * 0.5) + (dual_double_end_width * 0.5) + offset_val, 0.0)
         end
         bars['secondary'][:args] = args2
 
@@ -1852,7 +1852,7 @@ module OpenstudioStandards
         # can make use of this when breaking out multi-height spaces
         bars['custom_height'][:floor_height] = floor_height
         bars['custom_height'][:num_stories] = num_stories
-        bars['custom_height'][:center_of_footprint] = OpenStudio::Point3d.new(bars['primary'][:length] * -0.5 - length_cust_height * 0.5 - offset_val, 0.0, 0.0)
+        bars['custom_height'][:center_of_footprint] = OpenStudio::Point3d.new((bars['primary'][:length] * -0.5) - (length_cust_height * 0.5) - offset_val, 0.0, 0.0)
         bars['custom_height'][:floor_height] = OpenStudio.convert(custom_story_heights.max, 'ft', 'm').get
         bars['custom_height'][:num_stories] = 1
         bars['custom_height'][:space_types_hash] = multi_height_space_types_hash
@@ -1961,7 +1961,7 @@ module OpenstudioStandards
       # test for excessive exterior roof area (indication of problem with intersection and or surface matching)
       ext_roof_area = model.getBuilding.exteriorSurfaceArea - model.getBuilding.exteriorWallArea
       expected_roof_area = args[:total_bldg_floor_area] / (args[:num_stories_above_grade] + args[:num_stories_below_grade]).to_f
-      if ext_roof_area > expected_roof_area && single_floor_area_si == 0.0 # only test if using whole-building area input
+      if ext_roof_area > expected_roof_area && (single_floor_area_si.abs < 0.01) # only test if using whole-building area input
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', 'Roof area larger than expected, may indicate problem with inter-floor surface intersection or matching.')
         return false
       end

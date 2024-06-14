@@ -50,12 +50,8 @@ class Standard
     thermal_eff = nil
 
     # If specified as thermal efficiency, this takes precedent
-    if !furnace_props['minimum_thermal_efficiency'].nil?
-      thermal_eff = furnace_props['minimum_thermal_efficiency']
-      new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{thermal_eff} Thermal Eff"
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: = #{capacity_kbtu_per_hr.round}kBtu/hr; Thermal Efficiency = #{thermal_eff}")
-
-    else # If not thermal efficiency, check other parameters
+    if furnace_props['minimum_thermal_efficiency'].nil?
+      # If not thermal efficiency, check other parameters
 
       # If specified as AFUE
       unless furnace_props['minimum_annual_fuel_utilization_efficiency'].nil?
@@ -72,7 +68,10 @@ class Standard
         new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
       end
-
+    else
+      thermal_eff = furnace_props['minimum_thermal_efficiency']
+      new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{thermal_eff} Thermal Eff"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: = #{capacity_kbtu_per_hr.round}kBtu/hr; Thermal Efficiency = #{thermal_eff}")
     end
 
     # Set the efficiency values
