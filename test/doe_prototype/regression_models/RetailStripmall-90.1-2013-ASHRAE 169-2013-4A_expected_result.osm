@@ -12810,7 +12810,7 @@ OS:Pump:VariableSpeed,
   ,                                       !- Rated Flow Rate {m3/s}
   0.001,                                  !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.7,                                    !- Motor Efficiency
+  1.0,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
   0,                                      !- Coefficient 1 of the Part Load Performance Curve
   3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
@@ -13723,7 +13723,7 @@ OS:Pump:VariableSpeed,
   ,                                       !- Rated Flow Rate {m3/s}
   0.001,                                  !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.7,                                    !- Motor Efficiency
+  1.0,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
   0,                                      !- Coefficient 1 of the Part Load Performance Curve
   3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
@@ -14525,7 +14525,7 @@ OS:Pump:VariableSpeed,
   ,                                       !- Rated Flow Rate {m3/s}
   0.001,                                  !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.7,                                    !- Motor Efficiency
+  1.0,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
   0,                                      !- Coefficient 1 of the Part Load Performance Curve
   3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
@@ -15068,7 +15068,7 @@ OS:Pump:VariableSpeed,
   ,                                       !- Rated Flow Rate {m3/s}
   0.001,                                  !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.7,                                    !- Motor Efficiency
+  1.0,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
   0,                                      !- Coefficient 1 of the Part Load Performance Curve
   3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
@@ -15888,7 +15888,7 @@ OS:Pump:VariableSpeed,
   ,                                       !- Rated Flow Rate {m3/s}
   0.001,                                  !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.7,                                    !- Motor Efficiency
+  1.0,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
   0,                                      !- Coefficient 1 of the Part Load Performance Curve
   3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
@@ -16431,7 +16431,7 @@ OS:Pump:VariableSpeed,
   ,                                       !- Rated Flow Rate {m3/s}
   0.001,                                  !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.7,                                    !- Motor Efficiency
+  1.0,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
   0,                                      !- Coefficient 1 of the Part Load Performance Curve
   3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
@@ -16982,7 +16982,7 @@ OS:Pump:VariableSpeed,
   ,                                       !- Rated Flow Rate {m3/s}
   0.001,                                  !- Rated Pump Head {Pa}
   ,                                       !- Rated Power Consumption {W}
-  0.7,                                    !- Motor Efficiency
+  1.0,                                    !- Motor Efficiency
   ,                                       !- Fraction of Motor Inefficiencies to Fluid Stream
   0,                                      !- Coefficient 1 of the Part Load Performance Curve
   3.2485,                                 !- Coefficient 2 of the Part Load Performance Curve
