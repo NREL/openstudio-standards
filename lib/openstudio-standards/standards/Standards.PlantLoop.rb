@@ -55,7 +55,8 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @return [String] common_pipe or heat_exchanger
   def plant_loop_set_chw_pri_sec_configuration(model)
-    pri_sec_config = 'common_pipe'
+    # pri_sec_config = 'common_pipe'
+    pri_sec_config = 'heat_exchanger'
     return pri_sec_config
   end
 
