@@ -23,6 +23,7 @@ class ASHRAE901PRM < Standard
         surface.additionalProperties.setFeature('added_wwr', wwr_adjusted)
       else
         wwr_adjusted = surface_wwr * reduction
+        surface.additionalProperties.setFeature('adjusted_wwr', wwr_adjusted)
       end
       # Save doors to a temp list
       door_list = []

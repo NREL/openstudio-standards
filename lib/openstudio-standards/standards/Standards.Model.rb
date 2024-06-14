@@ -568,6 +568,9 @@ class Standard
           nb_adjustments += 1
         end
       end
+      if degs == 0
+        generate_prm_output(model, sizing_run_dir)
+      end
     end
 
     if debug
@@ -6089,6 +6092,13 @@ class Standard
   # @param file_directory [String] file directory
   # @return [Boolean] returns true if successful, false if not
   def generate_baseline_log(file_directory)
+    return true
+  end
+
+  # Generate baseline outputs for verification
+  # @param model OpenStudio::Model::Model
+  # @param file_path string
+  def generate_prm_output(model, file_path)
     return true
   end
 

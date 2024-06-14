@@ -440,6 +440,7 @@ class ASHRAE901PRM < Standard
 
             # Identify this surface as exterior
             surface_category[surf] = 'ExteriorSurface'
+            surf.additionalProperties.setFeature('surface_conditioning_category', 'ExteriorSurface')
 
             # Temporary change the surface's boundary condition to 'Outdoors' so it can be assigned a baseline construction
             surf.setOutsideBoundaryCondition('Outdoors')
@@ -2424,6 +2425,14 @@ class ASHRAE901PRM < Standard
     log_messages_to_file_prm("#{file_directory}/prm.log", false)
   end
 
+  # Generate baseline outputs
+  # @param model OpenStudio::Model::Model
+  # @param file_path string
+  def generate_prm_output(model, file_path)
+    output_json = extract_additional_properties(model)
+    export_baseline_report(output_json, file_path)
+  end
+
   # This function checks whether it is required to adjust the window to wall ratio based on the model WWR and wwr limit.
   # @param wwr_limit [Double] window to wall ratio limit
   # @param wwr_list [Array] list of wwr of zone conditioning category in a building area type category - residential, nonresidential and semiheated
@@ -2482,6 +2491,7 @@ class ASHRAE901PRM < Standard
 
     surface_name = surface.name.get
     surface_wwr = OpenstudioStandards::Geometry.surface_get_window_to_wall_ratio(surface)
+    surface.additionalProperties.setFeature('surface_wwr', surface_wwr)
     surface_dr = OpenstudioStandards::Geometry.surface_get_door_to_wall_ratio(surface)
 
     if multiplier < 1.0
