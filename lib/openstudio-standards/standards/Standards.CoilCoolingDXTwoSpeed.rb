@@ -75,7 +75,15 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
-    # if specified as SEER (heat pump)
+    # If specific as IEER
+    unless ac_props['minimum_integrated_energy_efficiency_ratio'].nil?
+      min_ieer = ac_props['minimum_integrated_energy_efficiency_ratio']
+      cop = ieer_to_cop_no_fan(min_ieer)
+      new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_ieer}IEER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{template}: #{coil_cooling_dx_two_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; IEER = #{min_ieer}")
+    end
+
+    # If specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
       cop = seer_to_cop_no_fan(min_seer)
