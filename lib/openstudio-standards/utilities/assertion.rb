@@ -40,7 +40,7 @@ def prm_get_optional_handler(component, log_dir, data_key, *remaining_keys)
   target_data = component.send(data_key)
   prm_raise(target_data.is_initialized, log_dir, "Failed to retrieve data: #{data_key} from #{prm_get_component_name(component)}")
   target_data_get = target_data.get
-  return remaining_keys.length == 0 ? target_data_get : prm_get_optional_handler(target_data_get, log_dir, remaining_keys[0], *remaining_keys[1...])
+  return remaining_keys.empty? ? target_data_get : prm_get_optional_handler(target_data_get, log_dir, remaining_keys[0], *remaining_keys[1...])
 end
 
 # This is a PRM handler to get a name from an OpenStudio object instance
@@ -57,7 +57,6 @@ def prm_get_component_name(component)
   end
   return name
 end
-
 
 # PRM get an additional property from an OpenStudio object as a boolean,
 # if no such additional property, then return default value.
@@ -113,7 +112,7 @@ end
 # @param key [String] key string
 # @param default [String] the default to return when there is no matching key
 # @return [String] String value
-def get_additional_property_as_string(component, key, default = "")
+def get_additional_property_as_string(component, key, default = '')
   value = default
   if component.additionalProperties.getFeatureAsString(key).is_initialized
     value = component.additionalProperties.getFeatureAsString(key).get
@@ -122,4 +121,3 @@ def get_additional_property_as_string(component, key, default = "")
   end
   return value
 end
-

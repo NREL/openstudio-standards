@@ -398,10 +398,8 @@ class Standard
 
     cw_t_stpt_manager = nil
     plant_loop.supplyOutletNode.setpointManagers.each do |spm|
-      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized
-        if spm.name.get.include? 'Setpoint Manager Follow OATwb'
-          cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
-        end
+      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized && spm.name.get.include?('Setpoint Manager Follow OATwb')
+        cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
       end
     end
     if cw_t_stpt_manager.nil?
@@ -1355,11 +1353,9 @@ class Standard
     plant_loop.demandComponents.each do |comp|
       if comp.to_WaterHeaterMixed.is_initialized
         comp = comp.to_WaterHeaterMixed.get
-        if comp.plantLoop.is_initialized
-          if plant_loop_swh_loop?(comp.plantLoop.get)
-            serves_swh = true
-            break
-          end
+        if comp.plantLoop.is_initialized && plant_loop_swh_loop?(comp.plantLoop.get)
+          serves_swh = true
+          break
         end
       end
     end
@@ -1394,11 +1390,7 @@ class Standard
           combination_system = false
         when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
           primary_fuels << 'Electricity'
-        when 'OS_SolarCollector_FlatPlate_PhotovoltaicThermal'
-          primary_fuels << 'SolarEnergy'
-        when 'OS_SolarCollector_FlatPlate_Water'
-          primary_fuels << 'SolarEnergy'
-        when 'OS_SolarCollector_IntegralCollectorStorage'
+        when 'OS_SolarCollector_FlatPlate_PhotovoltaicThermal', 'OS_SolarCollector_FlatPlate_Water', 'OS_SolarCollector_IntegralCollectorStorage'
           primary_fuels << 'SolarEnergy'
         when 'OS_WaterHeater_HeatPump'
           primary_fuels << 'Electricity'

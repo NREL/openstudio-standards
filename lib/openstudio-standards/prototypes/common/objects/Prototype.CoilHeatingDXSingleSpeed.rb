@@ -60,9 +60,10 @@ class Standard
     def_eir_f_of_temp = nil
 
     # curve sets
-    if type == 'OS default'
+    case type
+    when 'OS default'
       # use OS defaults
-    elsif type == 'Residential Central Air Source HP'
+    when 'Residential Central Air Source HP'
       # Performance curves
       # These coefficients are in IP UNITS
       heat_cap_ft_coeffs_ip = [0.566333415, -0.000744164, -0.0000103, 0.009414634, 0.0000506, -0.00000675]
@@ -84,7 +85,7 @@ class Standard
 
       # Heating defrost curve for reverse cycle
       def_eir_f_of_temp = create_curve_biquadratic(model, defrost_eir_coeffs, 'DefrostEIR', -100, 100, -100, 100, nil, nil)
-    elsif type == 'Residential Minisplit HP'
+    when 'Residential Minisplit HP'
       # Performance curves
       # These coefficients are in SI UNITS
       heat_cap_ft_coeffs_si = [1.14715889038462, -0.010386676170938, 0, 0.00865384615384615, 0, 0]

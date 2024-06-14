@@ -73,20 +73,17 @@ class ASHRAE9012016 < ASHRAE901
     # Exceptions
     if space.spaceType.is_initialized
       case space.spaceType.get.standardsSpaceType.to_s
-      # Retail spaces exception (c) to Section 9.4.1.4
-      # req_sec_ctrl set to true to create a second reference point
       when 'Core_Retail'
+        # Retail spaces exception (c) to Section 9.4.1.4
+        # req_sec_ctrl set to true to create a second reference point
         req_pri_ctrl = false
         req_sec_ctrl = true
-      when 'Entry', 'Front_Retail', 'Point_of_Sale'
+      when 'Entry', 'Front_Retail', 'Point_of_Sale', 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
+        # Retail, Strip mall
         req_pri_ctrl = false
         req_sec_ctrl = false
-      # Strip mall
-      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
-        req_pri_ctrl = false
-        req_sec_ctrl = false
-      # Residential apartments
       when 'Apartment', 'Apartment_topfloor_NS', 'Apartment_topfloor_WE'
+        # Residential apartments
         req_top_ctrl = false
         req_pri_ctrl = false
         req_sec_ctrl = false

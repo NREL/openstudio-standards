@@ -312,11 +312,11 @@ module OpenstudioStandards
       end
 
       # load weather file if specified
-      if !weather_file_path.nil?
-        epw_file = OpenStudio::EpwFile.new(weather_file_path)
-      else
+      if weather_file_path.nil?
         # look up the standard weather file for the climate zone
         weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+        epw_file = OpenStudio::EpwFile.new(weather_file_path)
+      else
         epw_file = OpenStudio::EpwFile.new(weather_file_path)
       end
 
@@ -369,11 +369,11 @@ module OpenstudioStandards
       end
 
       # load weather file if specified
-      if !weather_file_path.nil?
-        epw_file = OpenStudio::EpwFile.new(weather_file_path)
-      else
+      if weather_file_path.nil?
         # look up the standard weather file for the climate zone
         weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+        epw_file = OpenStudio::EpwFile.new(weather_file_path)
+      else
         epw_file = OpenStudio::EpwFile.new(weather_file_path)
       end
 

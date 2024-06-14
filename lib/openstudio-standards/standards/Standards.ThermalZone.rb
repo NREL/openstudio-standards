@@ -495,7 +495,12 @@ class Standard
     load_w = 0.0
     load_hrs_sum = Array.new(8760, 0)
 
-    if !use_noncoincident_value
+    if use_noncoincident_value
+      # Get the non-coincident sum of peak internal gains
+      thermal_zone.spaces.each do |space|
+        load_w += space_internal_load_annual_array(model, space, use_noncoincident_value)
+      end
+    else
       # Get array of coincident internal gain
       thermal_zone.spaces.each do |space|
         load_hrs = space_internal_load_annual_array(model, space, use_noncoincident_value)
@@ -504,11 +509,6 @@ class Standard
         end
       end
       load_w = load_hrs_sum.max
-    else
-      # Get the non-coincident sum of peak internal gains
-      thermal_zone.spaces.each do |space|
-        load_w += space_internal_load_annual_array(model, space, use_noncoincident_value)
-      end
     end
 
     return load_w

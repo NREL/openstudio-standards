@@ -671,24 +671,7 @@ module OpenstudioStandards
           end
         end
 
-        if !(bar_hash[:make_mid_story_surfaces_adiabatic])
-          # intersect and surface match two pair by pair
-          spaces_b = model.getSpaces.sort
-          # looping through vector of each space
-          model.getSpaces.sort.each do |space_a|
-            spaces_b.delete(space_a)
-            spaces_b.each do |space_b|
-              # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Intersecting and matching surfaces between #{space_a.name} and #{space.name}")
-              spaces_temp = OpenStudio::Model::SpaceVector.new
-              spaces_temp << space_a
-              spaces_temp << space_b
-              # intersect and sort
-              OpenStudio::Model.intersectSurfaces(spaces_temp)
-              OpenStudio::Model.matchSurfaces(spaces_temp)
-            end
-          end
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Intersecting and matching surfaces in model, this will create additional geometry.')
-        else
+        if (bar_hash[:make_mid_story_surfaces_adiabatic])
           # elsif bar_hash[:double_loaded_corridor] # only intersect spaces in each story, not between wtory
           model.getBuilding.buildingStories.sort.each do |story|
             # intersect and surface match two pair by pair
@@ -708,18 +691,26 @@ module OpenstudioStandards
             end
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Intersecting and matching surfaces in story #{story.name}, this will create additional geometry.")
           end
+        else
+          # intersect and surface match two pair by pair
+          spaces_b = model.getSpaces.sort
+          # looping through vector of each space
+          model.getSpaces.sort.each do |space_a|
+            spaces_b.delete(space_a)
+            spaces_b.each do |space_b|
+              # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Intersecting and matching surfaces between #{space_a.name} and #{space.name}")
+              spaces_temp = OpenStudio::Model::SpaceVector.new
+              spaces_temp << space_a
+              spaces_temp << space_b
+              # intersect and sort
+              OpenStudio::Model.intersectSurfaces(spaces_temp)
+              OpenStudio::Model.matchSurfaces(spaces_temp)
+            end
+          end
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Intersecting and matching surfaces in model, this will create additional geometry.')
         end
       else
-        if !(bar_hash[:make_mid_story_surfaces_adiabatic])
-          # intersect surfaces
-          # (when bottom floor has many space types and one above doesn't will end up with heavily subdivided floor. Maybe use adiabatic and don't intersect floor/ceilings)
-          intersect_surfaces = true
-          if intersect_surfaces
-            OpenStudio::Model.intersectSurfaces(spaces)
-            OpenStudio::Model.matchSurfaces(spaces)
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Intersecting and matching surfaces in model, this will create additional geometry.')
-          end
-        else
+        if (bar_hash[:make_mid_story_surfaces_adiabatic])
           # elsif bar_hash[:double_loaded_corridor] # only intersect spaces in each story, not between wtory
           model.getBuilding.buildingStories.sort.each do |story|
             story_spaces = OpenStudio::Model::SpaceVector.new
@@ -732,8 +723,16 @@ module OpenstudioStandards
             OpenStudio::Model.matchSurfaces(story_spaces)
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Intersecting and matching surfaces in story #{story.name}, this will create additional geometry.")
           end
+        else
+          # intersect surfaces
+          # (when bottom floor has many space types and one above doesn't will end up with heavily subdivided floor. Maybe use adiabatic and don't intersect floor/ceilings)
+          intersect_surfaces = true
+          if intersect_surfaces
+            OpenStudio::Model.intersectSurfaces(spaces)
+            OpenStudio::Model.matchSurfaces(spaces)
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Intersecting and matching surfaces in model, this will create additional geometry.')
+          end
         end
-
       end
 
       # set boundary conditions if not already set when geometry was created
@@ -866,9 +865,7 @@ module OpenstudioStandards
 
           space.surfaces.each do |surface|
             # set floor to adiabatic if requited
-            if adiabatic_floor && surface.surfaceType == 'Floor'
-              surface.setOutsideBoundaryCondition('Adiabatic')
-            elsif adiabatic_ceiling && surface.surfaceType == 'RoofCeiling'
+            if (adiabatic_floor && surface.surfaceType == 'Floor') || (adiabatic_ceiling && surface.surfaceType == 'RoofCeiling')
               surface.setOutsideBoundaryCondition('Adiabatic')
             end
 
@@ -893,16 +890,13 @@ module OpenstudioStandards
 
               # see if space type has wwr value
               bar_hash[:space_types].each do |k, v|
-                if v.key?(:space_type) && space_type == v[:space_type]
-
+                if v.key?(:space_type) && space_type == v[:space_type] && v.key?(:wwr)
                   # if matching space type specifies a wwr then override the orientation specific recommendations for this surface.
-                  if v.key?(:wwr)
-                    wwr_n = v[:wwr]
-                    wwr_e = v[:wwr]
-                    wwr_s = v[:wwr]
-                    wwr_w = v[:wwr]
-                    space_type_wwr_overrides[space_type] = v[:wwr]
-                  end
+                  wwr_n = v[:wwr]
+                  wwr_e = v[:wwr]
+                  wwr_s = v[:wwr]
+                  wwr_w = v[:wwr]
+                  space_type_wwr_overrides[space_type] = v[:wwr]
                 end
               end
             end

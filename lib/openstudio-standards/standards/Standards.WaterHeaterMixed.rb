@@ -290,15 +290,12 @@ class Standard
     sub_type = nil
     capacity_w = OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get
     # source: https://energycodeace.com/site/custom/public/reference-ace-2019/index.html#!Documents/52residentialwaterheatingequipment.htm
-    if fuel_type == 'NaturalGas' && capacity_btu_per_hr <= 75_000 && (volume_gal >= 20 && volume_gal <= 100)
+    if (fuel_type == 'NaturalGas' && capacity_btu_per_hr <= 75_000 && (volume_gal >= 20 && volume_gal <= 100)) ||
+       (fuel_type == 'Electricity' && capacity_w <= 12_000 && (volume_gal >= 20 && volume_gal <= 120))
       sub_type = 'consumer_storage'
-    elsif fuel_type == 'Electricity' && capacity_w <= 12_000 && (volume_gal >= 20 && volume_gal <= 120)
-      sub_type = 'consumer_storage'
-    elsif fuel_type == 'NaturalGas' && capacity_btu_per_hr < 105_000 && volume_gal < 120
-      sub_type = 'residential_duty'
-    elsif fuel_type == 'Oil' && capacity_btu_per_hr < 140_000 && volume_gal < 120
-      sub_type = 'residential_duty'
-    elsif fuel_type == 'Electricity' && capacity_w < 58_600 && volume_gal <= 2
+    elsif (fuel_type == 'NaturalGas' && capacity_btu_per_hr < 105_000 && volume_gal < 120) ||
+          (fuel_type == 'Oil' && capacity_btu_per_hr < 140_000 && volume_gal < 120) ||
+          (fuel_type == 'Electricity' && capacity_w < 58_600 && volume_gal <= 2)
       sub_type = 'residential_duty'
     elsif volume_gal <= 2
       sub_type = 'instantaneous'

@@ -56,7 +56,7 @@ Standard.class_eval do
       ep_dir = OpenStudio.getEnergyPlusDirectory
       ep_path = OpenStudio.getEnergyPlusExecutable
       ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
-      idd_path = OpenStudio::Path.new("#{ep_dir.to_s}/Energy+.idd")
+      idd_path = OpenStudio::Path.new("#{ep_dir}/Energy+.idd")
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
       # Make a run manager and queue up the run

@@ -259,10 +259,10 @@ module OpenstudioStandards
         # populate hash of building types
         if space_type.standardsBuildingType.is_initialized
           bldg_type = space_type.standardsBuildingType.get
-          if !building_types.key?(bldg_type)
-            building_types[bldg_type] = space_type.floorArea
-          else
+          if building_types.key?(bldg_type)
             building_types[bldg_type] += space_type.floorArea
+          else
+            building_types[bldg_type] = space_type.floorArea
           end
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CreateTypical', "Can't identify building type for #{space_type.name}")
@@ -538,11 +538,10 @@ module OpenstudioStandards
         end
 
         # add daylight controls, need to perform a sizing run for 2010
-        if template == '90.1-2010' || template == 'ComStock 90.1-2010'
-          if standard.model_run_sizing_run(model, "#{sizing_run_directory}/create_typical_building_from_model_SR0") == false
-            return false
-          end
+        if (template == '90.1-2010' || template == 'ComStock 90.1-2010') && (standard.model_run_sizing_run(model, "#{sizing_run_directory}/create_typical_building_from_model_SR0") == false)
+          return false
         end
+
         standard.model_add_daylighting_controls(model)
       end
 
