@@ -144,7 +144,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', 'Please assign an ASHRAE Climate Zone to your model.')
         return false
       else
-        cz_number = ashrae_climate_zone.split(//).first.to_i
+        cz_number = ashrae_climate_zone.chars.first.to_i
       end
 
       # expected climate zone number should be 0 through 8

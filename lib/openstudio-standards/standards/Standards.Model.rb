@@ -2,8 +2,7 @@ require 'csv'
 require 'date'
 
 class Standard
-  attr_accessor :space_multiplier_map
-  attr_accessor :standards_data
+  attr_accessor :space_multiplier_map, :standards_data
 
   # returns the space multiplier map
 
@@ -1154,11 +1153,11 @@ class Standard
         # fan_object = nil
         # fan_object = get_fan_object_for_airloop(model, air_loop_hvac)
         fan_object = 'nothing'
-        if !fan_object.nil?
+        if fan_object.nil?
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Failed to retreive fan object for AirLoop #{air_loop_hvac.name}")
+        else
           # fan_schedule = fan_object.availabilitySchedule
           fan_schedule = air_loop_hvac.availabilitySchedule
-        else
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Failed to retreive fan object for AirLoop #{air_loop_hvac.name}")
         end
         fan_schedule_8760 = OpenstudioStandards::Schedules.schedule_get_hourly_values(fan_schedule)
       end
@@ -1198,9 +1197,7 @@ class Standard
   # @param air_loop [object]
   # @return [object] supply fan of zone equipment component
   def get_fan_object_for_airloop(model, air_loop)
-    if !air_loop.supplyFan.empty?
-      fan_component = air_loop.supplyFan.get
-    else
+    if air_loop.supplyFan.empty?
       # Check if system has unitary wrapper
       air_loop.supplyComponents.each do |component|
         # Get the object type, getting the internal coil
@@ -1226,6 +1223,8 @@ class Standard
           break
         end
       end
+    else
+      fan_component = air_loop.supplyFan.get
     end
 
     # Get the fan object for this fan
@@ -2903,17 +2902,18 @@ class Standard
       vt = nil
       material_name.split.each_with_index do |item, i|
         prop_value = material_name.split[i + 1].to_f
-        if item == 'U'
+        case item
+        when 'U'
           unless u_factor.nil?
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Multiple U-Factor values have been identified for #{material_name}: previous = #{u_factor}, new = #{prop_value}. Please check the material name. New U-Factor will be used.")
           end
           u_factor = prop_value
-        elsif item == 'SHGC'
+        when 'SHGC'
           unless shgc.nil?
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Multiple SHGC values have been identified for #{material_name}: previous = #{shgc}, new = #{prop_value}. Please check the material name. New SHGC will be used.")
           end
           shgc = prop_value
-        elsif item == 'VT'
+        when 'VT'
           unless vt.nil?
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Multiple VT values have been identified for #{material_name}: previous = #{vt}, new = #{prop_value}. Please check the material name. New SHGC will be used.")
           end
@@ -2950,7 +2950,8 @@ class Standard
     end
 
     material = nil
-    if material_type == 'StandardOpaqueMaterial'
+    case material_type
+    when 'StandardOpaqueMaterial'
       material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
       material.setName(material_name)
 
@@ -2963,7 +2964,7 @@ class Standard
       material.setSolarAbsorptance(data['solar_absorptance'].to_f)
       material.setVisibleAbsorptance(data['visible_absorptance'].to_f)
 
-    elsif material_type == 'MasslessOpaqueMaterial'
+    when 'MasslessOpaqueMaterial'
       material = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
       material.setName(material_name)
       material.setThermalResistance(OpenStudio.convert(data['resistance'].to_f, 'hr*ft^2*R/Btu', 'm^2*K/W').get)
@@ -2972,20 +2973,20 @@ class Standard
       material.setSolarAbsorptance(data['solar_absorptance'].to_f)
       material.setVisibleAbsorptance(data['visible_absorptance'].to_f)
 
-    elsif material_type == 'AirGap'
+    when 'AirGap'
       material = OpenStudio::Model::AirGap.new(model)
       material.setName(material_name)
 
       material.setThermalResistance(OpenStudio.convert(data['resistance'].to_f, 'hr*ft^2*R/Btu*in', 'm*K/W').get)
 
-    elsif material_type == 'Gas'
+    when 'Gas'
       material = OpenStudio::Model::Gas.new(model)
       material.setName(material_name)
 
       material.setThickness(OpenStudio.convert(data['thickness'].to_f, 'in', 'm').get)
       material.setGasType(data['gas_type'].to_s)
 
-    elsif material_type == 'SimpleGlazing'
+    when 'SimpleGlazing'
       material = OpenStudio::Model::SimpleGlazing.new(model)
       material.setName(material_name)
 
@@ -2993,7 +2994,7 @@ class Standard
       material.setSolarHeatGainCoefficient(shgc.to_f)
       material.setVisibleTransmittance(vt.to_f)
 
-    elsif material_type == 'StandardGlazing'
+    when 'StandardGlazing'
       material = OpenStudio::Model::StandardGlazing.new(model)
       material.setName(material_name)
 
@@ -3870,53 +3871,48 @@ class Standard
   # @return [Double] floor area (m^2) of prototype building for building type passed in.
   #   Returns nil if unexpected building type
   def model_find_prototype_floor_area(model, building_type)
-    if building_type == 'FullServiceRestaurant' # 5502 ft^2
+    case building_type
+    when 'FullServiceRestaurant' # 5502 ft^2
       result = 511
-    elsif building_type == 'Hospital' # 241,410 ft^2 (including basement)
+    when 'Hospital' # 241,410 ft^2 (including basement)
       result = 22_422
-    elsif building_type == 'LargeHotel' # 122,132 ft^2
+    when 'LargeHotel' # 122,132 ft^2
       result = 11_345
-    elsif building_type == 'LargeOffice' # 498,600 ft^2
+    when 'LargeOffice', 'LargeOfficeDetailed' # 498,600 ft^2
       result = 46_320
-    elsif building_type == 'MediumOffice' # 53,600 ft^2
+    when 'MediumOffice', 'MediumOfficeDetailed' # 53,600 ft^2
       result = 4982
-    elsif building_type == 'LargeOfficeDetailed' # 498,600 ft^2
-      result = 46_320
-    elsif building_type == 'MediumOfficeDetailed' # 53,600 ft^2
-      result = 4982
-    elsif building_type == 'MidriseApartment' # 33,700 ft^2
+    when 'MidriseApartment' # 33,700 ft^2
       result = 3135
-    elsif building_type == 'Office'
+    when 'Office'
       result = nil
       # @todo there shouldn't be a prototype building for this
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', 'Measures calling this should choose between SmallOffice, MediumOffice, and LargeOffice')
-    elsif building_type == 'Outpatient' # 40.950 ft^2
+    when 'Outpatient' # 40.950 ft^2
       result = 3804
-    elsif building_type == 'PrimarySchool' # 73,960 ft^2
+    when 'PrimarySchool' # 73,960 ft^2
       result = 6871
-    elsif building_type == 'QuickServiceRestaurant' # 2500 ft^2
+    when 'QuickServiceRestaurant' # 2500 ft^2
       result = 232
-    elsif building_type == 'Retail' # 24,695 ft^2
+    when 'Retail' # 24,695 ft^2
       result = 2294
-    elsif building_type == 'SecondarySchool' # 210,900 ft^2
+    when 'SecondarySchool' # 210,900 ft^2
       result = 19_592
-    elsif building_type == 'SmallHotel' # 43,200 ft^2
+    when 'SmallHotel' # 43,200 ft^2
       result = 4014
-    elsif building_type == 'SmallOffice' # 5500 ft^2
+    when 'SmallOffice', 'SmallOfficeDetailed' # 5500 ft^2
       result = 511
-    elsif building_type == 'SmallOfficeDetailed' # 5500 ft^2
-      result = 511
-    elsif building_type == 'StripMall' # 22,500 ft^2
+    when 'StripMall' # 22,500 ft^2
       result = 2090
-    elsif building_type == 'SuperMarket' # 45,002 ft2 (from legacy reference idf file)
+    when 'SuperMarket' # 45,002 ft2 (from legacy reference idf file)
       result = 4181
-    elsif building_type == 'Warehouse' # 49,495 ft^2 (legacy ref shows 52,045, but I wil calc using 49,495)
+    when 'Warehouse' # 49,495 ft^2 (legacy ref shows 52,045, but I wil calc using 49,495)
       result = 4595
-    elsif building_type == 'SmallDataCenterLowITE' || building_type == 'SmallDataCenterHighITE'  # 600 ft^2
+    when 'SmallDataCenterLowITE', 'SmallDataCenterHighITE'  # 600 ft^2
       result = 56
-    elsif building_type == 'LargeDataCenterLowITE' || building_type == 'LargeDataCenterHighITE'  # 6000 ft^2
+    when 'LargeDataCenterLowITE', 'LargeDataCenterHighITE'  # 6000 ft^2
       result = 557
-    elsif building_type == 'Laboratory' # 90000 ft^2
+    when 'Laboratory' # 90000 ft^2
       result = 8361
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Didn't find expected building type. As a result can't determine floor prototype floor area")
@@ -4330,7 +4326,9 @@ class Standard
 
       # Initialize intermediate variables if space type hasn't
       # been encountered yet
-      if !bat_win_wall_info.key?(std_spc_type)
+      if bat_win_wall_info.key?(std_spc_type)
+        bat = bat_win_wall_info[std_spc_type]
+      else
         bat_win_wall_info[std_spc_type] = {}
         bat = bat_win_wall_info[std_spc_type]
 
@@ -4352,8 +4350,6 @@ class Standard
         bat.store('sh_plenum_wall_m2', 0.001)
         bat.store('total_wall_m2', 0.001)
         bat.store('total_plenum_m2', 0.001)
-      else
-        bat = bat_win_wall_info[std_spc_type]
       end
 
       # Loop through all surfaces in this space
@@ -4746,9 +4742,7 @@ class Standard
     # Air loops
     model.getAirLoopHVACs.each do |air_loop|
       # Don't remove airloops representing non-mechanically cooled systems
-      if !air_loop.additionalProperties.hasFeature('non_mechanically_cooled')
-        air_loop.remove
-      else
+      if air_loop.additionalProperties.hasFeature('non_mechanically_cooled')
         # Remove heating coil on
         air_loop.supplyComponents.each do |supply_comp|
           # Remove standalone heating coils
@@ -4765,6 +4759,8 @@ class Standard
             end
           end
         end
+      else
+        air_loop.remove
       end
     end
 
@@ -4950,55 +4946,56 @@ class Standard
       climate_zone = ''
     end
 
-    if building_type == 'FullServiceRestaurant'
+    case building_type
+    when 'FullServiceRestaurant'
       building_type = 'FullSrvRest'
-    elsif building_type == 'Hospital'
+    when 'Hospital'
       building_type = 'Hospital'
-    elsif building_type == 'LargeHotel'
+    when 'LargeHotel'
       building_type = 'LrgHotel'
-    elsif building_type == 'LargeOffice'
+    when 'LargeOffice'
       building_type = 'LrgOffice'
-    elsif building_type == 'MediumOffice'
+    when 'MediumOffice'
       building_type = 'MedOffice'
-    elsif building_type == 'MidriseApartment'
+    when 'MidriseApartment'
       building_type = 'MidApt'
-    elsif building_type == 'HighriseApartment'
+    when 'HighriseApartment'
       building_type = 'HighApt'
-    elsif building_type == 'Office'
+    when 'Office'
       building_type = 'Office'
-    elsif building_type == 'Outpatient'
+    when 'Outpatient'
       building_type = 'Outpatient'
-    elsif building_type == 'PrimarySchool'
+    when 'PrimarySchool'
       building_type = 'PriSchl'
-    elsif building_type == 'QuickServiceRestaurant'
+    when 'QuickServiceRestaurant'
       building_type = 'QckSrvRest'
-    elsif building_type == 'Retail'
+    when 'Retail'
       building_type = 'Retail'
-    elsif building_type == 'SecondarySchool'
+    when 'SecondarySchool'
       building_type = 'SecSchl'
-    elsif building_type == 'SmallHotel'
+    when 'SmallHotel'
       building_type = 'SmHotel'
-    elsif building_type == 'SmallOffice'
+    when 'SmallOffice'
       building_type = 'SmOffice'
-    elsif building_type == 'StripMall'
+    when 'StripMall'
       building_type = 'StMall'
-    elsif building_type == 'SuperMarket'
+    when 'SuperMarket'
       building_type = 'SpMarket'
-    elsif building_type == 'Warehouse'
+    when 'Warehouse'
       building_type = 'Warehouse'
-    elsif building_type == 'SmallDataCenterLowITE'
+    when 'SmallDataCenterLowITE'
       building_type = 'SmDCLowITE'
-    elsif building_type == 'SmallDataCenterHighITE'
+    when 'SmallDataCenterHighITE'
       building_type = 'SmDCHighITE'
-    elsif building_type == 'LargeDataCenterLowITE'
+    when 'LargeDataCenterLowITE'
       building_type = 'LrgDCLowITE'
-    elsif building_type == 'LargeDataCenterHighITE'
+    when 'LargeDataCenterHighITE'
       building_type = 'LrgDCHighITE'
-    elsif building_type == 'Laboratory'
+    when 'Laboratory'
       building_type = 'Laboratory'
-    elsif building_type == 'TallBuilding'
+    when 'TallBuilding'
       building_type = 'TallBldg'
-    elsif building_type == 'SuperTallBuilding'
+    when 'SuperTallBuilding'
       building_type = 'SpTallBldg'
     end
 
@@ -5291,16 +5288,14 @@ class Standard
         end
 
         # determine number of beds
-        if stds_bldg_type == 'Hospital' && ['PatRoom', 'ICU_PatRm', 'ICU_Open'].include?(stds_space_type)
-          num_beds = num_people
-        elsif stds_bldg_type == 'Hsp' && ['PatientRoom', 'HspSurgOutptLab', 'HspNursing'].include?(stds_space_type)
+        if ((stds_bldg_type == 'Hospital') && ['PatRoom', 'ICU_PatRm', 'ICU_Open'].include?(stds_space_type)) ||
+           ((stds_bldg_type == 'Hsp') && ['PatientRoom', 'HspSurgOutptLab', 'HspNursing'].include?(stds_space_type))
           num_beds = num_people
         end
 
         # determine number of students
-        if ['PrimarySchool', 'SecondarySchool'].include?(stds_bldg_type) && stds_space_type == 'Classroom'
-          num_students += num_people * ((typical_class_size - 1.0) / typical_class_size)
-        elsif ['EPr', 'ESe', 'ERC', 'EUn', 'ECC'].include?(stds_bldg_type) && stds_space_type == 'Classroom'
+        if ['PrimarySchool', 'SecondarySchool', 'EPr', 'ESe', 'ERC', 'EUn', 'ECC'].include?(stds_bldg_type) &&
+           (stds_space_type == 'Classroom')
           num_students += num_people * ((typical_class_size - 1.0) / typical_class_size)
         end
 
@@ -5470,10 +5465,11 @@ class Standard
   def model_ventilation_method(model)
     building_data = model_get_building_properties(model)
     building_type = building_data['building_type']
-    if building_type != 'Laboratory' # Laboratory has multiple criteria on ventilation, pick the greatest
-      ventilation_method = 'Sum'
-    else
+    if building_type == 'Laboratory'
+      # Laboratory has multiple criteria on ventilation, pick the greatest
       ventilation_method = 'Maximum'
+    else
+      ventilation_method = 'Sum'
     end
 
     return ventilation_method
@@ -5963,23 +5959,21 @@ class Standard
         return_air_type = 'ducted_return_or_direct_to_unit'
       else
         # Check heating air loop first
-        unless heating_equipment.nil?
-          if heating_equipment.to_StraightComponent.is_initialized
-            air_loop = heating_equipment.to_StraightComponent.get.airLoopHVAC.get
-            return_plenum = air_loop_hvac_return_air_plenum(air_loop)
-            return_air_type = return_plenum.nil? ? 'ducted_return_or_direct_to_unit' : 'return_plenum'
-            return_plenum = return_plenum.nil? ? nil : return_plenum.name.to_s
-          end
+        if !heating_equipment.nil? && heating_equipment.to_StraightComponent.is_initialized
+          air_loop = heating_equipment.to_StraightComponent.get.airLoopHVAC.get
+          return_plenum = air_loop_hvac_return_air_plenum(air_loop)
+          return_air_type = return_plenum.nil? ? 'ducted_return_or_direct_to_unit' : 'return_plenum'
+          return_plenum = return_plenum.nil? ? nil : return_plenum.name.to_s
         end
 
         # Check cooling air loop second; Assume that return air plenum is the dominant case
-        unless cooling_equipment.nil?
-          if (return_air_type != 'return_plenum') && cooling_equipment.to_StraightComponent.is_initialized
-            air_loop = cooling_equipment.to_StraightComponent.get.airLoopHVAC.get
-            return_plenum = air_loop_hvac_return_air_plenum(air_loop)
-            return_air_type = return_plenum.nil? ? 'ducted_return_or_direct_to_unit' : 'return_plenum'
-            return_plenum = return_plenum.nil? ? nil : return_plenum.name.to_s
-          end
+        if !cooling_equipment.nil? &&
+           (return_air_type != 'return_plenum') &&
+           cooling_equipment.to_StraightComponent.is_initialized
+          air_loop = cooling_equipment.to_StraightComponent.get.airLoopHVAC.get
+          return_plenum = air_loop_hvac_return_air_plenum(air_loop)
+          return_air_type = return_plenum.nil? ? 'ducted_return_or_direct_to_unit' : 'return_plenum'
+          return_plenum = return_plenum.nil? ? nil : return_plenum.name.to_s
         end
       end
 
@@ -6052,7 +6046,7 @@ class Standard
         return_air_types_score = zone_return_air_type[return_type]
       end
       if return_air_type == 'return_plenum'
-        zone_return_air_type['plenum'].keys.each do |p|
+        zone_return_air_type['plenum'].each_key do |p|
           if zone_return_air_type['plenum'][p] > plenum_score
             plenum = p
             plenum_score = zone_return_air_type['plenum'][p]

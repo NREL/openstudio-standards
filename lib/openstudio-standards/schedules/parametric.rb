@@ -713,7 +713,7 @@ module OpenstudioStandards
             start_delta_array_abs = [(hoo_start - time).abs, (hoo_start - time + 24).abs, (hoo_start - time - 24).abs]
             start_delta_h = start_delta_array[start_delta_array_abs.index(start_delta_array_abs.min)]
             formula_identifier['start'] = start_delta_h
-            mid_calc = hoo_start + occ * 0.5
+            mid_calc = hoo_start + (occ * 0.5)
             mid_delta_array = [mid_calc - time, mid_calc - time + 24, mid_calc - time - 24]
             mid_delta_array_abs = [(mid_calc - time).abs, (mid_calc - time + 24).abs, (mid_calc - time - 24).abs]
             mid_delta_h = mid_delta_array[mid_delta_array_abs.index(mid_delta_array_abs.min)]
@@ -734,7 +734,8 @@ module OpenstudioStandards
             min_key = formula_identifier_min_abs.key(formula_identifier_min_abs.values.min)
             min_value = formula_identifier[min_key]
 
-            if hoo_var_method == 'hours'
+            case hoo_var_method
+            when 'hours'
               # minimize x, which should be no greater than 12, see if rounding to 2 decimal places works
               min_value = min_value.round(2)
               if min_key == 'start'
@@ -768,7 +769,7 @@ module OpenstudioStandards
                 # puts time
               end
 
-            elsif hoo_var_method == 'fractional'
+            when 'fractional'
 
               # minimize x(hour before converted to fraction), which should be no greater than 0.5 as fraction, see if rounding to 3 decimal places works
               if occ > 0
@@ -810,7 +811,7 @@ module OpenstudioStandards
                 end
               end
 
-            elsif hoo_var_method == 'tstat'
+            when 'tstat'
               # puts formula_identifier
               if min_key == 'start' && !start_set
                 time = 'hoo_start + 0'
@@ -998,7 +999,7 @@ module OpenstudioStandards
         hoo_target_index = nil
         days_used = []
         indices_vector.each_with_index do |profile_index, i|
-          if profile_index == current_rule_index then days_used << i + 1 end
+          if profile_index == current_rule_index then days_used << (i + 1) end
         end
         # find days_used in hoo profiles that contains all days used from this profile
         hoo_profile_match_hash = {}
@@ -1152,7 +1153,7 @@ module OpenstudioStandards
         time = time.gsub('hoo_end', hoo_end.to_s)
         time = time.gsub('occ', occ.to_s)
         # can save special variables like lunch or break using this logic
-        time = time.gsub('mid', (hoo_start + occ * 0.5).to_s)
+        time = time.gsub('mid', (hoo_start + (occ * 0.5)).to_s)
         time = time.gsub('vac', vac.to_s)
         begin
           time_float = eval(time)
@@ -1293,7 +1294,7 @@ module OpenstudioStandards
 
         # add interpolated value to array
         interpolated_time = current_time + ramp_frequency
-        interpolated_value = next_value * (interpolated_time - current_time) / step_delta + current_value * (next_time - interpolated_time) / step_delta
+        interpolated_value = (next_value * (interpolated_time - current_time) / step_delta) + (current_value * (next_time - interpolated_time) / step_delta)
         time_value_pairs.insert(i + 1, [interpolated_time, interpolated_value])
       end
 

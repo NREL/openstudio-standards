@@ -752,7 +752,7 @@ class ASHRAE901PRM < Standard
 
         # Exception 7 - Dehumidification
         if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery') && thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
-        return nil
+          return nil
         end
       end
 

@@ -334,7 +334,7 @@ class Standard
       # r is the ratio of supply fan power to total equipment power at the rating condition,
       # assumed to be 0.12 for the reference buildings per Thornton et al. 2011.
       r = 0.12
-      cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + r) / (1 - r)
+      cop = ((eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get) + r) / (1 - r)
     else
       # The 90.1-2013 method
       # Convert the capacity to Btu/hr
@@ -630,7 +630,15 @@ class Standard
     vav_reheats = model.getAirTerminalSingleDuctVAVReheats
     vav_no_reheats = model.getAirTerminalSingleDuctVAVNoReheats
 
-    if !air_loop.nil?
+    if air_loop.nil?
+      # all terminals
+      vav_reheats.each do |vav_reheat|
+        vav_reheat.setControlForOutdoorAir(true)
+      end
+      vav_no_reheats.each do |vav_no_reheat|
+        vav_no_reheat.setControlForOutdoorAir(true)
+      end
+    else
       vav_reheats.each do |vav_reheat|
         next if vav_reheat.airLoopHVAC.get.name.to_s != air_loop.name.to_s
 
@@ -639,13 +647,6 @@ class Standard
       vav_no_reheats.each do |vav_no_reheat|
         next if vav_no_reheat.airLoopHVAC.get.name.to_s != air_loop.name.to_s
 
-        vav_no_reheat.setControlForOutdoorAir(true)
-      end
-    else # all terminals
-      vav_reheats.each do |vav_reheat|
-        vav_reheat.setControlForOutdoorAir(true)
-      end
-      vav_no_reheats.each do |vav_no_reheat|
         vav_no_reheat.setControlForOutdoorAir(true)
       end
     end
@@ -691,13 +692,11 @@ class Standard
         end
 
         # rename straight component outlet nodes
-        if component.to_StraightComponent.is_initialized
-          unless component.to_StraightComponent.get.outletModelObject.empty?
-            component_outlet_object = component.to_StraightComponent.get.outletModelObject.get
-            next unless component_outlet_object.to_Node.is_initialized
+        if component.to_StraightComponent.is_initialized && !component.to_StraightComponent.get.outletModelObject.empty?
+          component_outlet_object = component.to_StraightComponent.get.outletModelObject.get
+          next unless component_outlet_object.to_Node.is_initialized
 
-            component_outlet_object.setName("#{component.name} Outlet Air Node")
-          end
+          component_outlet_object.setName("#{component.name} Outlet Air Node")
         end
       end
 

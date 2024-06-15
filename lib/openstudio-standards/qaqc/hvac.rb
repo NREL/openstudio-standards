@@ -33,11 +33,9 @@ module OpenstudioStandards
         @sql = @model.sqlFile.get
         @sql.availableEnvPeriods.each do |env_pd|
           env_type = @sql.environmentType(env_pd)
-          if env_type.is_initialized
-            if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
-              ann_env_pd = env_pd
-              break
-            end
+          if env_type.is_initialized && (env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod'))
+            ann_env_pd = env_pd
+            break
           end
         end
 
@@ -98,15 +96,11 @@ module OpenstudioStandards
             end
 
             # check setpoint manager temperatures against design temperatures
-            if spm_min_temp_f
-              if (spm_min_temp_f - design_cooling_sat).abs > max_sizing_temp_delta
-                check_elems << OpenStudio::Attribute.new('flag', "Minor Error: Air loop '#{air_loop.name}' sizing uses a #{design_cooling_sat.round(1)}F design cooling supply air temperature, but the setpoint manager operates down to #{spm_min_temp_f.round(1)}F.")
-              end
+            if spm_min_temp_f && ((spm_min_temp_f - design_cooling_sat).abs > max_sizing_temp_delta)
+              check_elems << OpenStudio::Attribute.new('flag', "Minor Error: Air loop '#{air_loop.name}' sizing uses a #{design_cooling_sat.round(1)}F design cooling supply air temperature, but the setpoint manager operates down to #{spm_min_temp_f.round(1)}F.")
             end
-            if spm_max_temp_f
-              if (spm_max_temp_f - design_heating_sat).abs > max_sizing_temp_delta
-                check_elems << OpenStudio::Attribute.new('flag', "Minor Error: Air loop '#{air_loop.name}' sizing uses a #{design_heating_sat.round(1)}F design heating supply air temperature, but the setpoint manager operates up to #{spm_max_temp_f.round(1)}F.")
-              end
+            if spm_max_temp_f && ((spm_max_temp_f - design_heating_sat).abs > max_sizing_temp_delta)
+              check_elems << OpenStudio::Attribute.new('flag', "Minor Error: Air loop '#{air_loop.name}' sizing uses a #{design_heating_sat.round(1)}F design heating supply air temperature, but the setpoint manager operates up to #{spm_max_temp_f.round(1)}F.")
             end
 
             # set expected minimums for operating temperatures
@@ -133,10 +127,7 @@ module OpenstudioStandards
                   term = equipment.to_AirTerminalSingleDuctVAVReheat.get
                   reheat_op_f = OpenStudio.convert(term.maximumReheatAirTemperature, 'C', 'F').get
                   reheat_zone = true
-                when 'OS_AirTerminal_SingleDuct_ParallelPIU_Reheat'
-                  # reheat_op_f = # Not an OpenStudio input
-                  reheat_zone = true
-                when 'OS_AirTerminal_SingleDuct_SeriesPIU_Reheat'
+                when 'OS_AirTerminal_SingleDuct_ParallelPIU_Reheat', 'OS_AirTerminal_SingleDuct_SeriesPIU_Reheat'
                   # reheat_op_f = # Not an OpenStudio input
                   reheat_zone = true
                 end
@@ -494,10 +485,9 @@ module OpenstudioStandards
           elsif model_normalized_flow_rate_ip > air_loop_max_flow_rate_max_error
             check_elems <<  OpenStudio::Attribute.new('flag', "Error: Flow Rate of #{model_normalized_flow_rate_ip.round(2)} #{air_loop_max_flow_rate_units_ip} for #{air_loop.name.get} is above #{air_loop_max_flow_rate_max_error.round(2)} #{air_loop_max_flow_rate_units_ip}.")
           end
-        end
 
-        # loop through air loops to get max flow rate and cooling capacity.
-        @model.getAirLoopHVACs.sort.each do |air_loop|
+          # loop through air loops to get max flow rate and cooling capacity.
+
           # check if DOAS, don't check airflow or cooling capacity if it is
           sizing_system = air_loop.sizingSystem
           next if sizing_system.typeofLoadtoSizeOn.to_s == 'VentilationRequirement'
@@ -540,7 +530,7 @@ module OpenstudioStandards
 
         @model.getThermalZones.sort.each do |thermal_zone|
           next if thermal_zone.canBePlenum
-          next if thermal_zone.exteriorSurfaceArea == 0.0
+          next if thermal_zone.exteriorSurfaceArea < 0.01
 
           # check actual against target
           query = "SELECT Value FROM tabulardatawithstrings WHERE ReportName='#{report_name}' and TableName='#{table_name}' and RowName= '#{thermal_zone.name.get.upcase}' and ColumnName= '#{column_name}'"
@@ -748,7 +738,7 @@ module OpenstudioStandards
 
           # get eff values from standards
           motor_bhp = std.pump_brake_horsepower(component)
-          next if motor_bhp == 0.0
+          next if motor_bhp < 0.0001 # less than 1 watt
 
           standard_minimum_motor_efficiency_and_size = std.pump_standard_minimum_motor_efficiency_and_size(component, motor_bhp)[0]
 
@@ -769,7 +759,7 @@ module OpenstudioStandards
 
           # get eff values from standards
           motor_bhp = std.pump_brake_horsepower(component)
-          next if motor_bhp == 0.0
+          next if motor_bhp < 0.0001 # less than 1 watt
 
           standard_minimum_motor_efficiency_and_size = std.pump_standard_minimum_motor_efficiency_and_size(component, motor_bhp)[0]
 
@@ -857,11 +847,10 @@ module OpenstudioStandards
               end
             end
             # if no match and also no absorption_type then issue warning
-            if !search_criteria.key?('condenser_type') || search_criteria['condenser_type'].nil?
-              if !search_criteria.key?('absorption_type') || search_criteria['absorption_type'].nil?
-                check_elems <<  OpenStudio::Attribute.new('flag', "Can't find unique search criteria for #{component.name}. #{search_criteria}")
-                next # don't go past here
-              end
+            if (!search_criteria.key?('condenser_type') || search_criteria['condenser_type'].nil?) &&
+               (!search_criteria.key?('absorption_type') || search_criteria['absorption_type'].nil?)
+              check_elems <<  OpenStudio::Attribute.new('flag', "Can't find unique search criteria for #{component.name}. #{search_criteria}")
+              next # don't go past here
             end
           elsif search_criteria['cooling_type'] == 'WaterCooled'
             chiller_air_cooled_condenser_types.each do |compressor_type|
@@ -871,11 +860,10 @@ module OpenstudioStandards
               end
             end
             # if no match and also no absorption_type then issue warning
-            if !search_criteria.key?('compressor_type') || search_criteria['compressor_type'].nil?
-              if !search_criteria.key?('absorption_type') || search_criteria['absorption_type'].nil?
-                check_elems <<  OpenStudio::Attribute.new('flag', "Can't find unique search criteria for #{component.name}. #{search_criteria}")
-                next # don't go past here
-              end
+            if (!search_criteria.key?('compressor_type') || search_criteria['compressor_type'].nil?) &&
+               (!search_criteria.key?('absorption_type') || search_criteria['absorption_type'].nil?)
+              check_elems <<  OpenStudio::Attribute.new('flag', "Can't find unique search criteria for #{component.name}. #{search_criteria}")
+              next # don't go past here
             end
           end
 
@@ -1057,7 +1045,7 @@ module OpenstudioStandards
           end
 
           # skip of brake horsepower is 0
-          next if std.fan_brake_horsepower(component) == 0.0
+          next if std.fan_brake_horsepower(component) < 0.0001 # less than 1 wat
 
           # temp model for use by temp model and target curve
           model_temp = OpenStudio::Model::Model.new
@@ -1285,16 +1273,12 @@ module OpenstudioStandards
           # check setpoint manager temperatures against design temperatures
           case plant_loop.sizingPlant.loopType
           when 'Heating'
-            if spm_max_temp_f
-              if (spm_max_temp_f - design_supply_temperature).abs > max_sizing_temp_delta
-                check_elems << OpenStudio::Attribute.new('flag', "Minor Error: #{plant_loop.name} sizing uses a #{design_supply_temperature.round(1)}F supply water temperature, but the setpoint manager operates up to #{spm_max_temp_f.round(1)}F.")
-              end
+            if spm_max_temp_f && ((spm_max_temp_f - design_supply_temperature).abs > max_sizing_temp_delta)
+              check_elems << OpenStudio::Attribute.new('flag', "Minor Error: #{plant_loop.name} sizing uses a #{design_supply_temperature.round(1)}F supply water temperature, but the setpoint manager operates up to #{spm_max_temp_f.round(1)}F.")
             end
           when 'Cooling'
-            if spm_min_temp_f
-              if (spm_min_temp_f - design_supply_temperature).abs > max_sizing_temp_delta
-                check_elems << OpenStudio::Attribute.new('flag', "Minor Error: #{plant_loop.name} sizing uses a #{design_supply_temperature.round(1)}F supply water temperature, but the setpoint manager operates down to #{spm_min_temp_f.round(1)}F.")
-              end
+            if spm_min_temp_f && ((spm_min_temp_f - design_supply_temperature).abs > max_sizing_temp_delta)
+              check_elems << OpenStudio::Attribute.new('flag', "Minor Error: #{plant_loop.name} sizing uses a #{design_supply_temperature.round(1)}F supply water temperature, but the setpoint manager operates down to #{spm_min_temp_f.round(1)}F.")
             end
           end
 
@@ -1335,7 +1319,7 @@ module OpenstudioStandards
             next
           end
 
-          runtime_fraction = operating_temperatures.size.to_f / temperatures.size.to_f
+          runtime_fraction = operating_temperatures.size / temperatures.size.to_f
           temps_out_of_bounds = []
           case plant_loop.sizingPlant.loopType
           when 'Heating'
@@ -1420,12 +1404,10 @@ module OpenstudioStandards
           # Set the expected/typical W/gpm
           loop_type = plant_loop.sizingPlant.loopType
           case loop_type
-          when 'Heating'
+          when 'Heating', 'Condenser'
             expected_w_per_gpm = 19.0
           when 'Cooling'
             expected_w_per_gpm = 22.0
-          when 'Condenser'
-            expected_w_per_gpm = 19.0
           end
 
           # Check the W/gpm for each pump on each plant loop
@@ -1497,11 +1479,9 @@ module OpenstudioStandards
         ann_env_pd = nil
         @sql.availableEnvPeriods.each do |env_pd|
           env_type = @sql.environmentType(env_pd)
-          if env_type.is_initialized
-            if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
-              ann_env_pd = env_pd
-              break
-            end
+          if env_type.is_initialized && (env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod'))
+            ann_env_pd = env_pd
+            break
           end
         end
 
@@ -1663,7 +1643,7 @@ module OpenstudioStandards
       ts = ts.get.values
       plrs = []
       for i in 0..(ts.size - 1)
-        plrs << ts[i] / design_power.to_f
+        plrs << (ts[i] / design_power.to_f)
       end
 
       # Bin part load ratios
@@ -1727,11 +1707,9 @@ module OpenstudioStandards
         ann_env_pd = nil
         @sql.availableEnvPeriods.each do |env_pd|
           env_type = @sql.environmentType(env_pd)
-          if env_type.is_initialized
-            if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
-              ann_env_pd = env_pd
-              break
-            end
+          if env_type.is_initialized && (env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod'))
+            ann_env_pd = env_pd
+            break
           end
         end
 

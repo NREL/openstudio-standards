@@ -255,11 +255,11 @@ class Standard
       end
 
       # determine number of additional passenger elevators
-      if !elevator_data_lookup['additional_passenger_elevators'].nil?
+      if elevator_data_lookup['additional_passenger_elevators'].nil?
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', 'No additional passenger elevators added to model.')
+      else
         add_pass_elevs += elevator_data_lookup['additional_passenger_elevators']
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', "Adding #{elevator_data_lookup['additional_passenger_elevators']} additional passenger elevators.")
-      else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.elevators', 'No additional passenger elevators added to model.')
       end
     end
 
