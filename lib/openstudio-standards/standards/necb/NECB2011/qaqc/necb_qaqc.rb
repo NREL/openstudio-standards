@@ -1923,7 +1923,7 @@ class NECB2011
     matches = nil
     # save a copy of the headers
     headers = nil
-    CSV.open(csv_fname, 'r', options) do |csv|
+    CSV.open(csv_fname, 'r', **options) do |csv|
       # Since CSV includes Enumerable we can use 'find_all'
       # which will return all the elements of the Enumerble for
       # which the block returns true
