@@ -22,7 +22,7 @@ module ASHRAE901PRMFan
     # airflow required for a particular system, typically
     # heated-only spaces with high internal gains
     # and no OA requirements such as elevator shafts.
-    return [fan_motor_eff, 0] if motor_bhp == 0.0
+    return [fan_motor_eff, 0] if motor_bhp < 0.0001
 
     # Lookup the minimum motor efficiency
     motors = standards_data['motors']
@@ -47,7 +47,7 @@ module ASHRAE901PRMFan
       end
 
       # If the biggest fan motor size is hit, use the highest category efficiency
-      if nominal_hp == 9999.0
+      if nominal_hp > 9998.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{fan.name}, there is no greater nominal HP.  Use the efficiency of the largest motor category.")
         nominal_hp = motor_bhp
       end

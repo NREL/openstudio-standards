@@ -116,14 +116,11 @@ class Standard
     # Leave the water flow and air flow autosized.
     if fluid_cooler.to_FluidCoolerSingleSpeed.is_initialized
       fluid_cooler.setDesignAirFlowRateFanPower(fan_motor_actual_power_w)
-    elsif fluid_cooler.to_FluidCoolerTwoSpeed.is_initialized
+    elsif fluid_cooler.to_FluidCoolerTwoSpeed.is_initialized || fluid_cooler.to_EvaporativeFluidCoolerTwoSpeed.is_initialized
       fluid_cooler.setHighFanSpeedFanPower(fan_motor_actual_power_w)
       fluid_cooler.setLowFanSpeedFanPower(0.3 * fan_motor_actual_power_w)
     elsif fluid_cooler.to_EvaporativeFluidCoolerSingleSpeed.is_initialized
       fluid_cooler.setFanPoweratDesignAirFlowRate(fan_motor_actual_power_w)
-    elsif fluid_cooler.to_EvaporativeFluidCoolerTwoSpeed.is_initialized
-      fluid_cooler.setHighFanSpeedFanPower(fan_motor_actual_power_w)
-      fluid_cooler.setLowFanSpeedFanPower(0.3 * fan_motor_actual_power_w)
     end
 
     return true

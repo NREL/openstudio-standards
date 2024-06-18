@@ -10,11 +10,9 @@ class Standard
   # @return [Boolean] returns true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
     # @todo remove this once workaround for HPWHs is removed
-    if water_heater_mixed.partLoadFactorCurve.is_initialized
-      if water_heater_mixed.partLoadFactorCurve.get.name.get.include?('HPWH_COP')
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, the workaround for HPWHs has been applied, efficiency will not be changed.")
-        return true
-      end
+    if water_heater_mixed.partLoadFactorCurve.is_initialized && water_heater_mixed.partLoadFactorCurve.get.name.get.include?('HPWH_COP')
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.WaterHeaterMixed', "For #{water_heater_mixed.name}, the workaround for HPWHs has been applied, efficiency will not be changed.")
+      return true
     end
 
     # get number of water heaters
@@ -121,7 +119,7 @@ class Standard
       # Calculate the percent loss per hr
       hr_loss_base = wh_props['hourly_loss_base']
       hr_loss_allow = wh_props['hourly_loss_volume_allowance']
-      hrly_loss_pct = hr_loss_base + hr_loss_allow / volume_gal
+      hrly_loss_pct = hr_loss_base + (hr_loss_allow / volume_gal)
       # Convert to Btu/hr, assuming:
       # Water at 120F, density = 8.25 lb/gal
       # 1 Btu to raise 1 lb of water 1 F
@@ -146,18 +144,18 @@ class Standard
       et = wh_props['thermal_efficiency']
       # Estimate storage tank volume
       tank_volume = volume_gal > 100 ? (volume_gal - 100).round(0) : 0
-      wh_tank_volume = volume_gal > 100 ? 100 : volume_gal
+      wh_tank_volume = [volume_gal, 100].min
       # SL Storage Tank: polynomial regression based on a set of manufacturer data
-      sl_tank = 0.0000005 * tank_volume**3 - 0.001 * tank_volume**2 + 1.3519 * tank_volume + 64.456 # in Btu/h
+      sl_tank = (0.0000005 * (tank_volume**3)) - (0.001 * (tank_volume**2)) + (1.3519 * tank_volume) + 64.456 # in Btu/h
       # Calculate the max allowable standby loss (SL)
       # Output capacity is assumed to be 10 * Tank volume
       # Input capacity = Output capacity / Et
       p_on = capacity_btu_per_hr / et
-      sl_btu_per_hr = p_on / sl_cap_adj + sl_vol_drt * Math.sqrt(wh_tank_volume) + sl_tank
+      sl_btu_per_hr = (p_on / sl_cap_adj) + (sl_vol_drt * Math.sqrt(wh_tank_volume)) + sl_tank
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
       # Calculate water heater efficiency
-      water_heater_efficiency = (ua_btu_per_hr_per_f * 70 + p_on * et) / p_on
+      water_heater_efficiency = ((ua_btu_per_hr_per_f * 70) + (p_on * et)) / p_on
     end
 
     # Ensure that efficiency and UA were both set\
@@ -292,15 +290,12 @@ class Standard
     sub_type = nil
     capacity_w = OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get
     # source: https://energycodeace.com/site/custom/public/reference-ace-2019/index.html#!Documents/52residentialwaterheatingequipment.htm
-    if fuel_type == 'NaturalGas' && capacity_btu_per_hr <= 75_000 && (volume_gal >= 20 && volume_gal <= 100)
+    if (fuel_type == 'NaturalGas' && capacity_btu_per_hr <= 75_000 && (volume_gal >= 20 && volume_gal <= 100)) ||
+       (fuel_type == 'Electricity' && capacity_w <= 12_000 && (volume_gal >= 20 && volume_gal <= 120))
       sub_type = 'consumer_storage'
-    elsif fuel_type == 'Electricity' && capacity_w <= 12_000 && (volume_gal >= 20 && volume_gal <= 120)
-      sub_type = 'consumer_storage'
-    elsif fuel_type == 'NaturalGas' && capacity_btu_per_hr < 105_000 && volume_gal < 120
-      sub_type = 'residential_duty'
-    elsif fuel_type == 'Oil' && capacity_btu_per_hr < 140_000 && volume_gal < 120
-      sub_type = 'residential_duty'
-    elsif fuel_type == 'Electricity' && capacity_w < 58_600 && volume_gal <= 2
+    elsif (fuel_type == 'NaturalGas' && capacity_btu_per_hr < 105_000 && volume_gal < 120) ||
+          (fuel_type == 'Oil' && capacity_btu_per_hr < 140_000 && volume_gal < 120) ||
+          (fuel_type == 'Electricity' && capacity_w < 58_600 && volume_gal <= 2)
       sub_type = 'residential_duty'
     elsif volume_gal <= 2
       sub_type = 'instantaneous'
@@ -326,13 +321,13 @@ class Standard
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.WaterHeaterMixed', "No sub type identified for #{water_heater_mixed.name}, Energy Factor (EF) = Uniform Energy Factor (UEF) is assumed.")
       return uniform_energy_factor
     elsif sub_type == 'consumer_storage' && fuel_type == 'NaturalGas'
-      return 0.9066 * uniform_energy_factor + 0.0711
+      return (0.9066 * uniform_energy_factor) + 0.0711
     elsif sub_type == 'consumer_storage' && fuel_type == 'Electricity'
-      return 2.4029 * uniform_energy_factor - 1.2844
+      return (2.4029 * uniform_energy_factor) - 1.2844
     elsif sub_type == 'residential_duty' && (fuel_type == 'NaturalGas' || fuel_type == 'Oil')
-      return 1.0005 * uniform_energy_factor + 0.0019
+      return (1.0005 * uniform_energy_factor) + 0.0019
     elsif sub_type == 'residential_duty' && fuel_type == 'Electricity'
-      return 1.0219 * uniform_energy_factor - 0.0025
+      return (1.0219 * uniform_energy_factor) - 0.0025
     elsif sub_type == 'instantaneous'
       return uniform_energy_factor
     else
@@ -353,7 +348,7 @@ class Standard
     if fuel_type == 'Electricity'
       # Fixed water heater efficiency per PNNL
       water_heater_efficiency = 1.0
-      ua_btu_per_hr_per_f = (41_094 * (1 / energy_factor - 1)) / (24 * 67.5)
+      ua_btu_per_hr_per_f = (41_094 * ((1 / energy_factor) - 1)) / (24 * 67.5)
     elsif fuel_type == 'NaturalGas'
       # Fixed water heater thermal efficiency per PNNL
       water_heater_efficiency = 0.82
@@ -365,7 +360,7 @@ class Standard
       # 0.82 = (ua*67.5+cap*re)/cap
       # Solutions to the system of equations were determined
       # for discrete values of Energy Factor (EF) and modeled using a regression
-      recovery_efficiency = -0.1137 * energy_factor**2 + 0.1997 * energy_factor + 0.731
+      recovery_efficiency = (-0.1137 * (energy_factor**2)) + (0.1997 * energy_factor) + 0.731
       # Calculate the skin loss coefficient (UA)
       # Input capacity is assumed to be the output capacity
       # divided by a burner efficiency of 80%

@@ -68,7 +68,9 @@ module OpenstudioStandards
         target_eui = std.model_find_target_eui(@model)
 
         # check model vs. target for user specified tolerance.
-        if !target_eui.nil?
+        if target_eui.nil?
+          check_elems << OpenStudio::Attribute.new('flag', "Can't calculate target EUI. Make sure model has expected climate zone and building type.")
+        else
           eui_ip_neat = OpenStudio.toNeatString(OpenStudio.convert(eui, source_units, target_units).get, 1, true)
           target_eui_ip_neat = OpenStudio.toNeatString(OpenStudio.convert(target_eui, source_units, target_units).get, 1, true)
           if eui < target_eui * (1.0 - min_pass_pct)
@@ -76,8 +78,6 @@ module OpenstudioStandards
           elsif eui > target_eui * (1.0 + max_pass_pct)
             check_elems << OpenStudio::Attribute.new('flag', "Model EUI of #{eui_ip_neat} (#{target_units}) is more than #{max_pass_pct * 100} % above the expected EUI of #{target_eui_ip_neat} (#{target_units}) for #{target_standard}.")
           end
-        else
-          check_elems << OpenStudio::Attribute.new('flag', "Can't calculate target EUI. Make sure model has expected climate zone and building type.")
         end
       rescue StandardError => e
         # brief description of ruby error
@@ -172,7 +172,9 @@ module OpenstudioStandards
         target_units = 'kBtu/ft^2'
 
         # check acutal vs. target against tolerance
-        if !target_eui_by_end_use.nil?
+        if target_eui_by_end_use.nil?
+          check_elems << OpenStudio::Attribute.new('flag', "Can't calculate target end use EUIs. Make sure model has expected climate zone and building type.")
+        else
           actual_eui_by_end_use.each do |end_use, value|
             # this should have value of 0 in model. This page change in the future. It doesn't exist in target lookup
             next if end_use == 'Exterior Equipment'
@@ -193,8 +195,6 @@ module OpenstudioStandards
               check_elems << OpenStudio::Attribute.new('flag', "#{end_use} EUI of #{eui_ip_neat} (#{target_units}) is more than #{max_pass_pct * 100} % above the expected #{end_use} EUI of #{target_eui_ip_neat} (#{target_units}) for #{target_standard}.")
             end
           end
-        else
-          check_elems << OpenStudio::Attribute.new('flag', "Can't calculate target end use EUIs. Make sure model has expected climate zone and building type.")
         end
       rescue StandardError => e
         # brief description of ruby error

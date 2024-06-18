@@ -31,7 +31,7 @@ class Standard
     control_type = pump_variable_speed_get_control_type(pump, plant_loop_type, pump_nominal_hp)
 
     # Set pump part load performance curve coefficients
-    pump_variable_speed_set_control_type(pump, control_type) unless !control_type
+    pump_variable_speed_set_control_type(pump, control_type) if control_type
 
     return true
   end

@@ -73,7 +73,7 @@ module OpenstudioStandards
       new_vertices = []
       sub_surface.vertices.each do |vertex|
         if (vertex.z - min_z_val).abs < 0.025
-          new_vertices << vertex + OpenStudio::Vector3d.new(0.0, 0.0, z_delta)
+          new_vertices << (vertex + OpenStudio::Vector3d.new(0.0, 0.0, z_delta))
         else
           new_vertices << vertex
         end

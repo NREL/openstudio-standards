@@ -4,6 +4,7 @@ require 'date'
 class TestSchedulesInformation < Minitest::Test
   def setup
     @sch = OpenstudioStandards::Schedules
+    @create = OpenstudioStandards::CreateTypical
   end
 
   def test_schedule_get_min_max
@@ -500,4 +501,25 @@ class TestSchedulesInformation < Minitest::Test
     assert_equal(2, rule_index_hash[model.getScheduleDayByName('Test Complex SummmerWeekday').get])
   end
 
+  def test_model_get_hvac_schedule
+    FileUtils.mkdir "#{__dir__}/output" unless Dir.exist? "#{__dir__}/output"
+
+    # load model and set up weather file
+    template = '90.1-2013'
+    climate_zone = 'ASHRAE 169-2013-4A'
+    std = Standard.build(template)
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAEPrimarySchool.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+
+    # set output directory
+    output_dir = "#{__dir__}/output/test_hvac_schedule"
+    FileUtils.mkdir output_dir unless Dir.exist? output_dir
+
+    # apply create typical
+    @create.create_typical_building_from_model(model, template,
+                                               climate_zone: climate_zone,
+                                               sizing_run_directory: output_dir)
+    hvac_schedule = @sch.model_get_hvac_schedule(model)
+    assert_equal('TZ-Main_Corridor_ZN_1_FLR_1 PSZ-AC Occ Sch', hvac_schedule.name.to_s)
+  end
 end

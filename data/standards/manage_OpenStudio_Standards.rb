@@ -530,7 +530,7 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
       puts "--found #{objs.size} rows"
 
       # Skip to the next sheet if no objects were found
-      if objs.size.zero?
+      if objs.empty?
         warnings << "did not export #{sheet_name} in #{spreadsheet_title} because no rows were found"
         next
       end
