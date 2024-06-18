@@ -56,8 +56,9 @@ class DEER
     # Mapping is between standards-defined enumerations and the
     # enumerations available in OpenStudio.
     stds_type = nil
-    # Windows
-    if surf_type == 'ExteriorWindow'
+    case surf_type
+    when 'ExteriorWindow'
+      # Windows
       stds_type = standards_info.fenestrationFrameType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -74,8 +75,8 @@ class DEER
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "Could not determine the standards fenestration frame type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
         return previous_construction_map
       end
-    # Skylights
-    elsif surf_type == 'Skylight'
+    when 'Skylight'
+      # Skylights
       stds_type = standards_info.fenestrationType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -94,8 +95,8 @@ class DEER
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.PlanarSurface', "Could not determine the standards fenestration type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
         return previous_construction_map
       end
-    # Exterior Doors
-    elsif surf_type == 'ExteriorDoor'
+    when 'ExteriorDoor'
+      # Exterior Doors
       stds_type = standards_info.standardsConstructionType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -109,8 +110,8 @@ class DEER
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards construction type for exterior door #{planar_surface.name}.  This door will not have the standard applied.")
         return previous_construction_map
       end
-    # All other surface types
     else
+      # All other surface types
       stds_type = standards_info.standardsConstructionType
       if stds_type.is_initialized
         stds_type = stds_type.get

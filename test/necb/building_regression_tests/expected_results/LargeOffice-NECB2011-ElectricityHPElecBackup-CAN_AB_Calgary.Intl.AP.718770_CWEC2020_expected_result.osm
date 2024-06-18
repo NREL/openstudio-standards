@@ -14088,13 +14088,13 @@ OS:WaterHeater:Sizing,
 
 OS:Schedule:Ruleset,
   {fa672ddf-0b16-4b89-9953-99a614109af5}, !- Handle
-  Water Heater Ambient Temp Schedule - 70.0f, !- Name
+  Water Heater Ambient Temp Schedule 70.0F, !- Name
   {87ebe522-8c1f-4714-8759-649099bfb215}, !- Schedule Type Limits Name
   {74468927-066d-43b7-aeca-20ac7e02b153}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {74468927-066d-43b7-aeca-20ac7e02b153}, !- Handle
-  Water Heater Ambient Temp Schedule - 70.0f Default, !- Name
+  Water Heater Ambient Temp Schedule 70.0F Default, !- Name
   {87ebe522-8c1f-4714-8759-649099bfb215}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1

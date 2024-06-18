@@ -302,62 +302,36 @@ module OpenstudioStandards
     # @param deer_building_type_short [String] DEER building type in short format
     # @return [String] DEER building type in long format
     def self.deer_building_type_to_long(deer_building_type_short)
-      case deer_building_type_short
-      when 'Asm'
-        'Assembly'
-      when 'DMo'
-        'Residential Mobile Home'
-      when 'ECC'
-        'Education - Community College'
-      when 'EPr'
-        'Education - Primary School'
-      when 'ERC'
-        'Education - Relocatable Classroom'
-      when 'ESe'
-        'Education - Secondary School'
-      when 'EUn'
-        'Education - University'
-      when 'GHs'
-        'Greenhouse'
-      when 'Gro'
-        'Grocery'
-      when 'Hsp'
-        'Health/Medical - Hospital'
-      when 'Htl'
-        'Lodging - Hotel'
-      when 'MBT'
-        'Manufacturing Biotech'
-      when 'MFm'
-        'Residential Multi-family'
-      when 'MLI'
-        'Manufacturing Light Industrial'
-      when 'Mtl'
-        'Lodging - Motel'
-      when 'Nrs'
-        'Health/Medical - Nursing Home'
-      when 'OfL'
-        'Office - Large'
-      when 'OfS'
-        'Office - Small'
-      when 'RFF'
-        'Restaurant - Fast-Food'
-      when 'RSD'
-        'Restaurant - Sit-Down'
-      when 'Rt3'
-        'Retail - Multistory Large'
-      when 'RtL'
-        'Retail - Single-Story Large'
-      when 'RtS'
-        'Retail - Small'
-      when 'SCn'
-        'Storage - Conditioned'
-      when 'SFm'
-        'Residential Single Family'
-      when 'SUn'
-        'Storage - Unconditioned'
-      when 'WRf'
-        'Warehouse - Refrigerated'
-      end
+      dict = {}
+      dict['Asm'] = 'Assembly'
+      dict['DMo'] = 'Residential Mobile Home'
+      dict['ECC'] = 'Education - Community College'
+      dict['EPr'] = 'Education - Primary School'
+      dict['ERC'] = 'Education - Relocatable Classroom'
+      dict['ESe'] = 'Education - Secondary School'
+      dict['EUn'] = 'Education - University'
+      dict['GHs'] = 'Greenhouse'
+      dict['Gro'] = 'Grocery'
+      dict['Hsp'] = 'Health/Medical - Hospital'
+      dict['Htl'] = 'Lodging - Hotel'
+      dict['MBT'] = 'Manufacturing Biotech'
+      dict['MFm'] = 'Residential Multi-family'
+      dict['MLI'] = 'Manufacturing Light Industrial'
+      dict['Mtl'] = 'Lodging - Motel'
+      dict['Nrs'] = 'Health/Medical - Nursing Home'
+      dict['OfL'] = 'Office - Large'
+      dict['OfS'] = 'Office - Small'
+      dict['RFF'] = 'Restaurant - Fast-Food'
+      dict['RSD'] = 'Restaurant - Sit-Down'
+      dict['Rt3'] = 'Retail - Multistory Large'
+      dict['RtL'] = 'Retail - Single-Story Large'
+      dict['RtS'] = 'Retail - Small'
+      dict['SCn'] = 'Storage - Conditioned'
+      dict['SFm'] = 'Residential Single Family'
+      dict['SUn'] = 'Storage - Unconditioned'
+      dict['WRf'] = 'Warehouse - Refrigerated'
+
+      return dict[deer_building_type_short]
     end
 
     # HVAC type abbreviation to long name map
@@ -365,40 +339,25 @@ module OpenstudioStandards
     # @param deer_hvac_system_type_short [String] DEER HVAC system type in short format
     # @return [String] DEER HVAC system type in long format
     def self.deer_hvac_system_to_long(deer_hvac_system_type_short)
-      case deer_hvac_system_type_short
-      when 'DXGF'
-        'Split or Packaged DX Unit with Gas Furnace'
-      when 'DXEH'
-        'Split or Packaged DX Unit with Electric Heat'
-      when 'DXHP'
-        'Split or Packaged DX Unit with Heat Pump'
-      when 'WLHP'
-        'Water Loop Heat Pump'
-      when 'NCEH'
-        'No Cooling with Electric Heat'
-      when 'NCGF'
-        'No Cooling with Gas Furnace'
-      when 'PVVG'
-        'Packaged VAV System with Gas Boiler'
-      when 'PVVE'
-        'Packaged VAV System with Electric Heat'
-      when 'SVVG'
-        'Built-Up VAV System with Gas Boiler'
-      when 'SVVE'
-        'Built-Up VAV System with Electric Reheat'
-      when 'Unc'
-        'No HVAC (Unconditioned)'
-      when 'PTAC'
-        'Packaged Terminal Air Conditioner'
-      when 'PTHP'
-        'Packaged Terminal Heat Pump'
-      when 'FPFC'
-        'Four Pipe Fan Coil'
-      when 'DDCT'
-        'Dual Duct System'
-      when 'EVAP'
-        'Evaporative Cooling with Separate Gas Furnace'
-      end
+      dict = {}
+      dict['DXGF'] = 'Split or Packaged DX Unit with Gas Furnace'
+      dict['DXEH'] = 'Split or Packaged DX Unit with Electric Heat'
+      dict['DXHP'] = 'Split or Packaged DX Unit with Heat Pump'
+      dict['WLHP'] = 'Water Loop Heat Pump'
+      dict['NCEH'] = 'No Cooling with Electric Heat'
+      dict['NCGF'] = 'No Cooling with Gas Furnace'
+      dict['PVVG'] = 'Packaged VAV System with Gas Boiler'
+      dict['PVVE'] = 'Packaged VAV System with Electric Heat'
+      dict['SVVG'] = 'Built-Up VAV System with Gas Boiler'
+      dict['SVVE'] = 'Built-Up VAV System with Electric Reheat'
+      dict['Unc'] = 'No HVAC (Unconditioned)'
+      dict['PTAC'] = 'Packaged Terminal Air Conditioner'
+      dict['PTHP'] = 'Packaged Terminal Heat Pump'
+      dict['FPFC'] = 'Four Pipe Fan Coil'
+      dict['DDCT'] = 'Dual Duct System'
+      dict['EVAP'] = 'Evaporative Cooling with Separate Gas Furnace'
+
+      return dict[deer_hvac_system_type_short]
     end
 
     # Valid building type/hvac type combos
@@ -407,48 +366,16 @@ module OpenstudioStandards
     # @return [Array<String>] Allowable HVAC systems for the DEER building type
     def self.deer_building_type_to_hvac_systems(deer_building_type_short)
       case deer_building_type_short
-      when 'Asm'
+      when 'Asm', 'ERC', 'Gro', 'Mtl', 'MLI', 'RFF', 'RSD', 'RtL', 'RtS', 'SCn'
         ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'ECC'
+      when 'ECC', 'ESe', 'Htl', 'MBT', 'OfL', 'OfS', 'Rt3'
         ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
       when 'EPr'
         ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'WLHP']
-      when 'ERC'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'ESe'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'EUn'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG']
-      when 'Gro'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'Hsp'
+      when 'EUn', 'Hsp'
         ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG']
       when 'Nrs'
         ['DXEH', 'DXGF', 'DXHP', 'FPFC', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG']
-      when 'Htl'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'Mtl'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'MBT'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'MLI'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'OfL'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'OfS'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'RFF'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'RSD'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'Rt3'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF', 'PVVE', 'PVVG', 'SVVE', 'SVVG', 'WLHP']
-      when 'RtL'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'RtS'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
-      when 'SCn'
-        ['DXEH', 'DXGF', 'DXHP', 'NCEH', 'NCGF']
       when 'SUn'
         ['Unc']
       when 'WRf'
@@ -460,26 +387,18 @@ module OpenstudioStandards
     # @param deer_template [String] DEER template
     # @return [String] DEER age range
     def self.deer_template_to_age_range(deer_template)
-      case deer_template
-      when 'DEER Pre-1975'
-        'Before 1978'
-      when 'DEER 1985'
-        '1978-1992'
-      when 'DEER 1996'
-        '1993-2001'
-      when 'DEER 2003'
-        '2002-2005'
-      when 'DEER 2007'
-        '2006-2009'
-      when 'DEER 2011'
-        '2010-2013'
-      when 'DEER 2014'
-        '2014'
-      when 'DEER 2015'
-        '2015-2016'
-      when 'DEER 2017'
-        '2017 or Later'
-      end
+      dict = {}
+      dict['DEER Pre-1975'] = 'Before 1978'
+      dict['DEER 1985'] = '1978-1992'
+      dict['DEER 1996'] = '1993-2001'
+      dict['DEER 2003'] = '2002-2005'
+      dict['DEER 2007'] = '2006-2009'
+      dict['DEER 2011'] = '2010-2013'
+      dict['DEER 2014'] = '2014'
+      dict['DEER 2015'] = '2015-2016'
+      dict['DEER 2017'] = '2017 or Later'
+
+      return dict[deer_template]
     end
   end
 end
