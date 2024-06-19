@@ -95,7 +95,7 @@ class ASHRAE901PRM < Standard
   # EMS to stage chillers properly
   # @param plant_loop [OpenStudio::Model::PlantLoop] chilled water loop
   # @return [Boolean] returns true if successful, false if not
-  def plant_loop_apply_prm_number_of_chillers(model, plant_loop)
+  def plant_loop_apply_prm_number_of_chillers(plant_loop)
     # Skip non-cooling plants & secondary cooling loop
     return true unless plant_loop.sizingPlant.loopType == 'Cooling'
     # If the loop is cooling but it is a secondary loop, then skip.
@@ -107,6 +107,8 @@ class ASHRAE901PRM < Standard
     else
       plant_loop.setLoadDistributionScheme('SequentialLoad')
     end
+
+    model = plant_loop.model
 
     # Get all existing chillers and pumps. Copy chiller properties needed when duplicating existing settings
     chillers = []
@@ -214,10 +216,8 @@ class ASHRAE901PRM < Standard
       new_pump = OpenStudio::Model::PumpVariableSpeed.new(plant_loop.model)
       new_pump.setName("#{chiller.name} Inlet Pump")
       new_pump.setRatedPumpHead(original_pump.ratedPumpHead / num_chillers)
-      new_pump.setCoefficient1ofthePartLoadPerformanceCurve(original_pump.coefficient1ofthePartLoadPerformanceCurve)
-      new_pump.setCoefficient2ofthePartLoadPerformanceCurve(original_pump.coefficient2ofthePartLoadPerformanceCurve)
-      new_pump.setCoefficient3ofthePartLoadPerformanceCurve(original_pump.coefficient3ofthePartLoadPerformanceCurve)
-      new_pump.setCoefficient4ofthePartLoadPerformanceCurve(original_pump.coefficient4ofthePartLoadPerformanceCurve)
+
+      pump_variable_speed_set_control_type(new_pump, control_type = 'Riding Curve')
       chiller_inlet_node = chiller.connectedObject(chiller.supplyInletPort).get.to_Node.get
       new_pump.addToNode(chiller_inlet_node)
 
@@ -237,8 +237,6 @@ class ASHRAE901PRM < Standard
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name} has more than 3 chillers. We do not have an EMS strategy for that yet.")
       elsif num_chillers > 1
         add_ems_for_multiple_chiller_pumps_w_secondary_plant(model, plant_loop)
-      else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlantLoop', "No EMS for multiple chillers required for  #{plant_loop.name}, as there's only 1 chiller.")
       end
     end
 
@@ -470,6 +468,12 @@ class ASHRAE901PRM < Standard
     ems_pump_program_manager.addProgram(ems_pump_program)
   end
 
+  # Adds EMS program for pumps serving 3 chillers on primary + secondary loop. This was due to an issue when modeling two
+  # dedicated loops. The headered pumps or dedicated constant speed pumps operate at full flow as long as there's a
+  # load on the loop unless this EMS is in place.
+  # @param model [OpenStudio::Model] OpenStudio model with plant loops
+  # @param sorted_chiller_list [Array] Array of chillers in primary_plant sorted by capacity
+  # @param primary_plant [OpenStudio::Model::PlantLoop] Primary chilled water loop with chillers
   def add_ems_program_for_3_pump_chiller_plant(model, sorted_chiller_list, primary_plant)
     plant_name = primary_plant.name.to_s
 
