@@ -1,5 +1,4 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/compare_models_helper'
 require_relative '../resources/regression_helper'
 
 class Test_SecondarySchool_NECB2020_NaturalGasHPGasBackup < NECBRegressionHelper

@@ -1,5 +1,4 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/compare_models_helper'
 require_relative '../resources/regression_helper'
 
 class Test_Warehouse_NECB2017_Electricity < NECBRegressionHelper
