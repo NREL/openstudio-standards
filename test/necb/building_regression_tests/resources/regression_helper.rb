@@ -53,7 +53,7 @@ class NECBRegressionHelper < Minitest::Test
                    primary_heating_fuel: @primary_heating_fuel)
     #set paths
 
-    @model_name = "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw')}"
+    @model_name = "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw').split('.')[0]}"
 
     @run_dir = "#{test_dir}/#{@model_name}"
     #create folders
