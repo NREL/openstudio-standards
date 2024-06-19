@@ -1,5 +1,4 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/compare_models_helper'
 require_relative '../resources/regression_helper'
 
 class Test_LargeHotel_NECB2020_NaturalGasHPElecBackupMixed < NECBRegressionHelper
