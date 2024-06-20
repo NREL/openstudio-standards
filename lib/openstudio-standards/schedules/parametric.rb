@@ -587,7 +587,7 @@ module OpenstudioStandards
           end
         end
 
-        # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have ot split rule and alter model
+        # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have to split rule and alter model
         if hoo_target_index.nil?
 
           hoo_start = nil
