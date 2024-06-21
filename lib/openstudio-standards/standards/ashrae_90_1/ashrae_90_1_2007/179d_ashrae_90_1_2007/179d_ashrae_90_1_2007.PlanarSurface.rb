@@ -151,7 +151,11 @@ class ACM179dASHRAE9012007
       if stds_type.is_initialized
         stds_type = stds_type.get
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards construction type for #{planar_surface.name}.  This surface will not have the standard applied.")
+        if planar_surface.outsideBoundaryCondition == 'Surface' && surface_category == 'NA'
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.PlanarSurface', "Standards construction is not needed and not applied for interior wall: #{planar_surface.name}.")
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards construction type for #{planar_surface.name}.  This surface will not have the standard applied.")
+        end
         return previous_construction_map
       end
     end
@@ -172,7 +176,7 @@ class ACM179dASHRAE9012007
       type.push(surface_std_wwr_type)
     end
 
-    if previous_construction_map[type]
+    if previous_construction_map[type] && !previous_construction_map[type].iddObjectType.valueName.to_s.include?('factorGround')
       new_construction = previous_construction_map[type]
     else
       new_construction = model_find_and_add_construction(planar_surface.model,
@@ -181,7 +185,8 @@ class ACM179dASHRAE9012007
                                                          stds_type,
                                                          occ_type,
                                                          wwr_building_type: surface_std_wwr_type,
-                                                         wwr_info: wwr_info)
+                                                         wwr_info: wwr_info,
+                                                         surface: planar_surface)
       if !new_construction == false
         previous_construction_map[type] = new_construction
       end
