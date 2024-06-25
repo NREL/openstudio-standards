@@ -41,8 +41,7 @@ Standard.class_eval do
     # save new basefile to new geometry folder as class name.
     model.getBuilding.setName("-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
     model_add_loads(model)
-    model_apply_infiltration_standard(model)
-    model_modify_infiltration_coefficients(model, @instvarbuilding_type, climate_zone)
+    OpenstudioStandards::Infiltration.model_set_nist_infiltration(model, nist_building_type: @instvarbuilding_type)
     model_add_door_infiltration(model, climate_zone)
     model_modify_surface_convection_algorithm(model)
     model_create_thermal_zones(model, @space_multiplier_map)
@@ -220,7 +219,7 @@ Standard.class_eval do
   # Adds the loads and associated schedules for each space type
   # as defined in the OpenStudio_Standards_space_types.json file.
   # This includes lights, plug loads, occupants, ventilation rate requirements,
-  # infiltration, gas equipment (for kitchens, etc.) and typical schedules for each.
+  # gas equipment (for kitchens, etc.) and typical schedules for each.
   # Some loads are governed by the standard, others are typical values
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
@@ -235,10 +234,10 @@ Standard.class_eval do
       space_type_apply_rendering_color(space_type)
 
       # Loads
-      space_type_apply_internal_loads(space_type, true, true, true, true, true, true)
+      space_type_apply_internal_loads(space_type, true, true, true, true, true)
 
       # Schedules
-      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
+      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
@@ -1381,51 +1380,6 @@ Standard.class_eval do
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding exterior lights')
 
     return true
-  end
-
-  # Changes the infiltration coefficients for the prototype vintages.
-  #
-  # @param (see #add_constructions)
-  # @return [Boolean] returns true if successful, false if not
-  # @todo Consistency - make prototype and reference vintages consistent
-  def model_modify_infiltration_coefficients(model, building_type, climate_zone)
-    # Select the terrain type, which
-    # impacts wind speed, and in turn infiltration
-    terrain = 'City'
-    case template
-      when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019', 'NREL ZNE Ready 2017'
-        case building_type
-          when 'Warehouse'
-            terrain = 'Urban'
-          when 'SmallHotel'
-            terrain = 'Suburbs'
-        end
-    end
-    # Set the terrain type
-    model.getSite.setTerrain(terrain)
-
-    # modify the infiltration coefficients
-    case template
-      when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
-        # @todo make this consistent with newer prototypes
-        const_coeff = 1.0
-        temp_coeff = 0.0
-        velo_coeff = 0.0
-        velo_sq_coeff = 0.0
-      else
-        # Includes a wind-velocity-based term
-        const_coeff = 0.0
-        temp_coeff = 0.0
-        velo_coeff = 0.224
-        velo_sq_coeff = 0.0
-    end
-
-    model.getSpaceInfiltrationDesignFlowRates.sort.each do |infiltration|
-      infiltration.setConstantTermCoefficient(const_coeff)
-      infiltration.setTemperatureTermCoefficient(temp_coeff)
-      infiltration.setVelocityTermCoefficient(velo_coeff)
-      infiltration.setVelocitySquaredTermCoefficient(velo_sq_coeff)
-    end
   end
 
   # Sets the inside and outside convection algorithms for different vintages

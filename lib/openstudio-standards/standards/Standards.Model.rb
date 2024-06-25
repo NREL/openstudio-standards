@@ -219,9 +219,8 @@ class Standard
         set_electric_equipment = false
         set_gas_equipment = false
         set_ventilation = false
-        set_infiltration = false
         # For PRM, it only applies lights for now.
-        space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+        space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation)
       end
 
       # Modify the lighting schedule to handle lighting occupancy sensors
@@ -2313,32 +2312,15 @@ class Standard
     return true
   end
 
-  # For backward compatibility, infiltration standard not used for 2013 and earlier
-  #
-  # @return [Boolean] true if successful, false if not
-  def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
-    return true
+  # Default 5-sided (exterior walls and roof) airtightness design value (m^3/h-m^2) from a building pressurization test at 75 Pascals.
+  def default_airtightness
+    airtightness_value = 13.8
+    return airtightness_value
   end
 
-  # Apply the air leakage requirements to the model, as described in PNNL section 5.2.1.6.
-  # This method creates customized infiltration objects for each space
-  # and removes the SpaceType-level infiltration objects.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] returns true if successful, false if not
-  # @todo This infiltration method is not used by the Reference buildings, fix this inconsistency.
-  def model_apply_infiltration_standard(model)
-    # Set the infiltration rate at each space
-    model.getSpaces.sort.each do |space|
-      space_apply_infiltration_rate(space)
-    end
-
-    # Remove infiltration rates set at the space type
-    model.getSpaceTypes.sort.each do |space_type|
-      space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
-    end
-
-    return true
+  # Buildings by default are assumed to not have an air barrier
+  def default_air_barrier
+    return false
   end
 
   # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
