@@ -323,7 +323,7 @@ class ASHRAE901PRM < Standard
   def model_adjusted_building_envelope_infiltration(building_envelope_area_m2, specific_space_infiltration_rate_75_pa = nil)
     # Determine the total building baseline infiltration rate in cfm per ft2 of the building envelope at 75 Pa
     if specific_space_infiltration_rate_75_pa.nil?
-      basic_infil_rate_cfm_per_ft2 = space_infiltration_rate_75_pa
+      basic_infil_rate_cfm_per_ft2 = 1.0
     else
       basic_infil_rate_cfm_per_ft2 = specific_space_infiltration_rate_75_pa
     end

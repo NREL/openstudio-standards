@@ -35,16 +35,14 @@ module OpenstudioStandards
       end
 
       case model_building_type
-      when 'Office'
-        # map office building type to small medium or large
+      when 'Office', 'SmallOffice', 'SmallOfficeDetailed', 'MediumOffice', 'MediumOfficeDetailed', 'LargeOffice', 'LargeOfficeDetailed', 'Outpatient', 'OfS', 'OfL', 'SmallDataCenterLowITE', 'SmallDataCenterHighITE', 'LargeDataCenterLowITE', 'LargeDataCenterHighITE'
+        # map office or data center building type to small, medium or large
         floor_area = model.getBuilding.floorArea
         if floor_area < 2750.0
           nist_building_type = 'SmallOffice'
         else
           nist_building_type = 'MediumOffice'
         end
-      when 'LargeOffice', 'Outpatient', 'OfL'
-        nist_building_type = 'MediumOffice'
       when 'Retail'
         # map retal building type to RetailStripmall or RetailStandalone based on building name
         building_name = model.getBuilding.name.get
@@ -53,22 +51,33 @@ module OpenstudioStandards
         else
           nist_building_type = 'RetailStripmall'
         end
-      when 'StripMall', 'Warehouse', 'QuickServiceRestaurant', 'FullServiceRestaurant', 'RtS', 'RSD', 'RFF', 'SCn', 'SUn', 'WRf'
+      when 'RetailStripmall', 'StripMall', 'Warehouse', 'QuickServiceRestaurant', 'FullServiceRestaurant', 'RtS', 'RSD', 'RFF', 'SCn', 'SUn', 'WRf'
         nist_building_type = 'RetailStripmall'
-      when 'SuperMarket', 'RtL'
+      when 'RetailStandalone', 'SuperMarket', 'RtL'
         nist_building_type = 'RetailStandalone'
-      when 'EPr'
+      when 'PrimarySchool', 'EPr'
         nist_building_type = 'PrimarySchool'
-      when 'ESe'
+      when 'SecondarySchool', 'ESe'
         nist_building_type = 'SecondarySchool'
-      when 'Mtl'
+      when 'SmallHotel', 'Mtl'
         nist_building_type = 'SmallHotel'
-      when 'Htl'
+      when 'LargeHotel', 'Htl'
         nist_building_type = 'LargeHotel'
-      when 'Hsp'
+      when 'Hospital', 'Hsp'
         nist_building_type = 'Hospital'
-      when 'OfS'
-        nist_building_type = 'SmallOffice'
+      when 'MidriseApartment'
+        nist_building_type = 'MidriseApartment'
+      when 'HighriseApartment'
+        nist_building_type = 'HighriseApartment'
+      when 'TallBuilding', 'SuperTallBuilding'
+        nist_building_type = 'LargeHotel'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Infiltration', "NIST coefficients aren't available for model building type #{model_building_type}. Since the building type is for a tall building, using nist building type #{nist_building_type} to best represent infiltration coefficients.")
+      when 'College', 'Laboratory'
+        nist_building_type = 'SecondarySchool'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Infiltration', "NIST coefficients aren't available for model building type #{model_building_type}. Since the building may involve complex geometry, using nist building type #{nist_building_type} to best represent infiltration coefficients.")
+      when 'Courthouse'
+        nist_building_type = 'MediumOffice'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Infiltration', "NIST coefficients aren't available for model building type #{model_building_type}. Using nist building type #{nist_building_type} to best represent infiltration coefficients.")
       else
         nist_building_type = model_building_type
       end
