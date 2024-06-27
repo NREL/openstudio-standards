@@ -19,7 +19,7 @@ class Test_<%=building_type%>_<%=template%>_<%=primary_heating_fuel%> < NECBRegr
       puts diff
       puts "Pretty listing of diff-errors for readability."
       puts JSON.pretty_generate( diff )
-      puts "You can find the saved json diff file here test/necb/building_regression_tests/expected_results/<%=building_type%>-<%=template%>-<%=primary_heating_fuel%>_<%=File.basename(epw_file, ".epw")%>_diffs.json"
+      puts "You can find the saved json diff file here test/necb/regression_tests/expected/<%=building_type%>-<%=template%>-<%=primary_heating_fuel%>_<%=File.basename(epw_file, '.epw').split('.')[0]%>_diffs.json"
       puts "outputing errors here. "
       puts diff["diffs-errors"] if result == false
     end
