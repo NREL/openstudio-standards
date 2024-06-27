@@ -433,11 +433,11 @@ module OpenstudioStandards
         standard.model_add_hvac_system(model, 'PVAV PFP Boxes', ht = 'Electricity', znht = 'Electricity', cl = 'Electricity', zones)
 
       when 'PVAV with gas heat with electric reheat', 'PVAV with gas coil heat with electric reheat'
-        standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones,
+        standard.model_add_hvac_system(model, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones,
                                        air_loop_heating_type: 'Gas')
 
       when 'PVAV with gas boiler heat with electric reheat'
-        standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones)
+        standard.model_add_hvac_system(model, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones)
 
       # all residential systems do not have ventilation
       when 'Residential AC with baseboard electric'

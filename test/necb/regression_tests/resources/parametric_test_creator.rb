@@ -120,9 +120,9 @@ class ParametricTestCreator < ParametricRegressionHelper
       ecm_system_name      = params[:ecm_system_name]
 
       if !(params.key?(:ecm_system_name))
-        return "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw')}"
+        return "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw').split('.')[0]}"
       else
-        return "#{building_type}-#{template}-#{primary_heating_fuel}-#{ecm_system_name}-#{File.basename(epw_file, '.epw')}"
+        return "#{building_type}-#{template}-#{primary_heating_fuel}-#{ecm_system_name}-#{File.basename(epw_file, '.epw').split('.')[0]}"
       end
     end
   end
