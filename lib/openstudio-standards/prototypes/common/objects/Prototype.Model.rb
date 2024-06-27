@@ -41,7 +41,7 @@ Standard.class_eval do
     # save new basefile to new geometry folder as class name.
     model.getBuilding.setName("-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
     model_add_loads(model)
-    OpenstudioStandards::Infiltration.model_set_nist_infiltration(model, nist_building_type: @instvarbuilding_type)
+    OpenstudioStandards::Infiltration.model_set_nist_infiltration(model)
     model_add_door_infiltration(model, climate_zone)
     model_modify_surface_convection_algorithm(model)
     model_create_thermal_zones(model, @space_multiplier_map)
