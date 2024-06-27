@@ -19,7 +19,7 @@ class Test_LowriseApartment_NECB2017_NaturalGasHPElecBackupMixed < NECBRegressio
       puts diff
       puts "Pretty listing of diff-errors for readability."
       puts JSON.pretty_generate( diff )
-      puts "You can find the saved json diff file here test/necb/building_regression_tests/expected_results/LowriseApartment-NECB2017-NaturalGasHPElecBackupMixed_CAN_AB_Calgary.Intl.AP.718770_CWEC2020_diffs.json"
+      puts "You can find the saved json diff file here test/necb/regression_tests/expected/LowriseApartment-NECB2017-NaturalGasHPElecBackupMixed_CAN_AB_Calgary_diffs.json"
       puts "outputing errors here. "
       puts diff["diffs-errors"] if result == false
     end
