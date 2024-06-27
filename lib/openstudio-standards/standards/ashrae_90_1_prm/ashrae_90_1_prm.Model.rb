@@ -236,7 +236,7 @@ class ASHRAE901PRM < Standard
         vel = old_infil.velocityTermCoefficient
         vel_2 = old_infil.velocitySquaredTermCoefficient
         old_infil_coeffs = [cst, temp, vel, vel_2] if !(cst.nil? && temp.nil? && vel.nil? && vel_2.nil?)
-        # Return flow per space floor area if method is inconsisten in proposed model
+        # Return flow per space floor area if method is inconsistent in proposed model
         return [0.0, 0.0, 0.224, 0.0] if infil_coeffs != old_infil_coeffs && !(infil_coeffs[0].nil? &&
                                                                                     infil_coeffs[1].nil? &&
                                                                                     infil_coeffs[2].nil? &&
@@ -246,7 +246,7 @@ class ASHRAE901PRM < Standard
       end
 
       # Infiltration at the space type level
-      if infil_coeffs == [nil, nil, nil, nil] && space.spaceType.is_initialized
+      if (infil_coeffs == [nil, nil, nil, nil]) && space.spaceType.is_initialized
         space_type = space.spaceType.get
         unless space_type.spaceInfiltrationDesignFlowRates.empty?
           old_infil = space_type.spaceInfiltrationDesignFlowRates[0]
@@ -255,7 +255,7 @@ class ASHRAE901PRM < Standard
           vel = old_infil.velocityTermCoefficient
           vel_2 = old_infil.velocitySquaredTermCoefficient
           old_infil_coeffs = [cst, temp, vel, vel_2] if !(cst.nil? && temp.nil? && vel.nil? && vel_2.nil?)
-          # Return flow per space floor area if method is inconsisten in proposed model
+          # Return flow per space floor area if method is inconsistent in proposed model
           return [0.0, 0.0, 0.224, 0.0] unless infil_coeffs != old_infil_coeffs && !(infil_coeffs[0].nil? &&
                                                                                       infil_coeffs[1].nil? &&
                                                                                       infil_coeffs[2].nil? &&
