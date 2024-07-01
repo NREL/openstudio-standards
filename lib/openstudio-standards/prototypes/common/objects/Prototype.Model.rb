@@ -92,6 +92,8 @@ Standard.class_eval do
     # Apply prototype changes that supersede the HVAC efficiency standard
     model_apply_prototype_hvac_efficiency_adjustments(model)
     model_custom_swh_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
+    # adjust infiltration schedules to match HVAC operating schedule
+    OpenstudioStandards::Infiltration.model_set_nist_infiltration_schedules(model)
     # Fix EMS references.
     # Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)
