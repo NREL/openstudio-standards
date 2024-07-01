@@ -37,7 +37,13 @@ Standard.class_eval do
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
     model_custom_geometry_tweaks(model, building_type, climate_zone, @prototype_input)
     model.getThermostatSetpointDualSetpoints(&:remove)
+
+    # set building name and standards building type
     model.getBuilding.setName(self.class.to_s)
+    unless model.getBuilding.standardsBuildingType.is_initialized
+      model.getBuilding.setStandardsBuildingType(@instvarbuilding_type)
+    end
+
     # save new basefile to new geometry folder as class name.
     model.getBuilding.setName("-#{@instvarbuilding_type}-#{climate_zone} created: #{Time.new}")
     model_add_loads(model)
@@ -54,7 +60,7 @@ Standard.class_eval do
     end
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_fenestration_orientation(model, climate_zone)
-    model_custom_hvac_tweaks(model, building_type, climate_zone, @prototype_input)
+    model_custom_hvac_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_transfer_air(model)
     model_add_internal_mass(model, @instvarbuilding_type)
     model_add_swh(model, @instvarbuilding_type, @prototype_input)
@@ -63,7 +69,7 @@ Standard.class_eval do
     model_add_daylight_savings(model)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
-    model.getBuilding.setStandardsBuildingType(building_type)
+    model.getBuilding.setStandardsBuildingType(@instvarbuilding_type)
     model_add_lights_shutoff(model)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
@@ -75,7 +81,7 @@ Standard.class_eval do
     # Apply the prototype HVAC assumptions
     # which include sizing the fan pressure rises based
     # on the flow rate of the system.
-    model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
+    model_apply_prototype_hvac_assumptions(model, @instvarbuilding_type, climate_zone)
     # custom economizer controls
     # For 90.1-2010 Outpatient, AHU1 doesn't have economizer and AHU2 set minimum outdoor air flow rate as 0
     model_modify_oa_controller(model)
@@ -93,7 +99,7 @@ Standard.class_eval do
     # only four zones in large hotel have daylighting controls
     # @todo YXC to merge to the main function
     model_add_daylighting_controls(model)
-    model_custom_daylighting_tweaks(model, building_type, climate_zone, @prototype_input)
+    model_custom_daylighting_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_update_exhaust_fan_efficiency(model)
     model_update_fan_efficiency(model)
     # rename air loop and plant loop nodes for readability
