@@ -511,14 +511,12 @@ module OpenstudioStandards
       # set scheduleRuleset properties
       props = schedule_ruleset.additionalProperties
 
-      if props.getFeatureAsString('param_sch_ver') == '0.0.1'
-        # don't need to gather more than once
-        return parametric_inputs
-      else
-        props.setFeature('param_sch_ver', '0.0.1') # this is needed to see if formulas are in sync with version of standards that processes them also used to flag schedule as parametric
-        props.setFeature('param_sch_floor', min_max['min'])
-        props.setFeature('param_sch_ceiling', min_max['max'])
-      end
+      # don't need to gather more than once
+      return parametric_inputs if props.getFeatureAsString('param_sch_ver') == '0.0.1'
+
+      props.setFeature('param_sch_ver', '0.0.1') # this is needed to see if formulas are in sync with version of standards that processes them also used to flag schedule as parametric
+      props.setFeature('param_sch_floor', min_max['min'])
+      props.setFeature('param_sch_ceiling', min_max['max'])
 
       # cleanup existing profiles
       OpenstudioStandards::Schedules.schedule_ruleset_cleanup_profiles(schedule_ruleset)
@@ -575,7 +573,7 @@ module OpenstudioStandards
       end
       # new rules are created at top of list - cleanup old rules
       if !(new_rule_ct == 0 || new_rule_ct == schedule_ruleset.scheduleRules.size)
-        schedule_ruleset.scheduleRules[new_rule_ct..-1].each(&:remove)
+        schedule_ruleset.scheduleRules[new_rule_ct..].each(&:remove)
       end
 
       # re-collect new schedule rules
