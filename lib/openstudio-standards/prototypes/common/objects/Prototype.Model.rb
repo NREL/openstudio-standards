@@ -440,23 +440,27 @@ Standard.class_eval do
   # CFactorUndergroundWallConstruction and require some additional parameters when compared to Construction
   #
   # @param model[OpenStudio::Model::Model] OpenStudio Model
-  # @param climate_zone [String climate zone as described for prototype models. C-Factor is based on this parameter
-  # @param building_type [String the building type
-  # @return [void]
+  # @param climate_zone [String] climate zone as described for prototype models. C-Factor is based on this parameter
+  # @param building_type [String] the building type
+  # @return [Boolean] returns true if successful, false if not
   def model_set_below_grade_wall_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
-    building_type_category = construction_set_data['exterior_wall_building_category']
 
+    # If no construction data, return and allow code to use default constructions
+    return false if construction_set_data.nil?
+
+    # Find wall C factor
+    building_type_category = construction_set_data['exterior_wall_building_category']
     wall_construction_properties = model_get_construction_properties(model, 'GroundContactWall', 'Mass', building_type_category, climate_zone)
 
     # If no construction properties are found at all, return and allow code to use default constructions
-    return if wall_construction_properties.nil?
+    return false if wall_construction_properties.nil?
 
     c_factor_ip = wall_construction_properties['assembly_maximum_c_factor']
 
     # If no c-factor is found in construction properties, return and allow code to use defaults
-    return if c_factor_ip.nil?
+    return false if c_factor_ip.nil?
 
     # convert to SI
     c_factor_si = c_factor_ip * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
@@ -488,6 +492,8 @@ Standard.class_eval do
         end
       end
     end
+
+    return true
   end
 
   # Searches a model for spaces adjacent to ground. If the slab's perimeter is adjacent to ground, the length is
@@ -496,21 +502,25 @@ Standard.class_eval do
   # @param model [OpenStudio Model] OpenStudio model being modified
   # @param building_type [String the building type
   # @param climate_zone [String climate zone as described for prototype models. F-Factor is based on this parameter
+  # @return [Boolean] returns true if successful, false if not
   def model_set_floor_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
-    building_type_category = construction_set_data['ground_contact_floor_building_category']
 
-    # Find Floor F factor
+    # If no construction data, return and allow code to use default constructions
+    return false if construction_set_data.nil?
+
+    # Find floor F factor
+    building_type_category = construction_set_data['ground_contact_floor_building_category']
     floor_construction_properties = model_get_construction_properties(model, 'GroundContactFloor', 'Unheated', building_type_category, climate_zone)
 
     # If no construction properties are found at all, return and allow code to use default constructions
-    return if floor_construction_properties.nil?
+    return false if floor_construction_properties.nil?
 
     f_factor_ip = floor_construction_properties['assembly_maximum_f_factor']
 
     # If no f-factor is found in construction properties, return and allow code to use defaults
-    return if f_factor_ip.nil?
+    return false if f_factor_ip.nil?
 
     f_factor_si = f_factor_ip * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
 
@@ -543,6 +553,8 @@ Standard.class_eval do
         end
       end
     end
+
+    return true
   end
 
   # Adds internal mass objects and constructions based on the building type

@@ -28,7 +28,7 @@ class TestCreateTypical < Minitest::Test
     assert(starting_size < ending_size)
   end
 
-  def test_create_typical_comstock_building_from_model
+  def test_create_typical_building_from_model_comstock
     # load model and set up weather file
     template = 'ComStock DOE Ref 1980-2004'
     climate_zone = 'ASHRAE 169-2013-4A'
@@ -37,7 +37,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_comstock_building_from_model"
+    output_dir = "#{__dir__}/output/test_create_typical_building_from_model_comstock"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -140,6 +140,34 @@ class TestCreateTypical < Minitest::Test
                                                         modify_wknd_op_hrs: true,
                                                         wknd_op_hrs_start_time: 8.00,
                                                         wknd_op_hrs_duration: 6.00,
+                                                        sizing_run_directory: output_dir)
+    ending_size = model.getModelObjects.size
+    assert(result)
+    assert(starting_size < ending_size)
+  end
+
+  def test_create_typical_building_from_model_comstock_restaurant
+    # load model and set up weather file
+    # template = 'ComStock DOE Ref 1980-2004'
+    # climate_zone = 'ASHRAE 169-2013-3C'
+    # geometry_file = 'ASHRAEFullServiceRestaurant.osm'
+
+    template = 'ComStock DEER Pre-1975'
+    climate_zone = 'CEC T24-CEC2'
+    geometry_file = 'DEER_RSD.osm'
+
+    std = Standard.build(template)
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/#{geometry_file}")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+
+    # set output directory
+    output_dir = "#{__dir__}/output/test_create_typical_building_from_model_comstock_restaurant"
+    FileUtils.mkdir output_dir unless Dir.exist? output_dir
+
+    # apply create typical
+    starting_size = model.getModelObjects.size
+    result = @create.create_typical_building_from_model(model, template,
+                                                        climate_zone: climate_zone,
                                                         sizing_run_directory: output_dir)
     ending_size = model.getModelObjects.size
     assert(result)
