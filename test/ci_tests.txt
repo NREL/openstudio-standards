@@ -133,6 +133,7 @@ necb/unit_tests/tests/test_remove_duplicate_materials_and_constructions.rb
 necb/unit_tests/tests/test_necb_weather_hdd.rb
 necb/unit_tests/tests/test_necb_qaqc_reporting.rb
 necb/unit_tests/tests/test_necb_btap_data.rb
+necb/unit_tests/tests/test_ecm_envelope.rb
 #necb/unit_tests/tests/test_space_type_vintage_map.rb
 
 necb/system_tests/tests/test_necb_hvac_system_2_natural_gas_scroll_hydronic_fpfc.rb
