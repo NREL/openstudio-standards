@@ -7,7 +7,7 @@ class ECM_HS14_CGSHP_FanCoils_Test < ParametricTestCreator
     {
       template:
         [
-          #"BTAP1980TO2010",
+          "BTAP1980TO2010",
           #"NECB2011",
           #"NECB2015",
           #"NECB2017",
