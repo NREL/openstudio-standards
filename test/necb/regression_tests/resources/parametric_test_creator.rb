@@ -35,6 +35,22 @@ class ParametricTestCreator < ParametricRegressionHelper
       primary_heating_fuel: ['Electricity']
     }
 
+  $unitary_cop_names =
+    [
+      {
+        unitary_cop_arg:  'NECB_Default',
+        untiary_cop_short: 'NECB_Default'
+      },
+      {
+        unitary_cop_arg:  'Carrier WeatherExpert',
+        unitary_cop_short: 'unitary_Carrier_WE'
+      },
+      {
+        unitary_cop_arg:  'Lennox Model L Ultra High Efficiency',
+        unitary_cop_short: 'unitary_Lennox_HE'
+      }
+    ]
+
   # The generation of test methods has to be at the class level so Minitest doesn't skip them before they initialize
   class << self
     def generate_tests(params)
@@ -118,11 +134,15 @@ class ParametricTestCreator < ParametricRegressionHelper
       template             = params[:template]
       primary_heating_fuel = params[:primary_heating_fuel]
       ecm_system_name      = params[:ecm_system_name]
+      unitary_cop          = params[:unitary_cop]
 
-      if !(params.key?(:ecm_system_name))
+      if !(params.key?(:ecm_system_name)) && !(params.key?(:unitary_cop))
         return "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw').split('.')[0]}"
-      else
+      elsif params.key?(:ecm_system_name)
         return "#{building_type}-#{template}-#{primary_heating_fuel}-#{ecm_system_name}-#{File.basename(epw_file, '.epw').split('.')[0]}"
+      elsif params.key?(:unitary_cop)
+        unitary_cop_out = $unitary_cop_names.select{ |unitary_cop_item| unitary_cop_item[:unitary_cop_arg] == unitary_cop }.first
+        return "#{building_type}-#{template}-#{primary_heating_fuel}-#{unitary_cop_out[:unitary_cop_short]}-#{File.basename(epw_file, '.epw').split('.')[0]}"
       end
     end
   end
