@@ -509,5 +509,6 @@ necb/regression_tests/tests/test_necb_ecm_hs11_ashp_pthp.rb
 necb/regression_tests/tests/test_necb_ecm_hs12_ashp_baseboard.rb
 necb/regression_tests/tests/test_necb_ecm_hs13_ashp_vrf.rb
 necb/regression_tests/tests/test_necb_ecm_hs14_cgshp_fancoils.rb
+necb/regression_tests/tests/test_necb_ecm_noair_baseboard.rb
 
 #/home/osdev/openstudio-standards/utilities/btap_cli/tests/btap_cli_local_osm_test.rb
