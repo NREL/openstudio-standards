@@ -35,7 +35,7 @@ class ParametricTestCreator < ParametricRegressionHelper
       primary_heating_fuel: ['Electricity']
     }
 
-  $unitary_cop_names =
+  $unitary_cop_args =
     [
       {
         unitary_cop_arg:  'NECB_Default',
@@ -49,6 +49,86 @@ class ParametricTestCreator < ParametricRegressionHelper
         unitary_cop_arg:  'Lennox Model L Ultra High Efficiency',
         unitary_cop_short: 'unitary_Lennox_HE'
       }
+    ]
+
+  $boiler_eff_args =
+    [
+      {
+        boiler_eff_arg: 'NECB_Default',
+        boiler_eff_short: 'NECB_Default'
+      },
+      {
+        boiler_eff_arg: 'NECB 85% Efficient Condensing Boiler',
+        boiler_eff_short: 'NECB_boiler_85'
+      },
+      {
+        boiler_eff_arg: 'NECB 88% Efficient Condensing Boiler',
+        boiler_eff_short: 'NECB_boiler_88'
+      },
+      {
+        boiler_eff_arg: 'NECB 91% Efficient Condensing Boiler',
+        boiler_eff_short: 'NECB_boiler_91'
+      },
+      {
+        boiler_eff_arg: 'NECB 94% Efficient Condensing Boiler',
+        boiler_eff_short: 'NECB_boiler_94'
+      },
+      {
+        boiler_eff_arg: 'Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler',
+        boiler_eff_short: 'Viessmann_V300_boiler'
+      }
+    ]
+
+  $furnace_eff_args =
+    [
+      {
+        furnace_eff_arg: 'NECB_Default',
+        furnace_eff_short: 'NECB_Default'
+      },
+      {
+        furnace_eff_arg: 'NECB 85% Efficient Condensing Gas Furnace',
+        furnace_eff_short: 'NECB_furnace_85'
+      },
+      {
+        furnace_eff_arg: 'NECB 88% Efficient Condensing Gas Furnace',
+        furnace_eff_short: 'NECB_furnace_88'
+      },
+      {
+        furnace_eff_arg: 'NECB 91% Efficient Condensing Gas Furnace',
+        furnace_eff_short: 'NECB_furnace_91'
+      },
+      {
+        furnace_eff_arg: 'NECB 94% Efficient Condensing Gas Furnace',
+        furnace_eff_short: 'NECB_furnace_94'
+      }
+    ]
+
+  $shw_eff_args =
+    [
+      {
+        shw_eff_arg: 'NECB_Default',
+        shw_eff_short: 'NECB_Default'
+      },
+      {
+        shw_eff_arg: 'Natural Gas 85% Efficient SHW',
+        shw_eff_short: 'NECB_shw_85'
+      },
+      {
+        shw_eff_arg: 'Natural Gas 88% Efficient SHW',
+        shw_eff_short: 'NECB_shw_88'
+      },
+      {
+        shw_eff_arg: 'Natural Gas Direct Vent with Electric Ignition',
+        shw_eff_short: 'NECB_shw_91'
+      },
+      {
+        shw_eff_arg: 'Natural Gas Power Vent with Electric Ignition',
+        shw_eff_short: 'NECB_shw_94'
+      },
+      {
+        shw_eff_arg: 'Natural Gas Power Vent with Electric Ignition 97% Efficient',
+        shw_eff_short: 'NECB_shw_97'
+      },
     ]
 
   # The generation of test methods has to be at the class level so Minitest doesn't skip them before they initialize
@@ -135,16 +215,30 @@ class ParametricTestCreator < ParametricRegressionHelper
       primary_heating_fuel = params[:primary_heating_fuel]
       ecm_system_name      = params[:ecm_system_name]
       unitary_cop          = params[:unitary_cop]
+      airloop_economizer_type = params[:airloop_economizer_type]
+      boiler_eff = params[:boiler_eff]
+      furnace_eff = params[:furnace_eff]
+      shw_eff = params[:shw_eff]
 
-      if !(params.key?(:ecm_system_name)) && !(params.key?(:unitary_cop))
+      if !(params.key?(:ecm_system_name)) && !(params.key?(:unitary_cop)) && !(params.key?(:airloop_economizer_type)) && !(params.key?(:boiler_eff)) && !(params.key?(:furnace_eff)) && !(params.key?(:shw_eff))
         return "#{building_type}-#{template}-#{primary_heating_fuel}-#{File.basename(epw_file, '.epw').split('.')[0]}"
       elsif params.key?(:ecm_system_name)
         return "#{building_type}-#{template}-#{primary_heating_fuel}-#{ecm_system_name}-#{File.basename(epw_file, '.epw').split('.')[0]}"
       elsif params.key?(:unitary_cop)
-        unitary_cop_out = $unitary_cop_names.select{ |unitary_cop_item| unitary_cop_item[:unitary_cop_arg] == unitary_cop }.first
+        unitary_cop_out = $unitary_cop_args.select{ |unitary_cop_item| unitary_cop_item[:unitary_cop_arg] == unitary_cop }.first
         return "#{building_type}-#{template}-#{primary_heating_fuel}-#{unitary_cop_out[:unitary_cop_short]}-#{File.basename(epw_file, '.epw').split('.')[0]}"
+      elsif params.key?(:airloop_economizer_type)
+        return "#{building_type}-#{template}-#{primary_heating_fuel}-#{airloop_economizer_type}-#{File.basename(epw_file, '.epw').split('.')[0]}"
+      elsif params.key?(:boiler_eff)
+        boiler_eff_out = $boiler_eff_args.select{ |boiler_eff_item| boiler_eff_item[:boiler_eff_arg] == boiler_eff }.first
+        return "#{building_type}-#{template}-#{primary_heating_fuel}-#{boiler_eff_out[:boiler_eff_short]}-#{File.basename(epw_file, '.epw').split('.')[0]}"
+      elsif params.key?(:furnace_eff)
+        furnace_eff_out = $furnace_eff_args.select{ |furnace_eff_item| furnace_eff_item[:furnace_eff_arg] == furnace_eff }.first
+        return "#{building_type}-#{template}-#{primary_heating_fuel}-#{furnace_eff_out[:furnace_eff_short]}-#{File.basename(epw_file, '.epw').split('.')[0]}"
+      elsif params.key?(:shw_eff)
+        shw_eff_out = $shw_eff_args.select{ |shw_eff_item| shw_eff_item[:shw_eff_arg] == shw_eff }.first
+        return "#{building_type}-#{template}-#{primary_heating_fuel}-#{shw_eff_out[:shw_eff_short]}-#{File.basename(epw_file, '.epw').split('.')[0]}"
       end
     end
   end
 end
-
