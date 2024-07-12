@@ -43,4 +43,19 @@ class ACM179dASHRAE9012007
 
     return space_type_properties
   end
+
+  # NOTE: 179D overrides it to set the people fraction sensible per ACM rules instead of letting E+ AutoCalculate it
+  def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+    super(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+
+    if set_people
+      data = space_type_get_standards_data(space_type, extend_with_2007: false, throw_if_not_found: true)
+      people_frac_sensible = data['occupancy_fraction_sensible']
+      space_type.people.sort.each do |inst|
+        definition = inst.peopleDefinition
+        definition.setSensibleHeatFraction(people_frac_sensible)
+      end
+    end
+  end
+
 end
