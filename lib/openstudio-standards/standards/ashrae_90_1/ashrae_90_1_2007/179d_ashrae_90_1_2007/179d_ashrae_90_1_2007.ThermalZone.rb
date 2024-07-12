@@ -3,12 +3,18 @@ class ACM179dASHRAE9012007
   # Add Exhaust Fans based on space type lookup.
   # This measure doesn't look if DCV is needed.
   # Others methods can check if DCV needed and add it.
+  # NOTE: 179D override to add infiltration manually to balance the Kitchen and
+  # Restroom exhaust fans
   #
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @param exhaust_makeup_inputs [Hash] has of makeup exhaust inputs
   # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
   # @todo combine availability and fraction flow schedule to make zone mixing schedule
   def thermal_zone_add_exhaust(thermal_zone, exhaust_makeup_inputs = {})
+    data = model_get_standards_data(thermal_zone.model, throw_if_not_found: true)
+    acm_fan_sch_name = data['hvac_operation_schedule']
+    acm_fan_sch = model_add_schedule(thermal_zone.model, acm_fan_sch_name)
+
     exhaust_fans = {} # key is primary exhaust value is hash of arrays of secondary objects
 
     # hash to store space type information
@@ -79,8 +85,22 @@ class ACM179dASHRAE9012007
       # update efficiency and pressure rise
       prototype_fan_apply_prototype_fan_efficiency(zone_exhaust_fan)
 
+      # NOTE: 179D - Balance it up with infiltration
+      if ['Restroom', 'Kitchen'].include?(space_type.standardsSpaceType.get)
+        space = thermal_zone.spaces.first
+        OpenStudio.logFree(OpenStudio::Warn, '179d.Standards.ThermalZone', "adding make up #{space_type.standardsSpaceType.get} infiltration object: thermal zone = '#{thermal_zone.nameString}' | space= '#{space.nameString}'")
+        makeup_infiltration_for_exhaust_fan = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(thermal_zone.model)
+        makeup_infiltration_for_exhaust_fan.setName("#{zone_exhaust_fan.name} Makeup infil")
+        makeup_infiltration_for_exhaust_fan.setDesignFlowRate(maximum_flow_rate_si)
+        makeup_infiltration_for_exhaust_fan.setSpace(space)
+        makeup_infiltration_for_exhaust_fan.setSchedule(acm_fan_sch)
+
+        zone_exhaust_fan.setAvailabilitySchedule(acm_fan_sch)
+        zone_exhaust_fan.setFlowFractionSchedule(acm_fan_sch)
+        zone_exhaust_fan.setBalancedExhaustFractionSchedule(thermal_zone.model.alwaysOnDiscreteSchedule)
+
       # add and alter objectxs related to zone exhaust makeup air
-      if exhaust_makeup_inputs.key?(makeup_target) && exhaust_makeup_inputs[makeup_target][:source_zone]
+      elsif exhaust_makeup_inputs.key?(makeup_target) && exhaust_makeup_inputs[makeup_target][:source_zone]
 
         # add balanced schedule to zone_exhaust_fan
         balanced_sch_name = space_type_properties['balanced_exhaust_fraction_schedule']
