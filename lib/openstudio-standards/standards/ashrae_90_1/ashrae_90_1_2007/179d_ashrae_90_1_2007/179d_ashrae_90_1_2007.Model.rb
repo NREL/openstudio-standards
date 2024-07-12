@@ -639,6 +639,7 @@ class ACM179dASHRAE9012007
               air_loop.additionalProperties.setFeature('zone_group_type', sys_group['zone_group_type'] || 'None')
               air_loop.additionalProperties.setFeature('sys_group_occ', sys_group['occ'] || 'None')
               #  assign hvac_schedule directly not find from anywhere with air_loop_hvac_enable_unoccupied_fan_shutoff
+              #  NOTE: 179D override!
               if !zone_fan_scheds.values.empty? && (zone_fan_scheds.values[0].is_a? String)
                 air_loop.additionalProperties.setFeature('fan_sched_name', zone_fan_scheds.values[0])
               end
@@ -875,18 +876,19 @@ class ACM179dASHRAE9012007
   # Store fan operation schedule for each zone before deleting HVAC objects
   # NOTE: 179D overrides it to get the hvac_operation_schedule from ACM data
   # @param model [object]
-  # @return [hash] of zoneName:fan_schedule_8760
+  # @return [hash] of zoneName:STRING fan sch name! (Override)
   def get_fan_schedule_for_each_zone(model)
     data = model_get_standards_data(model, throw_if_not_found: true)
     acm_fan_sch_name = data['hvac_operation_schedule']
     acm_fan_sch = model_add_schedule(model, acm_fan_sch_name)
     model.getBuilding.additionalProperties.setFeature('acm_fan_sch', acm_fan_sch_name)
 
-    fan_schedule_8760 = get_8760_values_from_schedule(model, acm_fan_sch)
+    # NOTE: 179D override, we set it to a String
+    # fan_schedule_8760 = get_8760_values_from_schedule(model, acm_fan_sch)
 
     fan_sch_names = {}
     model.getThermalZones.sort.each do |zone|
-      fan_sch_names[zone.name.get] = fan_schedule_8760
+      fan_sch_names[zone.name.get] = acm_fan_sch_name # fan_schedule_8760
     end
 
     return fan_sch_names
