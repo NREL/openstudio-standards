@@ -25,17 +25,20 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     spaces = model.getSpaces.sort_by(&:nameString)
 
     wh_bulk = OpenStudio::Model::SpaceType.new(model)
+    wh_bulk.setName("Warehouse Bulk")
     wh_bulk.setStandardsBuildingType('Warehouse')
     wh_bulk.setStandardsSpaceType('Bulk')
     spaces[0].setSpaceType(wh_bulk)
     spaces[1].setSpaceType(wh_bulk)
 
     wh_office = OpenStudio::Model::SpaceType.new(model)
+    wh_office.setName("Warehouse Office")
     wh_office.setStandardsBuildingType('Warehouse')
     wh_office.setStandardsSpaceType('Office')
     spaces[2].setSpaceType(wh_bulk)
 
     retail_pt_sale = OpenStudio::Model::SpaceType.new(model)
+    retail_pt_sale.setName("Retail POS")
     retail_pt_sale.setStandardsBuildingType('Retail')
     retail_pt_sale.setStandardsSpaceType('Point_of_Sale')
     spaces[3].setSpaceType(retail_pt_sale)
@@ -408,6 +411,28 @@ class ACM179dASHRAE9012007Test < Minitest::Test
           assert_equal('SchoolPrimary_HVAC_Sch', new_avail_sch.nameString, "#{obj.briefDescription}: #{getter}")
         end
       end
+    end
+  end
+
+  def test_space_type_apply_internal_loads_also_sets_people_fraction_sensible
+
+    set_people = true
+    set_lights = false
+    set_electric_equipment = false
+    set_gas_equipment = false
+    set_ventilation = false
+    set_infiltration = false
+
+    data = standard.model_get_standards_data(model)
+    assert_equal(0.399, data['occupancy_fraction_sensible'])
+
+    model.getSpaceTypes.each do |space_type|
+      standard.space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+      assert_equal(1, space_type.people.size)
+      p = space_type.people.first
+      pd = p.peopleDefinition
+      refute_empty(pd.sensibleHeatFraction)
+      assert_equal(data['occupancy_fraction_sensible'],  pd.sensibleHeatFraction.get)
     end
   end
 
