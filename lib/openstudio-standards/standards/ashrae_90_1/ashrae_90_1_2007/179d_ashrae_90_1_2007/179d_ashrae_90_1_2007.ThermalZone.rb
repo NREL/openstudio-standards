@@ -86,7 +86,7 @@ class ACM179dASHRAE9012007
       prototype_fan_apply_prototype_fan_efficiency(zone_exhaust_fan)
 
       # NOTE: 179D - Balance it up with infiltration
-      if ['Restroom', 'Kitchen'].include?(space_type.standardsSpaceType.get)
+      if ['Restroom', 'Kitchen', 'Cafeteria'].include?(space_type.standardsSpaceType.get)
         space = thermal_zone.spaces.first
         OpenStudio.logFree(OpenStudio::Warn, '179d.Standards.ThermalZone', "adding make up #{space_type.standardsSpaceType.get} infiltration object: thermal zone = '#{thermal_zone.nameString}' | space= '#{space.nameString}'")
         makeup_infiltration_for_exhaust_fan = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(thermal_zone.model)
