@@ -766,6 +766,9 @@ class ACM179dASHRAE9012007
       # Apply the HVAC efficiency standard -- !179D notes: autofan_turn_off apply to this one (both airLoop and ZoneHVAC)
       model_apply_hvac_efficiency_standard(model, climate_zone)
 
+      # NOTE: 179D Set the ACM schedule
+      model_apply_acm_hvac_availability_schedule(model)
+
       # Set baseline DCV system
       model_set_baseline_demand_control_ventilation(model, climate_zone)
 
