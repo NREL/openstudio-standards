@@ -139,4 +139,148 @@ class ACM179dASHRAE9012007
     return exhaust_fans
   end
 
+  # Determines cooling status.
+  # If the zone has a thermostat with a minimum cooling setpoint below 33C (91F), counts as cooled.
+  # Plenums are also assumed to be cooled.
+  #
+  # @author Andrew Parker, Julien Marrec
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
+  # @return [Bool] returns true if cooled, false if not
+  def thermal_zone_cooled?(thermal_zone)
+    temp_f = 91
+    temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
+
+    cld = false
+
+    # Consider plenum zones cooled
+    area_plenum = 0
+    area_non_plenum = 0
+    thermal_zone.spaces.each do |space|
+      if space_plenum?(space)
+        area_plenum += space.floorArea
+      else
+        area_non_plenum += space.floorArea
+      end
+    end
+
+    # Majority
+    if area_plenum > area_non_plenum
+      cld = true
+      return cld
+    end
+
+    # Check if the zone has radiant cooling,
+    # and if it does, get cooling setpoint schedule
+    # directly from the radiant system to check.
+    thermal_zone.equipment.each do |equip|
+      clg_sch = nil
+      if equip.to_ZoneHVACLowTempRadiantConstFlow.is_initialized
+        equip = equip.to_ZoneHVACLowTempRadiantConstFlow.get
+        clg_coil = equip.coolingCoil
+        if clg_coil.to_CoilCoolingLowTempRadiantConstFlow.is_initialized
+          clg_coil = clg_coil.to_CoilCoolingLowTempRadiantConstFlow.get
+          if clg_coil.coolingLowControlTemperatureSchedule.is_initialized
+            clg_sch = clg_coil.coolingLowControlTemperatureSchedule.get
+          end
+        end
+      elsif equip.to_ZoneHVACLowTempRadiantVarFlow.is_initialized
+        equip = equip.to_ZoneHVACLowTempRadiantVarFlow.get
+        clg_coil = equip.coolingCoil
+        if equip.model.version > OpenStudio::VersionString.new('3.1.0')
+          if clg_coil.is_initialized
+            clg_coil = clg_coil.get
+          else
+            clg_coil = nil
+          end
+        end
+        if !clg_coil.nil? && clg_coil.to_CoilCoolingLowTempRadiantVarFlow.is_initialized
+          clg_coil = clg_coil.to_CoilCoolingLowTempRadiantVarFlow.get
+          if clg_coil.coolingControlTemperatureSchedule.is_initialized
+            clg_sch = clg_coil.coolingControlTemperatureSchedule.get
+          end
+        end
+      end
+      # Move on if no cooling schedule was found
+      next if clg_sch.nil?
+
+      # Get the setpoint from the schedule
+      if clg_sch.to_ScheduleRuleset.is_initialized
+        clg_sch = clg_sch.to_ScheduleRuleset.get
+        min_c = schedule_ruleset_annual_min_max_value(clg_sch)['min']
+        if min_c < temp_c
+          cld = true
+        end
+      elsif clg_sch.to_ScheduleConstant.is_initialized
+        clg_sch = clg_sch.to_ScheduleConstant.get
+        min_c = schedule_constant_annual_min_max_value(clg_sch)['min']
+        if min_c < temp_c
+          cld = true
+        end
+      elsif clg_sch.to_ScheduleCompact.is_initialized
+        clg_sch = clg_sch.to_ScheduleCompact.get
+        min_c = schedule_compact_annual_min_max_value(clg_sch)['min']
+        if min_c < temp_c
+          cld = true
+        end
+      else
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
+        cld = true
+      end
+    end
+
+    # Unheated if no thermostat present
+    if thermal_zone.thermostat.empty?
+      return cld
+    end
+
+    # Check the cooling setpoint
+    tstat = thermal_zone.thermostat.get
+    if tstat.to_ThermostatSetpointDualSetpoint
+      tstat = tstat.to_ThermostatSetpointDualSetpoint.get
+      clg_sch = tstat.getCoolingSchedule
+      if clg_sch.is_initialized
+        clg_sch = clg_sch.get
+        if clg_sch.to_ScheduleRuleset.is_initialized
+          clg_sch = clg_sch.to_ScheduleRuleset.get
+          min_c = schedule_ruleset_annual_min_max_value(clg_sch)['min']
+          if min_c < temp_c
+            cld = true
+          end
+        elsif clg_sch.to_ScheduleConstant.is_initialized
+          clg_sch = clg_sch.to_ScheduleConstant.get
+          min_c = schedule_constant_annual_min_max_value(clg_sch)['min']
+          if min_c < temp_c
+            cld = true
+          end
+        elsif clg_sch.to_ScheduleCompact.is_initialized
+          clg_sch = clg_sch.to_ScheduleCompact.get
+          min_c = schedule_compact_annual_min_max_value(clg_sch)['min']
+          if min_c < temp_c
+            cld = true
+          end
+        else
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
+          cld = true
+        end
+      end
+    elsif tstat.to_ZoneControlThermostatStagedDualSetpoint
+      tstat = tstat.to_ZoneControlThermostatStagedDualSetpoint.get
+      clg_sch = tstat.coolingTemperatureSetpointSchedule
+      if clg_sch.is_initialized
+        clg_sch = clg_sch.get
+        if clg_sch.to_ScheduleRuleset.is_initialized
+          clg_sch = clg_sch.to_ScheduleRuleset.get
+          min_c = schedule_ruleset_annual_min_max_value(clg_sch)['min']
+          if min_c < temp_c
+            cld = true
+          end
+        end
+      end
+    elsif tstat.to_ThermostatSetpointSingleHeating
+      cld = false
+    end
+
+    return cld
+  end
+
 end
