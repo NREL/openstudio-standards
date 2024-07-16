@@ -147,7 +147,7 @@ class ACM179dASHRAE9012007
   # @param thermal_zone [OpenStudio::Model::ThermalZone] thermal zone
   # @return [Bool] returns true if cooled, false if not
   def thermal_zone_cooled?(thermal_zone)
-    temp_f = 91
+    temp_f = 111   # NOTE: 179D - relaxed from 91 to 111 for Warehouse
     temp_c = OpenStudio.convert(temp_f, 'F', 'C').get
 
     cld = false
