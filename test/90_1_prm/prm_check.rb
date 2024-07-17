@@ -1988,4 +1988,77 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
   end
+
+  # Check primary/secondary chilled water loop for the baseline models
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_pri_sec_loop(prototypes_base)
+
+    prototypes_base.each do |prototype, model_baseline|
+
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+
+      has_primary_chilled_water_loop = false
+      has_secondary_chilled_water_loop = false
+
+      # Check primary and secondary chilled water loops
+      model_baseline.getPlantLoops.each do |plant_loop|
+
+        sizing_plant = plant_loop.sizingPlant
+
+        next if sizing_plant.loopType != 'Cooling'
+
+        # Check primary loop for components
+        if plant_loop.name.to_s.include? 'Chilled Water Loop_Primary'
+
+          has_primary_chilled_water_loop = true
+
+          n_chillers = 0
+
+          # Count chillers
+          plant_loop.supplyComponents.each do |sc|
+            if sc.to_ChillerElectricEIR.is_initialized
+              n_chillers += 1
+            end
+          end
+
+          assert(n_chillers == 2, "The number of chillers in the primary loop is incorrect. The test results in #{n_chillers} when it should be 2.")
+
+          has_heat_exchanger = false
+
+          # Check for heat exchanger on demand side
+          plant_loop.demandComponents.each do |dc|
+            if dc.to_HeatExchangerFluidToFluid.is_initialized
+              has_heat_exchanger = true
+            end
+          end
+
+          assert(has_heat_exchanger, "The primary chilled water loop should have a HeatExchangerFluidToFluid on the demand side but it does not.")
+
+        # Check secondary loop for components
+        elsif plant_loop.name.to_s.include? 'Chilled Water Loop'
+
+          has_secondary_chilled_water_loop = true
+          has_heat_exchanger = false
+
+          # Check for heat exchanger on supply side
+          plant_loop.supplyComponents.each do |sc|
+            if sc.to_HeatExchangerFluidToFluid.is_initialized
+              has_heat_exchanger = true
+            end
+          end
+
+          assert(has_heat_exchanger, "The secondary chilled water loop should have a HeatExchangerFluidToFluid on the supply side but it does not.")
+
+        end
+
+      end
+
+      assert(has_primary_chilled_water_loop, "The primary/secondary test did not find a primary chilled water loop for #{building_type}, #{template}, #{climate_zone}.")
+      assert(has_secondary_chilled_water_loop, "The primary/secondary test did not find a secondary chilled water loop for #{building_type}, #{template}, #{climate_zone}.")
+
+    end
+
+  end
+
 end

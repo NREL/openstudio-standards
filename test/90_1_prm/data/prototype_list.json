@@ -186,6 +186,11 @@
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-4A", "userdata_default_test", [["remove_transformer", []]]],
         ["PrimarySchool", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]]
     ],
+
+    "pri_sec_loop": [
+        ["LargeOffice", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_default_test", [["remove_transformer", []]]]
+    ],
+
     "proposed_model_residential_lpd": [
         ["LargeHotel", "90.1-2013", "ASHRAE 169-2013-2A", "userdata_res_ltg", [["remove_transformer", []], ["reduce_lpd" , []]]]
     ],
