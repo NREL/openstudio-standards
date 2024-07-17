@@ -269,25 +269,8 @@ class ASHRAE901PRM < Standard
     chw_sensor.setKeyName(plant_name)
     chw_sensor.setName("#{plant_name.gsub(/[-\s]+/, '_')}_CHW_DEMAND")
 
-    sorted_chiller_list = Array.new(num_of_chillers)
-
-    if num_of_chillers >= 3
-      chiller_list.each_with_index do |chiller, i|
-        sorted_chiller_list[0] = chiller if chiller.name.to_s.include? 'first_stage'
-        sorted_chiller_list[1] = chiller if chiller.name.to_s.include? 'second_stage_1'
-        sorted_chiller_list[2] = chiller if chiller.name.to_s.include? 'second_stage_2'
-      end
-    else
-      # 2 chiller setups are simply sorted such that the small chiller is staged first
-      if chiller_list[0].referenceCapacity.get > chiller_list[1].referenceCapacity.get
-        sorted_chiller_list[0] = chiller_list[1]
-        sorted_chiller_list[1] = chiller_list[0]
-      else
-        sorted_chiller_list[0] = chiller_list[0]
-        sorted_chiller_list[1] = chiller_list[1]
-      end
-
-    end
+    # Sort chillers by their reference capacity
+    sorted_chiller_list = chiller_list.sort_by { |chiller| chiller.referenceCapacity.get.to_f}
 
     # Make pump specific parameters for EMS. Use counter
     sorted_chiller_list.each_with_index do |chiller, i|

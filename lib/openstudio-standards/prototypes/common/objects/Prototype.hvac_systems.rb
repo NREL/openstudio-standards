@@ -393,23 +393,17 @@ class Standard
         default_cop = kw_per_ton_to_cop(0.66)
       end
 
-      # Create list of consolidated chiller names. This will reduce the number of chillers to no greater than 3 chillers
-      chiller_name_list = ["#{chiller_condenser_type}_first_stage"]
+      # Check number of chillers
       if num_chillers > 3
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "EMS Code for multiple chiller pump has not been written for greater than 3 chillers. This has #{num_of_chillers} chillers")
-      elsif num_chillers == 3
-        chiller_name_list << "#{chiller_condenser_type}_second_stage_1"
-        chiller_name_list << "#{chiller_condenser_type}_second_stage_2"
-      elsif num_chillers == 2
-        chiller_name_list << "#{chiller_condenser_type}_second_stage"
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "EMS Code for multiple chiller pump has not been written for greater than 3 chillers. This has #{num_chillers} chillers")
       end
 
       # make the correct type of chiller based these properties
-      chiller_sizing_factor = (1.0 / chiller_name_list.length).round(2)
+      chiller_sizing_factor = (1.0 / num_chillers).round(2)
 
       # Create chillers and set plant operation scheme
-      chiller_name_list.each do |chiller_name|
-        chiller_name = "#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_name}"
+      num_chillers.times do |i|
+        chiller_name = "#{template} #{chiller_cooling_type} #{chiller_condenser_type}"
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
         chiller.setName(chiller_name)
         chilled_water_loop.addSupplyBranchForComponent(chiller)
