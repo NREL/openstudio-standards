@@ -194,8 +194,8 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     assert_equal('ACM_Warehouse_ACTIVITY_SCH', data['occupancy_activity_schedule'])
     assert_nil(data['is_residential'])
 
-    assert_in_delta(0.038, data['infiltration_per_exterior_area'])
-    assert_nil(data['infiltration_per_exterior_wall_area'])
+    assert_nil(data['infiltration_per_exterior_area'])
+    assert_in_delta(0.038, data['infiltration_per_exterior_wall_area'])
     assert_nil(data['infiltration_air_changes'])
     assert_equal('Nonres_Infil_Sch', data['infiltration_schedule'])
     assert_nil(data['infiltration_schedule_perimeter'])
@@ -204,12 +204,12 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     assert_nil(data['service_water_heating_peak_flow_rate'])
     assert_nil(data['service_water_heating_area'])
     assert_in_delta(0.0007, data['service_water_heating_peak_flow_per_area'])
-    assert_nil(data['service_water_heating_system_type'])
+    assert_equal("Shared", data['service_water_heating_system_type'])
     assert_nil(data['booster_water_heater_fraction'])
     assert_in_delta(140.0, data['service_water_heating_target_temperature'])
     assert_nil(data['booster_water_heating_target_temperature'])
-    assert_nil(data['service_water_heating_fraction_sensible'])
-    assert_nil(data['service_water_heating_fraction_latent'])
+    assert_equal(0.2, data['service_water_heating_fraction_sensible'])
+    assert_equal(0.05, data['service_water_heating_fraction_latent'])
     assert_equal('Nonres_SWH_Sch', data['service_water_heating_schedule'])
 
     # Enhanced from 2007, based on actual Space Type
@@ -436,4 +436,34 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     end
   end
 
+  def test_179d_extending_materials_and_constructions
+    std_2007 = Standard.build('90.1-2007')
+
+    assert_equal(standard.standards_data['materials'].size,
+                 std_2007.standards_data['materials'].size + 3)
+
+    assert_equal(standard.standards_data['constructions'].size,
+                 std_2007.standards_data['constructions'].size + 3)
+  end
+
+  def test_all_windows_have_a_construction_and_material
+
+    intended_surface_types = ["ExteriorWindow"] #, "GlassDoor", "Skylight"]
+    standard.standards_data['construction_properties'].each do |construction_props|
+
+      next if intended_surface_types.none?{|t| construction_props['intended_surface_type'] == t}
+
+      construction_name = construction_props['construction']
+
+      construction = standard.standards_data['constructions'].find { |x| x['name'] == construction_name }
+      refute_nil(construction, "Construction '#{construction_name}' not found: #{construction_props}")
+
+      # assert_equal(1, construction['materials'].size, "Construction '#{construction_name}' has more than one layer: #{construction_props}")
+
+      construction['materials'].each do |material_name|
+        material = standard.standards_data['materials'].find { |x| x['name'] == material_name }
+        refute_nil(material, "Material '#{material_name}' not found")
+      end
+    end
+  end
 end
