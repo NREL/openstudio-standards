@@ -3,8 +3,8 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
     # Get default fuel based on epw location province.
     if swh_fueltype == 'DefaultFuel'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+      swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
     end
 
     # Calculate the tank size and service water pump information

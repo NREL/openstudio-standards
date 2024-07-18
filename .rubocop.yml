@@ -8,10 +8,10 @@ AllCops:
   Exclude:
     - 'data/**/*'
     - 'test/**/*'
-    - 'lib/openstudio-standards/hvac_sizing/**/*'
     - 'lib/openstudio-standards/btap/**/*'
     - 'lib/openstudio-standards/standards/necb/**/*'
     - 'lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb'
+  NewCops: enable
 
 inherit_from:
   - http://s3.amazonaws.com/openstudio-resources/styles/rubocop.yml
@@ -25,4 +25,7 @@ Metrics/BlockLength:
   Max: 100
 
 Naming/FileName:
-  Enabled: false    
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

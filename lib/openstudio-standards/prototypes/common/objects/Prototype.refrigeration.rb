@@ -67,6 +67,9 @@ class Standard
         anti_sweat_heater_control = props['anti_sweat_heater_control']
       end
     end
+    if props['under_case_hvac_return_air_fraction']
+      under_case_hvac_return_air_fraction = props['under_case_hvac_return_air_fraction']
+    end
     if props['fractionofantisweatheaterenergytocase']
       fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
     end
@@ -119,7 +122,7 @@ class Standard
     end
     ref_case.setHumidityatZeroAntiSweatHeaterEnergy(0)
     if props['under_case_hvac_return_air_fraction']
-      ref_case.setUnderCaseHVACReturnAirFraction(props['under_case_hvac_return_air_fraction'])
+      ref_case.setUnderCaseHVACReturnAirFraction(under_case_hvac_return_air_fraction)
     else
       ref_case.setUnderCaseHVACReturnAirFraction(0)
     end
@@ -246,13 +249,13 @@ class Standard
 
     # Calculated properties
     if rated_cooling_capacity.nil?
-      rated_cooling_capacity = cooling_capacity_c2 * (floor_surface_area ^ 2) + cooling_capacity_c1 * floor_surface_area + cooling_capacity_c0
+      rated_cooling_capacity = (cooling_capacity_c2 * (floor_surface_area ^ 2)) + (cooling_capacity_c1 * floor_surface_area) + cooling_capacity_c0
     end
     if defrost_power.nil?
       defrost_power = defrost_power_mult * rated_cooling_capacity
     end
     if total_insulated_surface_area.nil?
-      total_insulated_surface_area = 1.7226 * floor_surface_area + 28.653
+      total_insulated_surface_area = (1.7226 * floor_surface_area) + 28.653
     end
     if fan_power.nil?
       fan_power = fan_power_mult * rated_cooling_capacity
@@ -391,7 +394,7 @@ class Standard
     display_case_zone = nil
     display_case_zone_area_m2 = 0
     model.getThermalZones.each do |zone|
-      space_type = thermal_zone_majority_space_type(zone)
+      space_type = OpenstudioStandards::ThermalZone.thermal_zone_get_space_type(zone)
       next if space_type.empty?
 
       space_type = space_type.get
@@ -458,7 +461,7 @@ class Standard
     walkin_zone = nil
     walkin_zone_area_m2 = 0
     model.getThermalZones.each do |zone|
-      space_type = thermal_zone_majority_space_type(zone)
+      space_type = OpenstudioStandards::ThermalZone.thermal_zone_get_space_type(zone)
       next if space_type.empty?
 
       space_type = space_type.get
@@ -611,7 +614,7 @@ class Standard
 
         # Stagger the defrosts for cases by 1 hr
         interval_defrost = (24 / numb_defrosts_per_day).floor # Hour interval between each defrost period
-        if (def_start_hr_iterator + interval_defrost * numb_defrosts_per_day) > 23
+        if (def_start_hr_iterator + (interval_defrost * numb_defrosts_per_day)) > 23
           first_def_start_hr = 0 # Start over again at midnight when time reaches 23hrs
         else
           first_def_start_hr = def_start_hr_iterator
@@ -697,7 +700,7 @@ class Standard
 
         # Stagger the defrosts for cases by 1 hr
         interval_defrost = (24 / numb_defrosts_per_day).floor # Hour interval between each defrost period
-        if (def_start_hr_iterator + interval_defrost * numb_defrosts_per_day) > 23
+        if (def_start_hr_iterator + (interval_defrost * numb_defrosts_per_day)) > 23
           first_def_start_hr = 0 # Start over again at midnight when time reaches 23hrs
         else
           first_def_start_hr = def_start_hr_iterator
@@ -960,9 +963,9 @@ class Standard
     # Note the factor 1.2 has been included to over-estimate the condenser size.  The total capacity of the display cases can be calculated
     # from their rated cooling capacity times the length of the cases.  The capacity of each of the walk-ins is specified directly.
     condensor_cap = if compressor_type == 'Low Temp'
-                      1.2 * cooling_cap * (1 + 1 / 1.3)
+                      1.2 * cooling_cap * (1 + (1 / 1.3))
                     else
-                      1.2 * cooling_cap * (1 + 1 / 2.0)
+                      1.2 * cooling_cap * (1 + (1 / 2.0))
                     end
     condenser_coefficient_2 = condensor_cap / 5.6
     condenser_curve = OpenStudio::Model::CurveLinear.new(model)
@@ -973,7 +976,7 @@ class Standard
 
     # Condenser fan power
     # The condenser fan power can be estimated from the heat rejection capacity of the condenser as follows:
-    condenser_fan_pwr = 0.0441 * condensor_cap + 695
+    condenser_fan_pwr = (0.0441 * condensor_cap) + 695
 
     # Condenser
     condenser = OpenStudio::Model::RefrigerationCondenserAirCooled.new(model)

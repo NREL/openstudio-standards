@@ -198,7 +198,7 @@ class NECB2011
     outdoor_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Wall')
     outdoor_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'RoofCeiling')
     outdoor_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Floor')
-    outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
+    outdoor_subsurfaces = outdoor_surfaces.flat_map(&:subSurfaces)
 
     ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     ground_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Wall')
@@ -255,7 +255,10 @@ class NECB2011
     qaqc[:geography] = {}
     qaqc[:geography][:hdd_necb] = get_necb_hdd18(model: model, necb_hdd: true)
     qaqc[:geography][:hdd] = get_necb_hdd18(model: model, necb_hdd: false)
-    qaqc[:geography][:cdd] = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).cdd18
+    weather_file_path = model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    qaqc[:geography][:cdd] = stat_file.cdd18
     qaqc[:geography][:climate_zone] = NECB2011.new.get_climate_zone_name(qaqc[:geography][:hdd])
     qaqc[:geography][:city] = model.getWeatherFile.city
     qaqc[:geography][:state_province_region] = model.getWeatherFile.stateProvinceRegion
@@ -479,16 +482,16 @@ class NECB2011
                                               qaqc[:envelope][:overhead_doors_area_m2]
 
     # Average Conductances by surface Type
-    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
-    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
-    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
-    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_walls).round(4) if !ground_walls.empty?
-    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_roofs).round(4) if !ground_roofs.empty?
-    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_floors).round(4) if !ground_floors.empty?
-    qaqc[:envelope][:windows_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(windows).round(4) if !windows.empty?
-    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(skylights).round(4) if !skylights.empty?
-    qaqc[:envelope][:doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(doors).round(4) if !doors.empty?
-    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(overhead_doors).round(4) if !overhead_doors.empty?
+    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
+    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
+    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
+    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls).round(4) if !ground_walls.empty?
+    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs).round(4) if !ground_roofs.empty?
+    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors).round(4) if !ground_floors.empty?
+    qaqc[:envelope][:windows_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(windows).round(4) if !windows.empty?
+    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(skylights).round(4) if !skylights.empty?
+    qaqc[:envelope][:doors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(doors).round(4) if !doors.empty?
+    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors).round(4) if !overhead_doors.empty?
 
     # #Average Conductances for building whole weight factors
     !outdoor_walls.empty? ? o_wall_cond_weight = qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] * qaqc[:envelope][:outdoor_walls_area_m2] : o_wall_cond_weight = 0
@@ -538,16 +541,16 @@ class NECB2011
     constructions = []
     outdoor_subsurfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
       qaqc[:envelope][:constructions][:exterior_fenestration] << construction_info
       construction_info[:name] = construction.name.get
       construction_info[:net_area_m2] = construction.getNetArea.round(2)
-      construction_info[:thermal_conductance_m2_w_per_k] = BTAP::Resources::Envelope::Constructions.get_conductance(construction).round(3)
-      construction_info[:solar_transmittance] = BTAP::Resources::Envelope::Constructions.get_shgc(model, construction).round(3)
-      construction_info[:visible_tranmittance] = BTAP::Resources::Envelope::Constructions.get_tvis(model, construction).round(3)
+      construction_info[:thermal_conductance_m2_w_per_k] = OpenstudioStandards::Constructions.construction_get_conductance(construction).round(3)
+      construction_info[:solar_transmittance] = OpenstudioStandards::Constructions.construction_get_solar_transmittance(construction).round(3)
+      construction_info[:visible_tranmittance] = OpenstudioStandards::Constructions.construction_get_visible_transmittance(construction).round(3)
     end
 
     # Exterior
@@ -555,7 +558,7 @@ class NECB2011
     constructions = []
     outdoor_surfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
@@ -572,7 +575,7 @@ class NECB2011
     constructions = []
     ground_surfaces.each { |surface| constructions << surface.construction.get }
     ext_const_base = Hash.new(0)
-    constructions.each { |name| ext_const_base[name] += 1 }
+    constructions.each { |name| ext_const_base[name.to_Construction.get] += 1 }
     # iterate thought each construction and get store data
     ext_const_base.sort.each do |construction, count|
       construction_info = {}
@@ -1586,7 +1589,10 @@ class NECB2011
         # data.each do |key,value|
         # puts key
         outdoor_air_L_per_s = air_loop_info[:outdoor_air_L_per_s]
-        db990 = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).db990
+        weather_file_path = model.weatherFile.get.path.get.to_s
+        stat_file_path = weather_file_path.gsub('.epw', '.stat')
+        stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+        db990 = stat_file.heating_design_info[2]
         necb_section_test(
           qaqc,
           result_value,
@@ -1601,7 +1607,11 @@ class NECB2011
     # necb_section_name = "NECB2011-5.2.10.1"
     # qaqc[:air_loops].each do |air_loop_info|
     #   unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
-    #     hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
+    #     weather_file_path = model.weatherFile.get.path.get.to_s
+    #     stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    #     stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    #     db990 = stat_file.heating_design_info[2]
+    #     hrv_calc = 0.00123 * air_loop_info[:outdoor_air_L_per_s] * (21 - db990) #=AP46*(21-O$1)
     #     hrv_reqd = hrv_calc > 150 ? true : false
     #     #qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
     #     hrv_present = false
@@ -1733,7 +1743,10 @@ class NECB2011
       # data.each do |key,value|
       # puts key
       outdoor_air_L_per_s = air_loop_info[:outdoor_air_L_per_s]
-      db990 = BTAP::Environment::WeatherFile.new(model.getWeatherFile.path.get.to_s).db990
+      weather_file_path = model.weatherFile.get.path.get.to_s
+      stat_file_path = weather_file_path.gsub('.epw', '.stat')
+      stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+      db990 = stat_file.heating_design_info[2]
       necb_section_test(
         qaqc,
         result_value,
@@ -1747,7 +1760,11 @@ class NECB2011
     # necb_section_name = "NECB2011-5.2.10.1"
     # qaqc[:air_loops].each do |air_loop_info|
     #   unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
-    #     hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
+    #     weather_file_path = model.weatherFile.get.path.get.to_s
+    #     stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    #     stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    #     db990 = stat_file.heating_design_info[2]
+    #     hrv_calc = 0.00123 * air_loop_info[:outdoor_air_L_per_s] * (21 - db990) #=AP46*(21-O$1)
     #     hrv_reqd = hrv_calc > 150 ? true : false
     #     #qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
     #     hrv_present = false
@@ -1906,7 +1923,7 @@ class NECB2011
     matches = nil
     # save a copy of the headers
     headers = nil
-    CSV.open(csv_fname, 'r', options) do |csv|
+    CSV.open(csv_fname, 'r', **options) do |csv|
       # Since CSV includes Enumerable we can use 'find_all'
       # which will return all the elements of the Enumerble for
       # which the block returns true

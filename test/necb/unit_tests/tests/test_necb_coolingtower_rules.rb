@@ -43,7 +43,8 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
 
         # Load model and set climate file.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -75,7 +76,7 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
         else
           this_is_the_second_cap_range = true
         end
-        
+
         # Compare tower number of cells to expected value.
         tower = model.getCoolingTowerSingleSpeeds[0]
         num_of_cells_is_correct = false
@@ -86,20 +87,20 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
         end
         if tower.numberofCells == necb2011_num_cells then num_of_cells_is_correct = true end
         assert(num_of_cells_is_correct, "Tower number of cells is not correct based on #{template}")
-        
+
         # Compare the fan power to expected value.
         fan_power = clgtowerFanPowerFr * tower_cap
         tower_fan_power_is_correct = false
         rel_diff = (fan_power - tower.fanPoweratDesignAirFlowRate.to_f).abs/fan_power
         if rel_diff < tol then tower_fan_power_is_correct = true end
         assert(tower_fan_power_is_correct, "Tower fan power is not correct based on #{template}")
-        
+
         # Compare design inlet wetbulb to expected value.
         tower_Twb_is_correct = false
         rel_diff = (tower.designInletAirWetBulbTemperature.to_f - designInletTwb).abs/designInletTwb
         if rel_diff < tol then tower_Twb_is_correct = true end
         assert(tower_Twb_is_correct, "Tower inlet wet-bulb is not correct based on #{template}")
-        
+
         # Compare design approach temperature to expected value.
         tower_appT_is_correct = false
         rel_diff = (tower.designApproachTemperature.to_f - designApproachTemperature).abs/designApproachTemperature
@@ -135,7 +136,8 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
 
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -158,7 +160,7 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
         if ichiller.name.to_s.include? 'Primary' then refCOP = ichiller.referenceCOP end
       end
       tower_cap = chiller_cap * (1.0 + 1.0/refCOP)
-      
+
       # Compare the fan power to expected value.
       tol = 1.0e-3
       fan_power = clgtowerFanPowerFr * tower_cap

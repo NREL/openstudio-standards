@@ -42,6 +42,15 @@ class TestMisc < Minitest::Test
     end
   end
 
+  def test_add_table_lookup_curve
+    model = OpenStudio::Model::Model.new
+    std = Standard.build('ECMS')
+    curve1 = std.model_add_curve(model, 'Mitsubishi Hyper Heating VRF Outdoor Unit HPLFFPLR curve')
+    curve2 = std.model_add_curve(model, 'Mitsubishi Hyper Heating VRF Outdoor Unit CCAPFPL curve')
+    assert(curve1.to_Curve.is_initialized, 'table lookup curve was not added to the model')
+    assert(curve2.to_Curve.is_initialized, 'table lookup curve was not added to the model')
+  end
+
   def test_add_material
     model = OpenStudio::Model::Model.new
     std = Standard.build("90.1-2019")

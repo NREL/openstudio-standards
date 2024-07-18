@@ -10,7 +10,7 @@ class TestQAQC < Minitest::Test
     climate_zone = 'ASHRAE 169-2013-4A'
     std = Standard.build(template)
     model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAEPrimarySchool.osm")
-    std.model_add_design_days_and_weather_file(model, climate_zone)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # request additional output variables for QAQC
     vars = []

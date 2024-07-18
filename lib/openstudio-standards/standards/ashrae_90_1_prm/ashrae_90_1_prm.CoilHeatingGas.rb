@@ -10,16 +10,12 @@ class ASHRAE901PRM < Standard
     # Define the criteria to find the furnace properties
     # in the hvac standards data set.
     search_criteria = {}
-    search_criteria['fuel_type'] = 'Gas'
-    if sys_type == 'PSZ_AC'
-      search_criteria['subcategory'] = 'Furnace'
-    elsif sys_type == 'Gas_Furnace'
-      search_criteria['subcategory'] = 'Unit Heater'
+    search_criteria['fuel_type'] = 'NaturalGas'
+    if sys_type == 'Gas_Furnace'
+      search_criteria['equipment_type'] = 'Warm Air Unit Heaters'
     else
-      search_criteria['subcategory'] = 'Furnace'
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingGas', "#{coil_heating_gas.name} is not for a PSZ-AC or Gas Furnace and cannot apply efficiency standard.")
+      search_criteria['equipment_type'] = 'Warm Air Furnace'
     end
-
     return search_criteria
   end
 

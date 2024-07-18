@@ -6,6 +6,7 @@ require 'csv'
 # @abstract
 class ASHRAE901PRM < Standard
   def initialize
+    super()
     load_standards_database
     @sizing_run_dir = Dir.pwd
   end
@@ -27,9 +28,14 @@ class ASHRAE901PRM < Standard
                       UserDataCSVSpaceTypes.new(user_model, user_data_path),
                       UserDataCSVAirLoopHVACDOAS.new(user_model, user_data_path),
                       UserDataCSVExteriorLights.new(user_model, user_data_path),
+                      UserDataCSVLights.new(user_model, user_data_path),
                       UserDataCSVThermalZone.new(user_model, user_data_path),
                       UserDataCSVElectricEquipment.new(user_model, user_data_path),
-                      UserDataCSVOutdoorAir.new(user_model, user_data_path)]
+                      UserDataCSVGasEquipment.new(user_model, user_data_path),
+                      UserDataCSVOutdoorAir.new(user_model, user_data_path),
+                      UserDataWaterUseConnection.new(user_model, user_data_path),
+                      UserDataWaterUseEquipment.new(user_model, user_data_path),
+                      UserDataWaterUseEquipmentDefinition.new(user_model, user_data_path)]
 
     if user_data_file.nil?
       user_data_list.each(&:write_csv)
@@ -66,7 +72,7 @@ class ASHRAE901PRM < Standard
     # Read all valid files in user_data_folder and load into json array
     unless user_data_path == ''
       user_data_validation_outcome = true
-      Dir.glob("#{user_data_path}/*.csv").each do |csv_full_name|
+      Dir.glob("#{user_data_path.gsub('\\', '/')}/*.csv").each do |csv_full_name|
         csv_file_name = File.basename(csv_full_name, File.extname(csv_full_name))
         if json_objs.key?(csv_file_name)
           # Load csv file into array of hashes
@@ -90,12 +96,8 @@ class ASHRAE901PRM < Standard
 
     # Make folder for json files; remove pre-existing first, if needed
     json_path = "#{project_path}/user_data_json"
-    if !Dir.exist?(json_path)
-      Dir.mkdir(json_path)
-    else
-      FileUtils.rm_rf(json_path)
-      Dir.mkdir(json_path)
-    end
+    FileUtils.rm_rf(json_path)
+    FileUtils.mkdir_p(json_path)
 
     # Write all json files
     json_objs.each do |file_name, json_rows|
@@ -159,6 +161,10 @@ class ASHRAE901PRM < Standard
       return check_userdata_space_and_spacetype(object_name, user_data)
     when UserDataFiles::ELECTRIC_EQUIPMENT
       return check_userdata_electric_equipment(object_name, user_data)
+    when UserDataFiles::GAS_EQUIPMENT
+      return check_userdata_gas_equipment(object_name, user_data)
+    when UserDataFiles::LIGHTS
+      return check_userdata_lights(object_name, user_data)
     when UserDataFiles::EXTERIOR_LIGHTS
       return check_userdata_exterior_lighting(object_name, user_data)
     when UserDataFiles::AIRLOOP_HVAC
@@ -167,13 +173,54 @@ class ASHRAE901PRM < Standard
       return check_userdata_outdoor_air(object_name, user_data)
     when UserDataFiles::AIRLOOP_HVAC_DOAS
       return check_userdata_airloop_hvac_doas(object_name, user_data)
+    when UserDataFiles::ZONE_HVAC
+      return check_userdata_zone_hvac(object_name, user_data)
     when UserDataFiles::THERMAL_ZONE
       return check_userdata_thermal_zone(object_name, user_data)
+    when UserDataFiles::WATERUSE_CONNECTIONS
+      return check_userdata_wateruse_connections(object_name, user_data)
+    when UserDataFiles::WATERUSE_EQUIPMENT
+      return check_userdata_wateruse_equipment(object_name, user_data)
+    when UserDataFiles::WATERUSE_EQUIPMENT_DEFINITION
+      return check_userdata_wateruse_equipment_definition(object_name, user_data)
     else
       return true
     end
   end
 
+  # Check for incorrect data in [UserDataFiles::LIGHTS]
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_lights(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |user_light|
+      name = prm_read_user_data(user_light, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: lights name is missing or empty. Lights user data has not validated.")
+        return false
+      end
+
+      has_retail_display_exception = prm_read_user_data(user_light, 'has_retail_display_exception')
+      unless has_retail_display_exception.nil? || UserDataBoolean.matched_any?(has_retail_display_exception)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Lights name #{name}, has_retail_display_exception shall be either True or False. Got #{has_retail_display_exception}")
+        userdata_valid = false
+      end
+
+      has_unregulated_exception = prm_read_user_data(user_light, 'has_unregulated_exception')
+      unless has_unregulated_exception.nil? || UserDataBoolean.matched_any?(has_unregulated_exception)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Lights name #{name}, has_unregulated_exception shall be either True or False. Got #{has_unregulated_exception}")
+        userdata_valid = false
+      end
+    end
+    # do we need to regulate the unregulated_category?
+    return userdata_valid
+  end
+
+  # Check for incorrect data in [UserDataFiles::BUILDING]
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+  # @return [Boolean] true if data is valid, false if error found
   def check_userdata_building(object_name, user_data)
     userdata_valid = true
     user_data.each do |user_building|
@@ -210,6 +257,10 @@ class ASHRAE901PRM < Standard
     return userdata_valid
   end
 
+  # Check for incorrect data in [UserDataFiles::THERMAL_ZONE]
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+  # @return [Boolean] true if data is valid, false if error found
   def check_userdata_thermal_zone(object_name, user_data)
     userdata_valid = true
     user_data.each do |user_thermal_zone|
@@ -218,10 +269,51 @@ class ASHRAE901PRM < Standard
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: thermal zone name is missing or empty. Thermal zone user data has not validated.")
         return false
       end
-      has_health_safety_night_cycle_exception = prm_read_user_data(user_thermal_zone, 'has_health_safety_night_cycle_exception', UserDataBoolean::FALSE)
+      has_health_safety_night_cycle_exception = prm_read_user_data(user_thermal_zone, 'has_health_safety_night_cycle_exception')
       unless has_health_safety_night_cycle_exception.nil? || UserDataBoolean.matched_any?(has_health_safety_night_cycle_exception)
         OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Thermal zone name #{name}, has_health_safety_night_cycle_exception shall be either True or False. Got #{has_health_safety_night_cycle_exception}")
         userdata_valid = false
+      end
+    end
+    return userdata_valid
+  end
+
+  # Check for incorrect data in [UserDataFiles::ZONE_HVAC]
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_zone_hvac(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |user_zone_hvac|
+      name = prm_read_user_data(user_zone_hvac, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: zone HVAC name is missing or empty. Zone HVAC user data has not validated.")
+        return false
+      end
+      # Fan power credits, exhaust air energy recovery
+      user_zone_hvac.each_key do |info_key|
+        # Fan power credits
+        if info_key.include?('has_fan_power_credit')
+          has_fan_power_credit = prm_read_user_data(user_zone_hvac, info_key)
+          unless has_fan_power_credit.nil? || UserDataBoolean.matched_any?(has_fan_power_credit)
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, zone HVAC name #{name}, #{info_key} shall be either True or False. Got #{has_fan_power_credit}.")
+            userdata_valid = false
+          end
+        elsif info_key.include?('fan_power_credit')
+          fan_power_credit = prm_read_user_data(user_zone_hvac, info_key)
+          unless fan_power_credit.nil? || Float(fan_power_credit, exception: false)
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, zone HVAC name #{name}, #{info_key} shall be a numeric value. Got #{fan_power_credit}.")
+            userdata_valid = false
+          end
+        end
+        # Exhaust air energy recovery
+        if info_key.include?('exhaust_energy_recovery_exception')
+          exhaust_energy_recovery_exception = prm_read_user_data(user_zone_hvac, info_key)
+          unless exhaust_energy_recovery_exception.nil? || UserDataBoolean.matched_any?(exhaust_energy_recovery_exception)
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, zone HVAC name #{name}, #{info_key} shall be either True or False. Got #{exhaust_energy_recovery_exception}.")
+            userdata_valid = false
+          end
+        end
       end
     end
     return userdata_valid
@@ -240,7 +332,7 @@ class ASHRAE901PRM < Standard
         return false
       end
       # Fan power credits, exhaust air energy recovery
-      user_airloop.keys.each do |info_key|
+      user_airloop.each_key do |info_key|
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_airloop, info_key)
@@ -259,7 +351,7 @@ class ASHRAE901PRM < Standard
         if info_key.include?('exhaust_energy_recovery_exception')
           exhaust_energy_recovery_exception = prm_read_user_data(user_airloop, info_key)
           unless exhaust_energy_recovery_exception.nil? || UserDataBoolean.matched_any?(exhaust_energy_recovery_exception)
-            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be either True or False. Got #{has_fan_power_credit}.")
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, Air Loop name #{name}, #{info_key} shall be either True or False. Got #{exhaust_energy_recovery_exception}.")
             userdata_valid = false
           end
         end
@@ -334,7 +426,7 @@ class ASHRAE901PRM < Standard
       end
 
       # Fan power credits, exhaust air energy recovery
-      user_airloop.keys.each do |info_key|
+      user_airloop.each_key do |info_key|
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_airloop, info_key)
@@ -390,6 +482,35 @@ class ASHRAE901PRM < Standard
     return userdata_valid
   end
 
+  # Check for incorrect data in gas equipment user data
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_gas_equipment(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |gas_row|
+      name = prm_read_user_data(gas_row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: gas equipoment name is missing or empty. Gas equipment user data has not validated.")
+        return false
+      end
+      # check for fractions
+      fraction_of_controlled_receptacles = prm_read_user_data(gas_row, 'fraction_of_controlled_receptacles')
+      unless fraction_of_controlled_receptacles.nil? || Float(fraction_of_controlled_receptacles, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: gas equipment definition #{name}'s fraction of controlled receptacles shall be a float, Got #{fraction_of_controlled_receptacles}.")
+      end
+      receptacle_power_savings = prm_read_user_data(gas_row, 'receptacle_power_savings')
+      unless receptacle_power_savings.nil? || Float(receptacle_power_savings, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: gas equipment definition #{name}'s receptacle power savings shall be a float, Got #{receptacle_power_savings}.")
+      end
+    end
+    return userdata_valid
+  end
+
   # Check for incorrect data in electric equipment user data
 
   # @param object_name [String] name of user data csv file to check
@@ -399,6 +520,22 @@ class ASHRAE901PRM < Standard
   def check_userdata_electric_equipment(object_name, user_data)
     userdata_valid = true
     user_data.each do |electric_row|
+      name = prm_read_user_data(electric_row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: electric equipoment name is missing or empty. Electric equipment user data has not validated.")
+        return false
+      end
+      # check for fractions
+      fraction_of_controlled_receptacles = prm_read_user_data(electric_row, 'fraction_of_controlled_receptacles')
+      unless fraction_of_controlled_receptacles.nil? || Float(fraction_of_controlled_receptacles, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: electric equipment definition #{name}'s fraction of controlled receptacles shall be a float, Got #{fraction_of_controlled_receptacles}.")
+      end
+      receptacle_power_savings = prm_read_user_data(electric_row, 'receptacle_power_savings')
+      unless receptacle_power_savings.nil? || Float(receptacle_power_savings, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: electric equipment definition #{name}'s receptacle power savings shall be a float, Got #{receptacle_power_savings}.")
+      end
       # check for data type
       # unless fan_power_credit.nil? || Float(fan_power_credit, exception: false)
       motor_horsepower = prm_read_user_data(electric_row, 'motor_horsepower')
@@ -487,6 +624,73 @@ class ASHRAE901PRM < Standard
           OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data #{object_name}: The fraction of user defined lighting types in Space/SpaceType: #{row['name']} does not add up to 1.0. The calculated fraction is #{total_ltg_percent}.")
           userdata_valid = false
         end
+      end
+    end
+    return userdata_valid
+  end
+
+  # Check for incorrect data in water use connections
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_wateruse_connections(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |row|
+      name = prm_read_user_data(row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: water use connection name is missing or empty. user data is not validated.")
+        return false
+      end
+    end
+    return userdata_valid
+  end
+
+  # Check for incorrect data in water use equipment
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_wateruse_equipment(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |row|
+      name = prm_read_user_data(row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: water use equipment name is missing or empty. user data is not validated.")
+        return false
+      end
+
+      building_swh_type = prm_read_user_data(row, 'building_type_swh', nil)
+      # gas phase air cleaning is system base - add proposed hvac system name to zones
+      unless building_swh_type.nil? || UserDataSHWBldgType.matched_any?(building_swh_type)
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}, water equipment name #{name}, building_type_swh shall be one of the string listed in https://pnnl.github.io/BEM-for-PRM/user_guide/prm_api_ref/baseline_generation_api/#--default_swh_bldg_type. Got #{building_swh_type}")
+        userdata_valid = false
+      end
+    end
+    return userdata_valid
+  end
+
+  # Check for incorrect data in water use equipment definition
+
+  # @param object_name [String] name of user data csv file to check
+  # @param user_data [Hash] hash of data from user data csv file
+
+  # @return [Boolean] true if data is valid, false if error found
+  def check_userdata_wateruse_equipment_definition(object_name, user_data)
+    userdata_valid = true
+    user_data.each do |row|
+      name = prm_read_user_data(row, 'name')
+      unless name
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: water use equipment name is missing or empty. user data is not validated.")
+        return false
+      end
+      # check for data type
+      peak_flow_rate = prm_read_user_data(row, 'peak_flow_rate', nil)
+      unless peak_flow_rate.nil? || Float(peak_flow_rate, exception: false)
+        userdata_valid = false
+        OpenStudio.logFree(OpenStudio::Error, 'prm.log', "User data: #{object_name}: water use equipment definition #{name}'s peak flow rate shall be a float, Got #{peak_flow_rate}.")
       end
     end
     return userdata_valid

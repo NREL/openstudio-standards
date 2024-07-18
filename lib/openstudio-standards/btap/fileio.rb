@@ -560,18 +560,6 @@ module BTAP
       return model
     end
 
-    #load a sql file, exiting and erroring if a problem is found
-    def safe_load_sql(sql_path_string)
-      sql_path = OpenStudio::Path.new(sql_path_string)
-      if OpenStudio::exists(sql_path)
-        sql = OpenStudio::SqlFile.new(sql_path)
-      else
-        puts "Error: #{sql_path} couldn't be found"
-        exit
-      end
-      return sql
-    end
-
     #function to wrap debug == true puts
     def debug_puts(puts_text)
       if Debug_Mode == true

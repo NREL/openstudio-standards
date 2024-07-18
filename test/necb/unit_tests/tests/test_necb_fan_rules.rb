@@ -43,7 +43,8 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -56,7 +57,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
                                                                                    chiller_type: chiller_type,
                                                                                    fan_type: vavfan_type,
                                                                                    hw_loop: hw_loop)
-      
+
       vavfans = model.getFanVariableVolumes
       vavfans.each do |ifan|
         if ifan.name.to_s.include?('Supply')
@@ -145,7 +146,8 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
     # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -157,7 +159,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
                                                             mau_heating_coil_type: mau_heating_coil_type,
                                                             baseboard_type: baseboard_type,
                                                             hw_loop: hw_loop)
-    
+
     # Run sizing.
     run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 

@@ -32,8 +32,8 @@ class TestServiceWaterHeating < Minitest::Test
     wh.remove
 
     #puts 'weather path:'
-    #puts std.model_get_full_weather_file_path(model)
-    std.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2013-3A')
+    #puts OpenstudioStandards::Weather.model_get_full_weather_file_path(model)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: 'ASHRAE 169-2013-3A')
     annual_run_success = std.model_run_simulation_and_log_errors(model, "output/#{test_name}/AR")
     assert(annual_run_success)
 
@@ -72,8 +72,8 @@ class TestServiceWaterHeating < Minitest::Test
     wh.remove
 
     #puts 'weather path:'
-    #puts std.model_get_full_weather_file_path(model)
-    std.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2013-3A')
+    #puts OpenstudioStandards::Weather.model_get_full_weather_file_path(model)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: 'ASHRAE 169-2013-3A')
     annual_run_success = std.model_run_simulation_and_log_errors(model, "output/#{test_name}/AR")
     assert(annual_run_success)
 
@@ -97,10 +97,12 @@ class TestServiceWaterHeating < Minitest::Test
 
   def test_uef_to_ef()
     std = Standard.build('90.1-2019')
-    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('Electricity', 1, 1, 1) == 1.0194)
-    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('Electricity', 1, 300000, 2) == 1)
-    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('Electricity', 0, 74000, 2) == -0.0025)
-    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('NaturalGas', 0, 76000, 5) == 0.0019)
-    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor('NaturalGas', 0, 74000, 20) == 0.0711)
+    model = OpenStudio::Model::Model.new
+    water_heater = OpenStudio::Model::WaterHeaterMixed.new(model)
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor(water_heater, 'Electricity', 1, 1, 1) == 1.0194)
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor(water_heater, 'Electricity', 1, 300000, 2) == 1)
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor(water_heater, 'Electricity', 0, 74000, 2) == -0.0025)
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor(water_heater, 'NaturalGas', 0, 76000, 5) == 0.0019)
+    assert(std.water_heater_convert_uniform_energy_factor_to_energy_factor(water_heater, 'NaturalGas', 0, 74000, 20) == 0.0711)
   end
 end

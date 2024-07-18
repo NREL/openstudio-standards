@@ -256,9 +256,9 @@ class Standard
     if use_zone_occupancy_for_control
 
       # get annual occupancy schedule for zone
-      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone,
-                                                                 sch_name: "#{zone.name} Radiant System Occupied Schedule",
-                                                                 occupied_percentage_threshold: occupied_percentage_threshold)
+      occ_schedule_ruleset = OpenstudioStandards::ThermalZone.thermal_zone_get_occupancy_schedule(zone,
+                                                                                                  sch_name: "#{zone.name} Radiant System Occupied Schedule",
+                                                                                                  occupied_percentage_threshold: occupied_percentage_threshold)
     else
 
       occ_schedule_ruleset = model.getScheduleRulesetByName('Whole Building Radiant System Occupied Schedule')
@@ -543,12 +543,27 @@ class Standard
         # input lower limits on slab setpoint
         slab_setpoint.map! { |e| e < slab_sp_lower_limit ? slab_sp_lower_limit.round(1) : e }
 
-        # create ruleset for slab setpoint
-        sch_type_limits_obj = OpenstudioStandards::Schedules.create_schedule_type_limits(model, standard_schedule_type_limit: 'Temperature')
-        sch_radiant_slab_setp = make_ruleset_sched_from_8760(model, slab_setpoint,
-                                                             'Sch_Radiant_SlabSetP_Based_On_Rolling_Mean_OAT',
-                                                             sch_type_limits_obj)
+        # convert to timeseries
+        yd = model.getYearDescription
+        start_date = yd.makeDate(1, 1)
+        interval = OpenStudio::Time.new(1.0 / 24.0)
+        time_series = OpenStudio::TimeSeries.new(start_date, interval, OpenStudio.createVector(slab_setpoint), 'C')
 
+        # check for pre-existing schedule in model
+        schedule_interval = model.getScheduleByName('Sch_Radiant_SlabSetP_Based_On_Rolling_Mean_OAT')
+        if schedule_interval.is_initialized && schedule_interval.get.to_ScheduleFixedInterval.is_initialized
+          schedule_interval = schedule_interval.get.to_ScheduleFixedInterval.get
+          schedule_interval.setTimeSeries(time_series)
+        else
+          # create fixed interval schedule for slab setpoint
+          schedule_interval = OpenStudio::Model::ScheduleFixedInterval.new(model)
+          schedule_interval.setName('Sch_Radiant_SlabSetP_Based_On_Rolling_Mean_OAT')
+          schedule_interval.setTimeSeries(time_series)
+          sch_type_limits_obj = OpenstudioStandards::Schedules.create_schedule_type_limits(model, standard_schedule_type_limit: 'Temperature')
+          schedule_interval.setScheduleTypeLimits(sch_type_limits_obj)
+        end
+
+        # assign slab setpoint schedule
         coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_slab_setp)
         coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_slab_setp)
       else

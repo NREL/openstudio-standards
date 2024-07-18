@@ -248,7 +248,8 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
                 name = "sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
                 puts "***************************************#{name}*******************************************************\n"
                 model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-                BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+                weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+                OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
                 if (baseboard_type == "Hot Water") || (mau_heating_coil_type == "Hot Water")
                   hw_loop = OpenStudio::Model::PlantLoop.new(model)
                   standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
@@ -274,7 +275,8 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
               name = "sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-None_Baseboard-#{baseboard_type}"
               puts "***************************************#{name}*******************************************************\n"
               model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-              BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+              weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+              OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
               if (baseboard_type == "Hot Water")
                 hw_loop = OpenStudio::Model::PlantLoop.new(model)
                 standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
@@ -318,7 +320,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
       building_type = 'FullServiceRestaurant' # Does not use this...
       climate_zone = 'NECB HDD Method'
 
-      if !Dir.exists?(sizing_dir)
+      if !Dir.exist?(sizing_dir)
         FileUtils.mkdir_p(sizing_dir)
       end
       # Perform a sizing run
@@ -425,7 +427,8 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
             name = "sys2_Boiler-#{boiler_fueltype}_Chiller#-#{chiller_type}_MuACoolingType-#{mua_cooling_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-            BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+            OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             standard.add_sys2_FPFC_sys5_TPFC(model: model,
@@ -467,7 +470,7 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -567,7 +570,8 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
             name = "sys3_Boiler-#{boiler_fueltype}_HeatingCoilType#-#{heating_coil_type_sys3}_BaseboardType-#{baseboard_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-            BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+            OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
             hw_loop = nil
             if (baseboard_type == "Hot Water")
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -613,7 +617,7 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -714,7 +718,8 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
             name = "sys4_Boiler-#{boiler_fueltype}_HeatingCoilType#-#{heating_coil}_BaseboardType-#{baseboard_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-            BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+            OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
             hw_loop = nil
             if (baseboard_type == "Hot Water")
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -755,7 +760,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -858,7 +863,8 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
             name = "sys5_Boiler-#{boiler_fueltype}_ChillerType-#{chiller_type}_MuaCoolingType-#{mua_cooling_type}"
             puts "***************************************#{name}*******************************************************\n"
             model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-            BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+            OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             standard.add_sys2_FPFC_sys5_TPFC( model: model,
@@ -896,7 +902,7 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -1007,7 +1013,8 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
                 name = "sys6_Bo-#{boiler_fueltype}_Ch-#{chiller_type}_BB-#{baseboard_type}_HC-#{heating_coil_type}_Fan-#{fan_type}"
                 puts "***************************************#{name}*******************************************************\n"
                 model = BTAP::FileIO::load_osm("#{File.dirname(__FILE__)}/models/5ZoneNoHVAC.osm")
-                BTAP::Environment::WeatherFile.new(WEATHER_FILE).set_weather_file(model)
+                weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(WEATHER_FILE)
+                OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
                 hw_loop = nil
                 if (baseboard_type == "Hot Water") || (heating_coil_type == "Hot Water")
                   hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -1051,7 +1058,7 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -1214,7 +1221,7 @@ class $(classname) < Minitest::Test
       if File.exist?("#{model_dir}/final.osm")
 
         model = OpenStudio::Model::Model.new
-        sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
+        sql = OpenstudioStandards::SqlFile.sql_file_safe_load("#{model_dir}/AR/run/eplusout.sql")
         model.setSqlFile(sql)
 
       # If not created, make and run annual simulation
@@ -1224,8 +1231,8 @@ class $(classname) < Minitest::Test
         model = standard.safe_load_model("#{File.dirname(__FILE__)}/models/basic_2_story_office_no_hvac.osm")
 
         # Assign a weather file
-        standard.model_add_design_days_and_weather_file(model, 'ASHRAE 169-2006-7A', '')
-        standard.model_add_ground_temperatures(model, 'MediumOffice', 'ASHRAE 169-2006-7A')
+        OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: 'ASHRAE 169-2013-7A')
+
         # Add the HVAC
         standard.model_add_hvac_system(model, system_type, main_heat_fuel, zone_heat_fuel, cool_fuel, model.getThermalZones)
 
@@ -1243,7 +1250,7 @@ class $(classname) < Minitest::Test
       end
 
       # Check the conditioned floor area
-      errs << "For #{type_desc} there was no conditioned area." if standard.model_net_conditioned_floor_area(model) == 0
+      errs << "For #{type_desc} there was no conditioned area." if model.building.get.conditionedFloorArea.get.zero?
 
       # Check the unmet hours
       unmet_hrs = standard.model_annual_occupied_unmet_hours(model)
@@ -1383,7 +1390,7 @@ class Test$(building_type) < CreateDOEPrototypeBuildingTest
 
 
     run_dir = "#{@test_dir}/#{model_name}"
-    if !Dir.exists?(run_dir)
+    if !Dir.exist?(run_dir)
       Dir.mkdir(run_dir)
     end
     full_sim_dir = "#{run_dir}/AnnualRun"

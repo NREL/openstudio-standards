@@ -27,10 +27,8 @@ class ASHRAE901PRM < Standard
       return false
     end
 
-    if space_type.standardsSpaceType.is_initialized
-      if space_type.standardsSpaceType.get.downcase.include?('plenum')
-        return false
-      end
+    if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+      return false
     end
 
     # Save information about lighting exceptions before removing extra lights objects
@@ -61,7 +59,7 @@ class ASHRAE901PRM < Standard
 
     # Pre-process the light instances in the space type
     # Remove all regulated instances but leave one in the space type
-    if regulated_lights.size.zero?
+    if regulated_lights.empty?
       definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
       definition.setName("#{space_type.name} Lights Definition")
       instance = OpenStudio::Model::Lights.new(definition)
@@ -510,64 +508,23 @@ class ASHRAE901PRM < Standard
 
   def deep_copy_schedule(new_schedule_name, schedule, adjustment_factor, model)
     OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Creating a new lighting schedule that applies occupancy sensor adjustment factor: #{adjustment_factor} based on #{schedule.name.get} schedule")
-    ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
-    ruleset.setName(new_schedule_name)
-
-    # schedule types limits and default day schedule - keep the copy
-    schedule_ruleset = prm_get_optional_handler(schedule, @sizing_run_dir, 'to_ScheduleRuleset')
-    schedule_type_limit = prm_get_optional_handler(schedule, @sizing_run_dir, 'scheduleTypeLimits')
-    default_day_schedule = schedule_ruleset.defaultDaySchedule
-    default_winter_design_day_schedule = schedule_ruleset.winterDesignDaySchedule
-    default_summer_design_day_schedule = schedule_ruleset.summerDesignDaySchedule
-
-    schedule_ruleset.scheduleRules.each do |week_rule|
-      day_rule = week_rule.daySchedule
-      start_date = prm_get_optional_handler(week_rule, @sizing_run_dir, 'startDate')
-      end_date = prm_get_optional_handler(week_rule, @sizing_run_dir, 'endDate')
-
-      # create a new day rule - copy and apply the ajustment factor
-      new_day_rule = OpenStudio::Model::ScheduleDay.new(model)
-      new_day_rule.setName(format("#{day_rule.name.get}_%.4f", adjustment_factor))
-      new_day_rule.setScheduleTypeLimits(schedule_type_limit)
-
-      # process day rule
-      times = day_rule.times()
-      # remove the effect of occupancy sensors
-      times.each do |time|
-        hour_value = day_rule.getValue(time)
-        new_value = hour_value / (1.0 - adjustment_factor.to_f)
-        if new_value > 1
-          new_day_rule.addValue(time, 1.0)
-        else
-          new_day_rule.addValue(time, new_value)
-        end
-      end
-
-      # create week rule schedule
-      new_week_rule = OpenStudio::Model::ScheduleRule.new(ruleset, new_day_rule)
-      new_week_rule.setName(format("#{week_rule.name.get}_%.4f", adjustment_factor))
-      new_week_rule.setApplySunday(week_rule.applySunday)
-      new_week_rule.setApplyMonday(week_rule.applyMonday)
-      new_week_rule.setApplyTuesday(week_rule.applyTuesday)
-      new_week_rule.setApplyWednesday(week_rule.applyWednesday)
-      new_week_rule.setApplyThursday(week_rule.applyThursday)
-      new_week_rule.setApplyFriday(week_rule.applyFriday)
-      new_week_rule.setApplySaturday(week_rule.applySaturday)
-      new_week_rule.setStartDate(start_date)
-      new_week_rule.setEndDate(end_date)
+    sch = OpenstudioStandards::Schedules
+    multiplier = 1.0 / (1.0 - adjustment_factor.to_f)
+    case schedule.iddObjectType.valueName.to_s
+    when 'OS_Schedule_Constant'
+      schedule_constant = schedule.to_ScheduleConstant.get
+      schedule_value = schedule_constant.value
+      return sch.create_constant_schedule_ruleset(model, schedule_value * multiplier, name: new_schedule_name)
+    when 'OS_Schedule_Ruleset'
+      new_schedule = schedule.clone(model)
+      new_schedule.setName(new_schedule_name)
+      schedule_ruleset = new_schedule.to_ScheduleRuleset.get
+      return sch.schedule_ruleset_simple_value_adjust(schedule_ruleset, multiplier, modification_type = 'Multiplier')
+    when 'OS_Schedule_Compact'
+      prm_raise(false, @sizing_run_dir, 'PRM does not support using Compact schedule for lighting schedules. Please update it to ruleset based or constant schedules.')
+    else
+      prm_raise(false, @sizing_run_dir, 'PRM only supports ruleset based or constant schedules for lighting schedules')
     end
-    # default day schedule
-    default_day = ruleset.defaultDaySchedule
-    default_day.clearValues
-    default_day.times.each_index { |counter| default_day.addValue(default_day_schedule.times[counter], default_day_schedule.values[counter]) }
-    # winter design day schedule
-    winter_design_day_schedule = ruleset.winterDesignDaySchedule
-    winter_design_day_schedule.clearValues
-    winter_design_day_schedule.times.each_index { |counter| winter_design_day_schedule.addValue(default_winter_design_day_schedule.times[counter], default_winter_design_day_schedule.values[counter]) }
-    summer_design_day_schedule = ruleset.summerDesignDaySchedule
-    summer_design_day_schedule.clearValues
-    summer_design_day_schedule.times.each_index { |counter| summer_design_day_schedule.addValue(default_summer_design_day_schedule.times[counter], default_summer_design_day_schedule.values[counter]) }
-    return ruleset
   end
 
   # calculate the lighting power density per area based on space type
@@ -595,7 +552,7 @@ class ASHRAE901PRM < Standard
       space_area = space.floorArea
       space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
       # calculate the new lpd values
-      space_lighting_per_area = lighting_per_length * space_height + lighting_per_area
+      space_lighting_per_area = (lighting_per_length * space_height) + lighting_per_area
 
       # Adjust the occupancy control sensor reduction factor from dataset
       if manon_or_partauto == 1
@@ -695,8 +652,7 @@ class ASHRAE901PRM < Standard
         space_area = space.floorArea
         space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
         # calculate and add new lpd values
-        user_space_type_lighting_per_area = (lighting_per_length * space_height +
-          lighting_per_area) * sub_space_type_frac
+        user_space_type_lighting_per_area = ((lighting_per_length * space_height) + lighting_per_area) * sub_space_type_frac
         space_lighting_per_area += user_space_type_lighting_per_area
 
         # Adjust the occupancy control sensor reduction factor from dataset

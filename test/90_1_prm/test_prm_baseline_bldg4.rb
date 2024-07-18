@@ -87,7 +87,14 @@ class Baseline9012013TestBldg4 < Minitest::Test
             failure_array << "Heating coil serving System #{airloop_name} is not attached to a plant loop"
           else
             plant_loop = heating_water_coil.to_CoilHeatingWater.get.plantLoop.get
-            unless plant_loop.supplyComponents('OS_DistrictHeating'.to_IddObjectType).length == 1
+            districting_supply_components = []
+            plant_loop.supplyComponents.each do |sc|
+              case sc.iddObjectType.valueName.to_s
+              when 'OS_DistrictHeating', 'OS_DistrictHeating_Water', 'OS_DistrictHeating_Steam'
+                districting_supply_components << sc
+              end
+            end
+            unless districting_supply_components.size == 1
               failure_array << "Expected Heating Coil for System #{airloop_name} to be served by a DistrictHeating object"
             end
           end

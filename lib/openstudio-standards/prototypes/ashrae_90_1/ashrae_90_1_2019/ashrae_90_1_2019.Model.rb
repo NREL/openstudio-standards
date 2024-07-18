@@ -16,10 +16,10 @@ class ASHRAE9012019 < ASHRAE901
       case building_type
         when 'Hospital'
           # Rotate the building counter-clockwise
-          model_set_building_north_axis(model, 270.0)
+          OpenstudioStandards::Geometry.model_set_building_north_axis(model, 270.0)
         when 'SmallHotel'
           # Rotate the building clockwise
-          model_set_building_north_axis(model, 180)
+          OpenstudioStandards::Geometry.model_set_building_north_axis(model, 180)
       end
     end
 
@@ -65,19 +65,21 @@ class ASHRAE9012019 < ASHRAE901
     end
 
     # Calculate West, East and total fenestration area
-    a_w = model_get_window_area_info_for_orientation(model, 'W', wwr: wwr)
-    a_e = model_get_window_area_info_for_orientation(model, 'E', wwr: wwr)
-    a_t = a_w + a_e + model_get_window_area_info_for_orientation(model, 'N', wwr: wwr) + model_get_window_area_info_for_orientation(model, 'S', wwr: wwr)
+    a_n = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['north_window']
+    a_s = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['south_window']
+    a_e = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['east_window']
+    a_w = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['west_window']
+    a_t = a_n + a_s + a_e + a_w
 
-    return true if a_t == 0.0
+    return true if a_t.abs < 0.01
 
     # For prototypes SHGC_c assumed to be the building's weighted average SHGC
     shgc_c = shgc_a / a_t
     shgc_c = shgc_c.round(2)
 
     # West and East facing WWR
-    wwr_w = model_get_window_area_info_for_orientation(model, 'W', wwr: true)
-    wwr_e = model_get_window_area_info_for_orientation(model, 'E', wwr: true)
+    wwr_w = OpenstudioStandards::Geometry.model_get_exterior_window_to_wall_ratio(model, cardinal_direction: 'W')
+    wwr_e = OpenstudioStandards::Geometry.model_get_exterior_window_to_wall_ratio(model, cardinal_direction: 'E')
 
     # Calculate new SHGC for west and east facing fenestration;
     # Create new simple glazing object and assign it to all
@@ -156,8 +158,8 @@ class ASHRAE9012019 < ASHRAE901
         space.surfaces.each do |surface|
           # Proceed only for East and West facing surfaces that are required
           # to have their SHGC adjusted
-          next unless (surface_cardinal_direction(surface) == 'W' && shgc_w > 0) ||
-                      (surface_cardinal_direction(surface) == 'E' && shgc_e > 0)
+          next unless (OpenstudioStandards::Geometry.surface_get_cardinal_direction(surface) == 'W' && shgc_w > 0) ||
+                      (OpenstudioStandards::Geometry.surface_get_cardinal_direction(surface) == 'E' && shgc_e > 0)
 
           surface.subSurfaces.each do |subsurface|
             # Get window subsurface type
@@ -166,7 +168,7 @@ class ASHRAE9012019 < ASHRAE901
             # Window, glass doors
             next unless (subsurface_type.include? 'window') || (subsurface_type.include? 'glass')
 
-            new_shgc = surface_cardinal_direction(surface) == 'W' ? shgc_w : shgc_e
+            new_shgc = OpenstudioStandards::Geometry.surface_get_cardinal_direction(surface) == 'W' ? shgc_w : shgc_e
             new_shgc = new_shgc.round(2)
 
             # Get construction/simple glazing associated with the subsurface

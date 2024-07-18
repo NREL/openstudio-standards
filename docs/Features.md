@@ -18,7 +18,7 @@ The code has been structured such that several higher level methods may all call
 			space_type_add_schedules
 		model_apply_standard
 			space_type_add_loads(people = true, lights = true, plug_loads = true)
-	
+
 	model_create_prm_baseline_building('Small Office', '90.1-2010', 'ASHRAE 169-2013-5A', 'Xcel Energy CO EDA', Dir.pwd, false)
 		model_add_baseline_hvac_systems
 		model_apply_standard
@@ -26,7 +26,7 @@ The code has been structured such that several higher level methods may all call
 
 Where a method needs to operate **slightly differently** in two different situations, instead of duplicating the code, we make an input argument to tell that method what to do.  In the example above, `space_type_add_loads` is called with `plug_loads = true` when creating the prototype building, but `plug_loads = false` when creating the baseline model, since plug loads stay the same as the proposed model in Appendix G.
 
-Where a method needs to operate **very differently** in two different situations, it should be broken out into a separate method. 
+Where a method needs to operate **very differently** in two different situations, it should be broken out into a separate method.
 
 ## Outline of the main methods
 
@@ -42,7 +42,7 @@ Where a method needs to operate **very differently** in two different situations
   - **`model_add_constructions()`** Creates some generic constructions used by all Prototype models (interior walls, internal mass, etc.).
     - **`model_add_construction_set()`** Looks up the construction set for this building type from `OpenStudio_Standards_construction_sets.json` and adds all constructions in it to the model.
     - **`model_add_construction_set()`** Looks up the construction set for each `SpaceType` from `OpenStudio_Standards_construction_sets.json` and adds all constructions in it to the model.  `SpaceTypes` only have construction sets where they differ from the overall building construction set.
-  - **`model_create_thermal_zones()`** Creates one `ThermalZone` with a `ThermostatSetpointDualSetpoint` for each `Space` in the model.  Also sets zone multipliers if defined in `/prototypes/Prototype.large_office.rb`. 
+  - **`model_create_thermal_zones()`** Creates one `ThermalZone` with a `ThermostatSetpointDualSetpoint` for each `Space` in the model.  Also sets zone multipliers if defined in `/prototypes/Prototype.large_office.rb`.
   - **`model_add_hvac()`**
     - **`model_define_hvac_system_map()`** Get a map of HVAC system types from `/prototypes/Prototype.large_office.rb`
     - For each system type listed in the map, create the system using methods like `model_add_cw_loop()` and `model_add_psz_ac()`.  **Note that these methods only create the basic system layout; component efficiencies and code-mandated controls are applied later. Some of the inputs, like which type of heating or cooling fuel to use for these methods are pulled from `OpenStudio_Standards_prototype_inputs.json`.**
@@ -53,7 +53,7 @@ Where a method needs to operate **very differently** in two different situations
     - **`model_add_swh_end_uses_by_space()`** Adds `WaterUseEquipment` on a space-by-space basis based on the information in `OpenStudio_Standards_space_types.json`
   - **`model_add_exterior_lights()`** Adds `Exteriorlights` to the model as specified in `OpenStudio_Standards_prototype_inputs.json`.
   - **`model_add_occupancy_sensors()`** Adds lighting power reductions on a space-by-space basis based on `SpaceType`.  **NOTE: This method requires pre-computed assumptions about how much of each `SpaceType` exists in some models.  It would be better to make this more generic.**
-  - **`model_add_design_days_and_weather_file()`** Adds design days and weather file for the specified climate zone.
+  - **`model_set_weather_file_and_design_days()`** Adds design days and weather file for the specified climate zone.
   - **`model_apply_sizing_parameters()`** Sets the heating and cooling sizing factors.  **NOTE: These are not consistent between building types.  Why?**
   - **`model_run_sizing_run()`** Runs the first sizing run.  Equipment sizes (mainly flow rates) are necessary for some of the subsequent steps.
   - **`model_apply_multizone_vav_outdoor_air_sizing()`** Reset damper positions on VAV systems to achieve a 60% ventilation effectiveness based on the 62.1 multizone calculations.
@@ -92,7 +92,7 @@ Where a method needs to operate **very differently** in two different situations
     - **`water_heater_mixed_apply_efficiency()`** Sets efficiencies and curves.
     - **`cooling_tower_single_speeapply_efficiency_and_curves()`** Sets efficiencies and curves.
     - **`cooling_tower_two_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.
-    - **`cooling_tower_variable_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.  
+    - **`cooling_tower_variable_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.
   - **`model_custom_swh_tweaks()`** Some building types have even more unique SWH characteristics.  This approach keeps them isolated, which makes the already-complex methods `model_add_swh()` as simple as possible.
   - **`model_custom_geometry_tweaks()`** Some building types have even more unique geometry characteristics.  This approach keeps them isolated.
   - **`model_add_daylighting_controls()`** Adds daylighting controls to the model.  **NOTE: This should probably be moved before the first sizing run.**
@@ -122,13 +122,13 @@ Where a method needs to operate **very differently** in two different situations
     - **`air_loop_hvac_self.enable_unoccupied_fan_shutoff()`** Schedule fans off when not occupied.
   - **`air_loop_hvac_apply_minimum_vav_damper_positions()`** For each `AirLoopHVAC`, apply the minimum damper positions, assuming no DDC control of VAV terminals
   - **`plant_loop_apply_performance_rating_method_baseline_temperatures()`** For each `PlantLoop`, apply the baseline system setpoint temperatures.
-  - **`model_run_sizing_run()`** Runs the first sizing run.  Equipment sizes (mainly flow rates) are necessary for some of the subsequent steps. 
+  - **`model_run_sizing_run()`** Runs the first sizing run.  Equipment sizes (mainly flow rates) are necessary for some of the subsequent steps.
   - **`model_apply_multizone_vav_outdoor_air_sizing()`** Reset damper positions on VAV systems to achieve a 60% ventilation effectiveness based on the 62.1 multizone calculations.
   - **`air_loop_hvac_apply_performance_rating_method_baseline_fan_power()`** For each `AirLoopHVAC`, set the baseline fan power.
   - **`plant_loop_apply_performance_rating_method_number_of_boilers()`** For each `PlantLoop`, set the number of boilers.
   - **`plant_loop_apply_performance_rating_method_number_of_chillers()`** For each `PlantLoop`, set the number of chillers.
   - **`plant_loop_apply_performance_rating_method_number_of_cooling_towers()`** For each `PlantLoop`, set the number of cooling towers.
-  - **`model_run_sizing_run()`** Runs the second sizing run with new chillers, boilers, and cooling towers to determine capacities.    
+  - **`model_run_sizing_run()`** Runs the second sizing run with new chillers, boilers, and cooling towers to determine capacities.
   - **`plant_loop_apply_performance_rating_method_baseline_pump_power()`** For each `PlantLoop`, set the pumping power.
   - **`plant_loop_apply_performance_rating_method_baseline_pumping_type()`** For each `PlantLoop`, set the pumping control type.
   - **`model_apply_hvac_efficiency_standard()`** Apply the HVAC efficiency standard
@@ -162,5 +162,5 @@ Where a method needs to operate **very differently** in two different situations
     - **`water_heater_mixed_apply_efficiency()`** Sets efficiencies and curves.
     - **`cooling_tower_single_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.
     - **`cooling_tower_two_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.
-    - **`cooling_tower_variable_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.  
+    - **`cooling_tower_variable_speed_apply_efficiency_and_curves()`** Sets efficiencies and curves.
   - **`model_add_daylighting_controls()`** Adds daylighting controls to the model.  **NOTE: This should probably be moved before the first sizing run.**

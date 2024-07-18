@@ -17,11 +17,11 @@ module OpenstudioStandards
       # the 'zones' argument includes zones that have heating, cooling, or both
       # if the HVAC system type serves a single zone, handle zones with only heating separately by adding unit heaters
       # applies to system types PTAC, PTHP, PSZ-AC, and Window AC
-      heated_and_cooled_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-      heated_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) }
-      cooled_zones = zones.select { |zone| standard.thermal_zone_cooled?(zone) }
-      cooled_only_zones = zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-      heated_only_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) && !standard.thermal_zone_cooled?(zone) }
+      heated_and_cooled_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+      heated_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) }
+      cooled_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+      cooled_only_zones = zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+      heated_only_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && !OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
       system_zones = heated_and_cooled_zones + cooled_only_zones
 
       # system type naming convention:
@@ -57,12 +57,8 @@ module OpenstudioStandards
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'DistrictHeating', znht = nil, cl = nil, heated_zones)
         standard.model_add_hvac_system(model, 'Evaporative Cooler', ht = nil, znht = nil, cl = 'Electricity', cooled_zones)
 
-      when 'Direct evap coolers with forced air furnace'
+      when 'Direct evap coolers with forced air furnace', 'Direct evap coolers with gas unit heaters'
         # Using unit heater to represent forced air furnace to limit to one airloop per thermal zone.
-        standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
-        standard.model_add_hvac_system(model, 'Evaporative Cooler', ht = nil, znht = nil, cl = 'Electricity', cooled_zones)
-
-      when 'Direct evap coolers with gas unit heaters'
         standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
         standard.model_add_hvac_system(model, 'Evaporative Cooler', ht = nil, znht = nil, cl = 'Electricity', cooled_zones)
 
@@ -437,11 +433,11 @@ module OpenstudioStandards
         standard.model_add_hvac_system(model, 'PVAV PFP Boxes', ht = 'Electricity', znht = 'Electricity', cl = 'Electricity', zones)
 
       when 'PVAV with gas heat with electric reheat', 'PVAV with gas coil heat with electric reheat'
-        standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones,
+        standard.model_add_hvac_system(model, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones,
                                        air_loop_heating_type: 'Gas')
 
       when 'PVAV with gas boiler heat with electric reheat'
-        standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones)
+        standard.model_add_hvac_system(model, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones)
 
       # all residential systems do not have ventilation
       when 'Residential AC with baseboard electric'

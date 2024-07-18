@@ -49,10 +49,11 @@ module QuickServiceRestaurant
     infiltration_diningdoor.setName('Dining door Infiltration')
     infiltration_per_zone_diningdoor = 0
     infiltration_per_zone_attic = 0.0729
-    if template == '90.1-2004'
+    case template
+    when '90.1-2004'
       infiltration_per_zone_diningdoor = 0.902834611
       infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood DOOR_INFIL_SCH'))
-    elsif template == '90.1-2007'
+    when '90.1-2007'
       case climate_zone
         when 'ASHRAE 169-2006-0A',
              'ASHRAE 169-2006-1A',
@@ -80,7 +81,7 @@ module QuickServiceRestaurant
           infiltration_per_zone_diningdoor = 0.583798439
           infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantFastFood VESTIBULE_DOOR_INFIL_SCH'))
       end
-    elsif template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       case climate_zone
         when 'ASHRAE 169-2006-0A',
              'ASHRAE 169-2006-1A',
@@ -196,7 +197,7 @@ module QuickServiceRestaurant
   def adjust_clg_setpoint(climate_zone, model)
     ['Dining', 'Kitchen'].each do |space_name|
       space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
-      thermostat_name = space_type_name + ' Thermostat'
+      thermostat_name = "#{space_type_name} Thermostat"
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
@@ -309,7 +310,7 @@ module QuickServiceRestaurant
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 end

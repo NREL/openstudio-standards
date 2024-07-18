@@ -49,7 +49,8 @@ class NECB_HVAC_System_1_Test_NG_T_HW_E < Minitest::Test
     hw_loop = nil
     mau_heating_coil_type = "Electric" if mau_type == false
     model = BTAP::FileIO::load_osm(template_osm_file)
-    BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     if (baseboard_type == "Hot Water") || (mau_heating_coil_type == "Hot Water")
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
@@ -88,7 +89,7 @@ class NECB_HVAC_System_1_Test_NG_T_HW_E < Minitest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run

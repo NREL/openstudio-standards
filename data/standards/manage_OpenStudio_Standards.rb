@@ -99,11 +99,11 @@ def unique_properties(sheet_name)
          when 'construction_properties'
            ['template', 'climate_zone_set', 'operation_type', 'intended_surface_type', 'standards_construction_type', 'building_category', 'orientation', 'minimum_percent_of_surface', 'maximum_percent_of_surface']
          when 'boilers'
-           ['template', 'fluid_type', 'fuel_type', 'condensing', 'condensing_control', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'fluid_type', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'chillers'
-           ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'variable_speed_drive', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'compliance_path', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'furnaces'
-           ['template', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'equipment_type', 'fuel_type', 'electric_power_phase', 'minimum_capacity', 'maximum_capacity', 'minimum_combo_unit_cooling_capacity', 'maximum_combo_unit_cooling_capacity', 'subtype', 'start_date', 'end_date']
          when 'heat_rejection'
            ['template', 'equipment_type', 'fan_type', 'start_date', 'end_date']
          when 'water_source_heat_pumps'
@@ -117,7 +117,7 @@ def unique_properties(sheet_name)
          when 'unitary_acs'
            ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'water_heaters'
-           ['template', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'equipment_type', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'minimum_storage', 'maximum_storage', 'minimum_capacity_per_storage', 'maximum_capacity_per_storage', 'draw_profile', 'start_date', 'end_date']
          when 'elevators'
            ['template', 'building_type']
          when 'refrigeration_system_lineup', 'refrigeration_system'
@@ -136,8 +136,6 @@ def unique_properties(sheet_name)
            ['template', 'climate_ID']
          when 'motors'
            ['template', 'number_of_poles', 'type', 'synchronous_speed', 'minimum_capacity', 'maximum_capacity']
-         when 'ground_temperatures'
-           ['building_type', 'template', 'climate_zone']
          when 'hvac_inference'
            ['template', 'size_category', 'heating_source', 'cooling_source', 'delivery_type']
          when 'size_category'
@@ -206,7 +204,7 @@ end
 def check_google_drive_configuration
   require 'google_drive'
   client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
-  unless File.exists? client_config_path
+  unless File.exist? client_config_path
     puts "Unable to locate client_secret.json file at #{client_config_path}."
     return false
   end
@@ -230,7 +228,7 @@ end
 def download_google_spreadsheets(spreadsheet_titles)
   require 'google_drive'
   client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
-  unless File.exists? client_config_path
+  unless File.exist? client_config_path
     puts "Unable to locate client_secret.json file at #{client_config_path}."
     return false
   end
@@ -532,7 +530,7 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
       puts "--found #{objs.size} rows"
 
       # Skip to the next sheet if no objects were found
-      if objs.size.zero?
+      if objs.empty?
         warnings << "did not export #{sheet_name} in #{spreadsheet_title} because no rows were found"
         next
       end
