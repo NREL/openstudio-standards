@@ -40,7 +40,7 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
         if @standards_data[key].nil?
           OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Adding #{key} from #{File.basename(file)}")
           @standards_data[key] = objs
-        elsif key == 'schedules'
+        elsif ['schedules', 'constructions', 'materials'].include?(key)
           OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.standard', "Extending #{key} with #{File.basename(file)}")
           @standards_data[key] += objs
         else
