@@ -510,6 +510,10 @@ module OpenstudioStandards
 
       # set scheduleRuleset properties
       props = schedule_ruleset.additionalProperties
+
+      # don't need to gather more than once
+      return parametric_inputs if props.getFeatureAsString('param_sch_ver') == '0.0.1'
+
       props.setFeature('param_sch_ver', '0.0.1') # this is needed to see if formulas are in sync with version of standards that processes them also used to flag schedule as parametric
       props.setFeature('param_sch_floor', min_max['min'])
       props.setFeature('param_sch_ceiling', min_max['max'])
@@ -525,8 +529,11 @@ module OpenstudioStandards
       sch_ruleset_days_used = OpenstudioStandards::Schedules.schedule_ruleset_get_annual_days_used(schedule_ruleset)
 
       # match up schedule rule days with hours of operation days
+      # sch_day_map is a hash where keys are the rule indices of the schedule
+      # and values are hashes where keys are the hours of operation rule index, and values are arrays of days that the shcedu
       sch_day_map = {}
       sch_ruleset_days_used.each do |sch_index, sch_days|
+        # first create a hash that maps each day index to the hoo index that covers that day
         day_map = {}
         sch_days.each do |day|
           # find the hour of operation rule that contains the day number
@@ -555,6 +562,8 @@ module OpenstudioStandards
           # skip if rules already match
           if (sch_ruleset_days_used[sch_index] - day_group).empty?
             OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{schedule_ruleset.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
+            # iterate new_rule_ct anyway to keep these rules
+            new_rule_ct += 1 unless sch_index == -1
             next
           end
           # create new rules
@@ -563,7 +572,9 @@ module OpenstudioStandards
         end
       end
       # new rules are created at top of list - cleanup old rules
-      schedule_ruleset.scheduleRules[new_rule_ct..-1].each(&:remove) unless new_rule_ct == 0
+      if !(new_rule_ct == 0 || new_rule_ct == schedule_ruleset.scheduleRules.size)
+        schedule_ruleset.scheduleRules[new_rule_ct..].each(&:remove)
+      end
 
       # re-collect new schedule rules
       schedule_days = OpenstudioStandards::Schedules.schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
@@ -587,7 +598,7 @@ module OpenstudioStandards
           end
         end
 
-        # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have ot split rule and alter model
+        # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have to split rule and alter model
         if hoo_target_index.nil?
 
           hoo_start = nil
