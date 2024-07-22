@@ -633,6 +633,50 @@ class ACM179dASHRAE9012007
                                         sys_group['zones'],
                                         zone_fan_scheds)
 
+          if ['Gas_Furnace', 'Electric_Furnace'].include?(system_type[0])
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "179D - For Unit Heater, adding a ZoneVentilationDesignFlowRate for outside air requirements")
+            sys_group['zones'].sort.each do |zone|
+              total_oa_m3_per_s = thermal_zone_outdoor_airflow_rate(zone)
+
+              total_oa_m3_per_m2s = total_oa_m3_per_s / zone.floorArea
+
+              next unless total_oa_m3_per_s > 0
+
+              # ventilation = model_add_zone_ventilation(model, sys_group['zones'], ventilation_type: 'Natural', flow_rate: total_oa_m3_per_s).first
+
+              tot_oa_cfm = OpenStudio.convert(total_oa_m3_per_s, 'm^3/s', 'cfm').get.round(2)
+              total_oa_cfm_per_sqft = OpenStudio.convert(total_oa_m3_per_m2s, 'm^3/m^2*s', 'cfm/ft^2').get.round(4)
+
+              OpenStudio.logFree(
+                OpenStudio::Info, 'openstudio.179D.Model',
+                "Adding zone ventilation fan for #{zone.name} - #{tot_oa_cfm} CFM total - #{total_oa_cfm_per_sqft} CFM/ft^2"
+              )
+
+              ventilation = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
+              ventilation.setName("#{zone.name} Ventilation")
+              ventilation.setSchedule(model.alwaysOnDiscreteSchedule)
+
+              # ventilation.setDesignFlowRate(total_oa_m3_per_s)
+              ventilation.setFlowRateperZoneFloorArea(total_oa_m3_per_m2s)
+
+              ventilation.setFanPressureRise(0.0)
+              ventilation.setFanTotalEfficiency(1.0)
+              # TODO: Should we just make this 1.0 constant, and 0 velocity?
+              ventilation.setConstantTermCoefficient(0.0)
+              ventilation.setVelocityTermCoefficient(0.224)
+              ventilation.setTemperatureTermCoefficient(0.0)
+              ventilation.setMinimumIndoorTemperature(-73.3333352760033)
+              # Should we make max = 100.0
+              ventilation.setMaximumIndoorTemperature(29.4444452244559)
+              ventilation.setDeltaTemperature(-100.0)
+
+              ventilation.setVentilationType('Natural')
+              ventilation.addToThermalZone(zone)
+
+              ventilation.setMaximumIndoorTemperature(100.0)
+            end
+          end
+
           model.getAirLoopHVACs.each do |air_loop|
             air_loop_name = air_loop.name.get
             unless air_loop_name_array.include?(air_loop_name)
