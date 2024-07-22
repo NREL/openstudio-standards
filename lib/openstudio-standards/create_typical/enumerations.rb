@@ -297,6 +297,61 @@ module OpenstudioStandards
       return array
     end
 
+    # Map a DOE building type to the corresponding DEER building type.
+    # DEER to DEER mappings included for some use cases
+    # @param doe_building_type [String] DOE building type
+    #
+    # @return [String] DEER building type in short format
+    def self.doe_to_deer_building_type(doe_building_type)
+      dict = {}
+      dict['SecondarySchool'] = 'ESe',
+      dict['PrimarySchool'] = 'EPr',
+      dict['SmallOffice'] = 'OfS',
+      dict['MediumOffice'] = 'OfL',
+      dict['LargeOffice'] = 'OfL',
+      dict['SmallHotel'] = 'Mtl',
+      dict['LargeHotel'] = 'Htl',
+      dict['Warehouse'] = 'SUn', # Unconditioned Storage (SUn) is nearly identical to SCn
+      dict['RetailStandalone'] = 'RtL',
+      dict['RetailStripmall'] = 'RtS',
+      dict['QuickServiceRestaurant'] = 'RFF',
+      dict['FullServiceRestaurant'] = 'RSD',
+      dict['MidriseApartment'] = 'MFm',
+      dict['HighriseApartment'] = 'OfL',
+      dict['Hospital'] = 'Hsp',
+      dict['Outpatient'] = 'OfL',
+      dict['SuperMarket'] = 'Gro',
+      dict['Asm'] = 'Asm',
+      dict['DMo'] = 'DMo',
+      dict['ECC'] = 'ECC',
+      dict['EPr'] = 'EPr',
+      dict['ERC'] = 'ERC',
+      dict['ESe'] = 'ESe',
+      dict['EUn'] = 'EUn',
+      dict['GHs'] = 'GHs',
+      dict['Gro'] = 'Gro',
+      dict['Hsp'] = 'Hsp',
+      dict['Htl'] = 'Htl',
+      dict['MBT'] = 'MBT',
+      dict['MFm'] = 'MFm',
+      dict['MLI'] = 'MLI',
+      dict['Mtl'] = 'Mtl',
+      dict['Nrs'] = 'Nrs',
+      dict['OfL'] = 'OfL',
+      dict['OfS'] = 'OfS',
+      dict['RFF'] = 'RFF',
+      dict['RSD'] = 'RSD',
+      dict['Rt3'] = 'Rt3',
+      dict['RtL'] = 'RtL',
+      dict['RtS'] = 'RtS',
+      dict['SCn'] = 'SCn',
+      dict['SFm'] = 'SFm',
+      dict['SUn'] = 'SUn',
+      dict['WRf'] = 'WRf'
+
+      return dict[doe_building_type]
+    end
+
     # Building type abbreviation to long name map
     #
     # @param deer_building_type_short [String] DEER building type in short format
