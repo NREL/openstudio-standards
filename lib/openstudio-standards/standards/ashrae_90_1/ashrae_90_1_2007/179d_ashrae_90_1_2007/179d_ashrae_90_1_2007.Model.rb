@@ -633,7 +633,7 @@ class ACM179dASHRAE9012007
                                         sys_group['zones'],
                                         zone_fan_scheds)
 
-          if ['Gas_Furnace', 'Electric_Furnace'].include?(system_type[0])
+          if baseline_179d && ['Gas_Furnace', 'Electric_Furnace'].include?(system_type[0])
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "179D - For Unit Heater, adding a ZoneVentilationDesignFlowRate for outside air requirements")
             sys_group['zones'].sort.each do |zone|
               total_oa_m3_per_s = thermal_zone_outdoor_airflow_rate(zone)
