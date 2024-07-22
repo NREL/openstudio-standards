@@ -2178,7 +2178,7 @@ class NECB2011
   end
 
   # Method to set the base system name based on the following syntax:
-  # |sys_abbr|sys_oa|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
+  # |sys_abbr|sys_oa|shr>?|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
   # "sys_abbr" designates the NECB system type ("sys_1, sys_2, ... sys_6")
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
