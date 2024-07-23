@@ -44,6 +44,7 @@ class ECMS < NECB2011
                        template_standard:,
                        runner: nil,
                        primary_heating_fuel: nil,
+                       shw_fuel: nil,
                        ecm_system_zones_map_option: 'NECB_Default')
     # Do nothing if nil or other usual suspects.. covering all bases for now.
     return if ecm_system_name.nil? || ecm_system_name == 'none' || ecm_system_name == 'NECB_Default'
