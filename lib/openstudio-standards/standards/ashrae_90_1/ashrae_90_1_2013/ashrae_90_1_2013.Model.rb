@@ -110,4 +110,13 @@ class ASHRAE9012013 < ASHRAE901
     srr_lim = 3.0
     return srr_lim
   end
+
+  # Dummy method to avoid adjusting infiltration in PRM models using older ASHRAE 90.1 PRM methodology.
+  # space and removes the SpaceType-level infiltration objects.
+  # @param model [OpenStudio::Model::Model] openstudio model
+  # @param specific_space_infiltration_rate_75_pa [Double] space infiltration rate at a pressure differential of 75 Pa
+  # @return [Boolean] true
+  def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
+    return true
+  end
 end
