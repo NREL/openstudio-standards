@@ -656,24 +656,25 @@ class ACM179dASHRAE9012007
               ventilation.setName("#{zone.name} Ventilation")
               ventilation.setSchedule(model.alwaysOnDiscreteSchedule)
 
+              # Per Flow Area is clearer in intent, because that's what we
+              # mostly have in our standards data
               # ventilation.setDesignFlowRate(total_oa_m3_per_s)
               ventilation.setFlowRateperZoneFloorArea(total_oa_m3_per_m2s)
 
-              ventilation.setFanPressureRise(0.0)
-              ventilation.setFanTotalEfficiency(1.0)
-              # TODO: Should we just make this 1.0 constant, and 0 velocity?
-              ventilation.setConstantTermCoefficient(0.0)
-              ventilation.setVelocityTermCoefficient(0.224)
+              # Make it run all the time, with the design flow rate
+              ventilation.setConstantTermCoefficient(1.0)
+              ventilation.setVelocityTermCoefficient(0.0)
               ventilation.setTemperatureTermCoefficient(0.0)
               ventilation.setMinimumIndoorTemperature(-73.3333352760033)
-              # Should we make max = 100.0
-              ventilation.setMaximumIndoorTemperature(29.4444452244559)
+              ventilation.setMaximumIndoorTemperature(100.0)
               ventilation.setDeltaTemperature(-100.0)
 
+              # TODO: No fan power for now
               ventilation.setVentilationType('Natural')
-              ventilation.addToThermalZone(zone)
+              ventilation.setFanPressureRise(0.0)
+              ventilation.setFanTotalEfficiency(1.0)
 
-              ventilation.setMaximumIndoorTemperature(100.0)
+              ventilation.addToThermalZone(zone)
             end
           end
 
