@@ -635,7 +635,7 @@ class ACM179dASHRAE9012007
 
           if baseline_179d && ['Gas_Furnace', 'Electric_Furnace'].include?(system_type[0])
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "179D - For Unit Heater, adding a ZoneVentilationDesignFlowRate for outside air requirements")
-            model_add_equivalent_zone_ventilation_for_heated_only_zones_with_dsoa(model, sys_group['zones'])
+            model_add_equivalent_zone_ventilation_for_heated_only_zones_with_dsoa(model, sys_group['zones'], ventilation_type: 'Natural')
           end
 
           model.getAirLoopHVACs.each do |air_loop|
@@ -882,7 +882,19 @@ class ACM179dASHRAE9012007
   end
 
 
-  def model_add_equivalent_zone_ventilation_for_heated_only_zones_with_dsoa(model, zones)
+  # For Heated Only Zones, System 9 or 10, there will be zero outside air
+  # actually brought in, because the ZoneHVACUnitHeater does add OA.
+  # While this has very little effect in most of the building types (heated
+  # only zones are small), this is problematic for the Warehouse in particular
+  # This method will look on such zones, and for each zone it will find the
+  # DesignSpecificationOutdoorAir objects for the spaces and compute an
+  # equivalent OA flow rate, and create a ZoneVentilationDesignFlowRate object
+  # to match it.
+  # @param ventilation_type [String] one of:
+  #   * 'Natural', 'Intake' (Supply Fanfloor area (m^2)
+  #   * 'Intake': System 9 and 10 supply fan, 0.3 W/CFM
+  #   * 'Exahsut': System 9 and 10 non-mechanical cooling, 0.054 W/CFM
+  def model_add_equivalent_zone_ventilation_for_heated_only_zones_with_dsoa(model, zones, ventilation_type: 'Natural')
     zones.sort.each do |zone|
       total_oa_m3_per_s = thermal_zone_outdoor_airflow_rate(zone)
 
@@ -917,10 +929,28 @@ class ACM179dASHRAE9012007
       ventilation.setMaximumIndoorTemperature(100.0)
       ventilation.setDeltaTemperature(-100.0)
 
-      # TODO: No fan power for now
-      ventilation.setVentilationType('Natural')
-      ventilation.setFanPressureRise(0.0)
-      ventilation.setFanTotalEfficiency(1.0)
+      if ventilation_type == 'Natural'
+        # No fan power
+        pressure_rise_pa = 0.0
+        fan_total_eff = 1.0
+      elsif ventilation_type == 'Intake'
+        # System Type 9 and 10 (supply fan): Pfan = CFM * 0.3
+        target_w_per_m3_per_s = OpenStudio.convert(0.3, 'W/CFM', 'W*s/m^3').get()
+        fan_total_eff = 0.6
+        pressure_rise_pa = fan_total_eff * target_w_per_m3_per_s
+      elsif ventilation_type == 'Exhaust'
+        # System Type 9 and 10 (non-mechanical cooling fan
+        # if required by Section G3.1.2.8.2): Pfan = CFM * 0.054
+        target_w_per_m3_per_s = OpenStudio.convert(0.054, 'W/CFM', 'W*s/m^3').get()
+        fan_total_eff = 0.6
+        pressure_rise_pa = fan_total_eff * target_w_per_m3_per_s
+      else
+        raise "ventilation_type must be one of ['Natural', 'Intake', 'Exhaust']"
+      end
+
+      ventilation.setVentilationType(ventilation_type)
+      ventilation.setFanPressureRise(pressure_rise_pa)
+      ventilation.setFanTotalEfficiency(fan_total_eff)
 
       ventilation.addToThermalZone(zone)
     end
