@@ -635,7 +635,7 @@ class ACM179dASHRAE9012007
 
           if baseline_179d && ['Gas_Furnace', 'Electric_Furnace'].include?(system_type[0])
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "179D - For Unit Heater, adding a ZoneVentilationDesignFlowRate for outside air requirements")
-            model_add_equivalent_zone_ventilation_for_heated_only_zones_with_dsoa(model, sys_group['zones'], ventilation_type: 'Natural')
+            model_add_equivalent_zone_ventilation_for_heated_only_zones_with_dsoa(model, sys_group['zones'], ventilation_type: 'Exhaust')
           end
 
           model.getAirLoopHVACs.each do |air_loop|
