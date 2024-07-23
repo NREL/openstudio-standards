@@ -144,7 +144,7 @@ module OpenstudioStandards
         indoor_temp_c = OpenStudio.convert(indoor_temp_f, 'F', 'C').get
         default_water_heater_ambient_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                                                 indoor_temp_c,
-                                                                                                                name: "Water Heater Ambient Temp Schedule - #{indoor_temp_f} F",
+                                                                                                                name: "Water Heater Ambient Temp Schedule #{indoor_temp_f}F",
                                                                                                                 schedule_type_limit: 'Temperature')
         default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
         water_heater.setAmbientTemperatureIndicator('Schedule')

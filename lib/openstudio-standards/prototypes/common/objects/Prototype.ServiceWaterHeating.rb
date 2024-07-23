@@ -396,7 +396,7 @@ class Standard
       # assume the water heater is indoors at 70F for now
       default_water_heater_ambient_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                                               OpenStudio.convert(70.0, 'F', 'C').get,
-                                                                                                              name: 'Water Heater Ambient Temp Schedule - 70F',
+                                                                                                              name: 'Water Heater Ambient Temp Schedule 70F',
                                                                                                               schedule_type_limit: 'Temperature')
       if temp_sch_type_limits.nil?
         temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,

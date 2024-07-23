@@ -33417,13 +33417,13 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {56107bf3-2ad5-46a0-b005-20cd85cee558}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F, !- Name
+  Water Heater Ambient Temp Schedule 70F, !- Name
   {c23c0a36-8c74-469b-b34e-f359bcf5f66c}, !- Schedule Type Limits Name
   {6d81f719-7cf7-4877-8ef2-99771a98dfa1}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {6d81f719-7cf7-4877-8ef2-99771a98dfa1}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default, !- Name
+  Water Heater Ambient Temp Schedule 70F Default, !- Name
   {c23c0a36-8c74-469b-b34e-f359bcf5f66c}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
@@ -34315,13 +34315,13 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {822da938-7690-4964-b378-d8e96474cfc3}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F 1, !- Name
+  Water Heater Ambient Temp Schedule 70F 1, !- Name
   {27ee48ae-782d-4f9d-9eec-fb5a7e17c951}, !- Schedule Type Limits Name
   {6c6c27d9-16b5-4d90-a987-89e45f5d6917}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {6c6c27d9-16b5-4d90-a987-89e45f5d6917}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default 1, !- Name
+  Water Heater Ambient Temp Schedule 70F Default 1, !- Name
   {27ee48ae-782d-4f9d-9eec-fb5a7e17c951}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
@@ -35044,13 +35044,13 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {c6c61351-626f-4731-9812-d6e510ad530e}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F 2, !- Name
+  Water Heater Ambient Temp Schedule 70F 2, !- Name
   {a66220a3-89a2-4e63-9ee2-2753396a054f}, !- Schedule Type Limits Name
   {839f0e2f-7d17-41bb-9018-2ee9b5b1cf85}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {839f0e2f-7d17-41bb-9018-2ee9b5b1cf85}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default 2, !- Name
+  Water Heater Ambient Temp Schedule 70F Default 2, !- Name
   {a66220a3-89a2-4e63-9ee2-2753396a054f}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
