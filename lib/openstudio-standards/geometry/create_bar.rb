@@ -1994,6 +1994,8 @@ module OpenstudioStandards
     # @option args [String] :template ('90.1-2013') target standard
     # @return [Boolean] returns true if successful, false if not
     def self.create_bar_from_building_type_ratios(model, args)
+      # convert arguments to symbols
+      args = args.transform_keys(&:to_sym)
       bldg_type_a = args.fetch(:bldg_type_a, 'SmallOffice')
       bldg_type_b = args.fetch(:bldg_type_b, nil)
       bldg_type_c = args.fetch(:bldg_type_c, nil)
@@ -2007,6 +2009,61 @@ module OpenstudioStandards
       bldg_type_c_fract_bldg_area = args.fetch(:bldg_type_c_fract_bldg_area, 0.0)
       bldg_type_d_fract_bldg_area = args.fetch(:bldg_type_d_fract_bldg_area, 0.0)
       template = args.fetch(:template, '90.1-2013')
+
+      # If DOE building type is supplied with a DEER template, map to the nearest DEER building type
+      if template.include?('DEER')
+        unless bldg_type_a.nil?
+          bldg_type_a_deer = OpenstudioStandards::CreateTypical.doe_to_deer_building_type(bldg_type_a)
+          if bldg_type_a_deer.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', "Could not find a DEER equivalent to #{bldg_type_a} to align with template #{template}.")
+            return false
+          elsif bldg_type_a == bldg_type_a_deer
+            # Already using a DEER building type with a DEER template, no need to change
+          else
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Mapped input of DOE building type #{bldg_type_a} to DEER building type #{bldg_type_a_deer} to match template #{template}")
+            bldg_type_a = bldg_type_a_deer
+          end
+        end
+
+        unless bldg_type_b.nil?
+          bldg_type_b_deer = OpenstudioStandards::CreateTypical.doe_to_deer_building_type(bldg_type_b)
+          if bldg_type_b_deer.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', "Could not find a DEER equivalent to #{bldg_type_b} to align with template #{template}.")
+            return false
+          elsif bldg_type_b == bldg_type_b_deer
+            # Already using a DEER building type with a DEER template, no need to change
+          else
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Mapped input of DOE building type #{bldg_type_b} to DEER building type #{bldg_type_b_deer} to match template #{template}")
+            bldg_type_b = bldg_type_b_deer
+          end
+        end
+
+        unless bldg_type_c.nil?
+          bldg_type_c_deer = OpenstudioStandards::CreateTypical.doe_to_deer_building_type(bldg_type_c)
+          if bldg_type_c_deer.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', "Could not find a DEER equivalent to #{bldg_type_c} to align with template #{template}.")
+            return false
+          elsif bldg_type_c == bldg_type_c_deer
+            # Already using a DEER building type with a DEER template, no need to change
+          else
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Mapped input of DOE building type #{bldg_type_c} to DEER building type #{bldg_type_c_deer} to match template #{template}")
+            bldg_type_c = bldg_type_c_deer
+          end
+        end
+
+        unless bldg_type_d.nil?
+          bldg_type_d_deer = OpenstudioStandards::CreateTypical.doe_to_deer_building_type(bldg_type_d)
+          if bldg_type_d_deer.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', "Could not find a DEER equivalent to #{bldg_type_d} to align with template #{template}.")
+            return false
+          elsif bldg_type_d == bldg_type_d_deer
+            # Already using a DEER building type with a DEER template, no need to change
+          else
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Mapped input of DOE building type #{bldg_type_d} to DEER building type #{bldg_type_d_deer} to match template #{template}")
+            bldg_type_d = bldg_type_d_deer
+          end
+        end
+      end
 
       # check that sum of fractions for b,c, and d is less than 1.0 (so something is left for primary building type)
       bldg_type_a_fract_bldg_area = 1.0 - bldg_type_b_fract_bldg_area - bldg_type_c_fract_bldg_area - bldg_type_d_fract_bldg_area
