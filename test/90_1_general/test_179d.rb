@@ -466,4 +466,49 @@ class ACM179dASHRAE9012007Test < Minitest::Test
       end
     end
   end
+
+  def test_space_type_apply_internal_load_schedules_override
+    set_people = false
+    set_lights = false
+    set_electric_equipment = false
+    set_gas_equipment = false
+    set_ventilation = false
+    set_infiltration = false
+    make_thermostat = true
+
+    @model.getThermostatSetpointDualSetpoints.each(&:remove)
+
+    assert_equal(0, @model.getThermostatSetpointDualSetpoints.size)
+
+    @model.getSpaceTypes.each do |space_type|
+      @standard.space_type_apply_internal_load_schedules(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
+    end
+
+    assert_equal(3, @model.getThermostatSetpointDualSetpoints.size)
+
+    expected_tstats = {
+      'Warehouse Office Thermostat' => {
+        'heating_sch' => 'Nonres_Heat_Sch',
+        'cooling_sch' => 'Nonres_Cool_Sch'  # <----
+      },
+      'Warehouse Bulk Thermostat' => {
+        'heating_sch' => 'Nonres_Heat_Sch',
+        'cooling_sch' => 'Warehouse_Cool_Sch'
+      },
+      'Retail POS Thermostat' => {
+        'heating_sch' => 'Nonres_Heat_Sch',
+        'cooling_sch' => 'Warehouse_Cool_Sch'
+      }
+    }
+
+    expected_tstats.each do |tstat_name, tstat_info|
+      refute_empty(@model.getThermostatSetpointDualSetpointByName(tstat_name))
+      tstat = @model.getThermostatSetpointDualSetpointByName(tstat_name).get
+      refute_empty(tstat.heatingSetpointTemperatureSchedule)
+      assert_equal(tstat_info['heating_sch'], tstat.heatingSetpointTemperatureSchedule.get.nameString)
+
+      refute_empty(tstat.coolingSetpointTemperatureSchedule)
+      assert_equal(tstat_info['cooling_sch'], tstat.coolingSetpointTemperatureSchedule.get.nameString)
+    end
+  end
 end
