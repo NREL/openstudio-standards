@@ -14,6 +14,10 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
     @std_2007 = ASHRAE9012007.new
   end
 
+  def almost_equal?(value_actual, value_expected, epsilon = 0.01)
+    (value_actual - value_expected).abs / value_actual < epsilon
+  end
+
   # Loads the openstudio standards dataset for this standard.
   #
   # It will load ASHRAE90.1-2007, and do the following:
