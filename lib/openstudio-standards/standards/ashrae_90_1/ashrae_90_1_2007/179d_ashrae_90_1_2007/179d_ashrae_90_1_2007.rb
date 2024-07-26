@@ -96,5 +96,25 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
       end
     end
 
+    @standards_data['boilers'].each do |info|
+      if info['fluid_type'] == 'Hot Water' &&
+         almost_equal?(300000.0, info['minimum_capacity']) &&
+         almost_equal?(2500000.0, info['maximum_capacity'])
+        info['minimum_thermal_efficiency'] = 0.8
+        info['minimum_annual_fuel_utilization_efficiency'] = nil
+        info['minimum_combustion_efficiency'] = nil
+      end
+    end
+
+    @standards_data['boilers'].each do |info|
+      if info['fluid_type'] == 'Hot Water' &&
+         almost_equal?(2500000.01, info['minimum_capacity']) &&
+         almost_equal?(9999999999.0, info['maximum_capacity'])
+        info['minimum_thermal_efficiency'] = nil
+        info['minimum_annual_fuel_utilization_efficiency'] = nil
+        info['minimum_combustion_efficiency'] = 0.82
+      end
+    end
+
   end
 end
