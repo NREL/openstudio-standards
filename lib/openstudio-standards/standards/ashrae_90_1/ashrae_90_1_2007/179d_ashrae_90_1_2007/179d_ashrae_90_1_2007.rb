@@ -49,5 +49,52 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
         end
       end
     end
+
+    # override values in 90.1-2007 jsons that are no longer correct compared to the latest 90.1-2007
+    @standards_data['unitary_acs'].each do |info|
+      if info['cooling_type'] == 'AirCooled' &&
+         info['heating_type'] == 'All Other' &&
+         info['subcategory'] == 'Single Package' &&
+         almost_equal?(64999.0, info['minimum_capacity']) &&
+         almost_equal?(134999.0, info['maximum_capacity'])
+        info['minimum_energy_efficiency_ratio'] = 11.0
+        info['minimum_seasonal_energy_efficiency_ratio'] = nil
+        info['minimum_integrated_energy_efficiency_ratio'] = nil
+      end
+    end
+    @standards_data['unitary_acs'].each do |info|
+      if info['cooling_type'] == 'AirCooled' &&
+         info['heating_type'] == 'All Other' &&
+         info['subcategory'] == 'Single Package' &&
+         almost_equal?(135000.0, info['minimum_capacity']) &&
+         almost_equal?(239999.0, info['maximum_capacity'])
+        info['minimum_energy_efficiency_ratio'] = 10.8
+        info['minimum_seasonal_energy_efficiency_ratio'] = nil
+        info['minimum_integrated_energy_efficiency_ratio'] = nil
+      end
+    end
+    @standards_data['unitary_acs'].each do |info|
+      if info['cooling_type'] == 'AirCooled' &&
+         info['heating_type'] == 'All Other' &&
+         info['subcategory'] == 'Single Package' &&
+         almost_equal?(240000.0, info['minimum_capacity']) &&
+         almost_equal?(759999.0, info['maximum_capacity'])
+        info['minimum_energy_efficiency_ratio'] = 9.8
+        info['minimum_seasonal_energy_efficiency_ratio'] = nil
+        info['minimum_integrated_energy_efficiency_ratio'] = nil
+      end
+    end
+    @standards_data['unitary_acs'].each do |info|
+      if info['cooling_type'] == 'AirCooled' &&
+         info['heating_type'] == 'All Other' &&
+         info['subcategory'] == 'Single Package' &&
+         almost_equal?(760000.0, info['minimum_capacity']) &&
+         almost_equal?(9999999.0, info['maximum_capacity'])
+        info['minimum_energy_efficiency_ratio'] = 9.5
+        info['minimum_seasonal_energy_efficiency_ratio'] = nil
+        info['minimum_integrated_energy_efficiency_ratio'] = nil
+      end
+    end
+
   end
 end
