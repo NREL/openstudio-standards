@@ -49,5 +49,15 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
         end
       end
     end
+    # override values in 90.1-2007 jsons that are no longer correct compared to the latest 90.1-2007
+    # fans
+    # change VAV fans to use appendix G fan curve
+    @standards_data['fans'].each do |info|
+      if info['type'] == 'VariableVolume'
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.standard', "Overriding #{info['name']} fan_curve #{info['fan_curve']} to Multi Zone VAV with VSD and fixed SP setpoint") 
+        info['fan_curve'] = 'Multi Zone VAV with VSD and fixed SP setpoint'
+      end
+    end
+    
   end
 end
