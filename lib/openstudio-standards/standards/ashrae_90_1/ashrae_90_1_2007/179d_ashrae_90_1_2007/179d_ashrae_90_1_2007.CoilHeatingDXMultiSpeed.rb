@@ -1,4 +1,4 @@
-class Standard
+class ACM179dASHRAE9012007
   # @!group CoilHeatingDXMultiSpeed
 
   # Applies the standard efficiency ratings and typical performance curves to this object.

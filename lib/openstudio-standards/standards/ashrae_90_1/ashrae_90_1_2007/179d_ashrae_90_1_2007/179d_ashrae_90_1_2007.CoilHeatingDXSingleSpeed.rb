@@ -1,4 +1,4 @@
-class Standard
+class ACM179dASHRAE9012007
   # @!group CoilHeatingDXSingleSpeed
 
   include CoilDX
