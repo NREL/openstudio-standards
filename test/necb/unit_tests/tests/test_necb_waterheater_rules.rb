@@ -344,7 +344,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
       prototype_input['main_water_heater_capacity'] = 100000.0
       prototype_input['main_water_heater_fuel'] = 'NaturalGas'
       prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-      standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel', shw_scale: 1.0)
+      standard.model_add_swh(model: model, shw_fueltype: 'DefaultFuel', shw_scale: 1.0)
 
       # Add HVAC system.
       boiler_fueltype = 'NaturalGas'
