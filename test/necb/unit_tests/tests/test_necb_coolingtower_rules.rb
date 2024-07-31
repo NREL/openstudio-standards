@@ -18,7 +18,79 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
   # "if capacity <= 1750 kW ---> one cell
   # if capacity > 1750 kW ---> number of cells = capacity/1750 rounded up"
   # power = 0.015 x capacity in kW
-  def test_NECB2011_coolingtower
+  def test_number_of_coolingtowers
+    logger.info "Starting suite of tests for: #{__method__}"
+
+    # Define static test parameters.
+    test_parameters = {test_method: __method__,
+                       save_intermediate_models: true,
+                       boiler_fueltype: 'Electricity',
+                       heating_coil_type: 'Hot Water',
+                       baseboard_type: 'Hot Water',
+                       fan_type: 'AF_or_BI_rdg_fancurve'}
+
+    # Define test cases. 
+    test_cases = Hash.new
+
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 xxx"}
+    
+    # Test cases. Three cases for NG and FuelOil, one for Electric.
+    # Results and name are tbd here as they will be calculated in the test.
+    test_cases_hash = {:Vintage => ["NECB2011"], 
+                       :chiller_types => ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
+                       :TestCase => ["Single"], 
+                       :TestPars => {:tested_capacity_kW => 1500}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => ["NECB2011"], 
+                       :chiller_types => ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
+                       :TestCase => ["Twin"], 
+                       :TestPars => {:tested_capacity_kW => 2500}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
+
+    # Write test results.
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
+
+    # Read expected results. 
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name), {symbolize_names: true})
+  
+    # Check if test results match expected.
+    msg = "Numbrer of cooling towers do not match what is expected in test"
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
+
+    logger.info "Finished suite of tests for: #{__method__}"
+  end
+  
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_number_of_coolingtowers that runs a specific test. Called by do_test_cases in necb_helper.rb.
+  def do_test_number_of_coolingtowers(test_pars:, test_case:)
+    
+    # Debug.
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
+
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    test_name = test_pars[:test_method]
+    save_intermediate_models = test_pars[:save_intermediate_models]
+    mau_type = test_pars[:mau_type]
+    heating_coil_type = test_pars[:heating_coil_type]
+    baseboard_type = test_pars[:baseboard_type]
+    boiler_fueltype = test_pars[:FuelType]
+    vintage = test_pars[:Vintage]
+
+    # Test specific inputs.
+    total_boiler_cap = test_case[:tested_capacity_kW]
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
@@ -32,7 +104,6 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     chiller_types = ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
-    heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     test_chiller_cap = [1000000.0, 4000000.0]
     clgtowerFanPowerFr = 0.015
@@ -114,7 +185,7 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
 
   # NECB2015 rules for cooling tower.
   # power = 0.013 x capacity in kW.
-  def test_NECB2015_coolingtower
+  def test_coolingtower_power
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)

@@ -96,7 +96,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    output_folder = test_pars[:test_method]
+    test_name = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
     mau_cooling_type = test_pars[:mau_cooling_type]
     boiler_fueltype = test_pars[:boiler_fueltype]
@@ -117,7 +117,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new("CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw").set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}/baseline.osm") if save_intermediate_models
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
@@ -132,7 +132,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       model.getChillerElectricEIRs.each {|chiller| chiller.setReferenceCapacity(chiller_cap*1000.0)}
 
       # Run sizing.
-      run_sizing(model: model,  template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
@@ -195,13 +195,13 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     # Test cases. Define each case seperately as they have unique kW values to test accross the vintages/chiller types.
     test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
                        :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["small"], 
+                       :TestCase => ["single"], 
                        :TestPars => {:tested_capacity_kW => 800}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
                        :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["large"], 
+                       :TestCase => ["twin"], 
                        :TestPars => {:tested_capacity_kW => 3200}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -236,7 +236,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    output_folder = test_pars[:test_method]
+    test_name = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
     boiler_fueltype = test_pars[:boiler_fueltype]
     baseboard_type = test_pars[:baseboard_type]
@@ -260,7 +260,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
@@ -276,9 +276,10 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       model.getChillerElectricEIRs.each {|ichiller| ichiller.setReferenceCapacity(chiller_cap*1000.0)}
 
       # Run the standards.
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error "#{__FILE__}::#{__method__}: #{error.message}"
+      return {"ERROR" => error.message}
     end
 
     # Recover the chillers for checking. 
@@ -373,7 +374,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    output_folder = test_pars[:test_method]
+    test_name = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
     boiler_fueltype = test_pars[:boiler_fueltype]
     mau_cooling_type = test_pars[:mau_cooling_type]
@@ -399,7 +400,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
@@ -413,7 +414,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
                                        hw_loop: hw_loop)
       
       # Run sizing.
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end

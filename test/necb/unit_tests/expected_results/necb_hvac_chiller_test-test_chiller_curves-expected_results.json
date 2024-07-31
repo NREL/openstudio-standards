@@ -7,7 +7,7 @@
       "VarType": "TestCase",
       "small": {
         "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton": {
-          "chiller_name": " Chiller WaterCooled Scroll 28tons 0.8kW/ton",
+          "chiller_name": "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton",
           "capacity_kW": 99.39,
           "eff_curve_name": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",

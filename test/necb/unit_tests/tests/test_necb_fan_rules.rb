@@ -279,7 +279,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
       end
 
       # Run sizing.
-      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, second_run: true, output_dir: output_folder) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end

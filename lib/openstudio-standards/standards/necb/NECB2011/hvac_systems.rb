@@ -1331,14 +1331,18 @@ class NECB2011
         motor_type += 'VARIABLE-RETURN'
       end
       
-      # Calculate fan power using NECB equation (5.2.3.2)
-      max_flow = fan.maximumFlowRate.get
-      static_p = fan.pressureRise
-      total_eff = fan.fanTotalEfficiency
-      necb_fan_power_kw = max_flow * static_p / (total_eff * 1000.0)
-      power_vs_flow_curve_name = if necb_fan_power_kw >= 25.0
+      # Calculate fan power using NECB equation (5.2.3.2). This requires the max flow rate which is unknown for 
+      if fan.isMaximumFlowRateAutosized	then
+        fan_power_kw = 0.909 * 0.7457 * motor_bhp # Fall back if fan is autosized.
+      else
+        max_flow = fan.maximumFlowRate.get
+        static_p = fan.pressureRise
+        total_eff = fan.fanTotalEfficiency
+        fan_power_kw = max_flow * static_p / (total_eff * 1000.0)
+      end
+      power_vs_flow_curve_name = if fan_power_kw >= 25.0
                                    'VarVolFan-FCInletVanes-NECB2011-FPLR'
-                                 elsif necb_fan_power_kw >= 7.5 && necb_fan_power_kw < 25
+                                 elsif fan_power_kw >= 7.5 && fan_power_kw < 25
                                    'VarVolFan-AFBIInletVanes-NECB2011-FPLR'
                                  else
                                    'VarVolFan-AFBIFanCurve-NECB2011-FPLR'
