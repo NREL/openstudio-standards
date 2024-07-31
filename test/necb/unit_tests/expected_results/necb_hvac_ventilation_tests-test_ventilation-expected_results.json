@@ -1,0 +1,3141 @@
+{
+  "VarType": "Vintage",
+  "NECB2011": {
+    "VarType": "BuildingType",
+    "MediumOffice": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1480,
+          "calculated_ventilation_rate_m3_per_s": 0.699,
+          "sql_vbz_rate_m3_per_s": 0.7
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0934,
+          "sql_vbz_rate_m3_per_s": 0.0934
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0933,
+          "sql_vbz_rate_m3_per_s": 0.0933
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1480,
+          "calculated_ventilation_rate_m3_per_s": 0.699,
+          "sql_vbz_rate_m3_per_s": 0.7
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0933,
+          "sql_vbz_rate_m3_per_s": 0.0933
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0934,
+          "sql_vbz_rate_m3_per_s": 0.0934
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0934,
+          "sql_vbz_rate_m3_per_s": 0.0934
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 2": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1480,
+          "calculated_ventilation_rate_m3_per_s": 0.699,
+          "sql_vbz_rate_m3_per_s": 0.7
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0933,
+          "sql_vbz_rate_m3_per_s": 0.0933
+        }
+      }
+    },
+    "MidriseApartment": {
+      "VarType": "TestCase",
+      "Case1": {
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 1_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        },
+        "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 2_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 83.6,
+          "calculated_ventilation_rate_m3_per_s": 0.0395,
+          "sql_vbz_rate_m3_per_s": 0.0395
+        },
+        "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 3_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        }
+      }
+    },
+    "RetailStandalone": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Lobby - elevator_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 12.0,
+          "zone_area_ft2": 129,
+          "zone_num_people": 1.2,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 1.0,
+          "calculated_ventilation_rate_ft3_per_min": 129,
+          "calculated_ventilation_rate_m3_per_s": 0.061,
+          "sql_vbz_rate_m3_per_s": 0.061
+        },
+        "ALL_ST=Retail - sales_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Retail - sales_FL=Building Story 1_SCH=C 1": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Retail - sales_FL=Building Story 1_SCH=C 2": {
+          "zone_area_m2": 1600,
+          "zone_area_ft2": 17200,
+          "zone_num_people": 53.4,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 5170,
+          "calculated_ventilation_rate_m3_per_s": 2.44,
+          "sql_vbz_rate_m3_per_s": 2.44
+        },
+        "ALL_ST=Storage area_FL=Building Story 1_SCH=E": {
+          "zone_area_m2": 380,
+          "zone_area_ft2": 4090,
+          "zone_num_people": 3.8,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.15,
+          "calculated_ventilation_rate_ft3_per_min": 613,
+          "calculated_ventilation_rate_m3_per_s": 0.289,
+          "sql_vbz_rate_m3_per_s": 0.289
+        }
+      }
+    },
+    "Warehouse": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 237,
+          "zone_area_ft2": 2550,
+          "zone_num_people": 11.9,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 357,
+          "calculated_ventilation_rate_m3_per_s": 0.168,
+          "sql_vbz_rate_m3_per_s": 0.169
+        },
+        "ALL_ST=Warehouse - fine_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 1390,
+          "zone_area_ft2": 15000,
+          "zone_num_people": 27.9,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 750,
+          "calculated_ventilation_rate_m3_per_s": 0.354,
+          "sql_vbz_rate_m3_per_s": 0.354
+        },
+        "ALL_ST=Warehouse - med/blk_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 3200,
+          "zone_area_ft2": 34500,
+          "zone_num_people": 32.1,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 1720,
+          "calculated_ventilation_rate_m3_per_s": 0.814,
+          "sql_vbz_rate_m3_per_s": 0.814
+        }
+      }
+    }
+  },
+  "NECB2015": {
+    "VarType": "BuildingType",
+    "MediumOffice": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1480,
+          "calculated_ventilation_rate_m3_per_s": 0.699,
+          "sql_vbz_rate_m3_per_s": 0.7
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0934,
+          "sql_vbz_rate_m3_per_s": 0.0934
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0933,
+          "sql_vbz_rate_m3_per_s": 0.0933
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1480,
+          "calculated_ventilation_rate_m3_per_s": 0.699,
+          "sql_vbz_rate_m3_per_s": 0.7
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0933,
+          "sql_vbz_rate_m3_per_s": 0.0933
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0934,
+          "sql_vbz_rate_m3_per_s": 0.0934
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0934,
+          "sql_vbz_rate_m3_per_s": 0.0934
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 2": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1480,
+          "calculated_ventilation_rate_m3_per_s": 0.699,
+          "sql_vbz_rate_m3_per_s": 0.7
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0933,
+          "sql_vbz_rate_m3_per_s": 0.0933
+        }
+      }
+    },
+    "MidriseApartment": {
+      "VarType": "TestCase",
+      "Case1": {
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 1_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        },
+        "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 2_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 83.6,
+          "calculated_ventilation_rate_m3_per_s": 0.0395,
+          "sql_vbz_rate_m3_per_s": 0.0395
+        },
+        "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 3_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        }
+      }
+    },
+    "RetailStandalone": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Lobby - elevator_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 12.0,
+          "zone_area_ft2": 129,
+          "zone_num_people": 1.2,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 1.0,
+          "calculated_ventilation_rate_ft3_per_min": 129,
+          "calculated_ventilation_rate_m3_per_s": 0.061,
+          "sql_vbz_rate_m3_per_s": 0.061
+        },
+        "ALL_ST=Sales area_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Sales area_FL=Building Story 1_SCH=C 1": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Sales area_FL=Building Story 1_SCH=C 2": {
+          "zone_area_m2": 1600,
+          "zone_area_ft2": 17200,
+          "zone_num_people": 53.4,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 5170,
+          "calculated_ventilation_rate_m3_per_s": 2.44,
+          "sql_vbz_rate_m3_per_s": 2.44
+        },
+        "ALL_ST=Storage room < 5 m2-sch-A_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 380,
+          "zone_area_ft2": 4090,
+          "zone_num_people": 3.8,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.15,
+          "calculated_ventilation_rate_ft3_per_min": 613,
+          "calculated_ventilation_rate_m3_per_s": 0.289,
+          "sql_vbz_rate_m3_per_s": 0.289
+        }
+      }
+    },
+    "Warehouse": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office enclosed <= 25 m2_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 237,
+          "zone_area_ft2": 2550,
+          "zone_num_people": 11.8,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 357,
+          "calculated_ventilation_rate_m3_per_s": 0.168,
+          "sql_vbz_rate_m3_per_s": 0.169
+        },
+        "ALL_ST=Warehouse storage area medium to bulky palletized items_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 3200,
+          "zone_area_ft2": 34500,
+          "zone_num_people": 32.1,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 1720,
+          "calculated_ventilation_rate_m3_per_s": 0.814,
+          "sql_vbz_rate_m3_per_s": 0.814
+        },
+        "ALL_ST=Warehouse storage area small hand-carried items(4)_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 1390,
+          "zone_area_ft2": 15000,
+          "zone_num_people": 27.9,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 750,
+          "calculated_ventilation_rate_m3_per_s": 0.354,
+          "sql_vbz_rate_m3_per_s": 0.354
+        }
+      }
+    }
+  },
+  "NECB2017": {
+    "VarType": "BuildingType",
+    "MediumOffice": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1480,
+          "calculated_ventilation_rate_m3_per_s": 0.699,
+          "sql_vbz_rate_m3_per_s": 0.7
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0934,
+          "sql_vbz_rate_m3_per_s": 0.0934
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0933,
+          "sql_vbz_rate_m3_per_s": 0.0933
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1480,
+          "calculated_ventilation_rate_m3_per_s": 0.699,
+          "sql_vbz_rate_m3_per_s": 0.7
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0933,
+          "sql_vbz_rate_m3_per_s": 0.0933
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0934,
+          "sql_vbz_rate_m3_per_s": 0.0934
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0934,
+          "sql_vbz_rate_m3_per_s": 0.0934
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 2": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1480,
+          "calculated_ventilation_rate_m3_per_s": 0.699,
+          "sql_vbz_rate_m3_per_s": 0.7
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 312,
+          "calculated_ventilation_rate_m3_per_s": 0.147,
+          "sql_vbz_rate_m3_per_s": 0.147
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 198,
+          "calculated_ventilation_rate_m3_per_s": 0.0933,
+          "sql_vbz_rate_m3_per_s": 0.0933
+        }
+      }
+    },
+    "MidriseApartment": {
+      "VarType": "TestCase",
+      "Case1": {
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 1_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        },
+        "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 2_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 83.6,
+          "calculated_ventilation_rate_m3_per_s": 0.0395,
+          "sql_vbz_rate_m3_per_s": 0.0395
+        },
+        "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 3_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        }
+      }
+    },
+    "RetailStandalone": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Lobby - elevator_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 12.0,
+          "zone_area_ft2": 129,
+          "zone_num_people": 1.2,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 1.0,
+          "calculated_ventilation_rate_ft3_per_min": 129,
+          "calculated_ventilation_rate_m3_per_s": 0.061,
+          "sql_vbz_rate_m3_per_s": 0.061
+        },
+        "ALL_ST=Sales area_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Sales area_FL=Building Story 1_SCH=C 1": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Sales area_FL=Building Story 1_SCH=C 2": {
+          "zone_area_m2": 1600,
+          "zone_area_ft2": 17200,
+          "zone_num_people": 53.4,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 5170,
+          "calculated_ventilation_rate_m3_per_s": 2.44,
+          "sql_vbz_rate_m3_per_s": 2.44
+        },
+        "ALL_ST=Storage room < 5 m2-sch-A_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 380,
+          "zone_area_ft2": 4090,
+          "zone_num_people": 3.8,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.15,
+          "calculated_ventilation_rate_ft3_per_min": 613,
+          "calculated_ventilation_rate_m3_per_s": 0.289,
+          "sql_vbz_rate_m3_per_s": 0.289
+        }
+      }
+    },
+    "Warehouse": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office enclosed <= 25 m2_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 237,
+          "zone_area_ft2": 2550,
+          "zone_num_people": 11.8,
+          "oa_flow_in_ft3_per_min_per_person": 30.1,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 357,
+          "calculated_ventilation_rate_m3_per_s": 0.168,
+          "sql_vbz_rate_m3_per_s": 0.169
+        },
+        "ALL_ST=Warehouse storage area medium to bulky palletized items_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 3200,
+          "zone_area_ft2": 34500,
+          "zone_num_people": 32.1,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 1720,
+          "calculated_ventilation_rate_m3_per_s": 0.814,
+          "sql_vbz_rate_m3_per_s": 0.814
+        },
+        "ALL_ST=Warehouse storage area small hand-carried items(4)_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 1390,
+          "zone_area_ft2": 15000,
+          "zone_num_people": 27.9,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 750,
+          "calculated_ventilation_rate_m3_per_s": 0.354,
+          "sql_vbz_rate_m3_per_s": 0.354
+        }
+      }
+    }
+  },
+  "NECB2020": {
+    "VarType": "BuildingType",
+    "MediumOffice": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 900,
+          "calculated_ventilation_rate_m3_per_s": 0.425,
+          "sql_vbz_rate_m3_per_s": 0.425
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 120,
+          "calculated_ventilation_rate_m3_per_s": 0.0567,
+          "sql_vbz_rate_m3_per_s": 0.0567
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 190,
+          "calculated_ventilation_rate_m3_per_s": 0.0895,
+          "sql_vbz_rate_m3_per_s": 0.0895
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 190,
+          "calculated_ventilation_rate_m3_per_s": 0.0895,
+          "sql_vbz_rate_m3_per_s": 0.0895
+        },
+        "ALL_ST=Office open plan_FL=Building Story 1_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 120,
+          "calculated_ventilation_rate_m3_per_s": 0.0567,
+          "sql_vbz_rate_m3_per_s": 0.0567
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 900,
+          "calculated_ventilation_rate_m3_per_s": 0.425,
+          "sql_vbz_rate_m3_per_s": 0.425
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 120,
+          "calculated_ventilation_rate_m3_per_s": 0.0567,
+          "sql_vbz_rate_m3_per_s": 0.0567
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 190,
+          "calculated_ventilation_rate_m3_per_s": 0.0895,
+          "sql_vbz_rate_m3_per_s": 0.0895
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 190,
+          "calculated_ventilation_rate_m3_per_s": 0.0895,
+          "sql_vbz_rate_m3_per_s": 0.0895
+        },
+        "ALL_ST=Office open plan_FL=Building Story 2_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 120,
+          "calculated_ventilation_rate_m3_per_s": 0.0567,
+          "sql_vbz_rate_m3_per_s": 0.0567
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 190,
+          "calculated_ventilation_rate_m3_per_s": 0.0895,
+          "sql_vbz_rate_m3_per_s": 0.0895
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 120,
+          "calculated_ventilation_rate_m3_per_s": 0.0567,
+          "sql_vbz_rate_m3_per_s": 0.0567
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 2": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 900,
+          "calculated_ventilation_rate_m3_per_s": 0.425,
+          "sql_vbz_rate_m3_per_s": 0.425
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 190,
+          "calculated_ventilation_rate_m3_per_s": 0.0895,
+          "sql_vbz_rate_m3_per_s": 0.0895
+        },
+        "ALL_ST=Office open plan_FL=Building Story 3_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 120,
+          "calculated_ventilation_rate_m3_per_s": 0.0567,
+          "sql_vbz_rate_m3_per_s": 0.0567
+        }
+      }
+    },
+    "MidriseApartment": {
+      "VarType": "TestCase",
+      "Case1": {
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 149,
+          "calculated_ventilation_rate_m3_per_s": 0.0705,
+          "sql_vbz_rate_m3_per_s": 0.0705
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 149,
+          "calculated_ventilation_rate_m3_per_s": 0.0705,
+          "sql_vbz_rate_m3_per_s": 0.0705
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 149,
+          "calculated_ventilation_rate_m3_per_s": 0.0705,
+          "sql_vbz_rate_m3_per_s": 0.0705
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 149,
+          "calculated_ventilation_rate_m3_per_s": 0.0705,
+          "sql_vbz_rate_m3_per_s": 0.0705
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 149,
+          "calculated_ventilation_rate_m3_per_s": 0.0705,
+          "sql_vbz_rate_m3_per_s": 0.0705
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 149,
+          "calculated_ventilation_rate_m3_per_s": 0.0705,
+          "sql_vbz_rate_m3_per_s": 0.0705
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 149,
+          "calculated_ventilation_rate_m3_per_s": 0.0705,
+          "sql_vbz_rate_m3_per_s": 0.0705
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 149,
+          "calculated_ventilation_rate_m3_per_s": 0.0705,
+          "sql_vbz_rate_m3_per_s": 0.0705
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 3_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 3.53,
+          "oa_flow_in_ft3_per_min_per_person": 5.0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 74.7,
+          "calculated_ventilation_rate_m3_per_s": 0.0352,
+          "sql_vbz_rate_m3_per_s": 0.0352
+        },
+        "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 1_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 50.2,
+          "calculated_ventilation_rate_m3_per_s": 0.0237,
+          "sql_vbz_rate_m3_per_s": 0.0237
+        },
+        "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 2_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 100,
+          "calculated_ventilation_rate_m3_per_s": 0.0473,
+          "sql_vbz_rate_m3_per_s": 0.0473
+        },
+        "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 3_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 50.2,
+          "calculated_ventilation_rate_m3_per_s": 0.0237,
+          "sql_vbz_rate_m3_per_s": 0.0237
+        }
+      }
+    },
+    "RetailStandalone": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Lobby - elevator_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 12.0,
+          "zone_area_ft2": 129,
+          "zone_num_people": 1.2,
+          "oa_flow_in_ft3_per_min_per_person": 80.7,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 105,
+          "calculated_ventilation_rate_m3_per_s": 0.0494,
+          "sql_vbz_rate_m3_per_s": 0.0494
+        },
+        "ALL_ST=Sales area_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 36.3,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.12,
+          "calculated_ventilation_rate_ft3_per_min": 377,
+          "calculated_ventilation_rate_m3_per_s": 0.178,
+          "sql_vbz_rate_m3_per_s": 0.178
+        },
+        "ALL_ST=Sales area_FL=Building Story 1_SCH=C 1": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 36.3,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.12,
+          "calculated_ventilation_rate_ft3_per_min": 377,
+          "calculated_ventilation_rate_m3_per_s": 0.178,
+          "sql_vbz_rate_m3_per_s": 0.178
+        },
+        "ALL_ST=Sales area_FL=Building Story 1_SCH=C 2": {
+          "zone_area_m2": 1600,
+          "zone_area_ft2": 17200,
+          "zone_num_people": 53.4,
+          "oa_flow_in_ft3_per_min_per_person": 36.3,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.12,
+          "calculated_ventilation_rate_ft3_per_min": 4010,
+          "calculated_ventilation_rate_m3_per_s": 1.89,
+          "sql_vbz_rate_m3_per_s": 1.89
+        },
+        "ALL_ST=Storage room < 5 m2-sch-A_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 380,
+          "zone_area_ft2": 4090,
+          "zone_num_people": 3.8,
+          "oa_flow_in_ft3_per_min_per_person": 10.8,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 286,
+          "calculated_ventilation_rate_m3_per_s": 0.135,
+          "sql_vbz_rate_m3_per_s": 0.135
+        }
+      }
+    },
+    "Warehouse": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office enclosed <= 25 m2_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 237,
+          "zone_area_ft2": 2550,
+          "zone_num_people": 11.8,
+          "oa_flow_in_ft3_per_min_per_person": 5.38,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 217,
+          "calculated_ventilation_rate_m3_per_s": 0.102,
+          "sql_vbz_rate_m3_per_s": 0.102
+        },
+        "ALL_ST=Warehouse storage area medium to bulky palletized items_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 3200,
+          "zone_area_ft2": 34500,
+          "zone_num_people": 32.1,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 2070,
+          "calculated_ventilation_rate_m3_per_s": 0.977,
+          "sql_vbz_rate_m3_per_s": 0.977
+        },
+        "ALL_ST=Warehouse storage area small hand-carried items(4)_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 1390,
+          "zone_area_ft2": 15000,
+          "zone_num_people": 27.9,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 900,
+          "calculated_ventilation_rate_m3_per_s": 0.425,
+          "sql_vbz_rate_m3_per_s": 0.425
+        }
+      }
+    }
+  },
+  "BTAPPRE1980": {
+    "VarType": "BuildingType",
+    "MediumOffice": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1060,
+          "calculated_ventilation_rate_m3_per_s": 0.5,
+          "sql_vbz_rate_m3_per_s": 0.5
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1060,
+          "calculated_ventilation_rate_m3_per_s": 0.5,
+          "sql_vbz_rate_m3_per_s": 0.5
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 2": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1060,
+          "calculated_ventilation_rate_m3_per_s": 0.5,
+          "sql_vbz_rate_m3_per_s": 0.5
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        }
+      }
+    },
+    "MidriseApartment": {
+      "VarType": "TestCase",
+      "Case1": {
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 1_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        },
+        "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 2_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 83.6,
+          "calculated_ventilation_rate_m3_per_s": 0.0395,
+          "sql_vbz_rate_m3_per_s": 0.0395
+        },
+        "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 3_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        }
+      }
+    },
+    "RetailStandalone": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Lobby - elevator_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 12.0,
+          "zone_area_ft2": 129,
+          "zone_num_people": 1.2,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 1.0,
+          "calculated_ventilation_rate_ft3_per_min": 129,
+          "calculated_ventilation_rate_m3_per_s": 0.061,
+          "sql_vbz_rate_m3_per_s": 0.061
+        },
+        "ALL_ST=Retail - sales_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Retail - sales_FL=Building Story 1_SCH=C 1": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Retail - sales_FL=Building Story 1_SCH=C 2": {
+          "zone_area_m2": 1600,
+          "zone_area_ft2": 17200,
+          "zone_num_people": 53.4,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 5170,
+          "calculated_ventilation_rate_m3_per_s": 2.44,
+          "sql_vbz_rate_m3_per_s": 2.44
+        },
+        "ALL_ST=Storage area_FL=Building Story 1_SCH=E": {
+          "zone_area_m2": 380,
+          "zone_area_ft2": 4090,
+          "zone_num_people": 3.8,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.15,
+          "calculated_ventilation_rate_ft3_per_min": 613,
+          "calculated_ventilation_rate_m3_per_s": 0.289,
+          "sql_vbz_rate_m3_per_s": 0.289
+        }
+      }
+    },
+    "Warehouse": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 237,
+          "zone_area_ft2": 2550,
+          "zone_num_people": 11.9,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 255,
+          "calculated_ventilation_rate_m3_per_s": 0.12,
+          "sql_vbz_rate_m3_per_s": 0.12
+        },
+        "ALL_ST=Warehouse - fine_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 1390,
+          "zone_area_ft2": 15000,
+          "zone_num_people": 27.9,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 750,
+          "calculated_ventilation_rate_m3_per_s": 0.354,
+          "sql_vbz_rate_m3_per_s": 0.354
+        },
+        "ALL_ST=Warehouse - med/blk_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 3200,
+          "zone_area_ft2": 34500,
+          "zone_num_people": 32.1,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 1720,
+          "calculated_ventilation_rate_m3_per_s": 0.814,
+          "sql_vbz_rate_m3_per_s": 0.814
+        }
+      }
+    }
+  },
+  "BTAP1980TO2010": {
+    "VarType": "BuildingType",
+    "MediumOffice": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1060,
+          "calculated_ventilation_rate_m3_per_s": 0.5,
+          "sql_vbz_rate_m3_per_s": 0.5
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1060,
+          "calculated_ventilation_rate_m3_per_s": 0.5,
+          "sql_vbz_rate_m3_per_s": 0.5
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 2": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 1": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 2": {
+          "zone_area_m2": 984,
+          "zone_area_ft2": 10600,
+          "zone_num_people": 49.2,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 1060,
+          "calculated_ventilation_rate_m3_per_s": 0.5,
+          "sql_vbz_rate_m3_per_s": 0.5
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 3": {
+          "zone_area_m2": 207,
+          "zone_area_ft2": 2230,
+          "zone_num_people": 10.4,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 223,
+          "calculated_ventilation_rate_m3_per_s": 0.105,
+          "sql_vbz_rate_m3_per_s": 0.105
+        },
+        "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 4": {
+          "zone_area_m2": 131,
+          "zone_area_ft2": 1410,
+          "zone_num_people": 6.57,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 141,
+          "calculated_ventilation_rate_m3_per_s": 0.0667,
+          "sql_vbz_rate_m3_per_s": 0.0667
+        }
+      }
+    },
+    "MidriseApartment": {
+      "VarType": "TestCase",
+      "Case1": {
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 114,
+          "calculated_ventilation_rate_m3_per_s": 0.0538,
+          "sql_vbz_rate_m3_per_s": 0.0538
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 1": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 2": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 3": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 4": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 5": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 6": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 7": {
+          "zone_area_m2": 88.2,
+          "zone_area_ft2": 950,
+          "zone_num_people": 1.47,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.06,
+          "calculated_ventilation_rate_ft3_per_min": 57.0,
+          "calculated_ventilation_rate_m3_per_s": 0.0269,
+          "sql_vbz_rate_m3_per_s": 0.0269
+        },
+        "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 1_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        },
+        "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 2_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 83.6,
+          "calculated_ventilation_rate_m3_per_s": 0.0395,
+          "sql_vbz_rate_m3_per_s": 0.0395
+        },
+        "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 3_SCH=G": {
+          "zone_area_m2": 77.7,
+          "zone_area_ft2": 836,
+          "zone_num_people": 0.777,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 41.8,
+          "calculated_ventilation_rate_m3_per_s": 0.0197,
+          "sql_vbz_rate_m3_per_s": 0.0197
+        }
+      }
+    },
+    "RetailStandalone": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Lobby - elevator_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 12.0,
+          "zone_area_ft2": 129,
+          "zone_num_people": 1.2,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 1.0,
+          "calculated_ventilation_rate_ft3_per_min": 129,
+          "calculated_ventilation_rate_m3_per_s": 0.061,
+          "sql_vbz_rate_m3_per_s": 0.061
+        },
+        "ALL_ST=Retail - sales_FL=Building Story 1_SCH=C": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Retail - sales_FL=Building Story 1_SCH=C 1": {
+          "zone_area_m2": 151,
+          "zone_area_ft2": 1620,
+          "zone_num_people": 5.03,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 487,
+          "calculated_ventilation_rate_m3_per_s": 0.23,
+          "sql_vbz_rate_m3_per_s": 0.23
+        },
+        "ALL_ST=Retail - sales_FL=Building Story 1_SCH=C 2": {
+          "zone_area_m2": 1600,
+          "zone_area_ft2": 17200,
+          "zone_num_people": 53.4,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.3,
+          "calculated_ventilation_rate_ft3_per_min": 5170,
+          "calculated_ventilation_rate_m3_per_s": 2.44,
+          "sql_vbz_rate_m3_per_s": 2.44
+        },
+        "ALL_ST=Storage area_FL=Building Story 1_SCH=E": {
+          "zone_area_m2": 380,
+          "zone_area_ft2": 4090,
+          "zone_num_people": 3.8,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.15,
+          "calculated_ventilation_rate_ft3_per_min": 613,
+          "calculated_ventilation_rate_m3_per_s": 0.289,
+          "sql_vbz_rate_m3_per_s": 0.289
+        }
+      }
+    },
+    "Warehouse": {
+      "VarType": "TestCase",
+      "Case1": {
+        "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 237,
+          "zone_area_ft2": 2550,
+          "zone_num_people": 11.9,
+          "oa_flow_in_ft3_per_min_per_person": 21.5,
+          "oa_flow_in_ft3_per_min_per_ft2": 0,
+          "calculated_ventilation_rate_ft3_per_min": 255,
+          "calculated_ventilation_rate_m3_per_s": 0.12,
+          "sql_vbz_rate_m3_per_s": 0.12
+        },
+        "ALL_ST=Warehouse - fine_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 1390,
+          "zone_area_ft2": 15000,
+          "zone_num_people": 27.9,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 750,
+          "calculated_ventilation_rate_m3_per_s": 0.354,
+          "sql_vbz_rate_m3_per_s": 0.354
+        },
+        "ALL_ST=Warehouse - med/blk_FL=Building Story 1_SCH=A": {
+          "zone_area_m2": 3200,
+          "zone_area_ft2": 34500,
+          "zone_num_people": 32.1,
+          "oa_flow_in_ft3_per_min_per_person": 0,
+          "oa_flow_in_ft3_per_min_per_ft2": 0.05,
+          "calculated_ventilation_rate_ft3_per_min": 1720,
+          "calculated_ventilation_rate_m3_per_s": 0.814,
+          "sql_vbz_rate_m3_per_s": 0.814
+        }
+      }
+    }
+  }
+}
