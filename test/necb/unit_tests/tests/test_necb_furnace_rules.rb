@@ -200,7 +200,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # Read expected results.
     file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
-    expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
+    expected_results = JSON.parse(File.read(file_name), {symbolize_names: true})
 
     # Check if test results match expected.
     msg = "Furnace plf vs plr curve coeffs test results do not match what is expected in test"
@@ -262,8 +262,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       heatingCoil_name = mod_furnace.name.get
       furnace_curve = mod_furnace.partLoadFractionCorrelationCurve.get.to_CurveCubic.get
       furnace_curve_name = furnace_curve.name.get
-      results[heatingCoil_name] = {
-        # heating_coil_name: heatingCoil_name,
+      results[heatingCoil_name.gsub(/\s+/, "-").to_sym] = { # Ensure no white space in key string and that its a symbol.
         name: furnace_curve_name,
         type: "cubic",
         coeff1: furnace_curve.coefficient1Constant,
