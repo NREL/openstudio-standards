@@ -174,20 +174,30 @@ class NECB_HDD_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    output_folder = method_output_folder(test_pars[:test_method])
+    test_name = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
     vintage = test_pars[:Vintage]
-
+    
     # Test specific inputs.
     epw_file = test_case[:epw_file]
 
     # Define the base model. HDD rules are applied to this.
     model = create_base_model()
 
-    # Create a space type and assign to all spaces.. This is done because the FWDR is only applied to conditioned spaces. So we need conditioning data.
+    # Create a space type and assign to all spaces. This is done because the FWDR is only applied to conditioned spaces. So we need conditioning data.
     building_type = "Office"
     space_type = "WholeBuilding"
+
+    # Define the vintage, set weather file and get the HDD.
     standard = get_standard(vintage)
+    standard.apply_weather_data(model: model, epw_file: File.basename(epw_file))
+    hdd = standard.get_necb_hdd18(model)
+    
+    # Define the test name.
+    name = "#{vintage}-#{hdd} HDD"
+    name_short = "#{vintage}-#{hdd}"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
+    BTAP::FileIO.save_osm(model, "#{output_folder}/base.osm") if save_intermediate_models
 
     table = standard.standards_data['tables']['space_types']['table']
     space_type_properties = table.detect { |st| st["building_type"] == building_type && st["space_type"] == space_type }
@@ -208,7 +218,6 @@ class NECB_HDD_Tests < Minitest::Test
 
     # Worflow should mirror BTAP workflow up to fdwr. Note envelope includes infiltration.
     # Not validating spacetypes as not needed for this simplified test.
-    standard.apply_weather_data(model: model, epw_file: File.basename(epw_file))
     standard.apply_loads(model: model)
     standard.apply_envelope(model: model)
     standard.apply_fdwr_srr_daylighting(model: model)
@@ -218,8 +227,8 @@ class NECB_HDD_Tests < Minitest::Test
       standard.space_apply_infiltration_rate(space)
     end
 
-    # Store hdd for classifing results.
-    hdd = standard.get_necb_hdd18(model)
+    # Save model if requested.
+    BTAP::FileIO.save_osm(model, "#{output_folder}/hdd-#{hdd}.osm") if save_intermediate_models
 
     # Get Surfaces by type.
     outdoor_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Outdoors")
