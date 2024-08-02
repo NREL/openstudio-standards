@@ -3,6 +3,68 @@
   "NECB2011": {
     "VarType": "TestCase",
     "Reference": "NECB 2011 p3 5.2.10.1.",
+    "NO-HRV-Required": {
+      "Sys_3_PSZ Thermal Zone 2": {
+        "vintage": "NECB2011",
+        "city": "Toronto",
+        "multiplier_factor": 1.0,
+        "exhaust_heat_content_kW": 1.96,
+        "oaf": 0.25,
+        "flow_m3_per_s": 10.0,
+        "flow_L_per_s": 10000,
+        "flow_ft3_per_min": 21200,
+        "hdd": 3615.0,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 3": {
+        "vintage": "NECB2011",
+        "city": "Toronto",
+        "multiplier_factor": 1.0,
+        "exhaust_heat_content_kW": 4.5,
+        "oaf": 0.25,
+        "flow_m3_per_s": 10.0,
+        "flow_L_per_s": 10000,
+        "flow_ft3_per_min": 21200,
+        "hdd": 3615.0,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 4": {
+        "vintage": "NECB2011",
+        "city": "Toronto",
+        "multiplier_factor": 1.0,
+        "exhaust_heat_content_kW": 1.96,
+        "oaf": 0.25,
+        "flow_m3_per_s": 10.0,
+        "flow_L_per_s": 10000,
+        "flow_ft3_per_min": 21200,
+        "hdd": 3615.0,
+        "has_hrv": false
+      },
+      "Sys_3_PSZ Thermal Zone 5": {
+        "vintage": "NECB2011",
+        "city": "Toronto",
+        "multiplier_factor": 1.0,
+        "exhaust_heat_content_kW": 9.31,
+        "oaf": 0.25,
+        "flow_m3_per_s": 10.0,
+        "flow_L_per_s": 10000,
+        "flow_ft3_per_min": 21200,
+        "hdd": 3615.0,
+        "has_hrv": false
+      },
+      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
+        "vintage": "NECB2011",
+        "city": "Toronto",
+        "multiplier_factor": 1.0,
+        "exhaust_heat_content_kW": 4.5,
+        "oaf": 0.25,
+        "flow_m3_per_s": 10.0,
+        "flow_L_per_s": 10000,
+        "flow_ft3_per_min": 21200,
+        "hdd": 3615.0,
+        "has_hrv": false
+      }
+    },
     "HRV-Required": {
       "Sys_3_PSZ Thermal Zone 2": {
         "vintage": "NECB2011",
@@ -103,68 +165,6 @@
         "sensible_effectiveness_100_heating": 0.5,
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
-      }
-    },
-    "NO-HRV-Required": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2011",
-        "city": "Toronto",
-        "multiplier_factor": 1.0,
-        "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
-        "flow_L_per_s": 10000,
-        "flow_ft3_per_min": 21200,
-        "hdd": 3615.0,
-        "has_hrv": false
-      },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2011",
-        "city": "Toronto",
-        "multiplier_factor": 1.0,
-        "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
-        "flow_L_per_s": 10000,
-        "flow_ft3_per_min": 21200,
-        "hdd": 3615.0,
-        "has_hrv": false
-      },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2011",
-        "city": "Toronto",
-        "multiplier_factor": 1.0,
-        "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
-        "flow_L_per_s": 10000,
-        "flow_ft3_per_min": 21200,
-        "hdd": 3615.0,
-        "has_hrv": false
-      },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2011",
-        "city": "Toronto",
-        "multiplier_factor": 1.0,
-        "exhaust_heat_content_kW": 9.31,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
-        "flow_L_per_s": 10000,
-        "flow_ft3_per_min": 21200,
-        "hdd": 3615.0,
-        "has_hrv": false
-      },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2011",
-        "city": "Toronto",
-        "multiplier_factor": 1.0,
-        "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
-        "flow_L_per_s": 10000,
-        "flow_ft3_per_min": 21200,
-        "hdd": 3615.0,
-        "has_hrv": false
       }
     }
   },

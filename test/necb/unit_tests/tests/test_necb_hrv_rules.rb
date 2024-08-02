@@ -185,7 +185,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       weather_file = BTAP::Environment::WeatherFile.new(weather_file_name)
       # Set the weather file for the model
       weather_file.set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
       standard = get_standard(vintage)
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -249,7 +249,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       flow_L_per_s = OpenStudio.convert(flow, 'm^3/s', 'L/s').get
       flow_ft3_per_min = OpenStudio.convert(flow, 'm^3/s', 'ft^3/min').get
       # Add this test case to results and return the hash.
-      results[air_loop_hvac_name] = {
+      results[air_loop_hvac_name.to_sym] = {
         vintage: vintage,
         city: city,
         multiplier_factor: multiplier_factor,
@@ -274,14 +274,14 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
         sensibleEffectivenessat75CoolingAirFlow = hrv_objs.sensibleEffectivenessat75CoolingAirFlow
         sensibleEffectivenessat75HeatingAirFlow = hrv_objs.sensibleEffectivenessat75HeatingAirFlow
 
-        results[air_loop_hvac_name][:latent_effectiveness_100_cooling] = latentEffectivenessat100CoolingAirFlow
-        results[air_loop_hvac_name][:latent_effectiveness_100_heating] = latentEffectivenessat100HeatingAirFlow
-        results[air_loop_hvac_name][:latent_effectiveness_75_cooling] = latentEffectivenessat75CoolingAirFlow
-        results[air_loop_hvac_name][:latent_effectiveness_75_heating] = latentEffectivenessat75HeatingAirFlow
-        results[air_loop_hvac_name][:sensible_effectiveness_100_cooling] = sensibleEffectivenessat100CoolingAirFlow
-        results[air_loop_hvac_name][:sensible_effectiveness_100_heating] = sensibleEffectivenessat100HeatingAirFlow
-        results[air_loop_hvac_name][:sensible_effectiveness_75_cooling] = sensibleEffectivenessat75CoolingAirFlow
-        results[air_loop_hvac_name][:sensible_effectiveness_75_heating] = sensibleEffectivenessat75HeatingAirFlow
+        results[air_loop_hvac_name.to_sym][:latent_effectiveness_100_cooling] = latentEffectivenessat100CoolingAirFlow
+        results[air_loop_hvac_name.to_sym][:latent_effectiveness_100_heating] = latentEffectivenessat100HeatingAirFlow
+        results[air_loop_hvac_name.to_sym][:latent_effectiveness_75_cooling] = latentEffectivenessat75CoolingAirFlow
+        results[air_loop_hvac_name.to_sym][:latent_effectiveness_75_heating] = latentEffectivenessat75HeatingAirFlow
+        results[air_loop_hvac_name.to_sym][:sensible_effectiveness_100_cooling] = sensibleEffectivenessat100CoolingAirFlow
+        results[air_loop_hvac_name.to_sym][:sensible_effectiveness_100_heating] = sensibleEffectivenessat100HeatingAirFlow
+        results[air_loop_hvac_name.to_sym][:sensible_effectiveness_75_cooling] = sensibleEffectivenessat75CoolingAirFlow
+        results[air_loop_hvac_name.to_sym][:sensible_effectiveness_75_heating] = sensibleEffectivenessat75HeatingAirFlow
       end
       logger.info "Completed individual test: #{name}"
     end
@@ -290,4 +290,3 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     return results
   end
 end
-
