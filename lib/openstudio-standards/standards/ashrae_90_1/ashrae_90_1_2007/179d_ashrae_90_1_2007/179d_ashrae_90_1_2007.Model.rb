@@ -1096,7 +1096,7 @@ class ACM179dASHRAE9012007
           end
           area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
           occ_per_1000_ft2 = num_people / area_served_ft2 * 1000
-          if occ_per_1000_ft2 <= 100
+          if occ_per_1000_ft2 <= 40
             thermal_zone.additionalProperties.setFeature('apxg no need to have DCV', true)
           else
             thermal_zone.additionalProperties.setFeature('apxg no need to have DCV', false)
