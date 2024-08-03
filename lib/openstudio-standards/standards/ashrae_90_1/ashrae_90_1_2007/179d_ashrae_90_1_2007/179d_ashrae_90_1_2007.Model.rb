@@ -897,4 +897,232 @@ class ACM179dASHRAE9012007
     return fan_sch_names
   end
 
+  # https://github.com/NREL/openstudio-standards/blob/master/lib/openstudio-standards/standards/ashrae_90_1_prm/ashrae_90_1_prm.Model.rb#L1180
+  # Add zone additional property "zone DCV implemented in user model":
+  #   - 'true' if zone OA flow requirement is specified as per person & airloop supporting this zone has DCV enabled
+  #   - 'false' otherwise
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  # @return [Boolean] returns true if successful, false if not
+  def model_mark_zone_dcv_existence(model)
+    model.getAirLoopHVACs.each do |air_loop_hvac|
+      next unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+
+      oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
+      controller_oa = oa_system.getControllerOutdoorAir
+      controller_mv = controller_oa.controllerMechanicalVentilation
+      next unless controller_mv.demandControlledVentilation == true
+
+      air_loop_hvac.thermalZones.each do |thermal_zone|
+        zone_dcv = false
+        thermal_zone.spaces.each do |space|
+          dsn_oa = space.designSpecificationOutdoorAir
+          next if dsn_oa.empty?
+
+          dsn_oa = dsn_oa.get
+          next if dsn_oa.outdoorAirMethod == 'Maximum'
+
+          if dsn_oa.outdoorAirFlowperPerson > 0
+            # only in this case the thermal zone is considered to be implemented with DCV
+            zone_dcv = true
+          end
+        end
+
+        if zone_dcv
+          thermal_zone.additionalProperties.setFeature('zone DCV implemented in user model', true)
+        end
+      end
+    end
+
+    # mark unmarked zones
+    model.getThermalZones.each do |zone|
+      next if zone.additionalProperties.hasFeature('zone DCV implemented in user model')
+
+      zone.additionalProperties.setFeature('zone DCV implemented in user model', false)
+    end
+
+    return true
+  end
+
+  # https://github.com/NREL/openstudio-standards/blob/master/lib/openstudio-standards/standards/ashrae_90_1_prm/ashrae_90_1_prm.Model.rb#L1226
+  # read user data and add to zone additional properties
+  # "airloop user specified DCV exception"
+  # "one user specified DCV exception"
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  def model_add_dcv_user_exception_properties(model)
+    model.getAirLoopHVACs.each do |air_loop_hvac|
+      dcv_airloop_user_exception = false
+      if standards_data.key?('userdata_airloop_hvac')
+        standards_data['userdata_airloop_hvac'].each do |row|
+          next unless row['name'].to_s.downcase.strip == air_loop_hvac.name.to_s.downcase.strip
+
+          if row['dcv_exception_airloop'].to_s.upcase.strip == 'TRUE'
+            dcv_airloop_user_exception = true
+            break
+          end
+        end
+      end
+      air_loop_hvac.thermalZones.each do |thermal_zone|
+        if dcv_airloop_user_exception
+          thermal_zone.additionalProperties.setFeature('airloop user specified DCV exception', true)
+        end
+      end
+    end
+
+    # zone level exception tagging is put outside of airloop because it directly reads from user data and
+    # a zone not under an airloop in user model may be in an airloop in baseline
+    model.getThermalZones.each do |thermal_zone|
+      dcv_zone_user_exception = false
+      if standards_data.key?('userdata_thermal_zone')
+        standards_data['userdata_thermal_zone'].each do |row|
+          next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
+
+          if row['dcv_exception_thermal_zone'].to_s.upcase.strip == 'TRUE'
+            dcv_zone_user_exception = true
+            break
+          end
+        end
+      end
+      if dcv_zone_user_exception
+        thermal_zone.additionalProperties.setFeature('zone user specified DCV exception', true)
+      end
+    end
+
+    # mark unmarked zones
+    model.getThermalZones.each do |zone|
+      unless zone.additionalProperties.hasFeature('airloop user specified DCV exception')
+        zone.additionalProperties.setFeature('airloop user specified DCV exception', false)
+      end
+
+      unless zone.additionalProperties.hasFeature('zone user specified DCV exception')
+        zone.additionalProperties.setFeature('zone user specified DCV exception', false)
+      end
+    end
+  end
+
+  # https://github.com/NREL/openstudio-standards/blob/master/lib/openstudio-standards/standards/ashrae_90_1_prm/ashrae_90_1_prm.Model.rb#L1286
+  # add zone additional property "airloop dcv required by 901"
+  # - "true" if the airloop supporting this zone is required by 90.1 (non-exception requirement + user provided exception flag) to have DCV regarding user model
+  # - "false" otherwise
+  # add zone additional property "zone dcv required by 901"
+  # - "true" if the zone is required by 90.1(non-exception requirement + user provided exception flag) to have DCV regarding user model
+  # - 'flase' otherwise
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  def model_add_dcv_requirement_properties(model)
+    model.getAirLoopHVACs.each do |air_loop_hvac|
+      if user_model_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
+        air_loop_hvac.thermalZones.each do |thermal_zone|
+          thermal_zone.additionalProperties.setFeature('airloop dcv required by 901', true)
+
+          # the zone level dcv requirement can only be true if it is in an airloop that is required to have DCV
+          if user_model_zone_demand_control_ventilation_required?(thermal_zone)
+            thermal_zone.additionalProperties.setFeature('zone dcv required by 901', true)
+          end
+        end
+      end
+    end
+
+    # mark unmarked zones
+    model.getThermalZones.each do |zone|
+      unless zone.additionalProperties.hasFeature('airloop dcv required by 901')
+        zone.additionalProperties.setFeature('airloop dcv required by 901', false)
+      end
+
+      unless zone.additionalProperties.hasFeature('zone dcv required by 901')
+        zone.additionalProperties.setFeature('zone dcv required by 901', false)
+      end
+    end
+  end
+
+  # https://github.com/NREL/openstudio-standards/blob/master/lib/openstudio-standards/standards/ashrae_90_1_prm/ashrae_90_1_prm.Model.rb#L1319
+  # based on previously added flag, raise error if DCV is required but not implemented in zones, in which case
+  # baseline generation will be terminated; raise warning if DCV is not required but implemented, and continue baseline
+  # generation
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  # @todo JXL add log msgs to PRM logger
+  def model_raise_user_model_dcv_errors(model)
+    model.getThermalZones.each do |thermal_zone|
+      if thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get &&
+         (!thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get ||
+           !thermal_zone.additionalProperties.getFeatureAsBoolean('airloop dcv required by 901').get)
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "For thermal zone #{thermal_zone.name}, ASHRAE 90.1 2019 6.4.3.8 does NOT require this zone to have demand control ventilation, but it was implemented in the user model, Appendix G baseline generation will continue!")
+        if thermal_zone.additionalProperties.hasFeature('apxg no need to have DCV')
+          if !thermal_zone.additionalProperties.getFeatureAsBoolean('apxg no need to have DCV').get
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Moreover, for thermal zone #{thermal_zone.name}, Appendix G baseline model will have DCV based on ASHRAE 90.1 2019 G3.1.2.5")
+          end
+        end
+      end
+      if thermal_zone.additionalProperties.getFeatureAsBoolean('zone dcv required by 901').get &&
+         thermal_zone.additionalProperties.getFeatureAsBoolean('airloop dcv required by 901').get &&
+         !thermal_zone.additionalProperties.getFeatureAsBoolean('zone DCV implemented in user model').get
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "For thermal zone #{thermal_zone.name}, ASHRAE 90.1 2019 6.4.3.8 requires this zone to have demand control ventilation, but it was not implemented in the user model, Appendix G baseline generation should be terminated!")
+      end
+    end
+  end
+
+  # https://github.com/NREL/openstudio-standards/blob/master/lib/openstudio-standards/standards/ashrae_90_1_prm/ashrae_90_1_prm.Model.rb#L1344
+  # Check if zones in the baseline model (to be created) should have DCV based on 90.1 2019 G3.1.2.5. Zone additional
+  # property 'apxg no need to have DCV' added
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  def model_add_apxg_dcv_properties(model)
+    model.getAirLoopHVACs.each do |air_loop_hvac|
+      if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
+        oa_flow_m3_per_s = get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because it has no OA intake.")
+        return false
+      end
+      oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
+      if oa_flow_cfm <= 3000
+        air_loop_hvac.thermalZones.each do |thermal_zone|
+          thermal_zone.additionalProperties.setFeature('apxg no need to have DCV', true)
+        end
+      else # oa_flow_cfg > 3000, check zone people density
+        air_loop_hvac.thermalZones.each do |thermal_zone|
+          area_served_m2 = 0
+          num_people = 0
+          thermal_zone.spaces.each do |space|
+            area_served_m2 += space.floorArea
+            num_people += space.numberOfPeople
+          end
+          area_served_ft2 = OpenStudio.convert(area_served_m2, 'm^2', 'ft^2').get
+          occ_per_1000_ft2 = num_people / area_served_ft2 * 1000
+          if occ_per_1000_ft2 <= 100
+            thermal_zone.additionalProperties.setFeature('apxg no need to have DCV', true)
+          else
+            thermal_zone.additionalProperties.setFeature('apxg no need to have DCV', false)
+          end
+        end
+      end
+    end
+    # if a zone does not have this additional property, it means it was not served by airloop.
+  end
+
+  # https://github.com/NREL/openstudio-standards/blob/master/lib/openstudio-standards/standards/ashrae_90_1_prm/ashrae_90_1_prm.Model.rb#L1382
+  # Set DCV in baseline HVAC system if required
+  #
+  # @author Xuechen (Jerry) Lei, PNNL
+  # @param model [OpenStudio::Model::Model] OpenStudio model
+  def model_set_baseline_demand_control_ventilation(model, climate_zone)
+    model.getAirLoopHVACs.each do |air_loop_hvac|
+      if baseline_air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac)
+        air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
+        air_loop_hvac.thermalZones.sort.each do |zone|
+          unless baseline_thermal_zone_demand_control_ventilation_required?(zone)
+            OpenstudioStandards::ThermalZone.thermal_zone_convert_outdoor_air_to_per_area(zone)
+          end
+        end
+      end
+    end
+  end
+
 end
