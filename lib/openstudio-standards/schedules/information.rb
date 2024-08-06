@@ -24,13 +24,13 @@ module OpenstudioStandards
         schedule = schedule.to_ScheduleCompact.get
         result = OpenstudioStandards::Schedules.schedule_compact_get_min_max(schedule)
       when 'OS_Schedule_Year'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_min_max does not yet support ScheduleYear schedules.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} does not yet support ScheduleYear schedules.")
         result = { 'min' => nil, 'max' => nil }
       when 'OS_Schedule_Interval'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_min_max does not yet support ScheduleInterval schedules.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} does not yet support ScheduleInterval schedules.")
         result = { 'min' => nil, 'max' => nil }
       else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for schedule_get_min_max.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for #{__method__}.")
         result = { 'min' => nil, 'max' => nil }
       end
 
@@ -54,13 +54,13 @@ module OpenstudioStandards
         schedule = schedule.to_ScheduleCompact.get
         result = OpenstudioStandards::Schedules.schedule_compact_get_design_day_min_max(schedule, type)
       when 'OS_Schedule_Year'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_design_day_min_max does not yet support ScheduleYear schedules.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} does not yet support ScheduleYear schedules.")
         result = { 'min' => nil, 'max' => nil }
       when 'OS_Schedule_Interval'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_design_day_min_max does not yet support ScheduleInterval schedules.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} does not yet support ScheduleInterval schedules.")
         result = { 'min' => nil, 'max' => nil }
       else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for schedule_get_design_day_min_max.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for #{__method__}.")
         result = { 'min' => nil, 'max' => nil }
       end
 
@@ -82,16 +82,16 @@ module OpenstudioStandards
         schedule = schedule.to_ScheduleConstant.get
         result = OpenstudioStandards::Schedules.schedule_constant_get_equivalent_full_load_hours(schedule)
       when 'OS_Schedule_Compact'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_equivalent_full_load_hours does not yet support ScheduleCompact schedules.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} does not yet support ScheduleCompact schedules.")
         result = nil
       when 'OS_Schedule_Year'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_equivalent_full_load_hours does not yet support ScheduleYear schedules.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} does not yet support ScheduleYear schedules.")
         result = nil
       when 'OS_Schedule_Interval'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_equivalent_full_load_hours does not yet support ScheduleInterval schedules.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} does not yet support ScheduleInterval schedules.")
         result = nil
       else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for schedule_get_equivalent_full_load_hours.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for #{__method__}.")
         result = nil
       end
 
@@ -115,13 +115,13 @@ module OpenstudioStandards
         schedule = schedule.to_ScheduleCompact.get
         result = OpenstudioStandards::Schedules.schedule_compact_get_hourly_values(schedule)
       when 'OS_Schedule_Year'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_hourly_values does not yet support ScheduleYear schedules.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} does not yet support ScheduleYear schedules.")
         result = nil
       when 'OS_Schedule_Interval'
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', 'schedule_get_hourly_values does not yet support ScheduleInterval schedules.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} does not yet support ScheduleInterval schedules.")
         result = nil
       else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for schedule_get_hourly_values.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "unrecognized schedule type #{schedule.iddObjectType.valueName} for #{__method__}.")
         result = nil
       end
 
@@ -376,7 +376,7 @@ module OpenstudioStandards
       end
 
       unless schedule_values.size == 24
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method #{__method__} returned illegal number of values: #{schedule_values.size}.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} returned illegal number of values: #{schedule_values.size}.")
         return false
       end
 
@@ -399,7 +399,7 @@ module OpenstudioStandards
     def self.schedule_ruleset_get_min_max(schedule_ruleset, only_run_period_values: false)
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_min_max() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} failed because object #{schedule_ruleset.name.get} is not a ScheduleRuleset.")
         return nil
       end
 
@@ -497,7 +497,7 @@ module OpenstudioStandards
     def self.schedule_ruleset_get_design_day_min_max(schedule_ruleset, type = 'winter')
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_design_day_min_max() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} failed because object #{schedule_ruleset.name.get} is not a ScheduleRuleset.")
         return nil
       end
 
@@ -541,7 +541,7 @@ module OpenstudioStandards
     def self.schedule_ruleset_get_equivalent_full_load_hours(schedule_ruleset)
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_equivalent_full_load_hours() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} failed because object #{schedule_ruleset.name.get} is not a ScheduleRuleset.")
         return nil
       end
 
@@ -616,11 +616,11 @@ module OpenstudioStandards
     def self.schedule_ruleset_get_hourly_values(schedule_ruleset)
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_hourly_values() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
         return nil
       end
 
-        model = schedule_ruleset.model
+      model = schedule_ruleset.model
 
       # define the start and end date
       year_start_date = nil
@@ -660,7 +660,7 @@ module OpenstudioStandards
     def self.schedule_ruleset_get_hours_above_value(schedule_ruleset, lower_limit)
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_hours_above_value() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} failed because object #{schedule_ruleset.name.get} is not a ScheduleRuleset.")
         return nil
       end
 
@@ -741,7 +741,7 @@ module OpenstudioStandards
     def self.schedule_ruleset_get_timeseries(schedule_ruleset)
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_timeseries() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{method} failed because object #{schedule_ruleset.name.get} is not a ScheduleRuleset.")
         return nil
       end
 
@@ -772,7 +772,7 @@ module OpenstudioStandards
     def self.schedule_ruleset_get_start_and_end_times(schedule_ruleset)
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_start_and_end_times() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} failed because object #{schedule_ruleset.name.get} is not a ScheduleRuleset.")
         return [nil, nil]
       end
 
@@ -873,13 +873,13 @@ module OpenstudioStandards
       if include_design_days
 
         if schedule_ruleset.isSummerDesignDayScheduleDefaulted
-          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_day_schedules called for #{schedule_ruleset.name.get} with include_design_days: true, but the summer design day is defaulted. Duplicate design day will not be added.")
+          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "#{__method__} called for #{schedule_ruleset.name.get} with include_design_days: true, but the summer design day is defaulted. Duplicate design day will not be added.")
         else
           profiles << rule.summerDesignDaySchedule
         end
 
         if schedule_ruleset.isWinterDesignDayScheduleDefaulted
-          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_day_schedules called for #{schedule_ruleset.name.get} with include_design_days: true, but the winter design day is defaulted. Duplicate design day will not be added.")
+          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "#{__method__} called for #{schedule_ruleset.name.get} with include_design_days: true, but the winter design day is defaulted. Duplicate design day will not be added.")
         else
           profiles << rule.winterDesignDaySchedule
         end
