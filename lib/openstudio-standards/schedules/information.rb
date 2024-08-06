@@ -338,24 +338,36 @@ module OpenstudioStandards
     def self.schedule_day_get_hourly_values(schedule_day)
       schedule_values = []
 
-      # determine smallest time interval
-      times = schedule_day.times
-      time_interval_min = 15.0
-      previous_time_decimal = 0.0
-      times.each_with_index do |time, i|
-        time_decimal = (time.days * 24.0 * 60.0) + (time.hours * 60.0) + time.minutes + (time.seconds / 60)
-        interval_min = time_decimal - previous_time_decimal
-        time_interval_min = interval_min if interval_min < time_interval_min
-        previous_time_decimal = time_decimal
-      end
-      time_interval_min = time_interval_min.round(0).to_i
+      if schedule_day.model.version < OpenStudio::VersionString.new('3.8.0')
+        # determine smallest time interval
+        times = schedule_day.times
+        time_interval_min = 15.0
+        previous_time_decimal = 0.0
+        times.each_with_index do |time, i|
+          time_decimal = (time.days * 24.0 * 60.0) + (time.hours * 60.0) + time.minutes + (time.seconds / 60)
+          interval_min = time_decimal - previous_time_decimal
+          time_interval_min = interval_min if interval_min < time_interval_min
+          previous_time_decimal = time_decimal
+        end
+        time_interval_min = time_interval_min.round(0).to_i
 
-      # get the hourly average by averaging the values in the hour at the smallest time interval
-      (0..23).each do |j|
-        values = []
-        times = (time_interval_min..60).step(time_interval_min).to_a
-        times.each { |t| values << schedule_day.getValue(OpenStudio::Time.new(0, j, t, 0)) }
-        schedule_values << (values.sum / times.size).round(5)
+        # get the hourly average by averaging the values in the hour at the smallest time interval
+        (0..23).each do |j|
+          values = []
+          times = (time_interval_min..60).step(time_interval_min).to_a
+          times.each { |t| values << schedule_day.getValue(OpenStudio::Time.new(0, j, t, 0)) }
+          schedule_values << (values.sum / times.size).round(5)
+        end
+      else
+        orig_timestep = schedule_day.model.getTimestep.numberOfTimestepsPerHour
+        schedule_day.model.getTimestep.setNumberOfTimestepsPerHour(1)
+        schedule_values = schedule_day.timeSeries.values.to_a
+        schedule_day.model.getTimestep.setNumberOfTimestepsPerHour(orig_timestep)
+      end
+
+      unless schedule_values.size == 24
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method #{__method__} returned illegal number of values: #{schedule_values.size}.")
+        return false
       end
 
       return schedule_values
