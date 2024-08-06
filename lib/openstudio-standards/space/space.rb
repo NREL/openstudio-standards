@@ -435,6 +435,15 @@ module OpenstudioStandards
         sch_name = "#{spaces.size} space(s) Occ Sch"
       end
 
+      model = spaces.first.model
+
+      timestep = model.getTimestep
+      orig_timesteps = nil
+      if timestep.numberOfTimestepsPerHour != 1
+        orig_timestep = timestep.numberOfTimestepsPerHour
+        timestep.setNumberOfTimestepsPerHour(1)
+      end
+
       # Get all the occupancy schedules in spaces.
       # Include people added via the SpaceType and hard-assigned to the Space itself.
       occ_schedules_num_occ = {} # hash of People ScheduleRuleset => design occupancy for that People object
@@ -568,6 +577,9 @@ module OpenstudioStandards
         rules = OpenstudioStandards::Schedules.schedule_ruleset_create_rules_from_day_list(schedule_ruleset, days_used)
         rules.each { |rule| OpenstudioStandards::Schedules.schedule_day_populate_from_array_of_values(rule.daySchedule, profile) }
       end
+
+      # reset number of timesteps per hour
+      timestep.setNumberOfTimestepsPerHour(orig_timestep) unless orig_timestep.nil?
 
       return schedule_ruleset
     end

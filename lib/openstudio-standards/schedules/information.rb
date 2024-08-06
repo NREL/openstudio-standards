@@ -335,10 +335,14 @@ module OpenstudioStandards
     #
     # @param schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
     # @return [Array<Double>] Array of hourly values for the day
-    def self.schedule_day_get_hourly_values(schedule_day)
+    def self.schedule_day_get_hourly_values(schedule_day, model=nil)
       schedule_values = []
 
-      if schedule_day.model.version < OpenStudio::VersionString.new('3.8.0')
+      if model.nil?
+        model = schedule_day.model
+      end
+
+      if model.version.str < '3.8.0'
         # determine smallest time interval
         times = schedule_day.times
         time_interval_min = 15.0
@@ -359,10 +363,16 @@ module OpenstudioStandards
           schedule_values << (values.sum / times.size).round(5)
         end
       else
-        orig_timestep = schedule_day.model.getTimestep.numberOfTimestepsPerHour
-        schedule_day.model.getTimestep.setNumberOfTimestepsPerHour(1)
+        timestep = model.getTimestep
+        orig_timesteps = nil
+        if timestep.numberOfTimestepsPerHour != 1
+          orig_timestep = timestep.numberOfTimestepsPerHour
+          timestep.setNumberOfTimestepsPerHour(1)
+        end
+
         schedule_values = schedule_day.timeSeries.values.to_a
-        schedule_day.model.getTimestep.setNumberOfTimestepsPerHour(orig_timestep)
+
+        timestep.setNumberOfTimestepsPerHour(orig_timestep) unless orig_timestep.nil?
       end
 
       unless schedule_values.size == 24
@@ -610,11 +620,13 @@ module OpenstudioStandards
         return nil
       end
 
+        model = schedule_ruleset.model
+
       # define the start and end date
       year_start_date = nil
       year_end_date = nil
-      if schedule_ruleset.model.yearDescription.is_initialized
-        year_description = schedule_ruleset.model.yearDescription.get
+      if model.yearDescription.is_initialized
+        year_description = model.yearDescription.get
         year = year_description.assumedYear
         year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
         year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
@@ -632,8 +644,8 @@ module OpenstudioStandards
       annual_hourly_values = []
       day_schs.each do |day_sch|
         # add daily average hourly values to annual hourly values array
-        daily_hours = OpenstudioStandards::Schedules.schedule_day_get_hourly_values(day_sch)
-        daily_hours.each { |h| annual_hourly_values << h }
+        daily_hours = OpenstudioStandards::Schedules.schedule_day_get_hourly_values(day_sch, model)
+        annual_hourly_values += daily_hours
       end
 
       return annual_hourly_values
