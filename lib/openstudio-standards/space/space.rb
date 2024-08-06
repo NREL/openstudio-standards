@@ -440,7 +440,7 @@ module OpenstudioStandards
       timestep = model.getTimestep
       orig_timesteps = nil
       if timestep.numberOfTimestepsPerHour != 1
-        orig_timestep = timestep.numberOfTimestepsPerHour
+        orig_timesteps = timestep.numberOfTimestepsPerHour
         timestep.setNumberOfTimestepsPerHour(1)
       end
 
@@ -579,7 +579,7 @@ module OpenstudioStandards
       end
 
       # reset number of timesteps per hour
-      timestep.setNumberOfTimestepsPerHour(orig_timestep) unless orig_timestep.nil?
+      timestep.setNumberOfTimestepsPerHour(orig_timesteps) unless orig_timesteps.nil?
 
       return schedule_ruleset
     end
