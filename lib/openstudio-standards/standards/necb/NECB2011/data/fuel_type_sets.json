@@ -25,7 +25,6 @@
           "necb_reference_hp": false,
           "fan_type": "var_speed_drive",
           "swh_fueltype": "NaturalGas",
-          "shw_fueltype": "NaturalGas",
           "ecm_fueltype": "NaturalGas"
         },
         {
@@ -43,7 +42,6 @@
           "necb_reference_hp": true,
           "fan_type": "cav_speed_drive",
           "swh_fueltype": "NaturalGas",
-          "shw_fueltype": "NaturalGas",
           "ecm_fueltype": "NaturalGas"
         },
         {
@@ -61,7 +59,6 @@
           "necb_reference_hp":true,
           "fan_type": "cav_speed_drive",
           "swh_fueltype": "NaturalGas",
-          "shw_fueltype": "NaturalGas",
           "ecm_fueltype": "NaturalGas"
         },
         {
@@ -79,7 +76,6 @@
           "necb_reference_hp":false,
           "fan_type": "var_speed_drive",
           "swh_fueltype": "Electricity",
-          "shw_fueltype": "Electricity",
           "ecm_fueltype": "Electricity"
 
         },
@@ -98,7 +94,6 @@
           "necb_reference_hp":true,
           "fan_type": "cav_speed_drive",
           "swh_fueltype": "Electricity",
-          "shw_fueltype": "Electricity",
           "ecm_fueltype": "Electricity"
         },
         {
@@ -116,7 +111,6 @@
           "necb_reference_hp":true,
           "fan_type": "cav_speed_drive",
           "swh_fueltype": "Electricity",
-          "shw_fueltype": "Electricity",
           "ecm_fueltype": "Electricity" },
         {
           "name": "FuelOilNo2",
@@ -133,7 +127,6 @@
           "necb_reference_hp":false,
           "fan_type": "var_speed_drive",
           "swh_fueltype": "Electricity",
-          "shw_fueltype": "FuelOilNo2",
           "ecm_fueltype": "Electricity"
 
         }

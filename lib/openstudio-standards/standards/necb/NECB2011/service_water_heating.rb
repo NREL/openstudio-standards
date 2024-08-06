@@ -1,10 +1,10 @@
 class NECB2011
-  def model_add_swh(model:, shw_fueltype: 'DefaultFuel', shw_scale:)
+  def model_add_swh(model:, swh_fueltype: 'DefaultFuel', shw_scale:)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
     # Get default fuel based on epw location province.
-    if shw_fueltype == 'DefaultFuel'
+    if swh_fueltype == 'DefaultFuel'
       epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
-      shw_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
+      swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
     end
 
     # Calculate the tank size and service water pump information
@@ -29,7 +29,7 @@ class NECB2011
                                        shw_pump_motor_eff,
                                        shw_sizing['tank_capacity_SI'],
                                        shw_sizing['tank_volume_SI'],
-                                       shw_fueltype,
+                                       swh_fueltype,
                                        shw_sizing['parasitic_loss'],
                                        nil)
 
