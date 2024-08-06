@@ -335,7 +335,7 @@ module OpenstudioStandards
     #
     # @param schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
     # @return [Array<Double>] Array of hourly values for the day
-    def self.schedule_day_get_hourly_values(schedule_day, model=nil)
+    def self.schedule_day_get_hourly_values(schedule_day, model = nil)
       schedule_values = []
 
       if model.nil?
