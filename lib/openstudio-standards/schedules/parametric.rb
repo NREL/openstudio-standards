@@ -575,11 +575,11 @@ module OpenstudioStandards
       # new rules are created at top of list - cleanup old rules that have been replaced
       if !(new_rule_ct == 0 || new_rule_ct == schedule_ruleset.scheduleRules.size)
         # increase index values by the number of new rules
-        rule_idxs_adjusted = rule_idxs_to_keep.map{|v| v + new_rule_ct}
+        rule_idxs_adjusted = rule_idxs_to_keep.map { |v| v + new_rule_ct }
         rules_to_remove = []
         schedule_ruleset.scheduleRules.each_with_index do |rule, i|
           # don't remove new rules or rules that already match
-          if (rule.ruleIndex > new_rule_ct-1) && !(rule_idxs_adjusted.include?(rule.ruleIndex))
+          if (rule.ruleIndex > new_rule_ct - 1) && !rule_idxs_adjusted.include?(rule.ruleIndex)
             rules_to_remove << rule
           end
         end
