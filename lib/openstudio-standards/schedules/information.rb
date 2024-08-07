@@ -501,7 +501,7 @@ module OpenstudioStandards
       end
 
       if !schedule
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', "#{schedule_ruleset.name} is missing #{type} design day schedule, use default day schedule to process the min max search")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', "#{schedule_ruleset.name.get} is missing #{type} design day schedule, use default day schedule to process the min max search")
         schedule = schedule_ruleset.defaultDaySchedule
       end
 
@@ -595,7 +595,7 @@ module OpenstudioStandards
       # Warn if the max daily EFLH is more than 24,
       # which would indicate that this isn't a fractional schedule.
       if max_daily_flh > 24
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', "#{schedule_ruleset.name} has more than 24 EFLH in one day schedule, indicating that it is not a fractional schedule.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', "#{schedule_ruleset.name.get} has more than 24 EFLH in one day schedule, indicating that it is not a fractional schedule.")
       end
 
       return annual_flh
