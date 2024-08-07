@@ -435,15 +435,6 @@ module OpenstudioStandards
         sch_name = "#{spaces.size} space(s) Occ Sch"
       end
 
-      model = spaces.first.model
-
-      timestep = model.getTimestep
-      orig_timesteps = nil
-      if timestep.numberOfTimestepsPerHour != 1
-        orig_timesteps = timestep.numberOfTimestepsPerHour
-        timestep.setNumberOfTimestepsPerHour(1)
-      end
-
       # Get all the occupancy schedules in spaces.
       # Include people added via the SpaceType and hard-assigned to the Space itself.
       occ_schedules_num_occ = {} # hash of People ScheduleRuleset => design occupancy for that People object
@@ -484,11 +475,23 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "...#{occ_sch.name} - #{num_occ.round} people")
       end
 
+      model = spaces.first.model
+
+      timestep = model.getTimestep
+      orig_timesteps = nil
+      if timestep.numberOfTimestepsPerHour != 1
+        orig_timesteps = timestep.numberOfTimestepsPerHour
+        timestep.setNumberOfTimestepsPerHour(1)
+      end
+
       # get nested array of 8760 values of the total occupancy at each hour of each schedule
       all_schedule_hourly_occ = []
       occ_schedules_num_occ.each do |occ_sch, num_occ|
         all_schedule_hourly_occ << OpenstudioStandards::Schedules.schedule_get_hourly_values(occ_sch).map { |i| (i * num_occ).round(6) }
       end
+
+      # reset number of timesteps per hour
+      timestep.setNumberOfTimestepsPerHour(orig_timesteps) unless orig_timesteps.nil?
 
       # total occupancy from all people
       total_design_occ = occ_schedules_num_occ.values.sum
@@ -577,9 +580,6 @@ module OpenstudioStandards
         rules = OpenstudioStandards::Schedules.schedule_ruleset_create_rules_from_day_list(schedule_ruleset, days_used)
         rules.each { |rule| OpenstudioStandards::Schedules.schedule_day_populate_from_array_of_values(rule.daySchedule, profile) }
       end
-
-      # reset number of timesteps per hour
-      timestep.setNumberOfTimestepsPerHour(orig_timesteps) unless orig_timesteps.nil?
 
       return schedule_ruleset
     end
