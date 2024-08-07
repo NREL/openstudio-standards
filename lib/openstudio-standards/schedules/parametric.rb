@@ -554,6 +554,7 @@ module OpenstudioStandards
 
       # create new rule corresponding to the hour of operation rules
       new_rule_ct = 0
+      rule_idxs_to_keep = []
       sch_day_map.each do |sch_index, hoo_group|
         hoo_group.each do |hoo_index, day_group|
           # skip common default days
@@ -561,9 +562,9 @@ module OpenstudioStandards
 
           # skip if rules already match
           if (sch_ruleset_days_used[sch_index] - day_group).empty?
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{schedule_ruleset.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
-            # iterate new_rule_ct anyway to keep these rules
-            new_rule_ct += 1 unless sch_index == -1
+            # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{schedule_ruleset.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
+            # keep these rules indexes to avoid deleting later
+            rule_idxs_to_keep << sch_index unless sch_index == -1
             next
           end
           # create new rules
@@ -571,9 +572,18 @@ module OpenstudioStandards
           new_rule_ct += new_rules.size
         end
       end
-      # new rules are created at top of list - cleanup old rules
+      # new rules are created at top of list - cleanup old rules that have been replaced
       if !(new_rule_ct == 0 || new_rule_ct == schedule_ruleset.scheduleRules.size)
-        schedule_ruleset.scheduleRules[new_rule_ct..].each(&:remove)
+        # increase indexes by the number of new rules
+        rule_idxs_adjusted = rule_idxs_to_keep.map{|v| v + new_rule_ct}
+        rules_to_remove = []
+        schedule_ruleset.scheduleRules.each_with_index do |rule, i|
+          # don't remove new rules or rules that already match
+          if (rule.ruleIndex > new_rule_ct-1) && !(rule_idxs_adjusted.include?(rule.ruleIndex))
+            rules_to_remove << rule
+          end
+        end
+        rules_to_remove.each(&:remove)
       end
 
       # re-collect new schedule rules
