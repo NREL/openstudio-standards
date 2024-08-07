@@ -363,16 +363,9 @@ module OpenstudioStandards
           schedule_values << (values.sum / times.size).round(5)
         end
       else
-        timestep = model.getTimestep
-        orig_timesteps = nil
-        if timestep.numberOfTimestepsPerHour != 1
-          orig_timestep = timestep.numberOfTimestepsPerHour
-          timestep.setNumberOfTimestepsPerHour(1)
-        end
-
-        schedule_values = schedule_day.timeSeries.values.to_a
-
-        timestep.setNumberOfTimestepsPerHour(orig_timestep) unless orig_timestep.nil?
+        num_timesteps = model.getTimestep.numberOfTimestepsPerHour
+        day_timeseries = schedule_day.timeSeries.values.to_a
+        schedule_values = day_timeseries.each_slice(num_timesteps).map { |slice| slice.sum / slice.size.to_f }
       end
 
       unless schedule_values.size == 24
