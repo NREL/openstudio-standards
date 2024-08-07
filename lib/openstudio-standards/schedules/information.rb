@@ -616,7 +616,7 @@ module OpenstudioStandards
     def self.schedule_ruleset_get_hourly_values(schedule_ruleset)
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "#{__method__} failed because object #{schedule_ruleset.name.get} is not a ScheduleRuleset.")
         return nil
       end
 
