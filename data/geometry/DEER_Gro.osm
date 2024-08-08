@@ -1311,7 +1311,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Gro,                                    !- Standards Building Type
-  GrocSales;                              !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:SpaceType,
   {7db0a0bd-9aa4-45cd-9747-d2e0c17b7502}, !- Handle
@@ -1321,7 +1321,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Gro,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:SpaceType,
   {44a8edd8-c3fb-460d-8de4-7887fc170cae}, !- Handle
