@@ -521,7 +521,7 @@ module OpenstudioStandards
       # cleanup existing profiles
       OpenstudioStandards::Schedules.schedule_ruleset_cleanup_profiles(schedule_ruleset)
 
-      # get initial hash of schedule days => rule indices
+      # get initial hash of schedule days => rule index values
       schedule_days = OpenstudioStandards::Schedules.schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
       # get all day schedule equivalent full load hours to tag
       daily_flhs = schedule_days.keys.map { |day_sch| OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(day_sch) }
@@ -529,8 +529,8 @@ module OpenstudioStandards
       sch_ruleset_days_used = OpenstudioStandards::Schedules.schedule_ruleset_get_annual_days_used(schedule_ruleset)
 
       # match up schedule rule days with hours of operation days
-      # sch_day_map is a hash where keys are the rule indices of the schedule
-      # and values are hashes where keys are the hours of operation rule index, and values are arrays of days that the shcedu
+      # sch_day_map is a hash where keys are the rule index values of the schedule
+      # and values are hashes where keys are the hours of operation rule index, and values are arrays of days that the schedule
       sch_day_map = {}
       sch_ruleset_days_used.each do |sch_index, sch_days|
         # first create a hash that maps each day index to the hoo index that covers that day
@@ -554,6 +554,7 @@ module OpenstudioStandards
 
       # create new rule corresponding to the hour of operation rules
       new_rule_ct = 0
+      rule_idxs_to_keep = []
       sch_day_map.each do |sch_index, hoo_group|
         hoo_group.each do |hoo_index, day_group|
           # skip common default days
@@ -561,9 +562,9 @@ module OpenstudioStandards
 
           # skip if rules already match
           if (sch_ruleset_days_used[sch_index] - day_group).empty?
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{schedule_ruleset.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
-            # iterate new_rule_ct anyway to keep these rules
-            new_rule_ct += 1 unless sch_index == -1
+            # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{schedule_ruleset.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
+            # keep these rules index values to avoid deleting later
+            rule_idxs_to_keep << sch_index unless sch_index == -1
             next
           end
           # create new rules
@@ -571,9 +572,18 @@ module OpenstudioStandards
           new_rule_ct += new_rules.size
         end
       end
-      # new rules are created at top of list - cleanup old rules
+      # new rules are created at top of list - cleanup old rules that have been replaced
       if !(new_rule_ct == 0 || new_rule_ct == schedule_ruleset.scheduleRules.size)
-        schedule_ruleset.scheduleRules[new_rule_ct..].each(&:remove)
+        # increase index values by the number of new rules
+        rule_idxs_adjusted = rule_idxs_to_keep.map { |v| v + new_rule_ct }
+        rules_to_remove = []
+        schedule_ruleset.scheduleRules.each_with_index do |rule, i|
+          # don't remove new rules or rules that already match
+          if (rule.ruleIndex > new_rule_ct - 1) && !rule_idxs_adjusted.include?(rule.ruleIndex)
+            rules_to_remove << rule
+          end
+        end
+        rules_to_remove.each(&:remove)
       end
 
       # re-collect new schedule rules
@@ -958,7 +968,7 @@ module OpenstudioStandards
 
       # Get the hours of operation schedule
       hours_of_operation = parametric_inputs[schedule_ruleset][:hoo_inputs]
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name} hours_of_operation = #{hours_of_operation}.")
+      # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name} hours_of_operation = #{hours_of_operation}.")
 
       starting_aeflh = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule_ruleset)
 
@@ -1267,7 +1277,7 @@ module OpenstudioStandards
           time_value_pairs[i][0] = updated_time
 
           # reporting mostly for diagnostic purposes
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleDay', "For #{schedule_day.name} profile item #{i} time was #{last_time} and item #{i + 1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
+          # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleDay', "For #{schedule_day.name} profile item #{i} time was #{last_time} and item #{i + 1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
 
           last_time = updated_time
           throw_order_warning = true
@@ -1279,7 +1289,7 @@ module OpenstudioStandards
 
       # issue warning if order was changed
       if throw_order_warning
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.ScheduleDay', "Pre-interpolated processed hash for #{schedule_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjusted as shown to crate a valid profile: #{time_value_pairs}")
+        # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.ScheduleDay', "Pre-interpolated processed hash for #{schedule_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjusted as shown to crate a valid profile: #{time_value_pairs}")
       end
 
       # add interpolated values at ramp_frequency
@@ -1338,7 +1348,7 @@ module OpenstudioStandards
         time_value_pairs << [24.0, time_value_pairs.first[1]]
       end
 
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleDay', "Schedule #{schedule_day.name} will be adjusted with these time-value pairs: #{time_value_pairs}")
+      # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleDay', "Schedule #{schedule_day.name} will be adjusted with these time-value pairs: #{time_value_pairs}")
 
       # reset scheduleDay values based on interpolated values
       schedule_day.clearValues
