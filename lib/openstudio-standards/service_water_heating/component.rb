@@ -77,6 +77,15 @@ module OpenstudioStandards
         water_heater.setOffCycleParasiticFuelType('Electricity')
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053)
+      when 'FuelOilNo2'
+        water_heater.setHeaterFuelType('FuelOilNo2')
+        water_heater.setHeaterThermalEfficiency(0.78)
+        water_heater.setOnCycleParasiticFuelConsumptionRate(on_cycle_parasitic_fuel_consumption_rate)
+        water_heater.setOffCycleParasiticFuelConsumptionRate(off_cycle_parasitic_fuel_consumption_rate)
+        water_heater.setOnCycleParasiticFuelType('FuelOilNo2')
+        water_heater.setOffCycleParasiticFuelType('FuelOilNo2')
+        water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
+        water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
       when 'HeatPump', 'SimpleHeatPump'
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Simple workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
         # Make a part-load efficiency modifier curve with a value above 1, which is multiplied by the nominal efficiency of 100% to represent the COP of a HPWH.
