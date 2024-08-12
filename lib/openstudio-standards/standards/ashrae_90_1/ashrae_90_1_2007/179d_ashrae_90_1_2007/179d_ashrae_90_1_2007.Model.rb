@@ -1226,7 +1226,13 @@ class ACM179dASHRAE9012007
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because it has no OA intake.")
         return false
       end
-      oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
+      # oa_flow_m3_per_s can be false if the sizing run failed or sql not avail
+      if oa_flow_m3_per_s != false
+        oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because oa_flow_m3_per_s is FALSE.")
+        return false
+      end
       if oa_flow_cfm <= 3000
         air_loop_hvac.thermalZones.each do |thermal_zone|
           thermal_zone.additionalProperties.setFeature('apxg no need to have DCV', true)
