@@ -133,7 +133,7 @@ class ACM179dASHRAE9012007
     end
 
     return true
-
+  end
   # Set default fan curve to be VSD with static pressure reset
   # NOTE: 179D overrides it because we want the use the proper fan coefs, 
   # and not the ones from 'Multi Zone VAV with VSD and SP Setpoint Reset'
