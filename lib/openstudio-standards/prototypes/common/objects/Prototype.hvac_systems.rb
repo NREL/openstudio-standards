@@ -296,6 +296,10 @@ class Standard
         # Change the chilled water loop to have a two-way common pipes
         chilled_water_loop.setCommonPipeSimulation('CommonPipe')
       elsif pri_sec_config == 'heat_exchanger'
+        # Check number of chillers
+        if num_chillers > 3
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "EMS Code for multiple chiller pump has not been written for greater than 3 chillers. This has #{num_chillers} chillers")
+        end
         # NOTE: PRECONDITIONING for `const_pri_var_sec` pump type is only applicable for PRM routine and only applies to System Type 7 and System Type 8
         # See: model_add_prm_baseline_system under Model object.
         # In this scenario, we will need to create a primary and secondary configuration:
@@ -391,11 +395,6 @@ class Standard
         default_cop = kw_per_ton_to_cop(0.66)
       else
         default_cop = kw_per_ton_to_cop(0.66)
-      end
-
-      # Check number of chillers
-      if num_chillers > 3
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "EMS Code for multiple chiller pump has not been written for greater than 3 chillers. This has #{num_chillers} chillers")
       end
 
       # make the correct type of chiller based these properties
