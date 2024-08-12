@@ -22,8 +22,14 @@ class ACM179dASHRAE9012007
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because it has no OA intake.")
       return false
     end
-    oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
-
+    # oa_flow_m3_per_s can be false if the sizing run failed or sql not avail
+    if oa_flow_m3_per_s != false
+      puts "oa_flow_m3_per_s: #{oa_flow_m3_per_s}"
+      oa_flow_cfm = OpenStudio.convert(oa_flow_m3_per_s, 'm^3/s', 'cfm').get
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, DCV not applicable because oa_flow_m3_per_s is FALSE.")
+      return false
+    end
     any_zones_req_dcv = false
     air_loop_hvac.thermalZones.sort.each do |zone|
       if user_model_zone_demand_control_ventilation_required?(zone)
@@ -101,7 +107,7 @@ class ACM179dASHRAE9012007
   # @return [Double] Design outdoor air flow rate (m^3/s)
   def get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
     return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
-
+    return false unless air_loop_hvac.model.sqlFile.is_initialized
     cooling_oa = air_loop_hvac.model.sqlFile.get.execAndReturnFirstDouble(
       "SELECT Value FROM TabularDataWithStrings WHERE ReportName='Standard62.1Summary' AND ReportForString='Entire Facility' AND TableName = 'System Ventilation Requirements for Cooling' AND ColumnName LIKE 'Outdoor Air Intake Flow%Vot' AND RowName='#{air_loop_hvac.name.to_s.upcase}'"
     )
@@ -133,9 +139,9 @@ class ACM179dASHRAE9012007
     end
 
     return true
-
+  end
   # Set default fan curve to be VSD with static pressure reset
-  # NOTE: 179D overrides it because we want the use the proper fan coefs, 
+  # NOTE: 179D overrides it because we want the use the proper fan coefs,
   # and not the ones from 'Multi Zone VAV with VSD and SP Setpoint Reset'
   # @return [string] name of appropriate curve for this code version
   def air_loop_hvac_set_vsd_curve_type
