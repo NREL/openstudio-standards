@@ -633,6 +633,11 @@ class ACM179dASHRAE9012007
                                         sys_group['zones'],
                                         zone_fan_scheds)
 
+          if baseline_179d && ['Gas_Furnace', 'Electric_Furnace'].include?(system_type[0])
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "179D - For Unit Heater, adding a ZoneVentilationDesignFlowRate for outside air requirements")
+            model_add_equivalent_zone_ventilation_for_heated_only_zones_with_dsoa(model, sys_group['zones'], ventilation_type: 'Exhaust', ensure_ddy_infiltration: true)
+          end
+
           model.getAirLoopHVACs.each do |air_loop|
             air_loop_name = air_loop.name.get
             unless air_loop_name_array.include?(air_loop_name)
@@ -874,6 +879,146 @@ class ACM179dASHRAE9012007
     end
 
     return true
+  end
+
+
+  def _get_or_create_ddy_only_infiltration_schedule(model)
+    ddy_only_infil_sch_name = "Infiltration Schedule Only One on Design Days"
+    sch_ = model.getScheduleRulesetByName(ddy_only_infil_sch_name)
+    return sch_.get if sch_.is_initialized
+
+    sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(model, 0.0)
+    sch_ruleset.setName(ddy_only_infil_sch_name)
+    sch_ruleset.defaultDaySchedule().setName("#{ddy_only_infil_sch_name} Default Day")
+
+    # Winter Design Day
+    temp = OpenStudio::Model::ScheduleDay.new(model)
+    sch_ruleset.setWinterDesignDaySchedule(temp)
+    temp.remove
+    winter_dsn_day = sch_ruleset.winterDesignDaySchedule
+    winter_dsn_day.setName("#{ddy_only_infil_sch_name} Winter Design Day")
+    winter_dsn_day.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
+    # Summer Design Day
+    temp = OpenStudio::Model::ScheduleDay.new(model)
+    sch_ruleset.setSummerDesignDaySchedule(temp)
+    temp.remove
+    summer_dsn_day = sch_ruleset.summerDesignDaySchedule
+    summer_dsn_day.setName("#{ddy_only_infil_sch_name} Summer Design Day")
+    summer_dsn_day.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
+    return sch_ruleset
+  end
+
+  def space_get_outdoor_airflow_rate(space)
+    return 0.0 if space.designSpecificationOutdoorAir.empty?
+    dsoa = space.designSpecificationOutdoorAir.get
+    oa_people = space.numberOfPeople * dsoa.outdoorAirFlowperPerson
+    oa_floor_area = space.floorArea * dsoa.outdoorAirFlowperFloorArea
+    oa_rate = dsoa.outdoorAirFlowRate
+    oa_volume = space.volume * dsoa.outdoorAirFlowAirChangesperHour / 3600.0
+
+    if dsoa.outdoorAirMethod.downcase == 'sum'
+      return [oa_people, oa_floor_area, oa_rate, oa_volume].sum
+    else
+      return [oa_people, oa_floor_area, oa_rate, oa_volume].max
+    end
+  end
+
+  # For Heated Only Zones, System 9 or 10, there will be zero outside air
+  # actually brought in, because the ZoneHVACUnitHeater does add OA.
+  # While this has very little effect in most of the building types (heated
+  # only zones are small), this is problematic for the Warehouse in particular
+  # This method will look on such zones, and for each zone it will find the
+  # DesignSpecificationOutdoorAir objects for the spaces and compute an
+  # equivalent OA flow rate, and create a ZoneVentilationDesignFlowRate object
+  # to match it.
+  # @param ventilation_type [String] one of:
+  #   * 'Natural', 'Intake' (Supply Fanfloor area (m^2)
+  #   * 'Intake': System 9 and 10 supply fan, 0.3 W/CFM
+  #   * 'Exahsut': System 9 and 10 non-mechanical cooling, 0.054 W/CFM
+  # @param ensure_ddy_infiltration [Boolean]:
+  #   * If true, will check that the spaces do have some ACH, or will define a
+  #   SpaceInfiltrationDesignFlowRate only active during design days that
+  #   matches the space's DesignSpecificationOutdoorAir
+  def model_add_equivalent_zone_ventilation_for_heated_only_zones_with_dsoa(model, zones, ventilation_type: 'Natural', ensure_ddy_infiltration: true)
+    zones.sort.each do |zone|
+      total_oa_m3_per_s = thermal_zone_outdoor_airflow_rate(zone)
+
+      total_oa_m3_per_m2s = total_oa_m3_per_s / zone.floorArea
+
+      next unless total_oa_m3_per_s > 0
+
+      # ventilation = model_add_zone_ventilation(model, sys_group['zones'], ventilation_type: 'Natural', flow_rate: total_oa_m3_per_s).first
+
+      tot_oa_cfm = OpenStudio.convert(total_oa_m3_per_s, 'm^3/s', 'cfm').get.round(2)
+      total_oa_cfm_per_sqft = OpenStudio.convert(total_oa_m3_per_m2s, 'm^3/m^2*s', 'cfm/ft^2').get.round(4)
+
+      OpenStudio.logFree(
+        OpenStudio::Info, 'openstudio.179D.Model',
+        "Adding zone ventilation fan for #{zone.name} - #{tot_oa_cfm} CFM total - #{total_oa_cfm_per_sqft} CFM/ft^2"
+      )
+
+      ventilation = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
+      ventilation.setName("#{zone.name} Ventilation")
+      ventilation.setSchedule(model.alwaysOnDiscreteSchedule)
+
+      # Per Flow Area is clearer in intent, because that's what we
+      # mostly have in our standards data
+      # ventilation.setDesignFlowRate(total_oa_m3_per_s)
+      ventilation.setFlowRateperZoneFloorArea(total_oa_m3_per_m2s)
+
+      # Make it run all the time, with the design flow rate
+      ventilation.setConstantTermCoefficient(1.0)
+      ventilation.setVelocityTermCoefficient(0.0)
+      ventilation.setTemperatureTermCoefficient(0.0)
+      ventilation.setMinimumIndoorTemperature(-73.3333352760033)
+      ventilation.setMaximumIndoorTemperature(100.0)
+      ventilation.setDeltaTemperature(-100.0)
+
+      if ventilation_type == 'Natural'
+        # No fan power
+        pressure_rise_pa = 0.0
+        fan_total_eff = 1.0
+      elsif ventilation_type == 'Intake'
+        # System Type 9 and 10 (supply fan): Pfan = CFM * 0.3
+        target_w_per_m3_per_s = OpenStudio.convert(0.3, 'W/CFM', 'W*s/m^3').get()
+        fan_total_eff = 0.6
+        pressure_rise_pa = fan_total_eff * target_w_per_m3_per_s
+      elsif ventilation_type == 'Exhaust'
+        # System Type 9 and 10 (non-mechanical cooling fan
+        # if required by Section G3.1.2.8.2): Pfan = CFM * 0.054
+        target_w_per_m3_per_s = OpenStudio.convert(0.054, 'W/CFM', 'W*s/m^3').get()
+        fan_total_eff = 0.6
+        pressure_rise_pa = fan_total_eff * target_w_per_m3_per_s
+      else
+        raise "ventilation_type must be one of ['Natural', 'Intake', 'Exhaust']"
+      end
+
+      ventilation.setVentilationType(ventilation_type)
+      ventilation.setFanPressureRise(pressure_rise_pa)
+      ventilation.setFanTotalEfficiency(fan_total_eff)
+
+      ventilation.addToThermalZone(zone)
+
+      return unless ensure_ddy_infiltration
+
+      zone.spaces.each do |space|
+        next if space.infiltrationDesignAirChangesPerHour > 0.001
+        spi = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
+        spi.setName("#{space.nameString} Design Day Only Infiltration")
+        spi.setSpace(space)
+        spi.setSchedule(_get_or_create_ddy_only_infiltration_schedule(model))
+        if space.designSpecificationOutdoorAir.is_initialized
+          spi.setFlowperSpaceFloorArea(space_get_outdoor_airflow_rate(space) / space.floorArea())
+        else
+          spi.setAirChangesperHour(0.01) # Abitrary ACH
+        end
+        target_ach = spi.getAirChangesPerHour(space.floorArea(), space.exteriorArea(), space.exteriorWallArea(), space.volume())
+        OpenStudio.logFree(
+          OpenStudio::Info, 'openstudio.179D.Model',
+          "Adding Design Day Only Infiltration for Space '#{space.nameString}' with equivalent #{target_ach.round(2)} ACH to avoid sizing errors"
+        )
+      end
+    end
   end
 
   # Store fan operation schedule for each zone before deleting HVAC objects
