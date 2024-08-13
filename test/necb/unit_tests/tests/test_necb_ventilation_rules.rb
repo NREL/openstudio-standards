@@ -30,8 +30,8 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     test_cases_hash = {
       :Vintage => @AllTemplates,
       :BuildingType => @CommonBuildings,
-      :TestCase => ["Case1"],
-      :TestPars => { :oaf => "tbd" }
+      :TestCase => ["ZoneResults"],
+      :TestPars => {  } # :oaf => "tbd"
     }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -93,11 +93,11 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
         file.write("Model creation failed for #{vintage} #{building_type}\n")
       end
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
-      return {}
+      return []
     end
 
     # Extract the results for checking.
-    results = Hash.new
+    results = Array.new
     air_loops_hvac = model.getAirLoopHVACs
     air_loops_hvac.each do |air_loop_hvac|
       zones = air_loop_hvac.thermalZones
@@ -131,8 +131,9 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
           calculated_ventilation_rate = (zone_num_people * oa_flow_per_person + zone_area * oa_flow_per_floor_area) * zone.multiplier
           calculated_ventilation_rate_ft3_per_min = OpenStudio.convert(calculated_ventilation_rate, 'm^3/s', 'ft^3/min').get
           
-          # Add this test case to results and return the hash.
-          results[zone_name.to_sym] = {
+          # Add this test case to results and return the array.
+          results << {
+            zone_name: zone_name,
             zone_area_m2: zone_area.signif(3),
             zone_area_ft2: zone_area_ft2.signif(3),
             zone_num_people: zone_num_people.signif(3),
@@ -147,6 +148,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     end
     logger.info "Completed individual test: #{name}"
 
-    return results
+	  # Sort results hash by name (the diff algorithm does not work well for arrays of hashes)
+    return results.sort_by {|e| e[:zone_name]}
   end
 end

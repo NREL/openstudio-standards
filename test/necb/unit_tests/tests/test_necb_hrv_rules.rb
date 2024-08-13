@@ -33,7 +33,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
 
     # For compliance with NECB 2011 and NECB 2015, HRV is mandated when exhaust heat exceeds 150 kW.
     test_cases_hash = { :Vintage => ["NECB2011", "NECB2015"],
-                        :TestCase => ["NO-HRV-Required"],
+                        :TestCase => ["HRV not required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.25,
                                        :flow => 10.0,
@@ -43,7 +43,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
 
     # A multiplier of 80 is applied to simulate cases where exhaust heat surpasses the 150 kW threshold.
     test_cases_hash = { :Vintage => ["NECB2011", "NECB2015"],
-                        :TestCase => ["HRV-Required"],
+                        :TestCase => ["HRV required"],
                         :TestPars => { :multiplier_factor => 80.0,
                                        :oaf => 0.25,
                                        :flow => 10.0,
@@ -54,7 +54,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     # In compliance with NECB 2017 and NECB 2020 standards, HRV is mandated when the Heating Degree Days (HDD) surpass 3000;
     # Otherwise, its necessity hinges on airflow thresholds. Subsequent test cases will encompass various air flow ranges.
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 5"],
+                        :TestCase => ["CZ 5 - HRV required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.25,
                                        :flow => 10.0,
@@ -63,7 +63,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 4 - OAF 0.15 F 10 - Not required"],
+                        :TestCase => ["CZ 4 OAF 15% - HRV required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.15,
                                        :flow => 10.0,
@@ -72,7 +72,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 4 - OAF 0.25 F 10"],
+                        :TestCase => ["CZ 4 OAF 25% - HRV required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.25,
                                        :flow => 10.0,
@@ -81,7 +81,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 4 - OAF 0.35 F 5"],
+                        :TestCase => ["CZ 4 OAF 35% - HRV required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.35,
                                        :flow => 5.0,
@@ -90,7 +90,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 4 - OAF 0.45 F 3"],
+                        :TestCase => ["CZ 4 OAF 45% - HRV required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.45,
                                        :flow => 3.0,
@@ -99,7 +99,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 4 - OAF 0.55 F 2"],
+                        :TestCase => ["CZ 4 OAF 55% - HRV required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.55,
                                        :flow => 2.0,
@@ -108,7 +108,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 4 - OAF 0.65 F 1.6"],
+                        :TestCase => ["CZ 4 OAF 65% - HRV required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.65,
                                        :flow => 1.6,
@@ -117,7 +117,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 4 - OAF 0.75 F 1"],
+                        :TestCase => ["CZ 4 OAF 75% - HRV required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.75,
                                        :flow => 1.0,
@@ -126,7 +126,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["Climate zone 4 - OAF 0.55 F 1.4 - Not required"],
+                        :TestCase => ["CZ 4 OAF 55% - HRV not required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.55,
                                        :flow => 1.4,
@@ -230,10 +230,11 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      return []
     end
 
     # Extract the results for checking.
-    results = Hash.new
+    results = Array.new
 
     # Calculate the min_oa_flow_m3_per_s and the dsn_flow_m3_per_s
     air_loops_hvac = model.getAirLoopHVACs
@@ -248,20 +249,16 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       has_hrv = standard.air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, 'NECB')
       flow_L_per_s = OpenStudio.convert(flow, 'm^3/s', 'L/s').get
       flow_ft3_per_min = OpenStudio.convert(flow, 'm^3/s', 'ft^3/min').get
-      # Add this test case to results and return the hash.
-      results[air_loop_hvac_name.to_sym] = {
-        vintage: vintage,
-        city: city,
-        multiplier_factor: multiplier_factor,
-        exhaust_heat_content_kW: exhaust_heat_content_kW.signif(3),
-        oaf: oaf.signif(3),
-        flow_m3_per_s: flow.signif(3),
-        flow_L_per_s: flow_L_per_s.signif(3),
-        flow_ft3_per_min: flow_ft3_per_min.signif(3),
-        hdd: hdd,
-        has_hrv: has_hrv
-      }
 
+      # Recover HRV efficiency (if present)
+      latentEffectivenessat100CoolingAirFlow = 'n/a'
+      latentEffectivenessat100HeatingAirFlow = 'n/a'
+      latentEffectivenessat75CoolingAirFlow = 'n/a'
+      latentEffectivenessat75HeatingAirFlow = 'n/a'
+      sensibleEffectivenessat100CoolingAirFlow = 'n/a'
+      sensibleEffectivenessat100HeatingAirFlow = 'n/a'
+      sensibleEffectivenessat75CoolingAirFlow = 'n/a'
+      sensibleEffectivenessat75HeatingAirFlow = 'n/a'
       if has_hrv
         hrv_objs = model.getHeatExchangerAirToAirSensibleAndLatents.first
         # Check all effectiveness values
@@ -273,20 +270,33 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
         sensibleEffectivenessat100HeatingAirFlow = hrv_objs.sensibleEffectivenessat100HeatingAirFlow
         sensibleEffectivenessat75CoolingAirFlow = hrv_objs.sensibleEffectivenessat75CoolingAirFlow
         sensibleEffectivenessat75HeatingAirFlow = hrv_objs.sensibleEffectivenessat75HeatingAirFlow
-
-        results[air_loop_hvac_name.to_sym][:latent_effectiveness_100_cooling] = latentEffectivenessat100CoolingAirFlow
-        results[air_loop_hvac_name.to_sym][:latent_effectiveness_100_heating] = latentEffectivenessat100HeatingAirFlow
-        results[air_loop_hvac_name.to_sym][:latent_effectiveness_75_cooling] = latentEffectivenessat75CoolingAirFlow
-        results[air_loop_hvac_name.to_sym][:latent_effectiveness_75_heating] = latentEffectivenessat75HeatingAirFlow
-        results[air_loop_hvac_name.to_sym][:sensible_effectiveness_100_cooling] = sensibleEffectivenessat100CoolingAirFlow
-        results[air_loop_hvac_name.to_sym][:sensible_effectiveness_100_heating] = sensibleEffectivenessat100HeatingAirFlow
-        results[air_loop_hvac_name.to_sym][:sensible_effectiveness_75_cooling] = sensibleEffectivenessat75CoolingAirFlow
-        results[air_loop_hvac_name.to_sym][:sensible_effectiveness_75_heating] = sensibleEffectivenessat75HeatingAirFlow
       end
+
+      # Add this test case to results and return the hash.
+      results << {
+        name: air_loop_hvac_name,
+        city: city,
+        multiplier_factor: multiplier_factor,
+        exhaust_heat_content_kW: exhaust_heat_content_kW.signif(3),
+        oa_flow_fraction: oaf.signif(3),
+        flow_L_per_s: flow_L_per_s.signif(3),
+        flow_ft3_per_min: flow_ft3_per_min.signif(3),
+        hdd: hdd,
+        has_hrv: has_hrv,
+        latent_effectiveness_100_cooling: latentEffectivenessat100CoolingAirFlow,
+        latent_effectiveness_100_heating: latentEffectivenessat100HeatingAirFlow,
+        latent_effectiveness_75_cooling: latentEffectivenessat75CoolingAirFlow,
+        latent_effectiveness_75_heating: latentEffectivenessat75HeatingAirFlow,
+        sensible_effectiveness_100_cooling: sensibleEffectivenessat100CoolingAirFlow,
+        sensible_effectiveness_100_heating: sensibleEffectivenessat100HeatingAirFlow,
+        sensible_effectiveness_75_cooling: sensibleEffectivenessat75CoolingAirFlow,
+        sensible_effectiveness_75_heating: sensibleEffectivenessat75HeatingAirFlow
+      }
+
       logger.info "Completed individual test: #{name}"
     end
-	# Sort results hash by zone name
-    results = results.sort.to_h
-    return results
+
+	  # Sort results hash by name (the diff algorithm does not work well for arrays of hashes)
+    return results.sort_by {|e| e[:name]}
   end
 end

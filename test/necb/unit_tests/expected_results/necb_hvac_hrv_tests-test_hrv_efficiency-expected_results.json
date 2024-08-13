@@ -3,76 +3,110 @@
   "NECB2011": {
     "VarType": "TestCase",
     "Reference": "NECB 2011 p3 5.2.10.1.",
-    "NO-HRV-Required": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2011",
+    "HRV not required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2011",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2011",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2011",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 9.31,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2011",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       }
-    },
-    "HRV-Required": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2011",
+    ],
+    "HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 157,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -86,13 +120,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2011",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 360,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -106,13 +139,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2011",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 157,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -126,13 +158,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2011",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 745,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -146,13 +177,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2011",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 360,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -166,81 +196,115 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    }
+    ]
   },
   "NECB2015": {
     "VarType": "TestCase",
     "Reference": "NECB 2015 p1 5.2.10.1.(1)",
-    "NO-HRV-Required": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2015",
+    "HRV not required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2015",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2015",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2015",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 9.31,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2015",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       }
-    },
-    "HRV-Required": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2015",
+    ],
+    "HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 157,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -254,13 +318,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2015",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 360,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -274,13 +337,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2015",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 157,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -294,13 +356,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2015",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 745,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -314,13 +375,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2015",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Toronto",
         "multiplier_factor": 80.0,
         "exhaust_heat_content_kW": 360,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -334,19 +394,18 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    }
+    ]
   },
   "NECB2017": {
     "VarType": "TestCase",
     "Reference": "NECB 2017 p2 5.2.10.1.(1), Table 5.2.10.1.-B",
-    "Climate zone 5": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2017",
+    "CZ 5 - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -360,13 +419,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -380,13 +438,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -400,13 +457,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 9.31,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -420,13 +476,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2017",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -440,77 +495,111 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.15 F 10 - Not required": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2017",
+    ],
+    "CZ 4 OAF 15% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2017",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       }
-    },
-    "Climate zone 4 - OAF 0.25 F 10": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2017",
+    ],
+    "CZ 4 OAF 25% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -524,13 +613,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -544,13 +632,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -564,13 +651,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -584,13 +670,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2017",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -604,15 +689,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.35 F 5": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2017",
+    ],
+    "CZ 4 OAF 35% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -626,13 +710,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -646,13 +729,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -666,13 +748,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -686,13 +767,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2017",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -706,15 +786,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.45 F 3": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2017",
+    ],
+    "CZ 4 OAF 45% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -728,13 +807,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -748,13 +826,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -768,13 +845,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -788,13 +864,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2017",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -808,15 +883,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.55 F 2": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2017",
+    ],
+    "CZ 4 OAF 55% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -830,13 +904,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -850,13 +923,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -870,13 +942,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -890,13 +961,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2017",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -910,15 +980,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.65 F 1.6": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2017",
+    ],
+    "CZ 4 OAF 65% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -932,13 +1001,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -952,13 +1020,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -972,13 +1039,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -992,13 +1058,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2017",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -1012,15 +1077,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.75 F 1": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2017",
+    ],
+    "CZ 4 OAF 75% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1034,13 +1098,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1054,13 +1117,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1074,13 +1136,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1094,13 +1155,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2017",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1114,81 +1174,115 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.55 F 1.4 - Not required": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2017",
+    ],
+    "CZ 4 OAF 55% - HRV not required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2017",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2017",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       }
-    }
+    ]
   },
   "NECB2020": {
     "VarType": "TestCase",
     "Reference": "NECB 2020 p1 5.2.10.1.(1), Table 5.2.10.1.-B",
-    "Climate zone 5": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2020",
+    "CZ 5 - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -1202,13 +1296,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -1222,13 +1315,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.96,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -1242,13 +1334,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 9.31,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -1262,13 +1353,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2020",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Toronto",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 4.5,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 3615.0,
@@ -1282,77 +1372,111 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.15 F 10 - Not required": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2020",
+    ],
+    "CZ 4 OAF 15% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2020",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.15,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.15,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       }
-    },
-    "Climate zone 4 - OAF 0.25 F 10": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2020",
+    ],
+    "CZ 4 OAF 25% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -1366,13 +1490,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -1386,13 +1509,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -1406,13 +1528,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -1426,13 +1547,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2020",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.25,
-        "flow_m3_per_s": 10.0,
+        "oa_flow_fraction": 0.25,
         "flow_L_per_s": 10000,
         "flow_ft3_per_min": 21200,
         "hdd": 2901.0,
@@ -1446,15 +1566,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.35 F 5": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2020",
+    ],
+    "CZ 4 OAF 35% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -1468,13 +1587,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -1488,13 +1606,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -1508,13 +1625,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -1528,13 +1644,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2020",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.35,
-        "flow_m3_per_s": 5.0,
+        "oa_flow_fraction": 0.35,
         "flow_L_per_s": 5000,
         "flow_ft3_per_min": 10600,
         "hdd": 2901.0,
@@ -1548,15 +1663,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.45 F 3": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2020",
+    ],
+    "CZ 4 OAF 45% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -1570,13 +1684,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -1590,13 +1703,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -1610,13 +1722,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -1630,13 +1741,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2020",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.45,
-        "flow_m3_per_s": 3.0,
+        "oa_flow_fraction": 0.45,
         "flow_L_per_s": 3000,
         "flow_ft3_per_min": 6360,
         "hdd": 2901.0,
@@ -1650,15 +1760,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.55 F 2": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2020",
+    ],
+    "CZ 4 OAF 55% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -1672,13 +1781,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -1692,13 +1800,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -1712,13 +1819,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -1732,13 +1838,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2020",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.55,
-        "flow_m3_per_s": 2.0,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 2000,
         "flow_ft3_per_min": 4240,
         "hdd": 2901.0,
@@ -1752,15 +1857,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.65 F 1.6": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2020",
+    ],
+    "CZ 4 OAF 65% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -1774,13 +1878,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -1794,13 +1897,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -1814,13 +1916,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -1834,13 +1935,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2020",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.65,
-        "flow_m3_per_s": 1.6,
+        "oa_flow_fraction": 0.65,
         "flow_L_per_s": 1600,
         "flow_ft3_per_min": 3390,
         "hdd": 2901.0,
@@ -1854,15 +1954,14 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.75 F 1": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2020",
+    ],
+    "CZ 4 OAF 75% - HRV required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1876,13 +1975,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1896,13 +1994,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1916,13 +2013,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1936,13 +2032,12 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2020",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.75,
-        "flow_m3_per_s": 1.0,
+        "oa_flow_fraction": 0.75,
         "flow_L_per_s": 1000,
         "flow_ft3_per_min": 2120,
         "hdd": 2901.0,
@@ -1956,68 +2051,103 @@
         "sensible_effectiveness_75_cooling": 0.5,
         "sensible_effectiveness_75_heating": 0.5
       }
-    },
-    "Climate zone 4 - OAF 0.55 F 1.4 - Not required": {
-      "Sys_3_PSZ Thermal Zone 2": {
-        "vintage": "NECB2020",
+    ],
+    "CZ 4 OAF 55% - HRV not required": [
+      {
+        "name": "Sys_3_PSZ Thermal Zone 2",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 3": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 3",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 4": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 4",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 1.26,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "Sys_3_PSZ Thermal Zone 5": {
-        "vintage": "NECB2020",
+      {
+        "name": "Sys_3_PSZ Thermal Zone 5",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 5.97,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       },
-      "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|": {
-        "vintage": "NECB2020",
+      {
+        "name": "sys_3|mixed|shr>none|sc>dx|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none|",
         "city": "Victoria",
         "multiplier_factor": 1.0,
         "exhaust_heat_content_kW": 2.88,
-        "oaf": 0.55,
-        "flow_m3_per_s": 1.4,
+        "oa_flow_fraction": 0.55,
         "flow_L_per_s": 1400,
         "flow_ft3_per_min": 2970,
         "hdd": 2901.0,
-        "has_hrv": false
+        "has_hrv": false,
+        "latent_effectiveness_100_cooling": "n/a",
+        "latent_effectiveness_100_heating": "n/a",
+        "latent_effectiveness_75_cooling": "n/a",
+        "latent_effectiveness_75_heating": "n/a",
+        "sensible_effectiveness_100_cooling": "n/a",
+        "sensible_effectiveness_100_heating": "n/a",
+        "sensible_effectiveness_75_cooling": "n/a",
+        "sensible_effectiveness_75_heating": "n/a"
       }
-    }
+    ]
   }
 }
