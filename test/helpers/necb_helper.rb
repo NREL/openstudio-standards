@@ -56,7 +56,7 @@ module NecbHelper
     @resources_folder = File.join(@test_folder, 'resources')
     @expected_results_folder = File.join(@test_folder, 'expected_results')
     @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    @top_output_folder = File.join(@test_folder, 'output')
   end
 
   def method_output_folder(name="")
@@ -156,39 +156,34 @@ module NecbHelper
     test_results[:Reference] = test_cases[:Reference] if test_cases.key?(:Reference)
 
     if var_type == "TestCase"
-	  # Process test cases in parallel
-      results = Parallel.map(test_cases.reject { |key, _| [:VarType, :Reference].include?(key) }) do |key, value|
-        begin
-          logger.debug "Initiating test case #{key}"
-          logger.debug  "Current test: #{value}"
+      test_cases.each do |key, value|
+        next if key == :VarType # Skip to next. This is less expensive than using the except method chained before the each.
+        next if key == :Reference # Skip to next. 
+        logger.info  "Initiating test case #{key}"
+        logger.debug  "Test case: #{test_pars}"
+        logger.debug  "Current test: #{value}"
 
-          method_name = "do_#{test_pars[:test_method]}"
-          case_results = send(method_name, test_pars: test_pars, test_case: value)
-
-          [key, case_results]
-        rescue => e
-          logger.debug "Error in test case #{key}: #{e.message}"
-          [key, { error: e.message }]
-        end
+        # Run this test case. By default call the do_testMethod method.
+        method_name = "do_#{test_pars[:test_method]}"
+        case_results = self.send(method_name, test_pars: test_pars, test_case: value)
+        logger.debug  "Test case results: #{case_results}"
+        test_results[key] = case_results
       end
-	  # Collect results from all parallel executions
-      results.each { |key, value| test_results[key] = value }
     else
-	  # Recursively process nested test cases in parallel
-      results = Parallel.map(test_cases.reject { |key, _| [:VarType, :Reference].include?(key) }) do |key, value|
-        begin
-          if value.is_a? Hash
-            new_test_pars = test_pars.merge(var_type.to_sym => key.to_s)
-            [key, do_test_cases(test_cases: value, test_pars: new_test_pars)]
-          end
-        rescue => e
-          logger.debug  "Error in test case #{key}: #{e.message}"
-          [key, { error: e.message }]
+
+      # Recursively go through the variables defined in the json file and find the test cases.
+      test_cases.each do |key, value|
+        next if key == :VarType
+        next if key == :Reference
+        logger.debug  "Test case k,v: #{key}, #{value}"
+        if value.is_a? Hash
+          test_pars[var_type.to_sym] = key.to_s
+          test_results[key] = do_test_cases(test_cases: value, test_pars: test_pars)
         end
       end
-      results.each { |key, value| test_results[key] = value if key }
     end
-    test_results
+    logger.debug  "All test results: #{test_results}"
+    return test_results
   end
 
 
@@ -359,12 +354,6 @@ module NecbHelper
 
       return CompareHashes.call(obj1, obj2, prefix) if obj1.is_a?(Hash)
 
-      if obj1.to_s.include?("Controller") then
-        puts "obj1: #{obj1}"
-        puts "obj1: #{obj2.class.name}"
-        puts "obj2: #{obj2}"
-        puts "obj2: #{obj2.class.name}"
-      end
       return [] if obj1 == obj2
 
       [['~', prefix, obj1, obj2]]
