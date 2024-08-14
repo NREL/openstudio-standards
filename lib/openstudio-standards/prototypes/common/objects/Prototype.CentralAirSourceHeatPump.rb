@@ -19,10 +19,10 @@ class Standard
     # create the PlantComponentUserDefined object as a proxy for the Central Air Source Heat Pump
     plant_comp = OpenStudio::Model::PlantComponentUserDefined.new(model)
     if name.nil?
-      if !hot_water_loop.nil?
-        name = "#{hot_water_loop.name} Central Air Source Heat Pump"
-      else
+      if hot_water_loop.nil?
         name = 'Central Air Source Heat Pump'
+      else
+        name = "#{hot_water_loop.name} Central Air Source Heat Pump"
       end
     end
 

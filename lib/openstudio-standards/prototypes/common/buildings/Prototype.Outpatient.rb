@@ -139,7 +139,7 @@ module Outpatient
   def adjust_clg_setpoint(climate_zone, model)
     model.getSpaceTypes.sort.each do |space_type|
       space_type_name = space_type.name.get
-      thermostat_name = space_type_name + ' Thermostat'
+      thermostat_name = "#{space_type_name} Thermostat"
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
@@ -569,15 +569,15 @@ module Outpatient
       }
     end
 
-    if !init_mdp.nil?
+    if init_mdp.nil?
+      min_damper_position = 0.3
+    else
       airlp = air_terminal_single_duct_vav_reheat.airLoopHVAC.get
       init_mdp.each do |zn_name, mdp|
         if air_terminal_single_duct_vav_reheat.name.to_s.upcase.strip.include? zn_name.to_s.strip
           min_damper_position = mdp
         end
       end
-    else
-      min_damper_position = 0.3
     end
 
     # Set the minimum flow fraction

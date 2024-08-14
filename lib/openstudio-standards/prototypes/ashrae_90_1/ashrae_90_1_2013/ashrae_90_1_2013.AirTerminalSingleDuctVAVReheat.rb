@@ -9,11 +9,9 @@ class ASHRAE9012013 < ASHRAE901
   # @return [Boolean] returns true if successful, false if not
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
     min_damper_position = case air_terminal_single_duct_vav_reheat_reheat_type(air_terminal_single_duct_vav_reheat)
-                          when 'HotWater'
-                            0.2
                           when 'Electricity', 'NaturalGas'
                             0.3
-                          else
+                          else # 'HotWater', other
                             0.2
                           end
 

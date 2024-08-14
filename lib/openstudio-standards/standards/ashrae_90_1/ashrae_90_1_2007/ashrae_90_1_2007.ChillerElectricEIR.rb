@@ -14,17 +14,15 @@ class ASHRAE9012007 < ASHRAE901
     when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
-        if chiller_tonnage >= 150
-          return 'WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT'
-        else
-          return 'WaterCooled_Centrifugal_Chiller_LT150_2004_CAPFT'
-        end
+        return 'WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT' if chiller_tonnage >= 150
+
+        return 'WaterCooled_Centrifugal_Chiller_LT150_2004_CAPFT'
       when 'Reciprocating', 'Rotary Screw', 'Scroll'
-        if chiller_tonnage >= 150
-          return 'WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_CAPFT' # 2010 reference might suggest that this is the wrong curve
-        else
-          return 'WaterCooled_PositiveDisplacement_Chiller_LT150_2010_PathA_CAPFT' # 2010 reference might suggest that this is the wrong curve
-        end
+        # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_CAPFT' if chiller_tonnage >= 150
+
+        # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_PositiveDisplacement_Chiller_LT150_2010_PathA_CAPFT'
       else
         return nil
       end
@@ -48,17 +46,15 @@ class ASHRAE9012007 < ASHRAE901
     when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
-        if chiller_tonnage >= 150
-          return 'WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT'
-        else
-          return 'WaterCooled_Centrifugal_Chiller_LT150_2004_EIRFT'
-        end
+        return 'WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT' if chiller_tonnage >= 150
+
+        return 'WaterCooled_Centrifugal_Chiller_LT150_2004_EIRFT'
       when 'Reciprocating', 'Rotary Screw', 'Scroll'
-        if chiller_tonnage >= 150
-          return 'WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_EIRFT' # 2010 reference might suggest that this is the wrong curve
-        else
-          return 'WaterCooled_PositiveDisplacement_Chiller_LT150_2010_PathA_EIRFT' # 2010 reference might suggest that this is the wrong curve
-        end
+        # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_EIRFT' if chiller_tonnage >= 150
+
+        # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_PositiveDisplacement_Chiller_LT150_2010_PathA_EIRFT'
       else
         return nil
       end

@@ -545,13 +545,13 @@ class Standard
     allowable_fan_bhp = 0
     if fan_pwr_limit_type == 'constant volume'
       if dsn_air_flow_cfm > 0
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
+        allowable_fan_bhp = (dsn_air_flow_cfm * 0.00094) + fan_pwr_adjustment_bhp
       else
         allowable_fan_bhp = 0.00094
       end
     elsif fan_pwr_limit_type == 'variable volume'
       if dsn_air_flow_cfm > 0
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.0013 + fan_pwr_adjustment_bhp
+        allowable_fan_bhp = (dsn_air_flow_cfm * 0.0013) + fan_pwr_adjustment_bhp
       else
         allowable_fan_bhp = 0.0013
       end
@@ -922,7 +922,7 @@ class Standard
           nominal_cooling_capacity_w = coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
           nominal_flow_rate_factor = supply_fan.autosizedMaximumFlowRate.to_f / coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f
           fan_power_adjustment_w = fan_power / coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
-          total_cooling_capacity_w += nominal_cooling_capacity_w * nominal_flow_rate_factor + fan_power_adjustment_w
+          total_cooling_capacity_w += (nominal_cooling_capacity_w * nominal_flow_rate_factor) + fan_power_adjustment_w
         elsif coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
           total_cooling_capacity_w += coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
         else
@@ -2928,11 +2928,7 @@ class Standard
     end
 
     # Fan control program only used for systems with two-stage DX coils
-    fan_control = if air_loop_hvac_multi_stage_dx_cooling?(air_loop_hvac)
-                    true
-                  else
-                    false
-                  end
+    fan_control = air_loop_hvac_multi_stage_dx_cooling?(air_loop_hvac)
 
     # Scrub special characters from the system name
     sn = air_loop_hvac.name.get.to_s
@@ -3371,13 +3367,11 @@ class Standard
     model = air_loop_hvac.model
     # Check if schedule was stored in an additionalProperties field of the air loop
     air_loop_name = air_loop_hvac.name
-    if air_loop_hvac.hasAdditionalProperties
-      if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
-        fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
-        fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
-        air_loop_hvac.setAvailabilitySchedule(fan_sched)
-        return true
-      end
+    if air_loop_hvac.hasAdditionalProperties && air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
+      fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
+      fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
+      air_loop_hvac.setAvailabilitySchedule(fan_sched)
+      return true
     end
 
     # Check if already using a schedule other than always on
@@ -3915,10 +3909,8 @@ class Standard
       air_loop_hvac.model.getAirLoopHVACZoneMixers.each do |zone_air_mixer|
         inlets = zone_air_mixer.inletModelObjects
         inlets.each do |inlet|
-          if inlet.to_Node.get == return_plenum.outletModelObject.get.to_Node.get
-            if zone_air_mixer.outletModelObject.get.to_Node.get == return_air_node
-              return return_plenum.thermalZone.get
-            end
+          if (inlet.to_Node.get == return_plenum.outletModelObject.get.to_Node.get) && (zone_air_mixer.outletModelObject.get.to_Node.get == return_air_node)
+            return return_plenum.thermalZone.get
           end
         end
       end

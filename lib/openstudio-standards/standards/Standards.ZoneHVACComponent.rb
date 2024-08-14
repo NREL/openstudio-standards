@@ -111,20 +111,19 @@ class Standard
                 end
 
     # Get the fan
-    if !zone_hvac.nil?
-      fan_obj = if zone_hvac.supplyAirFan.to_FanConstantVolume.is_initialized
-                  zone_hvac.supplyAirFan.to_FanConstantVolume.get
-                elsif zone_hvac.supplyAirFan.to_FanVariableVolume.is_initialized
-                  zone_hvac.supplyAirFan.to_FanVariableVolume.get
-                elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
-                  zone_hvac.supplyAirFan.to_FanOnOff.get
-                elsif zone_hvac.supplyAirFan.to_FanSystemModel.is_initialized
-                  zone_hvac.supplyAirFan.to_FanSystemModel.get
-                end
-      return fan_obj
-    else
-      return nil
-    end
+    return nil if zone_hvac.nil?
+
+    fan_obj = if zone_hvac.supplyAirFan.to_FanConstantVolume.is_initialized
+                zone_hvac.supplyAirFan.to_FanConstantVolume.get
+              elsif zone_hvac.supplyAirFan.to_FanVariableVolume.is_initialized
+                zone_hvac.supplyAirFan.to_FanVariableVolume.get
+              elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
+                zone_hvac.supplyAirFan.to_FanOnOff.get
+              elsif zone_hvac.supplyAirFan.to_FanSystemModel.is_initialized
+                zone_hvac.supplyAirFan.to_FanSystemModel.get
+              end
+
+    return fan_obj
   end
 
   # Default occupancy fraction threshold for determining if the spaces served by the zone hvac are occupied
@@ -195,11 +194,9 @@ class Standard
 
     # if supply air fan operating schedule is always off,
     # override to provide ventilation during occupied hours
-    unless existing_sch.nil?
-      if existing_sch.name.is_initialized
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation, and schedule is set to always on; keeping always on schedule.")
-        return false if existing_sch.name.get.to_s.downcase.include?('always on discrete') || existing_sch.name.get.to_s.downcase.include?('guestroom_vent_ctrl_sch')
-      end
+    if !existing_sch.nil? && existing_sch.name.is_initialized
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation, and schedule is set to always on; keeping always on schedule.")
+      return false if existing_sch.name.get.to_s.downcase.include?('always on discrete') || existing_sch.name.get.to_s.downcase.include?('guestroom_vent_ctrl_sch')
     end
 
     thermal_zone = zone_hvac_component.thermalZone.get
@@ -238,7 +235,7 @@ class Standard
     end
 
     # Standby mode occupancy control
-    return true unless zone_hvac_component.thermalZone.empty?
+    return true if zone_hvac_component.thermalZone.empty?
 
     thermal_zone = zone_hvac_component.thermalZone.get
 

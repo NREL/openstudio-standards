@@ -163,11 +163,9 @@ class Standard
     when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
-        if chiller_tonnage >= 150
-          return 'WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT'
-        else
-          return 'WaterCooled_Centrifugal_Chiller_LT150_2004_EIRFT'
-        end
+        return 'WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT' if chiller_tonnage >= 150
+
+        return 'WaterCooled_Centrifugal_Chiller_LT150_2004_EIRFT'
       when 'Reciprocating', 'Rotary Screw', 'Scroll'
         return 'ChlrWtrPosDispPathAAllEIRRatio_fTchwsTcwsSI'
       else
@@ -192,9 +190,7 @@ class Standard
       return 'AirCooled_Chiller_AllCapacities_2004_2010_EIRFPLR'
     when 'WaterCooled'
       case compressor_type
-      when 'Centrifugal'
-        return 'ChlrWtrCentPathAAllEIRRatio_fQRatio'
-      when 'Reciprocating', 'Rotary Screw', 'Scroll'
+      when 'Centrifugal', 'Reciprocating', 'Rotary Screw', 'Scroll'
         return 'ChlrWtrCentPathAAllEIRRatio_fQRatio'
       else
         return nil

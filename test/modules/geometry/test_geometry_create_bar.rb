@@ -35,6 +35,41 @@ class TestGeometryCreateBar < Minitest::Test
     assert(result)
   end
 
+  def test_create_bar_from_building_type_ratios_ofs
+    model = OpenStudio::Model::Model.new
+
+    args = {}
+    args['total_bldg_floor_area'] = 2500.0
+    args['bldg_type_a'] = 'OfS'
+    args['ns_to_ew_ratio'] = 1.0
+    args['num_stories_above_grade'] = 3.0
+    args['template'] = "DEER Pre-1975"
+    args['climate_zone'] = "CEC T24-CEC9"
+    args['floor_height'] = 9.0
+    args['story_multiplier'] = "None"
+    args['wwr'] = 0.3
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+    assert(result)
+  end
+
+  def test_create_bar_from_building_type_ratios_doe_deer_mix
+    model = OpenStudio::Model::Model.new
+
+    args = {}
+    args['total_bldg_floor_area'] = 2500.0
+    args['bldg_type_a'] = 'PrimarySchool'
+    args['ns_to_ew_ratio'] = 1.0
+    args['num_stories_above_grade'] = 3.0
+    args['template'] = "DEER Pre-1975"
+    args['climate_zone'] = "CEC T24-CEC9"
+    args['floor_height'] = 9.0
+    args['story_multiplier'] = "None"
+    args['wwr'] = 0.3
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+    assert(result)
+    assert('EPr', model.getSpaceTypes[0].standardsBuildingType.get)
+  end
+
   def test_create_bar_from_building_type_ratios_division_methods
     model = OpenStudio::Model::Model.new
 

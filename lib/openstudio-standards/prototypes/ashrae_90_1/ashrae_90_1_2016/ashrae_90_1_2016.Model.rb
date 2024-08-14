@@ -71,7 +71,7 @@ class ASHRAE9012016 < ASHRAE901
     a_w = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['west_window']
     a_t = a_n + a_s + a_e + a_w
 
-    return true if a_t == 0.0
+    return true if a_t.abs < 0.01
 
     # For prototypes SHGC_c assumed to be the building's weighted average SHGC
     shgc_c = shgc_a / a_t

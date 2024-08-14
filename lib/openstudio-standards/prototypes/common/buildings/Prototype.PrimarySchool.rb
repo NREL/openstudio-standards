@@ -23,7 +23,7 @@ module PrimarySchool
     else
       transformer_efficiency = nil
     end
-    return true unless !transformer_efficiency.nil?
+    return true if transformer_efficiency.nil?
 
     model_add_transformer(model,
                           wired_lighting_frac: 0.0119,

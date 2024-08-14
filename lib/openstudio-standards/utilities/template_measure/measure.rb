@@ -5,6 +5,7 @@ require_relative 'resources/BTAPMeasureHelper'
 # start the measure
 class BTAPModelMeasure < OpenStudio::Measure::ModelMeasure
   attr_accessor :use_json_package, :use_string_double
+
   # Adds helper functions to make life a bit easier and consistent.
   include(BTAPMeasureHelper)
   # human readable name
