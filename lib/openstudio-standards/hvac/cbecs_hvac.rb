@@ -278,51 +278,73 @@ module OpenstudioStandards
         standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
 
       when 'PTAC with baseboard electric'
-        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_zones)
 
       when 'PTAC with baseboard gas boiler'
-        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
 
       when 'PTAC with baseboard district hot water'
-        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'DistrictHeating', znht = nil, cl = nil, heated_zones)
 
       when 'PTAC with gas unit heaters'
-        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
 
       when 'PTAC with electric coil'
-        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = 'Electricity', cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = 'Electricity', cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         # use 'Baseboard electric' for heated only zones
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_only_zones)
 
       when 'PTAC with gas coil'
-        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = 'NaturalGas', cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = 'NaturalGas', cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         # use 'Baseboard electric' for heated only zones
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_only_zones)
 
       when 'PTAC with gas boiler'
-        standard.model_add_hvac_system(model, 'PTAC', ht = 'NaturalGas', znht = nil, cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = 'NaturalGas', znht = nil, cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         # use 'Baseboard gas boiler' for heated only zones
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'NaturalGas', znht = nil, cl = nil, heated_only_zones)
 
       when 'PTAC with central air source heat pump'
-        standard.model_add_hvac_system(model, 'PTAC', ht = 'AirSourceHeatPump', znht = nil, cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = 'AirSourceHeatPump', znht = nil, cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         # use 'Baseboard central air source heat pump' for heated only zones
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'AirSourceHeatPump', znht = nil, cl = nil, heated_only_zones)
 
       when 'PTAC with district hot water'
-        standard.model_add_hvac_system(model, 'PTAC', ht = 'DistrictHeating', znht = nil, cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = 'DistrictHeating', znht = nil, cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         # use 'Baseboard district hot water heat' for heated only zones
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'DistrictHeating', znht = nil, cl = nil, heated_only_zones)
 
       when 'PTAC with no heat'
-        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTAC', ht = nil, znht = nil, cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
 
       when 'PTHP'
-        standard.model_add_hvac_system(model, 'PTHP', ht = 'Electricity', znht = nil, cl = 'Electricity', system_zones)
+        # default to have no ventilation air
+        standard.model_add_hvac_system(model, 'PTHP', ht = 'Electricity', znht = nil, cl = 'Electricity', system_zones,
+                                       zone_equipment_ventilation: false)
         # use 'Baseboard electric' for heated only zones
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_only_zones)
 
