@@ -226,14 +226,14 @@ class Standard
     clg_stages = coil_cooling_dx_multi_speed.stages
     if clg_stages.last.grossRatedTotalCoolingCapacity.is_initialized
       capacity_w = clg_stages.last.grossRatedTotalCoolingCapacity.get
-    elsif (clg_stages.size == 1) && coil_cooling_dx_multi_speed.autosizedSpeed1GrossRatedTotalCoolingCapacity.is_initialized
-      capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed1GrossRatedTotalCoolingCapacity.get
-    elsif (clg_stages.size == 2) && coil_cooling_dx_multi_speed.autosizedSpeed2GrossRatedTotalCoolingCapacity.is_initialized
-      capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed2GrossRatedTotalCoolingCapacity.get
-    elsif (clg_stages.size == 3) && coil_cooling_dx_multi_speed.autosizedSpeed3GrossRatedTotalCoolingCapacity.is_initialized
-      capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed3GrossRatedTotalCoolingCapacity.get
-    elsif (clg_stages.size == 4) && coil_cooling_dx_multi_speed.autosizedSpeed4GrossRatedTotalCoolingCapacity.is_initialized
-      capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed4GrossRatedTotalCoolingCapacity.get
+    elsif (clg_stages.size == 1) && coil_cooling_dx_multi_speed.stages[0].autosizedSpeedRatedTotalCoolingCapacity.is_initialized
+      capacity_w = coil_cooling_dx_multi_speed.stages[0].autosizedSpeedRatedTotalCoolingCapacity.get
+    elsif (clg_stages.size == 2) && coil_cooling_dx_multi_speed.stages[1].autosizedGrossRatedTotalCoolingCapacity.is_initialized
+      capacity_w = coil_cooling_dx_multi_speed.stages[1].autosizedGrossRatedTotalCoolingCapacity.get
+    elsif (clg_stages.size == 3) && coil_cooling_dx_multi_speed.stages[2].autosizedGrossRatedTotalCoolingCapacity.is_initialized
+      capacity_w = coil_cooling_dx_multi_speed.stages[2].autosizedSpeedRatedTotalCoolingCapacity.get
+    elsif (clg_stages.size == 4) && coil_cooling_dx_multi_speed.stages[3].autosizedGrossRatedTotalCoolingCapacity.is_initialized
+      capacity_w = coil_cooling_dx_multi_speed.stages[3].autosizedGrossRatedTotalCoolingCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false
