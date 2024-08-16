@@ -1834,14 +1834,14 @@ module OpenstudioStandards
         end
 
         # disable party walls
-        args3['party_wall_stories_east'] = 0
-        args3['party_wall_stories_west'] = 0
-        args3['party_wall_stories_south'] = 0
-        args3['party_wall_stories_north'] = 0
+        args3[:party_wall_stories_east] = 0
+        args3[:party_wall_stories_west] = 0
+        args3[:party_wall_stories_south] = 0
+        args3[:party_wall_stories_north] = 0
 
         # setup stories
-        args3['num_stories_below_grade'] = 0
-        args3['num_stories_above_grade'] = 1
+        args3[:num_stories_below_grade] = 0
+        args3[:num_stories_above_grade] = 1
 
         # can make use of this when breaking out multi-height spaces
         bars['custom_height'][:floor_height] = floor_height

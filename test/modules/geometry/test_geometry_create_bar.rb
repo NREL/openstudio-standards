@@ -72,6 +72,7 @@ class TestGeometryCreateBar < Minitest::Test
     args['total_bldg_floor_area'] = 37500.0
     args['bldg_type_a'] = 'Warehouse'
     args['ns_to_ew_ratio'] = 2.0
+    args['num_stories_above_grade'] = 2.0
     args['template'] = "ComStock DOE Ref Pre-1980"
     result = @geo.create_bar_from_building_type_ratios(model, args)
     assert(result)
