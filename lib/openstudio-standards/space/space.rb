@@ -578,9 +578,9 @@ module OpenstudioStandards
 
       [remaining_wd_profiles, sat_profile_days, sun_profile_days].each do |profile_hash|
         profile_hash.each do |profile, days_used|
-        rules = OpenstudioStandards::Schedules.schedule_ruleset_create_rules_from_day_list(schedule_ruleset, days_used)
-        rules.each { |rule| OpenstudioStandards::Schedules.schedule_day_populate_from_array_of_values(rule.daySchedule, profile) }
-      end
+          rules = OpenstudioStandards::Schedules.schedule_ruleset_create_rules_from_day_list(schedule_ruleset, days_used)
+          rules.each { |rule| OpenstudioStandards::Schedules.schedule_day_populate_from_array_of_values(rule.daySchedule, profile) }
+        end
       end
 
       return schedule_ruleset
@@ -599,9 +599,9 @@ module OpenstudioStandards
     # @param gather_data_only [Boolean]
     # @return [Hash]
     def self.space_load_instance_get_parametric_schedule_inputs(space_load_instance, parametric_inputs, hours_of_operation, gather_data_only)
-      if space_load_instance.class.to_s == 'OpenStudio::Model::People'
+      if space_load_instance.instance_of?(OpenStudio::Model::People)
         opt_sch = space_load_instance.numberofPeopleSchedule
-      elsif space_load_instance.class.to_s == 'OpenStudio::Model::DesignSpecificationOutdoorAir'
+      elsif space_load_instance.instance_of?(OpenStudio::Model::DesignSpecificationOutdoorAir)
         opt_sch = space_load_instance.outdoorAirFlowRateFractionSchedule
       else
         opt_sch = space_load_instance.schedule
@@ -610,7 +610,7 @@ module OpenstudioStandards
         return nil
       end
 
-      OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(opt_sch.get.to_ScheduleRuleset.get, space_load_instance, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
+      OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(opt_sch.get.to_ScheduleRuleset.get, space_load_instance, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method: 'hours')
 
       return parametric_inputs
     end
