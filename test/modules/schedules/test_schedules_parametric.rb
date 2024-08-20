@@ -299,6 +299,50 @@ class TestSchedulesParametric < Minitest::Test
     Dir.chdir(orig_dir)
   end
 
+  def test_comstock_bldg_hours_of_operation_days
+    puts "\n######\nTEST:#{__method__}\n######\n"
+
+    run_dir = "#{@test_dir}/building_hoo_schs"
+
+    types = []
+    types << 'SecondarySchool'
+    types << 'PrimarySchool'
+    types << 'SmallOffice'
+    types << 'MediumOffice'
+    types << 'LargeOffice'
+    types << 'SmallHotel'
+    types << 'LargeHotel'
+    types << 'Warehouse'
+    types << 'RetailStandalone'
+    types << 'RetailStripmall'
+    types << 'QuickServiceRestaurant'
+    types << 'FullServiceRestaurant'
+    types << 'Hospital'
+    types << 'Outpatient'
+
+    types.each do |type|
+      # don't modify schedules
+      create_simple_comstock_model_with_schedule_mod(type, 8.0, 12.0, 10.0, 6.0, false)
+
+      # create building hours of operation schedule
+      op_sch = OpenstudioStandards::Schedules.model_infer_hours_of_operation_building(@model)
+
+      # osm_path = "#{run_dir}/#{type}_nomod_hoo.osm"
+      # assert(@model.save(osm_path, true))
+      
+      rule_days = []
+      op_sch.scheduleRules.each do |rule|
+        if rule.applySaturday
+          rule_days << 'Saturday'
+        elsif rule.applySunday
+          rule_days << 'Sunday'
+        end
+      end
+      assert_includes(rule_days, 'Saturday', "#{op_sch.name.get} does not include Saturday rule!")
+      assert_includes(rule_days, 'Sunday', "#{op_sch.name.get} does not include Sunday rule!")
+    end
+  end
+
   def test_comstock_schedule_mod
     puts "\n######\nTEST:#{__method__}\n######\n"
 
@@ -324,8 +368,8 @@ class TestSchedulesParametric < Minitest::Test
       create_simple_comstock_model_with_schedule_mod(type, 8.0, 12.0, 10.0, 6.0)
       # create_simple_comstock_model_with_schedule_mod(type, 8.0, 12.0, 10.0, 6.0, false)
 
-      osm_path = "#{run_dir}/#{type}_modified_fix.osm"
-      assert(@model.save(osm_path, true))
+      # osm_path = "#{run_dir}/#{type}_modified_fix2.osm"
+      # assert(@model.save(osm_path, true))
 
       # test that hours_of_operation index found for all schedule days
       logs = get_logs(log_type = OpenStudio::Error)
