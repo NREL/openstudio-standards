@@ -170,7 +170,7 @@ class Standard
 
     props = model_find_object(standards_data['refrigeration_walkins'], search_criteria)
     if props.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find walkin properties for: #{search_criteria}.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.refrigeration', "Could not find walkin properties for: #{search_criteria}.")
       return nil
     end
 
@@ -262,6 +262,12 @@ class Standard
     end
     if lighting_power.nil?
       lighting_power = lighting_power_mult * floor_surface_area
+    end
+
+    # Check validity of thermal zone
+    if OpenstudioStandards::ThermalZone.thermal_zone_plenum?(thermal_zone)
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.refrigeration', "Thermal zone #{thermal_zone.name} is a plenum; cannot add walkins to a plenum.")
+      return nil
     end
 
     # Walk-In
