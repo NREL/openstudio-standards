@@ -57,12 +57,8 @@ module OpenstudioStandards
         standard.model_add_hvac_system(model, 'Baseboards', ht = 'DistrictHeating', znht = nil, cl = nil, heated_zones)
         standard.model_add_hvac_system(model, 'Evaporative Cooler', ht = nil, znht = nil, cl = 'Electricity', cooled_zones)
 
-      when 'Direct evap coolers with forced air furnace'
+      when 'Direct evap coolers with forced air furnace', 'Direct evap coolers with gas unit heaters'
         # Using unit heater to represent forced air furnace to limit to one airloop per thermal zone.
-        standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
-        standard.model_add_hvac_system(model, 'Evaporative Cooler', ht = nil, znht = nil, cl = 'Electricity', cooled_zones)
-
-      when 'Direct evap coolers with gas unit heaters'
         standard.model_add_hvac_system(model, 'Unit Heaters', ht = 'NaturalGas', znht = nil, cl = nil, heated_zones)
         standard.model_add_hvac_system(model, 'Evaporative Cooler', ht = nil, znht = nil, cl = 'Electricity', cooled_zones)
 
@@ -437,11 +433,11 @@ module OpenstudioStandards
         standard.model_add_hvac_system(model, 'PVAV PFP Boxes', ht = 'Electricity', znht = 'Electricity', cl = 'Electricity', zones)
 
       when 'PVAV with gas heat with electric reheat', 'PVAV with gas coil heat with electric reheat'
-        standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones,
+        standard.model_add_hvac_system(model, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones,
                                        air_loop_heating_type: 'Gas')
 
       when 'PVAV with gas boiler heat with electric reheat'
-        standard.model_add_hvac_system(self, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones)
+        standard.model_add_hvac_system(model, 'PVAV Reheat', ht = 'Gas', znht = 'Electricity', cl = 'Electricity', zones)
 
       # all residential systems do not have ventilation
       when 'Residential AC with baseboard electric'

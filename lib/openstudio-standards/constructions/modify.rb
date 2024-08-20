@@ -115,14 +115,14 @@ module OpenstudioStandards
       end
 
       # Make sure an insulation layer was specified
-      if insulation_layer_name.nil? && target_u_value_ip == 0.0
+      if insulation_layer_name.nil? && (target_u_value_ip.abs < 0.01)
         # Do nothing if the construction already doesn't have an insulation layer
       elsif insulation_layer_name.nil?
         insulation_layer_name = OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(construction).name.get
       end
 
       # Remove the insulation layer if the specified U-value is zero.
-      if target_u_value_ip == 0.0
+      if target_u_value_ip.abs < 0.01
         layer_index = 0
         construction.layers.each do |layer|
           break if layer.name.get == insulation_layer_name
@@ -300,7 +300,7 @@ module OpenstudioStandards
     # @return [Boolean] returns true if successful, false if not
     def self.construction_set_slab_f_factor(construction, target_f_factor_ip, insulation_layer_name: nil)
       # Regression from table A6.3 unheated, fully insulated slab
-      r_value_ip = 1.0248 * target_f_factor_ip**-2.186
+      r_value_ip = 1.0248 * (target_f_factor_ip**-2.186)
       u_value_ip = 1.0 / r_value_ip
 
       # Set the insulation U-value
@@ -362,7 +362,7 @@ module OpenstudioStandards
     # @return [Boolean] returns true if successful, false if not
     def self.construction_set_underground_wall_c_factor(construction, target_c_factor_ip, insulation_layer_name: nil)
       # Regression from table A4.2 continuous exterior insulation
-      r_value_ip = 0.775 * target_c_factor_ip**-1.067
+      r_value_ip = 0.775 * (target_c_factor_ip**-1.067)
       u_value_ip = 1.0 / r_value_ip
 
       # Set the insulation U-value

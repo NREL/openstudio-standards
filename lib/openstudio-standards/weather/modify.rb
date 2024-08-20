@@ -74,6 +74,10 @@ module OpenstudioStandards
         stat_file = OpenstudioStandards::Weather::StatFile.load(weather_file_path.sub('.epw', '.stat'))
       end
 
+      if stat_file.monthly_undis_ground_temps_0p5m.empty?
+        return false
+      end
+
       # set ground temperature shallow values based on .stat file
       ground_temperature_shallow = OpenStudio::Model::SiteGroundTemperatureShallow.new(model)
       ground_temperature_shallow.setJanuarySurfaceGroundTemperature(stat_file.monthly_undis_ground_temps_0p5m[0])
@@ -102,6 +106,10 @@ module OpenstudioStandards
       if stat_file.nil?
         weather_file_path = model.getWeatherFile.path.get.to_s
         stat_file = OpenstudioStandards::Weather::StatFile.load(weather_file_path.sub('.epw', '.stat'))
+      end
+
+      if stat_file.monthly_undis_ground_temps_4p0m.empty?
+        return false
       end
 
       # set ground temperature deep values based on .stat file
@@ -268,7 +276,7 @@ module OpenstudioStandards
       ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file_path).get
 
       # warn if no design days in file
-      if ddy_model.getDesignDays.size.zero?
+      if ddy_model.getDesignDays.empty?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', 'No design days were found in the design day file.')
         return false
       end
@@ -284,7 +292,7 @@ module OpenstudioStandards
       end
 
       # Check to ensure that some design days were added
-      if model.getDesignDays.size.zero?
+      if model.getDesignDays.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.modify', "No design days were loaded, check syntax of .ddy file: #{ddy_file_path}.")
         return false
       end
@@ -312,11 +320,11 @@ module OpenstudioStandards
       end
 
       # load weather file if specified
-      if !weather_file_path.nil?
-        epw_file = OpenStudio::EpwFile.new(weather_file_path)
-      else
+      if weather_file_path.nil?
         # look up the standard weather file for the climate zone
         weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+        epw_file = OpenStudio::EpwFile.new(weather_file_path)
+      else
         epw_file = OpenStudio::EpwFile.new(weather_file_path)
       end
 
@@ -364,16 +372,16 @@ module OpenstudioStandards
                                          ddy_list: nil)
       # check that either weather_file_path or climate_zone provided
       if weather_file_path.nil? && climate_zone.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', 'model_set_building_location must be called with either the weather_file_path or climate_zone argument specified.')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', "#{__method__} must be called with either the weather_file_path or climate_zone argument specified.")
         return false
       end
 
       # load weather file if specified
-      if !weather_file_path.nil?
-        epw_file = OpenStudio::EpwFile.new(weather_file_path)
-      else
+      if weather_file_path.nil?
         # look up the standard weather file for the climate zone
         weather_file_path = OpenstudioStandards::Weather.climate_zone_representative_weather_file_path(climate_zone)
+        epw_file = OpenStudio::EpwFile.new(weather_file_path)
+      else
         epw_file = OpenStudio::EpwFile.new(weather_file_path)
       end
 
@@ -389,8 +397,14 @@ module OpenstudioStandards
       if File.file?(stat_file_path)
         stat_file = OpenstudioStandards::Weather::StatFile.load(stat_file_path)
         OpenstudioStandards::Weather.model_set_site_water_mains_temperature(model, stat_file: stat_file)
-        OpenstudioStandards::Weather.model_set_undisturbed_ground_temperature_shallow(model, stat_file: stat_file)
-        OpenstudioStandards::Weather.model_set_undisturbed_ground_temperature_deep(model, stat_file: stat_file)
+        if !OpenstudioStandards::Weather.model_set_undisturbed_ground_temperature_shallow(model, stat_file: stat_file)
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', "Could not find undisturbed shallow ground temps in .stat file at #{stat_file_path}. Unable to set undisturbed ground temperatures.")
+        end
+
+        if !OpenstudioStandards::Weather.model_set_undisturbed_ground_temperature_deep(model, stat_file: stat_file)
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', "Could not find undisturbed deep ground temps in .stat file at #{stat_file_path}. Unable to set undisturbed ground temperatures.")
+        end
+
         stat_file_climate_zone = stat_file.climate_zone
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.modify', "Could not find .stat file at #{stat_file_path}. Unable to set site water mains temperature and undisturbed ground temperatures.")

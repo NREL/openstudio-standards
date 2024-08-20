@@ -37,10 +37,10 @@ class Standard
     # create the boiler
     boiler = OpenStudio::Model::BoilerHotWater.new(model)
     if name.nil?
-      if !hot_water_loop.nil?
-        boiler.setName("#{hot_water_loop.name} Boiler")
-      else
+      if hot_water_loop.nil?
         boiler.setName('Boiler')
+      else
+        boiler.setName("#{hot_water_loop.name} Boiler")
       end
     else
       boiler.setName(name)
@@ -88,9 +88,9 @@ class Standard
 
     # logic to set different defaults for condensing boilers if not specified
     if draft_type == 'Condensing'
-      if model.version < OpenStudio::VersionString.new('3.0.0')
+      if model.version < OpenStudio::VersionString.new('3.0.0') && lvg_temp_dsgn_f.nil?
         # default to 120 degrees Fahrenheit (48.49 degrees Celsius)
-        boiler.setDesignWaterOutletTemperature(OpenStudio.convert(120.0, 'F', 'C').get) if lvg_temp_dsgn_f.nil?
+        boiler.setDesignWaterOutletTemperature(OpenStudio.convert(120.0, 'F', 'C').get)
       end
       boiler.setNominalThermalEfficiency(0.96) if nominal_thermal_efficiency.nil?
     end

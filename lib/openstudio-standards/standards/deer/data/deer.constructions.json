@@ -344,20 +344,20 @@
       "name": "DEER Metal Framed Window",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": "Simple Glazing",
+      "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing"
+        "Simple Glazing U 1.23 SHGC 0.61 VT 0.25"
       ]
     },
     {
       "name": "DEER Skylight",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": "Nonmetal framing (all)",
-      "insulation_layer": "Simple Glazing",
+      "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing"
+        "Simple Glazing U 1.23 SHGC 0.61 VT 0.25"
       ]
     },
     {

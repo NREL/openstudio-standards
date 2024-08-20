@@ -638,7 +638,7 @@ Standard.class_eval do
 
       # Add a thermostat
       space_type_name = space.spaceType.get.name.get
-      thermostat_name = space_type_name + ' Thermostat'
+      thermostat_name = "#{space_type_name} Thermostat"
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
       if thermostat.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
@@ -676,21 +676,8 @@ Standard.class_eval do
     zone_exhaust_fans = {}
 
     # apply use specified kitchen_makup logic
-    if !['Adjacent', 'Largest Zone'].include?(kitchen_makeup)
-
-      if kitchen_makeup != 'None'
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
-      end
-
-      # loop through thermal zones
-      model.getThermalZones.sort.each do |thermal_zone|
-        zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
-
-        # populate zone_exhaust_fans
-        zone_exhaust_fans.merge!(zone_exhaust_hash)
-      end
-
-    else # common code for Adjacent and Largest Zone
+    if ['Adjacent', 'Largest Zone'].include?(kitchen_makeup)
+      # common code for Adjacent and Largest Zone
 
       # populate standard_space_types_with_makup_air
       standard_space_types_with_makup_air = {}
@@ -879,9 +866,19 @@ Standard.class_eval do
           zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
           zone_exhaust_fans.merge!(zone_exhaust_hash)
         end
-
+      end
+    else
+      if kitchen_makeup != 'None'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
       end
 
+      # loop through thermal zones
+      model.getThermalZones.sort.each do |thermal_zone|
+        zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
+
+        # populate zone_exhaust_fans
+        zone_exhaust_fans.merge!(zone_exhaust_hash)
+      end
     end
 
     return zone_exhaust_fans
@@ -991,7 +988,7 @@ Standard.class_eval do
 
     # Adjust thermostat schedules:
     # Increase set-up/back to comply with code requirements
-    thermostat_schedules.keys.each do |sch_type|
+    thermostat_schedules.each_key do |sch_type|
       thermostat_schedules[sch_type].uniq.each do |sch|
         # Skip non-ruleset schedules
         next if sch.to_ScheduleRuleset.empty?
@@ -1717,9 +1714,7 @@ Standard.class_eval do
     # model_run(model)  in the current working directory
 
     # Make the directory if it doesn't exist
-    unless Dir.exist?(run_dir)
-      Dir.mkdir(run_dir)
-    end
+    FileUtils.mkdir_p(run_dir)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started simulation in '#{run_dir}'")
 
@@ -1787,7 +1782,7 @@ Standard.class_eval do
       ep_dir = OpenStudio.getEnergyPlusDirectory
       ep_path = OpenStudio.getEnergyPlusExecutable
       ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
-      idd_path = OpenStudio::Path.new(ep_dir.to_s + '/Energy+.idd')
+      idd_path = OpenStudio::Path.new("#{ep_dir}/Energy+.idd")
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
       # Make a run manager and queue up the sizing model_run(model)
@@ -2089,7 +2084,7 @@ Standard.class_eval do
         }
         econ_limits = model_find_object(standards_data['economizers'], search_criteria)
         minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
-        economizer_required = minimum_capacity_btu_per_hr.nil? ? false : true
+        economizer_required = !minimum_capacity_btu_per_hr.nil?
       elsif @instvarbuilding_type == 'LargeOffice' && air_loop_hvac_include_wshp?(air_loop)
         # WSHP serving the IT closets are assumed to always be too
         # small to require an economizer
@@ -2320,7 +2315,7 @@ Standard.class_eval do
       source_zone_name, transfer_air_flow_cfm = target_and_source_zones[exhaust_fan_zone_name]
       source_zone = model.getThermalZoneByName(source_zone_name).get
       transfer_air_source_zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
-      transfer_air_source_zone_exhaust_fan.setName(source_zone.name.to_s + ' Dummy Transfer Air (Source) Fan')
+      transfer_air_source_zone_exhaust_fan.setName("#{source_zone.name} Dummy Transfer Air (Source) Fan")
       transfer_air_source_zone_exhaust_fan.setAvailabilitySchedule(exhaust_fan.availabilitySchedule.get)
       # Convert transfer air flow to m3/s
       transfer_air_flow_m3s = OpenStudio.convert(transfer_air_flow_cfm, 'cfm', 'm^3/s').get

@@ -37,8 +37,9 @@ class ASHRAE901PRM < Standard
 
     # Get non-mechanically cooled flag
     if zone_hvac.thermalZone.get.additionalProperties.hasFeature('non_mechanically_cooled')
-      nmc_flag = zone_hvac.thermalZone.get.additionalProperties.hasFeature('non_mechanically_cooled')
-    else nmc_flag = false
+      nmc_flag = zone_hvac.thermalZone.get.additionalProperties.getFeatureAsString('non_mechanically_cooled')
+    else
+      nmc_flag = false
     end
 
     # Get the fan
@@ -64,9 +65,9 @@ class ASHRAE901PRM < Standard
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
 
       # Determine allowable fan BHP and power
-      allowable_fan_bhp = 0.00094 * dsn_air_flow_cfm + thermal_zone_get_fan_power_limitations(zone_hvac.thermalZone.get, false)
+      allowable_fan_bhp = (0.00094 * dsn_air_flow_cfm) + thermal_zone_get_fan_power_limitations(zone_hvac.thermalZone.get, false)
       fan_apply_standard_minimum_motor_efficiency(fan, allowable_fan_bhp)
-      allowable_power_w = allowable_fan_bhp * 746 / fan.motorEfficiency
+      allowable_power_w = (allowable_fan_bhp * 746) / fan.motorEfficiency
 
       # Modify fan pressure rise to match target fan power
       fan_adjust_pressure_rise_to_meet_fan_power(fan, allowable_power_w)
@@ -78,7 +79,7 @@ class ASHRAE901PRM < Standard
         fan_efficacy_w_per_cfm = 0.3 # System 9, 10
       when 'Gas_Furnace', 'Electric_Furnace'
         # Zone heater cannot provide cooling
-        if nmc_flag & !zone_hvac_component.to_ZoneHVACUnitHeater.is_initialized
+        if nmc_flag && !zone_hvac_component.to_ZoneHVACUnitHeater.is_initialized
           fan_efficacy_w_per_cfm = 0.054
         else
           fan_efficacy_w_per_cfm = 0.3

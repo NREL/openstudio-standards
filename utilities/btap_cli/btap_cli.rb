@@ -1,4 +1,4 @@
-require_relative './libs.rb'
+require_relative './libs'
 @argument = {}
 @options = {}
 # Default folders if not using s3

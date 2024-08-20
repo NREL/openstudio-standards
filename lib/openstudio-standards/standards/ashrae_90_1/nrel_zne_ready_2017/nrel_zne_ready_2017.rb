@@ -6,6 +6,7 @@ class NRELZNEReady2017 < ASHRAE901
   attr_reader :template
 
   def initialize
+    super()
     @template = 'NREL ZNE Ready 2017'
     load_standards_database
   end

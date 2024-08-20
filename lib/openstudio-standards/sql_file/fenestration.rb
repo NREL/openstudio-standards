@@ -114,7 +114,7 @@ module OpenstudioStandards
 
       divider_area_m2 = divider_area_m2.is_initialized ? divider_area_m2.get : 0.0
 
-      u_factor_w_per_m2_k = (glass_u_factor_w_per_m2_k * glass_area_m2 + frame_conductance_w_per_m2_k * frame_area_m2 + divider_conductance_w_per_m2_k * divider_area_m2) / (glass_area_m2 + frame_area_m2 + divider_area_m2)
+      u_factor_w_per_m2_k = ((glass_u_factor_w_per_m2_k * glass_area_m2) + (frame_conductance_w_per_m2_k * frame_area_m2) + (divider_conductance_w_per_m2_k * divider_area_m2)) / (glass_area_m2 + frame_area_m2 + divider_area_m2)
 
       return u_factor_w_per_m2_k
     end

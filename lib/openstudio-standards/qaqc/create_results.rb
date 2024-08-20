@@ -323,10 +323,8 @@ module OpenstudioStandards
       ann_env_pd = nil
       @sql.availableEnvPeriods.each do |env_pd|
         env_type = @sql.environmentType(env_pd)
-        if env_type.is_initialized
-          if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
-            ann_env_pd = env_pd
-          end
+        if env_type.is_initialized && (env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod'))
+          ann_env_pd = env_pd
         end
       end
 
@@ -425,15 +423,14 @@ module OpenstudioStandards
             # Skip times before 2pm and after 6pm
             next if time < start_time || time > end_time
 
-            # Skip weekends if asked
-            if skip_weekends
-              # Sunday = 1, Saturday = 7
-              next if day_type == 1 || day_type == 7
+            # Skip weekends if asked, Sunday = 1, Saturday = 7
+            if skip_weekends && ((day_type == 1) || (day_type == 7))
+              next
             end
-            # Skip holidays if asked
-            if skip_holidays
-              # Holiday = 8
-              next if day_type == 8
+
+            # Skip holidays if asked, Holiday = 8
+            if skip_holidays && (day_type == 8)
+              next
             end
 
             # puts("VALID #{val_kw}kW; #{date}; #{time}; #{day_of_week.valueName}")
@@ -504,16 +501,16 @@ module OpenstudioStandards
               # Skip times before some time and after another time
               next if time < pd_start_time || time > pd_end_time
 
-              # Skip weekends if asked
-              if tou_pd['skip_weekends']
-                # Sunday = 1, Saturday = 7
-                next if day_type == 1 || day_type == 7
+              # Skip weekends if asked, Sunday = 1, Saturday = 7
+              if tou_pd['skip_weekends'] && ((day_type == 1) || (day_type == 7))
+                next
               end
-              # Skip holidays if asked
-              if tou_pd['skip_holidays']
-                # Holiday = 8
-                next if day_type == 8
+
+              # Skip holidays if asked, Holiday = 8
+              if tou_pd['skip_holidays'] && (day_type == 8)
+                next
               end
+
               # If here, this hour falls into the specified period
               tou_period_assigned = true
               electricity_tou_vals[tou_pd['tou_id']] += joules
@@ -539,8 +536,8 @@ module OpenstudioStandards
         if val.is_initialized
           ann_elec_gj = OpenStudio::Quantity.new(val.get, gigajoule_unit)
           ann_hrs = OpenStudio::Quantity.new(hrs_sim, hrs_unit)
-          elec_ann_avg_peak_demand_hourly_GJ_per_hr = ann_elec_gj / ann_hrs
-          electricity_annual_avg_peak_demand = OpenStudio.convert(elec_ann_avg_peak_demand_hourly_GJ_per_hr, kilowatt_unit).get.value
+          elec_ann_avg_peak_demand_hourly_gj_per_hr = ann_elec_gj / ann_hrs
+          electricity_annual_avg_peak_demand = OpenStudio.convert(elec_ann_avg_peak_demand_hourly_gj_per_hr, kilowatt_unit).get.value
           demand_elems << OpenStudio::Attribute.new('electricity_annual_avg_peak_demand', electricity_annual_avg_peak_demand, 'kW')
         else
           demand_elems << OpenStudio::Attribute.new('electricity_annual_avg_peak_demand', 0.0, 'kW')
@@ -590,15 +587,14 @@ module OpenstudioStandards
             # Skip times before 2pm and after 6pm
             next if time < start_time || time > end_time
 
-            # Skip weekends if asked
-            if skip_weekends
-              # Sunday = 1, Saturday = 7
-              next if day_type == 1 || day_type == 7
+            # Skip weekends if asked, Sunday = 1, Saturday = 7
+            if skip_weekends && ((day_type == 1) || (day_type == 7))
+              next
             end
-            # Skip holidays if asked
-            if skip_holidays
-              # Holiday = 8
-              next if day_type == 8
+
+            # Skip holidays if asked, Holiday = 8
+            if skip_holidays && (day_type == 8)
+              next
             end
 
             # puts("VALID #{val_kw}kW; #{date}; #{time}; #{day_of_week.valueName}")
@@ -663,16 +659,16 @@ module OpenstudioStandards
               # Skip times before some time and after another time
               next if time < pd_start_time || time > pd_end_time
 
-              # Skip weekends if asked
-              if tou_pd['skip_weekends']
-                # Sunday = 1, Saturday = 7
-                next if day_type == 1 || day_type == 7
+              # Skip weekends if asked, Sunday = 1, Saturday = 7
+              if tou_pd['skip_weekends'] && ((day_type == 1) || (day_type == 7))
+                next
               end
-              # Skip holidays if asked
-              if tou_pd['skip_holidays']
-                # Holiday = 8
-                next if day_type == 8
+
+              # Skip holidays if asked, Holiday = 8
+              if tou_pd['skip_holidays'] && (day_type == 8)
+                next
               end
+
               # If here, this hour falls into the specified period
               tou_period_assigned = true
               dist_clg_tou_vals[tou_pd['tou_id']] += joules

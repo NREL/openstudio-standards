@@ -6,6 +6,7 @@ class ASHRAE9012004 < ASHRAE901
   attr_reader :template
 
   def initialize
+    super()
     @template = '90.1-2004'
     load_standards_database
   end

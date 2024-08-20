@@ -122,6 +122,21 @@ module OpenstudioStandards
       model.getClimateZones.climateZones.each do |climate_zone|
         if climate_zone.institution == 'ASHRAE'
           ashrae_climate_zone = climate_zone.value
+        elsif climate_zone.institution == 'CEC'
+          ca_cz_num = climate_zone.value.gsub('CEC T24-CEC', '')
+          case ca_cz_num
+          when '1'
+            ashrae_climate_zone = '4B'
+          when '2', '3', '4', '5', '6'
+            ashrae_climate_zone = '3C'
+          when '7', '8', '9', '10', '11', '12', '13', '14'
+            ashrae_climate_zone = '3B'
+          when '15'
+            ashrae_climate_zone = '2B'
+          when '16'
+            ashrae_climate_zone = '5B'
+          end
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.information', "Using ASHRAE climate zone #{climate_zone} for California climate zone #{california_cz}.")
         end
       end
 
@@ -129,7 +144,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.information', 'Please assign an ASHRAE Climate Zone to your model.')
         return false
       else
-        cz_number = ashrae_climate_zone.split(//).first.to_i
+        cz_number = ashrae_climate_zone.chars.first.to_i
       end
 
       # expected climate zone number should be 0 through 8
@@ -382,7 +397,7 @@ module OpenstudioStandards
       # extraterrestrial normal irradiance, W/m^2
       extraterrestrial_normal_irradiance_degrees = 360 * (day_of_year - 3) / 365.0
       extraterrestrial_normal_irradiance_radians = extraterrestrial_normal_irradiance_degrees * (Math::PI / 180.0)
-      extraterrestrial_normal_irradiance = 1367.0 * (1.0 + 0.033 * Math.cos(extraterrestrial_normal_irradiance_radians))
+      extraterrestrial_normal_irradiance = 1367.0 * (1.0 + (0.033 * Math.cos(extraterrestrial_normal_irradiance_radians)))
 
       # declination
       day_angle_degrees = 360.0 * (day_of_year + 284) / 365.0
@@ -399,22 +414,22 @@ module OpenstudioStandards
       global_irradiance_array = []
       (0..23).to_a.each do |local_standard_time_hour|
         # apparent solar time
-        apparent_solar_time = local_standard_time_hour + (equation_of_time_minutes / 60.0) + (site_longitude_degrees - time_zone_longitude_degrees) / 15.0
+        apparent_solar_time = local_standard_time_hour + (equation_of_time_minutes / 60.0) + ((site_longitude_degrees - time_zone_longitude_degrees) / 15.0)
 
         # hour angle
         hour_angle_degrees = 15.0 * (apparent_solar_time - 12.0)
         hour_angle_radians = hour_angle_degrees * (Math::PI / 180.0)
 
         # solar altitude
-        solar_altitude_radians = Math.asin(Math.cos(site_latitude_radians) * Math.cos(declination_radians) * Math.cos(hour_angle_radians) + Math.sin(site_latitude_radians) * Math.sin(declination_radians))
+        solar_altitude_radians = Math.asin((Math.cos(site_latitude_radians) * Math.cos(declination_radians) * Math.cos(hour_angle_radians)) + (Math.sin(site_latitude_radians) * Math.sin(declination_radians)))
         solar_altitude_degrees = solar_altitude_radians * (180.0 / Math::PI)
 
         # equation 16 air mass
         # equation 17 and 18 irradiance calculation
         if solar_altitude_degrees > 0
-          air_mass = 1 / (Math.sin(solar_altitude_radians) + 0.50572 * (6.07995 + solar_altitude_degrees)**-1.6364)
-          beam_normal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_b * air_mass**ab)
-          diffuse_horizontal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_d * air_mass**ad)
+          air_mass = 1 / (Math.sin(solar_altitude_radians) + (0.50572 * ((6.07995 + solar_altitude_degrees)**-1.6364)))
+          beam_normal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_b * (air_mass**ab))
+          diffuse_horizontal_irradiance = extraterrestrial_normal_irradiance * Math.exp(-tau_d * (air_mass**ad))
         else
           air_mass = nil
           beam_normal_irradiance = 0.0
@@ -462,12 +477,12 @@ module OpenstudioStandards
       sp_values = []
       db_temps_k.each do |t|
         if t <= 273.15
-          sp = (c1 / t) + c2 + c3 * t + c4 * t**2 + c5 * t**3 + c6 * t**4 + c7 * Math.log(t, Math.exp(1))
+          sp = (c1 / t) + c2 + (c3 * t) + (c4 * (t**2)) + (c5 * (t**3)) + (c6 * (t**4)) + (c7 * Math.log(t, Math.exp(1)))
 
         else
-          sp = (c8 / t) + c9 + c10 * t + c11 * t**2 + c12 * t**3 + c13 * Math.log(t, Math.exp(1))
+          sp = (c8 / t) + c9 + (c10 * t) + (c11 * (t**2)) + (c12 * (t**3)) + (c13 * Math.log(t, Math.exp(1)))
         end
-        sp_values << Math.exp(1)**sp
+        sp_values << (Math.exp(1)**sp)
       end
 
       # calculate partial pressure of water vapor (Pa)

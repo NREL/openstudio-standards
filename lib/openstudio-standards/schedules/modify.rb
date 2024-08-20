@@ -25,10 +25,10 @@ module OpenstudioStandards
       new_values = []
       values.each do |value|
         if lower_apply_limit.nil?
-          new_values << value * multiplier
+          new_values << (value * multiplier)
         else
           if value > lower_apply_limit
-            new_values << value * multiplier
+            new_values << (value * multiplier)
           else
             new_values << value
           end
@@ -313,21 +313,21 @@ module OpenstudioStandards
             if inside_value.nil?
               new_values << sch_values[i]
             elsif modification_type == 'Sum'
-              new_values << inside_value + sch_values[i]
+              new_values << (inside_value + sch_values[i])
             elsif modification_type == 'Replace'
               new_values << inside_value
             else # should be Multiplier
-              new_values << inside_value * sch_values[i]
+              new_values << (inside_value * sch_values[i])
             end
           else
             if outside_value.nil?
               new_values << sch_values[i]
             elsif modification_type == 'Sum'
-              new_values << outside_value + sch_values[i]
+              new_values << (outside_value + sch_values[i])
             elsif modification_type == 'Replace'
               new_values << outside_value
             else # should be Multiplier
-              new_values << outside_value * sch_values[i]
+              new_values << (outside_value * sch_values[i])
             end
           end
 
@@ -442,12 +442,12 @@ module OpenstudioStandards
       # calculations
       if options['base_start_hoo'] <= options['base_finish_hoo']
         base_opp_day_length = options['base_finish_hoo'] - options['base_start_hoo']
-        mid_hoo = start_hoo_time + (finish_hoo_time - start_hoo_time) / 2
+        mid_hoo = start_hoo_time + ((finish_hoo_time - start_hoo_time) / 2)
         mid_non_hoo = mid_hoo + time_12
         if mid_non_hoo > time_24 then mid_non_hoo -= time_24 end
       else
         base_opp_day_length = options['base_finish_hoo'] - options['base_start_hoo'] + 24
-        mid_non_hoo = finish_hoo_time + (start_hoo_time - finish_hoo_time) / 2
+        mid_non_hoo = finish_hoo_time + ((start_hoo_time - finish_hoo_time) / 2)
         mid_hoo = mid_non_hoo + time_12
         if mid_non_hoo > time_24 then mid_non_hoo -= time_24 end
       end
@@ -529,9 +529,9 @@ module OpenstudioStandards
 
           # calculate change in time do to hoo delta
           if temp_time <= adj_finish_hoo_time
-            expand_time = (temp_time - adj_mid_hoo) * hoo_time_multiplier - (temp_time - adj_mid_hoo)
+            expand_time = ((temp_time - adj_mid_hoo) * hoo_time_multiplier) - (temp_time - adj_mid_hoo)
           else
-            expand_time = (temp_time - adj_mid_non_hoo) * non_hoo_time_multiplier - (temp_time - adj_mid_non_hoo)
+            expand_time = ((temp_time - adj_mid_non_hoo) * non_hoo_time_multiplier) - (temp_time - adj_mid_non_hoo)
           end
 
           new_time = time + shift_time + expand_time

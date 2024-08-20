@@ -8,9 +8,7 @@ Standard.class_eval do
   # @return [Boolean] returns true if successful, false if not
   def model_run_simulation_and_log_errors(model, run_dir = "#{Dir.pwd}/Run")
     # Make the directory if it doesn't exist
-    unless Dir.exist?(run_dir)
-      FileUtils.mkdir_p(run_dir)
-    end
+    FileUtils.mkdir_p(run_dir)
 
     # Save the model to energyplus idf
     idf_name = 'in.idf'
@@ -58,7 +56,7 @@ Standard.class_eval do
       ep_dir = OpenStudio.getEnergyPlusDirectory
       ep_path = OpenStudio.getEnergyPlusExecutable
       ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
-      idd_path = OpenStudio::Path.new(ep_dir.to_s + '/Energy+.idd')
+      idd_path = OpenStudio::Path.new("#{ep_dir}/Energy+.idd")
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
       # Make a run manager and queue up the run

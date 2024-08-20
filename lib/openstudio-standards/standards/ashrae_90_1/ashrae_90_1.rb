@@ -4,6 +4,7 @@
 # @abstract
 class ASHRAE901 < Standard
   def initialize
+    super()
     load_standards_database
   end
 

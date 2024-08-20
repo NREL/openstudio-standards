@@ -115,10 +115,8 @@ class Standard
       return false
     end
 
-    if space_type.standardsSpaceType.is_initialized
-      if space_type.standardsSpaceType.get.downcase.include?('plenum')
-        return false
-      end
+    if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+      return false
     end
 
     # Get the standards data
@@ -138,7 +136,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.people.sort
-      if instances.size.zero?
+      if instances.empty?
         # Create a new definition and instance
         definition = OpenStudio::Model::PeopleDefinition.new(space_type.model)
         definition.setName("#{space_type.name} People Definition")
@@ -230,7 +228,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.lights.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Lights Definition")
         instance = OpenStudio::Model::Lights.new(definition)
@@ -310,7 +308,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.electricEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::ElectricEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Elec Equip Definition")
         instance = OpenStudio::Model::ElectricEquipment.new(definition)
@@ -353,7 +351,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.gasEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::GasEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Gas Equip Definition")
         instance = OpenStudio::Model::GasEquipment.new(definition)
@@ -445,7 +443,7 @@ class Standard
     if set_infiltration && infiltration_have_info
       # Remove all but the first instance
       instances = space_type.spaceInfiltrationDesignFlowRates.sort
-      if instances.size.zero?
+      if instances.empty?
         instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space_type.model)
         instance.setName("#{space_type.name} Infiltration")
         instance.setSpaceType(space_type)
@@ -495,10 +493,8 @@ class Standard
       return false
     end
 
-    if space_type.standardsSpaceType.is_initialized
-      if space_type.standardsSpaceType.get.downcase.include?('plenum')
-        return false
-      end
+    if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+      return false
     end
 
     # Get the standards data
@@ -535,7 +531,7 @@ class Standard
           space_area = space_type_space.floorArea
           space_height = space_volume / space_area
           # New lpd values
-          lighting_per_area_new = lighting_per_area + lighting_per_length * space_height
+          lighting_per_area_new = lighting_per_area + (lighting_per_length * space_height)
           lighting_per_area_hash[space_type_space.name.to_s] = lighting_per_area_new
         end
       end
@@ -544,7 +540,7 @@ class Standard
     if lights_have_info
       # Remove all but the first instance
       instances = space_type.lights.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Lights Definition")
         instance = OpenStudio::Model::Lights.new(definition)

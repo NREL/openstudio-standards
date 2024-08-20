@@ -57,13 +57,11 @@ class ASHRAE901PRM < Standard
     model = air_loop_hvac.model
     # Check if schedule was stored in an additionalProperties field of the air loop
     air_loop_name = air_loop_hvac.name
-    if air_loop_hvac.hasAdditionalProperties
-      if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
-        fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
-        fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
-        air_loop_hvac.setAvailabilitySchedule(fan_sched)
-        return true
-      end
+    if air_loop_hvac.hasAdditionalProperties && air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
+      fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
+      fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
+      air_loop_hvac.setAvailabilitySchedule(fan_sched)
+      return true
     end
 
     # Check if already using a schedule other than always on
@@ -168,10 +166,8 @@ class ASHRAE901PRM < Standard
 
     # System type 3 and 4 in computer rooms are subject to exceptions
     if baseline_system_type == 'PSZ_AC' || baseline_system_type == 'PSZ_HP'
-      if air_loop_hvac.additionalProperties.hasFeature('zone_group_type')
-        if air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get == 'computer_zones'
-          economizer_required = false
-        end
+      if air_loop_hvac.additionalProperties.hasFeature('zone_group_type') && air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get == 'computer_zones'
+        economizer_required = false
       end
     end
 
@@ -283,10 +279,10 @@ class ASHRAE901PRM < Standard
           system_type == 'Electric_Furnace'
 
       # Determine allowable fan power
-      if !is_nmc
-        fan_efficacy_w_per_cfm = 0.3
-      else # is_nmc
+      if is_nmc
         fan_efficacy_w_per_cfm = 0.054
+      else
+        fan_efficacy_w_per_cfm = 0.3
       end
 
       # Configuration is supply fan only
@@ -378,15 +374,11 @@ class ASHRAE901PRM < Standard
         if supply_fan.name.to_s == fan.name.to_s
           allowable_power_w *= supply_fan_power_fraction
         elsif fan.airLoopHVAC.is_initialized
-          if fan.airLoopHVAC.get.returnFan.is_initialized
-            if fan.airLoopHVAC.get.returnFan.get.name.to_s == fan.name.to_s
-              allowable_power_w *= return_fan_power_fraction
-            end
+          if fan.airLoopHVAC.get.returnFan.is_initialized && fan.airLoopHVAC.get.returnFan.get.name.to_s == fan.name.to_s
+            allowable_power_w *= return_fan_power_fraction
           end
-          if fan.airLoopHVAC.get.reliefFan.is_initialized
-            if fan.airLoopHVAC.get.reliefFan.get.name.to_s == fan.name.to_s
-              allowable_power_w *= relief_fan_power_fraction
-            end
+          if fan.airLoopHVAC.get.reliefFan.is_initialized && fan.airLoopHVAC.get.reliefFan.get.name.to_s == fan.name.to_s
+            allowable_power_w *= relief_fan_power_fraction
           end
         end
         fan_adjust_pressure_rise_to_meet_fan_power(fan, allowable_power_w)
@@ -435,16 +427,10 @@ class ASHRAE901PRM < Standard
     # Calculate the Allowable Fan System brake horsepower per Table G3.1.2.9
     allowable_fan_bhp = 0.0
     case system_type
-      when 'PSZ_HP', 'PSZ_AC' # 3, 4
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
-      when
-           'PVAV_Reheat', 'PVAV_PFP_Boxes', # 5, 6
-           'VAV_Reheat', 'VAV_PFP_Boxes', # 7, 8
-           'SZ_VAV' # 11
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.0013 + fan_pwr_adjustment_bhp
-      when
-           'SZ_CV' # 12, 13
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
+      when 'PSZ_HP', 'PSZ_AC', 'SZ_CV' # 3, 4, 12, 13
+        allowable_fan_bhp = (dsn_air_flow_cfm * 0.00094) + fan_pwr_adjustment_bhp
+      when 'PVAV_Reheat', 'PVAV_PFP_Boxes', 'VAV_Reheat', 'VAV_PFP_Boxes', 'SZ_VAV' # 5, 6, 7, 8, 11
+        allowable_fan_bhp = (dsn_air_flow_cfm * 0.0013) + fan_pwr_adjustment_bhp
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', "Air loop #{air_loop_hvac.name} is not associated with a baseline system.")
     end
@@ -750,40 +736,31 @@ class ASHRAE901PRM < Standard
         end
 
         # Exception 2 - System exhausting toxic fumes
-        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
-          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
-          end
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_toxic_fumes_etc') && thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
+          return nil
         end
 
         # Exception 3 - Commercial kitchen hoods
-        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
-          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
-            return nil
-          end
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type1_kitchen_hoods') && thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
+          return nil
         end
 
         # Exception 6 - Distributed exhaust
-        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
-          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
-            return nil
-          end
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type_distributed_exhaust') && thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
+          return nil
         end
 
         # Exception 7 - Dehumidification
-        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
-          if thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
-            return nil
-          end
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery') && thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
+          return nil
         end
       end
 
       # Exception 4 - Heating systems in certain climate zones
-      if ['ASHRAE 169-2006-0A', 'ASHRAE 169-2006-0B', 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2013-0A', 'ASHRAE 169-2013-0B', 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B', 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C'].include?(climate_zone)
-        if air_loop_hvac.additionalProperties.hasFeature('baseline_system_type')
-          system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
-          if system_type == 'Gas_Furnace' || system_type == 'Electric_Furnace'
-            return nil
-          end
+      if ['ASHRAE 169-2006-0A', 'ASHRAE 169-2006-0B', 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2013-0A', 'ASHRAE 169-2013-0B', 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B', 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C'].include?(climate_zone) && air_loop_hvac.additionalProperties.hasFeature('baseline_system_type')
+        system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
+        if system_type == 'Gas_Furnace' || system_type == 'Electric_Furnace'
+          return nil
         end
       end
 

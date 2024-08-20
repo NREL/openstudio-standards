@@ -78,7 +78,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     # Make a directory to save the resulting models
     test_dir = "#{File.dirname(__FILE__)}/output"
-    if !Dir.exists?(test_dir)
+    if !Dir.exist?(test_dir)
       Dir.mkdir(test_dir)
     end
 
@@ -91,7 +91,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     # Create a directory for the test result
     osm_directory = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}"
-    if !Dir.exists?(osm_directory)
+    if !Dir.exist?(osm_directory)
       Dir.mkdir(osm_directory)
     end
 
@@ -128,7 +128,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
   def test_residential_and_nonresidential_story_counts
     # Make a directory to save the resulting models
     test_dir = "#{File.dirname(__FILE__)}/output"
-    if !Dir.exists?(test_dir)
+    if !Dir.exist?(test_dir)
       Dir.mkdir(test_dir)
     end
 

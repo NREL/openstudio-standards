@@ -29,7 +29,7 @@ class ASHRAE9012010 < ASHRAE901
 
     # Sidelighting
     # Check if the primary sidelit area < 250 ft2
-    if areas['primary_sidelighted_area'] == 0.0
+    if areas['primary_sidelighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.4.")
       req_pri_ctrl = false
     elsif areas['primary_sidelighted_area'] < OpenStudio.convert(250, 'ft^2', 'm^2').get
@@ -49,7 +49,7 @@ class ASHRAE9012010 < ASHRAE901
 
     # Toplighting
     # Check if the toplit area < 900 ft2
-    if areas['toplighted_area'] == 0.0
+    if areas['toplighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.5.")
       req_top_ctrl = false
     elsif areas['toplighted_area'] < OpenStudio.convert(900, 'ft^2', 'm^2').get
@@ -68,20 +68,17 @@ class ASHRAE9012010 < ASHRAE901
     # Exceptions
     if space.spaceType.is_initialized
       case space.spaceType.get.standardsSpaceType.to_s
-      # Retail spaces exception (c) to Section 9.4.1.4
-      # req_sec_ctrl set to true to create a second reference point
       when 'Core_Retail'
+        # Retail spaces exception (c) to Section 9.4.1.4
+        # req_sec_ctrl set to true to create a second reference point
         req_pri_ctrl = false
         req_sec_ctrl = true
-      when 'Entry', 'Front_Retail', 'Point_of_Sale'
+      when 'Entry', 'Front_Retail', 'Point_of_Sale', 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
+        # Retail, Strip mall
         req_pri_ctrl = false
         req_sec_ctrl = false
-      # Strip mall
-      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
-        req_pri_ctrl = false
-        req_sec_ctrl = false
-      # Residential apartments
       when 'Apartment', 'Apartment_topfloor_NS', 'Apartment_topfloor_WE'
+        # Residential apartments
         req_top_ctrl = false
         req_pri_ctrl = false
         req_sec_ctrl = false
