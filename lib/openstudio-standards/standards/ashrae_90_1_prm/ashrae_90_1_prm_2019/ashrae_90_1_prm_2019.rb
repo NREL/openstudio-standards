@@ -6,6 +6,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   attr_reader :template
 
   def initialize
+    super()
     @template = '90.1-PRM-2019'
     load_standards_database
   end

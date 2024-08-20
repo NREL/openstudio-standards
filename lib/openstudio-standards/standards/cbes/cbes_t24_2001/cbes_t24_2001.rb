@@ -5,6 +5,7 @@ class CBEST242001 < CBES
   attr_reader :template
 
   def initialize
+    super()
     @template = 'CBES T24 2001'
     load_standards_database
   end

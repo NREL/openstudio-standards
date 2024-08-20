@@ -11,8 +11,8 @@ module OpenstudioStandards
     # @param perimeter [Double] perimeter
     # @return [Double] aspect ratio
     def self.aspect_ratio(area, perimeter)
-      length = 0.25 * (perimeter + Math.sqrt(perimeter**2 - 16 * area))
-      width = 0.25 * (perimeter - Math.sqrt(perimeter**2 - 16 * area))
+      length = 0.25 * (perimeter + Math.sqrt((perimeter**2) - (16 * area)))
+      width = 0.25 * (perimeter - Math.sqrt((perimeter**2) - (16 * area)))
       aspect_ratio = length / width
 
       return aspect_ratio
@@ -160,9 +160,7 @@ module OpenstudioStandards
 
       # Determine the surface's cardinal direction
       cardinal_direction = ''
-      if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
-        cardinal_direction = 'N'
-      elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
+      if (surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45) || (surface_abs_azimuth > 315 && surface_abs_azimuth <= 360)
         cardinal_direction = 'N'
       elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
         cardinal_direction = 'E'
@@ -448,7 +446,7 @@ module OpenstudioStandards
       # now sort by areas.
       area_index = []
       array_hash = {}
-      return array_hash if spaces.size.zero?
+      return array_hash if spaces.empty?
 
       # iterate through each surface in the space
       space.surfaces.each do |surface|
@@ -717,10 +715,11 @@ module OpenstudioStandards
           vertex_hash.each do |k, v|
             edge_counter += 1
             counter += 1
-            if vertex_hash.size != counter
-              edge_hash[edge_counter] = [v, vertex_hash[counter + 1], surface, surface.outsideBoundaryCondition, surface.surfaceType]
-            else # different code for wrap around vertex
+            if vertex_hash.size == counter
+              # different code for wrap around vertex
               edge_hash[edge_counter] = [v, vertex_hash[1], surface, surface.outsideBoundaryCondition, surface.surfaceType]
+            else
+              edge_hash[edge_counter] = [v, vertex_hash[counter + 1], surface, surface.outsideBoundaryCondition, surface.surfaceType]
             end
           end
         end
@@ -832,7 +831,7 @@ module OpenstudioStandards
 
       # If there are no spaces on this story, assume
       # a multiplier of 1
-      if multipliers.size.zero?
+      if multipliers.empty?
         return floor_multiplier
       end
 
@@ -867,17 +866,17 @@ module OpenstudioStandards
         # loop through space surfaces to find min z value
         space.surfaces.each do |surface|
           surface.vertices.each do |vertex|
-            z_heights << vertex.z + z_origin
+            z_heights << (vertex.z + z_origin)
           end
         end
       end
 
       # Error if no z heights were found
       z = 999.9
-      if !z_heights.empty?
-        z = z_heights.min
-      else
+      if z_heights.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Information', "For #{building_story.name} could not find the minimum_z_value, which means the story has no spaces assigned or the spaces have no surfaces.")
+      else
+        z = z_heights.min
       end
 
       return z
@@ -929,8 +928,8 @@ module OpenstudioStandards
       above_ground_stories = []
       model.getBuildingStorys.sort.each do |story|
         z = story.nominalZCoordinate
-        unless z.empty?
-          above_ground_stories << story if z.to_f >= 0
+        if !z.empty? && z.to_f >= 0
+          above_ground_stories << story
         end
       end
       return above_ground_stories
@@ -944,8 +943,8 @@ module OpenstudioStandards
       below_ground_stories = []
       model.getBuildingStorys.sort.each do |story|
         z = story.nominalZCoordinate
-        unless z.empty?
-          below_ground_stories << story if z.to_f < 0
+        if !z.empty? && z.to_f < 0
+          below_ground_stories << story
         end
       end
       return below_ground_stories
@@ -976,13 +975,11 @@ module OpenstudioStandards
       spaces.each do |space|
         # get surface area adjusting for zone multiplier
         zone = space.thermalZone
-        if !zone.empty?
-          zone_multiplier = zone.get.multiplier
-          if zone_multiplier > 1
-          end
-        else
+        if zone.empty?
           # space is not in a thermal zone
           zone_multiplier = 1
+        else
+          zone_multiplier = zone.get.multiplier
         end
 
         # loop through spaces and skip all that aren't exterior walls and don't match selected cardinal direction
@@ -1047,12 +1044,10 @@ module OpenstudioStandards
       spaces.each do |space|
         # get surface area adjusting for zone multiplier
         zone = space.thermalZone
-        if !zone.empty?
-          zone_multiplier = zone.get.multiplier
-          if zone_multiplier > 1
-          end
-        else
+        if zone.empty?
           zone_multiplier = 1 # space is not in a thermal zone
+        else
+          zone_multiplier = zone.get.multiplier
         end
 
         space.surfaces.each do |s|
@@ -1127,10 +1122,11 @@ module OpenstudioStandards
           vertex_hash.each do |k, v|
             edge_counter += 1
             counter += 1
-            if vertex_hash.size != counter
-              edge_hash[edge_counter] = [v, vertex_hash[counter + 1], surface, surface.outsideBoundaryCondition, surface.surfaceType]
-            else # different code for wrap around vertex
+            if vertex_hash.size == counter
+              # different code for wrap around vertex
               edge_hash[edge_counter] = [v, vertex_hash[1], surface, surface.outsideBoundaryCondition, surface.surfaceType]
+            else
+              edge_hash[edge_counter] = [v, vertex_hash[counter + 1], surface, surface.outsideBoundaryCondition, surface.surfaceType]
             end
           end
         end

@@ -1,8 +1,6 @@
 class Standard
   # @!group ScheduleRuleset
 
-
-  #
   # Return Array of weekday values from Array of all day values
   # @author Xuechen (Jerry) Lei, PNNL
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -93,7 +91,7 @@ class Standard
 
     # Make week schedule for first week
     num_week_scheds = 1
-    week_sch_name = sch_name + '_ws' + num_week_scheds.to_s
+    week_sch_name = "#{sch_name}_ws#{num_week_scheds}"
     week_1_rules = make_week_ruleset_sched_from_168(model, sch_ruleset, all_week_values[1], start_date, end_date, week_sch_name)
     week_n_rules = week_1_rules
     all_week_rules = []
@@ -180,7 +178,7 @@ class Standard
       # Need to add a new rule
       day_of_week = start_date.dayOfWeek.valueName
       day_names = [day_of_week]
-      day_sch_name = sch_name + '_Day_365'
+      day_sch_name = "#{sch_name}_Day_365"
       day_sch_values = []
       (0..23).each do |ihr|
         day_sch_values << all_week_values[iweek][ihr]
@@ -227,7 +225,7 @@ class Standard
 
         day_of_week = start_date.dayOfWeek.valueName
         day_names = [day_of_week]
-        day_sch_name = sch_name + '_Day_366'
+        day_sch_name = "#{sch_name}_Day_366"
         day_sch_values = []
         (0..23).each do |ihr|
           day_sch_values << all_week_values[iweek][ihr]
@@ -265,7 +263,7 @@ class Standard
     end
     # Create the schedules for the design days
     day_sch = OpenStudio::Model::ScheduleDay.new(model)
-    day_sch.setName(sch_name + 'Winter Design Day')
+    day_sch.setName("#{sch_name} Winter Design Day")
     (0..23).each do |ihr|
       hr_of_yr = ihr_max + ihr
       next if values[hr_of_yr] == values[hr_of_yr + 1]
@@ -275,7 +273,7 @@ class Standard
     sch_ruleset.setWinterDesignDaySchedule(day_sch)
 
     day_sch = OpenStudio::Model::ScheduleDay.new(model)
-    day_sch.setName(sch_name + 'Summer Design Day')
+    day_sch.setName("#{sch_name} Summer Design Day")
     (0..23).each do |ihr|
       hr_of_yr = ihr_max + ihr
       next if values[hr_of_yr] == values[hr_of_yr + 1]
@@ -376,5 +374,4 @@ class Standard
 
     return sch_rules
   end
-
 end

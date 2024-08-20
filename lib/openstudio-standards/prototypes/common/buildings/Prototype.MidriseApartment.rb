@@ -30,7 +30,7 @@ module MidriseApartment
   def adjust_clg_setpoint(climate_zone, model)
     space_name = 'Office'
     space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
-    thermostat_name = space_type_name + ' Thermostat'
+    thermostat_name = "#{space_type_name} Thermostat"
     thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010'

@@ -11,13 +11,13 @@ class TestSpace < Minitest::Test
     space = OpenStudio::Model::Space.new(model)
     space.setName('some space')
     space.setPartofTotalFloorArea(false)
-    assert_equal(@space.space_plenum?(space), true)
+    assert_equal(true, @space.space_plenum?(space))
 
     space.setPartofTotalFloorArea(true)
     space_type = OpenStudio::Model::SpaceType.new(model)
     space_type.setName('Plenum')
     space.setSpaceType(space_type)
-    assert_equal(@space.space_plenum?(space), true)
+    assert_equal(true, @space.space_plenum?(space))
   end
 
   def test_space_residential?
@@ -35,13 +35,13 @@ class TestSpace < Minitest::Test
     space_type = OpenStudio::Model::SpaceType.new(model)
     space_type.setName('MidriseApartment Apartment')
     space1.setSpaceType(space_type)
-    assert_equal(@space.space_residential?(space1), true)
+    assert_equal(true, @space.space_residential?(space1))
 
     apt_ofc = OpenStudio::Model::SpaceType.new(model)
     apt_ofc.setName('MidriseApartment Office')
     ofc = OpenStudio::Model::Space.new(model)
     ofc.setSpaceType(apt_ofc)
-    assert_equal(@space.space_residential?(ofc), false)
+    assert_equal(false, @space.space_residential?(ofc))
 
     # plenum from below space
     polygon = OpenStudio::Point3dVector.new
@@ -53,7 +53,92 @@ class TestSpace < Minitest::Test
     space2 = OpenStudio::Model::Space.fromFloorPrint(polygon, 1.0, model).get
     space2.setPartofTotalFloorArea(false)
     space1.matchSurfaces(space2)
-    assert_equal(@space.space_residential?(space2), true)
+    assert_equal(true, @space.space_residential?(space2))
+  end
+
+  def test_space_heated?
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space1 = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    space1.setThermalZone(thermal_zone)
+    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
+    thermal_zone.setThermostatSetpointDualSetpoint(thermostat)
+    htg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 20.0,
+                                                         name: 'Heating Setpoint Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    clg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 24.0,
+                                                         name: 'Cooling Setpoint Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
+    thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
+    assert_equal(true, @space.space_heated?(space1))
+
+    # test unconditioned (<41F)
+    htg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 4.0,
+                                                         name: 'Unconditioned Heating Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
+    assert_equal(false, @space.space_heated?(space1))
+  end
+
+  def test_space_cooled?
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space1 = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    space1.setThermalZone(thermal_zone)
+    thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(model)
+    thermal_zone.setThermostatSetpointDualSetpoint(thermostat)
+    htg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 20.0,
+                                                         name: 'Heating Setpoint Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    clg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 24.0,
+                                                         name: 'Cooling Setpoint Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
+    thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
+    assert_equal(true, @space.space_cooled?(space1))
+
+    # test unconditioned (>91F)
+    clg_stpt_sch = @sch.create_constant_schedule_ruleset(model, 35.0,
+                                                         name: 'Unconditioned Cooling Schedule',
+                                                         schedule_type_limit: 'Temperature')
+    thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
+    assert_equal(false, @space.space_cooled?(space1))
+  end
+
+  def test_space_get_design_internal_load
+    model = OpenStudio::Model::Model.new
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space1 = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
+    assert_equal(0.0, @space.space_get_design_internal_load(space1))
+
+    # create space type and set standards info
+    space_type = OpenStudio::Model::SpaceType.new(model)
+    space_type.setStandardsBuildingType('PrimarySchool')
+    space_type.setStandardsSpaceType('Classroom')
+    space1.setSpaceType(space_type)
+
+    # add loads
+    std = Standard.build('90.1-2013')
+    std.model_add_loads(model)
+    assert_in_delta(708.67, @space.space_get_design_internal_load(space1), 0.1)
   end
 
   def test_space_hours_of_operation
@@ -79,14 +164,14 @@ class TestSpace < Minitest::Test
     space.setDefaultScheduleSet(default_schedule_set)
     hoo_hash = @space.space_hours_of_operation(space)
     # puts hoo_hash
-    assert_equal(hoo_hash[-1][:hoo_start], 8)
-    assert_equal(hoo_hash[-1][:hoo_end], 20)
-    assert_equal(hoo_hash[-1][:hoo_hours], 20-8)
-    assert_equal(hoo_hash[-1][:days_used].size, 261)
-    assert_equal(hoo_hash[0][:hoo_start], 10)
-    assert_equal(hoo_hash[0][:hoo_end], 14)
-    assert_equal(hoo_hash[0][:hoo_hours], 14-10)
-    assert_equal(hoo_hash[0][:days_used].size, 104)
+    assert_equal(8, hoo_hash[-1][:hoo_start])
+    assert_equal(20, hoo_hash[-1][:hoo_end])
+    assert_equal(20-8, hoo_hash[-1][:hoo_hours])
+    assert_equal(261, hoo_hash[-1][:days_used].size)
+    assert_equal(10, hoo_hash[0][:hoo_start])
+    assert_equal(14, hoo_hash[0][:hoo_end])
+    assert_equal(14-10, hoo_hash[0][:hoo_hours])
+    assert_equal(104, hoo_hash[0][:days_used].size)
   end
 
   def test_spaces_get_occupancy_schedule
@@ -147,35 +232,49 @@ class TestSpace < Minitest::Test
     ppl3.setNumberofPeopleSchedule(ppl_sch3)
     ppl3.setSpace(space2)
 
+    polygon = OpenStudio::Point3dVector.new
+    origin = OpenStudio::Point3d.new(0.0, 10.0, 0.0)
+    polygon << origin
+    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
+    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
+    space3 = OpenStudio::Model::Space.fromFloorPrint(polygon, 1.0, model).get
+
+    # space with no people
+    zero_schedule = @space.spaces_get_occupancy_schedule([space3], sch_name: 'test empty occupancy frac')
+    zero_min_max = @sch.schedule_get_min_max(zero_schedule)
+    assert_equal(0.0, zero_min_max['min'])
+    assert_equal(0.0, zero_min_max['max'])
+
     # fractional values
     occ_sch_fracs = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy frac', occupied_percentage_threshold: nil, threshold_calc_method: nil)
-    puts "Fractional Values: #{occ_sch_fracs.scheduleRules.size} Schedule Rules"
+    # puts "Fractional Values: #{occ_sch_fracs.scheduleRules.size} Schedule Rules"
 
     spring_wkdy = occ_sch_fracs.getDaySchedules(OpenStudio::Date.new('2018-Apr-10'),OpenStudio::Date.new('2018-Apr-10')).first
     spring_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wkdy)
-    assert_equal(spring_wkdy_hrly_vals.index(0.25), 6)
-    assert_equal(spring_wkdy_hrly_vals.index(0.5), 8)
-    assert_equal(spring_wkdy_hrly_vals.rindex(0.5), 17)
-    assert_equal(spring_wkdy_hrly_vals.index(0.75), 12)
-    assert_equal(spring_wkdy_hrly_vals.rindex(0.75), 15)
-    assert_equal(spring_wkdy_hrly_vals.rindex(0.125), 21)
+    assert_equal(6, spring_wkdy_hrly_vals.index(0.25))
+    assert_equal(8, spring_wkdy_hrly_vals.index(0.5))
+    assert_equal(17, spring_wkdy_hrly_vals.rindex(0.5))
+    assert_equal(12, spring_wkdy_hrly_vals.index(0.75))
+    assert_equal(15, spring_wkdy_hrly_vals.rindex(0.75))
+    assert_equal(21, spring_wkdy_hrly_vals.rindex(0.125))
 
     spring_wknd = occ_sch_fracs.getDaySchedules(OpenStudio::Date.new('2018-Apr-14'),OpenStudio::Date.new('2018-Apr-14')).first
     spring_wknd_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wknd)
-    assert_equal(spring_wknd_hrly_vals.index(0.25), 8)
-    assert_equal(spring_wknd_hrly_vals.rindex(0.25), 15)
+    assert_equal(8, spring_wknd_hrly_vals.index(0.25))
+    assert_equal(15, spring_wknd_hrly_vals.rindex(0.25))
 
     summer_wkdy = occ_sch_fracs.getDaySchedules(OpenStudio::Date.new('2018-Jul-23'),OpenStudio::Date.new('2018-Jul-23')).first
     summer_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(summer_wkdy)
-    assert_equal(summer_wkdy_hrly_vals.index(0.25), 6)
-    assert_equal(summer_wkdy_hrly_vals.index(0.5), 8)
-    assert_equal(summer_wkdy_hrly_vals.rindex(0.625), 11)
-    assert_equal(summer_wkdy_hrly_vals.index(0.875), 12)
-    assert_equal(summer_wkdy_hrly_vals.rindex(0.875), 15)
-    assert_equal(summer_wkdy_hrly_vals.rindex(0.538), 17)
-    assert_equal(summer_wkdy_hrly_vals.rindex(0.163), 19)
+    assert_equal(6, summer_wkdy_hrly_vals.index(0.25))
+    assert_equal(8, summer_wkdy_hrly_vals.index(0.5))
+    assert_equal(11, summer_wkdy_hrly_vals.rindex(0.625))
+    assert_equal(12, summer_wkdy_hrly_vals.index(0.875))
+    assert_equal(15, summer_wkdy_hrly_vals.rindex(0.875))
+    assert_equal(17, summer_wkdy_hrly_vals.rindex(0.5375))
+    assert_equal(19, summer_wkdy_hrly_vals.rindex(0.1625))
 
-    assert_in_delta(@sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_fracs), 2290.28, 0.01)
+    assert_in_delta(@sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_fracs), 2290.15, 0.01)
 
     # not normalized
     occ_sch_values = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy threshold', occupied_percentage_threshold: 0.3, threshold_calc_method: nil)
@@ -183,8 +282,8 @@ class TestSpace < Minitest::Test
 
     spring_wkdy = occ_sch_values.getDaySchedules(OpenStudio::Date.new('2018-Apr-10'),OpenStudio::Date.new('2018-Apr-10')).first
     spring_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wkdy)
-    assert_equal(spring_wkdy_hrly_vals.index(1.0), 8)
-    assert_equal(spring_wkdy_hrly_vals.rindex(1.0), 17)
+    assert_equal(8, spring_wkdy_hrly_vals.index(1.0))
+    assert_equal(17, spring_wkdy_hrly_vals.rindex(1.0))
 
     spring_wknd = occ_sch_values.getDaySchedules(OpenStudio::Date.new('2018-Apr-14'),OpenStudio::Date.new('2018-Apr-14')).first
     spring_wknd_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wknd)
@@ -192,10 +291,10 @@ class TestSpace < Minitest::Test
 
     summer_wkdy = occ_sch_values.getDaySchedules(OpenStudio::Date.new('2018-Jul-23'),OpenStudio::Date.new('2018-Jul-23')).first
     summer_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(summer_wkdy)
-    assert_equal(summer_wkdy_hrly_vals.index(1.0), 8)
-    assert_equal(summer_wkdy_hrly_vals.rindex(1.0), 17)
+    assert_equal(8, summer_wkdy_hrly_vals.index(1.0))
+    assert_equal(17, summer_wkdy_hrly_vals.rindex(1.0))
 
-    assert_equal(@sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_values), 2610)
+    assert_equal(2610, @sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_values))
 
     # normalized daily
     occ_sch_daily = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy daily', occupied_percentage_threshold: 0.3, threshold_calc_method: 'normalized_daily_range')
@@ -203,20 +302,20 @@ class TestSpace < Minitest::Test
 
     spring_wkdy = occ_sch_daily.getDaySchedules(OpenStudio::Date.new('2018-Apr-10'),OpenStudio::Date.new('2018-Apr-10')).first
     spring_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wkdy)
-    assert_equal(spring_wkdy_hrly_vals.index(1.0), 6)
-    assert_equal(spring_wkdy_hrly_vals.rindex(1.0), 17)
+    assert_equal(6, spring_wkdy_hrly_vals.index(1.0))
+    assert_equal(17, spring_wkdy_hrly_vals.rindex(1.0))
 
     spring_wknd = occ_sch_daily.getDaySchedules(OpenStudio::Date.new('2018-Apr-14'),OpenStudio::Date.new('2018-Apr-14')).first
     spring_wknd_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wknd)
-    assert_equal(spring_wknd_hrly_vals.index(1.0), 8)
-    assert_equal(spring_wknd_hrly_vals.rindex(1.0), 15)
+    assert_equal(8, spring_wknd_hrly_vals.index(1.0))
+    assert_equal(15, spring_wknd_hrly_vals.rindex(1.0))
 
     summer_wkdy = occ_sch_daily.getDaySchedules(OpenStudio::Date.new('2018-Jul-23'),OpenStudio::Date.new('2018-Jul-23')).first
     summer_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(summer_wkdy)
-    assert_equal(summer_wkdy_hrly_vals.index(1.0), 8)
-    assert_equal(summer_wkdy_hrly_vals.rindex(1.0), 17)
+    assert_equal(8, summer_wkdy_hrly_vals.index(1.0))
+    assert_equal(17, summer_wkdy_hrly_vals.rindex(1.0))
 
-    assert_equal(@sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_daily), 3832)
+    assert_equal(3832, @sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_daily))
 
     # normalized annually
     occ_sch_annual = @space.spaces_get_occupancy_schedule([space1,space2], sch_name: 'test occupancy annual', occupied_percentage_threshold: 0.3, threshold_calc_method: 'normalized_annual_range')
@@ -224,8 +323,8 @@ class TestSpace < Minitest::Test
 
     spring_wkdy = occ_sch_annual.getDaySchedules(OpenStudio::Date.new('2018-Apr-10'),OpenStudio::Date.new('2018-Apr-10')).first
     spring_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wkdy)
-    assert_equal(spring_wkdy_hrly_vals.index(1.0), 8)
-    assert_equal(spring_wkdy_hrly_vals.rindex(1.0), 17)
+    assert_equal(8, spring_wkdy_hrly_vals.index(1.0))
+    assert_equal(17, spring_wkdy_hrly_vals.rindex(1.0))
 
     spring_wknd = occ_sch_annual.getDaySchedules(OpenStudio::Date.new('2018-Apr-14'),OpenStudio::Date.new('2018-Apr-14')).first
     spring_wknd_hrly_vals = @sch.schedule_day_get_hourly_values(spring_wknd)
@@ -233,9 +332,44 @@ class TestSpace < Minitest::Test
 
     summer_wkdy = occ_sch_annual.getDaySchedules(OpenStudio::Date.new('2018-Jul-23'),OpenStudio::Date.new('2018-Jul-23')).first
     summer_wkdy_hrly_vals = @sch.schedule_day_get_hourly_values(summer_wkdy)
-    assert_equal(summer_wkdy_hrly_vals.index(1.0), 8)
-    assert_equal(summer_wkdy_hrly_vals.rindex(1.0), 17)
+    assert_equal(8, summer_wkdy_hrly_vals.index(1.0))
+    assert_equal(17, summer_wkdy_hrly_vals.rindex(1.0))
 
-    assert_equal(@sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_annual), 2610)
+    assert_equal(2610, @sch.schedule_ruleset_get_equivalent_full_load_hours(occ_sch_annual))
+
+    # test for equivalency with 90.1 PRM method
+    model.getYearDescription.setCalendarYear(2006)
+    sch4_opts = {
+      'name' => 'OfficeMedium BLDG_OCC_SCH',
+      'default_day' => ['Default', [6.0, 0],[18.0, 0.05], [24.0, 0.0]],
+      'rules' => [
+        ['Saturday', '1/1-12/31', 'Sat', [6, 0],[8, 0.1],[12,0.3], [17,0.1],[19,0.05],[24,0]],
+        ['Weekdays', '1/1-12/31', 'Mon/Tue/Wed/Thu/Fri', [6,0],[7,0.1],[8,0.2],[12,0.95],[13,0.5],[17,0.95],[18,0.3],[22,0.1],[24,0.05]]
+      ]
+    }
+
+    ppl_sch4 = @sch.create_complex_schedule(model, sch4_opts)
+    space4 = OpenStudio::Model::Space.new(model)
+    # need a spacetype to compare to PRM
+    st = OpenStudio::Model::SpaceType.new(model)
+    space4.setSpaceType(st)
+    ppl_def4 = OpenStudio::Model::PeopleDefinition.new(model)
+    ppl_def4.setNumberofPeople(21.15)
+    ppl4 = OpenStudio::Model::People.new(ppl_def4)
+    ppl4.setNumberofPeopleSchedule(ppl_sch4)
+    ppl4.setSpace(space4)
+    occ_sch = @space.spaces_get_occupancy_schedule([space4], sch_name: 'test occupancy frac', occupied_percentage_threshold: 0.1, threshold_calc_method: nil)
+
+    std = Standard.build('90.1-PRM-2019')
+    zone = OpenStudio::Model::ThermalZone.new(model)
+    zone.setName('Perimeter_bot_ZN_1 ZN')
+    space4.setThermalZone(zone)
+
+    prm_eflh = std.thermal_zone_get_annual_operating_hours(model, zone, nil)
+
+    oss_eflh = @sch.schedule_get_hourly_values(occ_sch)
+
+    assert((prm_eflh.sum - oss_eflh.sum).abs.round(2) <= 0.001)
+
   end
 end

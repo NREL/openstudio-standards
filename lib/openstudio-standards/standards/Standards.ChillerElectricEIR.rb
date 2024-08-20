@@ -129,24 +129,23 @@ class Standard
   # @return [String] name of applicable cuvre, nil if not found
   # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
   def chiller_electric_eir_get_cap_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
-    if cooling_type == 'AirCooled'
-      return 'AirCooled_Chiller_2010_PathA_CAPFT'
-    elsif cooling_type == 'WaterCooled'
+    curve_name = nil
+    case cooling_type
+    when 'AirCooled'
+      curve_name = 'AirCooled_Chiller_2010_PathA_CAPFT'
+    when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
         if chiller_tonnage >= 150
-          return 'WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT'
+          curve_name = 'WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT'
         else
-          return 'WaterCooled_Centrifugal_Chiller_LT150_2004_CAPFT'
+          curve_name = 'WaterCooled_Centrifugal_Chiller_LT150_2004_CAPFT'
         end
       when 'Reciprocating', 'Rotary Screw', 'Scroll'
-        return 'ChlrWtrPosDispPathAAllQRatio_fTchwsTcwsSI'
-      else
-        return nil
+        curve_name = 'ChlrWtrPosDispPathAAllQRatio_fTchwsTcwsSI'
       end
-    else
-      return nil
     end
+    return curve_name
   end
 
   # Get applicable performance curve for EIR as a function of temperature
@@ -158,16 +157,15 @@ class Standard
   # @return [String] name of applicable cuvre, nil if not found
   # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
   def chiller_electric_eir_get_eir_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
-    if cooling_type == 'AirCooled'
+    case cooling_type
+    when 'AirCooled'
       return 'AirCooled_Chiller_2010_PathA_EIRFT'
-    elsif cooling_type == 'WaterCooled'
+    when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
-        if chiller_tonnage >= 150
-          return 'WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT'
-        else
-          return 'WaterCooled_Centrifugal_Chiller_LT150_2004_EIRFT'
-        end
+        return 'WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT' if chiller_tonnage >= 150
+
+        return 'WaterCooled_Centrifugal_Chiller_LT150_2004_EIRFT'
       when 'Reciprocating', 'Rotary Screw', 'Scroll'
         return 'ChlrWtrPosDispPathAAllEIRRatio_fTchwsTcwsSI'
       else
@@ -187,13 +185,12 @@ class Standard
   # @return [String] name of applicable cuvre, nil if not found
   # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
   def chiller_electric_eir_get_eir_f_plr_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
-    if cooling_type == 'AirCooled'
+    case cooling_type
+    when 'AirCooled'
       return 'AirCooled_Chiller_AllCapacities_2004_2010_EIRFPLR'
-    elsif cooling_type == 'WaterCooled'
+    when 'WaterCooled'
       case compressor_type
-      when 'Centrifugal'
-        return 'ChlrWtrCentPathAAllEIRRatio_fQRatio'
-      when 'Reciprocating', 'Rotary Screw', 'Scroll'
+      when 'Centrifugal', 'Reciprocating', 'Rotary Screw', 'Scroll'
         return 'ChlrWtrCentPathAAllEIRRatio_fQRatio'
       else
         return nil

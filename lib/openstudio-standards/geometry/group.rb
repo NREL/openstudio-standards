@@ -69,7 +69,7 @@ module OpenstudioStandards
       zones = std.model_zones_with_occ_and_fuel_type(model, nil)
 
       # Ensure that there is at least one conditioned zone
-      if zones.size.zero?
+      if zones.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
         return []
       end
@@ -168,7 +168,7 @@ module OpenstudioStandards
       zones = std.model_zones_with_occ_and_fuel_type(model, nil)
 
       # Ensure that there is at least one conditioned zone
-      if zones.size.zero?
+      if zones.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
         return []
       end

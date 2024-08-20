@@ -19,7 +19,7 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # cooling delta t
-      if std.thermal_zone_cooled?(thermal_zone)
+      if OpenstudioStandards::ThermalZone.thermal_zone_cooled?(thermal_zone)
         case thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureInputMethod
         when 'SupplyAirTemperatureDifference'
           assert((thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference - delta_t_r).abs < 0.001, "supply to room cooling temperature difference for #{thermal_zone.name} in the #{building_type}, #{template}, #{climate_zone} model is incorrect. It is #{thermal_zone.sizingZone.zoneCoolingDesignSupplyAirTemperatureDifference}, but should be #{delta_t_r}")
@@ -50,7 +50,7 @@ class AppendixGPRMTests < Minitest::Test
       end
 
       # heating delta t
-      if std.thermal_zone_heated?(thermal_zone)
+      if OpenstudioStandards::ThermalZone.thermal_zone_heated?(thermal_zone)
         has_unit_heater = false
         # 90.1 Appendix G G3.1.2.8.2
         thermal_zone.equipment.each do |eqt|
@@ -207,11 +207,10 @@ class AppendixGPRMTests < Minitest::Test
   end
 
   def remove_zone_oa_per_person_spec(model, arguments)
-    std = Standard.build('90.1-PRM-2019')
     # argument contains a list of zone names to remove oa per person specification
     arguments.each do |zone_name|
       thermal_zone = model.getThermalZoneByName(zone_name).get
-      std.thermal_zone_convert_oa_req_to_per_area(thermal_zone)
+      OpenstudioStandards::ThermalZone.thermal_zone_convert_outdoor_air_to_per_area(thermal_zone)
     end
     return model
   end

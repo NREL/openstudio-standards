@@ -30,7 +30,7 @@ namespace :test do
   Rake::TestTask.new('parallel_run_all_tests_locally') do |t|
     # Make an empty test/reports directory
     report_dir = 'test/reports'
-    FileUtils.rm_rf(report_dir) if Dir.exist?(report_dir)
+    FileUtils.rm_rf(report_dir)
     Dir.mkdir(report_dir)
     file_list = FileList.new('test/parallel_run_all_tests_locally.rb')
     t.libs << 'test'
@@ -100,8 +100,7 @@ namespace :test do
       end
 
       # Write out the test results to file
-      folder = "#{Dir.pwd}/timing"
-      Dir.mkdir(folder) unless File.exist?(folder)
+      FileUtils.mkdir_p("#{Dir.pwd}/timing")
 
       # By file
       File.open("#{Dir.pwd}/timing/test_by_file.html", 'w') do |html|
@@ -201,7 +200,7 @@ end
 require 'yard'
 desc 'Generate the documentation'
 YARD::Rake::YardocTask.new(:doc) do |t|
-  require_relative 'lib/openstudio-standards/prototypes/common/prototype_metaprogramming.rb'
+  require_relative 'lib/openstudio-standards/prototypes/common/prototype_metaprogramming'
   # Generate temporary building type class files so that
   # the documentation shows these classes
   save_meta_classes_to_file
@@ -227,7 +226,7 @@ desc 'Check the code for style consistency'
 RuboCop::RakeTask.new(:rubocop) do |t|
   # Make a folder for the output
   out_dir = '.rubocop'
-  Dir.mkdir(out_dir) unless File.exist?(out_dir)
+  FileUtils.mkdir_p(out_dir)
   # Output both XML (CheckStyle format) and HTML
   t.options = ["--out=#{out_dir}/rubocop-results.xml", '--format=h', "--out=#{out_dir}/rubocop-results.html", '--format=offenses', "--out=#{out_dir}/rubocop-summary.txt"]
   t.requires = ['rubocop/formatter/checkstyle_formatter']

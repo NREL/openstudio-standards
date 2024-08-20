@@ -139,7 +139,7 @@ module Outpatient
   def adjust_clg_setpoint(climate_zone, model)
     model.getSpaceTypes.sort.each do |space_type|
       space_type_name = space_type.name.get
-      thermostat_name = space_type_name + ' Thermostat'
+      thermostat_name = "#{space_type_name} Thermostat"
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
@@ -353,7 +353,7 @@ module Outpatient
         if air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
           air_terminal = air_terminal.to_AirTerminalSingleDuctVAVReheat.get
           vav_name = air_terminal.name.get
-          zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+          zone_oa_per_area = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
           case template
           # High OA zones
           # Determine whether or not to use the high minimum guess.
@@ -569,15 +569,15 @@ module Outpatient
       }
     end
 
-    if !init_mdp.nil?
+    if init_mdp.nil?
+      min_damper_position = 0.3
+    else
       airlp = air_terminal_single_duct_vav_reheat.airLoopHVAC.get
       init_mdp.each do |zn_name, mdp|
         if air_terminal_single_duct_vav_reheat.name.to_s.upcase.strip.include? zn_name.to_s.strip
           min_damper_position = mdp
         end
       end
-    else
-      min_damper_position = 0.3
     end
 
     # Set the minimum flow fraction

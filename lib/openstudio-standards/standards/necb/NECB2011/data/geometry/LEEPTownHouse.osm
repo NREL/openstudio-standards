@@ -19286,7 +19286,7 @@ OS:Facility,
 
 OS:Building,
   {f084eff1-38e9-4be3-8e15-08183ba5242e}, !- Handle
-  LEEPTownHouse,                          !- Name
+  4-storey Stacked THs,                   !- Name
   ,                                       !- Building Sector Type
   ,                                       !- North Axis {deg}
   ,                                       !- Nominal Floor to Floor Height {m}
@@ -19296,7 +19296,7 @@ OS:Building,
   4,                                      !- Standards Number of Stories
   4,                                      !- Standards Number of Above Ground Stories
   ,                                       !- Standards Template
-  LEEPTownHouse,                          !- Standards Building Type
+  ,                                       !- Standards Building Type
   ,                                       !- Standards Number of Living Units
   ,                                       !- Relocatable
   ;                                       !- Nominal Floor to Ceiling Height {m}
@@ -39701,7 +39701,8 @@ OS:BuildingStory,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {82bc17ff-6082-40e2-b3d9-73bb2bf3afa6}; !- Group Rendering Name
+  {82bc17ff-6082-40e2-b3d9-73bb2bf3afa6}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
 
 OS:Rendering:Color,
   {82bc17ff-6082-40e2-b3d9-73bb2bf3afa6}, !- Handle
@@ -39717,7 +39718,8 @@ OS:BuildingStory,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {853ca033-e4df-49b6-8118-b200a44e99a5}; !- Group Rendering Name
+  {853ca033-e4df-49b6-8118-b200a44e99a5}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
 
 OS:Rendering:Color,
   {853ca033-e4df-49b6-8118-b200a44e99a5}, !- Handle
@@ -39733,7 +39735,8 @@ OS:BuildingStory,
   ,                                       !- Nominal Floor to Floor Height {m}
   ,                                       !- Default Construction Set Name
   ,                                       !- Default Schedule Set Name
-  {51c4a516-71eb-4678-b463-001a4d316596}; !- Group Rendering Name
+  {51c4a516-71eb-4678-b463-001a4d316596}, !- Group Rendering Name
+  ;                                       !- Nominal Floor to Ceiling Height {m}
 
 OS:Rendering:Color,
   {51c4a516-71eb-4678-b463-001a4d316596}, !- Handle
@@ -43324,15 +43327,6 @@ OS:Rendering:Color,
   245,                                    !- Rendering Red Value
   220,                                    !- Rendering Green Value
   245;                                    !- Rendering Blue Value
-
-OS:BuildingStory,
-  {88e56355-de3b-4e0f-affa-6482280fd844}, !- Handle
-  Building Story 5,                       !- Name
-  0,                                      !- Nominal Z Coordinate {m}
-  4,                                      !- Nominal Floor to Floor Height {m}
-  ,                                       !- Default Construction Set Name
-  ,                                       !- Default Schedule Set Name
-  {4d8e096e-ba63-4cc5-87f1-76a8ea230681}; !- Group Rendering Name
 
 OS:Rendering:Color,
   {4d8e096e-ba63-4cc5-87f1-76a8ea230681}, !- Handle

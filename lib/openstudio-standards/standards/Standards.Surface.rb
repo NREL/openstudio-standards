@@ -25,8 +25,8 @@ class Standard
     # Sort through each space
     model.getSpaces.sort.each do |space|
       # Is the space heated or cooled?
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
+      cooled = OpenstudioStandards::Space.space_cooled?(space)
+      heated = OpenstudioStandards::Space.space_heated?(space)
       # Assume conditioned means the space is heated, cooled, or both.
       if heated || cooled
         # If the space is conditioned then go through each surface and determine if it a vertial exterior wall.
@@ -106,8 +106,8 @@ class Standard
     sub_surface_area = 0
     # Sort through each space and determine if it conditioned.  Conditioned meaning it is either heated, cooled, or both.
     model.getSpaces.sort.each do |space|
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
+      cooled = OpenstudioStandards::Space.space_cooled?(space)
+      heated = OpenstudioStandards::Space.space_heated?(space)
       # If the space is conditioned sort through the surfaces looking for outdoor roofs.
       if heated || cooled
         space.surfaces.sort.each do |surface|
@@ -288,9 +288,9 @@ class Standard
           r_outside_film = 0.0
 
           # EnergyPlus Engineering Manual equation 3.195
-          r_soil = 0.0607 + 0.3479 * heig
+          r_soil = 0.0607 + (0.3479 * heig)
 
-          r_eff = 1 / cfac + r_soil
+          r_eff = (1 / cfac) + r_soil
           u_eff = 1 / (r_eff + r_inside_film + r_outside_film)
 
           ua = u_eff * surface.netArea
@@ -300,25 +300,8 @@ class Standard
     end
 
     surface.subSurfaces.sort.each do |subsurface|
-      if subsurface.construction.get.to_Construction.get.layers[0].to_Material.get.to_SimpleGlazing.empty?
-        # the uFactor() method does not work for complex glazing inputs
-        # For this case the U-Factor is retrieved from previous sizing run
-        u_factor = construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get)
-      else
-        # replace with direct query: u_factor = subsurface.uFactor.get
-        glass_u_factor_query = "SELECT Value
-                  FROM tabulardatawithstrings
-                  WHERE ReportName='EnvelopeSummary'
-                  AND ReportForString='Entire Facility'
-                  AND TableName='Exterior Fenestration'
-                  AND ColumnName='Glass U-Factor'
-                  AND RowName='#{subsurface.name.get.upcase}'"
-        sql = surface.model.sqlFile.get
-
-        glass_u_factor_w_per_m2_k = sql.execAndReturnFirstDouble(glass_u_factor_query)
-        u_factor = glass_u_factor_w_per_m2_k.is_initialized ? glass_u_factor_w_per_m2_k.get : 0.0
-      end
-      # u_factor = subsurface.uFactor.is_initialized ? (subsurface.uFactor.get) : (construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get))
+      subsurface_construction = subsurface.construction.get
+      u_factor = OpenstudioStandards::SqlFile.construction_calculated_fenestration_u_factor(subsurface_construction)
       ua += u_factor * subsurface.netArea
     end
 

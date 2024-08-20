@@ -1,4 +1,5 @@
 class AppendixGPRMTests < Minitest::Test
+  
   # Add exhaust fan object to each lab zone in model
   # @param model
   def add_exhaust_fan_per_lab_zone(model)

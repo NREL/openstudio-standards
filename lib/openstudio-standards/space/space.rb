@@ -20,7 +20,7 @@ module OpenstudioStandards
       # is a supply or return plenum
       unless space.partofTotalFloorArea
         plenum_status = true
-        return plenum_status
+        return true
       end
 
       # @todo update to check if it has internal loads
@@ -34,11 +34,9 @@ module OpenstudioStandards
           plenum_status = true
           return plenum_status
         end
-        if space_type.standardsSpaceType.is_initialized
-          if space_type.standardsSpaceType.get.downcase.include?('plenum')
-            plenum_status = true
-            return plenum_status
-          end
+        if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+          plenum_status = true
+          return plenum_status
         end
       end
 
@@ -107,6 +105,92 @@ module OpenstudioStandards
       return is_res
     end
 
+    # Determines heating status.
+    # If the space's zone has a thermostat with a maximum heating setpoint above 5C (41F), counts as heated.
+    #
+    # @author Andrew Parker, Julien Marrec
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Boolean] returns true if heated, false if not
+    def self.space_heated?(space)
+      # Get the zone this space is inside
+      zone = space.thermalZone
+
+      # Assume unheated if not assigned to a zone
+      if zone.empty?
+        return false
+      end
+
+      # Get the category from the zone
+      htd = OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone.get)
+
+      return htd
+    end
+
+    # Determines cooling status.
+    # If the space's zone has a thermostat with a minimum cooling setpoint above 33C (91F), counts as cooled.
+    #
+    # @author Andrew Parker, Julien Marrec
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Boolean] returns true if cooled, false if not
+    def self.space_cooled?(space)
+      # Get the zone this space is inside
+      zone = space.thermalZone
+
+      # Assume uncooled if not assigned to a zone
+      if zone.empty?
+        return false
+      end
+
+      # Get the category from the zone
+      cld = OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone.get)
+
+      return cld
+    end
+
+    # Determine the design internal load (W) for this space without space multipliers.
+    # This include People, Lights, Electric Equipment, and Gas Equipment.
+    # It assumes 100% of the wattage is converted to heat, and that the design peak schedule value is 1 (100%).
+    #
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
+    # @return [Double] the design internal load, in W
+    def self.space_get_design_internal_load(space)
+      load_w = 0.0
+
+      # People
+      space.people.each do |people|
+        w_per_person = 125 # Initial assumption
+        act_sch = people.activityLevelSchedule
+        if act_sch.is_initialized
+          if act_sch.get.to_ScheduleRuleset.is_initialized
+            act_sch = act_sch.get.to_ScheduleRuleset.get
+            w_per_person = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(act_sch)['max']
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{space.name} people activity schedule is not a Schedule:Ruleset.  Assuming #{w_per_person}W/person.")
+          end
+          OpenStudio.logFree(OpenStudio::Warn, 'OpenstudioStandards::Space', "#{space.name} people activity schedule not found.  Assuming #{w_per_person}W/person.")
+        end
+
+        num_ppl = people.getNumberOfPeople(space.floorArea)
+
+        ppl_w = num_ppl * w_per_person
+
+        load_w += ppl_w
+      end
+
+      # Lights
+      load_w += space.lightingPower
+
+      # Electric Equipment
+      load_w += space.electricEquipmentPower
+
+      # Gas Equipment
+      load_w += space.gasEquipmentPower
+
+      OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::Space', "#{space.name} has #{load_w.round}W of design internal loads.")
+
+      return load_w
+    end
+
     # @todo add related related to space_hours_of_operation like set_space_hours_of_operation and shift_and_expand_space_hours_of_operation
     # @todo ideally these could take in a date range, array of dates and or days of week. Hold off until need is a bit more defined.
     # If the model has an hours of operation schedule set in default schedule set for building that looks valid it will
@@ -115,7 +199,7 @@ module OpenstudioStandards
     #
     # Retrieves the default occupancy schedule assigned to the space
     # @author David Goldwasser
-    # @param space [OpenStudio::Model::Space] space object
+    # @param space [OpenStudio::Model::Space] OpenStudio Space object
     # @return [Hash]: see example
     # @example: {
     #   schedule: space hours_of_operation schedule,
@@ -196,7 +280,7 @@ module OpenstudioStandards
       rule_hash[:hoo_hours] = hoo_hours
       days_used = []
       indices_vector.each_with_index do |profile_index, i|
-        if profile_index == -1 then days_used << i + 1 end
+        if profile_index == -1 then days_used << (i + 1) end
       end
       rule_hash[:days_used] = days_used
       profiles[-1] = rule_hash
@@ -251,7 +335,7 @@ module OpenstudioStandards
         rule_hash[:hoo_hours] = hoo_hours
         days_used = []
         indices_vector.each_with_index do |profile_index, i|
-          if profile_index == rule.ruleIndex then days_used << i + 1 end
+          if profile_index == rule.ruleIndex then days_used << (i + 1) end
         end
         rule_hash[:days_used] = days_used
 
@@ -290,7 +374,7 @@ module OpenstudioStandards
     # expand hours of operation. When hours of operation do not overlap for two spaces, add logic to remove all but largest gap
     #
     # @author David Goldwasser
-    # @param spaces [Array<OpenStudio::Model::Space>] takes array of spaces
+    # @param spaces [Array<OpenStudio::Model::Space>] An array of OpenStudio Space objects
     # @return [Hash] start and end of hours of operation, stat date, end date, bool for each day of the week
     def self.spaces_hours_of_operation(spaces)
       hours_of_operation_array = []
@@ -336,25 +420,27 @@ module OpenstudioStandards
     #   normalized_daily_range evaluates each value against the min/max range for the day.
     #   The goal is a dynamic threshold that calibrates each day.
     # @return [<OpenStudio::Model::ScheduleRuleset>] a ScheduleRuleset of fractional or discrete occupancy
-    # @todo Speed up this method.  Bottleneck is ScheduleRule.getDaySchedules
     def self.spaces_get_occupancy_schedule(spaces, sch_name: nil, occupied_percentage_threshold: nil, threshold_calc_method: 'value')
-      unless !spaces.empty?
+      if spaces.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.space', 'Empty spaces array passed to spaces_get_occupancy_schedule method.')
         return false
       end
 
-      annual_normalized_tol = nil
-      if threshold_calc_method == 'normalized_annual_range'
-        # run this method without threshold to get annual min and max
-        temp_merged = spaces_get_occupancy_schedule(spaces)
-        tem_min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(temp_merged)
-        annual_normalized_tol = tem_min_max['min'] + (tem_min_max['max'] - tem_min_max['min']) * occupied_percentage_threshold
-        temp_merged.remove
+      model = spaces.first.model
+      year = model.getYearDescription.assumedYear
+
+      unless sch_name.nil?
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Finding space schedules for #{sch_name}.")
       end
+
+      # create schedule
+      if sch_name.nil?
+        sch_name = "#{spaces.size} space(s) Occ Sch"
+      end
+
       # Get all the occupancy schedules in spaces.
       # Include people added via the SpaceType and hard-assigned to the Space itself.
-      occ_schedules_num_occ = {} # hash of occupancy ScheduleRuleset => number of total number of people
-      max_occ_in_spaces = 0
+      occ_schedules_num_occ = {} # hash of People ScheduleRuleset => design occupancy for that People object
       spaces.each do |space|
         # From the space type
         if space.spaceType.is_initialized
@@ -368,10 +454,10 @@ module OpenstudioStandards
               num_ppl_sch = num_ppl_sch.get.to_ScheduleRuleset.get
               num_ppl = people.getNumberOfPeople(space.floorArea)
               occ_schedules_num_occ.key?(num_ppl_sch) ? occ_schedules_num_occ[num_ppl_sch] += num_ppl : occ_schedules_num_occ[num_ppl_sch] = num_ppl
-              max_occ_in_spaces += num_ppl
             end
           end
         end
+
         # From the space
         space.people.each do |people|
           num_ppl_sch = people.numberofPeopleSchedule
@@ -383,305 +469,148 @@ module OpenstudioStandards
             num_ppl_sch = num_ppl_sch.get.to_ScheduleRuleset.get
             num_ppl = people.getNumberOfPeople(space.floorArea)
             occ_schedules_num_occ.key?(num_ppl_sch) ? occ_schedules_num_occ[num_ppl_sch] += num_ppl : occ_schedules_num_occ[num_ppl_sch] = num_ppl
-            max_occ_in_spaces += num_ppl
           end
         end
       end
 
-      unless sch_name.nil?
-        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Finding space schedules for #{sch_name}.")
-      end
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "The #{spaces.size} spaces have #{occ_schedules_num_occ.size} unique occ schedules.")
       occ_schedules_num_occ.each do |occ_sch, num_occ|
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "...#{occ_sch.name} - #{num_occ.round} people")
       end
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "   Total #{max_occ_in_spaces.round} people in #{spaces.size} spaces.")
 
-      # Store arrays of 365 day schedules used by each occ schedule once for later
-      # Store arrays of day schedule times for later
-      occ_schedules_day_schedules = {}
-      day_schedule_times = {}
-      year = spaces[0].model.getYearDescription
-      first_date_of_year = year.makeDate(1)
-      end_date_of_year = year.makeDate(365)
+      # get nested array of 8760 values of the total occupancy at each hour of each schedule
+      all_schedule_hourly_occ = []
       occ_schedules_num_occ.each do |occ_sch, num_occ|
-        day_schedules = occ_sch.getDaySchedules(first_date_of_year, end_date_of_year)
-        # Store array of day schedules
-        occ_schedules_day_schedules[occ_sch] = day_schedules
-        day_schedules.uniq.each do |day_sch|
-          # Skip schedules that have been stored previously
-          next unless day_schedule_times[day_sch].nil?
+        all_schedule_hourly_occ << OpenstudioStandards::Schedules.schedule_get_hourly_values(occ_sch).map { |i| (i * num_occ).round(6) }
+      end
 
-          # Store times
-          times = []
-          day_sch.times.each do |time|
-            times << time.toString
-          end
-          day_schedule_times[day_sch] = times
+      # total occupancy from all people
+      total_design_occ = occ_schedules_num_occ.values.sum
+
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Total #{total_design_occ.round} people in #{spaces.size} spaces.")
+
+      # if design occupancy is zero, return zero schedule
+      if total_design_occ.zero?
+        schedule_ruleset = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(spaces[0].model, 0.0, name: sch_name)
+        return schedule_ruleset
+      end
+
+      # get one 8760 array of the sum of each schedule's hourly occupancy
+      combined_hourly_occ = all_schedule_hourly_occ.transpose.map(&:sum)
+
+      # divide each hourly value by total occupancy - this is all spaces fractional occupancy
+      combined_occ_frac = combined_hourly_occ.map { |i| i / total_design_occ }
+
+      # divide 8760 array into 365(or 366)x24 arrays
+      daily_combined_occ_fracs = combined_occ_frac.each_slice(24).to_a
+
+      # If occupied_percentage_threshold is specified, schedule values are boolean
+      # Otherwise use the actual spaces_occ_frac
+      if occupied_percentage_threshold.nil?
+        occ_status_vals = daily_combined_occ_fracs
+      elsif threshold_calc_method == 'normalized_daily_range'
+        # calculate max/min values in each daily occ fraction array
+        daily_max_vals = daily_combined_occ_fracs.map(&:max)
+        daily_min_vals = daily_combined_occ_fracs.map(&:min)
+        # normalize threshold to daily min/max values
+        daily_normalized_thresholds = daily_min_vals.zip(daily_max_vals).map { |min_max| min_max[0] + ((min_max[1] - min_max[0]) * occupied_percentage_threshold) }
+        # if daily occ frac exceeds daily normalized threshold, set value to 1
+        occ_status_vals = daily_combined_occ_fracs.each_with_index.map { |day_array, i| day_array.map { |day_val| !day_val.zero? && day_val >= daily_normalized_thresholds[i] ? 1 : 0 } }
+      elsif threshold_calc_method == 'normalized_annual_range'
+        # calculate annual min/max values
+        annual_max = daily_combined_occ_fracs.max_by(&:max).max
+        annual_min = daily_combined_occ_fracs.min_by(&:min).min
+        # normalize threshold to annual min/max
+        annual_normalized_threshold = annual_min + ((annual_max - annual_min) * occupied_percentage_threshold)
+        # if vals exceed threshold, set val to 1
+        occ_status_vals = daily_combined_occ_fracs.map { |day_array| day_array.map { |day_val| day_val >= annual_normalized_threshold ? 1 : 0 } }
+      else # threshold_calc_method == 'value'
+        occ_status_vals = daily_combined_occ_fracs.map { |day_array| day_array.map { |day_val| day_val >= occupied_percentage_threshold ? 1 : 0 } }
+      end
+
+      # get unique daily profiles for weekdays, saturdays and sundays
+      wd_profile_days = Hash.new { |h, k| h[k] = [] }
+      sat_profile_days = Hash.new { |h, k| h[k] = [] }
+      sun_profile_days = Hash.new { |h, k| h[k] = [] }
+
+      occ_status_vals.each_with_index do |day_profile, i|
+        day_type = OpenStudio::Date.fromDayOfYear(i + 1, year).dayOfWeek.valueName
+        if day_type == 'Saturday'
+          sat_profile_days[day_profile] << (i + 1)
+        elsif day_type == 'Sunday'
+          sun_profile_days[day_profile] << (i + 1)
+        else
+          wd_profile_days[day_profile] << (i + 1)
         end
       end
 
-      # For each day of the year, determine time_value_pairs = []
-      yearly_data = []
-      (1..365).each do |i|
-        times_on_this_day = []
-        os_date = year.makeDate(i)
-        day_of_week = os_date.dayOfWeek.valueName
-
-        # Get the unique time indices and corresponding day schedules
-        day_sch_num_occ = {}
-        occ_schedules_num_occ.each do |occ_sch, num_occ|
-          daily_sch = occ_schedules_day_schedules[occ_sch][i - 1]
-          times_on_this_day += day_schedule_times[daily_sch]
-          day_sch_num_occ[daily_sch] = num_occ
-        end
-
-        daily_normalized_tol = nil
-        if threshold_calc_method == 'normalized_daily_range'
-          # pre-process day to get daily min and max
-          daily_spaces_occ_frac = []
-          times_on_this_day.uniq.sort.each do |time|
-            os_time = OpenStudio::Time.new(time)
-            # Total number of people at each time
-            tot_occ_at_time = 0
-            day_sch_num_occ.each do |day_sch, num_occ|
-              occ_frac = day_sch.getValue(os_time)
-              tot_occ_at_time += occ_frac * num_occ
-            end
-            # Total fraction for the spaces at each time
-            daily_spaces_occ_frac << tot_occ_at_time / max_occ_in_spaces
-            daily_normalized_tol = daily_spaces_occ_frac.min + (daily_spaces_occ_frac.max - daily_spaces_occ_frac.min) * occupied_percentage_threshold
-          end
-        end
-
-        # Determine the total fraction for the spaces at each time
-        daily_times = []
-        daily_os_times = []
-        daily_values = []
-        daily_occs = []
-        times_on_this_day.uniq.sort.each do |time|
-          os_time = OpenStudio::Time.new(time)
-          # Total number of people at each time
-          tot_occ_at_time = 0
-          day_sch_num_occ.each do |day_sch, num_occ|
-            occ_frac = day_sch.getValue(os_time)
-            tot_occ_at_time += occ_frac * num_occ
-          end
-
-          # Total fraction for the spaces at each time,
-          # rounded to avoid decimal precision issues
-          spaces_occ_frac = (tot_occ_at_time / max_occ_in_spaces).round(3)
-
-          # If occupied_percentage_threshold is specified, schedule values are boolean
-          # Otherwise use the actual spaces_occ_frac
-          if occupied_percentage_threshold.nil?
-            occ_status = spaces_occ_frac
-          elsif threshold_calc_method == 'normalized_annual_range'
-            occ_status = 0 # unoccupied
-            if spaces_occ_frac >= annual_normalized_tol
-              occ_status = 1
-            end
-          elsif threshold_calc_method == 'normalized_daily_range'
-            occ_status = 0 # unoccupied
-            if spaces_occ_frac >= daily_normalized_tol
-              occ_status = 1
-            end
-          else
-            occ_status = 0 # unoccupied
-            if spaces_occ_frac >= occupied_percentage_threshold
-              occ_status = 1
-            end
-          end
-
-          # Add this data to the daily arrays
-          daily_times << time
-          daily_os_times << os_time
-          daily_values << occ_status
-          daily_occs << spaces_occ_frac.round(2)
-        end
-
-        # Simplify the daily times to eliminate intermediate points with the same value as the following point
-        simple_daily_times = []
-        simple_daily_os_times = []
-        simple_daily_values = []
-        simple_daily_occs = []
-        daily_values.each_with_index do |value, j|
-          next if value == daily_values[j + 1]
-
-          simple_daily_times << daily_times[j]
-          simple_daily_os_times << daily_os_times[j]
-          simple_daily_values << daily_values[j]
-          simple_daily_occs << daily_occs[j]
-        end
-
-        # Store the daily values
-        yearly_data << { 'date' => os_date, 'day_of_week' => day_of_week, 'times' => simple_daily_times, 'values' => simple_daily_values, 'daily_os_times' => simple_daily_os_times, 'daily_occs' => simple_daily_occs }
-      end
-
-      # Create a TimeSeries from the data
-      # time_series = OpenStudio::TimeSeries.new(times, values, 'unitless')
-      # Make a schedule ruleset
-      if sch_name.nil?
-        sch_name = "#{spaces.size} space(s) Occ Sch"
-      end
-      sch_ruleset = OpenStudio::Model::ScheduleRuleset.new(spaces[0].model)
-      sch_ruleset.setName(sch_name.to_s)
+      # create schedule
+      schedule_ruleset = OpenStudio::Model::ScheduleRuleset.new(spaces[0].model)
+      schedule_ruleset.setName(sch_name.to_s)
       # add properties to schedule
-      props = sch_ruleset.additionalProperties
-      props.setFeature('max_occ_in_spaces', max_occ_in_spaces)
+      props = schedule_ruleset.additionalProperties
+      props.setFeature('max_occ_in_spaces', total_design_occ)
       props.setFeature('number_of_spaces_included', spaces.size)
       # nothing uses this but can make user be aware if this may be out of sync with current state of occupancy profiles
       props.setFeature('date_parent_object_last_edited', Time.now.getgm.to_s)
       props.setFeature('date_parent_object_created', Time.now.getgm.to_s)
 
-      # Default - All Occupied
-      day_sch = sch_ruleset.defaultDaySchedule
-      day_sch.setName("#{sch_name} Default")
-      day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
-
       # Winter Design Day - All Occupied
-      day_sch = OpenStudio::Model::ScheduleDay.new(spaces[0].model)
-      sch_ruleset.setWinterDesignDaySchedule(day_sch)
-      day_sch = sch_ruleset.winterDesignDaySchedule
+      schedule_ruleset.setWinterDesignDaySchedule(schedule_ruleset.winterDesignDaySchedule)
+      day_sch = schedule_ruleset.winterDesignDaySchedule
       day_sch.setName("#{sch_name} Winter Design Day")
       day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
 
       # Summer Design Day - All Occupied
-      day_sch = OpenStudio::Model::ScheduleDay.new(spaces[0].model)
-      sch_ruleset.setSummerDesignDaySchedule(day_sch)
-      day_sch = sch_ruleset.summerDesignDaySchedule
+      schedule_ruleset.setSummerDesignDaySchedule(schedule_ruleset.summerDesignDaySchedule)
+      day_sch = schedule_ruleset.summerDesignDaySchedule
       day_sch.setName("#{sch_name} Summer Design Day")
       day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
 
-      # Create ruleset schedules, attempting to create the minimum number of unique rules
-      ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].each do |weekday|
-        end_of_prev_rule = yearly_data[0]['date']
-        yearly_data.each_with_index do |daily_data, k|
-          # Skip unless it is the day of week
-          # currently under inspection
-          day = daily_data['day_of_week']
-          next unless day == weekday
+      # set most used weekday profile to default day
+      most_used_wd_profile = wd_profile_days.max_by { |k, v| v.size }.first
+      default_day = schedule_ruleset.defaultDaySchedule
+      default_day.setName("#{sch_name} Default")
+      OpenstudioStandards::Schedules.schedule_day_populate_from_array_of_values(default_day, most_used_wd_profile)
 
-          date = daily_data['date']
-          times = daily_data['times']
-          values = daily_data['values']
-          daily_os_times = daily_data['daily_os_times']
+      # create rules from remaining weekday, saturday and sunday profiles
+      remaining_wd_profiles = wd_profile_days.slice(*wd_profile_days.keys.reject { |k| k == most_used_wd_profile })
 
-          # If the next (Monday, Tuesday, etc.) is the same as today, keep going
-          # If the next is different, or if we've reached the end of the year, create a new rule
-          unless yearly_data[k + 7].nil?
-            next_day_times = yearly_data[k + 7]['times']
-            next_day_values = yearly_data[k + 7]['values']
-            next if times == next_day_times && values == next_day_values
-          end
-
-          # If here, we need to make a rule to cover from the previous rule to today
-          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Making a new rule for #{weekday} from #{end_of_prev_rule} to #{date}")
-          sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
-          sch_rule.setName("#{sch_name} #{weekday} Rule")
-          day_sch = sch_rule.daySchedule
-          day_sch.setName("#{sch_name} #{weekday}")
-          daily_os_times.each_with_index do |time, t|
-            value = values[t]
-            next if value == values[t + 1] # Don't add breaks if same value
-
-            day_sch.addValue(time, value)
-          end
-
-          # Set the dates when the rule applies
-          sch_rule.setStartDate(end_of_prev_rule)
-          # for end dates in last week of year force it to use 12/31. Avoids issues if year or start day of week changes
-          start_of_last_week = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 25, year.assumedYear)
-          if date >= start_of_last_week
-            year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year.assumedYear)
-            sch_rule.setEndDate(year_end_date)
-          else
-            sch_rule.setEndDate(date)
-          end
-
-          # Individual Days
-          sch_rule.setApplyMonday(true) if weekday == 'Monday'
-          sch_rule.setApplyTuesday(true) if weekday == 'Tuesday'
-          sch_rule.setApplyWednesday(true) if weekday == 'Wednesday'
-          sch_rule.setApplyThursday(true) if weekday == 'Thursday'
-          sch_rule.setApplyFriday(true) if weekday == 'Friday'
-          sch_rule.setApplySaturday(true) if weekday == 'Saturday'
-          sch_rule.setApplySunday(true) if weekday == 'Sunday'
-
-          # Reset the previous rule end date
-          end_of_prev_rule = date + OpenStudio::Time.new(0, 24, 0, 0)
+      [remaining_wd_profiles, sat_profile_days, sun_profile_days].each do |profile_hash|
+        profile_hash.each do |profile, days_used|
+          rules = OpenstudioStandards::Schedules.schedule_ruleset_create_rules_from_day_list(schedule_ruleset, days_used)
+          rules.each { |rule| OpenstudioStandards::Schedules.schedule_day_populate_from_array_of_values(rule.daySchedule, profile) }
         end
       end
 
-      # utilize default profile and common similar days of week for same date range
-      # todo - if move to method in Standards.ScheduleRuleset.rb udpate code to check if default profile is used before replacing it with lowest priority rule.
-      # todo - also merging non adjacent priority rules without getting rid of any rules between the two could create unexpected reults
-      prior_rules = []
-      sch_ruleset.scheduleRules.each do |rule|
-        if prior_rules.empty?
-          prior_rules << rule
-          next
-        else
-          rules_combined = false
-          prior_rules.each do |prior_rule|
-            # see if they are similar
-            next if rules_combined
-            # @todo update to combine adjacent date ranges vs. just matching date ranges
-            next if prior_rule.startDate.get != rule.startDate.get
-            next if prior_rule.endDate.get != rule.endDate.get
-            next if prior_rule.daySchedule.times.to_a != rule.daySchedule.times.to_a
-            next if prior_rule.daySchedule.values.to_a != rule.daySchedule.values.to_a
-
-            # combine dates of week
-            if rule.applyMonday then prior_rule.setApplyMonday(true) && rules_combined = true end
-            if rule.applyTuesday then prior_rule.setApplyTuesday(true) && rules_combined = true end
-            if rule.applyWednesday then prior_rule.setApplyWednesday(true) && rules_combined = true end
-            if rule.applyThursday then prior_rule.setApplyThursday(true) && rules_combined = true end
-            if rule.applyFriday then prior_rule.setApplyFriday(true) && rules_combined = true end
-            if rule.applySaturday then prior_rule.setApplySaturday(true) && rules_combined = true end
-            if rule.applySunday then prior_rule.setApplySunday(true) && rules_combined = true end
-          end
-          rules_combined ? rule.remove : prior_rules << rule
-        end
-      end
-      # replace unused default profile with lowest priority rule
-      values = prior_rules.last.daySchedule.values
-      times = prior_rules.last.daySchedule.times
-      prior_rules.last.remove
-      sch_ruleset.defaultDaySchedule.clearValues
-      values.size.times do |i|
-        sch_ruleset.defaultDaySchedule.addValue(times[i], values[i])
-      end
-
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.space', "Created #{sch_ruleset.name} with #{OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(sch_ruleset)} annual EFLH.")
-
-      return sch_ruleset
+      return schedule_ruleset
     end
 
     # @!endgroup Space
 
     # @!group SpaceLoadInstance
+
     # method to process load instance schedules for model_setup_parametric_schedules
     #
     # @author David Goldwasser
-    # @param load_inst [OpenStudio::Model::SpaceLoadInstance]
+    # @param space_load_instance [OpenStudio::Model::SpaceLoadInstance] OpenStudio SpaceLoadInstance object
     # @param parametric_inputs [Hash]
     # @param hours_of_operation [Hash]
     # @param gather_data_only [Boolean]
     # @return [Hash]
-    def self.gather_inputs_parametric_load_inst_schedules(load_inst, parametric_inputs, hours_of_operation, gather_data_only)
-      if load_inst.class.to_s == 'OpenStudio::Model::People'
-        opt_sch = load_inst.numberofPeopleSchedule
-      elsif load_inst.class.to_s == 'OpenStudio::Model::DesignSpecificationOutdoorAir'
-        opt_sch = load_inst.outdoorAirFlowRateFractionSchedule
+    def self.space_load_instance_get_parametric_schedule_inputs(space_load_instance, parametric_inputs, hours_of_operation, gather_data_only)
+      if space_load_instance.instance_of?(OpenStudio::Model::People)
+        opt_sch = space_load_instance.numberofPeopleSchedule
+      elsif space_load_instance.instance_of?(OpenStudio::Model::DesignSpecificationOutdoorAir)
+        opt_sch = space_load_instance.outdoorAirFlowRateFractionSchedule
       else
-        opt_sch = load_inst.schedule
+        opt_sch = space_load_instance.schedule
       end
       if !opt_sch.is_initialized || !opt_sch.get.to_ScheduleRuleset.is_initialized
         return nil
       end
 
-      Schedules.gather_inputs_parametric_schedules(opt_sch.get.to_ScheduleRuleset.get, load_inst, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
+      OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(opt_sch.get.to_ScheduleRuleset.get, space_load_instance, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method: 'hours')
 
       return parametric_inputs
     end

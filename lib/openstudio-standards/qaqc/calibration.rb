@@ -106,7 +106,7 @@ module OpenstudioStandards
               end
 
               # CVRMSE
-              demand_cvrmse = 100.0 * (squared_err / (n - 1))**0.5 / ybar
+              demand_cvrmse = 100.0 * ((squared_err / (n - 1))**0.5) / ybar
               if demand_cvrmse > max_cvrmse
                 check_elems << OpenStudio::Attribute.new('flag', "For the #{fuel} bill called #{bill_name}, the peak demand CVRMSE of #{demand_cvrmse.round(1)}% is above the limit of #{max_cvrmse}%, so the model is not calibrated.")
               end

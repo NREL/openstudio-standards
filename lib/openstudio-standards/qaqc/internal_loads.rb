@@ -378,12 +378,12 @@ module OpenstudioStandards
               unless OpenstudioStandards::Space.space_plenum?(space)
                 all_spaces_plenums = false
                 break
-                end
+              end
             end
 
             unless all_spaces_plenums
               check_elems << OpenStudio::Attribute.new('flag', "Unexpected standards type for #{space_type.name}, can't validate schedules.")
-              end
+            end
 
             next
           end
@@ -537,7 +537,7 @@ module OpenstudioStandards
       if (space_load_instance.class.to_s == 'OpenStudio::Model::People') && space_load_instance.numberofPeopleSchedule.is_initialized
         schedule_inst = space_load_instance.numberofPeopleSchedule.get
       elsif (space_load_instance.class.to_s == 'OpenStudio::Model::DesignSpecificationOutdoorAir') && space_load_instance.outdoorAirFlowRateFractionSchedule.is_initialized
-        schedule_inst = space_load_instance.outdoorAirFlowRateFractionSchedule .get
+        schedule_inst = space_load_instance.outdoorAirFlowRateFractionSchedule.get
       elsif space_load_instance.schedule.is_initialized
         schedule_inst = space_load_instance.schedule.get
       else

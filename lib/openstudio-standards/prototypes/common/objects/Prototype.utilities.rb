@@ -242,7 +242,7 @@ class Standard
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
   def seer_to_cop_no_fan(seer)
-    cop = -0.0076 * seer * seer + 0.3796 * seer
+    cop = (-0.0076 * seer * seer) + (0.3796 * seer)
 
     return cop
   end
@@ -253,8 +253,8 @@ class Standard
   # @param cop [Double] COP
   # @return [Double] Seasonal Energy Efficiency Ratio
   def cop_no_fan_to_seer(cop)
-    delta = 0.3796**2 - 4.0 * 0.0076 * cop
-    seer = (-delta**0.5 + 0.3796) / (2.0 * 0.0076)
+    delta = (0.3796**2) - (4.0 * 0.0076 * cop)
+    seer = ((-delta**0.5) + 0.3796) / (2.0 * 0.0076)
 
     return seer
   end
@@ -265,7 +265,7 @@ class Standard
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
   def seer_to_cop(seer)
-    eer = -0.0182 * seer * seer + 1.1088 * seer
+    eer = (-0.0182 * seer * seer) + (1.1088 * seer)
     cop = eer_to_cop(eer)
 
     return cop
@@ -278,8 +278,8 @@ class Standard
   # @return [Double] seasonal energy efficiency ratio (SEER)
   def cop_to_seer(cop)
     eer = cop_to_eer(cop)
-    delta = 1.1088**2 - 4.0 * 0.0182 * eer
-    seer = (1.1088 - delta**0.5) / (2.0 * 0.0182)
+    delta = (1.1088**2) - (4.0 * 0.0182 * eer)
+    seer = (1.1088 - (delta**0.5)) / (2.0 * 0.0182)
 
     return seer
   end
@@ -294,7 +294,7 @@ class Standard
     # Convert the capacity to Btu/hr
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
-    cop = 1.48E-7 * coph47 * capacity_btu_per_hr + 1.062 * coph47
+    cop = (1.48E-7 * coph47 * capacity_btu_per_hr) + (1.062 * coph47)
 
     return cop
   end
@@ -305,7 +305,7 @@ class Standard
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
   def hspf_to_cop_no_fan(hspf)
-    cop = -0.0296 * hspf * hspf + 0.7134 * hspf
+    cop = (-0.0296 * hspf * hspf) + (0.7134 * hspf)
 
     return cop
   end
@@ -316,7 +316,7 @@ class Standard
   # @param hspf [Double] heating seasonal performance factor (HSPF)
   # @return [Double] Coefficient of Performance (COP)
   def hspf_to_cop(hspf)
-    cop = -0.0255 * hspf * hspf + 0.6239 * hspf
+    cop = (-0.0255 * hspf * hspf) + (0.6239 * hspf)
 
     return cop
   end
@@ -334,12 +334,12 @@ class Standard
       # r is the ratio of supply fan power to total equipment power at the rating condition,
       # assumed to be 0.12 for the reference buildings per Thornton et al. 2011.
       r = 0.12
-      cop = (eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get + r) / (1 - r)
+      cop = ((eer / OpenStudio.convert(1.0, 'W', 'Btu/h').get) + r) / (1 - r)
     else
       # The 90.1-2013 method
       # Convert the capacity to Btu/hr
       capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-      cop = 7.84E-8 * eer * capacity_btu_per_hr + 0.338 * eer
+      cop = (7.84E-8 * eer * capacity_btu_per_hr) + (0.338 * eer)
     end
 
     return cop
@@ -356,12 +356,12 @@ class Standard
       # r is the ratio of supply fan power to total equipment power at the rating condition,
       # assumed to be 0.12 for the reference buildngs per Thornton et al. 2011.
       r = 0.12
-      eer = OpenStudio.convert(1.0, 'W', 'Btu/h').get * (cop * (1 - r) - r)
+      eer = OpenStudio.convert(1.0, 'W', 'Btu/h').get * ((cop * (1 - r)) - r)
     else
       # The 90.1-2013 method
       # Convert the capacity to Btu/hr
       capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-      eer = cop / (7.84E-8 * capacity_btu_per_hr + 0.338)
+      eer = cop / ((7.84E-8 * capacity_btu_per_hr) + 0.338)
     end
 
     return eer
@@ -450,22 +450,22 @@ class Standard
     if ip_to_si
       # Convert IP curves to SI curves
       si_coeffs = []
-      si_coeffs << coeffs[0] + 32.0 * (coeffs[1] + coeffs[3]) + 1024.0 * (coeffs[2] + coeffs[4] + coeffs[5])
-      si_coeffs << 9.0 / 5.0 * coeffs[1] + 576.0 / 5.0 * coeffs[2] + 288.0 / 5.0 * coeffs[5]
-      si_coeffs << 81.0 / 25.0 * coeffs[2]
-      si_coeffs << 9.0 / 5.0 * coeffs[3] + 576.0 / 5.0 * coeffs[4] + 288.0 / 5.0 * coeffs[5]
-      si_coeffs << 81.0 / 25.0 * coeffs[4]
-      si_coeffs << 81.0 / 25.0 * coeffs[5]
+      si_coeffs << (coeffs[0] + (32.0 * (coeffs[1] + coeffs[3])) + (1024.0 * (coeffs[2] + coeffs[4] + coeffs[5])))
+      si_coeffs << ((9.0 / 5.0 * coeffs[1]) + (576.0 / 5.0 * coeffs[2]) + (288.0 / 5.0 * coeffs[5]))
+      si_coeffs << (81.0 / 25.0 * coeffs[2])
+      si_coeffs << ((9.0 / 5.0 * coeffs[3]) + (576.0 / 5.0 * coeffs[4]) + (288.0 / 5.0 * coeffs[5]))
+      si_coeffs << (81.0 / 25.0 * coeffs[4])
+      si_coeffs << (81.0 / 25.0 * coeffs[5])
       return si_coeffs
     else
       # Convert SI curves to IP curves
       ip_coeffs = []
-      ip_coeffs << coeffs[0] - 160.0 / 9.0 * (coeffs[1] + coeffs[3]) + 25_600.0 / 81.0 * (coeffs[2] + coeffs[4] + coeffs[5])
-      ip_coeffs << 5.0 / 9.0 * (coeffs[1] - 320.0 / 9.0 * coeffs[2] - 160.0 / 9.0 * coeffs[5])
-      ip_coeffs << 25.0 / 81.0 * coeffs[2]
-      ip_coeffs << 5.0 / 9.0 * (coeffs[3] - 320.0 / 9.0 * coeffs[4] - 160.0 / 9.0 * coeffs[5])
-      ip_coeffs << 25.0 / 81.0 * coeffs[4]
-      ip_coeffs << 25.0 / 81.0 * coeffs[5]
+      ip_coeffs << (coeffs[0] - (160.0 / 9.0 * (coeffs[1] + coeffs[3])) + (25_600.0 / 81.0 * (coeffs[2] + coeffs[4] + coeffs[5])))
+      ip_coeffs << (5.0 / 9.0 * (coeffs[1] - (320.0 / 9.0 * coeffs[2]) - (160.0 / 9.0 * coeffs[5])))
+      ip_coeffs << (25.0 / 81.0 * coeffs[2])
+      ip_coeffs << (5.0 / 9.0 * (coeffs[3] - (320.0 / 9.0 * coeffs[4]) - (160.0 / 9.0 * coeffs[5])))
+      ip_coeffs << (25.0 / 81.0 * coeffs[4])
+      ip_coeffs << (25.0 / 81.0 * coeffs[5])
       return ip_coeffs
     end
   end
@@ -620,72 +620,6 @@ class Standard
     return curve
   end
 
-  # Gives the total R-value of the interior and exterior (if applicable)
-  # film coefficients for a particular type of surface.
-  # @ref [References::ASHRAE9012010] A9.4.1 Air Films
-  #
-  # @param intended_surface_type [String]
-  #   Valid choices:  'AtticFloor', 'AtticWall', 'AtticRoof', 'DemisingFloor', 'InteriorFloor', 'InteriorCeiling',
-  #   'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor', 'DemisingRoof',
-  #   'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser', 'ExteriorFloor',
-  #   'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor', 'GroundContactFloor',
-  #   'GroundContactWall', 'GroundContactRoof'
-  # @param int_film [Boolean] if true, interior film coefficient will be included in result
-  # @param ext_film [Boolean] if true, exterior film coefficient will be included in result
-  # @return [Double] Returns the R-Value of the film coefficients [m^2*K/W]
-  def film_coefficients_r_value(intended_surface_type, int_film, ext_film)
-    # Return zero if both interior and exterior are false
-    return 0.0 if !int_film && !ext_film
-
-    # Film values from 90.1-2010 A9.4.1 Air Films
-    film_ext_surf_r_ip = 0.17
-    film_semi_ext_surf_r_ip = 0.46
-    film_int_surf_ht_flow_up_r_ip = 0.61
-    film_int_surf_ht_flow_dwn_r_ip = 0.92
-    fil_int_surf_vertical_r_ip = 0.68
-
-    film_ext_surf_r_si = OpenStudio.convert(film_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    film_semi_ext_surf_r_si = OpenStudio.convert(film_semi_ext_surf_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    film_int_surf_ht_flow_up_r_si = OpenStudio.convert(film_int_surf_ht_flow_up_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    film_int_surf_ht_flow_dwn_r_si = OpenStudio.convert(film_int_surf_ht_flow_dwn_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-    fil_int_surf_vertical_r_si = OpenStudio.convert(fil_int_surf_vertical_r_ip, 'ft^2*hr*R/Btu', 'm^2*K/W').get
-
-    film_r_si = 0.0
-    case intended_surface_type
-    when 'AtticFloor'
-      film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otheriwse
-    when 'AtticWall', 'AtticRoof'
-      film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_semi_ext_surf_r_si if int_film # Inside @todo: this is only true if the attic is ventilated, interior film should be used otherwise
-    when 'DemisingFloor', 'InteriorFloor'
-      film_r_si += film_int_surf_ht_flow_up_r_si if ext_film # Outside
-      film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
-    when 'InteriorCeiling'
-      film_r_si += film_int_surf_ht_flow_dwn_r_si if ext_film # Outside
-      film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
-    when 'DemisingWall', 'InteriorWall', 'InteriorPartition', 'InteriorWindow', 'InteriorDoor'
-      film_r_si += fil_int_surf_vertical_r_si if ext_film # Outside
-      film_r_si += fil_int_surf_vertical_r_si if int_film # Inside
-    when 'DemisingRoof', 'ExteriorRoof', 'Skylight', 'TubularDaylightDome', 'TubularDaylightDiffuser'
-      film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
-    when 'ExteriorFloor'
-      film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
-    when 'ExteriorWall', 'ExteriorWindow', 'ExteriorDoor', 'GlassDoor', 'OverheadDoor'
-      film_r_si += film_ext_surf_r_si if ext_film # Outside
-      film_r_si += fil_int_surf_vertical_r_si if int_film # Inside
-    when 'GroundContactFloor'
-      film_r_si += film_int_surf_ht_flow_dwn_r_si if int_film # Inside
-    when 'GroundContactWall'
-      film_r_si += fil_int_surf_vertical_r_si if int_film # Inside
-    when 'GroundContactRoof'
-      film_r_si += film_int_surf_ht_flow_up_r_si if int_film # Inside
-    end
-    return film_r_si
-  end
-
   # Sets VAV reheat and VAV no reheat terminals on an air loop to control for outdoor air
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -696,7 +630,15 @@ class Standard
     vav_reheats = model.getAirTerminalSingleDuctVAVReheats
     vav_no_reheats = model.getAirTerminalSingleDuctVAVNoReheats
 
-    if !air_loop.nil?
+    if air_loop.nil?
+      # all terminals
+      vav_reheats.each do |vav_reheat|
+        vav_reheat.setControlForOutdoorAir(true)
+      end
+      vav_no_reheats.each do |vav_no_reheat|
+        vav_no_reheat.setControlForOutdoorAir(true)
+      end
+    else
       vav_reheats.each do |vav_reheat|
         next if vav_reheat.airLoopHVAC.get.name.to_s != air_loop.name.to_s
 
@@ -705,13 +647,6 @@ class Standard
       vav_no_reheats.each do |vav_no_reheat|
         next if vav_no_reheat.airLoopHVAC.get.name.to_s != air_loop.name.to_s
 
-        vav_no_reheat.setControlForOutdoorAir(true)
-      end
-    else # all terminals
-      vav_reheats.each do |vav_reheat|
-        vav_reheat.setControlForOutdoorAir(true)
-      end
-      vav_no_reheats.each do |vav_no_reheat|
         vav_no_reheat.setControlForOutdoorAir(true)
       end
     end
@@ -757,13 +692,11 @@ class Standard
         end
 
         # rename straight component outlet nodes
-        if component.to_StraightComponent.is_initialized
-          unless component.to_StraightComponent.get.outletModelObject.empty?
-            component_outlet_object = component.to_StraightComponent.get.outletModelObject.get
-            next unless component_outlet_object.to_Node.is_initialized
+        if component.to_StraightComponent.is_initialized && !component.to_StraightComponent.get.outletModelObject.empty?
+          component_outlet_object = component.to_StraightComponent.get.outletModelObject.get
+          next unless component_outlet_object.to_Node.is_initialized
 
-            component_outlet_object.setName("#{component.name} Outlet Air Node")
-          end
+          component_outlet_object.setName("#{component.name} Outlet Air Node")
         end
       end
 
@@ -909,8 +842,8 @@ class Standard
 
             supply_inlet_object.setName("#{component.name} Supply Inlet Water Node")
           end
-          unless component.supplyOutletModelObject .empty?
-            supply_outlet_object = component.supplyOutletModelObject .get
+          unless component.supplyOutletModelObject.empty?
+            supply_outlet_object = component.supplyOutletModelObject.get
             next unless supply_outlet_object.to_Node.is_initialized
 
             supply_outlet_object.setName("#{component.name} Supply Outlet Water Node")
@@ -941,7 +874,7 @@ class Standard
     new_name = name.to_s.gsub(/\W/, '_')
 
     # prepend ems_ in case the name starts with a number
-    new_name = 'ems_' + new_name
+    new_name = "ems_#{new_name}"
 
     return new_name
   end

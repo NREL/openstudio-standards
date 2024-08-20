@@ -8,9 +8,10 @@ class ASHRAE9012016 < ASHRAE901
   # @return [String] name of applicable cuvre, nil if not found
   # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
   def chiller_electric_eir_get_cap_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
-    if cooling_type == 'AirCooled'
+    case cooling_type
+    when 'AirCooled'
       return 'AirCooled_Chiller_2010_PathA_CAPFT'
-    elsif cooling_type == 'WaterCooled'
+    when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
         if compliance_path == 'Path A'
@@ -39,9 +40,10 @@ class ASHRAE9012016 < ASHRAE901
   # @return [String] name of applicable cuvre, nil if not found
   # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
   def chiller_electric_eir_get_eir_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
-    if cooling_type == 'AirCooled'
+    case cooling_type
+    when 'AirCooled'
       return 'AirCooled_Chiller_2010_PathA_EIRFT'
-    elsif cooling_type == 'WaterCooled'
+    when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
         if compliance_path == 'Path A'
@@ -70,9 +72,10 @@ class ASHRAE9012016 < ASHRAE901
   # @return [String] name of applicable cuvre, nil if not found
   # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
   def chiller_electric_eir_get_eir_f_plr_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
-    if cooling_type == 'AirCooled'
+    case cooling_type
+    when 'AirCooled'
       return 'AirCooled_Chiller_AllCapacities_2004_2010_EIRFPLR'
-    elsif cooling_type == 'WaterCooled'
+    when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
         return 'ChlrWtrCentPathAAllEIRRatio_fQRatio'

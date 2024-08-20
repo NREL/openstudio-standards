@@ -222,7 +222,7 @@ module SuperTallBuilding
             next if data.nil?
 
             # Skip space types with no water use, unless it is a NECB archetype (these do not have peak flow rates defined)
-            next if data['service_water_heating_peak_flow_rate'].to_f == 0.0 && data['service_water_heating_peak_flow_per_area'].to_f == 0.0
+            next if data['service_water_heating_peak_flow_rate'].to_f < 0.00001 && data['service_water_heating_peak_flow_per_area'].to_f < 0.00001
 
             # Add a service water use for each space
             space_multiplier = space.multiplier
@@ -321,7 +321,7 @@ module SuperTallBuilding
       hvac_sch = nil
       hvac_off_sch = nil
       space_name = infiltration.space.get.name.to_s
-      space_name = space_name.split(' ')[-1]
+      space_name = space_name.split[-1]
       if space_name.start_with? 'Office'
         hvac_sch = office_hvac_sch
         hvac_off_sch = office_hvac_off_sch
@@ -335,7 +335,7 @@ module SuperTallBuilding
       end
 
       unless hvac_sch.nil?
-        infiltration.setName(orin_infil_name + ' HVAC On')
+        infiltration.setName("#{orin_infil_name} HVAC On")
         infiltration.setSchedule(hvac_sch)
       end
       # coeff will be updated anyway
@@ -346,7 +346,7 @@ module SuperTallBuilding
 
       unless hvac_off_sch.nil?
         infiltration_hvac_off = infiltration.clone(model).to_SpaceInfiltrationDesignFlowRate.get
-        infiltration_hvac_off.setName(orin_infil_name + ' HVAC Off')
+        infiltration_hvac_off.setName("#{orin_infil_name} HVAC Off")
         infiltration_hvac_off.setSchedule(hvac_off_sch)
         infiltration_hvac_off.setConstantTermCoefficient(coeff_a_off)
         infiltration_hvac_off.setTemperatureTermCoefficient(coeff_b_off)
@@ -385,12 +385,13 @@ module SuperTallBuilding
     thermostat.setCoolingSetpointTemperatureSchedule(model_add_schedule(model, 'ApartmentHighRise CLGSETP_APT_SCH'))
 
     model.getSpaceTypes.each do |space_type|
-      unless space_type.standardsBuildingType.empty? || space_type.standardsSpaceType.empty?
-        if space_type.standardsBuildingType.get == 'HighriseApartment' && space_type.standardsSpaceType.get == 'Corridor'
-          space_type.spaces.each do |space|
-            thermostat_clone = thermostat.clone(model).to_ThermostatSetpointDualSetpoint.get
-            space.thermalZone.get.setThermostatSetpointDualSetpoint(thermostat_clone)
-          end
+      next if space_type.standardsBuildingType.empty?
+      next if space_type.standardsSpaceType.empty?
+
+      if space_type.standardsBuildingType.get == 'HighriseApartment' && space_type.standardsSpaceType.get == 'Corridor'
+        space_type.spaces.each do |space|
+          thermostat_clone = thermostat.clone(model).to_ThermostatSetpointDualSetpoint.get
+          space.thermalZone.get.setThermostatSetpointDualSetpoint(thermostat_clone)
         end
       end
     end
@@ -562,7 +563,7 @@ module SuperTallBuilding
         multiplier_list = get_multiplier_list(num_retail_flr - 1)
         if multiplier_list.is_a? Numeric
           multiplier = multiplier_list
-          z_origin = current_height + f_to_f_height_retail * (multiplier / 2.0 - 0.5)
+          z_origin = current_height + (f_to_f_height_retail * ((multiplier / 2.0) - 0.5))
           if multiplier == 1 && num_office_flr >= 2
             deep_copy_story(model, retail_f2_story_orin, 1, z_origin, f_to_c_height_retail, f_to_f_height_retail, current_story, if_ground_story_plenum_adiabatic: true)
           else
@@ -574,7 +575,7 @@ module SuperTallBuilding
           current_height += f_to_f_height_retail * multiplier
         elsif multiplier_list.is_a? Array
           multiplier_list.each do |mpl|
-            z_origin = current_height + f_to_f_height_retail * (mpl / 2.0 - 0.5)
+            z_origin = current_height + (f_to_f_height_retail * ((mpl / 2.0) - 0.5))
             deep_copy_story(model, retail_f2_story_orin, mpl, z_origin, f_to_c_height_retail, f_to_f_height_retail, current_story)
 
             # update the story # and height #
@@ -636,7 +637,7 @@ module SuperTallBuilding
       # if no residential and hotel, separate one floor as top floor
       if num_resi_flr + num_hotel_flr == 0
         if_top_story_floor_adiabatic = false
-        z_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr - 1) * f_to_f_height_non_retail
+        z_origin = (num_retail_flr * f_to_f_height_retail) + ((num_office_flr - 1) * f_to_f_height_non_retail)
         top_story_num = num_retail_flr + num_office_flr
         num_office_flr_w_mult -= 1
         if num_office_flr_w_mult > 1
@@ -649,7 +650,7 @@ module SuperTallBuilding
         multiplier_list = get_multiplier_list(num_office_flr_w_mult)
         if multiplier_list.is_a? Numeric
           multiplier = multiplier_list
-          z_origin = current_height + f_to_f_height_non_retail * (multiplier / 2.0 - 0.5)
+          z_origin = current_height + (f_to_f_height_non_retail * ((multiplier / 2.0) - 0.5))
           deep_copy_story(model, office_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
           # update the story # and height #
@@ -657,7 +658,7 @@ module SuperTallBuilding
           current_height += f_to_f_height_non_retail * multiplier
         elsif multiplier_list.is_a? Array
           multiplier_list.each do |mpl|
-            z_origin = current_height + f_to_f_height_non_retail * (mpl / 2.0 - 0.5)
+            z_origin = current_height + (f_to_f_height_non_retail * ((mpl / 2.0) - 0.5))
             deep_copy_story(model, office_story_orin, mpl, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
             # update the story # and height #
@@ -708,7 +709,7 @@ module SuperTallBuilding
         # if no hotel, separate one floor from resi_mid story as top floor
         if num_hotel_flr == 0
           if_top_story_floor_adiabatic = false
-          z_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr + num_resi_flr - 1) * f_to_f_height_non_retail
+          z_origin = (num_retail_flr * f_to_f_height_retail) + ((num_office_flr + num_resi_flr - 1) * f_to_f_height_non_retail)
           top_story_num = num_retail_flr + num_office_flr + num_resi_flr
           num_resi_mid_flr_w_mult -= 1
           if num_resi_mid_flr_w_mult > 1
@@ -721,14 +722,14 @@ module SuperTallBuilding
           multiplier_list = get_multiplier_list(num_resi_mid_flr_w_mult)
           if multiplier_list.is_a? Numeric
             multiplier = multiplier_list
-            z_origin = current_height + f_to_f_height_non_retail * (multiplier / 2.0 - 0.5)
+            z_origin = current_height + (f_to_f_height_non_retail * ((multiplier / 2.0) - 0.5))
             deep_copy_story(model, resi_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
             current_story += multiplier
             current_height += f_to_f_height_non_retail * multiplier
           elsif multiplier_list.is_a? Array
             multiplier_list.each do |mpl|
-              z_origin = current_height + f_to_f_height_non_retail * (mpl / 2.0 - 0.5)
+              z_origin = current_height + (f_to_f_height_non_retail * ((mpl / 2.0) - 0.5))
               deep_copy_story(model, resi_mid_story_orin, mpl, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
               # update the story # and height #
@@ -761,7 +762,7 @@ module SuperTallBuilding
       end
     else # num_hotel_flr >= 1
       # deal with hotel_top_story
-      hotel_top_origin = num_retail_flr * f_to_f_height_retail + (num_office_flr + num_resi_flr + num_hotel_flr - 1) * f_to_f_height_non_retail
+      hotel_top_origin = (num_retail_flr * f_to_f_height_retail) + ((num_office_flr + num_resi_flr + num_hotel_flr - 1) * f_to_f_height_non_retail)
       hotel_top_story_orin.setNominalZCoordinate(hotel_top_origin)
       hotel_top_story_orin.setNominalFloortoFloorHeight(f_to_f_height_non_retail)
       hotel_top_story_orin.setName("F#{total_num_of_flr} " + hotel_top_story_orin.name.to_s)
@@ -795,12 +796,12 @@ module SuperTallBuilding
           multiplier_list = get_multiplier_list(num_hotel_flr - 2)
           if multiplier_list.is_a? Numeric
             multiplier = multiplier_list
-            z_origin = current_height + f_to_f_height_non_retail * (multiplier / 2.0 - 0.5)
+            z_origin = current_height + (f_to_f_height_non_retail * ((multiplier / 2.0) - 0.5))
             deep_copy_story(model, hotel_mid_story_orin, multiplier, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
           elsif multiplier_list.is_a? Array
             multiplier_list.each do |mpl|
-              z_origin = current_height + f_to_f_height_non_retail * (mpl / 2.0 - 0.5)
+              z_origin = current_height + (f_to_f_height_non_retail * ((mpl / 2.0) - 0.5))
               deep_copy_story(model, hotel_mid_story_orin, mpl, z_origin, f_to_c_height_non_retail, f_to_f_height_non_retail, current_story)
 
               # update the story # and height #
@@ -825,7 +826,7 @@ module SuperTallBuilding
       hotel_mid_story_orin.remove
     end
 
-    building_height = num_retail_flr * f_to_f_height_retail + (num_office_flr + num_resi_flr + num_hotel_flr + 1) * f_to_f_height_non_retail # add skylobby story
+    building_height = (num_retail_flr * f_to_f_height_retail) + ((num_office_flr + num_resi_flr + num_hotel_flr + 1) * f_to_f_height_non_retail) # add skylobby story
 
     # add skylobby story and relocate all stories above it
     add_skylobby_story(model, building_height)
@@ -885,113 +886,113 @@ module SuperTallBuilding
       end
       if story_name.include? 'Office'
         hvac_obj = {
-          "type": 'VAV',
-          "name": story_name + ' VAV WITH REHEAT',
-          "return_plenum": plenum_space,
-          "operation_schedule": 'OfficeLarge HVACOperationSchd',
-          "oa_damper_schedule": 'OfficeLarge MinOA_MotorizedDamper_Sched',
-          "chw_pumping_type": 'const_pri_var_sec',
-          "chiller_cooling_type": 'WaterCooled',
-          "chiller_condenser_type": nil,
-          "chiller_compressor_type": 'Centrifugal',
-          "chw_number_chillers": num_chillers,
-          "number_cooling_towers": num_chillers,
-          "space_names": space_names
+          type: 'VAV',
+          name: "#{story_name} VAV WITH REHEAT",
+          return_plenum: plenum_space,
+          operation_schedule: 'OfficeLarge HVACOperationSchd',
+          oa_damper_schedule: 'OfficeLarge MinOA_MotorizedDamper_Sched',
+          chw_pumping_type: 'const_pri_var_sec',
+          chiller_cooling_type: 'WaterCooled',
+          chiller_condenser_type: nil,
+          chiller_compressor_type: 'Centrifugal',
+          chw_number_chillers: num_chillers,
+          number_cooling_towers: num_chillers,
+          space_names: space_names
         }
 
       elsif story_name.include? 'Retail'
         hvac_obj = {
-          "type": 'VAV',
-          "name": story_name + ' VAV WITH REHEAT',
-          "return_plenum": plenum_space,
-          "operation_schedule": 'RetailStandalone HVACOperationSchd',
-          "oa_damper_schedule": 'RetailStandalone MinOA_MotorizedDamper_Sched',
-          "chw_pumping_type": 'const_pri_var_sec',
-          "chiller_cooling_type": 'WaterCooled',
-          "chiller_condenser_type": nil,
-          "chiller_compressor_type": 'Centrifugal',
-          "chw_number_chillers": num_chillers,
-          "number_cooling_towers": num_chillers,
-          "space_names": space_names
+          type: 'VAV',
+          name: "#{story_name} VAV WITH REHEAT",
+          return_plenum: plenum_space,
+          operation_schedule: 'RetailStandalone HVACOperationSchd',
+          oa_damper_schedule: 'RetailStandalone MinOA_MotorizedDamper_Sched',
+          chw_pumping_type: 'const_pri_var_sec',
+          chiller_cooling_type: 'WaterCooled',
+          chiller_condenser_type: nil,
+          chiller_compressor_type: 'Centrifugal',
+          chw_number_chillers: num_chillers,
+          number_cooling_towers: num_chillers,
+          space_names: space_names
         }
 
       elsif story_name.include? 'Hotel'
         hvac_obj = {
-          "type": 'DOAS Cold Supply',
-          "name": story_name + ' DOAS',
-          "return_plenum": plenum_space,
-          "operation_schedule": 'HotelLarge HVACOperationSchd',
-          "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
-          "chw_pumping_type": 'const_pri_var_sec',
-          "chiller_cooling_type": 'WaterCooled',
-          "chiller_condenser_type": nil,
-          "chiller_compressor_type": 'Centrifugal',
-          "chw_number_chillers": num_chillers,
-          "number_cooling_towers": num_chillers,
-          "economizer_control_method": 'DifferentialDryBulb',
-          "space_names": space_names
+          type: 'DOAS Cold Supply',
+          name: "#{story_name} DOAS",
+          return_plenum: plenum_space,
+          operation_schedule: 'HotelLarge HVACOperationSchd',
+          oa_damper_schedule: 'HotelLarge MinOA_MotorizedDamper_Sched',
+          chw_pumping_type: 'const_pri_var_sec',
+          chiller_cooling_type: 'WaterCooled',
+          chiller_condenser_type: nil,
+          chiller_compressor_type: 'Centrifugal',
+          chw_number_chillers: num_chillers,
+          number_cooling_towers: num_chillers,
+          economizer_control_method: 'DifferentialDryBulb',
+          space_names: space_names
         }
         # get the top floor plenum for hotel common areas' VAV system
         hotel_top_plenum_space = plenum_space if story_name.include? 'top'
 
       elsif story_name.include? 'Resi'
         hvac_obj = {
-          "type": 'DOAS Cold Supply',
-          "name": story_name + ' DOAS',
-          "return_plenum": plenum_space,
-          "operation_schedule": 'Always On',
-          "oa_damper_schedule": 'Always On',
-          "chw_pumping_type": 'const_pri_var_sec',
-          "chiller_cooling_type": 'WaterCooled',
-          "chiller_condenser_type": nil,
-          "chiller_compressor_type": 'Centrifugal',
-          "chw_number_chillers": num_chillers,
-          "number_cooling_towers": num_chillers,
-          "economizer_control_method": 'DifferentialDryBulb',
-          "space_names": space_names
+          type: 'DOAS Cold Supply',
+          name: "#{story_name} DOAS",
+          return_plenum: plenum_space,
+          operation_schedule: 'Always On',
+          oa_damper_schedule: 'Always On',
+          chw_pumping_type: 'const_pri_var_sec',
+          chiller_cooling_type: 'WaterCooled',
+          chiller_condenser_type: nil,
+          chiller_compressor_type: 'Centrifugal',
+          chw_number_chillers: num_chillers,
+          number_cooling_towers: num_chillers,
+          economizer_control_method: 'DifferentialDryBulb',
+          space_names: space_names
         }
 
       elsif story_name.include? 'Basement'
         hvac_obj = {
-          "type": 'CAV',
-          "name": 'CAV_bas',
-          "operation_schedule": 'OfficeLarge HVACOperationSchd',
-          "oa_damper_schedule": 'OfficeLarge MinOA_MotorizedDamper_Sched',
-          "chw_pumping_type": 'const_pri_var_sec',
-          "chiller_cooling_type": 'WaterCooled',
-          "chiller_condenser_type": nil,
-          "chiller_compressor_type": 'Centrifugal',
-          "chw_number_chillers": num_chillers,
-          "number_cooling_towers": num_chillers,
-          "space_names": space_names
+          type: 'CAV',
+          name: 'CAV_bas',
+          operation_schedule: 'OfficeLarge HVACOperationSchd',
+          oa_damper_schedule: 'OfficeLarge MinOA_MotorizedDamper_Sched',
+          chw_pumping_type: 'const_pri_var_sec',
+          chiller_cooling_type: 'WaterCooled',
+          chiller_condenser_type: nil,
+          chiller_compressor_type: 'Centrifugal',
+          chw_number_chillers: num_chillers,
+          number_cooling_towers: num_chillers,
+          space_names: space_names
         }
 
       elsif story_name.include? 'Skylobby'
         hvac_obj = {
-          "type": 'VAV',
-          "name": story_name + ' VAV WITH REHEAT',
-          "return_plenum": plenum_space,
-          "operation_schedule": 'HotelLarge HVACOperationSchd',
-          "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
-          "chw_pumping_type": 'const_pri_var_sec',
-          "chiller_cooling_type": 'WaterCooled',
-          "chiller_condenser_type": nil,
-          "chiller_compressor_type": 'Centrifugal',
-          "chw_number_chillers": num_chillers,
-          "number_cooling_towers": num_chillers,
-          "space_names": space_names
+          type: 'VAV',
+          name: "#{story_name} VAV WITH REHEAT",
+          return_plenum: plenum_space,
+          operation_schedule: 'HotelLarge HVACOperationSchd',
+          oa_damper_schedule: 'HotelLarge MinOA_MotorizedDamper_Sched',
+          chw_pumping_type: 'const_pri_var_sec',
+          chiller_cooling_type: 'WaterCooled',
+          chiller_condenser_type: nil,
+          chiller_compressor_type: 'Centrifugal',
+          chw_number_chillers: num_chillers,
+          number_cooling_towers: num_chillers,
+          space_names: space_names
         }
 
       elsif story_name.include? 'ElevatorMachineRm'
         hvac_obj = {
-          "type": 'PSZ-AC',
-          "name": story_name + ' PSZ-AC',
-          "operation_schedule": 'Always On',
-          "oa_damper_schedule": 'Always On',
-          "cooling_type": 'Single Speed DX AC',
-          "heating_type": 'Electricity',
-          "fan_type": 'ConstantVolume',
-          "space_names": space_names
+          type: 'PSZ-AC',
+          name: "#{story_name} PSZ-AC",
+          operation_schedule: 'Always On',
+          oa_damper_schedule: 'Always On',
+          cooling_type: 'Single Speed DX AC',
+          heating_type: 'Electricity',
+          fan_type: 'ConstantVolume',
+          space_names: space_names
         }
       end
 
@@ -1001,18 +1002,18 @@ module SuperTallBuilding
     # add VAV system for all hotel common area spaces
     if num_hotel_flr >= 1
       hotel_common_hvac_obj = {
-        "type": 'VAV',
-        "name": 'Hotel Common Areas VAV WITH REHEAT',
-        "return_plenum": hotel_top_plenum_space,
-        "operation_schedule": 'HotelLarge HVACOperationSchd',
-        "oa_damper_schedule": 'HotelLarge MinOA_MotorizedDamper_Sched',
-        "chw_pumping_type": 'const_pri_var_sec',
-        "chiller_cooling_type": 'WaterCooled',
-        "chiller_condenser_type": nil,
-        "chiller_compressor_type": 'Centrifugal',
-        "chw_number_chillers": num_chillers,
-        "number_cooling_towers": num_chillers,
-        "space_names": hotel_common_spaces
+        type: 'VAV',
+        name: 'Hotel Common Areas VAV WITH REHEAT',
+        return_plenum: hotel_top_plenum_space,
+        operation_schedule: 'HotelLarge HVACOperationSchd',
+        oa_damper_schedule: 'HotelLarge MinOA_MotorizedDamper_Sched',
+        chw_pumping_type: 'const_pri_var_sec',
+        chiller_cooling_type: 'WaterCooled',
+        chiller_condenser_type: nil,
+        chiller_compressor_type: 'Centrifugal',
+        chw_number_chillers: num_chillers,
+        number_cooling_towers: num_chillers,
+        space_names: hotel_common_spaces
       }
       new_json.push(hotel_common_hvac_obj)
     end
@@ -1054,28 +1055,30 @@ module SuperTallBuilding
   def update_space_outside_boundary_to_adiabatic(space, if_top_story_floor_adiabatic: false, if_ground_story_plenum_adiabatic: false)
     if (space.name.to_s.include? 'Plenum') && !if_top_story_floor_adiabatic
       space.surfaces.each do |surface|
-        if surface.surfaceType.to_s == 'RoofCeiling'
-          if surface.outsideBoundaryCondition.to_s == 'Surface'
-            if !surface.adjacentSurface.empty?
-              adj_surface = surface.adjacentSurface.get
-              adj_surface.setOutsideBoundaryCondition('Adiabatic')
-            end
-          end
-          surface.setOutsideBoundaryCondition('Adiabatic')
+        next unless surface.surfaceType.to_s == 'RoofCeiling'
+
+        surface.setOutsideBoundaryCondition('Adiabatic')
+
+        next unless surface.outsideBoundaryCondition.to_s == 'Surface'
+
+        unless surface.adjacentSurface.empty?
+          adj_surface = surface.adjacentSurface.get
+          adj_surface.setOutsideBoundaryCondition('Adiabatic')
         end
       end
     else
       # for ground floor plenum adiabatic scenario, skip floors
       unless if_ground_story_plenum_adiabatic
         space.surfaces.each do |surface|
-          if surface.surfaceType.to_s == 'Floor'
-            if surface.outsideBoundaryCondition.to_s == 'Surface'
-              if !surface.adjacentSurface.empty?
-                adj_surface = surface.adjacentSurface.get
-                adj_surface.setOutsideBoundaryCondition('Adiabatic')
-              end
-            end
-            surface.setOutsideBoundaryCondition('Adiabatic')
+          next unless surface.surfaceType.to_s == 'Floor'
+
+          surface.setOutsideBoundaryCondition('Adiabatic')
+
+          next unless surface.outsideBoundaryCondition.to_s == 'Surface'
+
+          unless surface.adjacentSurface.empty?
+            adj_surface = surface.adjacentSurface.get
+            adj_surface.setOutsideBoundaryCondition('Adiabatic')
           end
         end
       end
@@ -1126,7 +1129,7 @@ module SuperTallBuilding
       end
       # clone thermal zone and assign
       new_t_zone = space.thermalZone.get.clone(model).to_ThermalZone.get
-      new_t_zone.setName('TZ-' + new_name)
+      new_t_zone.setName("TZ-#{new_name}")
       new_t_zone.setMultiplier(multiplier * space.thermalZone.get.multiplier) # story multiplier and original thermal zone multiplier
       new_space.setThermalZone(new_t_zone)
       # assign new building story
@@ -1162,12 +1165,10 @@ module SuperTallBuilding
 
       f_to_f_height = story.nominalFloortoFloorHeight.get
       multiplier = story.spaces[0].multiplier
-      z_coordinates_bot.push(story.nominalZCoordinate.get.to_f - (multiplier - 1) / 2.0 * f_to_f_height)
+      z_coordinates_bot.push(story.nominalZCoordinate.get.to_f - ((multiplier - 1) / 2.0 * f_to_f_height))
     end
 
     dist_from_middle = z_coordinates_bot.map { |z_cor| (z_cor - (building_height / 2.0)).abs }
-    all_stories_names.each_with_index do |story_name, idx|
-    end
     # each_with_index.min returns the array [minimum value, index of the minimum value]
     mid_story_idx = dist_from_middle.each_with_index.min[1]
     story_above_skylobby = all_stories_names[mid_story_idx]
