@@ -16,7 +16,7 @@ class NECB2011 < Standard
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
     return variable if variable.kind_of?(Numeric)
-    return default if variable.nil? || (variable == 'NECB_Default')
+    return default if variable.nil? || (variable.to_s == 'NECB_Default')
     return unless variable.kind_of?(String)
 
     variable = variable.strip
@@ -26,13 +26,25 @@ class NECB2011 < Standard
   # This method converts arguments to bool.  Anything other than a bool false or string 'false' is converted
   # to a bool true.  Bool false and case insesitive string false are turned into bool false.
   def convert_arg_to_bool(variable:, default:)
-    return true if variable.nil?
+    return default if variable.nil?
     if variable.is_a? String
-      return true if variable.to_s.downcase == 'necb_default'
+      return default if variable.to_s.downcase == 'necb_default'
       return false if variable.to_s.downcase == 'false'
+      return true if variable.to_s.downcase == 'true'
     end
     return false if variable == false
-    return true
+    return variable
+  end
+
+  # This method checks if a variable is a string.  If it is anything but a string it returns the default.  If it is a
+  # string set to "NECB_Default" it return the default.  Otherwise it returns the strirng set to it.
+  def convert_arg_to_string(variable:, default:)
+    return default if variable.nil?
+    if variable.is_a? String
+      return default if variable.to_s.downcase == 'necb_default'
+      return variable
+    end
+    return default
   end
 
   def get_standards_table(table_name:)
@@ -256,7 +268,9 @@ class NECB2011 < Standard
                                    baseline_system_zones_map_option: nil,
                                    tbd_option: nil,
                                    tbd_interpolate: false,
-                                   necb_hdd: true)
+                                   necb_hdd: true,
+                                   boiler_fuel: nil,
+                                   boiler_cap_ratio: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
@@ -315,7 +329,9 @@ class NECB2011 < Standard
                                 output_meters: output_meters,
                                 airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
                                 baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
-                                necb_hdd: necb_hdd
+                                necb_hdd: necb_hdd,
+                                boiler_fuel: boiler_fuel,
+                                boiler_cap_ratio: boiler_cap_ratio
                                 )
 
   end
@@ -391,7 +407,10 @@ class NECB2011 < Standard
                            output_meters: nil,
                            airloop_economizer_type: nil,
                            baseline_system_zones_map_option: nil,
-                           necb_hdd: true)
+                           necb_hdd: true,
+                           boiler_fuel: nil,
+                           boiler_cap_ratio: nil)
+    boiler_fuel = "Electricity"
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel)
     self.fuel_type_set = SystemFuels.new()
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
@@ -399,6 +418,10 @@ class NECB2011 < Standard
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
+    boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
+    boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
+
+    self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel) unless boiler_fuel.nil?
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|

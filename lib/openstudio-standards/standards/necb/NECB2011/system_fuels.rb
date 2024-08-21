@@ -1,6 +1,7 @@
 class SystemFuels
   attr_accessor :name
   attr_accessor :boiler_fueltype
+  attr_accessor :backup_boiler_fueltype
   attr_accessor :baseboard_type
   attr_accessor :mau_type
   attr_accessor :mau_heating_coil_type
@@ -21,6 +22,7 @@ class SystemFuels
     # Assign fuel sources.
     @name = system_fuel_defaults['name']
     @boiler_fueltype = system_fuel_defaults['boiler_fueltype']
+    @backup_boiler_fueltype = system_fuel_defaults['boiler_fueltype']
     @baseboard_type = system_fuel_defaults['baseboard_type']
     @mau_type = system_fuel_defaults['mau_type']
     @mau_cooling_type = system_fuel_defaults['mau_cooling_type']
@@ -34,5 +36,16 @@ class SystemFuels
     @fan_type = system_fuel_defaults['fan_type']
     @swh_fueltype = system_fuel_defaults['swh_fueltype']
     @ecm_fueltype = system_fuel_defaults['ecm_fueltype']
+  end
+
+  # Forces a boiler to be generated.  It searches boiler_fuel_type_sets.json for the boiler_fuel string and sets the
+  # primary and backup boiler fuels to be whatever is boiler fuel type set.
+  def set_boiler_fuel(standards_data:, boiler_fuel:)
+    boiler_fuel_defaults = standards_data['boiler_fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == boiler_fuel }
+    @boiler_fueltype = boiler_fuel_defaults['boiler_fueltype']
+    @backup_boiler_fueltype = boiler_fuel_defaults['backup_boiler_fueltype']
+    @baseboard_type = boiler_fuel_defaults['baseboard_type']
+    @mau_heating_coil_type = boiler_fuel_defaults['mau_heating_coil_type']
+    @heating_coil_type_sys6 = boiler_fuel_defaults['heating_coil_type_sys6']
   end
 end
