@@ -402,9 +402,8 @@ class Standard
 
       # Create chillers and set plant operation scheme
       num_chillers.times do |i|
-        chiller_name = "#{template} #{chiller_cooling_type} #{chiller_condenser_type}"
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
-        chiller.setName(chiller_name.strip)
+        chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
         chilled_water_loop.addSupplyBranchForComponent(chiller)
         dsgn_sup_wtr_temp_c = OpenStudio.convert(dsgn_sup_wtr_temp, 'F', 'C').get
         chiller.setReferenceLeavingChilledWaterTemperature(dsgn_sup_wtr_temp_c)
