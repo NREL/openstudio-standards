@@ -50,7 +50,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     msg = "Ventilation test results do not match what is expected in test"
     compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
-	end_time = Time.now
+	  end_time = Time.now
     duration = end_time - start_time
     logger.info "Total time taken: #{duration} seconds"
   end
@@ -76,6 +76,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     name_short = "#{vintage}_#{building_type}_vent"
     output_folder = method_output_folder("#{test_name}/#{name_short}/")
     logger.info "Starting individual test: #{name}"
+    results = Array.new
 	
     # Wrap test in begin/rescue/ensure.
     begin
@@ -87,17 +88,12 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
                                                     primary_heating_fuel: fueltype,
                                                     sizing_run_dir: output_folder)
     rescue StandardError => error
-    
-      # Create a txt file to indicate the buildings with failed model creation.
-      File.open(File.join(output_folder, 'model_creation_failed.txt'), 'a') do |file|
-        file.write("Model creation failed for #{vintage} #{building_type}\n")
-      end
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
-      return []
+      msg = "Model creation failed for #{vintage} #{building_type}\n#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return [ERROR: msg]
     end
 
     # Extract the results for checking.
-    results = Array.new
     air_loops_hvac = model.getAirLoopHVACs
     air_loops_hvac.each do |air_loop_hvac|
       zones = air_loop_hvac.thermalZones

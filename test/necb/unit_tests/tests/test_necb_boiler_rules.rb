@@ -115,6 +115,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     name_short = "#{vintage}_sys1_Boiler-#{fueltype}_cap-#{boiler_cap.to_int}kW"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
+    results = Hash.new
 
     # Wrap test in begin/rescue/ensure.
     begin
@@ -141,7 +142,9 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Recover the thermal efficiency set in the measure for checking below.
@@ -265,6 +268,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     name_short = "#{vintage}_sys1_#{total_boiler_cap.round(0)}kW_#{boiler_fueltype}_boiler"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
+    results = Hash.new
 
     # Wrap test in begin/rescue/ensure.
     begin
@@ -289,11 +293,12 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Run sizing. Is this required?
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
     
     # Check that there are two boilers in the model. BTAP sets the second boiler to 0.001 W if the rules say only one boiler required.
-    results = Hash.new
     boilers = model.getBoilerHotWaters
     boiler_count = 0
     total_capacity = 0.0
@@ -390,6 +395,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     name_short = "#{vintage}_sys1"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
+    results = Hash.new
 
     # Wrap test in begin/rescue/ensure.
     begin
@@ -413,11 +419,12 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Extract the results for checking. There are always two boilers.
-    results = Hash.new
     boilers = model.getBoilerHotWaters
     boilers.each do |boiler|
       logger.info "Boiler: #{boiler}"
@@ -511,6 +518,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     name_short = "#{vintage}_sys1"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Started individual test: #{name}"
+    results = Hash.new
       
     # Wrap test in begin/rescue/ensure.
     begin
@@ -539,11 +547,12 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Customize the efficiency. Specify the name and the method will look up the correct boiler.
       standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: boiler_name)
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Extract the results for checking. There are always two boilers.
-    results = Hash.new
     results[:Reference] = reference
     boilers = model.getBoilerHotWaters
     boilers.each do |boiler|

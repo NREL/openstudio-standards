@@ -94,13 +94,17 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     heating_coil_type = test_pars[:heating_coil_types]
     baseboard_type = test_case[:baseboard_type]
     vintage = test_pars[:Vintage]
+
     # Test specific inputs.
     furnace_cap = test_case[:tested_capacity_kW]
     efficiency_metric = test_case[:efficiency_metric]
+
     name = "#{vintage}_sys3_Furnace-#{heating_coil_type}_cap-#{furnace_cap}kW_Baseboard-#{baseboard_type}"
     name_short = "#{vintage}_#{furnace_cap}_sys3_Furnace"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
+    results = Array.new
+
     # Wrap test in begin/rescue/ensure.
     begin
       # Load model and set climate file.
@@ -124,12 +128,14 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
                                                                                                   baseboard_type: baseboard_type,
                                                                                                   hw_loop: hw_loop,
                                                                                                   new_auto_zoner: false)
+      model.getCoilHeatingGass.each { |coil| coil.setNominalCapacity(furnace_cap * 1000.0) }
 
       # Run sizing.
-      model.getCoilHeatingGass.each { |coil| coil.setNominalCapacity(furnace_cap * 1000.0) }
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Extract the results for checking.
@@ -185,7 +191,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = { :Vintage => @AllTemplates,
                         :FuelType => ["NaturalGas"],
-                        :TestCase => ["Single"],
+                        :TestCase => ["SingleStage"],
                         :TestPars => { :stage => "Single" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -233,6 +239,8 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     output_folder = method_output_folder("#{test_name}/#{name_short}")
 
     logger.info "Starting individual test: #{name}"
+    results = Array.new
+
     # Wrap test in begin/rescue/ensure.
     begin
       # Load model and set climate file.
@@ -255,17 +263,19 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
 
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Extract the results for checking.
-    results = Hash.new
     model.getCoilHeatingGass.sort.each do |mod_furnace|
       heatingCoil_name = mod_furnace.name.get
       furnace_curve = mod_furnace.partLoadFractionCorrelationCurve.get.to_CurveCubic.get
       furnace_curve_name = furnace_curve.name.get
-      results[heatingCoil_name.to_sym] = {
-        name: furnace_curve_name,
+      results << {
+        name: heatingCoil_name.to_sym,
+        curve_name: furnace_curve_name,
         type: "cubic",
         coeff1: furnace_curve.coefficient1Constant,
         coeff2: furnace_curve.coefficient2x,
@@ -285,6 +295,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
   # `autosizedSpeed2GrossRatedTotalCoolingCapacity|' for #<OpenStudio::Model::CoilCoolingDXMultiSpeed:0x0000000009476978>|n
   # lib/openstudio-standards/standards/Standards.CoilCoolingDXMultiSpeed.rb:232:in
   # `coil_cooling_dx_multi_speed_find_capacity|'
+  # *** Not active as multi_stage coils do not work ***
   def donot_test_furnace_num_stages
     logger.info "Starting suite of tests for: #{__method__}"
 
@@ -362,7 +373,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     heating_coil_type = test_pars[:heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
     vintage = test_pars[:Vintage]
-
+ 
     # Test specific values.
     cap = test_case[:capacity_kW]
 
@@ -373,7 +384,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     output_folder = method_output_folder("#{test_name}/#{name_short}")
 
     logger.info "Starting individual test: #{name}"
-    results = Hash.new
+    results = Array.new
     begin
     
       # Load model and set climate file.
@@ -397,9 +408,9 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
 
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
-      results = {ERROR: error.message}
-      return results
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Generate the osm files for all relevant cases to generate the test data for system 3. 2011 results:
