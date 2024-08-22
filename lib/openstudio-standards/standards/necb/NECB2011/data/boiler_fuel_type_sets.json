@@ -39,6 +39,14 @@
           "baseboard_type": "Hot Water",
           "mau_heating_coil_type": "Hot Water",
           "heating_coil_type_sys6": "Hot Water"
+        },
+        {
+          "name":"FuelOilNo2",
+          "boiler_fueltype": "FuelOilNo2",
+          "backup_boiler_fueltype": "FuelOilNo2",
+          "baseboard_type": "Hot Water",
+          "mau_heating_coil_type": "Hot Water",
+          "heating_coil_type_sys6": "Hot Water"
         }
       ]
     }

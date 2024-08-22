@@ -410,7 +410,6 @@ class NECB2011 < Standard
                            necb_hdd: true,
                            boiler_fuel: nil,
                            boiler_cap_ratio: nil)
-    boiler_fuel = "Electricity"
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel)
     self.fuel_type_set = SystemFuels.new()
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
