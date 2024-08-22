@@ -274,7 +274,7 @@ module NecbHelper
         logger.error "Could not find second sizing run #{sizing_folder}"
         assert(false, "Failure in sizing run wile running test: #{self.class.ancestors[0]}")
       else
-        logger.debug "Found secind sizing run #{sizing_folder}"
+        logger.debug "Found second sizing run #{sizing_folder}"
       end
     end
 
