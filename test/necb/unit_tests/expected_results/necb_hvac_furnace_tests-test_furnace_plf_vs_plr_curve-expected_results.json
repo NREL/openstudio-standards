@@ -6,7 +6,7 @@
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {
-        "Coil-Heating-Gas-1": {
+        "Coil Heating Gas 1": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -16,7 +16,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-2": {
+        "Coil Heating Gas 2": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -26,7 +26,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-3": {
+        "Coil Heating Gas 3": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -36,7 +36,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-4": {
+        "Coil Heating Gas 4": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -46,7 +46,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-5": {
+        "Coil Heating Gas 5": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -65,7 +65,7 @@
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {
-        "Coil-Heating-Gas-1": {
+        "Coil Heating Gas 1": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -75,7 +75,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-2": {
+        "Coil Heating Gas 2": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -85,7 +85,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-3": {
+        "Coil Heating Gas 3": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -95,7 +95,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-4": {
+        "Coil Heating Gas 4": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -105,7 +105,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-5": {
+        "Coil Heating Gas 5": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -124,7 +124,7 @@
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {
-        "Coil-Heating-Gas-1": {
+        "Coil Heating Gas 1": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -134,7 +134,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-2": {
+        "Coil Heating Gas 2": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -144,7 +144,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-3": {
+        "Coil Heating Gas 3": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -154,7 +154,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-4": {
+        "Coil Heating Gas 4": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -164,7 +164,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-5": {
+        "Coil Heating Gas 5": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -183,7 +183,7 @@
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {
-        "Coil-Heating-Gas-1": {
+        "Coil Heating Gas 1": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -193,7 +193,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-2": {
+        "Coil Heating Gas 2": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -203,7 +203,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-3": {
+        "Coil Heating Gas 3": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -213,7 +213,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-4": {
+        "Coil Heating Gas 4": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -223,7 +223,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-5": {
+        "Coil Heating Gas 5": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -241,7 +241,7 @@
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {
-        "Coil-Heating-Gas-1": {
+        "Coil Heating Gas 1": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -251,7 +251,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-2": {
+        "Coil Heating Gas 2": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -261,7 +261,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-3": {
+        "Coil Heating Gas 3": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -271,7 +271,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-4": {
+        "Coil Heating Gas 4": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -281,7 +281,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-5": {
+        "Coil Heating Gas 5": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -299,7 +299,7 @@
     "NaturalGas": {
       "VarType": "TestCase",
       "Single": {
-        "Coil-Heating-Gas-1": {
+        "Coil Heating Gas 1": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -309,7 +309,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-2": {
+        "Coil Heating Gas 2": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -319,7 +319,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-3": {
+        "Coil Heating Gas 3": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -329,7 +329,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-4": {
+        "Coil Heating Gas 4": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
@@ -339,7 +339,7 @@
           "min_x": 0.0,
           "max_x": 1.0
         },
-        "Coil-Heating-Gas-5": {
+        "Coil Heating Gas 5": {
           "name": "FURNACE-EFFPLR-NECB2011",
           "type": "cubic",
           "coeff1": 0.722,
