@@ -210,11 +210,11 @@ module OpenstudioStandards
           thermostat = zone.thermostatSetpointDualSetpoint.get
           if thermostat.heatingSetpointTemperatureSchedule.is_initialized && thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
             schedule = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, thermostat, parametric_inputs, hours_of_operation, hoo_var_method: 'tstat')
+            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
           end
           if thermostat.coolingSetpointTemperatureSchedule.is_initialized && thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
             schedule = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, thermostat, parametric_inputs, hours_of_operation, hoo_var_method: 'tstat')
+            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
           end
         end
       end
@@ -231,7 +231,7 @@ module OpenstudioStandards
         air_loop_hash[air_loop] = hours_of_operation
         if air_loop.availabilitySchedule.to_ScheduleRuleset.is_initialized
           schedule = air_loop.availabilitySchedule.to_ScheduleRuleset.get
-          OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, air_loop, parametric_inputs, hours_of_operation)
+          OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, air_loop, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
         end
         avail_mgrs = air_loop.availabilityManagers
         avail_mgrs.sort.each do |avail_mgr|
@@ -241,7 +241,7 @@ module OpenstudioStandards
           resources.sort.each do |resource|
             if resource.to_ScheduleRuleset.is_initialized
               schedule = resource.to_ScheduleRuleset.get
-              OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, avail_mgr, parametric_inputs, hours_of_operation)
+              OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, avail_mgr, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
             end
           end
         end
@@ -299,7 +299,7 @@ module OpenstudioStandards
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Model', "Cannot identify where #{component.name.get} is in system. Will not gather parametric inputs for #{schedule.name.get}")
             next
           end
-          OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, component, parametric_inputs, hours_of_operation)
+          OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, component, parametric_inputs, hours_of_operation,  gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
         end
       end
 
@@ -317,11 +317,11 @@ module OpenstudioStandards
           if opt_space.is_initialized
             space = space.get
             hours_of_operation = OpenstudioStandards::Space.space_hours_of_operation(space)
-            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, water_use_equipment, parametric_inputs, hours_of_operation)
+            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
           else
             hours_of_operation = OpenstudioStandards::Space.spaces_hours_of_operation(model.getSpaces)
             if !hours_of_operation.nil?
-              OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, water_use_equipment, parametric_inputs, hours_of_operation)
+              OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
             end
           end
 
@@ -440,7 +440,7 @@ module OpenstudioStandards
           OpenstudioStandards::Space.space_load_instance_get_parametric_schedule_inputs(space_load_instance, parametric_inputs, hours_of_operation, gather_data_only)
           if space_load_instance.activityLevelSchedule.is_initialized && space_load_instance.activityLevelSchedule.get.to_ScheduleRuleset.is_initialized
             act_sch = space_load_instance.activityLevelSchedule.get.to_ScheduleRuleset.get
-            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(act_sch, space_load_instance, parametric_inputs, hours_of_operation, hoo_var_method: 'hours')
+            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(act_sch, space_load_instance, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
           end
         end
         space_type.spaceInfiltrationDesignFlowRates.each do |space_load_instance|
@@ -1056,7 +1056,7 @@ module OpenstudioStandards
             remainder = days_to_fill - value[:days_used]
             day_for_rule = days_to_fill - remainder
             if remainder.size < days_to_fill.size
-              autogen_rules[profile_index] = { days_to_fill: day_for_rule}
+              autogen_rules[profile_index] = { days_to_fill: day_for_rule,  hoo_start: hoo_start, hoo_end: hoo_end}
             end
             days_to_fill = remainder
           end
