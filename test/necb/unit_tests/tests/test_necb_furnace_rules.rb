@@ -19,7 +19,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = { test_method: __method__,
-                        save_intermediate_models: true,
+                        save_intermediate_models: false,
                         stage_types: 'single' }
 
     # Define test cases.
@@ -106,7 +106,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
       standard = get_standard(vintage)
       always_on = model.alwaysOnDiscreteSchedule
       hw_loop = nil
@@ -169,7 +169,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = { test_method: __method__,
-                        save_intermediate_models: true,
+                        save_intermediate_models: false,
                         heating_coil_type: 'Gas',
                         baseboard_type: 'Hot Water' }
 
@@ -227,16 +227,18 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     furnace_fueltype = test_pars[:FuelType]
     vintage = test_pars[:Vintage]
     stage_type = test_case[:stage]
+
     name = "#{vintage}_sys3_Furnace-#{furnace_fueltype}_#{heating_coil_type}_Baseboard-#{baseboard_type}"
     name_short = "#{vintage}_sys3_Furnace"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
+
     logger.info "Starting individual test: #{name}"
     # Wrap test in begin/rescue/ensure.
     begin
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
       BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
@@ -262,7 +264,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       heatingCoil_name = mod_furnace.name.get
       furnace_curve = mod_furnace.partLoadFractionCorrelationCurve.get.to_CurveCubic.get
       furnace_curve_name = furnace_curve.name.get
-      results[heatingCoil_name.gsub(/\s+/, "-").to_sym] = { # Ensure no white space in key string and that its a symbol.
+      results[heatingCoil_name.to_sym] = {
         name: furnace_curve_name,
         type: "cubic",
         coeff1: furnace_curve.coefficient1Constant,
@@ -283,52 +285,141 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
   # `autosizedSpeed2GrossRatedTotalCoolingCapacity|' for #<OpenStudio::Model::CoilCoolingDXMultiSpeed:0x0000000009476978>|n
   # lib/openstudio-standards/standards/Standards.CoilCoolingDXMultiSpeed.rb:232:in
   # `coil_cooling_dx_multi_speed_find_capacity|'
-  def no_test_NECB2011_furnace_num_stages
+  def donot_test_furnace_num_stages
+    logger.info "Starting suite of tests for: #{__method__}"
+
+    # Define test parameters that apply to all tests.
+    test_parameters = { test_method: __method__,
+                        save_intermediate_models: false,
+                        furnace_fueltype: 'NaturalGas',
+                        heating_coil_type: 'Gas',
+                        baseboard_type: 'Hot Water' }
+
+    # Define test cases.
+    test_cases = Hash.new
+
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 " }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1 " }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2 " }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1 " }
+
+    # Test cases.
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :TestCase => ["Test-small"],
+                        :TestPars => { :capacity_kW => 33.0 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :TestCase => ["Test-medium"],
+                        :TestPars => { :capacity_kW => 67.0  } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :TestCase => ["Test-large"],
+                        :TestPars => { :capacity_kW => 133.0 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :TestCase => ["Test-xlarge"],
+                        :TestPars => { :capacity_kW => 199.0 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
+
+    # Write test results.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
+
+    # Read expected results.
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name), {symbolize_names: true})
+
+    # Check if test results match expected.
+    msg = "Furnace number of stages test results do not match what is expected in test"
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished suite of tests for: #{__method__}"
+  end
+
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_furnace_num_stages that runs a specific test. Called by do_test_cases in necb_helper.rb.
+  def do_test_furnace_num_stages(test_pars:, test_case:)
+
+    # Debug.
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
+
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    test_name = test_pars[:test_method]
+    save_intermediate_models = test_pars[:save_intermediate_models]
+    furnace_fueltype = test_pars[:furnace_fueltype]
+    heating_coil_type = test_pars[:heating_coil_type]
+    baseboard_type = test_pars[:baseboard_type]
+    vintage = test_pars[:Vintage]
+
+    # Test specific values.
+    cap = test_case[:capacity_kW]
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    template = 'NECB2011'
-    standard = get_standard(template)
-    save_intermediate_models = false
+    
+    name = "#{vintage}_sys3_Furnace-#{heating_coil_type}_cap-#{cap}kW_Baseboard-#{baseboard_type}"
+    name_short = "Furnace-#{cap}kW"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
 
-    # Generate the osm files for all relevant cases to generate the test data for system 3
-    furnace_fueltype = 'NaturalGas'
-    heating_coil_type = 'Gas'
-    baseboard_type = 'Hot Water'
-    caps = [33000.0, 66001.0, 132001.0, 198001.0]
-    num_stages_needed = {}
-    num_stages_needed[33000.0] = 2
-    num_stages_needed[66001.0] = 2
-    num_stages_needed[132001.0] = 3
-    num_stages_needed[198001.0] = 4
-
-    caps.each do |cap|
-      name = "#{template}_sys3_Furnace-#{heating_coil_type}_cap-#{cap}W_Baseboard-#{baseboard_type}"
-      name.gsub!(/\s+/, "-")
-      puts "***************#{name}***************\n"
-
+    logger.info "Starting individual test: #{name}"
+    results = Hash.new
+    begin
+    
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
+      standard = get_standard(vintage)
       standard.setup_hw_loop_with_components(model, hw_loop, furnace_fueltype, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
                                                                                                  zones: model.getThermalZones,
                                                                                                  heating_coil_type: heating_coil_type,
                                                                                                  baseboard_type: baseboard_type,
                                                                                                  hw_loop: hw_loop,
-                                                                                                 new_auto_zoner: false)
-      model.getCoilHeatingGasMultiStages.each { |coil| coil.stages.last.setNominalCapacity(cap) }
+                                                                                                 new_auto_zoner: true)
+      model.getCoilHeatingGasMultiStages.each { |coil| coil.stages.last.setNominalCapacity(cap*1000.0) }
 
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
 
-      actual_num_stages = model.getCoilHeatingGasMultiStages[0].stages.size
-      assert(actual_num_stages == num_stages_needed[cap], "The actual number of stages for capacity #{cap} W is not #{num_stages_needed[cap]}")
+    rescue => error
+      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      results = {ERROR: error.message}
+      return results
     end
-  end
 
+    # Generate the osm files for all relevant cases to generate the test data for system 3. 2011 results:
+    #caps = [33000.0, 66001.0, 132001.0, 198001.0]
+    #num_stages_needed = {}
+    #num_stages_needed[33000.0] = 2
+    #num_stages_needed[66001.0] = 2
+    #num_stages_needed[132001.0] = 3
+    #num_stages_needed[198001.0] = 4
+    # Extract the results for checking.  *** This needs to be checked for completion once multi stage furnace working ***
+    coils = model.getCoilHeatingGasMultiStages
+    stages = []
+    coils.each do |coil|
+      stages << coil.stages.size
+    end
+    results = {
+      furnace_capacity_kW: cap,
+      number_of_stages: stages
+    }
+    logger.info "Completed individual test: #{name}"
+    return results
+  end
 end
