@@ -509,6 +509,37 @@ class TestSchedulesParametric < Minitest::Test
         times = day_sch.times.map(&:to_s)
         assert(op_times.to_set.superset?(times.to_set), "For #{type}, expected #{op_times} to include times from thermostat schedule #{day_sch.name.get}: #{times}")
       end
+
+      timesteps = @model.getTimestep.numberOfTimestepsPerHour
+      schedules_to_check = []
+      schedules_to_check += tstat_schedules
+      @model.getSpaceLoadInstances.each do |load|
+        next if ['OS_WaterUse_Equipment','OS_InternalMass'].include? load.iddObjectType.valueName
+        load = load.method("to_#{load.iddObjectType.valueName.gsub('OS_','').gsub('_','')}").call.get
+        if load.instance_of?(OpenStudio::Model::People)
+          opt_sch = load.numberofPeopleSchedule
+        elsif load.instance_of?(OpenStudio::Model::DesignSpecificationOutdoorAir)
+          opt_sch = load.outdoorAirFlowRateFractionSchedule
+        else
+          opt_sch = load.schedule
+        end
+        opt_sch = opt_sch.get.to_ScheduleRuleset.get
+        schedules_to_check << opt_sch
+      end
+      
+      schedules_to_check.each do |opt_sch|
+        day_schedules = [opt_sch.defaultDaySchedule]
+        opt_sch.scheduleRules.each{|r| day_schedules << r.daySchedule}
+        day_schedules.each do |sch_day|
+          mins = sch_day.times.map{|t| t.minutes}.uniq
+
+          ts_mins = (0...60).step(60/timesteps).to_a
+          mins.each do |min|
+            assert_includes(ts_mins, min, "#{sch_day.name.get} fails")
+          end
+        end
+      end
+
     end
   end
 end
