@@ -200,6 +200,108 @@ class TestSchedulesParametric < Minitest::Test
     assert_equal(13, weekend_vals.rindex(1))
   end
 
+  def test_schedule_day_adjust_from_parameter
+    puts "\n######\nTEST:#{__method__}\n######\n"
+
+    model = OpenStudio::Model::Model.new
+    model.getTimestep.setNumberOfTimestepsPerHour(4)
+    timesteps = model.getTimestep.numberOfTimestepsPerHour
+
+    std = Standard.build('ComStock 90.1-2010')
+
+    sch = std.model_add_schedule(model, 'Outpatient Bldg Light')
+    
+    day_sch = model.getScheduleDayByName('Outpatient Bldg Light Sat Day').get
+
+    puts day_sch
+
+    # set additional properties
+    day_sch.additionalProperties.setFeature('param_day_profile',
+                                            'hoo_start - 1.0 ~ 0.1 | '\
+                                            'hoo_start + 1.0 ~ 0.3 | '\
+                                            'hoo_start + 3.0 ~ 0.4 | '\
+                                            'mid - 0.5 ~ 0.4 | '\
+                                            'hoo_end - 3.0 ~ 0.3 | '\
+                                            'hoo_end - 2.0 ~ 0.3 | '\
+                                            'hoo_end + 2.0 ~ 0.1')
+    day_sch.additionalProperties.setFeature('param_day_secondary_logic', '')
+    day_sch.additionalProperties.setFeature('param_day_secondary_logic_arg_val', '')
+    day_sch.additionalProperties.setFeature('param_day_tag', 'medium_operation')
+
+    hoo_start = 11.0
+    hoo_end = 18.75
+    val_flr = 0.050000000000000003
+    val_clg = 0.90000000000000002
+    ramp_frequency = 1.0/timesteps
+
+    sch_adj = @sch.schedule_day_adjust_from_parameters(day_sch, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, true, false)
+
+    puts sch_adj
+
+    mins = sch_adj.times.map{|t| t.minutes}.uniq
+
+    ts_mins = (0...60).step(60/timesteps).to_a
+    mins.each do |min|
+      assert_includes(ts_mins, min)
+    end
+
+    std = Standard.build('ComStock 90.1-2013')
+
+    sch = std.model_add_schedule(model, 'FoodService_Restaurant BLDG_EQUIP_EndUseData')
+
+    day_sch = sch.defaultDaySchedule
+
+    puts day_sch
+
+    day_sch.additionalProperties.setFeature('param_day_profile', 
+                                            'hoo_end + 0.5 ~ 0.05113 | '\
+                                            'hoo_end + 1.5 ~ 0.036094 | '\
+                                            'hoo_end + 2.5 ~ 0.031636 | '\
+                                            'hoo_start - 3.5 ~ 0.068921 | '\
+                                            'hoo_start - 2.5 ~ 0.153839 | '\
+                                            'hoo_start - 1.5 ~ 0.176683 | '\
+                                            'hoo_start - 0.5 ~ 0.196174 | '\
+                                            'hoo_start + 0.5 ~ 0.26755 | '\
+                                            'hoo_start + 1.5 ~ 0.385492 | '\
+                                            'hoo_start + 2.5 ~ 0.46841 | '\
+                                            'hoo_start + 3.5 ~ 0.494935 | '\
+                                            'mid - 4.0 ~ 0.522401 | '\
+                                            'mid - 3.0 ~ 0.534863 | '\
+                                            'mid - 2.0 ~ 0.528583 | '\
+                                            'mid - 1.0 ~ 0.537839 | '\
+                                            'mid ~ 0.534183 | '\
+                                            'mid + 1.0 ~ 0.537422 | '\
+                                            'mid + 2.0 ~ 0.547466 | '\
+                                            'mid + 3.0 ~ 0.545909 | '\
+                                            'mid + 4.0 ~ 0.524621 | '\
+                                            'hoo_end - 3.5 ~ 0.482984 | '\
+                                            'hoo_end - 2.5 ~ 0.414776 | '\
+                                            'hoo_end - 1.5 ~ 0.252882 | '\
+                                            'hoo_end - 0.5 ~ 0.107246')
+    day_sch.additionalProperties.setFeature('param_day_secondary_logic', '')
+    day_sch.additionalProperties.setFeature('param_day_secondary_logic_arg_val', '')
+    day_sch.additionalProperties.setFeature('param_day_tag', 'typical_operation')
+
+    hoo_start = 10.0
+    hoo_end = 23.5
+    val_flr = 0.031635999999999997
+    val_clg = 0.63570599999999999
+    ramp_frequency = 1.0/timesteps
+
+    sch_adj = @sch.schedule_day_adjust_from_parameters(day_sch, hoo_start, hoo_end, val_flr, val_clg, ramp_frequency, true, false)
+
+    puts sch_adj
+
+    mins = sch_adj.times.map{|t| t.minutes}.uniq
+
+    ts_mins = (0...60).step(60/timesteps).to_a
+    mins.each do |min|
+      assert_includes(ts_mins, min)
+    end
+
+
+  end
+
   def create_simple_comstock_model_with_schedule_mod(type, wkdy_start, wkdy_dur, wknd_start, wknd_dur, modify_schedules = true)
     puts "-------------------------------------------------------------"
     puts type
