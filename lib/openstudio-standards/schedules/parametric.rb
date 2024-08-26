@@ -1345,7 +1345,7 @@ module OpenstudioStandards
       time_value_pairs.rotate!(rotate_steps)
 
       # add a 24 on the end of array that matches the first value
-      if time_value_pairs.last[0] != 24.0
+      if time_value_pairs.last[0].to_i != 24
         time_value_pairs << [24.0, time_value_pairs.first[1]]
       end
 
