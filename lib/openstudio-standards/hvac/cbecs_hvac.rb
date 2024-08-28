@@ -178,7 +178,7 @@ module OpenstudioStandards
                                        air_loop_heating_type: 'DX',
                                        air_loop_cooling_type: 'DX')
         standard.model_add_hvac_system(model, 'VRF', ht = 'Electricity', znht = nil, cl = 'Electricity', system_zones)
-        standard.model_add_hvac_system(self, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_only_zones)
+        standard.model_add_hvac_system(model, 'Baseboards', ht = 'Electricity', znht = nil, cl = nil, heated_only_zones)
 
       when 'DOAS with water source heat pumps fluid cooler with boiler'
         standard.model_add_hvac_system(model, 'DOAS', ht = 'NaturalGas', znht = nil, cl = 'Electricity', zones)
