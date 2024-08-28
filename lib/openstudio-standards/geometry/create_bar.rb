@@ -1444,7 +1444,7 @@ module OpenstudioStandards
           final_floor_area = ratio_of_bldg_total * total_bldg_floor_area_si # I think I can just pass ratio but passing in area is cleaner
 
           # only add custom height space if 0 is used for floor_height
-          if defaulted_args.include?(:floor_height) && hash.key?(:story_height) && args[:custom_height_bar]
+          if defaulted_args.include?('floor_height') && hash.key?(:story_height) && args[:custom_height_bar]
             multi_height_space_types_hash[space_type] = { floor_area: final_floor_area, space_type: space_type, story_height: hash[:story_height] }
             if hash.key?(:orig_ratio) then multi_height_space_types_hash[space_type][:orig_ratio] = hash[:orig_ratio] end
             custom_story_heights << hash[:story_height]
@@ -1834,14 +1834,14 @@ module OpenstudioStandards
         end
 
         # disable party walls
-        args3['party_wall_stories_east'] = 0
-        args3['party_wall_stories_west'] = 0
-        args3['party_wall_stories_south'] = 0
-        args3['party_wall_stories_north'] = 0
+        args3[:party_wall_stories_east] = 0
+        args3[:party_wall_stories_west] = 0
+        args3[:party_wall_stories_south] = 0
+        args3[:party_wall_stories_north] = 0
 
         # setup stories
-        args3['num_stories_below_grade'] = 0
-        args3['num_stories_above_grade'] = 1
+        args3[:num_stories_below_grade] = 0
+        args3[:num_stories_above_grade] = 1
 
         # can make use of this when breaking out multi-height spaces
         bars['custom_height'][:floor_height] = floor_height
@@ -1924,7 +1924,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Target facade area by orientation not validated when partial top story is used')
       elsif dual_bar_calc_approach == 'stretched'
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Target facade area by orientation not validated when single stretched bar has to be used to meet target minimum perimeter multiplier')
-      elsif defaulted_args.include?(:floor_height) && args[:custom_height_bar] && !multi_height_space_types_hash.empty?
+      elsif defaulted_args.include?('floor_height') && args[:custom_height_bar] && !multi_height_space_types_hash.empty?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Target facade area by orientation not validated when a dedicated bar is added for space types with custom heights')
       elsif args[:bar_width] > 0
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Target facade area by orientation not validated when a dedicated custom bar width is defined')

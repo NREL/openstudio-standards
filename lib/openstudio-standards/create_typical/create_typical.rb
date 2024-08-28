@@ -286,11 +286,11 @@ module OpenstudioStandards
 
       # adjust F factor constructions to avoid simulation errors
       model.getFFactorGroundFloorConstructions.each do |cons|
-        # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons = 0.15/1.95
-        if cons.area <= (0.135 + 0.03 + (0.15 / 1.95)) * cons.perimeterExposed * cons.fFactor
-          # set minimum Rfic to > 1e-3
-          new_area = 0.233 * cons.perimeterExposed * cons.fFactor
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)}.")
+        # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons for 6" heavy concrete = 0.15m / 1.95 W/mK, 0.001 minimum resistance of Rfic resistive layer
+        if cons.area <= (0.135 + 0.03 + (0.15 / 1.95) + 0.001) * cons.perimeterExposed * cons.fFactor
+          # set minimum Rfic to ~ R1 = 0.18 m^2K/W
+          new_area = 0.422 * cons.perimeterExposed * cons.fFactor
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)} m2.")
           cons.setArea(new_area)
         end
       end
