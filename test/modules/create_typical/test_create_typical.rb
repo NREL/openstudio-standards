@@ -113,8 +113,8 @@ class TestCreateTypical < Minitest::Test
     # Check that JSON specs were applied
     assert(result)
     assert(starting_size < ending_size)
-    assert(ptacs.length==4)
-    assert(psz_ac.length==1)
+    assert_equal(4, ptacs.length)
+    assert_equal(1, psz_ac.length)
   end
 
   def test_create_typical_ese_op_hrs_overnight
