@@ -155,8 +155,8 @@ class BTAPData
 
   def building_costing_data(cost_result)
     building_data = {}
-    building_data['cost_rs_means_prov'] = cost_result['rs_means_prov']
-    building_data['cost_rs_means_city'] = cost_result['rs_means_city']
+    building_data['cost_province_state'] = cost_result['province_state']
+    building_data['cost_city'] = cost_result['city']
     building_data['cost_equipment_envelope_total_cost_per_m_sq'] = (cost_result['totals']['envelope']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_thermal_bridging_total_cost_per_m_sq'] = (cost_result['totals']['thermal_bridging']) / @conditioned_floor_area_m_sq
     building_data['cost_equipment_lighting_total_cost_per_m_sq'] = (cost_result['totals']['lighting']) / @conditioned_floor_area_m_sq
