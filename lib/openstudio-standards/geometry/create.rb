@@ -90,8 +90,8 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Geometry.Create', 'Due to the size of the building modeling each floor as a single zone.')
       end
 
-      x_delta = footprint_origin_point.x - length / 2.0
-      y_delta = footprint_origin_point.y - width / 2.0
+      x_delta = footprint_origin_point.x - (length / 2.0)
+      y_delta = footprint_origin_point.y - (width / 2.0)
       z = 0
       nw_point = OpenStudio::Point3d.new(x_delta, y_delta + width, z)
       ne_point = OpenStudio::Point3d.new(x_delta + length, y_delta + width, z)
@@ -331,8 +331,8 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Geometry.Create', 'Not modeling core and perimeter zones for some portion of the model.')
       end
 
-      x_delta = footprint_origin_point.x - length / 2.0
-      y_delta = footprint_origin_point.y - width / 2.0
+      x_delta = footprint_origin_point.x - (length / 2.0)
+      y_delta = footprint_origin_point.y - (width / 2.0)
       z = 0.0
       # this represents the entire bar, not individual space type slices
       nw_point = OpenStudio::Point3d.new(x_delta, y_delta + width, z)
@@ -404,12 +404,12 @@ module OpenstudioStandards
           perim_ratio_adj = perim_ratio / (core_ratio + perim_ratio)
           core_space_type = space_type_hash[:children][:circ][:space_type]
           perim_space_type = space_type_hash[:children][:default][:space_type]
-          if !reverse_slice
-            custom_cor_val = width * core_ratio_adj
-            custom_perim_val = (width - custom_cor_val) / 2.0
-          else
+          if reverse_slice
             custom_cor_val = length * core_ratio_adj
             custom_perim_val = (length - custom_cor_val) / 2.0
+          else
+            custom_cor_val = width * core_ratio_adj
+            custom_perim_val = (width - custom_cor_val) / 2.0
           end
           actual_perim = custom_perim_val
           double_loaded_corridor = true
@@ -427,12 +427,12 @@ module OpenstudioStandards
           end_b_perim_ratio_adj = end_b_perim_ratio / (end_b_core_ratio + end_b_perim_ratio)
           end_b_core_space_type = first_space_type_hash[:children][:circ][:space_type]
           end_b_perim_space_type = first_space_type_hash[:children][:default][:space_type]
-          if !reverse_slice
-            end_b_custom_cor_val = width * end_b_core_ratio_adj
-            end_b_custom_perim_val = (width - end_b_custom_cor_val) / 2.0
-          else
+          if reverse_slice
             end_b_custom_cor_val = length * end_b_core_ratio_adj
             end_b_custom_perim_val = (length - end_b_custom_cor_val) / 2.0
+          else
+            end_b_custom_cor_val = width * end_b_core_ratio_adj
+            end_b_custom_perim_val = (width - end_b_custom_cor_val) / 2.0
           end
           end_b_actual_perim = end_b_custom_perim_val
           end_b_double_loaded_corridor = true
@@ -465,85 +465,18 @@ module OpenstudioStandards
             next
           end
 
-          if !reverse_slice
-
-            ne_point = nw_point + OpenStudio::Vector3d.new(slice, 0, 0)
-            se_point = sw_point + OpenStudio::Vector3d.new(slice, 0, 0)
-
-            if actual_perim > 0 && (actual_perim * 2.0) < width
-              polygon_a = OpenStudio::Point3dVector.new
-              polygon_a << sw_point
-              polygon_a << sw_point + OpenStudio::Vector3d.new(0, actual_perim, 0)
-              polygon_a << se_point + OpenStudio::Vector3d.new(0, actual_perim, 0)
-              polygon_a << se_point
-              if double_loaded_corridor
-                hash_of_point_vectors["#{perim_space_type.name} A #{k}"] = {}
-                hash_of_point_vectors["#{perim_space_type.name} A #{k}"][:space_type] = perim_space_type
-                hash_of_point_vectors["#{perim_space_type.name} A #{k}"][:polygon] = polygon_a
-              else
-                hash_of_point_vectors["#{space_type.name} A #{k}"] = {}
-                hash_of_point_vectors["#{space_type.name} A #{k}"][:space_type] = space_type
-                hash_of_point_vectors["#{space_type.name} A #{k}"][:polygon] = polygon_a
-              end
-
-              polygon_b = OpenStudio::Point3dVector.new
-              polygon_b << sw_point + OpenStudio::Vector3d.new(0, actual_perim, 0)
-              polygon_b << nw_point + OpenStudio::Vector3d.new(0, - actual_perim, 0)
-              polygon_b << ne_point + OpenStudio::Vector3d.new(0, - actual_perim, 0)
-              polygon_b << se_point + OpenStudio::Vector3d.new(0, actual_perim, 0)
-              if double_loaded_corridor
-                hash_of_point_vectors["#{core_space_type.name} B #{k}"] = {}
-                hash_of_point_vectors["#{core_space_type.name} B #{k}"][:space_type] = core_space_type
-                hash_of_point_vectors["#{core_space_type.name} B #{k}"][:polygon] = polygon_b
-              else
-                hash_of_point_vectors["#{space_type.name} B #{k}"] = {}
-                hash_of_point_vectors["#{space_type.name} B #{k}"][:space_type] = space_type
-                hash_of_point_vectors["#{space_type.name} B #{k}"][:polygon] = polygon_b
-              end
-
-              polygon_c = OpenStudio::Point3dVector.new
-              polygon_c << nw_point + OpenStudio::Vector3d.new(0, - actual_perim, 0)
-              polygon_c << nw_point
-              polygon_c << ne_point
-              polygon_c << ne_point + OpenStudio::Vector3d.new(0, - actual_perim, 0)
-              if double_loaded_corridor
-                hash_of_point_vectors["#{perim_space_type.name} C #{k}"] = {}
-                hash_of_point_vectors["#{perim_space_type.name} C #{k}"][:space_type] = perim_space_type
-                hash_of_point_vectors["#{perim_space_type.name} C #{k}"][:polygon] = polygon_c
-              else
-                hash_of_point_vectors["#{space_type.name} C #{k}"] = {}
-                hash_of_point_vectors["#{space_type.name} C #{k}"][:space_type] = space_type
-                hash_of_point_vectors["#{space_type.name} C #{k}"][:polygon] = polygon_c
-              end
-            else
-              polygon_a = OpenStudio::Point3dVector.new
-              polygon_a << sw_point
-              polygon_a << nw_point
-              polygon_a << ne_point
-              polygon_a << se_point
-              hash_of_point_vectors["#{space_type.name} #{k}"] = {}
-              hash_of_point_vectors["#{space_type.name} #{k}"][:space_type] = space_type
-              hash_of_point_vectors["#{space_type.name} #{k}"][:polygon] = polygon_a
-            end
-
-            # update west points
-            nw_point = ne_point
-            sw_point = se_point
-
-          else
-
+          if reverse_slice
             # create_bar at 90 degrees if aspect ration is less than 1.0
             # typical order (sw,nw,ne,se)
             # order used here (se,sw,nw,ne)
-
-            nw_point = sw_point + OpenStudio::Vector3d.new(0, slice, 0)
-            ne_point = se_point + OpenStudio::Vector3d.new(0, slice, 0)
+            nw_point = (sw_point + OpenStudio::Vector3d.new(0, slice, 0))
+            ne_point = (se_point + OpenStudio::Vector3d.new(0, slice, 0))
 
             if actual_perim > 0 && (actual_perim * 2.0) < length
               polygon_a = OpenStudio::Point3dVector.new
               polygon_a << se_point
-              polygon_a << se_point + OpenStudio::Vector3d.new(- actual_perim, 0, 0)
-              polygon_a << ne_point + OpenStudio::Vector3d.new(- actual_perim, 0, 0)
+              polygon_a << (se_point + OpenStudio::Vector3d.new(- actual_perim, 0, 0))
+              polygon_a << (ne_point + OpenStudio::Vector3d.new(- actual_perim, 0, 0))
               polygon_a << ne_point
               if double_loaded_corridor
                 hash_of_point_vectors["#{perim_space_type.name} A #{k}"] = {}
@@ -556,10 +489,10 @@ module OpenstudioStandards
               end
 
               polygon_b = OpenStudio::Point3dVector.new
-              polygon_b << se_point + OpenStudio::Vector3d.new(- actual_perim, 0, 0)
-              polygon_b << sw_point + OpenStudio::Vector3d.new(actual_perim, 0, 0)
-              polygon_b << nw_point + OpenStudio::Vector3d.new(actual_perim, 0, 0)
-              polygon_b << ne_point + OpenStudio::Vector3d.new(- actual_perim, 0, 0)
+              polygon_b << (se_point + OpenStudio::Vector3d.new(- actual_perim, 0, 0))
+              polygon_b << (sw_point + OpenStudio::Vector3d.new(actual_perim, 0, 0))
+              polygon_b << (nw_point + OpenStudio::Vector3d.new(actual_perim, 0, 0))
+              polygon_b << (ne_point + OpenStudio::Vector3d.new(- actual_perim, 0, 0))
               if double_loaded_corridor
                 hash_of_point_vectors["#{core_space_type.name} B #{k}"] = {}
                 hash_of_point_vectors["#{core_space_type.name} B #{k}"][:space_type] = core_space_type
@@ -571,10 +504,10 @@ module OpenstudioStandards
               end
 
               polygon_c = OpenStudio::Point3dVector.new
-              polygon_c << sw_point + OpenStudio::Vector3d.new(actual_perim, 0, 0)
+              polygon_c << (sw_point + OpenStudio::Vector3d.new(actual_perim, 0, 0))
               polygon_c << sw_point
               polygon_c << nw_point
-              polygon_c << nw_point + OpenStudio::Vector3d.new(actual_perim, 0, 0)
+              polygon_c << (nw_point + OpenStudio::Vector3d.new(actual_perim, 0, 0))
               if double_loaded_corridor
                 hash_of_point_vectors["#{perim_space_type.name} C #{k}"] = {}
                 hash_of_point_vectors["#{perim_space_type.name} C #{k}"][:space_type] = perim_space_type
@@ -598,7 +531,69 @@ module OpenstudioStandards
             # update west points
             sw_point = nw_point
             se_point = ne_point
+          else
+            ne_point = nw_point + OpenStudio::Vector3d.new(slice, 0, 0)
+            se_point = sw_point + OpenStudio::Vector3d.new(slice, 0, 0)
 
+            if actual_perim > 0 && (actual_perim * 2.0) < width
+              polygon_a = OpenStudio::Point3dVector.new
+              polygon_a << sw_point
+              polygon_a << (sw_point + OpenStudio::Vector3d.new(0, actual_perim, 0))
+              polygon_a << (se_point + OpenStudio::Vector3d.new(0, actual_perim, 0))
+              polygon_a << se_point
+              if double_loaded_corridor
+                hash_of_point_vectors["#{perim_space_type.name} A #{k}"] = {}
+                hash_of_point_vectors["#{perim_space_type.name} A #{k}"][:space_type] = perim_space_type
+                hash_of_point_vectors["#{perim_space_type.name} A #{k}"][:polygon] = polygon_a
+              else
+                hash_of_point_vectors["#{space_type.name} A #{k}"] = {}
+                hash_of_point_vectors["#{space_type.name} A #{k}"][:space_type] = space_type
+                hash_of_point_vectors["#{space_type.name} A #{k}"][:polygon] = polygon_a
+              end
+
+              polygon_b = OpenStudio::Point3dVector.new
+              polygon_b << (sw_point + OpenStudio::Vector3d.new(0, actual_perim, 0))
+              polygon_b << (nw_point + OpenStudio::Vector3d.new(0, - actual_perim, 0))
+              polygon_b << (ne_point + OpenStudio::Vector3d.new(0, - actual_perim, 0))
+              polygon_b << (se_point + OpenStudio::Vector3d.new(0, actual_perim, 0))
+              if double_loaded_corridor
+                hash_of_point_vectors["#{core_space_type.name} B #{k}"] = {}
+                hash_of_point_vectors["#{core_space_type.name} B #{k}"][:space_type] = core_space_type
+                hash_of_point_vectors["#{core_space_type.name} B #{k}"][:polygon] = polygon_b
+              else
+                hash_of_point_vectors["#{space_type.name} B #{k}"] = {}
+                hash_of_point_vectors["#{space_type.name} B #{k}"][:space_type] = space_type
+                hash_of_point_vectors["#{space_type.name} B #{k}"][:polygon] = polygon_b
+              end
+
+              polygon_c = OpenStudio::Point3dVector.new
+              polygon_c << (nw_point + OpenStudio::Vector3d.new(0, - actual_perim, 0))
+              polygon_c << nw_point
+              polygon_c << ne_point
+              polygon_c << (ne_point + OpenStudio::Vector3d.new(0, - actual_perim, 0))
+              if double_loaded_corridor
+                hash_of_point_vectors["#{perim_space_type.name} C #{k}"] = {}
+                hash_of_point_vectors["#{perim_space_type.name} C #{k}"][:space_type] = perim_space_type
+                hash_of_point_vectors["#{perim_space_type.name} C #{k}"][:polygon] = polygon_c
+              else
+                hash_of_point_vectors["#{space_type.name} C #{k}"] = {}
+                hash_of_point_vectors["#{space_type.name} C #{k}"][:space_type] = space_type
+                hash_of_point_vectors["#{space_type.name} C #{k}"][:polygon] = polygon_c
+              end
+            else
+              polygon_a = OpenStudio::Point3dVector.new
+              polygon_a << sw_point
+              polygon_a << nw_point
+              polygon_a << ne_point
+              polygon_a << se_point
+              hash_of_point_vectors["#{space_type.name} #{k}"] = {}
+              hash_of_point_vectors["#{space_type.name} #{k}"][:space_type] = space_type
+              hash_of_point_vectors["#{space_type.name} #{k}"][:polygon] = polygon_a
+            end
+
+            # update west points
+            nw_point = ne_point
+            sw_point = se_point
           end
         end
       end
@@ -624,11 +619,11 @@ module OpenstudioStandards
       if story_hash.empty?
         if effective_num_stories > 2
           story_hash['ground'] = { space_origin_z: footprint_origin_point.z, space_height: typical_story_height, multiplier: 1 }
-          story_hash['mid'] = { space_origin_z: footprint_origin_point.z + typical_story_height + typical_story_height * (effective_num_stories.ceil - 3) / 2.0, space_height: typical_story_height, multiplier: effective_num_stories - 2 }
-          story_hash['top'] = { space_origin_z: footprint_origin_point.z + typical_story_height * (effective_num_stories.ceil - 1), space_height: typical_story_height, multiplier: 1 }
+          story_hash['mid'] = { space_origin_z: footprint_origin_point.z + typical_story_height + (typical_story_height * (effective_num_stories.ceil - 3) / 2.0), space_height: typical_story_height, multiplier: effective_num_stories - 2 }
+          story_hash['top'] = { space_origin_z: footprint_origin_point.z + (typical_story_height * (effective_num_stories.ceil - 1)), space_height: typical_story_height, multiplier: 1 }
         elsif effective_num_stories > 1
           story_hash['ground'] = { space_origin_z: footprint_origin_point.z, space_height: typical_story_height, multiplier: 1 }
-          story_hash['top'] = { space_origin_z: footprint_origin_point.z + typical_story_height * (effective_num_stories.ceil - 1), space_height: typical_story_height, multiplier: 1 }
+          story_hash['top'] = { space_origin_z: footprint_origin_point.z + (typical_story_height * (effective_num_stories.ceil - 1)), space_height: typical_story_height, multiplier: 1 }
         else
           # one story only
           story_hash['ground'] = { space_origin_z: footprint_origin_point.z, space_height: typical_story_height, multiplier: 1 }

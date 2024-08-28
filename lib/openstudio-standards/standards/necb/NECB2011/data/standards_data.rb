@@ -208,7 +208,7 @@ class StandardsData
       # If no object was found, round the capacity down a little
       # to avoid issues where the number fell between the limits
       # in the json file.
-      if matching_objects.size.zero?
+      if matching_objects.empty?
         capacity *= 0.99
         search_criteria_matching_objects.each do |object|
           # Skip objects that don't have fields for minimum_capacity and maximum_capacity
@@ -226,7 +226,7 @@ class StandardsData
     end
 
     # Check the number of matching objects found
-    if matching_objects.size.zero?
+    if matching_objects.empty?
       desired_object = nil
       # OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find objects search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}.")
     end
@@ -311,7 +311,7 @@ class StandardsData
       # If no object was found, round the capacity down a little
       # to avoid issues where the number fell between the limits
       # in the json file.
-      if matching_objects.size.zero?
+      if matching_objects.empty?
         capacity *= 0.99
         search_criteria_matching_objects.each do |object|
           # Skip objects that don't have fields for minimum_capacity and maximum_capacity
@@ -345,7 +345,7 @@ class StandardsData
     end
 
     # Check the number of matching objects found
-    if matching_objects.size.zero?
+    if matching_objects.empty?
       desired_object = nil
       # OpenStudio::logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Find object search criteria returned no results. Search criteria: #{search_criteria}, capacity = #{capacity}.  Called from #{caller(0)[1]}")
     elsif matching_objects.size == 1

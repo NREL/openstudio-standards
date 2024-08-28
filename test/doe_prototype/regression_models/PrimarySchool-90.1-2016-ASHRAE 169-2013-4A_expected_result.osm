@@ -12905,8 +12905,8 @@ OS:ThermalZone,
   {d80a6dcc-f262-428a-9575-e3da6989ffc0}, !- Zone Return Air Port List
   {0ade4f47-8bf3-44b8-8c1a-1297ab16fc40}, !- Primary Daylighting Control Name
   0.224,                                  !- Fraction of Zone Controlled by Primary Daylighting Control
-  {4f6bdb16-fdd7-4eb9-8b37-431dc1811170}, !- Secondary Daylighting Control Name
-  0,                                      !- Fraction of Zone Controlled by Secondary Daylighting Control
+  ,                                       !- Secondary Daylighting Control Name
+  ,                                       !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                       !- Illuminance Map Name
   ,                                       !- Group Rendering Name
   {633b6b19-71b1-426c-8e3e-81b53a5b2958}, !- Thermostat Name
@@ -24529,7 +24529,7 @@ OS:WaterHeater:Sizing,
 
 OS:Schedule:Day,
   {470d9e6c-7a98-44b5-ab3a-c02f4695c585}, !- Handle
-  Water Heater Ambient Temp Schedule - 71.6 Default, !- Name
+  Water Heater Ambient Temp Schedule 71.6F Default, !- Name
   {39ab7fbf-846a-49bf-9ef3-61afd7206e0e}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
@@ -27698,25 +27698,6 @@ OS:Daylighting:Control,
   {55056c4d-a249-4d1d-b566-c5152b797e9a}, !- Space Name
   0.6596,                                 !- Position X-Coordinate {m}
   1.6544121,                              !- Position Y-Coordinate {m}
-  0.762,                                  !- Position Z-Coordinate {m}
-  ,                                       !- Psi Rotation Around X-Axis {deg}
-  ,                                       !- Theta Rotation Around Y-Axis {deg}
-  ,                                       !- Phi Rotation Around Z-Axis {deg}
-  323,                                    !- Illuminance Setpoint {lux}
-  Stepped,                                !- Lighting Control Type
-  0.3,                                    !- Minimum Input Power Fraction for Continuous Dimming Control
-  0.2,                                    !- Minimum Light Output Fraction for Continuous Dimming Control
-  3,                                      !- Number of Stepped Control Steps
-  1,                                      !- Probability Lighting will be Reset When Needed in Manual Stepped Control
-  ,                                       !- Number of Daylighting Views
-  22;                                     !- Maximum Allowable Discomfort Glare Index
-
-OS:Daylighting:Control,
-  {4f6bdb16-fdd7-4eb9-8b37-431dc1811170}, !- Handle
-  Offices_ZN_1_FLR_1 Daylt Sensor 2,      !- Name
-  {55056c4d-a249-4d1d-b566-c5152b797e9a}, !- Space Name
-  0.6596,                                 !- Position X-Coordinate {m}
-  3.33389105,                             !- Position Y-Coordinate {m}
   0.762,                                  !- Position Z-Coordinate {m}
   ,                                       !- Psi Rotation Around X-Axis {deg}
   ,                                       !- Theta Rotation Around Y-Axis {deg}

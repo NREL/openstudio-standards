@@ -288,9 +288,9 @@ class Standard
           r_outside_film = 0.0
 
           # EnergyPlus Engineering Manual equation 3.195
-          r_soil = 0.0607 + 0.3479 * heig
+          r_soil = 0.0607 + (0.3479 * heig)
 
-          r_eff = 1 / cfac + r_soil
+          r_eff = (1 / cfac) + r_soil
           u_eff = 1 / (r_eff + r_inside_film + r_outside_film)
 
           ua = u_eff * surface.netArea

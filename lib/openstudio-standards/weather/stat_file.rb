@@ -3,36 +3,14 @@ require 'pathname'
 module OpenstudioStandards
   module Weather
     class StatFile
-      attr_accessor :text
-      attr_accessor :path
-      attr_accessor :valid
-      attr_accessor :lat
-      attr_accessor :lon
-      attr_accessor :elevation
-      attr_accessor :gmt
-      attr_accessor :monthly_dry_bulb
-      attr_accessor :monthly_lagged_dry_bulb
-      attr_accessor :delta_dry_bulb
-      attr_accessor :mean_dry_bulb
-      attr_accessor :hdd18
-      attr_accessor :cdd18
-      attr_accessor :hdd10
-      attr_accessor :cdd10
-      attr_accessor :heating_design_info
-      attr_accessor :cooling_design_info
-      attr_accessor :extremes_design_info
-      attr_accessor :climate_zone
-      attr_accessor :standard
-      attr_accessor :summer_wet_months
-      attr_accessor :winter_dry_months
-      attr_accessor :autumn_months
-      attr_accessor :spring_months
-      attr_accessor :typical_summer_wet_week
-      attr_accessor :typical_winter_dry_week
-      attr_accessor :typical_autumn_week
-      attr_accessor :typical_spring_week
-      attr_accessor :monthly_undis_ground_temps_0p5m
-      attr_accessor :monthly_undis_ground_temps_4p0m
+      attr_accessor :text, :path, :valid, :lat, :lon, :elevation, :gmt,
+                    :monthly_dry_bulb, :monthly_lagged_dry_bulb, :delta_dry_bulb, :mean_dry_bulb,
+                    :hdd18, :cdd18, :hdd10, :cdd10,
+                    :heating_design_info, :cooling_design_info, :extremes_design_info,
+                    :climate_zone, :standard,
+                    :summer_wet_months, :winter_dry_months, :autumn_months, :spring_months,
+                    :typical_summer_wet_week, :typical_winter_dry_week, :typical_autumn_week, :typical_spring_week,
+                    :monthly_undis_ground_temps_0p5m, :monthly_undis_ground_temps_4p0m
 
       def initialize(path)
         @text = ''
@@ -125,10 +103,10 @@ module OpenstudioStandards
 
       # ground temps as monthly dry bulb tempreature lagged 3 months
       def monthly_lagged_dry_bulb_calc
-        if !@monthly_dry_bulb.empty?
-          lagged_temperatures = @monthly_dry_bulb.rotate(-3)
-        else
+        if @monthly_dry_bulb.empty?
           lagged_temperatures = []
+        else
+          lagged_temperatures = @monthly_dry_bulb.rotate(-3)
         end
 
         lagged_temperatures
@@ -136,11 +114,11 @@ module OpenstudioStandards
 
       # the mean of the mean monthly dry bulbs
       def mean_dry_bulb_calc
-        if !@monthly_dry_bulb.empty?
+        if @monthly_dry_bulb.empty?
+          mean = ''
+        else
           sum = @monthly_dry_bulb.inject(:+)
           mean = sum / @monthly_dry_bulb.size
-        else
-          mean = ''
         end
 
         mean.to_f
@@ -148,10 +126,10 @@ module OpenstudioStandards
 
       # max - min of the mean monthly dry bulbs
       def delta_dry_bulb_calc
-        if !@monthly_dry_bulb.empty?
-          delta_t = @monthly_dry_bulb.max - @monthly_dry_bulb.min
-        else
+        if @monthly_dry_bulb.empty?
           delta_t = ''
+        else
+          delta_t = @monthly_dry_bulb.max - @monthly_dry_bulb.min
         end
 
         delta_t.to_f
@@ -271,12 +249,12 @@ module OpenstudioStandards
         if match_data.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find lat/lon/gmt in .stat file.")
         else
-          @lat = match_data[2].to_f + match_data[3].to_f / 60.0
+          @lat = match_data[2].to_f + (match_data[3].to_f / 60.0)
           if match_data[1] == 'S'
             @lat = -@lat
           end
 
-          @lon = match_data[5].to_f + match_data[6].to_f / 60.0
+          @lon = match_data[5].to_f + (match_data[6].to_f / 60.0)
           if match_data[4] == 'W'
             @lon = -@lon
           end
@@ -328,15 +306,15 @@ module OpenstudioStandards
           monthly_undis_ground_temps_4p0m.shift
           monthly_undis_ground_temps_4p0m.shift
           # have to be 12 months
-          if monthly_undis_ground_temps_0p5m.size != 12
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temps at 0.5m in the .stat file.")
-          else
+          if monthly_undis_ground_temps_0p5m.size == 12
             monthly_undis_ground_temps_0p5m.each { |temp| @monthly_undis_ground_temps_0p5m << temp.to_f }
-          end
-          if monthly_undis_ground_temps_4p0m.size != 12
-            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temps at 4.0m in the .stat file.")
           else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temps at 0.5m in the .stat file.")
+          end
+          if monthly_undis_ground_temps_4p0m.size == 12
             monthly_undis_ground_temps_4p0m.each { |temp| @monthly_undis_ground_temps_4p0m << temp.to_f }
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Can't find undisturbed ground temps at 4.0m in the .stat file.")
           end
         end
 
@@ -364,7 +342,7 @@ module OpenstudioStandards
         # week periods
         regex = /Typical Week Period selected:(.*?)C/
         match_data = @text.scan(regex)
-        if match_data.nil?
+        if match_data.nil? || match_data.empty?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find typical weather weeks in the .stat file.")
         else
           @typical_summer_wet_week = Date.parse("#{match_data[0][0].split(':')[0]} 2000")

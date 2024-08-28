@@ -6,6 +6,7 @@ class DOERefPre1980 < ASHRAE901
   attr_reader :template
 
   def initialize
+    super()
     @template = 'DOE Ref Pre-1980'
     load_standards_database
   end

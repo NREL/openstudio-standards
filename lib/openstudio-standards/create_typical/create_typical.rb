@@ -143,7 +143,7 @@ module OpenstudioStandards
         end
 
         # check that weekday start time plus duration does not exceed 24 hrs
-        if (wkdy_op_hrs_start_time_hr + wkdy_op_hrs_duration_hr + (wkdy_op_hrs_start_time_min + wkdy_op_hrs_duration_min) / 60.0) > 24.0
+        if (wkdy_op_hrs_start_time_hr + wkdy_op_hrs_duration_hr + ((wkdy_op_hrs_start_time_min + wkdy_op_hrs_duration_min) / 60.0)) > 24.0
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Weekday start time of #{wkdy_op_hrs_start_time} plus duration of #{wkdy_op_hrs_duration} is more than 24 hrs, hours of operation overlap midnight.")
         end
       end
@@ -183,7 +183,7 @@ module OpenstudioStandards
         end
 
         # check that weekend start time plus duration does not exceed 24 hrs
-        if (wknd_op_hrs_start_time_hr + wknd_op_hrs_duration_hr + (wknd_op_hrs_start_time_min + wknd_op_hrs_duration_min) / 60.0) > 24.0
+        if (wknd_op_hrs_start_time_hr + wknd_op_hrs_duration_hr + ((wknd_op_hrs_start_time_min + wknd_op_hrs_duration_min) / 60.0)) > 24.0
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Weekend start time of #{wknd_op_hrs_start} plus duration of #{wknd_op_hrs_duration} is more than 24 hrs, hours of operation overlap midnight.")
         end
       end
@@ -259,10 +259,10 @@ module OpenstudioStandards
         # populate hash of building types
         if space_type.standardsBuildingType.is_initialized
           bldg_type = space_type.standardsBuildingType.get
-          if !building_types.key?(bldg_type)
-            building_types[bldg_type] = space_type.floorArea
-          else
+          if building_types.key?(bldg_type)
             building_types[bldg_type] += space_type.floorArea
+          else
+            building_types[bldg_type] = space_type.floorArea
           end
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CreateTypical', "Can't identify building type for #{space_type.name}")
@@ -285,11 +285,11 @@ module OpenstudioStandards
 
       # adjust F factor constructions to avoid simulation errors
       model.getFFactorGroundFloorConstructions.each do |cons|
-        # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons = 0.15/1.95
-        if cons.area <= (0.135 + 0.03 + 0.15 / 1.95) * cons.perimeterExposed * cons.fFactor
-          # set minimum Rfic to > 1e-3
-          new_area = 0.233 * cons.perimeterExposed * cons.fFactor
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)}.")
+        # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons for 6" heavy concrete = 0.15m / 1.95 W/mK, 0.001 minimum resistance of Rfic resistive layer
+        if cons.area <= (0.135 + 0.03 + (0.15 / 1.95) + 0.001) * cons.perimeterExposed * cons.fFactor
+          # set minimum Rfic to ~ R1 = 0.18 m^2K/W
+          new_area = 0.422 * cons.perimeterExposed * cons.fFactor
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)} m2.")
           cons.setArea(new_area)
         end
       end
@@ -318,7 +318,7 @@ module OpenstudioStandards
           model.getBuilding.setDefaultConstructionSet(bldg_def_const_set)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding default construction set named #{bldg_def_const_set.name}")
         else
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "Could not create default construction set for the building type #{lookup_building_type} in climate zone #{climate_zone}.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "Could not create default construction set for the building type #{lookup_building_type} in climate zone #{climate_zone} with template #{template}.")
           return false
         end
 
@@ -538,11 +538,10 @@ module OpenstudioStandards
         end
 
         # add daylight controls, need to perform a sizing run for 2010
-        if template == '90.1-2010' || template == 'ComStock 90.1-2010'
-          if standard.model_run_sizing_run(model, "#{sizing_run_directory}/create_typical_building_from_model_SR0") == false
-            return false
-          end
+        if (template == '90.1-2010' || template == 'ComStock 90.1-2010') && (standard.model_run_sizing_run(model, "#{sizing_run_directory}/create_typical_building_from_model_SR0") == false)
+          return false
         end
+
         standard.model_add_daylighting_controls(model)
       end
 
