@@ -237,6 +237,7 @@ class BTAPDatapoint
           costs_path = File.join(input_folder_cache, 'costs.csv')
           local_cost_factors_path = File.join(input_folder_cache, 'local_cost_factors.csv')
           costing = BTAPCosting.new(costs_csv: costs_path, factors_csv: local_cost_factors_path)
+          costing.load_database
 
           @cost_result, @btap_items = costing.cost_audit_all(model: model, prototype_creator: @standard, template_type: @options[:template])
           @qaqc[:costing_information] = @cost_result
