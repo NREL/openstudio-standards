@@ -3,22 +3,22 @@ require_relative '../helpers/create_doe_prototype_helper'
 
 class TestDOEPrototypesRegression < CreateDOEPrototypeBuildingTest
    @building_types = [
-    'SmallOffice',
-    'MediumOffice',
-    'LargeOffice',
-    'RetailStandalone',
-    'RetailStripmall',
-    'PrimarySchool',
-    'SecondarySchool',
-    'Outpatient',
-    'Hospital',
-    'SmallHotel',
-    'LargeHotel',
-    'QuickServiceRestaurant',
-    'FullServiceRestaurant',
-    'MidriseApartment',
-    'HighriseApartment',
-    'Warehouse']
+     'SmallOffice',
+     'MediumOffice',
+     'LargeOffice',
+     'RetailStandalone',
+     'RetailStripmall',
+     'PrimarySchool',
+     'SecondarySchool',
+     'Outpatient',
+     'Hospital',
+     'SmallHotel',
+     'LargeHotel',
+     'QuickServiceRestaurant',
+     'FullServiceRestaurant',
+     'MidriseApartment',
+     'HighriseApartment',
+     'Warehouse']
    @climate_zones = [
 #     'ASHRAE 169-2013-1A',
 #     'ASHRAE 169-2013-1B',
