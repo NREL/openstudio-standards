@@ -193,6 +193,37 @@ class NECB2011
         # Calculate water heater efficiency
         water_heater_eff = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
       end
+    when 'FuelOilNo2'
+      if capacity_btu_per_hr <= 75_000
+        # Fixed water heater thermal efficiency per PNNL
+        water_heater_eff = 0.82
+        # Calculate the minimum Energy Factor (EF)
+        base_ef = 0.67
+        vol_drt = 0.0019
+        ef = base_ef - (vol_drt * volume_gal)
+        # Calculate the Recovery Efficiency (RE)
+        # based on a fixed capacity of 75,000 Btu/hr
+        # and a fixed volume of 40 gallons by solving
+        # this system of equations:
+        # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
+        # 0.82 = (ua*67.5+cap*re)/cap
+        cap = 75_000.0
+        re = (Math.sqrt(6724 * ef**2 * cap**2 + 40_409_100 * ef**2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef**2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
+        # Calculate the skin loss coefficient (UA)
+        # based on the actual capacity.
+        ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 67.5
+      else
+        # Thermal efficiency requirement from 90.1
+        et = 0.8
+        # Calculate the max allowable standby loss (SL)
+        cap_adj = 800
+        vol_drt = 110
+        sl_btu_per_hr = (capacity_btu_per_hr / cap_adj + vol_drt * Math.sqrt(volume_gal))
+        # Calculate the skin loss coefficient (UA)
+        ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
+        # Calculate water heater efficiency
+        water_heater_eff = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
+      end
     end
 
     # Convert to SI
