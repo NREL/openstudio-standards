@@ -189,10 +189,9 @@ class StandardsData
     if capacity.nil?
       matching_objects = search_criteria_matching_objects
     else
-      # Round up if capacity is an integer
-      if capacity == capacity.round
-        capacity += (capacity * 0.01)
-      end
+      # Round to nearest integer and convert to a float in case not already
+      capacity = capacity.round(0).to_f
+
       search_criteria_matching_objects.each do |object|
         # Skip objects that don't have fields for minimum_capacity and maximum_capacity
         next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
@@ -292,10 +291,9 @@ class StandardsData
     if capacity.nil?
       matching_objects = search_criteria_matching_objects
     else
-      # Round up if capacity is an integer
-      if capacity == capacity.round
-        capacity += (capacity * 0.01)
-      end
+      # Round to nearest integer and convert to a float in case not already
+      capacity = capacity.round(0).to_f
+
       search_criteria_matching_objects.each do |object|
         # Skip objects that don't have fields for minimum_capacity and maximum_capacity
         next if !object.key?('minimum_capacity') || !object.key?('maximum_capacity')
