@@ -1428,7 +1428,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.52 SHGC 0.39"
+        "U 0.52 SHGC 0.39 Simple Glazing"
       ]
     },
     {
@@ -1450,7 +1450,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.52 SHGC 0.49"
+        "U 0.52 SHGC 0.49 Simple Glazing"
       ]
     },
     {
@@ -1460,7 +1460,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.52 SHGC 0.615"
+        "U 0.52 SHGC 0.615 Simple Glazing"
       ]
     },
     {
@@ -1590,7 +1590,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.58 SHGC 0.19"
+        "U 0.58 SHGC 0.19 Simple Glazing"
       ]
     },
     {
@@ -1600,7 +1600,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.58 SHGC 0.36"
+        "U 0.58 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -1610,7 +1610,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.59 SHGC 0.36"
+        "U 0.59 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -1620,7 +1620,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.59 SHGC 0.39"
+        "U 0.59 SHGC 0.39 Simple Glazing"
       ]
     },
     {
@@ -1642,7 +1642,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.61 SHGC 0.77"
+        "U 0.61 SHGC 0.77 Simple Glazing"
       ]
     },
     {
@@ -1676,7 +1676,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.62 SHGC 0.41"
+        "U 0.62 SHGC 0.41 Simple Glazing"
       ]
     },
     {
@@ -1710,7 +1710,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.65 SHGC 0.35"
+        "U 0.65 SHGC 0.35 Simple Glazing"
       ]
     },
     {
@@ -1730,7 +1730,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.69 SHGC 0.19"
+        "U 0.69 SHGC 0.19 Simple Glazing"
       ]
     },
     {
@@ -1740,7 +1740,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.69 SHGC 0.36"
+        "U 0.69 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -1750,7 +1750,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.69 SHGC 0.39"
+        "U 0.69 SHGC 0.39 Simple Glazing"
       ]
     },
     {
@@ -1760,7 +1760,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.69 SHGC 0.49"
+        "U 0.69 SHGC 0.49 Simple Glazing"
       ]
     },
     {
@@ -1770,7 +1770,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.69 SHGC 0.64"
+        "U 0.69 SHGC 0.64 Simple Glazing"
       ]
     },
     {
@@ -1780,7 +1780,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.69 SHGC 0.68"
+        "U 0.69 SHGC 0.68 Simple Glazing"
       ]
     },
     {
@@ -1812,7 +1812,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.72 SHGC 0.25"
+        "U 0.72 SHGC 0.25 Simple Glazing"
       ]
     },
     {
@@ -1822,7 +1822,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.72 SHGC 0.36"
+        "U 0.72 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -1832,7 +1832,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.72 SHGC 0.39"
+        "U 0.72 SHGC 0.39 Simple Glazing"
       ]
     },
     {
@@ -1842,7 +1842,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.74 SHGC 0.55"
+        "U 0.74 SHGC 0.55 Simple Glazing"
       ]
     },
     {
@@ -1852,7 +1852,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.74 SHGC 0.65"
+        "U 0.74 SHGC 0.65 Simple Glazing"
       ]
     },
     {
@@ -1862,7 +1862,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.75 SHGC 0.35"
+        "U 0.75 SHGC 0.35 Simple Glazing"
       ]
     },
     {
@@ -1882,7 +1882,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.81 SHGC 0.65"
+        "U 0.81 SHGC 0.65 Simple Glazing"
       ]
     },
     {
@@ -1892,7 +1892,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.85 SHGC 0.65"
+        "U 0.85 SHGC 0.65 Simple Glazing"
       ]
     },
     {
@@ -1902,7 +1902,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.87 SHGC 0.58"
+        "U 0.87 SHGC 0.58 Simple Glazing"
       ]
     },
     {
@@ -1912,7 +1912,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.87 SHGC 0.71"
+        "U 0.87 SHGC 0.71 Simple Glazing"
       ]
     },
     {
@@ -1922,7 +1922,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.87 SHGC 0.77"
+        "U 0.87 SHGC 0.77 Simple Glazing"
       ]
     },
     {
@@ -1952,7 +1952,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.98 SHGC 0.19"
+        "U 0.98 SHGC 0.19 Simple Glazing"
       ]
     },
     {
@@ -1962,7 +1962,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.98 SHGC 0.36"
+        "U 0.98 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -1992,7 +1992,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.10 SHGC 0.62"
+        "U 1.10 SHGC 0.62 Simple Glazing"
       ]
     },
     {
@@ -2002,7 +2002,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.10 SHGC 0.77"
+        "U 1.10 SHGC 0.77 Simple Glazing"
       ]
     },
     {
@@ -2012,7 +2012,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.15 SHGC 0.77"
+        "U 1.15 SHGC 0.77 Simple Glazing"
       ]
     },
     {
@@ -2022,7 +2022,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.17 SHGC 0.19"
+        "U 1.17 SHGC 0.19 Simple Glazing"
       ]
     },
     {
@@ -2032,7 +2032,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.17 SHGC 0.36"
+        "U 1.17 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -2052,7 +2052,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.17 SHGC 0.39"
+        "U 1.17 SHGC 0.39 Simple Glazing"
       ]
     },
     {
@@ -2072,7 +2072,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.17 SHGC 0.49"
+        "U 1.17 SHGC 0.49 Simple Glazing"
       ]
     },
     {
@@ -2082,7 +2082,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.17 SHGC 0.64"
+        "U 1.17 SHGC 0.64 Simple Glazing"
       ]
     },
     {
@@ -2102,7 +2102,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.17 SHGC 0.68"
+        "U 1.17 SHGC 0.68 Simple Glazing"
       ]
     },
     {
@@ -2122,7 +2122,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.22 SHGC 0.25"
+        "U 1.22 SHGC 0.25 Simple Glazing"
       ]
     },
     {
@@ -2152,7 +2152,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.22 SHGC 0.54"
+        "U 1.22 SHGC 0.54 Simple Glazing"
       ]
     },
     {
@@ -2172,7 +2172,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.30 SHGC 0.27"
+        "U 1.30 SHGC 0.27 Simple Glazing"
       ]
     },
     {
@@ -2182,7 +2182,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.30 SHGC 0.34"
+        "U 1.30 SHGC 0.34 Simple Glazing"
       ]
     },
     {
@@ -2192,7 +2192,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.30 SHGC 0.62"
+        "U 1.30 SHGC 0.62 Simple Glazing"
       ]
     },
     {
@@ -2202,7 +2202,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.30 SHGC 0.65"
+        "U 1.30 SHGC 0.65 Simple Glazing"
       ]
     },
     {
@@ -2212,7 +2212,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.36 SHGC 0.19"
+        "U 1.36 SHGC 0.19 Simple Glazing"
       ]
     },
     {
@@ -2222,7 +2222,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.36 SHGC 0.36"
+        "U 1.36 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -2232,7 +2232,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.36 SHGC 0.39"
+        "U 1.36 SHGC 0.39 Simple Glazing"
       ]
     },
     {
@@ -2242,7 +2242,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.36 SHGC 0.61"
+        "U 1.36 SHGC 0.61 Simple Glazing"
       ]
     },
     {
@@ -2252,7 +2252,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.70 SHGC 0.36"
+        "U 1.70 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -2262,7 +2262,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.80 SHGC 0.36"
+        "U 1.80 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -2272,7 +2272,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.90 SHGC 0.27"
+        "U 1.90 SHGC 0.27 Simple Glazing"
       ]
     },
     {
@@ -2282,7 +2282,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.90 SHGC 0.34"
+        "U 1.90 SHGC 0.34 Simple Glazing"
       ]
     },
     {
@@ -2292,7 +2292,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.90 SHGC 0.39"
+        "U 1.90 SHGC 0.39 Simple Glazing"
       ]
     },
     {
@@ -2302,7 +2302,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.90 SHGC 0.65"
+        "U 1.90 SHGC 0.65 Simple Glazing"
       ]
     },
     {
@@ -2312,7 +2312,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.98 SHGC 0.16"
+        "U 1.98 SHGC 0.16 Simple Glazing"
       ]
     },
     {
@@ -2322,7 +2322,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.98 SHGC 0.19"
+        "U 1.98 SHGC 0.19 Simple Glazing"
       ]
     },
     {
@@ -2342,7 +2342,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.98 SHGC 0.36"
+        "U 1.98 SHGC 0.36 Simple Glazing"
       ]
     },
     {
@@ -2352,7 +2352,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.98 SHGC 0.39"
+        "U 1.98 SHGC 0.39 Simple Glazing"
       ]
     },
     {
@@ -2372,7 +2372,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.98 SHGC 0.61"
+        "U 1.98 SHGC 0.61 Simple Glazing"
       ]
     },
     {
@@ -2382,7 +2382,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.47 SHGC 0.46"
+        "U 0.47 SHGC 0.46 Simple Glazing"
       ]
     },
     {
@@ -2392,7 +2392,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.47 SHGC 0.47"
+        "U 0.47 SHGC 0.47 Simple Glazing"
       ]
     },
     {
@@ -2402,7 +2402,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.47 SHGC 0.47"
+        "U 0.47 SHGC 0.47 Simple Glazing"
       ]
     },
     {
@@ -2412,7 +2412,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.47 SHGC 0.5"
+        "U 0.47 SHGC 0.5 Simple Glazing"
       ]
     },
     {
@@ -2422,7 +2422,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.47 SHGC 0.49"
+        "U 0.47 SHGC 0.49 Simple Glazing"
       ]
     },
     {
@@ -2432,7 +2432,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.77 SHGC 0.5"
+        "U 0.77 SHGC 0.5 Simple Glazing"
       ]
     },
     {
@@ -2442,7 +2442,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.77 SHGC 0.61"
+        "U 0.77 SHGC 0.61 Simple Glazing"
       ]
     },
     {
@@ -2452,7 +2452,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.77 SHGC 0.62"
+        "U 0.77 SHGC 0.62 Simple Glazing"
       ]
     },
     {
@@ -2462,7 +2462,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 0.77 SHGC 0.77"
+        "U 0.77 SHGC 0.77 Simple Glazing"
       ]
     },
     {
@@ -2472,7 +2472,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.23 SHGC 0.5"
+        "U 1.23 SHGC 0.5 Simple Glazing"
       ]
     },
     {
@@ -2482,7 +2482,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.23 SHGC 0.82"
+        "U 1.23 SHGC 0.82 Simple Glazing"
       ]
     },
     {
@@ -2492,7 +2492,7 @@
       "insulation_layer": null,
       "skylight_framing": null,
       "materials": [
-        "Simple Glazing U 1.23 SHGC 0.82"
+        "U 1.23 SHGC 0.82 Simple Glazing"
       ]
     },
     {

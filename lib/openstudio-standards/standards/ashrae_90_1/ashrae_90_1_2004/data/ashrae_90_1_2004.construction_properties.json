@@ -3417,7 +3417,7 @@
       "building_category": "Nonresidential",
       "construction": "U 1.22 SHGC 0.17 Simple Glazing",
       "minimum_percent_of_surface": 40.001,
-      "maximum_percent_of_surface": 50,
+      "maximum_percent_of_surface": 50.0,
       "assembly_maximum_u_value": 1.22,
       "assembly_maximum_u_value_unit": "Btu/h-ft2-F",
       "u_value_includes_interior_film_coefficient": true,
