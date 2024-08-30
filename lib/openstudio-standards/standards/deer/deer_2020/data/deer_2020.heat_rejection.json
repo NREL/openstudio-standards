@@ -7,6 +7,7 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance_gpm_per_hp": 7.0,
+      "minimum_performance_btu_per_hr_per_hp": null,
       "notes": "From CA Title 24 2019 Table 110.2-G"
     },
     {
@@ -16,6 +17,7 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance_gpm_per_hp": 16.1,
+      "minimum_performance_btu_per_hr_per_hp": null,
       "notes": "From CA Title 24 2019 Table 110.2-G"
     },
     {
@@ -25,6 +27,7 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance_gpm_per_hp": 20.0,
+      "minimum_performance_btu_per_hr_per_hp": null,
       "notes": "From CA Title 24 2019 Table 110.2-G"
     },
     {
@@ -34,6 +37,7 @@
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
       "minimum_performance_gpm_per_hp": 42.1,
+      "minimum_performance_btu_per_hr_per_hp": null,
       "notes": "From CA Title 24 2019 Table 110.2-G"
     }
   ]
