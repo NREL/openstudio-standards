@@ -2401,8 +2401,8 @@ class Standard
       # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
       matching_objects = matching_objects.reject { |object| object['minimum_capacity'].nil? || object['maximum_capacity'].nil? }
 
-      # Round to nearest integer and convert to a float in case not already
-      capacity = capacity.round(0).to_f
+      # Convert to a float in case not already
+      capacity = capacity.to_f
 
       # Skip objects whose the minimum capacity is below or maximum capacity above the specified capacity
       matching_capacity_objects = matching_objects.reject { |object| capacity <= object['minimum_capacity'].to_f || capacity > object['maximum_capacity'].to_f }
@@ -2630,8 +2630,8 @@ class Standard
       # Skip objects that don't have values specified for minimum_capacity and maximum_capacity
       matching_objects = matching_objects.reject { |object| object['minimum_capacity'].nil? || object['maximum_capacity'].nil? }
 
-      # Round to nearest integer and convert to a float in case not already
-      capacity = capacity.round(0).to_f
+      # Convert to a float in case not already
+      capacity = capacity.to_f
 
       # Skip objects whose the minimum capacity is below or maximum capacity above the specified capacity
       matching_capacity_objects = matching_objects.reject { |object| capacity <= object['minimum_capacity'].to_f || capacity > object['maximum_capacity'].to_f }
