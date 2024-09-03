@@ -881,16 +881,6 @@ class ACM179dASHRAE9012007
     return true
   end
 
-  # https://github.com/jmarrec/openstudio-standards/blob/179D/lib/openstudio-standards/standards/ashrae_90_1_prm/ashrae_90_1_prm.Model.rb#L970
-  # Applies the multi-zone VAV outdoor air sizing requirements to all applicable air loops in the model.
-  # @note This is not applicable to the stable baseline; hence no action in this method
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
-  def model_apply_multizone_vav_outdoor_air_sizing(model)
-    return true
-  end
-
   def _get_or_create_ddy_only_infiltration_schedule(model)
     ddy_only_infil_sch_name = "Infiltration Schedule Only One on Design Days"
     sch_ = model.getScheduleRulesetByName(ddy_only_infil_sch_name)
