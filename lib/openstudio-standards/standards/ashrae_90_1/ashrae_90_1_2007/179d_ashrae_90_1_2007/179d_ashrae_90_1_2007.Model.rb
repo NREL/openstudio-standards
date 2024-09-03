@@ -881,7 +881,6 @@ class ACM179dASHRAE9012007
     return true
   end
 
-
   def _get_or_create_ddy_only_infiltration_schedule(model)
     ddy_only_infil_sch_name = "Infiltration Schedule Only One on Design Days"
     sch_ = model.getScheduleRulesetByName(ddy_only_infil_sch_name)
