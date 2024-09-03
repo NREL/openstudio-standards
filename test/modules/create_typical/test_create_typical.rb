@@ -72,6 +72,29 @@ class TestCreateTypical < Minitest::Test
     assert(starting_size < ending_size)
   end
 
+  def test_create_typical_comstock_deer_building_from_model
+    # load model and set up weather file
+    template = 'ComStock DEER 2017'
+    climate_zone = 'CEC T24-CEC3'
+    std = Standard.build(template)
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/DEER_ESe.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+
+    # set output directory
+    output_dir = "#{__dir__}/output/test_create_typical_comstock_deer_building_from_model"
+    FileUtils.mkdir output_dir unless Dir.exist? output_dir
+
+    # apply create typical
+    starting_size = model.getModelObjects.size
+    result = @create.create_typical_building_from_model(model, template,
+                                                        climate_zone: climate_zone,
+                                                        hvac_system_type: 'PVAV with gas boiler reheat',
+                                                        sizing_run_directory: output_dir)
+    ending_size = model.getModelObjects.size
+    assert(result)
+    assert(starting_size < ending_size)
+  end
+
   def test_create_space_types_and_constructions
     model = OpenStudio::Model::Model.new
     building_type = 'PrimarySchool'
@@ -113,8 +136,8 @@ class TestCreateTypical < Minitest::Test
     # Check that JSON specs were applied
     assert(result)
     assert(starting_size < ending_size)
-    assert(ptacs.length==4)
-    assert(psz_ac.length==1)
+    assert_equal(4, ptacs.length)
+    assert_equal(1, psz_ac.length)
   end
 
   def test_create_typical_ese_op_hrs_overnight
