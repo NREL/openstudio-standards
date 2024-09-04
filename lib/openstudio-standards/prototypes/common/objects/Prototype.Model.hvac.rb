@@ -171,9 +171,7 @@ class Standard
         hot_water_loop = nil
         hot_water_loop = if model.getPlantLoopByName('Hot Water Loop').is_initialized
                            model.getPlantLoopByName('Hot Water Loop').get
-                         elsif building_type == 'MediumOffice'
-                           nil
-                         elsif building_type == 'MediumOfficeDetailed'
+                         elsif building_type == 'MediumOffice' || building_type == 'MediumOfficeDetailed'
                            nil
                          else
                            model_add_hw_loop(model,

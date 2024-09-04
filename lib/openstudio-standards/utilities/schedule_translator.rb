@@ -103,7 +103,7 @@ class ScheduleTranslator
         i_for += 1
         i_until = -1
 
-        arr = val.match(/for[:\s](.*)/i)[0].strip.downcase.split(' ')
+        arr = val.match(/for[:\s](.*)/i)[0].strip.downcase.split
         @schedule[i_thru][:for] << { daytype: arr, until: [] }
         next
       end

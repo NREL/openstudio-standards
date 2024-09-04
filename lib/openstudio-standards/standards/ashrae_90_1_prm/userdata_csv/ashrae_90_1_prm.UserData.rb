@@ -33,7 +33,7 @@ class UserDataCSV
     CSV.open("#{@save_dir}/#{@file_name}.csv", 'w') do |csv|
       csv << @headers
       @components.each do |component|
-        csv << [prm_get_component_name(component)] + write_default_rows(component)
+        csv << ([prm_get_component_name(component)] + write_default_rows(component))
       end
     end
     return true

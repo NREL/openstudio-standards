@@ -20,7 +20,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
   def setup
     # Make a directory to save the resulting models
     @test_dir =  File.expand_path("#{__dir__}/../doe_prototype/output")
-    if !Dir.exists?(@test_dir)
+    if !Dir.exist?(@test_dir)
       Dir.mkdir(@test_dir)
     end
     # Make a file to store the model energy comparisons
@@ -119,7 +119,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       end
 
       run_dir = "#{@test_dir}/#{test_name_prefix}#{model_name}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
 

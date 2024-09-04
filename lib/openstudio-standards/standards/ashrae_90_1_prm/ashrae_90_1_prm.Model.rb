@@ -120,7 +120,7 @@ class ASHRAE901PRM < Standard
     model.getSpaces.each do |space|
       building_envelope_area_m2 += OpenstudioStandards::Geometry.space_get_envelope_area(space)
     end
-    if building_envelope_area_m2 == 0.0
+    if building_envelope_area_m2 < 0.01
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'Calculated building envelope area is 0 m2, no infiltration will be added.')
       return 0.0
     end
@@ -329,7 +329,7 @@ class ASHRAE901PRM < Standard
     end
 
     # Conversion factor
-    conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
+    conv_fact = OpenStudio.convert(1.0, 'm^3/s', 'ft^3/min').get / OpenStudio.convert(1.0, 'm^2', 'ft^2').get
 
     # Adjust the infiltration rate to the average pressure for the prototype buildings.
     # adj_infil_rate_cfm_per_ft2 = 0.112 * basic_infil_rate_cfm_per_ft2
@@ -484,7 +484,7 @@ class ASHRAE901PRM < Standard
     end
 
     # List the unique array of constructions
-    if prev_created_consts.size.zero?
+    if prev_created_consts.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', 'None of the constructions in your proposed model have both Intended Surface Type and Standards Construction Type')
     else
       prev_created_consts.each do |surf_type, construction|
@@ -750,10 +750,10 @@ class ASHRAE901PRM < Standard
         # From Table G3.9.2 performance rating method baseline elevator motor
         elevator_mech_eff = 0.64
         # Determine the elevator counterweight
-        if elevator_counter_weight_of_car == 0.0
+        if elevator_counter_weight_of_car < 0.001
           # When the proposed design counterweight is not specified
           # it is determined as per Table G3.9.2
-          elevator_counter_weight_of_car = elevator_weight_of_car + 0.4 * elevator_rated_load
+          elevator_counter_weight_of_car = elevator_weight_of_car + (0.4 * elevator_rated_load)
         end
         search_criteria = {
           'template' => template,
@@ -828,7 +828,7 @@ class ASHRAE901PRM < Standard
     loads.each do |load|
       load_type = load.iddObjectType.valueName.sub('OS_', '').strip
       load_schedule_name = load_schedule_name_hash[load_type]
-      next unless !load_schedule_name.nil?
+      next if load_schedule_name.nil?
 
       # check if the load is in a dwelling space
       if load.spaceType.is_initialized
@@ -1144,7 +1144,7 @@ class ASHRAE901PRM < Standard
     end
     # in this situation, we hard set the temperature to be 22 F
     # (ASHRAE 90.1 Room heating stepoint temperature is 72 F)
-    max_heat_setpoint = 22.2 if max_heat_setpoint == 0.0
+    max_heat_setpoint = 22.2 if max_heat_setpoint.zero?
 
     max_heat_setpoint_f = OpenStudio.convert(max_heat_setpoint, 'C', 'F').get
     preheat_setpoint_f = max_heat_setpoint_f - 20
@@ -1264,15 +1264,13 @@ class ASHRAE901PRM < Standard
 
     # mark unmarked zones
     model.getThermalZones.each do |zone|
-      next if zone.additionalProperties.hasFeature('airloop user specified DCV exception')
+      unless zone.additionalProperties.hasFeature('airloop user specified DCV exception')
+        zone.additionalProperties.setFeature('airloop user specified DCV exception', false)
+      end
 
-      zone.additionalProperties.setFeature('airloop user specified DCV exception', false)
-    end
-
-    model.getThermalZones.each do |zone|
-      next if zone.additionalProperties.hasFeature('zone user specified DCV exception')
-
-      zone.additionalProperties.setFeature('zone user specified DCV exception', false)
+      unless zone.additionalProperties.hasFeature('zone user specified DCV exception')
+        zone.additionalProperties.setFeature('zone user specified DCV exception', false)
+      end
     end
   end
 
@@ -1301,15 +1299,13 @@ class ASHRAE901PRM < Standard
 
     # mark unmarked zones
     model.getThermalZones.each do |zone|
-      next if zone.additionalProperties.hasFeature('airloop dcv required by 901')
+      unless zone.additionalProperties.hasFeature('airloop dcv required by 901')
+        zone.additionalProperties.setFeature('airloop dcv required by 901', false)
+      end
 
-      zone.additionalProperties.setFeature('airloop dcv required by 901', false)
-    end
-
-    model.getThermalZones.each do |zone|
-      next if zone.additionalProperties.hasFeature('zone dcv required by 901')
-
-      zone.additionalProperties.setFeature('zone dcv required by 901', false)
+      unless zone.additionalProperties.hasFeature('zone dcv required by 901')
+        zone.additionalProperties.setFeature('zone dcv required by 901', false)
+      end
     end
   end
 
@@ -1750,7 +1746,7 @@ class ASHRAE901PRM < Standard
         user_data_oas.each do |user_oa|
           next unless UserData.compare(zone_oa.name.get, user_oa['name'])
 
-          user_oa.keys.each do |info_key|
+          user_oa.each_key do |info_key|
             if info_key == 'name'
               zone_oa.additionalProperties.setFeature('has_user_data', true)
             else
@@ -1786,7 +1782,7 @@ class ASHRAE901PRM < Standard
             # gas phase air cleaning is system base - add proposed hvac system name to zones
             economizer_exception_for_gas_phase_air_cleaning = user_airloop['economizer_exception_for_gas_phase_air_cleaning']
             economizer_exception_for_open_refrigerated_cases = user_airloop['economizer_exception_for_open_refrigerated_cases']
-            user_airloop.keys.each do |info_key|
+            user_airloop.each_key do |info_key|
               if info_key.include?('has_fan_power_credit') && UserData.compare(user_airloop[info_key], UserDataBoolean::TRUE)
                 current_value = get_additional_property_as_double(thermal_zone, info_key, 0.0)
                 thermal_zone.additionalProperties.setFeature(info_key, current_value + 1.0)
@@ -1877,7 +1873,7 @@ class ASHRAE901PRM < Standard
       if zone_hvac_eqp.thermalZone.is_initialized
         thermal_zone = zone_hvac_eqp.thermalZone.get
 
-        zone_hvac_eqp_info.keys.each do |info_key|
+        zone_hvac_eqp_info.each_key do |info_key|
           if info_key.include?('fan_power_credit')
             if !zone_hvac_eqp_info[info_key].to_s.empty?
               if info_key.include?('has_')
@@ -1914,7 +1910,7 @@ class ASHRAE901PRM < Standard
           next unless UserData.compare(user_airloop_doas['name'], air_loop_doas.name.get)
 
           # Parse fan power credits data
-          user_airloop_doas.keys.each do |info_key|
+          user_airloop_doas.each_key do |info_key|
             if info_key.include?('has_fan_power_credit') && UserDataBoolean.compare(user_airloop_doas[info_key], UserDataBoolean::TRUE)
               air_loop_doas.airLoops.each do |air_loop|
                 air_loop.thermalZones.each do |thermal_zone|
@@ -1965,13 +1961,11 @@ class ASHRAE901PRM < Standard
       if nightcycle_exception
         thermal_zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', true)
       end
-    end
 
-    # mark unmarked zones
-    model.getThermalZones.each do |zone|
-      next if zone.additionalProperties.hasFeature('has_health_safety_night_cycle_exception')
-
-      zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', false)
+      # mark unmarked zones
+      unless thermal_zone.additionalProperties.hasFeature('has_health_safety_night_cycle_exception')
+        thermal_zone.additionalProperties.setFeature('has_health_safety_night_cycle_exception', false)
+      end
     end
   end
 
@@ -2496,10 +2490,10 @@ class ASHRAE901PRM < Standard
       if total_wall_m2 > 0 then exist_max_wwr = total_wall_with_fene_m2 * 0.9 / total_wall_m2 end
       if exist_max_wwr < wwr_target
         # In this case, it is required to add vertical fenestration to other surfaces
-        if surface_wwr == 0.0
+        if surface_wwr < 0.001
           # delta_fenestration_surface_area / delta_wall_surface_area + 1.0 = increase_ratio for a surface with no windows.
           # ASSUMPTION!! assume adding windows to surface with no windows will never be window_m2 + door_m2 > surface_m2.
-          reduction_ratio = (wwr_target - exist_max_wwr) * total_wall_m2 / (total_wall_m2 - total_wall_with_fene_m2 - total_plenum_wall_m2) + 1.0
+          reduction_ratio = ((wwr_target - exist_max_wwr) * total_wall_m2 / (total_wall_m2 - total_wall_with_fene_m2 - total_plenum_wall_m2)) + 1.0
           OpenStudio.logFree(OpenStudio::Info, 'prm.log',
                              "The max window to wall ratio is #{exist_max_wwr}, smaller than the target window to wall ratio #{wwr_target}.
                               Surface #{surface_name} has no fenestration subsurfaces. Adding new fenestration band with WWR of #{(reduction_ratio - 1) * 100}%")
@@ -2518,7 +2512,7 @@ class ASHRAE901PRM < Standard
         end
       else
         # multiplier will be negative number thus resulting in > 1 reduction_ratio
-        if surface_wwr == 0.0
+        if surface_wwr < 0.001
           # 1.0 means remain the original form
           reduction_ratio = 1.0
         else
@@ -2546,7 +2540,7 @@ class ASHRAE901PRM < Standard
       added_wwr = surface.additionalProperties.getFeatureAsDouble('added_wwr').to_f
       # The full calculation of adjustment is:
       # ((residual_ratio * surface_area + added_wwr * surface_area) / surface_area ) / added_wwr
-      adjustment_ratio = residual_ratio / added_wwr + 1.0
+      adjustment_ratio = (residual_ratio / added_wwr) + 1.0
       surface_adjust_fenestration_in_a_surface(surface, adjustment_ratio, model)
     end
   end
@@ -2562,7 +2556,7 @@ class ASHRAE901PRM < Standard
   def model_prm_baseline_system_groups(model, custom, bldg_type_hvac_zone_hash)
     bldg_groups = []
 
-    bldg_type_hvac_zone_hash.keys.each do |hvac_building_type, zones_in_building_type|
+    bldg_type_hvac_zone_hash.each_key do |hvac_building_type, zones_in_building_type|
       # Get all groups for this hvac building type
       new_groups = get_baseline_system_groups_for_one_building_type(model, hvac_building_type, zones_in_building_type)
 
@@ -3211,18 +3205,17 @@ class ASHRAE901PRM < Standard
           avg_eflh_save = avg_eflh
         end
       end
-      if max_eflh_diff > eflh_limit
-        # Move the max Zone to the secondary list
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to eflh: #{max_zone_name}; limit = #{eflh_limit}")
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "eflh diff = #{max_eflh_diff}, this zone load = #{zone_eflh[max_zone_name]}, avg zone eflh = #{avg_eflh_save}")
-        sec_zones << max_zone
-        sec_zone_names << max_zone_name
-        zone_eflh.delete(max_zone_name)
-        zone_max_load.delete(max_zone_name)
-      else
-        # All zones are now within the limit, exit the iteration
-        break
-      end
+
+      # All zones are now within the limit, exit the iteration
+      break unless max_eflh_diff > eflh_limit
+
+      # Move the max Zone to the secondary list
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to eflh: #{max_zone_name}; limit = #{eflh_limit}")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "eflh diff = #{max_eflh_diff}, this zone load = #{zone_eflh[max_zone_name]}, avg zone eflh = #{avg_eflh_save}")
+      sec_zones << max_zone
+      sec_zone_names << max_zone_name
+      zone_eflh.delete(max_zone_name)
+      zone_max_load.delete(max_zone_name)
     end
 
     # Eliminate worst zone where max load exceeds limit and repeat until all pass
@@ -3252,18 +3245,17 @@ class ASHRAE901PRM < Standard
           avg_max_load_save = avg_max_load
         end
       end
-      if highest_max_load_diff > load_limit
-        # Move the max Zone to the secondary list
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to load: #{highest_zone_name}; load limit = #{load_limit}")
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "load diff = #{highest_max_load_diff}, this zone load = #{highest_max_load}, avg zone load = #{avg_max_load_save}")
-        sec_zones << highest_zone
-        sec_zone_names << highest_zone_name
-        zone_eflh.delete(highest_zone_name)
-        zone_max_load.delete(highest_zone_name)
-      else
-        # All zones are now within the limit, exit the iteration
-        break
-      end
+
+      # All zones are now within the limit, exit the iteration
+      break unless highest_max_load_diff > load_limit
+
+      # Move the max Zone to the secondary list
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Zone moved to PSZ due to load: #{highest_zone_name}; load limit = #{load_limit}")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "load diff = #{highest_max_load_diff}, this zone load = #{highest_max_load}, avg zone load = #{avg_max_load_save}")
+      sec_zones << highest_zone
+      sec_zone_names << highest_zone_name
+      zone_eflh.delete(highest_zone_name)
+      zone_max_load.delete(highest_zone_name)
     end
 
     # Place remaining zones in multizone system list

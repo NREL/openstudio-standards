@@ -1994,10 +1994,10 @@ class Standard
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "#{a_polygons.size} #{a_name} minus #{b_polygons.size} #{b_name}")
 
     # Don't try to subtract anything if either set is empty
-    if a_polygons.size.zero?
+    if a_polygons.empty?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "---#{a_name} - #{b_name}: #{a_name} contains no polygons.")
       return space_polygons_set_z(space, a_polygons, 0.0)
-    elsif b_polygons.size.zero?
+    elsif b_polygons.empty?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "---#{a_name} - #{b_name}: #{b_name} contains no polygons.")
       return space_polygons_set_z(space, a_polygons, 0.0)
     end
@@ -2114,7 +2114,7 @@ class Standard
     combined_polygons = []
 
     # Don't try to combine an empty array of polygons
-    if polygons.size.zero?
+    if polygons.empty?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "---#{name} contains no polygons, not combining.")
       return combined_polygons
     end
@@ -2240,10 +2240,10 @@ class Standard
     overlap_area = 0
 
     # Don't try anything if either set is empty
-    if a_polygons.size.zero?
+    if a_polygons.empty?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "---#{a_name} overlaps #{b_name}: #{a_name} contains no polygons.")
       return overlap_area
-    elsif b_polygons.size.zero?
+    elsif b_polygons.empty?
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "---#{a_name} overlaps #{b_name}: #{b_name} contains no polygons.")
       return overlap_area
     end
@@ -2294,7 +2294,7 @@ class Standard
           b_minus_a_polygons.each do |polygon|
             # Skip polygons that have no vertices
             # resulting from the subtraction.
-            if polygon.size.zero?
+            if polygon.empty?
               OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Space', "Zero-vertex polygon resulting from #{b_polygon.to_s.gsub(/\[|\]/, '|')} minus #{a_polygon.to_s.gsub(/\[|\]/, '|')}.")
               next
             end

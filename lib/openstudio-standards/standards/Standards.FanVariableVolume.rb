@@ -199,37 +199,22 @@ class Standard
     has_evap = false
     air_loop.supplyComponents.each do |sc|
       # CoilCoolingDXSingleSpeed
-      if sc.to_CoilCoolingDXSingleSpeed.is_initialized
-        has_dx = true
-      # CoilCoolingDXTwoSpeed
-      elsif sc.to_CoilCoolingDXTwoSpeed.is_initialized
-        has_dx = true
-      # CoilCoolingMultiSpeed
-      elsif sc.to_CoilCoolingDXMultiSpeed.is_initialized
+      if sc.to_CoilCoolingDXSingleSpeed.is_initialized || sc.to_CoilCoolingDXTwoSpeed.is_initialized || sc.to_CoilCoolingDXMultiSpeed.is_initialized || sc.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
         has_dx = true
       # CoilCoolingWater
       elsif sc.to_CoilCoolingWater.is_initialized
         has_chw = true
-      # CoilCoolingWaterToAirHeatPumpEquationFit
-      elsif sc.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
-        has_dx = true
       # UnitarySystem
       elsif sc.to_AirLoopHVACUnitarySystem.is_initialized
         unitary = sc.to_AirLoopHVACUnitarySystem.get
         if unitary.coolingCoil.is_initialized
           clg_coil = unitary.coolingCoil.get
           # CoilCoolingDXSingleSpeed
-          if clg_coil.to_CoilCoolingDXSingleSpeed.is_initialized
-            has_dx = true
-          # CoilCoolingDXTwoSpeed
-          elsif clg_coil.to_CoilCoolingDXTwoSpeed.is_initialized
+          if clg_coil.to_CoilCoolingDXSingleSpeed.is_initialized || clg_coil.to_CoilCoolingDXTwoSpeed.is_initialized || clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
             has_dx = true
           # CoilCoolingWater
           elsif clg_coil.to_CoilCoolingWater.is_initialized
             has_chw = true
-          # CoilCoolingWaterToAirHeatPumpEquationFit
-          elsif clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
-            has_dx = true
           end
         end
       # UnitaryHeatPumpAirToAir
@@ -237,20 +222,14 @@ class Standard
         unitary = sc.to_AirLoopHVACUnitaryHeatPumpAirToAir.get
         clg_coil = unitary.coolingCoil
         # CoilCoolingDXSingleSpeed
-        if clg_coil.to_CoilCoolingDXSingleSpeed.is_initialized
-          has_dx = true
-        # CoilCoolingDXTwoSpeed
-        elsif clg_coil.to_CoilCoolingDXTwoSpeed.is_initialized
+        if clg_coil.to_CoilCoolingDXSingleSpeed.is_initialized || clg_coil.to_CoilCoolingDXTwoSpeed.is_initialized
           has_dx = true
         # CoilCoolingWater
         elsif clg_coil.to_CoilCoolingWater.is_initialized
           has_chw = true
         end
       # EvaporativeCoolerDirectResearchSpecial
-      elsif sc.to_EvaporativeCoolerDirectResearchSpecial.is_initialized
-        has_evap = true
-      # EvaporativeCoolerIndirectResearchSpecial
-      elsif sc.to_EvaporativeCoolerIndirectResearchSpecial.is_initialized
+      elsif sc.to_EvaporativeCoolerDirectResearchSpecial.is_initialized || sc.to_EvaporativeCoolerIndirectResearchSpecial.is_initialized
         has_evap = true
       elsif sc.to_CoilCoolingCooledBeam.is_initialized ||
             sc.to_AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass.is_initialized ||

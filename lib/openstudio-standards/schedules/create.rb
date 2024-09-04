@@ -36,66 +36,66 @@ module OpenstudioStandards
         schedule_type_limits.setUnitType(unit_type)
       else
         schedule_type_limits = model.getScheduleTypeLimitsByName(standard_schedule_type_limit)
-        if !schedule_type_limits.empty?
+        if schedule_type_limits.empty?
+          case standard_schedule_type_limit.downcase
+          when 'dimensionless'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName('Dimensionless')
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(1000.0)
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Dimensionless')
+
+          when 'temperature'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName('Temperature')
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(100.0)
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Temperature')
+
+          when 'humidity ratio'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName('Humidity Ratio')
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(0.3)
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Dimensionless')
+
+          when 'fraction', 'fractional'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName('Fraction')
+            schedule_type_limits.setLowerLimitValue(0.0)
+            schedule_type_limits.setUpperLimitValue(1.0)
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('Dimensionless')
+
+          when 'onoff'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName('OnOff')
+            schedule_type_limits.setLowerLimitValue(0)
+            schedule_type_limits.setUpperLimitValue(1)
+            schedule_type_limits.setNumericType('Discrete')
+            schedule_type_limits.setUnitType('Availability')
+
+          when 'activity'
+            schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
+            schedule_type_limits.setName('Activity')
+            schedule_type_limits.setLowerLimitValue(70.0)
+            schedule_type_limits.setUpperLimitValue(1000.0)
+            schedule_type_limits.setNumericType('Continuous')
+            schedule_type_limits.setUnitType('ActivityLevel')
+          else
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Create', 'Invalid standard_schedule_type_limit for method create_schedule_type_limits.')
+            return false
+          end
+        else
           schedule_type_limits = schedule_type_limits.get
           if schedule_type_limits.name.to_s.downcase == 'temperature'
             schedule_type_limits.resetLowerLimitValue
             schedule_type_limits.resetUpperLimitValue
             schedule_type_limits.setNumericType('Continuous')
             schedule_type_limits.setUnitType('Temperature')
-          end
-        else
-          case standard_schedule_type_limit.downcase
-            when 'dimensionless'
-              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-              schedule_type_limits.setName('Dimensionless')
-              schedule_type_limits.setLowerLimitValue(0.0)
-              schedule_type_limits.setUpperLimitValue(1000.0)
-              schedule_type_limits.setNumericType('Continuous')
-              schedule_type_limits.setUnitType('Dimensionless')
-
-            when 'temperature'
-              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-              schedule_type_limits.setName('Temperature')
-              schedule_type_limits.setLowerLimitValue(0.0)
-              schedule_type_limits.setUpperLimitValue(100.0)
-              schedule_type_limits.setNumericType('Continuous')
-              schedule_type_limits.setUnitType('Temperature')
-
-            when 'humidity ratio'
-              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-              schedule_type_limits.setName('Humidity Ratio')
-              schedule_type_limits.setLowerLimitValue(0.0)
-              schedule_type_limits.setUpperLimitValue(0.3)
-              schedule_type_limits.setNumericType('Continuous')
-              schedule_type_limits.setUnitType('Dimensionless')
-
-            when 'fraction', 'fractional'
-              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-              schedule_type_limits.setName('Fraction')
-              schedule_type_limits.setLowerLimitValue(0.0)
-              schedule_type_limits.setUpperLimitValue(1.0)
-              schedule_type_limits.setNumericType('Continuous')
-              schedule_type_limits.setUnitType('Dimensionless')
-
-            when 'onoff'
-              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-              schedule_type_limits.setName('OnOff')
-              schedule_type_limits.setLowerLimitValue(0)
-              schedule_type_limits.setUpperLimitValue(1)
-              schedule_type_limits.setNumericType('Discrete')
-              schedule_type_limits.setUnitType('Availability')
-
-            when 'activity'
-              schedule_type_limits = OpenStudio::Model::ScheduleTypeLimits.new(model)
-              schedule_type_limits.setName('Activity')
-              schedule_type_limits.setLowerLimitValue(70.0)
-              schedule_type_limits.setUpperLimitValue(1000.0)
-              schedule_type_limits.setNumericType('Continuous')
-              schedule_type_limits.setUnitType('ActivityLevel')
-            else
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Create', 'Invalid standard_schedule_type_limit for method create_schedule_type_limits.')
-              return false
           end
         end
       end
@@ -329,27 +329,27 @@ module OpenstudioStandards
           if i == 0
             values_intermediate << 0.0
             if times[i] > hour_bump_time
-              times_intermediate << times[i] - hour_bump_time
+              times_intermediate << (times[i] - hour_bump_time)
               if times[i + 1].nil?
-                time_step_value = end_profile_time.hours + end_profile_time.minutes / 60 - times[i].hours - times[i].minutes / 60
+                time_step_value = end_profile_time.hours + (end_profile_time.minutes / 60) - times[i].hours - (times[i].minutes / 60)
               else
-                time_step_value = times[i + 1].hours + times[i + 1].minutes / 60 - times[i].hours - times[i].minutes / 60
+                time_step_value = times[i + 1].hours + (times[i + 1].minutes / 60) - times[i].hours - (times[i].minutes / 60)
               end
-              values_intermediate << (values[i + 1].to_f - values[i].to_f).abs / (time_step_value * 2)
+              values_intermediate << ((values[i + 1].to_f - values[i].to_f).abs / (time_step_value * 2))
             end
             times_intermediate << times[i]
           elsif i == (values.size - 1)
             if times[times.size - 2] < one_hour_left_time
-              times_intermediate << times[times.size - 2] + hour_bump_time # this should be the second to last time
-              time_step_value = times[i - 1].hours + times[i - 1].minutes / 60 - times[i - 2].hours - times[i - 2].minutes / 60
-              values_intermediate << (values[i - 1].to_f - values[i - 2].to_f).abs / (time_step_value * 2)
+              times_intermediate << (times[times.size - 2] + hour_bump_time) # this should be the second to last time
+              time_step_value = times[i - 1].hours + (times[i - 1].minutes / 60) - times[i - 2].hours - (times[i - 2].minutes / 60)
+              values_intermediate << ((values[i - 1].to_f - values[i - 2].to_f).abs / (time_step_value * 2))
             end
             values_intermediate << 0.0
             times_intermediate << times[i] # this should be the last time
           else
             # get value multiplier based on how many hours it is spread over
-            time_step_value = times[i].hours + times[i].minutes / 60 - times[i - 1].hours - times[i - 1].minutes / 60
-            values_intermediate << (values[i].to_f - values[i - 1].to_f).abs / time_step_value
+            time_step_value = times[i].hours + (times[i].minutes / 60) - times[i - 1].hours - (times[i - 1].minutes / 60)
+            values_intermediate << ((values[i].to_f - values[i - 1].to_f).abs / time_step_value)
             times_intermediate << times[i]
           end
           i += 1
@@ -499,5 +499,88 @@ module OpenstudioStandards
       result = { 'mergedSchedule' => sch_ruleset, 'denominator' => denominator }
       return result
     end
+
+    # Create a ScheduleDay from another ScheduleDay with inverted values
+    #
+    # @param old_schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object to invert
+    # @param new_schedule_day [OpenStudio::Model::ScheduleDay] An OpenStudio ScheduleDay object.
+    #   Default nil. If provided, will add values to this ScheduleDay object instead of creating a new one.
+    # @param schedule_name [String] Optional name of new schedule
+    # @return [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object of inverted schedule
+    def self.create_inverted_schedule_day(old_schedule_day, new_schedule_day: nil, schedule_name: nil)
+      # create new schedule object if none provided
+      if new_schedule_day.nil?
+        new_schedule_day = OpenStudio::Model::ScheduleDay.new(old_schedule_day.model)
+      end
+
+      # set default name if none provided
+      if schedule_name.nil?
+        new_schedule_day.setName("#{old_schedule_day.name} inverted")
+      else
+        new_schedule_day.setName(schedule_name)
+      end
+
+      # invert schedule values
+      for index in 0..old_schedule_day.times.size - 1
+        old_value = old_schedule_day.values[index]
+        if old_value == 0
+          new_value = 1
+        else
+          new_value = 0
+        end
+        new_schedule_day.addValue(old_schedule_day.times[index], new_value)
+      end
+
+      return new_schedule_day
+    end
+
+    # Create a ScheduleRuleset from another ScheduleRuleset with inverted values
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object to invert
+    # @param schedule_name [String] Optional name of new schedule
+    # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object of inverted schedule
+    def self.create_inverted_schedule_ruleset(schedule_ruleset, schedule_name: nil)
+      model = schedule_ruleset.model
+      new_schedule = OpenStudio::Model::ScheduleRuleset.new(model, 0.0)
+
+      # set default name if none provided
+      if schedule_name.nil?
+        new_schedule.setName("#{schedule_ruleset.name} inverted")
+      else
+        new_schedule.setName(schedule_name)
+      end
+
+      # change summer design day
+      new_summer_dd_schedule = OpenstudioStandards::Schedules.create_inverted_schedule_day(schedule_ruleset.summerDesignDaySchedule)
+      new_schedule.setSummerDesignDaySchedule(new_summer_dd_schedule)
+
+      # change winter design day
+      new_winter_dd_schedule = OpenstudioStandards::Schedules.create_inverted_schedule_day(schedule_ruleset.winterDesignDaySchedule)
+      new_schedule.setWinterDesignDaySchedule(new_winter_dd_schedule)
+
+      # change the default day values
+      OpenstudioStandards::Schedules.create_inverted_schedule_day(schedule_ruleset.defaultDaySchedule,
+                                                                  new_schedule_day: new_schedule.defaultDaySchedule)
+
+      # change for schedule rules
+      schedule_ruleset.scheduleRules.each_with_index do |rule, i|
+        old_schedule_day = rule.daySchedule
+        new_schedule_day = OpenstudioStandards::Schedules.create_inverted_schedule_day(old_schedule_day)
+
+        new_rule = OpenStudio::Model::ScheduleRule.new(new_schedule, new_schedule_day)
+        new_rule.setName("#{new_schedule_day.name} Rule")
+        new_rule.setApplySunday(rule.applySunday)
+        new_rule.setApplyMonday(rule.applyMonday)
+        new_rule.setApplyTuesday(rule.applyTuesday)
+        new_rule.setApplyWednesday(rule.applyWednesday)
+        new_rule.setApplyThursday(rule.applyThursday)
+        new_rule.setApplyFriday(rule.applyFriday)
+        new_rule.setApplySaturday(rule.applySaturday)
+      end
+
+      return new_schedule
+    end
+
+    # @!endgroup Create
   end
 end

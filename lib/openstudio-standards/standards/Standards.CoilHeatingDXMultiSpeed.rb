@@ -16,20 +16,18 @@ class Standard
     # Determine supplemental heating type if unitary
     heat_pump = false
     suppl_heating_type = nil
-    if coil_heating_dx_multi_speed.airLoopHVAC.empty?
-      if coil_heating_dx_multi_speed.containingHVACComponent.is_initialized
-        containing_comp = coil_heating_dx_multi_speed.containingHVACComponent.get
-        if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
-          heat_pump = true
-          htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.supplementalHeatingCoil
-          suppl_heating_type = if htg_coil.to_CoilHeatingElectric.is_initialized
-                                 'Electric Resistance or None'
-                               else
-                                 'All Other'
-                               end
-        end
-        # @todo Add other unitary systems
+    if coil_heating_dx_multi_speed.airLoopHVAC.empty? && coil_heating_dx_multi_speed.containingHVACComponent.is_initialized
+      containing_comp = coil_heating_dx_multi_speed.containingHVACComponent.get
+      if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+        heat_pump = true
+        htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.supplementalHeatingCoil
+        suppl_heating_type = if htg_coil.to_CoilHeatingElectric.is_initialized
+                                'Electric Resistance or None'
+                              else
+                                'All Other'
+                              end
       end
+      # @todo Add other unitary systems
     end
 
     # @todo Standards - add split system vs single package to model
@@ -45,10 +43,8 @@ class Standard
       ccoil = heat_pump_comp.coolingCoil
       dxcoil = ccoil.to_CoilCoolingDXMultiSpeed.get
       dxcoil_name = dxcoil.name.to_s
-      if sql_db_vars_map
-        if sql_db_vars_map[dxcoil_name]
-          dxcoil.setName(sql_db_vars_map[dxcoil_name])
-        end
+      if sql_db_vars_map && sql_db_vars_map[dxcoil_name]
+        dxcoil.setName(sql_db_vars_map[dxcoil_name])
       end
       clg_stages = dxcoil.stages
       if clg_stages.last.grossRatedTotalCoolingCapacity.is_initialized

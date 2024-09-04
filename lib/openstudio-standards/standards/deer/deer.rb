@@ -4,6 +4,7 @@
 # @abstract
 class DEER < Standard
   def initialize
+    super()
     load_standards_database
   end
 

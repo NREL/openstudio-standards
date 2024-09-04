@@ -6,6 +6,7 @@ class ComStockDEER2014 < DEER2014
   attr_reader :template
 
   def initialize
+    super()
     @template = 'ComStock DEER 2014'
     load_standards_database
   end

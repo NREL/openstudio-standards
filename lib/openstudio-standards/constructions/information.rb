@@ -179,8 +179,8 @@ module OpenstudioStandards
       exposed_material = construction.to_LayeredConstruction.get.getLayer(0)
       solar_absorptance = exposed_material.to_OpaqueMaterial.get.solarAbsorptance
       thermal_emissivity = exposed_material.to_OpaqueMaterial.get.thermalAbsorptance
-      x = (20.797 * solar_absorptance - 0.603 * thermal_emissivity) / (9.5205 * thermal_emissivity + 12.0)
-      sri = 123.97 - 141.35 * x + 9.6555 * x * x
+      x = ((20.797 * solar_absorptance) - (0.603 * thermal_emissivity)) / ((9.5205 * thermal_emissivity) + 12.0)
+      sri = 123.97 - (141.35 * x) + (9.6555 * x * x)
 
       return sri
     end
@@ -446,9 +446,10 @@ module OpenstudioStandards
       model.getSubSurfaces.sort.each do |surface|
         next unless surface.outsideBoundaryCondition == boundary_condition
 
-        if surface.subSurfaceType == 'FixedWindow' || surface.subSurfaceType == 'OperableWindow'
+        case surface.subSurfaceType
+        when 'FixedWindow', 'OperableWindow'
           next unless surface_type == 'ExteriorWindow'
-        elsif surface.subSurfaceType == 'Door'
+        when 'Door'
           next unless surface_type.include?('Door')
         else
           next unless surface.subSurfaceType == surface_type
