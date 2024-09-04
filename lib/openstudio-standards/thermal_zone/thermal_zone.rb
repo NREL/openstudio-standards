@@ -389,7 +389,7 @@ module OpenstudioStandards
 
       # Get an array of the heating fuels used by the zone
       htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
-      is_electric = htg_fuels.include?('Electricity') ? true : false
+      is_electric = htg_fuels.include?('Electricity')
 
       return is_electric
     end
@@ -531,7 +531,7 @@ module OpenstudioStandards
       end
 
       # If no space types, return empty optional SpaceType
-      if space_type_to_area.size.zero?
+      if space_type_to_area.empty?
         return OpenStudio::Model::OptionalSpaceType.new
       end
 

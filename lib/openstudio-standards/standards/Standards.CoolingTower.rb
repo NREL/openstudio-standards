@@ -62,11 +62,9 @@ module CoolingTower
     # Open Circuit Cooling Towers.
     if fan_type == 'Centrifugal'
       gpm_limit = cooling_tower_apply_minimum_power_per_flow_gpm_limit(cooling_tower)
-      if gpm_limit
-        if design_water_flow_gpm >= gpm_limit
-          fan_type = 'Propeller or Axial'
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, the design flow rate of #{design_water_flow_gpm.round} gpm is higher than the limit of #{gpm_limit.round} gpm for open centrifugal towers.  This tower must meet the minimum performance of #{fan_type} instead.")
-        end
+      if gpm_limit && design_water_flow_gpm >= gpm_limit
+        fan_type = 'Propeller or Axial'
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, the design flow rate of #{design_water_flow_gpm.round} gpm is higher than the limit of #{gpm_limit.round} gpm for open centrifugal towers.  This tower must meet the minimum performance of #{fan_type} instead.")
       end
     end
 

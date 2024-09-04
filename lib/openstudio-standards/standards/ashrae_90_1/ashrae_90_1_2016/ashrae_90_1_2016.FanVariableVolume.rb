@@ -11,9 +11,7 @@ class ASHRAE9012016 < ASHRAE901
     hp_limit = case fan_variable_volume_cooling_system_type(fan_variable_volume)
                when 'dx'
                  0.0
-               when 'chw'
-                 0.25
-               when 'evap'
+               when 'chw', 'evap'
                  0.25
                end
 

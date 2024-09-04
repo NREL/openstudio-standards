@@ -4,6 +4,7 @@ require 'date'
 class TestSchedulesInformation < Minitest::Test
   def setup
     @sch = OpenstudioStandards::Schedules
+    @create = OpenstudioStandards::CreateTypical
   end
 
   def test_schedule_get_min_max
@@ -252,6 +253,7 @@ class TestSchedulesInformation < Minitest::Test
 
   def test_schedule_day_get_hourly_values
     model = OpenStudio::Model::Model.new
+    model.getTimestep.setNumberOfTimestepsPerHour(10)
     schedule_day = OpenStudio::Model::ScheduleDay.new(model)
     schedule_day.addValue(OpenStudio::Time.new(0, 9, 0, 0), 1.0)
     schedule_day.addValue(OpenStudio::Time.new(0, 9, 6, 0), 0.2)
@@ -259,8 +261,10 @@ class TestSchedulesInformation < Minitest::Test
     schedule_day.addValue(OpenStudio::Time.new(0, 11, 0, 0), 0.6)
     schedule_day.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1)
     result = @sch.schedule_day_get_hourly_values(schedule_day)
-    expected_array = Array.new(8, 1.0).concat([0.66, 0.6]).concat(Array.new(14, 1.0))
+    expected_array = Array.new(9, 1.0).concat([0.66, 0.6]).concat(Array.new(13, 1.0))
     assert(expected_array.difference(result).empty?)
+    assert_equal(9, result.index(0.66))
+    assert_equal(10, result.rindex(0.6))
   end
 
   def test_schedule_ruleset_get_min_max
@@ -497,4 +501,25 @@ class TestSchedulesInformation < Minitest::Test
     assert_equal(2, rule_index_hash[model.getScheduleDayByName('Test Complex SummmerWeekday').get])
   end
 
+  def test_model_get_hvac_schedule
+    FileUtils.mkdir "#{__dir__}/output" unless Dir.exist? "#{__dir__}/output"
+
+    # load model and set up weather file
+    template = '90.1-2013'
+    climate_zone = 'ASHRAE 169-2013-4A'
+    std = Standard.build(template)
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAEPrimarySchool.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+
+    # set output directory
+    output_dir = "#{__dir__}/output/test_hvac_schedule"
+    FileUtils.mkdir output_dir unless Dir.exist? output_dir
+
+    # apply create typical
+    @create.create_typical_building_from_model(model, template,
+                                               climate_zone: climate_zone,
+                                               sizing_run_directory: output_dir)
+    hvac_schedule = @sch.model_get_hvac_schedule(model)
+    assert_equal('TZ-Main_Corridor_ZN_1_FLR_1 PSZ-AC Occ Sch', hvac_schedule.name.to_s)
+  end
 end

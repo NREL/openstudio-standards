@@ -23,7 +23,7 @@ module SecondarySchool
     else
       transformer_efficiency = nil
     end
-    return true unless !transformer_efficiency.nil?
+    return true if transformer_efficiency.nil?
 
     # Change to output variable name in E+ 9.4 (OS 3.1.0)
     excluded_interiorequip_variable = if model.version < OpenStudio::VersionString.new('3.1.0')

@@ -255,9 +255,17 @@ class AppendixGPRMTests < Minitest::Test
     check_wwr(model_hash['baseline'])
   end
 
+
   def test_swh_single_building_type
     model_hash = prm_test_helper('swh_single_building_type', require_prototype=false, require_baseline=true)
     check_swh_single_building_type(model_hash["baseline"])
   end
+
+  def test_pri_sec_loop_configuration
+    model_hash = prm_test_helper('pri_sec_loop', require_prototype = false, require_baseline = true)
+
+    check_pri_sec_loop(model_hash['baseline'])
+  end
+
 end
 

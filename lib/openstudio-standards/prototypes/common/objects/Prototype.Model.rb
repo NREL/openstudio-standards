@@ -440,23 +440,27 @@ Standard.class_eval do
   # CFactorUndergroundWallConstruction and require some additional parameters when compared to Construction
   #
   # @param model[OpenStudio::Model::Model] OpenStudio Model
-  # @param climate_zone [String climate zone as described for prototype models. C-Factor is based on this parameter
-  # @param building_type [String the building type
-  # @return [void]
+  # @param climate_zone [String] climate zone as described for prototype models. C-Factor is based on this parameter
+  # @param building_type [String] the building type
+  # @return [Boolean] returns true if successful, false if not
   def model_set_below_grade_wall_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
-    building_type_category = construction_set_data['exterior_wall_building_category']
 
+    # If no construction data, return and allow code to use default constructions
+    return false if construction_set_data.nil?
+
+    # Find wall C factor
+    building_type_category = construction_set_data['exterior_wall_building_category']
     wall_construction_properties = model_get_construction_properties(model, 'GroundContactWall', 'Mass', building_type_category, climate_zone)
 
     # If no construction properties are found at all, return and allow code to use default constructions
-    return if wall_construction_properties.nil?
+    return false if wall_construction_properties.nil?
 
     c_factor_ip = wall_construction_properties['assembly_maximum_c_factor']
 
     # If no c-factor is found in construction properties, return and allow code to use defaults
-    return if c_factor_ip.nil?
+    return false if c_factor_ip.nil?
 
     # convert to SI
     c_factor_si = c_factor_ip * OpenStudio.convert(1.0, 'Btu/ft^2*h*R', 'W/m^2*K').get
@@ -488,6 +492,8 @@ Standard.class_eval do
         end
       end
     end
+
+    return true
   end
 
   # Searches a model for spaces adjacent to ground. If the slab's perimeter is adjacent to ground, the length is
@@ -496,21 +502,25 @@ Standard.class_eval do
   # @param model [OpenStudio Model] OpenStudio model being modified
   # @param building_type [String the building type
   # @param climate_zone [String climate zone as described for prototype models. F-Factor is based on this parameter
+  # @return [Boolean] returns true if successful, false if not
   def model_set_floor_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
-    building_type_category = construction_set_data['ground_contact_floor_building_category']
 
-    # Find Floor F factor
+    # If no construction data, return and allow code to use default constructions
+    return false if construction_set_data.nil?
+
+    # Find floor F factor
+    building_type_category = construction_set_data['ground_contact_floor_building_category']
     floor_construction_properties = model_get_construction_properties(model, 'GroundContactFloor', 'Unheated', building_type_category, climate_zone)
 
     # If no construction properties are found at all, return and allow code to use default constructions
-    return if floor_construction_properties.nil?
+    return false if floor_construction_properties.nil?
 
     f_factor_ip = floor_construction_properties['assembly_maximum_f_factor']
 
     # If no f-factor is found in construction properties, return and allow code to use defaults
-    return if f_factor_ip.nil?
+    return false if f_factor_ip.nil?
 
     f_factor_si = f_factor_ip * OpenStudio.convert(1.0, 'Btu/ft*h*R', 'W/m*K').get
 
@@ -543,6 +553,8 @@ Standard.class_eval do
         end
       end
     end
+
+    return true
   end
 
   # Adds internal mass objects and constructions based on the building type
@@ -638,7 +650,7 @@ Standard.class_eval do
 
       # Add a thermostat
       space_type_name = space.spaceType.get.name.get
-      thermostat_name = space_type_name + ' Thermostat'
+      thermostat_name = "#{space_type_name} Thermostat"
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
       if thermostat.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
@@ -676,21 +688,8 @@ Standard.class_eval do
     zone_exhaust_fans = {}
 
     # apply use specified kitchen_makup logic
-    if !['Adjacent', 'Largest Zone'].include?(kitchen_makeup)
-
-      if kitchen_makeup != 'None'
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
-      end
-
-      # loop through thermal zones
-      model.getThermalZones.sort.each do |thermal_zone|
-        zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
-
-        # populate zone_exhaust_fans
-        zone_exhaust_fans.merge!(zone_exhaust_hash)
-      end
-
-    else # common code for Adjacent and Largest Zone
+    if ['Adjacent', 'Largest Zone'].include?(kitchen_makeup)
+      # common code for Adjacent and Largest Zone
 
       # populate standard_space_types_with_makup_air
       standard_space_types_with_makup_air = {}
@@ -879,9 +878,19 @@ Standard.class_eval do
           zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
           zone_exhaust_fans.merge!(zone_exhaust_hash)
         end
-
+      end
+    else
+      if kitchen_makeup != 'None'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
       end
 
+      # loop through thermal zones
+      model.getThermalZones.sort.each do |thermal_zone|
+        zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
+
+        # populate zone_exhaust_fans
+        zone_exhaust_fans.merge!(zone_exhaust_hash)
+      end
     end
 
     return zone_exhaust_fans
@@ -991,7 +1000,7 @@ Standard.class_eval do
 
     # Adjust thermostat schedules:
     # Increase set-up/back to comply with code requirements
-    thermostat_schedules.keys.each do |sch_type|
+    thermostat_schedules.each_key do |sch_type|
       thermostat_schedules[sch_type].uniq.each do |sch|
         # Skip non-ruleset schedules
         next if sch.to_ScheduleRuleset.empty?
@@ -1717,9 +1726,7 @@ Standard.class_eval do
     # model_run(model)  in the current working directory
 
     # Make the directory if it doesn't exist
-    unless Dir.exist?(run_dir)
-      Dir.mkdir(run_dir)
-    end
+    FileUtils.mkdir_p(run_dir)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started simulation in '#{run_dir}'")
 
@@ -1787,7 +1794,7 @@ Standard.class_eval do
       ep_dir = OpenStudio.getEnergyPlusDirectory
       ep_path = OpenStudio.getEnergyPlusExecutable
       ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
-      idd_path = OpenStudio::Path.new(ep_dir.to_s + '/Energy+.idd')
+      idd_path = OpenStudio::Path.new("#{ep_dir}/Energy+.idd")
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
       # Make a run manager and queue up the sizing model_run(model)
@@ -2089,7 +2096,7 @@ Standard.class_eval do
         }
         econ_limits = model_find_object(standards_data['economizers'], search_criteria)
         minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
-        economizer_required = minimum_capacity_btu_per_hr.nil? ? false : true
+        economizer_required = !minimum_capacity_btu_per_hr.nil?
       elsif @instvarbuilding_type == 'LargeOffice' && air_loop_hvac_include_wshp?(air_loop)
         # WSHP serving the IT closets are assumed to always be too
         # small to require an economizer
@@ -2320,7 +2327,7 @@ Standard.class_eval do
       source_zone_name, transfer_air_flow_cfm = target_and_source_zones[exhaust_fan_zone_name]
       source_zone = model.getThermalZoneByName(source_zone_name).get
       transfer_air_source_zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
-      transfer_air_source_zone_exhaust_fan.setName(source_zone.name.to_s + ' Dummy Transfer Air (Source) Fan')
+      transfer_air_source_zone_exhaust_fan.setName("#{source_zone.name} Dummy Transfer Air (Source) Fan")
       transfer_air_source_zone_exhaust_fan.setAvailabilitySchedule(exhaust_fan.availabilitySchedule.get)
       # Convert transfer air flow to m3/s
       transfer_air_flow_m3s = OpenStudio.convert(transfer_air_flow_cfm, 'cfm', 'm^3/s').get

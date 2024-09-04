@@ -646,7 +646,7 @@ class ASHRAE9012019 < ASHRAE901
 
     # From ASHRAE Std 62.1-2019 Section 6.2.5.3
     if occ_diver_d < 0.6
-      e_v = 0.88 * occ_diver_d + 0.22
+      e_v = (0.88 * occ_diver_d) + 0.22
     else
       e_v = 0.75
     end
@@ -659,13 +659,7 @@ class ASHRAE9012019 < ASHRAE901
     oa_ctrl = air_loop_hvac.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir
     max_oa_frac_sch = oa_ctrl.maximumFractionofOutdoorAirSchedule
 
-    if !max_oa_frac_sch.is_initialized
-      max_oa_frac_sch = OpenStudio::Model::ScheduleConstant.new(air_loop_hvac.model)
-      max_oa_frac_sch.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
-      max_oa_frac_sch.setValue(1.0)
-      max_oa_frac_sch_type = 'Schedule:Constant'
-      oa_ctrl.setMaximumFractionofOutdoorAirSchedule(max_oa_frac_sch)
-    else
+    if max_oa_frac_sch.is_initialized
       max_oa_frac_sch = max_oa_frac_sch.get
       if max_oa_frac_sch.to_ScheduleRuleset.is_initialized
         max_oa_frac_sch = max_oa_frac_sch.to_ScheduleRuleset.get
@@ -677,6 +671,12 @@ class ASHRAE9012019 < ASHRAE901
         max_oa_frac_sch = max_oa_frac_sch.to_ScheduleCompact.get
         max_oa_frac_sch_type = 'Schedule:Compact'
       end
+    else
+      max_oa_frac_sch = OpenStudio::Model::ScheduleConstant.new(air_loop_hvac.model)
+      max_oa_frac_sch.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
+      max_oa_frac_sch.setValue(1.0)
+      max_oa_frac_sch_type = 'Schedule:Constant'
+      oa_ctrl.setMaximumFractionofOutdoorAirSchedule(max_oa_frac_sch)
     end
 
     # Add EMS to "cap" the OA calculated by the
@@ -754,7 +754,7 @@ class ASHRAE9012019 < ASHRAE901
           unitary_system = comp.to_AirLoopHVACUnitarySystem.get
         end
       end
-      return false unless !unitary_system.nil?
+      return false if unitary_system.nil?
 
       # Set fan operating schedule during assumed occupant standby mode time to 0 so the fan can cycle
       new_sch = model_set_schedule_value(unitary_system.supplyAirFanOperatingModeSchedule.get, '12' => 0)

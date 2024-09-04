@@ -32,9 +32,7 @@ class Standard
 
     # Skip surfaces that don't have a construction
     # return previous_construction_map if planar_surface.construction.empty?
-    if !planar_surface.construction.empty?
-      construction = planar_surface.construction.get
-    else
+    if planar_surface.construction.empty?
       # Get appropriate default construction if not defined inside surface object
       construction = nil
       space_type = space.spaceType.get
@@ -56,6 +54,8 @@ class Standard
       end
 
       return previous_construction_map if construction.nil?
+    else
+      construction = planar_surface.construction.get
     end
 
     # Determine if residential or nonresidential
@@ -83,8 +83,9 @@ class Standard
     # Mapping is between standards-defined enumerations and the
     # enumerations available in OpenStudio.
     stds_type = nil
-    # Windows and Glass Doors
-    if surf_type == 'ExteriorWindow' || surf_type == 'GlassDoor'
+    case surf_type
+    when 'ExteriorWindow', 'GlassDoor'
+      # Windows and Glass Doors
       stds_type = standards_info.fenestrationFrameType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -103,15 +104,15 @@ class Standard
           return previous_construction_map
         end
       else
-        if !wwr_building_type.nil?
-          stds_type = 'Any Vertical Glazing'
-        else
+        if wwr_building_type.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration frame type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
           return previous_construction_map
+        else
+          stds_type = 'Any Vertical Glazing'
         end
       end
-    # Skylights
-    elsif surf_type == 'Skylight'
+    when 'Skylight'
+      # Skylights
       stds_type = standards_info.fenestrationType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -130,8 +131,8 @@ class Standard
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
         return previous_construction_map
       end
-    # Exterior Doors
-    elsif surf_type == 'ExteriorDoor'
+    when 'ExteriorDoor'
+      # Exterior Doors
       stds_type = standards_info.standardsConstructionType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -145,8 +146,8 @@ class Standard
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards construction type for exterior door #{planar_surface.name}.  This door will not have the standard applied.")
         return previous_construction_map
       end
-    # All other surface types
     else
+      # All other surface types
       stds_type = standards_info.standardsConstructionType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -207,11 +208,12 @@ class Standard
   # @return: [object] Construction object
   def get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
     # Get DefaultSurfaceContstructions or DefaultSubSurfaceConstructions object
-    if surface_category == 'ExteriorSurface'
+    case surface_category
+    when 'ExteriorSurface'
       cons_list = cons_set.defaultExteriorSurfaceConstructions.get
-    elsif surface_category == 'GroundSurface'
+    when 'GroundSurface'
       cons_list = cons_set.defaultGroundContactSurfaceConstructions.get
-    elsif surface_category == 'ExteriorSubSurface'
+    when 'ExteriorSubSurface'
       cons_list = cons_set.defaultExteriorSubSurfaceConstructions.get
     else
       cons_list = nil

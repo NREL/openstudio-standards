@@ -410,7 +410,7 @@ module OpenstudioStandards
     def self.spaces_space_types_get_parametric_schedule_inputs(spaces_space_types, parametric_inputs, gather_data_only)
       spaces_space_types.each do |space_type|
         # get hours of operation for space type once
-        next if space_type.class == 'OpenStudio::Model::SpaceTypes' && space_type.floorArea == 0
+        next if space_type.instance_of?(OpenStudio::Model::SpaceType) && space_type.floorArea == 0
 
         hours_of_operation = Space.space_hours_of_operation(space_type)
         if hours_of_operation.nil?
@@ -493,11 +493,9 @@ module OpenstudioStandards
                                                     min_ramp_dur_hr: 2.0,
                                                     gather_data_only: false,
                                                     hoo_var_method: 'hours')
-      if parametric_inputs.key?(schedule_ruleset)
-        if hours_of_operation != parametric_inputs[schedule_ruleset][:hoo_inputs] # don't warn if the hours of operation between old and new schedule are equivalent
-          # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedule', "#{space_load_instance.name} uses #{schedule_ruleset.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[schedule_ruleset][:target].name}.")
-          return nil
-        end
+      if parametric_inputs.key?(schedule_ruleset) && (hours_of_operation != parametric_inputs[schedule_ruleset][:hoo_inputs]) # don't warn if the hours of operation between old and new schedule are equivalent
+        # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Schedule', "#{space_load_instance.name} uses #{schedule_ruleset.name} but parametric inputs have already been setup based on hours of operation for #{parametric_inputs[schedule_ruleset][:target].name}.")
+        return nil
       end
 
       # gather and store data for scheduleRuleset
@@ -510,6 +508,10 @@ module OpenstudioStandards
 
       # set scheduleRuleset properties
       props = schedule_ruleset.additionalProperties
+
+      # don't need to gather more than once
+      return parametric_inputs if props.getFeatureAsString('param_sch_ver') == '0.0.1'
+
       props.setFeature('param_sch_ver', '0.0.1') # this is needed to see if formulas are in sync with version of standards that processes them also used to flag schedule as parametric
       props.setFeature('param_sch_floor', min_max['min'])
       props.setFeature('param_sch_ceiling', min_max['max'])
@@ -517,7 +519,7 @@ module OpenstudioStandards
       # cleanup existing profiles
       OpenstudioStandards::Schedules.schedule_ruleset_cleanup_profiles(schedule_ruleset)
 
-      # get initial hash of schedule days => rule indices
+      # get initial hash of schedule days => rule index values
       schedule_days = OpenstudioStandards::Schedules.schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
       # get all day schedule equivalent full load hours to tag
       daily_flhs = schedule_days.keys.map { |day_sch| OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(day_sch) }
@@ -525,8 +527,11 @@ module OpenstudioStandards
       sch_ruleset_days_used = OpenstudioStandards::Schedules.schedule_ruleset_get_annual_days_used(schedule_ruleset)
 
       # match up schedule rule days with hours of operation days
+      # sch_day_map is a hash where keys are the rule index values of the schedule
+      # and values are hashes where keys are the hours of operation rule index, and values are arrays of days that the schedule
       sch_day_map = {}
       sch_ruleset_days_used.each do |sch_index, sch_days|
+        # first create a hash that maps each day index to the hoo index that covers that day
         day_map = {}
         sch_days.each do |day|
           # find the hour of operation rule that contains the day number
@@ -547,6 +552,7 @@ module OpenstudioStandards
 
       # create new rule corresponding to the hour of operation rules
       new_rule_ct = 0
+      rule_idxs_to_keep = []
       sch_day_map.each do |sch_index, hoo_group|
         hoo_group.each do |hoo_index, day_group|
           # skip common default days
@@ -554,7 +560,9 @@ module OpenstudioStandards
 
           # skip if rules already match
           if (sch_ruleset_days_used[sch_index] - day_group).empty?
-            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{schedule_ruleset.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
+            # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.Schedules', "in #{__method__}: #{schedule_ruleset.name} rule #{sch_index} already matches hours of operation rule #{hoo_index}; new rule won't be created.")
+            # keep these rules index values to avoid deleting later
+            rule_idxs_to_keep << sch_index unless sch_index == -1
             next
           end
           # create new rules
@@ -562,8 +570,19 @@ module OpenstudioStandards
           new_rule_ct += new_rules.size
         end
       end
-      # new rules are created at top of list - cleanup old rules
-      schedule_ruleset.scheduleRules[new_rule_ct..-1].each(&:remove) unless new_rule_ct == 0
+      # new rules are created at top of list - cleanup old rules that have been replaced
+      if !(new_rule_ct == 0 || new_rule_ct == schedule_ruleset.scheduleRules.size)
+        # increase index values by the number of new rules
+        rule_idxs_adjusted = rule_idxs_to_keep.map { |v| v + new_rule_ct }
+        rules_to_remove = []
+        schedule_ruleset.scheduleRules.each_with_index do |rule, i|
+          # don't remove new rules or rules that already match
+          if (rule.ruleIndex > new_rule_ct - 1) && !rule_idxs_adjusted.include?(rule.ruleIndex)
+            rules_to_remove << rule
+          end
+        end
+        rules_to_remove.each(&:remove)
+      end
 
       # re-collect new schedule rules
       schedule_days = OpenstudioStandards::Schedules.schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
@@ -587,7 +606,7 @@ module OpenstudioStandards
           end
         end
 
-        # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have ot split rule and alter model
+        # if schedule day days used can't be mapped to single hours of operation then do not use hoo variables, otherwise would have to split rule and alter model
         if hoo_target_index.nil?
 
           hoo_start = nil
@@ -713,7 +732,7 @@ module OpenstudioStandards
             start_delta_array_abs = [(hoo_start - time).abs, (hoo_start - time + 24).abs, (hoo_start - time - 24).abs]
             start_delta_h = start_delta_array[start_delta_array_abs.index(start_delta_array_abs.min)]
             formula_identifier['start'] = start_delta_h
-            mid_calc = hoo_start + occ * 0.5
+            mid_calc = hoo_start + (occ * 0.5)
             mid_delta_array = [mid_calc - time, mid_calc - time + 24, mid_calc - time - 24]
             mid_delta_array_abs = [(mid_calc - time).abs, (mid_calc - time + 24).abs, (mid_calc - time - 24).abs]
             mid_delta_h = mid_delta_array[mid_delta_array_abs.index(mid_delta_array_abs.min)]
@@ -734,7 +753,8 @@ module OpenstudioStandards
             min_key = formula_identifier_min_abs.key(formula_identifier_min_abs.values.min)
             min_value = formula_identifier[min_key]
 
-            if hoo_var_method == 'hours'
+            case hoo_var_method
+            when 'hours'
               # minimize x, which should be no greater than 12, see if rounding to 2 decimal places works
               min_value = min_value.round(2)
               if min_key == 'start'
@@ -768,7 +788,7 @@ module OpenstudioStandards
                 # puts time
               end
 
-            elsif hoo_var_method == 'fractional'
+            when 'fractional'
 
               # minimize x(hour before converted to fraction), which should be no greater than 0.5 as fraction, see if rounding to 3 decimal places works
               if occ > 0
@@ -810,7 +830,7 @@ module OpenstudioStandards
                 end
               end
 
-            elsif hoo_var_method == 'tstat'
+            when 'tstat'
               # puts formula_identifier
               if min_key == 'start' && !start_set
                 time = 'hoo_start + 0'
@@ -946,7 +966,7 @@ module OpenstudioStandards
 
       # Get the hours of operation schedule
       hours_of_operation = parametric_inputs[schedule_ruleset][:hoo_inputs]
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name} hours_of_operation = #{hours_of_operation}.")
+      # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleRuleset', "For #{schedule_ruleset.name} hours_of_operation = #{hours_of_operation}.")
 
       starting_aeflh = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule_ruleset)
 
@@ -998,7 +1018,7 @@ module OpenstudioStandards
         hoo_target_index = nil
         days_used = []
         indices_vector.each_with_index do |profile_index, i|
-          if profile_index == current_rule_index then days_used << i + 1 end
+          if profile_index == current_rule_index then days_used << (i + 1) end
         end
         # find days_used in hoo profiles that contains all days used from this profile
         hoo_profile_match_hash = {}
@@ -1036,7 +1056,7 @@ module OpenstudioStandards
             remainder = days_to_fill - value[:days_used]
             day_for_rule = days_to_fill - remainder
             if remainder.size < days_to_fill.size
-              autogen_rules[profile_index] = { days_to_fill: day_for_rule, hoo_start: hoo_start, hoo_end: hoo_end }
+              autogen_rules[profile_index] = { days_to_fill: day_for_rule, hoo_start: hoo_start, hoo_end: hoo_end}
             end
             days_to_fill = remainder
           end
@@ -1142,6 +1162,8 @@ module OpenstudioStandards
       vac = 24.0 - occ
       range = val_clg - val_flr
 
+      timestep_minutes = (0..60).step(60 * ramp_frequency).to_a
+
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleDay', "Schedule #{schedule_day.name} has this formula hash: #{formula_hash}")
 
       # apply variables and create updated hash with only numbers
@@ -1152,7 +1174,11 @@ module OpenstudioStandards
         time = time.gsub('hoo_end', hoo_end.to_s)
         time = time.gsub('occ', occ.to_s)
         # can save special variables like lunch or break using this logic
-        time = time.gsub('mid', (hoo_start + occ * 0.5).to_s)
+        mid_start = hoo_start + (occ * 0.5)
+        mid_start_min = mid_start.modulo(1) * 60
+        mid_start_min_ts = timestep_minutes.min { |a, b| (a - mid_start_min).abs <=> (b - mid_start_min).abs }
+        mid_start_adjusted = mid_start.floor + (mid_start_min_ts / 60)
+        time = time.gsub('mid', mid_start_adjusted.to_s)
         time = time.gsub('vac', vac.to_s)
         begin
           time_float = eval(time)
@@ -1235,9 +1261,6 @@ module OpenstudioStandards
             updated_time = 0.0
             last_buffer = 'NA'
           else
-            # pick midpoint and put each time there. e.g. times of (2,7,9,8,11) would be changed to  (2,7,8.5,8.5,11)
-            delta = last_time - time_value_pair[0]
-
             # determine much space last item can move
             if i < 2
               last_buffer = time_value_pairs[i - 1][0] # can move down to 0 without any issues
@@ -1245,8 +1268,8 @@ module OpenstudioStandards
               last_buffer = time_value_pairs[i - 1][0] - time_value_pairs[i - 2][0]
             end
 
-            # center if possible but don't exceed available buffer
-            updated_time = time_value_pairs[i - 1][0] - [delta / 2.0, last_buffer].min
+            # move to previous timestep but don't exceed available buffer
+            updated_time = time_value_pairs[i - 1][0] - [ramp_frequency, last_buffer].min
           end
 
           # update values in array
@@ -1255,7 +1278,7 @@ module OpenstudioStandards
           time_value_pairs[i][0] = updated_time
 
           # reporting mostly for diagnostic purposes
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleDay', "For #{schedule_day.name} profile item #{i} time was #{last_time} and item #{i + 1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
+          # OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Parametric.ScheduleDay', "For #{schedule_day.name} profile item #{i} time was #{last_time} and item #{i + 1} time was #{orig_current_time}. Last buffer is #{last_buffer}. Changing both times to #{updated_time}.")
 
           last_time = updated_time
           throw_order_warning = true
@@ -1267,7 +1290,7 @@ module OpenstudioStandards
 
       # issue warning if order was changed
       if throw_order_warning
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.ScheduleDay', "Pre-interpolated processed hash for #{schedule_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjusted as shown to crate a valid profile: #{time_value_pairs}")
+        # OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.ScheduleDay', "Pre-interpolated processed hash for #{schedule_day.name} has one or more out of order conflicts: #{pre_fix_time_value_pairs}. Time values were adjusted as shown to crate a valid profile: #{time_value_pairs}")
       end
 
       # add interpolated values at ramp_frequency
@@ -1293,7 +1316,7 @@ module OpenstudioStandards
 
         # add interpolated value to array
         interpolated_time = current_time + ramp_frequency
-        interpolated_value = next_value * (interpolated_time - current_time) / step_delta + current_value * (next_time - interpolated_time) / step_delta
+        interpolated_value = (next_value * (interpolated_time - current_time) / step_delta) + (current_value * (next_time - interpolated_time) / step_delta)
         time_value_pairs.insert(i + 1, [interpolated_time, interpolated_value])
       end
 
@@ -1322,11 +1345,11 @@ module OpenstudioStandards
       time_value_pairs.rotate!(rotate_steps)
 
       # add a 24 on the end of array that matches the first value
-      if time_value_pairs.last[0] != 24.0
+      if time_value_pairs.last[0].to_i != 24
         time_value_pairs << [24.0, time_value_pairs.first[1]]
       end
 
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleDay', "Schedule #{schedule_day.name} will be adjusted with these time-value pairs: #{time_value_pairs}")
+      # OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleDay', "Schedule #{schedule_day.name} will be adjusted with these time-value pairs: #{time_value_pairs}")
 
       # reset scheduleDay values based on interpolated values
       schedule_day.clearValues
@@ -1341,6 +1364,11 @@ module OpenstudioStandards
 
       # Tell EnergyPlus to interpolate schedules to timestep so that it doesn't have to be done in this code
       # sch_day.setInterpolatetoTimestep(true)
+      # if model.version < OpenStudio::VersionString.new('3.8.0')
+      #   day_sch.setInterpolatetoTimestep(true)
+      # else
+      #   day_sch.setInterpolatetoTimestep('Average')
+      # end
 
       return schedule_day
     end

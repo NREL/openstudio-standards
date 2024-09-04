@@ -85,7 +85,7 @@ class NECB_HVAC_System_2_Test_FO2_S_H_FPFC < Minitest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
