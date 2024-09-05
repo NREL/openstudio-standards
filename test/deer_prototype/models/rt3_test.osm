@@ -9257,13 +9257,13 @@ OS:WaterHeater:Mixed,
 
 OS:Schedule:Ruleset,
   {dc3926d2-d6ac-4013-86bd-cae3462ca702}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F, !- Name
+  Water Heater Ambient Temp Schedule 70F, !- Name
   {1c4b821c-3835-4c4b-b417-b30941a342fc}, !- Schedule Type Limits Name
   {dc17d306-5801-47f5-99ce-1a559d47f992}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {dc17d306-5801-47f5-99ce-1a559d47f992}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default, !- Name
+  Water Heater Ambient Temp Schedule 70F Default, !- Name
   {1c4b821c-3835-4c4b-b417-b30941a342fc}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1

@@ -76,7 +76,7 @@ class NECB2020
       end
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = sl_btu_per_hr / 70
-    when 'NaturalGas'
+    when 'NaturalGas', 'FuelOilNo2'
       # Performance requirements from NECB2020 Table 6.2.2.1 Gas-fired storage type
       
       # Performance requirement based on FHR and volume

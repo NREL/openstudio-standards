@@ -235,7 +235,7 @@ class Standard
     end
 
     # Standby mode occupancy control
-    return true unless zone_hvac_component.thermalZone.empty?
+    return true if zone_hvac_component.thermalZone.empty?
 
     thermal_zone = zone_hvac_component.thermalZone.get
 
