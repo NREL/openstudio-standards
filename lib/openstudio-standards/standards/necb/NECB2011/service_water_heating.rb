@@ -193,6 +193,37 @@ class NECB2011
         # Calculate water heater efficiency
         water_heater_eff = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
       end
+    when 'FuelOilNo2'
+      if capacity_btu_per_hr <= 75_000
+        # Fixed water heater thermal efficiency per PNNL
+        water_heater_eff = 0.82
+        # Calculate the minimum Energy Factor (EF)
+        base_ef = 0.67
+        vol_drt = 0.0019
+        ef = base_ef - (vol_drt * volume_gal)
+        # Calculate the Recovery Efficiency (RE)
+        # based on a fixed capacity of 75,000 Btu/hr
+        # and a fixed volume of 40 gallons by solving
+        # this system of equations:
+        # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
+        # 0.82 = (ua*67.5+cap*re)/cap
+        cap = 75_000.0
+        re = (Math.sqrt(6724 * ef**2 * cap**2 + 40_409_100 * ef**2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef**2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
+        # Calculate the skin loss coefficient (UA)
+        # based on the actual capacity.
+        ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 67.5
+      else
+        # Thermal efficiency requirement from 90.1
+        et = 0.8
+        # Calculate the max allowable standby loss (SL)
+        cap_adj = 800
+        vol_drt = 110
+        sl_btu_per_hr = (capacity_btu_per_hr / cap_adj + vol_drt * Math.sqrt(volume_gal))
+        # Calculate the skin loss coefficient (UA)
+        ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
+        # Calculate water heater efficiency
+        water_heater_eff = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
+      end
     end
 
     # Convert to SI
@@ -445,13 +476,15 @@ class NECB2011
   # space that has a demand for shw.  It calculates the x, y, and z components of the vector between the shw space and the
   # spaces with demand for shw.  The distance of the piping run is calculated by adding the x, y, and z components of the
   # vector (rather than the magnitude of the vector).  For the purposes of calculating pressure loss along the pipe bends,
-  # and other minor losses are accounted by doubling the calculated length of the pipe.  the pipe diameter is defaulted to
-  # 0.01905m (3/4") as recommended by Mike Lubun.  The default kinematic viscosity of water is assumed to be that at
-  # 60 C (in m^2/s).  The default density of water is assumed to be 983 kg/m^3 as per https://hypertextbook.com/facts/2007/AllenMa.shtml
-  # accessed 2018-07-27.  The pipe is assumed to be made out of PVC and have a roughness height of 1.5*10^-6 m as per
+  # and other minor losses are accounted by doubling the calculated length of the pipe.  The default kinematic viscosity 
+  # of water is assumed to be that at 60 C (in m^2/s).  The default density of water is assumed to be 983 kg/m^3 as per 
+  # https://hypertextbook.com/facts/2007/AllenMa.shtml accessed 2018-07-27.  The pipe is assumed to be made out of PVC and 
+  # have a roughness height of 1.5*10^-6 m as per:
   # www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on 2018-07-25.
+  # The default maximum velocity is from the table from 'The Engineering Toolbox' link:
+  # https://www.engineeringtoolbox.com/flow-velocity-water-pipes-d_385.html
   # Chris Kirney 2018-07-27.
-  def auto_size_shw_pump_head(model, default: true, pipe_dia_m: 0.01905, kin_visc_SI: 0.000004736, density_SI: 983, pipe_rough_m: 0.0000015)
+  def auto_size_shw_pump_head(model, default: true, pipe_vel: 1.75, kin_visc_SI: 0.000004736, density_SI: 983, pipe_rough_m: 0.0000015)
     return 179532 if default
 
     mech_room, cond_spaces = find_mech_room(model)
@@ -511,7 +544,8 @@ class NECB2011
       #          2018-07-25.  I assume 3/4" pipe because that is what Mike Lubun says is used in most cases (unless it
       #          it is for process water but we assume that is not the case).
       # Determine the bulk velocity of the shw through the pipe.
-      pipe_vel = 4 * total_peak_flow / (Math::PI * (pipe_dia_m**2))
+      # find pipe diameter for the peak flow
+      pipe_dia_m = (4.0 * total_peak_flow / (Math::PI * pipe_vel))**0.5
       # Get the Reynolds number.
       re_pipe = (pipe_vel * pipe_dia_m) / kin_visc_SI
       # Step 2:  Figure out what the Darcy-Weisbach friction factor is.

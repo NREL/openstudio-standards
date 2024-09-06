@@ -6,6 +6,7 @@ require 'csv'
 # @abstract
 class ASHRAE901PRM < Standard
   def initialize
+    super()
     load_standards_database
     @sizing_run_dir = Dir.pwd
   end
@@ -71,7 +72,7 @@ class ASHRAE901PRM < Standard
     # Read all valid files in user_data_folder and load into json array
     unless user_data_path == ''
       user_data_validation_outcome = true
-      Dir.glob("#{user_data_path}/*.csv").each do |csv_full_name|
+      Dir.glob("#{user_data_path.gsub('\\', '/')}/*.csv").each do |csv_full_name|
         csv_file_name = File.basename(csv_full_name, File.extname(csv_full_name))
         if json_objs.key?(csv_file_name)
           # Load csv file into array of hashes
@@ -95,12 +96,8 @@ class ASHRAE901PRM < Standard
 
     # Make folder for json files; remove pre-existing first, if needed
     json_path = "#{project_path}/user_data_json"
-    if !Dir.exist?(json_path)
-      Dir.mkdir(json_path)
-    else
-      FileUtils.rm_rf(json_path)
-      Dir.mkdir(json_path)
-    end
+    FileUtils.rm_rf(json_path)
+    FileUtils.mkdir_p(json_path)
 
     # Write all json files
     json_objs.each do |file_name, json_rows|
@@ -294,7 +291,7 @@ class ASHRAE901PRM < Standard
         return false
       end
       # Fan power credits, exhaust air energy recovery
-      user_zone_hvac.keys.each do |info_key|
+      user_zone_hvac.each_key do |info_key|
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_zone_hvac, info_key)
@@ -335,7 +332,7 @@ class ASHRAE901PRM < Standard
         return false
       end
       # Fan power credits, exhaust air energy recovery
-      user_airloop.keys.each do |info_key|
+      user_airloop.each_key do |info_key|
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_airloop, info_key)
@@ -429,7 +426,7 @@ class ASHRAE901PRM < Standard
       end
 
       # Fan power credits, exhaust air energy recovery
-      user_airloop.keys.each do |info_key|
+      user_airloop.each_key do |info_key|
         # Fan power credits
         if info_key.include?('has_fan_power_credit')
           has_fan_power_credit = prm_read_user_data(user_airloop, info_key)

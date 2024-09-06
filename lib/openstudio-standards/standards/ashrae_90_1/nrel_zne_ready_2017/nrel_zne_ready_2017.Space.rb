@@ -30,7 +30,7 @@ class NRELZNEReady2017 < ASHRAE901
 
     # Primary Sidelighting
     # Check if the primary sidelit area contains less than 150W of lighting
-    if areas['primary_sidelighted_area'] == 0.0
+    if areas['primary_sidelighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
       req_pri_ctrl = false
     elsif areas['primary_sidelighted_area'] * space_lpd_w_per_m2 < 150.0
@@ -46,7 +46,7 @@ class NRELZNEReady2017 < ASHRAE901
 
     # Secondary Sidelighting
     # Check if the primary and secondary sidelit areas contains less than 300W of lighting
-    if areas['secondary_sidelighted_area'] == 0.0
+    if areas['secondary_sidelighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
       req_sec_ctrl = false
     elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 300
@@ -62,7 +62,7 @@ class NRELZNEReady2017 < ASHRAE901
 
     # Toplighting
     # Check if the toplit area contains less than 150W of lighting
-    if areas['toplighted_area'] == 0.0
+    if areas['toplighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
       req_top_ctrl = false
     elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150

@@ -316,30 +316,26 @@ class AppendixGPRMTests < Minitest::Test
       exterior_fenestration_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_fenestration_name']
       exterior_door_name = JSON.parse(File.read("#{@@json_dir}/envelope.json"))[run_id]['exterior_door_name']
 
-      # Get U-value of envelope in baseline model
-      std = Standard.build('90.1-PRM-2019')
-
       u_value_baseline = {}
       construction_baseline = {}
       opaque_exterior_name.each do |val|
-        u_value_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'U-Factor with Film', 'W/m2-K').to_f
-        construction_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'Construction', '').to_s
+        u_value_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'U-Factor with Film', 'W/m2-K').to_f
+        construction_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Opaque Exterior', val[0], 'Construction', '').to_s
       end
       # @todo: we've identified an issue with the r-value for air film in EnergyPlus for semi-exterior surfaces:
       # https://github.com/NREL/EnergyPlus/issues/9470
-      # todos were added in film_coefficients_r_value() since this is just a reporting issue, we're checking the
-      # no film u-value for opaque interior surfaces
+      # todos were added in OpenstudioStandards::Constructions.film_coefficients_r_value() since this is just a reporting issue, we're checking the no film u-value for opaque interior surfaces
       opaque_interior_name.each do |val|
-        u_value_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'U-Factor no Film', 'W/m2-K').to_f
-        construction_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'Construction', '').to_s
+        u_value_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'U-Factor no Film', 'W/m2-K').to_f
+        construction_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Opaque Interior', val[0], 'Construction', '').to_s
       end
       exterior_fenestration_name.each do |val|
-        u_value_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Exterior Fenestration', val[0], 'Glass U-Factor', 'W/m2-K').to_f
-        construction_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Exterior Fenestration', val[0], 'Construction', '').to_s
+        u_value_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Exterior Fenestration', val[0], 'Glass U-Factor', 'W/m2-K').to_f
+        construction_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Exterior Fenestration', val[0], 'Construction', '').to_s
       end
       exterior_door_name.each do |val|
-        u_value_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Exterior Door', val[0], 'U-Factor with Film', 'W/m2-K').to_f
-        construction_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'EnvelopeSummary', 'Exterior Door', val[0], 'Construction', '').to_s
+        u_value_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Exterior Door', val[0], 'U-Factor with Film', 'W/m2-K').to_f
+        construction_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'EnvelopeSummary', 'Exterior Door', val[0], 'Construction', '').to_s
       end
 
       # Check U-value against expected U-value
@@ -1011,8 +1007,9 @@ class AppendixGPRMTests < Minitest::Test
             end
           end
         end
-
-        assert((num_zones_target == 1 && num_zones_mz > 1 && (fan_hrs_per_week_target - fan_hrs_per_week_mz).abs < 5), 'Split PSZ from MZ system fails for high internal gain zone.')
+        assert(num_zones_target == 1, "Split PSZ from MZ system fails for high internal gain zone. Expected 'Perimeter_bot_ZN_1 ZN' to be isolated as one zone, but num_zones_target is #{num_zones_target}")
+        assert(num_zones_mz > 1, 'Split PSZ from MZ system fails for high internal gain zone. Expected multiple zones to be on multiple zone system.')
+        assert((fan_hrs_per_week_target - fan_hrs_per_week_mz).abs < 5, "Split PSZ from MZ system fails for high internal gain zone. Expected fan schedule on the PSZ system with #{fan_hrs_per_week_target} system hours to be roughly the same as the MZ system with #{fan_hrs_per_week_mz} system hours.")
       elsif building_type == 'MediumOffice' && mod_str == 'remove_transformer_change_to_long_occ_sch_Perimeter_bot_ZN_1 ZN'
         # This mod should isolate Perimeter_bot_ZN_1 ZN to PSZ
         # Fan schedule for the PSZ should be 24/7, while fan schedule for MZ system should be 92 hrs/wk
@@ -1032,8 +1029,9 @@ class AppendixGPRMTests < Minitest::Test
             end
           end
         end
-
-        assert((num_zones_target == 1 && num_zones_mz > 1 && fan_hrs_per_week_target > fan_hrs_per_week_mz), "Split PSZ from MZ system fails for high internal gain zone. Target zone fan hrs/wk = #{fan_hrs_per_week_target}; MZ fan hrs/wk = #{fan_hrs_per_week_mz}")
+        assert(num_zones_target == 1, "Split PSZ from MZ system fails for high internal gain zone. Expected 'Perimeter_bot_ZN_1 ZN' to be isolated as one zone, but num_zones_target is #{num_zones_target}")
+        assert(num_zones_mz > 1, 'Split PSZ from MZ system fails for high internal gain zone. Expected multiple zones to be on multiple zone system.')
+        assert(fan_hrs_per_week_target > fan_hrs_per_week_mz, "Split PSZ from MZ system fails for high internal gain zone. Target zone fan hrs/wk = #{fan_hrs_per_week_target}; MZ fan hrs/wk = #{fan_hrs_per_week_mz}.")
       end
     end
   end
@@ -1102,7 +1100,7 @@ class AppendixGPRMTests < Minitest::Test
       # Get space envelope area
       spc_env_area = 0
       model.getSpaces.sort.each do |spc|
-        spc_env_area += std.space_envelope_area(spc, climate_zone)
+        spc_env_area += OpenstudioStandards::Geometry.space_get_envelope_area(spc)
       end
       # close the sql
       sql.close
@@ -1127,7 +1125,7 @@ class AppendixGPRMTests < Minitest::Test
       # Check if the space envelope area calculations
       spc_env_area = 0
       model.getSpaces.sort.each do |spc|
-        spc_env_area += std.space_envelope_area(spc, climate_zone)
+        spc_env_area += OpenstudioStandards::Geometry.space_get_envelope_area(spc)
       end
       assert((space_env_areas[run_id].to_f - spc_env_area.round(2)).abs < 0.001, "Space envelope calculation is incorrect for the #{building_type}, #{template}, #{climate_zone} model: #{spc_env_area.round(2)} (model) vs. #{space_env_areas[run_id]} (expected).")
 
@@ -1173,7 +1171,7 @@ class AppendixGPRMTests < Minitest::Test
       has_res = 'false'
       std = Standard.build("#{template}_#{building_type}")
       model_baseline.getSpaces.sort.each do |space|
-        if std.space_residential?(space)
+        if OpenstudioStandards::Space.space_residential?(space)
           has_res = 'true'
         end
       end
@@ -1341,7 +1339,6 @@ class AppendixGPRMTests < Minitest::Test
       run_id = "#{building_type}_#{template}_#{climate_zone}_#{mod_str}"
       space_name = JSON.parse(File.read("#{@@json_dir}/lpd.json"))[run_id]
 
-      std = Standard.build('90.1-PRM-2019')
       sql = model_baseline.sqlFile.get
       unless sql.connectionOpen
         sql.reopen
@@ -1349,7 +1346,7 @@ class AppendixGPRMTests < Minitest::Test
       # Get LPD in baseline model
       lpd_baseline = {}
       space_name.each do |val|
-        lpd_baseline[val[0]] = std.run_query_tabulardatawithstrings(model_baseline, 'LightingSummary', 'Interior Lighting', val[0], 'Lighting Power Density', 'W/m2').to_f
+        lpd_baseline[val[0]] = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'LightingSummary', 'Interior Lighting', val[0], 'Lighting Power Density', 'W/m2').to_f
       end
       sql.close
 
@@ -1416,8 +1413,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, user_data_dir, mod = baseline
       if building_type == 'SmallOffice'
         # Get WWR of baseline model
-        std = Standard.build('90.1-PRM-2019')
-        wwr_baseline = std.run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
+        wwr_baseline = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
         # Check WWR against expected WWR
         wwr_goal = 100 * @@wwr_values[building_type].to_f
         assert(wwr_baseline > wwr_goal, "Baseline WWR for the #{building_type}, #{template}, #{climate_zone} model with user data is incorrect. The WWR of the baseline model is #{wwr_baseline} but should be greater than the WWR goal #{wwr_goal}")
@@ -1863,8 +1859,7 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Get srr of baseline model
-      std = Standard.build('90.1-PRM-2019')
-      srr_baseline = std.run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Skylight-Roof Ratio', 'Skylight-Roof Ratio', 'Total', '%').to_f
+      srr_baseline = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'InputVerificationandResultsSummary', 'Skylight-Roof Ratio', 'Skylight-Roof Ratio', 'Total', '%').to_f
 
       # Check WWR against expected WWR
       srr_goal = 3
@@ -1893,7 +1888,8 @@ class AppendixGPRMTests < Minitest::Test
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
 
-      assert(standard.model_get_unmet_load_hours(model) < 300, "The #{building_type} prototype building model has more than 300 unmet load hours.")
+      umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(model)
+      assert(umlh < 300, "The #{building_type} prototype building model has more than 300 unmet load hours.")
     end
   end
 
@@ -1946,20 +1942,19 @@ class AppendixGPRMTests < Minitest::Test
   #
   # @param prototypes_base [Hash] Baseline prototypes
   def check_vav_min_sp(prototypes_base)
-    standard = Standard.build('90.1-PRM-2019')
     prototypes_base.each do |prototype, model|
       building_type, template, climate_zone, mod = prototype
       model.getAirLoopHVACs.each do |air_loop|
         air_loop.thermalZones.each do |zone|
           zone.equipment.each do |equip|
             if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              zone_oa = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
               vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
               expected_mdp = [zone_oa / vav_terminal.autosizedMaximumAirFlowRate.get, 0.3].max.round(2)
               actual_mdp = vav_terminal.constantMinimumAirFlowFraction.get.round(2)
               assert(expected_mdp == actual_mdp, "Minimum MDP for #{building_type} for #{template} in #{climate_zone} should be #{expected_mdp} but #{actual_mdp} is used in the model.")
             elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
-              zone_oa = standard.thermal_zone_outdoor_airflow_rate(zone)
+              zone_oa = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
               fp_vav_terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
               expected_prim_frac = [zone_oa / fp_vav_terminal.autosizedMaximumPrimaryAirFlowRate.get, 0.3].max.round(2)
               actual_prim_frac = fp_vav_terminal.minimumPrimaryAirFlowFraction.get
@@ -1979,11 +1974,10 @@ class AppendixGPRMTests < Minitest::Test
       building_type, template, climate_zone, user_data_dir, mod = prototype
 
       # Get WWR of baseline model
-      std = Standard.build('90.1-PRM-2019')
-      wwr_baseline = std.run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
+      wwr_baseline = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'InputVerificationandResultsSummary', 'Conditioned Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
       if building_type == 'MediumOffice'
         # In 3.5 the conditioned window-wall ratio table does not consider plenum as indirectly conditioned space, so we need to take out the value from window-wall ratio table.
-        wwr_baseline = std.run_query_tabulardatawithstrings(model_baseline, 'InputVerificationandResultsSummary', 'Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
+        wwr_baseline = OpenstudioStandards::SqlFile.model_tabular_data_query(model_baseline, 'InputVerificationandResultsSummary', 'Window-Wall Ratio', 'Gross Window-Wall Ratio', 'Total', '%').to_f
       end
       # Check WWR against expected WWR
       wwr_goal = 100 * @@wwr_values[building_type].to_f
@@ -1994,4 +1988,77 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
   end
+
+  # Check primary/secondary chilled water loop for the baseline models
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_pri_sec_loop(prototypes_base)
+
+    prototypes_base.each do |prototype, model_baseline|
+
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+
+      has_primary_chilled_water_loop = false
+      has_secondary_chilled_water_loop = false
+
+      # Check primary and secondary chilled water loops
+      model_baseline.getPlantLoops.each do |plant_loop|
+
+        sizing_plant = plant_loop.sizingPlant
+
+        next if sizing_plant.loopType != 'Cooling'
+
+        # Check primary loop for components
+        if plant_loop.name.to_s.include? 'Chilled Water Loop_Primary'
+
+          has_primary_chilled_water_loop = true
+
+          n_chillers = 0
+
+          # Count chillers
+          plant_loop.supplyComponents.each do |sc|
+            if sc.to_ChillerElectricEIR.is_initialized
+              n_chillers += 1
+            end
+          end
+
+          assert(n_chillers == 2, "The number of chillers in the primary loop is incorrect. The test results in #{n_chillers} when it should be 2.")
+
+          has_heat_exchanger = false
+
+          # Check for heat exchanger on demand side
+          plant_loop.demandComponents.each do |dc|
+            if dc.to_HeatExchangerFluidToFluid.is_initialized
+              has_heat_exchanger = true
+            end
+          end
+
+          assert(has_heat_exchanger, "The primary chilled water loop should have a HeatExchangerFluidToFluid on the demand side but it does not.")
+
+        # Check secondary loop for components
+        elsif plant_loop.name.to_s.include? 'Chilled Water Loop'
+
+          has_secondary_chilled_water_loop = true
+          has_heat_exchanger = false
+
+          # Check for heat exchanger on supply side
+          plant_loop.supplyComponents.each do |sc|
+            if sc.to_HeatExchangerFluidToFluid.is_initialized
+              has_heat_exchanger = true
+            end
+          end
+
+          assert(has_heat_exchanger, "The secondary chilled water loop should have a HeatExchangerFluidToFluid on the supply side but it does not.")
+
+        end
+
+      end
+
+      assert(has_primary_chilled_water_loop, "The primary/secondary test did not find a primary chilled water loop for #{building_type}, #{template}, #{climate_zone}.")
+      assert(has_secondary_chilled_water_loop, "The primary/secondary test did not find a secondary chilled water loop for #{building_type}, #{template}, #{climate_zone}.")
+
+    end
+
+  end
+
 end

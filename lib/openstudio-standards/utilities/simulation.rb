@@ -8,9 +8,7 @@ Standard.class_eval do
   # @return [Boolean] returns true if successful, false if not
   def model_run_simulation_and_log_errors(model, run_dir = "#{Dir.pwd}/Run")
     # Make the directory if it doesn't exist
-    unless Dir.exist?(run_dir)
-      FileUtils.mkdir_p(run_dir)
-    end
+    FileUtils.mkdir_p(run_dir)
 
     # Save the model to energyplus idf
     idf_name = 'in.idf'
@@ -58,7 +56,7 @@ Standard.class_eval do
       ep_dir = OpenStudio.getEnergyPlusDirectory
       ep_path = OpenStudio.getEnergyPlusExecutable
       ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
-      idd_path = OpenStudio::Path.new(ep_dir.to_s + '/Energy+.idd')
+      idd_path = OpenStudio::Path.new("#{ep_dir}/Energy+.idd")
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
       # Make a run manager and queue up the run
@@ -193,6 +191,11 @@ Standard.class_eval do
       sim_control.setDoHVACSizingSimulationforSizingPeriods(true)
       sim_control.setMaximumNumberofHVACSizingSimulationPasses(1)
     end
+    if model.version >= OpenStudio::VersionString.new('3.8.0')
+      sim_control.setDoZoneSizingCalculation(true)
+      sim_control.setDoSystemSizingCalculation(true)
+      sim_control.setDoPlantSizingCalculation(true)
+    end
 
     # check that all zones have surfaces.
     raise 'Error: Sizing Run Failed. Thermal Zones with no surfaces exist.' unless model_do_all_zones_have_surfaces?(model)
@@ -217,7 +220,8 @@ Standard.class_eval do
   def model_do_all_zones_have_surfaces?(model)
     # Check to see if all zones have surfaces.
     model.getThermalZones.each do |zone|
-      if BTAP::Geometry::Surfaces.get_surfaces_from_thermal_zones([zone]).empty?
+      surfaces = zone.spaces.sort.flat_map(&:surfaces)
+      if surfaces.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Thermal zone #{zone.name} does not contain surfaces.\n")
         return false
       end

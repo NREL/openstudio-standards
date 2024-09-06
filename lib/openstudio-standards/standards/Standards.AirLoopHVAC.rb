@@ -124,7 +124,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Converting ventilation requirements to per-area for all zones served that do not require DCV.")
       air_loop_hvac.thermalZones.sort.each do |zone|
         unless thermal_zone_demand_control_ventilation_required?(zone, climate_zone)
-          thermal_zone_convert_oa_req_to_per_area(zone)
+          OpenstudioStandards::ThermalZone.thermal_zone_convert_outdoor_air_to_per_area(zone)
         end
       end
     end
@@ -458,13 +458,13 @@ class Standard
     allowable_fan_bhp = 0
     if fan_pwr_limit_type == 'constant volume'
       if dsn_air_flow_cfm > 0
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
+        allowable_fan_bhp = (dsn_air_flow_cfm * 0.00094) + fan_pwr_adjustment_bhp
       else
         allowable_fan_bhp = 0.00094
       end
     elsif fan_pwr_limit_type == 'variable volume'
       if dsn_air_flow_cfm > 0
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.0013 + fan_pwr_adjustment_bhp
+        allowable_fan_bhp = (dsn_air_flow_cfm * 0.0013) + fan_pwr_adjustment_bhp
       else
         allowable_fan_bhp = 0.0013
       end
@@ -835,7 +835,7 @@ class Standard
           nominal_cooling_capacity_w = coil.autosizedGrossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
           nominal_flow_rate_factor = supply_fan.autosizedMaximumFlowRate.to_f / coil.autosizedRatedAirFlowRateAtSelectedNominalSpeedLevel.to_f
           fan_power_adjustment_w = fan_power / coil.speeds.last.referenceUnitGrossRatedSensibleHeatRatio.to_f
-          total_cooling_capacity_w += nominal_cooling_capacity_w * nominal_flow_rate_factor + fan_power_adjustment_w
+          total_cooling_capacity_w += (nominal_cooling_capacity_w * nominal_flow_rate_factor) + fan_power_adjustment_w
         elsif coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.is_initialized
           total_cooling_capacity_w += coil.grossRatedTotalCoolingCapacityAtSelectedNominalSpeedLevel.to_f
         else
@@ -1895,7 +1895,7 @@ class Standard
     air_loop_hvac.thermalZones.each do |zone|
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-          zone_oa = thermal_zone_outdoor_airflow_rate(zone)
+          zone_oa = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
           vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
           air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(vav_terminal, zone_oa, has_ddc)
         end
@@ -1929,7 +1929,7 @@ class Standard
     air_loop_hvac.thermalZones.each do |zone|
       # Vou is the system uncorrected outdoor airflow:
       # Zone airflow is multiplied by the zone multiplier
-      v_ou += thermal_zone_outdoor_airflow_rate(zone) * zone.multiplier.to_f
+      v_ou += OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone) * zone.multiplier.to_f
     end
 
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
@@ -1968,7 +1968,7 @@ class Standard
 
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
-      v_bz = thermal_zone_outdoor_airflow_rate(zone)
+      v_bz = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
 
       # Zone air distribution, assumed 1 per PNNL
       e_z = 1.0
@@ -2813,9 +2813,9 @@ class Standard
   # @return [ScheduleRuleset] a ScheduleRuleset where 0 = unoccupied, 1 = occupied
   def air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: 0.05)
     # Create combined occupancy schedule of every space in every zone served by this airloop
-    sch_ruleset = thermal_zones_get_occupancy_schedule(air_loop_hvac.thermalZones,
-                                                       sch_name: "#{air_loop_hvac.name} Occ Sch",
-                                                       occupied_percentage_threshold: occupied_percentage_threshold)
+    sch_ruleset = OpenstudioStandards::ThermalZone.thermal_zones_get_occupancy_schedule(air_loop_hvac.thermalZones,
+                                                                                        sch_name: "#{air_loop_hvac.name} Occ Sch",
+                                                                                        occupied_percentage_threshold: occupied_percentage_threshold)
     return sch_ruleset
   end
 
@@ -2841,11 +2841,7 @@ class Standard
     end
 
     # Fan control program only used for systems with two-stage DX coils
-    fan_control = if air_loop_hvac_multi_stage_dx_cooling?(air_loop_hvac)
-                    true
-                  else
-                    false
-                  end
+    fan_control = air_loop_hvac_multi_stage_dx_cooling?(air_loop_hvac)
 
     # Scrub special characters from the system name
     sn = air_loop_hvac.name.get.to_s
@@ -3284,13 +3280,11 @@ class Standard
     model = air_loop_hvac.model
     # Check if schedule was stored in an additionalProperties field of the air loop
     air_loop_name = air_loop_hvac.name
-    if air_loop_hvac.hasAdditionalProperties
-      if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
-        fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
-        fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
-        air_loop_hvac.setAvailabilitySchedule(fan_sched)
-        return true
-      end
+    if air_loop_hvac.hasAdditionalProperties && air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
+      fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
+      fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
+      air_loop_hvac.setAvailabilitySchedule(fan_sched)
+      return true
     end
 
     # Check if already using a schedule other than always on
@@ -3828,10 +3822,8 @@ class Standard
       air_loop_hvac.model.getAirLoopHVACZoneMixers.each do |zone_air_mixer|
         inlets = zone_air_mixer.inletModelObjects
         inlets.each do |inlet|
-          if inlet.to_Node.get == return_plenum.outletModelObject.get.to_Node.get
-            if zone_air_mixer.outletModelObject.get.to_Node.get == return_air_node
-              return return_plenum.thermalZone.get
-            end
+          if (inlet.to_Node.get == return_plenum.outletModelObject.get.to_Node.get) && (zone_air_mixer.outletModelObject.get.to_Node.get == return_air_node)
+            return return_plenum.thermalZone.get
           end
         end
       end

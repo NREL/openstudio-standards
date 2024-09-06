@@ -5,7 +5,7 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
   @building_types = [
     'SmallOffice',
     'MediumOffice',
-#    'LargeOffice',
+    'LargeOffice',
     'RetailStandalone',
     'RetailStripmall',
     'PrimarySchool',
@@ -45,7 +45,7 @@ class TestDOEPrototypesPerformance < CreateDOEPrototypeBuildingTest
     '90.1-2010',
     '90.1-2013',
     '90.1-2016',
-    '90.1-2019',
+    '90.1-2019'
   ]
 
   all_comp =  @building_types.product @templates, @climate_zones

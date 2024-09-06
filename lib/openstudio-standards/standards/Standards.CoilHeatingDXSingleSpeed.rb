@@ -86,14 +86,12 @@ class Standard
     if ['PTAC', 'PTHP'].include?(coil_dx_subcategory(coil_heating_dx_single_speed))
       mult = 1
       comp = coil_heating_dx_single_speed.containingZoneHVACComponent
-      if comp.is_initialized
-        if comp.get.thermalZone.is_initialized
-          mult = comp.get.thermalZone.get.multiplier
-          if mult > 1
-            total_cap = capacity_w
-            capacity_w /= mult
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
-          end
+      if comp.is_initialized && comp.get.thermalZone.is_initialized
+        mult = comp.get.thermalZone.get.multiplier
+        if mult > 1
+          total_cap = capacity_w
+          capacity_w /= mult
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
         end
       end
     end
@@ -148,7 +146,7 @@ class Standard
     # If specified as HSPF
     unless ac_props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = ac_props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      cop = hspf_to_cop_no_fan(min_hspf)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_hspf.round(1)}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
     end

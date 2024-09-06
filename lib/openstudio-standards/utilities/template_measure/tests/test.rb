@@ -7,8 +7,8 @@ begin
 rescue LoadError
   puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
 end
-require_relative '../measure.rb'
-require_relative '../resources/BTAPMeasureHelper.rb'
+require_relative '../measure'
+require_relative '../resources/BTAPMeasureHelper'
 require 'minitest/autorun'
 
 class BTAPModelMeasure_Test < Minitest::Test
@@ -79,16 +79,15 @@ class BTAPModelMeasure_Test < Minitest::Test
     # Option 1: Model CreationCreate Empty Model object and start doing things to it. Here I am creating an empty model
     # and adding surface geometry to the model
     model = OpenStudio::Model::Model.new
-    # and adding surface geometry to the model using the wizard.
-    BTAP::Geometry::Wizards.create_shape_rectangle(model,
-                                                   length = 100.0,
-                                                   width = 100.0,
-                                                   above_ground_storys = 3,
-                                                   under_ground_storys = 1,
-                                                   floor_to_floor_height = 3.8,
-                                                   plenum_height = 1,
-                                                   perimeter_zone_depth = 4.57,
-                                                   initial_height = 0.0)
+    OpenstudioStandards::Geometry.create_shape_rectangle(model,
+                                                         length = 100.0,
+                                                         width = 100.0,
+                                                         above_ground_storys = 3,
+                                                         under_ground_storys = 1,
+                                                         floor_to_floor_height = 3.8,
+                                                         plenum_height = 1,
+                                                         perimeter_zone_depth = 4.57,
+                                                         initial_height = 0.0)
     # If we wanted to apply some aspects of a standard to our model we can by using a factory method to bring the
     # standards we want into our tests. So to bring the necb2011 we write.
     necb2011_standard = Standard.build('NECB2011')

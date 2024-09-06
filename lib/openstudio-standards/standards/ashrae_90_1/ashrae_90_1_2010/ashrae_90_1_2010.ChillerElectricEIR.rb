@@ -8,24 +8,23 @@ class ASHRAE9012010 < ASHRAE901
   # @return [String] name of applicable cuvre, nil if not found
   # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
   def chiller_electric_eir_get_cap_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
-    if cooling_type == 'AirCooled'
+    case cooling_type
+    when 'AirCooled'
       return 'AirCooled_Chiller_2010_PathA_CAPFT'
-    elsif cooling_type == 'WaterCooled'
+    when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
-        if chiller_tonnage >= 150
-          return 'WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT'
-        else
-          return 'WaterCooled_Centrifugal_Chiller_LT150_2004_CAPFT'
-        end
-    when 'Reciprocating', 'Rotary Screw', 'Scroll'
-      if chiller_tonnage >= 150
-        return 'WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_CAPFT' # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_Centrifugal_Chiller_GT150_2004_CAPFT' if chiller_tonnage >= 150
+
+        return 'WaterCooled_Centrifugal_Chiller_LT150_2004_CAPFT'
+      when 'Reciprocating', 'Rotary Screw', 'Scroll'
+        # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_CAPFT' if chiller_tonnage >= 150
+
+        # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_PositiveDisplacement_Chiller_LT150_2010_PathA_CAPFT'
       else
-        return 'WaterCooled_PositiveDisplacement_Chiller_LT150_2010_PathA_CAPFT' # 2010 reference might suggest that this is the wrong curve
-      end
-    else
-      return nil
+        return nil
       end
     else
       return nil
@@ -41,24 +40,23 @@ class ASHRAE9012010 < ASHRAE901
   # @return [String] name of applicable cuvre, nil if not found
   # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
   def chiller_electric_eir_get_eir_f_t_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
-    if cooling_type == 'AirCooled'
+    case cooling_type
+    when 'AirCooled'
       return 'AirCooled_Chiller_2010_PathA_EIRFT'
-    elsif cooling_type == 'WaterCooled'
+    when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
-        if chiller_tonnage >= 150
-          return 'WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT'
-        else
-          return 'WaterCooled_Centrifugal_Chiller_LT150_2004_EIRFT'
-        end
-    when 'Reciprocating', 'Rotary Screw', 'Scroll'
-      if chiller_tonnage >= 150
-        return 'WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_EIRFT' # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_Centrifugal_Chiller_GT150_2004_EIRFT' if chiller_tonnage >= 150
+
+        return 'WaterCooled_Centrifugal_Chiller_LT150_2004_EIRFT'
+      when 'Reciprocating', 'Rotary Screw', 'Scroll'
+        # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_PositiveDisplacement_Chiller_GT150_2010_PathA_EIRFT' if chiller_tonnage >= 150
+
+        # 2010 reference might suggest that this is the wrong curve
+        return 'WaterCooled_PositiveDisplacement_Chiller_LT150_2010_PathA_EIRFT'
       else
-        return 'WaterCooled_PositiveDisplacement_Chiller_LT150_2010_PathA_EIRFT' # 2010 reference might suggest that this is the wrong curve
-      end
-    else
-      return nil
+        return nil
       end
     else
       return nil
@@ -74,14 +72,15 @@ class ASHRAE9012010 < ASHRAE901
   # @return [String] name of applicable cuvre, nil if not found
   # @todo the current assingment is meant to replicate what was in the data, it probably needs to be reviewed
   def chiller_electric_eir_get_eir_f_plr_curve_name(chiller_electric_eir, compressor_type, cooling_type, chiller_tonnage, compliance_path)
-    if cooling_type == 'AirCooled'
+    case cooling_type
+    when 'AirCooled'
       return 'AirCooled_Chiller_AllCapacities_2004_2010_EIRFPLR'
-    elsif cooling_type == 'WaterCooled'
+    when 'WaterCooled'
       case compressor_type
       when 'Centrifugal'
         return 'ChlrWtrCentPathAAllEIRRatio_fQRatio'
       when 'Reciprocating', 'Rotary Screw', 'Scroll'
-        return 'ChlrWtrPosDispPathAAllEIRRatio_fTchwsTcwsSI'
+        return 'ChlrWtrPosDispPathAAllEIRRatio_fQRatio'
       else
         return nil
       end

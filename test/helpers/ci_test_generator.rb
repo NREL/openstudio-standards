@@ -320,7 +320,7 @@ class NECB_HVAC_System_1_Test < MiniTest::Test
       building_type = 'FullServiceRestaurant' # Does not use this...
       climate_zone = 'NECB HDD Method'
 
-      if !Dir.exists?(sizing_dir)
+      if !Dir.exist?(sizing_dir)
         FileUtils.mkdir_p(sizing_dir)
       end
       # Perform a sizing run
@@ -470,7 +470,7 @@ class NECB_HVAC_System_2_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -617,7 +617,7 @@ class NECB_HVAC_System_3_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -760,7 +760,7 @@ class NECB_HVAC_System_4_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -902,7 +902,7 @@ class NECB_HVAC_System_5_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -1058,7 +1058,7 @@ class NECB_HVAC_System_6_Test < MiniTest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run
@@ -1221,7 +1221,7 @@ class $(classname) < Minitest::Test
       if File.exist?("#{model_dir}/final.osm")
 
         model = OpenStudio::Model::Model.new
-        sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
+        sql = OpenstudioStandards::SqlFile.sql_file_safe_load("#{model_dir}/AR/run/eplusout.sql")
         model.setSqlFile(sql)
 
       # If not created, make and run annual simulation
@@ -1250,7 +1250,7 @@ class $(classname) < Minitest::Test
       end
 
       # Check the conditioned floor area
-      errs << "For #{type_desc} there was no conditioned area." if standard.model_net_conditioned_floor_area(model) == 0
+      errs << "For #{type_desc} there was no conditioned area." if model.building.get.conditionedFloorArea.get.zero?
 
       # Check the unmet hours
       unmet_hrs = standard.model_annual_occupied_unmet_hours(model)
@@ -1390,7 +1390,7 @@ class Test$(building_type) < CreateDOEPrototypeBuildingTest
 
 
     run_dir = "#{@test_dir}/#{model_name}"
-    if !Dir.exists?(run_dir)
+    if !Dir.exist?(run_dir)
       Dir.mkdir(run_dir)
     end
     full_sim_dir = "#{run_dir}/AnnualRun"

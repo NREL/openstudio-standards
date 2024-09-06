@@ -1,4 +1,5 @@
 require_relative '../../helpers/minitest_helper'
+require 'date'
 
 class TestSchedulesModify < Minitest::Test
   def setup
@@ -24,6 +25,45 @@ class TestSchedulesModify < Minitest::Test
     assert(schedule_min_max['min'] == 0.05)
     assert(schedule_min_max['max'] == 0.99)
   end
+
+  def test_schedule_day_set_hours_of_operation
+    model = OpenStudio::Model::Model.new
+    test_options = {
+      'name' => 'Simple Schedule',
+      'default_time_value_pairs' => { 7.0 => 0.0, 16.0 => 2.0, 24 => 0.0}
+    }
+    schedule_day = @sch.create_simple_schedule(model, test_options).defaultDaySchedule
+    start_time = OpenStudio::Time.new(0,9,0,0)
+    end_time = OpenStudio::Time.new(0,18,0,0)
+    @sch.schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
+    hourly_values = @sch.schedule_day_get_hourly_values(schedule_day)
+    assert_equal(9, hourly_values.index(1.0))
+    assert_equal(18-1, hourly_values.rindex(1.0))
+    # test fromprevious day
+    start_time = OpenStudio::Time.new(0,9,0,0)
+    end_time = OpenStudio::Time.new(0,28,0,0)
+    @sch.schedule_day_set_hours_of_operation(schedule_day, start_time, end_time)
+    hourly_values = @sch.schedule_day_get_hourly_values(schedule_day)
+    assert_equal(28-24, hourly_values.index(0.0))
+    assert_equal(9-1, hourly_values.rindex(0.0))
+  end
+
+  def test_schedule_day_populate_from_array_of_values
+    model = OpenStudio::Model::Model.new
+    schedule_day = OpenStudio::Model::ScheduleDay.new(model)
+    value_array = [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0]
+    schedule_day = @sch.schedule_day_populate_from_array_of_values(schedule_day, value_array)
+    assert(schedule_day.values.size == 3)
+    time_strings = schedule_day.times.map{|t| t.toString}
+    assert(time_strings == ['08:00:00', '18:00:00', '24:00:00'])
+
+    value_array = [0,0,0,0,1,1,1]
+    schedule_day = @sch.schedule_day_populate_from_array_of_values(schedule_day, value_array)
+    assert(schedule_day.values.size == 3)
+    time_strings = schedule_day.times.map{|t| t.toString}
+    assert(time_strings == ['04:00:00', '07:00:00', '24:00:00'])
+  end
+
 
   def test_schedule_ruleset_add_rule
     model = OpenStudio::Model::Model.new
@@ -118,7 +158,9 @@ class TestSchedulesModify < Minitest::Test
     }
     schedule = @sch.create_simple_schedule(model, test_options)
     basic_shift = { 'shift_hoo' => 2.0 }
-    @sch.schedule_ruleset_adjust_hours_of_operation(schedule, basic_shift)
+    schedule = @sch.schedule_ruleset_adjust_hours_of_operation(schedule, basic_shift)
+    hourly_values = @sch.schedule_day_get_hourly_values(schedule.defaultDaySchedule)
+    assert_equal(8+2, hourly_values.index(3.0))
   end
 
   def test_schedule_ruleset_cleanup_profiles
@@ -143,4 +185,52 @@ class TestSchedulesModify < Minitest::Test
     assert(day_min_max['min'] == 0.1)
     assert(day_min_max['max'] == 0.8)
   end
+
+  def test_schedule_ruleset_create_rules_from_day_list
+    model = OpenStudio::Model::Model.new
+    model.getYearDescription.setCalendarYear(2018)
+    test_options = {
+      'name' => 'Simple Schedule',
+      'winter_time_value_pairs' => { 24.0 => 0 },
+      'summer_time_value_pairs' => { 24.0 => 1 },
+      'default_time_value_pairs' => { 8.0 => 0, 16.0 => 1, 24.0 => 0 }
+    }
+    schedule_ruleset = @sch.create_simple_schedule(model, test_options)
+
+    weekend_days = []
+    summer_weekdays = []
+    (Date.new(2018,1,1)..Date.new(2018,12,31)).each do |day|
+      if [0,6].include? day.wday
+        weekend_days << day.yday
+      end
+    end
+    (Date.new(2018,6,1)..Date.new(2018,8,31)).each do |day|
+      if ![0,6].include? day.wday
+        summer_weekdays << day.yday
+      end
+    end
+
+    weekend_day = OpenStudio::Model::ScheduleDay.new(model)
+    weekend_day.addValue(OpenStudio::Time.new(0,12,0,0), 0)
+    weekend_day.addValue(OpenStudio::Time.new(0,18,0,0), 1)
+
+    summer_weekday = OpenStudio::Model::ScheduleDay.new(model)
+    summer_weekday.addValue(OpenStudio::Time.new(0,11,0,0),0)
+    summer_weekday.addValue(OpenStudio::Time.new(0,15,0,0),1)
+
+    weekend_rules = @sch.schedule_ruleset_create_rules_from_day_list(schedule_ruleset, weekend_days, schedule_day: weekend_day)
+    summer_rules = @sch.schedule_ruleset_create_rules_from_day_list(schedule_ruleset, summer_weekdays, schedule_day: summer_weekday)
+
+    rules = schedule_ruleset.scheduleRules
+    assert_equal(2, rules.size)
+    assert(rules[0].applyWeekdays == true)
+    assert(rules[0].startDate.get.dayOfYear == OpenStudio::Date.new('2018/06/01').dayOfYear)
+    assert(rules[0].endDate.get.dayOfYear == OpenStudio::Date.new('2018/08/31').dayOfYear)
+    assert(rules[0].daySchedule.values == summer_weekday.values)
+    assert(rules[1].applyWeekends == true)
+    assert(rules[1].startDate.get.dayOfYear == OpenStudio::Date.new('2018/01/06').dayOfYear)
+    assert(rules[1].endDate.get.dayOfYear == OpenStudio::Date.new('2018/12/30').dayOfYear)
+    assert(rules[1].daySchedule.values == weekend_day.values)
+  end
+
 end
