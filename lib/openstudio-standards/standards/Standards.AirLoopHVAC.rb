@@ -2080,7 +2080,7 @@ class Standard
           v_pz = clg_dsn_flow
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} clg_dsn_flow could not be found.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name}, zone CoolingDesignAirFlowRate could not be found.")
       end
       htg_dsn_flow = zone.autosizedHeatingDesignAirFlowRate
       if htg_dsn_flow.is_initialized
@@ -2089,7 +2089,11 @@ class Standard
           v_pz = htg_dsn_flow
         end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name} htg_dsn_flow could not be found.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name}, zone HeatingDesignAirFlowRate could not be found.")
+      end
+
+      if v_pz.zero?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: #{zone.name}, neither the CoolingDesignAirFlowRate nor the HeatingDesignAirFlowRate could be found. The primary design air flow rate, v_pz, is zero. The zone may be missing a DesignSpecificationOutdoorAir object, or both heating and cooling load may be zero.")
       end
 
       # Get the minimum damper position
@@ -2135,7 +2139,7 @@ class Standard
       v_dz = v_pz * mdp
 
       # Zone discharge air fraction
-      z_d = v_oz / v_dz
+      z_d = (v_dz.zero? || v_oz.zero?) ? 0.0 : v_oz / v_dz
 
       # Zone ventilation effectiveness
       e_vz = 1.0 + x_s - z_d
