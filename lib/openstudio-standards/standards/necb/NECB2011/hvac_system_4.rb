@@ -203,12 +203,11 @@ class NECB2011
     sys_name_pars['zone_htg'] = baseboard_type
     sys_name_pars['zone_clg'] = 'none'
     sys_name_pars['sys_rf'] = 'none'
-    assign_base_sys_name(air_loop,
+    return assign_base_sys_name(air_loop,
                          sys_abbr: 'sys_4',
                          sys_oa: 'mixed',
                          sys_name_pars: sys_name_pars)
 
-    return true
   end
   # end add_sys4_single_zone_make_up_air_unit_with_baseboard_heating
 end

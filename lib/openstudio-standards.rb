@@ -91,6 +91,7 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/NECB2011/hvac_system_3_and_8_multi_speed"
   require_relative "#{stds}/necb/NECB2011/hvac_system_4"
   require_relative "#{stds}/necb/NECB2011/hvac_system_6"
+  require_relative "#{stds}/necb/NECB2011/hvac_namer"
   require_relative "#{stds}/necb/NECB2011/service_water_heating"
   require_relative "#{stds}/necb/NECB2011/electrical_power_systems_and_motors"
   require_relative "#{stds}/necb/NECB2011/beps_compliance_path"

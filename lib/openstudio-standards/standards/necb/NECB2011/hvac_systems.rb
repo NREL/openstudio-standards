@@ -2162,7 +2162,7 @@ class NECB2011
           sys_name += 'sh>c-e'
         when 'hot water'
           sys_name += 'sh>c-hw'
-        when 'gas'
+        when 'gas', 'g'
           sys_name += 'sh>c-g'
         when 'dx'
           sys_name += 'sh>ashp'
@@ -2176,7 +2176,7 @@ class NECB2011
         case value.downcase
         when 'none'
           sys_name += 'sc>none'
-        when 'chilled water'
+        when 'chilled water','hydronic'
           sys_name += 'sc>c-chw'
         when 'dx'
           if sys_name_pars['sys_htg'] == 'dx'
@@ -2209,9 +2209,9 @@ class NECB2011
         when 'hot water'
           sys_name += 'zh>b-hw'
         when 'tpfc'
-          sys_name += 'zh>fpfc'
-        when 'fpfc'
           sys_name += 'zh>tpfc'
+        when 'fpfc'
+          sys_name += 'zh>fpfc'
         when 'pthp'
           sys_name += 'zh>pthp'
         end
@@ -2244,6 +2244,7 @@ class NECB2011
     end
 
     airloop.setName(sys_name)
+    return detect_air_system_type(airloop, sys_name)
   end
 
   # Method to update the base system name based on the inputs provided.
