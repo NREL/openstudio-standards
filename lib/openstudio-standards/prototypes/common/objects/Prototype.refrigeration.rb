@@ -630,9 +630,9 @@ class Standard
         (1..numb_defrosts_per_day).each do |defrost_of_day|
           def_start_hr = first_def_start_hr + ((1 - defrost_of_day) * interval_defrost)
           defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, 0, 0), 0)
-          defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_defrost.to_int, 0), 0)
+          defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_defrost.to_int, 0), 1)
           dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, 0, 0), 0) # Dripdown is synced with defrost
-          dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_dripdown.to_int, 0), 0)
+          dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_dripdown.to_int, 0), 1)
         end
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
         dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
@@ -716,9 +716,9 @@ class Standard
         (1..numb_defrosts_per_day).each do |defrost_of_day|
           def_start_hr = first_def_start_hr + ((1 - defrost_of_day) * interval_defrost)
           defrost_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, 0, 0), 0)
-          defrost_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_defrost.to_int, 0), 0)
+          defrost_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_defrost.to_int, 0), 1)
           dripdown_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, 0, 0), 0) # Dripdown is synced with defrost
-          dripdown_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_dripdown.to_int, 0), 0)
+          dripdown_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_dripdown.to_int, 0), 1)
         end
         defrost_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
         dripdown_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
