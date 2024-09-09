@@ -2139,7 +2139,7 @@ class Standard
       v_dz = v_pz * mdp
 
       # Zone discharge air fraction
-      z_d = (v_dz.zero? || v_oz.zero?) ? 0.0 : v_oz / v_dz
+      z_d = v_dz.zero? || v_oz.zero? ? 0.0 : v_oz / v_dz
 
       # Zone ventilation effectiveness
       e_vz = 1.0 + x_s - z_d
@@ -2162,7 +2162,7 @@ class Standard
 
         # Adjusted minimum damper position
         # default to 0.2 if either values are zero
-        mdp_adj = (v_dz_adj.zero? || v_pz.zero?) ? 0.2 : v_dz_adj / v_pz
+        mdp_adj = v_dz_adj.zero? || v_pz.zero? ? 0.2 : v_dz_adj / v_pz
 
         # Don't allow values > 1
         if mdp_adj > 1.0
