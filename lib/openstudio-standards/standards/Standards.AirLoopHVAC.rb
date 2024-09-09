@@ -2161,7 +2161,8 @@ class Standard
         v_dz_adj = v_oz / z_d_adj
 
         # Adjusted minimum damper position
-        mdp_adj = v_dz_adj / v_pz
+        # default to 0.2 if either values are zero
+        mdp_adj = (v_dz_adj.zero? || v_pz.zero?) ? 0.2 : v_dz_adj / v_pz
 
         # Don't allow values > 1
         if mdp_adj > 1.0
