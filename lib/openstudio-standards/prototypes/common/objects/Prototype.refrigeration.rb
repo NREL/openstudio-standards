@@ -612,11 +612,11 @@ class Standard
 
         # Add defrost and dripdown schedules
         defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-        defrost_sch.setName("#{ref_case.name} Refrigeration Defrost Schedule")
-        defrost_sch.defaultDaySchedule.setName("#{ref_case.name} Refrigeration Defrost Schedule Default")
+        defrost_sch.setName("#{ref_case.name} Defrost")
+        defrost_sch.defaultDaySchedule.setName("#{ref_case.name} Defrost Default")
         dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-        dripdown_sch.setName("#{ref_case.name} Refrigeration Dripdown Schedule")
-        dripdown_sch.defaultDaySchedule.setName("#{ref_case.name} Refrigeration Dripdown Schedule Default")
+        dripdown_sch.setName("#{ref_case.name} Dripdown")
+        dripdown_sch.defaultDaySchedule.setName("#{ref_case.name} Dripdown Default")
 
         # Stagger the defrosts for cases by 1 hr
         interval_defrost = (24 / numb_defrosts_per_day).floor # Hour interval between each defrost period
@@ -698,11 +698,11 @@ class Standard
 
         # Add defrost and dripdown schedules
         defrost_sch_walkin = OpenStudio::Model::ScheduleRuleset.new(model)
-        defrost_sch_walkin.setName("#{ref_walkin.name} Refrigeration Defrost Schedule")
-        defrost_sch_walkin.defaultDaySchedule.setName("#{ref_walkin.name} Refrigeration Defrost Schedule Default")
+        defrost_sch_walkin.setName("#{ref_walkin.name} Defrost")
+        defrost_sch_walkin.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
         dripdown_sch_walkin = OpenStudio::Model::ScheduleRuleset.new(model)
-        dripdown_sch_walkin.setName("#{ref_walkin.name} Refrigeration Dripdown Schedule")
-        dripdown_sch_walkin.defaultDaySchedule.setName("#{ref_walkin.name} Refrigeration Dripdown Schedule Default")
+        dripdown_sch_walkin.setName("#{ref_walkin.name} Dripdown")
+        dripdown_sch_walkin.defaultDaySchedule.setName("#{ref_walkin.name} Dripdown Default")
 
         # Stagger the defrosts for cases by 1 hr
         interval_defrost = (24 / numb_defrosts_per_day).floor # Hour interval between each defrost period
@@ -899,22 +899,22 @@ class Standard
       ########################################
       # Defrost schedule
       defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      defrost_sch.setName("#{ref_case.name} Refrigeration Defrost Schedule")
-      defrost_sch.defaultDaySchedule.setName("#{ref_case.name} Refrigeration Defrost Schedule Default")
+      defrost_sch.setName("#{ref_case.name} Defrost")
+      defrost_sch.defaultDaySchedule.setName("#{ref_case.name} Defrost Default")
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
       # Dripdown schedule
       dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      dripdown_sch.setName("#{ref_case.name} Refrigeration Defrost Schedule")
-      dripdown_sch.defaultDaySchedule.setName("#{ref_case.name} Refrigeration Defrost Schedule Default")
+      dripdown_sch.setName("#{ref_case.name} Defrost")
+      dripdown_sch.defaultDaySchedule.setName("#{ref_case.name} Defrost Default")
       dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
       dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
       dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
       # Case Credit Schedule
       case_credit_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      case_credit_sch.setName("#{ref_case.name} Refrigeration Case Credit Schedule")
-      case_credit_sch.defaultDaySchedule.setName("#{ref_case.name} Refrigeration Case Credit Schedule Default")
+      case_credit_sch.setName("#{ref_case.name} Case Credit")
+      case_credit_sch.defaultDaySchedule.setName("#{ref_case.name} Case Credit Default")
       case_credit_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 7, 0, 0), 0.2)
       case_credit_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 21, 0, 0), 0.4)
       case_credit_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
@@ -937,8 +937,8 @@ class Standard
         ########################################
         # Defrost schedule
         defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-        defrost_sch.setName("#{ref_walkin.name} Refrigeration Defrost Schedule")
-        defrost_sch.defaultDaySchedule.setName("#{ref_walkin.name} Refrigeration Defrost Schedule Default")
+        defrost_sch.setName("#{ref_walkin.name} Defrost")
+        defrost_sch.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i + 10, 0, 0), 0)
@@ -946,8 +946,8 @@ class Standard
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
         # Dripdown schedule
         dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-        dripdown_sch.setName("#{ref_walkin.name} Refrigeration Defrost Schedule")
-        dripdown_sch.defaultDaySchedule.setName("#{ref_walkin.name} Refrigeration Defrost Schedule Default")
+        dripdown_sch.setName("#{ref_walkin.name} Defrost")
+        dripdown_sch.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
         dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
         dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
         dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i + 10, 0, 0), 0)
