@@ -139,12 +139,12 @@ class Standard
       if capacity_btu_per_hr.nil?
         capacity_btu_per_hr = 7000.0
         capacity_kbtu_per_hr = capacity_btu_per_hr / 1000.0
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is nil. This zone may not have heating. Using default equipment efficiency for a 7 kBtu/hr unit.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For PTHP units, 90.1 heating efficiency depends on paired cooling capacity. Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is nil. This zone may not have heating. Using default equipment efficiency for a 7 kBtu/hr unit.")
       elsif capacity_btu_per_hr < 7000
         capacity_btu_per_hr = 7000.0
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is #{capacity_btu_per_hr.round} Btu/hr, which is less than the typical minimum equipment size of 7 kBtu/hr. Using default equipment efficiency for a 7 kBtu/hr unit.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For PTHP units, 90.1 heating efficiency depends on paired cooling capacity. Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is #{capacity_btu_per_hr.round} Btu/hr, which is less than the typical minimum equipment size of 7 kBtu/hr. Using default equipment efficiency for a 7 kBtu/hr unit.")
       elsif capacity_btu_per_hr > 15_000
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is #{capacity_btu_per_hr.round} Btu/hr, which is more than the typical maximum equipment size of 15 kBtu/hr. Using default equipment efficiency for a 15 kBtu/hr unit.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For PTHP units, 90.1 heating efficiency depends on paired cooling capacity. Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is #{capacity_btu_per_hr.round} Btu/hr, which is more than the typical maximum equipment size of 15 kBtu/hr. Using default equipment efficiency for a 15 kBtu/hr unit.")
         capacity_btu_per_hr = 15_000.0
       end
 
