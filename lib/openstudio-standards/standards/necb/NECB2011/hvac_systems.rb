@@ -2144,7 +2144,7 @@ class NECB2011
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
   # heating, cooling, supply fan, zone heating, zone cooling, and return fan
-  def assign_base_sys_name(airloop, sys_abbr:, sys_oa:, sys_name_pars:)
+  def assign_base_sys_name(air_loop:, sys_abbr:, sys_oa:, sys_name_pars:)
     sys_name = "#{sys_abbr}|#{sys_oa}|"
     sys_name_pars.each do |key, value|
       case key.downcase
@@ -2243,8 +2243,10 @@ class NECB2011
       sys_name += '|'
     end
 
-    airloop.setName(sys_name)
-    return detect_air_system_type(airloop, sys_name)
+    air_loop.setName(sys_name)
+    return detect_air_system_type(air_loop: air_loop, 
+                                  old_system_name: sys_name, 
+                                  sys_abbr: sys_abbr)
   end
 
   # Method to update the base system name based on the inputs provided.

@@ -4,7 +4,7 @@ WEATHER_FILE = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
 NECB = NECB2011.new
 $base_model = nil
 $failures = []
-$successes = []
+$successes = {}
 
 def create_model()
         # create model
@@ -27,8 +27,9 @@ def system1()
     necb_reference_hp_types = [true, false] 
     necb_reference_hp_supp_fuel_types = ["NaturalGas", "Electricity"]
     baseboard_types = ["Hot Water", "Electric"]
+    multispeed_type = [false]
     # Generate all possible combinations of the above arrays
-    mau_type.product(mau_heating_types, necb_reference_hp_types, necb_reference_hp_supp_fuel_types, baseboard_types).each do |mau_type, mau_heating_type, necb_reference_hp, necb_reference_hp_supp_fuel, baseboard_type|
+    mau_type.product(mau_heating_types, necb_reference_hp_types, necb_reference_hp_supp_fuel_types, baseboard_types,multispeed_type).each do |mau_type, mau_heating_type, necb_reference_hp, necb_reference_hp_supp_fuel, baseboard_type,multispeed|
         model = create_model()
 
         # Create hot water loop
@@ -49,7 +50,8 @@ def system1()
                             "mau_heating_type", mau_heating_type, 
                             "necb_reference_hp", necb_reference_hp, 
                             "necb_reference_hp_supp_fuel", necb_reference_hp_supp_fuel, 
-                            "baseboard_type", baseboard_type
+                            "baseboard_type", baseboard_type,
+                            "multispeed", multispeed
                         ]
 
         old_name, new_name = necb.add_sys1_unitary_ac_baseboard_heating_single_speed(
@@ -62,16 +64,17 @@ def system1()
             baseboard_type: baseboard_type,
             hw_loop: hw_loop
             )
-        if old_name == new_name
-            $successes.push([arguments,old_name,new_name])
-        else
-            $failures.push([arguments,old_name,new_name])
-        end
+            if old_name == new_name
+                arguments["system"] = "sys_1"
+                $successes[new_name] = arguments
+            else
+                $failures.push([arguments,old_name,new_name])
+            end
     end
 end
 
-def system2_5()
-    fan_coil_types = ['FPFC','TPFC']
+def system2()
+    fan_coil_types = ['FPFC']
     chiller_types = ["Scroll","Centrifugal","RotaryScrew","Reciprocating"]
     mau_cooling_types = ["DX","Hydronic"]
     # Generate all possible combinations of the above arrays
@@ -97,11 +100,12 @@ def system2_5()
                                                 mau_cooling_type: mau_cooling_type,
                                                 hw_loop: hw_loop)
         if old_name == new_name
-            $successes.push([arguments,old_name,new_name])
+            arguments["system"] = "sys_2"
+            $successes[new_name] = arguments
         else
             $failures.push([arguments,old_name,new_name])
         end
-end
+    end
 end
 
 def system3()
@@ -110,14 +114,16 @@ def system3()
     necb_reference_hp_types = [true, false] 
     necb_reference_hp_supp_fuel_types = ["NaturalGas", "Electricity"]
     baseboard_types = ["Hot Water", "Electric"]
+    multispeed_type = [false]
     # Generate all possible combinations of the above arrays
-    mau_type.product(heating_coil_types, necb_reference_hp_types, necb_reference_hp_supp_fuel_types, baseboard_types).each do |mau_type, heating_coil_type, necb_reference_hp, necb_reference_hp_supp_fuel, baseboard_type|
+    mau_type.product(heating_coil_types, necb_reference_hp_types, necb_reference_hp_supp_fuel_types, baseboard_types,multispeed_type).each do |mau_type, heating_coil_type, necb_reference_hp, necb_reference_hp_supp_fuel, baseboard_type,multispeed|
         arguments = Hash[
             "mau_type", mau_type, 
             "heating_coil_type", heating_coil_type, 
             "necb_reference_hp", necb_reference_hp, 
             "necb_reference_hp_supp_fuel", necb_reference_hp_supp_fuel, 
-            "baseboard_type", baseboard_type
+            "baseboard_type", baseboard_type,
+            "multispeed", multispeed
         ]
 
 
@@ -145,13 +151,96 @@ def system3()
             hw_loop: hw_loop,
             new_auto_zoner: true)
             if old_name == new_name
-                $successes.push([arguments,old_name,new_name])
+                arguments["system"] = "sys_3"
+                $successes[new_name] = arguments
             else
                 $failures.push([arguments,old_name,new_name])
             end
     end
     
 end
+
+
+def system4()
+    necb_reference_hp_types = [true, false] 
+    necb_reference_hp_supp_fuel_types = ["NaturalGas", "Electricity"]
+    heating_coil_types = ["DX","Gas", "Electric"]
+    baseboard_types = ["Hot Water", "Electric"]
+    necb_reference_hp_types.product(necb_reference_hp_supp_fuel_types, heating_coil_types, baseboard_types).each do |necb_reference_hp, necb_reference_hp_supp_fuel, heating_coil_type, baseboard_type|
+        #Create model
+        model = create_model
+        hw_loop = nil
+        if (baseboard_type == "Hot Water")
+            hw_loop = OpenStudio::Model::PlantLoop.new(model)
+            NECB.setup_hw_loop_with_components(model, hw_loop, 'Electricity', model.alwaysOnDiscreteSchedule)
+        end
+        arguments = Hash[
+            "necb_reference_hp", necb_reference_hp, 
+            "necb_reference_hp_supp_fuel", necb_reference_hp_supp_fuel, 
+            "heating_coil_type", heating_coil_type, 
+            "baseboard_type", baseboard_type
+        ]
+
+        if (necb_reference_hp == true and heating_coil_type != 'DX') or 
+            (necb_reference_hp == false and heating_coil_type == 'DX')
+            next
+        end
+
+        old_name, new_name = NECB2011.new.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
+                                                                   necb_reference_hp: necb_reference_hp,
+                                                                   necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                                                                   zones: model.getThermalZones,
+                                                                   heating_coil_type: heating_coil_type,
+                                                                   baseboard_type: baseboard_type,
+                                                                   hw_loop: hw_loop)
+
+        if old_name == new_name
+            arguments["system"] = "sys_4"
+            $successes[new_name] = arguments
+        else
+            $failures.push([arguments,old_name,new_name])
+        end
+    end
+end
+
+
+
+
+def system5()
+    fan_coil_types = ['TPFC']
+    chiller_types = ["Scroll","Centrifugal","RotaryScrew","Reciprocating"]
+    mau_cooling_types = ["DX","Hydronic"]
+    # Generate all possible combinations of the above arrays
+    mau_cooling_types.product( chiller_types, fan_coil_types).each do |mau_cooling_type, chiller_type, fan_coil_type|
+        puts("mau_cooling_type: #{mau_cooling_type}, chiller_types: #{chiller_type}, fan_coil_types: #{fan_coil_type}")
+        arguments = Hash[
+            "mau_cooling_type", mau_cooling_type, 
+            "chiller_type", chiller_type, 
+            "fan_coil_type", fan_coil_type, 
+        ]
+
+        #Create model
+        model = create_model
+
+        # Create hot water loop
+        hw_loop = OpenStudio::Model::PlantLoop.new(model)
+
+        # Create NECB2011 objects
+        old_name, new_name = NECB2011.new.add_sys2_FPFC_sys5_TPFC( model: model,
+                                                zones:model.getThermalZones,
+                                                chiller_type: chiller_type,
+                                                fan_coil_type: fan_coil_type,
+                                                mau_cooling_type: mau_cooling_type,
+                                                hw_loop: hw_loop)
+        if old_name == new_name
+            arguments["system"] = "sys_5"
+            $successes[new_name] = arguments
+        else
+            $failures.push([arguments,old_name,new_name])
+        end
+    end
+end
+
 
 def system6()
     heating_coil_types = ["Electric" , "Hot Water"]
@@ -186,7 +275,8 @@ def system6()
                     )
 
             if old_name == new_name
-                $successes.push([arguments,old_name,new_name])
+                arguments["system"] = "sys_6"
+                $successes[new_name] = arguments
             else
                 $failures.push([arguments,old_name,new_name])
             end
@@ -196,8 +286,10 @@ end
 
 
 system1()
-system2_5()
+system2()
 system3()
+system4()
+system5()
 system6()
 puts ("Successes: #{$successes}")
 puts("Failures: #{$failures}")
@@ -208,11 +300,14 @@ CSV.open('failures.csv', 'w') do |csv|
         csv << failure
     end
 end
-#Save $successes hash to the csv file.
-CSV.open('successes.csv', 'w') do |csv|
-    csv << ["arguments","old_name","new_name"]
-    $successes.each do |success|
-        csv << success
-    end
+
+
+# save $successes hash as a pretty json file.
+File.open('successes.json', 'w') do |f|
+    f.write(JSON.pretty_generate($successes))
 end
+
+
+
+
 

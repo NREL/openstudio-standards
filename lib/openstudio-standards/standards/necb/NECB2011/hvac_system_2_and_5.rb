@@ -169,7 +169,7 @@ class NECB2011
     sys_name_pars['zone_htg'] = fan_coil_type
     sys_name_pars['zone_clg'] = fan_coil_type
     sys_name_pars['sys_rf'] = 'none'
-    return assign_base_sys_name(mau_air_loop,
+    return assign_base_sys_name(air_loop: mau_air_loop,
                          sys_abbr: sys_abbr,
                          sys_oa: 'doas',
                          sys_name_pars: sys_name_pars)

@@ -123,7 +123,7 @@ class NECB2011
     sys_name_pars['zone_htg'] = baseboard_type
     sys_name_pars['zone_clg'] = 'none'
     sys_name_pars['sys_rf'] = 'none'
-    return assign_base_sys_name(air_loop,
+    return assign_base_sys_name( air_loop: air_loop,
                          sys_abbr: 'sys_3',
                          sys_oa: 'mixed',
                          sys_name_pars: sys_name_pars)

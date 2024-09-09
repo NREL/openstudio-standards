@@ -1,6 +1,7 @@
 class NECB2011
-    def detect_air_system_type(air_loop, old_name = nil)
+    def detect_air_system_type(air_loop: nil , sys_abbr: nil , old_system_name: nil)
         # Determine system charecteristics. 
+        puts air_loop
         unitary_hp = air_loop.components.detect(proc {false}) { |equip| equip.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized()} ? air_loop.components.detect() { |equip| equip.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized()}.to_AirLoopHVACUnitaryHeatPumpAirToAir.get : false
         unitary_heating_coil_elec = unitary_hp and unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingElectric.is_initialized()? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.get : false
         unitary_heating_coil_gas = unitary_hp and unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingGas.is_initialized()? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.get : false
@@ -73,60 +74,33 @@ class NECB2011
             return_fan_cv = false
         end
 
-        # System 1 systems must have the following components:
-        # 1. Heating Coil: Electric, ASHP, Hot Water
-        # 2. Cooling Coil: ASHP, CCASHP, DX
-        # 3. Fan: Constant Volume
-        # 4. Zone Heating: Baseboard Electric, Baseboard Hot Water
-        # 5. Zone Cooling: PTAC if no hp systems are present. 
+        # System Name and assumptions
 
-        # System 1 systems must have the following components:
-        # Should have ashp, electric or hot water heating coil
-        if (heating_coil_ashp or heating_coil_elect or heating_coil_water)
-            # Should have ashp, ccashp or dx cooling coil, if no ashp zones should have PTAC. 
-            if (cooling_coil_ashp or cooling_coil_ccashp or cooling_coil_dx) or (not cooling_coil_ashp and not cooling_coil_ccashp and zone_clg_ptac)
-            # Should have constant volume fan
-            if (supply_fan_cv) 
-                # Zone heating should have electric or hot water baseboard
-                if (zone_htg_b_elec or zone_htg_b_water)
-                ref_sys = "sys_1"
-                        oa='doas'
-                        oa = 'mixed' if heating_coil_ashp or heating_coil_ccashp
-                end
-            end
-            end
-        end
-
-        # System 2 systems must have the following components:
-        # Zonal conditioning systems must have fpfc with always on schedule. 
-        if (zone_fpfc)
-                ref_sys = "sys_2"
-                oa='doas'
-        end
-
-        # System 5 systems must have the following components:
-        # Zonal conditioning systems must have fpfc with always on schedule. 
-        if (zone_tpfc)
-            ref_sys = "sys_5"
-                oa='doas'
-        end 
-
-        # System 3 systems must have the following components:
-        # Heat pump system must have
-
-
-        if (unitary_hp and ( unitary_heating_coil_elec or unitary_heating_coil_gas or unitary_heating_coil_ashp) and unitary_supply_fan_on_off and (zone_htg_b_elec or zone_htg_b_water))
-            ref_sys = "sys_3"
+        case sys_abbr
+        when "sys_1"
+            ref_sys = sys_abbr
+            oa='doas'
+            oa = 'mixed' if heating_coil_ashp or heating_coil_ccashp
+        when "sys_2"
+            ref_sys = sys_abbr
+            oa='doas'
+        when "sys_3"
+            ref_sys = sys_abbr
             oa='mixed'
-        elsif (zone_htg_b_elec or zone_htg_b_water)  and (heating_coil_ashp or heating_coil_elect or heating_coil_gas) and cooling_coil_dx and not zone_clg_ptac
-            ref_sys = "sys_3"
+        when "sys_5"
+            ref_sys = sys_abbr
+            oa='doas'
+        when "sys_4"
+            ref_sys = sys_abbr
             oa='mixed'
+        when "sys_6"
+            ref_sys = sys_abbr
+            oa='mixed'
+        else
+            raise("System name not recognized")
         end
 
-        if zone_vav_rh and return_fan_vv and supply_fan_vv
-            ref_sys = "sys_6"
-            oa='mixed'
-        end
+
             
         # Determine if the system is a DOAS based on
         # whether there is 100% OA in heating and cooling sizing.
@@ -253,12 +227,13 @@ class NECB2011
         end
         name =""
         
+        
         # sh and sc are reversed for system 6
         unless ref_sys == "sys_6"
             name = "#{ref_sys}|#{oa}|shr>none|#{sc}|#{sh}|#{ssf}|#{zh}|#{zc}|#{srf}|"
         else
             name = "#{ref_sys}|#{oa}|shr>none|#{sh}|#{sc}|#{ssf}|#{zh}|#{zc}|#{srf}|"
         end
-        return old_name, name
+        return old_system_name, name
     end
 end
