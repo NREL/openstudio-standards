@@ -399,11 +399,8 @@ class NECB2011 < Standard
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel)
     self.fuel_type_set = SystemFuels.new()
     swh_fuel = swh_fuel.nil? ? 'NECB_Default' : swh_fuel.to_s
-
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel, swh_fuel: swh_fuel)
     swh_fuel = self.fuel_type_set.swh_fueltype if swh_fuel.to_s.downcase == 'necb_default'
-    puts "++++++++++++++++++++++++++++++++++++++++++++++"
-    puts swh_fuel
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
