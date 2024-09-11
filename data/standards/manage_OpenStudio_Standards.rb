@@ -344,8 +344,8 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
     dirs.each { |d| d == 'ALL' ? new_dirs << '*' : new_dirs << "*#{d}*" }
     glob_string = "#{standards_dir}/#{new_dirs.join('/')}"
     puts "--spreadsheet title embedded search criteria: #{glob_string} yields:"
-#    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') && !f.include?('prm')}
-    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data')}
+    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') && !f.include?('ashrae_90_1_prm') }
+    # template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') }
     template_dirs.each do |template_dir|
       puts "----#{template_dir}"
     end
