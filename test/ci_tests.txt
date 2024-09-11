@@ -39,6 +39,8 @@ os_stds_methods/test_minimum_efficiency_lookups.rb
 90_1_prm/test_prm_baseline_bldg13.rb
 90_1_prm/test_appendix_g_prm.rb
 
+rpd_features/test_rpd_model_prepare.rb
+
 90_1_general/test_boiler_hot_water.rb
 90_1_general/test_chiller_electric_eir.rb
 90_1_general/test_coil_dx.rb

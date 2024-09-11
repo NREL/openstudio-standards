@@ -91,6 +91,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/array'
   require_relative 'openstudio-standards/utilities/object_info'
   require_relative 'openstudio-standards/utilities/assertion'
+  require_relative 'openstudio-standards/utilities/ruleset_check'
 
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'
