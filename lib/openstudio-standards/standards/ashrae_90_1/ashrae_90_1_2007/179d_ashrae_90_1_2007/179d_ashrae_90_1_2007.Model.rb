@@ -286,8 +286,8 @@ class ACM179dASHRAE9012007
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param debug [Boolean] If true, will report out more detailed debugging output
   # @param baseline_179d [Boolean] NOTE: 179D addition, True for the baseline, false for the proposed
-  def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false, baseline_179d = true)
-    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, custom, sizing_run_dir, false, false, debug, baseline_179d)
+  def model_create_prm_baseline_building(model, building_type, climate_zone, custom = nil, sizing_run_dir = Dir.pwd, debug = false, baseline_179d = true, unmet_load_hours_check = false)
+    model_create_prm_any_baseline_building(model, building_type, climate_zone, 'All others', 'All others', 'All others', false, custom, sizing_run_dir, false, unmet_load_hours_check, debug, baseline_179d)
   end
 
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
