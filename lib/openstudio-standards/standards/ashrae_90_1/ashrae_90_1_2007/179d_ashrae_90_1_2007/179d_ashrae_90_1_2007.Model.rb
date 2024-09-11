@@ -809,65 +809,91 @@ class ACM179dASHRAE9012007
       # Check unmet load hours # disable for 179d
       if unmet_load_hours_check
         nb_adjustments = 0
+        max_adjustments = 5
+        max_sizing_factor = 10.0
+        unmet_load_hours = nil
+        # Original
+        # get_sizing_factor_multiplier = lambda {|unmet_hours| unmet_hours > 150 ? 1.1 : 1.05 }
+        # New, more aggressive
+        get_sizing_factor_multiplier = lambda { |unmet_hours| 1.025 + unmet_hours * 0.0005 }
+
         loop do
-          model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}") == false
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Starting the pre-simulation for the #{nb_adjustments + 1} round of zone sizing factor adjustments for the unmet load hours for the baseline model (#{degs} degree of rotation)")
+
+          # Close the previous SQL session if open to prevent EnergyPlus from overloading the same session
+          sql = model.sqlFile.get
+          if sql.connectionOpen
+            sql.close
+          end
+
+          if !model_run_simulation_and_log_errors(model, "#{sizing_run_dir}/final#{degs}_adjustment#{nb_adjustments}")
+            # simulation failure, raise the exception.
+            msg = "OpenStudio simulation failed on unmet_load_hours_check adjustment #{nb_adjustments}."
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', msg)
+            raise msg
+          end
+
           # If UMLH are greater than the threshold allowed by Appendix G,
           # increase zone air flow and load as per the recommendation in
           # the PRM-RM; Note that the PRM-RM only suggest to increase
           # air zone air flow, but the zone sizing factor in EnergyPlus
           # increase both air flow and load.
-          if model_get_unmet_load_hours(model) > 300
-            # Limit the number of zone sizing factor adjustment to 8
-            unless nb_adjustments < 8
-              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After 8 rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
-              break
-            end
-            model.getThermalZones.each do |thermal_zone|
-              # Cooling adjustments
-              clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
-              if clg_umlh > 50
-                # Get zone cooling sizing factor
-                if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
-                else
-                  sizing_factor = 1.0
-                end
+          unmet_load_hours = model_get_unmet_load_hours(model)
+          if unmet_load_hours <= 300
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "#{nb_adjustments} rounds of zone sizing factor adjustments were needed for the unmet load hours to be < 300 for the baseline model (#{degs} degree of rotation): final = #{unmet_load_hours} unmet load hours")
+            break
+          end
 
-                # Make adjustment to zone cooling sizing factor
-                # Do not adjust factors greater or equal to 2
-                if sizing_factor < 2.0
-                  if clg_umlh > 150
-                    sizing_factor *= 1.1
-                  elsif clg_umlh > 50
-                    sizing_factor *= 1.05
-                  end
-                  thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
-                end
+          nb_adjustments += 1
+          # Limit the number of zone sizing factor adjustment to 8
+          if nb_adjustments > max_adjustments
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "After #{max_adjustments} rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours: final = #{unmet_load_hours} unmet load hours. Please open an issue on GitHub (https://github.com/NREL/openstudio-standards/issues) and share your user model with the developers.")
+            break
+          end
+
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Starting the #{nb_adjustments} round of zone sizing factor adjustments for the unmet load hours for the baseline model (#{degs} degree of rotation)")
+
+          has_adjusted = false
+
+          model.getThermalZones.each do |thermal_zone|
+            # Cooling adjustments
+            clg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Cooling')
+            if clg_umlh > 50
+              # Get zone cooling sizing factor
+              sizing_factor = 1.0
+              if thermal_zone.sizingZone.zoneCoolingSizingFactor.is_initialized
+                sizing_factor = thermal_zone.sizingZone.zoneCoolingSizingFactor.get
               end
-
-              # Heating adjustments
-              htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
-              if htg_umlh > 50
-                # Get zone cooling sizing factor
-                if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
-                  sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
-                else
-                  sizing_factor = 1.0
-                end
-
-                # Make adjustment to zone heating sizing factor
-                # Do not adjust factors greater or equal to 2
-                if sizing_factor < 2.0
-                  if htg_umlh > 150
-                    sizing_factor *= 1.1
-                  elsif htg_umlh > 50
-                    sizing_factor *= 1.05
-                  end
-                  thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
-                end
+              # Make adjustment to zone cooling sizing factor
+              # Do not adjust factors greater or equal to 2
+              if sizing_factor < max_sizing_factor
+                sizing_factor = (get_sizing_factor_multiplier.call(clg_umlh) * sizing_factor).clamp(0, max_sizing_factor)
+                has_adjusted = true
+                thermal_zone.sizingZone.setZoneCoolingSizingFactor(sizing_factor)
               end
             end
-          else
+
+            # Heating adjustments
+            htg_umlh = thermal_zone_get_unmet_load_hours(thermal_zone, 'Heating')
+            if htg_umlh > 50
+              sizing_factor = 1.0
+              # Get zone heating sizing factor
+              if thermal_zone.sizingZone.zoneHeatingSizingFactor.is_initialized
+                sizing_factor = thermal_zone.sizingZone.zoneHeatingSizingFactor.get
+              end
+
+              # Make adjustment to zone heating sizing factor
+              # Do not adjust factors greater or equal to 2
+              if sizing_factor < max_sizing_factor
+                sizing_factor = (get_sizing_factor_multiplier.call(htg_umlh) * sizing_factor).clamp(0, max_sizing_factor)
+                has_adjusted = true
+                thermal_zone.sizingZone.setZoneHeatingSizingFactor(sizing_factor)
+              end
+            end
+          end
+          if !has_adjusted
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model',
+                               "After #{nb_adjustment} rounds of zone sizing factor adjustments the unmet load hours for the baseline model (#{degs} degree of rotation) still exceed 300 hours, but all Zone Sizing Factors are already at #{max_sizing_factor}.")
             break
           end
         end
