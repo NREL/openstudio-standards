@@ -6229,7 +6229,7 @@ OS:DefaultSubSurfaceConstructions,
 
 OS:Construction,
   {9b26b179-8d09-4a11-be3e-5ed07eced908}, !- Handle
-  U 0.36 SHGC 0.36 Simple Glazing Window Weighted, !- Name
+  U 0.36 SHGC 0.36 Simple Glazing,  !- Name
   ,                                       !- Surface Rendering Name
   {21469647-b135-4284-87ce-3fc7b3f52b94}; !- Layer 1
 

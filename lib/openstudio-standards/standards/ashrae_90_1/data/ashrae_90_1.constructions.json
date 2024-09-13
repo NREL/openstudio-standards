@@ -1366,7 +1366,7 @@
       ]
     },
     {
-      "name": "U 0.27 SHGC 0.4 Simple Glazing Window Weighted",
+      "name": "U 0.27 SHGC 0.4 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -1474,7 +1474,7 @@
       ]
     },
     {
-      "name": "U 0.3 SHGC 0.4 Simple Glazing Window Weighted",
+      "name": "U 0.3 SHGC 0.4 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -1624,7 +1624,7 @@
       ]
     },
     {
-      "name": "U 0.34 SHGC 0.38 Simple Glazing Window Weighted",
+      "name": "U 0.34 SHGC 0.38 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -1712,7 +1712,7 @@
       ]
     },
     {
-      "name": "U 0.35 SHGC 0.38 Simple Glazing Window Weighted",
+      "name": "U 0.35 SHGC 0.38 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -1744,7 +1744,7 @@
       ]
     },
     {
-      "name": "U 0.36 SHGC 0.36 Simple Glazing Window Weighted",
+      "name": "U 0.36 SHGC 0.36 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -1774,7 +1774,7 @@
       ]
     },
     {
-      "name": "U 0.36 SHGC 0.38 Simple Glazing Window Weighted",
+      "name": "U 0.36 SHGC 0.38 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -1794,7 +1794,7 @@
       ]
     },
     {
-      "name": "U 0.36 SHGC 0.4 Simple Glazing Window Weighted",
+      "name": "U 0.36 SHGC 0.4 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -1834,7 +1834,7 @@
       ]
     },
     {
-      "name": "U 0.37 SHGC 0.36 Simple Glazing Window Weighted",
+      "name": "U 0.37 SHGC 0.36 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -1854,7 +1854,7 @@
       ]
     },
     {
-      "name": "U 0.37 SHGC 0.38 Simple Glazing Window Weighted",
+      "name": "U 0.37 SHGC 0.38 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -1992,7 +1992,7 @@
       ]
     },
     {
-      "name": "U 0.41 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 0.41 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2022,7 +2022,7 @@
       ]
     },
     {
-      "name": "U 0.42 SHGC 0.25 Simple Glazing Window Weighted",
+      "name": "U 0.42 SHGC 0.25 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2088,7 +2088,7 @@
       ]
     },
     {
-      "name": "U 0.43 SHGC 0.25 Simple Glazing Window Weighted",
+      "name": "U 0.43 SHGC 0.25 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2146,7 +2146,7 @@
       ]
     },
     {
-      "name": "U 0.44 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 0.44 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2176,7 +2176,7 @@
       ]
     },
     {
-      "name": "U 0.45 SHGC 0.25 Simple Glazing Window Weighted",
+      "name": "U 0.45 SHGC 0.25 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2250,7 +2250,7 @@
       ]
     },
     {
-      "name": "U 0.47 SHGC 0.25 Simple Glazing Window Weighted",
+      "name": "U 0.47 SHGC 0.25 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2270,7 +2270,7 @@
       ]
     },
     {
-      "name": "U 0.47 SHGC 0.4 Simple Glazing Skylight",
+      "name": "U 0.47 SHGC 0.4 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2372,7 +2372,7 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.19 Simple Glazing Skylight",
+      "name": "U 0.5 SHGC 0.19 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2412,7 +2412,7 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.27 Simple Glazing Skylight",
+      "name": "U 0.5 SHGC 0.27 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2422,7 +2422,7 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.34 Simple Glazing Skylight",
+      "name": "U 0.5 SHGC 0.34 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2432,7 +2432,7 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.36 Simple Glazing Skylight",
+      "name": "U 0.5 SHGC 0.36 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2442,7 +2442,7 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.39 Simple Glazing Skylight",
+      "name": "U 0.5 SHGC 0.39 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2452,7 +2452,7 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.4 Simple Glazing Skylight",
+      "name": "U 0.5 SHGC 0.4 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2482,7 +2482,7 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 0.5 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2502,7 +2502,7 @@
       ]
     },
     {
-      "name": "U 0.5 SHGC 0.65 Simple Glazing Skylight",
+      "name": "U 0.5 SHGC 0.65 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2542,7 +2542,7 @@
       ]
     },
     {
-      "name": "U 0.51 SHGC 0.22 Simple Glazing Window Weighted",
+      "name": "U 0.51 SHGC 0.22 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2562,7 +2562,7 @@
       ]
     },
     {
-      "name": "U 0.51 SHGC 0.23 Simple Glazing Window Weighted",
+      "name": "U 0.51 SHGC 0.23 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2666,7 +2666,7 @@
       ]
     },
     {
-      "name": "U 0.53 SHGC 0.25 Simple Glazing Window Weighted",
+      "name": "U 0.53 SHGC 0.25 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2744,7 +2744,7 @@
       ]
     },
     {
-      "name": "U 0.55 SHGC 0.3 Simple Glazing Skylight",
+      "name": "U 0.55 SHGC 0.3 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2776,7 +2776,7 @@
       ]
     },
     {
-      "name": "U 0.55 SHGC 0.35 Simple Glazing Skylight",
+      "name": "U 0.55 SHGC 0.35 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2796,7 +2796,7 @@
       ]
     },
     {
-      "name": "U 0.55 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 0.55 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2806,7 +2806,7 @@
       ]
     },
     {
-      "name": "U 0.55 SHGC 0.64 Simple Glazing Skylight",
+      "name": "U 0.55 SHGC 0.64 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -2886,7 +2886,7 @@
       ]
     },
     {
-      "name": "U 0.58 SHGC 0.19 Simple Glazing Skylight",
+      "name": "U 0.58 SHGC 0.19 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": "Glass with Curb",
       "insulation_layer": null,
@@ -2896,7 +2896,7 @@
       ]
     },
     {
-      "name": "U 0.58 SHGC 0.36 Simple Glazing Skylight",
+      "name": "U 0.58 SHGC 0.36 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": "Glass with Curb",
       "insulation_layer": null,
@@ -2958,7 +2958,7 @@
       ]
     },
     {
-      "name": "U 0.61 SHGC 0.77 Simple Glazing Skylight",
+      "name": "U 0.61 SHGC 0.77 Simple Glazing",
       "intended_surface_type": "ExteriorWindow",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3106,7 +3106,7 @@
       ]
     },
     {
-      "name": "U 0.65 SHGC 0.3 Simple Glazing Skylight",
+      "name": "U 0.65 SHGC 0.3 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3126,7 +3126,7 @@
       ]
     },
     {
-      "name": "U 0.65 SHGC 0.35 Simple Glazing Skylight",
+      "name": "U 0.65 SHGC 0.35 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3146,7 +3146,7 @@
       ]
     },
     {
-      "name": "U 0.65 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 0.65 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3156,7 +3156,7 @@
       ]
     },
     {
-      "name": "U 0.65 SHGC 0.68 Simple Glazing Skylight",
+      "name": "U 0.65 SHGC 0.68 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3166,7 +3166,7 @@
       ]
     },
     {
-      "name": "U 0.65 SHGC 0.77 Simple Glazing Skylight",
+      "name": "U 0.65 SHGC 0.77 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3246,7 +3246,7 @@
       ]
     },
     {
-      "name": "U 0.69 SHGC 0.19 Simple Glazing Skylight",
+      "name": "U 0.69 SHGC 0.19 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3256,7 +3256,7 @@
       ]
     },
     {
-      "name": "U 0.69 SHGC 0.36 Simple Glazing Skylight",
+      "name": "U 0.69 SHGC 0.36 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3266,7 +3266,7 @@
       ]
     },
     {
-      "name": "U 0.69 SHGC 0.39 Simple Glazing Skylight",
+      "name": "U 0.69 SHGC 0.39 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3276,7 +3276,7 @@
       ]
     },
     {
-      "name": "U 0.69 SHGC 0.49 Simple Glazing Skylight",
+      "name": "U 0.69 SHGC 0.49 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3286,7 +3286,7 @@
       ]
     },
     {
-      "name": "U 0.69 SHGC 0.64 Simple Glazing Skylight",
+      "name": "U 0.69 SHGC 0.64 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3296,7 +3296,7 @@
       ]
     },
     {
-      "name": "U 0.69 SHGC 0.68 Simple Glazing Skylight",
+      "name": "U 0.69 SHGC 0.68 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3306,7 +3306,7 @@
       ]
     },
     {
-      "name": "U 0.7 SHGC 0.3 Simple Glazing Skylight",
+      "name": "U 0.7 SHGC 0.3 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3388,7 +3388,7 @@
       ]
     },
     {
-      "name": "U 0.74 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 0.74 SHGC 0.55 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3398,7 +3398,7 @@
       ]
     },
     {
-      "name": "U 0.74 SHGC 0.65 Simple Glazing Skylight",
+      "name": "U 0.74 SHGC 0.65 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3408,7 +3408,7 @@
       ]
     },
     {
-      "name": "U 0.75 SHGC 0.35 Simple Glazing Skylight",
+      "name": "U 0.75 SHGC 0.35 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3428,7 +3428,7 @@
       ]
     },
     {
-      "name": "U 0.75 SHGC 0.39 Simple Glazing Skylight",
+      "name": "U 0.75 SHGC 0.39 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3438,7 +3438,7 @@
       ]
     },
     {
-      "name": "U 0.75 SHGC 0.49 Simple Glazing Skylight",
+      "name": "U 0.75 SHGC 0.49 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3448,7 +3448,7 @@
       ]
     },
     {
-      "name": "U 0.75 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 0.75 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3468,7 +3468,7 @@
       ]
     },
     {
-      "name": "U 0.75 SHGC 0.64 Simple Glazing Skylight",
+      "name": "U 0.75 SHGC 0.64 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3478,7 +3478,7 @@
       ]
     },
     {
-      "name": "U 0.75 SHGC 0.68 Simple Glazing Skylight",
+      "name": "U 0.75 SHGC 0.68 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3528,7 +3528,7 @@
       ]
     },
     {
-      "name": "U 0.81 SHGC 0.65 Simple Glazing Skylight",
+      "name": "U 0.81 SHGC 0.65 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3588,7 +3588,7 @@
       ]
     },
     {
-      "name": "U 0.85 SHGC 0.19 Simple Glazing Skylight",
+      "name": "U 0.85 SHGC 0.19 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3598,7 +3598,7 @@
       ]
     },
     {
-      "name": "U 0.85 SHGC 0.27 Simple Glazing Skylight",
+      "name": "U 0.85 SHGC 0.27 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3608,7 +3608,7 @@
       ]
     },
     {
-      "name": "U 0.85 SHGC 0.39 Simple Glazing Skylight",
+      "name": "U 0.85 SHGC 0.39 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3618,7 +3618,7 @@
       ]
     },
     {
-      "name": "U 0.85 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 0.85 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3638,7 +3638,7 @@
       ]
     },
     {
-      "name": "U 0.85 SHGC 0.65 Simple Glazing Skylight",
+      "name": "U 0.85 SHGC 0.65 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3658,7 +3658,7 @@
       ]
     },
     {
-      "name": "U 0.87 SHGC 0.58 Simple Glazing Skylight",
+      "name": "U 0.87 SHGC 0.58 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3668,7 +3668,7 @@
       ]
     },
     {
-      "name": "U 0.87 SHGC 0.71 Simple Glazing Skylight",
+      "name": "U 0.87 SHGC 0.71 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3678,7 +3678,7 @@
       ]
     },
     {
-      "name": "U 0.87 SHGC 0.77 Simple Glazing Skylight",
+      "name": "U 0.87 SHGC 0.77 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3728,7 +3728,7 @@
       ]
     },
     {
-      "name": "U 0.98 SHGC 0.19 Simple Glazing Skylight",
+      "name": "U 0.98 SHGC 0.19 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3738,7 +3738,7 @@
       ]
     },
     {
-      "name": "U 0.98 SHGC 0.27 Simple Glazing Skylight",
+      "name": "U 0.98 SHGC 0.27 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3748,7 +3748,7 @@
       ]
     },
     {
-      "name": "U 0.98 SHGC 0.36 Simple Glazing Skylight",
+      "name": "U 0.98 SHGC 0.36 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3758,7 +3758,7 @@
       ]
     },
     {
-      "name": "U 0.98 SHGC 0.36 Simple Glazing Skylight Weighted",
+      "name": "U 0.98 SHGC 0.36 Simple Glazing Weighted",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3778,7 +3778,7 @@
       ]
     },
     {
-      "name": "U 0.98 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 0.98 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3828,7 +3828,7 @@
       ]
     },
     {
-      "name": "U 1.10 SHGC 0.62 Simple Glazing Skylight",
+      "name": "U 1.10 SHGC 0.62 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3838,7 +3838,7 @@
       ]
     },
     {
-      "name": "U 1.10 SHGC 0.77 Simple Glazing Skylight",
+      "name": "U 1.10 SHGC 0.77 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3848,7 +3848,7 @@
       ]
     },
     {
-      "name": "U 1.15 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 1.15 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3868,7 +3868,7 @@
       ]
     },
     {
-      "name": "U 1.15 SHGC 0.77 Simple Glazing Skylight",
+      "name": "U 1.15 SHGC 0.77 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3878,7 +3878,7 @@
       ]
     },
     {
-      "name": "U 1.17 SHGC 0.19 Simple Glazing Skylight",
+      "name": "U 1.17 SHGC 0.19 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3888,7 +3888,7 @@
       ]
     },
     {
-      "name": "U 1.17 SHGC 0.36 Simple Glazing Skylight",
+      "name": "U 1.17 SHGC 0.36 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3908,7 +3908,7 @@
       ]
     },
     {
-      "name": "U 1.17 SHGC 0.39 Simple Glazing Skylight",
+      "name": "U 1.17 SHGC 0.39 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3928,7 +3928,7 @@
       ]
     },
     {
-      "name": "U 1.17 SHGC 0.49 Simple Glazing Skylight",
+      "name": "U 1.17 SHGC 0.49 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3938,7 +3938,7 @@
       ]
     },
     {
-      "name": "U 1.17 SHGC 0.64 Simple Glazing Skylight",
+      "name": "U 1.17 SHGC 0.64 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -3958,7 +3958,7 @@
       ]
     },
     {
-      "name": "U 1.17 SHGC 0.68 Simple Glazing Skylight",
+      "name": "U 1.17 SHGC 0.68 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4048,7 +4048,7 @@
       ]
     },
     {
-      "name": "U 1.30 SHGC 0.27 Simple Glazing Skylight",
+      "name": "U 1.30 SHGC 0.27 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4058,7 +4058,7 @@
       ]
     },
     {
-      "name": "U 1.30 SHGC 0.34 Simple Glazing Skylight",
+      "name": "U 1.30 SHGC 0.34 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4068,7 +4068,7 @@
       ]
     },
     {
-      "name": "U 1.30 SHGC 0.62 Simple Glazing Skylight",
+      "name": "U 1.30 SHGC 0.62 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4078,7 +4078,7 @@
       ]
     },
     {
-      "name": "U 1.30 SHGC 0.65 Simple Glazing Skylight",
+      "name": "U 1.30 SHGC 0.65 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4088,7 +4088,7 @@
       ]
     },
     {
-      "name": "U 1.36 SHGC 0.19 Simple Glazing Skylight",
+      "name": "U 1.36 SHGC 0.19 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4098,7 +4098,7 @@
       ]
     },
     {
-      "name": "U 1.36 SHGC 0.36 Simple Glazing Skylight",
+      "name": "U 1.36 SHGC 0.36 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4108,7 +4108,7 @@
       ]
     },
     {
-      "name": "U 1.36 SHGC 0.39 Simple Glazing Skylight",
+      "name": "U 1.36 SHGC 0.39 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4118,7 +4118,7 @@
       ]
     },
     {
-      "name": "U 1.36 SHGC 0.61 Simple Glazing Skylight",
+      "name": "U 1.36 SHGC 0.61 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4128,7 +4128,7 @@
       ]
     },
     {
-      "name": "U 1.7 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 1.7 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4148,7 +4148,7 @@
       ]
     },
     {
-      "name": "U 1.70 SHGC 0.36 Simple Glazing Skylight",
+      "name": "U 1.70 SHGC 0.36 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4158,7 +4158,7 @@
       ]
     },
     {
-      "name": "U 1.8 SHGC 0.49 Simple Glazing Skylight",
+      "name": "U 1.8 SHGC 0.49 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4168,7 +4168,7 @@
       ]
     },
     {
-      "name": "U 1.8 SHGC 0.55 Simple Glazing Skylight",
+      "name": "U 1.8 SHGC 0.55 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4188,7 +4188,7 @@
       ]
     },
     {
-      "name": "U 1.8 SHGC 0.64 Simple Glazing Skylight",
+      "name": "U 1.8 SHGC 0.64 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4198,7 +4198,7 @@
       ]
     },
     {
-      "name": "U 1.8 SHGC 0.77 Simple Glazing Skylight",
+      "name": "U 1.8 SHGC 0.77 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4208,7 +4208,7 @@
       ]
     },
     {
-      "name": "U 1.80 SHGC 0.36 Simple Glazing Skylight",
+      "name": "U 1.80 SHGC 0.36 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4218,7 +4218,7 @@
       ]
     },
     {
-      "name": "U 1.90 SHGC 0.27 Simple Glazing Skylight",
+      "name": "U 1.90 SHGC 0.27 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4228,7 +4228,7 @@
       ]
     },
     {
-      "name": "U 1.90 SHGC 0.34 Simple Glazing Skylight",
+      "name": "U 1.90 SHGC 0.34 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4238,7 +4238,7 @@
       ]
     },
     {
-      "name": "U 1.90 SHGC 0.39 Simple Glazing Skylight",
+      "name": "U 1.90 SHGC 0.39 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4248,7 +4248,7 @@
       ]
     },
     {
-      "name": "U 1.90 SHGC 0.65 Simple Glazing Skylight",
+      "name": "U 1.90 SHGC 0.65 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4258,7 +4258,7 @@
       ]
     },
     {
-      "name": "U 1.98 SHGC 0.16 Simple Glazing Skylight",
+      "name": "U 1.98 SHGC 0.16 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4268,7 +4268,7 @@
       ]
     },
     {
-      "name": "U 1.98 SHGC 0.19 Simple Glazing Skylight",
+      "name": "U 1.98 SHGC 0.19 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4288,7 +4288,7 @@
       ]
     },
     {
-      "name": "U 1.98 SHGC 0.36 Simple Glazing Skylight",
+      "name": "U 1.98 SHGC 0.36 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4298,7 +4298,7 @@
       ]
     },
     {
-      "name": "U 1.98 SHGC 0.39 Simple Glazing Skylight",
+      "name": "U 1.98 SHGC 0.39 Simple Glazing",
       "intended_surface_type": null,
       "standards_construction_type": null,
       "insulation_layer": null,
@@ -4318,7 +4318,7 @@
       ]
     },
     {
-      "name": "U 1.98 SHGC 0.61 Simple Glazing Skylight",
+      "name": "U 1.98 SHGC 0.61 Simple Glazing",
       "intended_surface_type": "Skylight",
       "standards_construction_type": "Glass with Curb",
       "insulation_layer": null,

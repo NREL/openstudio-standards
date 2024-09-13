@@ -22312,7 +22312,7 @@ OS:StandardsInformation:Construction,
 
 OS:Construction,
   {7e988758-b708-44b2-8d09-15870353b68e}, !- Handle
-  U 1.17 SHGC 0.49 Simple Glazing Skylight, !- Name
+  U 1.17 SHGC 0.49 Simple Glazing,  !- Name
   ,                                       !- Surface Rendering Name
   {2b72eb7f-0079-4cfc-9929-e0bdf9c82881}; !- Layer 1
 

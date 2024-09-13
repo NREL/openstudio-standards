@@ -5706,7 +5706,7 @@ OS:DefaultSubSurfaceConstructions,
 
 OS:Construction,
   {fb31c304-29e9-478b-9564-e0c21d8f7ebb}, !- Handle
-  U 0.36 SHGC 0.36 Simple Glazing Window Weighted, !- Name
+  U 0.36 SHGC 0.36 Simple Glazing,  !- Name
   ,                                       !- Surface Rendering Name
   {4212a174-d26f-46f6-86cc-19892f2f34d0}; !- Layer 1
 
@@ -5771,7 +5771,7 @@ OS:StandardsInformation:Construction,
 
 OS:Construction,
   {35f78375-fc61-4772-ad65-a0ba401cf69b}, !- Handle
-  U 0.5 SHGC 0.4 Simple Glazing Skylight, !- Name
+  U 0.5 SHGC 0.4 Simple Glazing,  !- Name
   ,                                       !- Surface Rendering Name
   {4c58fcc9-f54f-4942-8fa1-22dc863713a1}; !- Layer 1
 
