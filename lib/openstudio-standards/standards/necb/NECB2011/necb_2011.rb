@@ -420,7 +420,8 @@ class NECB2011 < Standard
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
 
-    self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel) unless boiler_fuel.nil?
+    boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
+    self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
@@ -2438,4 +2439,52 @@ class NECB2011 < Standard
     return primary_heating_fuel
   end
 
+  # This method expects a string with the following pattern:  number-number
+  # The first number is the percent of the total capacity that the primary boiler's capacity will be set to.
+  # The second number is the percent of the total capacity that the secondary boiler's capacity will be set to.
+  # If no boiler_cap_ratio is provided the the primary boiler will have its capacity set to 75% of the total and the
+  # secondary boiler will have its capacity set to 25% of the total.  If a boiler_cap_ratio is set to '0_0' then the
+  # NECB default capacities are assigned.
+  def set_boiler_cap_ratios(boiler_cap_ratio:, boiler_fuel:)
+    # Rules if boiler_fuel is defined
+    unless boiler_fuel.nil?
+      # Set the NECB default boiler capacities if the boiler_cap_ratio is set to '0-0'
+      if boiler_cap_ratio == '0-0'
+        boiler_cap_ratios = {
+          primary_ratio: nil,
+          secondary_ratio: nil
+        }
+        return boiler_cap_ratios
+      elsif !boiler_fuel.to_s.downcase.include?('backup') && boiler_cap_ratios.to_s.nil?
+        # Set the NECB default boiler capacities if the boiler_cap_ratio in not defined and the boiler fuel type is set
+        # and the primary and secondary fuel types are the same.
+        boiler_cap_ratios = {
+          primary_ratio: nil,
+          secondary_ratio: nil
+        }
+        return boiler_cap_ratios
+      end
+    end
+    # Assuming the above rules do not apply, set the default boiler capacity ratio to 75% for the primary boiler and 25%
+    # for the secondary boiler
+    if boiler_cap_ratio.nil?
+      boiler_cap_ratios = {
+        primary_ratio: 0.75,
+        secondary_ratio: 0.25
+      }
+      return boiler_cap_ratios
+    end
+    # If you defined the boiler capacity ratios set them accordingly.
+    # Split the capacity ratio using the '-' symbol
+    string_ratios = boiler_cap_ratio.to_s.split('-')
+    # Turn the percentages into fractions
+    primary_ratio = string_ratios[0].to_f/100.0
+    secondary_ratio = string_ratios[1].to_f/100.0
+    # Set the hash containg the ratios and return
+    boiler_cap_ratios = {
+      primary_ratio: primary_ratio,
+      secondary_ratio: secondary_ratio
+    }
+    return boiler_cap_ratios
+  end
 end
