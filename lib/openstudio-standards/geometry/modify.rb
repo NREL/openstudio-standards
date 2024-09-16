@@ -109,14 +109,14 @@ module OpenstudioStandards
 
       # rename surfaces based on space name and surface type
       surface_type_counter = Hash.new(0)
-      space.surfaces.each do |surface|
+      space.surfaces.sort.each do |surface|
         surface_type = surface.surfaceType
         surface_type_counter[surface_type] += 1
         surface.setName("#{space.name} #{surface_type} #{surface_type_counter[surface_type]}")
 
         # rename sub surfaces based on surface name and subsurface type
         sub_surface_type_counter = Hash.new(0)
-        surface.subSurfaces.each do |sub_surface|
+        surface.subSurfaces.sort.each do |sub_surface|
           sub_surface_type = sub_surface.subSurfaceType
           sub_surface_type_counter[sub_surface_type] += 1
           sub_surface.setName("#{surface.name} #{sub_surface_type} #{sub_surface_type_counter[sub_surface_type]}")
