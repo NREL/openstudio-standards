@@ -1,4 +1,7 @@
-# Using Visual Studio Code and DevContainers for Openstudio-Standards Development. 
+# Openstudio-Standards development using VSCode. 
+
+These are instructions on how to conduct development in the openstudio-standards project, using development containers, and Visual Studio Code IDE. This method uses containers eliminate the need to install the correct version of ruby and other support tools required for development. It ensures that all developers are using the same consistent environment, same version of ruby and same toolchain. This help to avoid "It runs on my machine, but not yours" issues. The container is an Ubuntu linux based, and you can install linux console based applications if you wish. However, everything that you need for standards development is already included. 
+
 
 ## Requirements
 ### Docker
@@ -43,12 +46,8 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
 
-
-
-
-    * 
 ### Visual Studio Code
-[Visual Studio Code](https://code.visualstudio.com/)
+[Visual Studio Code](https://code.visualstudio.com/) is an free to use editor that has a variety of publically created plug-ins. Some even support OpenStudio and EnergyPlus development. Click on the link above and install in on your computer. 
 ## Configuration
 1. Launch vscode and install the following extenstions. 
     * [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
@@ -56,7 +55,58 @@ For more examples and ideas, visit:
 
 ## Development Workflow
 
-### Clone Repository into a DevContainer
+### Clone Standard Repository into a DevContainer
+This will create a container workspace and clone all the source code for openstudio-standards required for development.  
+1. Hit Ctrl+Shift+P to bring up the command pallet on the top of vscode. 
+1. Start to type "Dev Containers" and select " Dev Containers: Clone Repository in Container Volume" ![Clone](./images/CloneRepository.png "a title")
+1. Enter the URL for the openstudio-standards repository. ![URL](./images/URL.png "a title") For the nrcan branch use:
+`` https://github.com/NREL/openstudio-standards/tree/nrcan ``
+1. Wait a few minutes for the container to be created and to clone the source-code. 
+
+### Bring up a terminal to execute commands. 
+1. Hit Ctrl-Shift-`  (that is a backtick) to bring up a terminal. There are other ways to do this as well, such as the "Terminal Menu on the top or the "+" symbol to the right of the terminal on the bottom of vscode. You can now issue commands to the container.  
+
+### Install Certificates (NRCan Only)
+The NRCan network requires certificate to be installed in your container. Clone the cert repo. 
+```sh
+git clone https://github.com/canmet-energy/linux_nrcan_certs
+```
+Then install the certs by cut and pasting this command. This will also remove the cert folder as it will no longer be needed. 
+```ssh 
+cd linux_nrcan_certs && ./install_nrcan_certs.sh && cd .. && rm -fr linux_nrcan_certs
+```
+
+### Install / Update Ruby Gems. 
+This will install all the ruby packages required by standards. 
+1. In the terminal, enter:
+``
+bundle install --path vendor/bundle
+``
+
+
+You are now ready for development! You can change branches, commit, push and pull from git. You can run bundle command to test the code as well from the terminal.
+
+## Run Development Tests
+You want to ensure that ahead of a pull request that you run the battery of tests to ensure that you have not broken any of the existing functionality. To do this. Run the following command. 
+```sh
+bundle exec rake test:parallel_run_all_tests_locally
+```
+
+Depending on the speed of your computer this may take a few hours. Best practice is to run this overnight. 
+
+
+## Tips / Tricks
+### Copy files to/from host into your workspace folder. 
+
+You can use the CTRL+C, CTRL-V to cut as paste to/from your host(windows) machine. 
+
+
+
+
+
+
+
+
 
 
 
