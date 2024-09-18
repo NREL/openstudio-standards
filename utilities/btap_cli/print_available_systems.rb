@@ -4,7 +4,7 @@ WEATHER_FILE = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
 NECB = NECB2011.new
 $base_model = nil
 $failures = []
-$successes = {}
+$successes = []
 
 def create_model()
         # create model
@@ -66,7 +66,10 @@ def system1()
             )
             if old_name == new_name
                 arguments["system"] = "sys_1"
-                $successes[new_name] = arguments
+                # Make the "name" key the first key in the hash
+                arguments = arguments.sort.to_h
+                arguments = {"name" => new_name}.merge(arguments)
+                $successes.append(arguments)
             else
                 $failures.push([arguments,old_name,new_name])
             end
@@ -101,7 +104,10 @@ def system2()
                                                 hw_loop: hw_loop)
         if old_name == new_name
             arguments["system"] = "sys_2"
-            $successes[new_name] = arguments
+            # Make the "name" key the first key in the hash
+            arguments = arguments.sort.to_h
+            arguments = {"name" => new_name}.merge(arguments)
+            $successes.append(arguments)
         else
             $failures.push([arguments,old_name,new_name])
         end
@@ -152,7 +158,10 @@ def system3()
             new_auto_zoner: true)
             if old_name == new_name
                 arguments["system"] = "sys_3"
-                $successes[new_name] = arguments
+                # Make the "name" key the first key in the hash
+                arguments = arguments.sort.to_h
+                arguments = {"name" => new_name}.merge(arguments)
+                $successes.append(arguments)
             else
                 $failures.push([arguments,old_name,new_name])
             end
@@ -196,7 +205,10 @@ def system4()
 
         if old_name == new_name
             arguments["system"] = "sys_4"
-            $successes[new_name] = arguments
+            # Make the "name" key the first key in the hash
+            arguments = arguments.sort.to_h
+            arguments = {"name" => new_name}.merge(arguments)
+            $successes.append(arguments)
         else
             $failures.push([arguments,old_name,new_name])
         end
@@ -234,7 +246,10 @@ def system5()
                                                 hw_loop: hw_loop)
         if old_name == new_name
             arguments["system"] = "sys_5"
-            $successes[new_name] = arguments
+            # Make the "name" key the first key in the hash
+            arguments = arguments.sort.to_h
+            arguments = {"name" => new_name}.merge(arguments)
+            $successes.append(arguments)
         else
             $failures.push([arguments,old_name,new_name])
         end
@@ -276,7 +291,10 @@ def system6()
 
             if old_name == new_name
                 arguments["system"] = "sys_6"
-                $successes[new_name] = arguments
+                # Make the "name" key the first key in the hash
+                arguments = arguments.sort.to_h
+                arguments = { "name" => new_name}.merge(arguments)
+                $successes.append(arguments)
             else
                 $failures.push([arguments,old_name,new_name])
             end
@@ -302,10 +320,11 @@ CSV.open('failures.csv', 'w') do |csv|
 end
 
 
-# save $successes hash as a pretty json file.
-File.open('successes.json', 'w') do |f|
-    f.write(JSON.pretty_generate($successes))
+# save $successes array of hashes as a pretty yaml file.
+File.open('successes.yaml', 'w') do |file|
+    file.write($successes.to_yaml)
 end
+
 
 
 
