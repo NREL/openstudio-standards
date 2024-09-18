@@ -3171,6 +3171,10 @@ class ECMS
     raise 'You attempted to set the part load curve of boilers in this model to nil.  Please check the ECMS class boiler_set.json file and ensure that both the efficiency and part load curve are set.' if boiler_eff['part_load_curve'].nil?
 
     model.getBoilerHotWaters.sort.each do |mod_boiler|
+      if mod_boiler.fuelType.to_s.downcase == 'electricity'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "The boiler #{mod_boiler.name.to_s} is electrically powered.  Only the efficiencies of fuel fired boilers are modified.  The efficiency of this boiler will not be changed.")
+        next
+      end
       reset_boiler_efficiency(model: model, component: mod_boiler.to_BoilerHotWater.get, eff: boiler_eff)
     end
   end
