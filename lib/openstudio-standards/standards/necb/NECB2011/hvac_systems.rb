@@ -1117,7 +1117,7 @@ class NECB2011
     # This method will seem like an error in number of args..but this is due to swig voodoo.
     heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, 'Schedule:Constant', 'Schedule Value')
     heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    heat_pump_avail_sch_prog.setName("#{multi_speed_heat_pump.name.to_s.gsub(/[ +-.]/, '_')} Availability Schedule Program by Line")
+    heat_pump_avail_sch_prog.setName("#{ems_friendly_name(multi_speed_heat_pump.name)} Availability Schedule Program by Line")
     heat_pump_avail_sch_prog_body = <<-EMS
         IF #{heat_pump_avail_sch_sensor.handle} > 0.0
           SET #{heat_pump_avail_sch_actuator.handle} = #{heat_pump_avail_sch_sensor.handle}
@@ -1129,7 +1129,7 @@ class NECB2011
     EMS
     heat_pump_avail_sch_prog.setBody(heat_pump_avail_sch_prog_body)
     pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    pcm.setName("#{heat_pump_avail_sch_prog.name.to_s.gsub(/[ +-.]/, '_')} Calling Manager")
+    pcm.setName("#{heat_pump_avail_sch_prog.name} Calling Manager")
     pcm.setCallingPoint('InsideHVACSystemIterationLoop')
     pcm.addProgram(heat_pump_avail_sch_prog)
   end

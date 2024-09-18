@@ -1032,22 +1032,25 @@ class Standard
     loop_stpt_manager.setName("#{ground_hx_loop.name} Supply Outlet Setpoint")
     loop_stpt_manager.addToNode(ground_hx_loop.supplyOutletNode)
 
+    # edit name to be EMS friendly
+    ground_hx_ems_name = ems_friendly_name(ground_hx.name)
+
     # sensor to read supply inlet temperature
     inlet_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model,
                                                                             'System Node Temperature')
-    inlet_temp_sensor.setName("#{ground_hx.name.to_s.gsub(/[ +-.]/, '_')} Inlet Temp Sensor")
+    inlet_temp_sensor.setName("#{ground_hx_ems_name} Inlet Temp Sensor")
     inlet_temp_sensor.setKeyName(ground_hx_loop.supplyInletNode.handle.to_s)
 
     # actuator to set supply outlet temperature
     outlet_temp_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hx_temp_sch,
                                                                                  'Schedule:Constant',
                                                                                  'Schedule Value')
-    outlet_temp_actuator.setName("#{ground_hx.name} Outlet Temp Actuator")
+    outlet_temp_actuator.setName("#{ground_hx_ems_name} Outlet Temp Actuator")
 
     # program to control outlet temperature
     # adjusts delta-t based on calculation of slope and intercept from control temperatures
     program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    program.setName("#{ground_hx.name.to_s.gsub(/[ +-.]/, '_')} Temperature Control")
+    program.setName("#{ground_hx_ems_name} Temperature Control")
     program_body = <<-EMS
       SET Tin = #{inlet_temp_sensor.handle}
       SET Tout = #{slope_c_per_c.round(2)} * Tin + #{intercept_c.round(1)}
@@ -1057,7 +1060,7 @@ class Standard
 
     # program calling manager
     pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    pcm.setName("#{program.name.to_s.gsub(/[ +-.]/, '_')} Calling Manager")
+    pcm.setName("#{program.name} Calling Manager")
     pcm.setCallingPoint('InsideHVACSystemIterationLoop')
     pcm.addProgram(program)
 
@@ -4463,20 +4466,20 @@ class Standard
       # Create a sensor to read the zone load
       zn_load_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model,
                                                                            'Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate')
-      zn_load_sensor.setName("#{zone_name_clean.to_s.gsub(/[ +-.]/, '_')} Clg Load Sensor")
+      zn_load_sensor.setName("#{ems_friendly_name(zone_name_clean)} Clg Load Sensor")
       zn_load_sensor.setKeyName(zone.handle.to_s)
 
       # Create an actuator to set the airloop availability
       air_loop_avail_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(air_loop_avail_sch,
                                                                                       'Schedule:Constant',
                                                                                       'Schedule Value')
-      air_loop_avail_actuator.setName("#{air_loop.name.to_s.gsub(/[ +-.]/, '_')} Availability Actuator")
+      air_loop_avail_actuator.setName("#{ems_friendly_name(air_loop.name)} Availability Actuator")
 
       # Create a program to turn on Evap Cooler if
       # there is a cooling load in the target zone.
       # Load < 0.0 is a cooling load.
       avail_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-      avail_program.setName("#{air_loop.name.to_s.gsub(/[ +-.]/, '_')} Availability Control")
+      avail_program.setName("#{ems_friendly_name(air_loop.name)} Availability Control")
       avail_program_body = <<-EMS
         IF #{zn_load_sensor.handle} < 0.0
           SET #{air_loop_avail_actuator.handle} = 1
@@ -4489,10 +4492,16 @@ class Standard
       programs << avail_program
 
       # Direct Evap Cooler
-      # @todo better assumptions for evap cooler performance and fan pressure rise
+      # @todo better assumptions for fan pressure rise
       evap = OpenStudio::Model::EvaporativeCoolerDirectResearchSpecial.new(model, model.alwaysOnDiscreteSchedule)
       evap.setName("#{zone.name} Evap Media")
+      # assume 90% design effectiveness from https://basc.pnnl.gov/resource-guides/evaporative-cooling-systems#edit-group-description
+      evap.setCoolerDesignEffectiveness(0.90)
       evap.autosizePrimaryAirDesignFlowRate
+      evap.autosizeRecirculatingWaterPumpPowerConsumption
+      # use suggested E+ default values of 90.0 W-s/m^3 for pump sizing factor and 3.0 for blowdown concentration
+      evap.setWaterPumpPowerSizingFactor(90.0)
+      evap.setBlowdownConcentrationRatio(3.0)
       evap.addToNode(air_loop.supplyInletNode)
 
       # Fan (cycling), must be inside unitary system to cycle on airloop

@@ -2129,6 +2129,9 @@ module OpenstudioStandards
       args[:primary_building_type] = bldg_type_a
       OpenstudioStandards::Geometry.create_bar_from_args_and_building_type_hash(model, args, building_type_hash)
 
+      # rename all surfaces and subsurfaces
+      OpenstudioStandards::Geometry.model_rename_surfaces_and_subsurfaces(model)
+
       return true
     end
 
