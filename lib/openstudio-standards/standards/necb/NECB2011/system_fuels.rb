@@ -51,7 +51,7 @@ class SystemFuels
     @backup_boiler_fueltype = boiler_fuel_defaults['backup_boiler_fueltype']
     @secondary_boiler_cap_frac = boiler_cap_ratios[:secondary_ratio]
     @baseboard_type = boiler_fuel_defaults['baseboard_type']
-    @mau_heating_coil_type = boiler_fuel_defaults['mau_heating_coil_type']
+    @mau_heating_coil_type = boiler_fuel_defaults['mau_heating_coil_type'] unless @mau_heating_coil_type == 'DX'
     @heating_coil_type_sys6 = boiler_fuel_defaults['heating_coil_type_sys6']
   end
 end

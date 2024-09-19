@@ -543,8 +543,6 @@ class NECB2011
     capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
 
     boiler_capacity = capacity_w
-    prim_cap_frac = self.fuel_type_set.primary_boiler_cap_frac
-    sec_cap_frac = self.fuel_type_set.secondary_boiler_cap_frac
     if self.fuel_type_set.primary_boiler_cap_frac.nil? || self.fuel_type_set.secondary_boiler_cap_frac.nil?
       # Check if secondary and/or modulating boiler required
       # If boiler names include 'Primary Boiler' or 'Secondary Boiler' then NECB rules are applied

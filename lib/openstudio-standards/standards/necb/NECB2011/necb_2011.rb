@@ -581,7 +581,6 @@ class NECB2011 < Standard
     ecm.apply_system_ecm(model: model,
                          ecm_system_name: ecm_system_name,
                          template_standard: self,
-                         primary_heating_fuel: self.fuel_type_set.ecm_fueltype,
                          ecm_system_zones_map_option: ecm_system_zones_map_option)
 
     # -------- Performace, Efficiencies, Controls and Sensors ------------
@@ -2455,7 +2454,7 @@ class NECB2011 < Standard
           secondary_ratio: nil
         }
         return boiler_cap_ratios
-      elsif !boiler_fuel.to_s.downcase.include?('backup') && boiler_cap_ratios.to_s.nil?
+      elsif !boiler_fuel.to_s.downcase.include?('backup') && boiler_cap_ratio.nil?
         # Set the NECB default boiler capacities if the boiler_cap_ratio in not defined and the boiler fuel type is set
         # and the primary and secondary fuel types are the same.
         boiler_cap_ratios = {
