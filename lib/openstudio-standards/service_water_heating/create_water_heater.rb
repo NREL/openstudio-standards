@@ -25,20 +25,20 @@ module OpenstudioStandards
     #   lots of individual water heaters (for runtime sake).
     # @param service_water_loop [OpenStudio::Model::PlantLoop] if provided, add the water heater to this loop
     # @return [OpenStudio::Model::WaterHeaterMixed] OpenStudio WaterHeaterMixed object
-    def self.model_add_water_heater(model,
-                                    water_heater_capacity: nil,
-                                    water_heater_volume: nil,
-                                    water_heater_fuel: 'Electricity',
-                                    on_cycle_parasitic_fuel_consumption_rate: 0.0,
-                                    off_cycle_parasitic_fuel_consumption_rate: 0.0,
-                                    service_water_temperature: 60.0,
-                                    service_water_temperature_schedule: nil,
-                                    set_peak_use_flowrate: false,
-                                    peak_flowrate: nil,
-                                    flowrate_schedule: nil,
-                                    water_heater_thermal_zone: nil,
-                                    number_water_heaters: 1,
-                                    service_water_loop: nil)
+    def self.create_water_heater(model,
+                                 water_heater_capacity: nil,
+                                 water_heater_volume: nil,
+                                 water_heater_fuel: 'Electricity',
+                                 on_cycle_parasitic_fuel_consumption_rate: 0.0,
+                                 off_cycle_parasitic_fuel_consumption_rate: 0.0,
+                                 service_water_temperature: 60.0,
+                                 service_water_temperature_schedule: nil,
+                                 set_peak_use_flowrate: false,
+                                 peak_flowrate: nil,
+                                 flowrate_schedule: nil,
+                                 water_heater_thermal_zone: nil,
+                                 number_water_heaters: 1,
+                                 service_water_loop: nil)
       # create water heater object
       # @todo Standards - Change water heater methodology to follow 'Model Enhancements Appendix A.'
       water_heater = OpenStudio::Model::WaterHeaterMixed.new(model)
@@ -205,22 +205,22 @@ module OpenstudioStandards
     # @param service_water_loop [OpenStudio::Model::PlantLoop] if provided, add the water heater to this loop
     # @param use_ems_control [Boolean] if true, use ems control logic if using a 'WrappedCondenser' style HPWH.
     # @return [OpenStudio::Model::WaterHeaterMixed] OpenStudio WaterHeaterMixed object
-    def self.model_add_heatpump_water_heater(model,
-                                             heat_pump_type: 'PumpedCondenser',
-                                             water_heater_capacity: 500.0,
-                                             water_heater_volume: OpenStudio.convert(80.0, 'gal', 'm^3').get,
-                                             coefficient_of_performance: 2.8,
-                                             electric_backup_capacity: 4500.0,
-                                             on_cycle_parasitic_fuel_consumption_rate: 0.0,
-                                             off_cycle_parasitic_fuel_consumption_rate: 0.0,
-                                             service_water_temperature: OpenStudio.convert(125.0, 'F', 'C').get,
-                                             service_water_temperature_schedule: nil,
-                                             set_peak_use_flowrate: false,
-                                             peak_flowrate: nil,
-                                             flowrate_schedule: nil,
-                                             water_heater_thermal_zone: nil,
-                                             service_water_loop: nil,
-                                             use_ems_control: false)
+    def self.create_heatpump_water_heater(model,
+                                          heat_pump_type: 'PumpedCondenser',
+                                          water_heater_capacity: 500.0,
+                                          water_heater_volume: OpenStudio.convert(80.0, 'gal', 'm^3').get,
+                                          coefficient_of_performance: 2.8,
+                                          electric_backup_capacity: 4500.0,
+                                          on_cycle_parasitic_fuel_consumption_rate: 0.0,
+                                          off_cycle_parasitic_fuel_consumption_rate: 0.0,
+                                          service_water_temperature: OpenStudio.convert(125.0, 'F', 'C').get,
+                                          service_water_temperature_schedule: nil,
+                                          set_peak_use_flowrate: false,
+                                          peak_flowrate: nil,
+                                          flowrate_schedule: nil,
+                                          water_heater_thermal_zone: nil,
+                                          service_water_loop: nil,
+                                          use_ems_control: false)
       # create heat pump water heater
       if heat_pump_type == 'WrappedCondenser'
         hpwh = OpenStudio::Model::WaterHeaterHeatPumpWrappedCondenser.new(model)

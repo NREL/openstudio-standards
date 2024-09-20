@@ -99,19 +99,19 @@ class Standard
     swh_pump.setMotorEfficiency(service_water_pump_motor_efficiency)
     swh_pump.addToNode(service_water_loop.supplyInletNode)
 
-    water_heater = OpenstudioStandards::ServiceWaterHeating.model_add_water_heater(model,
-                                                                                   water_heater_capacity: water_heater_capacity,
-                                                                                   water_heater_volume: water_heater_volume,
-                                                                                   water_heater_fuel: water_heater_fuel,
-                                                                                   on_cycle_parasitic_fuel_consumption_rate: parasitic_fuel_consumption_rate,
-                                                                                   off_cycle_parasitic_fuel_consumption_rate: parasitic_fuel_consumption_rate,
-                                                                                   service_water_temperature: service_water_temperature,
-                                                                                   service_water_temperature_schedule: swh_temp_sch,
-                                                                                   set_peak_use_flowrate: false,
-                                                                                   peak_flowrate: 0.0,
-                                                                                   flowrate_schedule: nil,
-                                                                                   water_heater_thermal_zone: water_heater_thermal_zone,
-                                                                                   number_water_heaters: number_water_heaters)
+    water_heater = OpenstudioStandards::ServiceWaterHeating.create_water_heater(model,
+                                                                                water_heater_capacity: water_heater_capacity,
+                                                                                water_heater_volume: water_heater_volume,
+                                                                                water_heater_fuel: water_heater_fuel,
+                                                                                on_cycle_parasitic_fuel_consumption_rate: parasitic_fuel_consumption_rate,
+                                                                                off_cycle_parasitic_fuel_consumption_rate: parasitic_fuel_consumption_rate,
+                                                                                service_water_temperature: service_water_temperature,
+                                                                                service_water_temperature_schedule: swh_temp_sch,
+                                                                                set_peak_use_flowrate: false,
+                                                                                peak_flowrate: 0.0,
+                                                                                flowrate_schedule: nil,
+                                                                                water_heater_thermal_zone: water_heater_thermal_zone,
+                                                                                number_water_heaters: number_water_heaters)
     service_water_loop.addSupplyBranchForComponent(water_heater)
 
     # Pipe losses
