@@ -36,7 +36,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/schedules/parametric'
 
   # ServiceWaterHeating Module
-  require_relative 'openstudio-standards/service_water_heating/component'
+  require_relative 'openstudio-standards/service_water_heating/create_water_heater'
 
   # Space Module
   require_relative 'openstudio-standards/space/space'
