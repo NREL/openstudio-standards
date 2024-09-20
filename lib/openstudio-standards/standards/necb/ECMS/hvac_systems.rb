@@ -507,11 +507,12 @@ class ECMS
     standard:,
     air_sys_eqpt_type: 'ccashp')
 
+    # Get the heating fuel type from the system fuels object defined by the standards object
     heating_fuel = standard.fuel_type_set.ecm_fueltype
-    # Create one hot-water loop for hot-water baseboards if a boiler fuel is defined
-    primary_boiler_fuel_type = standard.fuel_type_set.boiler_fueltype
+
+    # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) unless primary_boiler_fuel_type.nil?
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
 
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
@@ -1220,11 +1221,12 @@ class ECMS
                                     ecm_system_zones_map_option:,
                                     standard:)
 
+    # Get the heating fuel type from the system fuels object defined by the standards object
     heating_fuel = standard.fuel_type_set.ecm_fueltype
-    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+
+    # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    primary_boiler_fuel = standard.fuel_type_set.boiler_fueltype
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) unless primary_boiler_fuel.nil?
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
 
     # Set supplemental heating for air loop
     sys_supp_htg_eqpt_type = 'coil_electric'
@@ -1392,7 +1394,7 @@ class ECMS
                              standard:)
     hw_loop = nil
 
-    # Set heating fuel
+    # Get the heating fuel type from the system fuels object defined by the standards object
     heating_fuel = standard.fuel_type_set.ecm_fueltype
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
@@ -1536,13 +1538,13 @@ class ECMS
                                   system_doas_flags:,
                                   ecm_system_zones_map_option:,
                                   standard:)
-    # Set heating fuel
+
+    # Get the heating fuel type from the system fuels object defined by the standards object
     heating_fuel = standard.fuel_type_set.ecm_fueltype
 
-    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+    # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    primary_boiler_fuel = standard.fuel_type_set.boiler_fueltype
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) unless primary_boiler_fuel.nil?
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
 
     # Set supplemental heating fuel for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
@@ -1718,7 +1720,9 @@ class ECMS
                                   ecm_system_zones_map_option:,
                                   standard:)
 
+    # Get the heating fuel type from the system fuels object defined by the standards object
     heating_fuel = standard.fuel_type_set.ecm_fueltype
+
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
@@ -3672,7 +3676,7 @@ class ECMS
     end
   end
   # ============================================================================================================================
-  # Add one hot-water loop for hot-water baseboards if primary heating fuel is gas
+  # Add one hot-water loop for hot-water baseboards if required
   def add_hotwater_loop(model:, fuel_type_set:)
     primary_boiler_fueltype = fuel_type_set.boiler_fueltype
     backup_boiler_fueltype = fuel_type_set.backup_boiler_fueltype
