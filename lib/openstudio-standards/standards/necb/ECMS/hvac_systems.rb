@@ -504,13 +504,15 @@ class ECMS
     system_zones_map:,
     system_doas_flags:,
     ecm_system_zones_map_option:,
-    heating_fuel:,
     standard:,
     air_sys_eqpt_type: 'ccashp')
 
-    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
+
+    # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
 
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
@@ -523,20 +525,14 @@ class ECMS
     # Update system doas flags
     system_doas_flags = {}
     system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
-    # Set heating fuel
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS08_CCASHP_VRF' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+
     # use system zones map and generate new air system and zonal equipment
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
       sys_supp_htg_eqpt_type = 'coil_electric'
-      sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+      sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
       airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
@@ -573,8 +569,8 @@ class ECMS
                     zone_fan_type: 'On_Off',
                     hw_loop: hw_loop)
       # add electric or hot-water baseboards for backup; Type of baseboard follows the primary heating fuel used in the building model.
-      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
-      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
+      zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
+      zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
 
       add_zone_eqpt(model: model,
                     airloop: airloop,
@@ -1223,23 +1219,18 @@ class ECMS
                                     system_zones_map:,    # hash of ailoop names as keys and array of zones as values
                                     system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
                                     ecm_system_zones_map_option:,
-                                    heating_fuel:,
                                     standard:)
 
-    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
-    hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
 
-    # Set heating fuel
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion)}['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS09_CCASHP_Baseboard' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Create one hot-water loop for hot-water baseboards if required
+    hw_loop = nil
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
+
     # Set supplemental heating for air loop
     sys_supp_htg_eqpt_type = 'coil_electric'
-    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1269,8 +1260,8 @@ class ECMS
         zone_clg_eqpt_type = 'ptac_electric_off'
         zone_fan_type = 'on_off'
       else
-        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
-        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
         zone_clg_eqpt_type = 'none'
         zone_fan_type = 'none'
       end
@@ -1286,8 +1277,8 @@ class ECMS
                     hw_loop: hw_loop)
       # for doas use baseboard electric or hotwater as backup for PTAC units
       if sys_info['sys_vent_type'] == 'doas'
-        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
-        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
@@ -1400,20 +1391,14 @@ class ECMS
                              system_zones_map:,
                              system_doas_flags:,
                              ecm_system_zones_map_option:,
-                             standard:,
-                             heating_fuel:)
+                             standard:)
     hw_loop = nil
 
-    # Set heating fuel
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion)}['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS11_ASHP_PTHP' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
-    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
     system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
@@ -1552,23 +1537,18 @@ class ECMS
                                   system_zones_map:,
                                   system_doas_flags:,
                                   ecm_system_zones_map_option:,
-                                  standard:,
-                                  heating_fuel:)
+                                  standard:)
 
-    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
+
+    # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
 
-    # Set heating fuel
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion)}['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS12_ASHP_Baseboard' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
     # Set supplemental heating fuel for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
-    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1595,8 +1575,8 @@ class ECMS
         zone_clg_eqpt_type = 'ptac_electric_off'
         zone_fan_type = 'on_off'
       else
-        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
-        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
         zone_clg_eqpt_type = 'none'
         zone_fan_type = 'none'
       end
@@ -1612,8 +1592,8 @@ class ECMS
                     hw_loop: hw_loop)
       # for doas use baseboard electric or hotwater as backup for PTAC units
       if sys_info['sys_vent_type'] == 'doas'
-        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
-        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
@@ -1711,15 +1691,13 @@ class ECMS
                             system_zones_map:,
                             system_doas_flags:,
                             ecm_system_zones_map_option:,
-                            standard:,
-                            heating_fuel:)
+                            standard:)
     # call method for ECM hs08 with ASHP in the air system
     add_ecm_hs08_ccashp_vrf(model: model,
                             system_zones_map: system_zones_map,
                             system_doas_flags: system_doas_flags,
                             ecm_system_zones_map_option: ecm_system_zones_map_option,
                             standard: standard,
-                            heating_fuel: heating_fuel,
                             air_sys_eqpt_type: 'ashp')
   end
 
@@ -1740,18 +1718,14 @@ class ECMS
                                   system_zones_map:,
                                   system_doas_flags:,
                                   ecm_system_zones_map_option:,
-                                  standard:,
-                                  heating_fuel:)
+                                  standard:)
 
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion)}['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS11_ASHP_PTHP' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
+
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
-    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
     system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
@@ -1820,7 +1794,7 @@ class ECMS
       raise("Can not find curve hpowerf for #{hw_loop_htg_eqpt.name}")
     end
     boiler = OpenStudio::Model::BoilerHotWater.new(model)
-    boiler.setFuelType(updated_heating_fuel)
+    boiler.setFuelType(heating_fuel)
     hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
     boiler.addToNode(hw_loop_htg_eqpt_outlet_node)
 
@@ -3530,28 +3504,21 @@ class ECMS
                                                   system_zones_map:,
                                                   system_doas_flags: nil,
                                                   ecm_system_zones_map_option:,
-                                                  standard:,
-                                                  heating_fuel:)
+                                                  standard:)
     # Set the primary fuel set to default to to specific fuel type.
     standards_info = standard.standards_data
 
-    if heating_fuel == 'DefaultFuel'
-      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
-      heating_fuel = standards_info['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
-    end
-    # Get fuelset.
-    system_fuel_defaults = standards_info['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == heating_fuel }
-    raise("fuel_type_sets named #{heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
-
     # Assign fuel sources.
-    boiler_fueltype = system_fuel_defaults['boiler_fueltype']
-    baseboard_type = system_fuel_defaults['baseboard_type']
+    boiler_fueltype = standard.fuel_type_set.boiler_fueltype
+    backup_boiler_fueltype = standard.fuel_type_set.backup_boiler_fueltype
+    baseboard_type = standard.fuel_type_set.baseboard_type
     mau_heating_coil_type = 'none'
 
     # Create the hot water loop if necessary.
     hw_loop = standard.create_hw_loop_if_required(
       baseboard_type,
       boiler_fueltype,
+      backup_boiler_fueltype,
       mau_heating_coil_type,
       model
     )
@@ -3709,15 +3676,17 @@ class ECMS
     end
   end
   # ============================================================================================================================
-  # Add one hot-water loop for hot-water baseboards if primary heating fuel is gas
-  def add_hotwater_loop(model:)
+  # Add one hot-water loop for hot-water baseboards if required
+  def add_hotwater_loop(model:, fuel_type_set:)
+    primary_boiler_fueltype = fuel_type_set.boiler_fueltype
+    backup_boiler_fueltype = fuel_type_set.backup_boiler_fueltype
     plant_loop_names = []
     model.getPlantLoops.sort.each do |plant_loop|
       plant_loop_names << plant_loop.name.to_s
     end
     unless plant_loop_names.include? 'Hot Water Loop'
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      setup_hw_loop_with_components(model, hw_loop, 'NaturalGas', model.alwaysOnDiscreteSchedule)
+      setup_hw_loop_with_components(model, hw_loop, primary_boiler_fueltype, backup_boiler_fueltype, model.alwaysOnDiscreteSchedule)
     end
     return hw_loop
   end
