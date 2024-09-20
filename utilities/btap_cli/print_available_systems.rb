@@ -262,7 +262,7 @@ def system6()
     heating_coil_types = ["Electric" , "Hot Water"]
     baseboard_types = ["Electric", "Hot Water"]
     chiller_types = ["Scroll","Centrifugal","RotaryScrew","Reciprocating"]
-    fan_types = ["AF_or_BI_rdg_fancurve","AF_or_BI_inletvanes","fc_inletvanes","var_speed_drive"]
+    fan_types = ["var_speed_drive"]
     # Generate all possible combinations of the above arrays
     heating_coil_types.product( baseboard_types, chiller_types, fan_types).each do |heating_coil_type, baseboard_type, chiller_type, fan_type|
             puts("heating_coil_type: #{heating_coil_type}  baseboard_type: #{baseboard_type}, chiller_type: #{chiller_type}, fan_type : #{fan_type}")
