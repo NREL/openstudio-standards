@@ -15,8 +15,41 @@ class NECB2011
         cooling_coil_ashp = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingDXSingleSpeed.is_initialized and heating_coil_ashp}
         cooling_coil_ccashp = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingDXSingleSpeed.is_initialized and heating_coil_ccashp}
         cooling_coil_dx = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingDXSingleSpeed.is_initialized and (heating_coil_gas or heating_coil_elect or heating_coil_water)}
-
         cooling_coil_water = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingWater.is_initialized } ? air_loop.components.detect() { |equip| equip.to_CoilCoolingWater.is_initialized}.to_CoilCoolingWater.get : false
+        # Determine PlantLoop that is connected to the cooling_coil_water coil.
+        if cooling_coil_water
+            # Get the PlantLoop attached to the CoilCoolingWater
+            plant_loop = cooling_coil_water.plantLoop
+            # Initialize an array to hold the names of the ChillerElectricEIR objects
+            chiller_names = []
+            # Check if the PlantLoop is valid
+            if plant_loop.is_initialized
+                # Get the actual PlantLoop object
+                plant_loop = plant_loop.get
+                # Get the ChillerElectricEIR objects attached to the PlantLoop
+                chillers = plant_loop.supplyComponents(OpenStudio::Model::ChillerElectricEIR::iddObjectType)
+                chillers.each do |chiller|
+                    chiller = chiller.to_ChillerElectricEIR.get
+                    chiller_names << chiller.name.get
+                end #chillers
+
+                case chiller_names[0]
+                # Check if name contains ["Scroll","Centrifugal","RotaryScrew","Reciprocating"]
+                when /Scroll/
+                    chiller_type = 'scrl'
+                when /Centrifugal/
+                    chiller_type = 'cent'
+                when /RotaryScrew/
+                    chiller_type = 'screw'
+                when /Reciprocating/
+                    chiller_type = 'recip'
+                else
+                    raise("Chiller type not recognized")
+                end
+            end
+        end
+
+    
         zone_htg_b_elec = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Electric') }
         zone_htg_b_water = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Water') }
         zone_vav_rh = air_loop.components.detect(proc {false}) { |equip| equip.to_AirTerminalSingleDuctVAVReheat.is_initialized()} ? air_loop.components.detect() { |equip| equip.to_AirTerminalSingleDuctVAVReheat.is_initialized()}.to_AirTerminalSingleDuctVAVReheat.get : false
@@ -28,11 +61,44 @@ class NECB2011
         if air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.to_ZoneHVACFourPipeFanCoil().is_initialized()}
             case air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.to_ZoneHVACFourPipeFanCoil().is_initialized()}.to_ZoneHVACFourPipeFanCoil.get.coolingCoil.to_CoilCoolingWater.get.availabilitySchedule.nameString
             when 'tpfc_clg_availability'
-            zone_tpfc = true
+                zone_tpfc = true
             when OpenStudio::Model::Model.new.alwaysOnDiscreteSchedule.nameString
-            zone_fpfc = true
+                zone_fpfc = true
             else
             raise('unknown schedule type')
+            end
+            cooling_coil_water = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.to_ZoneHVACFourPipeFanCoil().is_initialized()}.to_ZoneHVACFourPipeFanCoil.get.coolingCoil.to_CoilCoolingWater.get
+            # Determine PlantLoop that is connected to the cooling_coil_water coil.
+            if cooling_coil_water
+                # Get the PlantLoop attached to the CoilCoolingWater
+                plant_loop = cooling_coil_water.plantLoop
+                # Initialize an array to hold the names of the ChillerElectricEIR objects
+                chiller_names = []
+                # Check if the PlantLoop is valid
+                if plant_loop.is_initialized
+                    # Get the actual PlantLoop object
+                    plant_loop = plant_loop.get
+                    # Get the ChillerElectricEIR objects attached to the PlantLoop
+                    chillers = plant_loop.supplyComponents(OpenStudio::Model::ChillerElectricEIR::iddObjectType)
+                    chillers.each do |chiller|
+                        chiller = chiller.to_ChillerElectricEIR.get
+                        chiller_names << chiller.name.get
+                    end #chillers
+
+                    case chiller_names[0]
+                    # Check if name contains ["Scroll","Centrifugal","RotaryScrew","Reciprocating"]
+                    when /Scroll/
+                        chiller_type = 'scrl'
+                    when /Centrifugal/
+                        chiller_type = 'cent'
+                    when /RotaryScrew/
+                        chiller_type = 'screw'
+                    when /Reciprocating/
+                        chiller_type = 'recip'
+                    else
+                        raise("Chiller type not recognized")
+                    end
+                end
             end
         end  
 
@@ -225,6 +291,15 @@ class NECB2011
         else
             zc = 'zc>none'
         end
+
+        # Chiller type
+        if chiller_type
+            chiller = "ch>#{chiller_type}"
+        else
+            chiller = "ch>none"
+        end
+
+
         name =""
         
         
@@ -234,6 +309,7 @@ class NECB2011
         else
             name = "#{ref_sys}|#{oa}|shr>none|#{sh}|#{sc}|#{ssf}|#{zh}|#{zc}|#{srf}|"
         end
-        return old_system_name, name
+        new_name = name+"#{chiller}|"
+        return old_system_name, name, new_name
     end
 end

@@ -54,7 +54,7 @@ def system1()
                             "multispeed", multispeed
                         ]
 
-        old_name, new_name = necb.add_sys1_unitary_ac_baseboard_heating_single_speed(
+        old_name,new_name,updated_name = necb.add_sys1_unitary_ac_baseboard_heating_single_speed(
             model: model,
             necb_reference_hp: necb_reference_hp,
             necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -68,7 +68,7 @@ def system1()
                 arguments["system"] = "sys_1"
                 # Make the "name" key the first key in the hash
                 arguments = arguments.sort.to_h
-                arguments = {"name" => new_name}.merge(arguments)
+                arguments = {"name" => updated_name}.merge(arguments)
                 $successes.append(arguments)
             else
                 $failures.push([arguments,old_name,new_name])
@@ -96,7 +96,7 @@ def system2()
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
 
         # Create NECB2011 objects
-        old_name, new_name = NECB2011.new.add_sys2_FPFC_sys5_TPFC( model: model,
+        old_name,new_name,updated_name = NECB2011.new.add_sys2_FPFC_sys5_TPFC( model: model,
                                                 zones:model.getThermalZones,
                                                 chiller_type: chiller_type,
                                                 fan_coil_type: fan_coil_type,
@@ -106,7 +106,7 @@ def system2()
             arguments["system"] = "sys_2"
             # Make the "name" key the first key in the hash
             arguments = arguments.sort.to_h
-            arguments = {"name" => new_name}.merge(arguments)
+            arguments = {"name" => updated_name}.merge(arguments)
             $successes.append(arguments)
         else
             $failures.push([arguments,old_name,new_name])
@@ -147,7 +147,7 @@ def system3()
             (necb_reference_hp == false and heating_coil_type == 'DX')
             next
         end
-        old_name, new_name = NECB.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
+        old_name,new_name,updated_name = NECB.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
             model: model,
             necb_reference_hp: necb_reference_hp,
             necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -160,7 +160,7 @@ def system3()
                 arguments["system"] = "sys_3"
                 # Make the "name" key the first key in the hash
                 arguments = arguments.sort.to_h
-                arguments = {"name" => new_name}.merge(arguments)
+                arguments = {"name" => updated_name}.merge(arguments)
                 $successes.append(arguments)
             else
                 $failures.push([arguments,old_name,new_name])
@@ -195,7 +195,7 @@ def system4()
             next
         end
 
-        old_name, new_name = NECB2011.new.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
+        old_name,new_name,updated_name = NECB2011.new.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                    necb_reference_hp: necb_reference_hp,
                                                                    necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                    zones: model.getThermalZones,
@@ -207,7 +207,7 @@ def system4()
             arguments["system"] = "sys_4"
             # Make the "name" key the first key in the hash
             arguments = arguments.sort.to_h
-            arguments = {"name" => new_name}.merge(arguments)
+            arguments = {"name" => updated_name}.merge(arguments)
             $successes.append(arguments)
         else
             $failures.push([arguments,old_name,new_name])
@@ -231,6 +231,7 @@ def system5()
             "fan_coil_type", fan_coil_type, 
         ]
 
+
         #Create model
         model = create_model
 
@@ -238,7 +239,7 @@ def system5()
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
 
         # Create NECB2011 objects
-        old_name, new_name = NECB2011.new.add_sys2_FPFC_sys5_TPFC( model: model,
+        old_name,new_name,updated_name = NECB2011.new.add_sys2_FPFC_sys5_TPFC( model: model,
                                                 zones:model.getThermalZones,
                                                 chiller_type: chiller_type,
                                                 fan_coil_type: fan_coil_type,
@@ -248,7 +249,7 @@ def system5()
             arguments["system"] = "sys_5"
             # Make the "name" key the first key in the hash
             arguments = arguments.sort.to_h
-            arguments = {"name" => new_name}.merge(arguments)
+            arguments = {"name" => updated_name}.merge(arguments)
             $successes.append(arguments)
         else
             $failures.push([arguments,old_name,new_name])
@@ -279,7 +280,7 @@ def system6()
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
 
             # Create NECB2011 objects
-            old_name,new_name = NECB2011.new.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
+            old_name,new_name,updated_name = NECB2011.new.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
                     model:model,
                     zones:model.getThermalZones,
                     heating_coil_type: heating_coil_type,
@@ -293,7 +294,7 @@ def system6()
                 arguments["system"] = "sys_6"
                 # Make the "name" key the first key in the hash
                 arguments = arguments.sort.to_h
-                arguments = { "name" => new_name}.merge(arguments)
+                arguments = { "name" => updated_name}.merge(arguments)
                 $successes.append(arguments)
             else
                 $failures.push([arguments,old_name,new_name])
@@ -318,6 +319,22 @@ CSV.open('failures.csv', 'w') do |csv|
         csv << failure
     end
 end
+
+# save  $successes array of hashes as a csv file.
+# filter $successes array of hashes to only include hashes wehre the "system" key is "sys_1"
+["sys_1","sys_2","sys_3","sys_4","sys_5","sys_6"].each do |system_type|
+        system = $successes.select{|hash| hash["system"] == system_type}
+        filename = "#{system_type}.csv"
+        CSV.open(filename, 'w') do |csv|
+            csv << system[0].keys
+            system.each do |hash|
+                csv << hash.values
+        end
+    end
+end
+
+
+
 
 
 # save $successes array of hashes as a pretty yaml file.
