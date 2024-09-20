@@ -49,7 +49,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
                                                                                    zones: model.getThermalZones,
                                                                                    heating_coil_type: heating_coil_type,
@@ -152,7 +152,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
     standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                             zones: model.getThermalZones,
                                                             mau_type: mau_type,
