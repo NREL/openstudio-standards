@@ -96,7 +96,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
             hw_loop = nil
             if baseboard_types[index] == 'Hot Water'
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
-              standard.setup_hw_loop_with_components(model, hw_loop, heating_coil_type, always_on)
+              standard.setup_hw_loop_with_components(model, hw_loop, heating_coil_type, heating_coil_type, always_on)
             end
             sys3_heating_coil_type = 'Electric'
             sys3_heating_coil_type = 'Gas' if heating_coil_type == 'NaturalGas'
