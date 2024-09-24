@@ -1,12 +1,25 @@
 class NECB2011
     def detect_air_system_type(air_loop: nil , sys_abbr: nil , old_system_name: nil)
-        # Determine system charecteristics. 
-        puts air_loop
+        ref_system_desc = {
+            "sys_1" => "PSZ MAU %s Coils and %s",
+            "sys_2" => "FPFC MAU %s Coils with %s Chiller",
+            "sys_3" => "PSZ RTU %s Coils and %s",
+            "sys_4" => "PSZ MAU %s Coils and %s",
+            "sys_5" => "TPFC MAU %s Coils with %s Chiller",
+            "sys_6" => "MZ Built-Up %s Heating Coil %s Chiller and %s"
+        }
+
+        # AirLoopHVACUnitaryHeatPumpAirToAir
         unitary_hp = air_loop.components.detect(proc {false}) { |equip| equip.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized()} ? air_loop.components.detect() { |equip| equip.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized()}.to_AirLoopHVACUnitaryHeatPumpAirToAir.get : false
-        unitary_heating_coil_elec = unitary_hp and unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingElectric.is_initialized()? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.get : false
-        unitary_heating_coil_gas = unitary_hp and unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingGas.is_initialized()? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.get : false
+        unitary_heating_coil_elec = unitary_hp and unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingElectric.is_initialized()? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingElectric.get : false
+        unitary_heating_coil_gas = unitary_hp and unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingGas.is_initialized()? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingGas.get : false
         unitary_heating_coil_ashp = unitary_hp and unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingDXSingleSpeed.is_initialized()? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.heatingCoil.to_CoilHeatingDXSingleSpeed.get : false
+        unitary_sup_heating_coil_elec =( unitary_hp && unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingElectric.is_initialized()) ? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingElectric.get : false
+        unitary_sup_heating_coil_gas = ( unitary_hp && unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingGas.is_initialized()) ? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingGas.get : false
+        unitary_sup_heating_coil_ashp =( unitary_hp && unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingDXSingleSpeed.is_initialized()) ? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingDXSingleSpeed.get : false
         unitary_supply_fan_on_off = unitary_hp and unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplyAirFan.to_FanOnOff.is_initialized() ? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplyAirFan.to_FanOnOff.get : false
+        
+        # Main AirLoopHVAC Components
         heating_coil_elect = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilHeatingElectric.is_initialized } ? air_loop.components.detect() { |equip| equip.to_CoilHeatingElectric.is_initialized}.to_CoilHeatingElectric.get : false
         heating_coil_ashp = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilHeatingDXSingleSpeed.is_initialized and equip.to_CoilHeatingDXSingleSpeed.get.minimumOutdoorDryBulbTemperatureforCompressorOperation == -10} ? air_loop.components.detect() { |equip| equip.to_CoilHeatingDXSingleSpeed.is_initialized}.to_CoilHeatingDXSingleSpeed.get : false
         heating_coil_ccashp = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilHeatingDXSingleSpeed.is_initialized and equip.to_CoilHeatingDXSingleSpeed.get.minimumOutdoorDryBulbTemperatureforCompressorOperation == -25} ? air_loop.components.detect() { |equip| equip.to_CoilHeatingDXSingleSpeed.is_initialized}.to_CoilHeatingDXSingleSpeed.get : false
@@ -16,7 +29,9 @@ class NECB2011
         cooling_coil_ccashp = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingDXSingleSpeed.is_initialized and heating_coil_ccashp}
         cooling_coil_dx = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingDXSingleSpeed.is_initialized and (heating_coil_gas or heating_coil_elect or heating_coil_water)}
         cooling_coil_water = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingWater.is_initialized } ? air_loop.components.detect() { |equip| equip.to_CoilCoolingWater.is_initialized}.to_CoilCoolingWater.get : false
-        # Determine PlantLoop that is connected to the cooling_coil_water coil.
+        
+        
+        # PlantLoop cooling. 
         if cooling_coil_water
             # Get the PlantLoop attached to the CoilCoolingWater
             plant_loop = cooling_coil_water.plantLoop
@@ -49,13 +64,15 @@ class NECB2011
             end
         end
 
-    
+        # Zone Baseboard Heating
         zone_htg_b_elec = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Electric') }
         zone_htg_b_water = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Water') }
+
+        # Zone VAV with Reheat. 
         zone_vav_rh = air_loop.components.detect(proc {false}) { |equip| equip.to_AirTerminalSingleDuctVAVReheat.is_initialized()} ? air_loop.components.detect() { |equip| equip.to_AirTerminalSingleDuctVAVReheat.is_initialized()}.to_AirTerminalSingleDuctVAVReheat.get : false
 
 
-        #Check if TPFC is on or off.
+        # Zone 2/4 Pipe Fan Coils.
         zone_tpfc = false
         zone_fpfc = false
         if air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.to_ZoneHVACFourPipeFanCoil().is_initialized()}
@@ -102,6 +119,7 @@ class NECB2011
             end
         end  
 
+        
         zone_htg_pthp = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Packaged Terminal Heat Pump') }
         zone_clg_ptac = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('PTAC') }
         zone_clg_pthp = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Packaged Terminal Heat Pump') }
@@ -204,8 +222,8 @@ class NECB2011
         # puts "return_fan_vv: #{return_fan_vv}"
         # puts "supply_fan_cv: #{supply_fan_cv}"
         # puts "return_fan_cv: #{return_fan_cv}"
-        # puts "zone_rh_elec: #{zone_rh_elec}"
-        # puts "zone_rh_gas: #{zone_rh_gas}"
+        puts "zone_rh_elec: #{zone_rh_elec}"
+        puts "zone_rh_gas: #{zone_rh_gas}"
         # puts "unitary_hp: #{unitary_hp}"
         # puts "unitary_heating_coil_elec: #{unitary_heating_coil_elec}"
         # puts "unitary_heating_coil_gas: #{unitary_heating_coil_gas}"
@@ -219,6 +237,104 @@ class NECB2011
 
 
         # sys_htg or sh>?
+        sh_map = {
+            "sh>none" => 'None',
+            "sh>c-e" => 'Electric',
+            "sh>c-g" => 'Gas',
+            "sh>c-hw" => 'Hot Water',
+            "sh>ashp" => 'ASHP',
+            "sh>ccashp" => 'CCASHP'
+        }
+        sc_map = {
+            "sc>none" => 'None',
+            "sc>ashp" => 'ASHP',
+            "sc>ccashp" => 'CCASHP',
+            "sc>dx" => 'DX',
+            "sc>c-chw" => 'Chilled Water'
+        }
+        ssf_map = {
+            "ssf>none" => 'None',
+            "ssf>cv" => 'Constant Volume',
+            "ssf>vv" => 'Variable Volume'
+        }
+        zh_map = {
+            "zh>none" => 'None',
+            "zh>b-e" => 'Electric Baseboard',
+            "zh>b-hw" => 'Hot Water Baseboard',
+            "zh>tpfc" => 'TPFC',
+            "zh>fpfc" => 'FPFC',
+            "zh>pthp" => 'PTHP'
+        }
+        zc_map = {
+            "zc>none" => 'None',
+            "zc>tpfc" => 'TPFC',
+            "zc>fpfc" => 'FPFC',
+            "zc>ptac" => 'PTAC',
+            "zc>pthp" => 'PTHP'
+        }
+        chiller_map = {
+            "ch>none" => 'None',
+            "ch>scrl" => 'Scroll',
+            "ch>cent" => 'Centrifugal',
+            "ch>screw" => 'Rotary Screw',
+            "ch>recip" => 'Reciprocating'
+        }
+        srf_map = {
+            "srf>none" => 'None',
+            "srf>cv" => 'Constant Volume',
+            "srf>vv" => 'Variable Volume'
+        }
+        zrh_map = {
+            "zrh>none" => 'None',
+            "zrh>e" => 'Electric',
+            "zrh>g" => 'Gas',
+            "zrh>hw" => 'Hot Water'
+        }
+        # Unitary Heating Coil
+        uhc_map = {
+            "uhc>none" => 'None',
+            "uhc>e" => 'Electric',
+            "uhc>g" => 'Gas',
+        }
+
+        # Unitary Supplemental Heating Coil
+        ushc_map = {
+            "ushc>none" => 'None',
+            "ushc>e" => 'Electric',
+            "ushc>g" => 'Gas',
+        }
+
+        # Unitary Supplemental Heating Coil
+        if unitary_sup_heating_coil_elec
+            ushc = 'ushc>e'
+        elsif unitary_sup_heating_coil_gas
+            ushc = 'ushc>g'
+        else
+            ushc = 'ushc>none'
+        end
+
+        # Unitary Heating Coil
+        if unitary_heating_coil_elec
+            uhc = 'uhc>e'
+        elsif unitary_heating_coil_gas
+            uhc = 'uhc>g'
+        elsif unitary_heating_coil_ashp
+            uhc = 'uhc>ashp'
+        else
+            uhc = 'uhc>none'
+        end
+
+        # Zone Reheat
+        if zone_rh_gas
+            zrh = 'zrh>g'
+        elsif zone_rh_elec
+            zrh = 'zrh>e'
+        elsif zone_rh_hw
+            zrh = 'zrh>hw'
+        else
+            zrh = 'zrh>none'
+        end
+
         if heating_coil_elect
             sh = 'sh>c-e'
         elsif heating_coil_ashp or unitary_hp
@@ -301,15 +417,69 @@ class NECB2011
 
 
         name =""
-        
-        
+        desc =""
         # sh and sc are reversed for system 6
-        unless ref_sys == "sys_6"
-            name = "#{ref_sys}|#{oa}|shr>none|#{sc}|#{sh}|#{ssf}|#{zh}|#{zc}|#{srf}|"
+
+        name = "#{ref_sys}|#{oa}|shr>none|#{sc}|#{sh}|#{ssf}|#{zh}|#{zc}|#{srf}|"
+        fixed_name = name
+
+        case ref_sys
+        when "sys_1"
+            # Air Loop Coils
+            coils = ""
+            # if heating and cooling coils are the same, only list it once
+            if sh_map[sh] == sc_map[sc]
+                coils = "#{sh_map[sh]}"
+            else
+                coils = "#{sh_map[sh]} and #{sc_map[sc]}"
+            end
+            zone_system = "#{zh_map[zh]}"
+            zone_system += " with #{zc_map[zc]}" if zc_map[zc] != 'None'
+            # If reheating is present, add it to the zone system name
+            if zrh_map[zrh] != 'None'
+                zone_system += " with #{zrh_map[zrh]} Reheat"
+            end
+            desc= ref_system_desc[ref_sys] % [coils,zone_system]
+        when "sys_2"
+            desc= ref_system_desc[ref_sys] % [sc_map[sc],chiller_map[chiller]] 
+        when "sys_3"
+            coils = ""
+            # if heating and cooling coils are the same, only list it once
+            if sh_map[sh] == sc_map[sc]
+                coils = "#{sh_map[sh]}"
+            else
+                coils = "#{sh_map[sh]} and #{sc_map[sc]}"
+            end
+            if ushc_map[ushc] != 'None'
+                coils += " with #{ushc_map[ushc]} Supp. Heat"
+            end
+            zone_system = "#{zh_map[zh]}"
+            zone_system += " with #{zc_map[zc]}" if zc_map[zc] != 'None'
+            desc= ref_system_desc[ref_sys] % [coils,zone_system]
+        when "sys_4"
+            coils = ""
+            # if heating and cooling coils are the same, only list it once
+            if sh_map[sh] == sc_map[sc]
+                coils = "#{sh_map[sh]}"
+            else
+                coils = "#{sh_map[sh]} and #{sc_map[sc]}"
+            end
+            if ushc_map[ushc] != 'None'
+                coils += " with #{ushc_map[ushc]} Supp. Heat"
+            end
+            zone_system = "#{zh_map[zh]}"
+            zone_system += " with #{zc_map[zc]}" if zc_map[zc] != 'None'
+            desc= ref_system_desc[ref_sys] % [coils,zone_system]
+        when "sys_5"
+            desc= ref_system_desc[ref_sys] % [sc_map[sc],chiller_map[chiller]]
+        when "sys_6"
+            zone_system = "#{zh_map[zh]}"
+            zone_system += " with #{zc_map[zc]}" if zc_map[zc] != 'None'
+            desc= ref_system_desc[ref_sys] % [sh_map[sh],chiller_map[chiller], zone_system]
+            fixed_name = "#{ref_sys}|#{oa}|shr>none|#{sh}|#{sc}|#{ssf}|#{zh}|#{zc}|#{srf}|"
         else
-            name = "#{ref_sys}|#{oa}|shr>none|#{sh}|#{sc}|#{ssf}|#{zh}|#{zc}|#{srf}|"
+            
         end
-        new_name = name+"#{chiller}|"
-        return old_system_name, name, new_name
+        return old_system_name, fixed_name, name, desc
     end
 end
