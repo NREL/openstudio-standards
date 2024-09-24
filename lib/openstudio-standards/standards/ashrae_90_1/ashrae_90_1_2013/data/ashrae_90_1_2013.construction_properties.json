@@ -900,7 +900,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Nonresidential",
       "construction": "U 0.5 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -923,7 +923,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Nonresidential",
       "construction": "U 0.57 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -946,7 +946,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Nonresidential",
       "construction": "U 1.1 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -969,7 +969,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Residential",
       "construction": "U 0.5 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -992,7 +992,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Residential",
       "construction": "U 0.57 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -1015,7 +1015,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Residential",
       "construction": "U 1.1 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -1038,7 +1038,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Semiheated",
       "construction": "U 0.93 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -1061,7 +1061,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Semiheated",
       "construction": "U 1.2 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -1084,7 +1084,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Semiheated",
       "construction": "U 1.1 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -1107,7 +1107,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Nonresidential",
       "construction": "U 0.65 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -1130,7 +1130,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Residential",
       "construction": "U 0.65 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -1153,7 +1153,7 @@
     {
       "climate_zone_set": "ClimateZone 0",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Semiheated",
       "construction": "U 1.2 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -1169,7 +1169,7 @@
       "orientation": null,
       "minimum_projection_factor": null,
       "maximum_projection_factor": null,
-      "assembly_maximum_solar_heat_gain_coefficient": 0.25,
+      "assembly_maximum_solar_heat_gain_coefficient": null,
       "assembly_minimum_visible_transmittance": null,
       "assembly_minimum_vt_shgc": null
     },
@@ -2510,7 +2510,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Nonresidential",
       "construction": "U 0.5 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2533,7 +2533,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Nonresidential",
       "construction": "U 0.57 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2556,7 +2556,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Nonresidential",
       "construction": "U 0.65 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2579,7 +2579,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Residential",
       "construction": "U 0.5 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2602,7 +2602,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Residential",
       "construction": "U 0.57 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2625,7 +2625,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Residential",
       "construction": "U 0.65 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2648,7 +2648,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Semiheated",
       "construction": "U 0.93 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2671,7 +2671,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Semiheated",
       "construction": "U 1.2 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2694,7 +2694,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Semiheated",
       "construction": "U 1.2 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2717,7 +2717,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Nonresidential",
       "construction": "U 1.1 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2740,7 +2740,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Residential",
       "construction": "U 1.1 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -2763,7 +2763,7 @@
     {
       "climate_zone_set": "ClimateZone 1",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Semiheated",
       "construction": "U 1.1 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4120,7 +4120,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Nonresidential",
       "construction": "U 0.4 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4143,7 +4143,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Nonresidential",
       "construction": "U 0.57 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4166,7 +4166,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Nonresidential",
       "construction": "U 0.65 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4189,7 +4189,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Residential",
       "construction": "U 0.4 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4212,7 +4212,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Residential",
       "construction": "U 0.57 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4235,7 +4235,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Residential",
       "construction": "U 0.65 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4258,7 +4258,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Semiheated",
       "construction": "U 0.93 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4281,7 +4281,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Semiheated",
       "construction": "U 1.2 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4304,7 +4304,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Semiheated",
       "construction": "U 1.2 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4327,7 +4327,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Nonresidential",
       "construction": "U 0.83 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4350,7 +4350,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Residential",
       "construction": "U 0.77 SHGC 0.77 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -4373,7 +4373,7 @@
     {
       "climate_zone_set": "ClimateZone 2",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Semiheated",
       "construction": "U 0.83 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -5730,7 +5730,7 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Nonresidential",
       "construction": "U 0.35 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -5753,7 +5753,7 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Nonresidential",
       "construction": "U 0.5 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -5776,12 +5776,12 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Nonresidential",
-      "construction": "U 0.77 SHGC 0.25 Simple Glazing",
+      "construction": "U 0.6 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
       "maximum_percent_of_surface": 40,
-      "assembly_maximum_u_value": 0.77,
+      "assembly_maximum_u_value": 0.6,
       "assembly_maximum_u_value_unit": "Btu/h-ft2-F",
       "u_value_includes_interior_film_coefficient": true,
       "u_value_includes_exterior_film_coefficient": true,
@@ -5799,7 +5799,7 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Residential",
       "construction": "U 0.35 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -5822,7 +5822,7 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Residential",
       "construction": "U 0.5 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -5845,12 +5845,12 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Residential",
-      "construction": "U 0.68 SHGC 0.25 Simple Glazing",
+      "construction": "U 0.6 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
       "maximum_percent_of_surface": 40,
-      "assembly_maximum_u_value": 0.68,
+      "assembly_maximum_u_value": 0.6,
       "assembly_maximum_u_value_unit": "Btu/h-ft2-F",
       "u_value_includes_interior_film_coefficient": true,
       "u_value_includes_exterior_film_coefficient": true,
@@ -5868,7 +5868,7 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Semiheated",
       "construction": "U 0.87 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -5891,7 +5891,7 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Semiheated",
       "construction": "U 1.2 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -5914,12 +5914,12 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Semiheated",
-      "construction": "U 0.77 SHGC 0.45 Simple Glazing",
+      "construction": "U 1.2 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
       "maximum_percent_of_surface": 40,
-      "assembly_maximum_u_value": 0.77,
+      "assembly_maximum_u_value": 1.2,
       "assembly_maximum_u_value_unit": "Btu/h-ft2-F",
       "u_value_includes_interior_film_coefficient": true,
       "u_value_includes_exterior_film_coefficient": true,
@@ -5937,12 +5937,12 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Nonresidential",
-      "construction": "U 0.6 SHGC 0.25 Simple Glazing",
+      "construction": "U 0.77 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
       "maximum_percent_of_surface": 40,
-      "assembly_maximum_u_value": 0.6,
+      "assembly_maximum_u_value": 0.77,
       "assembly_maximum_u_value_unit": "Btu/h-ft2-F",
       "u_value_includes_interior_film_coefficient": true,
       "u_value_includes_exterior_film_coefficient": true,
@@ -5960,12 +5960,12 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Residential",
-      "construction": "U 0.6 SHGC 0.25 Simple Glazing",
+      "construction": "U 0.68 SHGC 0.25 Simple Glazing",
       "minimum_percent_of_surface": 0,
       "maximum_percent_of_surface": 40,
-      "assembly_maximum_u_value": 0.6,
+      "assembly_maximum_u_value": 0.68,
       "assembly_maximum_u_value_unit": "Btu/h-ft2-F",
       "u_value_includes_interior_film_coefficient": true,
       "u_value_includes_exterior_film_coefficient": true,
@@ -5983,12 +5983,12 @@
     {
       "climate_zone_set": "ClimateZone 3",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Semiheated",
-      "construction": "U 1.2 SHGC 0.45 Simple Glazing",
+      "construction": "U 0.77 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
       "maximum_percent_of_surface": 40,
-      "assembly_maximum_u_value": 1.2,
+      "assembly_maximum_u_value": 0.77,
       "assembly_maximum_u_value_unit": "Btu/h-ft2-F",
       "u_value_includes_interior_film_coefficient": true,
       "u_value_includes_exterior_film_coefficient": true,
@@ -7340,7 +7340,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Nonresidential",
       "construction": "U 0.35 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7363,7 +7363,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Nonresidential",
       "construction": "U 0.42 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7386,7 +7386,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Nonresidential",
       "construction": "U 0.5 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7409,7 +7409,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Residential",
       "construction": "U 0.35 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7432,7 +7432,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Residential",
       "construction": "U 0.42 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7455,7 +7455,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Residential",
       "construction": "U 0.5 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7478,7 +7478,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Semiheated",
       "construction": "U 0.51 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7501,7 +7501,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Semiheated",
       "construction": "U 0.73 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7524,7 +7524,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Semiheated",
       "construction": "U 0.81 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7547,7 +7547,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Nonresidential",
       "construction": "U 0.77 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7570,7 +7570,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Residential",
       "construction": "U 0.68 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -7593,7 +7593,7 @@
     {
       "climate_zone_set": "ClimateZone 4",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Semiheated",
       "construction": "U 0.77 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -8950,7 +8950,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Nonresidential",
       "construction": "U 0.32 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -8973,7 +8973,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Nonresidential",
       "construction": "U 0.42 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -8996,7 +8996,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Nonresidential",
       "construction": "U 0.5 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -9019,7 +9019,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Residential",
       "construction": "U 0.32 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -9042,7 +9042,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Residential",
       "construction": "U 0.42 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -9065,7 +9065,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Residential",
       "construction": "U 0.5 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -9088,7 +9088,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Semiheated",
       "construction": "U 0.45 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -9111,7 +9111,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Semiheated",
       "construction": "U 0.62 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -9134,7 +9134,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Semiheated",
       "construction": "U 0.7 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -9157,7 +9157,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Nonresidential",
       "construction": "U 0.77 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -9180,7 +9180,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Residential",
       "construction": "U 0.68 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -9203,7 +9203,7 @@
     {
       "climate_zone_set": "ClimateZone 5",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Semiheated",
       "construction": "U 0.77 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10560,7 +10560,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Nonresidential",
       "construction": "U 0.32 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10583,7 +10583,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Nonresidential",
       "construction": "U 0.42 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10606,7 +10606,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Nonresidential",
       "construction": "U 0.5 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10629,7 +10629,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Residential",
       "construction": "U 0.32 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10652,7 +10652,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Residential",
       "construction": "U 0.42 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10675,7 +10675,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Residential",
       "construction": "U 0.5 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10698,7 +10698,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Semiheated",
       "construction": "U 0.45 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10721,7 +10721,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Semiheated",
       "construction": "U 0.51 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10744,7 +10744,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Semiheated",
       "construction": "U 0.59 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10767,7 +10767,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Nonresidential",
       "construction": "U 0.77 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10790,7 +10790,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Residential",
       "construction": "U 0.68 SHGC 0.4 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -10813,7 +10813,7 @@
     {
       "climate_zone_set": "ClimateZone 6",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Semiheated",
       "construction": "U 0.77 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12170,7 +12170,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Nonresidential",
       "construction": "U 0.32 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12193,7 +12193,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Nonresidential",
       "construction": "U 0.38 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12216,7 +12216,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Nonresidential",
       "construction": "U 0.4 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12239,7 +12239,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Residential",
       "construction": "U 0.32 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12262,7 +12262,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Residential",
       "construction": "U 0.38 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12285,7 +12285,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Residential",
       "construction": "U 0.4 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12308,7 +12308,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Semiheated",
       "construction": "U 0.32 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12331,7 +12331,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Semiheated",
       "construction": "U 0.38 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12354,7 +12354,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Semiheated",
       "construction": "U 0.44 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12377,7 +12377,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Nonresidential",
       "construction": "U 0.77 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12400,7 +12400,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Residential",
       "construction": "U 0.68 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -12423,7 +12423,7 @@
     {
       "climate_zone_set": "ClimateZone 7",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Semiheated",
       "construction": "U 0.77 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13780,7 +13780,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Nonresidential",
       "construction": "U 0.32 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13803,7 +13803,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Nonresidential",
       "construction": "U 0.38 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13826,7 +13826,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Nonresidential",
       "construction": "U 0.4 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13849,7 +13849,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Residential",
       "construction": "U 0.32 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13872,7 +13872,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Residential",
       "construction": "U 0.38 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13895,7 +13895,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Residential",
       "construction": "U 0.4 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13918,7 +13918,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Nonmetal framing (all)",
+      "standards_construction_type": "Nonmetal framing, all",
       "building_category": "Semiheated",
       "construction": "U 0.32 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13941,7 +13941,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (curtainwall/storefront)",
+      "standards_construction_type": "Metal framing, fixed",
       "building_category": "Semiheated",
       "construction": "U 0.38 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13964,7 +13964,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "ExteriorWindow",
-      "standards_construction_type": "Metal framing (all other)",
+      "standards_construction_type": "Metal framing, operable",
       "building_category": "Semiheated",
       "construction": "U 0.44 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -13987,7 +13987,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Nonresidential",
       "construction": "U 0.77 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -14010,7 +14010,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Residential",
       "construction": "U 0.68 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
@@ -14033,7 +14033,7 @@
     {
       "climate_zone_set": "ClimateZone 8",
       "intended_surface_type": "GlassDoor",
-      "standards_construction_type": "Metal framing (entrance door)",
+      "standards_construction_type": "Metal framing, entrance door",
       "building_category": "Semiheated",
       "construction": "U 0.77 SHGC 0.45 Simple Glazing",
       "minimum_percent_of_surface": 0,
