@@ -102,11 +102,11 @@ You can use the CTRL+C, CTRL-V to cut as paste to/from your host(windows) machin
 
 
 ## Debugging using integrated VSCode ruby debugger. 
-You have to make some modification to the following to /workspaces/openstudio-standards/openstudio-standards.gemspec
+You have to make a modification to the following to /workspaces/openstudio-standards/openstudio-standards.gemspec by adding the following dependancy.
 ```ruby
 spec.add_development_dependency 'debug' 
 ```
-update your installed gems by running this command in the terminal window
+Update your installed gems by running this command in the terminal window
 ```
 bundle install --path vendor/bundle
 ```
