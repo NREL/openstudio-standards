@@ -101,7 +101,7 @@ Depending on the speed of your computer this may take a few hours. Best practice
 You can use the CTRL+C, CTRL-V to cut as paste to/from your host(windows) machine. 
 
 
-## Debugging using integrated VSCode ruby debugger. 
+### Debugging using integrated VSCode ruby debugger. 
 You have to make a modification to the following to /workspaces/openstudio-standards/openstudio-standards.gemspec by adding the following dependancy.
 ```ruby
 spec.add_development_dependency 'debug' 
@@ -112,6 +112,16 @@ bundle install --path vendor/bundle
 ```
 To debug, open the file in vscode editor window.. then hit F5. Ensure the file that appears on the top is what you want to run and hit Enter. 
 
+### Increase Terminal History Buffer
+Have long output you want to be able to scroll back and see? Very useful for long output of running tests.
+
+1. Open preferences
+ * Mac: Code → Preferences → Settings.
+ * Windows: File → preferences → Settings.
+2. Search for "scrollback".
+3. Overwrite "terminal.integrated.scrollback": 1000, with whatever you want, e.g. 9999.
+
+Note: You will have to restart vscode for this to take effect. 
 
 
 
