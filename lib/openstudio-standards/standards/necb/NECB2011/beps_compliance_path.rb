@@ -277,6 +277,13 @@ class NECB2011
     ventilation_have_info = true unless ventilation_per_person.zero?
     ventilation_have_info = true unless ventilation_ach.zero?
 
+    puts "========================================="
+    puts "ventilation_have_info #{ventilation_have_info}"
+    puts "ventilation_per_area #{ventilation_per_area}"
+    puts "ventilation_per_person #{ventilation_per_person}"
+    puts "occupancy per 1000ft2 (vent) #{ventilation_occupancy_per_area}"
+    puts "occupancy per 1000ft2 (space) #{occupancy_per_area}"
+
     # Get the design OA or create a new one if none exists
     ventilation = space_type.designSpecificationOutdoorAir
     if ventilation.is_initialized
@@ -300,7 +307,7 @@ class NECB2011
         # For BTAP we often use an occupancy per area rate for ventilation which is different from the one used for
         # everything else.  The mod_ventilation_per_person rate adjusts the per person ventilation rate so that the
         # proper ventilation rate is calculated when using the general occupant per area rate.
-        mod_ventilation_per_person = ventilation_per_person * ventilation_occupancy_per_area / occupancy_per_area
+        mod_ventilation_per_person = ventilation_per_person * occupancy_per_area / ventilation_occupancy_per_area
         ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(mod_ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per person to #{mod_ventilation_per_person} cfm/person.")
       end

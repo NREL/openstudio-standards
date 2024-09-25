@@ -130,12 +130,16 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
           # Add this test case to results and return the array.
           results << {
             zone_name: zone_name,
+            std_oa_flow_per_floor_area: oa_flow_per_floor_area.signif(3),
+            std_oa_flow_per_person: oa_flow_per_person.signif(3),
             zone_area_m2: zone_area.signif(3),
             zone_area_ft2: zone_area_ft2.signif(3),
             zone_num_people: zone_num_people.signif(3),
-            oa_flow_in_ft3_per_min_per_person: oa_flow_in_ft3_per_min_per_person.signif(3),
-            oa_flow_in_ft3_per_min_per_ft2: oa_flow_in_ft3_per_min_per_ft2.signif(3),
-            calculated_ventilation_rate_ft3_per_min: calculated_ventilation_rate_ft3_per_min.signif(3),
+            NECB_occ_density_per_1000ft2: (1000.0/(zone_area_ft2/zone_num_people)).signif(3),
+            NECB_occ_density_m2_per_occupant: (OpenStudio.convert((zone_area_ft2/zone_num_people), 'ft^2', 'm^2')).get.signif(2),
+            oa_flow_cfm_per_person: oa_flow_in_ft3_per_min_per_person.signif(3),
+            oa_flow_cfm_per_ft2: oa_flow_in_ft3_per_min_per_ft2.signif(3),
+            calculated_ventilation_rate_cfm: calculated_ventilation_rate_ft3_per_min.signif(3),
             calculated_ventilation_rate_m3_per_s: calculated_ventilation_rate.signif(3),
             sql_vbz_rate_m3_per_s: vbz_rate.signif(3)
           }
