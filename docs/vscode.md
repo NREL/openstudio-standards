@@ -101,9 +101,16 @@ Depending on the speed of your computer this may take a few hours. Best practice
 You can use the CTRL+C, CTRL-V to cut as paste to/from your host(windows) machine. 
 
 
-
-
-
+## Debugging using integrated VSCode ruby debugger. 
+You have to make some modification to the following to /workspaces/openstudio-standards/openstudio-standards.gemspec
+```ruby
+spec.add_development_dependency 'debug' 
+```
+update your installed gems by running this command in the terminal window
+```
+bundle install --path vendor/bundle
+```
+To debug, open the file in vscode editor window.. then hit F5. Ensure the file that appears on the top is what you want to run and hit Enter. 
 
 
 
