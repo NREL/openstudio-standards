@@ -12,7 +12,7 @@ These are instructions on how to conduct development in the openstudio-standards
 Ensure that docker desktop is running on your system.  You should see it present in your windows task tray.  Then run the following command. 
 
 ```
-docker hello-world
+docker run hello-world
 ```
 
 You should see the following output.
