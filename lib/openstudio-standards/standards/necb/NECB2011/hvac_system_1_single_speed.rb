@@ -251,6 +251,8 @@ class NECB2011
       sys_name_pars['sys_clg'] = 'ashp' if necb_reference_hp
       sys_name_pars['sys_htg'] = mau_heating_coil_type
       sys_name_pars['sys_htg'] = 'ashp' if necb_reference_hp
+      sys_name_pars['sys_htg'] = 'ashp>c-g' if necb_reference_hp and necb_reference_hp_supp_fuel == "NaturalGas"
+      sys_name_pars['sys_htg'] = 'ashp>c-e' if necb_reference_hp and necb_reference_hp_supp_fuel == "Electricity"
       sys_name_pars['sys_sf'] = 'cv'
       sys_name_pars['zone_htg'] = baseboard_type
       sys_oa = 'doas'

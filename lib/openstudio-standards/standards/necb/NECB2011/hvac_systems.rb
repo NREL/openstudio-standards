@@ -2164,12 +2164,21 @@ class NECB2011
           sys_name += 'sh>c-hw'
         when 'gas', 'g'
           sys_name += 'sh>c-g'
-        when 'dx'
+        when 'dx' , 'ashp'
           sys_name += 'sh>ashp'
+        when 'ashp>c-g'
+          sys_name += 'sh>ashp>c-g'
+        when 'ashp>c-e'
+          sys_name += 'sh>ashp>c-e'
         when 'ccashp'
           sys_name += 'sh>ccashp'
-        when 'ashp'
-          sys_name += 'sh>ashp'
+        when 'ccashp>c-g'
+          sys_name += 'sh>ccashp>c-g'
+        when 'ccashp>c-e'
+          sys_name += 'sh>ccashp>c-e'
+          
+        else
+          sys_name += 'sh>none'
         end
 
       when 'sys_clg'
