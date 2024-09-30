@@ -52,25 +52,25 @@ class Standard
         # Only the core spaces have service water
         ['Core_bottom', 'Core_mid', 'Core_top'].sort.each do |space_name|
           # ['Mechanical_Bot_ZN_1','Mechanical_Mid_ZN_1','Mechanical_Top_ZN_1'].each do |space_name| # for new space type large office
-          model_add_swh_end_uses(model,
-                                 'Main',
-                                 main_swh_loop,
-                                 OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                                 prototype_input['main_service_water_flowrate_schedule'],
-                                 OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                                 space_name)
+          OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                    name: 'Main',
+                                                                    flow_rate: OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                                                                    flow_rate_fraction_schedule: model_add_schedule(model, prototype_input['main_service_water_flowrate_schedule']),
+                                                                    water_use_temperature: OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
+                                                                    service_water_loop: main_swh_loop,
+                                                                    space: model.getSpaceByName(space_name).get)
         end
       elsif building_type == 'LargeOfficeDetailed' && template != 'NECB2011'
 
         # Only mechanical rooms have service water
         ['Mechanical_Bot_ZN_1', 'Mechanical_Mid_ZN_1', 'Mechanical_Top_ZN_1'].sort.each do |space_name| # for new space type large office
-          model_add_swh_end_uses(model,
-                                 'Main',
-                                 main_swh_loop,
-                                 OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                                 prototype_input['main_service_water_flowrate_schedule'],
-                                 OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                                 space_name)
+          OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                    name: 'Main',
+                                                                    flow_rate: OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                                                                    flow_rate_fraction_schedule: model_add_schedule(model, prototype_input['main_service_water_flowrate_schedule']),
+                                                                    water_use_temperature: OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
+                                                                    service_water_loop: main_swh_loop,
+                                                                    space: model.getSpaceByName(space_name).get)
         end
       elsif building_type == 'RetailStripmall' && template != 'NECB2011'
 
@@ -98,27 +98,25 @@ class Standard
                                              prototype_input['main_water_heater_fuel'],
                                              OpenStudio.convert(prototype_input['main_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
 
-          model_add_swh_end_uses(model,
-                                 'Main',
-                                 main_swh_loop,
-                                 rated_flow_rate_m3_per_s,
-                                 swh_sch_name,
-                                 OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                                 swh_space_name)
+          OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                    name: 'Main',
+                                                                    flow_rate: rated_flow_rate_m3_per_s,
+                                                                    flow_rate_fraction_schedule: model_add_schedule(model, swh_sch_name),
+                                                                    water_use_temperature: OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
+                                                                    service_water_loop: main_swh_loop,
+                                                                    space: model.getSpaceByName(swh_space_name).get)
         end
 
       elsif prototype_input['main_service_water_peak_flowrate']
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Adding shw by main_service_water_peak_flowrate')
 
         # Attaches the end uses if specified as a lump value in the prototype_input
-        model_add_swh_end_uses(model,
-                               'Main',
-                               main_swh_loop,
-                               OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                               prototype_input['main_service_water_flowrate_schedule'],
-                               OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
-                               nil)
-
+        OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                  name: 'Main',
+                                                                  flow_rate: OpenStudio.convert(prototype_input['main_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                                                                  flow_rate_fraction_schedule: model_add_schedule(model, prototype_input['main_service_water_flowrate_schedule']),
+                                                                  water_use_temperature: OpenStudio.convert(prototype_input['main_water_use_temperature'], 'F', 'C').get,
+                                                                  service_water_loop: main_swh_loop)
       else
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Model', 'Adding shw by space_type_map')
 
@@ -161,8 +159,7 @@ class Standard
 
             water_fixture = model_add_swh_end_uses_by_space(model,
                                                             main_swh_loop,
-                                                            space,
-                                                            space_multiplier)
+                                                            space)
             unless water_fixture.nil?
               water_fixtures << water_fixture
             end
@@ -184,12 +181,13 @@ class Standard
                                                                                                     service_water_temperature: OpenStudio.convert(prototype_input['booster_water_temperature'], 'F', 'C').get,
                                                                                                     service_water_loop: main_swh_loop)
 
-      # Attach the end uses
-      model_add_booster_swh_end_uses(model,
-                                     swh_booster_loop,
-                                     OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                                     prototype_input['booster_service_water_flowrate_schedule'],
-                                     OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get)
+      # add booster water use
+      OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                name: 'Booster',
+                                                                flow_rate: OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                                                                flow_rate_fraction_schedule: model_add_schedule(model, prototype_input['booster_service_water_flowrate_schedule']),
+                                                                water_use_temperature: OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get,
+                                                                service_water_loop: swh_booster_loop)
     end
 
     # Add the laundry water heater, if specified
@@ -208,13 +206,12 @@ class Standard
                                             OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
 
       # Attach the end uses if specified in prototype inputs
-      model_add_swh_end_uses(model,
-                             'Laundry',
-                             laundry_swh_loop,
-                             OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                             prototype_input['laundry_service_water_flowrate_schedule'],
-                             OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
-                             nil)
+      OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                name: 'Laundry',
+                                                                flow_rate: OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                                                                flow_rate_fraction_schedule: model_add_schedule(model, prototype_input['laundry_service_water_flowrate_schedule']),
+                                                                water_use_temperature: OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
+                                                                service_water_loop: laundry_swh_loop)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
@@ -303,27 +300,23 @@ class Standard
         peak_flow_rate_m3_per_s -= booster_peak_flow_rate_m3_per_s
 
         # Add booster water heater equipment and connections
-        booster_water_use_equip = model_add_swh_end_uses(model,
-                                                         "Booster #{use_name}",
-                                                         loop = nil,
-                                                         booster_peak_flow_rate_m3_per_s,
-                                                         flow_rate_fraction_schedule.name.get,
-                                                         booster_water_temperature_c,
-                                                         space_name = nil,
-                                                         frac_sensible: service_water_fraction_sensible,
-                                                         frac_latent: service_water_fraction_latent)
+        booster_water_use_equip = OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                                            name: "Booster #{use_name}",
+                                                                                            flow_rate: booster_peak_flow_rate_m3_per_s,
+                                                                                            flow_rate_fraction_schedule: flow_rate_fraction_schedule,
+                                                                                            water_use_temperature: booster_water_temperature_c,
+                                                                                            sensible_fraction: service_water_fraction_sensible,
+                                                                                            latent_fraction: service_water_fraction_latent)
       end
 
       # Add water use equipment and connections
-      water_use_equip = model_add_swh_end_uses(model,
-                                               use_name,
-                                               swh_loop = nil,
-                                               peak_flow_rate_m3_per_s,
-                                               flow_rate_fraction_schedule.name.get,
-                                               service_water_temperature_c,
-                                               space_name = nil,
-                                               frac_sensible: service_water_fraction_sensible,
-                                               frac_latent: service_water_fraction_latent)
+      water_use_equip = OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                                  name: use_name,
+                                                                                  flow_rate: peak_flow_rate_m3_per_s,
+                                                                                  flow_rate_fraction_schedule: flow_rate_fraction_schedule,
+                                                                                  water_use_temperature: service_water_temperature_c,
+                                                                                  sensible_fraction: service_water_fraction_sensible,
+                                                                                  latent_fraction: service_water_fraction_latent)
 
       # Water heater sizing
       case swh_system_type

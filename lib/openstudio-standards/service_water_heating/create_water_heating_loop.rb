@@ -2,7 +2,7 @@ module OpenstudioStandards
   # The ServiceWaterHeating module provides methods to create, modify, and get information about service water heating
   module ServiceWaterHeating
     # @!group Create Loop
-    # Methods to add service water heating components
+    # Methods to add service water heating loops
 
     # Creates a booster water heater on its own loop and attaches it to the main service water heating loop.
     #
@@ -29,7 +29,6 @@ module OpenstudioStandards
                                                service_water_temperature_schedule: nil,
                                                water_heater_thermal_zone: nil,
                                                service_water_loop: nil)
-      # TODO get service water heating loop if nil
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding booster water heater to #{service_water_loop.name}")
 
       water_heater_volume_gal = OpenStudio.convert(water_heater_volume, 'm^3', 'gal').get
@@ -125,7 +124,7 @@ module OpenstudioStandards
       site_water_mains = model.getSiteWaterMainsTemperature
       if site_water_mains.temperatureSchedule.is_initialized
         water_mains_temp_sch = site_water_mains.temperatureSchedule.get
-      elsif mains_src_temp_c = site_water_mains.annualAverageOutdoorAirTemperature.is_initialized
+      elsif site_water_mains.annualAverageOutdoorAirTemperature.is_initialized
         mains_src_temp_c = site_water_mains.annualAverageOutdoorAirTemperature.get
         mains_src.setSourceTemperature(mains_src_temp_c)
         water_mains_temp_sch = OpenStudio::Model::ScheduleConstant.new(model)

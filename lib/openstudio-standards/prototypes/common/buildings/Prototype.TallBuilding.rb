@@ -225,11 +225,9 @@ module TallBuilding
             next if data['service_water_heating_peak_flow_rate'].to_f < 0.00001 && data['service_water_heating_peak_flow_per_area'].to_f < 0.00001
 
             # Add a service water use for each space
-            space_multiplier = space.multiplier
             water_fixture = model_add_swh_end_uses_by_space(model,
                                                             main_swh_loop,
-                                                            space,
-                                                            space_multiplier)
+                                                            space)
             unless water_fixture.nil?
               water_fixtures << water_fixture
             end
@@ -253,14 +251,13 @@ module TallBuilding
                                                                                                     service_water_temperature: OpenStudio.convert(prototype_input['booster_water_temperature'], 'F', 'C').get,
                                                                                                     service_water_loop: hotel_swh_loop)
 
-
-      # Attach the end uses
-      model_add_booster_swh_end_uses(model,
-                                     swh_booster_loop,
-                                     OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                                     prototype_input['booster_service_water_flowrate_schedule'],
-                                     OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get)
-
+      # add booster water use
+      OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                name: 'Booster',
+                                                                flow_rate: OpenStudio.convert(prototype_input['booster_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                                                                flow_rate_fraction_schedule: model_add_schedule(model, prototype_input['booster_service_water_flowrate_schedule']),
+                                                                water_use_temperature: OpenStudio.convert(prototype_input['booster_water_use_temperature'], 'F', 'C').get,
+                                                                service_water_loop: swh_booster_loop)
     end
 
     # for tall and super tall buildings, there is laundry only if hotel has more than 1 floors
@@ -278,14 +275,13 @@ module TallBuilding
                                             prototype_input['laundry_water_heater_fuel'],
                                             OpenStudio.convert(prototype_input['laundry_service_water_parasitic_fuel_consumption_rate'], 'Btu/hr', 'W').get)
 
-      # Attach the end uses if specified in prototype inputs
-      model_add_swh_end_uses(model,
-                             'Laundry',
-                             laundry_swh_loop,
-                             OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
-                             prototype_input['laundry_service_water_flowrate_schedule'],
-                             OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
-                             nil)
+      # add water use
+      OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                name: 'Laundry',
+                                                                flow_rate: OpenStudio.convert(prototype_input['laundry_service_water_peak_flowrate'], 'gal/min', 'm^3/s').get,
+                                                                flow_rate_fraction_schedule: model_add_schedule(model, prototype_input['laundry_service_water_flowrate_schedule']),
+                                                                water_use_temperature: OpenStudio.convert(prototype_input['laundry_water_use_temperature'], 'F', 'C').get,
+                                                                service_water_loop: laundry_swh_loop)
     end
     return true
   end

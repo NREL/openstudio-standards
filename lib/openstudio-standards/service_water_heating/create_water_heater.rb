@@ -1,8 +1,8 @@
 module OpenstudioStandards
   # The ServiceWaterHeating module provides methods to create, modify, and get information about service water heating
   module ServiceWaterHeating
-    # @!group Create Component
-    # Methods to add service water heating components
+    # @!group Create Water Heater
+    # Methods to add service water heaters
 
     # Creates a water heater and attaches it to the supplied service water heating loop.
     #
@@ -566,6 +566,6 @@ module OpenstudioStandards
       return hpwh
     end
 
-    # @!endgroup Create Component
+    # @!endgroup Create Water Heater
   end
 end

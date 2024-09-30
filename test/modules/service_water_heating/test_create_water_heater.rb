@@ -1,6 +1,6 @@
 require_relative '../../helpers/minitest_helper'
 
-class TestServiceWaterHeatingComponent < Minitest::Test
+class TestCreateWaterHeater < Minitest::Test
   def setup
     @swh = OpenstudioStandards::ServiceWaterHeating
 
