@@ -9,6 +9,10 @@ class TestServiceWaterHeatingComponent < Minitest::Test
     @climate_zone = 'ASHRAE 169-2013-2A'
     @std = Standard.build(template)
     @model = @std.safe_load_model("#{File.dirname(__FILE__)}/../../os_stds_methods/models/QuickServiceRestaurant_2A_2010.osm")
+
+    # create output directory
+    output_dir = "#{__dir__}/output"
+    FileUtils.mkdir output_dir unless Dir.exist? output_dir
   end
 
   def test_create_water_heater

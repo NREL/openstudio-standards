@@ -177,14 +177,12 @@ class Standard
     # for tall and super tall buildings, add main (multiple) and booster swh in model_custom_hvac_tweaks
     unless prototype_input['booster_water_heater_volume'].nil? || (building_type == 'TallBuilding' || building_type == 'SuperTallBuilding')
       # Add the booster water loop
-      swh_booster_loop = model_add_swh_booster(model,
-                                               main_swh_loop,
-                                               OpenStudio.convert(prototype_input['booster_water_heater_capacity'], 'Btu/hr', 'W').get,
-                                               OpenStudio.convert(prototype_input['booster_water_heater_volume'], 'gal', 'm^3').get,
-                                               prototype_input['booster_water_heater_fuel'],
-                                               OpenStudio.convert(prototype_input['booster_water_temperature'], 'F', 'C').get,
-                                               0,
-                                               nil)
+      swh_booster_loop = OpenstudioStandards::ServiceWaterHeating.create_booster_water_heating_loop(model,
+                                                                                                    water_heater_capacity: OpenStudio.convert(prototype_input['booster_water_heater_capacity'], 'Btu/hr', 'W').get,
+                                                                                                    water_heater_volume: OpenStudio.convert(prototype_input['booster_water_heater_volume'], 'gal', 'm^3').get,
+                                                                                                    water_heater_fuel: prototype_input['booster_water_heater_fuel'],
+                                                                                                    service_water_temperature: OpenStudio.convert(prototype_input['booster_water_temperature'], 'F', 'C').get,
+                                                                                                    service_water_loop: main_swh_loop)
 
       # Attach the end uses
       model_add_booster_swh_end_uses(model,
@@ -394,14 +392,10 @@ class Standard
 
           # Add service water booster loop with water heater
           # Note that booster water heaters are always assumed to be electric resistance
-          swh_booster_loop = model_add_swh_booster(model,
-                                                   swh_loop,
-                                                   booster_water_heater_sizing[:water_heater_capacity],
-                                                   water_heater_volume_m3 = OpenStudio.convert(6, 'gal', 'm^3').get,
-                                                   water_heater_fuel = 'Electricity',
-                                                   booster_water_temperature_c,
-                                                   parasitic_fuel_consumption_rate_w = 0.0,
-                                                   booster_water_heater_thermal_zone = nil)
+          swh_booster_loop = OpenstudioStandards::ServiceWaterHeating.create_booster_water_heating_loop(model,
+                                                                                                        water_heater_capacity: booster_water_heater_sizing[:water_heater_capacity],
+                                                                                                        service_water_temperature: booster_water_temperature_c,
+                                                                                                        service_water_loop: swh_loop)
 
           # Rename the service water booster loop
           swh_booster_loop.setName("#{space_type.name} Service Water Booster Loop")

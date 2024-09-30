@@ -246,14 +246,12 @@ module SuperTallBuilding
 
     # Add the booster water loop if there is any hotel floor
     if additional_params[:num_of_floor_hotel].to_i > 0
-      swh_booster_loop = model_add_swh_booster(model,
-                                               hotel_swh_loop,
-                                               OpenStudio.convert(prototype_input['booster_water_heater_capacity'], 'Btu/hr', 'W').get,
-                                               OpenStudio.convert(prototype_input['booster_water_heater_volume'], 'gal', 'm^3').get,
-                                               prototype_input['booster_water_heater_fuel'],
-                                               OpenStudio.convert(prototype_input['booster_water_temperature'], 'F', 'C').get,
-                                               0,
-                                               nil)
+      swh_booster_loop = OpenstudioStandards::ServiceWaterHeating.create_booster_water_heating_loop(model,
+                                                                                                    water_heater_capacity: OpenStudio.convert(prototype_input['booster_water_heater_capacity'], 'Btu/hr', 'W').get,
+                                                                                                    water_heater_volume: OpenStudio.convert(prototype_input['booster_water_heater_volume'], 'gal', 'm^3').get,
+                                                                                                    water_heater_fuel: prototype_input['booster_water_heater_fuel'],
+                                                                                                    service_water_temperature: OpenStudio.convert(prototype_input['booster_water_temperature'], 'F', 'C').get,
+                                                                                                    service_water_loop: hotel_swh_loop)
 
       # Attach the end uses
       model_add_booster_swh_end_uses(model,
