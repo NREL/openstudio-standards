@@ -36,6 +36,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/schedules/parametric'
 
   # ServiceWaterHeating Module
+  require_relative 'openstudio-standards/service_water_heating/create_piping_losses'
   require_relative 'openstudio-standards/service_water_heating/create_water_heater'
   require_relative 'openstudio-standards/service_water_heating/create_water_heating_loop'
   require_relative 'openstudio-standards/service_water_heating/create_water_use'
