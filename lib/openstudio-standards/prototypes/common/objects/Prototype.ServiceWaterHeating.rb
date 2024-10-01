@@ -44,10 +44,9 @@ class Standard
     service_water_loop.setMaximumLoopTemperature(60.0)
 
     if system_name.nil?
-      service_water_loop.setName('Service Water Loop')
-    else
-      service_water_loop.setName(system_name)
+      system_name = 'Service Water Loop'
     end
+    service_water_loop.setName(system_name)
 
     # Temperature schedule type limits
     temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
