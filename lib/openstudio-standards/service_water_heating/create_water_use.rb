@@ -56,11 +56,13 @@ module OpenstudioStandards
       water_use_def.setName("#{name} #{flow_rate_gpm.round(2)}gpm #{water_use_temperature_f.round}F")
 
       # target mixed water temperature
-      mixed_water_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
-                                                                                             water_use_temperature,
-                                                                                             name: "Mixed Water At Faucet Temp - #{water_use_temperature_f.round}F",
-                                                                                             schedule_type_limit: 'Temperature')
-      water_use_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
+      if water_use_temperature_schedule.nil?
+        water_use_temperature_schedule = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                         water_use_temperature,
+                                                                                                         name: "Mixed Water At Faucet Temp - #{water_use_temperature_f.round}F",
+                                                                                                         schedule_type_limit: 'Temperature')
+      end
+      water_use_def.setTargetTemperatureSchedule(water_use_temperature_schedule)
 
       # create water use equipment
       water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_use_def)
