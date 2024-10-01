@@ -36,6 +36,10 @@ class TestCreateWaterUse < Minitest::Test
                                               service_water_loop: swh_loop,
                                               space: space)
 
+    assert_equal('Water Use Fraction Schedule', water_use_fixture.flowRateFractionSchedule.get.name.get)
+    assert_equal('Kitchen', water_use_fixture.space.get.name.get)
+    assert_in_delta(flow_rate, water_use_fixture.waterUseEquipmentDefinition.peakFlowRate, 0.000001)
+
     # set output directory
     output_dir = "#{__dir__}/output/test_create_water_use"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
