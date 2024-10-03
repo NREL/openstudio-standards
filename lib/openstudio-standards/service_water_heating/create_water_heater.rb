@@ -20,7 +20,7 @@ module OpenstudioStandards
     # @param flowrate_schedule [OpenStudio::Model::Schedule] the flow rate fraction schedule
     # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] Thermal zone for ambient heat loss.
     #   If nil, will assume 71.6 F / 22 C ambient air temperature.
-    # @param number_water_heaters [Integer] the number of water heaters represented by the capacity and volume inputs.
+    # @param number_of_water_heaters [Integer] the number of water heaters represented by the capacity and volume inputs.
     #   Used to modify efficiencies for water heaters based on individual component size while avoiding having to model
     #   lots of individual water heaters (for runtime sake).
     # @param service_water_loop [OpenStudio::Model::PlantLoop] if provided, add the water heater to this loop
@@ -37,7 +37,7 @@ module OpenstudioStandards
                                  peak_flowrate: nil,
                                  flowrate_schedule: nil,
                                  water_heater_thermal_zone: nil,
-                                 number_water_heaters: 1,
+                                 number_of_water_heaters: 1,
                                  service_water_loop: nil)
       # create water heater object
       # @todo Standards - Change water heater methodology to follow 'Model Enhancements Appendix A.'
@@ -166,9 +166,9 @@ module OpenstudioStandards
       end
 
       # assign a quantity to the water heater if it represents multiple water heaters
-      if number_water_heaters > 1
-        water_heater.setName("#{number_water_heaters}X #{(water_heater_volume_gal / number_water_heaters).round}gal #{water_heater_fuel} Water Heater - #{(water_heater_capacity_kbtu_per_hr / number_water_heaters).round}kBtu/hr")
-        water_heater.additionalProperties.setFeature('component_quantity', number_water_heaters)
+      if number_of_water_heaters > 1
+        water_heater.setName("#{number_of_water_heaters}X #{(water_heater_volume_gal / number_of_water_heaters).round}gal #{water_heater_fuel} Water Heater - #{(water_heater_capacity_kbtu_per_hr / number_of_water_heaters).round}kBtu/hr")
+        water_heater.additionalProperties.setFeature('component_quantity', number_of_water_heaters)
       else
         water_heater.setName("#{water_heater_volume_gal.round}gal #{water_heater_fuel} Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
       end

@@ -15,6 +15,36 @@ class TestCreateWaterHeatingLoop < Minitest::Test
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
   end
 
+  def test_create_service_water_heating_loop
+    # get existing service water heating loop
+    model = @model
+    swh_loop = model.getPlantLoopByName('Main Service Water Loop').get
+
+    # set output directory
+    output_dir = "#{__dir__}/output/test_create_service_water_heating_loop"
+    FileUtils.mkdir output_dir unless Dir.exist? output_dir
+
+    # run the model to get the previous water use
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: @climate_zone)
+    annual_run_success = @std.model_run_simulation_and_log_errors(model, "#{output_dir}/pre/AR")
+    assert(annual_run_success)
+    # model.save("#{output_dir}/pre/pre.osm", true)
+
+    # replace the service water heating loop and rerun
+    swh_loop.remove
+    service_water_loop = @swh.create_service_water_heating_loop(model, water_heater_fuel: 'NaturalGas')
+
+    water_fixture = model.getWaterUseEquipments[0]
+    swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
+    swh_connection.addWaterUseEquipment(water_fixture)
+    service_water_loop.addDemandBranchForComponent(swh_connection)
+
+    # run the model to check that the new energy use is similar
+    annual_run_success = @std.model_run_simulation_and_log_errors(model, "#{output_dir}/post/AR")
+    assert(annual_run_success)
+    # model.save("#{output_dir}/post/post.osm", true)
+  end
+
   def test_create_booster_water_heating_loop
     # get existing service water heating loop
     model = @model

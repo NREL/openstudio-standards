@@ -4,6 +4,150 @@ module OpenstudioStandards
     # @!group Create Loop
     # Methods to add service water heating loops
 
+    # Creates a service water heating loop.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param system_name [String] the name of the system. nil results in the default.
+    # @param service_water_temperature [Double] water heater temperature, in degrees C. Default is 60 C / 140 F.
+    # @param service_water_pump_head [Double] service water pump head, in Pa. Default is 29861 Pa / 10 ft.
+    # @param service_water_pump_motor_efficiency [Double] service water pump motor efficiency, as decimal.
+    # @param water_heater_capacity [Double] water heater capacity, in W. Defaults to 58.6 kW / 200 kBtu/hr
+    # @param water_heater_volume [Double] water heater volume, in m^3. Defaults to 0.378 m^3 / 100 gal
+    # @param water_heater_fuel [String] water heating fuel. Valid choices are 'NaturalGas', 'Electricity', or 'HeatPump'
+    # @param on_cycle_parasitic_fuel_consumption_rate [Double] water heater on cycle parasitic fuel consumption rate, in W
+    # @param off_cycle_parasitic_fuel_consumption_rate [Double] water heater off cycle parasitic fuel consumption rate, in W
+    # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] Thermal zone for ambient heat loss.
+    #   If nil, will assume 71.6 F / 22 C ambient air temperature.
+    # @param number_of_water_heaters [Integer] the number of water heaters represented by the capacity and volume inputs.
+    #   Used to modify efficiencies for water heaters based on individual component size while avoiding having to model lots of individual water heaters (for runtime sake).
+    # @param add_piping_losses [Boolean] if true, add piping and associated heat losses to system.  If false, add no pipe heat losses.
+    # @param pipe_insulation_thickness [Double] the thickness of the pipe insulation, in m. Default is 0.0127 m / 0.5 inches.
+    # @param floor_area [Double] the area of building served by the service water heating loop, in m^2
+    #   If nil, will use the total building floor area. Only used if piping losses is true and the system is circulating.
+    # @param number_of_stories [Integer] the number of stories served by the service water heating loop
+    #   If nil, will use the total building number of stories. Only used if piping losses is true and the system is circulating.
+    # @return [OpenStudio::Model::PlantLoop] OpenStudio PlantLoop object of the service water loop
+    def self.create_service_water_heating_loop(model,
+                                               system_name: 'Service Water Loop',
+                                               service_water_temperature: 60.0,
+                                               service_water_pump_head: 29861.0,
+                                               service_water_pump_motor_efficiency: 0.3,
+                                               water_heater_capacity: nil,
+                                               water_heater_volume: nil,
+                                               water_heater_fuel: 'Electricity',
+                                               on_cycle_parasitic_fuel_consumption_rate: 0.0,
+                                               off_cycle_parasitic_fuel_consumption_rate: 0.0,
+                                               water_heater_thermal_zone: nil,
+                                               number_of_water_heaters: 1,
+                                               add_piping_losses: false,
+                                               pipe_insulation_thickness: 0.0127,
+                                               floor_area: nil,
+                                               number_of_stories: nil)
+
+      # create service water heating loop
+      service_water_loop = OpenStudio::Model::PlantLoop.new(model)
+      service_water_loop.setMinimumLoopTemperature(10.0)
+      service_water_loop.setMaximumLoopTemperature(82.2)
+
+      if system_name.nil?
+        system_name = 'Service Water Loop'
+      end
+      service_water_loop.setName(system_name)
+
+      # temperature schedule type limits
+      temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
+                                                                                        name: 'Temperature Schedule Type Limits',
+                                                                                        lower_limit_value: 0.0,
+                                                                                        upper_limit_value: 100.0,
+                                                                                        numeric_type: 'Continuous',
+                                                                                        unit_type: 'Temperature')
+
+      # service water heating loop controls
+      swh_temp_f = OpenStudio.convert(service_water_temperature, 'C', 'F').get
+      swh_delta_t_r = 9.0 # 9F delta-T
+      swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
+      swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                     service_water_temperature,
+                                                                                     name: "Service Water Loop Temp - #{swh_temp_f.round}F",
+                                                                                     schedule_type_limit: 'Temperature')
+      swh_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
+      swh_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, swh_temp_sch)
+      swh_stpt_manager.setName('Service hot water setpoint manager')
+      swh_stpt_manager.addToNode(service_water_loop.supplyOutletNode)
+      sizing_plant = service_water_loop.sizingPlant
+      sizing_plant.setLoopType('Heating')
+      sizing_plant.setDesignLoopExitTemperature(service_water_temperature)
+      sizing_plant.setLoopDesignTemperatureDifference(swh_delta_t_k)
+
+      # determine if circulating or non-circulating based on supplied head pressure
+      if service_water_pump_head.nil? || service_water_pump_head <= 1
+        # set pump head pressure to near zero if there is no circulation pump
+        service_water_pump_head = 0.001
+        service_water_pump_motor_efficiency = 1
+        circulating = false
+      else
+        circulating = true
+      end
+
+      # add pump
+      if circulating
+        swh_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        swh_pump.setName("#{service_water_loop.name} Circulator Pump")
+        swh_pump.setPumpControlType('Intermittent')
+      else
+        swh_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+        swh_pump.setName("#{service_water_loop.name} Water Mains Pressure Driven")
+        swh_pump.setPumpControlType('Continuous')
+      end
+      swh_pump.setRatedPumpHead(service_water_pump_head.to_f)
+      swh_pump.setMotorEfficiency(service_water_pump_motor_efficiency)
+      swh_pump.addToNode(service_water_loop.supplyInletNode)
+
+      # add water heater
+      water_heater = OpenstudioStandards::ServiceWaterHeating.create_water_heater(model,
+                                                                                  water_heater_capacity: water_heater_capacity,
+                                                                                  water_heater_volume: water_heater_volume,
+                                                                                  water_heater_fuel: water_heater_fuel,
+                                                                                  on_cycle_parasitic_fuel_consumption_rate: on_cycle_parasitic_fuel_consumption_rate,
+                                                                                  off_cycle_parasitic_fuel_consumption_rate: off_cycle_parasitic_fuel_consumption_rate,
+                                                                                  service_water_temperature: service_water_temperature,
+                                                                                  service_water_temperature_schedule: swh_temp_sch,
+                                                                                  set_peak_use_flowrate: false,
+                                                                                  peak_flowrate: 0.0,
+                                                                                  flowrate_schedule: nil,
+                                                                                  water_heater_thermal_zone: water_heater_thermal_zone,
+                                                                                  number_of_water_heaters: number_of_water_heaters)
+      service_water_loop.addSupplyBranchForComponent(water_heater)
+
+      # add pipe losses if requested
+      if add_piping_losses
+        OpenstudioStandards::ServiceWaterHeating.create_service_water_heating_piping_losses(model,
+                                                                                            service_water_loop,
+                                                                                            circulating: circulating,
+                                                                                            pipe_insulation_thickness: pipe_insulation_thickness,
+                                                                                            floor_area: floor_area,
+                                                                                            number_of_stories: number_of_stories)
+      end
+
+      # service water heating loop bypass pipes
+      water_heater_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+      service_water_loop.addSupplyBranchForComponent(water_heater_bypass_pipe)
+      coil_bypass_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+      service_water_loop.addDemandBranchForComponent(coil_bypass_pipe)
+      supply_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+      supply_outlet_pipe.addToNode(service_water_loop.supplyOutletNode)
+      demand_outlet_pipe = OpenStudio::Model::PipeAdiabatic.new(model)
+      demand_outlet_pipe.addToNode(service_water_loop.demandOutletNode)
+
+      if circulating
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added circulating SWH loop called #{service_water_loop.name}")
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added non-circulating SWH loop called #{service_water_loop.name}")
+      end
+
+      return service_water_loop
+    end
+
     # Creates a booster water heater on its own loop and attaches it to the main service water heating loop.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object

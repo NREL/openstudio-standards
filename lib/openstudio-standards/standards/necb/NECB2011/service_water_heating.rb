@@ -21,17 +21,16 @@ class NECB2011
     # Add the main service water heating loop
     shw_pump_motor_eff = 0.9
 
-    main_swh_loop = model_add_swh_loop(model,
-                                       'Main Service Water Loop',
-                                       nil,
-                                       shw_sizing['max_temp_SI'],
-                                       shw_pump_head,
-                                       shw_pump_motor_eff,
-                                       shw_sizing['tank_capacity_SI'],
-                                       shw_sizing['tank_volume_SI'],
-                                       swh_fueltype,
-                                       shw_sizing['parasitic_loss'],
-                                       nil)
+    main_swh_loop = OpenstudioStandards::ServiceWaterHeating.create_service_water_heating_loop(model,
+                                                                                               system_name: 'Main Service Water Loop',
+                                                                                               service_water_temperature: shw_sizing['max_temp_SI'],
+                                                                                               service_water_pump_head: shw_pump_head,
+                                                                                               service_water_pump_motor_efficiency: shw_pump_motor_eff,
+                                                                                               water_heater_capacity: shw_sizing['tank_capacity_SI'],
+                                                                                               water_heater_volume: shw_sizing['tank_volume_SI'],
+                                                                                               water_heater_fuel: swh_fueltype,
+                                                                                               on_cycle_parasitic_fuel_consumption_rate: shw_sizing['parasitic_loss'],
+                                                                                               off_cycle_parasitic_fuel_consumption_rate: shw_sizing['parasitic_loss'])
 
     # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by
     # the space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier

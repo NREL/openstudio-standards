@@ -35,9 +35,6 @@ module OpenstudioStandards
       # default name
       name = 'Main' if name.nil?
 
-      # water use connection
-      swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
-
       # water use definition
       water_use_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
 
@@ -66,8 +63,11 @@ module OpenstudioStandards
 
       # create water use equipment
       water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_use_def)
-      swh_connection.addWaterUseEquipment(water_fixture)
       water_fixture.setFlowRateFractionSchedule(flow_rate_fraction_schedule)
+
+      # create water use connection
+      swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
+      swh_connection.addWaterUseEquipment(water_fixture)
 
       # add to the space if provided
       if space.nil?
