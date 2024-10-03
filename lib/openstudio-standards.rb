@@ -522,7 +522,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.Pump"
   require_relative "#{proto}/common/objects/Prototype.PumpVariableSpeed"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
-  require_relative "#{proto}/common/objects/Prototype.ServiceWaterHeating"
   require_relative "#{proto}/common/objects/Prototype.SizingSystem"
   require_relative "#{proto}/common/objects/Prototype.utilities"
   # 90.1-2004

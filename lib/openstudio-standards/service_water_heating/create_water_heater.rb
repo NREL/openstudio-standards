@@ -505,7 +505,7 @@ module OpenstudioStandards
           service_water_temperature_schedule = service_water_temperature_schedule.to_ScheduleRuleset.get
           schedule_type = 'Schedule:Year'
         else
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.ServiceWaterHeating', "Unsupported schedule type for HPWH setpoint schedule #{service_water_temperature_schedule.name}.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ServiceWaterHeating', "Unsupported schedule type for HPWH setpoint schedule #{service_water_temperature_schedule.name}.")
           return false
         end
         hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(service_water_temperature_schedule, schedule_type, 'Schedule Value')
