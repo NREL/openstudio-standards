@@ -170,7 +170,7 @@ module OpenstudioStandards
             full_epw_path = OpenStudio::OptionalPath.new(epw_path.get)
           else
             # If this is an always-run Measure, need to check a different path
-            alt_weath_path = File.expand_path(File.join(Dir.pwd, '../../resources'))
+            alt_weath_path = File.expand_path(File.join(__dir__, '../../resources'))
             alt_epw_path = File.expand_path(File.join(alt_weath_path, epw_path.get.to_s))
             if File.exist?(alt_epw_path)
               full_epw_path = OpenStudio::OptionalPath.new(OpenStudio::Path.new(alt_epw_path))
@@ -202,7 +202,7 @@ module OpenstudioStandards
         stat_string = load_resource_relative("../../../data/weather/#{weather_file_name.gsub('.epw', '.stat')}")
 
         # extract to local weather dir
-        weather_dir = File.expand_path(File.join(Dir.pwd, 'extracted_files/weather/'))
+        weather_dir = File.expand_path(File.join(__dir__, 'extracted_files/weather/'))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.information', "Extracting weather files from OpenStudio CLI to #{weather_dir}")
         FileUtils.mkdir_p(weather_dir)
 
