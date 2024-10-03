@@ -19,7 +19,7 @@ lib/openstudio-standards/prototypes/**/*.rb
 lib/openstudio-standards/qaqc/**/*.rb
 lib/openstudio-standards/refs/references.rb
 lib/openstudio-standards/schedules/**/*.rb
-lib/openstudio-standards/service_Water_heating/**/*.rb
+lib/openstudio-standards/service_water_heating/**/*.rb
 lib/openstudio-standards/space/**/*.rb
 lib/openstudio-standards/sql_file/**/*.rb
 lib/openstudio-standards/standards/**/*.rb
