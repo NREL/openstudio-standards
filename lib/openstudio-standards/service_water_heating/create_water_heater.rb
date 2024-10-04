@@ -87,7 +87,7 @@ module OpenstudioStandards
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
       when 'HeatPump', 'SimpleHeatPump'
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Simple workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ServiceWaterHeating', 'Simple workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
         # Make a part-load efficiency modifier curve with a value above 1, which is multiplied by the nominal efficiency of 100% to represent the COP of a HPWH.
         # @todo could make this workaround better by using EMS to modify this curve output in realtime based on the OA temperature.
         hpwh_cop = 2.8
@@ -109,7 +109,7 @@ module OpenstudioStandards
         water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053)
         water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053)
       else
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "#{water_heater_fuel} is not a valid water heater fuel.  Valid choices are NaturalGas, Electricity, and HeatPump.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ServiceWaterHeating', "#{water_heater_fuel} is not a valid water heater fuel.  Valid choices are NaturalGas, Electricity, and HeatPump.")
       end
 
       # set water temperature properties
@@ -119,14 +119,6 @@ module OpenstudioStandards
       water_heater.setOffCycleParasiticHeatFractiontoTank(0.8)
       water_heater.setIndirectWaterHeatingRecoveryTime(1.5) # 1.5hrs
 
-      # get or create temperature schedule type limits
-      temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
-                                                                                        name: 'Temperature Schedule Type Limits',
-                                                                                        lower_limit_value: 0.0,
-                                                                                        upper_limit_value: 100.0,
-                                                                                        numeric_type: 'Continuous',
-                                                                                        unit_type: 'Temperature')
-
       # create service water temperature schedule based on the service_water_temperature if none provided
       if service_water_temperature_schedule.nil?
         swh_temp_c = service_water_temperature
@@ -135,7 +127,6 @@ module OpenstudioStandards
                                                                                                              swh_temp_c,
                                                                                                              name: "Service Water Loop Temp - #{swh_temp_f.round}F",
                                                                                                              schedule_type_limit: 'Temperature')
-        service_water_temperature_schedule.setScheduleTypeLimits(temp_sch_type_limits)
       end
       water_heater.setMaximumTemperatureLimit(service_water_temperature)
       water_heater.setSetpointTemperatureSchedule(service_water_temperature_schedule)
@@ -155,7 +146,6 @@ module OpenstudioStandards
                                                                                                                 indoor_temp_c,
                                                                                                                 name: "Water Heater Ambient Temp Schedule #{indoor_temp_f}F",
                                                                                                                 schedule_type_limit: 'Temperature')
-        default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
         water_heater.setAmbientTemperatureIndicator('Schedule')
         water_heater.setAmbientTemperatureSchedule(default_water_heater_ambient_temp_sch)
         water_heater.resetAmbientTemperatureThermalZone
@@ -178,7 +168,7 @@ module OpenstudioStandards
         service_water_loop.addSupplyBranchForComponent(water_heater)
       end
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating.Create', "Added water heater called #{water_heater.name}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Added water heater called #{water_heater.name}")
 
       return water_heater
     end
@@ -285,13 +275,6 @@ module OpenstudioStandards
 
       # set temperature setpoint schedule
       if service_water_temperature_schedule.nil?
-        # temperature schedule type limits
-        temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
-                                                                                          name: 'Temperature Schedule Type Limits',
-                                                                                          lower_limit_value: 0.0,
-                                                                                          upper_limit_value: 100.0,
-                                                                                          numeric_type: 'Continuous',
-                                                                                          unit_type: 'Temperature')
         # service water heating loop controls
         swh_temp_c = service_water_temperature
         swh_temp_f = OpenStudio.convert(swh_temp_c, 'C', 'F').get
@@ -302,7 +285,6 @@ module OpenstudioStandards
                                                                                                              swh_temp_c,
                                                                                                              name: "Heat Pump Water Heater Temp - #{swh_temp_f.round}F",
                                                                                                              schedule_type_limit: 'Temperature')
-        service_water_temperature_schedule.setScheduleTypeLimits(temp_sch_type_limits)
       end
       hpwh.setCompressorSetpointTemperatureSchedule(service_water_temperature_schedule)
 
@@ -441,15 +423,6 @@ module OpenstudioStandards
                                                                                                                 OpenStudio.convert(71.6, 'F', 'C').get,
                                                                                                                 name: 'Water Heater Ambient Temp Schedule 70F',
                                                                                                                 schedule_type_limit: 'Temperature')
-        if temp_sch_type_limits.nil?
-          temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
-                                                                                            name: 'Temperature Schedule Type Limits',
-                                                                                            lower_limit_value: 0.0,
-                                                                                            upper_limit_value: 100.0,
-                                                                                            numeric_type: 'Continuous',
-                                                                                            unit_type: 'Temperature')
-        end
-        default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
         tank.setAmbientTemperatureIndicator('Schedule')
         tank.setAmbientTemperatureSchedule(default_water_heater_ambient_temp_sch)
         tank.resetAmbientTemperatureThermalZone
@@ -561,7 +534,7 @@ module OpenstudioStandards
         service_water_loop.addSupplyBranchForComponent(tank)
       end
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating.Create', "Added heat pump water heater called #{tank.name}")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Added heat pump water heater called #{tank.name}")
 
       return hpwh
     end

@@ -37,7 +37,7 @@ class NECB2011
     # as well which is different than the space (ultimately thermal zone) multiplier.
     shw_sizing['spaces_w_dhw'].each do |space|
       OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
-                                                                name: "#{space['shw_spaces'].name.capitalize}",
+                                                                name: "#{space['shw_spaces'].name.get.capitalize}",
                                                                 flow_rate: space['shw_peakflow_ind_SI'],
                                                                 flow_rate_fraction_schedule: model_add_schedule(model, space['shw_sched']),
                                                                 water_use_temperature: space['shw_temp_SI'],

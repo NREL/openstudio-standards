@@ -480,8 +480,6 @@ class Standard
                                                                                                    water_heater_capacity: water_heater_capacity_w,
                                                                                                    water_heater_volume: water_heater_volume_m3,
                                                                                                    water_heater_fuel: water_heater_fuel,
-                                                                                                   on_cycle_parasitic_fuel_consumption_rate: parasitic_fuel_consumption_rate_w,
-                                                                                                   off_cycle_parasitic_fuel_consumption_rate: parasitic_fuel_consumption_rate_w,
                                                                                                    add_piping_losses: true,
                                                                                                    pipe_insulation_thickness: OpenStudio.convert(pipe_insul_in, 'in', 'm').get,
                                                                                                    floor_area: bldg_type_floor_area_m2,

@@ -13,7 +13,8 @@ module OpenstudioStandards
     # @param service_water_pump_motor_efficiency [Double] service water pump motor efficiency, as decimal.
     # @param water_heater_capacity [Double] water heater capacity, in W. Defaults to 58.6 kW / 200 kBtu/hr
     # @param water_heater_volume [Double] water heater volume, in m^3. Defaults to 0.378 m^3 / 100 gal
-    # @param water_heater_fuel [String] water heating fuel. Valid choices are 'NaturalGas', 'Electricity', or 'HeatPump'
+    # @param water_heater_fuel [String] water heating fuel. Valid choices are 'NaturalGas', 'Electricity', 'FuelOilNo2', 'SimpleHeatPump', 'HeatPump', or 'None'.
+    #   If 'None', no water heater will be added.
     # @param on_cycle_parasitic_fuel_consumption_rate [Double] water heater on cycle parasitic fuel consumption rate, in W
     # @param off_cycle_parasitic_fuel_consumption_rate [Double] water heater off cycle parasitic fuel consumption rate, in W
     # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] Thermal zone for ambient heat loss.
@@ -54,14 +55,6 @@ module OpenstudioStandards
       end
       service_water_loop.setName(system_name)
 
-      # temperature schedule type limits
-      temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
-                                                                                        name: 'Temperature Schedule Type Limits',
-                                                                                        lower_limit_value: 0.0,
-                                                                                        upper_limit_value: 100.0,
-                                                                                        numeric_type: 'Continuous',
-                                                                                        unit_type: 'Temperature')
-
       # service water heating loop controls
       swh_temp_f = OpenStudio.convert(service_water_temperature, 'C', 'F').get
       swh_delta_t_r = 9.0 # 9F delta-T
@@ -70,7 +63,6 @@ module OpenstudioStandards
                                                                                      service_water_temperature,
                                                                                      name: "Service Water Loop Temp - #{swh_temp_f.round}F",
                                                                                      schedule_type_limit: 'Temperature')
-      swh_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       swh_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, swh_temp_sch)
       swh_stpt_manager.setName('Service hot water setpoint manager')
       swh_stpt_manager.addToNode(service_water_loop.supplyOutletNode)
@@ -104,20 +96,39 @@ module OpenstudioStandards
       swh_pump.addToNode(service_water_loop.supplyInletNode)
 
       # add water heater
-      water_heater = OpenstudioStandards::ServiceWaterHeating.create_water_heater(model,
-                                                                                  water_heater_capacity: water_heater_capacity,
-                                                                                  water_heater_volume: water_heater_volume,
-                                                                                  water_heater_fuel: water_heater_fuel,
-                                                                                  on_cycle_parasitic_fuel_consumption_rate: on_cycle_parasitic_fuel_consumption_rate,
-                                                                                  off_cycle_parasitic_fuel_consumption_rate: off_cycle_parasitic_fuel_consumption_rate,
-                                                                                  service_water_temperature: service_water_temperature,
-                                                                                  service_water_temperature_schedule: swh_temp_sch,
-                                                                                  set_peak_use_flowrate: false,
-                                                                                  peak_flowrate: 0.0,
-                                                                                  flowrate_schedule: nil,
-                                                                                  water_heater_thermal_zone: water_heater_thermal_zone,
-                                                                                  number_of_water_heaters: number_of_water_heaters)
-      service_water_loop.addSupplyBranchForComponent(water_heater)
+      case water_heater_fuel
+      when 'None'
+        # don't add a water heater
+      when 'HeatPump'
+        OpenstudioStandards::ServiceWaterHeating.create_heatpump_water_heater(model,
+                                                                              water_heater_capacity: water_heater_capacity,
+                                                                              water_heater_volume: water_heater_volume,
+                                                                              on_cycle_parasitic_fuel_consumption_rate: on_cycle_parasitic_fuel_consumption_rate,
+                                                                              off_cycle_parasitic_fuel_consumption_rate: off_cycle_parasitic_fuel_consumption_rate,
+                                                                              service_water_temperature: service_water_temperature,
+                                                                              service_water_temperature_schedule: swh_temp_sch,
+                                                                              set_peak_use_flowrate: false,
+                                                                              peak_flowrate: 0.0,
+                                                                              flowrate_schedule: nil,
+                                                                              water_heater_thermal_zone: water_heater_thermal_zone,
+                                                                              service_water_loop: service_water_loop,
+                                                                              use_ems_control: false)
+      else
+        OpenstudioStandards::ServiceWaterHeating.create_water_heater(model,
+                                                                      water_heater_capacity: water_heater_capacity,
+                                                                      water_heater_volume: water_heater_volume,
+                                                                      water_heater_fuel: water_heater_fuel,
+                                                                      on_cycle_parasitic_fuel_consumption_rate: on_cycle_parasitic_fuel_consumption_rate,
+                                                                      off_cycle_parasitic_fuel_consumption_rate: off_cycle_parasitic_fuel_consumption_rate,
+                                                                      service_water_temperature: service_water_temperature,
+                                                                      service_water_temperature_schedule: swh_temp_sch,
+                                                                      set_peak_use_flowrate: false,
+                                                                      peak_flowrate: 0.0,
+                                                                      flowrate_schedule: nil,
+                                                                      water_heater_thermal_zone: water_heater_thermal_zone,
+                                                                      number_of_water_heaters: number_of_water_heaters,
+                                                                      service_water_loop: service_water_loop)
+      end
 
       # add pipe losses if requested
       if add_piping_losses
@@ -140,9 +151,9 @@ module OpenstudioStandards
       demand_outlet_pipe.addToNode(service_water_loop.demandOutletNode)
 
       if circulating
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added circulating SWH loop called #{service_water_loop.name}")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Added circulating SWH loop called #{service_water_loop.name}")
       else
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Added non-circulating SWH loop called #{service_water_loop.name}")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Added non-circulating SWH loop called #{service_water_loop.name}")
       end
 
       return service_water_loop
@@ -173,7 +184,12 @@ module OpenstudioStandards
                                                service_water_temperature_schedule: nil,
                                                water_heater_thermal_zone: nil,
                                                service_water_loop: nil)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding booster water heater to #{service_water_loop.name}")
+      if service_water_loop.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ServiceWaterHeating', "#{_method_} requires the service_water_loop argument to couple the booster water heating loop with a heat exchanger.")
+        return nil
+      else
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Adding booster water heater to #{service_water_loop.name}")
+      end
 
       water_heater_volume_gal = OpenStudio.convert(water_heater_volume, 'm^3', 'gal').get
       water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity, 'W', 'kBtu/hr').get
@@ -196,23 +212,14 @@ module OpenstudioStandards
       booster_water_heater.setName("#{water_heater_volume_gal}gal #{water_heater_fuel} Booster Water Heater - #{water_heater_capacity_kbtu_per_hr.round}kBtu/hr")
       booster_water_heater.setEndUseSubcategory('Booster')
 
-      # Temperature schedule type limits
-      temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
-                                                                                        name: 'Temperature Schedule Type Limits',
-                                                                                        lower_limit_value: 0.0,
-                                                                                        upper_limit_value: 100.0,
-                                                                                        numeric_type: 'Continuous',
-                                                                                        unit_type: 'Temperature')
-
       # Service water heating loop controls
       swh_temp_f = OpenStudio.convert(service_water_temperature, 'C', 'F').get
-      swh_delta_t_r = 9 # 9F delta-T
+      swh_delta_t_r = 9.0 # 9F delta-T
       swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
       swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                      service_water_temperature,
-                                                                                     name: "Service Water Booster Temp - #{swh_temp_f.round(0)}F",
+                                                                                     name: "Service Water Booster Temp - #{swh_temp_f.round}F",
                                                                                      schedule_type_limit: 'Temperature')
-      swh_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       swh_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, swh_temp_sch)
       swh_stpt_manager.setName('Hot water booster setpoint manager')
       swh_stpt_manager.addToNode(booster_service_water_loop.supplyOutletNode)

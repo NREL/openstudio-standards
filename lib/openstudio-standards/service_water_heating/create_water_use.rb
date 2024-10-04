@@ -19,7 +19,7 @@ module OpenstudioStandards
     # @param space [OpenStudio::Model::Space] OpenStudio Space object
     # @return [OpenStudio::Model::WaterUseEquipment] OpenStudio WaterUseEquipment object
     def self.create_water_use(model,
-                              name: 'Main',
+                              name: 'Main Water Use',
                               flow_rate: 0.0,
                               flow_rate_fraction_schedule: nil,
                               water_use_temperature: 43.3,
@@ -33,7 +33,7 @@ module OpenstudioStandards
       water_use_temperature_f = OpenStudio.convert(water_use_temperature, 'C', 'F').get
 
       # default name
-      name = 'Main' if name.nil?
+      name = 'Main Water Use' if name.nil?
 
       # water use definition
       water_use_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
@@ -50,7 +50,7 @@ module OpenstudioStandards
       water_use_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
       water_use_def.setLatentFractionSchedule(water_use_latent_frac_sch)
       water_use_def.setPeakFlowRate(flow_rate)
-      water_use_def.setName("#{name} #{flow_rate_gpm.round(2)}gpm #{water_use_temperature_f.round}F")
+      water_use_def.setName("#{name} #{flow_rate_gpm.round(1)}gpm #{water_use_temperature_f.round}F")
 
       # target mixed water temperature
       if water_use_temperature_schedule.nil?
@@ -71,21 +71,21 @@ module OpenstudioStandards
 
       # add to the space if provided
       if space.nil?
-        water_fixture.setName("#{name} Service Water Use #{flow_rate_gpm.round(2)}gpm #{water_use_temperature_f.round}F")
-        swh_connection.setName("#{name} WUC #{flow_rate_gpm.round(2)}gpm #{water_use_temperature_f.round}F")
+        water_fixture.setName("#{name} Service Water Use #{flow_rate_gpm.round(1)}gpm #{water_use_temperature_f.round}F")
+        swh_connection.setName("#{name} WUC #{flow_rate_gpm.round(1)}gpm #{water_use_temperature_f.round}F")
       else
-        water_fixture.setName("#{space.name} Service Water Use #{flow_rate_gpm.round(2)}gpm #{water_use_temperature_f.round}F")
-        swh_connection.setName("#{space.name} WUC #{flow_rate_gpm.round(2)}gpm #{water_use_temperature_f.round}F")
+        water_fixture.setName("#{space.name} Service Water Use #{flow_rate_gpm.round(1)}gpm #{water_use_temperature_f.round}F")
+        swh_connection.setName("#{space.name} WUC #{flow_rate_gpm.round(1)}gpm #{water_use_temperature_f.round}F")
         water_fixture.setSpace(space)
       end
 
       # add to the service water loop if provided
       unless service_water_loop.nil?
         service_water_loop.addDemandBranchForComponent(swh_connection)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding water fixture to #{service_water_loop.name}.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Adding water fixture to #{service_water_loop.name}.")
       end
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{water_fixture.name}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Added #{water_fixture.name}.")
 
       return water_fixture
     end

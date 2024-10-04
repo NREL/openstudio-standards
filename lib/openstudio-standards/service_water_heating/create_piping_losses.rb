@@ -44,15 +44,15 @@ module OpenstudioStandards
 
         # calculate the piping length
         pipe_length_ft = 2.0 * (Math.sqrt(floor_area_ft2 / number_of_stories) + (10.0 * (number_of_stories - 1.0)))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Pipe length #{pipe_length_ft.round}ft = 2.0 * ( (#{floor_area_ft2.round}ft2 / #{number_of_stories} stories)^0.5 + (10.0ft * (#{number_of_stories} stories - 1.0) ) )")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Pipe length #{pipe_length_ft.round}ft = 2.0 * ( (#{floor_area_ft2.round}ft2 / #{number_of_stories} stories)^0.5 + (10.0ft * (#{number_of_stories} stories - 1.0) ) )")
       else
         # For non-circulating systems, assume water heater is close to point of use
 
         # get pipe length
-        pipe_length = 6.1 if pipe_length.nil?
+        pipe_length_m = 6.1 if pipe_length.nil?
 
-        pipe_length_ft = OpenStudio.convert(pipe_length, 'm', 'ft').get
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Pipe length #{pipe_length_ft.round}ft. For non-circulating systems, assume water heater is close to point of use.")
+        pipe_length_ft = OpenStudio.convert(pipe_length_m, 'm', 'ft').get
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Pipe length #{pipe_length_ft.round}ft. For non-circulating systems, assume water heater is close to point of use.")
       end
 
       # For systems whose water heater object represents multiple pieces
@@ -69,8 +69,10 @@ module OpenstudioStandards
           comp_qty = 1
         end
 
-        if comp_qty > 1
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Piping length has been multiplied by #{comp_qty}X because #{water_heater.name} represents #{comp_qty} pieces of equipment.")
+        # if more than 1 water heater, multiply the pipe length by the number of water heaters,
+        # unless the user has specified a pipe length
+        if comp_qty > 1 && pipe_length.nil?
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Piping length has been multiplied by #{comp_qty}X because #{water_heater.name} represents #{comp_qty} pieces of equipment.")
           pipe_length_ft *= comp_qty
           break
         end
@@ -134,19 +136,15 @@ module OpenstudioStandards
       heat_loss_pipe = OpenStudio::Model::PipeIndoor.new(model)
       heat_loss_pipe.setName("#{service_water_loop.name} Pipe #{pipe_length_ft.round}ft")
       heat_loss_pipe.setEnvironmentType('Schedule')
-      # @todoschedule type registry error for this setter
-      # heat_loss_pipe.setAmbientTemperatureSchedule(swh_piping_air_temp_sch)
-      heat_loss_pipe.setPointer(7, swh_piping_air_temp_sch.handle)
-      # @todo schedule type registry error for this setter
-      # heat_loss_pipe.setAmbientAirVelocitySchedule(model.alwaysOffDiscreteSchedule)
-      heat_loss_pipe.setPointer(8, swh_piping_air_velocity_sch.handle)
+      heat_loss_pipe.setAmbientTemperatureSchedule(swh_piping_air_temp_sch)
+      heat_loss_pipe.setAmbientAirVelocitySchedule(swh_piping_air_velocity_sch)
       heat_loss_pipe.setConstruction(pipe_construction)
       heat_loss_pipe.setPipeInsideDiameter(OpenStudio.convert(0.785, 'in', 'm').get)
       heat_loss_pipe.setPipeLength(OpenStudio.convert(pipe_length_ft, 'ft', 'm').get)
 
       heat_loss_pipe.addToNode(service_water_loop.demandInletNode)
 
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Added #{pipe_length_ft.round}ft of #{pipe_construction.name} losing heat to #{air_temperature_f.round}F air to #{service_water_loop.name}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Added #{pipe_length_ft.round}ft of #{pipe_construction.name} losing heat to #{air_temperature_f.round}F air to #{service_water_loop.name}.")
       return true
     end
 
