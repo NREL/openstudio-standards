@@ -680,11 +680,10 @@ class Standard
                   summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
                 else
                   if dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
-                    summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb
+                    summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb.get
                     summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
                   end
                 end
-
               end
             end
           end
