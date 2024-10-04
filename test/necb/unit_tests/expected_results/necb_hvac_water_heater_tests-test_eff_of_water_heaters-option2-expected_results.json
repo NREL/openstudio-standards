@@ -242,41 +242,41 @@
         "office-enclosed--25-m2": {
           "space_type": "office-enclosed--25-m2",
           "water_heater_name": "100gal NaturalGas Water Heater - 67kBtu/hr 0.82 Therm Eff",
-          "capacity_kW": 10.0,
-          "volume_L": 100.0,
+          "capacity_kW": 19.8,
+          "volume_L": 379,
           "first_hour_rating_L_per_hr": 344,
-          "offcycle_standby_loss": 4.39,
-          "oncycle_standby_loss": 4.39,
+          "offcycle_standby_loss": 0.989,
+          "oncycle_standby_loss": 0.989,
           "shw_tank_eff": 0.82
         },
         "health-care-facility-operating-room": {
           "space_type": "health-care-facility-operating-room",
-          "water_heater_name": "546gal NaturalGas Water Heater - 368kBtu/hr 0.82 Therm Eff",
-          "capacity_kW": 10.0,
-          "volume_L": 100.0,
+          "water_heater_name": "546gal NaturalGas Water Heater - 368kBtu/hr 0.906 Therm Eff",
+          "capacity_kW": 108,
+          "volume_L": 2070,
           "first_hour_rating_L_per_hr": 1150,
-          "offcycle_standby_loss": 4.39,
-          "oncycle_standby_loss": 4.39,
-          "shw_tank_eff": 0.82
+          "offcycle_standby_loss": 17.3,
+          "oncycle_standby_loss": 17.3,
+          "shw_tank_eff": 0.906
         },
         "museum-general-exhibition-area": {
           "space_type": "museum-general-exhibition-area",
-          "water_heater_name": "230gal NaturalGas Water Heater - 155kBtu/hr 0.82 Therm Eff",
-          "capacity_kW": 10.0,
-          "volume_L": 100.0,
+          "water_heater_name": "230gal NaturalGas Water Heater - 155kBtu/hr 0.909 Therm Eff",
+          "capacity_kW": 45.6,
+          "volume_L": 872,
           "first_hour_rating_L_per_hr": 918,
-          "offcycle_standby_loss": 4.39,
-          "oncycle_standby_loss": 4.39,
-          "shw_tank_eff": 0.82
+          "offcycle_standby_loss": 10.6,
+          "oncycle_standby_loss": 10.6,
+          "shw_tank_eff": 0.909
         },
         "retail-facility-mall-concourse": {
           "space_type": "retail-facility-mall-concourse",
           "water_heater_name": "29gal NaturalGas Water Heater - 19kBtu/hr 0.82 Therm Eff",
-          "capacity_kW": 10.0,
-          "volume_L": 100.0,
+          "capacity_kW": 5.69,
+          "volume_L": 109,
           "first_hour_rating_L_per_hr": 115,
-          "offcycle_standby_loss": 4.0,
-          "oncycle_standby_loss": 4.0,
+          "offcycle_standby_loss": 4.1,
+          "oncycle_standby_loss": 4.1,
           "shw_tank_eff": 0.82
         }
       },
@@ -284,84 +284,84 @@
         "office-enclosed--25-m2": {
           "space_type": "office-enclosed--25-m2",
           "water_heater_name": "100gal NaturalGas Water Heater - 67kBtu/hr 0.82 Therm Eff",
-          "capacity_kW": 25.0,
-          "volume_L": 300,
+          "capacity_kW": 19.8,
+          "volume_L": 379,
           "first_hour_rating_L_per_hr": 344,
-          "offcycle_standby_loss": 1.72,
-          "oncycle_standby_loss": 1.72,
+          "offcycle_standby_loss": 0.989,
+          "oncycle_standby_loss": 0.989,
           "shw_tank_eff": 0.82
         },
         "health-care-facility-operating-room": {
           "space_type": "health-care-facility-operating-room",
-          "water_heater_name": "546gal NaturalGas Water Heater - 368kBtu/hr 0.82 Therm Eff",
-          "capacity_kW": 25.0,
-          "volume_L": 300,
+          "water_heater_name": "546gal NaturalGas Water Heater - 368kBtu/hr 0.906 Therm Eff",
+          "capacity_kW": 108,
+          "volume_L": 2070,
           "first_hour_rating_L_per_hr": 1150,
-          "offcycle_standby_loss": 1.72,
-          "oncycle_standby_loss": 1.72,
-          "shw_tank_eff": 0.82
+          "offcycle_standby_loss": 17.3,
+          "oncycle_standby_loss": 17.3,
+          "shw_tank_eff": 0.906
         },
         "museum-general-exhibition-area": {
           "space_type": "museum-general-exhibition-area",
-          "water_heater_name": "230gal NaturalGas Water Heater - 155kBtu/hr 0.82 Therm Eff",
-          "capacity_kW": 25.0,
-          "volume_L": 300,
+          "water_heater_name": "230gal NaturalGas Water Heater - 155kBtu/hr 0.909 Therm Eff",
+          "capacity_kW": 45.6,
+          "volume_L": 872,
           "first_hour_rating_L_per_hr": 918,
-          "offcycle_standby_loss": 1.72,
-          "oncycle_standby_loss": 1.72,
-          "shw_tank_eff": 0.82
+          "offcycle_standby_loss": 10.6,
+          "oncycle_standby_loss": 10.6,
+          "shw_tank_eff": 0.909
         },
         "retail-facility-mall-concourse": {
           "space_type": "retail-facility-mall-concourse",
           "water_heater_name": "29gal NaturalGas Water Heater - 19kBtu/hr 0.82 Therm Eff",
-          "capacity_kW": 25.0,
-          "volume_L": 300,
+          "capacity_kW": 5.69,
+          "volume_L": 109,
           "first_hour_rating_L_per_hr": 115,
-          "offcycle_standby_loss": 0.78,
-          "oncycle_standby_loss": 0.78,
+          "offcycle_standby_loss": 4.1,
+          "oncycle_standby_loss": 4.1,
           "shw_tank_eff": 0.82
         }
       },
       "case-7": {
         "office-enclosed--25-m2": {
           "space_type": "office-enclosed--25-m2",
-          "water_heater_name": "100gal NaturalGas Water Heater - 67kBtu/hr 0.903 Therm Eff",
-          "capacity_kW": 125,
-          "volume_L": 300,
+          "water_heater_name": "100gal NaturalGas Water Heater - 67kBtu/hr 0.82 Therm Eff",
+          "capacity_kW": 19.8,
+          "volume_L": 379,
           "first_hour_rating_L_per_hr": 344,
-          "offcycle_standby_loss": 8.62,
-          "oncycle_standby_loss": 8.62,
-          "shw_tank_eff": 0.903
+          "offcycle_standby_loss": 0.989,
+          "oncycle_standby_loss": 0.989,
+          "shw_tank_eff": 0.82
         },
         "health-care-facility-operating-room": {
           "space_type": "health-care-facility-operating-room",
-          "water_heater_name": "546gal NaturalGas Water Heater - 368kBtu/hr 0.903 Therm Eff",
-          "capacity_kW": 125,
-          "volume_L": 300,
+          "water_heater_name": "546gal NaturalGas Water Heater - 368kBtu/hr 0.906 Therm Eff",
+          "capacity_kW": 108,
+          "volume_L": 2070,
           "first_hour_rating_L_per_hr": 1150,
-          "offcycle_standby_loss": 8.62,
-          "oncycle_standby_loss": 8.62,
-          "shw_tank_eff": 0.903
+          "offcycle_standby_loss": 17.3,
+          "oncycle_standby_loss": 17.3,
+          "shw_tank_eff": 0.906
         },
         "museum-general-exhibition-area": {
           "space_type": "museum-general-exhibition-area",
-          "water_heater_name": "230gal NaturalGas Water Heater - 155kBtu/hr 0.903 Therm Eff",
-          "capacity_kW": 125,
-          "volume_L": 300,
+          "water_heater_name": "230gal NaturalGas Water Heater - 155kBtu/hr 0.909 Therm Eff",
+          "capacity_kW": 45.6,
+          "volume_L": 872,
           "first_hour_rating_L_per_hr": 918,
-          "offcycle_standby_loss": 8.62,
-          "oncycle_standby_loss": 8.62,
-          "shw_tank_eff": 0.903
+          "offcycle_standby_loss": 10.6,
+          "oncycle_standby_loss": 10.6,
+          "shw_tank_eff": 0.909
         },
         "retail-facility-mall-concourse": {
           "space_type": "retail-facility-mall-concourse",
-          "water_heater_name": "29gal NaturalGas Water Heater - 19kBtu/hr 0.903 Therm Eff",
-          "capacity_kW": 125,
-          "volume_L": 300,
+          "water_heater_name": "29gal NaturalGas Water Heater - 19kBtu/hr 0.82 Therm Eff",
+          "capacity_kW": 5.69,
+          "volume_L": 109,
           "first_hour_rating_L_per_hr": 115,
-          "offcycle_standby_loss": 8.62,
-          "oncycle_standby_loss": 8.62,
-          "shw_tank_eff": 0.903
+          "offcycle_standby_loss": 4.1,
+          "oncycle_standby_loss": 4.1,
+          "shw_tank_eff": 0.82
         }
       }
     }

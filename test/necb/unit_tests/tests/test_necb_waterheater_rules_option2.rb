@@ -210,27 +210,20 @@ class NECB_HVAC_water_heater_Tests < Minitest::Test
                                                                                                     baseboard_type: baseboard_type,
                                                                                                     hw_loop: hw_loop,
                                                                                                     new_auto_zoner: false)
-        # Set volume and capacity of water tank.
-        shw_units = model.getWaterHeaterMixeds
-        shw_units[0].setHeaterMaximumCapacity(1000.0 * icap)
-        shw_units[0].setTankVolume(ivol / 1000.0)
-        # Run sizing.
+
         run_sizing(model: model, template: vintage, test_name: name_sp, output_dir: output_folder, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+
+        # Calc FHR
+        fhr_L_per_hr = standard.calculate_total_peak_flow_rate(model: model, shw_scale: 'NECB_Default')
+        # Convert to L/hr.
+        fhr_L_per_hr = fhr_L_per_hr * 3600000.0
+
         # Get standard water tank efficiency and standby losses.
         shw_units = model.getWaterHeaterMixeds
         icap = (shw_units[0].heaterMaximumCapacity.get.to_f) / 1000.0 # kW
         ivol = (shw_units[0].tankVolume.get.to_f) * 1000.0 # Litres
-        # Calc FHR.
-        # tank_param = standard.auto_size_shw_capacity(model: model, shw_scale: 'NECB_Default')
-        fhr_L_per_hr = standard.calculate_total_peak_flow_rate(model: model, shw_scale: 'NECB_Default')
-        # Convert to L/hr.
-        fhr_L_per_hr = fhr_L_per_hr * 3600000.0
-        puts "Calculate UA   ========================================== "
-        puts "fhr_L_per_hr #{fhr_L_per_hr} L/hr"
-        puts "icap #{icap} kW"
-        puts "ivol #{ivol} L"
+
         actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
-        # actual_shw_tank_vol = shw_units[0].tankVolume.to_f
         actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
         actual_oncycle_ua = shw_units[0].onCycleLossCoefficienttoAmbientTemperature.to_f
 
@@ -245,6 +238,7 @@ class NECB_HVAC_water_heater_Tests < Minitest::Test
           oncycle_standby_loss: actual_oncycle_ua.signif(3),
           shw_tank_eff: actual_shw_tank_eff.signif(3)
         }
+        puts "results #{results}"
       end
     else
       baseboard_type = 'Hot Water'
@@ -284,8 +278,10 @@ class NECB_HVAC_water_heater_Tests < Minitest::Test
         shw_tank_eff: actual_shw_tank_eff.signif(3)
       }
     end
+
     logger.info "Completed individual test: #{name}"
     return results
   end
+
 end
 
