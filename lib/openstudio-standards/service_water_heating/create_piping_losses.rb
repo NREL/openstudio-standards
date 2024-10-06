@@ -90,8 +90,7 @@ module OpenstudioStandards
       swh_piping_air_velocity_mph = OpenStudio.convert(swh_piping_air_velocity_m_per_s, 'm/s', 'mile/hr').get
       swh_piping_air_velocity_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                                     swh_piping_air_velocity_m_per_s,
-                                                                                                    name: "#{service_water_loop.name} Piping Air Velocity - #{swh_piping_air_velocity_mph.round(2)}mph",
-                                                                                                    schedule_type_limit: 'Dimensionless')
+                                                                                                    name: "#{service_water_loop.name} Piping Air Velocity - #{swh_piping_air_velocity_mph.round(2)}mph")
 
       # Material for 3/4in type L (heavy duty) copper pipe
       copper_pipe = OpenStudio::Model::StandardOpaqueMaterial.new(model)
