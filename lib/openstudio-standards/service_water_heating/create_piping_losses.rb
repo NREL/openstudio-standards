@@ -49,7 +49,7 @@ module OpenstudioStandards
         # For non-circulating systems, assume water heater is close to point of use
 
         # get pipe length
-        pipe_length_m = 6.1 if pipe_length.nil?
+        pipe_length_m = pipe_length.nil? ? 6.1 : pipe_length
 
         pipe_length_ft = OpenStudio.convert(pipe_length_m, 'm', 'ft').get
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Pipe length #{pipe_length_ft.round}ft. For non-circulating systems, assume water heater is close to point of use.")
