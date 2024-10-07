@@ -48,7 +48,11 @@ module OpenstudioStandards
       # create service water heating loop
       service_water_loop = OpenStudio::Model::PlantLoop.new(model)
       service_water_loop.setMinimumLoopTemperature(10.0)
-      service_water_loop.setMaximumLoopTemperature(82.2)
+      if service_water_temperature > 60.0
+        service_water_loop.setMaximumLoopTemperature(service_water_temperature)
+      else
+        service_water_loop.setMaximumLoopTemperature(60.0)
+      end
 
       if system_name.nil?
         system_name = 'Service Water Loop'
