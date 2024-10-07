@@ -1056,7 +1056,7 @@ module OpenstudioStandards
             remainder = days_to_fill - value[:days_used]
             day_for_rule = days_to_fill - remainder
             if remainder.size < days_to_fill.size
-              autogen_rules[profile_index] = { days_to_fill: day_for_rule, hoo_start: hoo_start, hoo_end: hoo_end}
+              autogen_rules[profile_index] = { days_to_fill: day_for_rule, hoo_start: hoo_start, hoo_end: hoo_end }
             end
             days_to_fill = remainder
           end
