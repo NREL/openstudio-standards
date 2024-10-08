@@ -11,6 +11,10 @@ Gem::Specification.new do |spec|
   spec.summary       = 'Creates OpenStudio models of typical buildings, creates standard baselines from proposed models, and checks a model against a standard.'
   spec.description   = 'The openstudio-standards library provides methods for programatically generating, modifying, and checking OpenStudio building energy models. It can create a typical building from user geometry, template geometry, or programmatically generated geometry. It can apply a building standard including ASHRAE 90.1 or NECB to a model. It can transform a proposed building model into a 90.1 Appendix G code baseline model. It can check a model against a building standard. It can generate represenative typical buildings, such as those used in ComStock.'
   spec.license       = 'Modified BSD License'
+  spec.metadata = {
+    "documentation_uri" => "https://gemdocs.org/gems/openstudio-standards"
+  }
+
   spec.required_ruby_version = '>= 2.0.0'
   spec.required_rubygems_version = '>= 1.3.6'
   spec.files = Dir['LICENSE.md', 'lib/**/*', 'data/**/*']
