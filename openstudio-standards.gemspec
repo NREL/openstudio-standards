@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'bundler', '~> 2.1'
     spec.add_development_dependency 'nokogiri', '<= 1.11.7'
     spec.add_development_dependency 'parallel_tests', '~> 3.0.0'
+    spec.add_development_dependency 'public_suffix', '~> 5.1.1'
   elsif RUBY_VERSION < '3.2'
     spec.add_development_dependency 'bundler', '~> 2.1.4'
     spec.add_development_dependency 'nokogiri', '~> 1.11'
@@ -34,7 +35,6 @@ Gem::Specification.new do |spec|
   end
   spec.add_development_dependency 'aes', '0.5.0'
   spec.add_development_dependency 'codecov'
-  spec.add_development_dependency 'google_drive'
   spec.add_development_dependency 'minitest', '~> 5.14.0'
   spec.add_development_dependency 'minitest-ci'
   spec.add_development_dependency 'minitest-parallel_fork'

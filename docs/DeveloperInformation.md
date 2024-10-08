@@ -28,7 +28,7 @@
 6. Install [Git](https://git-scm.com/).
 7. Install [GitHub desktop](https://desktop.github.com/) or another GUI that makes Git easier to use.
 8. Clone the [source code](https://github.com/NREL/openstudio-standards.git) using GitHub desktop (easier) or Git (harder).
-9. Run all commands below from the top level directory 
+9. Run all commands below from the top level directory
 10. **On Windows**, use the Git Bash instead of the default command prompt.
 11. **On Mac** the default terminal is fine.
 12. **Using BTAP development Environment** use the terminator terminal ideally.
@@ -45,20 +45,16 @@
 5. Push branch to GitHub repository
 6. Continuous automation runs tests
 7. Pull request
-8. Code review and merge 
+8. Code review and merge
 
-This project uses [Rake](http://rake.rubyforge.org/) to run tasks from the terminal.  
+This project uses [Rake](http://rake.rubyforge.org/) to run tasks from the terminal.
 
 `bundle exec rake -T`: List all available commands
 
 - `bundle exec rake build`                    # Build openstudio-standards-X.X.XX.gem into the pkg directory
 - `bundle exec rake clean`                    # Remove any temporary products
 - `bundle exec rake clobber`                  # Remove any generated files
-- `bundle exec rake data:apicheck`            # Check Google Drive configuration  
-- `bundle exec rake data:download`            # Download OpenStudio_Standards spreadsheets from Google Drive
-- `bundle exec rake data:update`              # Download OpenStudio_Standards from Google & export JSONs
-- `bundle exec rake data:update`              # Download OpenStudio_Standards spreadsheets and generate JSONs
-- `bundle exec rake data:update:manual`       # Generate JSONs from OpenStudio_Standards spreadsheets
+- `bundle exec rake data:update`              # Generate JSONs from OpenStudio_Standards spreadsheets locally downloaded to data/standards
 - `bundle exec rake data:export:jsons`        # Export JSONs from OpenStudio_Standards to data library
 - `bundle exec rake data:update:costing`      # Update RS-Means Database
 - `bundle exec rake doc`                      # Generate the documentation
@@ -78,7 +74,7 @@ This project uses [Rake](http://rake.rubyforge.org/) to run tasks from the termi
 - `bundle exec rake test:circ-necb`           # Run tests for circ-necb
 - `bundle exec rake test:circ-necb_bldg`      # Run tests for circ-necb_bldg
 - `bundle exec rake test:necb_local_bldgs_regression_tests`  # Run tests for necb_local_bld...`
- 
+
 ### Modify the code
 
 As you add to/modify the code, please try to fit changes into the current structure rather than bolting things on willy-nilly.  See the {file:docs/RepositoryStructure.md Repository Structure page} to see how the code is organized.  If you don't understand something or want to discuss your plan before you get started, contact <mailto:matthew.dahlhausen@nrel.gov>.
@@ -105,7 +101,7 @@ Good documentation is critical.  Changes or additions without good documentation
 1. Make sure your methods are documented.
 2. `bundle exec rake doc` Generate the documentation and document any undocumented methods that are listed
 3. `bundle exec rake doc:show` Inspect the documentation in a browser to make sure it looks right.
-   
+
 ### Push branch to GitHub
 
 1. Commit your changes to your branch.
