@@ -3,7 +3,6 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
-
 class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
 
   # Set to true to run the standards in the test.
@@ -16,228 +15,277 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
 
   # Test to validate hot water loop rules
   def test_hw_loop_rules
+    logger.info "Starting suite of tests for: #{__method__}"
 
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    template = 'NECB2011'
-    standard = get_standard(template)
-    save_intermediate_models = false
+    # Define test parameters that apply to all tests.
+    test_parameters = {
+      test_method: __method__,
+      save_intermediate_models: true,
+      baseboard_type: 'Hot Water',
+      chiller_type: 'Scroll',
+      heating_coil_type: 'Electric',
+      fan_type: 'AF_or_BI_rdg_fancurve'
+    }
 
-    # Generate the osm files for all relevant cases to generate the test data for system 6
-    boiler_fueltype = 'NaturalGas'
-    baseboard_type = 'Hot Water'
-    chiller_type = 'Scroll'
-    heating_coil_type = 'Electric'
-    fan_type = 'AF_or_BI_rdg_fancurve'
-    
-    name = "sys6"
-    name.gsub!(/\s+/, "-")
-    puts "***************#{name}***************\n"
+    # Define test cases.
+    test_cases = {}
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.10.(6h)" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.9.(6h)" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.9.(6h)" }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.9.(6h)" }
 
-    # Load model and set climate file.
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+    # Results and name are tbd here as they will be calculated in the test.
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :FuelType => ["NaturalGas"],
+                        :TestCase => ["case-1"],
+                        :TestPars => { :name => "tbd" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
 
-    hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
-                                                                        zones: model.getThermalZones,
-                                                                        heating_coil_type: heating_coil_type,
-                                                                        baseboard_type: baseboard_type,
-                                                                        chiller_type: chiller_type,
-                                                                        fan_type: fan_type,
-                                                                        hw_loop: hw_loop)
-    
-    # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
-    tol = 1.0e-3
+    # Write test results.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
+
+    # Read expected results.
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
+    # Check if test results match expected.
+    msg = "Hot water loop rules test results do not match what is expected in test"
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished suite of tests for: #{__method__}"
+  end
+
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_hw_loop_rules that runs a specific test. Called by do_test_cases in necb_helper.rb.
+  def do_test_hw_loop_rules(test_pars:, test_case:)
+    # Debug.
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
+
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    test_name = test_pars[:test_method]
+    baseboard_type = test_pars[:baseboard_type]
+    heating_coil_type = test_pars[:heating_coil_type]
+    fan_type = test_pars[:fan_type]
+    chiller_type = test_pars[:chiller_type]
+    save_intermediate_models = test_pars[:save_intermediate_models]
+    fueltype = test_pars[:FuelType]
+    vintage = test_pars[:Vintage]
+    hasVariablePump = true
+    results = {}
+    # Define the test name.
+    name = "#{vintage}_#{fueltype}"
+    name_short = "#{vintage}_#{fueltype}"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
+    standard = get_standard(vintage)
+    logger.info "Starting individual test: #{name}"
+
+    # Wrap test in begin/rescue/ensure.
+    begin
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC5Storeys.osm"))
+      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
+      # Generate the osm files for all relevant cases to generate the test data for system 6
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
+                                                                          zones: model.getThermalZones,
+                                                                          heating_coil_type: heating_coil_type,
+                                                                          baseboard_type: baseboard_type,
+                                                                          chiller_type: chiller_type,
+                                                                          fan_type: fan_type,
+                                                                          hw_loop: hw_loop)
+      # Run sizing.
+      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models)
+    rescue => error
+      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+    end
     loops = model.getPlantLoops
     loops.each do |iloop|
-      if iloop.name.to_s == 'Hot Water Loop'
-        necb_deltaT = 16.0
+      iloop_name = iloop.name.to_s
+      if iloop_name == 'Hot Water Loop'
         deltaT = iloop.sizingPlant.loopDesignTemperatureDifference
-        diff = (necb_deltaT - deltaT).abs / necb_deltaT
-        deltaT_set_correctly = true
-        if diff > tol then deltaT_set_correctly = false end
-        assert(deltaT_set_correctly,'test_hw_loop_rules: Hot water loop design temperature difference does not match necb requirement')
         supply_comps = iloop.supplyComponents
-        pump_is_constant_speed = false
         supply_comps.each do |icomp|
-          if icomp.to_PumpConstantSpeed.is_initialized
-            pump_is_constant_speed = true
-          end
+          hasVariablePump = false if icomp.to_PumpConstantSpeed.is_initialized
         end
-        assert(!pump_is_constant_speed,'test_hw_loop_rules: Hot water loop pump is not variable speed')
         supply_out_node = iloop.supplyOutletNode
         set_point_manager = supply_out_node.setpointManagers[0].to_SetpointManagerOutdoorAirReset.get
-        necb_outdoorLowTemperature = -16.0
-        diff1 = (necb_outdoorLowTemperature - set_point_manager.outdoorLowTemperature).abs / necb_outdoorLowTemperature
-        necb_outdoorHighTemperature = 0.0
-        diff2 = (necb_outdoorHighTemperature - set_point_manager.outdoorHighTemperature).abs / necb_outdoorHighTemperature
-        necb_setpointatOutdoorLowTemperature = 82.0
-        diff3 = (necb_setpointatOutdoorLowTemperature - set_point_manager.setpointatOutdoorLowTemperature).abs / necb_setpointatOutdoorLowTemperature
-        necb_setpointatOutdoorHighTemperature = 60.0
-        diff4 = (necb_setpointatOutdoorHighTemperature - set_point_manager.setpointatOutdoorHighTemperature).abs / necb_setpointatOutdoorHighTemperature
-        pars_set_correlctly = true
-        if diff1 > tol || diff2 > tol || diff3 > tol || diff4 > tol then pars_set_correlctly = false end
-        assert(pars_set_correlctly, "test_hw_loop_rules: Outdoor temperature reset parameters do not match necb requirement #{name}")
+        spm_outdoorLowTemperature = set_point_manager.outdoorLowTemperature
+        spm_outdoorHighTemperature = set_point_manager.outdoorHighTemperature
+        spm_setpointatOutdoorLowTemperature = set_point_manager.setpointatOutdoorLowTemperature
+        spm_setpointatOutdoorHighTemperature = set_point_manager.setpointatOutdoorHighTemperature
+
+        # Add this test case to results and return the hash.
+        results[iloop_name] = {
+          name: iloop_name,
+          loopDesignTemperatureDifference: deltaT,
+          hasVariablePump: hasVariablePump,
+          set_point_manager_outdoorLowTemperature: spm_outdoorLowTemperature,
+          set_point_manager_outdoorHighTemperature: spm_outdoorHighTemperature,
+          set_point_manager_setpointatOutdoorLowTemperature: spm_setpointatOutdoorLowTemperature,
+          set_point_manager_setpointatOutdoorHighTemperature: spm_setpointatOutdoorHighTemperature
+        }
       end
     end
+    return results
+    logger.info "Completed individual test: #{name}"
   end
 
   # Test to validate chilled water loop rules
   def test_chw_loop_rules
+    logger.info "Starting suite of tests for: #{__method__}"
+    # Define test parameters that apply to all tests.
+    test_parameters = {
+      test_method: __method__,
+      save_intermediate_models: true,
+      chiller_type: 'Centrifugal',
+      mau_cooling_type: 'DX',
+      fan_coil_type: 'FPFC'
+    }
 
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    template = 'NECB2011'
-    standard = get_standard(template)
-    save_intermediate_models = false
+    # Define test cases.
+    test_cases = {}
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3: 8.4.4.11.(6g); 8.4.4.12.(1b,6c)" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)" }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)" }
 
-    # Generate the osm files for all relevant cases to generate the test data for system 2
-    boiler_fueltype = 'Electricity'
-    chiller_type = 'Centrifugal'
-    mua_cooling_type = 'DX'
+    # Results and name are tbd here as they will be calculated in the test.
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :FuelType => ["Electricity"],
+                        :TestCase => ["case-1"],
+                        :TestPars => { :name => "tbd" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
 
-    name = "sys2_chw"
-    name.gsub!(/\s+/, "-")
-    puts "***************#{name}***************\n"
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
-    # Load model and set climate file.
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+    # Write test results.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
 
-    hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule	
-    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys2_FPFC_sys5_TPFC(model: model,
-                                     zones: model.getThermalZones,
-                                     chiller_type: chiller_type,
-                                     fan_coil_type: 'FPFC',
-                                     mau_cooling_type: mua_cooling_type,
-                                     hw_loop: hw_loop)
-    
-    # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    # Read expected results.
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
+    # Check if test results match expected.
+    msg = "Chilled water or condenser loop rules test results do not match what is expected in test"
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished suite of tests for: #{__method__}"
+  end
 
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test chilled and condensed water loop rules. Called by do_test_cases in necb_helper.rb.
+  def do_test_chw_loop_rules(test_pars:, test_case:)
+    # Debug.
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
+
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    test_name = test_pars[:test_method]
+    save_intermediate_models = test_pars[:save_intermediate_models]
+    fueltype = test_pars[:FuelType]
+    vintage = test_pars[:Vintage]
+    chiller_type = test_pars[:chiller_type]
+    mau_cooling_type = test_pars[:mau_cooling_type]
+    fan_coil_type = test_pars[:fan_coil_type]
+    hasVariablePump = true
+    results = {}
+    # Define the test name.
+    name = "#{vintage}_#{fueltype}_sys2_chw"
+    name_short = "#{vintage}_#{fueltype}_sys2_chw"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
+    standard = get_standard(vintage)
+    logger.info "Starting individual test: #{name}"
+
+    # Wrap test in begin/rescue/ensure.
+    begin
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, '5ZoneNoHVAC.osm'))
+      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
+      # Generate the osm files for all relevant cases to generate the test data for system 6
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                       zones: model.getThermalZones,
+                                       chiller_type: chiller_type,
+                                       fan_coil_type: fan_coil_type,
+                                       mau_cooling_type: mau_cooling_type,
+                                       hw_loop: hw_loop)
+
+      # Run sizing.
+      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models)
+    rescue => error
+      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+    end
     loops = model.getPlantLoops
-    tol = 1.0e-3
     loops.each do |iloop|
-      if iloop.name.to_s == 'Chilled Water Loop'
-        necb_deltaT = 6.0
-        deltaT = iloop.sizingPlant.loopDesignTemperatureDifference
-        diff = (necb_deltaT - deltaT).abs / necb_deltaT
-        deltaT_set_correctly = true
-        if diff > tol then deltaT_set_correctly = false end
-        assert(deltaT_set_correctly,'test_chw_loop_rules: Chilled water loop design temperature difference does not match necb requirement')
-        supply_comps = iloop.supplyComponents
-        pump_is_constant_speed = false
-        supply_comps.each do |icomp|
-          if icomp.to_PumpConstantSpeed.is_initialized
-            pump_is_constant_speed = true
-          end
-        end
-        assert(!pump_is_constant_speed,'test_chw_loop_rules: Chilled water loop pump is not variable speed')
+      iloop_name = iloop.name.to_s
+      deltaT = iloop.sizingPlant.loopDesignTemperatureDifference
+      # Check the supply loop. There should be a variable speed pump.
+      supply_comps = iloop.supplyComponents
+      supply_comps.each do |icomp|
+        hasVariablePump = false if icomp.to_PumpConstantSpeed.is_initialized
+      end
+      if iloop_name == 'Chilled Water Loop'
         supply_out_node = iloop.supplyOutletNode
         set_point_manager = supply_out_node.setpointManagers[0].to_SetpointManagerScheduled.get
         setpoint_sch = set_point_manager.schedule.to_ScheduleRuleset.get
         sch_rules = setpoint_sch.scheduleRules
-        necb_setpoint = 7.0
-        setpoint_set_correctly = true
         sch_rules.each do |rule|
+          schedule_rule_name = rule.name.get
           day_sch = rule.daySchedule
           setpoints = day_sch.values
-          setpoints.each do |ivalue|
-            diff = (necb_setpoint - ivalue).abs / necb_setpoint
-            if diff > tol then setpoint_set_correctly = false end
-          end
+
+          # Add this test case to results and return the hash.
+          results[iloop_name] = {
+            name: iloop_name,
+            has_variable_pump: hasVariablePump,
+            loop_design_temperature_difference: deltaT,
+            schedule_rule_name: schedule_rule_name,
+            hourly_setpoints: setpoints
+          }
         end
-        assert(setpoint_set_correctly, "test_chw_loop_rules: Loop supply temperature schedule does not match necb requirement #{name}")
-        pars_set_correlctly = true
-      end
-    end
-  end
-  
-  # Test to validate condenser loop rules
-  def test_NECB2011_cw_loop_rules
-
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    template = 'NECB2011'
-    standard = get_standard(template)
-    save_intermediate_models = false
-
-    # Generate the osm files for all relevant cases to generate the test data for system 2.
-    boiler_fueltype = 'Electricity'
-    chiller_type = 'Centrifugal'
-    mua_cooling_type = 'DX'
-    
-    name = "sys2_cw"
-    name.gsub!(/\s+/, "-")
-    puts "***************#{name}***************\n"
-
-    # Load model and set climate file.
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-
-    hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-    standard.add_sys2_FPFC_sys5_TPFC(model: model,
-                                     zones: model.getThermalZones,
-                                     chiller_type: chiller_type,
-                                     fan_coil_type: 'FPFC',
-                                     mau_cooling_type: mua_cooling_type,
-                                     hw_loop: hw_loop)
-
-    # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-
-    loops = model.getPlantLoops
-    tol = 1.0e-3
-    loops.each do |iloop|
-      if iloop.name.to_s == 'Condenser Water Loop'
-        necb_deltaT = 6.0
+      elsif iloop.name.to_s == 'Condenser Water Loop'
         deltaT = iloop.sizingPlant.loopDesignTemperatureDifference
-        diff = (necb_deltaT - deltaT).abs / necb_deltaT
-        deltaT_set_correctly = true
-        if diff > tol then deltaT_set_correctly = false end
-        assert(deltaT_set_correctly,'test_cw_loop_rules: Condenser water loop design temperature difference does not match necb requirement')
-        necb_exitT = 29.0
         exitT = iloop.sizingPlant.designLoopExitTemperature
-        diff = (necb_exitT - exitT).abs / necb_exitT
-        exitT_set_correctly = true
-        if diff > tol then exitT_set_correctly = false end
-        assert(exitT_set_correctly,'test_cw_loop_rules: Condenser water loop design exit temperature does not match necb requirement')
-        supply_comps = iloop.supplyComponents
-        pump_is_constant_speed = false
-        supply_comps.each do |icomp|
-          if icomp.to_PumpConstantSpeed.is_initialized
-            pump_is_constant_speed = true
-          end
-        end
-        assert(!pump_is_constant_speed,'test_cw_loop_rules: Hot water loop pump is not variable speed')
         supply_out_node = iloop.supplyOutletNode
         set_point_manager = supply_out_node.setpointManagers[0].to_SetpointManagerScheduled.get
         setpoint_sch = set_point_manager.schedule.to_ScheduleRuleset.get
         sch_rules = setpoint_sch.scheduleRules
-        setpoint_set_correctly = true
         sch_rules.each do |rule|
+          schedule_rule_name = rule.name.get
           day_sch = rule.daySchedule
           setpoints = day_sch.values
-          setpoints.each do |ivalue|
-            diff = (necb_exitT - ivalue).abs / necb_exitT
-            if diff > tol then setpoint_set_correctly = false end
-          end
+          results[iloop_name] = {
+            name: iloop_name,
+            has_variable_pump: hasVariablePump,
+            loop_design_temperature_difference: deltaT,
+            condenser_water_loop_exit_temperature: exitT,
+            schedule_rule_name: schedule_rule_name,
+            hourly_setpoints: setpoints
+          }
         end
-        assert(setpoint_set_correctly, "test_cw_loop_rules: Loop supply temperature schedule does not match necb requirement #{name}")
       end
     end
+    return results
+    logger.info "Completed individual test: #{name}"
   end
-  
 end
