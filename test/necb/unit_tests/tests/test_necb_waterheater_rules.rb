@@ -37,25 +37,17 @@ class NECB_SWH_Additional_Tests < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
-    # Add SWH loop.
-    prototype_input = {}
-    prototype_input['main_water_heater_volume'] = 100.0
-    prototype_input['main_service_water_temperature'] = 60.0
-    prototype_input['main_service_water_pump_head'] = 1.0
-    prototype_input['main_service_water_pump_motor_efficiency'] = 0.7
-    prototype_input['main_water_heater_capacity'] = 100000.0
-    prototype_input['main_water_heater_fuel'] = 'NaturalGas'
-    prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-    standard.model_add_swh_loop(model,
-                        'Main Service Water Loop',
-                        nil,
-                        prototype_input['main_service_water_temperature'],
-                        prototype_input['main_service_water_pump_head'],
-                        prototype_input['main_service_water_pump_motor_efficiency'],
-                        prototype_input['main_water_heater_capacity'],
-                        prototype_input['main_water_heater_volume'],
-                        prototype_input['main_water_heater_fuel'],
-                        prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
+    # Add SWH loop
+    OpenstudioStandards::ServiceWaterHeating.create_service_water_heating_loop(model,
+                                                                               system_name: 'Main Service Water Loop',
+                                                                               service_water_temperature: 60.0,
+                                                                               service_water_pump_head: 1.0,
+                                                                               service_water_pump_motor_efficiency: 0.7,
+                                                                               water_heater_capacity: 100000.0,
+                                                                               water_heater_volume: 100.0,
+                                                                               water_heater_fuel: 'NaturalGas',
+                                                                               on_cycle_parasitic_fuel_consumption_rate: 1.0,
+                                                                               off_cycle_parasitic_fuel_consumption_rate: 1.0)
 
     # Add hvac system.
     boiler_fueltype = 'Electricity'
@@ -116,25 +108,17 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
-        # Add SWH loop.
-        prototype_input = {}
-        prototype_input['main_water_heater_volume'] = 100.0
-        prototype_input['main_service_water_temperature'] = 60.0
-        prototype_input['main_service_water_pump_head'] = 1.0
-        prototype_input['main_service_water_pump_motor_efficiency'] = 0.7
-        prototype_input['main_water_heater_capacity'] = 100000.0
-        prototype_input['main_water_heater_fuel'] = 'Electricity'
-        prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-        standard.model_add_swh_loop(model,
-                            'Main Service Water Loop',
-                            nil,
-                            prototype_input['main_service_water_temperature'],
-                            prototype_input['main_service_water_pump_head'],
-                            prototype_input['main_service_water_pump_motor_efficiency'],
-                            prototype_input['main_water_heater_capacity'],
-                            prototype_input['main_water_heater_volume'],
-                            prototype_input['main_water_heater_fuel'],
-                            prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
+        # Add SWH loop
+        OpenstudioStandards::ServiceWaterHeating.create_service_water_heating_loop(model,
+                                                                                   system_name: 'Main Service Water Loop',
+                                                                                   service_water_temperature: 60.0,
+                                                                                   service_water_pump_head: 1.0,
+                                                                                   service_water_pump_motor_efficiency: 0.7,
+                                                                                   water_heater_capacity: 100000.0,
+                                                                                   water_heater_volume: 100.0,
+                                                                                   water_heater_fuel: 'Electricity',
+                                                                                   on_cycle_parasitic_fuel_consumption_rate: 1.0,
+                                                                                   off_cycle_parasitic_fuel_consumption_rate: 1.0)
 
         # Add hvac system.
         boiler_fueltype = 'Electricity'
@@ -220,25 +204,17 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
-        # add SWH loop.
-        prototype_input = {}
-        prototype_input['main_water_heater_volume'] = 100.0
-        prototype_input['main_service_water_temperature'] = 60.0
-        prototype_input['main_service_water_pump_head'] = 1.0
-        prototype_input['main_service_water_pump_motor_efficiency'] = 0.7
-        prototype_input['main_water_heater_capacity'] = 100000.0
-        prototype_input['main_water_heater_fuel'] = 'Electricity'
-        prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-        standard.model_add_swh_loop(model,
-                            'Main Service Water Loop',
-                            nil,
-                            prototype_input['main_service_water_temperature'],
-                            prototype_input['main_service_water_pump_head'],
-                            prototype_input['main_service_water_pump_motor_efficiency'],
-                            prototype_input['main_water_heater_capacity'],
-                            prototype_input['main_water_heater_volume'],
-                            prototype_input['main_water_heater_fuel'],
-                            prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
+        # add SWH loop
+        OpenstudioStandards::ServiceWaterHeating.create_service_water_heating_loop(model,
+                                                                                   system_name: 'Main Service Water Loop',
+                                                                                   service_water_temperature: 60.0,
+                                                                                   service_water_pump_head: 1.0,
+                                                                                   service_water_pump_motor_efficiency: 0.7,
+                                                                                   water_heater_capacity: 100000.0,
+                                                                                   water_heater_volume: 100.0,
+                                                                                   water_heater_fuel: 'Electricity',
+                                                                                   on_cycle_parasitic_fuel_consumption_rate: 1.0,
+                                                                                   off_cycle_parasitic_fuel_consumption_rate: 1.0)
 
         # Add hvac system.
         boiler_fueltype = 'Electricity'
@@ -335,15 +311,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         space.setSpaceType(st)
       end
 
-      # Add SWH loop.
-      prototype_input = {}
-      prototype_input['main_water_heater_volume'] = 100.0
-      prototype_input['main_service_water_temperature'] = 60.0
-      prototype_input['main_service_water_pump_head'] = 1.0
-      prototype_input['main_service_water_pump_motor_efficiency'] = 0.7
-      prototype_input['main_water_heater_capacity'] = 100000.0
-      prototype_input['main_water_heater_fuel'] = 'NaturalGas'
-      prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
+      # Add SWH loop
       standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel', shw_scale: 1.0)
 
       # Add HVAC system.

@@ -36,7 +36,10 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/schedules/parametric'
 
   # ServiceWaterHeating Module
-  require_relative 'openstudio-standards/service_water_heating/component'
+  require_relative 'openstudio-standards/service_water_heating/create_piping_losses'
+  require_relative 'openstudio-standards/service_water_heating/create_water_heater'
+  require_relative 'openstudio-standards/service_water_heating/create_water_heating_loop'
+  require_relative 'openstudio-standards/service_water_heating/create_water_use'
 
   # Space Module
   require_relative 'openstudio-standards/space/space'
@@ -269,6 +272,7 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.PumpConstantSpeed"
   require_relative "#{stds}/Standards.PumpVariableSpeed"
   require_relative "#{stds}/Standards.ScheduleRuleset"
+  require_relative "#{stds}/Standards.ServiceWaterHeating"
   require_relative "#{stds}/Standards.Space"
   require_relative "#{stds}/Standards.SpaceType"
   require_relative "#{stds}/Standards.SubSurface"
@@ -515,11 +519,9 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.Model.exterior_lights"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
-  require_relative "#{proto}/common/objects/Prototype.Model.swh"
   require_relative "#{proto}/common/objects/Prototype.Pump"
   require_relative "#{proto}/common/objects/Prototype.PumpVariableSpeed"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
-  require_relative "#{proto}/common/objects/Prototype.ServiceWaterHeating"
   require_relative "#{proto}/common/objects/Prototype.SizingSystem"
   require_relative "#{proto}/common/objects/Prototype.utilities"
   # 90.1-2004

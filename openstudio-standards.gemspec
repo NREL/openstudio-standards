@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'bundler', '~> 2.1'
     spec.add_development_dependency 'parallel_tests', '~> 3.0.0'
   elsif RUBY_VERSION < '3.2'
-    spec.add_development_dependency 'nokogiri', '~> 1.15'
+    spec.add_development_dependency 'nokogiri', '<= 1.15.6'
     spec.add_development_dependency 'public_suffix', '~> 5.1.1'
     spec.add_development_dependency 'bundler', '~> 2.1.4'
     spec.add_development_dependency 'parallel_tests', '~> 3.7.0'
