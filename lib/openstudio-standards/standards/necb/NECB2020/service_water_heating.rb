@@ -91,8 +91,8 @@ class NECB2020
       #   PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
 
       # Assume fhr = peak demand flow
-	  fhr_L_per_hr = calculate_total_peak_flow_rate(model:water_heater_mixed.model, shw_scale: 'NECB_Default')
-	  # Convert to L/hr.
+      tank_param = auto_size_shw_capacity(model:water_heater_mixed.model, shw_scale: 'NECB_Default')
+      fhr_L_per_hr = tank_param['loop_peak_flow_rate_SI']
       fhr_L_per_hr = fhr_L_per_hr * 3600000
       if capacity_w <= 22000 and volume_litre >= 76 and volume_litre < 208
         if fhr_L_per_hr < 68
