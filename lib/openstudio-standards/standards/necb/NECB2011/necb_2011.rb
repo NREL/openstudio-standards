@@ -1199,11 +1199,6 @@ class NECB2011 < Standard
     end
   end
 
-  # Determine whether or not water fixtures are attached to spaces
-  def model_attach_water_fixtures_to_spaces?(model)
-    return true
-  end
-
   # Set the infiltration rate for this space to include
   # the impact of air leakage requirements in the standard.
   #
