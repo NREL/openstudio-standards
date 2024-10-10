@@ -5504,7 +5504,7 @@ class Standard
   def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
     require_adjustment = false
     wwr_list.each do |wwr|
-      require_adjustment = true unless wwr > wwr_limit
+      require_adjustment = true if wwr > wwr_limit
     end
     return require_adjustment
   end
