@@ -6416,7 +6416,7 @@ OS:SpaceType,
   {d5f1419a-2e63-460e-afcd-dfe102a5d5fb}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {d5f1419a-2e63-460e-afcd-dfe102a5d5fb}, !- Handle
@@ -6433,7 +6433,7 @@ OS:SpaceType,
   {e241c0d8-fa8f-499e-8a25-f4ea1cb20dcc}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {e241c0d8-fa8f-499e-8a25-f4ea1cb20dcc}, !- Handle
@@ -6450,7 +6450,7 @@ OS:SpaceType,
   {2cb76859-269e-48d8-9938-995154c7a449}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  Apartment;                              !- Standards Space Type
+  multifamily;      !- Standards Space Type
 
 OS:Rendering:Color,
   {2cb76859-269e-48d8-9938-995154c7a449}, !- Handle

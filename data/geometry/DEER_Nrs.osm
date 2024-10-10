@@ -2647,7 +2647,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Nrs,                                    !- Standards Building Type
-  CorridorStairway;                       !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:SpaceType,
   {b2fd4d32-8018-4b73-b37d-a5770d001747}, !- Handle
@@ -2657,7 +2657,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Nrs,                                    !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:SpaceType,
   {d9220f9a-2c5a-4206-a7bd-7f47ececad24}, !- Handle
@@ -2667,7 +2667,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Nrs,                                    !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:SpaceType,
   {baad95c2-2301-4259-9b5c-e7f74838202a}, !- Handle
@@ -2677,7 +2677,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Nrs,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:SpaceType,
   {57ce7636-4de7-459a-b96e-6fc5770be7b3}, !- Handle
@@ -4337,7 +4337,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 
 OS:Surface,
   {4300d593-52dc-4083-853c-957b6ba8a9d6}, !- Handle

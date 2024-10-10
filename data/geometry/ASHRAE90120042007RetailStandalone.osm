@@ -1437,7 +1437,7 @@ OS:SpaceType,
   {a3a0739e-a571-406d-be23-3a1109c00149}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
-  Back_Space;                             !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {a3a0739e-a571-406d-be23-3a1109c00149}, !- Handle
@@ -1454,7 +1454,7 @@ OS:SpaceType,
   {76c09621-8ebd-4f85-9aa1-e7b662cba73a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
-  Entry;                                  !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {76c09621-8ebd-4f85-9aa1-e7b662cba73a}, !- Handle
@@ -1471,7 +1471,7 @@ OS:SpaceType,
   {fa5b1461-b656-4d07-a74e-d98fc640db1d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
-  Point_of_Sale;                          !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {fa5b1461-b656-4d07-a74e-d98fc640db1d}, !- Handle
@@ -1488,7 +1488,7 @@ OS:SpaceType,
   {881fc831-ec2a-47eb-9248-d56a79ee8cb0}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Retail,                                 !- Standards Building Type
-  Retail;                                 !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {881fc831-ec2a-47eb-9248-d56a79ee8cb0}, !- Handle
