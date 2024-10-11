@@ -1353,7 +1353,7 @@ class AppendixGPRMTests < Minitest::Test
       # Check LPD against expected LPD
       space_name.each do |key, value|
         value_si = OpenStudio.convert(value, 'W/ft^2', 'W/m^2').get
-        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The LPD of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
+        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline LPD the #{building_type}, #{template}, #{climate_zone} model is incorrect. The LPD of #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
       end
     end
   end
@@ -1386,7 +1386,7 @@ class AppendixGPRMTests < Minitest::Test
             lights_obj = model_baseline.getLightsByName(lights_name).get
             model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
             # model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
-            assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of #{space_name} is #{target_lpd} but should be #{model_lpd}.")
           end
         elsif user_data_dir == 'userdata_lpd_02'
           space_name_to_lpd_target = {}
@@ -1401,7 +1401,7 @@ class AppendixGPRMTests < Minitest::Test
             lights_name = space.spaceType.get.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
             lights_obj = model_baseline.getLightsByName(lights_name).get
             model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
-            assert((target_lpd - model_lpd).abs < 0.001, "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of #{space_name} is #{target_lpd} but should be #{model_lpd}.")
           end
         end
       end
