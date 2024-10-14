@@ -52,6 +52,15 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
+    # PTAC, additional search criteria
+    equipment_type = nil
+    if search_criteria.keys.include?('equipment_type')
+      equipment_type = search_criteria['equipment_type']
+      if equipment_type == 'PTAC'
+        search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
+      end
+    end
+
     # Look up the efficiency characteristics
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
@@ -92,7 +101,7 @@ class Standard
     # If PTAC, use equations if coefficients are specified
     ptac_eer_coeff_1 = ac_props['ptac_eer_coefficient_1']
     ptac_eer_coeff_2 = ac_props['ptac_eer_coefficient_2']
-    if sub_category == 'PTAC' && !ptac_eer_coeff_1.nil? && !ptac_eer_coeff_2.nil?
+    if equipment_type == 'PTAC' && !ptac_eer_coeff_1.nil? && !ptac_eer_coeff_2.nil?
       # TABLE 6.8.1D
       # EER = ptac_eer_coeff_1 - (ptac_eer_coeff_2 * Cap / 1000)
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
@@ -143,7 +152,15 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
-    # if specified as SEER (heat pump)
+    # If specific as IEER
+    unless ac_props['minimum_integrated_energy_efficiency_ratio'].nil?
+      min_ieer = ac_props['minimum_integrated_energy_efficiency_ratio']
+      cop = ieer_to_cop_no_fan(min_ieer)
+      new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_ieer}IEER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: #{cooling_type} #{heating_type} #{sub_category} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    # If specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
       cop = seer_to_cop_no_fan(min_seer)
@@ -176,21 +193,24 @@ class Standard
   def coil_cooling_dx_single_speed_apply_efficiency_and_curves(coil_cooling_dx_single_speed, sql_db_vars_map, necb_ref_hp = false)
     successfully_set_all_properties = true
 
-    # Get the search criteria.
-    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp)
-
-    # Get the capacity.
+    # Get the capacity
     capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed, necb_ref_hp)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-    # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
-    ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
-                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
-               else
-                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
-               end
+    # Get efficiencies data depending on whether it is a unitary AC or a heat pump
+    coil_efficiency_data = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+                             standards_data['heat_pumps']
+                           else
+                             standards_data['unitary_acs']
+                           end
+
+    # Get the search criteria
+    equipment_type = coil_efficiency_data[0].keys.include?('equipment_type') ? true : false
+    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp, equipment_type)
+
+    # Lookup efficiency
+    ac_props = model_find_object(coil_efficiency_data, search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?
@@ -199,8 +219,15 @@ class Standard
       return sql_db_vars_map
     end
 
+    equipment_type = search_criteria['equipment_type']
     # Make the COOL-CAP-FT curve
-    cool_cap_ft = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_ft'])
+    cool_cap_ft = nil
+    if ac_props['cool_cap_ft']
+      cool_cap_ft = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_ft'])
+    else
+      cool_cap_ft_curve_name = coil_dx_cap_ft(coil_cooling_dx_single_speed, equipment_type)
+      cool_cap_ft = model_add_curve(coil_cooling_dx_single_speed.model, cool_cap_ft_curve_name)
+    end
     if cool_cap_ft
       coil_cooling_dx_single_speed.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft)
     else
@@ -209,7 +236,13 @@ class Standard
     end
 
     # Make the COOL-CAP-FFLOW curve
-    cool_cap_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_fflow'])
+    cool_cap_fflow = nil
+    if ac_props['cool_cap_fflow']
+      cool_cap_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_fflow'])
+    else
+      cool_cap_fflow_curve_name = coil_dx_cap_fff(coil_cooling_dx_single_speed, equipment_type)
+      cool_cap_fflow = model_add_curve(coil_cooling_dx_single_speed.model, cool_cap_fflow_curve_name)
+    end
     if cool_cap_fflow
       coil_cooling_dx_single_speed.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow)
     else
@@ -218,7 +251,13 @@ class Standard
     end
 
     # Make the COOL-EIR-FT curve
-    cool_eir_ft = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_eir_ft'])
+    cool_eir_ft = nil
+    if ac_props['cool_eir_ft']
+      cool_eir_ft = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_eir_ft'])
+    else
+      cool_eir_ft_curve_name = coil_dx_eir_ft(coil_cooling_dx_single_speed, equipment_type)
+      cool_eir_ft = model_add_curve(coil_cooling_dx_single_speed.model, cool_eir_ft_curve_name)
+    end
     if cool_eir_ft
       coil_cooling_dx_single_speed.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)
     else
@@ -227,7 +266,13 @@ class Standard
     end
 
     # Make the COOL-EIR-FFLOW curve
-    cool_eir_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_eir_fflow'])
+    cool_eir_fflow = nil
+    if ac_props['cool_eir_fflow']
+      cool_eir_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_eir_fflow'])
+    else
+      cool_eir_fflow_curve_name = coil_dx_eir_fff(coil_cooling_dx_single_speed, equipment_type)
+      cool_eir_fflow = model_add_curve(coil_cooling_dx_single_speed.model, cool_eir_fflow_curve_name)
+    end
     if cool_eir_fflow
       coil_cooling_dx_single_speed.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
     else
@@ -236,7 +281,13 @@ class Standard
     end
 
     # Make the COOL-PLF-FPLR curve
-    cool_plf_fplr = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_plf_fplr'])
+    cool_plf_fplr = nil
+    if ac_props['cool_plf_fplr']
+      cool_plf_fplr = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_plf_fplr'])
+    else
+      cool_plf_fplr_curve_name = coil_dx_plf_fplr(coil_cooling_dx_single_speed, equipment_type)
+      cool_plf_fplr = model_add_curve(coil_cooling_dx_single_speed.model, cool_plf_fplr_curve_name)
+    end
     if cool_plf_fplr
       coil_cooling_dx_single_speed.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
     else
