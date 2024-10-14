@@ -2742,7 +2742,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ESe,                                    !- Standards Building Type
-  Classroom;                              !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:SpaceType,
   {29243df3-b501-44c7-8333-1fce59002668}, !- Handle
@@ -2762,7 +2762,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ESe,                                    !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:SpaceType,
   {b3a2cf32-672a-4bcc-96fe-e640ec2fbb0c}, !- Handle
@@ -2772,7 +2772,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ESe,                                    !- Standards Building Type
-  Gymnasium;                              !- Standards Space Type
+  exercise area;      !- Standards Space Type
 
 OS:SpaceType,
   {52a7395f-7c11-4cf8-add8-30685f2fc6f0}, !- Handle
@@ -2782,7 +2782,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ESe,                                    !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:ThermalZone,
   {c1ba5fba-5209-4c77-ab39-fdb73a839281}, !- Handle
@@ -4596,7 +4596,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 
 OS:Surface,
   {3c38cff1-f9bc-40bf-a64b-76ed9f08d5a3}, !- Handle
