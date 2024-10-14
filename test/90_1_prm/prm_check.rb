@@ -1391,10 +1391,13 @@ class AppendixGPRMTests < Minitest::Test
         elsif user_data_dir == 'userdata_lpd_02'
           space_name_to_lpd_target = {}
           space_name_to_lpd_target['Attic'] = 0.0
+          space_name_to_lpd_target['Perimeter_ZN_2'] = 10.255
+          space_name_to_lpd_target['Perimeter_ZN_4'] = 10.2557
+          space_name_to_lpd_target['Core_ZN'] = 10.2392
 
           model_baseline.getSpaces.each do |space|
             space_name = space.name.get
-            target_lpd = 12.2452724
+            target_lpd = 10.2435
             if space_name_to_lpd_target.key?(space_name)
               target_lpd = space_name_to_lpd_target[space_name]
             end
