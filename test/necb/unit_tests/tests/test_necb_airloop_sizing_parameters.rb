@@ -30,10 +30,10 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
     # Define test cases.
     test_cases = {}
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.19.(2a,2b)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.18.(2a,2b)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.18.(2a,2b)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.18.(2a,2b)" }
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.9.(1b,2b), 8.4.4.19.(2a,2b)" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a,2b)" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.8.(1b,2b), 8.4.4.18.(2a,2b)" }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a,2b)" }
 
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = { :Vintage => @AllTemplates,
@@ -127,32 +127,22 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
         # check sizing factors
         heating_sizing_factor = sizing_zone.zoneHeatingSizingFactor
         cooling_sizing_factor = sizing_zone.zoneCoolingSizingFactor
-        necb_heating_sizing_factor = 1.3
-        necb_cooling_sizing_factor = 1.1
 
         # check supply temperature diffs and method
-        necb_design_supply_temp_input_method = 'TemperatureDifference'
         design_clg_supply_temp_input_method = sizing_zone.zoneCoolingDesignSupplyAirTemperatureInputMethod.to_s
         design_htg_supply_temp_input_method = sizing_zone.zoneHeatingDesignSupplyAirTemperatureInputMethod.to_s
         heating_sizing_temp_diff = sizing_zone.zoneHeatingDesignSupplyAirTemperatureDifference
         cooling_sizing_temp_diff = sizing_zone.zoneCoolingDesignSupplyAirTemperatureDifference
-        necb_heating_sizing_temp_diff = 21.0
-        necb_cooling_sizing_temp_diff = 11.0
         tot_floor_area += izone.floorArea
 
         # Add this test case to results and return the hash.
         thermal_zone_results << {
           thermal_zone_name: izone_name,
-          necb_heating_sizing_factor: necb_heating_sizing_factor,
           calculated_heating_sizing_factor: heating_sizing_factor.to_f.signif(2),
-          necb_cooling_sizing_factor: necb_cooling_sizing_factor,
           calculated_cooling_sizing_factor: cooling_sizing_factor.to_f.signif(2),
-          necb_design_supply_temp_input_method: necb_design_supply_temp_input_method,
           design_clg_supply_temp_input_method: design_clg_supply_temp_input_method,
           design_htg_supply_temp_input_method: design_htg_supply_temp_input_method,
-          necb_heating_sizing_temp_diff: necb_heating_sizing_temp_diff,
           heating_sizing_temp_diff: heating_sizing_temp_diff,
-          necb_cooling_sizing_temp_diff: necb_cooling_sizing_temp_diff,
           cooling_sizing_temp_diff: cooling_sizing_temp_diff
         }
       end
@@ -190,10 +180,10 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
     # Define test cases.
     test_cases = {}
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.19.(2a,2b)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.18.(2a,2b)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.18.(2a,2b)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.18.(2a,2b)" }
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.9.(1b), 8.4.4.14.(2b), 8.4.4.19.(2a,2b)" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a,2b)" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a,2b)" }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a,2b)" }
 
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = { :Vintage => @AllTemplates,
@@ -284,24 +274,16 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
         # check sizing factors
         heating_sizing_factor = sizing_zone.zoneHeatingSizingFactor
         cooling_sizing_factor = sizing_zone.zoneCoolingSizingFactor
-        necb_heating_sizing_factor = 1.3
-        necb_cooling_sizing_factor = 1.1
         heating_sizing_temp_diff = sizing_zone.zoneHeatingDesignSupplyAirTemperatureDifference
         cooling_sizing_temp_diff = sizing_zone.zoneCoolingDesignSupplyAirTemperatureDifference
-        necb_heating_sizing_temp_diff = 21.0
-        necb_cooling_sizing_temp_diff = 11.0
         tot_floor_area += izone.floorArea
 
         # Add this test case to results and return the hash.
         thermal_zone_results << {
           thermal_zone_name: izone_name,
-          necb_heating_sizing_factor: necb_heating_sizing_factor,
           calculated_heating_sizing_factor: heating_sizing_factor.to_f.signif(2),
-          necb_cooling_sizing_factor: necb_cooling_sizing_factor,
           calculated_cooling_sizing_factor: cooling_sizing_factor.to_f.signif(2),
-          necb_heating_sizing_temp_diff: necb_heating_sizing_temp_diff,
           heating_sizing_temp_diff: heating_sizing_temp_diff,
-          necb_cooling_sizing_temp_diff: necb_cooling_sizing_temp_diff,
           cooling_sizing_temp_diff: cooling_sizing_temp_diff
         }
       end
