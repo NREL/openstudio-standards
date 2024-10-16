@@ -138,8 +138,8 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
         # Add this test case to results and return the hash.
         thermal_zone_results << {
           thermal_zone_name: izone_name,
-          calculated_heating_sizing_factor: heating_sizing_factor.to_f.signif(2),
-          calculated_cooling_sizing_factor: cooling_sizing_factor.to_f.signif(2),
+          heating_sizing_factor: heating_sizing_factor.to_f.signif(2),
+          cooling_sizing_factor: cooling_sizing_factor.to_f.signif(2),
           design_clg_supply_temp_input_method: design_clg_supply_temp_input_method,
           design_htg_supply_temp_input_method: design_htg_supply_temp_input_method,
           heating_sizing_temp_diff: heating_sizing_temp_diff,
@@ -281,8 +281,8 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
         # Add this test case to results and return the hash.
         thermal_zone_results << {
           thermal_zone_name: izone_name,
-          calculated_heating_sizing_factor: heating_sizing_factor.to_f.signif(2),
-          calculated_cooling_sizing_factor: cooling_sizing_factor.to_f.signif(2),
+          heating_sizing_factor: heating_sizing_factor.to_f.signif(2),
+          cooling_sizing_factor: cooling_sizing_factor.to_f.signif(2),
           heating_sizing_temp_diff: heating_sizing_temp_diff,
           cooling_sizing_temp_diff: cooling_sizing_temp_diff
         }
