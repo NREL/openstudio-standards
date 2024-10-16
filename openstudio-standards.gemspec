@@ -38,7 +38,6 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'nokogiri', '~> 1.16'
     spec.add_development_dependency 'parallel_tests', '~> 3.7.0'
   end
-  spec.add_development_dependency 'aes', '0.5.0'
   spec.add_development_dependency 'codecov'
   spec.add_development_dependency 'minitest', '~> 5.14.0'
   spec.add_development_dependency 'minitest-ci'
@@ -46,8 +45,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest-reporters', '~> 1.4.2'
   spec.add_development_dependency 'openstudio-api-stubs'
   spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'rest-client', '~> 2.0.2'
-  spec.add_development_dependency 'roo', '2.7.1'
   spec.add_development_dependency 'rubocop', '1.50'
   spec.add_development_dependency 'rubocop-checkstyle_formatter', '~> 0.6.0'
   spec.add_development_dependency 'ruby-progressbar'
