@@ -486,59 +486,11 @@
     },
     {
       "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 10\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
       "message": "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 2\", Blank Schedule Type Limits Name input -- will not be validated."
     },
     {
       "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 5\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 6\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 7\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 8\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 9\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
       "message": "ProcessScheduleInput: Schedule:Year=\"ECONOMIZER MAX OA FRACTION 100 PCT\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 3\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 4\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 5\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 6\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 7\", Blank Schedule Type Limits Name input -- will not be validated."
-    },
-    {
-      "error_type": "warning",
-      "message": "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 8\", Blank Schedule Type Limits Name input -- will not be validated."
     },
     {
       "error_type": "warning",
@@ -594,11 +546,11 @@
     },
     {
       "error_type": "warning",
-      "message": "CalcEquipmentFlowRates: \"DINING SERVICE WATER USE 0.38GAL/MIN\" - Target water temperature is greater than the hot water temperature by (1.40 C)   Environment=RUN PERIOD 1, at Simulation time=01/01 00:00 - 00:10  ...target water temperature     = 60.00 C  ...hot water temperature        = 58.60 C  ...Target water temperature should be less than or equal to the hot water temperature. Verify temperature setpoints and schedules."
+      "message": "CalcEquipmentFlowRates: \"DINING SERVICE WATER USE 0.38GPM 140F\" - Target water temperature is greater than the hot water temperature by (1.40 C)   Environment=RUN PERIOD 1, at Simulation time=01/01 00:00 - 00:10  ...target water temperature     = 60.00 C  ...hot water temperature        = 58.60 C  ...Target water temperature should be less than or equal to the hot water temperature. Verify temperature setpoints and schedules."
     },
     {
       "error_type": "warning",
-      "message": "CalcEquipmentFlowRates: \"KITCHEN SERVICE WATER USE 0.07GAL/MIN\" - Target water temperature is greater than the hot water temperature by (1.40 C)   Environment=RUN PERIOD 1, at Simulation time=01/01 00:00 - 00:10  ...target water temperature     = 60.00 C  ...hot water temperature        = 58.60 C  ...Target water temperature should be less than or equal to the hot water temperature. Verify temperature setpoints and schedules."
+      "message": "CalcEquipmentFlowRates: \"KITCHEN SERVICE WATER USE 0.07GPM 140F\" - Target water temperature is greater than the hot water temperature by (1.40 C)   Environment=RUN PERIOD 1, at Simulation time=01/01 00:00 - 00:10  ...target water temperature     = 60.00 C  ...hot water temperature        = 58.60 C  ...Target water temperature should be less than or equal to the hot water temperature. Verify temperature setpoints and schedules."
     },
     {
       "error_type": "warning",
