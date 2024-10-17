@@ -32,7 +32,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.057,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -66,7 +67,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.029,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -100,7 +102,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.019,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -132,7 +135,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -164,7 +168,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -196,7 +201,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -228,7 +234,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -262,7 +269,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -296,7 +304,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -330,7 +339,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -362,7 +372,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -394,7 +405,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -426,7 +438,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -458,7 +471,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -490,7 +504,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -524,7 +539,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -558,7 +574,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.044,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -592,7 +609,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -626,7 +644,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -660,7 +679,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -694,7 +714,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -728,7 +749,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.091,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -762,7 +784,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.091,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -796,7 +819,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.061,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -830,7 +854,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -864,7 +889,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -898,7 +924,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -932,7 +959,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -964,7 +992,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -996,7 +1025,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1030,7 +1060,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1064,7 +1095,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.023,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1098,7 +1130,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1132,7 +1165,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1166,7 +1200,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.061,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1200,7 +1235,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1232,7 +1268,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1264,7 +1301,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1296,7 +1334,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1330,7 +1369,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1364,7 +1404,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.014,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1398,7 +1439,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.014,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1432,7 +1474,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.001,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1466,7 +1509,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0015,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1498,7 +1542,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1530,7 +1575,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1564,7 +1610,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1598,7 +1645,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1632,7 +1680,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1666,7 +1715,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1698,7 +1748,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1730,7 +1781,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1762,7 +1814,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1799,7 +1852,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.057,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1833,7 +1887,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.029,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1867,7 +1922,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.019,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1899,7 +1955,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1931,7 +1988,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1963,7 +2021,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -1995,7 +2054,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2029,7 +2089,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2063,7 +2124,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2097,7 +2159,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2129,7 +2192,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2161,7 +2225,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2193,7 +2258,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2225,7 +2291,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2257,7 +2324,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2291,7 +2359,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2325,7 +2394,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2359,7 +2429,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2393,7 +2464,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2427,7 +2499,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2461,7 +2534,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2495,7 +2569,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2529,7 +2604,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.091,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2563,7 +2639,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.061,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2597,7 +2674,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2631,7 +2709,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2665,7 +2744,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2699,7 +2779,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2731,7 +2812,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2763,7 +2845,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2797,7 +2880,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2831,7 +2915,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.023,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2865,7 +2950,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2899,7 +2985,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2933,7 +3020,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.061,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2967,7 +3055,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -2999,7 +3088,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3031,7 +3121,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3063,7 +3154,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3097,7 +3189,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3131,7 +3224,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.014,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3165,7 +3259,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.014,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3199,7 +3294,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.001,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3233,7 +3329,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0015,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3265,7 +3362,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3297,7 +3395,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3329,7 +3428,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3361,7 +3461,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3395,7 +3496,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3429,7 +3531,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3461,7 +3564,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3493,7 +3597,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3525,7 +3630,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3562,7 +3668,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.057,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3596,7 +3703,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.029,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3630,7 +3738,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.019,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3662,7 +3771,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3694,7 +3804,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3726,7 +3837,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3758,7 +3870,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3792,7 +3905,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3826,7 +3940,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3860,7 +3975,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3892,7 +4008,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3924,7 +4041,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3956,7 +4074,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -3988,7 +4107,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4020,7 +4140,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4054,7 +4175,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4088,7 +4210,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4122,7 +4245,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4156,7 +4280,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4190,7 +4315,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4224,7 +4350,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4258,7 +4385,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4292,7 +4420,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.091,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4326,7 +4455,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.061,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4360,7 +4490,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4394,7 +4525,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4428,7 +4560,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4462,7 +4595,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4494,7 +4628,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4526,7 +4661,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4560,7 +4696,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4594,7 +4731,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.023,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4628,7 +4766,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4662,7 +4801,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4696,7 +4836,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.061,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4730,7 +4871,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4762,7 +4904,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4794,7 +4937,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4826,7 +4970,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4860,7 +5005,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4894,7 +5040,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.014,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4928,7 +5075,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.014,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4962,7 +5110,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.001,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -4996,7 +5145,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0015,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5028,7 +5178,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5060,7 +5211,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5092,7 +5244,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5124,7 +5277,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5158,7 +5312,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5192,7 +5347,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5224,7 +5380,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5256,7 +5413,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5288,7 +5446,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5325,7 +5484,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.019,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5359,7 +5519,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.019,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5393,7 +5554,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.0063,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5425,7 +5587,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5457,7 +5620,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5489,7 +5653,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5521,7 +5686,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5555,7 +5721,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00091,
             "dsoa_outdoor_air_flow_per_person": 0.027,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5589,7 +5756,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00091,
             "dsoa_outdoor_air_flow_per_person": 0.027,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5623,7 +5791,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.0024,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5655,7 +5824,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5687,7 +5857,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5719,7 +5890,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5751,7 +5923,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5783,7 +5956,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5817,7 +5991,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00061,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5851,7 +6026,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.02,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5885,7 +6061,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00091,
             "dsoa_outdoor_air_flow_per_person": 0.0036,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5919,7 +6096,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 2.0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 2.0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5953,7 +6131,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 2.0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 2.0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -5987,7 +6166,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00061,
             "dsoa_outdoor_air_flow_per_person": 0.0051,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6021,7 +6201,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 4.0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 4.0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6055,7 +6236,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 2.0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 2.0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6089,7 +6271,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 4.0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 4.0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6123,7 +6306,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 2.0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 2.0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6157,7 +6341,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 2.0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 2.0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6191,7 +6376,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 2.0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 2.0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6225,7 +6411,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 2.0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 2.0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6257,7 +6444,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6289,7 +6477,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6323,7 +6512,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00091,
             "dsoa_outdoor_air_flow_per_person": 0.027,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6357,7 +6547,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.011,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6391,7 +6582,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.0063,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6425,7 +6617,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.0063,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6459,7 +6652,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00091,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6493,7 +6687,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00061,
             "dsoa_outdoor_air_flow_per_person": 0.0051,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6525,7 +6720,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.038,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6557,7 +6753,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.038,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6589,7 +6786,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0013,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6623,7 +6821,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.0063,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6657,7 +6856,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.0025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6691,7 +6891,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.0025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6725,7 +6926,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6759,7 +6961,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00061,
             "dsoa_outdoor_air_flow_per_person": 0.017,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6791,7 +6994,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6823,7 +7027,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6855,7 +7060,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.0051,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6887,7 +7093,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0.0051,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6921,7 +7128,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6955,7 +7163,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -6987,7 +7196,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7019,7 +7229,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7051,7 +7262,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7088,7 +7300,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.057,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7122,7 +7335,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.037,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7156,7 +7370,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7188,7 +7403,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7220,7 +7436,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7252,7 +7469,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7284,7 +7502,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7318,7 +7537,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7352,7 +7572,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7386,7 +7607,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7418,7 +7640,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7450,7 +7673,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7482,7 +7706,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7514,7 +7739,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7546,7 +7772,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7580,7 +7807,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7614,7 +7842,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7648,7 +7877,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7682,7 +7912,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7716,7 +7947,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7750,7 +7982,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7784,7 +8017,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.091,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7818,7 +8052,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.091,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7852,7 +8087,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.061,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7886,7 +8122,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7920,7 +8157,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7954,7 +8192,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -7988,7 +8227,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8020,7 +8260,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8052,7 +8293,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8086,7 +8328,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8120,7 +8363,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.023,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8154,7 +8398,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8188,7 +8433,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8222,7 +8468,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.051,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8256,7 +8503,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8288,7 +8536,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8320,7 +8569,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8352,7 +8602,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8386,7 +8637,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.038,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8420,7 +8672,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.01,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8454,7 +8707,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.01,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8488,7 +8742,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.001,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8522,7 +8777,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0015,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8554,7 +8810,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8586,7 +8843,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8620,7 +8878,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8654,7 +8913,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8688,7 +8948,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8722,7 +8983,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8754,7 +9016,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8786,7 +9049,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8818,7 +9082,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8855,7 +9120,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.057,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8889,7 +9155,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.037,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8923,7 +9190,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8955,7 +9223,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -8987,7 +9256,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9019,7 +9289,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9051,7 +9322,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9085,7 +9357,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9119,7 +9392,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9153,7 +9427,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0003,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9185,7 +9460,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9217,7 +9493,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9249,7 +9526,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9281,7 +9559,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9313,7 +9592,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9347,7 +9627,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9381,7 +9662,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9415,7 +9697,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9449,7 +9732,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9483,7 +9767,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9517,7 +9802,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9551,7 +9837,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.091,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9585,7 +9872,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.091,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9619,7 +9907,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.061,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9653,7 +9942,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.025,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9687,7 +9977,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9721,7 +10012,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9755,7 +10047,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.03,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9787,7 +10080,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9819,7 +10113,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9853,7 +10148,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.071,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9887,7 +10183,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.023,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9921,7 +10218,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9955,7 +10253,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00046,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -9989,7 +10288,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.051,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10023,7 +10323,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.015,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10055,7 +10356,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0051,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10087,7 +10389,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.15,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10119,7 +10422,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10153,7 +10457,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.038,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10187,7 +10492,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.01,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10221,7 +10527,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.01,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10255,7 +10562,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.001,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10289,7 +10597,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.0015,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10321,7 +10630,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10353,7 +10663,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10387,7 +10698,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10421,7 +10733,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00076,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10455,7 +10768,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10489,7 +10803,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0.00025,
             "dsoa_outdoor_air_flow_per_person": 0,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10521,7 +10836,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10553,7 +10869,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }
@@ -10585,7 +10902,8 @@
             "outdoor_air_flow_per_floor_area_m_per_s": 0,
             "dsoa_outdoor_air_flow_per_person": 0.23,
             "dsoa_outdoor_air_flow_rate_m_per_s": 0,
-            "dsoa_Outdoor_air_flow_air_changes_per_hour": 0
+            "dsoa_outdoor_air_flow_air_changes_per_hour": 0,
+            "dsoa_outdoor_air_flow_rate_fraction_schedule": "NA"
           }
         }
       }

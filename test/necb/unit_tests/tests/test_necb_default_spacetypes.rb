@@ -13,7 +13,6 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
     define_std_ranges
   end
 
-  #######################################################
   # Tests to ensure that the NECB default schedules are being defined correctly.
   # This is not for compliance, but for archetype development.
   # @return [Boolean] true if successful.
@@ -244,7 +243,12 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         outdoor_air_flow_per_floor_area_m_per_s = dsoa.outdoorAirFlowperFloorArea.signif(2)
         dsoa_outdoor_air_flow_per_person = dsoa.outdoorAirFlowperPerson.signif(2)
         dsoa_outdoor_air_flow_rate_m_per_s = dsoa.outdoorAirFlowRate.signif(2)
-        dsoa_Outdoor_air_flow_air_changes_per_hour = dsoa.outdoorAirFlowAirChangesperHour.signif(2)
+        dsoa_outdoor_air_flow_air_changes_per_hour = dsoa.outdoorAirFlowAirChangesperHour.signif(2)
+        if dsoa.outdoorAirFlowRateFractionSchedule.empty?
+          dsoa_outdoorAirFlowRateFractionSchedule = "NA"
+        else
+          dsoa_outdoorAirFlowRateFractionSchedule = dsoa.outdoorAirFlowRateFractionSchedule.get.name
+        end
 
         # Add this test case to results and return the hash.
         results[space_type_name] = {
@@ -269,16 +273,14 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
           outdoor_air_flow_per_floor_area_m_per_s: outdoor_air_flow_per_floor_area_m_per_s,
           dsoa_outdoor_air_flow_per_person: dsoa_outdoor_air_flow_per_person,
           dsoa_outdoor_air_flow_rate_m_per_s: dsoa_outdoor_air_flow_rate_m_per_s,
-          dsoa_Outdoor_air_flow_air_changes_per_hour: dsoa_Outdoor_air_flow_air_changes_per_hour
+          dsoa_outdoor_air_flow_air_changes_per_hour: dsoa_outdoor_air_flow_air_changes_per_hour,
+          dsoa_outdoor_air_flow_rate_fraction_schedule: dsoa_outdoorAirFlowRateFractionSchedule
         }
-
       end
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
-
     logger.info "Completed individual test: #{name}"
-
     return results
   end
 end
