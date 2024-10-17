@@ -70,6 +70,8 @@ module NecbHelper
   def define_std_ranges
     @Templates = ["NECB2011", "NECB2015", "NECB2017", "BTAPPRE1980"]
     @AllTemplates = ["NECB2011", "NECB2015", "NECB2017", "NECB2020", "BTAPPRE1980", "BTAP1980TO2010"]
+	@SpaceTypes = ["Dwelling Unit(s)", "Office - enclosed", "Office - open plan", "Retail - mall concourse", "Retail - sales", "Warehouse - fine", "Warehouse - med/blk"]
+    @AllSpaceTypes = ["Audience - auditorium", "Classroom/lecture/training", "Conf./meet./multi-purpose", "Corr. < 2.4m wide-sch-G", "Corr. >= 2.4m wide-sch-D", "Corr. >= 2.4m wide-sch-E", "Corr. >= 2.4m wide-sch-F", "Dining - bar lounge/leisure", "Dining - family space", "Dwelling Unit(s)", "Electrical/Mechanical-sch-A", "Electrical/Mechanical-sch-D", "Electrical/Mechanical-sch-E", "Electrical/Mechanical-sch-F", "Electrical/Mechanical-sch-H", "Food preparation", "Gym - fitness", "Gym - play", "Hospital - emergency", "Hospital - exam", "Hospital - laundry/washing", "Hospital - lounge/recreation", "Hospital - nurses station", "Hospital - operating room", "Hospital - patient room", "Hospital - physical therapy", "Hospital - radiology/imaging", "Hospital - recovery", "Hospital corr. >= 2.4m-sch-B", "Hospital corr. >= 2.4m-sch-H", "Hotel/Motel - dining", "Hotel/Motel - lobby", "Hotel/Motel - rooms", "Hway lodging - rooms", "Lab - research", "Library - reading", "Lobby - elevator", "Lobby - other", "Locker room-sch-H", "Lounge/recreation", "Office - enclosed", "Office - open plan", "Retail - mall concourse", "Retail - sales", "Stairway-sch-F", "Stairway-sch-H", "Storage area - occsens", "Storage area", "Warehouse - fine", "Warehouse - med/blk", "Washroom-sch-D", "Washroom-sch-F", "Washroom-sch-H"]   
     @AllBuildings = [
       "FullServiceRestaurant",
       "LargeHotel",
