@@ -50,7 +50,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
           # Set up hvac system.
-          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           if sys_number == 'sys1'
             standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
                 necb_reference_hp: necb_reference_hp,
@@ -236,7 +236,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
           # set up hvac system
-          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           if sys_number == 'sys1'
             standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
                 necb_reference_hp: necb_reference_hp,
@@ -338,7 +338,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
           # set up hvac system
-          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           if sys_number == 'sys1'
             standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
                 necb_reference_hp: necb_reference_hp,
@@ -770,7 +770,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
         # set up hvac system
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         if sys_number == 'sys1'
           standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
               necb_reference_hp: necb_reference_hp,
@@ -857,7 +857,7 @@ def test_ref_heatpump_heating_low_temp
         BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
         # Set up hvac system.
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         if sys_number == 'sys1'
           standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
               necb_reference_hp: necb_reference_hp,

@@ -176,7 +176,9 @@ class BTAPDatapoint
                                        shw_scale: @options[:shw_scale],
                                        baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
                                        tbd_option: @options[:tbd_option],
-                                       necb_hdd: @options[:necb_hdd]
+                                       necb_hdd: @options[:necb_hdd],
+                                       boiler_fuel: @options[:boiler_fuel],
+                                       boiler_cap_ratio: @options[:boiler_cap_ratio]
                                        )
       end
 

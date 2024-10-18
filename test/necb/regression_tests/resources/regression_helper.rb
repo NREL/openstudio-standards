@@ -9,12 +9,11 @@ class NECBRegressionHelper < Minitest::Test
     @epw_file = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
     @template = 'NECB2011'
     @test_dir = "#{File.dirname(__FILE__)}/output"
-    @expected_results_folder = "#{File.dirname(__FILE__)}/../expected_results/"
+    @expected_results_folder = "#{File.dirname(__FILE__)}/../expected/"
     @model = nil
     @model_name = nil
     @run_simulation = false
     @primary_heating_fuel = "Electricity"
-    @reference_hp = false
   end
 
 
@@ -24,8 +23,7 @@ class NECBRegressionHelper < Minitest::Test
                                        test_dir: @test_dir,
                                        expected_results_folder: @expected_results_folder,
                                        run_simulation: @run_simulation,
-                                       primary_heating_fuel: @primary_heating_fuel,
-                                       reference_hp: @reference_hp
+                                       primary_heating_fuel: @primary_heating_fuel
   )
     @epw_file = epw_file
     @template = template
@@ -33,7 +31,6 @@ class NECBRegressionHelper < Minitest::Test
     @test_dir = test_dir
     @expected_results_folder = expected_results_folder
     @primary_heating_fuel = primary_heating_fuel
-    @reference_hp = reference_hp
     self.create_model(building_type: @building_type,
                       epw_file: @epw_file,
                       template: @template,
