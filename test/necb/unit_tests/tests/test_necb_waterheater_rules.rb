@@ -55,7 +55,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
     heating_coil_type = 'DX'
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, boiler_fueltype, always_on)
     standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
@@ -126,7 +126,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                     zones: model.getThermalZones,
                                                                                                     heating_coil_type: heating_coil_type,
@@ -222,7 +222,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                     zones: model.getThermalZones,
                                                                                                     heating_coil_type: heating_coil_type,
@@ -320,7 +320,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
       heating_coil_type = 'DX'
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, boiler_fueltype, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                   zones: model.getThermalZones,
                                                                                                   heating_coil_type: heating_coil_type,
