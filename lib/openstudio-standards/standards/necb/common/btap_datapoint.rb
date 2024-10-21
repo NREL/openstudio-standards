@@ -34,12 +34,12 @@ class BTAPDatapoint
     @dp_temp_folder = File.join(__dir__, 'temp_folder')
 
     # Make sure temp folder is always clean.
-    FileUtils.rm_rf(@dp_temp_folder) if Dir.exist?(@dp_temp_folder)
+    FileUtils.rm_rf(@dp_temp_folder)
     FileUtils.mkdir_p(@dp_temp_folder)
 
     # Create local cache for datapoint folder. Makes everything faster an easier to have a local copy. Mirroring logic
     # even if running locally to be consistent.
-    FileUtils.rm_rf(input_folder_cache) if Dir.exist?(input_folder_cache)
+    FileUtils.rm_rf(input_folder_cache)
     FileUtils.mkdir_p(input_folder_cache)
 
     # Check if input where input is from.
@@ -176,7 +176,9 @@ class BTAPDatapoint
                                        shw_scale: @options[:shw_scale],
                                        baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
                                        tbd_option: @options[:tbd_option],
-                                       necb_hdd: @options[:necb_hdd]
+                                       necb_hdd: @options[:necb_hdd],
+                                       boiler_fuel: @options[:boiler_fuel],
+                                       boiler_cap_ratio: @options[:boiler_cap_ratio]
                                        )
       end
 
@@ -276,7 +278,7 @@ class BTAPDatapoint
       else
         # Copy results to datapoint output folder.
         @dp_output_folder = File.join(output_folder, @options[:datapoint_id])
-        FileUtils.rm_rf(@dp_output_folder) if Dir.exist?(@dp_output_folder)
+        FileUtils.rm_rf(@dp_output_folder)
         FileUtils.mkdir_p(@dp_output_folder)
         FileUtils.cp_r(File.join(@dp_temp_folder, '.'), @dp_output_folder) # Needs dot otherwise will copy temp folder and not just contents.
         puts "Copied output to your designated output folder in the #{@options[:datapoint_id]} subfolder."

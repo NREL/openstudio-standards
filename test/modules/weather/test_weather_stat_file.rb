@@ -35,4 +35,11 @@ class TestWeatherStatFile < Minitest::Test
       assert_equal(12, stat_file.monthly_dry_bulb.size)
     end
   end
+
+  def test_load_sparse_stat_file
+    model = OpenStudio::Model::Model.new
+    stat_file_path = File.join(File.dirname(__FILE__),'data','G0100010.stat')
+    assert(File.exist?(stat_file_path))
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+  end
 end

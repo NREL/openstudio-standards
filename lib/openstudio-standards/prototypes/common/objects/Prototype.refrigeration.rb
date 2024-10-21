@@ -67,6 +67,9 @@ class Standard
         anti_sweat_heater_control = props['anti_sweat_heater_control']
       end
     end
+    if props['under_case_hvac_return_air_fraction']
+      under_case_hvac_return_air_fraction = props['under_case_hvac_return_air_fraction']
+    end
     if props['fractionofantisweatheaterenergytocase']
       fractionofantisweatheaterenergytocase = props['fractionofantisweatheaterenergytocase']
     end
@@ -119,7 +122,7 @@ class Standard
     end
     ref_case.setHumidityatZeroAntiSweatHeaterEnergy(0)
     if props['under_case_hvac_return_air_fraction']
-      ref_case.setUnderCaseHVACReturnAirFraction(props['under_case_hvac_return_air_fraction'])
+      ref_case.setUnderCaseHVACReturnAirFraction(under_case_hvac_return_air_fraction)
     else
       ref_case.setUnderCaseHVACReturnAirFraction(0)
     end
@@ -167,7 +170,7 @@ class Standard
 
     props = model_find_object(standards_data['refrigeration_walkins'], search_criteria)
     if props.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Could not find walkin properties for: #{search_criteria}.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.refrigeration', "Could not find walkin properties for: #{search_criteria}.")
       return nil
     end
 
@@ -246,19 +249,25 @@ class Standard
 
     # Calculated properties
     if rated_cooling_capacity.nil?
-      rated_cooling_capacity = cooling_capacity_c2 * (floor_surface_area ^ 2) + cooling_capacity_c1 * floor_surface_area + cooling_capacity_c0
+      rated_cooling_capacity = (cooling_capacity_c2 * (floor_surface_area ^ 2)) + (cooling_capacity_c1 * floor_surface_area) + cooling_capacity_c0
     end
     if defrost_power.nil?
       defrost_power = defrost_power_mult * rated_cooling_capacity
     end
     if total_insulated_surface_area.nil?
-      total_insulated_surface_area = 1.7226 * floor_surface_area + 28.653
+      total_insulated_surface_area = (1.7226 * floor_surface_area) + 28.653
     end
     if fan_power.nil?
       fan_power = fan_power_mult * rated_cooling_capacity
     end
     if lighting_power.nil?
       lighting_power = lighting_power_mult * floor_surface_area
+    end
+
+    # Check validity of thermal zone
+    if OpenstudioStandards::ThermalZone.thermal_zone_plenum?(thermal_zone)
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.refrigeration', "Thermal zone #{thermal_zone.name} is a plenum; cannot add walkins to a plenum.")
+      return nil
     end
 
     # Walk-In
@@ -603,15 +612,15 @@ class Standard
 
         # Add defrost and dripdown schedules
         defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-        defrost_sch.setName('Refrigeration Defrost Schedule')
-        defrost_sch.defaultDaySchedule.setName("Refrigeration Defrost Schedule Default - #{case_type}")
+        defrost_sch.setName("#{ref_case.name} Defrost")
+        defrost_sch.defaultDaySchedule.setName("#{ref_case.name} Defrost Default")
         dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-        dripdown_sch.setName('Refrigeration Dripdown Schedule')
-        dripdown_sch.defaultDaySchedule.setName("Refrigeration Dripdown Schedule Default - #{case_type}")
+        dripdown_sch.setName("#{ref_case.name} Dripdown")
+        dripdown_sch.defaultDaySchedule.setName("#{ref_case.name} Dripdown Default")
 
         # Stagger the defrosts for cases by 1 hr
         interval_defrost = (24 / numb_defrosts_per_day).floor # Hour interval between each defrost period
-        if (def_start_hr_iterator + interval_defrost * numb_defrosts_per_day) > 23
+        if (def_start_hr_iterator + (interval_defrost * numb_defrosts_per_day)) > 23
           first_def_start_hr = 0 # Start over again at midnight when time reaches 23hrs
         else
           first_def_start_hr = def_start_hr_iterator
@@ -621,9 +630,9 @@ class Standard
         (1..numb_defrosts_per_day).each do |defrost_of_day|
           def_start_hr = first_def_start_hr + ((1 - defrost_of_day) * interval_defrost)
           defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, 0, 0), 0)
-          defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_defrost.to_int, 0), 0)
+          defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_defrost.to_int, 0), 1)
           dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, 0, 0), 0) # Dripdown is synced with defrost
-          dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_dripdown.to_int, 0), 0)
+          dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_dripdown.to_int, 0), 1)
         end
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
         dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
@@ -689,15 +698,15 @@ class Standard
 
         # Add defrost and dripdown schedules
         defrost_sch_walkin = OpenStudio::Model::ScheduleRuleset.new(model)
-        defrost_sch_walkin.setName('Refrigeration Defrost Schedule')
-        defrost_sch_walkin.defaultDaySchedule.setName("Refrigeration Defrost Schedule Default - #{walkin_type}")
+        defrost_sch_walkin.setName("#{ref_walkin.name} Defrost")
+        defrost_sch_walkin.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
         dripdown_sch_walkin = OpenStudio::Model::ScheduleRuleset.new(model)
-        dripdown_sch_walkin.setName('Refrigeration Dripdown Schedule')
-        dripdown_sch_walkin.defaultDaySchedule.setName("Refrigeration Dripdown Schedule Default - #{walkin_type}")
+        dripdown_sch_walkin.setName("#{ref_walkin.name} Dripdown")
+        dripdown_sch_walkin.defaultDaySchedule.setName("#{ref_walkin.name} Dripdown Default")
 
         # Stagger the defrosts for cases by 1 hr
         interval_defrost = (24 / numb_defrosts_per_day).floor # Hour interval between each defrost period
-        if (def_start_hr_iterator + interval_defrost * numb_defrosts_per_day) > 23
+        if (def_start_hr_iterator + (interval_defrost * numb_defrosts_per_day)) > 23
           first_def_start_hr = 0 # Start over again at midnight when time reaches 23hrs
         else
           first_def_start_hr = def_start_hr_iterator
@@ -707,9 +716,9 @@ class Standard
         (1..numb_defrosts_per_day).each do |defrost_of_day|
           def_start_hr = first_def_start_hr + ((1 - defrost_of_day) * interval_defrost)
           defrost_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, 0, 0), 0)
-          defrost_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_defrost.to_int, 0), 0)
+          defrost_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_defrost.to_int, 0), 1)
           dripdown_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, 0, 0), 0) # Dripdown is synced with defrost
-          dripdown_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_dripdown.to_int, 0), 0)
+          dripdown_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, def_start_hr, minutes_dripdown.to_int, 0), 1)
         end
         defrost_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
         dripdown_sch_walkin.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
@@ -890,22 +899,22 @@ class Standard
       ########################################
       # Defrost schedule
       defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      defrost_sch.setName('Refrigeration Defrost Schedule')
-      defrost_sch.defaultDaySchedule.setName('Refrigeration Defrost Schedule Default')
+      defrost_sch.setName("#{ref_case.name} Defrost")
+      defrost_sch.defaultDaySchedule.setName("#{ref_case.name} Defrost Default")
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
-      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 0)
+      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
       defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
       # Dripdown schedule
       dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      dripdown_sch.setName('Refrigeration Defrost Schedule')
-      dripdown_sch.defaultDaySchedule.setName('Refrigeration Defrost Schedule Default')
+      dripdown_sch.setName("#{ref_case.name} Defrost")
+      dripdown_sch.defaultDaySchedule.setName("#{ref_case.name} Defrost Default")
       dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
-      dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 0)
+      dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
       dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
       # Case Credit Schedule
       case_credit_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      case_credit_sch.setName('Refrigeration Case Credit Schedule')
-      case_credit_sch.defaultDaySchedule.setName('Refrigeration Case Credit Schedule Default')
+      case_credit_sch.setName("#{ref_case.name} Case Credit")
+      case_credit_sch.defaultDaySchedule.setName("#{ref_case.name} Case Credit Default")
       case_credit_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 7, 0, 0), 0.2)
       case_credit_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 21, 0, 0), 0.4)
       case_credit_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
@@ -928,8 +937,8 @@ class Standard
         ########################################
         # Defrost schedule
         defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-        defrost_sch.setName('Refrigeration Defrost Schedule')
-        defrost_sch.defaultDaySchedule.setName('Refrigeration Defrost Schedule Default')
+        defrost_sch.setName("#{ref_walkin.name} Defrost")
+        defrost_sch.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i + 10, 0, 0), 0)
@@ -937,8 +946,8 @@ class Standard
         defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
         # Dripdown schedule
         dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-        dripdown_sch.setName('Refrigeration Defrost Schedule')
-        dripdown_sch.defaultDaySchedule.setName('Refrigeration Defrost Schedule Default')
+        dripdown_sch.setName("#{ref_walkin.name} Defrost")
+        dripdown_sch.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
         dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
         dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
         dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i + 10, 0, 0), 0)
@@ -960,9 +969,9 @@ class Standard
     # Note the factor 1.2 has been included to over-estimate the condenser size.  The total capacity of the display cases can be calculated
     # from their rated cooling capacity times the length of the cases.  The capacity of each of the walk-ins is specified directly.
     condensor_cap = if compressor_type == 'Low Temp'
-                      1.2 * cooling_cap * (1 + 1 / 1.3)
+                      1.2 * cooling_cap * (1 + (1 / 1.3))
                     else
-                      1.2 * cooling_cap * (1 + 1 / 2.0)
+                      1.2 * cooling_cap * (1 + (1 / 2.0))
                     end
     condenser_coefficient_2 = condensor_cap / 5.6
     condenser_curve = OpenStudio::Model::CurveLinear.new(model)
@@ -973,7 +982,7 @@ class Standard
 
     # Condenser fan power
     # The condenser fan power can be estimated from the heat rejection capacity of the condenser as follows:
-    condenser_fan_pwr = 0.0441 * condensor_cap + 695
+    condenser_fan_pwr = (0.0441 * condensor_cap) + 695
 
     # Condenser
     condenser = OpenStudio::Model::RefrigerationCondenserAirCooled.new(model)

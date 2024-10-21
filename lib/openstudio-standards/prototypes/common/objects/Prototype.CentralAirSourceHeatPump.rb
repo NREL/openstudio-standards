@@ -19,15 +19,15 @@ class Standard
     # create the PlantComponentUserDefined object as a proxy for the Central Air Source Heat Pump
     plant_comp = OpenStudio::Model::PlantComponentUserDefined.new(model)
     if name.nil?
-      if !hot_water_loop.nil?
-        name = "#{hot_water_loop.name} Central Air Source Heat Pump"
-      else
+      if hot_water_loop.nil?
         name = 'Central Air Source Heat Pump'
+      else
+        name = "#{hot_water_loop.name} Central Air Source Heat Pump"
       end
     end
 
     # change equipment name for EMS validity
-    plant_comp.setName(name.gsub(/[ +-.]/, '_'))
+    plant_comp.setName(ems_friendly_name(name))
 
     # set plant component properties
     plant_comp.setPlantLoadingMode('MeetsLoadWithNominalCapacityHiOutLimit')

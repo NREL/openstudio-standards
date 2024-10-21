@@ -24,6 +24,7 @@ module OpenstudioStandards
 
   # Infiltration Module
   require_relative 'openstudio-standards/infiltration/infiltration'
+  require_relative 'openstudio-standards/infiltration/nist_infiltration'
 
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
@@ -33,6 +34,12 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/schedules/modify'
   require_relative 'openstudio-standards/schedules/information'
   require_relative 'openstudio-standards/schedules/parametric'
+
+  # ServiceWaterHeating Module
+  require_relative 'openstudio-standards/service_water_heating/create_piping_losses'
+  require_relative 'openstudio-standards/service_water_heating/create_water_heater'
+  require_relative 'openstudio-standards/service_water_heating/create_water_heating_loop'
+  require_relative 'openstudio-standards/service_water_heating/create_water_use'
 
   # Space Module
   require_relative 'openstudio-standards/space/space'
@@ -228,17 +235,11 @@ module OpenstudioStandards
   require_relative "#{stds}/cbes/cbes_t24_2005/cbes_t24_2005"
   require_relative "#{stds}/cbes/cbes_t24_2008/cbes_t24_2008"
 
-  # Files with modules
-  require_relative "#{stds}/Standards.Fan"
+  # Base Model Objects
   require_relative "#{stds}/Standards.CoilDX"
-  require_relative "#{stds}/Standards.Pump"
   require_relative "#{stds}/Standards.CoolingTower"
-  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTower"
-  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTower"
-  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTower"
-  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTower"
-  require_relative "#{stds}/ashrae_90_1/nrel_zne_ready_2017/nrel_zne_ready_2017.CoolingTower"
-  require_relative "#{stds}/ashrae_90_1/ze_aedg_multifamily/ze_aedg_multifamily.CoolingTower"
+  require_relative "#{stds}/Standards.Fan"
+  require_relative "#{stds}/Standards.Pump"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Fan"
 
   # Model Objects
@@ -251,17 +252,14 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.CoilCoolingDXSingleSpeed"
   require_relative "#{stds}/Standards.CoilCoolingDXTwoSpeed"
   require_relative "#{stds}/Standards.CoilCoolingWaterToAirHeatPumpEquationFit"
-  require_relative "#{stds}/Standards.CoilDX"
   require_relative "#{stds}/Standards.CoilHeatingDXMultiSpeed"
   require_relative "#{stds}/Standards.CoilHeatingDXSingleSpeed"
   require_relative "#{stds}/Standards.CoilHeatingGasMultiStage"
   require_relative "#{stds}/Standards.CoilHeatingGas"
   require_relative "#{stds}/Standards.CoilHeatingWaterToAirHeatPumpEquationFit"
-  require_relative "#{stds}/Standards.CoolingTower"
   require_relative "#{stds}/Standards.CoolingTowerSingleSpeed"
   require_relative "#{stds}/Standards.CoolingTowerTwoSpeed"
   require_relative "#{stds}/Standards.CoolingTowerVariableSpeed"
-  require_relative "#{stds}/Standards.Fan"
   require_relative "#{stds}/Standards.FanConstantVolume"
   require_relative "#{stds}/Standards.FanOnOff"
   require_relative "#{stds}/Standards.FanVariableVolume"
@@ -273,10 +271,10 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.Model"
   require_relative "#{stds}/Standards.PlanarSurface"
   require_relative "#{stds}/Standards.PlantLoop"
-  require_relative "#{stds}/Standards.Pump"
   require_relative "#{stds}/Standards.PumpConstantSpeed"
   require_relative "#{stds}/Standards.PumpVariableSpeed"
   require_relative "#{stds}/Standards.ScheduleRuleset"
+  require_relative "#{stds}/Standards.ServiceWaterHeating"
   require_relative "#{stds}/Standards.Space"
   require_relative "#{stds}/Standards.SpaceType"
   require_relative "#{stds}/Standards.SubSurface"
@@ -307,6 +305,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.BoilerHotWater"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirTerminalSingleDuctVAVReheat"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.ChillerElectricEIR"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTower"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTowerSingleSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTowerTwoSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTowerVariableSpeed"
@@ -522,11 +521,9 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.Model.exterior_lights"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
-  require_relative "#{proto}/common/objects/Prototype.Model.swh"
   require_relative "#{proto}/common/objects/Prototype.Pump"
   require_relative "#{proto}/common/objects/Prototype.PumpVariableSpeed"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
-  require_relative "#{proto}/common/objects/Prototype.ServiceWaterHeating"
   require_relative "#{proto}/common/objects/Prototype.SizingSystem"
   require_relative "#{proto}/common/objects/Prototype.utilities"
   # 90.1-2004

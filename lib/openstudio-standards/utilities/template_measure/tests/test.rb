@@ -7,8 +7,8 @@ begin
 rescue LoadError
   puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
 end
-require_relative '../measure.rb'
-require_relative '../resources/BTAPMeasureHelper.rb'
+require_relative '../measure'
+require_relative '../resources/BTAPMeasureHelper'
 require 'minitest/autorun'
 
 class BTAPModelMeasure_Test < Minitest::Test

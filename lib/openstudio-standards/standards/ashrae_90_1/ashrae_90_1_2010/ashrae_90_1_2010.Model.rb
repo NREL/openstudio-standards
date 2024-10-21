@@ -22,10 +22,8 @@ class ASHRAE9012010 < ASHRAE901
     # Customization for Xcel EDA.
     # No special retail category
     # for regular 90.1-2010.
-    unless custom == 'Xcel Energy CO EDA'
-      if area_type == 'retail'
-        area_type = 'nonresidential'
-      end
+    if (custom != 'Xcel Energy CO EDA') && (area_type == 'retail')
+      area_type = 'nonresidential'
     end
 
     case area_type

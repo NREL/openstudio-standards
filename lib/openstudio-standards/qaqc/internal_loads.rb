@@ -537,7 +537,7 @@ module OpenstudioStandards
       if (space_load_instance.class.to_s == 'OpenStudio::Model::People') && space_load_instance.numberofPeopleSchedule.is_initialized
         schedule_inst = space_load_instance.numberofPeopleSchedule.get
       elsif (space_load_instance.class.to_s == 'OpenStudio::Model::DesignSpecificationOutdoorAir') && space_load_instance.outdoorAirFlowRateFractionSchedule.is_initialized
-        schedule_inst = space_load_instance.outdoorAirFlowRateFractionSchedule .get
+        schedule_inst = space_load_instance.outdoorAirFlowRateFractionSchedule.get
       elsif space_load_instance.schedule.is_initialized
         schedule_inst = space_load_instance.schedule.get
       else

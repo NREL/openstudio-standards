@@ -86,14 +86,12 @@ class Standard
     if ['PTAC', 'PTHP'].include?(coil_dx_subcategory(coil_heating_dx_single_speed))
       mult = 1
       comp = coil_heating_dx_single_speed.containingZoneHVACComponent
-      if comp.is_initialized
-        if comp.get.thermalZone.is_initialized
-          mult = comp.get.thermalZone.get.multiplier
-          if mult > 1
-            total_cap = capacity_w
-            capacity_w /= mult
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
-          end
+      if comp.is_initialized && comp.get.thermalZone.is_initialized
+        mult = comp.get.thermalZone.get.multiplier
+        if mult > 1
+          total_cap = capacity_w
+          capacity_w /= mult
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
         end
       end
     end
@@ -135,12 +133,23 @@ class Standard
       # TABLE 6.8.1D
       # COP = pthp_cop_coeff_1 - (pthp_cop_coeff_2 * Cap / 1000)
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
-      # If the unit's capacity is less than 7000 Btu/h, use 7000 Btu/h in the calculation.
-      # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation.
-      capacity_btu_per_hr = 7000 if capacity_btu_per_hr < 7000
-      capacity_btu_per_hr = 15_000 if capacity_btu_per_hr > 15_000
+
+      # If the unit's capacity is nil or less than 7000 Btu/h, use 7000 Btu/h in the calculation
+      # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation
+      if capacity_btu_per_hr.nil?
+        capacity_btu_per_hr = 7000.0
+        capacity_kbtu_per_hr = capacity_btu_per_hr / 1000.0
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For PTHP units, 90.1 heating efficiency depends on paired cooling capacity. Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is nil. This zone may not have heating. Using default equipment efficiency for a 7 kBtu/hr unit.")
+      elsif capacity_btu_per_hr < 7000
+        capacity_btu_per_hr = 7000.0
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For PTHP units, 90.1 heating efficiency depends on paired cooling capacity. Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is #{capacity_btu_per_hr.round} Btu/hr, which is less than the typical minimum equipment size of 7 kBtu/hr. Using default equipment efficiency for a 7 kBtu/hr unit.")
+      elsif capacity_btu_per_hr > 15_000
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For PTHP units, 90.1 heating efficiency depends on paired cooling capacity. Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is #{capacity_btu_per_hr.round} Btu/hr, which is more than the typical maximum equipment size of 15 kBtu/hr. Using default equipment efficiency for a 15 kBtu/hr unit.")
+        capacity_btu_per_hr = 15_000.0
+      end
+
       min_coph = pthp_cop_coeff_1 - (pthp_cop_coeff_2 * capacity_btu_per_hr / 1000.0)
-      cop = cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
+      cop = cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_coph.round(1)}COPH"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}: #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph.round(2)}")
     end

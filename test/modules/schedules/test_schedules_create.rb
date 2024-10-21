@@ -128,4 +128,49 @@ class TestSchedulesCreate < Minitest::Test
     assert(schedule['mergedSchedule'].name.to_s == 'Merged Schedule')
     assert(schedule['denominator'] == 10.0)
   end
+
+  def test_create_inverted_schedule_day
+    model = OpenStudio::Model::Model.new
+    test_options = {
+      'name' => 'Test Create Simple',
+      'winter_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'summer_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 }
+    }
+    schedule = @sch.create_simple_schedule(model, test_options)
+    default_day_schedule = schedule.defaultDaySchedule
+    inverted_schedule = @sch.create_inverted_schedule_day(default_day_schedule)
+    assert(inverted_schedule.to_ScheduleDay.is_initialized)
+    assert_equal(1.0, inverted_schedule.values[0])
+    assert_equal(0.0, inverted_schedule.values[1])
+    assert_equal(1.0, inverted_schedule.values[2])
+  end
+
+  def test_create_inverted_schedule_ruleset
+    model = OpenStudio::Model::Model.new
+    test_options = {
+      'name' => 'Test Create Simple',
+      'winter_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'summer_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 }
+    }
+    schedule = @sch.create_simple_schedule(model, test_options)
+    inverted_schedule = @sch.create_inverted_schedule_ruleset(schedule)
+    assert(inverted_schedule.to_ScheduleRuleset.is_initialized)
+    assert_equal('Test Create Simple inverted', inverted_schedule.name.to_s)
+
+    rules = []
+    rules << ['Tuesdays and Thursdays', '1/1-12/31', 'Tue/Thu', [4, 0], [4.33, 1], [18, 0], [18.66, 1], [24, 0]]
+    test_options = {
+      'name' => 'Test Create Complex',
+      'winter_design_day' => [[24, 0]],
+      'summer_design_day' => [[24, 1]],
+      'default_day' => ['Test Create Complex Default', [11, 0], [11.33, 1], [23, 0], [23.33, 1], [24, 0]],
+      'rules' => rules
+    }
+    schedule = @sch.create_complex_schedule(model, test_options)
+    inverted_schedule = @sch.create_inverted_schedule_ruleset(schedule)
+    assert(inverted_schedule.to_ScheduleRuleset.is_initialized)
+    assert_equal('Test Create Complex inverted', inverted_schedule.name.to_s)
+  end
 end

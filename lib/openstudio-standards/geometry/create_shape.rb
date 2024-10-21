@@ -1,5 +1,5 @@
 module OpenstudioStandards
-  # This Module provides methods to create, modify, and get information about model geometry
+  # The Geometry module provides methods to create, modify, and get information about model geometry
   module Geometry
     # Methods to create basic shapes
 
@@ -60,7 +60,7 @@ module OpenstudioStandards
       # Loop through the number of floors
       building_stories = []
       for floor in ((under_ground_storys * -1)..above_ground_storys - 1)
-        z = floor_to_floor_height * floor + initial_height
+        z = (floor_to_floor_height * floor) + initial_height
 
         # Create a new story within the building
         story = OpenStudio::Model::BuildingStory.new(model)
@@ -282,13 +282,13 @@ module OpenstudioStandards
         return nil
       end
 
-      if courtyard_length >= (length - 4 * perimeter_zone_depth - 1e-4)
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create.Shape', "Courtyard length must be less than #{length - 4.0 * perimeter_zone_depth}m.")
+      if courtyard_length >= (length - (4 * perimeter_zone_depth) - 1e-4)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create.Shape', "Courtyard length must be less than #{length - (4.0 * perimeter_zone_depth)}m.")
         return nil
       end
 
-      if courtyard_width >= (width - 4 * perimeter_zone_depth - 1e-4)
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create.Shape', "Courtyard width must be less than #{width - 4.0 * perimeter_zone_depth}m.")
+      if courtyard_width >= (width - (4 * perimeter_zone_depth) - 1e-4)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create.Shape', "Courtyard width must be less than #{width - (4.0 * perimeter_zone_depth)}m.")
         return nil
       end
 
@@ -306,9 +306,9 @@ module OpenstudioStandards
         se_point = OpenStudio::Point3d.new(length, 0.0, z)
         sw_point = OpenStudio::Point3d.new(0.0, 0.0, z)
 
-        courtyard_nw_point = OpenStudio::Point3d.new((length - courtyard_length) / 2.0, (width - courtyard_width) / 2.0 + courtyard_width, z)
-        courtyard_ne_point = OpenStudio::Point3d.new((length - courtyard_length) / 2.0 + courtyard_length, (width - courtyard_width) / 2.0 + courtyard_width, z)
-        courtyard_se_point = OpenStudio::Point3d.new((length - courtyard_length) / 2.0 + courtyard_length, (width - courtyard_width) / 2.0, z)
+        courtyard_nw_point = OpenStudio::Point3d.new((length - courtyard_length) / 2.0, ((width - courtyard_width) / 2.0) + courtyard_width, z)
+        courtyard_ne_point = OpenStudio::Point3d.new(((length - courtyard_length) / 2.0) + courtyard_length, ((width - courtyard_width) / 2.0) + courtyard_width, z)
+        courtyard_se_point = OpenStudio::Point3d.new(((length - courtyard_length) / 2.0) + courtyard_length, (width - courtyard_width) / 2.0, z)
         courtyard_sw_point = OpenStudio::Point3d.new((length - courtyard_length) / 2.0, (width - courtyard_width) / 2.0, z)
 
         # Identity matrix for setting space origins

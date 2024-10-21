@@ -49,10 +49,11 @@ module FullServiceRestaurant
     infiltration_diningdoor.setName('Dining door Infiltration')
     infiltration_per_zone_diningdoor = 0
     infiltration_per_zone_attic = 0.2378
-    if template == '90.1-2004'
+    case template
+    when '90.1-2004'
       infiltration_per_zone_diningdoor = 0.614474994
       infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
-    elsif template == '90.1-2007'
+    when '90.1-2007'
       case climate_zone
         when 'ASHRAE 169-2006-0A',
              'ASHRAE 169-2006-1A',
@@ -80,7 +81,7 @@ module FullServiceRestaurant
           infiltration_per_zone_diningdoor = 0.389828222
           infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
       end
-    elsif template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       case climate_zone
         when 'ASHRAE 169-2006-0A',
              'ASHRAE 169-2006-1A',
@@ -244,7 +245,7 @@ module FullServiceRestaurant
   def adjust_clg_setpoint(climate_zone, model)
     ['Dining', 'Kitchen'].each do |space_name|
       space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
-      thermostat_name = space_type_name + ' Thermostat'
+      thermostat_name = "#{space_type_name} Thermostat"
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'

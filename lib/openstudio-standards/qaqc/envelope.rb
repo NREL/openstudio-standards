@@ -158,7 +158,7 @@ module OpenstudioStandards
               end
               film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
               thermal_conductance = surface_detail[:construction].thermalConductance.get
-              r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
+              r_value_with_film = (1 / thermal_conductance) + film_coefficients_r_value
               source_units = 'm^2*K/W'
               target_units = 'ft^2*h*R/Btu'
               r_value_ip = OpenStudio.convert(r_value_with_film, source_units, target_units).get
@@ -166,7 +166,7 @@ module OpenstudioStandards
               # @todo check with exterior air wall
 
               # stop if didn't find values (0 or infinity)
-              next if target_r_value_ip[surface_detail[:surface_type]] == 0.0
+              next if target_r_value_ip[surface_detail[:surface_type]] < 0.01
               next if target_r_value_ip[surface_detail[:surface_type]] == Float::INFINITY
 
               # check r avlues
@@ -200,7 +200,7 @@ module OpenstudioStandards
               shgc = OpenstudioStandards::Constructions.construction_get_solar_transmittance(surface_construction)
 
               # stop if didn't find values (0 or infinity)
-              next if target_u_value_ip[sub_surface_detail[:surface_type]] == 0.0
+              next if target_u_value_ip[sub_surface_detail[:surface_type]] < 0.01
               next if target_u_value_ip[sub_surface_detail[:surface_type]] == Float::INFINITY
 
               # check u avlues
@@ -232,7 +232,7 @@ module OpenstudioStandards
                 film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
 
                 thermal_conductance = sub_surface_detail[:construction].thermalConductance.get
-                r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
+                r_value_with_film = (1 / thermal_conductance) + film_coefficients_r_value
                 source_units = 'm^2*K/W'
                 target_units = 'ft^2*h*R/Btu'
                 r_value_ip = OpenStudio.convert(r_value_with_film, source_units, target_units).get
@@ -240,7 +240,7 @@ module OpenstudioStandards
                 # @todo check what happens with exterior air wall
 
                 # stop if didn't find values (0 or infinity)
-                next if target_r_value_ip[sub_surface_detail[:surface_type]] == 0.0
+                next if target_r_value_ip[sub_surface_detail[:surface_type]] < 0.01
                 next if target_r_value_ip[sub_surface_detail[:surface_type]] == Float::INFINITY
 
                 # check r avlues
@@ -323,7 +323,7 @@ module OpenstudioStandards
                 end
                 film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
                 thermal_conductance = surface_detail[:construction].thermalConductance.get
-                r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
+                r_value_with_film = (1 / thermal_conductance) + film_coefficients_r_value
                 source_units = 'm^2*K/W'
                 target_units = 'ft^2*h*R/Btu'
                 r_value_ip = OpenStudio.convert(r_value_with_film, source_units, target_units).get
@@ -350,7 +350,7 @@ module OpenstudioStandards
                 assembly_maximum_r_value_ip = 1 / assembly_maximum_u_value
 
                 # stop if didn't find values (0 or infinity)
-                next if assembly_maximum_r_value_ip == 0.0
+                next if assembly_maximum_r_value_ip < 0.01
                 next if assembly_maximum_r_value_ip == Float::INFINITY
 
                 # check r avlues
