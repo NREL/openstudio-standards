@@ -75,12 +75,12 @@ module NecbHelper
   #   necb_ref_hp = true if the caase is for the NECB reference model using heat pumps
   #   sql_db_vars_map - ???
   #   save_model_versions - logical to trigger saving of osm files before and after standards applied
-  def run_sizing(model:, 
-                 template: 'NECB2011', 
-                 test_name:, 
+  def run_sizing(model:,
+                 template: 'NECB2011',
+                 test_name:,
                  second_run: false,
                  necb_ref_hp: false,
-                 sql_db_vars_map: nil, 
+                 sql_db_vars_map: nil,
                  save_model_versions: false)
 
     # Report what we are doing (helps when things go wrong!).
@@ -127,11 +127,11 @@ module NecbHelper
 
     # Second sizing run (if requested).
     if second_run
-      
+
       # Save model before sizing run 2.
       BTAP::FileIO.save_osm(model, "#{models_dir}/pre-sizing2.osm") if save_model_versions
 
-      # Do another sizing run after applying the hvac assumptions and efficiency standards 
+      # Do another sizing run after applying the hvac assumptions and efficiency standards
       #  to properly apply the pump rules.
       sizing_folder = "#{sizing_dir}/SR2"
       if standard.model_run_sizing_run(model, sizing_folder) == false
@@ -149,12 +149,12 @@ module NecbHelper
   # Check if two files are identical with some added smarts
   # (used in place of simple ruby methods)
   def file_compare(expected_results_file:, test_results_file:, msg: "Files do not match", type: nil)
-  
+
     #if type == "fred" # Place holder for other file compare options. So far just defined the default behaviour.
     #else
       # Open files and compare the line by line. Remove line endings before checking strings (this can be an issue when running in docker).
       same = true
-      fe = File.open(expected_results_file, 'rb') 
+      fe = File.open(expected_results_file, 'rb')
       ft = File.open(test_results_file, 'rb')
       comp_lines_str = ""
       fe.each.zip(ft.each).each do |le, lt|
@@ -170,7 +170,7 @@ module NecbHelper
       ft.close
       expected_results_file_path=Pathname.new(expected_results_file).cleanpath
       test_results_file_path=Pathname.new(test_results_file).cleanpath
-      comp_files_str="  Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
+      comp_files_str = "Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
       assert(same, "#{msg} #{self.class.ancestors[0]}.\n#{comp_files_str}\n#{comp_lines_str}")
     #end
   end

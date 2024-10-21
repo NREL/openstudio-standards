@@ -80,7 +80,7 @@ class ASHRAE9012007 < ASHRAE901
       when 'Centrifugal'
         return 'ChlrWtrCentPathAAllEIRRatio_fQRatio'
       when 'Reciprocating', 'Rotary Screw', 'Scroll'
-        return 'ChlrWtrPosDispPathAAllEIRRatio_fTchwsTcwsSI'
+        return 'ChlrWtrPosDispPathAAllEIRRatio_fQRatio'
       else
         return nil
       end
