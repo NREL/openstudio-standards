@@ -303,7 +303,7 @@ class NECB2011
                                                                             type: "Rotary",
                                                                             economizer_lockout: true,
                                                                             supply_air_outlet_temperature_control: true,
-                                                                            frost_control_type: 'ExhaustOnly'
+                                                                            frost_control_type: 'ExhaustOnly',
                                                                             sensible_heating_100_eff: 0.5,
                                                                             sensible_heating_75_eff: 0.5,
                                                                             latent_heating_100_eff: 0.5,
