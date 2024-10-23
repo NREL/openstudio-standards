@@ -97,7 +97,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             always_on = model.alwaysOnDiscreteSchedule
-            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
             case speed
             when 'single'
               # For single speed use the capacity 'unitary_cap' directly to set the capacity of the dx coils
@@ -213,7 +213,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
     standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                      zones: model.getThermalZones,
                                      chiller_type: chiller_type,

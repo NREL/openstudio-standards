@@ -30263,7 +30263,7 @@ OS:Material:NoMass,
 
 OS:Construction,
   {fa41d7d7-c421-4aa5-be6c-155c7f725c12}, !- Handle
-  U 1.17 SHGC 0.68 Simple Glazing Skylight, !- Name
+  U 1.17 SHGC 0.68 Simple Glazing, !- Name
   ,                                       !- Surface Rendering Name
   {d72b167d-a229-4b0b-929c-d70002c5e504}; !- Layer 1
 
@@ -61100,13 +61100,13 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {4ed14430-b462-407f-a682-7d0b72b2cfdc}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F, !- Name
+  Water Heater Ambient Temp Schedule 70F, !- Name
   {7e247af9-fecf-42b9-9669-a1a00b84f5ef}, !- Schedule Type Limits Name
   {cd45af7e-535d-4fbf-869f-9ba206723a51}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {cd45af7e-535d-4fbf-869f-9ba206723a51}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default, !- Name
+  Water Heater Ambient Temp Schedule 70F Default, !- Name
   {7e247af9-fecf-42b9-9669-a1a00b84f5ef}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1

@@ -62,7 +62,7 @@ class TestMisc < Minitest::Test
     assert(mat_1.visibleTransmittance.get == 0.3)
 
     # Missing information
-    mat_2 = std.model_add_material(model, "U 0.51 SHGC 0.23 Simple Glazing Window Weighted")
+    mat_2 = std.model_add_material(model, "U 0.51 SHGC 0.23 Simple Glazing")
     assert(mat_2.uFactor.round(2) == OpenStudio.convert(0.51, 'Btu/hr*ft^2*R', 'W/m^2*K').get.round(2))
     assert(mat_2.solarHeatGainCoefficient == 0.23)
     assert(mat_2.visibleTransmittance.get == 0.81)

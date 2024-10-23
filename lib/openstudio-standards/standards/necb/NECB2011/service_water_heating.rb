@@ -21,75 +21,32 @@ class NECB2011
     # Add the main service water heating loop
     shw_pump_motor_eff = 0.9
 
-    main_swh_loop = model_add_swh_loop(model,
-                                       'Main Service Water Loop',
-                                       nil,
-                                       shw_sizing['max_temp_SI'],
-                                       shw_pump_head,
-                                       shw_pump_motor_eff,
-                                       shw_sizing['tank_capacity_SI'],
-                                       shw_sizing['tank_volume_SI'],
-                                       swh_fueltype,
-                                       shw_sizing['parasitic_loss'],
-                                       nil)
+    main_swh_loop = OpenstudioStandards::ServiceWaterHeating.create_service_water_heating_loop(model,
+                                                                                               system_name: 'Main Service Water Loop',
+                                                                                               service_water_temperature: shw_sizing['max_temp_SI'],
+                                                                                               service_water_pump_head: shw_pump_head,
+                                                                                               service_water_pump_motor_efficiency: shw_pump_motor_eff,
+                                                                                               water_heater_capacity: shw_sizing['tank_capacity_SI'],
+                                                                                               water_heater_volume: shw_sizing['tank_volume_SI'],
+                                                                                               water_heater_fuel: swh_fueltype,
+                                                                                               on_cycle_parasitic_fuel_consumption_rate: shw_sizing['parasitic_loss'],
+                                                                                               off_cycle_parasitic_fuel_consumption_rate: shw_sizing['parasitic_loss'])
 
     # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by
     # the space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier
     # as well which is different than the space (ultimately thermal zone) multiplier.
-    shw_sizing['spaces_w_dhw'].each { |space| model_add_swh_end_uses_by_spaceonly(model, space, main_swh_loop) }
+    shw_sizing['spaces_w_dhw'].each do |space|
+      OpenstudioStandards::ServiceWaterHeating.create_water_use(model,
+                                                                name: "#{space['shw_spaces'].name.get.capitalize}",
+                                                                flow_rate: space['shw_peakflow_ind_SI'],
+                                                                flow_rate_fraction_schedule: model_add_schedule(model, space['shw_sched']),
+                                                                water_use_temperature: space['shw_temp_SI'],
+                                                                service_water_loop: main_swh_loop,
+                                                                space: space['shw_spaces'])
+    end
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished adding Service Water Heating')
 
     return true
-  end
-
-  # This method will add an swh water fixture to the model for the space.
-  # if the it will return a water fixture object, or NIL if there is no water load at all.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param space [Hash] hash of shw space information
-  # @param swh_loop [OpenStudio::Model::PlantLoop] plant loop to add swh
-  # @return [OpenStudio::Model::WaterUseEquipment] water use equipment
-  def model_add_swh_end_uses_by_spaceonly(model, space, swh_loop)
-    # Water use connection
-    swh_connection = OpenStudio::Model::WaterUseConnections.new(model)
-
-    # Water fixture definition
-    water_fixture_def = OpenStudio::Model::WaterUseEquipmentDefinition.new(model)
-
-    # water_use_sensible_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
-    # water_use_sensible_frac_sch.setValue(0.2)
-    # water_use_latent_frac_sch = OpenStudio::Model::ScheduleConstant.new(self)
-    # water_use_latent_frac_sch.setValue(0.05)
-    # Note that when water use equipment is assigned to spaces then the water used by the equipment is multiplied by the
-    # space (ultimately thermal zone) multiplier.  Note that there is a separate water use equipment multiplier as well
-    # which is different than the space (ultimately thermal zone) multiplier.
-    rated_flow_rate_gal_per_min = OpenStudio.convert(space['shw_peakflow_ind_SI'], 'm^3/s', 'gal/min').get
-    water_use_sensible_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-    water_use_sensible_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.2)
-    water_use_latent_frac_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-    water_use_latent_frac_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.05)
-    water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
-    water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
-    water_fixture_def.setPeakFlowRate(space['shw_peakflow_ind_SI'])
-    water_fixture_def.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gal/min")
-    # Target mixed water temperature
-    mixed_water_temp_c = space['shw_temp_SI']
-    mixed_water_temp_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-    mixed_water_temp_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), mixed_water_temp_c)
-    water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
-
-    # Water use equipment
-    water_fixture = OpenStudio::Model::WaterUseEquipment.new(water_fixture_def)
-    schedule = model_add_schedule(model, space['shw_sched'])
-    water_fixture.setFlowRateFractionSchedule(schedule)
-    water_fixture.setName("#{space['shw_spaces'].name.to_s.capitalize} Service Water Use #{rated_flow_rate_gal_per_min.round(2)}gal/min")
-    swh_connection.addWaterUseEquipment(water_fixture)
-    # Assign water fixture to a space
-    water_fixture.setSpace(space['shw_spaces']) if model_attach_water_fixtures_to_spaces?(model)
-
-    # Connect the water use connection to the SWH loop
-    swh_loop.addDemandBranchForComponent(swh_connection)
-    return water_fixture
   end
 
   # add swh
@@ -163,6 +120,37 @@ class NECB2011
       # Calculate the skin loss coefficient (UA)
       ua_btu_per_hr_per_f = sl_btu_per_hr / 70
     when 'NaturalGas'
+      if capacity_btu_per_hr <= 75_000
+        # Fixed water heater thermal efficiency per PNNL
+        water_heater_eff = 0.82
+        # Calculate the minimum Energy Factor (EF)
+        base_ef = 0.67
+        vol_drt = 0.0019
+        ef = base_ef - (vol_drt * volume_gal)
+        # Calculate the Recovery Efficiency (RE)
+        # based on a fixed capacity of 75,000 Btu/hr
+        # and a fixed volume of 40 gallons by solving
+        # this system of equations:
+        # ua = (1/.95-1/re)/(67.5*(24/41094-1/(re*cap)))
+        # 0.82 = (ua*67.5+cap*re)/cap
+        cap = 75_000.0
+        re = (Math.sqrt(6724 * ef**2 * cap**2 + 40_409_100 * ef**2 * cap - 28_080_900 * ef * cap + 29_318_000_625 * ef**2 - 58_636_001_250 * ef + 29_318_000_625) + 82 * ef * cap + 171_225 * ef - 171_225) / (200 * ef * cap)
+        # Calculate the skin loss coefficient (UA)
+        # based on the actual capacity.
+        ua_btu_per_hr_per_f = (water_heater_eff - re) * capacity_btu_per_hr / 67.5
+      else
+        # Thermal efficiency requirement from 90.1
+        et = 0.8
+        # Calculate the max allowable standby loss (SL)
+        cap_adj = 800
+        vol_drt = 110
+        sl_btu_per_hr = (capacity_btu_per_hr / cap_adj + vol_drt * Math.sqrt(volume_gal))
+        # Calculate the skin loss coefficient (UA)
+        ua_btu_per_hr_per_f = (sl_btu_per_hr * et) / 70
+        # Calculate water heater efficiency
+        water_heater_eff = (ua_btu_per_hr_per_f * 70 + capacity_btu_per_hr * et) / capacity_btu_per_hr
+      end
+    when 'FuelOilNo2'
       if capacity_btu_per_hr <= 75_000
         # Fixed water heater thermal efficiency per PNNL
         water_heater_eff = 0.82
@@ -445,9 +433,9 @@ class NECB2011
   # space that has a demand for shw.  It calculates the x, y, and z components of the vector between the shw space and the
   # spaces with demand for shw.  The distance of the piping run is calculated by adding the x, y, and z components of the
   # vector (rather than the magnitude of the vector).  For the purposes of calculating pressure loss along the pipe bends,
-  # and other minor losses are accounted by doubling the calculated length of the pipe.  The default kinematic viscosity 
-  # of water is assumed to be that at 60 C (in m^2/s).  The default density of water is assumed to be 983 kg/m^3 as per 
-  # https://hypertextbook.com/facts/2007/AllenMa.shtml accessed 2018-07-27.  The pipe is assumed to be made out of PVC and 
+  # and other minor losses are accounted by doubling the calculated length of the pipe.  The default kinematic viscosity
+  # of water is assumed to be that at 60 C (in m^2/s).  The default density of water is assumed to be 983 kg/m^3 as per
+  # https://hypertextbook.com/facts/2007/AllenMa.shtml accessed 2018-07-27.  The pipe is assumed to be made out of PVC and
   # have a roughness height of 1.5*10^-6 m as per:
   # www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on 2018-07-25.
   # The default maximum velocity is from the table from 'The Engineering Toolbox' link:

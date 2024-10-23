@@ -17204,13 +17204,13 @@ OS:WaterHeater:Mixed,
 
 OS:Schedule:Ruleset,
   {c684f42c-2e14-4a64-960c-1655a1ccf06c}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F, !- Name
+  Water Heater Ambient Temp Schedule 70F, !- Name
   {d1caf49c-42e9-4a74-966b-aa691b811dc2}, !- Schedule Type Limits Name
   {259c0569-8970-438f-9194-bb46252baf2f}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {259c0569-8970-438f-9194-bb46252baf2f}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default, !- Name
+  Water Heater Ambient Temp Schedule 70F Default, !- Name
   {d1caf49c-42e9-4a74-966b-aa691b811dc2}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
@@ -17837,13 +17837,13 @@ OS:WaterHeater:Mixed,
 
 OS:Schedule:Ruleset,
   {b5a17409-5fc1-4d9d-96d8-fc6a32c1d03f}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F 1, !- Name
+  Water Heater Ambient Temp Schedule 70F 1, !- Name
   {e6dd6281-356b-4cec-8dac-c02c21a6261b}, !- Schedule Type Limits Name
   {603a7c4e-e016-4660-badf-b702ba5f8606}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {603a7c4e-e016-4660-badf-b702ba5f8606}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default 1, !- Name
+  Water Heater Ambient Temp Schedule 70F Default 1, !- Name
   {e6dd6281-356b-4cec-8dac-c02c21a6261b}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1

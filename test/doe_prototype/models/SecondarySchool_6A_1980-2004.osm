@@ -12200,7 +12200,7 @@ OS:DefaultSubSurfaceConstructions,
 
 OS:Construction,
   {5388c6b6-a487-4dd3-9fc8-a0d627126df2}, !- Handle
-  U 0.52 SHGC 0.39 Simple Glazing Window, !- Name
+  U 0.52 SHGC 0.39 Simple Glazing,  !- Name
   ,                                       !- Surface Rendering Name
   {9b0a98f4-5622-4fdb-92dd-0c3bcc4621e0}; !- Layer 1
 
@@ -31700,13 +31700,13 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {4e5d0fcb-29d4-4d54-bbc7-7b4a1654d269}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F, !- Name
+  Water Heater Ambient Temp Schedule 70F, !- Name
   {db7ac843-653c-437d-a60f-4de0c6059a6f}, !- Schedule Type Limits Name
   {725d782b-1a29-43d0-9490-4bbf90e9300c}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {725d782b-1a29-43d0-9490-4bbf90e9300c}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default, !- Name
+  Water Heater Ambient Temp Schedule 70F Default, !- Name
   {db7ac843-653c-437d-a60f-4de0c6059a6f}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
