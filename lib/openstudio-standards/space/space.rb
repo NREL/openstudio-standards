@@ -1,5 +1,5 @@
-# Methods to obtain information about model spaces
 module OpenstudioStandards
+  # The Space module provides methods get information about model spaces
   module Space
     # @!group Space
 
@@ -610,7 +610,7 @@ module OpenstudioStandards
         return nil
       end
 
-      OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(opt_sch.get.to_ScheduleRuleset.get, space_load_instance, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method: 'hours')
+      OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(opt_sch.get.to_ScheduleRuleset.get, space_load_instance, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
 
       return parametric_inputs
     end

@@ -90,15 +90,25 @@ module CoilDX
         if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
           htg_type = 'Electric Resistance or None'
         elsif containing_comp.to_AirLoopHVACUnitarySystem.is_initialized
+          htg_coil = containing_comp.to_AirLoopHVACUnitarySystem.get.heatingCoil
           if containing_comp.name.to_s.include? 'Minisplit'
             htg_type = 'All Other'
+          elsif htg_coil.is_initialized
+            htg_coil = htg_coil.get
+            if htg_coil.to_CoilHeatingElectric.is_initialized || htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized
+              htg_type = 'Electric Resistance or None'
+            elsif htg_coil.to_CoilHeatingGas.is_initialized || htg_coil.to_CoilHeatingGasMultiStage.is_initialized
+              htg_type = 'All Other'
+            end
+          else
+            htg_type = 'Electric Resistance or None'
           end
         elsif containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
           htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.heatingCoil
           supp_htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.supplementalHeatingCoil
           if htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized || supp_htg_coil.to_CoilHeatingElectric.is_initialized
             htg_type = 'Electric Resistance or None'
-          elsif htg_coil.to_CoilHeatingGasMultiStage.is_initialized
+          elsif htg_coil.to_CoilHeatingGasMultiStage.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized
             htg_type = 'All Other'
           end
         end

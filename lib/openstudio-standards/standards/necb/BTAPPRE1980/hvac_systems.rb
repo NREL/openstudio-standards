@@ -29,7 +29,8 @@ class BTAPPRE1980
     chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
     chiller_electric_eir.setMinimumPartLoadRatio(0.25)
     chiller_electric_eir.setMinimumUnloadingRatio(0.25)
-
+  
+    chiller_capacity = capacity_w
     if (capacity_w / 1000.0) <= 700.0
       # As per MNECB if chiller capacity <= 700 kW the compressor should be reciprocating so change the type here in
       # the name, compressor_type and search_criteria which is where the compressor type is used.

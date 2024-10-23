@@ -210,11 +210,11 @@ module OpenstudioStandards
           thermostat = zone.thermostatSetpointDualSetpoint.get
           if thermostat.heatingSetpointTemperatureSchedule.is_initialized && thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
             schedule = thermostat.heatingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method: 'tstat')
+            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
           end
           if thermostat.coolingSetpointTemperatureSchedule.is_initialized && thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.is_initialized
             schedule = thermostat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
-            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method: 'tstat')
+            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, thermostat, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'tstat')
           end
         end
       end
@@ -231,7 +231,7 @@ module OpenstudioStandards
         air_loop_hash[air_loop] = hours_of_operation
         if air_loop.availabilitySchedule.to_ScheduleRuleset.is_initialized
           schedule = air_loop.availabilitySchedule.to_ScheduleRuleset.get
-          OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, air_loop, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method:)
+          OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, air_loop, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
         end
         avail_mgrs = air_loop.availabilityManagers
         avail_mgrs.sort.each do |avail_mgr|
@@ -241,7 +241,7 @@ module OpenstudioStandards
           resources.sort.each do |resource|
             if resource.to_ScheduleRuleset.is_initialized
               schedule = resource.to_ScheduleRuleset.get
-              OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, avail_mgr, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method:)
+              OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, avail_mgr, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
             end
           end
         end
@@ -299,7 +299,7 @@ module OpenstudioStandards
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Parametric.Model', "Cannot identify where #{component.name.get} is in system. Will not gather parametric inputs for #{schedule.name.get}")
             next
           end
-          OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, component, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method:)
+          OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, component, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
         end
       end
 
@@ -317,11 +317,11 @@ module OpenstudioStandards
           if opt_space.is_initialized
             space = space.get
             hours_of_operation = OpenstudioStandards::Space.space_hours_of_operation(space)
-            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method:)
+            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
           else
             hours_of_operation = OpenstudioStandards::Space.spaces_hours_of_operation(model.getSpaces)
             if !hours_of_operation.nil?
-              OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method:)
+              OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(schedule, water_use_equipment, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: hoo_var_method)
             end
           end
 
@@ -440,7 +440,7 @@ module OpenstudioStandards
           OpenstudioStandards::Space.space_load_instance_get_parametric_schedule_inputs(space_load_instance, parametric_inputs, hours_of_operation, gather_data_only)
           if space_load_instance.activityLevelSchedule.is_initialized && space_load_instance.activityLevelSchedule.get.to_ScheduleRuleset.is_initialized
             act_sch = space_load_instance.activityLevelSchedule.get.to_ScheduleRuleset.get
-            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(act_sch, space_load_instance, parametric_inputs, hours_of_operation, gather_data_only:, hoo_var_method: 'hours')
+            OpenstudioStandards::Schedules.schedule_ruleset_get_parametric_inputs(act_sch, space_load_instance, parametric_inputs, hours_of_operation, gather_data_only: gather_data_only, hoo_var_method: 'hours')
           end
         end
         space_type.spaceInfiltrationDesignFlowRates.each do |space_load_instance|
@@ -1056,7 +1056,7 @@ module OpenstudioStandards
             remainder = days_to_fill - value[:days_used]
             day_for_rule = days_to_fill - remainder
             if remainder.size < days_to_fill.size
-              autogen_rules[profile_index] = { days_to_fill: day_for_rule, hoo_start:, hoo_end: }
+              autogen_rules[profile_index] = { days_to_fill: day_for_rule, hoo_start: hoo_start, hoo_end: hoo_end }
             end
             days_to_fill = remainder
           end
@@ -1162,6 +1162,8 @@ module OpenstudioStandards
       vac = 24.0 - occ
       range = val_clg - val_flr
 
+      timestep_minutes = (0..60).step(60 * ramp_frequency).to_a
+
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Parametric.ScheduleDay', "Schedule #{schedule_day.name} has this formula hash: #{formula_hash}")
 
       # apply variables and create updated hash with only numbers
@@ -1172,7 +1174,11 @@ module OpenstudioStandards
         time = time.gsub('hoo_end', hoo_end.to_s)
         time = time.gsub('occ', occ.to_s)
         # can save special variables like lunch or break using this logic
-        time = time.gsub('mid', (hoo_start + (occ * 0.5)).to_s)
+        mid_start = hoo_start + (occ * 0.5)
+        mid_start_min = mid_start.modulo(1) * 60
+        mid_start_min_ts = timestep_minutes.min { |a, b| (a - mid_start_min).abs <=> (b - mid_start_min).abs }
+        mid_start_adjusted = mid_start.floor + (mid_start_min_ts / 60)
+        time = time.gsub('mid', mid_start_adjusted.to_s)
         time = time.gsub('vac', vac.to_s)
         begin
           time_float = eval(time)
@@ -1255,9 +1261,6 @@ module OpenstudioStandards
             updated_time = 0.0
             last_buffer = 'NA'
           else
-            # pick midpoint and put each time there. e.g. times of (2,7,9,8,11) would be changed to  (2,7,8.5,8.5,11)
-            delta = last_time - time_value_pair[0]
-
             # determine much space last item can move
             if i < 2
               last_buffer = time_value_pairs[i - 1][0] # can move down to 0 without any issues
@@ -1265,8 +1268,8 @@ module OpenstudioStandards
               last_buffer = time_value_pairs[i - 1][0] - time_value_pairs[i - 2][0]
             end
 
-            # center if possible but don't exceed available buffer
-            updated_time = time_value_pairs[i - 1][0] - [delta / 2.0, last_buffer].min
+            # move to previous timestep but don't exceed available buffer
+            updated_time = time_value_pairs[i - 1][0] - [ramp_frequency, last_buffer].min
           end
 
           # update values in array
@@ -1342,7 +1345,7 @@ module OpenstudioStandards
       time_value_pairs.rotate!(rotate_steps)
 
       # add a 24 on the end of array that matches the first value
-      if time_value_pairs.last[0] != 24.0
+      if time_value_pairs.last[0].to_i != 24
         time_value_pairs << [24.0, time_value_pairs.first[1]]
       end
 
