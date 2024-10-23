@@ -50,6 +50,28 @@ class TestApplyHVACEfficiencyStandard < Minitest::Test
     std.model_apply_hvac_efficiency_standard(model, climate_zone)
   end
 
+  def test_vrf_90_1_2019
+    test_name = 'test_vrf_90_1_2019'
+    # Load model
+    std = Standard.build('90.1-2019')
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../90_1_prm/models/bldg_20.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: 'ASHRAE 169-2013-4A')
+
+    # Perform a sizing run
+    if std.model_run_sizing_run(model, File.join(File.dirname(__FILE__),"output/#{test_name}/SR1")) == false
+      return false
+    end
+
+    # Apply the HVAC efficiency standard
+    std.model_apply_hvac_efficiency_standard(model, 'ASHRAE 169-2013-4A')
+    model.save(File.join(File.dirname(__FILE__),"output/#{test_name}.osm"), true)
+
+    # Spot check expected efficiencies
+    vrfs = model.getAirConditionerVariableRefrigerantFlows
+    assert vrfs[0].name.to_s.include?('11EER')
+    assert vrfs[-1].name.to_s.include?('10.6EER')
+  end
+
   def test_efficiency_conversions
     std = Standard.build('90.1-2019')
     # SEER conversions

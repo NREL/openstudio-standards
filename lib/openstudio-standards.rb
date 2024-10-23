@@ -241,6 +241,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Fan"
 
   # Model Objects
+  require_relative "#{stds}/Standards.AirConditionerVariableRefrigerantFlow"
   require_relative "#{stds}/Standards.AirLoopHVAC"
   require_relative "#{stds}/Standards.AirTerminalSingleDuctParallelPIUReheat"
   require_relative "#{stds}/Standards.AirTerminalSingleDuctVAVReheat"
