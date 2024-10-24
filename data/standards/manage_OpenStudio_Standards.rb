@@ -131,7 +131,7 @@ def unique_properties(sheet_name)
          when 'refrigeration_compressors'
            ['template', 'compressor_name', 'compressor_type']
          when 'economizers'
-           ['template', 'climate_zone', 'data_center']
+           ['climate_zone', 'data_center', 'minimum_capacity', 'fan_cooling_application', 'minimum_water_cooled_chilled_water_capacity_no_fan_cooling', 'minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling', 'fixed_dry_bulb_is_allowed', 'differential_dry_bulb_is_allowed', 'electronic_enthalpy_is_allowed', 'differential_enthalpy_is_allowed', 'dew_point_dry_bulb_is_allowed', 'fixed_enthalpy_is_allowed', 'fixed_enthalpy_fixed_dry_bulb_is_allowed', 'differential_enthalpy_fixed_dry_bulb_is_allowed', 'fixed_dry_bulb_high_limit_shutoff_temp', 'fixed_enthalpy_high_limit_shutoff_enthalpy', 'dew_point_dry_bulb_high_limit_shutoff_dew_point_temp', 'dew_point_dry_bulb_high_limit_shutoff_dry_bulb_temp', 'fixed_enthalpy_fixed_dry_bulb_high_limit_shutoff_enthalpy', 'fixed_enthalpy_fixed_dry_bulb_high_limit_shutoff_dry_bulb_temp', 'differential_enthalpy_fixed_dry_bulb_high_limit_shutoff_dry_bulb_temp', 'percent_increase_cooling_efficiency_eliminate_requirement', 'heat_recovery_exempted']
          when 'prm_economizers'
            ['template', 'climate_ID']
          when 'motors'
