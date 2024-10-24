@@ -257,8 +257,8 @@ class Standard
       # Run a sizing run to calculate VLT for layer-by-layer windows.
       if model_create_prm_baseline_building_requires_vlt_sizing_run(model)
         if model_run_sizing_run(model, "#{sizing_run_dir}/SRVLT") == false
-        return false
-      end
+          return false
+        end
       end
 
       # Add or remove daylighting controls to each space
@@ -606,8 +606,8 @@ class Standard
       # If not modeled based on field verification, it should be modeled as 0.6 cfm/ft2
       unless infiltration_modeled_from_field_verification_results.casecmp('true')
         if curr_tot_infil_cfm_per_envelope_area < 0.6
-        OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The user model's I_75Pa is estimated to be #{curr_tot_infil_cfm_per_envelope_area} m3/s per m2 of total building envelope")
-      end
+          OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The user model's I_75Pa is estimated to be #{curr_tot_infil_cfm_per_envelope_area} m3/s per m2 of total building envelope")
+        end
       end
 
       # Modify model to follow the PRM infiltration modeling method
@@ -677,8 +677,8 @@ class Standard
       obj_to_be_checked_for_autosizing = false
       if obj_type.include?('chiller') || obj_type.include?('boiler') || obj_type.include?('coil') || obj_type.include?('fan') || obj_type.include?('pump') || obj_type.include?('waterheater')
         if !obj_type.include?('controller')
-        obj_to_be_checked_for_autosizing = true
-      end
+          obj_to_be_checked_for_autosizing = true
+        end
       end
 
       # Check for autosizing
@@ -690,12 +690,12 @@ class Standard
         casted_obj.methods.each do |method|
           if method.to_s.include?('is') && method.to_s.include?('Autosized')
             if casted_obj.public_send(method) == true
-            is_hvac_autosized = true
-            OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The #{method.to_s.sub('is', '').sub('Autosized', '').sub(':', '')} field of the #{obj_type} named #{casted_obj.name} is autosized. It should be hard sized.")
+              is_hvac_autosized = true
+              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The #{method.to_s.sub('is', '').sub('Autosized', '').sub(':', '')} field of the #{obj_type} named #{casted_obj.name} is autosized. It should be hard sized.")
+            end
           end
         end
       end
-    end
     end
 
     return is_hvac_autosized
@@ -749,11 +749,11 @@ class Standard
       end
 
       if !applicable_zones.nil?
-      # This is only used for the stable baseline (2016 and later)
+        # This is only used for the stable baseline (2016 and later)
         if !applicable_zones.include?(zone)
-        # This zone is not part of the current hvac_building_type
-        next
-      end
+          # This zone is not part of the current hvac_building_type
+          next
+        end
       end
 
       # Skip unconditioned zones
