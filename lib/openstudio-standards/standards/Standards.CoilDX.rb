@@ -28,11 +28,8 @@ module CoilDX
 
     if coil_dx.airLoopHVAC.empty? && coil_dx.containingZoneHVACComponent.is_initialized
       containing_comp = coil_dx.containingZoneHVACComponent.get
-      # PTAC
-      if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-        sub_category = 'PTAC'
       # PTHP
-      elsif containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+      if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
         sub_category = 'PTHP'
       end
       # @todo Add other zone hvac systems
@@ -168,8 +165,9 @@ module CoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
+  # @param equipment_type [Boolean] indicate that equipment_type should be in the search criteria.
   # @return [Hash] has for search criteria to be used for find object
-  def coil_dx_find_search_criteria(coil_dx, necb_ref_hp = false)
+  def coil_dx_find_search_criteria(coil_dx, necb_ref_hp = false, equipment_type = false)
     search_criteria = {}
     search_criteria['template'] = template
 
@@ -204,6 +202,105 @@ module CoilDX
       # @todo Add other unitary systems
     end
 
+    # Get the equipment type
+    if equipment_type
+      if coil_dx.airLoopHVAC.empty?
+        if coil_dx.containingZoneHVACComponent.is_initialized
+          containing_comp = coil_dx.containingZoneHVACComponent.get
+          # PTAC
+          if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+            search_criteria['equipment_type'] = 'PTAC'
+            search_criteria['subcategory'] = nil
+            search_criteria['heating_type'] = nil
+          end
+        end
+      end
+    end
+
     return search_criteria
+  end
+
+  # Determine what application to use for looking up the minimum efficiency requirements of PTACs
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @return [String] PTAC application
+  def coil_dx_ptac_application(coil_dx)
+    return 'New Construction'
+  end
+
+  # Determine what capacity curve to use to represent the change of the coil's capacity as a function of changes in temperatures
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param equipment_type [String] Type of equipment
+  # @return [String] PTAC application
+  def coil_dx_cap_ft(coil_dx, equipment_type)
+    case equipment_type
+    when 'PTAC'
+      return 'PSZ-Fine Storage DX Coil Cap-FT'
+    else
+      return 'CoilClgDXQRatio_fTwbToadbSI'
+    end
+  end
+
+  # Determine what capacity curve to use to represent the change of the coil's capacity as a function of changes in airflow fraction
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param equipment_type [String] Type of equipment
+  # @return [String] PTAC application
+  def coil_dx_cap_fff(coil_dx, equipment_type)
+    case equipment_type
+    when 'PTAC'
+      return 'DX Coil Cap-FF'
+    else
+      return 'CoilClgDXSnglQRatio_fCFMRatio'
+    end
+  end
+
+  # Determine what EIR curve to use to represent the change of the coil's EIR as a function of changes in temperatures
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param equipment_type [String] Type of equipment
+  # @return [String] PTAC application
+  def coil_dx_eir_ft(coil_dx, equipment_type)
+    case equipment_type
+    when 'PTAC'
+      return 'PSZ-AC DX Coil EIR-FT'
+    else
+      return 'CoilClgDXEIRRatio_fTwbToadbSI'
+    end
+  end
+
+  # Determine what EIR curve to use to represent the change of the coil's EIR as a function of changes in airflow fraction
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param equipment_type [String] Type of equipment
+  # @return [String] PTAC application
+  def coil_dx_eir_fff(coil_dx, equipment_type)
+    case equipment_type
+    when 'PTAC'
+      return 'Split DX Coil EIR-FF'
+    else
+      return 'CoilClgDXSnglEIRRatio_fCFMRatio'
+    end
+  end
+
+  # Determine what PLF curve to use to represent the change of the coil's PLR as a function of changes in PLR
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param equipment_type [String] Type of equipment
+  # @return [String] PTAC application
+  def coil_dx_plf_fplr(coil_dx, equipment_type)
+    case equipment_type
+    when 'PTAC'
+      return 'HPACCOOLPLFFPLR'
+    else
+      return 'CoilClgDXEIRRatio_fQFrac'
+    end
   end
 end
