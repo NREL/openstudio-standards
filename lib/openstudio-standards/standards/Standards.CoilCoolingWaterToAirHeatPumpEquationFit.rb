@@ -54,7 +54,7 @@ class Standard
       matching_objects = model_find_objects(standards_data[equipment_type], search_criteria, nil, Date.today)
       if !matching_objects.empty? && (equipment_type == 'water_source_heat_pumps') && (capacity_btu_per_hr > 135000)
         # Issue warning indicate the coil size is may be too large
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "The capacity of coil '#{coil_cooling_water_to_air_heat_pump.name}' is #{capacity_btu_per_hr} Btu/hr, which is larger than the 135,000 Btu/hr maximum capacity listed in the efficiency standard. This may be because of zone loads, zone size, or because zone equipment sizing in EnergyPlus includes zone multipliers. Will assume a capacity of 134,999 Btu/hr for the efficiency lookup.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "The capacity of coil '#{coil_cooling_water_to_air_heat_pump.name}' is #{capacity_btu_per_hr.round} Btu/hr, which is larger than the 135,000 Btu/hr maximum capacity listed in the efficiency standard. This may be because of zone loads, zone size, or because zone equipment sizing in EnergyPlus includes zone multipliers. Will assume a capacity of 134,999 Btu/hr for the efficiency lookup.")
         coil_props = model_find_object(standards_data[equipment_type], search_criteria, 134999, Date.today)
       end
     end
