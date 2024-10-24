@@ -5965,7 +5965,7 @@ class Standard
 
     # Extract ERR from data lookup
     if !erv_enthalpy_recovery_ratio.nil?
-      if erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'].nil? & erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio_design_conditions'].nil?
+      if erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'].nil? & erv_enthalpy_recovery_ratio['design_conditions'].nil?
         # If not included in the data, an enthalpy
         # recovery ratio (ERR) of 50% is used
         enthalpy_recovery_ratio = 0.5
@@ -5985,7 +5985,7 @@ class Standard
             design_conditions = 'cooling'
         end
       else
-        design_conditions = erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio_design_conditions'].downcase
+        design_conditions = erv_enthalpy_recovery_ratio['design_conditions'].downcase
         enthalpy_recovery_ratio = erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio']
       end
     end
