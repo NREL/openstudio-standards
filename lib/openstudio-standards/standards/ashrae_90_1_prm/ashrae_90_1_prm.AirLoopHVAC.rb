@@ -594,9 +594,11 @@ class ASHRAE901PRM < Standard
     when 'NoEconomizer'
       return [nil, nil, nil]
     when 'FixedDryBulb'
-      climate_zone_code = climate_zone.split('-')[-1]
-      climate_zone_code = 7 if ['7A', '7B'].include? climate_zone_code
-      climate_zone_code = 8 if ['8A', '8B'].include? climate_zone_code
+      # Process climate zone:
+      # Moisture regime is not needed for climate zone 8
+      climate_zone = climate_zone.split('-')[-1]
+      climate_zone = '8' if climate_zone.include?('8')
+
       search_criteria = {
         'template' => template,
         'climate_id' => climate_zone_code

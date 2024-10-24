@@ -965,6 +965,11 @@ class Standard
       is_dc = true
     end
 
+    # Process climate zone:
+    # Moisture regime is not needed for climate zone 8
+    climate_zone = climate_zone.split('-')[-1]
+    climate_zone = '8' if climate_zone.include?('8')
+
     # Retrieve economizer limits from JSON
     search_criteria = {
       'template' => template,
@@ -978,7 +983,7 @@ class Standard
     end
 
     # Determine the minimum capacity and whether or not it is a data center
-    minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
+    minimum_capacity_btu_per_hr = econ_limits['minimum_capacity']
 
     # A big number of btu per hr as the minimum requirement if nil in spreadsheet
     infinity_btu_per_hr = 999_999_999_999
@@ -1115,6 +1120,11 @@ class Standard
     when 'NoEconomizer'
       return [nil, nil, nil]
     when 'FixedDryBulb'
+      # Process climate zone:
+      # Moisture regime is not needed for climate zone 8
+      climate_zone = climate_zone.split('-')[-1]
+      climate_zone = '8' if climate_zone.include?('8')
+
       search_criteria = {
         'template' => template,
         'climate_zone' => climate_zone

@@ -2088,6 +2088,11 @@ Standard.class_eval do
         # specified, economizer requirements were aimed at comfort
         # cooling, not computer room cooling (as per input from the MSC).
 
+        # Process climate zone:
+        # Moisture regime is not needed for climate zone 8
+        climate_zone = climate_zone.split('-')[-1]
+        climate_zone = '8' if climate_zone.include?('8')
+
         # Get the size threshold requirement
         search_criteria = {
           'template' => template,
@@ -2095,7 +2100,7 @@ Standard.class_eval do
           'data_center' => true
         }
         econ_limits = model_find_object(standards_data['economizers'], search_criteria)
-        minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
+        minimum_capacity_btu_per_hr = econ_limits['minimum_capacity']
         economizer_required = !minimum_capacity_btu_per_hr.nil?
       elsif @instvarbuilding_type == 'LargeOffice' && air_loop_hvac_include_wshp?(air_loop)
         # WSHP serving the IT closets are assumed to always be too
