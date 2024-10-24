@@ -424,21 +424,21 @@ class ASHRAE9012016 < ASHRAE901
       if pct_oa < 0.1
         erv_cfm = nil
       elsif pct_oa >= 0.1 && pct_oa < 0.2
-        erv_cfm = energy_recovery_limits['10_to_20_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_10_to_20']
       elsif pct_oa >= 0.2 && pct_oa < 0.3
-        erv_cfm = energy_recovery_limits['20_to_30_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_20_to_30']
       elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = energy_recovery_limits['30_to_40_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_30_to_40']
       elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = energy_recovery_limits['40_to_50_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_40_to_50']
       elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = energy_recovery_limits['50_to_60_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_50_to_60']
       elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = energy_recovery_limits['60_to_70_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_60_to_70']
       elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = energy_recovery_limits['70_to_80_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_70_to_80']
       elsif pct_oa >= 0.8
-        erv_cfm = energy_recovery_limits['greater_than_80_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_greater_than_80']
       end
     else
       # Table 6.5.6.1-2, above 8000 hrs
@@ -455,21 +455,21 @@ class ASHRAE9012016 < ASHRAE901
       if pct_oa < 0.1
         erv_cfm = nil
       elsif pct_oa >= 0.1 && pct_oa < 0.2
-        erv_cfm = energy_recovery_limits['10_to_20_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_10_to_20']
       elsif pct_oa >= 0.2 && pct_oa < 0.3
-        erv_cfm = energy_recovery_limits['20_to_30_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_20_to_30']
       elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = energy_recovery_limits['30_to_40_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_30_to_40']
       elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = energy_recovery_limits['40_to_50_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_40_to_50']
       elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = energy_recovery_limits['50_to_60_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_50_to_60']
       elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = energy_recovery_limits['60_to_70_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_60_to_70']
       elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = energy_recovery_limits['70_to_80_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_70_to_80']
       elsif pct_oa >= 0.8
-        erv_cfm = energy_recovery_limits['greater_than_80_percent_oa']
+        erv_cfm = energy_recovery_limits['percent_oa_greater_than_80']
       end
     end
 
