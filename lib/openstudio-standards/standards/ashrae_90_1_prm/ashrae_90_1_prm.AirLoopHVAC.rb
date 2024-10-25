@@ -601,7 +601,7 @@ class ASHRAE901PRM < Standard
 
       search_criteria = {
         'template' => template,
-        'climate_id' => climate_zone_code
+        'climate_id' => climate_zone
       }
       econ_limits = model_find_object(standards_data['prm_economizers'], search_criteria)
       drybulb_limit_f = econ_limits['high_limit_shutoff']
