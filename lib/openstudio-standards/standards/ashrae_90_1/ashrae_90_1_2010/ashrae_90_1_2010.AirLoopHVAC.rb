@@ -364,6 +364,11 @@ class ASHRAE9012010 < ASHRAE901
   # @param pct_oa [Double] percentage of outdoor air
   # @return [Double] the flow rate above which an ERV is required. if nil, ERV is never required.
   def air_loop_hvac_energy_recovery_ventilator_flow_limit(air_loop_hvac, climate_zone, pct_oa)
+    # Process climate zone:
+    # Moisture regime is not needed for climate zone 8
+    climate_zone = climate_zone.split('-')[-1]
+    climate_zone = '8' if climate_zone.include?('8')
+
     # Table 6.5.6.1
     search_criteria = {
       'template' => template,

@@ -453,6 +453,11 @@ class ASHRAE9012019 < ASHRAE901
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "For #{air_loop_hvac.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
     end
 
+    # Process climate zone:
+    # Moisture regime is not needed for climate zone 8
+    climate_zone = climate_zone.split('-')[-1]
+    climate_zone = '8' if climate_zone.include?('8')
+
     if ann_op_hrs < 8000.0
       # Table 6.5.6.1-1, less than 8000 hrs
       search_criteria = {
