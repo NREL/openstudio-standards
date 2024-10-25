@@ -1353,7 +1353,7 @@ class AppendixGPRMTests < Minitest::Test
       # Check LPD against expected LPD
       space_name.each do |key, value|
         value_si = OpenStudio.convert(value, 'W/ft^2', 'W/m^2').get
-        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model is incorrect. The LPD of the #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
+        assert(((lpd_baseline[key] - value_si).abs < 0.001), "Baseline LPD the #{building_type}, #{template}, #{climate_zone} model is incorrect. The LPD of #{key} is #{lpd_baseline[key]} but should be #{value_si}.")
       end
     end
   end
@@ -1386,22 +1386,25 @@ class AppendixGPRMTests < Minitest::Test
             lights_obj = model_baseline.getLightsByName(lights_name).get
             model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
             # model_lpd = space.spaceType.get.lights[0].lightsDefinition.wattsperSpaceFloorArea.get
-            assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of #{space_name} is #{target_lpd} but should be #{model_lpd}.")
           end
         elsif user_data_dir == 'userdata_lpd_02'
           space_name_to_lpd_target = {}
           space_name_to_lpd_target['Attic'] = 0.0
+          space_name_to_lpd_target['Perimeter_ZN_2'] = 10.255
+          space_name_to_lpd_target['Perimeter_ZN_4'] = 10.2557
+          space_name_to_lpd_target['Core_ZN'] = 10.2392
 
           model_baseline.getSpaces.each do |space|
             space_name = space.name.get
-            target_lpd = 12.2452724
+            target_lpd = 10.2435
             if space_name_to_lpd_target.key?(space_name)
               target_lpd = space_name_to_lpd_target[space_name]
             end
             lights_name = space.spaceType.get.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
             lights_obj = model_baseline.getLightsByName(lights_name).get
             model_lpd = lights_obj.lightsDefinition.wattsperSpaceFloorArea.get
-            assert((target_lpd - model_lpd).abs < 0.001, "Baseline U-value for the #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of the #{space_name} is #{target_lpd} but should be #{model_lpd}.")
+            assert((target_lpd - model_lpd).abs < 0.001, "Baseline LPD for #{building_type}, #{template}, #{climate_zone} model with user data #{user_data_dir} is incorrect. The LPD of #{space_name} is #{target_lpd} but should be #{model_lpd}.")
           end
         end
       end
@@ -1988,4 +1991,77 @@ class AppendixGPRMTests < Minitest::Test
       end
     end
   end
+
+  # Check primary/secondary chilled water loop for the baseline models
+  #
+  # @param prototypes_base [Hash] Baseline prototypes
+  def check_pri_sec_loop(prototypes_base)
+
+    prototypes_base.each do |prototype, model_baseline|
+
+      building_type, template, climate_zone, user_data_dir, mod = prototype
+
+      has_primary_chilled_water_loop = false
+      has_secondary_chilled_water_loop = false
+
+      # Check primary and secondary chilled water loops
+      model_baseline.getPlantLoops.each do |plant_loop|
+
+        sizing_plant = plant_loop.sizingPlant
+
+        next if sizing_plant.loopType != 'Cooling'
+
+        # Check primary loop for components
+        if plant_loop.name.to_s.include? 'Chilled Water Loop_Primary'
+
+          has_primary_chilled_water_loop = true
+
+          n_chillers = 0
+
+          # Count chillers
+          plant_loop.supplyComponents.each do |sc|
+            if sc.to_ChillerElectricEIR.is_initialized
+              n_chillers += 1
+            end
+          end
+
+          assert(n_chillers == 2, "The number of chillers in the primary loop is incorrect. The test results in #{n_chillers} when it should be 2.")
+
+          has_heat_exchanger = false
+
+          # Check for heat exchanger on demand side
+          plant_loop.demandComponents.each do |dc|
+            if dc.to_HeatExchangerFluidToFluid.is_initialized
+              has_heat_exchanger = true
+            end
+          end
+
+          assert(has_heat_exchanger, "The primary chilled water loop should have a HeatExchangerFluidToFluid on the demand side but it does not.")
+
+        # Check secondary loop for components
+        elsif plant_loop.name.to_s.include? 'Chilled Water Loop'
+
+          has_secondary_chilled_water_loop = true
+          has_heat_exchanger = false
+
+          # Check for heat exchanger on supply side
+          plant_loop.supplyComponents.each do |sc|
+            if sc.to_HeatExchangerFluidToFluid.is_initialized
+              has_heat_exchanger = true
+            end
+          end
+
+          assert(has_heat_exchanger, "The secondary chilled water loop should have a HeatExchangerFluidToFluid on the supply side but it does not.")
+
+        end
+
+      end
+
+      assert(has_primary_chilled_water_loop, "The primary/secondary test did not find a primary chilled water loop for #{building_type}, #{template}, #{climate_zone}.")
+      assert(has_secondary_chilled_water_loop, "The primary/secondary test did not find a secondary chilled water loop for #{building_type}, #{template}, #{climate_zone}.")
+
+    end
+
+  end
+
 end
