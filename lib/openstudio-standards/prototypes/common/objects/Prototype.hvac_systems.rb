@@ -366,15 +366,15 @@ class Standard
     # check for existence of condenser_water_loop if WaterCooled
     if chiller_cooling_type == 'WaterCooled'
       if condenser_water_loop.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is WaterCooled but no condenser loop specified.')
-      end
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is WaterCooled but no condenser loop specified.')
+    end
     end
 
     # check for non-existence of condenser_water_loop if AirCooled
     if chiller_cooling_type == 'AirCooled'
       unless condenser_water_loop.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is AirCooled but condenser loop specified.')
-      end
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is AirCooled but condenser loop specified.')
+    end
     end
 
     if cooling_fuel == 'DistrictCooling'
@@ -5945,23 +5945,36 @@ class Standard
     # enthalpy_recovery_ratio = nil will trigger an ERV with no effectiveness that only provides OA
     enthalpy_recovery_ratio = nil
     climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
+    climate_zone_code = climate_zone.split('-')[-1]
+    climate_zone_code = 7 if ['7A', '7B'].include? climate_zone_code
+    climate_zone_code = 8 if ['8A', '8B'].include? climate_zone_code
     case template
       when '90.1-2019'
         search_criteria = {
           'template' => template,
-          'climate_zone' => climate_zone,
+          'climate_zone' => climate_zone_code,
           'under_8000_hours' => false,
           'nontransient_dwelling' => true
         }
       else
         search_criteria = {
           'template' => template,
-          'climate_zone' => climate_zone,
+          'climate_zone' => climate_zone_code,
           'under_8000_hours' => false
         }
     end
 
-    erv_enthalpy_recovery_ratio = model_find_object(standards_data['energy_recovery'], search_criteria)
+    erv_enthalpy_recovery_ratio = nil
+    # When there are separate heating and cooling ERR requirements, pick the highest value
+    # TODO: heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio should be refactored to take both ERR requirements; PNNL to refactor based on regressions developed from manufacturer data
+    erv_enthalpy_recovery_ratios = model_find_objects(standards_data['energy_recovery'], search_criteria)
+    erv_enthalpy_recovery_ratios.each do |erv_data|
+      if erv_enthalpy_recovery_ratio.nil?
+        erv_enthalpy_recovery_ratio = erv_data
+      elsif erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'] < erv_data['enthalpy_recovery_ratio']
+        erv_enthalpy_recovery_ratio = erv_data
+      end
+    end
 
     # Extract ERR from data lookup
     if !erv_enthalpy_recovery_ratio.nil?
@@ -6003,7 +6016,6 @@ class Standard
     exhaust_fan.setFanTotalEfficiency(0.303158)
     supply_fan.setPressureRise(270.64755)
     exhaust_fan.setPressureRise(270.64755)
-
 
     # Create ERV Controller
     erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
@@ -6133,7 +6145,7 @@ class Standard
       # input the flow rate as a number (assign directly) or from an array (assign each flow rate to each zone)
       if flow_rate.is_a? Numeric
         fan.setMaximumFlowRate(flow_rate)
-      elsif flow_rate.class.to_s == 'Array'
+      elsif flow_rate.instance_of?(::Array)
         index = thermal_zones.index(zone)
         flow_rate_zone = flow_rate[index]
         fan.setMaximumFlowRate(flow_rate_zone)
