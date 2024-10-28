@@ -50,6 +50,17 @@ class Standard
 
     # Check to make sure properties were found
     if coil_props.nil?
+      # search again without capacity
+      matching_objects = model_find_objects(standards_data[equipment_type], search_criteria, nil, Date.today)
+      if !matching_objects.empty? && (equipment_type == 'water_source_heat_pumps') && (capacity_btu_per_hr > 135000)
+        # Issue warning indicate the coil size is may be too large
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "The capacity of coil '#{coil_cooling_water_to_air_heat_pump.name}' is #{capacity_btu_per_hr.round} Btu/hr, which is larger than the 135,000 Btu/hr maximum capacity listed in the efficiency standard. This may be because of zone loads, zone size, or because zone equipment sizing in EnergyPlus includes zone multipliers. Will assume a capacity of 134,999 Btu/hr for the efficiency lookup.")
+        coil_props = model_find_object(standards_data[equipment_type], search_criteria, 134999, Date.today)
+      end
+    end
+
+    # Check to make sure properties were found
+    if coil_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
       successfully_set_all_properties = false
       return successfully_set_all_properties
@@ -119,22 +130,9 @@ class Standard
       if matching_objects.empty?
         # This proves that the search_criteria has issue finding the correct coil prop
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      else
-        # Issue warning indicate the coil size is may be too large
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "The capacity of the coil: #{coil_cooling_water_to_air_heat_pump.name} maybe too large to be found in the efficiency standard. The coil capacity is #{capacity_btu_per_hr} Btu/hr.")
+        return sql_db_vars_map
       end
-      return sql_db_vars_map
     end
-
-    # @todo Add methods to set coefficients, and add coefficients to data spreadsheet
-    # using OS defaults for now
-    # tot_cool_cap_coeff1 = coil_props['tot_cool_cap_coeff1']
-    # if tot_cool_cap_coeff1
-    #   coil_cooling_water_to_air_heat_pump.setTotalCoolingCapacityCoefficient1(tot_cool_cap_coeff1)
-    # else
-    #   OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}, cannot find tot_cool_cap_coeff1, will not be set.")
-    #   successfully_set_all_properties = false
-    # end
 
     # Preserve the original name
     orig_name = coil_cooling_water_to_air_heat_pump.name.to_s
