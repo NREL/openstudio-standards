@@ -5971,7 +5971,8 @@ class Standard
     erv_enthalpy_recovery_ratios.each do |erv_data|
       if erv_enthalpy_recovery_ratio.nil?
         erv_enthalpy_recovery_ratio = erv_data
-      elsif erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'] < erv_data['enthalpy_recovery_ratio']
+      end
+      if !erv_data['enthalpy_recovery_ratio'].nil? && (erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'] < erv_data['enthalpy_recovery_ratio'])
         erv_enthalpy_recovery_ratio = erv_data
       end
     end
