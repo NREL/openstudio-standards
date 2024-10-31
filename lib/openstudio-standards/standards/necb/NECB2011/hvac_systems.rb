@@ -542,31 +542,38 @@ class NECB2011
     # Get the capacity
     capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
 
-    # Check if secondary and/or modulating boiler required
-    # If boiler names include 'Primary Boiler' or 'Secondary Boiler' then NECB rules are applied
     boiler_capacity = capacity_w
-    if boiler_hot_water.name.to_s.include?('Primary Boiler') || boiler_hot_water.name.to_s.include?('Secondary Boiler')
-      if capacity_w / 1000.0 >= 352.0
-        if boiler_hot_water.name.to_s.include?('Primary Boiler')
-          boiler_capacity = capacity_w
-          boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
-          boiler_hot_water.setMinimumPartLoadRatio(0.25)
-        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-          boiler_capacity = 0.001
-        end
-      elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
-        boiler_capacity = capacity_w / 2
-      elsif (capacity_w / 1000.0) <= 176.0
-        if boiler_hot_water.name.to_s.include?('Primary Boiler')
-          if capacity_w <= 1.0
-            boiler_capacity = 1.0
-          else
+    # Use the NECB capacities if the SystemFuels class is not defined (i.e. this method was not called from something
+    # that created a SystemFuels object) or if either primary or secondary boiler capacity fractions are not defined.
+    if !self.fuel_type_set.is_a?(SystemFuels) || self.fuel_type_set.primary_boiler_cap_frac.nil? || self.fuel_type_set.secondary_boiler_cap_frac.nil?
+      # Check if secondary and/or modulating boiler required
+      # If boiler names include 'Primary Boiler' or 'Secondary Boiler' then NECB rules are applied
+      if boiler_hot_water.name.to_s.include?('Primary Boiler') || boiler_hot_water.name.to_s.include?('Secondary Boiler')
+        if capacity_w / 1000.0 >= 352.0
+          if boiler_hot_water.name.to_s.include?('Primary Boiler')
             boiler_capacity = capacity_w
+            boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
+            boiler_hot_water.setMinimumPartLoadRatio(0.25)
+          elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+            boiler_capacity = 0.001
           end
-        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-          boiler_capacity = 0.001
+        elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
+          boiler_capacity = capacity_w / 2
+        elsif (capacity_w / 1000.0) <= 176.0
+          if boiler_hot_water.name.to_s.include?('Primary Boiler')
+            if capacity_w <= 1.0
+              boiler_capacity = 1.0
+            else
+              boiler_capacity = capacity_w
+            end
+          elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+            boiler_capacity = 0.001
+          end
         end
       end
+    else
+      boiler_capacity = capacity_w * self.fuel_type_set.primary_boiler_cap_frac if boiler_hot_water.name.to_s.include?('Primary Boiler')
+      boiler_capacity = capacity_w * self.fuel_type_set.secondary_boiler_cap_frac if boiler_hot_water.name.to_s.include?('Secondary Boiler')
     end
     boiler_hot_water.setNominalCapacity(boiler_capacity)
 
@@ -1117,7 +1124,7 @@ class NECB2011
     # This method will seem like an error in number of args..but this is due to swig voodoo.
     heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, 'Schedule:Constant', 'Schedule Value')
     heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    heat_pump_avail_sch_prog.setName("#{multi_speed_heat_pump.name.to_s.gsub(/[ +-.]/, '_')} Availability Schedule Program by Line")
+    heat_pump_avail_sch_prog.setName("#{ems_friendly_name(multi_speed_heat_pump.name)} Availability Schedule Program by Line")
     heat_pump_avail_sch_prog_body = <<-EMS
         IF #{heat_pump_avail_sch_sensor.handle} > 0.0
           SET #{heat_pump_avail_sch_actuator.handle} = #{heat_pump_avail_sch_sensor.handle}
@@ -1129,7 +1136,7 @@ class NECB2011
     EMS
     heat_pump_avail_sch_prog.setBody(heat_pump_avail_sch_prog_body)
     pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    pcm.setName("#{heat_pump_avail_sch_prog.name.to_s.gsub(/[ +-.]/, '_')} Calling Manager")
+    pcm.setName("#{heat_pump_avail_sch_prog.name} Calling Manager")
     pcm.setCallingPoint('InsideHVACSystemIterationLoop')
     pcm.addProgram(heat_pump_avail_sch_prog)
   end
@@ -1650,6 +1657,7 @@ class NECB2011
   def setup_hw_loop_with_components(model,
                                     hw_loop,
                                     boiler_fueltype,
+                                    backup_boiler_fueltype,
                                     pump_flow_sch)
     hw_loop.setName('Hot Water Loop')
     sizing_plant = hw_loop.sizingPlant
@@ -1671,7 +1679,7 @@ class NECB2011
     boiler1 = OpenStudio::Model::BoilerHotWater.new(model)
     boiler2 = OpenStudio::Model::BoilerHotWater.new(model)
     boiler1.setFuelType(boiler_fueltype)
-    boiler2.setFuelType(boiler_fueltype)
+    boiler2.setFuelType(backup_boiler_fueltype)
     boiler1.setName('Primary Boiler')
     boiler2.setName('Secondary Boiler')
 
@@ -2178,7 +2186,7 @@ class NECB2011
   end
 
   # Method to set the base system name based on the following syntax:
-  # |sys_abbr|sys_oa|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
+  # |sys_abbr|sys_oa|shr>?|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
   # "sys_abbr" designates the NECB system type ("sys_1, sys_2, ... sys_6")
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,

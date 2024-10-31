@@ -16,7 +16,7 @@ class NECB2011 < Standard
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
     return variable if variable.kind_of?(Numeric)
-    return default if variable.nil? || (variable == 'NECB_Default')
+    return default if variable.nil? || (variable.to_s == 'NECB_Default')
     return unless variable.kind_of?(String)
 
     variable = variable.strip
@@ -26,13 +26,25 @@ class NECB2011 < Standard
   # This method converts arguments to bool.  Anything other than a bool false or string 'false' is converted
   # to a bool true.  Bool false and case insesitive string false are turned into bool false.
   def convert_arg_to_bool(variable:, default:)
-    return true if variable.nil?
+    return default if variable.nil?
     if variable.is_a? String
-      return true if variable.to_s.downcase == 'necb_default'
+      return default if variable.to_s.downcase == 'necb_default'
       return false if variable.to_s.downcase == 'false'
+      return true if variable.to_s.downcase == 'true'
     end
     return false if variable == false
-    return true
+    return variable
+  end
+
+  # This method checks if a variable is a string.  If it is anything but a string it returns the default.  If it is a
+  # string set to "NECB_Default" it return the default.  Otherwise it returns the strirng set to it.
+  def convert_arg_to_string(variable:, default:)
+    return default if variable.nil?
+    if variable.is_a? String
+      return default if variable.to_s.downcase == 'necb_default'
+      return variable
+    end
+    return default
   end
 
   def get_standards_table(table_name:)
@@ -257,7 +269,9 @@ class NECB2011 < Standard
                                    baseline_system_zones_map_option: nil,
                                    tbd_option: nil,
                                    tbd_interpolate: false,
-                                   necb_hdd: true)
+                                   necb_hdd: true,
+                                   boiler_fuel: nil,
+                                   boiler_cap_ratio: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
@@ -317,9 +331,10 @@ class NECB2011 < Standard
                                 output_meters: output_meters,
                                 airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
                                 baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
-                                necb_hdd: necb_hdd
+                                necb_hdd: necb_hdd,
+                                boiler_fuel: boiler_fuel,
+                                boiler_cap_ratio: boiler_cap_ratio
                                 )
-
   end
 
   def load_building_type_from_library(building_type:)
@@ -394,14 +409,24 @@ class NECB2011 < Standard
                            output_meters: nil,
                            airloop_economizer_type: nil,
                            baseline_system_zones_map_option: nil,
-                           necb_hdd: true)
+                           necb_hdd: true,
+                           boiler_fuel: nil,
+                           boiler_cap_ratio: nil)
+
+    primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel)
     self.fuel_type_set = SystemFuels.new()
     swh_fuel = swh_fuel.nil? ? 'NECB_Default' : swh_fuel.to_s
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel, swh_fuel: swh_fuel)
+    swh_fuel = self.fuel_type_set.swh_fueltype if swh_fuel.to_s.downcase == 'necb_default'
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
+    boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
+    boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
+
+    boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
+    self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
@@ -564,8 +589,6 @@ class NECB2011 < Standard
     ecm.apply_system_ecm(model: model,
                          ecm_system_name: ecm_system_name,
                          template_standard: self,
-                         primary_heating_fuel: self.fuel_type_set.ecm_fueltype,
-                         swh_fuel: self.fuel_type_set.ecm_fueltype,
                          ecm_system_zones_map_option: ecm_system_zones_map_option)
 
     # -------- Performace, Efficiencies, Controls and Sensors ------------
@@ -1195,11 +1218,6 @@ class NECB2011 < Standard
       end
       return no_errors
     end
-  end
-
-  # Determine whether or not water fixtures are attached to spaces
-  def model_attach_water_fixtures_to_spaces?(model)
-    return true
   end
 
   # Set the infiltration rate for this space to include
@@ -2438,4 +2456,60 @@ class NECB2011 < Standard
     return true
   end
 
+  # This method is defined and used by the vintage classes to address he issue with the heat pump fuel types.  This
+  # method does nothing when creating NECB reference buildings.
+  def validate_primary_heating_fuel(primary_heating_fuel:)
+    return primary_heating_fuel
+  end
+
+  # This method expects a string with the following pattern:  number-number
+  # The first number is the percent of the total capacity that the primary boiler's capacity will be set to.
+  # The second number is the percent of the total capacity that the secondary boiler's capacity will be set to.
+  # If no boiler_cap_ratio is provided the the primary boiler will have its capacity set to 75% of the total and the
+  # secondary boiler will have its capacity set to 25% of the total.  If a boiler_cap_ratio is set to '0_0' then the
+  # NECB default capacities are assigned.
+  def set_boiler_cap_ratios(boiler_cap_ratio:, boiler_fuel:)
+    # Rules if boiler_fuel is defined
+    unless boiler_fuel.nil?
+      # Set the NECB default boiler capacities if the boiler_cap_ratio is set to '0-0'
+      if boiler_cap_ratio == '0-0'
+        boiler_cap_ratios = {
+          primary_ratio: nil,
+          secondary_ratio: nil
+        }
+        return boiler_cap_ratios
+      elsif !boiler_fuel.to_s.downcase.include?('backup') && boiler_cap_ratio.nil?
+        # Set the NECB default boiler capacities if the boiler_cap_ratio in not defined and the boiler fuel type is set
+        # and the primary and secondary fuel types are the same.
+        boiler_cap_ratios = {
+          primary_ratio: nil,
+          secondary_ratio: nil
+        }
+        return boiler_cap_ratios
+      end
+    end
+    # Assuming the above rules do not apply, set the default boiler capacity ratio to 75% for the primary boiler and 25%
+    # for the secondary boiler
+    if boiler_cap_ratio.nil?
+      boiler_cap_ratios = {
+        primary_ratio: 0.75,
+        secondary_ratio: 0.25
+      }
+      return boiler_cap_ratios
+    end
+    # If you defined the boiler capacity ratios set them accordingly.
+    # Split the capacity ratio using the '-' symbol
+    string_ratios = boiler_cap_ratio.to_s.split('-')
+    # Turn the percentages into fractions
+    primary_ratio = string_ratios[0].to_f/100.0
+    secondary_ratio = string_ratios[1].to_f/100.0
+    # Set the hash containg the ratios and return
+    boiler_cap_ratios = {
+      primary_ratio: primary_ratio,
+      secondary_ratio: secondary_ratio
+    }
+    return boiler_cap_ratios
+  end
 end
+
+

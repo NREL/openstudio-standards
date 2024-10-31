@@ -240,7 +240,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Infiltration', "Unable to find file: #{nist_infiltration_correlations_csv}")
         return false
       end
-      coefficients_tbl = CSV.table(nist_infiltration_correlations_csv)
+      coefficients_tbl = CSV.table(nist_infiltration_correlations_csv, encoding: "ISO8859-1:utf-8" )
       coefficients_hsh = coefficients_tbl.map(&:to_hash)
 
       # select down to building type and climate zone

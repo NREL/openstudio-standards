@@ -551,7 +551,7 @@ class ASHRAE901PRM < Standard
       space_area = space.floorArea
       space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
       # calculate the new lpd values
-      space_lighting_per_area = (lighting_per_length * space_height) + lighting_per_area
+      space_lighting_per_area = ((lighting_per_length * space_height) / space_area) + lighting_per_area
 
       # Adjust the occupancy control sensor reduction factor from dataset
       if manon_or_partauto == 1
@@ -651,7 +651,7 @@ class ASHRAE901PRM < Standard
         space_area = space.floorArea
         space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
         # calculate and add new lpd values
-        user_space_type_lighting_per_area = ((lighting_per_length * space_height) + lighting_per_area) * sub_space_type_frac
+        user_space_type_lighting_per_area = (((lighting_per_length * space_height) / space_area) + lighting_per_area) * sub_space_type_frac
         space_lighting_per_area += user_space_type_lighting_per_area
 
         # Adjust the occupancy control sensor reduction factor from dataset
