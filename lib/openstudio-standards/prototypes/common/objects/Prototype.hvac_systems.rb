@@ -5966,20 +5966,22 @@ class Standard
 
     erv_enthalpy_recovery_ratio = nil
     # When there are separate heating and cooling ERR requirements, pick the highest value
-    # TODO: heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio should be refactored to take both ERR requirements; PNNL to refactor based on regressions developed from manufacturer data
+    # TODO: heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio should be refactored to take both ERR requirements (heating and cooling); PNNL to refactor based on regressions developed from manufacturer data
     erv_enthalpy_recovery_ratios = model_find_objects(standards_data['energy_recovery'], search_criteria)
     erv_enthalpy_recovery_ratios.each do |erv_data|
       if erv_enthalpy_recovery_ratio.nil?
         erv_enthalpy_recovery_ratio = erv_data
       end
-      if !erv_data['enthalpy_recovery_ratio'].nil? && (erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'] < erv_data['enthalpy_recovery_ratio'])
+      if !erv_data['energy_recovery_effectiveness'].nil? && (erv_enthalpy_recovery_ratio['energy_recovery_effectiveness'] <= erv_data['energy_recovery_effectiveness'])
+        erv_enthalpy_recovery_ratio = erv_data
+      elsif !erv_data['enthalpy_recovery_ratio'].nil? && (erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'] <= erv_data['enthalpy_recovery_ratio'])
         erv_enthalpy_recovery_ratio = erv_data
       end
     end
 
     # Extract ERR from data lookup
     if !erv_enthalpy_recovery_ratio.nil?
-      if erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'].nil? & erv_enthalpy_recovery_ratio['design_conditions'].nil?
+      if erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'].nil? & erv_enthalpy_recovery_ratio['design_conditions'].nil? & erv_enthalpy_recovery_ratio['energy_recovery_effectiveness'].nil?
         # If not included in the data, an enthalpy
         # recovery ratio (ERR) of 50% is used
         enthalpy_recovery_ratio = 0.5
@@ -6001,6 +6003,9 @@ class Standard
       else
         design_conditions = erv_enthalpy_recovery_ratio['design_conditions'].downcase
         enthalpy_recovery_ratio = erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio']
+        if enthalpy_recovery_ratio.nil?
+          enthalpy_recovery_ratio = erv_enthalpy_recovery_ratio['energy_recovery_effectiveness']
+        end
       end
     end
 
