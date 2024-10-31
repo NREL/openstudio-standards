@@ -364,17 +364,13 @@ class Standard
     end
 
     # check for existence of condenser_water_loop if WaterCooled
-    if chiller_cooling_type == 'WaterCooled'
-      if condenser_water_loop.nil?
+    if chiller_cooling_type == 'WaterCooled' && condenser_water_loop.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is WaterCooled but no condenser loop specified.')
-    end
     end
 
     # check for non-existence of condenser_water_loop if AirCooled
-    if chiller_cooling_type == 'AirCooled'
-      unless condenser_water_loop.nil?
+    if chiller_cooling_type == 'AirCooled' && !condenser_water_loop.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is AirCooled but condenser loop specified.')
-    end
     end
 
     if cooling_fuel == 'DistrictCooling'
@@ -5937,17 +5933,19 @@ class Standard
   def model_add_residential_erv(model,
                                 thermal_zone,
                                 min_oa_flow_m3_per_s_per_m2 = nil)
-
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding standalone ERV for #{thermal_zone.name}.")
 
     # Determine ERR and design basis when energy recovery is required
-    #
     # enthalpy_recovery_ratio = nil will trigger an ERV with no effectiveness that only provides OA
     enthalpy_recovery_ratio = nil
+
+    # Process climate zone:
+    # Moisture regime is not needed for climate zone 7 and 8
     climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
     climate_zone_code = climate_zone.split('-')[-1]
     climate_zone_code = 7 if ['7A', '7B'].include? climate_zone_code
     climate_zone_code = 8 if ['8A', '8B'].include? climate_zone_code
+
     case template
       when '90.1-2019'
         search_criteria = {
@@ -5956,34 +5954,33 @@ class Standard
           'under_8000_hours' => false,
           'nontransient_dwelling' => true
         }
+        metric = 'enthalpy_recovery_ratio'
       else
         search_criteria = {
           'template' => template,
           'climate_zone' => climate_zone_code,
           'under_8000_hours' => false
         }
+        metric = 'energy_recovery_effectiveness'
     end
 
+    # Pick the most stringent of the heating or cooling Enthalpy Recovery Ratio (ERR)
+    # or Energy Recovery Effectiveness (ERE); ERR and ERE are virtually the same metrics
     erv_enthalpy_recovery_ratio = nil
-    # When there are separate heating and cooling ERR requirements, pick the highest value
-    # TODO: heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio should be refactored to take both ERR requirements (heating and cooling); PNNL to refactor based on regressions developed from manufacturer data
     erv_enthalpy_recovery_ratios = model_find_objects(standards_data['energy_recovery'], search_criteria)
     erv_enthalpy_recovery_ratios.each do |erv_data|
       if erv_enthalpy_recovery_ratio.nil?
         erv_enthalpy_recovery_ratio = erv_data
       end
-      if !erv_data['energy_recovery_effectiveness'].nil? && (erv_enthalpy_recovery_ratio['energy_recovery_effectiveness'] <= erv_data['energy_recovery_effectiveness'])
-        erv_enthalpy_recovery_ratio = erv_data
-      elsif !erv_data['enthalpy_recovery_ratio'].nil? && (erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'] <= erv_data['enthalpy_recovery_ratio'])
+      if !erv_data[metric].nil? && (erv_enthalpy_recovery_ratio[metric] <= erv_data[metric])
         erv_enthalpy_recovery_ratio = erv_data
       end
     end
 
-    # Extract ERR from data lookup
+    # Extract ERR/ERE from data lookup
     if !erv_enthalpy_recovery_ratio.nil?
-      if erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'].nil? & erv_enthalpy_recovery_ratio['design_conditions'].nil? & erv_enthalpy_recovery_ratio['energy_recovery_effectiveness'].nil?
-        # If not included in the data, an enthalpy
-        # recovery ratio (ERR) of 50% is used
+      if erv_enthalpy_recovery_ratio[metric].nil? & erv_enthalpy_recovery_ratio['design_conditions'].nil?
+        # If not included in the data, an ERR of 50% is used
         enthalpy_recovery_ratio = 0.5
         case climate_zone
           when 'ASHRAE 169-2006-6B',
@@ -6002,14 +5999,11 @@ class Standard
         end
       else
         design_conditions = erv_enthalpy_recovery_ratio['design_conditions'].downcase
-        enthalpy_recovery_ratio = erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio']
-        if enthalpy_recovery_ratio.nil?
-          enthalpy_recovery_ratio = erv_enthalpy_recovery_ratio['energy_recovery_effectiveness']
-        end
+        enthalpy_recovery_ratio = erv_enthalpy_recovery_ratio[metric]
       end
     end
 
-    # # Fan power with energy recovery = 0.934 W/cfm
+    # Fan power with energy recovery = 0.934 W/cfm
     supply_fan = create_fan_by_name(model,
                                     'ERV_Supply_Fan',
                                     fan_name: "#{thermal_zone.name} ERV Supply Fan")
@@ -6039,6 +6033,7 @@ class Standard
     heat_exchanger.setInitialDefrostTimeFraction(0.167)
     heat_exchanger.setRateofDefrostTimeFractionIncrease(1.44)
     heat_exchanger.setAvailabilitySchedule(model_add_schedule(model, 'Always On - No Design Day'))
+    # TODO: heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio should be refactored to take both ERR requirements (heating and cooling); PNNL to refactor based on regressions developed from manufacturer data
     heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio(heat_exchanger, enthalpy_recovery_ratio, design_conditions, climate_zone)
 
     erv = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)

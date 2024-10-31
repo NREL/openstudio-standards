@@ -458,101 +458,74 @@ class ASHRAE9012019 < ASHRAE901
     climate_zone = climate_zone.split('-')[-1]
     climate_zone = '8' if climate_zone.include?('8')
 
+    # Check if air loop serves a non-transient dwelling unit
+    nontrans_dwel = false
+    air_loop_hvac.thermalZones.each do |zone|
+      next unless OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone)
+
+      nontrans_dwel = true
+    end
+
+    # Check annual operating hours
     if ann_op_hrs < 8000.0
-      # Table 6.5.6.1-1, less than 8000 hrs
-      search_criteria = {
-        'template' => template,
-        'climate_zone' => climate_zone,
-        'under_8000_hours' => true,
-        'nontransient_dwelling' => false,
-        'design_conditions' => 'Cooling'
-      }
-      energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
-      if energy_recovery_limits.nil?
-        # Repeat the search for heating
-        search_criteria['design_conditions'] = 'Heating'
-        energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
-        if energy_recovery_limits.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
-          return nil
-        end
-      end
-
-      if pct_oa < 0.1
-        erv_cfm = nil
-      elsif pct_oa >= 0.1 && pct_oa < 0.2
-        erv_cfm = energy_recovery_limits['percent_oa_10_to_20']
-      elsif pct_oa >= 0.2 && pct_oa < 0.3
-        erv_cfm = energy_recovery_limits['percent_oa_20_to_30']
-      elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = energy_recovery_limits['percent_oa_30_to_40']
-      elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = energy_recovery_limits['percent_oa_40_to_50']
-      elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = energy_recovery_limits['percent_oa_50_to_60']
-      elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = energy_recovery_limits['percent_oa_60_to_70']
-      elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = energy_recovery_limits['percent_oa_70_to_80']
-      elsif pct_oa >= 0.8
-        erv_cfm = energy_recovery_limits['percent_oa_greater_than_80']
-      end
+      under_8000_hours = true
+      string_for_log = 'under'
     else
-      # Check if air loop serves a non-transient dwelling unit,
-      # currently non-transient dwelling units are residential
-      # spaces in the apartment prototypes
-      building_data = model_get_building_properties(air_loop_hvac.model)
-      building_type = building_data['building_type']
-      nontrans_dwel = false
-      if building_type == 'MidriseApartment' || building_type == 'HighriseApartment'
-        air_loop_hvac.thermalZones.each do |zone|
-          next unless OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone)
+      under_8000_hours = false
+      string_for_log = 'over'
+    end
 
-          nontrans_dwel = true
-        end
-      end
+    # Search database
+    search_criteria = {
+      'template' => template,
+      'climate_zone' => climate_zone,
+      'under_8000_hours' => under_8000_hours,
+      'nontransient_dwelling' => nontrans_dwel,
+      'design_conditions' => 'Cooling'
+    }
+    energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
 
-      # Table 6.5.6.1-2, above 8000 hrs
-      search_criteria = {
-        'template' => template,
-        'climate_zone' => climate_zone,
-        'under_8000_hours' => false,
-        'nontransient_dwelling' => nontrans_dwel,
-        'design_conditions' => 'Cooling'
-      }
+    # Check if there is no cooling requirements...
+    repeat_search_with_heating = false
+    if energy_recovery_limits.nil?
+      repeat_search_with_heating = true
+    else
+      energy_recovery_limits['enthalpy_recovery_ratio'].nil?
+      repeat_search_with_heating = true
+    end
+
+    # ... if so, look for heating requirements
+    if repeat_search_with_heating
+      search_criteria['design_conditions'] = 'Heating'
       energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
       if energy_recovery_limits.nil?
-        # Repeat the search for heating
-        search_criteria['design_conditions'] = 'Heating'
-        energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
-        if energy_recovery_limits.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
-          return nil
-        end
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and #{string_for_log} 8000 hours, assuming no energy recovery required.")
+        return nil
       end
-      if pct_oa < 0.1
-        if nontrans_dwel
-          erv_cfm = energy_recovery_limits['percent_oa_0_to_10']
-        else
-          erv_cfm = nil
-        end
-      elsif pct_oa >= 0.1 && pct_oa < 0.2
-        erv_cfm = energy_recovery_limits['percent_oa_10_to_20']
-      elsif pct_oa >= 0.2 && pct_oa < 0.3
-        erv_cfm = energy_recovery_limits['percent_oa_20_to_30']
-      elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = energy_recovery_limits['percent_oa_30_to_40']
-      elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = energy_recovery_limits['percent_oa_40_to_50']
-      elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = energy_recovery_limits['percent_oa_50_to_60']
-      elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = energy_recovery_limits['percent_oa_60_to_70']
-      elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = energy_recovery_limits['percent_oa_70_to_80']
-      elsif pct_oa >= 0.8
-        erv_cfm = energy_recovery_limits['percent_oa_greater_than_80']
+    end
+
+    if pct_oa < 0.1
+      if nontrans_dwel
+        erv_cfm = energy_recovery_limits['percent_oa_0_to_10']
+      else
+        erv_cfm = nil
       end
+    elsif pct_oa >= 0.1 && pct_oa < 0.2
+      erv_cfm = energy_recovery_limits['percent_oa_10_to_20']
+    elsif pct_oa >= 0.2 && pct_oa < 0.3
+      erv_cfm = energy_recovery_limits['percent_oa_20_to_30']
+    elsif pct_oa >= 0.3 && pct_oa < 0.4
+      erv_cfm = energy_recovery_limits['percent_oa_30_to_40']
+    elsif pct_oa >= 0.4 && pct_oa < 0.5
+      erv_cfm = energy_recovery_limits['percent_oa_40_to_50']
+    elsif pct_oa >= 0.5 && pct_oa < 0.6
+      erv_cfm = energy_recovery_limits['percent_oa_50_to_60']
+    elsif pct_oa >= 0.6 && pct_oa < 0.7
+      erv_cfm = energy_recovery_limits['percent_oa_60_to_70']
+    elsif pct_oa >= 0.7 && pct_oa < 0.8
+      erv_cfm = energy_recovery_limits['percent_oa_70_to_80']
+    elsif pct_oa >= 0.8
+      erv_cfm = energy_recovery_limits['percent_oa_greater_than_80']
     end
 
     return erv_cfm
