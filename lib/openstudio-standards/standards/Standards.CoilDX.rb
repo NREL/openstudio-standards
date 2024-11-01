@@ -240,7 +240,7 @@ module CoilDX
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
   # @return [String] PTAC application
-  def coil_dx_cap_ft(coil_dx, equipment_type)
+  def coil_dx_cap_ft(coil_dx, equipment_type = 'Air Conditioners')
     case equipment_type
     when 'PTAC'
       return 'PSZ-Fine Storage DX Coil Cap-FT'
@@ -255,7 +255,7 @@ module CoilDX
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
   # @return [String] PTAC application
-  def coil_dx_cap_fff(coil_dx, equipment_type)
+  def coil_dx_cap_fff(coil_dx, equipment_type = 'Air Conditioners')
     case equipment_type
     when 'PTAC'
       return 'DX Coil Cap-FF'
@@ -270,7 +270,7 @@ module CoilDX
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
   # @return [String] PTAC application
-  def coil_dx_eir_ft(coil_dx, equipment_type)
+  def coil_dx_eir_ft(coil_dx, equipment_type = 'Air Conditioners')
     case equipment_type
     when 'PTAC'
       return 'PSZ-AC DX Coil EIR-FT'
@@ -285,7 +285,7 @@ module CoilDX
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
   # @return [String] PTAC application
-  def coil_dx_eir_fff(coil_dx, equipment_type)
+  def coil_dx_eir_fff(coil_dx, equipment_type = 'Air Conditioners')
     case equipment_type
     when 'PTAC'
       return 'Split DX Coil EIR-FF'
@@ -300,7 +300,7 @@ module CoilDX
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
   # @return [String] PTAC application
-  def coil_dx_plf_fplr(coil_dx, equipment_type)
+  def coil_dx_plf_fplr(coil_dx, equipment_type = 'Air Conditioners')
     case equipment_type
     when 'PTAC'
       return 'HPACCOOLPLFFPLR'
