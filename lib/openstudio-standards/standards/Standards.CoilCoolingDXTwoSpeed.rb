@@ -35,13 +35,26 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
+    # Define database
+    if coil_dx_heat_pump?(coil_cooling_dx_two_speed)
+      database = standards_data['heat_pumps']
+    else
+      database = standards_data['unitary_acs']
+    end
+
+    # Additional search criteria
+    if database[0].keys.include?('equipment_type')
+      if !coil_dx_heat_pump?(coil_cooling_dx_two_speed)
+        search_criteria['equipment_type'] = "Air Conditioners"
+      end
+    end
+    if database[0].keys.include?('region')
+      search_criteria['region'] = nil # non-nil values are currently used for residential products
+    end
+
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_two_speed)
-                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
-               else
-                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
-               end
+    ac_props = model_find_object(database, search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?
@@ -157,34 +170,60 @@ class Standard
     end
 
     # Make the total COOL-CAP-FT curve
-    tot_cool_cap_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_cap_ft'])
-    if tot_cool_cap_ft
-      coil_cooling_dx_two_speed.setTotalCoolingCapacityFunctionOfTemperatureCurve(tot_cool_cap_ft)
+    cool_cap_ft = nil
+    if ac_props['cool_cap_ft']
+      cool_cap_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_cap_ft'])
+    else
+      cool_cap_ft_curve_name = coil_dx_cap_ft(coil_cooling_dx_two_speed, equipment_type_field)
+      cool_cap_ft = model_add_curve(coil_cooling_dx_two_speed.model, cool_cap_ft_curve_name)
+    end
+    if cool_cap_ft
+      coil_cooling_dx_two_speed.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft)
+      coil_cooling_dx_two_speed.setLowSpeedTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_cap_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the total COOL-CAP-FFLOW curve
-    tot_cool_cap_fflow = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_cap_fflow'])
-    if tot_cool_cap_fflow
-      coil_cooling_dx_two_speed.setTotalCoolingCapacityFunctionOfFlowFractionCurve(tot_cool_cap_fflow)
+    cool_cap_fflow = nil
+    if ac_props['cool_cap_fflow']
+      cool_cap_fflow = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_cap_fflow'])
+    else
+      cool_cap_fflow_curve_name = coil_dx_cap_fff(coil_cooling_dx_two_speed, equipment_type_field)
+      cool_cap_fflow = model_add_curve(coil_cooling_dx_two_speed.model, cool_cap_fflow_curve_name)
+    end
+    if cool_cap_fflow
+      coil_cooling_dx_two_speed.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_cap_fflow curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FT curve
-    cool_eir_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_eir_ft'])
+    cool_eir_ft = nil
+    if ac_props['cool_eir_ft']
+      cool_eir_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_eir_ft'])
+    else
+      cool_eir_ft_curve_name = coil_dx_eir_ft(coil_cooling_dx_two_speed, equipment_type_field)
+      cool_eir_ft = model_add_curve(coil_cooling_dx_two_speed.model, cool_eir_ft_curve_name)
+    end
     if cool_eir_ft
       coil_cooling_dx_two_speed.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)
+      coil_cooling_dx_two_speed.setLowSpeedEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_eir_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FFLOW curve
-    cool_eir_fflow = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_eir_fflow'])
+    cool_eir_fflow = nil
+    if ac_props['cool_eir_fflow']
+      cool_eir_fflow = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_eir_fflow'])
+    else
+      cool_eir_fflow_curve_name = coil_dx_eir_fff(coil_cooling_dx_two_speed, equipment_type_field)
+      cool_eir_fflow = model_add_curve(coil_cooling_dx_two_speed.model, cool_eir_fflow_curve_name)
+    end
     if cool_eir_fflow
       coil_cooling_dx_two_speed.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
     else
@@ -193,29 +232,17 @@ class Standard
     end
 
     # Make the COOL-PLF-FPLR curve
-    cool_plf_fplr = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_plf_fplr'])
+    cool_plf_fplr = nil
+    if ac_props['cool_plf_fplr']
+      cool_plf_fplr = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_plf_fplr'])
+    else
+      cool_plf_fplr_curve_name = coil_dx_plf_fplr(coil_cooling_dx_two_speed, equipment_type_field)
+      cool_plf_fplr = model_add_curve(coil_cooling_dx_two_speed.model, cool_plf_fplr_curve_name)
+    end
     if cool_plf_fplr
       coil_cooling_dx_two_speed.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_plf_fplr curve, will not be set.")
-      successfully_set_all_properties = false
-    end
-
-    # Make the low speed COOL-CAP-FT curve
-    low_speed_cool_cap_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_cap_ft'])
-    if low_speed_cool_cap_ft
-      coil_cooling_dx_two_speed.setLowSpeedTotalCoolingCapacityFunctionOfTemperatureCurve(low_speed_cool_cap_ft)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_cap_ft curve, will not be set.")
-      successfully_set_all_properties = false
-    end
-
-    # Make the low speed COOL-EIR-FT curve
-    low_speed_cool_eir_ft = model_add_curve(coil_cooling_dx_two_speed.model, ac_props['cool_eir_ft'])
-    if low_speed_cool_eir_ft
-      coil_cooling_dx_two_speed.setLowSpeedEnergyInputRatioFunctionOfTemperatureCurve(low_speed_cool_eir_ft)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_eir_ft curve, will not be set.")
       successfully_set_all_properties = false
     end
 

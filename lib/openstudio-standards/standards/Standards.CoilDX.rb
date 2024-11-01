@@ -226,7 +226,12 @@ module CoilDX
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @return [String] PTAC application
   def coil_dx_ptac_application(coil_dx)
-    return 'New Construction'
+    case template
+    when '90.1-2004', '90.1-2007'
+      return 'New Construction'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+      return 'Standard Size'
+    end
   end
 
   # Determine what capacity curve to use to represent the change of the coil's capacity as a function of changes in temperatures

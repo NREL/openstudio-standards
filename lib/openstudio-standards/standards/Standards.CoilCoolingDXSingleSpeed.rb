@@ -42,33 +42,44 @@ class Standard
   # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
   # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
+  # @param equipment_type [Boolean] indicate that equipment_type should be in the search criteria.
   # @return [Double] full load efficiency (COP)
-  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, rename = false, necb_ref_hp = false)
-    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp)
+  def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, rename = false, necb_ref_hp = false, equipment_type = false)
+    search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp, equipment_type)
     cooling_type = search_criteria['cooling_type']
     heating_type = search_criteria['heating_type']
     sub_category = search_criteria['subcategory']
     capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed, necb_ref_hp)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
-
-    # PTAC, additional search criteria
     equipment_type = nil
-    if search_criteria.keys.include?('equipment_type')
-      equipment_type = search_criteria['equipment_type']
-      if equipment_type == 'PTAC'
-        search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
+
+    # Define database
+    if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+      database = standards_data['heat_pumps']
+    else
+      database = standards_data['unitary_acs']
+    end
+
+    # Additional search criteria
+    if database[0].keys.include?('equipment_type')
+      if search_criteria.keys.include?('equipment_type')
+        equipment_type = search_criteria['equipment_type']
+        if equipment_type == 'PTAC'
+          search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
+        end
+      elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+        search_criteria['equipment_type'] = "Air Conditioners"
       end
+    end
+    if database[0].keys.include?('region')
+      search_criteria['region'] = nil # non-nil values are currently used for residential products
     end
 
     # Look up the efficiency characteristics
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
-                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
-               else
-                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
-               end
+    ac_props = model_find_object(database, search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?
@@ -237,13 +248,13 @@ class Standard
       return sql_db_vars_map
     end
 
-    equipment_type = search_criteria['equipment_type']
+    equipment_type_field = search_criteria['equipment_type']
     # Make the COOL-CAP-FT curve
     cool_cap_ft = nil
     if ac_props['cool_cap_ft']
       cool_cap_ft = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_ft'])
     else
-      cool_cap_ft_curve_name = coil_dx_cap_ft(coil_cooling_dx_single_speed, equipment_type)
+      cool_cap_ft_curve_name = coil_dx_cap_ft(coil_cooling_dx_single_speed, equipment_type_field)
       cool_cap_ft = model_add_curve(coil_cooling_dx_single_speed.model, cool_cap_ft_curve_name)
     end
     if cool_cap_ft
@@ -258,7 +269,7 @@ class Standard
     if ac_props['cool_cap_fflow']
       cool_cap_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_fflow'])
     else
-      cool_cap_fflow_curve_name = coil_dx_cap_fff(coil_cooling_dx_single_speed, equipment_type)
+      cool_cap_fflow_curve_name = coil_dx_cap_fff(coil_cooling_dx_single_speed, equipment_type_field)
       cool_cap_fflow = model_add_curve(coil_cooling_dx_single_speed.model, cool_cap_fflow_curve_name)
     end
     if cool_cap_fflow
@@ -273,7 +284,7 @@ class Standard
     if ac_props['cool_eir_ft']
       cool_eir_ft = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_eir_ft'])
     else
-      cool_eir_ft_curve_name = coil_dx_eir_ft(coil_cooling_dx_single_speed, equipment_type)
+      cool_eir_ft_curve_name = coil_dx_eir_ft(coil_cooling_dx_single_speed, equipment_type_field)
       cool_eir_ft = model_add_curve(coil_cooling_dx_single_speed.model, cool_eir_ft_curve_name)
     end
     if cool_eir_ft
@@ -288,7 +299,7 @@ class Standard
     if ac_props['cool_eir_fflow']
       cool_eir_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_eir_fflow'])
     else
-      cool_eir_fflow_curve_name = coil_dx_eir_fff(coil_cooling_dx_single_speed, equipment_type)
+      cool_eir_fflow_curve_name = coil_dx_eir_fff(coil_cooling_dx_single_speed, equipment_type_field)
       cool_eir_fflow = model_add_curve(coil_cooling_dx_single_speed.model, cool_eir_fflow_curve_name)
     end
     if cool_eir_fflow
@@ -303,7 +314,7 @@ class Standard
     if ac_props['cool_plf_fplr']
       cool_plf_fplr = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_plf_fplr'])
     else
-      cool_plf_fplr_curve_name = coil_dx_plf_fplr(coil_cooling_dx_single_speed, equipment_type)
+      cool_plf_fplr_curve_name = coil_dx_plf_fplr(coil_cooling_dx_single_speed, equipment_type_field)
       cool_plf_fplr = model_add_curve(coil_cooling_dx_single_speed.model, cool_plf_fplr_curve_name)
     end
     if cool_plf_fplr
@@ -317,7 +328,7 @@ class Standard
     orig_name = coil_cooling_dx_single_speed.name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, true, necb_ref_hp)
+    cop = coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, true, necb_ref_hp, equipment_type)
 
     # Map the original name to the new name
     sql_db_vars_map[coil_cooling_dx_single_speed.name.to_s] = orig_name
