@@ -5947,7 +5947,7 @@ class Standard
     climate_zone_code = 8 if ['8A', '8B'].include? climate_zone_code
 
     case template
-      when '90.1-2019'
+      when '90.1-2019', '90.1-2016'
         search_criteria = {
           'template' => template,
           'climate_zone' => climate_zone_code,
