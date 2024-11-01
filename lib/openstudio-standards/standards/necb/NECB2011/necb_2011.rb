@@ -216,7 +216,7 @@ class NECB2011 < Standard
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
                                    primary_heating_fuel: 'Electricity',
-                                   swh_fuel: 'NECB_Default',
+                                   swh_fuel: nil,
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
@@ -415,7 +415,6 @@ class NECB2011 < Standard
 
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel)
     self.fuel_type_set = SystemFuels.new()
-    swh_fuel = swh_fuel.nil? ? 'NECB_Default' : swh_fuel.to_s
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel, swh_fuel: swh_fuel)
     swh_fuel = self.fuel_type_set.swh_fueltype if swh_fuel.to_s.downcase == 'necb_default'
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
@@ -424,9 +423,11 @@ class NECB2011 < Standard
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
+    swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
 
     boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
     self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
+    self.fuel_type_set.set_swh_fuel(swh_fuel: swh_fuel)
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
@@ -475,7 +476,6 @@ class NECB2011 < Standard
     apply_systems_and_efficiencies(model: model,
                                    sizing_run_dir: sizing_run_dir,
                                    primary_heating_fuel: primary_heating_fuel,
-                                   swh_fuel: swh_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
@@ -548,7 +548,6 @@ class NECB2011 < Standard
   def apply_systems_and_efficiencies(model:,
                                      sizing_run_dir:,
                                      primary_heating_fuel:,
-                                     swh_fuel:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      ecm_system_zones_map_option: 'NECB_Default',
@@ -579,8 +578,6 @@ class NECB2011 < Standard
 
     # Create Default Systems.
     apply_systems(model: model,
-                  primary_heating_fuel: primary_heating_fuel,
-                  swh_fuel: swh_fuel,
                   sizing_run_dir: sizing_run_dir,
                   shw_scale: shw_scale,
                   baseline_system_zones_map_option: baseline_system_zones_map_option)

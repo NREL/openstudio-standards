@@ -56,4 +56,9 @@ class SystemFuels
     @mau_heating_coil_type = boiler_fuel_defaults['mau_heating_coil_type'] unless @mau_heating_coil_type == 'DX'
     @heating_coil_type_sys6 = boiler_fuel_defaults['heating_coil_type_sys6']
   end
+
+  # Reset the Service Hot Water fuel.
+  def set_swh_fuel(swh_fuel:)
+    @swh_fueltype = swh_fuel
+  end
 end
