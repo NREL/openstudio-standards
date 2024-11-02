@@ -203,17 +203,13 @@ module CoilDX
     end
 
     # Get the equipment type
-    if equipment_type
-      if coil_dx.airLoopHVAC.empty?
-        if coil_dx.containingZoneHVACComponent.is_initialized
-          containing_comp = coil_dx.containingZoneHVACComponent.get
-          # PTAC
-          if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-            search_criteria['equipment_type'] = 'PTAC'
-            search_criteria['subcategory'] = nil
-            search_criteria['heating_type'] = nil
-          end
-        end
+    if equipment_type && coil_dx.airLoopHVAC.empty? && coil_dx.containingZoneHVACComponent.is_initialized
+      containing_comp = coil_dx.containingZoneHVACComponent.get
+      # PTAC
+      if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+        search_criteria['equipment_type'] = 'PTAC'
+        search_criteria['subcategory'] = nil
+        search_criteria['heating_type'] = nil
       end
     end
 

@@ -43,10 +43,9 @@ class Standard
     end
 
     # Additional search criteria
-    if database[0].keys.include?('equipment_type')
-      if !coil_dx_heat_pump?(coil_cooling_dx_two_speed)
-        search_criteria['equipment_type'] = "Air Conditioners"
-      end
+    if (database[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+      (template == 'BTAP1980TO2010'))) && !coil_dx_heat_pump?(coil_cooling_dx_two_speed)
+      search_criteria['equipment_type'] = 'Air Conditioners'
     end
     if database[0].keys.include?('region')
       search_criteria['region'] = nil # non-nil values are currently used for residential products
@@ -156,16 +155,15 @@ class Standard
 
     # Get efficiencies data depending on whether it is a unitary AC or a heat pump
     coil_efficiency_data = if coil_dx_heat_pump?(coil_cooling_dx_two_speed)
-      standards_data['heat_pumps']
-    else
-      standards_data['unitary_acs']
-    end
+                             standards_data['heat_pumps']
+                           else
+                             standards_data['unitary_acs']
+                           end
 
     # Additional search criteria
-    if coil_efficiency_data[0].keys.include?('equipment_type')
-      if !coil_dx_heat_pump?(coil_cooling_dx_two_speed)
-        search_criteria['equipment_type'] = "Air Conditioners"
-      end
+    if (coil_efficiency_data[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+      (template == 'BTAP1980TO2010'))) && !coil_dx_heat_pump?(coil_cooling_dx_two_speed)
+      search_criteria['equipment_type'] = 'Air Conditioners'
     end
     if coil_efficiency_data[0].keys.include?('region')
       search_criteria['region'] = nil # non-nil values are currently used for residential products

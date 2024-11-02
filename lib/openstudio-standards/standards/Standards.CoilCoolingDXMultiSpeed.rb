@@ -86,16 +86,15 @@ class Standard
 
     # Get efficiencies data depending on whether it is a unitary AC or a heat pump
     coil_efficiency_data = if coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
-      standards_data['heat_pumps']
-    else
-      standards_data['unitary_acs']
-    end
+                             standards_data['heat_pumps']
+                           else
+                             standards_data['unitary_acs']
+                           end
 
     # Additional search criteria
-    if coil_efficiency_data[0].keys.include?('equipment_type')
-      if !coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
-        search_criteria['equipment_type'] = "Air Conditioners"
-      end
+    if (coil_efficiency_data[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+      (template == 'BTAP1980TO2010'))) && !coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
+      search_criteria['equipment_type'] = 'Air Conditioners'
     end
     if coil_efficiency_data[0].keys.include?('region')
       search_criteria['region'] = nil # non-nil values are currently used for residential products
@@ -209,7 +208,7 @@ class Standard
       new_comp_name = "#{coil_cooling_dx_multi_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{ptac_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{template}: #{coil_cooling_dx_multi_speed.name}: #{cooling_type} #{heating_type} #{subcategory} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{ptac_eer}")
     end
-    
+
     # Preserve the original name
     orig_name = coil_cooling_dx_single_speed.name.to_s
 
@@ -272,7 +271,6 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
-
     # Define database
     if coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
       database = standards_data['heat_pumps']
@@ -281,10 +279,9 @@ class Standard
     end
 
     # Additional search criteria
-    if database[0].keys.include?('equipment_type')
-      if !coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
-        search_criteria['equipment_type'] = "Air Conditioners"
-      end
+    if (database[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+      (template == 'BTAP1980TO2010'))) && !coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
+      search_criteria['equipment_type'] = 'Air Conditioners'
     end
     if database[0].keys.include?('region')
       search_criteria['region'] = nil # non-nil values are currently used for residential products

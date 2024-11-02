@@ -62,14 +62,15 @@ class Standard
     end
 
     # Additional search criteria
-    if database[0].keys.include?('equipment_type')
+    if database[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+      (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
         if equipment_type == 'PTAC'
           search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
         end
       elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
-        search_criteria['equipment_type'] = "Air Conditioners"
+        search_criteria['equipment_type'] = 'Air Conditioners'
       end
     end
     if database[0].keys.include?('region')
@@ -239,14 +240,15 @@ class Standard
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp, equipment_type)
 
     # Additional search criteria
-    if coil_efficiency_data[0].keys.include?('equipment_type')
+    if coil_efficiency_data[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+      (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
         if equipment_type == 'PTAC'
           search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
         end
       elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
-        search_criteria['equipment_type'] = "Air Conditioners"
+        search_criteria['equipment_type'] = 'Air Conditioners'
       end
     end
     if coil_efficiency_data[0].keys.include?('region')
