@@ -154,13 +154,27 @@ class Standard
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
+    # Get efficiencies data depending on whether it is a unitary AC or a heat pump
+    coil_efficiency_data = if coil_dx_heat_pump?(coil_cooling_dx_two_speed)
+      standards_data['heat_pumps']
+    else
+      standards_data['unitary_acs']
+    end
+
+    # Additional search criteria
+    if coil_efficiency_data[0].keys.include?('equipment_type')
+      if !coil_dx_heat_pump?(coil_cooling_dx_two_speed)
+        search_criteria['equipment_type'] = "Air Conditioners"
+      end
+    end
+    if coil_efficiency_data[0].keys.include?('region')
+      search_criteria['region'] = nil # non-nil values are currently used for residential products
+    end
+
+    # Look up the efficiency characteristics
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_two_speed)
-                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
-               else
-                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
-               end
+    ac_props = model_find_object(coil_efficiency_data, search_criteria, capacity_btu_per_hr, Date.today)
 
     # Check to make sure properties were found
     if ac_props.nil?

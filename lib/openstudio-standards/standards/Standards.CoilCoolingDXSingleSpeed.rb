@@ -238,6 +238,21 @@ class Standard
     equipment_type = coil_efficiency_data[0].keys.include?('equipment_type') ? true : false
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_single_speed, necb_ref_hp, equipment_type)
 
+    # Additional search criteria
+    if coil_efficiency_data[0].keys.include?('equipment_type')
+      if search_criteria.keys.include?('equipment_type')
+        equipment_type = search_criteria['equipment_type']
+        if equipment_type == 'PTAC'
+          search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
+        end
+      elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+        search_criteria['equipment_type'] = "Air Conditioners"
+      end
+    end
+    if coil_efficiency_data[0].keys.include?('region')
+      search_criteria['region'] = nil # non-nil values are currently used for residential products
+    end
+
     # Lookup efficiency
     ac_props = model_find_object(coil_efficiency_data, search_criteria, capacity_btu_per_hr, Date.today)
 
