@@ -27,7 +27,7 @@ class Standard
     end
 
     # change equipment name for EMS validity
-    plant_comp.setName(name.gsub(/[ +-.]/, '_'))
+    plant_comp.setName(ems_friendly_name(name))
 
     # set plant component properties
     plant_comp.setPlantLoadingMode('MeetsLoadWithNominalCapacityHiOutLimit')

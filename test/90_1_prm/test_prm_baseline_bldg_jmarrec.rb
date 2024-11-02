@@ -97,7 +97,7 @@ class CreatePerformanceRatingMethodBaselineBuildingTest < Minitest::Test
 
     # Create the baseline model from the
     # supplied proposed test model
-    #create_performance_rating_method_baseline_building(building_type, building_vintage, climate_zone, sizing_run_dir = Dir.pwd, debug = false)
+    #create_performance_rating_method_baseline_building(building_type, building_vintage, climate_zone, sizing_run_dir = __dir__, debug = false)
     #model.create_performance_rating_method_baseline_building(building_type,standard,climate_zone,osm_directory,debug = false)
 
     sys_groups = model.performance_rating_method_baseline_system_groups(building_vintage)
