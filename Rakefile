@@ -160,24 +160,8 @@ namespace :data do
   spreadsheet_titles = spreadsheets_ashrae + spreadsheets_deer + spreadsheets_comstock + spreadsheets_cbes
   spreadsheet_titles = spreadsheet_titles.uniq
 
-  desc 'Check Google Drive configuration'
-  task 'apicheck' do
-    check_google_drive_configuration
-  end
-
-  desc 'Download OpenStudio_Standards spreadsheets from Google Drive'
-  task 'download' do
-    download_google_spreadsheets(spreadsheet_titles)
-  end
-
-  desc 'Download OpenStudio_Standards spreadsheets and generate JSONs'
-  task 'update' do
-    download_google_spreadsheets(spreadsheet_titles)
-    export_spreadsheet_to_json(spreadsheet_titles)
-  end
-
   desc 'Generate JSONs from OpenStudio_Standards spreadsheets'
-  task 'update:manual' do
+  task 'update' do
     export_spreadsheet_to_json(spreadsheet_titles)
   end
 

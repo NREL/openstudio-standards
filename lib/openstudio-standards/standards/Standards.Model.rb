@@ -102,6 +102,9 @@ class Standard
 
     # Check proposed model unmet load hours
     if unmet_load_hours_check
+      # Set proposed model export data in json format
+      OpenStudioStandards::RulesetChecking.export_json_output(proposed_model)
+
       # Run user model; need annual simulation to get unmet load hours
       if model_run_simulation_and_log_errors(proposed_model, run_dir = "#{sizing_run_dir}/PROP")
         umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
@@ -128,8 +131,17 @@ class Standard
       proposed_model.save(OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.osm"), true)
       forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
       idf = forward_translator.translateModel(proposed_model)
+
+      proposed_model.getSpaces.sort.each do |space|
+        space_cond_type = space_conditioning_category(space)
+        next if space_cond_type == 'Unconditioned'
+        OpenStudioStandards::RulesetChecking.tag_spaces(idf, space)
+      end
       idf_path = OpenStudio::Path.new("#{sizing_run_dir}/proposed_final.idf")
       idf.save(idf_path, true)
+
+      # export to epjson
+      OpenStudioStandards::RulesetChecking.export_epjson(proposed_model, sizing_run_dir, 'proposed_final')
     end
 
     # Define different orientation from original orientation
@@ -494,15 +506,21 @@ class Standard
       # @todo: turn off self shading
       # Set Solar Distribution to MinimalShadowing... problem is when you also have detached shading such as surrounding buildings etc
       # It won't be taken into account, while it should: only self shading from the building itself should be turned off but to my knowledge there isn't a way to do this in E+
-
       model_status = degs > 0 ? "baseline_final_#{degs}" : 'baseline_final'
+      OpenStudioStandards::RulesetChecking.export_json_output(model)
       model.save(OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.osm"), true)
 
       # Translate to IDF and save for debugging
       forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
       idf = forward_translator.translateModel(model)
+      model.getSpaces.sort.each do |space|
+        space_cond_type = space_conditioning_category(space)
+        next if space_cond_type == 'Unconditioned'
+        OpenStudioStandards::RulesetChecking.tag_spaces(idf, space)
+      end
       idf_path = OpenStudio::Path.new("#{sizing_run_dir}/#{model_status}.idf")
       idf.save(idf_path, true)
+      OpenStudioStandards::RulesetChecking.export_epjson(model, sizing_run_dir, "#{model_status}")
 
       # Check unmet load hours
       if unmet_load_hours_check
@@ -5504,7 +5522,7 @@ class Standard
   def model_does_require_wwr_adjustment?(wwr_limit, wwr_list)
     require_adjustment = false
     wwr_list.each do |wwr|
-      require_adjustment = true unless wwr > wwr_limit
+      require_adjustment = true if wwr > wwr_limit
     end
     return require_adjustment
   end
