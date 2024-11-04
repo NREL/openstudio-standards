@@ -3,7 +3,7 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
     # Get default fuel based on the system fuels if not defined.
     if swh_fueltype.nil?
-      swh_fueltype = self.fuel_type_set.swh_fuel
+      swh_fueltype = self.fuel_type_set.swh_fueltype
     end
 
     # Calculate the tank size and service water pump information
