@@ -1,9 +1,9 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/universal
 {
-	"name": "BTAP DevContainer",
+	"name": "Standards DevContainer",
 	// use a Dockerfile
-	"image":"canmet/os_standards_devcontainer:3.7.0",
+	"image":"canmet/os_sdk_container:3.7.0",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -29,5 +29,7 @@
 				"karyfoundation.idf"
 			]
 		}
-	}
+	},
+  "remoteUser": "vscode",
+  "postCreateCommand": "/venv/bin/python -m venv ${containerWorkspaceFolder}/venv && bundle config set path '${containerWorkspaceFolder}/vendor/bundle'&& bundle install"
 }
