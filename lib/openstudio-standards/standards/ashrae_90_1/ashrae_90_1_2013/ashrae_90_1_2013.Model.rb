@@ -1,6 +1,12 @@
 class ASHRAE9012013 < ASHRAE901
   # @!group Model
 
+  # Returns the PRM building envelope infiltration rate at a pressure differential of 75 Pa in cfm per ft^2
+  # @return [Double] infiltration rate in cfm per ft^2 at 75 Pa
+  def prm_building_envelope_infiltration_rate
+    return 0.4
+  end
+
   # Determines which system number is used
   # for the baseline system.
   # @return [String] the system number: 1_or_2, 3_or_4,
@@ -109,14 +115,5 @@ class ASHRAE9012013 < ASHRAE901
   def model_prm_skylight_to_roof_ratio_limit(model)
     srr_lim = 3.0
     return srr_lim
-  end
-
-  # Dummy method to avoid adjusting infiltration in PRM models using older ASHRAE 90.1 PRM methodology.
-  # space and removes the SpaceType-level infiltration objects.
-  # @param model [OpenStudio::Model::Model] openstudio model
-  # @param specific_space_infiltration_rate_75_pa [Double] space infiltration rate at a pressure differential of 75 Pa
-  # @return [Boolean] true
-  def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
-    return true
   end
 end
