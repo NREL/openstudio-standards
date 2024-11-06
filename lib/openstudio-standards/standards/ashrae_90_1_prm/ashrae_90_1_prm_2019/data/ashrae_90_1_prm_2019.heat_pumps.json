@@ -3,7 +3,7 @@
     {
       "template": "90.1-PRM-2019",
       "cooling_type": "AirCooled",
-      "heating_type": "All Other",
+      "heating_type": "Any",
       "subcategory": "PTHP",
       "minimum_capacity": 0.0,
       "maximum_capacity": 9999999.0,
@@ -26,7 +26,7 @@
     {
       "template": "90.1-PRM-2019",
       "cooling_type": "AirCooled",
-      "heating_type": "All Other",
+      "heating_type": "Any",
       "subcategory": "Single Package",
       "minimum_capacity": 0.0,
       "maximum_capacity": 64999.0,
@@ -49,7 +49,7 @@
     {
       "template": "90.1-PRM-2019",
       "cooling_type": "AirCooled",
-      "heating_type": "All Other",
+      "heating_type": "Any",
       "subcategory": "Split-system and single package",
       "minimum_capacity": 65000.0,
       "maximum_capacity": 134999.0,
@@ -72,7 +72,7 @@
     {
       "template": "90.1-PRM-2019",
       "cooling_type": "AirCooled",
-      "heating_type": "All Other",
+      "heating_type": "Any",
       "subcategory": "Split-system and single package",
       "minimum_capacity": 135000.0,
       "maximum_capacity": 239999.0,
@@ -95,7 +95,7 @@
     {
       "template": "90.1-PRM-2019",
       "cooling_type": "AirCooled",
-      "heating_type": "All Other",
+      "heating_type": "Any",
       "subcategory": "Split-system and single package",
       "minimum_capacity": 240000.0,
       "maximum_capacity": 9999999.0,
