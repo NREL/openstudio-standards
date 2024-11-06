@@ -2,9 +2,7 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
-
 class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
-
   # Set to true to run the standards in the test.
   PERFORM_STANDARDS = true
 
@@ -16,182 +14,180 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
   # Test to validate the heating efficiency generated against expected values stored in the file:
   # 'compliance_heatpump_efficiencies_expected_results.csv
   def test_heatpump_efficiency
+    logger.info "Starting suite of tests for: #{__method__}"
 
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    save_intermediate_models = false
+    # Define test parameters that apply to all tests.
+    test_parameters = {
+      test_method: __method__,
+      save_intermediate_models: true,
+      heating_coil_type: 'DX',
+      baseboard_type: 'Hot Water'
+    }
 
-    #templates = ['NECB2011', 'NECB2015', 'NECB2020', 'BTAPPRE1980']
-    templates = ['NECB2020']
+    # Define test cases.
+    test_cases = {}
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:Table 5.2.12.1." }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:Table 5.2.12.1." }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:Table 5.2.12.1." }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:Table 5.2.12.1.-A" }
 
-    templates.each do |template|
-      heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
-      standard = get_standard(template)
+    # Test cases. Three cases for NG and FuelOil, one for Electric.
+    # Results and name are tbd here as they will be calculated in the test.
 
-      # Initialize hashes for storing expected heat pump efficiency data from file
-      min_caps = []
-      max_caps = []
-      #efficiency_type = []
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :FuelType => ["Electricity"],
+                        :TestCase => ["case-1"],
+                        :TestPars => { :test_capacity_kW => 9.5 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
 
-      # read the file for the expected unitary efficiency values for different heating types and equipment capacity ranges
-      num_cap_intv = 0
-      CSV.foreach(heatpump_expected_result_file, headers: true) do |data|
-        min_caps << data['Min Capacity (kW)']
-        max_caps << data['Max Capacity (kW)']
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :FuelType => ["Electricity"],
+                        :TestCase => ["case-2"],
+                        :TestPars => { :test_capacity_kW => 29.5 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
 
-        num_cap_intv += 1
-      end
-      # Use the expected heat pump efficiency data to generate suitable equipment capacities for the test to cover all
-      # the relevant equipment capacity ranges
-      test_caps = []
-      for i in 0..num_cap_intv - 2
-        test_caps << 0.5 * ((min_caps[i]).to_f + (min_caps[i + 1]).to_f)
-      end
-      test_caps << (min_caps[num_cap_intv - 1].to_f + 10.0)
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :FuelType => ["Electricity"],
+                        :TestCase => ["case-3"],
+                        :TestPars => { :test_capacity_kW => 55.0 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
 
-      # Generate the osm files for all relevant cases to generate the test data for system 3
-      actual_heatpump_cop = []
-      heatpump_res_file_output_text = "Min Capacity (kW),Max Capacity (kW),Test Capacity (kW),COP (no fan),COP-H\n"
-      boiler_fueltype = 'Electricity'
-      baseboard_type = 'Hot Water'
-      heating_coil_type = 'DX'
-      
-      test_caps.each do |cap|
-        name = "#{template}_sys3_HtgDXCoilCap-#{cap}kW"
-        name.gsub!(/\s+/, "-")
-        puts "***************#{name}***************\n"
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :FuelType => ["Electricity"],
+                        :TestCase => ["case-4"],
+                        :TestPars => { :test_capacity_kW => 146.5 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
 
-        # Load model and set climate file.
-        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :FuelType => ["Electricity"],
+                        :TestCase => ["case-5"],
+                        :TestPars => { :test_capacity_kW => 233 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
 
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
-        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                                    zones: model.getThermalZones,
-                                                                                                    heating_coil_type: heating_coil_type,
-                                                                                                    baseboard_type: baseboard_type,
-                                                                                                    hw_loop: hw_loop,
-                                                                                                    new_auto_zoner: false)
-        
-        dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
-        dx_clg_coils.each do |coil|
-          coil.setRatedTotalCoolingCapacity(cap * 1000)
-          flow_rate = cap * 1000 * 5.0e-5
-          coil.setRatedAirFlowRate(flow_rate)
-        end
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
-        # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-        actual_heatpump_cop << model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
-      end
+    # Write test results.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
 
-      # Generate table of test heat pump heating efficiencies
-      output_line_text = ''
-      for i in 0..num_cap_intv - 1
-        # Convert from  COP  to COP_H for heat pump heating coils
-        # COP from code is converted to remove fan heat gain following ASHRAE 90.1:2013 section 11.5.2.c
-        # As the OpenStudio model has the COP (no fan), so it's converted back in the unit test to compare it to the code
-        capacity_btu_per_hr = OpenStudio.convert(test_caps[i].to_f, 'kW', 'Btu/hr').get
-        actual_heatpump_copH = actual_heatpump_cop[i] / (1.48E-7 * capacity_btu_per_hr + 1.062)
-        output_line_text += "#{min_caps[i]},#{max_caps[i]},#{test_caps[i]},#{actual_heatpump_cop[i].round(1)},#{actual_heatpump_copH.round(1)}\n"
-      end
-      heatpump_res_file_output_text += output_line_text
-
-      # Write test results file.
-      test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_test_results.csv")
-
-      File.open(test_result_file, 'w') { |f| f.write(heatpump_res_file_output_text.chomp) }
-
-      # Test that the values are correct by doing a file compare.
-      expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_efficiencies_expected_results.csv")
-
-      # Check if test results match expected.
-      msg = "Heat pump efficiency test results do not match what is expected in test"
-      file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
-    end
-
+    # Read expected results.
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name), {symbolize_names: true})
+    # Check if test results match expected.
+    msg = "Heat pump efficiencies test results do not match what is expected in test"
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished suite of tests for: #{__method__}"
   end
 
-  # Test to validate the heat pump performance curves
-  def test_heatpump_curves
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_heatpump_efficiency that runs a specific test. Called by do_test_cases in necb_helper.rb.
+  def do_test_heatpump_efficiency(test_pars:, test_case:)
 
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    template = 'NECB2011'
-    standard = get_standard(template)
-    save_intermediate_models = false
+    # Debug.
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
 
-    heatpump_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
-    heatpump_curve_names = []
-    CSV.foreach(heatpump_expected_result_file, headers: true) do |data|
-      heatpump_curve_names << data['Curve Name']
-    end
-    # Generate the osm files for all relevant cases to generate the test data for system 3
-    heatpump_res_file_output_text = "Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,coeff5,coeff6,min_x,max_x\n"
-    boiler_fueltype = 'Electricity'
-    baseboard_type = 'Hot Water'
-    heating_coil_type = 'DX'
-    
-    name = "sys3"
-    name.gsub!(/\s+/, "-")
-    puts "***************#{name}***************\n"
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    test_name = test_pars[:test_method]
+    save_intermediate_models = test_pars[:save_intermediate_models]
+    heating_coil_type = test_pars[:heating_coil_type]
+    baseboard_type = test_pars[:baseboard_type]
+    fueltype = test_pars[:FuelType]
+    vintage = test_pars[:Vintage]
+    standard = get_standard(vintage)
+    # Test specific inputs.
+    cap = test_case[:test_capacity_kW]
+    # Define the test name.
+    name = "#{vintage}_sys3_HtgDXCoilCap_#{fueltype}_cap-#{cap.to_int}kW__Baseboard-#{baseboard_type}"
+    name_short = "#{vintage}_sys3_HtgDXCoilCap_cap-#{cap.to_int}kW"
+
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
+    logger.info "Starting individual test: #{name}"
+    actual_heatpump_cop = []
 
     # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
     BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-            
+
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
     standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
                                                                                                 baseboard_type: baseboard_type,
                                                                                                 hw_loop: hw_loop,
                                                                                                 new_auto_zoner: false)
-    
-    # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
-    dx_units = model.getCoilHeatingDXSingleSpeeds
-    heatpump_cap_ft_curve = dx_units[0].totalHeatingCapacityFunctionofTemperatureCurve.to_CurveCubic.get
-    heatpump_res_file_output_text +=
-      "#{heatpump_curve_names[0]},cubic,#{'%.5E' % heatpump_cap_ft_curve.coefficient1Constant},#{'%.5E' % heatpump_cap_ft_curve.coefficient2x}," +
-        "#{'%.5E' % heatpump_cap_ft_curve.coefficient3xPOW2},#{'%.5E' % heatpump_cap_ft_curve.coefficient4xPOW3},#{'%.5E' % heatpump_cap_ft_curve.minimumValueofx}," +
-        "#{'%.5E' % heatpump_cap_ft_curve.maximumValueofx}\n"
-    heatpump_eir_ft_curve = dx_units[0].energyInputRatioFunctionofTemperatureCurve.to_CurveCubic.get
-    heatpump_res_file_output_text +=
-      "#{heatpump_curve_names[1]},cubic,#{'%.5E' % heatpump_eir_ft_curve.coefficient1Constant},#{'%.5E' % heatpump_eir_ft_curve.coefficient2x}," +
-        "#{'%.5E' % heatpump_eir_ft_curve.coefficient3xPOW2},#{'%.5E' % heatpump_eir_ft_curve.coefficient4xPOW3},#{'%.5E' % heatpump_eir_ft_curve.minimumValueofx}," +
-        "#{'%.5E' % heatpump_eir_ft_curve.maximumValueofx}\n"
-    heatpump_cap_flow_curve = dx_units[0].totalHeatingCapacityFunctionofFlowFractionCurve.to_CurveCubic.get
-    heatpump_res_file_output_text +=
-      "#{heatpump_curve_names[2]},cubic,#{'%.5E' % heatpump_cap_flow_curve.coefficient1Constant},#{'%.5E' % heatpump_cap_flow_curve.coefficient2x}," +
-        "#{'%.5E' % heatpump_cap_flow_curve.coefficient3xPOW2},#{'%.5E' % heatpump_cap_flow_curve.coefficient4xPOW3},#{'%.5E' % heatpump_cap_flow_curve.minimumValueofx}," +
-        "#{'%.5E' % heatpump_cap_flow_curve.maximumValueofx}\n"
-    heatpump_eir_flow_curve = dx_units[0].energyInputRatioFunctionofFlowFractionCurve.to_CurveQuadratic.get
-    heatpump_res_file_output_text +=
-      "#{heatpump_curve_names[3]},quadratic,#{'%.5E' % heatpump_eir_flow_curve.coefficient1Constant},#{'%.5E' % heatpump_eir_flow_curve.coefficient2x}," +
-        "#{'%.5E' % heatpump_eir_flow_curve.coefficient3xPOW2},#{'%.5E' % heatpump_eir_flow_curve.minimumValueofx},#{'%.5E' % heatpump_eir_flow_curve.maximumValueofx}\n"
-    heatpump_plfvsplr__curve = dx_units[0].partLoadFractionCorrelationCurve.to_CurveCubic.get
-    heatpump_res_file_output_text +=
-      "#{heatpump_curve_names[4]},cubic,#{'%.5E' % heatpump_plfvsplr__curve.coefficient1Constant},#{'%.5E' % heatpump_plfvsplr__curve.coefficient2x}," +
-        "#{'%.5E' % heatpump_plfvsplr__curve.coefficient3xPOW2},#{'%.5E' % heatpump_plfvsplr__curve.coefficient4xPOW3}," +
-        "#{'%.5E' % heatpump_plfvsplr__curve.minimumValueofx},#{'%.5E' % heatpump_plfvsplr__curve.maximumValueofx}\n"
 
-    # Write test results file.
-    test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_heatpump_curves_test_results.csv")
-    File.open(test_result_file, 'w') { |f| f.write(heatpump_res_file_output_text.chomp) }
+=begin
 
-    # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_heatpump_curves_expected_results.csv")
+      dx_htg_coils = model.getCoilHeatingDXSingleSpeeds
+      dx_htg_coils.each do |coil|
+        coil.setRatedTotalHeatingCapacity(cap * 1000)
+        flow_rate = cap * 1000 * 5.0e-5
+        coil.setRatedAirFlowRate(flow_rate)
+      end
+=end
 
-    # Check if test results match expected.
-    msg = "Heat pump performance curve coeffs test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
+
+    dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
+    dx_clg_coils.each do |coil|
+      coil.setRatedTotalCoolingCapacity(cap * 1000)
+      flow_rate = cap * 1000 * 5.0e-5
+      coil.setRatedAirFlowRate(flow_rate)
+    end
+
+
+    # Wrap test in begin/rescue/ensure.
+    begin
+      # Run sizing.
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
+      actual_heatpump_cop = model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
+
+      dx_htg_coils = model.getCoilHeatingDXSingleSpeeds
+      dx_htg_coils.each do |coil|
+        cap_h = coil.ratedTotalHeatingCapacity
+        puts "Rated Total Heating Capacity: #{cap_h}"
+        puts "coil #{coil}"
+      end
+
+      capacity_btu_per_hr = OpenStudio.convert(cap.to_f, 'kW', 'Btu/hr').get
+      actual_heatpump_copH = actual_heatpump_cop / (1.48E-7 * capacity_btu_per_hr + 1.062)
+      # https://github.com/NREL/openstudio-standards/blob/971514ee0a64262a9c81788fd85fc60d8dd69980/lib/openstudio-standards/prototypes/common/objects/Prototype.utilities.rb#L379C7-L379C58
+      results = {
+        test_capacity_kW: cap.signif,
+        test_capacity_btu_per_hr: capacity_btu_per_hr.signif,
+        actual_heatpump_cop: actual_heatpump_cop.round(2),
+        actual_heatpump_copH: actual_heatpump_copH.round(2)
+      }
+
+    rescue => error
+      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+    end
+
+    # Add this test case to results and return the hash.
+
+    logger.info "Completed individual test: #{name}"
+    return results
   end
+
+=begin
+  # Test to validate the heat pump performance curves
+  def test_heatpump_curves
+  end
+=end
+
 end
