@@ -26,10 +26,14 @@
 				"castwide.solargraph",
 				"ms-azuretools.vscode-docker",
 				"KoichiSasada.vscode-rdbg",
-				"karyfoundation.idf"
+				"karyfoundation.idf",
+				"ms-python.python",
+				"janisdd.vscode-edit-csv",
+				"qwtel.sqlite-viewer",
 			]
 		}
 	},
+  "runArgs": ["--env", "LANG=en_US.UTF-8"],
   "remoteUser": "vscode",
   "postCreateCommand": "/venv/bin/python -m venv ${containerWorkspaceFolder}/venv && bundle config set path '${containerWorkspaceFolder}/vendor/bundle'&& bundle install"
 }
