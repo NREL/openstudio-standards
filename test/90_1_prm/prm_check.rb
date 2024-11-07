@@ -1143,18 +1143,18 @@ class AppendixGPRMTests < Minitest::Test
       # "The baseline building design shall be modeled with the same number of floors and
       # identical conditioned floor area as the proposed design."
       # So it is assumed that the baseline space conditioning category shall be the same as the proposed.
-      # if baseline_or_proposed == 'baseline'
-      #   infil_rate = 0.6
-      # else
-      #   if building_type == 'SmallOffice'
-      #     infil_rate = 0.22
-      #   elsif building_type == 'LargeHotel'
-      #     infil_rate = 0.50
-      #   elsif building_type == 'Warehouse'
-      #     infil_rate = 0.61
-      #   end
-      # end
-      infil_rate = 0.6
+      if baseline_or_proposed == 'baseline'
+        infil_rate = 1.0
+      else
+        # if building_type == 'SmallOffice'
+        #   infil_rate = 0.22
+        # elsif building_type == 'LargeHotel'
+        #   infil_rate = 0.50
+        # elsif building_type == 'Warehouse'
+        #   infil_rate = 0.61
+        # end
+        infil_rate = 1.0
+      end
 
       conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
       model_infil_rate = (std.model_current_building_envelope_infiltration_at_75pa(model, prototypes_spc_area_calc[prototype]) * conv_fact).round(2)

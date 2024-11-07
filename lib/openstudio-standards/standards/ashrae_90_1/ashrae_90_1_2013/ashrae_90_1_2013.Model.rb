@@ -4,7 +4,7 @@ class ASHRAE9012013 < ASHRAE901
   # Returns the PRM building envelope infiltration rate at a pressure differential of 75 Pa in cfm per ft^2
   # @return [Double] infiltration rate in cfm per ft^2 at 75 Pa
   def prm_building_envelope_infiltration_rate
-    return 0.4
+    return 1.0
   end
 
   # Dummy method to avoid adjusting infiltration in PRM models using older ASHRAE 90.1 PRM methodology.

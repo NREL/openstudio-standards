@@ -608,14 +608,14 @@ class Standard
       curr_tot_infil_cfm_per_envelope_area = OpenStudio.convert(curr_tot_infil_m3_per_s_per_envelope_area, 'm^3/s*m^2', 'cfm/ft^2').get
 
       # Warn users if the infiltration modeling in the user/proposed model is not based on field verification
-      # If not modeled based on field verification, it should be modeled as 0.6 cfm/ft2
+      # If model based on field verification use 0.6 cfm/ft^2, otherwise use 1.0 cfm/ft^2
       if infiltration_modeled_from_field_verification_results == 'true'
         if curr_tot_infil_cfm_per_envelope_area < 0.6
           OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The user model's I_75Pa is estimated to be #{curr_tot_infil_cfm_per_envelope_area} m3/s per m2 of total building envelope")
         end
 
         # Modify model to follow the PRM infiltration modeling method
-        model_apply_standard_infiltration(proposed_model, infiltration_rate: curr_tot_infil_cfm_per_envelope_area)
+        model_apply_standard_infiltration(proposed_model, infiltration_rate: 0.6)
       else
         # Modify model to follow the PRM infiltration modeling method with the default infiltration rate
         model_apply_standard_infiltration(proposed_model, infiltration_rate: prm_building_envelope_infiltration_rate)
