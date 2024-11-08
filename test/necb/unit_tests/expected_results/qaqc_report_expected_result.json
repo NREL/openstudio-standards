@@ -250,9 +250,7 @@
         "infiltration_method": "Flow/ExteriorArea",
         "infiltration_flow_per_m2": 0.00025,
         "occupancy_schedule": null,
-        "waterUseEquipment": [
-
-        ]
+        "waterUseEquipment": []
       },
       {
         "name": "Dining",
@@ -314,9 +312,7 @@
       "infiltration_method": "Flow/ExteriorArea",
       "infiltration_flow_per_m2": 0.00025,
       "occupancy_schedule": null,
-      "waterUseEquipment": [
-
-      ]
+      "waterUseEquipment": []
     },
     {
       "name": "Dining",
