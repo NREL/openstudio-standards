@@ -447,7 +447,8 @@
           "notes": "From NECB 2011, Table 5.2.12.1"
         },
         {
-          "equipment_type": "Air Conditioners",
+          "equipment_type": "PTAC",
+          "application": null,
           "cooling_type": "AirCooled",
           "heating_type": "Electric Resistance or None",
           "subcategory": null,
