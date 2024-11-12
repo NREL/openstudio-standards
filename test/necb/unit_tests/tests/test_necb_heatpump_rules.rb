@@ -288,7 +288,7 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
           minimumValueofx: sprintf('%.5E', curve.minimumValueofx),
           maximumValueofx: sprintf('%.5E', curve.maximumValueofx)
         }
-        # Conditionally add `coefficient4xPOW3` if they exist (only for cubic curves)
+        # Conditionally add `coefficient4xPOW3` if it exists (only for cubic curves)
         results[dx_unit.name.get][curve_name][:coefficient4xPOW3] = sprintf('%.5E', curve.coefficient4xPOW3) if curve.respond_to?(:coefficient4xPOW3)
       end
     end
