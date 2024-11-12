@@ -466,12 +466,8 @@
             "nominal_total_capacity_w": 65653.65
           }
         ],
-        "dx_two_speed": [
-
-        ],
-        "coil_cooling_water": [
-
-        ]
+        "dx_two_speed": [],
+        "coil_cooling_water": []
       },
       "heating_coils": {
         "coil_heating_gas": [
@@ -482,12 +478,8 @@
             "nominal_capacity": 209949.22
           }
         ],
-        "coil_heating_electric": [
-
-        ],
-        "coil_heating_water": [
-
-        ]
+        "coil_heating_electric": [],
+        "coil_heating_water": []
       },
       "heat_exchanger": {
       }
@@ -522,12 +514,8 @@
             "nominal_total_capacity_w": 9939.64
           }
         ],
-        "dx_two_speed": [
-
-        ],
-        "coil_cooling_water": [
-
-        ]
+        "dx_two_speed": [],
+        "coil_cooling_water": []
       },
       "heating_coils": {
         "coil_heating_gas": [
@@ -538,12 +526,8 @@
             "nominal_capacity": 22010.39
           }
         ],
-        "coil_heating_electric": [
-
-        ],
-        "coil_heating_water": [
-
-        ]
+        "coil_heating_electric": [],
+        "coil_heating_water": []
       },
       "heat_exchanger": {
       }
@@ -578,15 +562,9 @@
           "nominal_capacity": 0.001
         }
       ],
-      "chiller_electric_eir": [
-
-      ],
-      "cooling_tower_single_speed": [
-
-      ],
-      "water_heater_mixed": [
-
-      ]
+      "chiller_electric_eir": [],
+      "cooling_tower_single_speed": [],
+      "water_heater_mixed": []
     },
     {
       "name": "Main Service Water Loop",
@@ -602,15 +580,9 @@
           "motor_efficency": 0.7
         }
       ],
-      "boilers": [
-
-      ],
-      "chiller_electric_eir": [
-
-      ],
-      "cooling_tower_single_speed": [
-
-      ],
+      "boilers": [],
+      "chiller_electric_eir": [],
+      "cooling_tower_single_speed": [],
       "water_heater_mixed": [
         {
           "name": "49gal NaturalGas Water Heater - 33kBtu/hr 0.82 Therm Eff",
@@ -653,12 +625,8 @@
       "The resource referenced by LifeCycleCost:UsePriceEscalation= \"U.S. AVG  COMMERCIAL-NATURAL GAS\" has no energy cost.   ... It is likely that the wrong resource is used. The resource should match the meter used in Utility:Tariff.",
       "The resource referenced by LifeCycleCost:UsePriceEscalation= \"U.S. AVG  COMMERCIAL-COAL\" has no energy cost.   ... It is likely that the wrong resource is used. The resource should match the meter used in Utility:Tariff."
     ],
-    "fatal": [
-
-    ],
-    "severe": [
-
-    ]
+    "fatal": [],
+    "severe": []
   },
   "ruby_warnings": [
     "space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule is empty for attic",
