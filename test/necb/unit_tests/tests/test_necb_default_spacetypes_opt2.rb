@@ -43,7 +43,6 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
 
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-
     # Create empty results hash and call the template method that runs the individual test cases.
     test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
@@ -145,7 +144,6 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
                              "Washroom-sch-B", "Washroom-sch-C", "Washroom-sch-D", "Washroom-sch-E", "Washroom-sch-F", "Washroom-sch-G",
                              "Washroom-sch-H", "Washroom-sch-I", "Dress./fitt. - performance arts", "Locker room", "Retail - dressing/fitting"]
           space_type_name = st.standardsSpaceType.get
-          puts "space_type_name #{space_type_name}"
           if reduceLPDSpaces.include?(space_type_name)
             occSensLPDfactor = 0.9
           elsif ((space_type_name == 'Storage area' && space_area < 100) ||
@@ -155,86 +153,89 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
           end
         end
 
-        st.lights.each { |light| total_lpd << light.powerPerFloorArea.get * occSensLPDfactor; lpd_sched << light.schedule.get.name }
-        if total_lpd[0].nil?
-          total_lpd[0] = 0.0
-          lpd_sched[0] = "NA"
+        st.lights.each do |light|
+          total_lpd << light.powerPerFloorArea.get * occSensLPDfactor
+          lpd_sched << light.schedule.get.name
         end
+        ensure_non_nil_power_and_schedule(total_lpd, lpd_sched)
 
-        # People / Occupancy.
+        # People / Occupancy
         total_occ_dens = []
         occ_sched = []
-        st.people.each { |people_def| total_occ_dens << people_def.peoplePerFloorArea.get; occ_sched << people_def.numberofPeopleSchedule.get.name }
+        st.people.each do |people_def|
+          total_occ_dens << people_def.peoplePerFloorArea.get
+          occ_sched << people_def.numberofPeopleSchedule.get.name
+        end
 
-        # Equipment - Gas.
+        # Equipment - Gas
         gas_equip_power = []
         gas_equip_sched = []
-        st.gasEquipment.each { |gas_equip| gas_equip_power << gas_equip.powerPerFloorArea.get; gas_equip_sched << gas_equip.schedule.get.name }
-        if gas_equip_power[0].nil?
-          gas_equip_power[0] = 0.0
-          gas_equip_sched[0] = "NA"
+        st.gasEquipment.each do |gas_equip|
+          gas_equip_power << gas_equip.powerPerFloorArea.get
+          gas_equip_sched << gas_equip.schedule.get.name
         end
+        ensure_non_nil_power_and_schedule(gas_equip_power, gas_equip_sched)
 
-        # Equipment - Electric.
+        # Equipment - Electric
         elec_equip_power = []
         elec_equip_sched = []
-        st.electricEquipment.each { |elec_equip| elec_equip_power << elec_equip.powerPerFloorArea.get; elec_equip_sched << elec_equip.schedule.get.name }
-        if elec_equip_power[0].nil?
-          elec_equip_power[0] = 0.0
-          elec_equip_sched[0] = "NA"
+        st.electricEquipment.each do |elec_equip|
+          elec_equip_power << elec_equip.powerPerFloorArea.get
+          elec_equip_sched << elec_equip.schedule.get.name
         end
+        ensure_non_nil_power_and_schedule(elec_equip_power, elec_equip_sched)
 
-        # Equipment - Steam.
+        # Equipment - Steam
         steam_equip_power = []
         steam_equip_sched = []
-        st.steamEquipment.each { |steam_equip| steam_equip_power << steam_equip.powerPerFloorArea.get; steam_equip_sched << steam_equip.schedule.get.name }
-        if steam_equip_power[0].nil?
-          steam_equip_power[0] = 0.0
-          steam_equip_sched[0] = "NA"
+        st.steamEquipment.each do |steam_equip|
+          steam_equip_power << steam_equip.powerPerFloorArea.get
+          steam_equip_sched << steam_equip.schedule.get.name
         end
+        ensure_non_nil_power_and_schedule(steam_equip_power, steam_equip_sched)
 
-        # Equipment - Hot Water (not SWH is below).
+        # Equipment - Hot Water
         hw_equip_power = []
         hw_equip_sched = []
-        st.hotWaterEquipment.each { |equip| hw_equip_power << equip.powerPerFloorArea.get; hw_equip_sched << equip.schedule.get.name }
-        if hw_equip_power[0].nil?
-          hw_equip_power[0] = 0.0
-          hw_equip_sched[0] = "NA"
+        st.hotWaterEquipment.each do |equip|
+          hw_equip_power << equip.powerPerFloorArea.get
+          hw_equip_sched << equip.schedule.get.name
         end
-
-        # Equipment - Other.
-        other_equip_power = []
-        other_equip_sched = []
-        st.otherEquipment.each { |equip| other_equip_power << equip.powerPerFloorArea.get; other_equip_sched << equip.schedule.get.name }
-
+        ensure_non_nil_power_and_schedule(hw_equip_power, hw_equip_sched)
         # Equipment - SWH.
         swh_loop = OpenStudio::Model::PlantLoop.new(model)
         swh_peak_flow_per_area = []
         swh_heating_target_temperature = []
-        swh__schedule = ""
-        area_per_occ = 0.0
-        area_per_occ = 1 / total_occ_dens[0].to_f unless total_occ_dens[0].nil?
+        swh_schedule = ""
+        area_per_occ = total_occ_dens.map { |val| val.nil? ? 0.0 : 1 / val.to_f }
         water_fixture = standard.model_add_swh_end_uses_by_space(model, swh_loop, space)
+
         if water_fixture.nil?
-          swh_watts_per_person = 0.0
-          swh_fraction_schedule = 0.0
-          swh_target_temperature_schedule = "NA"
+          swh_watts_per_person = Array.new(total_occ_dens.size, 0.0)
+          swh_fraction_schedule = Array.new(total_occ_dens.size, 0.0)
+          swh_target_temperature_schedule = Array.new(total_occ_dens.size, "NA")
         else
-          swh_fraction_schedule = water_fixture.flowRateFractionSchedule.get.name
+          swh_fraction_schedule = Array.new(total_occ_dens.size) { water_fixture.flowRateFractionSchedule.get.name }
           swh_peak_flow = water_fixture.waterUseEquipmentDefinition.peakFlowRate # m3/s
-          swh_peak_flow_per_area = swh_peak_flow / space_area # m3/s/m2
-          # # Watt per person =             m3/s/m3        * 1000W/kW * (specific heat * dT) * m2/person
-          swh_watts_per_person = swh_peak_flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ
-          swh_target_temperature_schedule = water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values
-          swh_target_temperature_schedule = swh_target_temperature_schedule.map { |val| val.to_f.round(1) }
+          swh_peak_flow_per_area = Array.new(total_occ_dens.size) { swh_peak_flow / space_area } # m3/s/m2
+
+          swh_watts_per_person = swh_peak_flow_per_area.map.with_index do |flow_per_area, i|
+            flow_per_area * 1000 * (4.19 * 44.4) * 1000 * area_per_occ[i]
+          end
+
+          swh_target_temperature_schedule = Array.new(total_occ_dens.size) do
+            water_fixture.waterUseEquipmentDefinition.targetTemperatureSchedule.get.to_ScheduleRuleset.get.defaultDaySchedule.values.map { |val| val.to_f.round(1) }
+          end
         end
 
-        # People.
-        if total_occ_dens[0].nil?
-          total_occ_dens[0] = 0.0
-          occ_sched[0] = "NA"
-        else
-          total_occ_dens[0] = 1 / total_occ_dens[0].to_f
+        # Check all values in the total_occ_dens array
+        total_occ_dens.each_with_index do |occ_value, index|
+          if occ_value.nil?
+            total_occ_dens[index] = 0.0
+            occ_sched[index] = "NA"
+          else
+            total_occ_dens[index] = 1 / occ_value.to_f
+          end
         end
 
         # Outdoor Air / Ventilation.
@@ -249,24 +250,23 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         else
           dsoa_outdoorAirFlowRateFractionSchedule = dsoa.outdoorAirFlowRateFractionSchedule.get.name
         end
-
         # Add this test case to results and return the hash.
         results[space_type_name] = {
           standards_space_type: st.standardsSpaceType.get,
           standards_building_type: st.standardsBuildingType.get,
-          total_lpd: total_lpd[0].signif(3),
-          lpd_schedule_name: lpd_sched[0],
-          total_occ_dens_m2_per_person: total_occ_dens[0].signif(3),
-          occupancy_schedule_name: occ_sched[0],
-          gas_equip_power: gas_equip_power[0].signif(3),
-          gas_equip_schedule_name: gas_equip_sched[0],
-          elec_equip_power_W_per_m2: elec_equip_power[0].signif(3),
-          elec_equip_schedule_name: elec_equip_sched[0],
-          steam_equip_power: steam_equip_power[0].signif(3),
-          steam_equip_schedule_name: steam_equip_sched[0],
-          hw_equip_power: hw_equip_power[0].signif(3),
-          hw_equip_schedule_name: hw_equip_sched[0],
-          swh_watts_per_person: swh_watts_per_person.signif(3),
+          total_lpd: total_lpd.map { |lpd| lpd.signif(3) },
+          lpd_schedule_name: lpd_sched,
+          total_occ_dens_m2_per_person: total_occ_dens.map { |dens| dens.signif(3) },
+          occupancy_schedule_name: occ_sched,
+          gas_equip_power: gas_equip_power.map { |power| power.signif(3) },
+          gas_equip_schedule_name: gas_equip_sched,
+          elec_equip_power_W_per_m2: elec_equip_power.map { |power| power.signif(3) },
+          elec_equip_schedule_name: elec_equip_sched,
+          steam_equip_power: steam_equip_power.map { |power| power.signif(3) },
+          steam_equip_schedule_name: steam_equip_sched,
+          hw_equip_power: hw_equip_power.map { |power| power.signif(3) },
+          hw_equip_schedule_name: hw_equip_sched,
+          swh_watts_per_person: swh_watts_per_person.map { |power| power.signif(3) },
           swh_fraction_schedule: swh_fraction_schedule,
           swh_target_temperature_schedule: swh_target_temperature_schedule,
           outdoor_air_method: outdoor_air_method,
@@ -276,12 +276,30 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
           dsoa_outdoor_air_flow_air_changes_per_hour: dsoa_outdoor_air_flow_air_changes_per_hour,
           dsoa_outdoor_air_flow_rate_fraction_schedule: dsoa_outdoorAirFlowRateFractionSchedule
         }
+
       end
     rescue => error
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
     logger.info "Completed individual test: #{name}"
+    results = results.sort.to_h
     return results
+  end
+
+  # Define a helper method to handle defaults and nil replacements
+  def ensure_non_nil_power_and_schedule(power_array, sched_array)
+    # Add a default value if power_array is empty
+    if power_array.empty?
+      power_array << 0.0
+      sched_array << "NA"
+    end
+    # Replace nil values in power_array
+    power_array.each_with_index do |power_value, index|
+      if power_value.nil?
+        power_array[index] = 0.0
+        sched_array[index] = "NA"
+      end
+    end
   end
 end
 

@@ -16,7 +16,6 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
   # Tests to ensure that the NECB default schedules are being defined correctly.
   # This is not for compliance, but for archetype development.
   # @return [Boolean] true if successful.
-  #
   def test_schedule_type_defaults
     logger.info "Starting suite of tests for: #{__method__}"
 
@@ -43,7 +42,6 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
 
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-
     # Create empty results hash and call the template method that runs the individual test cases.
     test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
@@ -57,7 +55,7 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
     expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
     # Check if test results match expected.
     msg = "Schedule type defaults test results do not match what is expected in test"
-    # compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
   end
 
@@ -155,7 +153,12 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         end
 
         st.lights.each { |light| total_lpd << light.powerPerFloorArea.get * occSensLPDfactor; lpd_sched << light.schedule.get.name }
-        # Check all values in the total_lpd array
+        # Add a default value if total_lpd is empty
+        if total_lpd.empty?
+          total_lpd << 0.0
+          lpd_sched << "NA" # corrected from total_lpd
+        end
+        # Replace nil values in total_lpd
         total_lpd.each_with_index do |lpd_value, index|
           if lpd_value.nil?
             total_lpd[index] = 0.0
@@ -172,7 +175,12 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         gas_equip_power = []
         gas_equip_sched = []
         st.gasEquipment.each { |gas_equip| gas_equip_power << gas_equip.powerPerFloorArea.get; gas_equip_sched << gas_equip.schedule.get.name }
-        # Check all values in the gas_equip_power array
+        # Add a default value if gas_equip_power is empty
+        if gas_equip_power.empty?
+          gas_equip_power << 0.0
+          gas_equip_sched << "NA" # corrected from gas_equip_power
+        end
+        # Replace nil values in gas_equip_power
         gas_equip_power.each_with_index do |power_value, index|
           if power_value.nil?
             gas_equip_power[index] = 0.0
@@ -184,7 +192,13 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         elec_equip_power = []
         elec_equip_sched = []
         st.electricEquipment.each { |elec_equip| elec_equip_power << elec_equip.powerPerFloorArea.get; elec_equip_sched << elec_equip.schedule.get.name }
-        # Check all values in the elec_equip_power array
+        # Add a default value if elec_equip_power is empty
+        if elec_equip_power.empty?
+          elec_equip_power << 0.0
+          elec_equip_sched << "NA"
+        end
+
+        # Replace nil values in elec_equip_power
         elec_equip_power.each_with_index do |power_value, index|
           if power_value.nil?
             elec_equip_power[index] = 0.0
@@ -197,6 +211,11 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         steam_equip_sched = []
         st.steamEquipment.each { |steam_equip| steam_equip_power << steam_equip.powerPerFloorArea.get; steam_equip_sched << steam_equip.schedule.get.name }
         # Check all values in the steam_equip_power array
+        # Add a default value if steam_equip_power is empty
+        if steam_equip_power.empty?
+          steam_equip_power << 0.0
+          steam_equip_sched << "NA"
+        end
         steam_equip_power.each_with_index do |power_value, index|
           if power_value.nil?
             steam_equip_power[index] = 0.0
@@ -208,7 +227,12 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         hw_equip_power = []
         hw_equip_sched = []
         st.hotWaterEquipment.each { |equip| hw_equip_power << equip.powerPerFloorArea.get; hw_equip_sched << equip.schedule.get.name }
-        # Check all values in the hw_equip_power array
+        # Add a default value if hw_equip_power is empty
+        if hw_equip_power.empty?
+          hw_equip_power << 0.0
+          hw_equip_sched << "NA" # corrected from hw_equip_power
+        end
+        # Replace nil values in hw_equip_power
         hw_equip_power.each_with_index do |power_value, index|
           if power_value.nil?
             hw_equip_power[index] = 0.0
@@ -301,6 +325,7 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
       logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
     logger.info "Completed individual test: #{name}"
+    results = results.sort.to_h
     return results
   end
 
