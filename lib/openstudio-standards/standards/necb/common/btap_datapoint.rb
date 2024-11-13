@@ -178,7 +178,8 @@ class BTAPDatapoint
                                        tbd_option: @options[:tbd_option],
                                        necb_hdd: @options[:necb_hdd],
                                        boiler_fuel: @options[:boiler_fuel],
-                                       boiler_cap_ratio: @options[:boiler_cap_ratio]
+                                       boiler_cap_ratio: @options[:boiler_cap_ratio],
+                                       swh_fuel: @options[:swh_fuel]
                                        )
       end
 

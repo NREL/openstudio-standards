@@ -216,7 +216,7 @@ class NECB2011 < Standard
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
                                    primary_heating_fuel: 'Electricity',
-                                   swh_fuel: 'NECB_Default',
+                                   swh_fuel: nil,
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
@@ -357,8 +357,8 @@ class NECB2011 < Standard
                            sizing_run_dir: Dir.pwd,
                            necb_reference_hp: false,
                            necb_reference_hp_supp_fuel: 'DefaultFuel',
-                           primary_heating_fuel: 'DefaultFuel',
-                           swh_fuel: 'DefaultFuel',
+                           primary_heating_fuel: 'Electricity',
+                           swh_fuel: nil,
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
                            lights_scale: 'NECB_Default',
@@ -413,27 +413,27 @@ class NECB2011 < Standard
                            boiler_fuel: nil,
                            boiler_cap_ratio: nil)
 
-    primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel)
+    apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
+    primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
     self.fuel_type_set = SystemFuels.new()
-    swh_fuel = swh_fuel.nil? ? 'NECB_Default' : swh_fuel.to_s
-    self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel, swh_fuel: swh_fuel)
-    swh_fuel = self.fuel_type_set.swh_fueltype if swh_fuel.to_s.downcase == 'necb_default'
+    self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
+    swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
 
     boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
     self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
+    self.fuel_type_set.set_swh_fuel(swh_fuel: swh_fuel) unless swh_fuel.nil? || swh_fuel.to_s.downcase == 'defaultfuel'
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
       space.autocalculateVolume
     end
 
-    apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -475,7 +475,6 @@ class NECB2011 < Standard
     apply_systems_and_efficiencies(model: model,
                                    sizing_run_dir: sizing_run_dir,
                                    primary_heating_fuel: primary_heating_fuel,
-                                   swh_fuel: swh_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
@@ -548,7 +547,6 @@ class NECB2011 < Standard
   def apply_systems_and_efficiencies(model:,
                                      sizing_run_dir:,
                                      primary_heating_fuel:,
-                                     swh_fuel:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      ecm_system_zones_map_option: 'NECB_Default',
@@ -579,8 +577,6 @@ class NECB2011 < Standard
 
     # Create Default Systems.
     apply_systems(model: model,
-                  primary_heating_fuel: primary_heating_fuel,
-                  swh_fuel: swh_fuel,
                   sizing_run_dir: sizing_run_dir,
                   shw_scale: shw_scale,
                   baseline_system_zones_map_option: baseline_system_zones_map_option)
@@ -2437,7 +2433,16 @@ class NECB2011 < Standard
 
   # This method is defined and used by the vintage classes to address he issue with the heat pump fuel types.  This
   # method does nothing when creating NECB reference buildings.
-  def validate_primary_heating_fuel(primary_heating_fuel:)
+  def validate_primary_heating_fuel(primary_heating_fuel:, model:)
+    if primary_heating_fuel.to_s.downcase == 'defaultfuel' || primary_heating_fuel.to_s.downcase == 'necb_default'
+      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+      default_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
+      if default_fuel.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.swh', "Could not find a default fuel for #{epw.stateProvinceRegion}.  Using Electricity as the fuel type instead.")
+        return 'Electricity'
+      end
+      return default_fuel
+    end
     return primary_heating_fuel
   end
 

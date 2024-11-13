@@ -1793,10 +1793,17 @@ class ECMS
     else
       raise("Can not find curve hpowerf for #{hw_loop_htg_eqpt.name}")
     end
-    boiler = OpenStudio::Model::BoilerHotWater.new(model)
-    boiler.setFuelType(heating_fuel)
-    hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
-    boiler.addToNode(hw_loop_htg_eqpt_outlet_node)
+    # Add one boiler if the primary and backup boiler fuel types are the same.  Add two boilers if the primary and
+    # secondary boiler fuel types differ.
+    boiler_fuels = []
+    boiler_fuels[0] = standard.fuel_type_set.boiler_fueltype
+    boiler_fuels[1] = standard.fuel_type_set.backup_boiler_fueltype unless standard.fuel_type_set.backup_boiler_fueltype == boiler_fuels[0]
+    boiler_fuels.each do |boiler_fuel|
+      boiler = OpenStudio::Model::BoilerHotWater.new(model)
+      boiler.setFuelType(boiler_fuel)
+      hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
+      boiler.addToNode(hw_loop_htg_eqpt_outlet_node)
+    end
 
     # add chilled-water loop
     chw_loop,chw_loop_clg_eqpt = add_plantloop(model: model,
@@ -1860,7 +1867,7 @@ class ECMS
     hw_loops = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'heating'}
     hw_heatpump_loop = nil
     hw_heatpump = nil
-    hw_boiler = nil
+    hw_boilers = nil
     hw_loops.each do |hw_loop|
       hw_heatpumps = hw_loop.supplyComponents.select {|comp| comp.to_HeatPumpWaterToWaterEquationFitHeating.is_initialized}
       if !hw_heatpumps.empty?
@@ -1868,8 +1875,7 @@ class ECMS
         hw_heatpump = hw_heatpumps[0].to_HeatPumpWaterToWaterEquationFitHeating.get
       end
       hw_boilers = hw_loop.supplyComponents.select {|comp| comp.to_BoilerHotWater.is_initialized}
-      hw_boiler = hw_boilers[0].to_BoilerHotWater.get if !hw_boilers.empty?
-      break if !hw_heatpump_loop.nil? && !hw_heatpump.nil? && !hw_boiler.nil?
+      break if !hw_heatpump_loop.nil? && !hw_heatpump.nil? && !hw_boilers.empty?
     end
     raise("apply_efficiency_ecm_hs14_cgshp_fancoils: no water-source heat pump found in heating loop #{hw_loops.name.to_s}") if hw_heatpump.nil?
     cw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'condenser'}[0]
@@ -1904,7 +1910,18 @@ class ECMS
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: capacity of water-source heat pump #{hw_heatpump.name.to_s} is not defined")
     end
     hw_heatpump.setRatedHeatingCapacity(heatpump_siz_f*cap)
-    hw_boiler.setNominalCapacity((1.0-heatpump_siz_f)*cap)
+    # If two boilers are present set their capacities by multiplying the capacity not handled by the GSHP by the defined
+    # primary and secondary boiler capacity ratios, respectively. If one boiler is defined then set its capacity to the
+    # amount not handled by the GSHP.
+    tot_hw_boiler_cap = (1.0-heatpump_siz_f)*cap
+    hw_boiler_cap = [ 1.0 ]
+    if hw_boilers.size > 1
+      standard.fuel_type_set.primary_boiler_cap_frac.nil? ? hw_boiler_cap[0] = 0.75 : hw_boiler_cap[0] = standard.fuel_type_set.primary_boiler_cap_frac
+      standard.fuel_type_set.secondary_boiler_cap_frac.nil? ? hw_boiler_cap[1] = 1.0 - hw_boiler_cap[0] : hw_boiler_cap[1] = standard.fuel_type_set.secondary_boiler_cap_frac
+    end
+    hw_boilers.sort.each_with_index do |hw_boiler, boiler_index|
+      hw_boiler.to_BoilerHotWater.get.setNominalCapacity((tot_hw_boiler_cap*hw_boiler_cap[boiler_index]))
+    end
     # set cooling capacity of chillers
     chillers = chw_loop.supplyComponents.select {|comp| comp.to_ChillerElectricEIR.is_initialized}
     chiller_water_cooled = nil
