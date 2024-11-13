@@ -156,7 +156,7 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         # Add a default value if total_lpd is empty
         if total_lpd.empty?
           total_lpd << 0.0
-          lpd_sched << "NA" # corrected from total_lpd
+          lpd_sched << "NA" 
         end
         # Replace nil values in total_lpd
         total_lpd.each_with_index do |lpd_value, index|
@@ -178,7 +178,7 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         # Add a default value if gas_equip_power is empty
         if gas_equip_power.empty?
           gas_equip_power << 0.0
-          gas_equip_sched << "NA" # corrected from gas_equip_power
+          gas_equip_sched << "NA" 
         end
         # Replace nil values in gas_equip_power
         gas_equip_power.each_with_index do |power_value, index|
@@ -230,7 +230,7 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         # Add a default value if hw_equip_power is empty
         if hw_equip_power.empty?
           hw_equip_power << 0.0
-          hw_equip_sched << "NA" # corrected from hw_equip_power
+          hw_equip_sched << "NA" 
         end
         # Replace nil values in hw_equip_power
         hw_equip_power.each_with_index do |power_value, index|
