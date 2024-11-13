@@ -119,8 +119,8 @@
       "case-1": {
         "test_capacity_kW": 9.5,
         "test_capacity_btu_per_hr": 32420,
-        "actual_heatpump_cop": 3.91,
-        "actual_heatpump_copH": 3.67
+        "actual_heatpump_cop": 4.31,
+        "actual_heatpump_copH": 4.04
       },
       "case-2": {
         "test_capacity_kW": 29.5,

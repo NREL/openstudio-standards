@@ -13,6 +13,7 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
 
   # Test to validate the heating efficiency generated against expected values stored in the file:
   # 'compliance_heatpump_efficiencies_expected_results.csv
+
   def test_heatpump_efficiency
     logger.info "Starting suite of tests for: #{__method__}"
 
@@ -130,16 +131,7 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
                                                                                                 baseboard_type: baseboard_type,
                                                                                                 hw_loop: hw_loop,
                                                                                                 new_auto_zoner: false)
-
-=begin
-      dx_htg_coils = model.getCoilHeatingDXSingleSpeeds
-      dx_htg_coils.each do |coil|
-        coil.setRatedTotalHeatingCapacity(cap * 1000)
-        flow_rate = cap * 1000 * 5.0e-5
-        coil.setRatedAirFlowRate(flow_rate)
-      end
-=end
-
+    # According to NECB 2011, Section 8.4.4.14, the heat pump must be sized based on its cooling capacity.
     dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
     dx_clg_coils.each do |coil|
       coil.setRatedTotalCoolingCapacity(cap * 1000)
@@ -152,13 +144,6 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
       actual_heatpump_cop = model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
-
-      dx_htg_coils = model.getCoilHeatingDXSingleSpeeds
-      dx_htg_coils.each do |coil|
-        cap_h = coil.ratedTotalHeatingCapacity
-        puts "Rated Total Heating Capacity: #{cap_h}"
-        puts "coil #{coil}"
-      end
 
       capacity_btu_per_hr = OpenStudio.convert(cap.to_f, 'kW', 'Btu/hr').get
       actual_heatpump_copH = actual_heatpump_cop / (1.48E-7 * capacity_btu_per_hr + 1.062)

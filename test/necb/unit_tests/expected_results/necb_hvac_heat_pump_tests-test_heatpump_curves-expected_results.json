@@ -719,7 +719,7 @@
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
-        "CoilHeatingDXSingleSpeed_ashp 1 41 Htg kBtu/hr 13SEER": {
+        "CoilHeatingDXSingleSpeed_ashp 1 41 Htg kBtu/hr 15SEER": {
           "DXHEAT-NECB2011-REF-CAPFT": {
             "curve_type": "cubic",
             "coefficient1Constant": "7.29009E-01",
@@ -765,7 +765,7 @@
             "coefficient4xPOW3": "1.25960E+00"
           }
         },
-        "CoilHeatingDXSingleSpeed_ashp 2 24 Htg kBtu/hr 13SEER": {
+        "CoilHeatingDXSingleSpeed_ashp 2 24 Htg kBtu/hr 15SEER": {
           "DXHEAT-NECB2011-REF-CAPFT": {
             "curve_type": "cubic",
             "coefficient1Constant": "7.29009E-01",
@@ -811,7 +811,7 @@
             "coefficient4xPOW3": "1.25960E+00"
           }
         },
-        "CoilHeatingDXSingleSpeed_ashp 3 38 Htg kBtu/hr 13SEER": {
+        "CoilHeatingDXSingleSpeed_ashp 3 38 Htg kBtu/hr 15SEER": {
           "DXHEAT-NECB2011-REF-CAPFT": {
             "curve_type": "cubic",
             "coefficient1Constant": "7.29009E-01",
@@ -857,7 +857,7 @@
             "coefficient4xPOW3": "1.25960E+00"
           }
         },
-        "CoilHeatingDXSingleSpeed_ashp 4 21 Htg kBtu/hr 13SEER": {
+        "CoilHeatingDXSingleSpeed_ashp 4 21 Htg kBtu/hr 15SEER": {
           "DXHEAT-NECB2011-REF-CAPFT": {
             "curve_type": "cubic",
             "coefficient1Constant": "7.29009E-01",
@@ -903,7 +903,7 @@
             "coefficient4xPOW3": "1.25960E+00"
           }
         },
-        "CoilHeatingDXSingleSpeed_ashp 45 Htg kBtu/hr 13SEER": {
+        "CoilHeatingDXSingleSpeed_ashp 45 Htg kBtu/hr 15SEER": {
           "DXHEAT-NECB2011-REF-CAPFT": {
             "curve_type": "cubic",
             "coefficient1Constant": "7.29009E-01",
