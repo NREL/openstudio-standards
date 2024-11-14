@@ -481,8 +481,7 @@
         "coil_heating_electric": [],
         "coil_heating_water": []
       },
-      "heat_exchanger": {
-      }
+      "heat_exchanger": {}
     },
     {
       "name": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1",
@@ -529,8 +528,7 @@
         "coil_heating_electric": [],
         "coil_heating_water": []
       },
-      "heat_exchanger": {
-      }
+      "heat_exchanger": {}
     }
   ],
   "plant_loops": [
