@@ -50,4 +50,4 @@ coverage/
 /data/standards/export
 /data/geometry/../*.osw
 
-/venv
+/.venv
