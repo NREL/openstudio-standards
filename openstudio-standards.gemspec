@@ -33,18 +33,10 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'public_suffix', '~> 5.1.1'
     spec.add_development_dependency 'bundler', '~> 2.1.4'
     spec.add_development_dependency 'parallel_tests', '~> 3.7.0'
-    if ENV['VSCODE']=="TRUE"
-      spec.add_development_dependency 'solargraph', '~> 0.50.0'
-      spec.add_development_dependency 'debug', '~> 1.9.2'
-    end
   else
     spec.add_development_dependency 'bundler', '~> 2.4.10'
     spec.add_development_dependency 'nokogiri', '~> 1.16'
     spec.add_development_dependency 'parallel_tests', '~> 3.7.0'
-    if ENV['VSCODE']=="TRUE"
-      spec.add_development_dependency 'solargraph', '~> 0.50.0'
-      spec.add_development_dependency 'debug', '~> 1.9.2'
-    end
   end
   spec.add_development_dependency 'codecov'
   spec.add_development_dependency 'minitest', '~> 5.14.0'
