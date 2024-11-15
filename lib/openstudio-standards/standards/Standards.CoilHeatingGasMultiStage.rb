@@ -55,14 +55,14 @@ class Standard
     htg_stages = coil_heating_gas_multi_stage.stages
     if htg_stages.last.nominalCapacity.is_initialized
       capacity_w = htg_stages.last.nominalCapacity.get
-    elsif (htg_stages.size == 1) && coil_heating_gas_multi_stage.autosizedStage1NominalCapacity.is_initialized
-      capacity_w = coil_heating_gas_multi_stage.autosizedStage1NominalCapacity.get
-    elsif (htg_stages.size == 2) && coil_heating_gas_multi_stage.autosizedStage2NominalCapacity.is_initialized
-      capacity_w = coil_heating_gas_multi_stage.autosizedStage2NominalCapacity.get
-    elsif (htg_stages.size == 3) && coil_heating_gas_multi_stage.autosizedStage3NominalCapacity.is_initialized
-      capacity_w = coil_heating_gas_multi_stage.autosizedStage3NominalCapacity.get
-    elsif (htg_stages.size == 4) && coil_heating_gas_multi_stage.autosizedStage4NominalCapacity.is_initialized
-      capacity_w = coil_heating_gas_multi_stage.autosizedStage4NominalCapacity.get
+    elsif (htg_stages.size == 1) && coil_heating_gas_multi_stage.stages[0].autosizedNominalCapacity.is_initialized
+      capacity_w = coil_heating_gas_multi_stage.stages[0].autosizedNominalCapacity.get
+    elsif (htg_stages.size == 2) && coil_heating_gas_multi_stage.stages[1].autosizedNominalCapacity.is_initialized
+      capacity_w = coil_heating_gas_multi_stage.stages[1].autosizedNominalCapacity.get
+    elsif (htg_stages.size == 3) && coil_heating_gas_multi_stage.stages[2].autosizedNominalCapacity.is_initialized
+      capacity_w = coil_heating_gas_multi_stage.stages[2].autosizedNominalCapacity.get
+    elsif (htg_stages.size == 4) && coil_heating_gas_multi_stage.stages[3].autosizedNominalCapacity.is_initialized
+      capacity_w = coil_heating_gas_multi_stage.stages[3].autosizedNominalCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_heating_gas_multi_stage.name} capacity is not available, cannot apply efficiency standard.")
       successfully_set_all_properties = false

@@ -71,7 +71,7 @@ class NECB2011
     system_data[:ZoneCoolingSizingFactor] = 1.1
     system_data[:ZoneHeatingSizingFactor] = 1.3
 
-    # System Type 1: PTAC with no heating (unitary AC) 
+    # System Type 1: PTAC with no heating (unitary AC)
     # Zone baseboards, electric or hot water depending on argument baseboard_type
     # baseboard_type choices are "Hot Water" or "Electric"
     # PSZ to represent make-up air unit (if present)
@@ -85,8 +85,8 @@ class NECB2011
     # mau_heating_coil_type choices are "Hot Water", "Electric"
     # boiler_fueltype choices match OS choices for Boiler component fuel type, i.e.
     # "NaturalGas","Electricity","PropaneGas","FuelOilNo1","FuelOilNo2","Coal","Diesel","Gasoline","OtherFuel1"
-    
-    # If reference_hp = true, NECB 8.4.4.13 Heat Pump System Type 1: CAV Packaged rooftop heat pump with 
+
+    # If reference_hp = true, NECB 8.4.4.13 Heat Pump System Type 1: CAV Packaged rooftop heat pump with
     # zone baseboard (electric or hot water depending on argument baseboard_type)
 
     # Some system parameters are set after system is set up; by applying method 'apply_hvac_efficiency_standard'
@@ -104,7 +104,7 @@ class NECB2011
 
       #if reference_hp
         # AirLoopHVACUnitaryHeatPumpAirToAir needs FanOnOff in order for the fan to turn off during off hours
-      #  mau_fan = OpenStudio::Model::FanOnOff.new(model, always_on)        
+      #  mau_fan = OpenStudio::Model::FanOnOff.new(model, always_on)
       #else
         mau_fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
       #end
@@ -124,7 +124,7 @@ class NECB2011
       mau_clg_coil = add_onespeed_DX_coil(model, always_on)
       mau_clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
       mau_clg_coil.setName('CoilCoolingDXSingleSpeed_ashp') if necb_reference_hp
-      
+
       # Set up OA system
       oa_controller = OpenStudio::Model::ControllerOutdoorAir.new(model)
       oa_controller.autosizeMinimumOutdoorAirFlowRate
@@ -142,8 +142,8 @@ class NECB2011
       # Reference HP requires slight changes to default MAU heating
       #if reference_hp
         # Create supplemental heating coil based on default regional fuel type
-        #epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-        #primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+        # epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+        #primary_heating_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
         #if primary_heating_fuel == 'NaturalGas'
         #  supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
         #elsif primary_heating_fuel == 'Electricity' or  primary_heating_fuel == 'FuelOilNo2'
@@ -160,10 +160,10 @@ class NECB2011
         mau_fan.addToNode(supply_inlet_node)
         mau_htg_coil.addToNode(supply_inlet_node)
         mau_clg_coil.addToNode(supply_inlet_node)
-        
+
       #end
       oa_system.addToNode(supply_inlet_node)
-      
+
       # Add a setpoint manager to control the supply air temperature
       if necb_reference_hp
         setpoint_mgr = OpenStudio::Model::SetpointManagerWarmest.new(model)
@@ -221,12 +221,12 @@ class NECB2011
                           zone: zone)
 
       #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
-      
-      if necb_reference_hp 
+
+      if necb_reference_hp
         # Create CAV RH (RH based on region's default fuel type or user input)
         if necb_reference_hp_supp_fuel == 'DefaultFuel'
-          epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-          necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+          epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+          necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
         end
         if necb_reference_hp_supp_fuel == 'NaturalGas'
           rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)

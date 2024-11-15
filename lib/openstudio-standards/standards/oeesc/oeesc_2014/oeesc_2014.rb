@@ -8,6 +8,7 @@ class OEESC2014 < OEESC
   attr_reader :template
 
   def initialize
+    super()
     @template = 'OEESC 2014'
     load_standards_database
   end

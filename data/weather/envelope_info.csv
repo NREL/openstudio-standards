@@ -1,6 +1,0 @@
-WeatherFile,HDD,FDWR,SRR,outdoor_walls_average_conductance,outdoor_roofs_average_conductance,outdoor_floors_average_conductance,ground_walls_average_conductances, ground_roofs_average_conductances, ground_floors_average_conductances,windows_average_conductance,skylights_average_conductance,doors_average_conductance,overhead_doors_average_conductance
-CAN_BC_Vancouver.718920_CWEC.epw,2932,0.4,0.0499,0.315 ,0.227 , 0.227,0.568,0.568,0.757,2.4,2.4,2.4,2.4
-CAN_ON_Toronto.716240_CWEC.epw,3956,0.4,0.0499,0.278 ,0.183 , 0.183,0.379,0.379,0.757,2.2,2.2,2.2,2.2
-CAN_PQ_Sherbrooke.716100_CWEC.epw,5058,0.329,0.0499,0.21 ,0.162 , 0.162,0.284,0.284,0.757,2.2,2.2,2.2,2.2
-CAN_YT_Whitehorse.719640_CWEC.epw,6803,0.213,0.0499,0.21 ,0.162 , 0.162,0.284,0.284,0.757,2.2,2.2,2.2,2.2
-CAN_NU_Resolute.719240_CWEC.epw,12471,0.2,0.0499,0.183 ,0.142 , 0.142,0.21,0.21,0.379,1.6,1.6,1.6,1.6

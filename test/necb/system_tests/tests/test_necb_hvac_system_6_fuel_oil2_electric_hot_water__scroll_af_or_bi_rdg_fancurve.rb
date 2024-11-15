@@ -49,11 +49,12 @@ class NECB_HVAC_System_6_Test_FO2_E_HW_S_AFORBI_RDG_FC < Minitest::Test
     name = "sys6_Bo-#{boiler_fueltype}_Ch-#{chiller_type}_BB-#{baseboard_type}_HC-#{heating_coil_type}_Fan-#{fan_type}"
     puts "***************************************#{name}*******************************************************\n"
     model = BTAP::FileIO::load_osm(template_osm_file)
-    BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     hw_loop = nil
     if (baseboard_type == "Hot Water") || (heating_coil_type == "Hot Water")
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, model.alwaysOnDiscreteSchedule)
     end
     standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
         model: model,
@@ -87,7 +88,7 @@ class NECB_HVAC_System_6_Test_FO2_E_HW_S_AFORBI_RDG_FC < Minitest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run

@@ -1,9 +1,8 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
-class NECB_QAQC_Repoprting < Minitest::Test
+class NECB_QAQC_Reporting < Minitest::Test
 
 
   def setup()
@@ -36,6 +35,9 @@ class NECB_QAQC_Repoprting < Minitest::Test
     qaqc = standard.init_qaqc(model)
     # Replace the openstudio-standards version with test to avoid the test failing with every commit to a branch.
     qaqc[:os_standards_revision] = "test"
+    qaqc[:os_standards_version] = "test"
+    qaqc[:openstudio_version] = "test"
+    qaqc[:energyplus_version] = "test"
     # Create the test file.  If no expected results file exists create the expected results file from the test results.
     qaqc_expected_results = File.join(@expected_results_folder, 'qaqc_report_expected_result.json')
     qaqc_test_results = File.join(@test_results_folder, 'qaqc_report_test_result.json')

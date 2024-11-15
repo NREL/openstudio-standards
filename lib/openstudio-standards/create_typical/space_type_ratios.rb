@@ -20,7 +20,8 @@ module OpenstudioStandards
       hash = {}
 
       # DOE Prototypes
-      if building_type == 'SecondarySchool'
+      case building_type
+      when 'SecondarySchool'
         if ['DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'ComStock DOE Ref Pre-1980', 'ComStock DOE Ref 1980-2004'].include?(template)
           hash['Auditorium'] = { ratio: 0.0504, space_type_gen: true, default: false, story_height: 26.0 }
           hash['Cafeteria'] = { ratio: 0.0319, space_type_gen: true, default: false }
@@ -48,7 +49,7 @@ module OpenstudioStandards
           hash['Office'] = { ratio: 0.0543, space_type_gen: true, default: false }
           hash['Restroom'] = { ratio: 0.0214, space_type_gen: true, default: false }
         end
-      elsif building_type == 'PrimarySchool'
+      when 'PrimarySchool'
         if ['DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'ComStock DOE Ref Pre-1980', 'ComStock DOE Ref 1980-2004'].include?(template)
           # updated to 2004 which includes library vs. pre-1980
           hash['Cafeteria'] = { ratio: 0.0458, space_type_gen: true, default: false }
@@ -75,44 +76,38 @@ module OpenstudioStandards
           hash['Office'] = { ratio: 0.0642, space_type_gen: true, default: false }
           hash['Restroom'] = { ratio: 0.0277, space_type_gen: true, default: false }
         end
-      elsif building_type == 'SmallOffice'
+      when 'SmallOffice'
         # @todo populate Small, Medium, and Large office for whole_building false
         if whole_building
           hash['WholeBuilding - Sm Office'] = { ratio: 1.0, space_type_gen: true, default: true }
         else
-          hash['SmallOffice - Breakroom'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['SmallOffice - ClosedOffice'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['SmallOffice - Conference'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['SmallOffice - Corridor'] = { ratio: 0.99, space_type_gen: true, default: false, circ: true }
-          hash['SmallOffice - Elec/MechRoom'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['SmallOffice - Lobby'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['SmallOffice - OpenOffice'] = { ratio: 0.99, space_type_gen: true, default: true }
-          hash['SmallOffice - Restroom'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['SmallOffice - Stair'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['SmallOffice - Storage'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['SmallOffice - Classroom'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['SmallOffice - Dining'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['WholeBuilding - Sm Office'] = { ratio: 0.0, space_type_gen: true, default: false }
+          hash['SmallOffice - ClosedOffice'] = { ratio: 0.3325, space_type_gen: true, default: false }
+          hash['SmallOffice - Conference'] = { ratio: 0.0818, space_type_gen: true, default: false }
+          hash['SmallOffice - Corridor'] = { ratio: 0.1213, space_type_gen: true, default: false, circ: true }
+          hash['SmallOffice - Elec/MechRoom'] = { ratio: 0.0201, space_type_gen: true, default: false }
+          hash['SmallOffice - Lobby'] = { ratio: 0.0818, space_type_gen: true, default: false }
+          hash['SmallOffice - OpenOffice'] = { ratio: 0.1659, space_type_gen: true, default: true }
+          hash['SmallOffice - Restroom'] = { ratio: 0.0402, space_type_gen: true, default: false }
+          hash['SmallOffice - Stair'] = { ratio: 0.0201, space_type_gen: true, default: false }
+          hash['SmallOffice - Storage'] = { ratio: 0.1363, space_type_gen: true, default: false }
         end
-      elsif building_type == 'MediumOffice'
+      when 'MediumOffice'
         if whole_building
           hash['WholeBuilding - Md Office'] = { ratio: 1.0, space_type_gen: true, default: true }
         else
-          hash['MediumOffice - Breakroom'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['MediumOffice - ClosedOffice'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['MediumOffice - Conference'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['MediumOffice - Corridor'] = { ratio: 0.99, space_type_gen: true, default: false, circ: true }
-          hash['MediumOffice - Elec/MechRoom'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['MediumOffice - Lobby'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['MediumOffice - OpenOffice'] = { ratio: 0.99, space_type_gen: true, default: true }
-          hash['MediumOffice - Restroom'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['MediumOffice - Stair'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['MediumOffice - Storage'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['MediumOffice - Classroom'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['MediumOffice - Dining'] = { ratio: 0.99, space_type_gen: true, default: false }
-          hash['WholeBuilding - Md Office'] = { ratio: 0.0, space_type_gen: true, default: false }
+          hash['MediumOffice - Classroom'] = { ratio: 0.0060, space_type_gen: true, default: false }
+          hash['MediumOffice - ClosedOffice'] = { ratio: 0.1866, space_type_gen: true, default: false }
+          hash['MediumOffice - Conference'] = { ratio: 0.0519, space_type_gen: true, default: false }
+          hash['MediumOffice - Corridor'] = { ratio: 0.0896, space_type_gen: true, default: false, circ: true }
+          hash['MediumOffice - Dining'] = { ratio: 0.0138, space_type_gen: true, default: false }
+          hash['MediumOffice - Elec/MechRoom'] = { ratio: 0.0300, space_type_gen: true, default: false }
+          hash['MediumOffice - Lobby'] = { ratio: 0.0550, space_type_gen: true, default: false }
+          hash['MediumOffice - OpenOffice'] = { ratio: 0.4255, space_type_gen: true, default: true }
+          hash['MediumOffice - Restroom'] = { ratio: 0.0360, space_type_gen: true, default: false }
+          hash['MediumOffice - Stair'] = { ratio: 0.0370, space_type_gen: true, default: false }
+          hash['MediumOffice - Storage'] = { ratio: 0.0686, space_type_gen: true, default: false }
         end
-      elsif building_type == 'LargeOffice'
+      when 'LargeOffice'
         case building_subtype
         when 'largeoffice_datacenter'
           hash['WholeBuilding - Lg Office'] = { ratio: 0.9737, space_type_gen: true, default: true }
@@ -122,25 +117,23 @@ module OpenstudioStandards
           hash['OfficeLarge Data Center'] = { ratio: 1.0, space_type_gen: true, default: false }
         when 'largeoffice_nodatacenter'
           hash['WholeBuilding - Lg Office'] = { ratio: 1.0, space_type_gen: true, default: true }
-        when 'largeoffice_default'
+        else # 'largeoffice_default'
           if ['DOE Ref Pre-1980', 'DOE Ref 1980-2004', 'ComStock DOE Ref Pre-1980', 'ComStock DOE Ref 1980-2004'].include?(template)
             if whole_building
               hash['WholeBuilding - Lg Office'] = { ratio: 1.0, space_type_gen: true, default: true }
             else
-              hash['BreakRoom'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['ClosedOffice'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Conference'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Corridor'] = { ratio: 0.99, space_type_gen: true, default: false, circ: true }
-              hash['Elec/MechRoom'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['IT_Room'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Lobby'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['OpenOffice'] = { ratio: 0.99, space_type_gen: true, default: true }
-              hash['PrintRoom'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Restroom'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Stair'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Storage'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Vending'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['WholeBuilding - Lg Office'] = { ratio: 0.0, space_type_gen: true, default: false }
+              hash['BreakRoom'] = { ratio: 0.0178, space_type_gen: true, default: false }
+              hash['Classroom'] = { ratio: 0.0040, space_type_gen: true, default: false }
+              hash['ClosedOffice'] = { ratio: 0.16, space_type_gen: true, default: false }
+              hash['Conference'] = { ratio: 0.0153, space_type_gen: true, default: false }
+              hash['Corridor'] = { ratio: 0.0460, space_type_gen: true, default: false, circ: true }
+              hash['Dining'] = { ratio: 0.0161, space_type_gen: true, default: false }
+              hash['Elec/MechRoom'] = { ratio: 0.0944, space_type_gen: true, default: false }
+              hash['Lobby'] = { ratio: 0.0554, space_type_gen: true, default: false }
+              hash['OpenOffice'] = { ratio: 0.5230, space_type_gen: true, default: true }
+              hash['Restroom'] = { ratio: 0.0310, space_type_gen: true, default: false }
+              hash['Stair'] = { ratio: 0.0180, space_type_gen: true, default: false }
+              hash['Storage'] = { ratio: 0.0190, space_type_gen: true, default: false }
             end
           else
             if whole_building
@@ -148,26 +141,24 @@ module OpenstudioStandards
               hash['OfficeLarge Data Center'] = { ratio: 0.0094, space_type_gen: true, default: false }
               hash['OfficeLarge Main Data Center'] = { ratio: 0.0169, space_type_gen: true, default: false }
             else
-              hash['BreakRoom'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['ClosedOffice'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Conference'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Corridor'] = { ratio: 0.99, space_type_gen: true, default: false, circ: true }
-              hash['Elec/MechRoom'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['IT_Room'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Lobby'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['OpenOffice'] = { ratio: 0.99, space_type_gen: true, default: true }
-              hash['PrintRoom'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Restroom'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Stair'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Storage'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['Vending'] = { ratio: 0.99, space_type_gen: true, default: false }
-              hash['WholeBuilding - Lg Office'] = { ratio: 0.0, space_type_gen: true, default: false }
-              hash['OfficeLarge Data Center'] = { ratio: 0.0, space_type_gen: true, default: false }
-              hash['OfficeLarge Main Data Center'] = { ratio: 0.0, space_type_gen: true, default: false }
+              hash['BreakRoom'] = { ratio: 0.0167, space_type_gen: true, default: false }
+              hash['Classroom'] = { ratio: 0.0038, space_type_gen: true, default: false }
+              hash['ClosedOffice'] = { ratio: 0.1500, space_type_gen: true, default: false }
+              hash['Conference'] = { ratio: 0.0144, space_type_gen: true, default: false }
+              hash['Corridor'] = { ratio: 0.0431, space_type_gen: true, default: false, circ: true }
+              hash['Dining'] = { ratio: 0.0151, space_type_gen: true, default: false }
+              hash['Elec/MechRoom'] = { ratio: 0.0885, space_type_gen: true, default: false }
+              hash['Lobby'] = { ratio: 0.0520, space_type_gen: true, default: false }
+              hash['OfficeLarge Data Center'] = { ratio: 0.0077, space_type_gen: true, default: false }
+              hash['OfficeLarge Main Data Center'] = { ratio: 0.0550, space_type_gen: true, default: false }
+              hash['OpenOffice'] = { ratio: 0.4900, space_type_gen: true, default: true }
+              hash['Restroom'] = { ratio: 0.0290, space_type_gen: true, default: false }
+              hash['Stair'] = { ratio: 0.0169, space_type_gen: true, default: false }
+              hash['Storage'] = { ratio: 0.0178, space_type_gen: true, default: false }
             end
           end
         end
-      elsif building_type == 'SmallHotel'
+      when 'SmallHotel'
         hash['Corridor'] = { ratio: 0.1313, space_type_gen: true, default: false, circ: true }
         hash['Elec/MechRoom'] = { ratio: 0.0038, space_type_gen: true, default: false }
         hash['ElevatorCore'] = { ratio: 0.0113, space_type_gen: true, default: false }
@@ -183,7 +174,7 @@ module OpenstudioStandards
         hash['StaffLounge'] = { ratio: 0.0081, space_type_gen: true, default: false }
         hash['Stair'] = { ratio: 0.0400, space_type_gen: true, default: false }
         hash['Storage'] = { ratio: 0.0325, space_type_gen: true, default: false }
-      elsif building_type == 'LargeHotel'
+      when 'LargeHotel'
         hash['Banquet'] = { ratio: 0.0585, space_type_gen: true, default: false }
         hash['Basement'] = { ratio: 0.1744, space_type_gen: false, default: false }
         hash['Cafe'] = { ratio: 0.0166, space_type_gen: true, default: false }
@@ -195,7 +186,7 @@ module OpenstudioStandards
         hash['Mechanical'] = { ratio: 0.0145, space_type_gen: true, default: false }
         hash['Retail'] = { ratio: 0.0128, space_type_gen: true, default: false }
         hash['Storage'] = { ratio: 0.0084, space_type_gen: true, default: false }
-      elsif building_type == 'Warehouse'
+      when 'Warehouse'
         case building_subtype
         when 'warehouse_bulk100'
           hash['Bulk'] = { ratio: 1.0, space_type_gen: true, default: true }
@@ -213,39 +204,35 @@ module OpenstudioStandards
           hash['Bulk'] = { ratio: 0.20, space_type_gen: true, default: true }
           hash['Fine'] = { ratio: 0.751, space_type_gen: true, default: false }
           hash['Office'] = { ratio: 0.0490, space_type_gen: true, default: false, wwr: 0.71, story_height: 14.0 }
-        when 'warehouse_default'
-          hash['Bulk'] = { ratio: 0.6628, space_type_gen: true, default: true }
-          hash['Fine'] = { ratio: 0.2882, space_type_gen: true, default: false }
-          hash['Office'] = { ratio: 0.0490, space_type_gen: true, default: false, wwr: 0.71, story_height: 14.0 }
-        else
+        else # 'warehouse_default'
           hash['Bulk'] = { ratio: 0.6628, space_type_gen: true, default: true }
           hash['Fine'] = { ratio: 0.2882, space_type_gen: true, default: false }
           hash['Office'] = { ratio: 0.0490, space_type_gen: true, default: false, wwr: 0.71, story_height: 14.0 }
         end
-      elsif building_type == 'RetailStandalone'
+      when 'RetailStandalone'
         hash['Back_Space'] = { ratio: 0.1656, space_type_gen: true, default: false }
         hash['Entry'] = { ratio: 0.0052, space_type_gen: true, default: false }
         hash['Point_of_Sale'] = { ratio: 0.0657, space_type_gen: true, default: false }
         hash['Retail'] = { ratio: 0.7635, space_type_gen: true, default: true }
-      elsif building_type == 'RetailStripmall'
+      when 'RetailStripmall'
         hash['Strip mall - type 1'] = { ratio: 0.25, space_type_gen: true, default: false }
         hash['Strip mall - type 2'] = { ratio: 0.25, space_type_gen: true, default: false }
         hash['Strip mall - type 3'] = { ratio: 0.50, space_type_gen: true, default: true }
-      elsif building_type == 'QuickServiceRestaurant'
+      when 'QuickServiceRestaurant'
         hash['Dining'] = { ratio: 0.5, space_type_gen: true, default: true }
         hash['Kitchen'] = { ratio: 0.5, space_type_gen: true, default: false }
-      elsif building_type == 'FullServiceRestaurant'
+      when 'FullServiceRestaurant'
         hash['Dining'] = { ratio: 0.7272, space_type_gen: true, default: true }
         hash['Kitchen'] = { ratio: 0.2728, space_type_gen: true, default: false }
-      elsif building_type == 'MidriseApartment'
+      when 'MidriseApartment'
         hash['Apartment'] = { ratio: 0.8727, space_type_gen: true, default: true }
         hash['Corridor'] = { ratio: 0.0991, space_type_gen: true, default: false, circ: true }
         hash['Office'] = { ratio: 0.0282, space_type_gen: true, default: false }
-      elsif building_type == 'HighriseApartment'
+      when 'HighriseApartment'
         hash['Apartment'] = { ratio: 0.8896, space_type_gen: true, default: true }
         hash['Corridor'] = { ratio: 0.0991, space_type_gen: true, default: false, circ: true }
         hash['Office'] = { ratio: 0.0113, space_type_gen: true, default: false }
-      elsif building_type == 'Hospital'
+      when 'Hospital'
         hash['Basement'] = { ratio: 0.1667, space_type_gen: false, default: false }
         hash['Corridor'] = { ratio: 0.1741, space_type_gen: true, default: false, circ: true }
         hash['Dining'] = { ratio: 0.0311, space_type_gen: true, default: false }
@@ -266,7 +253,7 @@ module OpenstudioStandards
         hash['PatRoom'] = { ratio: 0.0845, space_type_gen: true, default: true }
         hash['PhysTherapy'] = { ratio: 0.0217, space_type_gen: true, default: false }
         hash['Radiology'] = { ratio: 0.0217, space_type_gen: true, default: false }
-      elsif building_type == 'Outpatient'
+      when 'Outpatient'
         hash['Anesthesia'] = { ratio: 0.0026, space_type_gen: true, default: false }
         hash['BioHazard'] = { ratio: 0.0014, space_type_gen: true, default: false }
         hash['Cafe'] = { ratio: 0.0103, space_type_gen: true, default: false }
@@ -298,7 +285,7 @@ module OpenstudioStandards
         hash['Toilet'] = { ratio: 0.0193, space_type_gen: true, default: false }
         hash['Undeveloped'] = { ratio: 0.0835, space_type_gen: false, default: false }
         hash['Xray'] = { ratio: 0.0220, space_type_gen: true, default: false }
-      elsif building_type == 'SuperMarket'
+      when 'SuperMarket'
         # @todo populate ratios for SuperMarket
         hash['Bakery'] = { ratio: 0.99, space_type_gen: true, default: false }
         hash['Deli'] = { ratio: 0.99, space_type_gen: true, default: false }
@@ -312,20 +299,16 @@ module OpenstudioStandards
         hash['Meeting'] = { ratio: 0.99, space_type_gen: true, default: true }
         hash['Restroom'] = { ratio: 0.99, space_type_gen: true, default: true }
         hash['Vestibule'] = { ratio: 0.99, space_type_gen: true, default: true }
-      elsif building_type == 'Laboratory'
+      when 'Laboratory'
         hash['Office'] = { ratio: 0.50, space_type_gen: true, default: true }
         hash['Open lab'] = { ratio: 0.35, space_type_gen: true, default: true }
         hash['Equipment corridor'] = { ratio: 0.05, space_type_gen: true, default: true }
         hash['Lab with fume hood'] = { ratio: 0.10, space_type_gen: true, default: true }
-      elsif building_type == 'LargeDataCenterHighITE'
+      when 'LargeDataCenterHighITE', 'LargeDataCenterLowITE'
         hash['StandaloneDataCenter'] = { ratio: 1.0, space_type_gen: true, default: true }
-      elsif building_type == 'LargeDataCenterLowITE'
-        hash['StandaloneDataCenter'] = { ratio: 1.0, space_type_gen: true, default: true }
-      elsif building_type == 'SmallDataCenterHighITE'
+      when 'SmallDataCenterHighITE', 'SmallDataCenterLowITE'
         hash['ComputerRoom'] = { ratio: 1.0, space_type_gen: true, default: true }
-      elsif building_type == 'SmallDataCenterLowITE'
-        hash['ComputerRoom'] = { ratio: 1.0, space_type_gen: true, default: true }
-      elsif building_type == 'Courthouse'
+      when 'Courthouse'
         hash['Courthouse - Break Room'] = { ratio: 0.0067, space_type_gen: true, default: false }
         hash['Courthouse - Cell'] = { ratio: 0.0731, space_type_gen: true, default: false }
         hash['Courthouse - Conference'] = { ratio: 0.0203, space_type_gen: true, default: false }
@@ -347,7 +330,7 @@ module OpenstudioStandards
         hash['Courthouse - Stairs'] = { ratio: 0.0111, space_type_gen: true, default: false }
         hash['Courthouse - Storage'] = { ratio: 0.0882, space_type_gen: true, default: false }
         hash['Courthouse - Utility'] = { ratio: 0.0484, space_type_gen: true, default: false }
-      elsif building_type == 'College'
+      when 'College'
         hash['College - Art Classroom'] = { ratio: 0.1868, space_type_gen: true, default: false }
         hash['College - Classroom'] = { ratio: 0.2348, space_type_gen: true, default: true }
         hash['College - Conference'] = { ratio: 0.0215, space_type_gen: true, default: false }
@@ -363,26 +346,27 @@ module OpenstudioStandards
         hash['College - Stairs'] = { ratio: 0.0272, space_type_gen: true, default: false }
         hash['College - Storage'] = { ratio: 0.0117, space_type_gen: true, default: false }
         hash['College - Utility'] = { ratio: 0.0051, space_type_gen: true, default: false }
-        # DEER Prototypes
-      elsif building_type == 'Asm'
+
+      # DEER Prototypes
+      when 'Asm'
         hash['Auditorium'] = { ratio: 0.7658, space_type_gen: true, default: true }
         hash['OfficeGeneral'] = { ratio: 0.2342, space_type_gen: true, default: false }
-      elsif building_type == 'ECC'
+      when 'ECC'
         hash['Classroom'] = { ratio: 0.5558, space_type_gen: true, default: true }
         hash['CompRoomClassRm'] = { ratio: 0.0319, space_type_gen: true, default: false }
         hash['Shop'] = { ratio: 0.1249, space_type_gen: true, default: false }
         hash['Dining'] = { ratio: 0.0876, space_type_gen: true, default: false }
         hash['Kitchen'] = { ratio: 0.0188, space_type_gen: true, default: false }
         hash['OfficeGeneral'] = { ratio: 0.181, space_type_gen: true, default: false }
-      elsif building_type == 'EPr'
+      when 'EPr'
         hash['Classroom'] = { ratio: 0.53, space_type_gen: true, default: true }
         hash['CorridorStairway'] = { ratio: 0.1, space_type_gen: true, default: false }
         hash['Dining'] = { ratio: 0.15, space_type_gen: true, default: false }
         hash['Gymnasium'] = { ratio: 0.15, space_type_gen: true, default: false }
         hash['Kitchen'] = { ratio: 0.07, space_type_gen: true, default: false }
-      elsif building_type == 'ERC'
+      when 'ERC'
         hash['Classroom'] = { ratio: 0.5, space_type_gen: true, default: true }
-      elsif building_type == 'ESe'
+      when 'ESe'
         hash['Classroom'] = { ratio: 0.488, space_type_gen: true, default: true }
         hash['CompRoomClassRm'] = { ratio: 0.021, space_type_gen: true, default: false }
         hash['CorridorStairway'] = { ratio: 0.1, space_type_gen: true, default: false }
@@ -390,7 +374,7 @@ module OpenstudioStandards
         hash['Gymnasium'] = { ratio: 0.15, space_type_gen: true, default: false }
         hash['Kitchen'] = { ratio: 0.07, space_type_gen: true, default: false }
         hash['OfficeGeneral'] = { ratio: 0.021, space_type_gen: true, default: true }
-      elsif building_type == 'EUn'
+      when 'EUn'
         hash['Dining'] = { ratio: 0.0238, space_type_gen: true, default: false }
         hash['Classroom'] = { ratio: 0.3056, space_type_gen: true, default: false }
         hash['OfficeGeneral'] = { ratio: 0.3422, space_type_gen: true, default: true }
@@ -399,20 +383,20 @@ module OpenstudioStandards
         hash['CorridorStairway'] = { ratio: 0.03, space_type_gen: true, default: false }
         hash['FacMaint'] = { ratio: 0.08, space_type_gen: true, default: false }
         hash['DormitoryRoom'] = { ratio: 0.1699, space_type_gen: true, default: false }
-      elsif building_type == 'Gro'
+      when 'Gro'
         hash['GrocSales'] = { ratio: 0.8002, space_type_gen: true, default: true }
         hash['RefWalkInCool'] = { ratio: 0.0312, space_type_gen: true, default: false }
         hash['OfficeGeneral'] = { ratio: 0.07, space_type_gen: true, default: false }
         hash['RefFoodPrep'] = { ratio: 0.0253, space_type_gen: true, default: false }
         hash['RefWalkInFreeze'] = { ratio: 0.0162, space_type_gen: true, default: false }
         hash['IndLoadDock'] = { ratio: 0.057, space_type_gen: true, default: false }
-      elsif building_type == 'Hsp'
+      when 'Hsp'
         hash['HspSurgOutptLab'] = { ratio: 0.2317, space_type_gen: true, default: false }
         hash['Dining'] = { ratio: 0.0172, space_type_gen: true, default: false }
         hash['Kitchen'] = { ratio: 0.0075, space_type_gen: true, default: false }
         hash['OfficeGeneral'] = { ratio: 0.3636, space_type_gen: true, default: false }
         hash['PatientRoom'] = { ratio: 0.38, space_type_gen: true, default: true }
-      elsif building_type == 'Htl'
+      when 'Htl'
         hash['Dining'] = { ratio: 0.004, space_type_gen: true, default: false }
         hash['BarCasino'] = { ratio: 0.005, space_type_gen: true, default: false }
         hash['HotelLobby'] = { ratio: 0.0411, space_type_gen: true, default: false }
@@ -422,7 +406,7 @@ module OpenstudioStandards
         hash['GuestRmOcc'] = { ratio: 0.64224, space_type_gen: true, default: true }
         hash['GuestRmUnOcc'] = { ratio: 0.16056, space_type_gen: true, default: true }
         hash['Kitchen'] = { ratio: 0.005, space_type_gen: true, default: false }
-      elsif building_type == 'MBT'
+      when 'MBT'
         hash['CompRoomData'] = { ratio: 0.02, space_type_gen: true, default: false }
         hash['Laboratory'] = { ratio: 0.4534, space_type_gen: true, default: true }
         hash['CorridorStairway'] = { ratio: 0.2, space_type_gen: true, default: false }
@@ -430,58 +414,58 @@ module OpenstudioStandards
         hash['Dining'] = { ratio: 0.03, space_type_gen: true, default: false }
         hash['OfficeOpen'] = { ratio: 0.2666, space_type_gen: true, default: false }
         hash['Kitchen'] = { ratio: 0.01, space_type_gen: true, default: false }
-      elsif building_type == 'MFm'
+      when 'MFm'
         hash['ResLiving'] = { ratio: 0.9297, space_type_gen: true, default: true }
         hash['ResPublicArea'] = { ratio: 0.0725, space_type_gen: true, default: false }
-      elsif building_type == 'MLI'
+      when 'MLI'
         hash['StockRoom'] = { ratio: 0.2, space_type_gen: true, default: false }
         hash['Work'] = { ratio: 0.8, space_type_gen: true, default: true }
-      elsif building_type == 'Mtl'
+      when 'Mtl'
         hash['OfficeGeneral'] = { ratio: 0.02, space_type_gen: true, default: false }
         hash['GuestRmCorrid'] = { ratio: 0.649, space_type_gen: true, default: true }
         hash['Laundry'] = { ratio: 0.016, space_type_gen: true, default: false }
         hash['GuestRmOcc'] = { ratio: 0.25208, space_type_gen: true, default: false }
         hash['GuestRmUnOcc'] = { ratio: 0.06302, space_type_gen: true, default: false }
-      elsif building_type == 'Nrs'
+      when 'Nrs'
         hash['CorridorStairway'] = { ratio: 0.0555, space_type_gen: true, default: false }
         hash['Dining'] = { ratio: 0.105, space_type_gen: true, default: false }
         hash['Kitchen'] = { ratio: 0.045, space_type_gen: true, default: false }
         hash['OfficeGeneral'] = { ratio: 0.35, space_type_gen: true, default: false }
         hash['PatientRoom'] = { ratio: 0.4445, space_type_gen: true, default: true }
-      elsif building_type == 'OfL'
+      when 'OfL'
         hash['LobbyWaiting'] = { ratio: 0.0412, space_type_gen: true, default: false }
         hash['OfficeSmall'] = { ratio: 0.3704, space_type_gen: true, default: false }
         hash['OfficeOpen'] = { ratio: 0.5296, space_type_gen: true, default: true }
         hash['MechElecRoom'] = { ratio: 0.0588, space_type_gen: true, default: false }
-      elsif building_type == 'OfS'
+      when 'OfS'
         hash['Hall'] = { ratio: 0.3141, space_type_gen: true, default: false }
         hash['OfficeSmall'] = { ratio: 0.6859, space_type_gen: true, default: true }
-      elsif building_type == 'RFF'
+      when 'RFF'
         hash['Dining'] = { ratio: 0.3997, space_type_gen: true, default: false }
         hash['Kitchen'] = { ratio: 0.4, space_type_gen: true, default: true }
         hash['LobbyWaiting'] = { ratio: 0.1501, space_type_gen: true, default: false }
         hash['Restroom'] = { ratio: 0.0501, space_type_gen: true, default: false }
-      elsif building_type == 'RSD'
+      when 'RSD'
         hash['Restroom'] = { ratio: 0.0357, space_type_gen: true, default: false }
         hash['Dining'] = { ratio: 0.5353, space_type_gen: true, default: true }
         hash['LobbyWaiting'] = { ratio: 0.1429, space_type_gen: true, default: false }
         hash['Kitchen'] = { ratio: 0.2861, space_type_gen: true, default: false }
-      elsif building_type == 'Rt3'
+      when 'Rt3'
         hash['RetailSales'] = { ratio: 1.0, space_type_gen: true, default: true }
-      elsif building_type == 'RtL'
+      when 'RtL'
         hash['OfficeGeneral'] = { ratio: 0.0363, space_type_gen: true, default: false }
         hash['Work'] = { ratio: 0.0405, space_type_gen: true, default: false }
         hash['StockRoom'] = { ratio: 0.0920, space_type_gen: true, default: false }
         hash['RetailSales'] = { ratio: 0.8312, space_type_gen: true, default: true }
         # hash['Kitchen'] = { ratio: 0.0113, space_type_gen: true, default: false }
-      elsif building_type == 'RtS'
+      when 'RtS'
         hash['RetailSales'] = { ratio: 0.8, space_type_gen: true, default: true }
         hash['StockRoom'] = { ratio: 0.2, space_type_gen: true, default: false }
-      elsif building_type == 'SCn'
+      when 'SCn'
         hash['WarehouseCond'] = { ratio: 1.0, space_type_gen: true, default: true }
-      elsif building_type == 'SUn'
+      when 'SUn'
         hash['WarehouseUnCond'] = { ratio: 1.0, space_type_gen: true, default: true }
-      elsif building_type == 'WRf'
+      when 'WRf'
         hash['IndLoadDock'] = { ratio: 0.08, space_type_gen: true, default: false }
         hash['OfficeGeneral'] = { ratio: 0.02, space_type_gen: true, default: false }
         hash['RefStorFreezer'] = { ratio: 0.4005, space_type_gen: true, default: false }

@@ -85,4 +85,30 @@ class BTAPPRE1980 < NECB2011
   def set_occ_sensor_spacetypes(model, space_type_map)
     return true
   end
+
+  # This method sets the primary heating fuel to either NaturalGas or Electricity if a HP fuel type is set.
+  def validate_primary_heating_fuel(primary_heating_fuel:, model:)
+    if primary_heating_fuel.to_s.downcase == 'defaultfuel' || primary_heating_fuel.to_s.downcase == 'necb_default'
+      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+      default_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
+      if default_fuel.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.swh', "Could not find a default fuel for #{epw.stateProvinceRegion}.  Using Electricity as the fuel type instead.")
+        return 'Electricity'
+      end
+      return default_fuel
+    end
+    return primary_heating_fuel unless primary_heating_fuel == 'NaturalGasHPGasBackup' || primary_heating_fuel == 'NaturalGasHPElecBackupMixed' || primary_heating_fuel == 'ElectricityHPElecBackup' || primary_heating_fuel == 'ElectricityHPGasBackupMixed'
+    case primary_heating_fuel
+    when "NaturalGasHPGasBackup"
+      primary_heating_fuel = 'NaturalGas'
+    when "NaturalGasHPElecBackupMixed"
+      primary_heating_fuel = 'NaturalGas'
+    when "ElectricityHPElecBackup"
+      primary_heating_fuel = 'Electricity'
+    when "ElectricityHPGasBackupMixed"
+      primary_heating_fuel = 'Electricity'
+    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Attemted to apply an NECB HP primary_heating_fuel to a vintage building type.  Replacing the selected primary_heating_fuel with #{primary_heating_fuel}.")
+    return primary_heating_fuel
+  end
 end

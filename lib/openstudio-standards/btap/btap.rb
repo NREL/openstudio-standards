@@ -146,13 +146,6 @@ module BTAP
     end
   end
 
-
-
-
-
-
-
-
   def self.gut_building(model)
     #clean up any remaining items that we don't need for NECB.
     puts "Removing casual loads."
@@ -270,17 +263,6 @@ module BTAP
       return model
     end
 
-
-  end
-  module Site
-    #This method sets the weather file for the model.
-    #It takes a simple string, remember to escape the slashes..(i.e. // not / )
-    #@author Phylroy A. Lopez
-    #@param model [OpenStudio::Model::Model] A model object
-    #@param  epw_path [String] a simple string of the epw file path, remember to escape the slashes..(i.e. // not / )
-    def self.set_weather_file(model, epw_path)
-      BTAP::Environment::WeatherFile.new(epw_path).set_weather_file(model)
-    end
 
   end
   # This contains methods for creation and querying object that deal with Envelope, SpaceLoads,Schedules, and HVAC.

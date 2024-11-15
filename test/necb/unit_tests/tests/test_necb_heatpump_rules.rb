@@ -52,7 +52,7 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
       boiler_fueltype = 'Electricity'
       baseboard_type = 'Hot Water'
       heating_coil_type = 'DX'
-      
+
       test_caps.each do |cap|
         name = "#{template}_sys3_HtgDXCoilCap-#{cap}kW"
         name.gsub!(/\s+/, "-")
@@ -60,19 +60,20 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
 
         # Load model and set climate file.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                     zones: model.getThermalZones,
                                                                                                     heating_coil_type: heating_coil_type,
                                                                                                     baseboard_type: baseboard_type,
                                                                                                     hw_loop: hw_loop,
                                                                                                     new_auto_zoner: false)
-        
+
         dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
         dx_clg_coils.each do |coil|
           coil.setRatedTotalCoolingCapacity(cap * 1000)
@@ -131,26 +132,27 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
-    
+
     name = "sys3"
     name.gsub!(/\s+/, "-")
     puts "***************#{name}***************\n"
 
     # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-            
+
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
     standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
                                                                                                 baseboard_type: baseboard_type,
                                                                                                 hw_loop: hw_loop,
                                                                                                 new_auto_zoner: false)
-    
+
     # Run sizing.
     run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 

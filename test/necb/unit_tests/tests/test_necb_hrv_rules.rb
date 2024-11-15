@@ -19,14 +19,15 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     template = 'NECB2011'
     standard = Standard.build(template)
     save_intermediate_models = false
- 
+
     name = "hrv"
     name.gsub!(/\s+/, "-")
     puts "***************#{name}***************\n"
 
     # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
     # Add HVAC system.
@@ -35,7 +36,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     heating_coil_type = 'DX'
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, boiler_fueltype, always_on)
     standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
@@ -81,5 +82,5 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       end
     end
   end
-  
+
 end

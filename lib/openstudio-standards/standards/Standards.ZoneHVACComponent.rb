@@ -111,20 +111,19 @@ class Standard
                 end
 
     # Get the fan
-    if !zone_hvac.nil?
-      fan_obj = if zone_hvac.supplyAirFan.to_FanConstantVolume.is_initialized
-                  zone_hvac.supplyAirFan.to_FanConstantVolume.get
-                elsif zone_hvac.supplyAirFan.to_FanVariableVolume.is_initialized
-                  zone_hvac.supplyAirFan.to_FanVariableVolume.get
-                elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
-                  zone_hvac.supplyAirFan.to_FanOnOff.get
-                elsif zone_hvac.supplyAirFan.to_FanSystemModel.is_initialized
-                  zone_hvac.supplyAirFan.to_FanSystemModel.get
-                end
-      return fan_obj
-    else
-      return nil
-    end
+    return nil if zone_hvac.nil?
+
+    fan_obj = if zone_hvac.supplyAirFan.to_FanConstantVolume.is_initialized
+                zone_hvac.supplyAirFan.to_FanConstantVolume.get
+              elsif zone_hvac.supplyAirFan.to_FanVariableVolume.is_initialized
+                zone_hvac.supplyAirFan.to_FanVariableVolume.get
+              elsif zone_hvac.supplyAirFan.to_FanOnOff.is_initialized
+                zone_hvac.supplyAirFan.to_FanOnOff.get
+              elsif zone_hvac.supplyAirFan.to_FanSystemModel.is_initialized
+                zone_hvac.supplyAirFan.to_FanSystemModel.get
+              end
+
+    return fan_obj
   end
 
   # Default occupancy fraction threshold for determining if the spaces served by the zone hvac are occupied
@@ -195,18 +194,16 @@ class Standard
 
     # if supply air fan operating schedule is always off,
     # override to provide ventilation during occupied hours
-    unless existing_sch.nil?
-      if existing_sch.name.is_initialized
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation, and schedule is set to always on; keeping always on schedule.")
-        return false if existing_sch.name.get.to_s.downcase.include?('always on discrete') || existing_sch.name.get.to_s.downcase.include?('guestroom_vent_ctrl_sch')
-      end
+    if !existing_sch.nil? && existing_sch.name.is_initialized
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation, and schedule is set to always on; keeping always on schedule.")
+      return false if existing_sch.name.get.to_s.downcase.include?('always on discrete') || existing_sch.name.get.to_s.downcase.include?('guestroom_vent_ctrl_sch')
     end
 
     thermal_zone = zone_hvac_component.thermalZone.get
     occ_threshold = zone_hvac_unoccupied_threshold
-    occ_sch = thermal_zones_get_occupancy_schedule([thermal_zone],
-                                                   sch_name: "#{zone_hvac_component.name} Occ Sch",
-                                                   occupied_percentage_threshold: occ_threshold)
+    occ_sch = OpenstudioStandards::ThermalZone.thermal_zone_get_occupancy_schedule(thermal_zone,
+                                                                                   sch_name: "#{zone_hvac_component.name} Occ Sch",
+                                                                                   occupied_percentage_threshold: occ_threshold)
     zone_hvac_component.setSupplyAirFanOperatingModeSchedule(occ_sch)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ZoneHVACComponent', "#{zone_hvac_component.name} has ventilation.  Setting fan operating mode schedule to align with zone occupancy schedule.")
 
@@ -238,7 +235,7 @@ class Standard
     end
 
     # Standby mode occupancy control
-    return true unless zone_hvac_component.thermalZone.empty?
+    return true if zone_hvac_component.thermalZone.empty?
 
     thermal_zone = zone_hvac_component.thermalZone.get
 
@@ -344,11 +341,7 @@ class Standard
     fan.setAvailabilitySchedule(avail_sch)
 
     # Clean name of zone HVAC
-    equip_name_clean = zone_hvac.name.get.to_s.gsub(/\W/, '').delete('_')
-    # If the name starts with a number, prepend with a letter
-    if equip_name_clean[0] =~ /[0-9]/
-      equip_name_clean = "EQUIP#{equip_name_clean}"
-    end
+    equip_name_clean = ems_friendly_name(zone_hvac.name)
 
     # Sensors
     # Get existing OAT sensor if present
@@ -363,12 +356,12 @@ class Standard
 
     # Actuators
     avail_sch_act = OpenStudio::Model::EnergyManagementSystemActuator.new(avail_sch, 'Schedule:Constant', 'Schedule Value')
-    avail_sch_act.setName("#{equip_name_clean}VestHtgAvailSch")
+    avail_sch_act.setName("#{equip_name_clean}_VestHtgAvailSch")
 
     # Programs
     htg_lim_f = 45
     vestibule_htg_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    vestibule_htg_prg.setName("#{equip_name_clean}VestHtgPrg")
+    vestibule_htg_prg.setName("#{equip_name_clean}_VestHtgPrg")
     vestibule_htg_prg_body = <<-EMS
     IF #{oat_db_c_sen.handle} > #{OpenStudio.convert(htg_lim_f, 'F', 'C').get}
       SET #{avail_sch_act.handle} = 0
@@ -378,7 +371,7 @@ class Standard
 
     # Program Calling Managers
     vestibule_htg_mgr = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    vestibule_htg_mgr.setName("#{equip_name_clean}VestHtgMgr")
+    vestibule_htg_mgr.setName("#{equip_name_clean}_VestHtgMgr")
     vestibule_htg_mgr.setCallingPoint('BeginTimestepBeforePredictor')
     vestibule_htg_mgr.addProgram(vestibule_htg_prg)
 

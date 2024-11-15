@@ -323,10 +323,8 @@ module OpenstudioStandards
       ann_env_pd = nil
       @sql.availableEnvPeriods.each do |env_pd|
         env_type = @sql.environmentType(env_pd)
-        if env_type.is_initialized
-          if env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod')
-            ann_env_pd = env_pd
-          end
+        if env_type.is_initialized && (env_type.get == OpenStudio::EnvironmentType.new('WeatherRunPeriod'))
+          ann_env_pd = env_pd
         end
       end
 
@@ -415,28 +413,27 @@ module OpenstudioStandards
             date = date_time.date
             day_of_week = date.dayOfWeek
             # Convert the peak demand to kW
-            val_J_per_hr = val / int_len_hrs.value
-            val_kW = OpenStudio.convert(val_J_per_hr, 'J/h', 'kW').get
+            val_j_per_hr = val / int_len_hrs.value
+            val_kw = OpenStudio.convert(val_j_per_hr, 'J/h', 'kW').get
 
-            # puts("#{val_kW}kW; #{date}; #{time}; #{day_of_week.valueName}")
+            # puts("#{val_kw}kW; #{date}; #{time}; #{day_of_week.valueName}")
 
             # Skip times outside of the correct months
             next if date_time < start_date || date_time > end_date
             # Skip times before 2pm and after 6pm
             next if time < start_time || time > end_time
 
-            # Skip weekends if asked
-            if skip_weekends
-              # Sunday = 1, Saturday = 7
-              next if day_type == 1 || day_type == 7
-            end
-            # Skip holidays if asked
-            if skip_holidays
-              # Holiday = 8
-              next if day_type == 8
+            # Skip weekends if asked, Sunday = 1, Saturday = 7
+            if skip_weekends && ((day_type == 1) || (day_type == 7))
+              next
             end
 
-            # puts("VALID #{val_kW}kW; #{date}; #{time}; #{day_of_week.valueName}")
+            # Skip holidays if asked, Holiday = 8
+            if skip_holidays && (day_type == 8)
+              next
+            end
+
+            # puts("VALID #{val_kw}kW; #{date}; #{time}; #{day_of_week.valueName}")
 
             # Check peak demand against this timestep
             # and update if this timestep is higher.
@@ -445,11 +442,11 @@ module OpenstudioStandards
               electricity_peak_demand_time = date_time
             end
           end
-          elec_peak_demand_timestep_J = OpenStudio::Quantity.new(electricity_peak_demand, joule_unit)
+          elec_peak_demand_timestep_j = OpenStudio::Quantity.new(electricity_peak_demand, joule_unit)
           num_int = elec.values.size
           int_len_hrs = OpenStudio::Quantity.new(hrs_sim / num_int, hrs_unit)
-          elec_peak_demand_hourly_J_per_hr = elec_peak_demand_timestep_J / int_len_hrs
-          electricity_peak_demand = OpenStudio.convert(elec_peak_demand_hourly_J_per_hr, kilowatt_unit).get.value
+          elec_peak_demand_hourly_j_per_hr = elec_peak_demand_timestep_j / int_len_hrs
+          electricity_peak_demand = OpenStudio.convert(elec_peak_demand_hourly_j_per_hr, kilowatt_unit).get.value
           demand_elems << OpenStudio::Attribute.new('electricity_peak_demand', electricity_peak_demand, 'kW')
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.QAQC', "Peak Demand = #{electricity_peak_demand.round(2)}kW on #{electricity_peak_demand_time}")
         else
@@ -490,7 +487,7 @@ module OpenstudioStandards
             time = date_time.time
             date = date_time.date
 
-            # puts("#{val_kW}kW; #{date}; #{time}; #{day_of_week.valueName}")
+            # puts("#{val_kw}kW; #{date}; #{time}; #{day_of_week.valueName}")
 
             # Determine which TOU period this hour falls into
             tou_period_assigned = false
@@ -504,16 +501,16 @@ module OpenstudioStandards
               # Skip times before some time and after another time
               next if time < pd_start_time || time > pd_end_time
 
-              # Skip weekends if asked
-              if tou_pd['skip_weekends']
-                # Sunday = 1, Saturday = 7
-                next if day_type == 1 || day_type == 7
+              # Skip weekends if asked, Sunday = 1, Saturday = 7
+              if tou_pd['skip_weekends'] && ((day_type == 1) || (day_type == 7))
+                next
               end
-              # Skip holidays if asked
-              if tou_pd['skip_holidays']
-                # Holiday = 8
-                next if day_type == 8
+
+              # Skip holidays if asked, Holiday = 8
+              if tou_pd['skip_holidays'] && (day_type == 8)
+                next
               end
+
               # If here, this hour falls into the specified period
               tou_period_assigned = true
               electricity_tou_vals[tou_pd['tou_id']] += joules
@@ -539,8 +536,8 @@ module OpenstudioStandards
         if val.is_initialized
           ann_elec_gj = OpenStudio::Quantity.new(val.get, gigajoule_unit)
           ann_hrs = OpenStudio::Quantity.new(hrs_sim, hrs_unit)
-          elec_ann_avg_peak_demand_hourly_GJ_per_hr = ann_elec_gj / ann_hrs
-          electricity_annual_avg_peak_demand = OpenStudio.convert(elec_ann_avg_peak_demand_hourly_GJ_per_hr, kilowatt_unit).get.value
+          elec_ann_avg_peak_demand_hourly_gj_per_hr = ann_elec_gj / ann_hrs
+          electricity_annual_avg_peak_demand = OpenStudio.convert(elec_ann_avg_peak_demand_hourly_gj_per_hr, kilowatt_unit).get.value
           demand_elems << OpenStudio::Attribute.new('electricity_annual_avg_peak_demand', electricity_annual_avg_peak_demand, 'kW')
         else
           demand_elems << OpenStudio::Attribute.new('electricity_annual_avg_peak_demand', 0.0, 'kW')
@@ -580,28 +577,27 @@ module OpenstudioStandards
             date = date_time.date
             day_of_week = date.dayOfWeek
             # Convert the peak demand to kW
-            val_J_per_hr = val / int_len_hrs.value
-            val_kW = OpenStudio.convert(val_J_per_hr, 'J/h', 'kW').get
+            val_j_per_hr = val / int_len_hrs.value
+            val_kw = OpenStudio.convert(val_j_per_hr, 'J/h', 'kW').get
 
-            # puts("#{val_kW}kW; #{date}; #{time}; #{day_of_week.valueName}")
+            # puts("#{val_kw}kW; #{date}; #{time}; #{day_of_week.valueName}")
 
             # Skip times outside of the correct months
             next if date_time < start_date || date_time > end_date
             # Skip times before 2pm and after 6pm
             next if time < start_time || time > end_time
 
-            # Skip weekends if asked
-            if skip_weekends
-              # Sunday = 1, Saturday = 7
-              next if day_type == 1 || day_type == 7
-            end
-            # Skip holidays if asked
-            if skip_holidays
-              # Holiday = 8
-              next if day_type == 8
+            # Skip weekends if asked, Sunday = 1, Saturday = 7
+            if skip_weekends && ((day_type == 1) || (day_type == 7))
+              next
             end
 
-            # puts("VALID #{val_kW}kW; #{date}; #{time}; #{day_of_week.valueName}")
+            # Skip holidays if asked, Holiday = 8
+            if skip_holidays && (day_type == 8)
+              next
+            end
+
+            # puts("VALID #{val_kw}kW; #{date}; #{time}; #{day_of_week.valueName}")
 
             # Check peak demand against this timestep
             # and update if this timestep is higher.
@@ -610,11 +606,11 @@ module OpenstudioStandards
               ann_dist_clg_peak_demand_time = date_time
             end
           end
-          dist_clg_peak_demand_timestep_J = OpenStudio::Quantity.new(district_cooling_peak_demand, joule_unit)
+          dist_clg_peak_demand_timestep_j = OpenStudio::Quantity.new(district_cooling_peak_demand, joule_unit)
           num_int = dist_clg.values.size
           int_len_hrs = OpenStudio::Quantity.new(hrs_sim / num_int, hrs_unit)
-          dist_clg_peak_demand_hourly_J_per_hr = dist_clg_peak_demand_timestep_J / int_len_hrs
-          district_cooling_peak_demand = OpenStudio.convert(dist_clg_peak_demand_hourly_J_per_hr, kilowatt_unit).get.value
+          dist_clg_peak_demand_hourly_j_per_hr = dist_clg_peak_demand_timestep_j / int_len_hrs
+          district_cooling_peak_demand = OpenStudio.convert(dist_clg_peak_demand_hourly_j_per_hr, kilowatt_unit).get.value
           demand_elems << OpenStudio::Attribute.new('district_cooling_peak_demand', district_cooling_peak_demand, 'kW')
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.QAQC', "District Cooling Peak Demand = #{district_cooling_peak_demand.round(2)}kW on #{ann_dist_clg_peak_demand_time}")
         else
@@ -649,7 +645,7 @@ module OpenstudioStandards
             time = date_time.time
             date = date_time.date
 
-            # puts("#{val_kW}kW; #{date}; #{time}; #{day_of_week.valueName}")
+            # puts("#{val_kw}kW; #{date}; #{time}; #{day_of_week.valueName}")
 
             # Determine which TOU period this hour falls into
             tou_period_assigned = false
@@ -663,16 +659,16 @@ module OpenstudioStandards
               # Skip times before some time and after another time
               next if time < pd_start_time || time > pd_end_time
 
-              # Skip weekends if asked
-              if tou_pd['skip_weekends']
-                # Sunday = 1, Saturday = 7
-                next if day_type == 1 || day_type == 7
+              # Skip weekends if asked, Sunday = 1, Saturday = 7
+              if tou_pd['skip_weekends'] && ((day_type == 1) || (day_type == 7))
+                next
               end
-              # Skip holidays if asked
-              if tou_pd['skip_holidays']
-                # Holiday = 8
-                next if day_type == 8
+
+              # Skip holidays if asked, Holiday = 8
+              if tou_pd['skip_holidays'] && (day_type == 8)
+                next
               end
+
               # If here, this hour falls into the specified period
               tou_period_assigned = true
               dist_clg_tou_vals[tou_pd['tou_id']] += joules
@@ -809,8 +805,8 @@ module OpenstudioStandards
       # Subtract off the already accounted for fuel types from the total
       # to account for fuels on custom meters where the fuel type is not known.
       prev_tot = 0.0
-      annual_utility_cost_map.each do |fuel, val|
-        prev_tot += val
+      annual_utility_cost_map.each do |fuel, value|
+        prev_tot += value
       end
       if total.is_initialized
         other_val = total.get - prev_tot
@@ -909,10 +905,10 @@ module OpenstudioStandards
             mon_energy_cons = 0.0
             val = @sql.energyConsumptionByMonth(end_use_fuel_type, end_use_cat, month)
             if val.is_initialized
-              monthly_consumption_J = OpenStudio::Quantity.new(val.get, joule_unit)
-              monthly_consumption_GJ = OpenStudio.convert(monthly_consumption_J, gigajoule_unit).get.value
-              mon_energy_cons = monthly_consumption_GJ
-              ann_energy_cons += monthly_consumption_GJ
+              monthly_consumption_j = OpenStudio::Quantity.new(val.get, joule_unit)
+              monthly_consumption_gj = OpenStudio.convert(monthly_consumption_j, gigajoule_unit).get.value
+              mon_energy_cons = monthly_consumption_gj
+              ann_energy_cons += monthly_consumption_gj
             end
             # record the monthly value
             if end_use_fuel_type == OpenStudio::EndUseFuelType.new('Water')
@@ -948,12 +944,12 @@ module OpenstudioStandards
           fuel_type_name = fuel_type_alias_map[end_use_fuel_type.value]
           ann_peak_demand = 0.0
           # in each end use, loop through months and get monthly enedy consumption
-          months.each_with_index do |month, i|
+          months.each_with_index do |month, month_index|
             mon_peak_demand = 0.0
             val = @sql.peakEnergyDemandByMonth(end_use_fuel_type, end_use_cat, month)
             if val.is_initialized
-              mon_peak_demand_W = OpenStudio::Quantity.new(val.get, watt_unit)
-              mon_peak_demand = OpenStudio.convert(mon_peak_demand_W, kilowatt_unit).get.value
+              mon_peak_demand_w = OpenStudio::Quantity.new(val.get, watt_unit)
+              mon_peak_demand = OpenStudio.convert(mon_peak_demand_w, kilowatt_unit).get.value
             end
             # record the monthly value
             fuel_type_elems << OpenStudio::Attribute.new('month', mon_peak_demand, 'kW')

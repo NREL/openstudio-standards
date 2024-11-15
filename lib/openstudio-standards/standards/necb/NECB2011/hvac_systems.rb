@@ -251,12 +251,14 @@ class NECB2011
 
     # Get January winter design temperature
     # get model weather file name
-    weather_file = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get)
+    weather_file_path = air_loop_hvac.model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
 
     # get winter(heating) design temp stored in array
     # Note that the NECB2011 specifies using the 2.5% january design temperature
     # The outdoor temperature used here is the 0.4% heating design temperature of the coldest month, available in stat file
-    outdoor_temp = weather_file.heating_design_info[1]
+    outdoor_temp = stat_file.heating_design_info[1]
 
     #      for debugging/testing
     #      puts "outdoor design temp = #{outdoor_temp}"
@@ -381,12 +383,19 @@ class NECB2011
     heat_exchanger_air_to_air_sensible_and_latent.setHeatExchangerType(erv_info['HeatExchangerType'])
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
     heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(erv_info['LatentEffectivenessat100HeatingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow'])
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(erv_info['SensibleEffectivenessat100CoolingAirFlow'])
     heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(erv_info['LatentEffectivenessat100CoolingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow'])
+    if heat_exchanger_air_to_air_sensible_and_latent.model.version < OpenStudio::VersionString.new('3.8.0')
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow'])
+    else
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow']) unless erv_info['SensibleEffectivenessat75HeatingAirFlow'].zero?
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow']) unless erv_info['LatentEffectivenessat75HeatingAirFlow'].zero?
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow']) unless erv_info['SensibleEffectivenessat75CoolingAirFlow'].zero?
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow']) unless erv_info['LatentEffectivenessat75CoolingAirFlow'].zero?
+    end
     heat_exchanger_air_to_air_sensible_and_latent.setSupplyAirOutletTemperatureControl(erv_info['SupplyAirOutletTemperatureControl'])
     heat_exchanger_air_to_air_sensible_and_latent.setFrostControlType(erv_info['FrostControlType'])
     heat_exchanger_air_to_air_sensible_and_latent.setEconomizerLockout(erv_info['EconomizerLockout'])
@@ -487,6 +496,36 @@ class NECB2011
     return [minimum_oa_flow_cfm, maximum_stories]
   end
 
+  # find search criteria
+  #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @return [Hash] used for standards_lookup_table(model)
+  def boiler_hot_water_find_search_criteria(boiler_hot_water)
+    # Define the criteria to find the boiler properties
+    # in the hvac standards data set.
+    search_criteria = {}
+    search_criteria['template'] = template
+    # Get fuel type
+    fuel_type = nil
+    case boiler_hot_water.fuelType
+    when 'NaturalGas'
+      fuel_type = 'Gas'
+    when 'Electricity'
+      fuel_type = 'Electric'
+    when 'FuelOilNo1', 'FuelOilNo2'
+      fuel_type = 'Oil'
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuel_type} is not yet supported.  Assuming 'Gas.'")
+      fuel_type = 'Gas'
+    end
+
+    search_criteria['fuel_type'] = fuel_type
+    # Get the fluid type
+    fluid_type = 'Hot Water'
+    search_criteria['fluid_type'] = fluid_type
+    return search_criteria
+  end
+
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify
@@ -503,31 +542,38 @@ class NECB2011
     # Get the capacity
     capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
 
-    # Check if secondary and/or modulating boiler required
-    # If boiler names include 'Primary Boiler' or 'Secondary Boiler' then NECB rules are applied
     boiler_capacity = capacity_w
-    if boiler_hot_water.name.to_s.include?('Primary Boiler') || boiler_hot_water.name.to_s.include?('Secondary Boiler')
-      if capacity_w / 1000.0 >= 352.0
-        if boiler_hot_water.name.to_s.include?('Primary Boiler')
-          boiler_capacity = capacity_w
-          boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
-          boiler_hot_water.setMinimumPartLoadRatio(0.25)
-        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-          boiler_capacity = 0.001
-        end
-      elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
-        boiler_capacity = capacity_w / 2
-      elsif (capacity_w / 1000.0) <= 176.0
-        if boiler_hot_water.name.to_s.include?('Primary Boiler')
-          if capacity_w <= 1.0
-            boiler_capacity = 1.0
-          else
+    # Use the NECB capacities if the SystemFuels class is not defined (i.e. this method was not called from something
+    # that created a SystemFuels object) or if either primary or secondary boiler capacity fractions are not defined.
+    if !self.fuel_type_set.is_a?(SystemFuels) || self.fuel_type_set.primary_boiler_cap_frac.nil? || self.fuel_type_set.secondary_boiler_cap_frac.nil?
+      # Check if secondary and/or modulating boiler required
+      # If boiler names include 'Primary Boiler' or 'Secondary Boiler' then NECB rules are applied
+      if boiler_hot_water.name.to_s.include?('Primary Boiler') || boiler_hot_water.name.to_s.include?('Secondary Boiler')
+        if capacity_w / 1000.0 >= 352.0
+          if boiler_hot_water.name.to_s.include?('Primary Boiler')
             boiler_capacity = capacity_w
+            boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
+            boiler_hot_water.setMinimumPartLoadRatio(0.25)
+          elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+            boiler_capacity = 0.001
           end
-        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-          boiler_capacity = 0.001
+        elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
+          boiler_capacity = capacity_w / 2
+        elsif (capacity_w / 1000.0) <= 176.0
+          if boiler_hot_water.name.to_s.include?('Primary Boiler')
+            if capacity_w <= 1.0
+              boiler_capacity = 1.0
+            else
+              boiler_capacity = capacity_w
+            end
+          elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+            boiler_capacity = 0.001
+          end
         end
       end
+    else
+      boiler_capacity = capacity_w * self.fuel_type_set.primary_boiler_cap_frac if boiler_hot_water.name.to_s.include?('Primary Boiler')
+      boiler_capacity = capacity_w * self.fuel_type_set.secondary_boiler_cap_frac if boiler_hot_water.name.to_s.include?('Secondary Boiler')
     end
     boiler_hot_water.setNominalCapacity(boiler_capacity)
 
@@ -618,7 +664,7 @@ class NECB2011
           chiller_capacity = 0.001
         end
       else
-        chiller_capacity = capacity_w / 2.0 
+        chiller_capacity = capacity_w / 2.0
       end
     end
     chiller_electric_eir.setReferenceCapacity(chiller_capacity)
@@ -1078,7 +1124,7 @@ class NECB2011
     # This method will seem like an error in number of args..but this is due to swig voodoo.
     heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, 'Schedule:Constant', 'Schedule Value')
     heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    heat_pump_avail_sch_prog.setName("#{multi_speed_heat_pump.name.to_s.gsub(/[ +-.]/, '_')} Availability Schedule Program by Line")
+    heat_pump_avail_sch_prog.setName("#{ems_friendly_name(multi_speed_heat_pump.name)} Availability Schedule Program by Line")
     heat_pump_avail_sch_prog_body = <<-EMS
         IF #{heat_pump_avail_sch_sensor.handle} > 0.0
           SET #{heat_pump_avail_sch_actuator.handle} = #{heat_pump_avail_sch_sensor.handle}
@@ -1090,7 +1136,7 @@ class NECB2011
     EMS
     heat_pump_avail_sch_prog.setBody(heat_pump_avail_sch_prog_body)
     pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    pcm.setName("#{heat_pump_avail_sch_prog.name.to_s.gsub(/[ +-.]/, '_')} Calling Manager")
+    pcm.setName("#{heat_pump_avail_sch_prog.name} Calling Manager")
     pcm.setCallingPoint('InsideHVACSystemIterationLoop')
     pcm.addProgram(heat_pump_avail_sch_prog)
   end
@@ -1611,6 +1657,7 @@ class NECB2011
   def setup_hw_loop_with_components(model,
                                     hw_loop,
                                     boiler_fueltype,
+                                    backup_boiler_fueltype,
                                     pump_flow_sch)
     hw_loop.setName('Hot Water Loop')
     sizing_plant = hw_loop.sizingPlant
@@ -1632,7 +1679,7 @@ class NECB2011
     boiler1 = OpenStudio::Model::BoilerHotWater.new(model)
     boiler2 = OpenStudio::Model::BoilerHotWater.new(model)
     boiler1.setFuelType(boiler_fueltype)
-    boiler2.setFuelType(boiler_fueltype)
+    boiler2.setFuelType(backup_boiler_fueltype)
     boiler1.setName('Primary Boiler')
     boiler2.setName('Secondary Boiler')
 
@@ -1784,19 +1831,19 @@ class NECB2011
       # Determine if space is heated or cooled via spacetype heating or cooling setpoints also checking if the space is
       # a plenum by checking if there is a hvac system associtated with it
       if sp_type_info['heating_setpoint_schedule'].nil?
-        heated = FALSE
+        heated = false
       else
-        heated = TRUE
+        heated = true
       end
       if sp_type_info['cooling_setpoint_schedule'].nil?
-        cooled = FALSE
+        cooled = false
       else
-        cooled = TRUE
+        cooled = true
       end
       if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type'])
-        not_plenum = FALSE
+        not_plenum = false
       else
-        not_plenum = TRUE
+        not_plenum = true
       end
       # If the spaces are heated or cooled and are not a plenum then continue
       if (heated || cooled) && not_plenum
@@ -1950,7 +1997,7 @@ class NECB2011
 
   def add_onespeed_htg_DX_coil(model, sch)
 
-  
+
     htg_cap_f_of_temp = OpenStudio::Model::CurveCubic.new(model)
     htg_cap_f_of_temp.setCoefficient1Constant(0.729009)
     htg_cap_f_of_temp.setCoefficient2x(0.0319275)
@@ -1958,7 +2005,7 @@ class NECB2011
     htg_cap_f_of_temp.setCoefficient4xPOW3(-8.748e-06)
     htg_cap_f_of_temp.setMinimumValueofx(-20.0)
     htg_cap_f_of_temp.setMaximumValueofx(20.0)
-  
+
     htg_cap_f_of_flow = OpenStudio::Model::CurveCubic.new(model)
     htg_cap_f_of_flow.setCoefficient1Constant(0.84)
     htg_cap_f_of_flow.setCoefficient2x(0.16)
@@ -1981,7 +2028,7 @@ class NECB2011
     htg_energy_input_ratio_f_of_flow.setCoefficient3xPOW2(0.0512)
     htg_energy_input_ratio_f_of_flow.setMinimumValueofx(0.0)
     htg_energy_input_ratio_f_of_flow.setMaximumValueofx(1.0)
-  
+
     htg_part_load_ratio = OpenStudio::Model::CurveCubic.new(model)
     htg_part_load_ratio.setCoefficient1Constant(0.3696)
     htg_part_load_ratio.setCoefficient2x(2.3362)
@@ -1989,7 +2036,7 @@ class NECB2011
     htg_part_load_ratio.setCoefficient4xPOW3(1.2596)
     htg_part_load_ratio.setMinimumValueofx(0.7)
     htg_part_load_ratio.setMaximumValueofx(1.0)
-     
+
     dx_htg_coil = OpenStudio::Model::CoilHeatingDXSingleSpeed.new(model,
                                                                   sch,
                                                                   htg_cap_f_of_temp,
@@ -1999,7 +2046,7 @@ class NECB2011
                                                                   htg_part_load_ratio)
     dx_htg_coil.setMinimumOutdoorDryBulbTemperatureforCompressorOperation(-10)
 
-    return dx_htg_coil                                                           
+    return dx_htg_coil
   end
 
   # Zonal systems
@@ -2139,7 +2186,7 @@ class NECB2011
   end
 
   # Method to set the base system name based on the following syntax:
-  # |sys_abbr|sys_oa|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
+  # |sys_abbr|sys_oa|shr>?|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
   # "sys_abbr" designates the NECB system type ("sys_1, sys_2, ... sys_6")
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
@@ -2310,9 +2357,9 @@ class NECB2011
     if necb_reference_hp #NECB reference heat pump rules apply
       # grab paired cooling coil
       if coil_heating_dx_single_speed.airLoopHVAC.empty?
-        
+
         if coil_heating_dx_single_speed.containingHVACComponent.is_initialized
-          
+
           containing_comp = coil_heating_dx_single_speed.containingHVACComponent.get
           if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
             clg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.coolingCoil
@@ -2357,16 +2404,16 @@ class NECB2011
       cooling_cap_f_temp_curve = clg_coil.totalCoolingCapacityFunctionOfTemperatureCurve
       cooling_cap_f_temp_factor_min_y = cooling_cap_f_temp_curve.evaluate(indoor_wb,outdoor_db)
       htg_cap_w_min_y = capacity_w*0.5*cooling_cap_f_temp_factor_min_y
-      
-      # heating capacity = capacity factor (function of temp) from biquadratic curve 
+
+      # heating capacity = capacity factor (function of temp) from biquadratic curve
       # without curve limits on minimum y/outdoor db (extrapolate)
       cooling_cap_f_temp_const = 0.867905
       cooling_cap_f_temp_x = 0.0142459
       cooling_cap_f_temp_x2 = 0.00055436
       cooling_cap_f_temp_y = -0.0075575
-      cooling_cap_f_temp_y2 = 3.3e-05 
+      cooling_cap_f_temp_y2 = 3.3e-05
       cooling_cap_f_temp_xy = -0.0001918
-      cooling_cap_f_temp_factor_no_min_y = cooling_cap_f_temp_const + cooling_cap_f_temp_x*indoor_wb + cooling_cap_f_temp_x2*indoor_wb**2 + 
+      cooling_cap_f_temp_factor_no_min_y = cooling_cap_f_temp_const + cooling_cap_f_temp_x*indoor_wb + cooling_cap_f_temp_x2*indoor_wb**2 +
       cooling_cap_f_temp_y*outdoor_db + cooling_cap_f_temp_y2*outdoor_db**2 + cooling_cap_f_temp_xy*indoor_wb*outdoor_db
       htg_cap_w_no_min_y = capacity_w*0.5*cooling_cap_f_temp_factor_no_min_y
 
@@ -2391,11 +2438,11 @@ class NECB2011
       return super(coil_heating_dx_single_speed)
     end
   end
-  
+
   # NECB reference heat pump system
-  # heating type rules need to be flexible to account for 
+  # heating type rules need to be flexible to account for
   # 1.  DX htg/cooling + gas supplement htg
-  # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem  
+  # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem
   # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def coil_dx_heating_type(coil_dx, necb_reference_hp = false)
     supp_htg_type = nil
@@ -2412,52 +2459,52 @@ class NECB2011
             if supp_htg_coil.to_CoilHeatingElectric.is_initialized
               supp_htg_type = 'Electric Resistance or None'
             elsif supp_htg_coil.to_CoilHeatingGas.is_initialized or supp_htg_coil.to_CoilHeatingWater.is_initialized
-              supp_htg_type = 'All Other' 
+              supp_htg_type = 'All Other'
             else # None
               supp_htg_type = 'Electric Resistance or None'
             end
-          else 
+          else
             # For other virtual wrapper, use method in Standard.DXCoil
             # Or add future wrappers here
-            return super 
+            return super
           end
         end
 
       elsif coil_dx.airLoopHVAC.is_initialized # Heat pumps without a wrapper (lone DX coils in the air loop)
         airloop = coil_dx.airLoopHVAC.get
         num_of_DX_Coils = 0
-        num_of_supp_coils = 0 
+        num_of_supp_coils = 0
         supp_htg_type = ''
         # Go through and determine number of each type of coils in air loop to determine supp_htg_type
-        airloop.supplyComponents.each do |supply_component| 
+        airloop.supplyComponents.each do |supply_component|
           if supply_component.to_CoilHeatingDXSingleSpeed.is_initialized or supply_component.to_CoilHeatingDXMultiSpeed.is_initialized
             supply_component.to_CoilHeatingDXVariableSpeed.is_initialized
             num_of_DX_Coils = num_of_DX_Coils + 1
           elsif supply_component.to_CoilCoolingDXSingleSpeed.is_initialized or supply_component.to_CoilCoolingDXTwoSpeed.is_initialized or
-            supply_component.to_CoilCoolingDXTwoSpeed.is_initialized or supply_component.to_CoilCoolingDXVariableSpeed.is_initialized or 
+            supply_component.to_CoilCoolingDXTwoSpeed.is_initialized or supply_component.to_CoilCoolingDXVariableSpeed.is_initialized or
             supply_component.to_CoilCoolingDXMultiSpeed.is_initialized or
             supply_component.to_CoilCoolingDXCurveFitPerformance.is_initialized or
             supply_component.to_CoilCoolingDXTwoStageWithHumidityControlMode.is_initialized
             num_of_DX_Coils = num_of_DX_Coils + 1
-          elsif supply_component.to_CoilHeatingGas.is_initialized or supply_component.to_CoilHeatingGasMultiStage.is_initialized or 
+          elsif supply_component.to_CoilHeatingGas.is_initialized or supply_component.to_CoilHeatingGasMultiStage.is_initialized or
             supply_component.to_CoilHeatingWater.is_initialized
             num_of_supp_coils = num_of_supp_coils + 1
-            supp_htg_type = 'All Other' 
-          elsif supply_component.to_CoilHeatingElectric.is_initialized 
-            num_of_supp_coils = num_of_supp_coils + 1        
+            supp_htg_type = 'All Other'
+          elsif supply_component.to_CoilHeatingElectric.is_initialized
+            num_of_supp_coils = num_of_supp_coils + 1
             supp_htg_type = 'Electric Resistance or None'
           end
         end
 
         #Two possible heat pump configuration
-        if num_of_DX_Coils == 2 && num_of_supp_coils == 1 #Scenario 1: 1 DX htg + 1 DX clg + 1 Non-DX htg coil 
+        if num_of_DX_Coils == 2 && num_of_supp_coils == 1 #Scenario 1: 1 DX htg + 1 DX clg + 1 Non-DX htg coil
           puts "scenario 1 supp_htg_type #{supp_htg_type}"
           return supp_htg_type # return supplmental heating type
-        else #Scenario 2: num_of_DX_Coils < 2 or num_of_supp_coils = 0; 
+        else #Scenario 2: num_of_DX_Coils < 2 or num_of_supp_coils = 0;
           puts "scenario 2 supp_htg_type #{supp_htg_type}"
           puts "num_of_DX_Coils #{num_of_DX_Coils}"
           puts "num_of_supp_coils #{num_of_supp_coils}"
-          return supp_htg_type = 'Electric Resistance or None' 
+          return supp_htg_type = 'Electric Resistance or None'
         end
       end
     end
@@ -2466,7 +2513,7 @@ class NECB2011
   # Sets the capacity of the reheat coil based on the minimum flow fraction, and the maximum flow rate.
   #
   # @param air_terminal_single_duct_vav_reheat [OpenStudio::Model::AirTerminalSingleDuctVAVReheat] the air terminal object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
     flow_rate_fraction = 0.0
     if air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction.is_initialized

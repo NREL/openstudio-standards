@@ -3,6 +3,8 @@
 :analysis_name: test_analysis_para
 :baseline_system_zones_map_option: NECB_Default
 :boiler_eff: NECB_Default
+:boiler_fuel: NECB_Default
+:boiler_cap_ratio: NECB_Default
 :building_type: FullServiceRestaurant
 :chiller_type: NECB_Default
 :compute_environment: local
@@ -29,6 +31,7 @@
 :infiltration_scale: NECB_Default
 :lights_scale: NECB_Default
 :lights_type: NECB_Default
+:necb_hdd: NECB_Default
 :nv_delta_temp_in_out: NECB_Default
 :nv_temp_out_min: NECB_Default
 :nv_opening_fraction: NECB_Default
@@ -53,6 +56,7 @@
 :skylight_cond: NECB_Default
 :skylight_solar_trans: NECB_Default
 :srr_set: NECB_Default
+:swh_fuel: NECB_Default
 :template: NECB2017
 :npv_start_year: NECB_Default
 :npv_end_year: NECB_Default

@@ -99,11 +99,11 @@ def unique_properties(sheet_name)
          when 'construction_properties'
            ['template', 'climate_zone_set', 'operation_type', 'intended_surface_type', 'standards_construction_type', 'building_category', 'orientation', 'minimum_percent_of_surface', 'maximum_percent_of_surface']
          when 'boilers'
-           ['template', 'fluid_type', 'fuel_type', 'condensing', 'condensing_control', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'fluid_type', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'chillers'
-           ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'variable_speed_drive', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'cooling_type', 'condenser_type', 'compressor_type', 'absorption_type', 'compliance_path', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'furnaces'
-           ['template', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'equipment_type', 'fuel_type', 'electric_power_phase', 'minimum_capacity', 'maximum_capacity', 'minimum_combo_unit_cooling_capacity', 'maximum_combo_unit_cooling_capacity', 'subtype', 'start_date', 'end_date']
          when 'heat_rejection'
            ['template', 'equipment_type', 'fan_type', 'start_date', 'end_date']
          when 'water_source_heat_pumps'
@@ -117,7 +117,7 @@ def unique_properties(sheet_name)
          when 'unitary_acs'
            ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'water_heaters'
-           ['template', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+           ['template', 'equipment_type', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'minimum_storage', 'maximum_storage', 'minimum_capacity_per_storage', 'maximum_capacity_per_storage', 'draw_profile', 'start_date', 'end_date']
          when 'elevators'
            ['template', 'building_type']
          when 'refrigeration_system_lineup', 'refrigeration_system'
@@ -137,7 +137,7 @@ def unique_properties(sheet_name)
          when 'motors'
            ['template', 'number_of_poles', 'type', 'synchronous_speed', 'minimum_capacity', 'maximum_capacity']
          when 'ground_temperatures'
-           ['building_type', 'template', 'climate_zone']
+          ['template', 'building_type', 'climate_zone']
          when 'hvac_inference'
            ['template', 'size_category', 'heating_source', 'cooling_source', 'delivery_type']
          when 'size_category'
@@ -199,53 +199,6 @@ def standard_directory_name_from_template(template)
   # puts "Extracting standard directory from template #{template} = #{directory_name}"
 
   return directory_name
-end
-
-# checks whether your authorization credentials are set up to access the spreadsheets
-# @return [Boolean] returns true if api is working, false if not
-def check_google_drive_configuration
-  require 'google_drive'
-  client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
-  unless File.exists? client_config_path
-    puts "Unable to locate client_secret.json file at #{client_config_path}."
-    return false
-  end
-  puts 'attempting to access spreadsheets...'
-  puts 'if you get an SSL error, disconnect from the VPN and try again'
-  session = GoogleDrive::Session.from_config(client_config_path)
-
-  # Gets list of remote files
-  session.files.each do |file|
-    puts file.title if file.title.include? 'OpenStudio'
-  end
-
-  puts 'Spreadsheets accessed successfully'
-  return true
-end
-
-# Downloads the OpenStudio_Standards.xlsx from Google Drive
-# @note This requires you to have a client_secret.json file saved in your
-# username/.credentials folder.  To get one of these files, please contact
-# marley.praprost@nrel.gov
-def download_google_spreadsheets(spreadsheet_titles)
-  require 'google_drive'
-  client_config_path = File.join(Dir.home, '.credentials', "client_secret.json")
-  unless File.exists? client_config_path
-    puts "Unable to locate client_secret.json file at #{client_config_path}."
-    return false
-  end
-
-  session = GoogleDrive::Session.from_config(client_config_path)
-
-  # Gets list of remote files
-  session.files.each do |file|
-    if spreadsheet_titles.include?(file.title)
-      puts "Found #{file.title}"
-      file.export_as_file("#{File.dirname(__FILE__)}/#{file.title}.xlsx")
-      puts "Downloaded #{file.title} to #{File.dirname(__FILE__)}/#{file.title}.xlsx"
-    end
-  end
-  return true
 end
 
 def exclusion_list
@@ -344,8 +297,8 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
     dirs.each { |d| d == 'ALL' ? new_dirs << '*' : new_dirs << "*#{d}*" }
     glob_string = "#{standards_dir}/#{new_dirs.join('/')}"
     puts "--spreadsheet title embedded search criteria: #{glob_string} yields:"
-#    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') && !f.include?('prm')}
-    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data')}
+    template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') && !f.include?('ashrae_90_1_prm') }
+    # template_dirs = Dir.glob(glob_string).select { |f| File.directory?(f) && !f.include?('data') }
     template_dirs.each do |template_dir|
       puts "----#{template_dir}"
     end
@@ -532,7 +485,7 @@ def export_spreadsheet_to_json(spreadsheet_titles, dataset_type: 'os_stds')
       puts "--found #{objs.size} rows"
 
       # Skip to the next sheet if no objects were found
-      if objs.size.zero?
+      if objs.empty?
         warnings << "did not export #{sheet_name} in #{spreadsheet_title} because no rows were found"
         next
       end
