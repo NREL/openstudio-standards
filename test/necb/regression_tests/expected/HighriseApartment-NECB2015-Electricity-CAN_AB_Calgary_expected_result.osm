@@ -1,7 +1,7 @@
 
 OS:Version,
-  {0ed1b088-cf3a-4dfc-8707-4a127ced471c}, !- Handle
-  3.6.1;                                  !- Version Identifier
+  {27ec3833-abd1-4953-b367-e7d17a3dbff0}, !- Handle
+  3.7.0;                                  !- Version Identifier
 
 OS:ScheduleTypeLimits,
   {01aaf1b6-ccc8-4b44-ada7-a2694b6bba51}, !- Handle
@@ -13458,7 +13458,7 @@ OS:DefaultScheduleSet,
   {a27065d3-6456-4952-aeb1-74189db8f530}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {85a10254-ad4e-4568-84ec-0fdf2f155a7c}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -14054,21 +14054,6 @@ OS:Schedule:Day,
   0,                                      !- Minute 9
   0.5;                                    !- Value Until Time 9
 
-OS:Schedule:Ruleset,
-  {85a10254-ad4e-4568-84ec-0fdf2f155a7c}, !- Handle
-  Always On,                              !- Name
-  {c4067b34-38bc-40a4-be3d-c5257a726695}, !- Schedule Type Limits Name
-  {c79cf45b-d2df-4d6e-bac8-a7636510d054}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {c79cf45b-d2df-4d6e-bac8-a7636510d054}, !- Handle
-  Always On Default,                      !- Name
-  {c4067b34-38bc-40a4-be3d-c5257a726695}, !- Schedule Type Limits Name
-  ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
-
 OS:ThermostatSetpoint:DualSetpoint,
   {7f14938d-c672-41ba-a760-38a16c78d237}, !- Handle
   Space Function Corridor/Transition area other-sch-G Thermostat, !- Name
@@ -14405,7 +14390,7 @@ OS:DefaultScheduleSet,
   {a27065d3-6456-4952-aeb1-74189db8f530}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {85a10254-ad4e-4568-84ec-0fdf2f155a7c}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -32266,6 +32251,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -32299,7 +32285,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {04966f2a-fedb-421e-ab24-44f0ac78650f}, !- Handle
@@ -32534,6 +32521,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -32814,6 +32802,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -33086,6 +33075,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -33358,6 +33348,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -33630,6 +33621,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -33902,6 +33894,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -34174,6 +34167,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -34446,6 +34440,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -34718,6 +34713,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -34990,6 +34986,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -35262,6 +35259,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -35534,6 +35532,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -35806,6 +35805,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -36078,6 +36078,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -36350,6 +36351,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -36622,6 +36624,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -36894,6 +36897,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -37166,6 +37170,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -37438,6 +37443,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -37710,6 +37716,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -37982,6 +37989,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -38254,6 +38262,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -38526,6 +38535,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -38798,6 +38808,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -39070,6 +39081,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -39342,6 +39354,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -39614,6 +39627,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -39886,6 +39900,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -40158,6 +40173,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -40430,6 +40446,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -40702,6 +40719,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -40974,6 +40992,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -41246,6 +41265,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -41518,6 +41538,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -41790,6 +41811,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -42062,6 +42084,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -42334,6 +42357,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -42606,6 +42630,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -42878,6 +42903,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -43150,6 +43176,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -43422,6 +43449,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -43694,6 +43722,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -43966,6 +43995,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -44238,6 +44268,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -44510,6 +44541,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -44782,6 +44814,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -45054,6 +45087,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -45326,6 +45360,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -45598,6 +45633,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -45870,6 +45906,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -46142,6 +46179,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -46414,6 +46452,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -46686,6 +46725,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -46958,6 +46998,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -47230,6 +47271,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -47502,6 +47544,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -47774,6 +47817,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -48046,6 +48090,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -48318,6 +48363,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -48590,6 +48636,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -48862,6 +48909,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -49134,6 +49182,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -49406,6 +49455,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -49678,6 +49728,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -49950,6 +50001,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -50222,6 +50274,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -50494,6 +50547,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -50766,6 +50820,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -51038,6 +51093,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -51310,6 +51366,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -51582,6 +51639,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -51854,6 +51912,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -52126,6 +52185,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -52398,6 +52458,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -52670,6 +52731,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -52942,6 +53004,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -53214,6 +53277,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -53486,6 +53550,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -53758,6 +53823,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -54030,6 +54096,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -54476,6 +54543,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -54518,7 +54586,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {f8f2aa50-d195-48f4-8122-7c594e28f5fe}, !- Handle

@@ -1,7 +1,7 @@
 
 OS:Version,
-  {35886be0-d0d5-4443-9518-fc79f92fa5d0}, !- Handle
-  3.6.1;                                  !- Version Identifier
+  {fd922ecb-a180-4c8c-a88f-547acf3fd348}, !- Handle
+  3.7.0;                                  !- Version Identifier
 
 OS:ScheduleTypeLimits,
   {a2a3fd77-45f7-45b8-b484-f9c2aa24ee5d}, !- Handle
@@ -10706,7 +10706,7 @@ OS:DefaultScheduleSet,
   {45cc9fdd-7a75-4657-af54-f447ce2dac7a}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -11215,21 +11215,6 @@ OS:Schedule:Day,
   0,                                      !- Minute 1
   0.05;                                   !- Value Until Time 1
 
-OS:Schedule:Ruleset,
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Handle
-  Always On,                              !- Name
-  {d7f1bb65-e508-40dc-81c4-7f3b1c4fcb0b}, !- Schedule Type Limits Name
-  {e60555f0-1541-420c-9445-a9a207252608}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {e60555f0-1541-420c-9445-a9a207252608}, !- Handle
-  Always On Default,                      !- Name
-  {d7f1bb65-e508-40dc-81c4-7f3b1c4fcb0b}, !- Schedule Type Limits Name
-  ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
-
 OS:ThermostatSetpoint:DualSetpoint,
   {7ac6c531-3af1-4edc-a721-09257fe6ff38}, !- Handle
   Space Function Corridor/Transition area other-sch-E Thermostat, !- Name
@@ -11575,7 +11560,7 @@ OS:DefaultScheduleSet,
   {3e0c5da3-d423-4a88-9692-d33dac5f360e}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -12507,7 +12492,7 @@ OS:DefaultScheduleSet,
   {45cc9fdd-7a75-4657-af54-f447ce2dac7a}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -12605,7 +12590,7 @@ OS:DefaultScheduleSet,
   {3e0c5da3-d423-4a88-9692-d33dac5f360e}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -12859,7 +12844,7 @@ OS:DefaultScheduleSet,
   {97a40a99-de91-458c-8cc5-596c16986390}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -13896,7 +13881,7 @@ OS:DefaultScheduleSet,
   {0a7455cd-e8ab-4337-9402-158ec4d7fca7}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -14774,7 +14759,7 @@ OS:DefaultScheduleSet,
   {a84b62ce-5916-4805-993b-5898f180c313}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -15403,7 +15388,7 @@ OS:DefaultScheduleSet,
   {0a7455cd-e8ab-4337-9402-158ec4d7fca7}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -15654,7 +15639,7 @@ OS:DefaultScheduleSet,
   {0a7455cd-e8ab-4337-9402-158ec4d7fca7}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -15752,7 +15737,7 @@ OS:DefaultScheduleSet,
   {b5aa59d1-c5a1-4b12-ac1c-73203efa5cd3}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -16525,7 +16510,7 @@ OS:DefaultScheduleSet,
   {b5aa59d1-c5a1-4b12-ac1c-73203efa5cd3}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -27902,7 +27887,7 @@ OS:DefaultScheduleSet,
   {97a40a99-de91-458c-8cc5-596c16986390}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -28126,7 +28111,7 @@ OS:DefaultScheduleSet,
   {97a40a99-de91-458c-8cc5-596c16986390}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {3c92e639-13c9-4df0-bd2a-b051716611cb}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -29215,7 +29200,8 @@ OS:Boiler:HotWater,
   {90ee6252-2240-4ef0-9373-5e2d807619ff}, !- Boiler Water Outlet Node Name
   99,                                     !- Water Outlet Upper Temperature Limit {C}
   LeavingSetpointModulated,               !- Boiler Flow Mode
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
+  0,                                      !- Off Cycle Parasitic Fuel Load {W}
   1,                                      !- Sizing Factor
   General;                                !- End-Use Subcategory
 
@@ -29235,7 +29221,8 @@ OS:Boiler:HotWater,
   {4c069ff1-c6cd-4d65-b1e3-94d48d5723f6}, !- Boiler Water Outlet Node Name
   99,                                     !- Water Outlet Upper Temperature Limit {C}
   ConstantFlow,                           !- Boiler Flow Mode
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
+  0,                                      !- Off Cycle Parasitic Fuel Load {W}
   1,                                      !- Sizing Factor
   General;                                !- End-Use Subcategory
 
@@ -30382,6 +30369,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -30472,6 +30460,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -30505,7 +30494,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {c32930c1-4aa5-4954-833f-ad8f1aeeea0f}, !- Handle
@@ -38364,6 +38354,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -38439,6 +38430,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -38472,7 +38464,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {ff1f323c-8076-458c-8c02-8b08c9668005}, !- Handle
@@ -39114,6 +39107,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -39189,6 +39183,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -39222,7 +39217,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {e404ba58-0fbd-49c6-97b4-b0914458862c}, !- Handle
@@ -39966,6 +39962,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -40056,6 +40053,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -40089,7 +40087,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {941b8d28-c59e-4517-be79-5fd858409668}, !- Handle
@@ -41085,6 +41084,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -41160,6 +41160,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -41193,7 +41194,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {13412362-3fca-4be4-ac01-83c9bf31959f}, !- Handle
@@ -41704,6 +41706,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -41779,6 +41782,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -41812,7 +41816,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {62ac9964-8eec-44b7-97f8-dbf208e636c3}, !- Handle
@@ -42323,6 +42328,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -42398,6 +42404,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -42431,7 +42438,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {ef9d08d0-419f-4554-bcbb-268829ac3fa2}, !- Handle

@@ -1,7 +1,7 @@
 
 OS:Version,
-  {46dff4d5-d0c5-4c28-91f0-9a94171fa5a9}, !- Handle
-  3.6.1;                                  !- Version Identifier
+  {5d7fb1ff-1572-4a5e-8b72-9c0acb32a167}, !- Handle
+  3.7.0;                                  !- Version Identifier
 
 OS:ScheduleTypeLimits,
   {8a896ae3-7ce2-47f6-9067-69cba7518edd}, !- Handle
@@ -1233,7 +1233,7 @@ OS:DefaultScheduleSet,
   {2b6ad2c9-0bb9-47da-b2ab-636e12240540}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {f68bc3eb-9eff-4c6a-9853-c44db1d81a97}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -1820,21 +1820,6 @@ OS:Schedule:Day,
   0,                                      !- Minute 4
   0.05;                                   !- Value Until Time 4
 
-OS:Schedule:Ruleset,
-  {f68bc3eb-9eff-4c6a-9853-c44db1d81a97}, !- Handle
-  Always On,                              !- Name
-  {f7a2d75a-3541-4ca9-a6a2-6450380e35b3}, !- Schedule Type Limits Name
-  {f2c629af-ef94-4a79-b4f2-d9753c2700b2}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {f2c629af-ef94-4a79-b4f2-d9753c2700b2}, !- Handle
-  Always On Default,                      !- Name
-  {f7a2d75a-3541-4ca9-a6a2-6450380e35b3}, !- Schedule Type Limits Name
-  ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
-
 OS:ThermostatSetpoint:DualSetpoint,
   {06dbb17e-c118-48fb-aac8-cc5313e18bac}, !- Handle
   Space Function Lobby - elevator Thermostat, !- Name
@@ -2195,7 +2180,7 @@ OS:DefaultScheduleSet,
   {2b6ad2c9-0bb9-47da-b2ab-636e12240540}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {f68bc3eb-9eff-4c6a-9853-c44db1d81a97}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -2446,7 +2431,7 @@ OS:DefaultScheduleSet,
   {0369650a-4f65-499e-92cb-f0c45b459c66}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {f68bc3eb-9eff-4c6a-9853-c44db1d81a97}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -5533,6 +5518,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -5608,6 +5594,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -5641,7 +5628,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {54795908-b503-416e-92e1-1c99d43698ee}, !- Handle
@@ -6100,6 +6088,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -6175,6 +6164,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -6208,7 +6198,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {73c17801-5d05-4600-a181-45834cbb9d53}, !- Handle
@@ -6667,6 +6658,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -6742,6 +6734,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -6775,7 +6768,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {917139e4-dc1e-4567-96aa-835f65cac62d}, !- Handle
@@ -7234,6 +7228,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -7309,6 +7304,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -7342,7 +7338,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {106d694c-d0a3-4594-9d8e-c5261be6f291}, !- Handle
@@ -7801,6 +7798,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -7876,6 +7874,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -7909,7 +7908,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {5a74644c-c63a-4b6c-8e58-03eb6e688e7f}, !- Handle

@@ -1,7 +1,7 @@
 
 OS:Version,
-  {0bc97575-eb88-4245-8ace-b56294becf18}, !- Handle
-  3.6.1;                                  !- Version Identifier
+  {a7d17662-4292-4b66-8c74-d6bbfe15092c}, !- Handle
+  3.7.0;                                  !- Version Identifier
 
 OS:ScheduleTypeLimits,
   {6ae76667-2b0a-4d6a-8737-9a4289ff3d1f}, !- Handle
@@ -936,7 +936,7 @@ OS:DefaultScheduleSet,
   {4d11fa17-8a63-49bf-9995-7e97640a4eaf}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {d23fbf57-ea40-407a-9137-518a03c9e5db}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -1436,21 +1436,6 @@ OS:Schedule:Day,
   0,                                      !- Minute 1
   0.2;                                    !- Value Until Time 1
 
-OS:Schedule:Ruleset,
-  {d23fbf57-ea40-407a-9137-518a03c9e5db}, !- Handle
-  Always On,                              !- Name
-  {90022bb4-7ba2-47e7-8d1f-f0dc1c52144c}, !- Schedule Type Limits Name
-  {5d3437ed-674d-41c2-90c9-ff3f171bf369}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {5d3437ed-674d-41c2-90c9-ff3f171bf369}, !- Handle
-  Always On Default,                      !- Name
-  {90022bb4-7ba2-47e7-8d1f-f0dc1c52144c}, !- Schedule Type Limits Name
-  ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
-
 OS:ThermostatSetpoint:DualSetpoint,
   {b13a2485-fd53-4616-bde3-efd14187be20}, !- Handle
   Space Function Office enclosed <= 25 m2 Thermostat, !- Name
@@ -1781,7 +1766,7 @@ OS:DefaultScheduleSet,
   {4d11fa17-8a63-49bf-9995-7e97640a4eaf}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {d23fbf57-ea40-407a-9137-518a03c9e5db}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -2026,7 +2011,7 @@ OS:DefaultScheduleSet,
   {4d11fa17-8a63-49bf-9995-7e97640a4eaf}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {d23fbf57-ea40-407a-9137-518a03c9e5db}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -4161,6 +4146,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -4258,7 +4244,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {2b92775d-2631-4a91-9599-d418c88a9128}, !- Handle
@@ -4704,6 +4691,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -4746,7 +4734,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {6b59eb5e-a9df-47c4-be46-1cb8d28714f7}, !- Handle
@@ -5192,6 +5181,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -5234,7 +5224,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {86564944-ae38-47c4-8660-b5cf70d36b0a}, !- Handle

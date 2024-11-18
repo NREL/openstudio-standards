@@ -288,7 +288,6 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.Model"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.PlantLoop"
-  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.ThermalZone"
   # 90.1-2007
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.AirLoopHVAC"
@@ -296,7 +295,6 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.ChillerElectricEIR"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.Model"
-  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.ThermalZone"
   # 90.1-2010
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirLoopHVAC"
@@ -336,6 +334,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTowerTwoSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Model"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.ThermalZone"
   # 90.1-2019
@@ -349,6 +348,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerTwoSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.WaterHeaterMixed"
@@ -422,7 +422,6 @@ module OpenstudioStandards
   # DEER Common
   require_relative "#{stds}/deer/deer.Model"
   require_relative "#{stds}/deer/deer.AirLoopHVAC"
-  require_relative "#{stds}/deer/deer.Space"
   require_relative "#{stds}/deer/deer.PlanarSurface"
   # DEER 2003
   require_relative "#{stds}/deer/deer_2003/deer_2003.ThermalZone"
@@ -448,11 +447,6 @@ module OpenstudioStandards
   require_relative "#{stds}/cbes/cbes.AirLoopHVAC"
   require_relative "#{stds}/cbes/cbes.Model"
   require_relative "#{stds}/cbes/cbes.PlantLoop"
-  require_relative "#{stds}/cbes/cbes.Space"
-  # CBES T24 2005
-  require_relative "#{stds}/cbes/cbes_t24_2005/cbes_t24_2005.Space"
-  # CBES T24 2008
-  require_relative "#{stds}/cbes/cbes_t24_2008/cbes_t24_2008.Space"
 
   ### Prototypes ###
   # Building Types

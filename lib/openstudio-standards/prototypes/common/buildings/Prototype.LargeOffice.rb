@@ -75,31 +75,6 @@ module LargeOffice
       end
     end
 
-    # set infiltration schedule for plenums
-    # @todo remove once infil_sch in Standards.Space pulls from default building infiltration schedule
-    model.getSpaces.each do |space|
-      next unless space.name.get.to_s.include? 'Plenum'
-
-      # add infiltration if DOE Ref vintage
-      if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-        # Create an infiltration rate object for this space
-        infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
-        infiltration.setName("#{space.name} Infiltration")
-        all_ext_infil_m3_per_s_per_m2 = OpenStudio.convert(0.2232, 'ft^3/min*ft^2', 'm^3/s*m^2').get
-        infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2)
-        infiltration.setSchedule(model_add_schedule(model, 'Large Office Infil Quarter On'))
-        infiltration.setConstantTermCoefficient(1.0)
-        infiltration.setTemperatureTermCoefficient(0.0)
-        infiltration.setVelocityTermCoefficient(0.0)
-        infiltration.setVelocitySquaredTermCoefficient(0.0)
-        infiltration.setSpace(space)
-      else
-        space.spaceInfiltrationDesignFlowRates.each do |infiltration_object|
-          infiltration_object.setSchedule(model_add_schedule(model, 'OfficeLarge INFIL_SCH_PNNL'))
-        end
-      end
-    end
-
     hp_loop = model.getPlantLoopByName('Heat Pump Loop')
     if hp_loop.is_initialized
       hp_loop = hp_loop.get
