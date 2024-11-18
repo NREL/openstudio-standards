@@ -81,7 +81,8 @@ class NECB2011
                                             system_data,
                                             determine_control_zone(zones),
                                             necb_reference_hp: necb_reference_hp,
-                                            necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel)
+                                            necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
+                                            hw_loop: hw_loop)
       # Add Zone equipment
       zones.each do |zone| # Zone sizing temperature difference
         sizing_zone = zone.sizingZone
@@ -130,7 +131,7 @@ class NECB2011
     return true
   end
 
-  def add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone, necb_reference_hp:false, necb_reference_hp_supp_fuel:'DefaultFuel')
+  def add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone, necb_reference_hp:false, necb_reference_hp_supp_fuel:'DefaultFuel', necb_reference_hp_fancoil: false, hw_loop: nil)
     # System Type 3: PSZ-AC
     # This measure creates:
     # -a constant volume packaged single-zone A/C unit
@@ -182,6 +183,9 @@ class NECB2011
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
     when 'Gas'
       htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+    when 'Hot Water'
+      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
+      hw_loop.addDemandBranchForComponent(htg_coil)
     when 'DX'
       #create main DX heating coil
       htg_coil = add_onespeed_htg_DX_coil(model, always_on)
@@ -221,7 +225,10 @@ class NECB2011
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
       elsif necb_reference_hp_supp_fuel == 'Electricity' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-      else #hot water coils is an option in the future
+      elsif necb_reference_hp_supp_fuel == 'Hot Water'
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
+        hw_loop.addDemandBranchForComponent(htg_coil)
+      else
         raise('Invalid fuel type selected for heat pump supplemental coil')
       end
       # This method will seem like an error in number of args..but this is due to swig voodoo.

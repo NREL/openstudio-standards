@@ -830,26 +830,31 @@ class NECB2011
       systems_used.uniq!
     end
 
-    # See if we need to create a hot water loop based on fueltype and systems used.
+    # See if we need to create a hot water loop based on fueltypes and systems used.
     hw_loop_needed = false
-    systems_used.each do |system|
-      case system.to_s
-      when '2', '5', '7'
-        hw_loop_needed = true
-      when '1', '6'
-        if (mau_heating_coil_type == 'Hot Water') || (baseboard_type == 'Hot Water')
+    if self.fuel_type_set.mau_heating_coil_type == "Hot Water" || self.fuel_type_set.heating_coil_type_sys3 == "Hot Water" || self.fuel_type_set.heating_coil_type_sys4 == "Hot Water" || self.fuel_type_set.heating_coil_type_sys6 == "Hot Water" || self.fuel_type_set.necb_reference_hp_supp_fuel == "Hot Water" || self.fuel_type_set.baseboard_type == "Hot Water"
+      hw_loop_needed = true
+    else
+      puts "hello"
+      systems_used.each do |system|
+        case system.to_s
+        when '2', '5', '7'
           hw_loop_needed = true
+        when '1', '6'
+          if (mau_heating_coil_type == 'Hot Water') || (baseboard_type == 'Hot Water')
+            hw_loop_needed = true
+          end
+        when '3', '4'
+          if (mau_heating_coil_type == 'Hot Water') || (baseboard_type == 'Hot Water')
+            hw_loop_needed = true if baseboard_type == 'Hot Water'
+          end
         end
-      when '3', '4'
-        if (mau_heating_coil_type == 'Hot Water') || (baseboard_type == 'Hot Water')
-          hw_loop_needed = true if baseboard_type == 'Hot Water'
+        if hw_loop_needed
+          # just need one true condition to need a boiler.
+          break
         end
+        # each
       end
-      if hw_loop_needed
-        # just need one true condition to need a boiler.
-        break
-      end
-      # each
     end
     # create hw_loop as needed.. Assuming one loop per model.
     if hw_loop_needed

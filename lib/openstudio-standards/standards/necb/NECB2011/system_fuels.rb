@@ -60,4 +60,15 @@ class SystemFuels
   def set_swh_fuel(swh_fuel:)
     @swh_fueltype = swh_fuel
   end
+
+  #Forces heating_coils to be 'Hot Water' except when using HPs
+  def set_airloop_fancoils()
+    @mau_heating_coil_type = "Hot Water" unless @mau_heating_coil_type == 'DX'
+    @heating_coil_type_sys3 = "Hot Water" unless @heating_coil_type_sys3 == 'DX'
+    @heating_coil_type_sys4 = "Hot Water" unless @heating_coil_type_sys4 == 'DX'
+    @heating_coil_type_sys6 = "Hot Water" unless @heating_coil_type_sys6 == 'DX'
+    if @mau_cooling_type == 'DX' || @heating_coil_type_sys3 == 'DX' || @heating_coil_type_sys4 == 'DX' || @heating_coil_type_sys6 == 'DX'
+      @necb_reference_hp_supp_fuel = 'Hot Water'
+    end
+  end
 end

@@ -128,7 +128,6 @@
           "fan_type": "var_speed_drive",
           "swh_fueltype": "FuelOilNo2",
           "ecm_fueltype": "Electricity"
-
         }
       ]
     }
