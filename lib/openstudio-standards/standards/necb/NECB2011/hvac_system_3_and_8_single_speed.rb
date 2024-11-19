@@ -227,7 +227,7 @@ class NECB2011
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       elsif necb_reference_hp_supp_fuel == 'Hot Water'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
-        hw_loop.addDemandBranchForComponent(htg_coil)
+        hw_loop.addDemandBranchForComponent(supplemental_htg_coil)
       else
         raise('Invalid fuel type selected for heat pump supplemental coil')
       end

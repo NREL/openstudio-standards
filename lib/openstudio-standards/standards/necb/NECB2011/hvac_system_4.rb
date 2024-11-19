@@ -103,6 +103,9 @@ class NECB2011
     elsif heating_coil_type == 'DX'
       htg_coil = add_onespeed_htg_DX_coil(model, always_on)
       htg_coil.setName('CoilHeatingDXSingleSpeed_ashp')
+    elsif heating_coil_type == 'Hot Water'
+      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
+      hw_loop.addDemandBranchForComponent(htg_coil)
     end
 
     # TO DO: other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)
@@ -131,7 +134,10 @@ class NECB2011
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
       elsif necb_reference_hp_supp_fuel == 'Electricity' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-      else #hot water coils is an option in the future
+      elsif necb_reference_hp_supp_fuel == 'Hot Water'
+        supplemental_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
+        hw_loop.addDemandBranchForComponent(supplemental_htg_coil)
+      else
         raise('Invalid fuel type selected for heat pump supplemental coil')
       end
       # This method will seem like an error in number of args..but this is due to swig voodoo.

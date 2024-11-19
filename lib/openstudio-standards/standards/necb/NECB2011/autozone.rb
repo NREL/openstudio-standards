@@ -835,7 +835,6 @@ class NECB2011
     if self.fuel_type_set.mau_heating_coil_type == "Hot Water" || self.fuel_type_set.heating_coil_type_sys3 == "Hot Water" || self.fuel_type_set.heating_coil_type_sys4 == "Hot Water" || self.fuel_type_set.heating_coil_type_sys6 == "Hot Water" || self.fuel_type_set.necb_reference_hp_supp_fuel == "Hot Water" || self.fuel_type_set.baseboard_type == "Hot Water"
       hw_loop_needed = true
     else
-      puts "hello"
       systems_used.each do |system|
         case system.to_s
         when '2', '5', '7'

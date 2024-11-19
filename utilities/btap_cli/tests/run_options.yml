@@ -62,6 +62,7 @@
 :npv_end_year: NECB_Default
 :npv_discount_rate: NECB_Default
 :tbd_option: NECB_Default
+:airloop_fancoils: NECB_Default
 :output_variables: [
   {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}
 ]
