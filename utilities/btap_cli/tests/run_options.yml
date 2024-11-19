@@ -1,5 +1,6 @@
 :adv_dx_units: NECB_Default
-:analysis_id: c3ae0124-f685-46a1-8798-433713d702fc
+:airloop_fancoils_heating: NECB_Default
+analysis_id: c3ae0124-f685-46a1-8798-433713d702fc
 :analysis_name: test_analysis_para
 :baseline_system_zones_map_option: NECB_Default
 :boiler_eff: NECB_Default
@@ -62,7 +63,6 @@
 :npv_end_year: NECB_Default
 :npv_discount_rate: NECB_Default
 :tbd_option: NECB_Default
-:airloop_fancoils: NECB_Default
 :output_variables: [
   {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}
 ]

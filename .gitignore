@@ -21,6 +21,7 @@
 /doc/
 
 # Test output
+input/
 output/
 coverage/
 /spec/reports/

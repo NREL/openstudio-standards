@@ -62,7 +62,7 @@ class SystemFuels
   end
 
   #Forces heating_coils to be 'Hot Water' except when using HPs
-  def set_airloop_fancoils()
+  def set_airloop_fancoils_heating()
     @mau_heating_coil_type = "Hot Water" unless @mau_heating_coil_type == 'DX'
     @heating_coil_type_sys3 = "Hot Water" unless @heating_coil_type_sys3 == 'DX'
     @heating_coil_type_sys4 = "Hot Water" unless @heating_coil_type_sys4 == 'DX'

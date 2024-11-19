@@ -272,7 +272,7 @@ class NECB2011 < Standard
                                    necb_hdd: true,
                                    boiler_fuel: nil,
                                    boiler_cap_ratio: nil,
-                                   airloop_fancoils: nil)
+                                   airloop_fancoils_heating: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
@@ -335,7 +335,7 @@ class NECB2011 < Standard
                                 necb_hdd: necb_hdd,
                                 boiler_fuel: boiler_fuel,
                                 boiler_cap_ratio: boiler_cap_ratio,
-                                airloop_fancoils: airloop_fancoils
+                                airloop_fancoils_heating: airloop_fancoils_heating
                                 )
   end
 
@@ -414,7 +414,7 @@ class NECB2011 < Standard
                            necb_hdd: true,
                            boiler_fuel: nil,
                            boiler_cap_ratio: nil,
-                           airloop_fancoils: nil)
+                           airloop_fancoils_heating: nil)
 
     apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
@@ -427,12 +427,12 @@ class NECB2011 < Standard
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
     swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
-    airloop_fancoils = convert_arg_to_bool(variable: airloop_fancoils, default: false)
+    airloop_fancoils_heating = convert_arg_to_bool(variable: airloop_fancoils_heating, default: false)
 
     boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
     self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
     self.fuel_type_set.set_swh_fuel(swh_fuel: swh_fuel) unless swh_fuel.nil? || swh_fuel.to_s.downcase == 'defaultfuel'
-    self.fuel_type_set.set_airloop_fancoils() if airloop_fancoils
+    self.fuel_type_set.set_airloop_fancoils_heating() if airloop_fancoils_heating
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
