@@ -1056,6 +1056,27 @@ class NECB2011 < Standard
     true
   end
 
+  # Apply the air leakage requirements to the model, as described in PNNL section 5.2.1.6.
+  # This method creates customized infiltration objects for each space
+  # and removes the SpaceType-level infiltration objects.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] returns true if successful, false if not
+  # @todo This infiltration method is not used by the Reference buildings, fix this inconsistency.
+  def model_apply_infiltration_standard(model)
+    # Set the infiltration rate at each space
+    model.getSpaces.sort.each do |space|
+      space_apply_infiltration_rate(space)
+    end
+
+    # Remove infiltration rates set at the space type
+    model.getSpaceTypes.sort.each do |space_type|
+      space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
+    end
+
+    return true
+  end
+
   # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     raise('validation of model failed.') unless validate_initial_model(model)
@@ -1940,7 +1961,7 @@ class NECB2011 < Standard
       space_type_apply_internal_loads(space_type: space_type, lights_type: lights_type, lights_scale: lights_scale)
 
       # Schedules
-      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
+      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')

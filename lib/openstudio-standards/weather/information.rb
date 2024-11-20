@@ -136,7 +136,7 @@ module OpenstudioStandards
           when '16'
             ashrae_climate_zone = '5B'
           end
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.information', "Using ASHRAE climate zone #{climate_zone} for California climate zone #{california_cz}.")
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Weather.information', "Using ASHRAE climate zone #{climate_zone} for California climate zone #{climate_zone.value}.")
         end
       end
 

@@ -13,6 +13,12 @@ class Standard
 
   # @!group Model
 
+  # Returns the PRM building envelope infiltration rate at a pressure differential of 75 Pa in cfm per ft^2
+  # @return [Double] infiltration rate in cfm per ft^2 at 75 Pa
+  def prm_building_envelope_infiltration_rate
+    return 1.0
+  end
+
   # Creates a Performance Rating Method (aka Appendix G aka LEED) baseline building model
   # Method used for 90.1-2016 and onward
   #
@@ -219,9 +225,8 @@ class Standard
         set_electric_equipment = false
         set_gas_equipment = false
         set_ventilation = false
-        set_infiltration = false
         # For PRM, it only applies lights for now.
-        space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+        space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation)
       end
 
       # Modify the lighting schedule to handle lighting occupancy sensors
@@ -239,7 +244,7 @@ class Standard
       model_add_prm_elevators(model)
 
       # Calculate infiltration as per 90.1 PRM rules
-      model_apply_standard_infiltration(model)
+      model_apply_standard_infiltration(model, infiltration_rate: prm_building_envelope_infiltration_rate)
 
       # Apply user outdoor air specs as per 90.1 PRM rules exceptions
       model_apply_userdata_outdoor_air(model)
@@ -598,20 +603,23 @@ class Standard
       end
 
       # Calculate total infiltration flow rate per envelope area
-      building_envelope_area_m2 = model_building_envelope_area(proposed_model)
+      building_envelope_area_m2 = OpenstudioStandards::Geometry.model_get_envelope_area(proposed_model)
       curr_tot_infil_m3_per_s_per_envelope_area = model_current_building_envelope_infiltration_at_75pa(proposed_model, building_envelope_area_m2)
       curr_tot_infil_cfm_per_envelope_area = OpenStudio.convert(curr_tot_infil_m3_per_s_per_envelope_area, 'm^3/s*m^2', 'cfm/ft^2').get
 
       # Warn users if the infiltration modeling in the user/proposed model is not based on field verification
-      # If not modeled based on field verification, it should be modeled as 0.6 cfm/ft2
-      unless infiltration_modeled_from_field_verification_results.casecmp('true')
+      # If model based on field verification use 0.6 cfm/ft^2, otherwise use 1.0 cfm/ft^2
+      if infiltration_modeled_from_field_verification_results == 'true'
         if curr_tot_infil_cfm_per_envelope_area < 0.6
           OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The user model's I_75Pa is estimated to be #{curr_tot_infil_cfm_per_envelope_area} m3/s per m2 of total building envelope")
         end
-      end
 
-      # Modify model to follow the PRM infiltration modeling method
-      model_apply_standard_infiltration(proposed_model, curr_tot_infil_cfm_per_envelope_area)
+        # Modify model to follow the PRM infiltration modeling method
+        model_apply_standard_infiltration(proposed_model, infiltration_rate: 0.6)
+      else
+        # Modify model to follow the PRM infiltration modeling method with the default infiltration rate
+        model_apply_standard_infiltration(proposed_model, infiltration_rate: prm_building_envelope_infiltration_rate)
+      end
     end
 
     # If needed, remove all non-adiabatic pipes of SWH loops
@@ -2313,32 +2321,15 @@ class Standard
     return true
   end
 
-  # For backward compatibility, infiltration standard not used for 2013 and earlier
-  #
-  # @return [Boolean] true if successful, false if not
-  def model_apply_standard_infiltration(model, specific_space_infiltration_rate_75_pa = nil)
-    return true
+  # Default 5-sided (exterior walls and roof) airtightness design value (m^3/h-m^2) from a building pressurization test at 75 Pascals.
+  def default_airtightness
+    airtightness_value = 13.8
+    return airtightness_value
   end
 
-  # Apply the air leakage requirements to the model, as described in PNNL section 5.2.1.6.
-  # This method creates customized infiltration objects for each space
-  # and removes the SpaceType-level infiltration objects.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] returns true if successful, false if not
-  # @todo This infiltration method is not used by the Reference buildings, fix this inconsistency.
-  def model_apply_infiltration_standard(model)
-    # Set the infiltration rate at each space
-    model.getSpaces.sort.each do |space|
-      space_apply_infiltration_rate(space)
-    end
-
-    # Remove infiltration rates set at the space type
-    model.getSpaceTypes.sort.each do |space_type|
-      space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
-    end
-
-    return true
+  # Buildings by default are assumed to not have an air barrier
+  def default_air_barrier
+    return false
   end
 
   # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
