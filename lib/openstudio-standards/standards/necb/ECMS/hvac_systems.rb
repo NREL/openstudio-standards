@@ -819,7 +819,10 @@ class ECMS
     sys_name_pars['sys_rf'] = 'none'
     sys_name_pars['sys_rf'] = 'cv' if sys_ret_fan_type == 'constant_volume'
     sys_name_pars['sys_rf'] = 'vv' if sys_ret_fan_type == 'variable_volume'
-    assign_base_sys_name(airloop, sys_abbr: sys_abbr, sys_oa: sys_vent_type, sys_name_pars: sys_name_pars)
+    assign_base_sys_name( air_loop: airloop, 
+                          sys_abbr: sys_abbr, 
+                          sys_oa: sys_vent_type, 
+                          sys_name_pars: sys_name_pars)
     return airloop, clg_eqpt, htg_eqpt, return_fan
   end
 

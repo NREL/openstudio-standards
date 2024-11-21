@@ -18,17 +18,19 @@ class NECB2011
                 end #chillers
 
                 case chiller_names[0]
-                # Check if name contains ["Scroll","Centrifugal","RotaryScrew","Reciprocating"]
+                # Check if name contains ["Scroll","Centrifugal","RotaryScrew","Reciprocating","WaterCooled"]
                 when /Scroll/
                     chiller_type = 'scrl'
                 when /Centrifugal/
                     chiller_type = 'cent'
-                when /RotaryScrew/
+                when /RotaryScrew/ , /Rotary Screw/
                     chiller_type = 'screw'
                 when /Reciprocating/
                     chiller_type = 'recip'
+                when /WaterCooled/
+                    chiller_type = 'water'
                 else
-                    raise("Chiller type not recognized")
+                    raise("Chiller type not recognized #{chiller_names[0]}")
                 end
             end
         end
@@ -71,8 +73,8 @@ class NECB2011
         chiller_type = get_chiller_type_from_water_coil(cooling_coil_water: cooling_coil_water)
         
         # Zone Baseboard Heating.
-        zone_htg_b_elec = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Electric') }
-        zone_htg_b_water = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Water') }
+        zone_htg_b_elec = air_loop.thermalZones.first.respond_to?(:equipment) ? air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Electric') } : false
+        zone_htg_b_water = air_loop.thermalZones.first.respond_to?(:equipment) ? air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Water') } : false
 
         # Zone VAV with Reheat. 
         zone_vav_rh = air_loop.components.detect(proc {false}) { |equip| equip.to_AirTerminalSingleDuctVAVReheat.is_initialized()} ? air_loop.components.detect() { |equip| equip.to_AirTerminalSingleDuctVAVReheat.is_initialized()}.to_AirTerminalSingleDuctVAVReheat.get : false
@@ -81,28 +83,33 @@ class NECB2011
         # Zone 2/4 Pipe Fan Coils.
         zone_tpfc = false
         zone_fpfc = false
-        if air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.to_ZoneHVACFourPipeFanCoil().is_initialized()}
-            case air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.to_ZoneHVACFourPipeFanCoil().is_initialized()}.to_ZoneHVACFourPipeFanCoil.get.coolingCoil.to_CoilCoolingWater.get.availabilitySchedule.nameString
-            when 'tpfc_clg_availability'
-                zone_tpfc = true
-            when OpenStudio::Model::Model.new.alwaysOnDiscreteSchedule.nameString
-                zone_fpfc = true
-            else
-                raise('unknown schedule type')
-            end
+        if air_loop.thermalZones.first.respond_to?(:equipment)
+            fan_coil = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.to_ZoneHVACFourPipeFanCoil().is_initialized() }
+            if fan_coil
+                case fan_coil.to_ZoneHVACFourPipeFanCoil.get.coolingCoil.to_CoilCoolingWater.get.availabilitySchedule.nameString
+                when 'tpfc_clg_availability'
+                    zone_tpfc = true
+                when OpenStudio::Model::Model.new.alwaysOnDiscreteSchedule.nameString
+                    zone_fpfc = true
+                else
+                    raise('unknown schedule type')
+                end
             cooling_coil_water = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.to_ZoneHVACFourPipeFanCoil().is_initialized()}.to_ZoneHVACFourPipeFanCoil.get.coolingCoil.to_CoilCoolingWater.get
             
             # If chiller was not detected, from MAU or RTU, then detect it from the fan coil. 
             chiller_type = get_chiller_type_from_water_coil(cooling_coil_water: cooling_coil_water) if not chiller_type
+            end
         end  
 
         
-        zone_htg_pthp = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Packaged Terminal Heat Pump') }
-        zone_clg_ptac = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('PTAC') }
-        zone_clg_pthp = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Packaged Terminal Heat Pump') }
-        zone_rh_elec = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Air Terminal Single Duct Constant Volume Reheat') and equip.to_AirTerminalSingleDuctConstantVolumeReheat.get.reheatCoil.nameString.include?('Coil Heating Electric') }
-        zone_rh_gas = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Air Terminal Single Duct Constant Volume Reheat') and equip.to_AirTerminalSingleDuctConstantVolumeReheat.get.reheatCoil.nameString.include?('Coil Heating Gas') }
-        zone_rh_hw = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Air Terminal Single Duct Constant Volume Reheat') and equip.to_AirTerminalSingleDuctConstantVolumeReheat.get.reheatCoil.nameString.include?('Coil Heating Water') }
+        if air_loop.thermalZones.first.respond_to?(:equipment)
+            zone_htg_pthp = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Packaged Terminal Heat Pump') }
+            zone_clg_ptac = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('PTAC') }
+            zone_clg_pthp = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Packaged Terminal Heat Pump') }
+            zone_rh_elec = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Air Terminal Single Duct Constant Volume Reheat') and equip.to_AirTerminalSingleDuctConstantVolumeReheat.get.reheatCoil.nameString.include?('Coil Heating Electric') }
+            zone_rh_gas = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Air Terminal Single Duct Constant Volume Reheat') and equip.to_AirTerminalSingleDuctConstantVolumeReheat.get.reheatCoil.nameString.include?('Coil Heating Gas') }
+            zone_rh_hw = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Air Terminal Single Duct Constant Volume Reheat') and equip.to_AirTerminalSingleDuctConstantVolumeReheat.get.reheatCoil.nameString.include?('Coil Heating Water') }
+        end
         return_fan = air_loop.components.detect(proc {false}) { |equip| equip.nameString.include?('Fan') }
         # Determine System Outdoor Air type.
         oa_controller = air_loop.components.detect(proc {false}) { |equip| equip.nameString.include?('ControllerOutdoorAir') }
