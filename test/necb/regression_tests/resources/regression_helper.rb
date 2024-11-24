@@ -84,16 +84,16 @@ class NECBRegressionHelper < Minitest::Test
   def osm_regression(expected_results_folder: @expected_results_folder)
     begin
       diffs = []
-      osm_results_folder = File.expand_path('..', expected_results_folder, 'output_osm')
-      idf_results_folder = File.expand_path('..', expected_results_folder, 'output_idf')
-      diff_results_folder = File.expand_path('..', expected_results_folder, 'output_diff')
+      osm_results_folder = File.join(File.expand_path('..', expected_results_folder), 'output_osm')
+      idf_results_folder = File.join(File.expand_path('..', expected_results_folder), 'output_idf')
+      diff_results_folder = File.join(File.expand_path('..', expected_results_folder), 'output_diff')
       [osm_results_folder, idf_results_folder, diff_results_folder].each do |folder|
         FileUtils.mkdir_p(folder) unless Dir.exist?(folder)
       end
 
-      expected_osm_file = File.join(expected_results_folder."#{@model_name}_expected_result.osm")
-      test_osm_file = "#{expected_results_folder}#{@model_name}.osm"
-      test_idf_file = "#{expected_results_folder}#{@model_name}.idf"
+      expected_osm_file = File.join(expected_results_folder, @model_name + '.osm')
+      test_osm_file = File.join(osm_results_folder, @model_name + '.osm')
+      test_idf_file = File.join(idf_results_folder, @model_name + '.idf')
 
       #save test results by default
       BTAP::FileIO.save_osm(@model, test_osm_file)
@@ -121,7 +121,7 @@ class NECBRegressionHelper < Minitest::Test
       diffs << "#{@model_name}: Error \n#{error}"
     end
     #Write out diff or error message
-    diff_file = "#{expected_results_folder}#{@model_name}_diffs.json"
+    diff_file = File.join(diff_results_folder,@model_name+'_diffs.json')
     FileUtils.rm(diff_file) if File.exist?(diff_file)
     if diffs.size > 0
       File.write(diff_file, JSON.pretty_generate(diffs))
