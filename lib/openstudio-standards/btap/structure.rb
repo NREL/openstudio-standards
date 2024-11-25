@@ -166,7 +166,7 @@ module BTAP
     #
     #   Example A: Composite STRUCTURE:
     #     - "concrete" post/beam STRUCTURE for first 4 building stories
-    #     - s"teel" post/frame STRUCTURE for building stories > 4
+    #     - "steel" post/frame STRUCTURE for building stories > 4
     #
     #   Example B: School gym:
     #     - "cmu" gymnasium walls in an otherwise "steel" post/frame school
