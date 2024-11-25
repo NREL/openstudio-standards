@@ -4,6 +4,10 @@
 	"name": "Standards DevContainer",
 	"image":"canmet/os_sdk_container:3.7.0",
 	"containerUser": "vscode",
+	"remoteUser": "vscode",
+	"containerEnv": {
+		"VSCODE": "TRUE"
+	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -14,11 +18,11 @@
 				"ms-python.python",
 				"janisdd.vscode-edit-csv",
 				"qwtel.sqlite-viewer",
+				"moshfeu.compare-folders"
 			]
 		}
 	},
 	// This is set as a env variable in the container, but it is also used to set the default shell in the container, just in case. 
     "runArgs": ["--env", "LANG=en_US.UTF-8"],
-    "remoteUser": "vscode",
-    "postCreateCommand": "if [ \"$(curl -k -o /dev/null -s -w \"%{http_code}\" \"https://intranet.nrcan.gc.ca/\")\" -ge 200 ] && [ \"$(curl -o /dev/null -s -w \"%{http_code}\" \"https://intranet.nrcan.gc.ca/\")\" -lt 400 ]; then echo \"nrcan network detected.\" && git clone https://github.com/canmet-energy/linux_nrcan_certs.git && cd linux_nrcan_certs && ./install_nrcan_certs.sh && cd .. && rm -fr linux_nrcan_certs ; fi &&/venv/bin/python -m venv ${containerWorkspaceFolder}/.venv && cp Gemfile.lock.3.7.0 Gemfile.lock && bundle config set path '${containerWorkspaceFolder}/vendor/bundle'&& bundle install"
+    "postCreateCommand": "if [ \"$(curl -k -o /dev/null -s -w \"%{http_code}\" \"https://intranet.nrcan.gc.ca/\")\" -ge 200 ] && [ \"$(curl -o /dev/null -s -w \"%{http_code}\" \"https://intranet.nrcan.gc.ca/\")\" -lt 400 ]; then echo \"nrcan network detected.\" && git clone https://github.com/canmet-energy/linux_nrcan_certs.git && cd linux_nrcan_certs && ./install_nrcan_certs.sh && cd .. && rm -fr linux_nrcan_certs ; fi &&/venv/bin/python -m venv ${containerWorkspaceFolder}/.venv && cp Gemfile.lock.$OPENSTUDIO_VERSION Gemfile.lock && bundle config set path '${containerWorkspaceFolder}/vendor/bundle'&& bundle install"
 }
