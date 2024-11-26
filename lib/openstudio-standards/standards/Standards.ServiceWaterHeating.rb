@@ -329,7 +329,7 @@ class Standard
       else
         water_use_equips = [water_use_equip]
         water_use_equips << booster_water_use_equip unless booster_water_use_equip.nil? # Include booster in sizing since flows will be preheated by main water heater
-        water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, water_use_equips)
+        water_heater_sizing = OpenstudioStandards::ServiceWaterHeating.water_heater_sizing_from_water_use_equipment(water_use_equips)
         water_heater_capacity_w = water_heater_sizing[:water_heater_capacity]
         water_heater_volume_m3 = water_heater_sizing[:water_heater_volume]
         num_water_heaters = 1
@@ -378,11 +378,11 @@ class Standard
         # main water heater, so the booster is responsible for a smaller delta-T.
         if booster_water_heater_fraction > 0
           # find_water_heater_capacity_volume_and_parasitic
-          booster_water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model,
-                                                                                              [booster_water_use_equip],
-                                                                                              htg_eff: 1.0,
-                                                                                              inlet_temp_f: service_water_temperature_f,
-                                                                                              target_temp_f: booster_water_temperature_f)
+          booster_water_heater_sizing = OpenstudioStandards::ServiceWaterHeating.water_heater_sizing_from_water_use_equipment(model,
+                                                                                                                              [booster_water_use_equip],
+                                                                                                                              water_heater_efficiency: 1.0,
+                                                                                                                              inlet_temperature: service_water_temperature_f,
+                                                                                                                              supply_temperature: booster_water_temperature_f)
 
           # Add service water booster loop with water heater
           # Note that booster water heaters are always assumed to be electric resistance
@@ -467,7 +467,7 @@ class Standard
       num_stories = bldg_effective_num_stories * (bldg_type_floor_area_m2 / bldg_floor_area_m2)
 
       # Water heater sizing
-      water_heater_sizing = model_find_water_heater_capacity_volume_and_parasitic(model, water_use_equipment_array)
+      water_heater_sizing = OpenstudioStandards::ServiceWaterHeating.water_heater_sizing_from_water_use_equipment(water_use_equipment_array)
       water_heater_capacity_w = water_heater_sizing[:water_heater_capacity]
       water_heater_volume_m3 = water_heater_sizing[:water_heater_volume]
 
@@ -582,79 +582,5 @@ class Standard
                                                                               service_water_loop: swh_loop)
 
     return water_fixture
-  end
-
-  # Use rules from DOE Prototype Building documentation to determine water heater capacity,
-  # volume, pipe dump losses, and pipe thermal losses.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param water_use_equipment_array [Array] array of water use equipment objects that will be using this water heater
-  # @param storage_to_cap_ratio_gal_to_kbtu_per_hr [Double] storage volume gal to kBtu/hr of capacity
-  # @param htg_eff [Double] water heater thermal efficiency, fraction
-  # @param inlet_temp_f [Double] inlet cold water temperature, degrees Fahrenheit
-  # @param target_temp_f [Double] target supply water temperature from the tank, degrees Fahrenheit
-  # @return [Hash] hash with values needed to size water heater made with downstream method
-  def model_find_water_heater_capacity_volume_and_parasitic(model,
-                                                            water_use_equipment_array,
-                                                            storage_to_cap_ratio_gal_to_kbtu_per_hr: 1.0,
-                                                            htg_eff: 0.8,
-                                                            inlet_temp_f: 40.0,
-                                                            target_temp_f: 140.0,
-                                                            peak_flow_fraction: 1.0)
-    # A.1.4 Total Storage Volume and Water Heater Capacity of PrototypeModelEnhancements_2014_0.pdf shows 1 gallon of storage to 1 kBtu/h of capacity
-
-    water_heater_sizing = {}
-
-    # Get the maximum flow rates for all pieces of water use equipment
-    adjusted_max_flow_rates_gal_per_hr = [] # gallons per hour
-    water_use_equipment_array.sort.each do |water_use_equip|
-      water_use_equip_sch = water_use_equip.flowRateFractionSchedule
-      next if water_use_equip_sch.empty?
-
-      water_use_equip_sch = water_use_equip_sch.get
-      if water_use_equip_sch.to_ScheduleRuleset.is_initialized
-        water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get
-        max_sch_value = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(water_use_equip_sch)['max']
-      elsif water_use_equip_sch.to_ScheduleConstant.is_initialized
-        water_use_equip_sch = water_use_equip_sch.to_ScheduleConstant.get
-        max_sch_value = OpenstudioStandards::Schedules.schedule_constant_get_min_max(water_use_equip_sch)['max']
-      elsif water_use_equip_sch.to_ScheduleCompact.is_initialized
-        water_use_equip_sch = water_use_equip_sch.to_ScheduleCompact.get
-        max_sch_value = OpenstudioStandards::Schedules.schedule_compact_get_min_max(water_use_equip_sch)['max']
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The peak flow rate fraction for #{water_use_equip_sch.name} could not be determined, assuming 1 for water heater sizing purposes.")
-        max_sch_value = 1.0
-      end
-
-      # Get peak flow rate from water use equipment definition
-      peak_flow_rate_m3_per_s = water_use_equip.waterUseEquipmentDefinition.peakFlowRate
-
-      # Calculate adjusted flow rate based on the peak fraction found in the flow rate fraction schedule
-      adjusted_peak_flow_rate_m3_per_s = max_sch_value * peak_flow_rate_m3_per_s
-      adjusted_max_flow_rates_gal_per_hr << OpenStudio.convert(adjusted_peak_flow_rate_m3_per_s, 'm^3/s', 'gal/hr').get
-    end
-
-    # Sum gph values from water use equipment to use in formula
-    total_adjusted_flow_rate_gal_per_hr = adjusted_max_flow_rates_gal_per_hr.inject(:+)
-
-    # Calculate capacity based on analysis of combined water use equipment maximum flow rates and schedules
-    # Max gal/hr * 8.4 lb/gal * 1 Btu/lb F * (120F - 40F)/0.8 = Btu/hr
-    water_heater_capacity_btu_per_hr = peak_flow_fraction * total_adjusted_flow_rate_gal_per_hr * 8.4 * 1.0 * (target_temp_f - inlet_temp_f) / htg_eff
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Capacity of #{water_heater_capacity_btu_per_hr.round} Btu/hr = #{peak_flow_fraction} peak fraction * #{total_adjusted_flow_rate_gal_per_hr.round} gal/hr * 8.4 lb/gal * 1.0 Btu/lb F * (#{target_temp_f.round} - #{inlet_temp_f.round} deltaF / #{htg_eff} htg eff).")
-    water_heater_capacity_m3_per_s = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'W').get
-
-    # Calculate volume based on capacity
-    # Default assumption is 1 gal of volume per 1 kBtu/hr of heating capacity
-    water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'kBtu/hr').get
-    water_heater_volume_gal = water_heater_capacity_kbtu_per_hr * storage_to_cap_ratio_gal_to_kbtu_per_hr
-    # increase tank size to 40 galons if calculated value is smaller
-    water_heater_volume_gal = 40.0 if water_heater_volume_gal < 40.0 # gal
-    water_heater_volume_m3 = OpenStudio.convert(water_heater_volume_gal, 'gal', 'm^3').get
-
-    # Populate return hash
-    water_heater_sizing[:water_heater_capacity] = water_heater_capacity_m3_per_s
-    water_heater_sizing[:water_heater_volume] = water_heater_volume_m3
-
-    return water_heater_sizing
   end
 end

@@ -166,6 +166,7 @@ module OpenstudioStandards
     # Creates a booster water heater on its own loop and attaches it to the main service water heating loop.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param system_name [String] the name of the system. nil results in the default.
     # @param water_heater_capacity [Double] water heater capacity, in W. Defaults to 8 kW / 27.283 kBtu/hr
     # @param water_heater_volume [Double] water heater volume, in m^3. Defaults to 0.0227 m^3 / 6 gal
     # @param water_heater_fuel [String] water heating fuel. Valid choices are 'NaturalGas', 'Electricity'.
@@ -179,6 +180,7 @@ module OpenstudioStandards
     # @param service_water_loop [OpenStudio::Model::PlantLoop] if provided, add the water heater to this loop
     # @return [OpenStudio::Model::PlantLoop] The booster water loop OpenStudio PlantLoop object
     def self.create_booster_water_heating_loop(model,
+                                               system_name: 'Booster Water Loop',
                                                water_heater_capacity: 8000.0,
                                                water_heater_volume: OpenStudio.convert(6.0, 'gal', 'm^3').get,
                                                water_heater_fuel: 'Electricity',
