@@ -36,7 +36,7 @@ OS:AdditionalProperties,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000001},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0066-000000000020},  !- Availability Schedule
   {00000000-0000-0000-0008-000000000001},  !- Availability Manager List Name
@@ -58,7 +58,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000002},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0066-000000000021},  !- Availability Schedule
   {00000000-0000-0000-0008-000000000002},  !- Availability Manager List Name
@@ -3957,85 +3957,85 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0050-000000000088},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Demand Inlet Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000070},  !- Inlet Port
   {00000000-0000-0000-0016-000000000072};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000089},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Demand Outlet Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000073},  !- Inlet Port
   {00000000-0000-0000-0016-000000000071};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000090},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Mixed Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000082},  !- Inlet Port
   {00000000-0000-0000-0016-000000000083};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000091},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Outdoor Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000079};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000092},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Relief Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000080},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000093},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Supply Inlet Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000068},  !- Inlet Port
   {00000000-0000-0000-0016-000000000081};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000094},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Supply Outlet Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000078},  !- Inlet Port
   {00000000-0000-0000-0016-000000000069};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000095},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Demand Inlet Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000044},  !- Inlet Port
   {00000000-0000-0000-0016-000000000046};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000096},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Demand Outlet Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000047},  !- Inlet Port
   {00000000-0000-0000-0016-000000000045};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000097},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Mixed Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000056},  !- Inlet Port
   {00000000-0000-0000-0016-000000000057};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000098},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Outdoor Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000053};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000099},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Relief Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000054},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000100},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Supply Inlet Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000042},  !- Inlet Port
   {00000000-0000-0000-0016-000000000055};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000101},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Supply Outlet Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000052},  !- Inlet Port
   {00000000-0000-0000-0016-000000000043};  !- Outlet Port
 
@@ -5567,7 +5567,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000047},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Default, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Default, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
@@ -5582,7 +5582,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000048},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Summer Design Day, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -5591,7 +5591,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000049},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Winter Design Day, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -5600,7 +5600,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000050},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Default, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Default, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
@@ -5615,7 +5615,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000051},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Summer Design Day, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -5624,7 +5624,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000052},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Winter Design Day, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -6186,7 +6186,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000020},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000047},  !- Default Day Schedule Name
   {00000000-0000-0000-0064-000000000048},  !- Summer Design Day Schedule Name
@@ -6194,7 +6194,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000021},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000050},  !- Default Day Schedule Name
   {00000000-0000-0000-0064-000000000051},  !- Summer Design Day Schedule Name
