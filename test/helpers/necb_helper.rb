@@ -69,6 +69,7 @@ module NecbHelper
 
   def define_std_ranges
     @Templates = ["NECB2011", "NECB2015", "NECB2017", "BTAPPRE1980"]
+	@SomeTemplates = ["NECB2015", "NECB2017", "NECB2020"]  # for the Pumppower rules as they started with NECB2015
     @AllTemplates = ["NECB2011", "NECB2015", "NECB2017", "NECB2020", "BTAPPRE1980", "BTAP1980TO2010"]
     @AllBuildings = [
       "FullServiceRestaurant",
