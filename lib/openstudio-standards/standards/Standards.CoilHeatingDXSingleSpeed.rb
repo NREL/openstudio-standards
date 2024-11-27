@@ -6,7 +6,7 @@ class Standard
   # Finds capacity in W.  This is the cooling capacity of the paired DX cooling coil.
   #
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
-  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
+  # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [Double] capacity in W to be used for find object
   def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_ref_hp = false)
     capacity_w = nil
@@ -86,14 +86,12 @@ class Standard
     if ['PTAC', 'PTHP'].include?(coil_dx_subcategory(coil_heating_dx_single_speed))
       mult = 1
       comp = coil_heating_dx_single_speed.containingZoneHVACComponent
-      if comp.is_initialized
-        if comp.get.thermalZone.is_initialized
-          mult = comp.get.thermalZone.get.multiplier
-          if mult > 1
-            total_cap = capacity_w
-            capacity_w /= mult
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
-          end
+      if comp.is_initialized && comp.get.thermalZone.is_initialized
+        mult = comp.get.thermalZone.get.multiplier
+        if mult > 1
+          total_cap = capacity_w
+          capacity_w /= mult
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
         end
       end
     end
@@ -104,8 +102,8 @@ class Standard
   # Finds lookup object in standards and return efficiency
   #
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
-  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
+  # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [Double] full load efficiency (COP)
   def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false, necb_ref_hp = false)
     # find ac properties
@@ -115,13 +113,11 @@ class Standard
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_ref_hp)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
-
     # Get the minimum efficiency standards
     cop = nil
 
     # find object
     ac_props = model_find_object(standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
-
     # Check to make sure properties were found
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
@@ -148,8 +144,8 @@ class Standard
     # If specified as HSPF
     unless ac_props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = ac_props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_hspf.round(1)}HSPF"
+      cop = hspf_to_cop_heating_no_fan(min_hspf)
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_hspf.round(1)}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
     end
 
@@ -157,16 +153,31 @@ class Standard
     unless ac_props['minimum_coefficient_of_performance_heating'].nil?
       min_coph = ac_props['minimum_coefficient_of_performance_heating']
       cop = cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_coph.round(1)}COPH"
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_coph.round(1)}COPH"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph}")
+    end
+
+    # If specified as COP
+    unless ac_props['coefficient_of_performance'].nil?
+      cop = ac_props['coefficient_of_performance']
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{cop.round(1)}COP"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COP = #{cop}")
     end
 
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_eer.round(1)}EER"
+      cop = eer_to_cop_no_fan(min_eer)
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_eer.round(1)}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
+    end
+
+    # If specified as SEER
+    unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
+      min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
+      cop = seer_to_cop_cooling_with_fan(min_seer)
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_seer.round(1)}SEER"
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
     # Rename
@@ -181,7 +192,7 @@ class Standard
   #
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
   # @param sql_db_vars_map [Hash] hash map
-  # @param necb_ref_hp [Bool] for compatability with NECB ruleset only.
+  # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [Hash] hash of coil objects
   def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map, necb_ref_hp = false)
     successfully_set_all_properties = true

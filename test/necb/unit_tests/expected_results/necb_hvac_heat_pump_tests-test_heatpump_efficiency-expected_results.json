@@ -1,0 +1,223 @@
+{
+  "VarType": "Vintage",
+  "NECB2011": {
+    "VarType": "FuelType",
+    "Reference": "NECB 2011 p3:Table 5.2.12.1.",
+    "Electricity": {
+      "VarType": "TestCase",
+      "case-1": {
+        "test_capacity_kW": 9.5,
+        "test_capacity_btu_per_hr": 32420,
+        "actual_heatpump_cop": 4.12,
+        "actual_heatpump_copH": 3.86
+      },
+      "case-2": {
+        "test_capacity_kW": 29.5,
+        "test_capacity_btu_per_hr": 100700,
+        "actual_heatpump_cop": 3.22,
+        "actual_heatpump_copH": 2.99
+      },
+      "case-3": {
+        "test_capacity_kW": 55.0,
+        "test_capacity_btu_per_hr": 187700,
+        "actual_heatpump_cop": 3.1,
+        "actual_heatpump_copH": 2.84
+      },
+      "case-4": {
+        "test_capacity_kW": 146.5,
+        "test_capacity_btu_per_hr": 499900,
+        "actual_heatpump_cop": 2.78,
+        "actual_heatpump_copH": 2.45
+      },
+      "case-5": {
+        "test_capacity_kW": 233,
+        "test_capacity_btu_per_hr": 795000,
+        "actual_heatpump_cop": 2.78,
+        "actual_heatpump_copH": 2.36
+      }
+    }
+  },
+  "NECB2015": {
+    "VarType": "FuelType",
+    "Reference": "NECB 2015 p1:Table 5.2.12.1.",
+    "Electricity": {
+      "VarType": "TestCase",
+      "case-1": {
+        "test_capacity_kW": 9.5,
+        "test_capacity_btu_per_hr": 32420,
+        "actual_heatpump_cop": 4.12,
+        "actual_heatpump_copH": 3.86
+      },
+      "case-2": {
+        "test_capacity_kW": 29.5,
+        "test_capacity_btu_per_hr": 100700,
+        "actual_heatpump_cop": 3.55,
+        "actual_heatpump_copH": 3.3
+      },
+      "case-3": {
+        "test_capacity_kW": 55.0,
+        "test_capacity_btu_per_hr": 187700,
+        "actual_heatpump_cop": 3.49,
+        "actual_heatpump_copH": 3.2
+      },
+      "case-4": {
+        "test_capacity_kW": 146.5,
+        "test_capacity_btu_per_hr": 499900,
+        "actual_heatpump_cop": 3.64,
+        "actual_heatpump_copH": 3.2
+      },
+      "case-5": {
+        "test_capacity_kW": 233,
+        "test_capacity_btu_per_hr": 795000,
+        "actual_heatpump_cop": 3.77,
+        "actual_heatpump_copH": 3.2
+      }
+    }
+  },
+  "NECB2017": {
+    "VarType": "FuelType",
+    "Reference": "NECB 2017 p2:Table 5.2.12.1.",
+    "Electricity": {
+      "VarType": "TestCase",
+      "case-1": {
+        "test_capacity_kW": 9.5,
+        "test_capacity_btu_per_hr": 32420,
+        "actual_heatpump_cop": 4.12,
+        "actual_heatpump_copH": 3.86
+      },
+      "case-2": {
+        "test_capacity_kW": 29.5,
+        "test_capacity_btu_per_hr": 100700,
+        "actual_heatpump_cop": 3.55,
+        "actual_heatpump_copH": 3.3
+      },
+      "case-3": {
+        "test_capacity_kW": 55.0,
+        "test_capacity_btu_per_hr": 187700,
+        "actual_heatpump_cop": 3.49,
+        "actual_heatpump_copH": 3.2
+      },
+      "case-4": {
+        "test_capacity_kW": 146.5,
+        "test_capacity_btu_per_hr": 499900,
+        "actual_heatpump_cop": 3.64,
+        "actual_heatpump_copH": 3.2
+      },
+      "case-5": {
+        "test_capacity_kW": 233,
+        "test_capacity_btu_per_hr": 795000,
+        "actual_heatpump_cop": 3.77,
+        "actual_heatpump_copH": 3.2
+      }
+    }
+  },
+  "NECB2020": {
+    "VarType": "FuelType",
+    "Reference": "NECB 2020 p1:Table 5.2.12.1.-A",
+    "Electricity": {
+      "VarType": "TestCase",
+      "case-1": {
+        "test_capacity_kW": 9.5,
+        "test_capacity_btu_per_hr": 32420,
+        "actual_heatpump_cop": 4.31,
+        "actual_heatpump_copH": 4.04
+      },
+      "case-2": {
+        "test_capacity_kW": 29.5,
+        "test_capacity_btu_per_hr": 100700,
+        "actual_heatpump_cop": 3.55,
+        "actual_heatpump_copH": 3.3
+      },
+      "case-3": {
+        "test_capacity_kW": 55.0,
+        "test_capacity_btu_per_hr": 187700,
+        "actual_heatpump_cop": 3.49,
+        "actual_heatpump_copH": 3.2
+      },
+      "case-4": {
+        "test_capacity_kW": 146.5,
+        "test_capacity_btu_per_hr": 499900,
+        "actual_heatpump_cop": 3.64,
+        "actual_heatpump_copH": 3.2
+      },
+      "case-5": {
+        "test_capacity_kW": 233,
+        "test_capacity_btu_per_hr": 795000,
+        "actual_heatpump_cop": 3.77,
+        "actual_heatpump_copH": 3.2
+      }
+    }
+  },
+  "BTAPPRE1980": {
+    "VarType": "FuelType",
+    "Electricity": {
+      "VarType": "TestCase",
+      "case-1": {
+        "test_capacity_kW": 9.5,
+        "test_capacity_btu_per_hr": 32420,
+        "actual_heatpump_cop": 3.2,
+        "actual_heatpump_copH": 3.0
+      },
+      "case-2": {
+        "test_capacity_kW": 29.5,
+        "test_capacity_btu_per_hr": 100700,
+        "actual_heatpump_cop": 3.23,
+        "actual_heatpump_copH": 3.0
+      },
+      "case-3": {
+        "test_capacity_kW": 55.0,
+        "test_capacity_btu_per_hr": 187700,
+        "actual_heatpump_cop": 3.27,
+        "actual_heatpump_copH": 3.0
+      },
+      "case-4": {
+        "test_capacity_kW": 146.5,
+        "test_capacity_btu_per_hr": 499900,
+        "actual_heatpump_cop": 3.41,
+        "actual_heatpump_copH": 3.0
+      },
+      "case-5": {
+        "test_capacity_kW": 233,
+        "test_capacity_btu_per_hr": 795000,
+        "actual_heatpump_cop": 3.54,
+        "actual_heatpump_copH": 3.0
+      }
+    }
+  },
+  "BTAP1980TO2010": {
+    "VarType": "FuelType",
+    "Electricity": {
+      "VarType": "TestCase",
+      "case-1": {
+        "test_capacity_kW": 9.5,
+        "test_capacity_btu_per_hr": 32420,
+        "actual_heatpump_cop": 3.2,
+        "actual_heatpump_copH": 3.0
+      },
+      "case-2": {
+        "test_capacity_kW": 29.5,
+        "test_capacity_btu_per_hr": 100700,
+        "actual_heatpump_cop": 3.23,
+        "actual_heatpump_copH": 3.0
+      },
+      "case-3": {
+        "test_capacity_kW": 55.0,
+        "test_capacity_btu_per_hr": 187700,
+        "actual_heatpump_cop": 3.27,
+        "actual_heatpump_copH": 3.0
+      },
+      "case-4": {
+        "test_capacity_kW": 146.5,
+        "test_capacity_btu_per_hr": 499900,
+        "actual_heatpump_cop": 3.41,
+        "actual_heatpump_copH": 3.0
+      },
+      "case-5": {
+        "test_capacity_kW": 233,
+        "test_capacity_btu_per_hr": 795000,
+        "actual_heatpump_cop": 3.54,
+        "actual_heatpump_copH": 3.0
+      }
+    }
+  }
+}
