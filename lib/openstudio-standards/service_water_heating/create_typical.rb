@@ -51,7 +51,7 @@ module OpenstudioStandards
         space_water_use_equipment = []
 
         if space.hasAdditionalProperties && space.additionalProperties.hasFeature('num_units')
-          num_units = space.additionalProperties.getFeatureAsInteger('num_units')
+          num_units = space.additionalProperties.getFeatureAsInteger('num_units').get
         else # assume 1 space is 1 unit
           num_units = space.multiplier
         end
