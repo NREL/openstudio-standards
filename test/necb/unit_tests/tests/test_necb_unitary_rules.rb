@@ -2,7 +2,6 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
-
 class NECB_HVAC_Unitary_Tests < Minitest::Test
 
   # Set to true to run the standards in the test.
@@ -13,179 +12,240 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     define_std_ranges
   end
 
-  # Test to validate the cooling efficiency generated against expected values stored in the file:
-  # 'compliance_unitary_efficiencies_expected_results.csv.
   def test_unitary_efficiency
+    logger.info "Starting suite of tests for: #{__method__}"
 
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    save_intermediate_models = false
+    # Define test parameters that apply to all tests.
+    test_parameters = {
+      test_method: __method__,
+      save_intermediate_models: true,
+      mau_type: true,
+      speeds: 'single',
+      baseboard_type: 'Hot Water',
+      fuelType: 'NaturalGas'
+    }
 
-    # Generate the osm files for all relevant cases to generate the test data for system 3.
-    boiler_fueltype = 'NaturalGas'
-    baseboard_type = 'Hot Water'
-    unitary_heating_types = ['Electric Resistance', 'All Other']
-    templates = ['NECB2011', 'NECB2015', 'NECB2020', 'BTAPPRE1980'] #list of templates
-    num_cap_intv = {'NECB2011' => 4, 'NECB2015' => 5, 'NECB2020' => 5, 'BTAPPRE1980' => 4}
-    speeds = ['single']  # only single speed test works for now
-    
-    templates.each do |template|
-      unitary_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_unitary_efficiencies_expected_results.csv")
-      standard = get_standard(template)
-      unitary_res_file_output_text = "Heating Type,Min Capacity (Btu per hr),Max Capacity (Btu per hr),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER)\n"
-      
-      # Initialize hashes for storing expected unitary efficiency data from file
-      heating_type_min_cap = {}
-      heating_type_min_cap['Electric Resistance'] = []
-      heating_type_min_cap['All Other'] = []
-      heating_type_max_cap = {}
-      heating_type_max_cap['Electric Resistance'] = []
-      heating_type_max_cap['All Other'] = []
-      efficiency_type = {}
-      efficiency_type['Electric Resistance'] = []
-      efficiency_type['All Other'] = []
+    # Define test cases.
+    test_cases = {}
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:Table 5.2.12.1." }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:Table 5.2.12.1." }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:Table 5.2.12.1." }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:Table 5.2.12.1.-A" }
 
-      # read the file for the expected unitary efficiency values for different heating types and equipment capacity ranges
-      CSV.foreach(unitary_expected_result_file, headers: true) do |data|
-        heating_type_min_cap[data['Heating Type']] << data['Min Capacity (Btu per hr)']
-        heating_type_max_cap[data['Heating Type']] << data['Max Capacity (Btu per hr)']
-        if data['Seasonal Energy Efficiency Ratio (SEER)'].to_f > 0.0
-          efficiency_type[data['Heating Type']] << 'Seasonal Energy Efficiency Ratio (SEER)'
-        elsif data['Energy Efficiency Ratio (EER)'].to_f > 0.0
-          efficiency_type[data['Heating Type']] << 'Energy Efficiency Ratio (EER)'
+    # Test cases. Three cases for NG and FuelOil, one for Electric.
+    # Results and name are tbd here as they will be calculated in the test.
+
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :unitary_heating_types => ['Electric Resistance', 'All Other'],
+                        :TestCase => ["case-1"],
+                        :TestPars => { :test_capacity_kW => 9.5 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :unitary_heating_types => ['Electric Resistance', 'All Other'],
+                        :TestCase => ["case-2"],
+                        :TestPars => { :test_capacity_kW => 29.5 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :unitary_heating_types => ['Electric Resistance', 'All Other'],
+                        :TestCase => ["case-3"],
+                        :TestPars => { :test_capacity_kW => 55.0 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :unitary_heating_types => ['Electric Resistance', 'All Other'],
+                        :TestCase => ["case-4"],
+                        :TestPars => { :test_capacity_kW => 146.5 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :unitary_heating_types => ['Electric Resistance', 'All Other'],
+                        :TestCase => ["case-5"],
+                        :TestPars => { :test_capacity_kW => 253 } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
+
+    # Write test results.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
+
+    # Read expected results.
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
+    # Check if test results match expected.
+    msg = "Unitary efficiencies test results do not match what is expected in test"
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished suite of tests for: #{__method__}"
+  end
+
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_unitary_efficiency that runs a specific test. Called by do_test_cases in necb_helper.rb.
+  def do_test_unitary_efficiency(test_pars:, test_case:)
+
+    # Debug.
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    test_name = test_pars[:test_method]
+    save_intermediate_models = test_pars[:save_intermediate_models]
+    speed = test_pars[:speeds]
+    baseboard_type = test_pars[:baseboard_type]
+    fueltype = test_pars[:fuelType]
+    heating_type = test_pars[:unitary_heating_types]
+    # Test specific inputs.
+    cap = test_case[:test_capacity_kW]
+    vintage = test_pars[:Vintage]
+    standard = get_standard(vintage)
+    # Define the test name.
+    name = "#{vintage}_sys3_MauHtgCoilType-#{heating_type}_Speed-#{speed}_cap-#{cap.to_int}kW"
+    name_short = "#{vintage}_#{heating_type}_cap-#{cap.to_int}kW"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
+    logger.info "Starting individual test: #{name}"
+
+    # Wrap test in begin/rescue/ensure.
+    begin
+
+      if heating_type == 'Electric Resistance'
+        heating_coil_type = 'Electric'
+      elsif heating_type == 'All Other'
+        heating_coil_type = 'Gas'
+      end
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
+      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      case speed
+      when 'single'
+        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                    zones: model.getThermalZones,
+                                                                                                    heating_coil_type: heating_coil_type,
+                                                                                                    baseboard_type: baseboard_type,
+                                                                                                    hw_loop: hw_loop,
+                                                                                                    new_auto_zoner: false)
+        model.getCoilCoolingDXSingleSpeeds.each do |dxcoil|
+          dxcoil.setRatedTotalCoolingCapacity(cap * 1000)
+          flow_rate = cap * 1000 * 5.0e-5
+          dxcoil.setRatedAirFlowRate(flow_rate)
         end
+      when 'multi'
+        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
+                                                                                                   zones: model.getThermalZones,
+                                                                                                   heating_coil_type: heating_coil_type,
+                                                                                                   baseboard_type: baseboard_type,
+                                                                                                   hw_loop: hw_loop,
+                                                                                                   new_auto_zoner: false)
       end
 
-      # Use the expected unitary efficiency data to generate suitable equipment capacities for the test to cover all
-      # the relevant equipment capacity ranges
-      heating_type_cap = {}
-      heating_type_min_cap.each do |heating_type, cap|
-        unless heating_type_cap.key? heating_type then
-          heating_type_cap[heating_type] = []
-        end
-        for i in 0..num_cap_intv[template] - 2
-          heating_type_cap[heating_type] << 0.5 * (OpenStudio.convert(heating_type_min_cap[heating_type][i].to_f, 'Btu/hr', 'W').to_f + OpenStudio.convert(heating_type_min_cap[heating_type][i + 1].to_f, 'Btu/h', 'W').to_f)
-        end
-        heating_type_cap[heating_type] << (heating_type_min_cap[heating_type][num_cap_intv[template] - 1].to_f + 10000.0)
-      end
+      # Save the model after btap hvac.
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
 
-      speeds.each do |speed|
-        actual_unitary_cop = {}
-        actual_unitary_cop['Electric Resistance'] = []
-        actual_unitary_cop['All Other'] = []
-        unitary_heating_types.each do |heating_type|
-          if heating_type == 'Electric Resistance'
-            heating_coil_type = 'Electric'
-          elsif heating_type == 'All Other'
-            heating_coil_type = 'Gas'
-          end
-          heating_type_cap[heating_type].each do |unitary_cap|
-            name = "#{template}_sys3_MuaHtgCoilType-#{heating_coil_type}_Speed-#{speed}_UnitaryCap-#{unitary_cap}watts"
-            name.gsub!(/\s+/, "-")
-            puts "***************#{name}***************\n"
-        
-            # Load model and set climate file.
-            model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-            BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-            BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-        
-            hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            always_on = model.alwaysOnDiscreteSchedule
-            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
-            case speed
-            when 'single'
-              standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                                      zones: model.getThermalZones,
-                                                                                                      heating_coil_type: heating_coil_type,
-                                                                                                      baseboard_type: baseboard_type,
-                                                                                                      hw_loop: hw_loop,
-                                                                                                      new_auto_zoner: false)
-              model.getCoilCoolingDXSingleSpeeds.each do |dxcoil|
-                dxcoil.setRatedTotalCoolingCapacity(unitary_cap)
-                flow_rate = unitary_cap * 5.0e-5
-                dxcoil.setRatedAirFlowRate(flow_rate)
-              end
-            when 'multi'
-              standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
-                                                                                                          zones: model.getThermalZones,
-                                                                                                          heating_coil_type: heating_coil_type,
-                                                                                                          baseboard_type: baseboard_type,
-                                                                                                          hw_loop: hw_loop,
-                                                                                                          new_auto_zoner: false)
-            end
-            
-            # Save the model after btap hvac.
-            BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
+      # Run the measure.
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
 
-            # Run the measure.
-            run_sizing(model: model, test_name: name, template: template, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-
-            case speed
-            when 'single'
-              actual_unitary_cop[heating_type] << model.getCoilCoolingDXSingleSpeeds[0].ratedCOP.to_f
-            when 'multi'
-              actual_unitary_cop[heating_type] << model.getCoilCoolingDXMultiSpeeds[0].stages.last.grossRatedCoolingCOP.to_f
-            end
-          end
-        end
-
-        # Generate table of test unitary efficiencies.
-        actual_unitary_eff = {}
-        actual_unitary_eff['Electric Resistance'] = []
-        actual_unitary_eff['All Other'] = []
-        unitary_heating_types.each do |heating_type|
-          output_line_text = ''
-          for int in 0..heating_type_cap[heating_type].size - 1
-            output_line_text += "#{heating_type},#{heating_type_min_cap[heating_type][int]},#{heating_type_max_cap[heating_type][int]},"
-            if efficiency_type[heating_type][int] == 'Seasonal Energy Efficiency Ratio (SEER)'
-              actual_unitary_eff[heating_type][int] = (standard.cop_to_seer_cooling_with_fan(actual_unitary_cop[heating_type][int].to_f) + 0.001).round(2)
-              output_line_text += "#{actual_unitary_eff[heating_type][int]},\n"
-            elsif efficiency_type[heating_type][int] == 'Energy Efficiency Ratio (EER)'
-              actual_unitary_eff[heating_type][int] = (standard.cop_to_eer(actual_unitary_cop[heating_type][int].to_f) + 0.001).round(2)
-              output_line_text += ",#{actual_unitary_eff[heating_type][int]}\n"
-            end
-          end
-          unitary_res_file_output_text += output_line_text
-        end
-
-        # Write test results file.
-        test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_unitary_efficiencies_test_results.csv")
-        File.open(test_result_file, 'w') {|f| f.write(unitary_res_file_output_text.chomp)}
-
-        # Test that the values are correct by doing a file compare.
-        expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_unitary_efficiencies_expected_results.csv")
-
-        # Check if test results match expected.
-        msg = "Unitary efficiency test results do not match what is expected in test"
-        file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
-      end
+    rescue => error
+      logger.error "#{__FILE__}::#{__method__} #{error.message}"
     end
+    results = {}
+    dx_units = model.getCoilCoolingDXSingleSpeeds
+    dx_units.each do |dx_unit|
+      dx_unit_name = dx_unit.name.get
+      cop = dx_unit.ratedCOP.to_f
+      seer = standard.cop_to_seer_cooling_with_fan(cop.to_f)
+      eer = standard.cop_to_eer(cop.to_f)
+      # Add this test case to results and return the hash.
+      results[dx_unit_name] = {
+        speed: speed,
+        tested_capacity_kW: cap.round(2),
+        cop: cop.round(2),
+        seer: seer.round(2),
+        eer: eer.round(2)
+      }
+    end
+    logger.info "Completed individual test: #{name}"
+    results = results.sort.to_h
+
+    return results
   end
 
   # Test to validate the unitary performance curves
-  def test_NECB2011_unitary_curves
+  def test_unitary_curves
+    logger.info "Starting suite of tests for: #{__method__}"
 
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    template='NECB2011'
-    standard = get_standard(template)
-    save_intermediate_models = false
+    # Define test parameters that apply to all tests.
+    test_parameters = {
+      test_method: __method__,
+      save_intermediate_models: true,
+      chiller_type: 'Scroll',
+      mau_cooling_type: 'DX'
+    }
 
-    unitary_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_unitary_curves_expected_results.csv")
-    unitary_curve_names = []
-    CSV.foreach(unitary_expected_result_file, headers: true) do |data|
-      unitary_curve_names << data['Curve Name']
-    end
+    # Define test cases.
+    test_cases = {}
 
-    # Generate the osm files for all relevant cases to generate the test data for system 2
-    unitary_res_file_output_text = "Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,coeff5,coeff6,min_x,max_x,min_y,max_y\n"
-    boiler_fueltype = 'NaturalGas'
-    chiller_type = 'Scroll'
-    mua_cooling_type = 'DX'
+    # Test cases. Three cases for NG and FuelOil, one for Electric.
+    # Results and name are tbd here as they will be calculated in the test.
 
-    name = "#{template.downcase}_sys2_CoolingType-#{mua_cooling_type}"
-    name.gsub!(/\s+/, "-")
-    puts "***************#{name}***************\n"
+    test_cases_hash = { :Vintage => @AllTemplates,
+                        :FuelType => ["NaturalGas"],
+                        :TestCase => ["case-1"],
+                        :TestPars => { :curve_name => "tbd" } }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
+
+    # Write test results.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
+
+    # Read expected results.
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
+    # Check if test results match expected.
+    msg = "Unitary efficiencies test results do not match what is expected in test"
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
+    logger.info "Finished suite of tests for: #{__method__}"
+  end
+
+  def do_test_unitary_curves(test_pars:, test_case:)
+    # Debug.
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
+
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    test_name = test_pars[:test_method]
+    save_intermediate_models = test_pars[:save_intermediate_models]
+    chiller_type = test_pars[:chiller_type]
+    mau_cooling_type = test_pars[:mau_cooling_type]
+    fueltype = test_pars[:FuelType]
+    vintage = test_pars[:Vintage]
+    standard = get_standard(vintage)
+    # Define the test name.
+    name = "#{vintage}_sys2_CoolingType_#{fueltype}_kW_chiller_type-#{chiller_type}_#{mau_cooling_type}"
+    name_short = "#{vintage.downcase}_sys2_CoolingType-#{chiller_type}_#{mau_cooling_type}"
+
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
+    logger.info "Starting individual test: #{name}"
 
     # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
@@ -194,54 +254,70 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+
     standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                      zones: model.getThermalZones,
                                      chiller_type: chiller_type,
                                      fan_coil_type: 'FPFC',
-                                     mau_cooling_type: mua_cooling_type,
+                                     mau_cooling_type: mau_cooling_type,
                                      hw_loop: hw_loop)
-   
-    # Run sizing.
-    run_sizing(model: model, test_name: name, template: template, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+
+    run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
 
     dx_units = model.getCoilCoolingDXSingleSpeeds
-    unitary_cap_ft_curve = dx_units[0].totalCoolingCapacityFunctionOfTemperatureCurve.to_CurveBiquadratic.get
-    unitary_res_file_output_text +=
-        "#{unitary_curve_names[0]},biquadratic,#{'%.5E' % unitary_cap_ft_curve.coefficient1Constant},#{'%.5E' % unitary_cap_ft_curve.coefficient2x}," +
-            "#{'%.5E' % unitary_cap_ft_curve.coefficient3xPOW2},#{'%.5E' % unitary_cap_ft_curve.coefficient4y},#{'%.5E' % unitary_cap_ft_curve.coefficient5yPOW2}," +
-            "#{'%.5E' % unitary_cap_ft_curve.coefficient6xTIMESY},#{'%.5E' % unitary_cap_ft_curve.minimumValueofx},#{'%.5E' % unitary_cap_ft_curve.maximumValueofx}," +
-            "#{'%.5E' % unitary_cap_ft_curve.minimumValueofy},#{'%.5E' % unitary_cap_ft_curve.maximumValueofy}\n"
-    unitary_eir_ft_curve = dx_units[0].energyInputRatioFunctionOfTemperatureCurve.to_CurveBiquadratic.get
-    unitary_res_file_output_text +=
-        "#{unitary_curve_names[1]},biquadratic,#{'%.5E' % unitary_eir_ft_curve.coefficient1Constant},#{'%.5E' % unitary_eir_ft_curve.coefficient2x}," +
-            "#{'%.5E' % unitary_eir_ft_curve.coefficient3xPOW2},#{'%.5E' % unitary_eir_ft_curve.coefficient4y},#{'%.5E' % unitary_eir_ft_curve.coefficient5yPOW2}," +
-            "#{'%.5E' % unitary_eir_ft_curve.coefficient6xTIMESY},#{'%.5E' % unitary_eir_ft_curve.minimumValueofx},#{'%.5E' % unitary_eir_ft_curve.maximumValueofx}," +
-            "#{'%.5E' % unitary_eir_ft_curve.minimumValueofy},#{'%.5E' % unitary_eir_ft_curve.maximumValueofy}\n"
-    unitary_cap_flow_curve = dx_units[0].totalCoolingCapacityFunctionOfFlowFractionCurve.to_CurveQuadratic.get
-    unitary_res_file_output_text +=
-        "#{unitary_curve_names[2]},quadratic,#{'%.5E' % unitary_cap_flow_curve.coefficient1Constant},#{'%.5E' % unitary_cap_flow_curve.coefficient2x}," +
-            "#{'%.5E' % unitary_cap_flow_curve.coefficient3xPOW2},#{'%.5E' % unitary_cap_flow_curve.minimumValueofx},#{'%.5E' % unitary_cap_flow_curve.maximumValueofx}\n"
-    unitary_eir_flow_curve = dx_units[0].energyInputRatioFunctionOfFlowFractionCurve.to_CurveQuadratic.get
-    unitary_res_file_output_text +=
-        "#{unitary_curve_names[3]},quadratic,#{'%.5E' % unitary_eir_flow_curve.coefficient1Constant},#{'%.5E' % unitary_eir_flow_curve.coefficient2x}," +
-            "#{'%.5E' % unitary_eir_flow_curve.coefficient3xPOW2},#{'%.5E' % unitary_eir_flow_curve.minimumValueofx},#{'%.5E' % unitary_eir_flow_curve.maximumValueofx}\n"
-    unitary_plfvsplr__curve = dx_units[0].partLoadFractionCorrelationCurve.to_CurveCubic.get
-    unitary_res_file_output_text +=
-        "#{unitary_curve_names[4]},cubic,#{'%.5E' % unitary_plfvsplr__curve.coefficient1Constant},#{'%.5E' % unitary_plfvsplr__curve.coefficient2x}," +
-            "#{'%.5E' % unitary_plfvsplr__curve.coefficient3xPOW2},#{'%.5E' % unitary_plfvsplr__curve.coefficient4xPOW3}," +
-            "#{'%.5E' % unitary_plfvsplr__curve.minimumValueofx},#{'%.5E' % unitary_plfvsplr__curve.maximumValueofx}\n"
+    results = {}
 
-    # Write test results file.
-    test_result_file = File.join(@test_results_folder, "#{template.downcase}_compliance_unitary_curves_test_results.csv")
-    File.open(test_result_file, 'w') {|f| f.write(unitary_res_file_output_text.chomp)}
+    dx_units.each do |dx_unit|
+      dx_unit_name = dx_unit.name.get
+      results[dx_unit_name] ||= {} # Initialize hash for dx_unit_name
 
-    # Test that the values are correct by doing a file compare.
-    expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_unitary_curves_expected_results.csv")
+      # Define the curves and their types inline
+      curves = [
+        { curve: dx_unit.totalCoolingCapacityFunctionOfTemperatureCurve.to_CurveBiquadratic.get, type: 'biquadratic' },
+        { curve: dx_unit.energyInputRatioFunctionOfTemperatureCurve.to_CurveBiquadratic.get, type: 'biquadratic' },
+        { curve: dx_unit.totalCoolingCapacityFunctionOfFlowFractionCurve.to_CurveQuadratic.get, type: 'quadratic' },
+        { curve: dx_unit.energyInputRatioFunctionOfFlowFractionCurve.to_CurveQuadratic.get, type: 'quadratic' },
+        { curve: dx_unit.partLoadFractionCorrelationCurve.to_CurveCubic.get, type: 'cubic' }
+      ]
 
-    # Check if test results match expected.
-    msg = "Unitary performance curve coeffs test results do not match what is expected in test"
-    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
+      curves.each do |curve_detail|
+        curve = curve_detail[:curve]
+        next unless curve # Skip if the curve is nil
+
+        curve_name = curve.name.get
+        results[dx_unit_name][curve_name] ||= {} # Initialize hash for curve_name
+
+        # Add mandatory attributes
+        results[dx_unit_name][curve_name] = {
+          curve_type: curve_detail[:type],
+          coefficient1Constant: sprintf('%.5E', curve.coefficient1Constant),
+          coefficient2x: sprintf('%.5E', curve.coefficient2x),
+          coefficient3xPOW2: sprintf('%.5E', curve.coefficient3xPOW2),
+          minimumValueofx: sprintf('%.5E', curve.minimumValueofx),
+          maximumValueofx: sprintf('%.5E', curve.maximumValueofx)
+        }
+
+        # Define a mapping of optional attributes
+        attributes = {
+          coefficient4y: :coefficient4y,
+          coefficient5yPOW2: :coefficient5yPOW2,
+          coefficient6xTIMESY: :coefficient6xTIMESY,
+          minimumValueofy: :minimumValueofy,
+          maximumValueofy: :maximumValueofy
+        }
+
+        # Conditionally add optional attributes if the methods exist
+        attributes.each do |key, method|
+          if curve.respond_to?(method)
+            results[dx_unit_name][curve_name][key] = sprintf('%.5E', curve.send(method))
+          end
+        end
+      end
+    end
+
+    # Sort results hash
+    results = results.sort.to_h
+    return results
   end
-
 end
