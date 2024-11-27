@@ -292,7 +292,8 @@ module NecbHelper
     if type == "json_data"
 
       # Compare two json classes.
-      #diff = hashdiff.diff(expected_results, test_results)
+      expected_results = JSON.parse(JSON.pretty_generate(expected_results))
+      test_results = JSON.parse(JSON.pretty_generate(test_results))
       diff = CompareJSON.diff(expected_results, test_results)
       error_msg = ""
       if !diff.nil?
