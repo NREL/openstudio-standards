@@ -14,7 +14,7 @@ class Standard
   # @param water_heater_volume [Double] water heater volume, in m^3
   # @param water_heater_fuel [String] water heater fuel. Valid choices are NaturalGas, Electricity
   # @param parasitic_fuel_consumption_rate [Double] the parasitic fuel consumption rate of the water heater, in W
-  # @param add_pipe_losses [Bool] if true, add piping and associated heat losses to system.  If false, add no pipe heat losses
+  # @param add_pipe_losses [Boolean] if true, add piping and associated heat losses to system.  If false, add no pipe heat losses
   # @param floor_area_served [Double] area served by the SWH loop, in m^2.  Used for pipe loss piping length estimation
   # @param number_of_stories [Integer] number of stories served by the SWH loop.  Used for pipe loss piping length estimation
   # @param pipe_insulation_thickness [Double] thickness of the fiberglass batt pipe insulation, in m.  Use 0 for uninsulated pipes
@@ -50,21 +50,22 @@ class Standard
     end
 
     # Temperature schedule type limits
-    temp_sch_type_limits = model_add_schedule_type_limits(model,
-                                                          name: 'Temperature Schedule Type Limits',
-                                                          lower_limit_value: 0.0,
-                                                          upper_limit_value: 100.0,
-                                                          numeric_type: 'Continuous',
-                                                          unit_type: 'Temperature')
+    temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
+                                                                                      name: 'Temperature Schedule Type Limits',
+                                                                                      lower_limit_value: 0.0,
+                                                                                      upper_limit_value: 100.0,
+                                                                                      numeric_type: 'Continuous',
+                                                                                      unit_type: 'Temperature')
 
     # Service water heating loop controls
     swh_temp_c = service_water_temperature
     swh_temp_f = OpenStudio.convert(swh_temp_c, 'C', 'F').get
     swh_delta_t_r = 9.0 # 9F delta-T
     swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
-    swh_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                       swh_temp_c,
-                                                       name = "Service Water Loop Temp - #{swh_temp_f.round}F")
+    swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                   swh_temp_c,
+                                                                                   name: "Service Water Loop Temp - #{swh_temp_f.round}F",
+                                                                                   schedule_type_limit: 'Temperature')
     swh_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
     swh_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, swh_temp_sch)
     swh_stpt_manager.setName('Service hot water setpoint manager')
@@ -151,7 +152,7 @@ class Standard
   # @param service_water_temperature [Double] water heater temperature, in C
   # @param parasitic_fuel_consumption_rate [Double] water heater parasitic fuel consumption rate, in W
   # @param swh_temp_sch [OpenStudio::Model::Schedule] the service water heating schedule. If nil, will be defaulted.
-  # @param set_peak_use_flowrate [Bool] if true, the peak flow rate and flow rate schedule will be set.
+  # @param set_peak_use_flowrate [Boolean] if true, the peak flow rate and flow rate schedule will be set.
   # @param peak_flowrate [Double] in m^3/s
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] zone to place water heater in.
@@ -180,12 +181,12 @@ class Standard
     water_heater_vol_gal = OpenStudio.convert(water_heater_volume, 'm^3', 'gal').get
 
     # Temperature schedule type limits
-    temp_sch_type_limits = model_add_schedule_type_limits(model,
-                                                          name: 'Temperature Schedule Type Limits',
-                                                          lower_limit_value: 0.0,
-                                                          upper_limit_value: 100.0,
-                                                          numeric_type: 'Continuous',
-                                                          unit_type: 'Temperature')
+    temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
+                                                                                      name: 'Temperature Schedule Type Limits',
+                                                                                      lower_limit_value: 0.0,
+                                                                                      upper_limit_value: 100.0,
+                                                                                      numeric_type: 'Continuous',
+                                                                                      unit_type: 'Temperature')
 
     if swh_temp_sch.nil?
       # Service water heating loop controls
@@ -194,9 +195,10 @@ class Standard
       swh_delta_t_r = 9 # 9F delta-T
       swh_temp_c = OpenStudio.convert(swh_temp_f, 'F', 'C').get
       swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
-      swh_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                         swh_temp_c,
-                                                         name = "Service Water Loop Temp - #{swh_temp_f.round}F")
+      swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                     swh_temp_c,
+                                                                                     name: "Service Water Loop Temp - #{swh_temp_f.round}F",
+                                                                                     schedule_type_limit: 'Temperature')
       swh_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
     end
 
@@ -223,9 +225,10 @@ class Standard
       else
         indoor_temp = 70.0
       end
-      default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                                                  OpenStudio.convert(indoor_temp, 'F', 'C').get,
-                                                                                  name = 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s + 'f')
+      default_water_heater_ambient_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                              OpenStudio.convert(indoor_temp, 'F', 'C').get,
+                                                                                                              name: "Water Heater Ambient Temp Schedule #{indoor_temp}F",
+                                                                                                              schedule_type_limit: 'Temperature')
       default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       water_heater.setAmbientTemperatureIndicator('Schedule')
       water_heater.setAmbientTemperatureSchedule(default_water_heater_ambient_temp_sch)
@@ -242,7 +245,8 @@ class Standard
     water_heater.setHeaterMaximumCapacity(OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'W').get)
     water_heater.setOffCycleParasiticHeatFractiontoTank(0.8)
     water_heater.setIndirectWaterHeatingRecoveryTime(1.5) # 1.5hrs
-    if water_heater_fuel == 'Electricity'
+    case water_heater_fuel
+    when 'Electricity'
       water_heater.setHeaterFuelType('Electricity')
       water_heater.setHeaterThermalEfficiency(1.0)
       water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
@@ -251,7 +255,7 @@ class Standard
       water_heater.setOnCycleParasiticFuelType('Electricity')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(1.053)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(1.053)
-    elsif water_heater_fuel == 'Natural Gas' || water_heater_fuel == 'NaturalGas'
+    when 'Natural Gas', 'NaturalGas'
       water_heater.setHeaterFuelType('Gas')
       water_heater.setHeaterThermalEfficiency(0.78)
       water_heater.setOffCycleParasiticFuelConsumptionRate(parasitic_fuel_consumption_rate)
@@ -260,7 +264,7 @@ class Standard
       water_heater.setOnCycleParasiticFuelType('Gas')
       water_heater.setOffCycleLossCoefficienttoAmbientTemperature(6.0)
       water_heater.setOnCycleLossCoefficienttoAmbientTemperature(6.0)
-    elsif water_heater_fuel == 'HeatPump'
+    when 'HeatPump'
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Simple workaround to represent heat pump water heaters without incurring significant runtime penalty associated with using correct objects.')
       # Make a part-load efficiency modifier curve with a value above 1, which
       # is multiplied by the nominal efficiency of 100% to represent
@@ -314,12 +318,12 @@ class Standard
   # @param service_water_temperature [Double] water heater temperature, in C
   # @param parasitic_fuel_consumption_rate [Double] water heater parasitic fuel consumption rate, in W
   # @param swh_temp_sch [OpenStudio::Model::Schedule] the service water heating schedule. If nil, will be defaulted.
-  # @param set_peak_use_flowrate [Bool] if true, the peak flow rate and flow rate schedule will be set.
+  # @param set_peak_use_flowrate [Boolean] if true, the peak flow rate and flow rate schedule will be set.
   # @param peak_flowrate [Double] in m^3/s
   # @param flowrate_schedule [String] name of the flow rate schedule
   # @param water_heater_thermal_zone [OpenStudio::Model::ThermalZone] zone to place water heater in.
   #   If nil, will be assumed in 70F air for heat loss.
-  # @param use_ems_control [Bool] if true, use ems control logic if using a 'WrappedCondenser' style HPWH.
+  # @param use_ems_control [Boolean] if true, use ems control logic if using a 'WrappedCondenser' style HPWH.
   # @return [OpenStudio::Model::WaterHeaterMixed] the resulting water heater
   def model_add_heatpump_water_heater(model,
                                       type: 'PumpedCondenser',
@@ -350,7 +354,7 @@ class Standard
     # calculate tank height and radius
     water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity, 'W', 'kBtu/hr').get
     hpwh_vol_gal = OpenStudio.convert(water_heater_volume, 'm^3', 'gal').get
-    tank_height = 0.0188 * hpwh_vol_gal + 0.0935 # linear relationship that gets GE height at 50 gal and AO Smith height at 80 gal
+    tank_height = (0.0188 * hpwh_vol_gal) + 0.0935 # linear relationship that gets GE height at 50 gal and AO Smith height at 80 gal
     tank_radius = (0.9 * water_heater_volume / (Math::PI * tank_height))**0.5
     tank_surface_area = 2.0 * Math::PI * tank_radius * (tank_radius + tank_height)
     u_tank = (5.678 * tank_ua) / OpenStudio.convert(tank_surface_area, 'm^2', 'ft^2').get
@@ -404,21 +408,22 @@ class Standard
     # set temperature setpoint schedule
     if swh_temp_sch.nil?
       # temperature schedule type limits
-      temp_sch_type_limits = model_add_schedule_type_limits(model,
-                                                            name: 'Temperature Schedule Type Limits',
-                                                            lower_limit_value: 0.0,
-                                                            upper_limit_value: 100.0,
-                                                            numeric_type: 'Continuous',
-                                                            unit_type: 'Temperature')
+      temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
+                                                                                        name: 'Temperature Schedule Type Limits',
+                                                                                        lower_limit_value: 0.0,
+                                                                                        upper_limit_value: 100.0,
+                                                                                        numeric_type: 'Continuous',
+                                                                                        unit_type: 'Temperature')
       # service water heating loop controls
       swh_temp_c = service_water_temperature
       swh_temp_f = OpenStudio.convert(swh_temp_c, 'C', 'F').get
       swh_delta_t_r = 9.0 # 9F delta-T
       swh_temp_c = OpenStudio.convert(swh_temp_f, 'F', 'C').get
       swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
-      swh_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                         swh_temp_c,
-                                                         name = "Heat Pump Water Heater Temp - #{swh_temp_f.round}F")
+      swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                     swh_temp_c,
+                                                                                     name: "Heat Pump Water Heater Temp - #{swh_temp_f.round}F",
+                                                                                     schedule_type_limit: 'Temperature')
       swh_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
     end
     hpwh.setCompressorSetpointTemperatureSchedule(swh_temp_sch)
@@ -554,16 +559,17 @@ class Standard
     if water_heater_thermal_zone.nil?
       # add in schedules for Tamb, RHamb, and the compressor
       # assume the water heater is indoors at 70F for now
-      default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                                                  OpenStudio.convert(70.0, 'F', 'C').get,
-                                                                                  name = 'Water Heater Ambient Temp Schedule - 70F')
+      default_water_heater_ambient_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                              OpenStudio.convert(70.0, 'F', 'C').get,
+                                                                                                              name: 'Water Heater Ambient Temp Schedule - 70F',
+                                                                                                              schedule_type_limit: 'Temperature')
       if temp_sch_type_limits.nil?
-        temp_sch_type_limits = model_add_schedule_type_limits(model,
-                                                              name: 'Temperature Schedule Type Limits',
-                                                              lower_limit_value: 0.0,
-                                                              upper_limit_value: 100.0,
-                                                              numeric_type: 'Continuous',
-                                                              unit_type: 'Temperature')
+        temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
+                                                                                          name: 'Temperature Schedule Type Limits',
+                                                                                          lower_limit_value: 0.0,
+                                                                                          upper_limit_value: 100.0,
+                                                                                          numeric_type: 'Continuous',
+                                                                                          unit_type: 'Temperature')
       end
       default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       tank.setAmbientTemperatureIndicator('Schedule')
@@ -624,7 +630,7 @@ class Standard
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.Prototype.ServiceWaterHeating', "Unsupported schedule type for HPWH setpoint schedule #{swh_temp_sch.name}.")
         return false
       end
-      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch,schedule_type, 'Schedule Value')
+      hpwhschedoverride_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(swh_temp_sch, schedule_type, 'Schedule Value')
       hpwhschedoverride_actuator.setName("#{hpwh_name_ems_friendly}_HPWHSchedOverride")
 
       # create actuator for lower heating element in water tank
@@ -708,21 +714,22 @@ class Standard
     booster_service_water_loop.setName('Service Water Loop')
 
     # Temperature schedule type limits
-    temp_sch_type_limits = model_add_schedule_type_limits(model,
-                                                          name: 'Temperature Schedule Type Limits',
-                                                          lower_limit_value: 0.0,
-                                                          upper_limit_value: 100.0,
-                                                          numeric_type: 'Continuous',
-                                                          unit_type: 'Temperature')
+    temp_sch_type_limits = OpenstudioStandards::Schedules.create_schedule_type_limits(model,
+                                                                                      name: 'Temperature Schedule Type Limits',
+                                                                                      lower_limit_value: 0.0,
+                                                                                      upper_limit_value: 100.0,
+                                                                                      numeric_type: 'Continuous',
+                                                                                      unit_type: 'Temperature')
 
     # Service water heating loop controls
     swh_temp_c = booster_water_temperature
     swh_temp_f = OpenStudio.convert(swh_temp_c, 'C', 'F').get
     swh_delta_t_r = 9 # 9F delta-T
     swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
-    swh_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                       swh_temp_c,
-                                                       name = "Service Water Booster Temp - #{swh_temp_f}F")
+    swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                   swh_temp_c,
+                                                                                   name: "Service Water Booster Temp - #{swh_temp_f}F",
+                                                                                   schedule_type_limit: 'Temperature')
     swh_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
     swh_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, swh_temp_sch)
     swh_stpt_manager.setName('Hot water booster setpoint manager')
@@ -765,9 +772,10 @@ class Standard
       else
         indoor_temp = 70.0
       end
-      default_water_heater_ambient_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                                                  OpenStudio.convert(indoor_temp, 'F', 'C').get,
-                                                                                  name = 'Water Heater Ambient Temp Schedule - ' + indoor_temp.to_s)
+      default_water_heater_ambient_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                              OpenStudio.convert(indoor_temp, 'F', 'C').get,
+                                                                                                              name: "Water Heater Ambient Temp Schedule #{indoor_temp}F",
+                                                                                                              schedule_type_limit: 'Temperature')
       default_water_heater_ambient_temp_sch.setScheduleTypeLimits(temp_sch_type_limits)
       water_heater.setAmbientTemperatureIndicator('Schedule')
       water_heater.setAmbientTemperatureSchedule(default_water_heater_ambient_temp_sch)
@@ -905,23 +913,24 @@ class Standard
     rated_flow_rate_m3_per_s = peak_flowrate
     rated_flow_rate_gal_per_min = OpenStudio.convert(rated_flow_rate_m3_per_s, 'm^3/s', 'gal/min').get
 
-    water_use_sensible_frac_sch = model_add_constant_schedule_ruleset(model,
-                                                                      frac_sensible,
-                                                                      name = "Fraction Sensible - #{frac_sensible}",
-                                                                      sch_type_limit: 'Fractional')
-    water_use_latent_frac_sch = model_add_constant_schedule_ruleset(model,
-                                                                    frac_latent,
-                                                                    name = "Fraction Latent - #{frac_latent}",
-                                                                    sch_type_limit: 'Fractional')
+    water_use_sensible_frac_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                  frac_sensible,
+                                                                                                  name: "Fraction Sensible - #{frac_sensible}",
+                                                                                                  schedule_type_limit: 'Fractional')
+    water_use_latent_frac_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                frac_latent,
+                                                                                                name: "Fraction Latent - #{frac_latent}",
+                                                                                                schedule_type_limit: 'Fractional')
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
     water_fixture_def.setName("#{use_name} Service Water Use Def #{rated_flow_rate_gal_per_min.round(2)}gpm")
     # Target mixed water temperature
     mixed_water_temp_f = OpenStudio.convert(water_use_temperature, 'C', 'F').get
-    mixed_water_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                               OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get,
-                                                               name = "Mixed Water At Faucet Temp - #{mixed_water_temp_f.round}F")
+    mixed_water_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                           OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get,
+                                                                                           name: "Mixed Water At Faucet Temp - #{mixed_water_temp_f.round}F",
+                                                                                           schedule_type_limit: 'Temperature')
     water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
 
     # Water use equipment
@@ -967,7 +976,7 @@ class Standard
   # @param space [OpenStudio::Model::Space] the Space to add a WaterUseEquipment for
   # @param space_multiplier [Double] the multiplier to use if the supplied Space actually represents
   #   more area than is shown in the model.
-  # @param is_flow_per_area [Bool] if true, use the value in the 'service_water_heating_peak_flow_per_area'
+  # @param is_flow_per_area [Boolean] if true, use the value in the 'service_water_heating_peak_flow_per_area'
   #   field of the space_types JSON.  If false, use the value in the 'service_water_heating_peak_flow_rate' field.
   # @return [OpenStudio::Model::WaterUseEquipment] the WaterUseEquipment for the
   def model_add_swh_end_uses_by_space(model,
@@ -1011,8 +1020,7 @@ class Standard
     space_area = OpenStudio.convert(space.floorArea, 'm^2', 'ft^2').get # ft2
 
     # If there is no service hot water load.. Don't bother adding anything.
-    if data['service_water_heating_peak_flow_per_area'].to_f == 0.0 &&
-       data['service_water_heating_peak_flow_rate'].to_f == 0.0
+    if data['service_water_heating_peak_flow_per_area'].to_f < 0.00001 && data['service_water_heating_peak_flow_rate'].to_f < 0.00001
       return nil
     end
 
@@ -1029,14 +1037,14 @@ class Standard
                                    end
     rated_flow_rate_gal_per_min = rated_flow_rate_gal_per_hour / 60 # gal/h to gal/min
     rated_flow_rate_m3_per_s = OpenStudio.convert(rated_flow_rate_gal_per_min, 'gal/min', 'm^3/s').get
-    water_use_sensible_frac_sch = model_add_constant_schedule_ruleset(model,
-                                                                      0.2,
-                                                                      name = 'Fraction Sensible - 0.2',
-                                                                      sch_type_limit: 'Fractional')
-    water_use_latent_frac_sch = model_add_constant_schedule_ruleset(model,
-                                                                    0.05,
-                                                                    name = 'Fraction Latent - 0.05',
-                                                                    sch_type_limit: 'Fractional')
+    water_use_sensible_frac_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                  0.2,
+                                                                                                  name: 'Fraction Sensible - 0.2',
+                                                                                                  schedule_type_limit: 'Fractional')
+    water_use_latent_frac_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                0.05,
+                                                                                                name: 'Fraction Latent - 0.05',
+                                                                                                schedule_type_limit: 'Fractional')
     water_fixture_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
     water_fixture_def.setLatentFractionSchedule(water_use_latent_frac_sch)
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
@@ -1044,9 +1052,10 @@ class Standard
     # Target mixed water temperature
     mixed_water_temp_f = data['service_water_heating_target_temperature']
     mixed_water_temp_c = OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get
-    mixed_water_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                               mixed_water_temp_c,
-                                                               name = "Mixed Water At Faucet Temp - #{mixed_water_temp_f.round}F")
+    mixed_water_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                           mixed_water_temp_c,
+                                                                                           name: "Mixed Water At Faucet Temp - #{mixed_water_temp_f.round}F",
+                                                                                           schedule_type_limit: 'Temperature')
     water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
 
     # Water use equipment
@@ -1066,7 +1075,7 @@ class Standard
   # Determine whether or not water fixtures are attached to spaces
   # @todo For hotels and apartments, add the water fixture at the space level
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_attach_water_fixtures_to_spaces?(model)
     # if building_type!=nil && ((building_type.downcase.include?"hotel") || (building_type.downcase.include?"apartment"))
     #   return true
@@ -1100,9 +1109,10 @@ class Standard
     water_fixture_def.setPeakFlowRate(rated_flow_rate_m3_per_s)
     # Target mixed water temperature
     mixed_water_temp_f = OpenStudio.convert(water_use_temperature, 'C', 'F').get
-    mixed_water_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                               OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get,
-                                                               name = "Mixed Water At Faucet Temp - #{mixed_water_temp_f.round}F")
+    mixed_water_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                           OpenStudio.convert(mixed_water_temp_f, 'F', 'C').get,
+                                                                                           name: "Mixed Water At Faucet Temp - #{mixed_water_temp_f.round}F",
+                                                                                           schedule_type_limit: 'Temperature')
     water_fixture_def.setTargetTemperatureSchedule(mixed_water_temp_sch)
 
     # Water use equipment
@@ -1133,9 +1143,9 @@ class Standard
   # @param floor_area_served [Double] the area of building served by the service water heating loop, in m^2
   # @param number_of_stories [Integer] the number of stories served by the service water heating loop
   # @param pipe_insulation_thickness [Double] the thickness of the pipe insulation, in m.  Use 0 for no insulation
-  # @param circulating [Bool] use true for circulating systems, false for non-circulating systems
+  # @param circulating [Boolean] use true for circulating systems, false for non-circulating systems
   # @param air_temp_surrounding_piping [Double] the temperature of the air surrounding the piping, in C.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_piping_losses_to_swh_system(model,
                                             swh_loop,
                                             circulating,
@@ -1181,16 +1191,18 @@ class Standard
     # Service water heating piping heat loss scheduled air temperature
     swh_piping_air_temp_c = air_temp_surrounding_piping
     swh_piping_air_temp_f = OpenStudio.convert(swh_piping_air_temp_c, 'C', 'F').get
-    swh_piping_air_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                                  swh_piping_air_temp_c,
-                                                                  name = "#{swh_loop.name} Piping Air Temp - #{swh_piping_air_temp_f.round}F")
+    swh_piping_air_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                              swh_piping_air_temp_c,
+                                                                                              name: "#{swh_loop.name} Piping Air Temp - #{swh_piping_air_temp_f.round}F",
+                                                                                              schedule_type_limit: 'Temperature')
 
     # Service water heating piping heat loss scheduled air velocity
     swh_piping_air_velocity_m_per_s = 0.3
     swh_piping_air_velocity_mph = OpenStudio.convert(swh_piping_air_velocity_m_per_s, 'm/s', 'mile/hr').get
-    swh_piping_air_velocity_sch = model_add_constant_schedule_ruleset(model,
-                                                                      swh_piping_air_velocity_m_per_s,
-                                                                      name = "#{swh_loop.name} Piping Air Velocity - #{swh_piping_air_velocity_mph.round(2)}mph")
+    swh_piping_air_velocity_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                  swh_piping_air_velocity_m_per_s,
+                                                                                                  name: "#{swh_loop.name} Piping Air Velocity - #{swh_piping_air_velocity_mph.round(2)}mph",
+                                                                                                  schedule_type_limit: 'Dimensionless')
 
     # Material for 3/4in type L (heavy duty) copper pipe
     copper_pipe = OpenStudio::Model::StandardOpaqueMaterial.new(model)

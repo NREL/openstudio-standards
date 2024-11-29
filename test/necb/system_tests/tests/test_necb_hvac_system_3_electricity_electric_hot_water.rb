@@ -27,7 +27,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 class NECB_HVAC_System_3_Test_E_E_HW < Minitest::Test
 
   def test_necb_hvac_system_3_electricity_electric_hot_water()
-    weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
+    weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
     template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = 'system_3'
     vintage = 'NECB2011'
@@ -85,7 +85,7 @@ class NECB_HVAC_System_3_Test_E_E_HW < Minitest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run

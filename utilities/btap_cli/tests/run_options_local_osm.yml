@@ -12,7 +12,7 @@
 :door_construction_cond: NECB_Default
 :ecm_system_name: NECB_Default
 :electrical_loads_scale: NECB_Default
-:epw_file: CAN_QC_Montreal-Trudeau.Intl.AP.716270_CWEC2016.epw
+:epw_file: CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw
 :erv_package: NECB_Default
 :ext_floor_cond: NECB_Default
 :ext_roof_cond: NECB_Default

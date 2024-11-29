@@ -47,7 +47,7 @@ class BTAPData
     @btap_data.merge!(building_costing_data(cost_result)) unless cost_result.nil?
     @btap_data.merge!(climate_data)
     @btap_data.merge!(service_water_heating_data)
-    @btap_data.merge!(energy_eui_data)
+    @btap_data.merge!(energy_eui_data(model))
     @btap_data.merge!(energy_peak_data)
     @btap_data.merge!(utility(model))
     @btap_data.merge!(unmet_hours(model))
@@ -295,7 +295,7 @@ class BTAPData
     outdoor_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Wall')
     outdoor_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'RoofCeiling')
     outdoor_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Floor')
-    outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
+    outdoor_subsurfaces = outdoor_surfaces.flat_map(&:subSurfaces)
     ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     ground_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Wall')
     ground_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'RoofCeiling')
@@ -334,16 +334,16 @@ class BTAPData
                                       data['overhead_doors_area_m_sq']
 
     # Average Conductances by surface Type
-    data['outdoor_walls_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
-    data['outdoor_roofs_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
-    data['outdoor_floors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
-    data['ground_walls_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_walls).round(4) if !ground_walls.empty?
-    data['ground_roofs_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_roofs).round(4) if !ground_roofs.empty?
-    data['ground_floors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_floors).round(4) if !ground_floors.empty?
-    data['windows_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(windows).round(4) if !windows.empty?
-    data['skylights_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(skylights).round(4) if !skylights.empty?
-    data['doors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(doors).round(4) if !doors.empty?
-    data['overhead_doors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(overhead_doors).round(4) if !overhead_doors.empty?
+    data['outdoor_walls_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
+    data['outdoor_roofs_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
+    data['outdoor_floors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
+    data['ground_walls_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls).round(4) if !ground_walls.empty?
+    data['ground_roofs_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs).round(4) if !ground_roofs.empty?
+    data['ground_floors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors).round(4) if !ground_floors.empty?
+    data['windows_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(windows).round(4) if !windows.empty?
+    data['skylights_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(skylights).round(4) if !skylights.empty?
+    data['doors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(doors).round(4) if !doors.empty?
+    data['overhead_doors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors).round(4) if !overhead_doors.empty?
 
     # #Average Conductances for building whole weight factors
     !outdoor_walls.empty? ? o_wall_cond_weight = data['outdoor_walls_average_conductance_w_per_m_sq_k'] * data['outdoor_walls_area_m_sq'] : o_wall_cond_weight = 0
@@ -499,10 +499,13 @@ class BTAPData
   def climate_data
     # Store Geography Data
     geography_data = {}
-    geography_data['location_necb_hdd'] = @standard.get_necb_hdd18(@model)
+    geography_data['location_necb_hdd'] = @standard.get_necb_hdd18(model: @model, necb_hdd: true)
     geography_data['location_weather_file'] = File.basename(@model.getWeatherFile.path.get.to_s)
-    geography_data['location_epw_cdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).cdd18
-    geography_data['location_epw_hdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).hdd18
+    weather_file_path = @model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    geography_data['location_epw_cdd'] = stat_file.cdd18
+    geography_data['location_epw_hdd'] = stat_file.hdd18
     geography_data['location_necb_climate_zone'] = @standard.get_climate_zone_name(geography_data['location_necb_hdd'])
     geography_data['location_city'] = @model.getWeatherFile.city
     geography_data['location_state_province_region'] = @model.getWeatherFile.stateProvinceRegion
@@ -1353,7 +1356,7 @@ class BTAPData
     data['energy_peak_electric_w_per_m_sq'] = electric_peak.empty? ? 0.0 : electric_peak.get / @conditioned_floor_area_m_sq
     data['energy_peak_natural_gas_w_per_m_sq'] = natural_gas_peak.empty? ? 0.0 : natural_gas_peak.get / @conditioned_floor_area_m_sq
 
-    # Peak heating load  #TODO: IMPORTANT NOTE: Peak heating load must be updated if a combination of fuel types is used in a building model.
+    # Peak heating load  # @todo IMPORTANT NOTE: Peak heating load must be updated if a combination of fuel types is used in a building model.
     command = "SELECT Value
                FROM TabularDataWithStrings
                WHERE ReportName='EnergyMeters'
@@ -1375,7 +1378,7 @@ class BTAPData
     heating_peak_w = [heating_peak_w_electricity.to_f, heating_peak_w_gas.to_f].max
     data['heating_peak_w_per_m_sq'] = heating_peak_w / @conditioned_floor_area_m_sq
 
-    # Peak cooling load    #TODO: IMPORTANT NOTE: Peak cooling load must be updated if a combination of fuel types is used in a building model.
+    # Peak cooling load    # @todo IMPORTANT NOTE: Peak cooling load must be updated if a combination of fuel types is used in a building model.
     command = "SELECT Value
                FROM TabularDataWithStrings
                WHERE ReportName='EnergyMeters'
@@ -1400,7 +1403,7 @@ class BTAPData
     return data
   end
 
-  def energy_eui_data
+  def energy_eui_data(model)
     data = {}
     # default to zero to start.
     ['energy_eui_fans_gj_per_m_sq',
@@ -1412,6 +1415,16 @@ class BTAPData
      'energy_eui_total_gj_per_m_sq',
      'energy_eui_heat recovery_gj_per_m_sq',
      'energy_eui_water systems_gj_per_m_sq'].each { |end_use| data[end_use] = 0.0 }
+
+    # Check if the HVAC of the model is GSHP
+    plant_loops = model.getPlantLoops
+    model_has_how_many_GSHP = 0.0
+    plant_loops.each do |plantloop|
+      if plantloop.name.to_s.upcase.include? "GLHX"
+        model_has_how_many_GSHP += 1.0
+      end
+    end
+
     # Get E+ End use table from sql
     table = get_sql_table_to_json(@model, 'AnnualBuildingUtilityPerformanceSummary', 'Entire Facility', 'End Uses')['table']
     # Get rid of totals and averages rows.. I want just the
@@ -1422,13 +1435,20 @@ class BTAPData
       # Store eui by use name.
       data["energy_eui_#{row['name'].downcase}_gj_per_m_sq"] = energy_columns.inject(0) { |sum, tuple| sum += tuple[1] } / @conditioned_floor_area_m_sq
     end
+
     data['energy_eui_total_gj_per_m_sq'] = 0.0
-    ['natural_gas_GJ', 'electricity_GJ', 'additional_fuel_GJ'].each do |column|
+
+    ['natural_gas_GJ', 'electricity_GJ', 'additional_fuel_GJ', 'district_cooling_GJ', 'district_heating_GJ'].each do |column|
       data["energy_eui_#{column.downcase}_per_m_sq"] = table.inject(0) { |sum, row| sum + (row[column].nil? ? 0.0 : row[column]) } / @conditioned_floor_area_m_sq
       data['energy_eui_total_gj_per_m_sq'] += data["energy_eui_#{column.downcase}_per_m_sq"] unless data["energy_eui_#{column.downcase}_per_m_sq"].nil?
     end
-    ['district_cooling_GJ', 'district_heating_GJ'].each do |column|
-      data["energy_eui_#{column.downcase}_per_m_sq"] = table.inject(0) { |sum, row| sum + (row[column].nil? ? 0.0 : row[column]) } / @conditioned_floor_area_m_sq
+
+    # If the HVAC of the model is GSHP, district heating and cooling must be removed from EUIs for heating and cooling and total EUI
+    # NOTE: it has been assumed that if a model has GSHP, that is the only HVAC type in the model. This assumption means that any district heating/cooling in the model is related to GSHP.
+    if model_has_how_many_GSHP > 0.0
+      data['energy_eui_heating_gj_per_m_sq'] -= data['energy_eui_district_heating_gj_per_m_sq']
+      data['energy_eui_cooling_gj_per_m_sq'] -= data['energy_eui_district_cooling_gj_per_m_sq']
+      data['energy_eui_total_gj_per_m_sq'] -= (data['energy_eui_district_heating_gj_per_m_sq'] + data['energy_eui_district_cooling_gj_per_m_sq'])
     end
 
     # Get total and net site energy use intensity
@@ -1798,7 +1818,7 @@ class BTAPData
     return var.get
   end
 
-  # TODO: SQL command units may have been converted wrong.
+  # @todo SQL command units may have been converted wrong.
 
   def get_actual_child_object(object)
     # monkey patch class to have a decendants static method to return all possible subclasses of the object.
@@ -2036,41 +2056,112 @@ class BTAPData
       unit_density_per_ft_sq = 1.0 / bldg_conditioned_floor_area_ft_sq
     end
 
-    ### Get weather file name
-    weather_file = model.weatherFile.get.path.get.to_s
-#    weather_file = weather_file.split('/')[-1]
+    ### Get weather file
+    weather_file_path = model.weatherFile.get.path.get.to_s
+    epw_file = model.weatherFile.get.file.get
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
 
     ### Cooling Degree Days, base 50degF
-    cdd10_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).cdd10
+    cdd10_degree_c_days = stat_file.cdd10
     cdd50_degree_f_days = cdd10_degree_c_days * 9.0 / 5.0
 
     ### Heating Degree Days, base 65degF (note that base temperature of 18degC has been considered)
-    hdd18_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).hdd18
+    hdd18_degree_c_days = stat_file.hdd18
     hdd65_degree_f_days = hdd18_degree_c_days * 9.0 / 5.0
 
     ### Dehumidification degree days
     ### ('Dehumidification degree-days, base 0.010' in REF: Wright (2019))
-    dehumidification_degree_days = BTAP::Environment::WeatherFile.new(weather_file).calculate_humidity_ratio
+    dehumidification_degree_days = OpenstudioStandards::Weather.epw_file_get_dehumidification_degree_days(epw_file)
 
     ### annual global horizontal irradiance (GHI)
-    annual_ghi_kwh_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_annual_ghi
+
+    # Workaround for case when the weather file contains the February from a leap year but that February only has 28
+    # days of data.
+    has_leap_day = false
+
+    # Find the first day in February
+    feb_index = epw_file.data.find_index { |entry| entry.date.monthOfYear.value == 2 }
+
+    # Find the year for February
+    feb_year = epw_file.data[feb_index].year
+    # Determine if February's year is a leap year
+    leap_year = false
+    if (feb_year % 100) > 0
+      leap_year = true if (feb_year % 4) == 0
+    else
+      leap_year = true if (feb_year % 400) == 0
+    end
+    # If the February is from a leap year determine if it contains a leap day
+    if leap_year
+
+      day = epw_file.data[feb_index].date.dayOfMonth
+      inc = 0
+
+      while epw_file.data[feb_index].date.dayOfMonth == day
+        feb_index += 1
+        inc       += 1
+      end
+
+      has_leap_day = epw_file.data[feb_index + (inc * 28)].date.dayOfMonth == 29
+    end
+
+    # If the February is from a leap year and there is no leap day then do not use the faulty OpenStudio Epw
+    # .getTimeSeries method.  Otherwise, use the method.
+    if has_leap_day || !leap_year
+      ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get.values
+    else
+      # Access the data directly instead of using the OpenStudio API to avoid the faulty OpenStudioEpw
+      # .getTimeSeries method.
+
+      # Open the weather file
+      regex_csv = /[^,]+/
+      regex_num = /[0-9]/
+      f         = File.open(epw_file.path.to_s, 'r')
+      i         = 0
+
+      # Skip the header
+      i += 1 until f.readline[0] =~ regex_num
+
+      # Get all of the hourly weather data
+      lines         = IO.readlines(f)[i..-1]
+
+      # Get hourly weather data for a specific column
+      ghi_timeseries = lines.map {|line| Float(line.scan(regex_csv)[13])}
+    end
+
+    annual_ghi_kwh_per_m_sq = ghi_timeseries.sum / 1000.0
 
     ### THD-1 Temperature at the colder of the two heating design conditions in PHIUS, 2021
     ### ('Heating design temperature' in REF: Wright (2019))
-    thd_degree_c = BTAP::Environment::WeatherFile.new(weather_file).heating_design_info[1]
+    thd_degree_c = stat_file.heating_design_info[1]
     thd_degree_f = OpenStudio.convert(thd_degree_c, 'C', 'F').get
 
     ### TCD  Temperature at the cooling design condition in PHIUS, 2021
     ### ('Cooling design temperature' in REF: Wright (2019))
-    tcd_degree_c = BTAP::Environment::WeatherFile.new(weather_file).cooling_design_info[2]
+    tcd_degree_c = stat_file.cooling_design_info[2]
     tcd_degree_f = OpenStudio.convert(tcd_degree_c.to_f, 'C', 'F').get
 
     ### IGHL (Irradiance, Global, at the heating design condition) (Btu/h.ft2) in PHIUS, 2021
-    solar_irradiance_on_heating_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_heating_design_day
+    average_daily_global_irradiance_w_per_m2_array = []
+    model.getDesignDays.each do |design_day|
+      next unless design_day.dayType == 'WinterDesignDay'
+
+      average_daily_global_irradiance_w_per_m2 = OpenstudioStandards::Weather.design_day_average_global_irradiance(design_day)
+      average_daily_global_irradiance_w_per_m2_array << average_daily_global_irradiance_w_per_m2
+    end
+    solar_irradiance_on_heating_design_day_w_per_m_sq = average_daily_global_irradiance_w_per_m2_array.min
     solar_irradiance_on_heating_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_heating_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
 
     ### IGCL (Irradiance, Global, at the cooling design condition) (Btu/h.ft2) in PHIUS, 2021
-    solar_irradiance_on_cooling_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_cooling_design_day
+    average_daily_global_irradiance_w_per_m2_array = []
+    model.getDesignDays.each do |design_day|
+      next unless design_day.dayType == 'SummerDesignDay'
+
+      average_daily_global_irradiance_w_per_m2 = OpenstudioStandards::Weather.design_day_average_global_irradiance(design_day)
+      average_daily_global_irradiance_w_per_m2_array << average_daily_global_irradiance_w_per_m2
+    end
+    solar_irradiance_on_cooling_design_day_w_per_m_sq = average_daily_global_irradiance_w_per_m2_array.max
     solar_irradiance_on_cooling_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_cooling_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
 
     ### occupant density (persons per ft2 of floor area)

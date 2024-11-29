@@ -8,7 +8,7 @@ class Standard
   # and whether the fan lives inside a unit heater, PTAC, etc.
   #
   # @param fan_on_off [OpenStudio::Model::FanOnOff] on off fan object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fan_on_off_apply_prototype_fan_pressure_rise(fan_on_off)
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil

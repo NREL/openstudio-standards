@@ -6,7 +6,7 @@
 # @param model_true [OpenStudio::Model::Model] the "true" model
 # @param model_compare [OpenStudio::Model::Model] the model to be
 # compared to the "true" model
-# @param look_for_renamed_objects [Bool] if true, objects that have no match based
+# @param look_for_renamed_objects [Boolean] if true, objects that have no match based
 # on name alone will be compared with all objects of the same type on a field-by-field basis.
 # This finds objects that have been renamed but are otherwise
 # identical between models, but significantly slows down the comparison.
@@ -29,10 +29,10 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     'OS:PortList', # Names are UIDs
     'OS:Building', # Name includes timestamp of creation
     'OS:ModelObjectList', # Names are UIDs
-    'OS:ZoneHVAC:EquipmentList', # Names appear to be created non-deteministically
-    'OS:AvailabilityManagerAssignmentList', # Names appear to be created non-deteministically
-    'OS:Schedule:Rule', # Names appear to be created non-deteministically
-    'OS:ScheduleTypeLimits', # Names appear to be created non-deteministically
+    'OS:ZoneHVAC:EquipmentList', # Names appear to be created non-deterministically
+    'OS:AvailabilityManagerAssignmentList', # Names appear to be created non-deterministically
+    'OS:Schedule:Rule', # Names appear to be created non-deterministically
+    'OS:ScheduleTypeLimits', # Names appear to be created non-deterministically
     'OS:Rendering:Color', # Rendering colors don't matter
     'OS:Output:Meter', # Output meter objects may be different and don't affect results
     'OS:ProgramControl', # Deprecated object no longer translated to EnergyPlus
@@ -90,7 +90,7 @@ def compare_osm_files(model_true, model_compare, look_for_renamed_objects = fals
     end
   end
 
-  # Compare objects found in both models field by field 
+  # Compare objects found in both models field by field
   both_models.uniq.each do |b|
     true_object = b[0]
     compare_object = b[1]
@@ -305,7 +305,7 @@ def find_object_matches_field_by_field(true_object, compare_model, alias_hash = 
     # Compare field by field
     obj_diffs = compare_objects_field_by_field(true_object, compare_object, alias_hash)
     # If there are no differences, this is an obvious match
-    if obj_diffs.size.zero?
+    if obj_diffs.empty?
       matching_objects << compare_object
       # puts "renamed: #{object_name(true_object)} matches #{object_name(compare_object)}"
       next
@@ -331,7 +331,7 @@ end
 # This method is recursive because after it finds that some objects have been renamed, it needs to re-compare
 # all remaining unmatched objects because they might have been unmatched due to having fields
 # referencing renamed object names be different.
-# @param look_for_renamed_objects [Bool] if true, objects that have no match based
+# @param look_for_renamed_objects [Boolean] if true, objects that have no match based
 # on name alone will be compared with all objects of the same type in the model_compare
 # on a field-by-field basis.  This finds objects that have been renamed but are otherwise
 # identical between models, but has a significant speed penalty.

@@ -4,10 +4,10 @@ module SecondarySchool
   # hvac adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific HVAC adjustments')
 
@@ -23,7 +23,7 @@ module SecondarySchool
     else
       transformer_efficiency = nil
     end
-    return true unless !transformer_efficiency.nil?
+    return true if transformer_efficiency.nil?
 
     # Change to output variable name in E+ 9.4 (OS 3.1.0)
     excluded_interiorequip_variable = if model.version < OpenStudio::VersionString.new('3.1.0')
@@ -75,7 +75,7 @@ module SecondarySchool
   # add extra equipment for kitchen
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen_ZN_1_FLR_1')
     kitchen_space = kitchen_space.get
@@ -118,7 +118,7 @@ module SecondarySchool
   # update water heater ambient conditions
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
@@ -133,10 +133,10 @@ module SecondarySchool
   # swh adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     update_waterheater_ambient_parameters(model)
 
@@ -150,13 +150,13 @@ module SecondarySchool
   # geometry adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 
@@ -167,7 +167,7 @@ module SecondarySchool
   #
   # @param air_terminal_single_duct_vav_reheat [OpenStudio::Model::AirTerminalSingleDuctVAVReheat] the air terminal object
   # @param zone_oa_per_area [Double] the zone outdoor air per area in m^3/s*m^2
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
     min_damper_position = template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019' ? 0.2 : 0.3
 

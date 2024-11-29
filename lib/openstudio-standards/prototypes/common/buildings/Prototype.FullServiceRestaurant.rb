@@ -4,10 +4,10 @@ module FullServiceRestaurant
   # hvac adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
@@ -37,7 +37,7 @@ module FullServiceRestaurant
   #
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def add_door_infiltration(climate_zone, model)
     # add extra infiltration for dining room door and attic (there is no attic in 'DOE Ref Pre-1980')
     return false if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980' || template == 'NECB2011'
@@ -49,10 +49,11 @@ module FullServiceRestaurant
     infiltration_diningdoor.setName('Dining door Infiltration')
     infiltration_per_zone_diningdoor = 0
     infiltration_per_zone_attic = 0.2378
-    if template == '90.1-2004'
+    case template
+    when '90.1-2004'
       infiltration_per_zone_diningdoor = 0.614474994
       infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown DOOR_INFIL_SCH'))
-    elsif template == '90.1-2007'
+    when '90.1-2007'
       case climate_zone
         when 'ASHRAE 169-2006-0A',
              'ASHRAE 169-2006-1A',
@@ -80,7 +81,7 @@ module FullServiceRestaurant
           infiltration_per_zone_diningdoor = 0.389828222
           infiltration_diningdoor.setSchedule(model_add_schedule(model, 'RestaurantSitDown VESTIBULE_DOOR_INFIL_SCH'))
       end
-    elsif template == '90.1-2010' || template == '90.1-2013' || template == '90.1-2016' || template == '90.1-2019'
+    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       case climate_zone
         when 'ASHRAE 169-2006-0A',
              'ASHRAE 169-2006-1A',
@@ -114,7 +115,7 @@ module FullServiceRestaurant
   # update exhuast fan efficiency
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_update_exhaust_fan_efficiency(model)
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -137,7 +138,7 @@ module FullServiceRestaurant
   # add zone_mixing between kitchen and dining
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def add_zone_mixing(model)
     # @todo remove zone mixing objects, transfer air is the should be the same for all stds, exhaust flow varies
     space_kitchen = model.getSpaceByName('Kitchen').get
@@ -162,7 +163,7 @@ module FullServiceRestaurant
   # add extra equipment for kitchen
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def add_extra_equip_kitchen(model)
     kitchen_space = model.getSpaceByName('Kitchen')
     kitchen_space = kitchen_space.get
@@ -215,7 +216,7 @@ module FullServiceRestaurant
   # update zone sizing information
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def update_sizing_zone(model)
     case template
       when '90.1-2007', '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
@@ -240,11 +241,11 @@ module FullServiceRestaurant
   #
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def adjust_clg_setpoint(climate_zone, model)
     ['Dining', 'Kitchen'].each do |space_name|
       space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
-      thermostat_name = space_type_name + ' Thermostat'
+      thermostat_name = "#{space_type_name} Thermostat"
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
       case template
         when '90.1-2004', '90.1-2007', '90.1-2010'
@@ -274,7 +275,7 @@ module FullServiceRestaurant
   # It takes into account the available OSA in dining as transfer air.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def reset_kitchen_oa(model)
     space_kitchen = model.getSpaceByName('Kitchen').get
     ventilation = space_kitchen.designSpecificationOutdoorAir.get
@@ -294,7 +295,7 @@ module FullServiceRestaurant
   # update water heater ambient conditions
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def update_waterheater_ambient_parameters(model)
     model.getWaterHeaterMixeds.sort.each do |water_heater|
       if water_heater.name.to_s.include?('Booster')
@@ -309,10 +310,10 @@ module FullServiceRestaurant
   # swh adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     update_waterheater_ambient_parameters(model)
 
@@ -322,13 +323,13 @@ module FullServiceRestaurant
   # geometry adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 end

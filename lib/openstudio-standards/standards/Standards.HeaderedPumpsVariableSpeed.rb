@@ -7,7 +7,7 @@ class Standard
   #
   # @param headered_pumps_variable_speed [OpenStudio::Model::HeaderedPumpsVariableSpeed] headered variable speed pumps object
   # @param control_type [String] valid choices are Riding Curve, VSD No Reset, VSD DP Reset
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def headered_pumps_variable_speed_set_control_type(headered_pumps_variable_speed, control_type)
     # Determine the coefficients
     coeff_a = nil

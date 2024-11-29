@@ -9,7 +9,7 @@ class NECB2011
 
   # NECB does not change damper positions
   #
-  # return [Bool] returns true if successful, false if not
+  # return [Boolean] returns true if successful, false if not
   def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac)
     # Do not change anything.
     return true
@@ -18,7 +18,7 @@ class NECB2011
   # Determine whether or not this system
   # is required to have an economizer.
   #
-  # @return [Bool] returns true if an economizer is required, false if not
+  # @return [Boolean] returns true if an economizer is required, false if not
   def air_loop_hvac_economizer_required?(air_loop_hvac)
     economizer_required = false
 
@@ -86,7 +86,7 @@ class NECB2011
   # @note this method assumes you previously checked that an economizer is required at all
   #   via #economizer_required?
   # @param (see #economizer_required?)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_loop_hvac_apply_economizer_integration(air_loop_hvac, climate_zone)
     # Get the OA system and OA controller
     oa_sys = air_loop_hvac.airLoopHVACOutdoorAirSystem
@@ -105,7 +105,7 @@ class NECB2011
   # Check if ERV is required on this airloop.
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
     # ERV Not Applicable for AHUs that serve
@@ -197,7 +197,29 @@ class NECB2011
 
     exhaust_heat_content = calculate_exhaust_heat(air_loop_hvac)
     # for debugging/testing
-    # puts "exhaust heat content = #{exhaust_heat_content}"
+    #      puts "average exhaust temp = #{avg_exhaust_temp}"
+    #      puts "sum_zone_oa = #{sum_zone_oa}"
+
+    # Get January winter design temperature
+    # get model weather file name
+    weather_file_path = air_loop_hvac.model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+
+    # get winter(heating) design temp stored in array
+    # Note that the NECB2011 specifies using the 2.5% january design temperature
+    # The outdoor temperature used here is the 0.4% heating design temperature of the coldest month, available in stat file
+    outdoor_temp = stat_file.heating_design_info[1]
+
+    #      for debugging/testing
+    #      puts "outdoor design temp = #{outdoor_temp}"
+
+    # Calculate exhaust heat content
+    exhaust_heat_content = 0.00123 * sum_zone_oa * 1000.0 * (avg_exhaust_temp - outdoor_temp)
+
+    # for debugging/testing
+    #      puts "exhaust heat content = #{exhaust_heat_content}"
+
     # Modify erv_required based on exhaust heat content
     if exhaust_heat_content > 150.0
       erv_required = true
@@ -291,7 +313,7 @@ class NECB2011
   # Will be a rotary-type HX
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for systems serving parking garage, warehouse, or multifamily
   def air_loop_hvac_apply_energy_recovery_ventilator(air_loop_hvac, climate = nil)
     # Get the oa system
@@ -389,12 +411,19 @@ class NECB2011
     heat_exchanger_air_to_air_sensible_and_latent.setHeatExchangerType(erv_info['HeatExchangerType'])
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
     heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(erv_info['LatentEffectivenessat100HeatingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow'])
     heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(erv_info['SensibleEffectivenessat100CoolingAirFlow'])
     heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(erv_info['LatentEffectivenessat100CoolingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow'])
+    if heat_exchanger_air_to_air_sensible_and_latent.model.version < OpenStudio::VersionString.new('3.8.0')
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow'])
+    else
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow']) unless erv_info['SensibleEffectivenessat75HeatingAirFlow'].zero?
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow']) unless erv_info['LatentEffectivenessat75HeatingAirFlow'].zero?
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow']) unless erv_info['SensibleEffectivenessat75CoolingAirFlow'].zero?
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow']) unless erv_info['LatentEffectivenessat75CoolingAirFlow'].zero?
+    end
     heat_exchanger_air_to_air_sensible_and_latent.setSupplyAirOutletTemperatureControl(erv_info['SupplyAirOutletTemperatureControl'])
     heat_exchanger_air_to_air_sensible_and_latent.setFrostControlType(erv_info['FrostControlType'])
     heat_exchanger_air_to_air_sensible_and_latent.setEconomizerLockout(erv_info['EconomizerLockout'])
@@ -409,7 +438,7 @@ class NECB2011
   # required for this air loop.
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for
   #   systems that serve multifamily, parking garage, warehouse
   def air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac, climate_zone)
@@ -421,7 +450,7 @@ class NECB2011
   # Set the VAV damper control to single maximum or
   # dual maximum control depending on the standard.
   #
-  # @return [Bool] Returns true if successful, false if not
+  # @return [Boolean] Returns true if successful, false if not
   # @todo see if this impacts the sizing run.
   def air_loop_hvac_apply_vav_damper_action(air_loop_hvac)
     damper_action = 'Single Maximum'
@@ -470,7 +499,7 @@ class NECB2011
 
   # NECB has no single zone air loop control requirements
   #
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: No special economizer controls were modeled.")
     return true
@@ -478,7 +507,7 @@ class NECB2011
 
   # NECB doesn't require static pressure reset.
   #
-  # return [Bool] returns true if static pressure reset is required, false if not
+  # return [Boolean] returns true if static pressure reset is required, false if not
   def air_loop_hvac_static_pressure_reset_required?(air_loop_hvac, has_ddc)
     # static pressure reset not required
     sp_reset_required = false
@@ -495,10 +524,40 @@ class NECB2011
     return [minimum_oa_flow_cfm, maximum_stories]
   end
 
+  # find search criteria
+  #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @return [Hash] used for standards_lookup_table(model)
+  def boiler_hot_water_find_search_criteria(boiler_hot_water)
+    # Define the criteria to find the boiler properties
+    # in the hvac standards data set.
+    search_criteria = {}
+    search_criteria['template'] = template
+    # Get fuel type
+    fuel_type = nil
+    case boiler_hot_water.fuelType
+    when 'NaturalGas'
+      fuel_type = 'Gas'
+    when 'Electricity'
+      fuel_type = 'Electric'
+    when 'FuelOilNo1', 'FuelOilNo2'
+      fuel_type = 'Oil'
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuel_type} is not yet supported.  Assuming 'Gas.'")
+      fuel_type = 'Gas'
+    end
+
+    search_criteria['fuel_type'] = fuel_type
+    # Get the fluid type
+    fluid_type = 'Hot Water'
+    search_criteria['fluid_type'] = fluid_type
+    return search_criteria
+  end
+
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] the object to modify
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def boiler_hot_water_apply_efficiency_and_curves(boiler_hot_water)
     successfully_set_all_properties = false
 
@@ -600,7 +659,7 @@ class NECB2011
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
@@ -816,7 +875,7 @@ class NECB2011
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def coil_heating_gas_apply_efficiency_and_curves(coil_heating_gas)
     successfully_set_all_properties = true
 
@@ -857,7 +916,7 @@ class NECB2011
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def coil_cooling_dx_multi_speed_apply_efficiency_and_curves(coil_cooling_dx_multi_speed, sql_db_vars_map)
     successfully_set_all_properties = true
     model = coil_cooling_dx_multi_speed.model
@@ -1109,7 +1168,7 @@ class NECB2011
 
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def coil_heating_gas_multi_stage_apply_efficiency_and_curves(coil_heating_gas_multi_stage)
     successfully_set_all_properties = true
     model = coil_heating_gas_multi_stage.model
@@ -1299,11 +1358,11 @@ class NECB2011
   # @todo Add fan type to data model and modify this method
   def fan_baseline_impeller_efficiency(fan)
     # Assume that the fan efficiency is 65% for normal fans
-    # TODO add fan type to fan data model
+    # @todo add fan type to fan data model
     # and infer impeller efficiency from that?
     # or do we always assume a certain type of
     # fan impeller for the baseline system?
-    # TODO check COMNET and T24 ACM and PNNL 90.1 doc
+    # @todo check COMNET and T24 ACM and PNNL 90.1 doc
     fan_impeller_eff = 0.65
 
     return fan_impeller_eff
@@ -1490,7 +1549,7 @@ class NECB2011
   # Does not account for System requirements like ERV, economizer, etc.
   # Those are accounted for in the AirLoopHVAC method of the same name.
   #
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   # @todo Add exception logic for 90.1-2013
   #   for cells, sickrooms, labs, barbers, salons, and bowling alleys
   def thermal_zone_demand_control_ventilation_required?(thermal_zone, climate_zone)
@@ -1638,13 +1697,13 @@ class NECB2011
     hw_loop.setName('Hot Water Loop')
     sizing_plant = hw_loop.sizingPlant
     sizing_plant.setLoopType('Heating')
-    sizing_plant.setDesignLoopExitTemperature(82.0) # TODO: units
+    sizing_plant.setDesignLoopExitTemperature(82.0) #@todo units
     sizing_plant.setLoopDesignTemperatureDifference(16.0)
 
     # pump (set to variable speed for now till fix to run away plant temperature is found)
     # pump = OpenStudio::Model::PumpConstantSpeed.new(model)
     pump = OpenStudio::Model::PumpVariableSpeed.new(model)
-    # TODO: the keyword "setPumpFlowRateSchedule" does not seem to work. A message
+    # @todo the keyword "setPumpFlowRateSchedule" does not seem to work. A message
     # was sent to NREL to let them know about this. Once there is a fix for this,
     # use the proper pump schedule depending on whether we have two-pipe or four-pipe
     # fan coils.
@@ -1807,19 +1866,19 @@ class NECB2011
       # Determine if space is heated or cooled via spacetype heating or cooling setpoints also checking if the space is
       # a plenum by checking if there is a hvac system associtated with it
       if sp_type_info['heating_setpoint_schedule'].nil?
-        heated = FALSE
+        heated = false
       else
-        heated = TRUE
+        heated = true
       end
       if sp_type_info['cooling_setpoint_schedule'].nil?
-        cooled = FALSE
+        cooled = false
       else
-        cooled = TRUE
+        cooled = true
       end
       if (sp_type_info['necb_hvac_system_selection_type'] == '- undefined -') || /undefined/.match(sp_type_info['necb_hvac_system_selection_type'])
-        not_plenum = FALSE
+        not_plenum = false
       else
-        not_plenum = TRUE
+        not_plenum = true
       end
       # If the spaces are heated or cooled and are not a plenum then continue
       if (heated || cooled) && not_plenum
@@ -2115,7 +2174,7 @@ class NECB2011
   end
 
   def create_heating_cooling_on_off_availability_schedule(model)
-    # TODO: Create a feature to derive start and end heating and cooling seasons from weather file.
+    # @todo Create a feature to derive start and end heating and cooling seasons from weather file.
     avail_data = [{ start_month: 1, start_day: 1, end_month: 6, end_day: 30, htg_value: 1, clg_value: 0 },
                   { start_month: 7, start_day: 1, end_month: 10, end_day: 31, htg_value: 0, clg_value: 1 },
                   { start_month: 11, start_day: 1, end_month: 12, end_day: 31, htg_value: 1, clg_value: 0 }]
@@ -2161,7 +2220,7 @@ class NECB2011
   end
 
   # Method to set the base system name based on the following syntax:
-  # |sys_abbr|sys_oa|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
+  # |sys_abbr|sys_oa|shr>?|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
   # "sys_abbr" designates the NECB system type ("sys_1, sys_2, ... sys_6")
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
@@ -2368,8 +2427,8 @@ class NECB2011
       # heating capacity = capacity factor (function of temp) from biquadratic curve
       # with curve limits on minimum y/outdoor db (no extrapolation)
       cooling_cap_f_temp_curve = clg_coil.totalCoolingCapacityFunctionOfTemperatureCurve
-      cooling_cap_f_temp_factor_min_y = cooling_cap_f_temp_curve.evaluate(indoor_wb, outdoor_db)
-      htg_cap_w_min_y = capacity_w * 0.5 * cooling_cap_f_temp_factor_min_y
+      cooling_cap_f_temp_factor_min_y = cooling_cap_f_temp_curve.evaluate(indoor_wb,outdoor_db)
+      htg_cap_w_min_y = capacity_w*0.5*cooling_cap_f_temp_factor_min_y
 
       # heating capacity = capacity factor (function of temp) from biquadratic curve
       # without curve limits on minimum y/outdoor db (extrapolate)
@@ -2379,9 +2438,9 @@ class NECB2011
       cooling_cap_f_temp_y = -0.0075575
       cooling_cap_f_temp_y2 = 3.3e-05
       cooling_cap_f_temp_xy = -0.0001918
-      cooling_cap_f_temp_factor_no_min_y = cooling_cap_f_temp_const + cooling_cap_f_temp_x * indoor_wb + cooling_cap_f_temp_x2 * indoor_wb ** 2 +
-        cooling_cap_f_temp_y * outdoor_db + cooling_cap_f_temp_y2 * outdoor_db ** 2 + cooling_cap_f_temp_xy * indoor_wb * outdoor_db
-      htg_cap_w_no_min_y = capacity_w * 0.5 * cooling_cap_f_temp_factor_no_min_y
+      cooling_cap_f_temp_factor_no_min_y = cooling_cap_f_temp_const + cooling_cap_f_temp_x*indoor_wb + cooling_cap_f_temp_x2*indoor_wb**2 +
+      cooling_cap_f_temp_y*outdoor_db + cooling_cap_f_temp_y2*outdoor_db**2 + cooling_cap_f_temp_xy*indoor_wb*outdoor_db
+      htg_cap_w_no_min_y = capacity_w*0.5*cooling_cap_f_temp_factor_no_min_y
 
       puts "capacity_w #{capacity_w}"
       puts "cooling_cap_f_temp_factor_no_min_y #{cooling_cap_f_temp_factor_no_min_y}"
@@ -2410,7 +2469,7 @@ class NECB2011
   # heating type rules need to be flexible to account for
   # 1.  DX htg/cooling + gas supplement htg
   # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem
-  # @param necb_ref_hp [Bool] if true, NECB reference model rules for heat pumps will be used.
+  # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def coil_dx_heating_type(coil_dx, necb_reference_hp = false)
     supp_htg_type = nil
 
@@ -2427,8 +2486,7 @@ class NECB2011
               supp_htg_type = 'Electric Resistance or None'
             elsif supp_htg_coil.to_CoilHeatingGas.is_initialized or supp_htg_coil.to_CoilHeatingWater.is_initialized
               supp_htg_type = 'All Other'
-            else
-              # None
+            else # None
               supp_htg_type = 'Electric Resistance or None'
             end
           else
@@ -2464,12 +2522,11 @@ class NECB2011
           end
         end
 
-        # Two possible heat pump configuration
-        if num_of_DX_Coils == 2 && num_of_supp_coils == 1 # Scenario 1: 1 DX htg + 1 DX clg + 1 Non-DX htg coil
+        #Two possible heat pump configuration
+        if num_of_DX_Coils == 2 && num_of_supp_coils == 1 #Scenario 1: 1 DX htg + 1 DX clg + 1 Non-DX htg coil
           puts "scenario 1 supp_htg_type #{supp_htg_type}"
           return supp_htg_type # return supplmental heating type
-        else
-          # Scenario 2: num_of_DX_Coils < 2 or num_of_supp_coils = 0;
+        else #Scenario 2: num_of_DX_Coils < 2 or num_of_supp_coils = 0;
           puts "scenario 2 supp_htg_type #{supp_htg_type}"
           puts "num_of_DX_Coils #{num_of_DX_Coils}"
           puts "num_of_supp_coils #{num_of_supp_coils}"
@@ -2482,7 +2539,7 @@ class NECB2011
   # Sets the capacity of the reheat coil based on the minimum flow fraction, and the maximum flow rate.
   #
   # @param air_terminal_single_duct_vav_reheat [OpenStudio::Model::AirTerminalSingleDuctVAVReheat] the air terminal object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_terminal_single_duct_vav_reheat_set_heating_cap(air_terminal_single_duct_vav_reheat)
     flow_rate_fraction = 0.0
     if air_terminal_single_duct_vav_reheat.constantMinimumAirFlowFraction.is_initialized

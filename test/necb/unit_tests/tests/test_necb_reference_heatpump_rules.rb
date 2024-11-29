@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -46,7 +43,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+          OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
           # Save baseline model.
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -98,7 +96,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           end
 
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
           # Non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -232,7 +230,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+          OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           # save baseline
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
@@ -272,9 +271,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 baseboard_type: baseboard_type,
                 hw_loop: hw_loop)
           end
-          
+
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
           # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -333,7 +332,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+          OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           # save baseline
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
@@ -373,9 +373,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 baseboard_type: baseboard_type,
                 hw_loop: hw_loop)
           end
-          
+
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
           #get expected cooling values
           cooling_curve_expected_result_file = File.join(@expected_results_folder, "necb2011_reference_heatpump_cooling_curves_expected_results.csv")
@@ -764,7 +764,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         # save baseline
         BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
@@ -804,9 +805,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               baseboard_type: baseboard_type,
               hw_loop: hw_loop)
         end
-        
+
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
         no_over_sizing = true
         model.getThermalZones.each do |zone|
@@ -849,7 +850,8 @@ def test_ref_heatpump_heating_low_temp
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
         # Save baseline model.
         BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -892,7 +894,7 @@ def test_ref_heatpump_heating_low_temp
         end
 
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
 
         # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
         unless sys_number == 'sys6'

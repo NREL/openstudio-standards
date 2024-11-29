@@ -4,10 +4,10 @@ module MidriseApartment
   # hvac adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_hvac_tweaks(model, building_type, climate_zone, prototype_input)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started building type specific adjustments')
 
@@ -26,11 +26,11 @@ module MidriseApartment
   # adjust office cooling setpoint in specific climate zones
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def adjust_clg_setpoint(climate_zone, model)
     space_name = 'Office'
     space_type_name = model.getSpaceByName(space_name).get.spaceType.get.name.get
-    thermostat_name = space_type_name + ' Thermostat'
+    thermostat_name = "#{space_type_name} Thermostat"
     thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name).get
     case template
       when '90.1-2004', '90.1-2007', '90.1-2010'
@@ -52,7 +52,7 @@ module MidriseApartment
   # add elevator and lights&fans for the ground floor corridor
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def add_extra_equip_corridor(model)
     corridor_ground_space = model.getSpaceByName('G Corridor').get
     elec_equip_def1 = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
@@ -107,7 +107,7 @@ module MidriseApartment
   #
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def add_door_infiltration(climate_zone, model)
     return false if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
 
@@ -169,10 +169,10 @@ module MidriseApartment
   # swh adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_swh_tweaks(model, building_type, climate_zone, prototype_input)
     return true
   end
@@ -180,13 +180,13 @@ module MidriseApartment
   # geometry adjustments specific to the prototype model
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param building_type [string] the building type
+  # @param building_type [String the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @param prototype_input [Hash] hash of prototype inputs
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 end

@@ -39,8 +39,8 @@ class ECMS
 
     ##### Set default PV panels' tilt angle as the latitude
     if pv_ground_tilt_angle == 'NECB_Default'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      pv_ground_tilt_angle = epw.latitude.to_f
+      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+      pv_ground_tilt_angle = epw.latitude
     end
 
     ##### Set default PV panels' azimuth angle as south-facing arrays
@@ -90,7 +90,7 @@ class ECMS
   # Method for calculating footprint of the building model
   def calculate_building_footprint(model:)
     building_footprint_m2_array = []
-    lowest_floor = 10000000000.0 # dummy number as initialization to find the lowest floor among spaces #TODO: Question:it it fine that it has been assumed that the floor of all lowest spaces are at the same level?
+    lowest_floor = 10000000000.0 # dummy number as initialization to find the lowest floor among spaces # @todo Question:it it fine that it has been assumed that the floor of all lowest spaces are at the same level?
     model.getSpaces.sort.each do |space|
       space.surfaces.sort.select { |surface| (surface.surfaceType == 'Floor') && (surface.outsideBoundaryCondition != 'Surface') && (surface.outsideBoundaryCondition != 'Adiabatic') }.each do |surface|
         floor_vertices = surface.vertices

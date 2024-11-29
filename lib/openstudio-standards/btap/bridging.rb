@@ -1502,7 +1502,7 @@ module BTAP
           next unless construction[:stypes  ] == stypes
           next     if construction[:surfaces].empty?
 
-          BTAP::Geometry::Surfaces.set_surfaces_construction_conductance(construction[:surfaces].values, construction[:uo])
+          construction[:surfaces].values.each { |surface| surface.setConstruction(construction[:uo]) }
         end
       end
 
@@ -1578,7 +1578,7 @@ module BTAP
     # @param model [OpenStudio::Model::Model] a model
     # @param buffers [Array] identifiers of modified buffer spaces in model
     #
-    # @return [Bool] true if successful
+    # @return [Boolean] true if successful
     def purge_buffer_schedules(model = nil, buffers = [])
       scheds = []
       lgs    = @feedback[:logs]
@@ -1663,7 +1663,7 @@ module BTAP
     # @param model [OpenStudio::Model::Model] a model
     # @param argh [Hash] BTAP/TBD argument hash
     #
-    # @return [Bool] true if valid (check @feedback logs if false)
+    # @return [Boolean] true if valid (check @feedback logs if false)
     def populate(model = nil, argh = {})
       cl     = OpenStudio::Model::Model
       args   = { option: "(non thermal bridging)" }    # for initial TBD dry run
@@ -1855,7 +1855,7 @@ module BTAP
     ##
     # Generate BTAP/TBD tallies
     #
-    # @return [Bool] true if BTAP/TBD tally is successful
+    # @return [Boolean] true if BTAP/TBD tally is successful
     def gen_tallies
       edges  = {}
       return false unless @model.key?(:io)
@@ -1887,7 +1887,7 @@ module BTAP
     ##
     # Generate BTAP/TBD post-processing feedback.
     #
-    # @return [Bool] true if valid BTAP/TBD model
+    # @return [Boolean] true if valid BTAP/TBD model
     def gen_feedback
       lgs = @feedback[:logs]
       return false unless @model.key?(:complies) # all model constructions

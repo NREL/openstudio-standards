@@ -1,14 +1,14 @@
 [
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "NaturalGas",
     "pv_ground_type": "add_pv_ground",
     "Generator PVWatts 1 - dc_system_capacity": "88032.1359886609",
     "Generator PVWatts 1 - module_type": "Standard",
     "Generator PVWatts 1 - array_type": "FixedOpenRack",
-    "Generator PVWatts 1 - tilt_angle": 51.193,
+    "Generator PVWatts 1 - tilt_angle": 51.11,
     "Generator PVWatts 1 - azimuth_angle": 180.0,
     "Electric Load Center Inverter PVWatts 1 - dc_to_as_size_ratio": 1.1,
     "Electric Load Center Inverter PVWatts 1 - inverter_efficiency": 0.96,

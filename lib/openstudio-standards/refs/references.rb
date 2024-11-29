@@ -33,18 +33,19 @@ module References
   # ASHRAE 90.1-2019 Appendix G PRM
   # @see https://www.techstreet.com/ashrae/standards/ashrae-90-1-2019-i-p?product_id=2088527 Purchase in the ASHRAE Bookstore
   class ASHRAE901PRM2019; end
+
   # ASHRAE 90.1-2019
   # @see https://www.techstreet.com/ashrae/standards/ashrae-90-1-2019-i-p?product_id=2088527 Purchase in the ASHRAE Bookstore
   class ASHRAE9012019; end
 
-  # NREL ZNE Ready 2017.
+  # NREL ZNE Ready 2017
   # This is not an actual code or standard, but rather describes what NREL believes
   # to be a reasonable set of assumptions for achieving a building that is Zero Net Energy Ready
   # as of 2017.
   class NRELZNEReady2017; end
 
   # ZE AEDG Multifamily
-  # This template contains values from the Zero Energy Advanced Energy Design Guide for Multifamily Buildings
+  # This template contains values from the ASHRAE Zero Energy Advanced Energy Design Guide for Multifamily Buildings
   class ZEAEDGMultifamily; end
 
   # NECB2011

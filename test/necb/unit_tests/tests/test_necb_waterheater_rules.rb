@@ -5,9 +5,6 @@ include(NecbHelper)
 
 class NECB_SWH_Additional_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -27,7 +24,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
     CSV.foreach(expected_result_file, headers: true) do |data|
       shw_curve_names << data['Curve Name']
     end
- 
+
     # Generate the osm files for all relevant cases to generate the test data
     shw_res_file_output_text = "Curve Name,Curve Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
     name = "swh_curves"
@@ -36,7 +33,8 @@ class NECB_SWH_Additional_Tests < Minitest::Test
 
     # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
     # Add SWH loop.
@@ -58,7 +56,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                         prototype_input['main_water_heater_volume'],
                         prototype_input['main_water_heater_fuel'],
                         prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
-    
+
     # Add hvac system.
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
@@ -74,7 +72,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                                                                                                 new_auto_zoner: false)
 
     # Run sizing.
-    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
     # Extract standards generated part-load performance curve.
     shw_units = model.getWaterHeaterMixeds
@@ -101,20 +99,21 @@ class NECB_SWH_Additional_Tests < Minitest::Test
     template="NECB2011"
     standard = get_standard(template)
     save_intermediate_models = false
- 
+
     # Test tank capacities and volumes (liters).
     test_caps = [10.0,20.0]
     test_vols = [200.0,300.0]
-    
+
     test_caps.each do |icap|
       test_vols.each do |ivol|
         name = "shw_cap-#{icap}kW-vol-#{ivol}liters-2011"
         name.gsub!(/\s+/, "-")
         puts "***************#{name}***************\n"
-    
+
         # Load model and set climate file.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
         # Add SWH loop.
@@ -126,7 +125,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         prototype_input['main_water_heater_capacity'] = 100000.0
         prototype_input['main_water_heater_fuel'] = 'Electricity'
         prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-        standard.model_add_swh_loop(model, 
+        standard.model_add_swh_loop(model,
                             'Main Service Water Loop',
                             nil,
                             prototype_input['main_service_water_temperature'],
@@ -136,7 +135,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                             prototype_input['main_water_heater_volume'],
                             prototype_input['main_water_heater_fuel'],
                             prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
-        
+
         # Add hvac system.
         boiler_fueltype = 'Electricity'
         baseboard_type = 'Hot Water'
@@ -156,7 +155,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         shw_units[0].setTankVolume(ivol/1000.0)
 
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
         # Get standard water tank efficiency and standby losses.
         actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
@@ -171,7 +170,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
             ua_w = 40 + 0.2 * ivol
           else
             ua_w = 0.472 * ivol - 33.5
-          end   
+          end
           ua_btu_p_hr = OpenStudio.convert(ua_w, 'W', 'Btu/hr').get
         else
           expected_eff = 1.0
@@ -204,22 +203,23 @@ class NECB_SWH_Additional_Tests < Minitest::Test
     template='NECB2020'
     standard = get_standard(template)
     save_intermediate_models = false
- 
+
     # Test tank capacities and volumes (liters).
     test_caps = [10.0,20.0]
     test_vols = [200.0,300.0]
-    
+
     test_caps.each do |icap|
       test_vols.each do |ivol|
         name = "shw_cap-#{icap}kW-vol-#{ivol}liters-2020"
         name.gsub!(/\s+/, "-")
         puts "***************#{name}***************\n"
-    
+
         # Load model and set climate file.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-        
+
         # add SWH loop.
         prototype_input = {}
         prototype_input['main_water_heater_volume'] = 100.0
@@ -229,7 +229,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         prototype_input['main_water_heater_capacity'] = 100000.0
         prototype_input['main_water_heater_fuel'] = 'Electricity'
         prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-        standard.model_add_swh_loop(model, 
+        standard.model_add_swh_loop(model,
                             'Main Service Water Loop',
                             nil,
                             prototype_input['main_service_water_temperature'],
@@ -239,7 +239,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                             prototype_input['main_water_heater_volume'],
                             prototype_input['main_water_heater_fuel'],
                             prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
-        
+
         # Add hvac system.
         boiler_fueltype = 'Electricity'
         baseboard_type = 'Hot Water'
@@ -253,15 +253,15 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                                                                                                     baseboard_type: baseboard_type,
                                                                                                     hw_loop: hw_loop,
                                                                                                     new_auto_zoner: false)
-        
+
         # Set volume and capacity of water tank.
         shw_units = model.getWaterHeaterMixeds
         shw_units[0].setHeaterMaximumCapacity(1000.0*icap)
         shw_units[0].setTankVolume(ivol/1000.0)
-        
+
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
-       
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
+
         # Get standard water tank efficiency and standby losses.
         actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
         shw_units = model.getWaterHeaterMixeds
@@ -275,7 +275,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
             ua_w = 40 + 0.2 * ivol
           else
             ua_w = 0.472 * ivol - 33.5
-          end   
+          end
           ua_btu_p_hr = OpenStudio.convert(ua_w, 'W', 'Btu/hr').get
         else
           expected_eff = 1.0
@@ -299,32 +299,33 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         assert(value_is_correct,"SHW on cycle standby loss test results do not match expected results!")
       end
     end
-  end 
+  end
 
   # Test to validate efficiency and standby losses of GAS shw heater (NECB 2020)
   def test_NECB2020_swh_gas_efficiency_standby_losses
-    
+
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
     template='NECB2020'
     standard = get_standard(template)
     save_intermediate_models = false
- 
+
     # Test space types - SWH demand depends on space type + space area.
     test_spacetypes = ["Office enclosed <= 25 m2", "Health care facility operating room", "Museum general exhibition area", "Conference/Meeting/Multi-purpose room", \
     "Warehouse storage area medium to bulky palletized items", "Transportation facility baggage/carousel area", "Audience seating area permanent - gymnasium",\
     "Computer/Server room-sch-C", "Gymnasium/Fitness centre playing area", "Retail facility mall concourse"]
-   
+
     test_spacetypes.each do |test_spacetype|
       name = "shw_for_#{test_spacetype}"
       name.gsub!(/\s+/, "-")
       puts "***************#{name}***************\n"
-  
+
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC5Storeys.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-      
+
       # Set spacetype.
       model.getSpaces.each do |space|
         st = OpenStudio::Model::SpaceType.new(model)
@@ -344,7 +345,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
       prototype_input['main_water_heater_fuel'] = 'NaturalGas'
       prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
       standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel', shw_scale: 1.0)
-      
+
       # Add HVAC system.
       boiler_fueltype = 'NaturalGas'
       baseboard_type = 'Hot Water'
@@ -360,7 +361,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                                                                                                   new_auto_zoner: false)
 
       # Run sizing.
-      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
       # Get standard water tank efficiency and standby losses.
       shw_units = model.getWaterHeaterMixeds
@@ -379,7 +380,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         # 1. calc FHR
         # 2a. Set water heater thermal efficiency (burner efficiency), calc UEF, then UA (skin loss) OR
         # 2b. Calc SL, then UA (skin loss), followed by water heater thermal efficiency (burner efficiency)
-      
+
       # Calc FHR.
       tank_param = standard.auto_size_shw_capacity(model:model, shw_scale: 'NECB_Default')
       fhr_L_per_hr = (tank_param['loop_peak_flow_rate_SI']) * 3600000
@@ -387,14 +388,14 @@ class NECB_SWH_Additional_Tests < Minitest::Test
       puts "fhr_L_per_hr #{fhr_L_per_hr} L/hr"
       puts "icap #{icap} kW"
       puts "ivol #{ivol} L; (=#{vol_gal} gal)"
-      
+
       # Select UA and burner efficiency estimation method based on tank volume and heating capacity.
       if icap <= 22 and ivol >= 76 and ivol < 208
         uef = 1
         volume_drawn_m3 = 0
         if fhr_L_per_hr < 68
           uef = 0.3456 - 0.00053 * ivol
-          volume_drawn_m3 = 0.038 
+          volume_drawn_m3 = 0.038
         elsif fhr_L_per_hr >= 68 and fhr_L_per_hr < 193
           uef = 0.5982 - 0.0005 * ivol
           volume_drawn_m3 = 0.144
@@ -418,7 +419,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         puts "re #{re}"
         ua_w_per_k = (water_heater_eff-re)*icap*1000/(51.66667-19.7222)
         puts "ua_w_per_k 22kw #{ua_w_per_k}"
-        
+
 
 
       elsif icap <= 22 and ivol >= 208 and ivol < 380
@@ -482,7 +483,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
         ua_w_per_k = (water_heater_eff-re)*icap*1000/(51.66667-19.72222)
         puts "ua_w_per_k #{ua_w_per_k}"
       else
-        # 
+        #
         puts "case ELSE"
         et = 0.9
         sl_w = 0.84*(1.25*icap+16.57*(ivol**0.5))
@@ -526,7 +527,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
       value_is_correct = true
       if rel_diff > rel_tol and abs_diff > abs_tol then value_is_correct = false end
       assert(value_is_correct,"SHW on cycle standby loss test results (#{ua_w_per_k})do not match expected results (#{actual_oncycle_ua})!")
-    
+
     end
   end
 

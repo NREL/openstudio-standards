@@ -1,4 +1,4 @@
-class ASHRAE901PRM2019 < ASHRAE901PRM
+class ASHRAE901PRM < Standard
   # @!group SpaceType
 
   # Sets the selected internal loads to standards-based or typical values.
@@ -9,16 +9,16 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # loads directly assigned to spaces.  This method skips plenums.
   #
   # @param space_type [OpenStudio::Model::SpaceType] space type object
-  # @param set_people [Bool] if true, set the people density.
+  # @param set_people [Boolean] if true, set the people density.
   #   Also, assign reasonable clothing, air velocity, and work efficiency inputs
   #   to allow reasonable thermal comfort metrics to be calculated.
-  # @param set_lights [Bool] if true, set the lighting density, lighting fraction
+  # @param set_lights [Boolean] if true, set the lighting density, lighting fraction
   #   to return air, fraction radiant, and fraction visible.
-  # @param set_electric_equipment [Bool] if true, set the electric equipment density
-  # @param set_gas_equipment [Bool] if true, set the gas equipment density
-  # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
-  # @param set_infiltration [Bool] if true, set the infiltration rates
-  # @return [Bool] returns true if successful, false if not
+  # @param set_electric_equipment [Boolean] if true, set the electric equipment density
+  # @param set_gas_equipment [Boolean] if true, set the gas equipment density
+  # @param set_ventilation [Boolean] if true, set the ventilation rates (per-person and per-area)
+  # @param set_infiltration [Boolean] if true, set the infiltration rates
+  # @return [Boolean] returns true if successful, false if not
   def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     # Skip plenums
     # Check if the space type name
@@ -27,10 +27,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       return false
     end
 
-    if space_type.standardsSpaceType.is_initialized
-      if space_type.standardsSpaceType.get.downcase.include?('plenum')
-        return false
-      end
+    if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+      return false
     end
 
     # Save information about lighting exceptions before removing extra lights objects
@@ -61,7 +59,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
     # Pre-process the light instances in the space type
     # Remove all regulated instances but leave one in the space type
-    if regulated_lights.size.zero?
+    if regulated_lights.empty?
       definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
       definition.setName("#{space_type.name} Lights Definition")
       instance = OpenStudio::Model::Lights.new(definition)
@@ -154,10 +152,12 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # @param power_schedule_hash [Hash] equipment operation schedule hash
   # @param space_type [OpenStudio::Model:SpaceType] space type
   # @param user_space_data [Hash] user space data
+  # @return [Boolean] returns true if successful, false if not
   def calculate_electric_value_by_userdata(user_equip_data, power_equipment, power_schedule_hash, space_type, user_space_data = nil)
     # Check if the plug load represents a motor (check if motorhorsepower exist), if so, record the motor HP and efficiency.
     if !user_equip_data['motor_horsepower'].nil?
       # Pre-processing will ensure these three user data are added correctly (float, float, boolean)
+      # @todo move this part to user data processing.
       power_equipment.additionalProperties.setFeature('motor_horsepower', user_equip_data['motor_horsepower'].to_f)
       power_equipment.additionalProperties.setFeature('motor_efficiency', user_equip_data['motor_efficiency'].to_f)
       power_equipment.additionalProperties.setFeature('motor_is_exempt', user_equip_data['motor_is_exempt'])
@@ -168,12 +168,20 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     else
       # The electric equipment is either an elevator or refrigeration
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ElectricEquipment', "#{power_equipment.name} is an elevator or refrigeration according to the user data provided. Skip receptacle power credit.")
+      return false
     end
+    return true
   end
 
+  # Apply power equipment to space type
+  # This is utility function for applying user data to space type
+  #
+  # @param space_type [OpenStudio::Model:SpaceType]
+  # @return [Boolean] returns true if successful, false if not
   def space_type_apply_power_equipment(space_type)
     # save schedules in a hash in case it is needed for new electric equipment
     power_schedule_hash = {}
+    # @todo move this part to user data processing
     user_electric_equipment_data = @standards_data.key?('userdata_electric_equipment') ? @standards_data['userdata_electric_equipment'] : nil
     user_gas_equipment_data = @standards_data.key?('userdata_gas_equipment') ? @standards_data['userdata_gas_equipment'] : nil
     if user_electric_equipment_data && user_electric_equipment_data.length >= 1
@@ -198,6 +206,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         end
       end
     end
+    return true
   end
 
   # Apply space to space type power equipment adjustment.
@@ -207,7 +216,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   #
   # @param user_spacetypes [Hash] spacetype user data
   # @param user_spaces [Hash] space user data
-  # @param space_array [OpenStudio::Model:Space] list of spaces need for process
+  # @param space_array [Array OpenStudio::Model:Space] list of spaces need for process
+  # @return [Boolean] returns true if successful, false if not
   def space_to_space_type_apply_power_equipment(user_spacetypes, user_spaces, space_array)
     # Step 1: Set electric / gas equipment
     # save schedules in a hash in case it is needed for new electric equipment
@@ -265,17 +275,19 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         end
       end
     end
+    return true
   end
 
   # Function update a power equipment schedule based on user data.
   # This function works with both electric equipment and gas equipment and applies the ruleset on power equipment
   # The function process user data including the fraction of controlled receptacles and receptacle power savings.
   #
-  # @parma power_equipment [OpenStudio::Model::ElectricEquipment] or [OpenStudio::Model:GasEquipment]
+  # @param power_equipment [OpenStudio::Model::ElectricEquipment] or [OpenStudio::Model:GasEquipment]
   # @param user_power_equipment [Hash] user data for the power equipment
   # @param schedule_hash [Hash] power equipment operation schedules in a hash
   # @param space_type [OpenStudio::Model:SpaceType] space type
   # @param user_data [Hash] user space data
+  # @return [Boolean] returns true it adjusted, false if not
   def update_power_equipment_credits(power_equipment, user_power_equipment, schedule_hash, space_type, user_data = nil)
     exception_list = ['office - enclosed <= 250 sf', 'conference/meeting/multipurpose', 'copy/print',
                       'lounge/breakroom - all other', 'lounge/breakroom - healthcare facility', 'classroom/lecture/training - all other',
@@ -319,28 +331,36 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       end
     end
 
+    # return false if no receptacle power credits
+    unless receptacle_power_credits > 0.0
+      return false
+    end
+
     # Step 2: check if need to adjust the electric equipment schedule. - apply credit if needed.
-    if receptacle_power_credits > 0.0
-      # get current schedule
-      power_schedule = power_equipment.schedule.get
-      power_schedule_name = power_schedule.name.get
-      new_power_schedule_name = format("#{power_schedule_name}_%.4f", receptacle_power_credits)
-      if schedule_hash.key?(new_power_schedule_name)
-        # In this case, there is a schedule created, can retrieve the schedule object and reset in this space type.
-        schedule_rule = schedule_hash[new_power_schedule_name]
-        power_equipment.setSchedule(schedule_rule)
-      else
-        # In this case, create a new schedule
-        # 1. Clone the existing schedule
-        new_rule_set_schedule = deep_copy_schedule(new_power_schedule_name, power_schedule, receptacle_power_credits, space_type.model)
-        if power_equipment.setSchedule(new_rule_set_schedule)
-          schedule_hash[new_power_schedule_name] = new_rule_set_schedule
-        end
+    # get current schedule
+    power_schedule = power_equipment.schedule.get
+    power_schedule_name = power_schedule.name.get
+    new_power_schedule_name = format("#{power_schedule_name}_%.4f", receptacle_power_credits)
+    if schedule_hash.key?(new_power_schedule_name)
+      # In this case, there is a schedule created, can retrieve the schedule object and reset in this space type.
+      schedule_rule = schedule_hash[new_power_schedule_name]
+      power_equipment.setSchedule(schedule_rule)
+    else
+      # In this case, create a new schedule
+      # 1. Clone the existing schedule
+      new_rule_set_schedule = deep_copy_schedule(new_power_schedule_name, power_schedule, receptacle_power_credits, space_type.model)
+      if power_equipment.setSchedule(new_rule_set_schedule)
+        schedule_hash[new_power_schedule_name] = new_rule_set_schedule
       end
     end
+    return true
   end
 
-  # Function to tset LPD on default space type
+  # Function to test LPD on default space type. The function assigns lighting power density to an light object.
+  # @param space_type [OpenStudio::Model::SpaceType]
+  # @param user_spaces [Hash]
+  # @param user_spacetypes [Hash]
+  # @return [Boolean] returns true if successful, false if not
   def set_lpd_on_space_type(space_type, user_spaces, user_spacetypes)
     if has_multi_lpd_values_space_type(space_type)
       # If multiple LPD value exist - then enforce space-space_type one on one relationship
@@ -355,18 +375,21 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       if space_type.hasAdditionalProperties && space_type.additionalProperties.hasFeature('regulated_lights_name')
         lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
         lights_obj = space_type.model.getLightsByName(lights_name).get
+        OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Setting lighting object #{lights_obj.name.get} lighting per area to #{space_type_lighting_per_area} W/ft^2")
         lights_obj.lightsDefinition.setWattsperSpaceFloorArea(OpenStudio.convert(space_type_lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
       end
     end
+    return true
   end
 
   # Function that applies user LPD to each space by duplicating space types
   # This function is used when there are user space data available or
   # the spaces under space type has lighting per length value which may cause multiple
   # lighting power densities under one space_type.
-  # @param user_spaces hash data contained in the user space
-  # @param user_spacetypes hash data contained in the user spacetypes
-  # @param space_type OpenStudio::Model::SpaceType object
+  # @param user_spaces [Hash] hash data contained in the user space
+  # @param user_spacetypes [Hash] hash data contained in the user spacetypes
+  # @param space_type [OpenStudio::Model::SpaceType] object
+  # @return [ArrayOpenStudio::Model::Space] List of Spaces
   def space_to_space_type_apply_lighting(user_spaces, user_spacetypes, space_type)
     space_lighting_per_area_hash = {}
     # first priority - user_space data
@@ -426,7 +449,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
           new_definition = definition.clone.to_LightsDefinition.get
           new_definition.setWattsperSpaceFloorArea(OpenStudio.convert(lighting_per_area.to_f, 'W/ft^2', 'W/m^2').get)
           inst.setLightsDefinition(new_definition)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
+          OpenStudio.logFree(OpenStudio::Info, 'log.prm', "#{space_type.name} set LPD to #{lighting_per_area} W/ft^2.")
         end
       end
       space_array.push(space)
@@ -441,22 +464,38 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
     # set schedule for lighting
     schedule_hash = {}
     model.getSpaces.each do |space|
-      space_type = space.spaceType.get
+      space_type = prm_get_optional_handler(space, @sizing_run_dir, 'spaceType')
       if space_type.hasAdditionalProperties && space_type.additionalProperties.hasFeature('regulated_lights_name')
         lights_name = space_type.additionalProperties.getFeatureAsString('regulated_lights_name').to_s
-        ltg = space_type.model.getLightsByName(lights_name).get
+        ltg_option = space_type.model.getLightsByName(lights_name)
+        if ltg_option.is_initialized
+          ltg = ltg_option.get
+        else
+          # raise exception if we cannot find the lights in the model
+          prm_raise(false, @sizing_run_dir, "Cannot find the lights #{lights_name} in the model")
+        end
+        # this will raise exception if the ltg has no schedule assigned.
         if ltg.schedule.is_initialized
           ltg_schedule = ltg.schedule.get
-          ltg_schedule_name = ltg_schedule.name
-          occupancy_sensor_credit = space.additionalProperties.getFeatureAsDouble('occ_control_credit')
-          new_ltg_schedule_name = format("#{ltg_schedule_name}_%.4f", occupancy_sensor_credit)
-          if schedule_hash.key?(new_ltg_schedule_name)
+        else
+          # case such as Attic may have light object but no light schedule assigned
+          # Eplus use default 0 so in here we raise Error but continue processing.
+          ltg_schedule = nil
+          OpenStudio.logFree(OpenStudio::Warn, 'prm.log',
+                             "schedule is not available in component #{ltg.name.get}. Skip processing")
+        end
+
+        if ltg_schedule
+          ltg_schedule_name = ltg_schedule.name.get
+          occupancy_sensor_credit = get_additional_property_as_double(space, 'occ_control_credit', 0.0)
+          if schedule_hash.key?(ltg_schedule_name)
             # In this case, there is a schedule created, can retrieve the schedule object and reset in this space type
-            schedule_rule = schedule_hash[new_ltg_schedule_name]
+            schedule_rule = schedule_hash[ltg_schedule_name]
             ltg.setSchedule(schedule_rule)
           else
             # In this case, create a new schedule
             # 1. Clone the existing schedule
+            new_ltg_schedule_name = format("#{ltg_schedule_name}_%.4f", occupancy_sensor_credit)
             new_rule_set_schedule = deep_copy_schedule(new_ltg_schedule_name, ltg_schedule, occupancy_sensor_credit, model)
             if ltg.setSchedule(new_rule_set_schedule)
               schedule_hash[new_ltg_schedule_name] = new_rule_set_schedule
@@ -468,75 +507,36 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   end
 
   def deep_copy_schedule(new_schedule_name, schedule, adjustment_factor, model)
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.ScheduleRuleset', "Creating a new lighting schedule that applies occupancy sensor adjustment factor: #{adjustment_factor} based on #{schedule.name.get} schedule")
-    ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
-    ruleset.setName(new_schedule_name)
-
-    # schedule types limits and default day schedule - keep the copy
-    schedule_ruleset = schedule.to_ScheduleRuleset.get
-    schedule_type_limit = schedule_ruleset.scheduleTypeLimits.get
-    default_day_schedule = schedule_ruleset.defaultDaySchedule
-    default_winter_design_day_schedule = schedule_ruleset.winterDesignDaySchedule
-    default_summer_design_day_schedule = schedule_ruleset.summerDesignDaySchedule
-
-    schedule_ruleset.scheduleRules.each do |week_rule|
-      day_rule = week_rule.daySchedule
-      start_date = week_rule.startDate.get
-      end_date = week_rule.endDate.get
-
-      # create a new day rule - copy and apply the ajustment factor
-      new_day_rule = OpenStudio::Model::ScheduleDay.new(model)
-      new_day_rule.setName(format("#{day_rule.name.get}_%.4f", adjustment_factor))
-      new_day_rule.setScheduleTypeLimits(schedule_type_limit)
-
-      # process day rule
-      times = day_rule.times()
-      # remove the effect of occupancy sensors
-      times.each do |time|
-        hour_value = day_rule.getValue(time)
-        new_value = hour_value / (1.0 - adjustment_factor.to_f)
-        if new_value > 1
-          new_day_rule.addValue(time, 1.0)
-        else
-          new_day_rule.addValue(time, new_value)
-        end
-      end
-
-      # create week rule schedule
-      new_week_rule = OpenStudio::Model::ScheduleRule.new(ruleset, new_day_rule)
-      new_week_rule.setName(format("#{week_rule.name.get}_%.4f", adjustment_factor))
-      new_week_rule.setApplySunday(week_rule.applySunday)
-      new_week_rule.setApplyMonday(week_rule.applyMonday)
-      new_week_rule.setApplyTuesday(week_rule.applyTuesday)
-      new_week_rule.setApplyWednesday(week_rule.applyWednesday)
-      new_week_rule.setApplyThursday(week_rule.applyThursday)
-      new_week_rule.setApplyFriday(week_rule.applyFriday)
-      new_week_rule.setApplySaturday(week_rule.applySaturday)
-      new_week_rule.setStartDate(start_date)
-      new_week_rule.setEndDate(end_date)
+    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "Creating a new lighting schedule that applies occupancy sensor adjustment factor: #{adjustment_factor} based on #{schedule.name.get} schedule")
+    sch = OpenstudioStandards::Schedules
+    multiplier = 1.0 / (1.0 - adjustment_factor.to_f)
+    case schedule.iddObjectType.valueName.to_s
+    when 'OS_Schedule_Constant'
+      schedule_constant = schedule.to_ScheduleConstant.get
+      schedule_value = schedule_constant.value
+      return sch.create_constant_schedule_ruleset(model, schedule_value * multiplier, name: new_schedule_name)
+    when 'OS_Schedule_Ruleset'
+      new_schedule = schedule.clone(model)
+      new_schedule.setName(new_schedule_name)
+      schedule_ruleset = new_schedule.to_ScheduleRuleset.get
+      return sch.schedule_ruleset_simple_value_adjust(schedule_ruleset, multiplier, modification_type = 'Multiplier')
+    when 'OS_Schedule_Compact'
+      prm_raise(false, @sizing_run_dir, 'PRM does not support using Compact schedule for lighting schedules. Please update it to ruleset based or constant schedules.')
+    else
+      prm_raise(false, @sizing_run_dir, 'PRM only supports ruleset based or constant schedules for lighting schedules')
     end
-    # default day schedule
-    default_day = ruleset.defaultDaySchedule
-    default_day.clearValues
-    default_day.times.each_index { |counter| default_day.addValue(default_day_schedule.times[counter], default_day_schedule.values[counter]) }
-    # winter design day schedule
-    winter_design_day_schedule = ruleset.winterDesignDaySchedule
-    winter_design_day_schedule.clearValues
-    winter_design_day_schedule.times.each_index { |counter| winter_design_day_schedule.addValue(default_winter_design_day_schedule.times[counter], default_winter_design_day_schedule.values[counter]) }
-    summer_design_day_schedule = ruleset.summerDesignDaySchedule
-    summer_design_day_schedule.clearValues
-    summer_design_day_schedule.times.each_index { |counter| summer_design_day_schedule.addValue(default_summer_design_day_schedule.times[counter], default_summer_design_day_schedule.values[counter]) }
-    return ruleset
   end
 
   # calculate the lighting power density per area based on space type
   # The function will calculate the LPD based on the space type (STRING)
   # It considers lighting per area, lighting per length as well as occupancy factors in the database.
-  # @param space_type [String]
+  # @param space_type [OpenStudio::Model::SpaceType]
   # @param space [OpenStudio::Model::Space]
+  # @return [Double] lighting power density in the space
   def calculate_lpd_by_space(space_type, space)
     # get interior lighting data
     space_type_properties = interior_lighting_get_prm_data(space_type)
+    OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The lighting properties for space: #{space.name.get} is based on lighting_space_type: #{space_type_properties['lpd_space_type']}, primary_space_type: #{space_type_properties['primary_space_type']}, secondary_space_type: #{space_type_properties['secondary_space_type']}.")
     space_lighting_per_area = 0.0
     # Assign data
     lights_have_info = false
@@ -552,7 +552,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
       space_area = space.floorArea
       space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
       # calculate the new lpd values
-      space_lighting_per_area = lighting_per_length * space_height + lighting_per_area
+      space_lighting_per_area = (lighting_per_length * space_height) + lighting_per_area
 
       # Adjust the occupancy control sensor reduction factor from dataset
       if manon_or_partauto == 1
@@ -567,6 +567,8 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   end
 
   # Function checks whether the user data contains lighting data
+  # @param user_space_data [Hash] space data extracted from user csv.
+  # @return [Boolean] True if there are user lpd values, False otherwise.
   def has_user_lpd_values(user_space_data)
     user_space_data.each do |user_data|
       if user_data.key?('num_std_ltg_types') && user_data['num_std_ltg_types'].to_f > 0
@@ -578,15 +580,21 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
 
   # Function checks whether there are multi lpd values in the space type
   # multi-lpd value means there are multiple spaces and the lighting_per_length > 0
+  # @param space_type [OpenStudio::Model::SpaceType]
+  # @return [Boolean] True if there is lighting power defined by w/ft, False otherwise.
   def has_multi_lpd_values_space_type(space_type)
     space_type_properties = interior_lighting_get_prm_data(space_type)
     lighting_per_length = space_type_properties['w/ft'].to_f
+
     return space_type.spaces.size > 1 && lighting_per_length > 0
   end
 
   # Function checks whether there are multi lpd values in the space type from user's data
   # The sum of each space fraction in the user_data is assumed to be 1.0
   # multi-lpd value means lighting per area > 0 and lighting_per_length > 0
+  # @param user_data [Hash] user data from the user csv
+  # @param space_type [OpenStudio::Model::SpaceType]
+  # @return [Boolean]
   def has_multi_lpd_values_user_data(user_data, space_type)
     num_std_ltg_types = user_data['num_std_ltg_types'].to_i
     std_ltg_index = 0 # loop index
@@ -614,6 +622,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
   # The sum of each space fraction in the user_data is assumed to be 1.0
   # @param user_data [Hash] user data from the user csv
   # @param space [OpenStudio::Model::Space]
+  # @return [Double] space lighting per area in W per m2
   def calculate_lpd_from_userdata(user_data, space)
     num_std_ltg_types = user_data['num_std_ltg_types'].to_i
     space_lighting_per_area = 0.0
@@ -643,8 +652,7 @@ class ASHRAE901PRM2019 < ASHRAE901PRM
         space_area = space.floorArea
         space_height = OpenStudio.convert(space_volume / space_area, 'm', 'ft').get
         # calculate and add new lpd values
-        user_space_type_lighting_per_area = (lighting_per_length * space_height +
-          lighting_per_area) * sub_space_type_frac
+        user_space_type_lighting_per_area = ((lighting_per_length * space_height) + lighting_per_area) * sub_space_type_frac
         space_lighting_per_area += user_space_type_lighting_per_area
 
         # Adjust the occupancy control sensor reduction factor from dataset

@@ -5,7 +5,7 @@ class ASHRAE901PRM < Standard
   # (Fan coils, Unit Heaters, PTACs, PTHPs, VRF Terminals, WSHPs, ERVs)
   # based on the W/cfm specified in the standard.
   #
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def zone_hvac_component_apply_prm_baseline_fan_power(zone_hvac_component)
     OpenStudio.logFree(OpenStudio::Debug, 'openstudio.ashrae_90_1_prm.ZoneHVACComponent', "Setting fan power for #{zone_hvac_component.name}.")
 
@@ -37,8 +37,9 @@ class ASHRAE901PRM < Standard
 
     # Get non-mechanically cooled flag
     if zone_hvac.thermalZone.get.additionalProperties.hasFeature('non_mechanically_cooled')
-      nmc_flag = zone_hvac.thermalZone.get.additionalProperties.hasFeature('non_mechanically_cooled')
-    else nmc_flag = false
+      nmc_flag = zone_hvac.thermalZone.get.additionalProperties.getFeatureAsString('non_mechanically_cooled')
+    else
+      nmc_flag = false
     end
 
     # Get the fan
@@ -50,7 +51,7 @@ class ASHRAE901PRM < Standard
             zone_hvac.supplyAirFan.to_FanOnOff.get
           elsif zone_hvac.supplyAirFan.to_FanSystemModel.is_initialized
             zone_hvac.supplyAirFan.to_FanSystemModel.get
-    end
+          end
 
     if system_type == 'SZ_CV' # System 12, 13
       # Get design supply air flow rate (whether autosized or hard-sized)
@@ -64,9 +65,9 @@ class ASHRAE901PRM < Standard
       dsn_air_flow_cfm = OpenStudio.convert(dsn_air_flow_m3_per_s, 'm^3/s', 'cfm').get
 
       # Determine allowable fan BHP and power
-      allowable_fan_bhp = 0.00094 * dsn_air_flow_cfm + thermal_zone_get_fan_power_limitations(zone_hvac.thermalZone.get, false)
+      allowable_fan_bhp = (0.00094 * dsn_air_flow_cfm) + thermal_zone_get_fan_power_limitations(zone_hvac.thermalZone.get, false)
       fan_apply_standard_minimum_motor_efficiency(fan, allowable_fan_bhp)
-      allowable_power_w = allowable_fan_bhp * 746 / fan.motorEfficiency
+      allowable_power_w = (allowable_fan_bhp * 746) / fan.motorEfficiency
 
       # Modify fan pressure rise to match target fan power
       fan_adjust_pressure_rise_to_meet_fan_power(fan, allowable_power_w)
@@ -78,7 +79,7 @@ class ASHRAE901PRM < Standard
         fan_efficacy_w_per_cfm = 0.3 # System 9, 10
       when 'Gas_Furnace', 'Electric_Furnace'
         # Zone heater cannot provide cooling
-        if nmc_flag & !zone_hvac_component.to_ZoneHVACUnitHeater.is_initialized
+        if nmc_flag && !zone_hvac_component.to_ZoneHVACUnitHeater.is_initialized
           fan_efficacy_w_per_cfm = 0.054
         else
           fan_efficacy_w_per_cfm = 0.3

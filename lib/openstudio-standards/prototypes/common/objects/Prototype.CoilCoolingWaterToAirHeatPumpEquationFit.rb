@@ -62,22 +62,90 @@ class Standard
         clg_coil.setCoolingPowerConsumptionCoefficient4(0.141605667000125)
         clg_coil.setCoolingPowerConsumptionCoefficient5(-0.168727936032429)
       else
-        clg_coil.totalCoolingCapacityCurve.setCoefficient1Constant(-4.30266987344639)
-        clg_coil.totalCoolingCapacityCurve.setCoefficient2w(7.18536990534372)
-        clg_coil.totalCoolingCapacityCurve.setCoefficient3x(-2.23946714486189)
-        clg_coil.totalCoolingCapacityCurve.setCoefficient4y(0.139995928440879)
-        clg_coil.totalCoolingCapacityCurve.setCoefficient5z(0.102660179888915)
-        clg_coil.sensibleCoolingCapacityCurve.setCoefficient1Constant(6.0019444814887)
-        clg_coil.sensibleCoolingCapacityCurve.setCoefficient2v(22.6300677244073)
-        clg_coil.sensibleCoolingCapacityCurve.setCoefficient3w(-26.7960783730934)
-        clg_coil.sensibleCoolingCapacityCurve.setCoefficient4x(-1.72374720346819)
-        clg_coil.sensibleCoolingCapacityCurve.setCoefficient5y(0.490644802367817)
-        clg_coil.sensibleCoolingCapacityCurve.setCoefficient6z(0.0693119353468141)
-        clg_coil.coolingPowerConsumptionCurve.setCoefficient1Constant(-5.67775976415698)
-        clg_coil.coolingPowerConsumptionCurve.setCoefficient2w(0.438988156976704)
-        clg_coil.coolingPowerConsumptionCurve.setCoefficient3x(5.845277342193)
-        clg_coil.coolingPowerConsumptionCurve.setCoefficient4y(0.141605667000125)
-        clg_coil.coolingPowerConsumptionCurve.setCoefficient5z(-0.168727936032429)
+        if model.getCurveByName('Water to Air Heat Pump Total Cooling Capacity Curve').is_initialized
+          total_cooling_capacity_curve = model.getCurveByName('Water to Air Heat Pump Total Cooling Capacity Curve').get
+          total_cooling_capacity_curve = total_cooling_capacity_curve.to_CurveQuadLinear.get
+        else
+          total_cooling_capacity_curve = OpenStudio::Model::CurveQuadLinear.new(model)
+          total_cooling_capacity_curve.setName('Water to Air Heat Pump Total Cooling Capacity Curve')
+          total_cooling_capacity_curve.setCoefficient1Constant(-4.30266987344639)
+          total_cooling_capacity_curve.setCoefficient2w(7.18536990534372)
+          total_cooling_capacity_curve.setCoefficient3x(-2.23946714486189)
+          total_cooling_capacity_curve.setCoefficient4y(0.139995928440879)
+          total_cooling_capacity_curve.setCoefficient5z(0.102660179888915)
+          total_cooling_capacity_curve.setMinimumValueofw(-100)
+          total_cooling_capacity_curve.setMaximumValueofw(100)
+          total_cooling_capacity_curve.setMinimumValueofx(-100)
+          total_cooling_capacity_curve.setMaximumValueofx(100)
+          total_cooling_capacity_curve.setMinimumValueofy(0)
+          total_cooling_capacity_curve.setMaximumValueofy(100)
+          total_cooling_capacity_curve.setMinimumValueofz(0)
+          total_cooling_capacity_curve.setMaximumValueofz(100)
+        end
+        clg_coil.setTotalCoolingCapacityCurve(total_cooling_capacity_curve)
+
+        if model.getCurveByName('Water to Air Heat Pump Sensible Cooling Capacity Curve').is_initialized
+          sensible_cooling_capacity_curve = model.getCurveByName('Water to Air Heat Pump Sensible Cooling Capacity Curve').get
+          sensible_cooling_capacity_curve = sensible_cooling_capacity_curve.to_CurveQuintLinear.get
+        else
+          sensible_cooling_capacity_curve = OpenStudio::Model::CurveQuintLinear.new(model)
+          sensible_cooling_capacity_curve.setName('Water to Air Heat Pump Sensible Cooling Capacity Curve')
+          sensible_cooling_capacity_curve.setCoefficient1Constant(6.0019444814887)
+          sensible_cooling_capacity_curve.setCoefficient2v(22.6300677244073)
+          sensible_cooling_capacity_curve.setCoefficient3w(-26.7960783730934)
+          sensible_cooling_capacity_curve.setCoefficient4x(-1.72374720346819)
+          sensible_cooling_capacity_curve.setCoefficient5y(0.490644802367817)
+          sensible_cooling_capacity_curve.setCoefficient6z(0.0693119353468141)
+          sensible_cooling_capacity_curve.setMinimumValueofw(-100)
+          sensible_cooling_capacity_curve.setMaximumValueofw(100)
+          sensible_cooling_capacity_curve.setMinimumValueofx(-100)
+          sensible_cooling_capacity_curve.setMaximumValueofx(100)
+          sensible_cooling_capacity_curve.setMinimumValueofy(0)
+          sensible_cooling_capacity_curve.setMaximumValueofy(100)
+          sensible_cooling_capacity_curve.setMinimumValueofz(0)
+          sensible_cooling_capacity_curve.setMaximumValueofz(100)
+        end
+        clg_coil.setSensibleCoolingCapacityCurve(sensible_cooling_capacity_curve)
+
+        if model.getCurveByName('Water to Air Heat Pump Cooling Power Consumption Curve').is_initialized
+          cooling_power_consumption_curve = model.getCurveByName('Water to Air Heat Pump Cooling Power Consumption Curve').get
+          cooling_power_consumption_curve = cooling_power_consumption_curve.to_CurveQuadLinear.get
+        else
+          cooling_power_consumption_curve = OpenStudio::Model::CurveQuadLinear.new(model)
+          cooling_power_consumption_curve.setName('Water to Air Heat Pump Cooling Power Consumption Curve')
+          cooling_power_consumption_curve.setCoefficient1Constant(-5.67775976415698)
+          cooling_power_consumption_curve.setCoefficient2w(0.438988156976704)
+          cooling_power_consumption_curve.setCoefficient3x(5.845277342193)
+          cooling_power_consumption_curve.setCoefficient4y(0.141605667000125)
+          cooling_power_consumption_curve.setCoefficient5z(-0.168727936032429)
+          cooling_power_consumption_curve.setMinimumValueofw(-100)
+          cooling_power_consumption_curve.setMaximumValueofw(100)
+          cooling_power_consumption_curve.setMinimumValueofx(-100)
+          cooling_power_consumption_curve.setMaximumValueofx(100)
+          cooling_power_consumption_curve.setMinimumValueofy(0)
+          cooling_power_consumption_curve.setMaximumValueofy(100)
+          cooling_power_consumption_curve.setMinimumValueofz(0)
+          cooling_power_consumption_curve.setMaximumValueofz(100)
+        end
+        clg_coil.setCoolingPowerConsumptionCurve(cooling_power_consumption_curve)
+      end
+
+      # part load fraction correlation curve added as a required curve in OS v3.7.0
+      if model.version > OpenStudio::VersionString.new('3.6.1')
+        if model.getCurveByName('Water to Air Heat Pump Part Load Fraction Correlation Curve').is_initialized
+          part_load_correlation_curve = model.getCurveByName('Water to Air Heat Pump Part Load Fraction Correlation Curve').get
+          part_load_correlation_curve = part_load_correlation_curve.to_CurveLinear.get
+        else
+          part_load_correlation_curve = OpenStudio::Model::CurveLinear.new(model)
+          part_load_correlation_curve.setName('Water to Air Heat Pump Part Load Fraction Correlation Curve')
+          part_load_correlation_curve.setCoefficient1Constant(0.833746458696111)
+          part_load_correlation_curve.setCoefficient2x(0.166253541303889)
+          part_load_correlation_curve.setMinimumValueofx(0)
+          part_load_correlation_curve.setMaximumValueofx(1)
+          part_load_correlation_curve.setMinimumCurveOutput(0)
+          part_load_correlation_curve.setMaximumCurveOutput(1)
+        end
+        clg_coil.setPartLoadFractionCorrelationCurve(part_load_correlation_curve)
       end
     end
 

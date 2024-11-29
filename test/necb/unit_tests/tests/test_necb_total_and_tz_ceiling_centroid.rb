@@ -8,19 +8,16 @@ include(NecbHelper)
 # a modified version of the initial HighriseApartement.osm geometry file.
 class NECB_Ceiling_Centroid_Test < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
   end
 
   # Additional constant ranges for tests.
-  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw']
+  Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
   Templates = ['NECB2011', 'NECB2015', 'NECB2017']
 
-  # @return [Bool] true if successful.
+  # @return [Boolean] true if successful.
   def test_ceiling_centroid()
 
     # Set up remaining parameters for test.
@@ -28,7 +25,7 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
 
     output_array = []
     climate_zone = 'none'
-    #Iterate through code versions. It shouldn't make a different but do it anyway. 
+    #Iterate through code versions. It shouldn't make a different but do it anyway.
     Templates.sort.each do |template|
       Epw_files.sort.each do |epw_file|
         model = nil
@@ -36,7 +33,8 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
         # Open the Outpatient model.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"Ceilingtest.osm"))
         # Set the weather file.
-        BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         # Get access to the standards class
         standard = get_standard(template)
         # Find the centroid of the highest outside ceiling and add it to the output array

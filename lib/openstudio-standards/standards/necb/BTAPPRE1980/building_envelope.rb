@@ -1,9 +1,9 @@
 class BTAPPRE1980
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0)
+  def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0, necb_hdd: true)
     # NECB FDWR limit
-    hdd = get_necb_hdd18(model)
+    hdd = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
 
     # Get the maximum NECB fdwr
     # fdwr_set settings:
@@ -86,7 +86,7 @@ class BTAPPRE1980
 
       # Determine the space category
       cat = 'NonRes'
-      if space_residential?(space)
+      if OpenstudioStandards::Space.space_residential?(space)
         cat = 'Res'
       end
       # if space.is_semiheated
@@ -141,7 +141,7 @@ class BTAPPRE1980
         surface.subSurfaces.sort.each do |ss|
           # Reduce the size of the subsurface
           red = 1.0 - mult
-          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
     end
@@ -156,7 +156,7 @@ class BTAPPRE1980
   # modifications.  For others, it will not.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
 
   def apply_standard_construction_properties(
     model:,
@@ -174,12 +174,13 @@ class BTAPPRE1980
     skylight_cond: nil,
     glass_door_solar_trans: nil,
     fixed_wind_solar_trans: nil,
-    skylight_solar_trans: nil
+    skylight_solar_trans: nil,
+    necb_hdd: true
   )
     # this call should be removed for a more general application.
     model.getDefaultConstructionSets.sort.each do |set|
       # Set the SHGC of the default glazing material before making new constructions based on it and changing U-values.
-      assign_SHGC_to_windows(model: model, default_construction_set: set)
+      assign_SHGC_to_windows(model: model, default_construction_set: set, necb_hdd: necb_hdd)
     end
     super(model: model,
           runner: runner,
@@ -196,12 +197,13 @@ class BTAPPRE1980
           skylight_cond: skylight_cond,
           glass_door_solar_trans: glass_door_solar_trans,
           fixed_wind_solar_trans: fixed_wind_solar_trans,
-          skylight_solar_trans: skylight_solar_trans)
+          skylight_solar_trans: skylight_solar_trans,
+          necb_hdd: necb_hdd)
   end
 
-  def assign_SHGC_to_windows(model:, default_construction_set:)
+  def assign_SHGC_to_windows(model:, default_construction_set:, necb_hdd: true)
     # Get HDD to determine which SHGC to use
-    hdd = get_necb_hdd18(model)
+    hdd = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
     # Determine the solar heat gain coefficient from the standards data
     shgc_table = @standards_data['SHGC']
     shgc = eval(shgc_table[0]['formula'])

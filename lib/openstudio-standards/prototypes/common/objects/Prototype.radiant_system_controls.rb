@@ -5,7 +5,7 @@ class Standard
   # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
   # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
   #   options are 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
-  # @param use_zone_occupancy_for_control [Bool] Set to true if radiant system is to use specific zone occupancy objects
+  # @param use_zone_occupancy_for_control [Boolean] Set to true if radiant system is to use specific zone occupancy objects
   #   for CBE control strategy. If false, then it will use values in model_occ_hr_start and model_occ_hr_end
   #   for all radiant zones. default to true.
   # @param occupied_percentage_threshold [Double] the minimum fraction (0 to 1) that counts as occupied
@@ -25,7 +25,6 @@ class Standard
                                               proportional_gain: 0.3,
                                               switch_over_time: 24.0)
 
-
     zone_name = ems_friendly_name(zone.name)
     zone_timestep = model.getTimestep.numberOfTimestepsPerHour
 
@@ -43,8 +42,8 @@ class Standard
     # set radiant system temperature and setpoint control type
     unless ['surfacefacetemperature', 'surfaceinteriortemperature'].include? radiant_temperature_control_type.downcase
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
-        "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
-      radiant_temperature_control_type = "SurfaceFaceTemperature"
+                         "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
+      radiant_temperature_control_type = 'SurfaceFaceTemperature'
     end
 
     radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
@@ -54,24 +53,25 @@ class Standard
     ####
 
     # get existing switchover time schedule or create one if needed
-    sch_radiant_switchover = model.getScheduleRulesetByName("Radiant System Switchover")
+    sch_radiant_switchover = model.getScheduleRulesetByName('Radiant System Switchover')
     if sch_radiant_switchover.is_initialized
       sch_radiant_switchover = sch_radiant_switchover.get
     else
-      sch_radiant_switchover = model_add_constant_schedule_ruleset(model,
-                                                                   switch_over_time,
-                                                                   name = "Radiant System Switchover",
-                                                                   sch_type_limit: "Dimensionless")
+      sch_radiant_switchover = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                               switch_over_time,
+                                                                                               name: 'Radiant System Switchover',
+                                                                                               schedule_type_limit: 'Dimensionless')
     end
 
     # set radiant system switchover schedule
     radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover.to_Schedule.get)
-    
+
     # Calculated active slab heating and cooling temperature setpoint.
     # radiant system cooling control actuator
-    sch_radiant_clgsetp = model_add_constant_schedule_ruleset(model,
-                                                              26.0,
-                                                              name = "#{zone_name}_Sch_Radiant_ClgSetP")
+    sch_radiant_clgsetp = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                          26.0,
+                                                                                          name: "#{zone_name}_Sch_Radiant_ClgSetP",
+                                                                                          schedule_type_limit: 'Temperature')
     coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_clgsetp)
     cmd_cold_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_radiant_clgsetp,
                                                                                 'Schedule:Year',
@@ -79,9 +79,10 @@ class Standard
     cmd_cold_water_ctrl.setName("#{zone_name}_cmd_cold_water_ctrl")
 
     # radiant system heating control actuator
-    sch_radiant_htgsetp = model_add_constant_schedule_ruleset(model,
-                                                              20.0,
-                                                              name = "#{zone_name}_Sch_Radiant_HtgSetP")
+    sch_radiant_htgsetp = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                          20.0,
+                                                                                          name: "#{zone_name}_Sch_Radiant_HtgSetP",
+                                                                                          schedule_type_limit: 'Temperature')
     coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_htgsetp)
     cmd_hot_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_radiant_htgsetp,
                                                                                'Schedule:Year',
@@ -89,23 +90,24 @@ class Standard
     cmd_hot_water_ctrl.setName("#{zone_name}_cmd_hot_water_ctrl")
 
     # Calculated cooling setpoint error. Calculated from upper comfort limit minus setpoint offset and 'measured' controlled zone temperature.
-    sch_csp_error = model_add_constant_schedule_ruleset(model,
-                                                        0.0,
-                                                        name = "#{zone_name}_Sch_CSP_Error")
+    sch_csp_error = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                    0.0,
+                                                                                    name: "#{zone_name}_Sch_CSP_Error",
+                                                                                    schedule_type_limit: 'Temperature')
     cmd_csp_error = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_csp_error,
                                                                           'Schedule:Year',
                                                                           'Schedule Value')
     cmd_csp_error.setName("#{zone_name}_cmd_csp_error")
 
     # Calculated heating setpoint error. Calculated from lower comfort limit plus setpoint offset and 'measured' controlled zone temperature.
-    sch_hsp_error = model_add_constant_schedule_ruleset(model,
-                                                        0.0,
-                                                        name = "#{zone_name}_Sch_HSP_Error")
+    sch_hsp_error = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                    0.0,
+                                                                                    name: "#{zone_name}_Sch_HSP_Error",
+                                                                                    schedule_type_limit: 'Temperature')
     cmd_hsp_error = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_hsp_error,
                                                                           'Schedule:Year',
                                                                           'Schedule Value')
     cmd_hsp_error.setName("#{zone_name}_cmd_hsp_error")
-
 
     #####
     # List of global variables used in EMS scripts
@@ -186,24 +188,24 @@ class Standard
     end
 
     # create new heating and cooling schedules to be used with all radiant systems
-    zone_htg_thermostat = model.getScheduleRulesetByName("Radiant System Heating Setpoint")
+    zone_htg_thermostat = model.getScheduleRulesetByName('Radiant System Heating Setpoint')
     if zone_htg_thermostat.is_initialized
       zone_htg_thermostat = zone_htg_thermostat.get
     else
-      zone_htg_thermostat = model_add_constant_schedule_ruleset(model,
-                                                                20.0,
-                                                                name = "Radiant System Heating Setpoint",
-                                                                sch_type_limit: "Temperature")
+      zone_htg_thermostat = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                            20.0,
+                                                                                            name: 'Radiant System Heating Setpoint',
+                                                                                            schedule_type_limit: 'Temperature')
     end
 
-    zone_clg_thermostat = model.getScheduleRulesetByName("Radiant System Cooling Setpoint")
+    zone_clg_thermostat = model.getScheduleRulesetByName('Radiant System Cooling Setpoint')
     if zone_clg_thermostat.is_initialized
       zone_clg_thermostat = zone_clg_thermostat.get
     else
-      zone_clg_thermostat = model_add_constant_schedule_ruleset(model,
-                                                                26.0,
-                                                                name = "Radiant System Cooling Setpoint",
-                                                                sch_type_limit: "Temperature")
+      zone_clg_thermostat = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                            26.0,
+                                                                                            name: 'Radiant System Cooling Setpoint',
+                                                                                            schedule_type_limit: 'Temperature')
     end
 
     # implement new heating and cooling schedules
@@ -230,13 +232,13 @@ class Standard
     zone_rad_heat_operation.setName("#{zone_name}_rad_heat_operation")
     zone_rad_heat_operation.setKeyName(coil_heating_radiant.to_StraightComponent.get.inletModelObject.get.name.get)
 
-    # Radiant system switchover delay time period schedule 
+    # Radiant system switchover delay time period schedule
     # used to determine if there is active hydronic cooling/heating in the radiant system.
-    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName("radiant_switch_over_time")
+    zone_rad_switch_over = model.getEnergyManagementSystemSensorByName('radiant_switch_over_time')
 
     unless zone_rad_switch_over.is_initialized
       zone_rad_switch_over = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
-      zone_rad_switch_over.setName("radiant_switch_over_time")
+      zone_rad_switch_over.setName('radiant_switch_over_time')
       zone_rad_switch_over.setKeyName(sch_radiant_switchover.name.get)
     end
 
@@ -254,18 +256,18 @@ class Standard
     if use_zone_occupancy_for_control
 
       # get annual occupancy schedule for zone
-      occ_schedule_ruleset = thermal_zone_get_occupancy_schedule(zone,
-                                                                 sch_name: "#{zone.name} Radiant System Occupied Schedule",
-                                                                 occupied_percentage_threshold: occupied_percentage_threshold)
+      occ_schedule_ruleset = OpenstudioStandards::ThermalZone.thermal_zone_get_occupancy_schedule(zone,
+                                                                                                  sch_name: "#{zone.name} Radiant System Occupied Schedule",
+                                                                                                  occupied_percentage_threshold: occupied_percentage_threshold)
     else
 
-      occ_schedule_ruleset = model.getScheduleRulesetByName("Whole Building Radiant System Occupied Schedule")
+      occ_schedule_ruleset = model.getScheduleRulesetByName('Whole Building Radiant System Occupied Schedule')
       if occ_schedule_ruleset.is_initialized
         occ_schedule_ruleset = occ_schedule_ruleset.get
       else
         # create occupancy schedules
         occ_schedule_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
-        occ_schedule_ruleset.setName("Whole Building Radiant System Occupied Schedule")
+        occ_schedule_ruleset.setName('Whole Building Radiant System Occupied Schedule')
 
         start_hour = model_occ_hr_end.to_i
         start_minute = ((model_occ_hr_end % 1) * 60).to_i
@@ -310,7 +312,9 @@ class Standard
     EMS
 
     set_constant_values_prg = model.getEnergyManagementSystemProgramByName('Set_Constant_Values')
-    unless set_constant_values_prg.is_initialized
+    if set_constant_values_prg.is_initialized
+      set_constant_values_prg = set_constant_values_prg.get
+    else
       set_constant_values_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
       set_constant_values_prg.setName('Set_Constant_Values')
       set_constant_values_prg.setBody(set_constant_values_prg_body)
@@ -389,6 +393,11 @@ class Standard
     initialize_constant_parameters = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters')
     if initialize_constant_parameters.is_initialized
       initialize_constant_parameters = initialize_constant_parameters.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters.programs.collect { |prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters.setName('Initialize_Constant_Parameters')
@@ -399,6 +408,11 @@ class Standard
     initialize_constant_parameters_after_warmup = model.getEnergyManagementSystemProgramCallingManagerByName('Initialize_Constant_Parameters_After_Warmup')
     if initialize_constant_parameters_after_warmup.is_initialized
       initialize_constant_parameters_after_warmup = initialize_constant_parameters_after_warmup.get
+      # add program if it does not exist in manager
+      existing_program_names = initialize_constant_parameters_after_warmup.programs.collect { |prg| prg.name.get.downcase }
+      unless existing_program_names.include? set_constant_values_prg.name.get.downcase
+        initialize_constant_parameters_after_warmup.addProgram(set_constant_values_prg)
+      end
     else
       initialize_constant_parameters_after_warmup = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
       initialize_constant_parameters_after_warmup.setName('Initialize_Constant_Parameters_After_Warmup')
@@ -435,6 +449,142 @@ class Standard
     zone_max_ctrl_temp_output.setName("#{zone_name} Maximum occupied temperature in zone")
     zone_min_ctrl_temp_output = OpenStudio::Model::EnergyManagementSystemOutputVariable.new(model, zone_min_ctrl_temp)
     zone_min_ctrl_temp_output.setName("#{zone_name} Minimum occupied temperature in zone")
+  end
 
+  # Native EnergyPlus objects implement a control for a single thermal zone with a radiant system.
+  # @param zone [OpenStudio::Model::ThermalZone>] zone to add radiant controls
+  # @param radiant_loop [OpenStudio::Model::ZoneHVACLowTempRadiantVarFlow>] radiant loop in thermal zone
+  # @param radiant_temperature_control_type [String] determines the controlled temperature for the radiant system
+  #   options are 'SurfaceFaceTemperature', 'SurfaceInteriorTemperature'
+  # @param slab_setpoint_oa_control [Bool] True if slab setpoint is to be varied based on outdoor air temperature
+  # @param switch_over_time [Double] Time limitation for when the system can switch between heating and cooling
+  # @param slab_sp_at_oat_low [Double] radiant slab temperature setpoint, in F, at the outdoor high temperature.
+  # @param slab_oat_low [Double] outdoor drybulb air temperature, in F, for low radiant slab setpoint.
+  # @param slab_sp_at_oat_high [Double] radiant slab temperature setpoint, in F, at the outdoor low temperature.
+  # @param slab_oat_high [Double] outdoor drybulb air temperature, in F, for high radiant slab setpoint.
+  def model_add_radiant_basic_controls(model, zone, radiant_loop,
+                                       radiant_temperature_control_type: 'SurfaceFaceTemperature',
+                                       slab_setpoint_oa_control: false,
+                                       switch_over_time: 24.0,
+                                       slab_sp_at_oat_low: 73,
+                                       slab_oat_low: 65,
+                                       slab_sp_at_oat_high: 68,
+                                       slab_oat_high: 80)
+
+    zone_name = zone.name.to_s.gsub(/[ +-.]/, '_')
+
+    if model.version < OpenStudio::VersionString.new('3.1.1')
+      coil_cooling_radiant = radiant_loop.coolingCoil.to_CoilCoolingLowTempRadiantVarFlow.get
+      coil_heating_radiant = radiant_loop.heatingCoil.to_CoilHeatingLowTempRadiantVarFlow.get
+    else
+      coil_cooling_radiant = radiant_loop.coolingCoil.get.to_CoilCoolingLowTempRadiantVarFlow.get
+      coil_heating_radiant = radiant_loop.heatingCoil.get.to_CoilHeatingLowTempRadiantVarFlow.get
+    end
+
+    #####
+    # Define radiant system parameters
+    ####
+    # set radiant system temperature and setpoint control type
+    unless ['surfacefacetemperature', 'surfaceinteriortemperature'].include? radiant_temperature_control_type.downcase
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
+                         "Control sequences not compatible with '#{radiant_temperature_control_type}' radiant system control. Defaulting to 'SurfaceFaceTemperature'.")
+      radiant_temperature_control_type = 'SurfaceFaceTemperature'
+    end
+
+    radiant_loop.setTemperatureControlType(radiant_temperature_control_type)
+
+    # get existing switchover time schedule or create one if needed
+    sch_radiant_switchover = model.getScheduleRulesetByName('Radiant System Switchover')
+    if sch_radiant_switchover.is_initialized
+      sch_radiant_switchover = sch_radiant_switchover.get
+    else
+      sch_radiant_switchover = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                               switch_over_time,
+                                                                                               name: 'Radiant System Switchover',
+                                                                                               schedule_type_limit: 'Dimensionless')
+    end
+
+    # set radiant system switchover schedule
+    radiant_loop.setChangeoverDelayTimePeriodSchedule(sch_radiant_switchover.to_Schedule.get)
+
+    if slab_setpoint_oa_control
+      # get weather file from model
+      weather_file = model.getWeatherFile
+      if weather_file.initialized
+        # get annual outdoor dry bulb temperature
+        annual_oat = weather_file.file.get.data.collect { |dat| dat.dryBulbTemperature.get }
+
+        # calculate a nhrs rolling average from annual outdoor dry bulb temperature
+        nhrs = 24
+        last_nhrs_oat_in_year = annual_oat.last(nhrs - 1)
+        combined_oat = last_nhrs_oat_in_year + annual_oat
+        oat_rolling_average = combined_oat.each_cons(nhrs).map { |e| e.reduce(&:+).fdiv(nhrs).round(2) }
+
+        # use rolling average to calculate slab setpoint temperature
+
+        # convert temperature from IP to SI units
+        slab_sp_at_oat_low_si = OpenStudio.convert(slab_sp_at_oat_low, 'F', 'C').get
+        slab_oat_low_si = OpenStudio.convert(slab_oat_low, 'F', 'C').get
+        slab_sp_at_oat_high_si = OpenStudio.convert(slab_sp_at_oat_high, 'F', 'C').get
+        slab_oat_high_si = OpenStudio.convert(slab_oat_high, 'F', 'C').get
+
+        # calculate relationship between slab setpoint and slope
+        slope_num = slab_sp_at_oat_high_si - slab_sp_at_oat_low_si
+        slope_den = slab_oat_high_si - slab_oat_low_si
+        sp_and_oat_slope = slope_num.fdiv(slope_den).round(4)
+
+        slab_setpoint = oat_rolling_average.map { |e| (slab_sp_at_oat_low_si + ((e - slab_oat_low_si) * sp_and_oat_slope)).round(1) }
+
+        # input upper limits on slab setpoint
+        slab_sp_upper_limit = [slab_sp_at_oat_high_si, slab_sp_at_oat_low_si].max
+        slab_sp_lower_limit = [slab_sp_at_oat_high_si, slab_sp_at_oat_low_si].min
+        slab_setpoint.map! { |e| e > slab_sp_upper_limit ? slab_sp_upper_limit.round(1) : e }
+
+        # input lower limits on slab setpoint
+        slab_setpoint.map! { |e| e < slab_sp_lower_limit ? slab_sp_lower_limit.round(1) : e }
+
+        # convert to timeseries
+        yd = model.getYearDescription
+        start_date = yd.makeDate(1, 1)
+        interval = OpenStudio::Time.new(1.0 / 24.0)
+        time_series = OpenStudio::TimeSeries.new(start_date, interval, OpenStudio.createVector(slab_setpoint), 'C')
+
+        # check for pre-existing schedule in model
+        schedule_interval = model.getScheduleByName('Sch_Radiant_SlabSetP_Based_On_Rolling_Mean_OAT')
+        if schedule_interval.is_initialized && schedule_interval.get.to_ScheduleFixedInterval.is_initialized
+          schedule_interval = schedule_interval.get.to_ScheduleFixedInterval.get
+          schedule_interval.setTimeSeries(time_series)
+        else
+          # create fixed interval schedule for slab setpoint
+          schedule_interval = OpenStudio::Model::ScheduleFixedInterval.new(model)
+          schedule_interval.setName('Sch_Radiant_SlabSetP_Based_On_Rolling_Mean_OAT')
+          schedule_interval.setTimeSeries(time_series)
+          sch_type_limits_obj = OpenstudioStandards::Schedules.create_schedule_type_limits(model, standard_schedule_type_limit: 'Temperature')
+          schedule_interval.setScheduleTypeLimits(sch_type_limits_obj)
+        end
+
+        # assign slab setpoint schedule
+        coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_slab_setp)
+        coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_slab_setp)
+      else
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model',
+                           'Model does not have a weather file associated with it. Define to implement slab setpoint based on outdoor weather.')
+      end
+    else
+      # radiant system cooling control setpoint
+      slab_setpoint = 22
+      sch_radiant_clgsetp = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                            slab_setpoint + 0.1,
+                                                                                            name: "#{zone_name}_Sch_Radiant_ClgSetP",
+                                                                                            schedule_type_limit: 'Temperature')
+      coil_cooling_radiant.setCoolingControlTemperatureSchedule(sch_radiant_clgsetp)
+
+      # radiant system heating control setpoint
+      sch_radiant_htgsetp = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                            slab_setpoint,
+                                                                                            name: "#{zone_name}_Sch_Radiant_HtgSetP",
+                                                                                            schedule_type_limit: 'Temperature')
+      coil_heating_radiant.setHeatingControlTemperatureSchedule(sch_radiant_htgsetp)
+    end
   end
 end

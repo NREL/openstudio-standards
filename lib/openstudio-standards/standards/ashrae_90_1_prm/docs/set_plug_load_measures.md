@@ -70,7 +70,7 @@ Expected output: the baseline schedule is 15% higher than proposed schedule for 
 - User data folder: */userdata_pe_03*
 - Summary:
 This case will test whether *motor_horsepower*, *motor_efficiency* and *motor_is_exempt* are read correctly for an electric equipment (*Office WholeBuilding - Sm Office Elec Equip*).
-Expected output: the electric equipment in the baseline shall have three additional properties *motor_horsepower = 10.0*, *motor_efficiency = 0.72* and *motor_is_exempt = No* 
+Expected output: the electric equipment in the baseline shall have three additional properties *motor_horsepower = 10.0*, *motor_efficiency = 0.72* and *motor_is_exempt = False* 
 
 
 ### Test case 4

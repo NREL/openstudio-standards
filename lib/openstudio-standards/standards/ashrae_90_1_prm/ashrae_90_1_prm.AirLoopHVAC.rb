@@ -10,7 +10,7 @@ class ASHRAE901PRM < Standard
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param min_occ_pct [Double] the fractional value below which the system will be considered unoccupied.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_loop_hvac_enable_unoccupied_fan_shutoff(air_loop_hvac, min_occ_pct = 0.05)
     if air_loop_hvac.additionalProperties.hasFeature('zone_group_type')
       zone_group_type = air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get
@@ -57,13 +57,11 @@ class ASHRAE901PRM < Standard
     model = air_loop_hvac.model
     # Check if schedule was stored in an additionalProperties field of the air loop
     air_loop_name = air_loop_hvac.name
-    if air_loop_hvac.hasAdditionalProperties
-      if air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
-        fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
-        fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
-        air_loop_hvac.setAvailabilitySchedule(fan_sched)
-        return true
-      end
+    if air_loop_hvac.hasAdditionalProperties && air_loop_hvac.additionalProperties.hasFeature('fan_sched_name')
+      fan_sched_name = air_loop_hvac.additionalProperties.getFeatureAsString('fan_sched_name').get
+      fan_sched = model.getScheduleRulesetByName(fan_sched_name).get
+      air_loop_hvac.setAvailabilitySchedule(fan_sched)
+      return true
     end
 
     # Check if already using a schedule other than always on
@@ -75,7 +73,7 @@ class ASHRAE901PRM < Standard
 
     # Get the airloop occupancy schedule
     loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
-    flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch)
+    flh = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(loop_occ_sch)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
 
     # Set HVAC availability schedule to follow occupancy
@@ -92,8 +90,8 @@ class ASHRAE901PRM < Standard
   end
 
   # Determine if the system is a multizone VAV system
-  #
-  # @return [Bool] Returns true if required, false if not.
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
+  # @return [Boolean] Returns true if required, false if not.
   def air_loop_hvac_multizone_vav_system?(air_loop_hvac)
     return true if air_loop_hvac.name.to_s.include?('Sys5') || air_loop_hvac.name.to_s.include?('Sys6') || air_loop_hvac.name.to_s.include?('Sys7') || air_loop_hvac.name.to_s.include?('Sys8')
 
@@ -121,7 +119,7 @@ class ASHRAE901PRM < Standard
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
     return true
   end
@@ -154,7 +152,7 @@ class ASHRAE901PRM < Standard
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_prm_baseline_economizer_required?(air_loop_hvac, climate_zone)
     economizer_required = false
     baseline_system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
@@ -168,10 +166,8 @@ class ASHRAE901PRM < Standard
 
     # System type 3 and 4 in computer rooms are subject to exceptions
     if baseline_system_type == 'PSZ_AC' || baseline_system_type == 'PSZ_HP'
-      if air_loop_hvac.additionalProperties.hasFeature('zone_group_type')
-        if air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get == 'computer_zones'
-          economizer_required = false
-        end
+      if air_loop_hvac.additionalProperties.hasFeature('zone_group_type') && air_loop_hvac.additionalProperties.getFeatureAsString('zone_group_type').get == 'computer_zones'
+        economizer_required = false
       end
     end
 
@@ -193,7 +189,7 @@ class ASHRAE901PRM < Standard
   end
 
   # Set fan curve for stable baseline to be VSD with fixed static pressure setpoint
-  # @return [string] name of appropriate curve for this code version
+  # @return [String name of appropriate curve for this code version
   def air_loop_hvac_set_vsd_curve_type
     return 'Multi Zone VAV with VSD and Fixed SP Setpoint'
   end
@@ -202,7 +198,7 @@ class ASHRAE901PRM < Standard
   # PRM does not require optimum start - override it to false.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_optimum_start_required?(air_loop_hvac)
     return false
   end
@@ -218,7 +214,7 @@ class ASHRAE901PRM < Standard
   # Also adjusts the fan power and flow rates
   # of any parallel PIU terminals on the system.
   #
-  # return [Bool] true if successful, false if not.
+  # return [Boolean] true if successful, false if not.
   def air_loop_hvac_apply_prm_baseline_fan_power(air_loop_hvac)
     # Get system type associated with air loop
     system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
@@ -254,7 +250,7 @@ class ASHRAE901PRM < Standard
       air_loop_hvac.thermalZones.sort.each do |zone|
         # error if zone design air flow rate is not available
         if zone.model.version < OpenStudio::VersionString.new('3.6.0')
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', "Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', 'Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
         end
 
         zone_air_flow = zone.autosizedDesignAirFlowRate.to_f
@@ -283,10 +279,10 @@ class ASHRAE901PRM < Standard
           system_type == 'Electric_Furnace'
 
       # Determine allowable fan power
-      if !is_nmc
-        fan_efficacy_w_per_cfm = 0.3
-      else # is_nmc
+      if is_nmc
         fan_efficacy_w_per_cfm = 0.054
+      else
+        fan_efficacy_w_per_cfm = 0.3
       end
 
       # Configuration is supply fan only
@@ -378,15 +374,11 @@ class ASHRAE901PRM < Standard
         if supply_fan.name.to_s == fan.name.to_s
           allowable_power_w *= supply_fan_power_fraction
         elsif fan.airLoopHVAC.is_initialized
-          if fan.airLoopHVAC.get.returnFan.is_initialized
-            if fan.airLoopHVAC.get.returnFan.get.name.to_s == fan.name.to_s
-              allowable_power_w *= return_fan_power_fraction
-            end
+          if fan.airLoopHVAC.get.returnFan.is_initialized && fan.airLoopHVAC.get.returnFan.get.name.to_s == fan.name.to_s
+            allowable_power_w *= return_fan_power_fraction
           end
-          if fan.airLoopHVAC.get.reliefFan.is_initialized
-            if fan.airLoopHVAC.get.reliefFan.get.name.to_s == fan.name.to_s
-              allowable_power_w *= relief_fan_power_fraction
-            end
+          if fan.airLoopHVAC.get.reliefFan.is_initialized && fan.airLoopHVAC.get.reliefFan.get.name.to_s == fan.name.to_s
+            allowable_power_w *= relief_fan_power_fraction
           end
         end
         fan_adjust_pressure_rise_to_meet_fan_power(fan, allowable_power_w)
@@ -409,6 +401,7 @@ class ASHRAE901PRM < Standard
   # Determine the allowable fan system brake horsepower
   # Per Section G3.1.2.9
   #
+  # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC]
   # @return [Double] allowable fan system brake horsepower
   #   units = horsepower
   def air_loop_hvac_allowable_system_brake_horsepower(air_loop_hvac)
@@ -434,16 +427,10 @@ class ASHRAE901PRM < Standard
     # Calculate the Allowable Fan System brake horsepower per Table G3.1.2.9
     allowable_fan_bhp = 0.0
     case system_type
-      when 'PSZ_HP', 'PSZ_AC' # 3, 4
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
-      when
-           'PVAV_Reheat', 'PVAV_PFP_Boxes', # 5, 6
-           'VAV_Reheat', 'VAV_PFP_Boxes', # 7, 8
-           'SZ_VAV' # 11
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.0013 + fan_pwr_adjustment_bhp
-      when
-           'SZ_CV' # 12, 13
-        allowable_fan_bhp = dsn_air_flow_cfm * 0.00094 + fan_pwr_adjustment_bhp
+      when 'PSZ_HP', 'PSZ_AC', 'SZ_CV' # 3, 4, 12, 13
+        allowable_fan_bhp = (dsn_air_flow_cfm * 0.00094) + fan_pwr_adjustment_bhp
+      when 'PVAV_Reheat', 'PVAV_PFP_Boxes', 'VAV_Reheat', 'VAV_PFP_Boxes', 'SZ_VAV' # 5, 6, 7, 8, 11
+        allowable_fan_bhp = (dsn_air_flow_cfm * 0.0013) + fan_pwr_adjustment_bhp
       else
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.AirLoopHVAC', "Air loop #{air_loop_hvac.name} is not associated with a baseline system.")
     end
@@ -548,7 +535,7 @@ class ASHRAE901PRM < Standard
   # Get the air loop HVAC design outdoor air flow rate by reading Standard 62.1 Summary from the sizing sql
   # @author Xuechen (Jerry) Lei, PNNL
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @return [Float] Design outdoor air flow rate (m^3/s)
+  # @return [Double] Design outdoor air flow rate (m^3/s)
   def get_airloop_hvac_design_oa_from_sql(air_loop_hvac)
     return false unless air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
 
@@ -564,18 +551,18 @@ class ASHRAE901PRM < Standard
   # Set the minimum VAV damper positions.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @param has_ddc [Bool] if true, will assume that there is DDC control of vav terminals.
+  # @param has_ddc [Boolean] if true, will assume that there is DDC control of vav terminals.
   #   If false, assumes otherwise.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_loop_hvac_apply_minimum_vav_damper_positions(air_loop_hvac, has_ddc = true)
     air_loop_hvac.thermalZones.each do |zone|
       zone.equipment.each do |equip|
         if equip.to_AirTerminalSingleDuctVAVReheat.is_initialized
-          zone_oa = thermal_zone_outdoor_airflow_rate(zone)
+          zone_oa = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
           vav_terminal = equip.to_AirTerminalSingleDuctVAVReheat.get
           air_terminal_single_duct_vav_reheat_apply_minimum_damper_position(vav_terminal, zone_oa, has_ddc)
         elsif equip.to_AirTerminalSingleDuctParallelPIUReheat.is_initialized
-          zone_oa = thermal_zone_outdoor_airflow_rate(zone)
+          zone_oa = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
           fp_vav_terminal = equip.to_AirTerminalSingleDuctParallelPIUReheat.get
           air_terminal_single_duct_parallel_piu_reheat_apply_minimum_primary_airflow_fraction(fp_vav_terminal, zone_oa)
         end
@@ -707,19 +694,19 @@ class ASHRAE901PRM < Standard
             htg_sch = htg_sch.get
             if htg_sch.to_ScheduleRuleset.is_initialized
               htg_sch = htg_sch.to_ScheduleRuleset.get
-              max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end
             elsif htg_sch.to_ScheduleConstant.is_initialized
               htg_sch = htg_sch.to_ScheduleConstant.get
-              max_c = schedule_constant_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_constant_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end
             elsif htg_sch.to_ScheduleCompact.is_initialized
               htg_sch = htg_sch.to_ScheduleCompact.get
-              max_c = schedule_compact_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_compact_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end
@@ -735,7 +722,7 @@ class ASHRAE901PRM < Standard
             htg_sch = htg_sch.get
             if htg_sch.to_ScheduleRuleset.is_initialized
               htg_sch = htg_sch.to_ScheduleRuleset.get
-              max_c = schedule_ruleset_annual_min_max_value(htg_sch)['max']
+              max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(htg_sch)['max']
               if max_c > temp_c
                 htd = true
               end
@@ -749,41 +736,31 @@ class ASHRAE901PRM < Standard
         end
 
         # Exception 2 - System exhausting toxic fumes
-        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_toxic_fumes_etc').get == 'yes'
-            return nil
-          end
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_toxic_fumes_etc') && thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_toxic_fumes_etc')
+          return nil
         end
 
         # Exception 3 - Commercial kitchen hoods
-        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_type1_kitchen_hoods').get == 'yes'
-            return nil
-          end
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type1_kitchen_hoods') && thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type1_kitchen_hoods')
+          return nil
         end
 
         # Exception 6 - Distributed exhaust
-        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_type_distributed_exhaust').get == 'yes'
-            return nil
-          end
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_type_distributed_exhaust') && thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_type_distributed_exhaust')
+          return nil
         end
 
         # Exception 7 - Dehumidification
-        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
-          if thermal_zone.additionalProperties.getFeatureAsString('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery').get == 'yes'
-            return nil
-          end
+        if thermal_zone.additionalProperties.hasFeature('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery') && thermal_zone.additionalProperties.getFeatureAsBoolean('exhaust_energy_recovery_exception_for_dehumidifcation_with_series_cooling_recovery')
+          return nil
         end
       end
 
       # Exception 4 - Heating systems in certain climate zones
-      if ['ASHRAE 169-2006-0A', 'ASHRAE 169-2006-0B', 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2013-0A', 'ASHRAE 169-2013-0B', 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B', 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C'].include?(climate_zone)
-        if air_loop_hvac.additionalProperties.hasFeature('baseline_system_type')
-          system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
-          if system_type == 'Gas_Furnace' || system_type == 'Electric_Furnace'
-            return nil
-          end
+      if ['ASHRAE 169-2006-0A', 'ASHRAE 169-2006-0B', 'ASHRAE 169-2006-1A', 'ASHRAE 169-2006-1B', 'ASHRAE 169-2006-2A', 'ASHRAE 169-2006-2B', 'ASHRAE 169-2006-3A', 'ASHRAE 169-2006-3B', 'ASHRAE 169-2006-3C', 'ASHRAE 169-2013-0A', 'ASHRAE 169-2013-0B', 'ASHRAE 169-2013-1A', 'ASHRAE 169-2013-1B', 'ASHRAE 169-2013-2A', 'ASHRAE 169-2013-2B', 'ASHRAE 169-2013-3A', 'ASHRAE 169-2013-3B', 'ASHRAE 169-2013-3C'].include?(climate_zone) && air_loop_hvac.additionalProperties.hasFeature('baseline_system_type')
+        system_type = air_loop_hvac.additionalProperties.getFeatureAsString('baseline_system_type').get
+        if system_type == 'Gas_Furnace' || system_type == 'Electric_Furnace'
+          return nil
         end
       end
 

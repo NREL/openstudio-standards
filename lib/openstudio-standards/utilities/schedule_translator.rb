@@ -54,19 +54,21 @@ class ScheduleTranslator
   end
 
   # Convert from scheduleCompact to scheduleRuleset
-  # @Author Nicholas Long and Andrew Parker, NREL
-  # @Return ScheduleRuleset object
+  # @author Nicholas Long and Andrew Parker, NREL
+  # @return [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+  # @todo will fail if no limits set in source schedule
   def convert_schedule_compact_to_schedule_ruleset
     @sched_name = @os_schedule.getString(1).get
     @sched_name = "#{@name_prefix} #{@sched_name}" unless @name_prefix.nil?
-    @sched_type = @os_schedule.scheduleTypeLimits.get # TODO: - will fail if no limits set in source schedule
+    # @todo will fail if no limits set in source schedule
+    @sched_type = @os_schedule.scheduleTypeLimits.get
 
     # puts "Translating #{@sched_name}"
 
     i_thru = -1
     i_for = -1
     i_until = -1
-    sUntil = ''
+    s_until = ''
 
     (3..@os_schedule.numFields - 1).each do |i|
       val = @os_schedule.getString(i).get
@@ -101,7 +103,7 @@ class ScheduleTranslator
         i_for += 1
         i_until = -1
 
-        arr = val.match(/for[:\s](.*)/i)[0].strip.downcase.split(' ')
+        arr = val.match(/for[:\s](.*)/i)[0].strip.downcase.split
         @schedule[i_thru][:for] << { daytype: arr, until: [] }
         next
       end
@@ -110,14 +112,14 @@ class ScheduleTranslator
         i_until += 1
 
         str = val.split(':')[1..2].join(':').strip
-        sUntil = str
+        s_until = str
 
         next
       end
 
-      dVal = @os_schedule.getDouble(i).get
+      d_val = @os_schedule.getDouble(i).get
       # puts "thru: #{i_thru} for: #{i_for} until #{i_until}"
-      @schedule[i_thru][:for][i_for][:until] << { timestamp: sUntil, value: dVal }
+      @schedule[i_thru][:for][i_for][:until] << { timestamp: s_until, value: d_val }
     end
 
     # DEBUG spit out the schedule for quick check\
@@ -169,7 +171,7 @@ class ScheduleTranslator
         os_schedule_rule.setEndDate(osdate_end)
 
         # create os day model
-        # TODO break this out as a method
+        # @todo break this out as a method
         if fr[:daytype].include?('monday') || fr[:daytype].include?('alldays') || fr[:daytype].include?('weekdays')
           os_schedule_rule.setApplyMonday(true)
           coverage[:mon] = true

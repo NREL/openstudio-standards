@@ -6,26 +6,26 @@ class ASHRAE9012013 < ASHRAE901
   # from the proposed building in some scenarios.
   #
   # @param building_type [String] the building type
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def water_heater_mixed_apply_prm_baseline_fuel_type(water_heater_mixed, building_type)
     # Determine the building-type specific
     # fuel requirements from Table G3.1.1-2
     new_fuel = nil
     case building_type
-    when 'SecondarySchool', 'PrimarySchool', # School/university
-         'SmallHotel', # Motel
-         'LargeHotel', # Hotel
-         'QuickServiceRestaurant', # Dining: Cafeteria/fast food
-         'FullServiceRestaurant', # Dining: Family
-         'MidriseApartment', 'HighriseApartment', # Multifamily
-         'Hospital', # Hospital
-         'Outpatient' # Health-care clinic
-      new_fuel = 'NaturalGas'
     when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed', # Office
          'RetailStandalone', 'RetailStripmall', # Retail
          'Warehouse' # Warehouse
       new_fuel = 'Electricity'
     else
+      # 'SecondarySchool', 'PrimarySchool', # School/university
+      # 'SmallHotel', # Motel
+      # 'LargeHotel', # Hotel
+      # 'QuickServiceRestaurant', # Dining: Cafeteria/fast food
+      # 'FullServiceRestaurant', # Dining: Family
+      # 'MidriseApartment', 'HighriseApartment', # Multifamily
+      # 'Hospital', # Hospital
+      # 'Outpatient' # Health-care clinic
+      # Or Unspecified
       new_fuel = 'NaturalGas'
     end
 

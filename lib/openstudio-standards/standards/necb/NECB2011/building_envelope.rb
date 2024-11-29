@@ -1,9 +1,9 @@
 class NECB2011
   # Reduces the WWR to the values specified by the NECB
   # NECB 3.2.1.4
-  def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0)
+  def apply_standard_window_to_wall_ratio(model:, fdwr_set: -1.0, necb_hdd: true)
     # NECB FDWR limit
-    hdd = get_necb_hdd18(model)
+    hdd = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
 
     # Get the maximum NECB fdwr
     # fdwr_set settings:
@@ -56,15 +56,15 @@ class NECB2011
       end
 
       # Determine the space category
-      # zTODO This should really use the heating/cooling loads
+      # @todo This should really use the heating/cooling loads
       # from the proposed building.  However, in an attempt
       # to avoid another sizing run just for this purpose,
       # conditioned status is based on heating/cooling
       # setpoints.  If heated-only, will be assumed Semiheated.
       # The full-bore method is on the next line in case needed.
       # cat = thermal_zone_conditioning_category(space, template, climate_zone)
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
+      cooled = OpenstudioStandards::Space.space_cooled?(space)
+      heated = OpenstudioStandards::Space.space_heated?(space)
       cat = 'Unconditioned'
       # Unconditioned
       if !heated && !cooled
@@ -74,7 +74,7 @@ class NECB2011
         cat = 'Semiheated'
         # Heated and Cooled
       else
-        res = thermal_zone_residential?(space.thermalZone.get)
+        res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(space.thermalZone.get)
         cat = if res
                 'ResConditioned'
               else
@@ -151,7 +151,7 @@ class NECB2011
         surface.subSurfaces.sort.each do |ss|
           # Reduce the size of the window
           red = 1.0 - mult
-          sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_raising_sill(ss, red)
         end
       end
     end
@@ -217,7 +217,7 @@ class NECB2011
 
       # Determine the space category
       cat = 'NonRes'
-      if space_residential?(space)
+      if OpenstudioStandards::Space.space_residential?(space)
         cat = 'Res'
       end
       # if space.is_semiheated
@@ -272,7 +272,7 @@ class NECB2011
         surface.subSurfaces.sort.each do |ss|
           # Reduce the size of the subsurface
           red = 1.0 - mult
-          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, red)
         end
       end
     end
@@ -295,7 +295,7 @@ class NECB2011
   # modifications.  For others, it will not.
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
 
   def apply_standard_construction_properties(model:,
                                              runner: nil,
@@ -333,7 +333,8 @@ class NECB2011
                                              # tubular daylight diffuser
                                              tubular_daylight_diffuser_cond: nil,
                                              tubular_daylight_diffuser_solar_trans: nil,
-                                             tubular_daylight_diffuser_vis_trans: nil)
+                                             tubular_daylight_diffuser_vis_trans: nil,
+                                             necb_hdd: true)
 
     model.getDefaultConstructionSets.sort.each do |default_surface_construction_set|
       BTAP.runner_register('Info', 'apply_standard_construction_properties', runner)
@@ -344,7 +345,7 @@ class NECB2011
       end
 
       # hdd required in scope for eval function.
-      hdd = get_necb_hdd18(model)
+      hdd = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
       # Lambdas are preferred over methods in methods for small utility methods.
       correct_cond = lambda do |conductivity, surface_type|
         return conductivity.nil? || conductivity.to_f <= 0.0 || conductivity == 'NECB_Default' ? eval(model_find_objects(@standards_data['surface_thermal_transmittance'], surface_type)[0]['formula']) : conductivity.to_f
@@ -356,7 +357,7 @@ class NECB2011
       end
 
       BTAP::Resources::Envelope::ConstructionSets.customize_default_surface_construction_set!(model: model,
-                                                                                              name: "#{default_surface_construction_set.name.get} at hdd = #{get_necb_hdd18(model)}",
+                                                                                              name: "#{default_surface_construction_set.name.get} at hdd = #{get_necb_hdd18(model: model, necb_hdd: necb_hdd)}",
                                                                                               default_surface_construction_set: default_surface_construction_set,
                                                                                               # ext surfaces
                                                                                               ext_wall_cond: correct_cond.call(ext_wall_cond, 'boundary_condition' => 'Outdoors', 'surface' => 'Wall'),
@@ -465,9 +466,8 @@ class NECB2011
   # individual space type, this construction set will be created and applied
   # to this space type, overriding the whole-building construction set.
   #
-  # @param building_type [String] the type of building
-  # @param climate_zone [String] the name of the climate zone the building is in
-  # @return [Bool] returns true if successful, false if not
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] returns true if successful, false if not
   def model_add_constructions(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
 
@@ -668,7 +668,7 @@ class NECB2011
       return false
     elsif fdwr_lim < 0.001
       exp_surf_info['exp_nonplenum_walls'].sort.each do |exp_surf|
-        remove_all_subsurfaces(surface: exp_surf)
+        exp_surf.subSurfaces.sort.each(&:remove)
       end
       return true
     end
@@ -683,8 +683,14 @@ class NECB2011
       exp_surf_info['exp_nonplenum_walls'].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
-        remove_all_subsurfaces(surface: exp_surf)
-        set_window_to_wall_ratio_set_name(surface: exp_surf, area_fraction: nonplenum_fdwr, construction: fixed_window_construct_set)
+        exp_surf.subSurfaces.sort.each(&:remove)
+        exp_surf.setWindowToWallRatio(nonplenum_fdwr)
+        exp_surf.subSurfaces.sort.each do |sub_surf|
+          sub_surf.setSubSurfaceType('FixedWindow')
+          sub_surf.setConstruction(fixed_window_construct_set)
+          new_name = exp_surf.name.to_s + '_' + sub_surf.subSurfaceType.to_s
+          sub_surf.setName(new_name)
+        end
       end
     else
       # There was not enough non-plenum wall area so add the windows to both the plenum and non-plenum walls.  This is
@@ -693,14 +699,26 @@ class NECB2011
       exp_surf_info['exp_nonplenum_walls'].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
-        remove_all_subsurfaces(surface: exp_surf)
-        set_window_to_wall_ratio_set_name(surface: exp_surf, area_fraction: fdwr_lim, construction: fixed_window_construct_set)
+        exp_surf.subSurfaces.sort.each(&:remove)
+        exp_surf.setWindowToWallRatio(fdwr_lim)
+        exp_surf.subSurfaces.sort.each do |sub_surf|
+          sub_surf.setSubSurfaceType('FixedWindow')
+          sub_surf.setConstruction(fixed_window_construct_set)
+          new_name = exp_surf.name.to_s + '_' + sub_surf.subSurfaceType.to_s
+          sub_surf.setName(new_name)
+        end
       end
       exp_surf_info['exp_plenum_walls'].sort.each do |exp_surf|
         # Remove any subsurfaces, add the window, set the name to be whatever the surface name is plus the subsurface
         # type (which will be 'fixedwindow')
-        remove_all_subsurfaces(surface: exp_surf)
-        set_window_to_wall_ratio_set_name(surface: exp_surf, area_fraction: fdwr_lim, construction: fixed_window_construct_set)
+        exp_surf.subSurfaces.sort.each(&:remove)
+        exp_surf.setWindowToWallRatio(fdwr_lim)
+        exp_surf.subSurfaces.sort.each do |sub_surf|
+          sub_surf.setSubSurfaceType('FixedWindow')
+          sub_surf.setConstruction(fixed_window_construct_set)
+          new_name = exp_surf.name.to_s + '_' + sub_surf.subSurfaceType.to_s
+          sub_surf.setName(new_name)
+        end
       end
     end
     return true
@@ -727,7 +745,7 @@ class NECB2011
       return false
     elsif srr_lim < 0.001
       exp_surf_info['exp_nonplenum_roofs'].sort.each do |exp_surf|
-        remove_all_subsurfaces(surface: exp_surf)
+        exp_surf.subSurfaces.sort.each(&:remove)
       end
       return true
     end

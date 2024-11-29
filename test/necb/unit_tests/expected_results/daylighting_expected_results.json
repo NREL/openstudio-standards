@@ -1,14 +1,14 @@
 [
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default"
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -111,14 +111,14 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Outpatient",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default"
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Outpatient",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -733,7 +733,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SecondarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default",
@@ -764,7 +764,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SecondarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -1131,7 +1131,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Warehouse",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default",
@@ -1154,7 +1154,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Warehouse",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -1185,14 +1185,14 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default"
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -1295,14 +1295,14 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Outpatient",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default"
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Outpatient",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -1917,7 +1917,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SecondarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default",
@@ -1932,7 +1932,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SecondarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -2299,7 +2299,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Warehouse",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default",
@@ -2314,7 +2314,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Warehouse",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -2345,14 +2345,14 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default"
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -2455,14 +2455,14 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Outpatient",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default"
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Outpatient",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -3077,14 +3077,14 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SecondarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default"
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SecondarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",
@@ -3451,7 +3451,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Warehouse",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "NECB_Default",
@@ -3466,7 +3466,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Warehouse",
     "primary_heating_fuel": "DefaultFuel",
     "daylighting_type": "add_daylighting_controls",

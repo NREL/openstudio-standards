@@ -25,12 +25,16 @@ Standard.class_eval do
     end
     # optionally  determine the climate zone from the epw and stat files.
     if climate_zone == 'NECB HDD Method'
-      climate_zone = BTAP::Environment::WeatherFile.new(epw_file).a169_2006_climate_zone
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+      stat_file_path = weather_file_path.gsub('.epw', '.stat')
+      stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+      climate_zone = OpenstudioStandards::Weather.get_climate_zone_from_degree_days(stat_file.hdd18, stat_file.cdd10)
     else
       # this is required to be blank otherwise it may cause side effects.
       epw_file = ''
     end
     model = load_geometry_osm(@geometry_file)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
     model_custom_geometry_tweaks(model, building_type, climate_zone, @prototype_input)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getBuilding.setName(self.class.to_s)
@@ -42,10 +46,10 @@ Standard.class_eval do
     model_add_door_infiltration(model, climate_zone)
     model_modify_surface_convection_algorithm(model)
     model_create_thermal_zones(model, @space_multiplier_map)
-    model_add_design_days_and_weather_file(model, climate_zone, epw_file)
     model_add_hvac(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model.getAirLoopHVACs.each do |air_loop|
       next unless air_loop_hvac_multizone_vav_system?(air_loop)
+
       model_system_outdoor_air_sizing_vrp_method(air_loop)
       air_loop_hvac_apply_vav_damper_action(air_loop)
     end
@@ -58,11 +62,9 @@ Standard.class_eval do
     model_add_exterior_lights(model, @instvarbuilding_type, climate_zone, @prototype_input)
     model_add_occupancy_sensors(model, @instvarbuilding_type, climate_zone)
     model_add_daylight_savings(model)
-    model_add_ground_temperatures(model, @instvarbuilding_type, climate_zone)
     model_apply_sizing_parameters(model, @instvarbuilding_type)
     model.yearDescription.get.setDayofWeekforStartDay('Sunday')
     model.getBuilding.setStandardsBuildingType(building_type)
-    model_set_climate_zone(model, climate_zone)
     model_add_lights_shutoff(model)
     # Perform a sizing model_run(model)
     return false if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
@@ -136,7 +138,7 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param rel_path_to_osm [String] the path to an .osm file, relative to this file
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_replace_model_from_osm(model, rel_path_to_osm)
     # Take the existing model and remove all the objects
     # (this is cheesy), but need to keep the same memory block
@@ -215,27 +217,6 @@ Standard.class_eval do
     model_add_loads(model)
   end
 
-  def model_assign_building_story(model, building_story_map = nil)
-    if building_story_map.nil? || building_story_map.empty?
-
-      model_assign_spaces_to_stories(model)
-      return true
-    end
-    building_story_map.each do |building_story_name, space_names|
-      stub_building_story = OpenStudio::Model::BuildingStory.new(model)
-      stub_building_story.setName(building_story_name)
-
-      space_names.each do |space_name|
-        space = model.getSpaceByName(space_name)
-        next if space.empty?
-
-        space = space.get
-        space.setBuildingStory(stub_building_story)
-      end
-    end
-    return true
-  end
-
   # Adds the loads and associated schedules for each space type
   # as defined in the OpenStudio_Standards_space_types.json file.
   # This includes lights, plug loads, occupants, ventilation rate requirements,
@@ -243,7 +224,7 @@ Standard.class_eval do
   # Some loads are governed by the standard, others are typical values
   # pulled from sources such as the DOE Reference and DOE Prototype Buildings.
   #
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_loads(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying space types (loads)')
 
@@ -265,89 +246,6 @@ Standard.class_eval do
     return true
   end
 
-  # Checks to see if the an adiabatic floor construction has been constructed in an OpenStudio model.
-  # If so, it returns it. If not, it constructs an adiabatic floor construction, adds it to the model,
-  # and then returns it.
-  # @return [OpenStudio::Model::Construction]
-  def model_get_adiabatic_floor_construction(model)
-    adiabatic_construction_name = 'Floor Adiabatic construction'
-
-    # Check if adiabatic floor construction already exists in the model
-    adiabatic_construct_exists = model.getConstructionByName(adiabatic_construction_name).is_initialized
-
-    # Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
-    return model.getConstructionByName(adiabatic_construction_name).get if adiabatic_construct_exists
-
-    # Assign construction to adiabatic construction
-    cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
-    cp02_carpet_pad.setName('CP02 CARPET PAD')
-    cp02_carpet_pad.setRoughness('VeryRough')
-    cp02_carpet_pad.setThermalResistance(0.21648)
-    cp02_carpet_pad.setThermalAbsorptance(0.9)
-    cp02_carpet_pad.setSolarAbsorptance(0.7)
-    cp02_carpet_pad.setVisibleAbsorptance(0.8)
-
-    normalweight_concrete_floor = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-    normalweight_concrete_floor.setName('100mm Normalweight concrete floor')
-    normalweight_concrete_floor.setRoughness('MediumSmooth')
-    normalweight_concrete_floor.setThickness(0.1016)
-    normalweight_concrete_floor.setThermalConductivity(2.31)
-    normalweight_concrete_floor.setDensity(2322)
-    normalweight_concrete_floor.setSpecificHeat(832)
-
-    nonres_floor_insulation = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
-    nonres_floor_insulation.setName('Nonres_Floor_Insulation')
-    nonres_floor_insulation.setRoughness('MediumSmooth')
-    nonres_floor_insulation.setThermalResistance(2.88291975297193)
-    nonres_floor_insulation.setThermalAbsorptance(0.9)
-    nonres_floor_insulation.setSolarAbsorptance(0.7)
-    nonres_floor_insulation.setVisibleAbsorptance(0.7)
-
-    floor_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-    floor_adiabatic_construction.setName(adiabatic_construction_name)
-    floor_layers = OpenStudio::Model::MaterialVector.new
-    floor_layers << cp02_carpet_pad
-    floor_layers << normalweight_concrete_floor
-    floor_layers << nonres_floor_insulation
-    floor_adiabatic_construction.setLayers(floor_layers)
-
-    return floor_adiabatic_construction
-  end
-
-  # Checks to see if the an adiabatic wall construction has been constructed in an OpenStudio model.
-  # If so, it returns it. If not, it constructs an adiabatic wall construction, adds it to the model,
-  # and then returns it.
-  # @return [OpenStudio::Model::Construction]
-  def model_get_adiabatic_wall_construction(model)
-    adiabatic_construction_name = 'Wall Adiabatic construction'
-
-    # Check if adiabatic wall construction already exists in the model
-    adiabatic_construct_exists = model.getConstructionByName(adiabatic_construction_name).is_initialized
-
-    # Check to see if adiabatic construction has been constructed. If so, return it. Else, construct it.
-    return model.getConstructionByName(adiabatic_construction_name).get if adiabatic_construct_exists
-
-    g01_13mm_gypsum_board = OpenStudio::Model::StandardOpaqueMaterial.new(model)
-    g01_13mm_gypsum_board.setName('G01 13mm gypsum board')
-    g01_13mm_gypsum_board.setRoughness('Smooth')
-    g01_13mm_gypsum_board.setThickness(0.0127)
-    g01_13mm_gypsum_board.setThermalConductivity(0.1600)
-    g01_13mm_gypsum_board.setDensity(800)
-    g01_13mm_gypsum_board.setSpecificHeat(1090)
-    g01_13mm_gypsum_board.setThermalAbsorptance(0.9)
-    g01_13mm_gypsum_board.setSolarAbsorptance(0.7)
-    g01_13mm_gypsum_board.setVisibleAbsorptance(0.5)
-
-    wall_adiabatic_construction = OpenStudio::Model::Construction.new(model)
-    wall_adiabatic_construction.setName(adiabatic_construction_name)
-    wall_layers = OpenStudio::Model::MaterialVector.new
-    wall_layers << g01_13mm_gypsum_board
-    wall_layers << g01_13mm_gypsum_board
-    wall_adiabatic_construction.setLayers(wall_layers)
-
-    return wall_adiabatic_construction
-  end
-
   # Adds code-minimum constructions based on the building type
   # as defined in the OpenStudio_Standards_construction_sets.json file.
   # Where there is a separate construction set specified for the
@@ -357,7 +255,7 @@ Standard.class_eval do
   # @param model[OpenStudio::Model::Model] OpenStudio Model
   # @param building_type [String] the building type
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_constructions(model, building_type, climate_zone)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')
     is_residential = 'No' # default is nonresidential for building level
@@ -374,8 +272,8 @@ Standard.class_eval do
     end
 
     # Construct adiabatic constructions
-    floor_adiabatic_construction = model_get_adiabatic_floor_construction(model)
-    wall_adiabatic_construction = model_get_adiabatic_wall_construction(model)
+    floor_adiabatic_construction = OpenstudioStandards::Constructions.model_get_adiabatic_floor_construction(model)
+    wall_adiabatic_construction = OpenstudioStandards::Constructions.model_get_adiabatic_wall_construction(model)
 
     cp02_carpet_pad = OpenStudio::Model::MasslessOpaqueMaterial.new(model)
     cp02_carpet_pad.setName('CP02 CARPET PAD')
@@ -542,8 +440,8 @@ Standard.class_eval do
   # CFactorUndergroundWallConstruction and require some additional parameters when compared to Construction
   #
   # @param model[OpenStudio::Model::Model] OpenStudio Model
-  # @param climate_zone [string] climate zone as described for prototype models. C-Factor is based on this parameter
-  # @param building_type [string] the building type
+  # @param climate_zone [String climate zone as described for prototype models. C-Factor is based on this parameter
+  # @param building_type [String the building type
   # @return [void]
   def model_set_below_grade_wall_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
@@ -566,7 +464,7 @@ Standard.class_eval do
     # iterate through spaces and set any necessary CFactorUndergroundWallConstructions
     model.getSpaces.each do |space|
       # Get height of the first below grade wall in this space. Will return nil if none are found.
-      below_grade_wall_height = model_get_space_below_grade_wall_height(space)
+      below_grade_wall_height = OpenstudioStandards::Geometry.space_get_below_grade_wall_height(space)
       next if below_grade_wall_height.nil?
 
       c_factor_wall_name = "Basement Wall C-Factor #{c_factor_si.round(2)} Height #{below_grade_wall_height.round(2)}"
@@ -592,36 +490,12 @@ Standard.class_eval do
     end
   end
 
-  # Finds heights of the first below grade walls and returns them as a numeric. Used when defining C Factor walls.
-  # Returns nil if the space is above grade.
-  # @param space [OpenStudio::Model::Space] space to determine below grade wall height
-  # @return [Numeric, nil]
-  def model_get_space_below_grade_wall_height(space)
-    # find height of first below-grade wall adjacent to the ground
-    space.surfaces.each do |surface|
-      next unless surface.surfaceType == 'Wall'
-
-      boundary_condition = surface.outsideBoundaryCondition
-      next unless boundary_condition == 'OtherSideCoefficients' || boundary_condition.to_s.downcase.include?('ground')
-
-      # calculate wall height as difference of maximum and minimum z values, assuming square, vertical walls
-      z_values = []
-      surface.vertices.each do |vertex|
-        z_values << vertex.z
-      end
-      surface_height = z_values.max - z_values.min
-      return surface_height
-    end
-
-    return nil
-  end
-
   # Searches a model for spaces adjacent to ground. If the slab's perimeter is adjacent to ground, the length is
   # calculated. Used for F-Factor floors that require additional parameters.
   #
   # @param model [OpenStudio Model] OpenStudio model being modified
-  # @param building_type [string] the building type
-  # @param climate_zone [string] climate zone as described for prototype models. F-Factor is based on this parameter
+  # @param building_type [String the building type
+  # @param climate_zone [String climate zone as described for prototype models. F-Factor is based on this parameter
   def model_set_floor_constructions(model, building_type, climate_zone)
     # Find ground contact wall building category
     construction_set_data = model_get_construction_set(building_type)
@@ -643,13 +517,12 @@ Standard.class_eval do
     # iterate through spaces and set FFactorGroundFloorConstruction to surfaces if applicable
     model.getSpaces.each do |space|
       # Find this space's exposed floor area and perimeter. NOTE: this assumes only only floor per space.
-      perimeter, area = model_get_f_floor_geometry(space)
+      perimeter = OpenstudioStandards::Geometry.space_get_f_floor_perimeter(space)
+      area = OpenstudioStandards::Geometry.space_get_f_floor_area(space)
       next if area == 0 # skip floors not adjacent to ground
 
       # Record combination of perimeter and area. Each unique combination requires a FFactorGroundFloorConstruction.
-      # @note periods '.' were causing issues and were therefore removed.
-      #   Caused E+ error with duplicate names despite being different.
-      f_floor_const_name = "Foundation F #{f_factor_si.round(2)} Perim #{perimeter.round(2)} Area #{area.round(2)}".gsub('.', '')
+      f_floor_const_name = "Foundation F #{f_factor_si.round(2)}W/m*K Perim #{perimeter.round(2)}m Area #{area.round(2)}m2"
 
       # Check if the floor construction has been constructed already. If so, look it up in the model
       if model.getFFactorGroundFloorConstructionByName(f_floor_const_name).is_initialized
@@ -672,123 +545,11 @@ Standard.class_eval do
     end
   end
 
-  # This function returns the space's ground perimeter and area. Assumes only one floor per space!
-  # @param space [OpenStudio::Model::Space] space object
-  # @return [Numeric, Numeric]
-  def model_get_f_floor_geometry(space)
-    perimeter = 0
-
-    floors = []
-
-    # Find space's floors
-    space.surfaces.each do |surface|
-      if surface.surfaceType == 'Floor' && surface.outsideBoundaryCondition.to_s.downcase.include?('ground')
-        floors << surface
-      end
-    end
-
-    # Raise a warning for any space with more than 1 ground contact floor surface.
-    if floors.length > 1
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Space: #{space.name} has more than one ground contact floor. FFactorGroundFloorConstruction constructions in this space may be incorrect")
-    elsif floors.empty? # If this space has no ground contact floors, return 0
-      return 0, 0
-    end
-
-    floor = floors[0]
-
-    # cycle through surfaces in space
-    space.surfaces.each do |surface|
-      # find perimeter of floor by finding intersecting outdoor walls and measuring the intersection
-      if surface.surfaceType == 'Wall' && surface.outsideBoundaryCondition == 'Outdoors'
-        perimeter += model_calculate_wall_and_floor_intersection(surface, floor)
-      end
-    end
-
-    # Get floor area
-    area = floor.netArea
-
-    return perimeter, area
-  end
-
-  # This function returns the length of intersection between a wall and floor sharing space. Primarily used for
-  # FFactorGroundFloorConstruction exposed perimeter calculations.
-  # @note this calculation has a few assumptions:
-  # - Floors are flat. This means they have a constant z-axis value.
-  # - If a wall shares an edge with a floor, it's assumed that edge intersects with only this floor.
-  # - The wall and floor share a common space. This space is assumed to only have one floor!
-  # @param wall[OpenStudio::Model::Surface] wall surface being compared to the floor of interest
-  # @param floor[OpenStudio::Model::Surface] floor occupying same space as wall. Edges checked for interesections with wall
-  # @return [Numeric] returns the intersection/overlap length of the wall and floor of interest
-  def model_calculate_wall_and_floor_intersection(wall, floor)
-    # Used for determining if two points are 'equal' if within this length
-    tolerance = 0.0001
-
-    # Get floor and wall edges
-    wall_edge_array = model_get_surface_edges(wall)
-    floor_edge_array = model_get_surface_edges(floor)
-
-    # Floor assumed flat and constant in x-y plane (i.e. a single z value)
-    floor_z_value = floor_edge_array[0][0].z
-
-    # Iterate through wall edges
-    wall_edge_array.each do |wall_edge|
-      wall_edge_p1 = wall_edge[0]
-      wall_edge_p2 = wall_edge[1]
-
-      # If points representing the wall surface edge have different z-coordinates, this edge is not parallel to the
-      # floor and can be skipped
-
-      if tolerance <= (wall_edge_p1.z - wall_edge_p2.z).abs
-        next
-      end
-
-      # If wall edge is parallel to the floor, ensure it's on the same x-y plane as the floor.
-      if tolerance <= (wall_edge_p1.z - floor_z_value).abs
-        next
-      end
-
-      # If the edge is parallel with the floor and in the same x-y plane as the floor, assume an intersection the
-      # length of the wall edge
-      intersect_vector = wall_edge_p1 - wall_edge_p2
-      edge_vector = OpenStudio::Vector3d.new(intersect_vector.x, intersect_vector.y, intersect_vector.z)
-      return(edge_vector.length)
-    end
-
-    # If no edges intersected, return 0
-    return 0
-  end
-
-  # Returns an array of OpenStudio::Point3D pairs of an OpenStudio::Model::Surface's edges. Used to calculate surface
-  # intersections.
-  # @param surface[OpenStudio::Model::Surface] - surface whose edges are being returned
-  # @return [Array<Array(OpenStudio::Point3D, OpenStudio::Point3D)>] - array of pair of points describing the line segment of an edge
-  def model_get_surface_edges(surface)
-    vertices = surface.vertices
-    n_vertices = vertices.length
-
-    # Create edge hash that keeps track of all edges in surface. An edge is defined here as an array of length 2
-    # containing two OpenStudio::Point3Ds that define the line segment representing a surface edge.
-    edge_array = [] # format edge_array[i] = [OpenStudio::Point3D, OpenStudio::Point3D]
-
-    # Iterate through each vertex in the surface and construct an edge for it
-    for edge_counter in 0..n_vertices - 1
-
-      # If not the last vertex in surface
-      if edge_counter < n_vertices - 1
-        edge_array << [vertices[edge_counter], vertices[edge_counter + 1]]
-      else # Make index adjustments for final index in vertices array
-        edge_array << [vertices[edge_counter], vertices[0]]
-      end
-    end
-
-    return edge_array
-  end
-
   # Adds internal mass objects and constructions based on the building type
   #
   # @param model[OpenStudio::Model::Model] OpenStudio Model
   # @param building_type [String] the building type
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_internal_mass(model, building_type)
     # Assign a material to all internal mass objects
     material = OpenStudio::Model::StandardOpaqueMaterial.new(model)
@@ -827,8 +588,8 @@ Standard.class_eval do
       internal_mass_def.setConstruction(construction)
       model.getSpaces.each do |space|
         # only add internal mass objects to conditioned spaces
-        next unless space_cooled?(space)
-        next unless space_heated?(space)
+        next unless OpenstudioStandards::Space.space_cooled?(space)
+        next unless OpenstudioStandards::Space.space_heated?(space)
 
         internal_mass = OpenStudio::Model::InternalMass.new(internal_mass_def)
         internal_mass.setName("#{space.name} Mass")
@@ -847,7 +608,7 @@ Standard.class_eval do
   # e.g. (Prototype.secondary_school.rb) file.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_create_thermal_zones(model, space_multiplier_map = nil)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started creating thermal zones')
 
@@ -877,7 +638,7 @@ Standard.class_eval do
 
       # Add a thermostat
       space_type_name = space.spaceType.get.name.get
-      thermostat_name = space_type_name + ' Thermostat'
+      thermostat_name = "#{space_type_name} Thermostat"
       thermostat = model.getThermostatSetpointDualSetpointByName(thermostat_name)
       if thermostat.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Thermostat #{thermostat_name} not found for space name: #{space.name}")
@@ -915,21 +676,8 @@ Standard.class_eval do
     zone_exhaust_fans = {}
 
     # apply use specified kitchen_makup logic
-    if !['Adjacent', 'Largest Zone'].include?(kitchen_makeup)
-
-      if kitchen_makeup != 'None'
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
-      end
-
-      # loop through thermal zones
-      model.getThermalZones.sort.each do |thermal_zone|
-        zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
-
-        # populate zone_exhaust_fans
-        zone_exhaust_fans.merge!(zone_exhaust_hash)
-      end
-
-    else # common code for Adjacent and Largest Zone
+    if ['Adjacent', 'Largest Zone'].include?(kitchen_makeup)
+      # common code for Adjacent and Largest Zone
 
       # populate standard_space_types_with_makup_air
       standard_space_types_with_makup_air = {}
@@ -1072,7 +820,7 @@ Standard.class_eval do
             # process zones of each makeup_target
             zones_by_standards[makeup_target].each do |thermal_zone, space_type_hash|
               # get adjacent zones
-              adjacent_zones = thermal_zone_get_adjacent_zones_with_shared_wall_areas(thermal_zone)
+              adjacent_zones = OpenstudioStandards::Geometry.thermal_zone_get_adjacent_zones_with_shared_walls(thermal_zone)
 
               # find adjacent zones matching key and value from standard_space_types_with_makup_air
               first_adjacent_makeup_source = nil
@@ -1118,9 +866,19 @@ Standard.class_eval do
           zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
           zone_exhaust_fans.merge!(zone_exhaust_hash)
         end
-
+      end
+    else
+      if kitchen_makeup != 'None'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
       end
 
+      # loop through thermal zones
+      model.getThermalZones.sort.each do |thermal_zone|
+        zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
+
+        # populate zone_exhaust_fans
+        zone_exhaust_fans.merge!(zone_exhaust_hash)
+      end
     end
 
     return zone_exhaust_fans
@@ -1230,7 +988,7 @@ Standard.class_eval do
 
     # Adjust thermostat schedules:
     # Increase set-up/back to comply with code requirements
-    thermostat_schedules.keys.each do |sch_type|
+    thermostat_schedules.each_key do |sch_type|
       thermostat_schedules[sch_type].uniq.each do |sch|
         # Skip non-ruleset schedules
         next if sch.to_ScheduleRuleset.empty?
@@ -1251,7 +1009,7 @@ Standard.class_eval do
         end
 
         # Modify schedules
-        model_multiply_schedule(model, sch.defaultDaySchedule, sch_mult, 0)
+        OpenstudioStandards::Schedules.schedule_day_multiply_by_value(sch.defaultDaySchedule, sch_mult)
       end
     end
   end
@@ -1449,7 +1207,7 @@ Standard.class_eval do
   # the PNNL documentation.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo genericize and move this method to Standards.Space
   def model_add_occupancy_sensors(model, building_type, climate_zone)
     # Only add occupancy sensors for 90.1-2010
@@ -1520,11 +1278,11 @@ Standard.class_eval do
         reduced_lights_schs[lights_sch_name] = new_lights_sch
 
         # Reduce default day schedule
-        model_multiply_schedule(model, new_lights_sch.defaultDaySchedule, red_multiplier, 0.25)
+        OpenstudioStandards::Schedules.schedule_day_multiply_by_value(new_lights_sch.defaultDaySchedule, red_multiplier, lower_apply_limit: 0.25)
 
         # Reduce all other rule schedules
         new_lights_sch.scheduleRules.each do |sch_rule|
-          model_multiply_schedule(model, sch_rule.daySchedule, red_multiplier, 0.25)
+          OpenstudioStandards::Schedules.schedule_day_multiply_by_value(sch_rule.daySchedule, red_multiplier, lower_apply_limit: 0.25)
         end
       end
 
@@ -1553,7 +1311,7 @@ Standard.class_eval do
   # in OpenStudio_Standards_prototype_inputs
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo translate w/linear foot of facade, door, parking, etc
   #   into lookup table and implement that way instead of hard-coding as
   #   inputs in the spreadsheet.
@@ -1628,7 +1386,7 @@ Standard.class_eval do
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo Consistency - make prototype and reference vintages consistent
   def model_modify_infiltration_coefficients(model, building_type, climate_zone)
     # Select the terrain type, which
@@ -1673,7 +1431,7 @@ Standard.class_eval do
   # Sets the inside and outside convection algorithms for different vintages
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo Consistency - make prototype and reference vintages consistent
   def model_modify_surface_convection_algorithm(model)
     inside = model.getInsideSurfaceConvectionAlgorithm
@@ -1721,7 +1479,7 @@ Standard.class_eval do
   # Changes the infiltration coefficients for the prototype vintages.
   #
   # @param (see #add_constructions)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @todo Consistency - make sizing factors consistent
   #   between building types, climate zones, and vintages?
   def model_apply_sizing_parameters(model, building_type)
@@ -1798,7 +1556,7 @@ Standard.class_eval do
   # Applies the Prototype Building assumptions that contradict/supersede
   # the given standard.
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   def model_apply_prototype_hvac_efficiency_adjustments(model)
     building_data = model_get_building_properties(model)
     building_type = building_data['building_type']
@@ -1816,11 +1574,56 @@ Standard.class_eval do
         serves_res_spc = false
 
         air_loop_hvac.thermalZones.each do |zone|
-          next unless thermal_zone_residential?(zone)
+          next unless OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone)
+
+          # Exception 3 to 6.5.6.1.1
+          case template
+          when '90.1-2019'
+            case climate_zone
+            when 'ASHRAE 169-2006-0A',
+              'ASHRAE 169-2006-0B',
+              'ASHRAE 169-2006-1A',
+              'ASHRAE 169-2006-1B',
+              'ASHRAE 169-2006-2A',
+              'ASHRAE 169-2006-2B',
+              'ASHRAE 169-2006-3A',
+              'ASHRAE 169-2006-3B',
+              'ASHRAE 169-2006-3C',
+              'ASHRAE 169-2006-4A',
+              'ASHRAE 169-2006-4B',
+              'ASHRAE 169-2006-4C',
+              'ASHRAE 169-2006-5A',
+              'ASHRAE 169-2006-5B',
+              'ASHRAE 169-2006-5C',
+              'ASHRAE 169-2013-0A',
+              'ASHRAE 169-2013-0B',
+              'ASHRAE 169-2013-1A',
+              'ASHRAE 169-2013-1B',
+              'ASHRAE 169-2013-2A',
+              'ASHRAE 169-2013-2B',
+              'ASHRAE 169-2013-3A',
+              'ASHRAE 169-2013-3B',
+              'ASHRAE 169-2013-3C',
+              'ASHRAE 169-2013-4A',
+              'ASHRAE 169-2013-4B',
+              'ASHRAE 169-2013-4C',
+              'ASHRAE 169-2013-5A',
+              'ASHRAE 169-2013-5B',
+              'ASHRAE 169-2013-5C'
+              if zone.floorArea <= OpenStudio.convert(500.0, 'ft^2', 'm^2').get
+                has_erv = false
+                OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Energy recovery will not be modeled for the ERV serving #{zone.name}.")
+              end
+            end
+          end
 
           oa_cfm_per_ft2 = 0.0578940512546562
           oa_m3_per_m2 = OpenStudio.convert(OpenStudio.convert(oa_cfm_per_ft2, 'cfm', 'm^3/s').get, '1/ft^2', '1/m^2').get
-          model_add_residential_erv(model, zone, climate_zone, has_erv, oa_m3_per_m2)
+          if has_erv
+            model_add_residential_erv(model, zone, oa_m3_per_m2)
+          else
+            model_add_residential_ventilator(model, zone, oa_m3_per_m2)
+          end
 
           # Shut-off air loop level OA intake
           oa_controller = air_loop_hvac.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir
@@ -1911,9 +1714,7 @@ Standard.class_eval do
     # model_run(model)  in the current working directory
 
     # Make the directory if it doesn't exist
-    unless Dir.exist?(run_dir)
-      Dir.mkdir(run_dir)
-    end
+    FileUtils.mkdir_p(run_dir)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Started simulation in '#{run_dir}'")
 
@@ -1981,7 +1782,7 @@ Standard.class_eval do
       ep_dir = OpenStudio.getEnergyPlusDirectory
       ep_path = OpenStudio.getEnergyPlusExecutable
       ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
-      idd_path = OpenStudio::Path.new(ep_dir.to_s + '/Energy+.idd')
+      idd_path = OpenStudio::Path.new("#{ep_dir}/Energy+.idd")
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
       # Make a run manager and queue up the sizing model_run(model)
@@ -2129,54 +1930,13 @@ Standard.class_eval do
 
   def model_clear_and_set_example_constructions(model)
     # Define Materials
-    name = 'opaque material'
-    thickness = 0.012700
-    conductivity = 0.160000
-    opaque_mat = BTAP::Resources::Envelope::Materials::Opaque.create_opaque_material(model, name, thickness, conductivity)
-
-    name = 'insulation material'
-    thickness = 0.050000
-    conductivity = 0.043000
-    insulation_mat = BTAP::Resources::Envelope::Materials::Opaque.create_opaque_material(model, name, thickness, conductivity)
-
-    name = 'simple glazing test'
-    shgc = 0.250000
-    ufactor = 3.236460
-    thickness = 0.003000
-    visible_transmittance = 0.160000
-    simple_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_simple_glazing(model, name, shgc, ufactor, thickness, visible_transmittance)
-
-    name = 'Standard Glazing Test'
-    thickness = 0.003
-    conductivity = 0.9
-    solar_trans_normal = 0.84
-    front_solar_ref_normal = 0.075
-    back_solar_ref_normal = 0.075
-    vlt = 0.9
-    front_vis_ref_normal = 0.081
-    back_vis_ref_normal = 0.081
-    ir_trans_normal = 0.0
-    front_ir_emis = 0.84
-    back_ir_emis = 0.84
-    optical_data_type = 'SpectralAverage'
-    dirt_correction_factor = 1.0
-    is_solar_diffusing = false
-
-    standard_glazing_mat = BTAP::Resources::Envelope::Materials::Fenestration.create_standard_glazing(model,
-                                                                                                      name,
-                                                                                                      thickness,
-                                                                                                      conductivity,
-                                                                                                      solar_trans_normal,
-                                                                                                      front_solar_ref_normal,
-                                                                                                      back_solar_ref_normal, vlt,
-                                                                                                      front_vis_ref_normal,
-                                                                                                      back_vis_ref_normal,
-                                                                                                      ir_trans_normal,
-                                                                                                      front_ir_emis,
-                                                                                                      back_ir_emis,
-                                                                                                      optical_data_type,
-                                                                                                      dirt_correction_factor,
-                                                                                                      is_solar_diffusing)
+    opaque_mat = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.0127, 0.16, 0.1, 100)
+    insulation_mat = OpenStudio::Model::StandardOpaqueMaterial.new(model, 'Smooth', 0.05, 0.043, 0.1, 100)
+    simple_glazing_mat = OpenStudio::Model::SimpleGlazing.new(model, 3.236460, 0.25)
+    simple_glazing_mat.setThickness(0.003)
+    simple_glazing_mat.setVisibleTransmittance(0.16)
+    standard_glazing_mat = OpenStudio::Model::StandardGlazing.new(model, 'SpectralAverage', 0.003)
+    standard_glazing_mat.setSolarTransmittanceatNormalIncidence(0.5)
 
     # Define Constructions
     # # Surfaces
@@ -2252,233 +2012,6 @@ Standard.class_eval do
     return building_type
   end
 
-  # Split all zones in the model into groups that are big enough to justify their own HVAC system type.
-  # Similar to the logic from 90.1 Appendix G, but without regard to the fuel type of the existing HVAC system (because the model may not have one).
-  #
-  # @param min_area_m2[Double] the minimum area required to justify a different system type, default 20,000 ft^2
-  # @return [Array<Hash>] an array of hashes of area information, with keys area_ft2, type, stories, and zones (an array of zones)
-  def model_group_zones_by_type(model, min_area_m2 = 1858.0608)
-    min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
-
-    # Get occupancy type, fuel type, and area information for all zones, excluding unconditioned zones.
-    # Occupancy types are:
-    # Residential
-    # NonResidential
-    # Use 90.1-2010 so that retail and publicassembly are not split out
-    zones = model_zones_with_occ_and_fuel_type(model, nil)
-
-    # Ensure that there is at least one conditioned zone
-    if zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
-      return []
-    end
-
-    # Group the zones by occupancy type
-    type_to_area = Hash.new { 0.0 }
-    zones_grouped_by_occ = zones.group_by { |z| z['occ'] }
-
-    # Determine the dominant occupancy type by area
-    zones_grouped_by_occ.each do |occ_type, zns|
-      zns.each do |zn|
-        type_to_area[occ_type] += zn['area']
-      end
-    end
-    dom_occ = type_to_area.sort_by { |k, v| v }.reverse[0][0]
-
-    # Get the dominant occupancy type group
-    dom_occ_group = zones_grouped_by_occ[dom_occ]
-
-    # Check the non-dominant occupancy type groups to see if they are big enough to trigger the occupancy exception.
-    # If they are, leave the group standing alone.
-    # If they are not, add the zones in that group back to the dominant occupancy type group.
-    occ_groups = []
-    zones_grouped_by_occ.each do |occ_type, zns|
-      # Skip the dominant occupancy type
-      next if occ_type == dom_occ
-
-      # Add up the floor area of the group
-      area_m2 = 0
-      zns.each do |zn|
-        area_m2 += zn['area']
-      end
-      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-
-      # If the non-dominant group is big enough, preserve that group.
-      if area_ft2 > min_area_ft2
-        occ_groups << [occ_type, zns]
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with an occupancy type of #{occ_type} is bigger than the minimum area of #{min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
-        # Otherwise, add the zones back to the dominant group.
-      else
-        dom_occ_group += zns
-      end
-    end
-    # Add the dominant occupancy group to the list
-    occ_groups << [dom_occ, dom_occ_group]
-
-    # Calculate the area for each of the final groups
-    # and replace the zone hashes with an array of zone objects
-    final_groups = []
-    occ_groups.each do |occ_type, zns|
-      # Sum the area and put all zones into an array
-      area_m2 = 0.0
-      gp_zns = []
-      zns.each do |zn|
-        area_m2 += zn['area']
-        gp_zns << zn['zone']
-      end
-      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-
-      # Determine the number of stories this group spans
-      num_stories = model_num_stories_spanned(model, gp_zns)
-
-      # Create a hash representing this group
-      group = {}
-      group['area_ft2'] = area_ft2
-      group['type'] = occ_type
-      group['stories'] = num_stories
-      group['zones'] = gp_zns
-      final_groups << group
-
-      # Report out the final grouping
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: occ = #{group['type']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
-      group['zones'].sort.each_slice(5) do |zone_list|
-        zone_names = []
-        zone_list.each do |zone|
-          zone_names << zone.name.get.to_s
-        end
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
-      end
-    end
-
-    return final_groups
-  end
-
-  # Split all zones in the model into groups that are big enough to justify their own HVAC system type.
-  # Similar to the logic from 90.1 Appendix G, but without regard to the fuel type of the existing HVAC system (because the model may not have one).
-  #
-  # @param min_area_m2[Double] the minimum area required to justify a different system type, default 20,000 ft^2
-  # @return [Array<Hash>] an array of hashes of area information, with keys area_ft2, type, stories, and zones (an array of zones)
-  def model_group_zones_by_building_type(model, min_area_m2 = 1858.0608)
-    min_area_ft2 = OpenStudio.convert(min_area_m2, 'm^2', 'ft^2').get
-
-    # Get occupancy type, building type, fuel type, and area information for all zones, excluding unconditioned zones
-    zones = model_zones_with_occ_and_fuel_type(model, nil)
-
-    # Ensure that there is at least one conditioned zone
-    if zones.size.zero?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.Model', 'The building does not appear to have any conditioned zones. Make sure zones have thermostat with appropriate heating and cooling setpoint schedules.')
-      return []
-    end
-
-    # Group the zones by building type
-    type_to_area = Hash.new { 0.0 }
-    zones_grouped_by_bldg_type = zones.group_by { |z| z['bldg_type'] }
-
-    # Determine the dominant building type by area
-    zones_grouped_by_bldg_type.each do |bldg_type, zns|
-      zns.each do |zn|
-        type_to_area[bldg_type] += zn['area']
-      end
-    end
-    dom_bldg_type = type_to_area.sort_by { |k, v| v }.reverse[0][0]
-
-    # Get the dominant building type group
-    dom_bldg_type_group = zones_grouped_by_bldg_type[dom_bldg_type]
-
-    # Check the non-dominant building type groups to see if they are big enough to trigger the building exception.
-    # If they are, leave the group standing alone.
-    # If they are not, add the zones in that group back to the dominant building type group.
-    bldg_type_groups = []
-    zones_grouped_by_bldg_type.each do |bldg_type, zns|
-      # Skip the dominant building type
-      next if bldg_type == dom_bldg_type
-
-      # Add up the floor area of the group
-      area_m2 = 0
-      zns.each do |zn|
-        area_m2 += zn['area']
-      end
-      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-
-      # If the non-dominant group is big enough, preserve that group.
-      if area_ft2 > min_area_ft2
-        bldg_type_groups << [bldg_type, zns]
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "The portion of the building with a building type of #{bldg_type} is bigger than the minimum area of #{min_area_ft2.round} ft2.  It will be assigned a separate HVAC system type.")
-        # Otherwise, add the zones back to the dominant group.
-      else
-        dom_bldg_type_group += zns
-      end
-    end
-    # Add the dominant building type group to the list
-    bldg_type_groups << [dom_bldg_type, dom_bldg_type_group]
-
-    # Calculate the area for each of the final groups
-    # and replace the zone hashes with an array of zone objects
-    final_groups = []
-    bldg_type_groups.each do |bldg_type, zns|
-      # Sum the area and put all zones into an array
-      area_m2 = 0.0
-      gp_zns = []
-      zns.each do |zn|
-        area_m2 += zn['area']
-        gp_zns << zn['zone']
-      end
-      area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-
-      # Determine the number of stories this group spans
-      num_stories = model_num_stories_spanned(model, gp_zns)
-
-      # Create a hash representing this group
-      group = {}
-      group['area_ft2'] = area_ft2
-      group['type'] = bldg_type
-      group['stories'] = num_stories
-      group['zones'] = gp_zns
-      final_groups << group
-
-      # Report out the final grouping
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Final system type group: bldg_type = #{group['type']}, area = #{group['area_ft2'].round} ft2, num stories = #{group['stories']}, zones:")
-      group['zones'].sort.each_slice(5) do |zone_list|
-        zone_names = []
-        zone_list.each do |zone|
-          zone_names << zone.name.get.to_s
-        end
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "--- #{zone_names.join(', ')}")
-      end
-    end
-
-    return final_groups
-  end
-
-  # Method to multiply the values in a day schedule by a specified value
-  # but only when the existing value is higher than a specified lower limit.
-  # This limit prevents occupancy sensors from affecting unoccupied hours.
-  def model_multiply_schedule(model, day_sch, multiplier, limit)
-    # Record the original times and values
-    times = day_sch.times
-    values = day_sch.values
-
-    # Remove the original times and values
-    day_sch.clearValues
-
-    # Create new values by using the multiplier on the original values
-    new_values = []
-    values.each do |value|
-      new_values << if value > limit
-                      value * multiplier
-                    else
-                      value
-                    end
-    end
-
-    # Add the revised time/value pairs to the schedule
-    new_values.each_with_index do |new_value, i|
-      day_sch.addValue(times[i], new_value)
-    end
-  end
-
-  # end reduce schedule
-
   # Determine the prototypical economizer type for the model.
   # Defaults to FixedDryBulb based on anecdotal evidence of this being
   # the most common type encountered in the field, combined
@@ -2488,7 +2021,7 @@ Standard.class_eval do
   # by Steven Taylor and Hwakong Cheng.
   # https://tayloreng.egnyte.com/dl/mN0c9t4WSO/ASHRAE_Journal_-_Economizer_High_Limit_Devices_and_Why_Enthalpy_Economizers_Dont_Work.pdf_
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the economizer type.  Possible values are:
   # 'NoEconomizer'
@@ -2551,7 +2084,7 @@ Standard.class_eval do
         }
         econ_limits = model_find_object(standards_data['economizers'], search_criteria)
         minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
-        economizer_required = minimum_capacity_btu_per_hr.nil? ? false : true
+        economizer_required = !minimum_capacity_btu_per_hr.nil?
       elsif @instvarbuilding_type == 'LargeOffice' && air_loop_hvac_include_wshp?(air_loop)
         # WSHP serving the IT closets are assumed to always be too
         # small to require an economizer
@@ -2594,7 +2127,7 @@ Standard.class_eval do
   # @author Xuechen (Jerry) Lei, PNNL
   #
   # @param model [OpenStudio::Model::Model] OpenStudio Model
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_add_lights_shutoff(model)
     return false
   end
@@ -2612,7 +2145,7 @@ Standard.class_eval do
   # Metal coiling door code minimum infiltration rate at 75 Pa
   #
   # @param [String] Climate zone
-  # @return [Float] Minimum infiltration rate for metal coiling doors
+  # @return [Double] Minimum infiltration rate for metal coiling doors
   def model_door_infil_flow_rate_metal_coiling_cfm_ft2(climate_zone)
     case climate_zone
       when 'ASHRAE 169-2006-7A',
@@ -2628,7 +2161,7 @@ Standard.class_eval do
   # Metal rollup door code minimum infiltration rate at 75 Pa
   #
   # @param [String] Climate zone
-  # @return [Float] Minimum infiltration rate for metal coiling doors
+  # @return [Double] Minimum infiltration rate for metal coiling doors
   def model_door_infil_flow_rate_rollup_cfm_ft2(climate_zone)
     return 0.4
   end
@@ -2636,7 +2169,7 @@ Standard.class_eval do
   # Open door infiltration rate at 75 Pa
   #
   # @param [String] Climate zone
-  # @return [Float] Open door infiltration rate
+  # @return [Double] Open door infiltration rate
   def model_door_infil_flow_rate_open_cfm_ft2(climate_zone)
     return 9.7875
   end
@@ -2672,7 +2205,7 @@ Standard.class_eval do
       conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f
 
       # Adjust the infiltration rate to the average pressure for the prototype buildings.
-      adj_door_infil_cfm = adjust_infiltration_to_prototype_building_conditions(door_infil_cfm)
+      adj_door_infil_cfm = OpenstudioStandards::Infiltration.adjust_infiltration_to_prototype_building_conditions(door_infil_cfm)
       adj_door_infil_m3_per_s = adj_door_infil_cfm / conv_fact
 
       # Create door infiltration object
@@ -2686,20 +2219,6 @@ Standard.class_eval do
       door_infil_obj.setVelocityTermCoefficient(0.224)
       door_infil_obj.setVelocitySquaredTermCoefficient(0.0)
     end
-
-    return true
-  end
-
-  # Set the model's north axis (degrees from true North)
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param north_axis [Float] Degrees from true North
-  # @return [Boolean] Returns true if successful, false otherwise
-  def model_set_building_north_axis(model, north_axis)
-    return false if north_axis.nil?
-
-    building = model.getBuilding
-    building.setNorthAxis(north_axis)
 
     return true
   end
@@ -2743,56 +2262,6 @@ Standard.class_eval do
     return window_area
   end
 
-  # Calculate a model's window or WWR for a specific orientation
-  # Disregard space conditioning (assume all spaces are conditioned)
-  # which is true for most of not all prototypes
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model objetc
-  # @param orientation [String] Orientation: "N", "E", "S", "W"
-  # @return [Boolean] Returns true if successful, false otherwise
-  def model_get_window_area_info_for_orientation(model, orientation, wwr: true)
-    return false unless ['N', 'E', 'S', 'W'].include? orientation
-
-    window_area = 0
-    wall_area = 0
-
-    model.getSpaces.each do |space|
-      # Get zone multiplier
-      multiplier = space.thermalZone.get.multiplier
-
-      space.surfaces.each do |surface|
-        next if surface.surfaceType != 'Wall'
-        next if surface.outsideBoundaryCondition != 'Outdoors'
-
-        case orientation
-          when 'N'
-            next unless surface_cardinal_direction(surface) == 'N'
-          when 'E'
-            next unless surface_cardinal_direction(surface) == 'E'
-          when 'S'
-            next unless surface_cardinal_direction(surface) == 'S'
-          when 'W'
-            next unless surface_cardinal_direction(surface) == 'W'
-        end
-
-        # Get wall and window area
-        wall_area += surface.grossArea * multiplier
-        surface.subSurfaces.each do |subsurface|
-          subsurface_type = subsurface.subSurfaceType.to_s.downcase
-          # Do not count doors
-          next unless (subsurface_type.include? 'window') || (subsurface_type.include? 'glass')
-
-          window_area += subsurface.grossArea * subsurface.multiplier * multiplier
-        end
-      end
-    end
-
-    return window_area / wall_area if wwr
-
-    # else
-    return window_area
-  end
-
   # Adjust model to comply with fenestration orientation
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -2823,7 +2292,7 @@ Standard.class_eval do
   # Add transfer to prototype for spaces that require it
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] true if successful, false otherwise
+  # @return [Boolean] returns true if successful, false if not
   def model_add_transfer_air(model)
     # Do not add transfer air if not required
     return true unless model_transfer_air_required?(model)
@@ -2846,7 +2315,7 @@ Standard.class_eval do
       source_zone_name, transfer_air_flow_cfm = target_and_source_zones[exhaust_fan_zone_name]
       source_zone = model.getThermalZoneByName(source_zone_name).get
       transfer_air_source_zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
-      transfer_air_source_zone_exhaust_fan.setName(source_zone.name.to_s + ' Dummy Transfer Air (Source) Fan')
+      transfer_air_source_zone_exhaust_fan.setName("#{source_zone.name} Dummy Transfer Air (Source) Fan")
       transfer_air_source_zone_exhaust_fan.setAvailabilitySchedule(exhaust_fan.availabilitySchedule.get)
       # Convert transfer air flow to m3/s
       transfer_air_flow_m3s = OpenStudio.convert(transfer_air_flow_cfm, 'cfm', 'm^3/s').get
@@ -2858,9 +2327,9 @@ Standard.class_eval do
       # Set exhaust fan balanced air flow schedule to only consider the transfer air to be balanced air flow
       balanced_air_flow_schedule = exhaust_fan.availabilitySchedule.get.clone(model).to_ScheduleRuleset.get
       balanced_air_flow_schedule.setName("#{exhaust_fan_zone_name} Exhaust Fan Balanced Air Flow Schedule")
-      model_multiply_schedule(model, balanced_air_flow_schedule.defaultDaySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get, 0)
+      OpenstudioStandards::Schedules.schedule_day_multiply_by_value(balanced_air_flow_schedule.defaultDaySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get)
       balanced_air_flow_schedule.scheduleRules.each do |sch_rule|
-        model_multiply_schedule(model, sch_rule.daySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get, 0)
+        OpenstudioStandards::Schedules.schedule_day_multiply_by_value(sch_rule.daySchedule, transfer_air_flow_m3s / exhaust_fan.maximumFlowRate.get)
       end
       transfer_air_source_zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_air_flow_schedule)
 
@@ -2884,8 +2353,8 @@ Standard.class_eval do
   # required to setup/back their thermostat setpoints
   #
   # @param time_offset_hash [Hash] Hash providing time (key) and schedule value offset (values)
-  # @param schedule [OpenStudio::model::ScheduleRuleset] OpenStudio schedule object
-  # @return [OpenStudio::model::ScheduleRuleset] Modified OpenStudio schedule object
+  # @param schedule [OpenStudio::Model::ScheduleRuleset] OpenStudio schedule object
+  # @return [OpenStudio::Model::ScheduleRuleset] Modified OpenStudio schedule object
   def model_offset_schedule_value(schedule, time_offset_hash)
     offset_sch = schedule.clone(schedule.model).to_ScheduleRuleset.get
 
@@ -2924,8 +2393,8 @@ Standard.class_eval do
   # required to setup/back their thermostat setpoints
   #
   # @param time_offset_hash [Hash] Hash providing time (key) and schedule value offset (values)
-  # @param schedule [OpenStudio::model::ScheduleRuleset] OpenStudio schedule object
-  # @return [OpenStudio::model::ScheduleRuleset] Modified OpenStudio schedule object
+  # @param schedule [OpenStudio::Model::ScheduleRuleset] OpenStudio schedule object
+  # @return [OpenStudio::Model::ScheduleRuleset] Modified OpenStudio schedule object
   def model_set_schedule_value(schedule, time_value_hash)
     return nil unless schedule.to_ScheduleRuleset.is_initialized
 
@@ -2962,8 +2431,8 @@ Standard.class_eval do
 
   # Modify thermostat schedule to account for a thermostat setback/up
   #
-  # @param thermostat [OpenStudio::model::ThermostatSetpointDualSetpoint] OpenStudio ThermostatSetpointDualSetpoint object
-  # @return [Boolean] true if success
+  # @param thermostat [OpenStudio::Model::ThermostatSetpointDualSetpoint] OpenStudio ThermostatSetpointDualSetpoint object
+  # @return [Boolean] returns true if successful, false if not
   def space_occupancy_standby_mode(thermostat)
     return false
   end

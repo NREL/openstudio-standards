@@ -10,7 +10,7 @@ class ASHRAE901PRM < Standard
 
     # error if zone design air flow rate is not available
     if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ThermalZone', "Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ThermalZone', 'Required ThermalZone method .autosizedDesignAirFlowRate is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
     # Get autosized zone design supply air flow rate
@@ -79,22 +79,18 @@ class ASHRAE901PRM < Standard
     end
 
     # Energy recovery device, other than coil runaround loop
-    if thermal_zone.additionalProperties.hasFeature('fan_power_credit_other_than_coil_runaround')
-      if is_energy_recovery_required
-        adj_in_wc = thermal_zone.additionalProperties.getFeatureAsDouble('fan_power_credit_other_than_coil_runaround').to_f
-        fan_pwr_adjustment_in_wc += adj_in_wc
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for energy recovery device other than coil runaround loop")
-      end
+    if thermal_zone.additionalProperties.hasFeature('fan_power_credit_other_than_coil_runaround') && is_energy_recovery_required
+      adj_in_wc = thermal_zone.additionalProperties.getFeatureAsDouble('fan_power_credit_other_than_coil_runaround').to_f
+      fan_pwr_adjustment_in_wc += adj_in_wc
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for energy recovery device other than coil runaround loop")
     end
 
     # Coil runaround loop
-    if thermal_zone.additionalProperties.hasFeature('has_fan_power_credit_coil_runaround')
-      if is_energy_recovery_required
-        mult = thermal_zone.additionalProperties.getFeatureAsDouble('has_fan_power_credit_coil_runaround').to_f
-        adj_in_wc = 0.6 * 2 * mult # for each stream
-        fan_pwr_adjustment_in_wc += adj_in_wc
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for coil runaround loop")
-      end
+    if thermal_zone.additionalProperties.hasFeature('has_fan_power_credit_coil_runaround') && is_energy_recovery_required
+      mult = thermal_zone.additionalProperties.getFeatureAsDouble('has_fan_power_credit_coil_runaround').to_f
+      adj_in_wc = 0.6 * 2 * mult # for each stream
+      fan_pwr_adjustment_in_wc += adj_in_wc
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for coil runaround loop")
     end
 
     # Evaporative humidifier/cooler in series with another cooling coil
@@ -157,21 +153,21 @@ class ASHRAE901PRM < Standard
   end
 
   # Identify if zone has district energy for occ_and_fuel_type method
-  # @param themal_zone
-  # @return [string] with applicable DistrictHeating and/or DistrictCooling
-  def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(zone)
+  # @param thermal_zone
+  # @return [String with applicable DistrictHeating and/or DistrictCooling
+  def thermal_zone_get_zone_fuels_for_occ_and_fuel_type(thermal_zone)
     zone_fuels = ''
 
     # error if HVACComponent heating fuels method is not available
-    if zone.model.version < OpenStudio::VersionString.new('3.6.0')
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ThermalZone', "Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+    if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.ashrae_90_1_prm.ThermalZone', 'Required HVACComponent methods .heatingFuelTypes and .coolingFuelTypes are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
     end
 
-    htg_fuels = zone.heatingFuelTypes.map { |f| f.valueName }
+    htg_fuels = thermal_zone.heatingFuelTypes.map(&:valueName)
     if htg_fuels.include?('DistrictHeating')
       zone_fuels = 'DistrictHeating'
     end
-    clg_fuels = zone.coolingFuelTypes.map { |f| f.valueName }
+    clg_fuels = thermal_zone.coolingFuelTypes.map(&:valueName)
     if clg_fuels.include?('DistrictCooling')
       zone_fuels += 'DistrictCooling'
     end

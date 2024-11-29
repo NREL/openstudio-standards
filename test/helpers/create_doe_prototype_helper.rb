@@ -20,7 +20,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
   def setup
     # Make a directory to save the resulting models
     @test_dir =  File.expand_path("#{__dir__}/../doe_prototype/output")
-    if !Dir.exists?(@test_dir)
+    if !Dir.exist?(@test_dir)
       Dir.mkdir(@test_dir)
     end
     # Make a file to store the model energy comparisons
@@ -119,7 +119,7 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
       end
 
       run_dir = "#{@test_dir}/#{test_name_prefix}#{model_name}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
 
@@ -219,7 +219,13 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
           end_uses = ['InteriorLights', 'ExteriorLights', 'InteriorEquipment', 'ExteriorEquipment', 'Fans', 'Pumps', 'Heating', 'Cooling', 'HeatRejection', 'Humidifier', 'HeatRecovery', 'DHW', 'Cogeneration', 'Refrigeration', 'WaterSystems']
 
           # EnergyPlus I/O Reference Manual, Table 5.1
-          fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling', 'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+          if model.version < OpenStudio::VersionString.new('3.7.0')
+            fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'Steam', 'DistrictCooling',
+                     'DistrictHeating', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+          else
+            fuels = ['Electricity', 'Gas', 'Gasoline', 'Diesel', 'Coal', 'FuelOilNo1', 'FuelOilNo2', 'Propane', 'OtherFuel1', 'OtherFuel2', 'Water', 'DistrictCooling',
+                     'DistrictHeatingWater', 'DistrictHeatingSteam', 'ElectricityPurchased', 'ElectricitySurplusSold', 'ElectricityNet']
+          end
 
           # Creating individual meters
           meters = end_uses.product fuels
@@ -261,9 +267,9 @@ class CreateDOEPrototypeBuildingTest < Minitest::Test
 
           # Get the current simulation results
           if run_type == 'dd-only'
-            current_values = prototype_creator.model_dd_results_by_end_use_and_fuel_type(model)
+            current_values = OpenstudioStandards::SqlFile.model_get_dd_results_by_end_use_and_fuel_type(model)
           else
-            current_values = prototype_creator.model_results_by_end_use_and_fuel_type(model)
+            current_values = OpenstudioStandards::SqlFile.model_get_annual_results_by_end_use_and_fuel_type(model)
           end
 
           # Get the osm values for all fuel type/end use pairs

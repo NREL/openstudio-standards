@@ -30,7 +30,7 @@ class NECB_HVAC_System_2_Test_NG_RS_H_FPFC < Minitest::Test
   #System #2
   #Sizing Convergence Errors when mua_cooling_types = DX
   def test_necb_hvac_system_2_natural_gas_rotary_screw_hydronic_fpfc()
-    weather_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
+    weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
     template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = 'system_2'
     vintage = 'NECB2011'
@@ -48,7 +48,8 @@ class NECB_HVAC_System_2_Test_NG_RS_H_FPFC < Minitest::Test
     name = "sys2_Boiler-#{boiler_fueltype}_Chiller-#{chiller_type}_MuACoolingType-#{mua_cooling_type}"
     puts "***************************************#{name}*******************************************************\n"
     model = BTAP::FileIO::load_osm(template_osm_file)
-    BTAP::Environment::WeatherFile.new(weather_file).set_weather_file(model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
     standard.add_sys2_FPFC_sys5_TPFC(model: model,
@@ -84,7 +85,7 @@ class NECB_HVAC_System_2_Test_NG_RS_H_FPFC < Minitest::Test
     building_type = 'FullServiceRestaurant' # Does not use this...
     climate_zone = 'NECB HDD Method'
 
-    if !Dir.exists?(sizing_dir)
+    if !Dir.exist?(sizing_dir)
       FileUtils.mkdir_p(sizing_dir)
     end
     # Perform a sizing run

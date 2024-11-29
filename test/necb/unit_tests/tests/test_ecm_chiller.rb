@@ -44,8 +44,8 @@ class NECB_VSDchiller_Tests < Minitest::Test
         # 'Warehouse'
     ]
     @epw_files = [
-        'CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw',
-        # 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw'
+        'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw',
+        # 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2020.epw'
     ]
     @primary_heating_fuels = ['NaturalGas']
 

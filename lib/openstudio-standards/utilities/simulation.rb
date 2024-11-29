@@ -5,12 +5,10 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param run_dir [String] file path location for the annual run, defaults to 'Run' in the current directory
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_run_simulation_and_log_errors(model, run_dir = "#{Dir.pwd}/Run")
     # Make the directory if it doesn't exist
-    unless Dir.exist?(run_dir)
-      FileUtils.mkdir_p(run_dir)
-    end
+    FileUtils.mkdir_p(run_dir)
 
     # Save the model to energyplus idf
     idf_name = 'in.idf'
@@ -28,7 +26,7 @@ Standard.class_eval do
 
     # Set up the simulation
     # Find the weather file
-    epw_path = model_get_full_weather_file_path(model)
+    epw_path = OpenstudioStandards::Weather.model_get_full_weather_file_path(model)
     if epw_path.empty?
       return false
     end
@@ -58,7 +56,7 @@ Standard.class_eval do
       ep_dir = OpenStudio.getEnergyPlusDirectory
       ep_path = OpenStudio.getEnergyPlusExecutable
       ep_tool = OpenStudio::Runmanager::ToolInfo.new(ep_path)
-      idd_path = OpenStudio::Path.new(ep_dir.to_s + '/Energy+.idd')
+      idd_path = OpenStudio::Path.new("#{ep_dir}/Energy+.idd")
       output_path = OpenStudio::Path.new("#{run_dir}/")
 
       # Make a run manager and queue up the run
@@ -103,7 +101,7 @@ Standard.class_eval do
 
       # 'touch' the weather file - for some odd reason this fixes the simulation not running issue we had on openstudio-server.
       # Removed for until further investigation completed.
-      #FileUtils.touch("#{run_dir}/#{epw_name}")
+      # FileUtils.touch("#{run_dir}/#{epw_name}")
 
       cli_path = OpenStudio.getOpenStudioCLI
       cmd = "\"#{cli_path}\" run -w \"#{osw_path}\""
@@ -183,7 +181,7 @@ Standard.class_eval do
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param sizing_run_dir [String] file path location for the sizing run, defaults to 'SR' in the current directory
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_run_sizing_run(model, sizing_run_dir = "#{Dir.pwd}/SR")
     # Change the simulation to only run the sizing days
     sim_control = model.getSimulationControl
@@ -192,6 +190,11 @@ Standard.class_eval do
     if model.version >= OpenStudio::VersionString.new('3.0.0')
       sim_control.setDoHVACSizingSimulationforSizingPeriods(true)
       sim_control.setMaximumNumberofHVACSizingSimulationPasses(1)
+    end
+    if model.version >= OpenStudio::VersionString.new('3.8.0')
+      sim_control.setDoZoneSizingCalculation(true)
+      sim_control.setDoSystemSizingCalculation(true)
+      sim_control.setDoPlantSizingCalculation(true)
     end
 
     # check that all zones have surfaces.
@@ -213,11 +216,12 @@ Standard.class_eval do
   # Method to check if all zones have surfaces. This is required to run a simulation.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def model_do_all_zones_have_surfaces?(model)
     # Check to see if all zones have surfaces.
     model.getThermalZones.each do |zone|
-      if BTAP::Geometry::Surfaces.get_surfaces_from_thermal_zones([zone]).empty?
+      surfaces = zone.spaces.sort.flat_map(&:surfaces)
+      if surfaces.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Thermal zone #{zone.name} does not contain surfaces.\n")
         return false
       end
@@ -283,7 +287,7 @@ Standard.class_eval do
       unless space.thermalZone.empty?
         # error if zone design load methods are not available
         if space.model.version < OpenStudio::VersionString.new('3.6.0')
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', "Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.simulation', 'Required ThermalZone methods .autosizedHeatingDesignLoad and .autosizedCoolingDesignLoad are not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
         end
 
         space_cooling_load = 0.0

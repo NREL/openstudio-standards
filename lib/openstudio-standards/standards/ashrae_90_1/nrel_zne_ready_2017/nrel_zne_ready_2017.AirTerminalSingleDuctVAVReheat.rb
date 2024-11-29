@@ -5,7 +5,7 @@ class NRELZNEReady2017 < ASHRAE901
   # For terminals with hot water heat and DDC, the minimum is 20%, otherwise the minimum is 30%.
   #
   # @param air_terminal_single_duct_vav_reheat [OpenStudio::Model::AirTerminalSingleDuctVAVReheat] the air terminal object
-  # @param has_ddc [Bool] whether or not there is DDC control of the VAV terminal in question
+  # @param has_ddc [Boolean] whether or not there is DDC control of the VAV terminal in question
   # @return [Double] minimum damper position
   def air_terminal_single_duct_vav_reheat_minimum_damper_position(air_terminal_single_duct_vav_reheat, has_ddc = true)
     min_damper_position = nil

@@ -40,6 +40,8 @@ fuels = [
     "Steam",
     "DistrictCooling",
     "DistrictHeating",
+    "DistrictHeatingWater",
+    "DistrictHeatingSteam",
     "ElectricityPurchased",
     "ElectricitySurplusSold",
     "ElectricityNet",

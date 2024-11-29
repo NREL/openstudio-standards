@@ -11,7 +11,7 @@ class ASHRAE901PRM < Standard
     enthalpy_recovery_ratio = heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio(heat_exchanger_air_to_air_sensible_and_latent)
 
     # Get design condition for climate zones
-    climate_zone = model_standards_climate_zone(heat_exchanger_air_to_air_sensible_and_latent.model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(heat_exchanger_air_to_air_sensible_and_latent.model)
     design_conditions = heat_exchanger_air_to_air_sensible_and_latent_design_conditions(heat_exchanger_air_to_air_sensible_and_latent, climate_zone)
 
     # Adjust, and convert ERR to Effectiveness for input to the model
@@ -48,7 +48,7 @@ class ASHRAE901PRM < Standard
   # Determine the required enthalpy recovery ratio (ERR)
   #
   # @param heat_exchanger_air_to_air_sensible_and_latent [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] OpenStudio heat exchanger object
-  # @return [Float] ERR
+  # @return [Double] enthalpy recovery ratio
   def heat_exchanger_air_to_air_sensible_and_latent_enthalpy_recovery_ratio(heat_exchanger_air_to_air_sensible_and_latent)
     return 0.5
   end

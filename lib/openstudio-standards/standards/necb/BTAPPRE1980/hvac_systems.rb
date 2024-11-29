@@ -2,7 +2,7 @@ class BTAPPRE1980
   # Check if ERV is required on this airloop.
   #
   # @param (see #economizer_required?)
-  # @return [Bool] Returns true if required, false if not.
+  # @return [Boolean] Returns true if required, false if not.
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
     # Do not apply ERV to BTAPPRE1980 buildings.
     erv_required = false
@@ -11,7 +11,7 @@ class BTAPPRE1980
 
   # Applies the standard efficiency ratings and typical performance curves to this object from MNECB Supplement 5.4.8.3.
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir, clg_tower_objs)
     chillers = standards_data['chillers']
 
@@ -29,7 +29,8 @@ class BTAPPRE1980
     chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
     chiller_electric_eir.setMinimumPartLoadRatio(0.25)
     chiller_electric_eir.setMinimumUnloadingRatio(0.25)
-
+  
+    chiller_capacity = capacity_w
     if (capacity_w / 1000.0) <= 700.0
       # As per MNECB if chiller capacity <= 700 kW the compressor should be reciprocating so change the type here in
       # the name, compressor_type and search_criteria which is where the compressor type is used.

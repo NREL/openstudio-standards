@@ -5,7 +5,7 @@ class DEER
   # Based on the MASControl rules, it appears that
   # only FixedDryBulb economizers are used.
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] DEER climate zone
   # @return [String] the economizer type.  Possible values are:
   # 'NoEconomizer'

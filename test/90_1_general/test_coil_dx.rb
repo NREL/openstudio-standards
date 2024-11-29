@@ -21,7 +21,7 @@ class TestCoilDX < Minitest::Test
 
     # Minimum EER = 11.2
     correct_eer = 11.2
-    correct_min_cop = standard.eer_to_cop(correct_eer, cap_watts)
+    correct_min_cop = standard.eer_to_cop_no_fan(correct_eer, cap_watts)
     
     # Check the lookup against the truth
     assert_in_delta(min_cop, correct_min_cop, 0.1, "Expected #{correct_eer} EER AKA #{correct_min_cop.round(2)} COP.  Got #{min_cop} COP instead.")
@@ -47,7 +47,7 @@ class TestCoilDX < Minitest::Test
 
     # Minimum EER = 11.2
     correct_eer = 11.2
-    correct_min_cop = standard.eer_to_cop(correct_eer, cap_watts)
+    correct_min_cop = standard.eer_to_cop_no_fan(correct_eer, cap_watts)
     
     # Check the lookup against the truth
     assert_in_delta(min_cop, correct_min_cop, 0.1, "Expected #{correct_eer} EER AKA #{correct_min_cop.round(2)} COP.  Got #{min_cop} COP instead.")

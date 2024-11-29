@@ -82,7 +82,7 @@ class NRELZNEReady2017 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_integrated_economizer_required?(air_loop_hvac, climate_zone)
     return true
   end
@@ -93,7 +93,7 @@ class NRELZNEReady2017 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] Returns true if allowable, if the system has no economizer or no OA system.
+  # @return [Boolean] Returns true if allowable, if the system has no economizer or no OA system.
   #   Returns false if the economizer type is not allowable.
   def air_loop_hvac_economizer_type_allowable?(air_loop_hvac, climate_zone)
     # EnergyPlus economizer types
@@ -181,7 +181,7 @@ class NRELZNEReady2017 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   # @todo Add exception logic for systems with AIA healthcare ventilation requirements dual duct systems
   def air_loop_hvac_multizone_vav_optimization_required?(air_loop_hvac, climate_zone)
     multizone_opt_required = false
@@ -278,7 +278,7 @@ class NRELZNEReady2017 < ASHRAE901
   # DCV and an ERV may be used in conjunction.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_dcv_required_when_erv(air_loop_hvac)
     dcv_required_when_erv_present = true
     return dcv_required_when_erv_present
@@ -347,7 +347,7 @@ class NRELZNEReady2017 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_supply_air_temperature_reset_required?(air_loop_hvac, climate_zone)
     is_sat_reset_required = false
 
@@ -418,7 +418,7 @@ class NRELZNEReady2017 < ASHRAE901
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] Returns true if required, false if not
+  # @return [Boolean] Returns true if required, false if not
   def air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, climate_zone)
     if air_loop_hvac.airLoopHVACOutdoorAirSystem.is_initialized
       oa_system = air_loop_hvac.airLoopHVACOutdoorAirSystem.get
@@ -491,7 +491,7 @@ class NRELZNEReady2017 < ASHRAE901
       ann_op_hrs = 8760.0
     elsif avail_sch.to_ScheduleRuleset.is_initialized
       avail_sch = avail_sch.to_ScheduleRuleset.get
-      ann_op_hrs = schedule_ruleset_annual_hours_above_value(avail_sch, 0.0)
+      ann_op_hrs = OpenstudioStandards::Schedules.schedule_ruleset_get_hours_above_value(avail_sch, 0.0)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
     end
@@ -509,25 +509,7 @@ class NRELZNEReady2017 < ASHRAE901
            'ASHRAE 169-2013-4B',
            'ASHRAE 169-2013-4C',
            'ASHRAE 169-2013-5B'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
-          erv_cfm = nil
-        elsif pct_oa >= 0.2 && pct_oa < 0.3
-          erv_cfm = nil
-        elsif pct_oa >= 0.3 && pct_oa < 0.4
-          erv_cfm = nil
-        elsif pct_oa >= 0.4 && pct_oa < 0.5
-          erv_cfm = nil
-        elsif pct_oa >= 0.5 && pct_oa < 0.6
-          erv_cfm = nil
-        elsif pct_oa >= 0.6 && pct_oa < 0.7
-          erv_cfm = nil
-        elsif pct_oa >= 0.7 && pct_oa < 0.8
-          erv_cfm = nil
-        elsif pct_oa >= 0.8
-          erv_cfm = nil
-        end
+        erv_cfm = nil
       when 'ASHRAE 169-2006-0B',
            'ASHRAE 169-2006-1B',
            'ASHRAE 169-2006-2B',
@@ -536,15 +518,7 @@ class NRELZNEReady2017 < ASHRAE901
            'ASHRAE 169-2013-1B',
            'ASHRAE 169-2013-2B',
            'ASHRAE 169-2013-5C'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
-          erv_cfm = nil
-        elsif pct_oa >= 0.2 && pct_oa < 0.3
-          erv_cfm = nil
-        elsif pct_oa >= 0.3 && pct_oa < 0.4
-          erv_cfm = nil
-        elsif pct_oa >= 0.4 && pct_oa < 0.5
+        if pct_oa < 0.5
           erv_cfm = nil
         elsif pct_oa >= 0.5 && pct_oa < 0.6
           erv_cfm = 26_000
@@ -583,7 +557,7 @@ class NRELZNEReady2017 < ASHRAE901
            'ASHRAE 169-2006-4A',
            'ASHRAE 169-2006-5A',
            'ASHRAE 169-2006-6A',
-           'ASHRAE 169-2006-0A',
+           'ASHRAE 169-2013-0A',
            'ASHRAE 169-2013-1A',
            'ASHRAE 169-2013-2A',
            'ASHRAE 169-2013-3A',
@@ -655,9 +629,7 @@ class NRELZNEReady2017 < ASHRAE901
            'ASHRAE 169-2013-3B',
            'ASHRAE 169-2013-4C',
            'ASHRAE 169-2013-5C'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
+        if pct_oa < 0.2
           erv_cfm = nil
         elsif pct_oa >= 0.2 && pct_oa < 0.3
           erv_cfm = 19_500
@@ -680,7 +652,7 @@ class NRELZNEReady2017 < ASHRAE901
            'ASHRAE 169-2006-3A',
            'ASHRAE 169-2006-4B',
            'ASHRAE 169-2006-5B',
-           'ASHRAE 169-2006-0A',
+           'ASHRAE 169-2013-0A',
            'ASHRAE 169-2013-1A',
            'ASHRAE 169-2013-2A',
            'ASHRAE 169-2013-3A',
@@ -808,12 +780,14 @@ class NRELZNEReady2017 < ASHRAE901
       if erv_type == 'HRV'
         erv.setSensibleEffectivenessat100HeatingAirFlow(0.865)
         erv.setLatentEffectivenessat100HeatingAirFlow(0.0)
-        erv.setSensibleEffectivenessat75HeatingAirFlow(0.887)
-        erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
         erv.setSensibleEffectivenessat100CoolingAirFlow(0.865)
         erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
+        erv.setSensibleEffectivenessat75HeatingAirFlow(0.887)
         erv.setSensibleEffectivenessat75CoolingAirFlow(0.887)
-        erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+        if erv.model.version < OpenStudio::VersionString.new('3.8.0')
+          erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
+          erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+        end
       else
         erv.setSensibleEffectivenessat100HeatingAirFlow(0.755)
         erv.setLatentEffectivenessat100HeatingAirFlow(0.564)
@@ -829,11 +803,13 @@ class NRELZNEReady2017 < ASHRAE901
         erv.setSensibleEffectivenessat100HeatingAirFlow(0.75)
         erv.setLatentEffectivenessat100HeatingAirFlow(0.0)
         erv.setSensibleEffectivenessat75HeatingAirFlow(0.79)
-        erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
         erv.setSensibleEffectivenessat100CoolingAirFlow(0.75)
         erv.setLatentEffectivenessat100CoolingAirFlow(0.0)
         erv.setSensibleEffectivenessat75CoolingAirFlow(0.78)
-        erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+        if erv.model.version < OpenStudio::VersionString.new('3.8.0')
+          erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
+          erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
+        end
       else
         erv.setSensibleEffectivenessat100HeatingAirFlow(0.75)
         erv.setLatentEffectivenessat100HeatingAirFlow(0.74)

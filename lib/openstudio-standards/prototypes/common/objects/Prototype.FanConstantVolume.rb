@@ -7,7 +7,7 @@ class Standard
   # and whether the fan lives inside a unit heater, PTAC, etc.
   #
   # @param fan_constant_volume [OpenStudio::Model::FanConstantVolume] constant volume fan object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
     # Don't modify unit heater fans
     return true if fan_constant_volume.name.to_s.include?('UnitHeater Fan')
@@ -33,9 +33,7 @@ class Standard
     # If the fan lives inside of a zone hvac equipment
     if fan_constant_volume.containingZoneHVACComponent.is_initialized
       zone_hvac = fan_constant_volume.containingZoneHVACComponent.get
-      if zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-        pressure_rise_in_h2o = 1.33
-      elsif zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
+      if zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized || zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
         pressure_rise_in_h2o = 1.33
       elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
         pressure_rise_in_h2o = 0.2

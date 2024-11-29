@@ -3,8 +3,8 @@ class NECB2011
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started Adding Service Water Heating')
     # Get default fuel based on epw location province.
     if swh_fueltype == 'DefaultFuel'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+      swh_fueltype = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
     end
 
     # Calculate the tank size and service water pump information
@@ -99,10 +99,10 @@ class NECB2011
   # Per PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
   # Appendix A: Service Water Heating
   #
-  # @return [Bool] true if successful, false if not
+  # @return [Boolean] true if successful, false if not
   def water_heater_mixed_apply_efficiency(water_heater_mixed)
     # Get the capacity of the water heater
-    # TODO add capability to pull autosized water heater capacity
+    # @todo add capability to pull autosized water heater capacity
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
     capacity_w = water_heater_mixed.heaterMaximumCapacity
     if capacity_w.empty?
@@ -115,7 +115,7 @@ class NECB2011
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Get the volume of the water heater
-    # TODO add capability to pull autosized water heater volume
+    # @todo add capability to pull autosized water heater volume
     # if the Sizing:WaterHeater object is ever implemented in OpenStudio.
     volume_m3 = water_heater_mixed.tankVolume
     if volume_m3.empty?
@@ -203,7 +203,7 @@ class NECB2011
     # Skin loss
     water_heater_mixed.setOffCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
     water_heater_mixed.setOnCycleLossCoefficienttoAmbientTemperature(ua_btu_per_hr_per_c)
-    # TODO: Parasitic loss (pilot light)
+    # @todo Parasitic loss (pilot light)
     # PNNL document says pilot lights were removed, but IDFs
     # still have the on/off cycle parasitic fuel consumptions filled in
     water_heater_mixed.setOnCycleParasiticFuelType(fuel_type)
@@ -445,13 +445,15 @@ class NECB2011
   # space that has a demand for shw.  It calculates the x, y, and z components of the vector between the shw space and the
   # spaces with demand for shw.  The distance of the piping run is calculated by adding the x, y, and z components of the
   # vector (rather than the magnitude of the vector).  For the purposes of calculating pressure loss along the pipe bends,
-  # and other minor losses are accounted by doubling the calculated length of the pipe.  the pipe diameter is defaulted to
-  # 0.01905m (3/4") as recommended by Mike Lubun.  The default kinematic viscosity of water is assumed to be that at
-  # 60 C (in m^2/s).  The default density of water is assumed to be 983 kg/m^3 as per https://hypertextbook.com/facts/2007/AllenMa.shtml
-  # accessed 2018-07-27.  The pipe is assumed to be made out of PVC and have a roughness height of 1.5*10^-6 m as per
+  # and other minor losses are accounted by doubling the calculated length of the pipe.  The default kinematic viscosity 
+  # of water is assumed to be that at 60 C (in m^2/s).  The default density of water is assumed to be 983 kg/m^3 as per 
+  # https://hypertextbook.com/facts/2007/AllenMa.shtml accessed 2018-07-27.  The pipe is assumed to be made out of PVC and 
+  # have a roughness height of 1.5*10^-6 m as per:
   # www.pipeflow.com/pipe-pressure-drop-calculations/pipe-roughness accessed on 2018-07-25.
+  # The default maximum velocity is from the table from 'The Engineering Toolbox' link:
+  # https://www.engineeringtoolbox.com/flow-velocity-water-pipes-d_385.html
   # Chris Kirney 2018-07-27.
-  def auto_size_shw_pump_head(model, default: true, pipe_dia_m: 0.01905, kin_visc_SI: 0.000004736, density_SI: 983, pipe_rough_m: 0.0000015)
+  def auto_size_shw_pump_head(model, default: true, pipe_vel: 1.75, kin_visc_SI: 0.000004736, density_SI: 983, pipe_rough_m: 0.0000015)
     return 179532 if default
 
     mech_room, cond_spaces = find_mech_room(model)
@@ -511,7 +513,8 @@ class NECB2011
       #          2018-07-25.  I assume 3/4" pipe because that is what Mike Lubun says is used in most cases (unless it
       #          it is for process water but we assume that is not the case).
       # Determine the bulk velocity of the shw through the pipe.
-      pipe_vel = 4 * total_peak_flow / (Math::PI * (pipe_dia_m**2))
+      # find pipe diameter for the peak flow
+      pipe_dia_m = (4.0 * total_peak_flow / (Math::PI * pipe_vel))**0.5
       # Get the Reynolds number.
       re_pipe = (pipe_vel * pipe_dia_m) / kin_visc_SI
       # Step 2:  Figure out what the Darcy-Weisbach friction factor is.

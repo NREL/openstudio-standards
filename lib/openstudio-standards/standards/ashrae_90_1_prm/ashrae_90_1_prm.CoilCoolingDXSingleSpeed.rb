@@ -25,35 +25,29 @@ class ASHRAE901PRM < Standard
     mult = 1
     thermal_zone = nil
     comp = coil_cooling_dx_single_speed.containingHVACComponent
-    if comp.is_initialized
-      if comp.get.to_AirLoopHVACUnitarySystem.is_initialized
-        unitary = comp.get.to_AirLoopHVACUnitarySystem.get
-        thermal_zone = unitary.controllingZoneorThermostatLocation.get
-      end
+    if comp.is_initialized && comp.get.to_AirLoopHVACUnitarySystem.is_initialized
+      unitary = comp.get.to_AirLoopHVACUnitarySystem.get
+      thermal_zone = unitary.controllingZoneorThermostatLocation.get
     end
     # meth = comp.methods
     comp = coil_cooling_dx_single_speed.containingZoneHVACComponent
-    if comp.is_initialized
-      if comp.get.thermalZone.is_initialized
-        thermal_zone = comp.get.thermalZone.get
-      end
+    if comp.is_initialized && comp.get.thermalZone.is_initialized
+      thermal_zone = comp.get.thermalZone.get
     end
 
-    if !thermal_zone.nil?
-      if standards_data.key?('userdata_thermal_zone')
-        standards_data['userdata_thermal_zone'].each do |row|
-          next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
+    if !thermal_zone.nil? && standards_data.key?('userdata_thermal_zone')
+      standards_data['userdata_thermal_zone'].each do |row|
+        next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
 
-          if row['number_of_systems'].to_s.upcase.strip != ''
-            mult = row['number_of_systems'].to_s
-            if mult.to_i.to_s == mult
-              mult = mult.to_i
-              capacity_w /= mult
-            else
-              OpenStudio.logFree(OpenStudio::Error, 'prm.log', 'In userdata_thermalzone, number_of_systems requires integer input.')
-            end
-            break
+        if row['number_of_systems'].to_s.upcase.strip != ''
+          mult = row['number_of_systems'].to_s
+          if mult.to_i.to_s == mult
+            mult = mult.to_i
+            capacity_w /= mult
+          else
+            OpenStudio.logFree(OpenStudio::Error, 'prm.log', 'In userdata_thermalzone, number_of_systems requires integer input.')
           end
+          break
         end
       end
     end
@@ -63,14 +57,12 @@ class ASHRAE901PRM < Standard
     if sys_type == 'PTAC' || sys_type == 'PTHP'
       mult = 1
       comp = coil_cooling_dx_single_speed.containingZoneHVACComponent
-      if comp.is_initialized
-        if comp.get.thermalZone.is_initialized
-          mult = comp.get.thermalZone.get.multiplier
-          if mult > 1
-            total_cap = capacity_w
-            capacity_w /= mult
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
-          end
+      if comp.is_initialized && comp.get.thermalZone.is_initialized
+        mult = comp.get.thermalZone.get.multiplier
+        if mult > 1
+          total_cap = capacity_w
+          capacity_w /= mult
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
         end
       end
     end
@@ -82,7 +74,7 @@ class ASHRAE901PRM < Standard
   #
   # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
   # @param sys_type [String] HVAC system type
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_cooling_dx_single_speed_standard_minimum_cop(coil_cooling_dx_single_speed, sys_type, rename = false)
     # find properties

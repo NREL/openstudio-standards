@@ -4,7 +4,7 @@ class Standard
   # Returns standards data for selected space type and template
   #
   # @param space_type [OpenStudio::Model::SpaceType] space type object
-  # @return [hash] hash of internal loads for different load types
+  # @return [Hash] hash of internal loads for different load types
   def space_type_get_standards_data(space_type)
     standards_building_type = if space_type.standardsBuildingType.is_initialized
                                 space_type.standardsBuildingType.get
@@ -48,7 +48,13 @@ class Standard
     interior_lighting_properties = model_find_object(standards_data['prm_interior_lighting'], search_criteria)
 
     if interior_lighting_properties.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Interior lighting PRM properties lookup failed: #{search_criteria}.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Interior lighting PRM properties lookup failed: #{search_criteria}. Trying to search with primary_space_type. It is highly recommended to update the standard space type to one of the lighting types listed in: https://pnnl.github.io/BEM-for-PRM/user_guide/model_requirements/standards_space_type/")
+      search_criteria = {
+        'template' => template,
+        'primary_space_type' => standards_space_type
+      }
+      interior_lighting_properties = model_find_object(standards_data['prm_interior_lighting'], search_criteria)
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.SpaceType', "Interior Lighting PRM properties lookup failed: #{search_criteria}")
       interior_lighting_properties = {}
     end
 
@@ -58,7 +64,7 @@ class Standard
   # Sets the color for the space types as shown in the SketchUp plugin using render by space type.
   #
   # @param space_type [OpenStudio::Model::SpaceType] space type object
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def space_type_apply_rendering_color(space_type)
     # Get the standards data
     space_type_properties = space_type_get_standards_data(space_type)
@@ -91,16 +97,16 @@ class Standard
   # loads directly assigned to spaces.  This method skips plenums.
   #
   # @param space_type [OpenStudio::Model::SpaceType] space type object
-  # @param set_people [Bool] if true, set the people density.
+  # @param set_people [Boolean] if true, set the people density.
   #   Also, assign reasonable clothing, air velocity, and work efficiency inputs
   #   to allow reasonable thermal comfort metrics to be calculated.
-  # @param set_lights [Bool] if true, set the lighting density, lighting fraction
+  # @param set_lights [Boolean] if true, set the lighting density, lighting fraction
   #   to return air, fraction radiant, and fraction visible.
-  # @param set_electric_equipment [Bool] if true, set the electric equipment density
-  # @param set_gas_equipment [Bool] if true, set the gas equipment density
-  # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
-  # @param set_infiltration [Bool] if true, set the infiltration rates
-  # @return [Bool] returns true if successful, false if not
+  # @param set_electric_equipment [Boolean] if true, set the electric equipment density
+  # @param set_gas_equipment [Boolean] if true, set the gas equipment density
+  # @param set_ventilation [Boolean] if true, set the ventilation rates (per-person and per-area)
+  # @param set_infiltration [Boolean] if true, set the infiltration rates
+  # @return [Boolean] returns true if successful, false if not
   def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
     # Skip plenums
     # Check if the space type name
@@ -109,10 +115,8 @@ class Standard
       return false
     end
 
-    if space_type.standardsSpaceType.is_initialized
-      if space_type.standardsSpaceType.get.downcase.include?('plenum')
-        return false
-      end
+    if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+      return false
     end
 
     # Get the standards data
@@ -132,7 +136,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.people.sort
-      if instances.size.zero?
+      if instances.empty?
         # Create a new definition and instance
         definition = OpenStudio::Model::PeopleDefinition.new(space_type.model)
         definition.setName("#{space_type.name} People Definition")
@@ -224,7 +228,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.lights.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Lights Definition")
         instance = OpenStudio::Model::Lights.new(definition)
@@ -304,7 +308,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.electricEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::ElectricEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Elec Equip Definition")
         instance = OpenStudio::Model::ElectricEquipment.new(definition)
@@ -347,7 +351,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.gasEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::GasEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Gas Equip Definition")
         instance = OpenStudio::Model::GasEquipment.new(definition)
@@ -439,7 +443,7 @@ class Standard
     if set_infiltration && infiltration_have_info
       # Remove all but the first instance
       instances = space_type.spaceInfiltrationDesignFlowRates.sort
-      if instances.size.zero?
+      if instances.empty?
         instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space_type.model)
         instance.setName("#{space_type.name} Infiltration")
         instance.setSpaceType(space_type)
@@ -478,8 +482,9 @@ class Standard
   # Initially, only lighting power density will be set
   # Possibly infiltration will also be set from here
   #
-  # @param model [OpenStudio::Model::SpaceType] OpenStudio space type object
+  # @param space_type [OpenStudio::Model::SpaceType] OpenStudio space type object
   # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] returns true if successful, false if not
   def space_type_apply_int_loads_prm(space_type, model)
     # Skip plenums
     # Check if the space type name
@@ -488,10 +493,8 @@ class Standard
       return false
     end
 
-    if space_type.standardsSpaceType.is_initialized
-      if space_type.standardsSpaceType.get.downcase.include?('plenum')
-        return false
-      end
+    if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+      return false
     end
 
     # Get the standards data
@@ -522,14 +525,14 @@ class Standard
       else
         lighting_per_area_hash = {}
         multiple_lpd_value_check = true
-        space_type.spaces.each do |space|
+        space_type.spaces.each do |space_type_space|
           # Space height
-          space_volume = space.volume
-          space_area = space.floorArea
+          space_volume = space_type_space.volume
+          space_area = space_type_space.floorArea
           space_height = space_volume / space_area
           # New lpd values
-          lighting_per_area_new = lighting_per_area + lighting_per_length * space_height
-          lighting_per_area_hash[space.name.to_s] = lighting_per_area_new
+          lighting_per_area_new = lighting_per_area + (lighting_per_length * space_height)
+          lighting_per_area_hash[space_type_space.name.to_s] = lighting_per_area_new
         end
       end
     end
@@ -537,7 +540,7 @@ class Standard
     if lights_have_info
       # Remove all but the first instance
       instances = space_type.lights.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Lights Definition")
         instance = OpenStudio::Model::Lights.new(definition)
@@ -564,10 +567,10 @@ class Standard
           end
         end
       else
-        space_type.spaces.each do |space|
+        space_type.spaces.each do |space_type_space|
           new_space_type = space_type.clone.to_SpaceType.get
-          space.setSpaceType(new_space_type)
-          lighting_per_area = lighting_per_area_hash[space.name.to_s]
+          space_type_space.setSpaceType(new_space_type)
+          lighting_per_area = lighting_per_area_hash[space_type_space.name.to_s]
           new_space_type.lights.sort.each do |inst|
             definition = inst.lightsDefinition
             unless lighting_per_area.zero?
@@ -580,11 +583,13 @@ class Standard
         space_type.remove
       end
     end
+    return true
   end
 
   # Modify the lighting schedules for Appendix G PRM for 2016 and later
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] returns true if successful, false if not
   def space_type_light_sch_change(model)
     return true
   end
@@ -597,15 +602,15 @@ class Standard
   # does not inherit from the default schedule set.
   #
   # @param space_type [OpenStudio::Model::SpaceType] space type object
-  # @param set_people [Bool] if true, set the occupancy and activity schedules
-  # @param set_lights [Bool] if true, set the lighting schedule
-  # @param set_electric_equipment [Bool] if true, set the electric schedule schedule
-  # @param set_gas_equipment [Bool] if true, set the gas equipment density
-  # @param set_infiltration [Bool] if true, set the infiltration schedule
-  # @param make_thermostat [Bool] if true, makes a thermostat for this space type from the
+  # @param set_people [Boolean] if true, set the occupancy and activity schedules
+  # @param set_lights [Boolean] if true, set the lighting schedule
+  # @param set_electric_equipment [Boolean] if true, set the electric schedule schedule
+  # @param set_gas_equipment [Boolean] if true, set the gas equipment density
+  # @param set_infiltration [Boolean] if true, set the infiltration schedule
+  # @param make_thermostat [Boolean] if true, makes a thermostat for this space type from the
   #   schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
   #   but may be found and used later.
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def space_type_apply_internal_load_schedules(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
     # Get the standards data
     space_type_properties = space_type_get_standards_data(space_type)
@@ -697,7 +702,7 @@ class Standard
   # @param space_type [OpenStudio::Model::SpaceType] space type object
   # @param space_type_properties [Hash] hash of space type properties
   # @param default_sch_set [OpenStudio::Model::DefaultScheduleSet] default schedule set
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def apply_lighting_schedule(space_type, space_type_properties, default_sch_set)
     lighting_sch = space_type_properties['lighting_schedule']
     return false if lighting_sch.nil?
@@ -710,9 +715,9 @@ class Standard
   # Returns standards data for selected construction
   #
   # @param space_type [OpenStudio::Model::SpaceType] space type object
-  # @param intended_surface_type [string] the type of surface
-  # @param standards_construction_type [string] the type of construction
-  # @return [hash] hash of construction properties
+  # @param intended_surface_type [String] the type of surface
+  # @param standards_construction_type [String] the type of construction
+  # @return [Hash] hash of construction properties
   def space_type_get_construction_properties(space_type, intended_surface_type, standards_construction_type)
     # get building_category value
     building_category = if !space_type_get_standards_data(space_type).nil? && space_type_get_standards_data(space_type)['is_residential'] == 'Yes'

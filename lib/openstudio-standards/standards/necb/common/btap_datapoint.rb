@@ -9,6 +9,7 @@ require 'git-revision'
 class BTAPDatapoint
   def initialize(input_folder: nil,
                  output_folder: nil,
+                 weather_folder: nil,
                  input_folder_cache: File.join(__dir__, 'input_cache'))
     @failed = false
 
@@ -19,7 +20,10 @@ class BTAPDatapoint
     if output_folder.nil?
       output_folder = File.join(__dir__, 'output')
     end
-
+    # Create an empty weather folder if one doesn't exist.  This is to avoid issues later.
+    if weather_folder.nil?
+      weather_folder = File.join(__dir__, 'weather')
+    end
     puts("INPUT FOLDER:#{input_folder}")
     puts("OUTPUT FOLDER:#{output_folder}")
 
@@ -30,12 +34,12 @@ class BTAPDatapoint
     @dp_temp_folder = File.join(__dir__, 'temp_folder')
 
     # Make sure temp folder is always clean.
-    FileUtils.rm_rf(@dp_temp_folder) if Dir.exist?(@dp_temp_folder)
+    FileUtils.rm_rf(@dp_temp_folder)
     FileUtils.mkdir_p(@dp_temp_folder)
 
     # Create local cache for datapoint folder. Makes everything faster an easier to have a local copy. Mirroring logic
     # even if running locally to be consistent.
-    FileUtils.rm_rf(input_folder_cache) if Dir.exist?(input_folder_cache)
+    FileUtils.rm_rf(input_folder_cache)
     FileUtils.mkdir_p(input_folder_cache)
 
     # Check if input where input is from.
@@ -108,13 +112,14 @@ class BTAPDatapoint
         epw_file = @options[:epw_file]
         epw_dir = nil
         local_epw_file_path = File.join(input_folder_cache,@options[:epw_file])
-        epw_dir = input_folder_cache if File.exists? local_epw_file_path
-        @standard.model_add_design_days_and_weather_file(model, climate_zone, epw_file, epw_dir) # Standards
-        @standard.model_add_ground_temperatures(model, nil, climate_zone)
+        epw_dir = input_folder_cache if File.exist? local_epw_file_path
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       else
         # Otherwise modify osm input with options.
         @standard.model_apply_standard(model: model,
                                        epw_file: @options[:epw_file],
+                                       custom_weather_folder: weather_folder,
                                        sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
                                        primary_heating_fuel: @options[:primary_heating_fuel],
                                        necb_reference_hp: @options[:necb_reference_hp],
@@ -170,7 +175,8 @@ class BTAPDatapoint
                                        airloop_economizer_type: @options[:airloop_economizer_type],
                                        shw_scale: @options[:shw_scale],
                                        baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
-                                       tbd_option: @options[:tbd_option]
+                                       tbd_option: @options[:tbd_option],
+                                       necb_hdd: @options[:necb_hdd]
                                        )
       end
 
@@ -270,7 +276,7 @@ class BTAPDatapoint
       else
         # Copy results to datapoint output folder.
         @dp_output_folder = File.join(output_folder, @options[:datapoint_id])
-        FileUtils.rm_rf(@dp_output_folder) if Dir.exist?(@dp_output_folder)
+        FileUtils.rm_rf(@dp_output_folder)
         FileUtils.mkdir_p(@dp_output_folder)
         FileUtils.cp_r(File.join(@dp_temp_folder, '.'), @dp_output_folder) # Needs dot otherwise will copy temp folder and not just contents.
         puts "Copied output to your designated output folder in the #{@options[:datapoint_id]} subfolder."

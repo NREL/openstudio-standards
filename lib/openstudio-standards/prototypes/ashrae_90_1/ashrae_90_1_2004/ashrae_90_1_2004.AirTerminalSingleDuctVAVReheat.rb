@@ -6,7 +6,7 @@ class ASHRAE9012004 < ASHRAE901
   #
   # @param air_terminal_single_duct_vav_reheat [OpenStudio::Model::AirTerminalSingleDuctVAVReheat] the air terminal object
   # @param zone_oa_per_area [Double] the zone outdoor air per area in m^3/s*m^2
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(air_terminal_single_duct_vav_reheat, zone_oa_per_area)
     min_damper_position = 0.3
 

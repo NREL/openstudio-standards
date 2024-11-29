@@ -6,14 +6,11 @@ include(NecbHelper)
 
 class NECB_Autozone_Tests < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
 
-    @epw_file = 'CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw'
+    @epw_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
     @template = 'NECB2011'
   end
 

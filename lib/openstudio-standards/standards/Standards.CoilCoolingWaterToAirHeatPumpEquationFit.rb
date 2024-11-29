@@ -22,7 +22,7 @@ class Standard
   # Finds lookup object in standards and return efficiency
   #
   # @param coil_cooling_water_to_air_heat_pump [OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit] coil cooling object
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_cooling_water_to_air_heat_pump_standard_minimum_cop(coil_cooling_water_to_air_heat_pump, rename = false, computer_room_air_conditioner = false)
     search_criteria = {}
@@ -61,7 +61,7 @@ class Standard
     # If specified as EER (heat pump)
     unless coil_props['minimum_full_load_efficiency'].nil?
       min_eer = coil_props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer, capacity_w = nil)
+      cop = eer_to_cop_no_fan(min_eer, capacity_w = nil)
       new_comp_name = "#{coil_cooling_water_to_air_heat_pump.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{template}: #{coil_cooling_water_to_air_heat_pump.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -116,7 +116,7 @@ class Standard
     if coil_props.nil?
       # search again without capacity
       matching_objects = model_find_objects(standards_data['water_source_heat_pumps'], search_criteria, nil, Date.today)
-      if matching_objects.size.zero?
+      if matching_objects.empty?
         # This proves that the search_criteria has issue finding the correct coil prop
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
       else

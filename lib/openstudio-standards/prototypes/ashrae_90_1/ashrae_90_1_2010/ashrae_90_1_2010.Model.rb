@@ -3,7 +3,7 @@ class ASHRAE9012010 < ASHRAE901
 
   # Determine the prototypical economizer type for the model.
   #
-  # @param model [OpenStudio::Model::Model] the model
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
   # @return [String] the economizer type.  Possible values are:
   # 'NoEconomizer'
@@ -42,9 +42,9 @@ class ASHRAE9012010 < ASHRAE901
   def model_fenestration_orientation(model, climate_zone)
     wwr = false
 
-    win_area_w = model_get_window_area_info_for_orientation(model, 'W', wwr: wwr)
-    win_area_e = model_get_window_area_info_for_orientation(model, 'E', wwr: wwr)
-    win_area_s = model_get_window_area_info_for_orientation(model, 'S', wwr: wwr)
+    win_area_w = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['west_window']
+    win_area_e = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['east_window']
+    win_area_s = OpenstudioStandards::Geometry.model_get_exterior_window_and_wall_area_by_orientation(model)['south_window']
 
     # Make prototype specific adjustment to meet the code requirement
     if !((win_area_s > win_area_w) && (win_area_s > win_area_e))
@@ -58,10 +58,10 @@ class ASHRAE9012010 < ASHRAE901
           #   5.2.1.7 in Thornton et al. 2011
           when 'Hospital'
             # Rotate the building counter-clockwise
-            model_set_building_north_axis(model, 270.0)
+            OpenstudioStandards::Geometry.model_set_building_north_axis(model, 270.0)
           when 'SmallHotel'
             # Rotate the building clockwise
-            model_set_building_north_axis(model, 180.0)
+            OpenstudioStandards::Geometry.model_set_building_north_axis(model, 180.0)
           else
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.ashrae_90_1_2010', "The prototype model doesn't meet the requirement from Section 5.5.4.5 in ASHRAE Standard 90.1-2010.")
         end

@@ -6,7 +6,7 @@ class Standard
   # Sets the fan pressure rise based on the Prototype buildings inputs
   #
   # @param fan_zone_exhaust [OpenStudio::Model::FanZoneExhaust] the exhaust fan
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fan_zone_exhaust_apply_prototype_fan_pressure_rise(fan_zone_exhaust)
     # Do not modify dummy exhaust fans
     return true if fan_zone_exhaust.name.to_s.downcase.include? 'dummy'

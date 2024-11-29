@@ -5,7 +5,7 @@ class CBES < Standard
   # Does nothing for CBES.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # return [Bool] returns true if successful, false if not
+  # return [Boolean] returns true if successful, false if not
   # @todo enable damper position adjustment for legacy IDFS
   def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac)
     # Do nothing
@@ -16,8 +16,8 @@ class CBES < Standard
   # Not required by CBES.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @param has_ddc [Bool] whether or not the system has DDC control over VAV terminals.
-  # return [Bool] returns true if static pressure reset is required, false if not
+  # @param has_ddc [Boolean] whether or not the system has DDC control over VAV terminals.
+  # return [Boolean] returns true if static pressure reset is required, false if not
   def air_loop_hvac_static_pressure_reset_required?(air_loop_hvac, has_ddc)
     sp_reset_required = false
     return sp_reset_required
@@ -38,7 +38,7 @@ class CBES < Standard
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_demand_control_ventilation_required?(air_loop_hvac, climate_zone)
     dcv_required = false
     return dcv_required
@@ -49,7 +49,7 @@ class CBES < Standard
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
   # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
     # Do nothing
     return true

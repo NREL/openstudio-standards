@@ -73,7 +73,7 @@ def model_hvac_test(hvac_arguments)
   if File.exist?("#{model_dir}/AR/run/eplusout.sql")
     puts "test: '#{model_test_name}' results already available. Not re-rerunning energy simulation."
     model = OpenStudio::Model::Model.new
-    sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
+    sql = OpenstudioStandards::SqlFile.sql_file_safe_load("#{model_dir}/AR/run/eplusout.sql")
     model.setSqlFile(sql)
     annual_run_success = true
   end
@@ -89,15 +89,14 @@ def model_hvac_test(hvac_arguments)
     end
 
     # Assign a weather file
-    standard.model_add_design_days_and_weather_file(model, climate_zone, '')
-    standard.model_add_ground_temperatures(model, 'MediumOffice', climate_zone)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     zones = model.getThermalZones
-    heated_and_cooled_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-    heated_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) }
-    cooled_zones = zones.select { |zone| standard.thermal_zone_cooled?(zone) }
-    cooled_only_zones = zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-    heated_only_zones = zones.select { |zone| standard.thermal_zone_heated?(zone) && !standard.thermal_zone_cooled?(zone) }
+    heated_and_cooled_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+    heated_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) }
+    cooled_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+    cooled_only_zones = zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+    heated_only_zones = zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && !OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
     system_zones = heated_and_cooled_zones + cooled_only_zones
     case zone_selection
     when 'heated_zones'
@@ -141,7 +140,7 @@ def model_hvac_test(hvac_arguments)
     end
 
     # Check the conditioned floor area
-    if standard.model_net_conditioned_floor_area(model).zero?
+    if model.building.get.conditionedFloorArea.get.zero?
       errs << "Test model #{model_test_name} has no conditioned area."
       log_hvac_test_errors(errs)
       return errs
@@ -176,9 +175,9 @@ def model_hvac_test(hvac_arguments)
   end
 
   # Check unmet hours
-  unmet_heating_hrs = standard.model_annual_occupied_unmet_heating_hours(model)
-  unmet_cooling_hrs = standard.model_annual_occupied_unmet_cooling_hours(model)
-  unmet_hrs = standard.model_annual_occupied_unmet_hours(model)
+  unmet_heating_hrs = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_heating_hours(model)
+  unmet_cooling_hrs = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_cooling_hours(model)
+  unmet_hrs = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(model)
   if unmet_hrs
     if unmet_heating_hrs > unmet_hrs_htg
       errs << "Model #{model_test_name} has #{unmet_heating_hrs.round(1)} unmet occupied heating hours, more than the expected limit of #{unmet_hrs_htg}."
@@ -215,6 +214,16 @@ def default_radiant_test_hash
   default_hash = {two_pipe_system: false,
                   two_pipe_control_strategy: 'outdoor_air_lockout',
                   two_pipe_lockout_temperature: 65.0,
+                  plant_supply_water_temperature_control: false,
+                  plant_supply_water_temperature_control_strategy: 'outdoor_air',
+                  hwsp_at_oat_low: 120,
+                  hw_oat_low: 55,
+                  hwsp_at_oat_high: 80,
+                  hw_oat_high: 70,
+                  chwsp_at_oat_low: 70,
+                  chw_oat_low: 65,
+                  chwsp_at_oat_high: 55,
+                  chw_oat_high: 75,
                   radiant_type: 'floor',
                   radiant_temperature_control_type: 'SurfaceFaceTemperature',
                   radiant_setpoint_control_type: 'ZeroFlowPower',
@@ -224,7 +233,7 @@ def default_radiant_test_hash
                   use_zone_occupancy_for_control: true,
                   occupied_percentage_threshold: 0.10,
                   model_occ_hr_start: 6.0,
-                  model_occ_hr_end: 18.0,                  
+                  model_occ_hr_end: 18.0,
                   proportional_gain: 0.3,
                   switch_over_time: 24.0,
                   radiant_availability_type: 'precool',
@@ -257,6 +266,16 @@ def model_radiant_system_test(arguments)
   two_pipe_system = hash[:two_pipe_system]
   two_pipe_control_strategy = hash[:two_pipe_control_strategy]
   two_pipe_lockout_temperature = hash[:two_pipe_lockout_temperature]
+  plant_supply_water_temperature_control = hash[:plant_supply_water_temperature_control]
+  plant_supply_water_temperature_control_strategy = hash[:plant_supply_water_temperature_control_strategy]
+  hwsp_at_oat_low = hash[:hwsp_at_oat_low]
+  hw_oat_low = hash[:hw_oat_low]
+  hwsp_at_oat_high = hash[:hwsp_at_oat_high]
+  hw_oat_high = hash[:hw_oat_high]
+  chwsp_at_oat_low = hash[:chwsp_at_oat_low]
+  chw_oat_low = hash[:chw_oat_low]
+  chwsp_at_oat_high = hash[:chwsp_at_oat_high]
+  chw_oat_high = hash[:chw_oat_high]
   radiant_type = hash[:radiant_type]
   radiant_temperature_control_type = hash[:radiant_temperature_control_type]
   radiant_setpoint_control_type = hash[:radiant_setpoint_control_type]
@@ -287,7 +306,7 @@ def model_radiant_system_test(arguments)
   if File.exist?("#{model_dir}/AR/run/eplusout.sql")
     puts "test: '#{model_test_name}' results already available. Not re-rerunning energy simulation."
     model = OpenStudio::Model::Model.new
-    sql = standard.safe_load_sql("#{model_dir}/AR/run/eplusout.sql")
+    sql = OpenstudioStandards::SqlFile.sql_file_safe_load("#{model_dir}/AR/run/eplusout.sql")
     model.setSqlFile(sql)
     annual_run_success = true
   end
@@ -303,8 +322,7 @@ def model_radiant_system_test(arguments)
     end
 
     # Assign a weather file
-    standard.model_add_design_days_and_weather_file(model, climate_zone, '')
-    standard.model_add_ground_temperatures(model, 'MediumOffice', climate_zone)
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # create plant loops
     zones = model.getThermalZones
@@ -332,6 +350,16 @@ def model_radiant_system_test(arguments)
                                                         two_pipe_system: two_pipe_system,
                                                         two_pipe_control_strategy: two_pipe_control_strategy,
                                                         two_pipe_lockout_temperature: two_pipe_lockout_temperature,
+                                                        plant_supply_water_temperature_control: plant_supply_water_temperature_control,
+                                                        plant_supply_water_temperature_control_strategy: plant_supply_water_temperature_control_strategy,
+                                                        hwsp_at_oat_low: hwsp_at_oat_low,
+                                                        hw_oat_low: hw_oat_low,
+                                                        hwsp_at_oat_high: hwsp_at_oat_high,
+                                                        hw_oat_high: hw_oat_high,
+                                                        chwsp_at_oat_low: chwsp_at_oat_low,
+                                                        chw_oat_low: chw_oat_low,
+                                                        chwsp_at_oat_high: chwsp_at_oat_high,
+                                                        chw_oat_high: chw_oat_high,
                                                         radiant_type: radiant_type,
                                                         radiant_temperature_control_type: radiant_temperature_control_type,
                                                         radiant_setpoint_control_type: radiant_setpoint_control_type,
@@ -379,9 +407,9 @@ def model_radiant_system_test(arguments)
   end
 
   # Check unmet hours
-  unmet_heating_hrs = standard.model_annual_occupied_unmet_heating_hours(model)
-  unmet_cooling_hrs = standard.model_annual_occupied_unmet_cooling_hours(model)
-  unmet_hrs = standard.model_annual_occupied_unmet_hours(model)
+  unmet_heating_hrs = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_heating_hours(model)
+  unmet_cooling_hrs = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_cooling_hours(model)
+  unmet_hrs = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(model)
   if unmet_hrs
     if unmet_heating_hrs > unmet_hrs_htg
       errs << "Model #{model_test_name} has #{unmet_heating_hrs.round(1)} unmet occupied heating hours, more than the expected limit of #{unmet_hrs_htg}."

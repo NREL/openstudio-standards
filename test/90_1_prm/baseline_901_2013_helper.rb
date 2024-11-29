@@ -65,8 +65,6 @@ module Baseline9012013
   # @author Eric Ringold, Ambient Energy
   def check_sat_delta(model)
 
-    standard = Standard.build('90.1-2013')
-
     delta_good = []
     cool_delta_bad = []
     heat_delta_bad = []
@@ -81,8 +79,8 @@ module Baseline9012013
         cooling_sch = tstat.coolingSetpointTemperatureSchedule.get.to_ScheduleRuleset.get
 
         # get heating and cooling setpoints
-        heating_min_max = standard.schedule_ruleset_annual_min_max_value(heating_sch)
-        cooling_min_max = standard.schedule_ruleset_annual_min_max_value(cooling_sch)
+        heating_min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(heating_sch)
+        cooling_min_max = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(cooling_sch)
 
         heat_set_t = OpenStudio.convert(heating_min_max['max'],"C","F").get
         cool_set_t = OpenStudio.convert(cooling_min_max['min'],"C","F").get
@@ -109,8 +107,8 @@ module Baseline9012013
         if (heat_delta - 20).abs > 0.1
           heat_delta_bad << "#{zone.name} Htg delta =#{heat_delta}"
         end
-      end # if !tstat
-    end #model.get
+      end
+    end
     assert_equal(cool_delta_bad.size, 0, "Cooling supply air to room air temperature difference is not 20F for zones #{cool_delta_bad.sort.join("\n")}.")
     assert_equal(heat_delta_bad.size, 0, "Heating supply air to room air temperature difference is not 20F for zones #{heat_delta_bad.sort.join("\n")}.")
 
@@ -160,12 +158,8 @@ module Baseline9012013
   # or accreditation standards, whichever is larger.
   # @author Eric Ringold, Ambient Energy
   def check_min_vav_setpoints(model)
-
-    standard = Standard.build('90.1-2013')
-
     min_good = []
     min_bad = []
-
     vent_driven = []
     oa_driven = []
     fixed_min_driven = []
@@ -187,7 +181,7 @@ module Baseline9012013
           end
 
           #get outdoor air rate from DSOA
-          min_oa_flow = standard.thermal_zone_outdoor_airflow_rate(zone)
+          min_oa_flow = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
 
           # larger of fixed 20% fraction and fraction based
           # on minimum OA requirement
@@ -338,23 +332,22 @@ module Baseline9012013
           if size < 65000
             seer = 14.0
             # Per PNNL, convert SEER to COP with fan
-            eer = -0.0182 * seer * seer + 1.1088 * seer
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = -0.0076 * seer * seer + 0.3796 * seer
           elsif size >= 65000 && size < 135000
             eer = 11.0
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           elsif size >= 135000 && size < 240000
             eer = 10.8
             # Per PNNL, covert EER to COP using a capacity-agnostic formula
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           elsif size >= 240000 && size < 760000
             eer = 9.8
             # Per PNNL, covert EER to COP using a capacity-agnostic formula
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           else # size >= 760000
             eer = 9.5
             # Per PNNL, covert EER to COP using a capacity-agnostic formula
-            cop = (eer / 3.413 + 0.12) / (1 - 0.12)
+            cop = (eer / OpenStudio.convert(1.0,'W','Btu/h').get + 0.12) / (1 - 0.12)
           end
 
           if (coil_cop - cop).abs >= 0.1
@@ -393,7 +386,7 @@ module Baseline9012013
     # get proposed ventilation from designSpecificationOutdoorAir
     zone_oa = {}
     proposed_model.getThermalZones.sort.each do |zone|
-      oa_rate = standard.thermal_zone_outdoor_airflow_rate(zone)
+      oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
       zone_oa["#{zone.name.get}"] = oa_rate
     end
 
@@ -406,7 +399,7 @@ module Baseline9012013
       if bzone.is_initialized
         bzone = bzone.get
         #puts bzone.name
-        oa_rate = standard.thermal_zone_outdoor_airflow_rate(bzone)
+        oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(bzone)
         # compare baseline and proposed rates
         if (oa_rate - zone_oa[k]).abs <= 0.0001
           #puts "#{bzone.name} MEETS Requirement with Prop OA: #{zone_oa[k]}, Base OA: #{oa_rate}"
@@ -576,9 +569,17 @@ module Baseline9012013
     prm_maj_sec = 'G3.1.1 Baseline HVAC System Type'
 
     # get model objects, could use zone.heatinFuelTypes or zone.appGHeatingFuelTypes
-    prop_dist_htgs = prop_model.getDistrictHeatings
+    if prop_model.version < OpenStudio::VersionString.new('3.7.0')
+      prop_dist_htgs = prop_model.getDistrictHeatings
+    else
+      prop_dist_htgs = prop_model.getDistrictHeatingWaters
+    end
     prop_dist_clgs = prop_model.getDistrictCoolings
-    base_dist_htgs = base_model.getDistrictHeatings
+    if prop_model.version < OpenStudio::VersionString.new('3.7.0')
+      base_dist_htgs = base_model.getDistrictHeatings
+    else
+      base_dist_htgs = base_model.getDistrictHeatingWaters
+    end
     base_dist_clgs = base_model.getDistrictCoolings
 
     # tests
@@ -660,7 +661,7 @@ module Baseline9012013
     chiller_num = chillers.size
 
     # get baseline peak cooling laod
-    base_peak_clg_si = 'TODO' # get from sql
+    base_peak_clg_si = '' # @todo get from sql
     base_peak_clg_ip = 200 # OpenStudio.convert(base_peak_clg_si, 'W', 'tons').get
 
     chiller_cap = []
@@ -674,7 +675,7 @@ module Baseline9012013
       elsif base_peak_clg_ip >= 600
         assert(chiller_num >= 2, "#{prm_maj_sec}: number of chillers")
         chillers.each do |c|
-          #TODO get size
+          # @todo get size
 
         end
       end
@@ -800,14 +801,22 @@ module Baseline9012013
             next unless dd.dayType == 'SummerDesignDay'
             next unless dd.name.get.to_s.include?('WB=>MDB')
 
-            if dd.humidityIndicatingType == 'Wetbulb'
-              des_day_wb_si = dd.humidityIndicatingConditionsAtMaximumDryBulb
-              des_day_wb_ip << OpenStudio.convert(des_day_wb_si, 'C', 'F').get
-              puts "DD WB = #{des_day_wb_ip}"
+            if base_model.version < OpenStudio::VersionString.new('3.3.0')
+              if dd.humidityIndicatingType == 'Wetbulb'
+                des_day_wb_si = dd.humidityIndicatingConditionsAtMaximumDryBulb
+                des_day_wb_ip << OpenStudio.convert(des_day_wb_si, 'C', 'F').get
+                puts "DD WB = #{des_day_wb_ip}"
+              else
+                puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
+              end
             else
-              puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
+              if dd.humidityConditionType == 'Wetbulb' && dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+                des_day_wb_ip << OpenStudio.convert(dd.wetBulbOrDewPointAtMaximumDryBulb.get, 'C', 'F').get
+                puts "DD WB = #{des_day_wb_ip}"
+              else
+                puts "#{prm_maj_sec}: #{prm_min_sec}: cannot determine design day information"
+              end
             end
-
           end
 
           if des_day_wb_ip.size == 0
@@ -1970,7 +1979,12 @@ module Baseline9012013
     hot_water_area_served_ft2 = 0
     zones_served = []
     # get hot water loop
-    model.getDistrictHeatings.each do |district_heating|
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      district_heatings = model.getDistrictHeatings
+    else
+      district_heatings = model.getDistrictHeatingWaters
+    end
+    district_heatings.each do |district_heating|
       if district_heating.plantLoop.is_initialized
         plant_loop = district_heating.plantLoop.get
         next if plant_loop.name.get.to_s.include? "DHW" or plant_loop.name.get.to_s.include? "Service Water Heating"
@@ -2184,10 +2198,19 @@ module Baseline9012013
           design_day_name = design_day.name.get.to_s
           next unless design_day.dayType == "SummerDesignDay"
           next unless design_day_name.include? "WB=>MDB"
-          next unless design_day.humidityIndicatingType == "Wetbulb"
 
-          design_wb_c = design_day.humidityIndicatingConditionsAtMaximumDryBulb
-          design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
+          if model.version < OpenStudio::VersionString.new('3.3.0')
+            next unless design_day.humidityIndicatingType == "Wetbulb"
+            design_wb_c = design_day.humidityIndicatingConditionsAtMaximumDryBulb
+            design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
+          else
+            next unless design_day.humidityConditionType == "Wetbulb"
+            if design_day.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+              design_wb_c = design_day.wetBulbOrDewPointAtMaximumDryBulb
+              design_wb_f = OpenStudio.convert(design_wb_c, 'C', 'F').get
+            end
+          end
+
           if design_wb_f_max.nil?
             design_wb_f_max = design_wb_f
           else
@@ -2277,7 +2300,12 @@ module Baseline9012013
   def check_hw_controls(model, failure_array)
     # get hot water loops
     hw_loops = []
-    model.getDistrictHeatings.each do |district_heating|
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      district_heatings = model.getDistrictHeatings
+    else
+      district_heatings = model.getDistrictHeatingWaters
+    end
+    district_heatings.each do |district_heating|
       if district_heating.plantLoop.is_initialized
         next if district_heating.plantLoop.get.name.get.to_s.include? "DHW" or district_heating.plantLoop.get.name.get.to_s.include? "Service Water Heating"
         hw_loops << district_heating.plantLoop.get

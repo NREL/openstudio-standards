@@ -8,7 +8,7 @@ module Fan
   # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
   #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @param allowed_bhp [Double] allowable brake horsepower
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fan_apply_standard_minimum_motor_efficiency(fan, allowed_bhp)
     # Find the motor efficiency
     motor_eff, nominal_hp = fan_standard_minimum_motor_efficiency_and_size(fan, allowed_bhp)
@@ -39,7 +39,7 @@ module Fan
   # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
   #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @param target_fan_power [Double] the target fan power in watts
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fan_adjust_pressure_rise_to_meet_fan_power(fan, target_fan_power)
     # Get design supply air flow rate (whether autosized or hard-sized)
     dsn_air_flow_m3_per_s = 0
@@ -94,7 +94,7 @@ module Fan
                               else
                                 OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "The maximum flow rate for exhaust fan '#{fan.name}' was not specified.")
                               end
-    end
+                            end
     return dsn_air_flow_m3_per_s
   end
 
@@ -161,7 +161,7 @@ module Fan
   # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
   #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @param motor_eff [Double] motor efficiency (0.0 to 1.0)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fan_change_motor_efficiency(fan, motor_eff)
     # Calculate the existing impeller efficiency
     existing_motor_eff = 0.7
@@ -190,7 +190,7 @@ module Fan
   # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
   #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
   # @param impeller_eff [Double] impeller efficiency (0.0 to 1.0)
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def fan_change_impeller_efficiency(fan, impeller_eff)
     # Get the existing motor efficiency
     existing_motor_eff = 0.7
@@ -250,7 +250,7 @@ module Fan
     # airflow required for a particular system, typically
     # heated-only spaces with high internal gains
     # and no OA requirements such as elevator shafts.
-    return [fan_motor_eff, 0] if motor_bhp == 0.0
+    return [fan_motor_eff, 0] if motor_bhp < 0.0001
 
     # Lookup the minimum motor efficiency
     motors = standards_data['motors']
@@ -276,7 +276,7 @@ module Fan
 
       nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
       # If the biggest fan motor size is hit, use the highest category efficiency
-      if nominal_hp == 9999.0
+      if nominal_hp > 9998.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{fan.name}, there is no greater nominal HP.  Use the efficiency of the largest motor category.")
         nominal_hp = motor_bhp
       end
@@ -305,7 +305,7 @@ module Fan
   #
   # @param fan [OpenStudio::Model::StraightComponent] fan object, allowable types:
   #   FanConstantVolume, FanOnOff, FanVariableVolume, and FanZoneExhaust
-  # @return [Bool] returns true if it is a small fan, false if not
+  # @return [Boolean] returns true if it is a small fan, false if not
   def fan_small_fan?(fan)
     is_small = false
 
@@ -319,15 +319,7 @@ module Fan
         is_small = true
       # elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
       #   is_small = true
-      elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-        is_small = true
-      elsif zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
-        is_small = true
-      elsif zone_hvac.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized
-        is_small = true
-      elsif zone_hvac.to_ZoneHVACWaterToAirHeatPump.is_initialized
-        is_small = true
-      elsif zone_hvac.to_ZoneHVACEnergyRecoveryVentilator.is_initialized
+      elsif zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized || zone_hvac.to_ZoneHVACPackagedTerminalHeatPump.is_initialized || zone_hvac.to_ZoneHVACTerminalUnitVariableRefrigerantFlow.is_initialized || zone_hvac.to_ZoneHVACWaterToAirHeatPump.is_initialized || zone_hvac.to_ZoneHVACEnergyRecoveryVentilator.is_initialized
         is_small = true
       end
     # Powered VAV terminal

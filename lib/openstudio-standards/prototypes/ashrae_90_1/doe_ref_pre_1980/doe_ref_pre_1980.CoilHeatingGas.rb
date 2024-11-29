@@ -6,7 +6,7 @@ class DOERefPre1980 < ASHRAE901
   # @todo Refactor: remove inconsistency in logic; all coils should be lower efficiency
   #
   # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] a gas heating coil
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def coil_heating_gas_apply_prototype_efficiency(coil_heating_gas)
     # Only modify coils in PSZ-AC units
     name_patterns = ['PSZ-AC Gas Htg Coil',

@@ -9,7 +9,7 @@ module Pump
   # @param pump [OpenStudio::Model::StraightComponent] pump object, allowable types:
   #   PumpConstantSpeed, PumpVariableSpeed
   # @param target_w_per_gpm [Double] the target power per flow, in W/gpm
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   # @author jmarrec
   def pump_apply_prm_pressure_rise_and_motor_efficiency(pump, target_w_per_gpm)
     # Eplus assumes an impeller efficiency of 0.78 to determine the total efficiency
@@ -94,7 +94,7 @@ module Pump
   #
   # @param pump [OpenStudio::Model::StraightComponent] pump object, allowable types:
   #   PumpConstantSpeed, PumpVariableSpeed
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def pump_apply_standard_minimum_motor_efficiency(pump)
     # Get the horsepower
     bhp = pump_brake_horsepower(pump)
@@ -130,7 +130,7 @@ module Pump
     # Don't attempt to look up motor efficiency
     # for zero-hp pumps (required for circulation-pump-free
     # service water heating systems).
-    return [1.0, 0] if motor_bhp == 0.0
+    return [1.0, 0] if motor_bhp < 0.0001 # under 1 watt
 
     # Lookup the minimum motor efficiency
     motors = standards_data['motors']
@@ -182,8 +182,6 @@ module Pump
                         pump.ratedFlowRate.get
                       elsif pump.autosizedRatedFlowRate.is_initialized
                         pump.autosizedRatedFlowRate.get
-                      else
-                        pump.ratedFlowRate.get
                       end
                     elsif pump.to_HeaderedPumpsVariableSpeed.is_initialized || pump.to_HeaderedPumpsConstantSpeed.is_initialized
                       if pump.totalRatedFlowRate.is_initialized

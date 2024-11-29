@@ -94,7 +94,7 @@ class NECB2011
         raise("#{mau_heating_coil_type} is not a valid heating coil type.)")
       end
 
-      # TODO: other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)
+      # @todo other fuel-fired heating coil types? (not available in OpenStudio/E+ - may need to play with efficiency to mimic other fuel types)
 
       # This method will seem like an error in number of args..but this is due to swig voodoo.
       air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.new(model,

@@ -1,7 +1,7 @@
 [
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -24,7 +24,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "HighriseApartment",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -46,7 +46,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Hospital",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -145,7 +145,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeHotel",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -230,7 +230,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -253,7 +253,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "MediumOffice",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -269,7 +269,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "MidriseApartment",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -291,7 +291,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Outpatient",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -446,7 +446,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "PrimarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -524,7 +524,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "QuickServiceRestaurant",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -547,7 +547,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "RetailStandalone",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -576,7 +576,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SecondarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -661,7 +661,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SmallHotel",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -746,7 +746,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Warehouse",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -775,7 +775,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -798,7 +798,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "HighriseApartment",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -820,7 +820,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Hospital",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -912,7 +912,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeHotel",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -997,7 +997,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1020,7 +1020,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "MediumOffice",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1036,7 +1036,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "MidriseApartment",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1058,7 +1058,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Outpatient",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1206,7 +1206,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "PrimarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1284,7 +1284,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "QuickServiceRestaurant",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1307,7 +1307,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "RetailStandalone",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1336,7 +1336,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SecondarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1421,7 +1421,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SmallHotel",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1506,7 +1506,7 @@
   },
   {
     "template": "NECB2015",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Warehouse",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1535,7 +1535,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "FullServiceRestaurant",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1558,7 +1558,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "HighriseApartment",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1580,7 +1580,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Hospital",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1672,7 +1672,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeHotel",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1757,7 +1757,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeOffice",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1780,7 +1780,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "MediumOffice",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1796,7 +1796,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "MidriseApartment",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1818,7 +1818,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Outpatient",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -1966,7 +1966,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "PrimarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -2044,7 +2044,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "QuickServiceRestaurant",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -2067,7 +2067,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "RetailStandalone",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -2096,7 +2096,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SecondarySchool",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -2181,7 +2181,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "SmallHotel",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",
@@ -2266,7 +2266,7 @@
   },
   {
     "template": "NECB2017",
-    "epw_file": "CAN_AB_Banff.CS.711220_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "Warehouse",
     "primary_heating_fuel": "DefaultFuel",
     "dcv_type": "No DCV",

@@ -1,123 +1,6 @@
 class Standard
   # @!group Surface
 
-  # Determine the component infiltration rate for this surface
-  #
-  # @param surface [OpenStudio::Model::Surface] surface object
-  # @param type [String] choices are 'baseline' and 'advanced'
-  # @return [Double] infiltration rate in cubic meters per second, m^3/s
-  # @todo handle floors over unconditioned spaces
-  def surface_component_infiltration_rate(surface, type)
-    comp_infil_rate_m3_per_s = 0.0
-
-    # Define the envelope component infiltration rates
-    component_infil_rates_cfm_per_ft2 = {
-      'baseline' => {
-        'roof' => 0.12,
-        'exterior_wall' => 0.12,
-        'below_grade_wall' => 0.12,
-        'floor_over_unconditioned' => 0.12,
-        'slab_on_grade' => 0.12
-      },
-      'advanced' => {
-        'roof' => 0.04,
-        'exterior_wall' => 0.04,
-        'below_grade_wall' => 0.04,
-        'floor_over_unconditioned' => 0.04,
-        'slab_on_grade' => 0.04
-      }
-    }
-
-    boundary_condition = surface.outsideBoundaryCondition
-    # Skip non-outdoor surfaces
-    return comp_infil_rate_m3_per_s unless outsideBoundaryCondition == 'Outdoors' || surface.outsideBoundaryCondition == 'Ground'
-
-    # Per area infiltration rate for this surface
-    surface_type = surface.surfaceType
-    infil_rate_cfm_per_ft2 = nil
-    case boundary_condition
-    when 'Outdoors'
-      case surface_type
-      when 'RoofCeiling'
-        infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['roof']
-      when 'Wall'
-        infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['exterior_wall']
-      end
-    when 'Ground'
-      case surface_type
-      when 'Wall'
-        infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['below_grade_wall']
-      when 'Floor'
-        infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['slab_on_grade']
-      end
-    when 'TODO Surface'
-      case surface_type
-      when 'Floor'
-        infil_rate_cfm_per_ft2 = component_infil_rates_cfm_per_ft2[type]['floor_over_unconditioned']
-      end
-    end
-    if infil_rate_cfm_per_ft2.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Surface', "For #{surface.name}, could not determine surface type for infiltration, will not be included in calculation.")
-      return comp_infil_rate_m3_per_s
-    end
-
-    # Area of the surface
-    area_m2 = surface.netArea
-    area_ft2 = OpenStudio.convert(area_m2, 'm^2', 'ft^2').get
-
-    # Rate for this surface
-    comp_infil_rate_cfm = area_ft2 * infil_rate_cfm_per_ft2
-
-    comp_infil_rate_m3_per_s = OpenStudio.convert(comp_infil_rate_cfm, 'cfm', 'm^3/s').get
-
-    # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "...#{self.name}, infil = #{comp_infil_rate_cfm.round(2)} cfm @ rate = #{infil_rate_cfm_per_ft2} cfm/ft2, area = #{area_ft2.round} ft2.")
-
-    return comp_infil_rate_m3_per_s
-  end
-
-  # Start of method meant to help implement NECB2015 8.4.4.5.(5).
-  # The method starts by finding exterior surfaces which help enclose conditioned spaces.
-  # It then removes the subsurfaces.
-  # Though not implemented yet it was supposed to then put a window centered in the surface with a sill
-  # height and window height defined passed via sill_heght_m and window_height_m
-  # (0.9 m, and 1.8 m respectively for NECB2015).
-  # The width of the window was to be set so that the fdwr matched whatever code said (passed by fdwr).
-  # @author Chris Kirney
-  # @note 2018-05-17 not complete-do not call.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param sill_height_m [Double] sill height in meters
-  # @param window_height_m [Double] window height in meters
-  # @param fdwr [Double] fdwr
-  # @return [Bool] returns true if successful, false if not
-  def surface_replace_existing_subsurfaces_with_centered_subsurface(model, sill_height_m, window_height_m, fdwr)
-    vertical_surfaces = find_exposed_conditioned_vertical_surfaces(model)
-    vertical_surfaces.each do |vertical_surface|
-      vertical_surface.subSurfaces.sort.each do |vertical_subsurface|
-        # Need to fix this so that error show up in right place
-        if vertical_subsurface.nil?
-          puts 'Surface does not exist'
-        else
-          vertical_subsurface.remove
-        end
-      end
-      # corner_coords = vertical_surface.vertices
-      code_window_area = fdwr * vertical_surface.grossArea
-      code_window_width = code_window_area / window_height_m
-      min_z = 0
-      vertical_surface.vertices.each_with_index do |vertex, index|
-        if index == 0
-          min_z = vertex.z
-        elsif vertex.z < min_z
-          min_z = vertex.z
-        end
-      end
-      surface_centroid = vertical_surface.centroid
-      surface_normal = vertical_surface.outwardNormal
-    end
-    return true
-  end
-
   # This method searches through a model a returns vertical exterior surfaces which help
   # enclose a conditioned space.  It distinguishes between walls adjacent to plenums and wall adjacent to other
   # conditioned spaces (as attics in OpenStudio are considered plenums and conditioned spaces though many would
@@ -142,8 +25,8 @@ class Standard
     # Sort through each space
     model.getSpaces.sort.each do |space|
       # Is the space heated or cooled?
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
+      cooled = OpenstudioStandards::Space.space_cooled?(space)
+      heated = OpenstudioStandards::Space.space_heated?(space)
       # Assume conditioned means the space is heated, cooled, or both.
       if heated || cooled
         # If the space is conditioned then go through each surface and determine if it a vertial exterior wall.
@@ -160,7 +43,7 @@ class Standard
           if tilt_degrees <= max_angle && tilt_degrees >= min_angle
             # If the wall is vertical determine if it is adjacent to a plenum.  If yes include it in the array of
             # plenum walls and add it to the plenum wall area counter (accounting for space multipliers).
-            if space_plenum?(space)
+            if OpenstudioStandards::Space.space_plenum?(space)
               plenum_surfaces << surface
               exp_plenum_area += surface.grossArea * space.multiplier
             else
@@ -223,8 +106,8 @@ class Standard
     sub_surface_area = 0
     # Sort through each space and determine if it conditioned.  Conditioned meaning it is either heated, cooled, or both.
     model.getSpaces.sort.each do |space|
-      cooled = space_cooled?(space)
-      heated = space_heated?(space)
+      cooled = OpenstudioStandards::Space.space_cooled?(space)
+      heated = OpenstudioStandards::Space.space_heated?(space)
       # If the space is conditioned sort through the surfaces looking for outdoor roofs.
       if heated || cooled
         space.surfaces.sort.each do |surface|
@@ -234,7 +117,7 @@ class Standard
 
           # Determine if the roof is adjacent to a plenum.
           sub_surface_info = []
-          if space_plenum?(space)
+          if OpenstudioStandards::Space.space_plenum?(space)
             # If the roof is adjacent to a plenum add it to the plenum roof array and the plenum roof area counter
             # (accounting for space multipliers).
             plenum_surfaces << surface
@@ -381,9 +264,8 @@ class Standard
 
   # Returns the surface and subsurface UA product
   #
-  # @param [OpenStudio::Model::Surface] OpenStudio model surface object
-  #
-  # @retrun [Double] UA product in W/K
+  # @param surface [OpenStudio::Model::Surface] OpenStudio model surface object
+  # @return [Double] UA product in W/K
   def surface_subsurface_ua(surface)
     # Compute the surface UA product
     if surface.outsideBoundaryCondition.to_s == 'GroundFCfactorMethod' && surface.construction.is_initialized
@@ -406,9 +288,9 @@ class Standard
           r_outside_film = 0.0
 
           # EnergyPlus Engineering Manual equation 3.195
-          r_soil = 0.0607 + 0.3479 * heig
+          r_soil = 0.0607 + (0.3479 * heig)
 
-          r_eff = 1 / cfac + r_soil
+          r_eff = (1 / cfac) + r_soil
           u_eff = 1 / (r_eff + r_inside_film + r_outside_film)
 
           ua = u_eff * surface.netArea
@@ -418,96 +300,20 @@ class Standard
     end
 
     surface.subSurfaces.sort.each do |subsurface|
-      if subsurface.construction.get.to_Construction.get.layers[0].to_Material.get.to_SimpleGlazing.empty?
-        # the uFactor() method does not work for complex glazing inputs
-        # For this case the U-Factor is retrieved from previous sizing run
-        u_factor = construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get)
-      else
-        # replace with direct query: u_factor = subsurface.uFactor.get
-        glass_u_factor_query = "SELECT Value
-                  FROM tabulardatawithstrings
-                  WHERE ReportName='EnvelopeSummary'
-                  AND ReportForString='Entire Facility'
-                  AND TableName='Exterior Fenestration'
-                  AND ColumnName='Glass U-Factor'
-                  AND RowName='#{subsurface.name.get.upcase}'"
-        sql = surface.model.sqlFile.get
-
-        glass_u_factor_w_per_m2_k = sql.execAndReturnFirstDouble(glass_u_factor_query)
-        u_factor = glass_u_factor_w_per_m2_k.is_initialized ? glass_u_factor_w_per_m2_k.get : 0.0
-      end
-      # u_factor = subsurface.uFactor.is_initialized ? (subsurface.uFactor.get) : (construction_calculated_fenestration_u_factor_w_frame(subsurface.construction.get))
+      subsurface_construction = subsurface.construction.get
+      u_factor = OpenstudioStandards::SqlFile.construction_calculated_fenestration_u_factor(subsurface_construction)
       ua += u_factor * subsurface.netArea
     end
 
     return ua
   end
 
-  # Calculate a surface's absolute azimuth
-  # source: https://github.com/NREL/openstudio-extension-gem/blob/e354355054b83ffc26e3b69befa20d6baf5ef242/lib/openstudio/extension/core/os_lib_geometry.rb#L913
-  #
-  # @param surface [OpenStudio::Model::Surface] surface object
-  # @return [Double] surface absolute azimuth
-  def surface_absolute_azimuth(surface)
-    # Get associated space
-    space = surface.space.get
-
-    # Get model object
-    model = surface.model
-
-    # Calculate azimuth
-    surface_azimuth_rel_space = OpenStudio.convert(surface.azimuth, 'rad', 'deg').get
-    space_dir_rel_north = space.directionofRelativeNorth
-    building_dir_rel_north = model.getBuilding.northAxis
-    surface_abs_azimuth = surface_azimuth_rel_space + space_dir_rel_north + building_dir_rel_north
-    surface_abs_azimuth -= 360.0 until surface_abs_azimuth < 360.0
-
-    return surface_abs_azimuth
-  end
-
-  # Determine a surface absolute cardinal direction
-  #
-  # @param surface [OpenStudio::Model::Surface] surface object
-  # @return [String] surface absolute cardinal direction
-  def surface_cardinal_direction(surface)
-    # Get the surface's absolute azimuth
-    surface_abs_azimuth = surface_absolute_azimuth(surface)
-
-    # Determine the surface's cardinal direction
-    if surface_abs_azimuth >= 0 && surface_abs_azimuth <= 45
-      return 'N'
-    elsif surface_abs_azimuth > 315 && surface_abs_azimuth <= 360
-      return 'N'
-    elsif surface_abs_azimuth > 45 && surface_abs_azimuth <= 135
-      return 'E'
-    elsif surface_abs_azimuth > 135 && surface_abs_azimuth <= 225
-      return 'S'
-    elsif surface_abs_azimuth > 225 && surface_abs_azimuth <= 315
-      return 'W'
-    end
-  end
-
-  # Calculate the wwr of a surface
-  #
-  # @param surface [OpenStudio::Model::Surface]
-  # @return [Float] window to wall ratio of a surface
-  def surface_get_wwr_of_a_surface(surface)
-    surface_area = surface.grossArea
-    surface_fene_area = 0.0
-    surface.subSurfaces.sort.each do |ss|
-      next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
-
-      surface_fene_area += ss.netArea
-    end
-    return surface_fene_area / surface_area
-  end
-
   # Adjust the fenestration area to the values specified by the reduction value in a surface
   #
   # @param surface [OpenStudio::Model:Surface] openstudio surface object
-  # @param reduction [Float] ratio of adjustments
+  # @param reduction [Double] ratio of adjustments
   # @param model [OpenStudio::Model::Model] openstudio model
-  # @return [Bool] return true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def surface_adjust_fenestration_in_a_surface(surface, reduction, model)
     # Subsurfaces in this surface
     # Default case only handles reduction
@@ -515,28 +321,13 @@ class Standard
       surface.subSurfaces.sort.each do |ss|
         next unless ss.subSurfaceType == 'FixedWindow' || ss.subSurfaceType == 'OperableWindow' || ss.subSurfaceType == 'GlassDoor'
 
-        if sub_surface_vertical_rectangle?(ss)
-          sub_surface_reduce_area_by_percent_by_raising_sill(ss, reduction)
+        if OpenstudioStandards::Geometry.sub_surface_vertical_rectangle?(ss)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_raising_sill(ss, reduction)
         else
-          sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
+          OpenstudioStandards::Geometry.sub_surface_reduce_area_by_percent_by_shrinking_toward_centroid(ss, reduction)
         end
       end
     end
     return true
-  end
-
-  # Calculate the door ratio of a surface
-  #
-  # @param surface [OpenStudio::Model::Surface]
-  # @return [Float] window to wall ratio of a surface
-  def surface_get_door_ratio_of_a_surface(surface)
-    surface_area = surface.grossArea
-    surface_door_area = 0.0
-    surface.subSurfaces.sort.each do |ss|
-      next unless ss.subSurfaceType == 'Door'
-
-      surface_door_area += ss.netArea
-    end
-    return surface_door_area / surface_area
   end
 end

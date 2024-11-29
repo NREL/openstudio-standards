@@ -24,14 +24,12 @@ class ASHRAE901PRM < Standard
     if sys_type == 'PTAC' || sys_type == 'PTHP'
       mult = 1
       comp = coil_cooling_dx_two_speed.containingZoneHVACComponent
-      if comp.is_initialized
-        if comp.get.thermalZone.is_initialized
-          mult = comp.get.thermalZone.get.multiplier
-          if mult > 1
-            total_cap = capacity_w
-            capacity_w /= mult
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
-          end
+      if comp.is_initialized && comp.get.thermalZone.is_initialized
+        mult = comp.get.thermalZone.get.multiplier
+        if mult > 1
+          total_cap = capacity_w
+          capacity_w /= mult
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
         end
       end
     end
@@ -43,7 +41,7 @@ class ASHRAE901PRM < Standard
   #
   # @param coil_cooling_dx_two_speed [OpenStudio::Model::CoilCoolingDXTwoSpeed] coil cooling dx two speed object
   # @param sys_type [String] HVAC system type
-  # @param rename [Bool] if true, object will be renamed to include capacity and efficiency level
+  # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @return [Double] full load efficiency (COP)
   def coil_cooling_dx_two_speed_standard_minimum_cop(coil_cooling_dx_two_speed, sys_type, rename = false)
     # find properties

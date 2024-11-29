@@ -5,7 +5,7 @@ class DOERefPre1980 < ASHRAE901
   # Currently doesn't do anything for the DOE prototype buildings.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # return [Bool] returns true if successful, false if not
+  # return [Boolean] returns true if successful, false if not
   # @todo enable damper position adjustment for legacy IDFS
   def air_loop_hvac_apply_multizone_vav_outdoor_air_sizing(air_loop_hvac)
     OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirLoopHVAC', 'Damper positions not modified for DOE Ref Pre-1980 or DOE Ref 1980-2004 vintages.')
@@ -21,8 +21,8 @@ class DOERefPre1980 < ASHRAE901
   #   be added to the OpenStudio data model.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @param has_ddc [Bool] whether or not the system has DDC control over VAV terminals.
-  # return [Bool] returns true if static pressure reset is required, false if not
+  # @param has_ddc [Boolean] whether or not the system has DDC control over VAV terminals.
+  # return [Boolean] returns true if static pressure reset is required, false if not
   def air_loop_hvac_static_pressure_reset_required?(air_loop_hvac, has_ddc)
     sp_reset_required = false
     return sp_reset_required
@@ -32,7 +32,7 @@ class DOERefPre1980 < ASHRAE901
   # Not required by DOE Pre-1980.
   #
   # @param air_loop_hvac [OpenStudio::Model::AirLoopHVAC] air loop
-  # @return [Bool] returns true if required, false if not
+  # @return [Boolean] returns true if required, false if not
   def air_loop_hvac_optimum_start_required?(air_loop_hvac)
     opt_start_required = false
     return opt_start_required

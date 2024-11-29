@@ -1,5 +1,5 @@
 require_relative './helpers/parallel_tests'
-TestListFile = File.join(File.dirname(__FILE__), 'circleci_tests.txt')
+TestListFile = File.join(File.dirname(__FILE__), 'ci_tests.txt')
 
 class RunAllTests < Minitest::Test
   def test_all()

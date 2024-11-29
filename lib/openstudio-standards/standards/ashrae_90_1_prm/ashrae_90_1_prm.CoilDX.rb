@@ -26,11 +26,12 @@ module ASHRAEPRMCoilDX
 
     # cooling coil
     if coil_dx.iddObjectType.valueName.to_s.include? 'OS_Coil_Cooling_DX'
-      if sys_type == 'PTHP'
+      case sys_type
+      when 'PTHP'
         sub_category = 'PTHP'
-      elsif sys_type == 'PTAC'
+      when 'PTAC'
         sub_category = 'PTAC'
-      elsif sys_type == 'PSZ_HP'
+      when 'PSZ_HP'
         if capacity < 65000
           sub_category = 'Single Package'
         else
@@ -49,7 +50,7 @@ module ASHRAEPRMCoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object
   # @param capacity [Double] capacity in btu/hr
   # @param sys_type [String] HVAC system type
-  # @return [hash] has for search criteria to be used for find object
+  # @return [Hash] has for search criteria to be used for find object
   def coil_dx_find_search_criteria(coil_dx, capacity, sys_type)
     search_criteria = {}
     search_criteria['template'] = template

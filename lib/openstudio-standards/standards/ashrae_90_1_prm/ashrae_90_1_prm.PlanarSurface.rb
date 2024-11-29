@@ -13,6 +13,9 @@ class ASHRAE901PRM < Standard
   #   [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   #   and the values are the constructions.  If supplied, constructions will be pulled
   #   from this hash if already created to avoid creating duplicate constructions.
+  # @param wwr_building_type [String | Nil] building type that identifies the prescribed window to wall ratio
+  # @param wwr_info [Hash] A map that maps the building area type to window to wall ratio
+  # @param surface_category [String] surface category e.g., 'ExteriorSubSurface'
   # @return [Hash] returns a hash where the key is an array of inputs
   #   [template, climate_zone, intended_surface_type, standards_construction_type, occ_type]
   #   and the value is the newly created construction.
@@ -32,9 +35,7 @@ class ASHRAE901PRM < Standard
 
     # Skip surfaces that don't have a construction
     # return previous_construction_map if planar_surface.construction.empty?
-    if !planar_surface.construction.empty?
-      construction = planar_surface.construction.get
-    else
+    if planar_surface.construction.empty?
       # Get appropriate default construction if not defined inside surface object
       construction = nil
       space_type = space.spaceType.get
@@ -54,14 +55,19 @@ class ASHRAE901PRM < Standard
         cons_set = space.model.building.get.defaultConstructionSet.get
         construction = get_default_surface_cons_from_surface_type(surface_category, surface_type, cons_set)
       end
-
-      return previous_construction_map if construction.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'prm.log',
+                         "Surface #{planar_surface.name.get} does not have a construction. Failed to find defaultConstructionSet for #{planar_surface.name.get}. Add a construction for the surface or add a defaultConstructionSet to Space #{space.name.get} or SpaceType #{space_type.name.get}.")
+      prm_raise(construction,
+                @sizing_run_dir,
+                "Failed to find defaultConstructionSet for #{planar_surface.name.get}. Check inputs.")
+    else
+      construction = planar_surface.construction.get
     end
 
     # Determine if residential or nonresidential
     # based on the space type.
     occ_type = 'Nonresidential'
-    if space_residential?(space)
+    if OpenstudioStandards::Space.space_residential?(space)
       occ_type = 'Residential'
     end
 
@@ -83,8 +89,9 @@ class ASHRAE901PRM < Standard
     # Mapping is between standards-defined enumerations and the
     # enumerations available in OpenStudio.
     stds_type = nil
-    # Windows and Glass Doors
-    if surf_type == 'ExteriorWindow' || surf_type == 'GlassDoor'
+    case surf_type
+    when 'ExteriorWindow', 'GlassDoor'
+      # Windows and Glass Doors
       stds_type = standards_info.fenestrationFrameType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -103,15 +110,15 @@ class ASHRAE901PRM < Standard
           return previous_construction_map
         end
       else
-        if !wwr_building_type.nil?
-          stds_type = 'Any Vertical Glazing'
-        else
+        if wwr_building_type.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlanarSurface', "Could not determine the standards fenestration frame type for #{planar_surface.name} from #{construction.name}.  This surface will not have the standard applied.")
           return previous_construction_map
+        else
+          stds_type = 'Any Vertical Glazing'
         end
       end
-    # Exterior Doors
-    elsif surf_type == 'ExteriorDoor'
+    when 'ExteriorDoor'
+      # Exterior Doors
       stds_type = standards_info.standardsConstructionType
       if stds_type.is_initialized
         stds_type = stds_type.get
@@ -122,12 +129,12 @@ class ASHRAE901PRM < Standard
       else
         stds_type = 'Swinging'
       end
-    # Skylights
-    elsif surf_type == 'Skylight'
+    when 'Skylight'
+      # Skylights
       # There is only one type for AppendixG stable baseline
       stds_type = 'Any Skylight'
-    # All other surface types
     else
+      # All other surface types
       stds_type = standards_info.standardsConstructionType
       if stds_type.is_initialized
         stds_type = stds_type.get

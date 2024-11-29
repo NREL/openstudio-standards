@@ -6,7 +6,7 @@ class ASHRAE9012013 < ASHRAE901
   #
   # @ref [References::ASHRAE9012013] 6.4.3.9
   # @param zone_hvac_component [OpenStudio::Model::ZoneHVACComponent] zone hvac component
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def zone_hvac_component_vestibule_heating_control_required?(zone_hvac_component)
     # Ensure that the equipment is assigned to a thermal zone
     if zone_hvac_component.thermalZone.empty?
@@ -15,7 +15,7 @@ class ASHRAE9012013 < ASHRAE901
     end
 
     # Only applies to equipment that is in vestibule zones
-    return true if thermal_zone_vestibule?(zone_hvac_component.thermalZone.get)
+    return true if OpenstudioStandards::ThermalZone.thermal_zone_vestibule?(zone_hvac_component.thermalZone.get)
 
     # If here, vestibule heating control not required
     return false

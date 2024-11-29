@@ -5,8 +5,7 @@ module BTAP
     outdoor_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Wall")
     outdoor_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "RoofCeiling")
     outdoor_floors = BTAP::Geometry::Surfaces::filter_by_surface_types(outdoor_surfaces, "Floor")
-    outdoor_subsurfaces = BTAP::Geometry::Surfaces::get_subsurfaces_from_surfaces(outdoor_surfaces)
-
+    outdoor_subsurfaces = outdoor_surfaces.flat_map(&:subSurfaces)
     ground_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(model.getSurfaces(), "Ground")
     ground_walls = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Wall")
     ground_roofs = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling")
@@ -26,8 +25,6 @@ module BTAP
     # Create hash to store all the collected data.
     qaqc = {}
     error_warning=[]
-    qaqc[:os_standards_revision] = OpenstudioStandards::git_revision
-    qaqc[:os_standards_version] = OpenstudioStandards::VERSION
     # Store Building data.
     qaqc[:building] = {}
     qaqc[:building][:name] = model.building.get.name.get
@@ -42,8 +39,11 @@ module BTAP
     qaqc[:building][:number_of_stories] = model.getBuildingStorys.size
     # Store Geography Data
     qaqc[:geography] ={}
-    qaqc[:geography][:hdd] = BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).hdd18
-    qaqc[:geography][:cdd] = BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).cdd18
+    weather_file_path = model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    qaqc[:geography][:hdd] = stat_file.hdd18
+    qaqc[:geography][:cdd] = stat_file.cdd18
     qaqc[:geography][:climate_zone] = NECB2011.new().get_climate_zone_name(qaqc[:geography][:hdd])
     qaqc[:geography][:city] = model.getWeatherFile.city
     qaqc[:geography][:state_province_region] = model.getWeatherFile.stateProvinceRegion
@@ -199,16 +199,16 @@ module BTAP
     #Store Envelope data.
     qaqc[:envelope] = {}
 
-    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] 	= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_walls).round(4) if outdoor_walls.size > 0
-    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k]  = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_roofs).round(4) if outdoor_roofs.size > 0
-    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(outdoor_floors).round(4) if outdoor_floors.size > 0
-    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k]  	= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_walls).round(4) if ground_walls.size > 0
-    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k]  	= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_roofs).round(4) if ground_roofs.size > 0
-    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k]  = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(ground_floors).round(4) if ground_floors.size > 0
-    qaqc[:envelope][:windows_average_conductance_w_per_m2_k]  		= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(windows).round(4) if windows.size > 0
-    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k]  	= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(skylights).round(4) if skylights.size > 0
-    qaqc[:envelope][:doors_average_conductance_w_per_m2_k]  		= BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(doors).round(4) if doors.size > 0
-    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = BTAP::Geometry::Surfaces::get_weighted_average_surface_conductance(overhead_doors).round(4) if overhead_doors.size > 0
+    qaqc[:envelope][:outdoor_walls_average_conductance_w_per_m2_k] 	= OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls).round(4) if outdoor_walls.size > 0
+    qaqc[:envelope][:outdoor_roofs_average_conductance_w_per_m2_k]  = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs).round(4) if outdoor_roofs.size > 0
+    qaqc[:envelope][:outdoor_floors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors).round(4) if outdoor_floors.size > 0
+    qaqc[:envelope][:ground_walls_average_conductance_w_per_m2_k]  	= OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls).round(4) if ground_walls.size > 0
+    qaqc[:envelope][:ground_roofs_average_conductance_w_per_m2_k]  	= OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs).round(4) if ground_roofs.size > 0
+    qaqc[:envelope][:ground_floors_average_conductance_w_per_m2_k]  = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors).round(4) if ground_floors.size > 0
+    qaqc[:envelope][:windows_average_conductance_w_per_m2_k]  		= OpenstudioStandards::Constructions.surfaces_get_conductance(windows).round(4) if windows.size > 0
+    qaqc[:envelope][:skylights_average_conductance_w_per_m2_k]  	= OpenstudioStandards::Constructions.surfaces_get_conductance(skylights).round(4) if skylights.size > 0
+    qaqc[:envelope][:doors_average_conductance_w_per_m2_k]  		= OpenstudioStandards::Constructions.surfaces_get_conductance(doors).round(4) if doors.size > 0
+    qaqc[:envelope][:overhead_doors_average_conductance_w_per_m2_k] = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors).round(4) if overhead_doors.size > 0
     qaqc[:envelope][:fdwr]  										= (BTAP::Geometry::get_fwdr(model) * 100.0).round(1)
     qaqc[:envelope][:srr]  											= (BTAP::Geometry::get_srr(model) * 100.0).round(1)
 
@@ -225,9 +225,9 @@ module BTAP
       qaqc[:envelope][:constructions][:exterior_fenestration] << construction_info
       construction_info[:name] = construction.name.get
       construction_info[:net_area_m2] = construction.getNetArea.round(2)
-      construction_info[:thermal_conductance_m2_w_per_k] = BTAP::Resources::Envelope::Constructions::get_conductance(construction).round(3)
-      construction_info[:solar_transmittance] = BTAP::Resources::Envelope::Constructions::get_shgc(model, construction).round(3)
-      construction_info[:visible_tranmittance] = BTAP::Resources::Envelope::Constructions::get_tvis(model,construction).round(3)
+      construction_info[:thermal_conductance_m2_w_per_k] = OpenstudioStandards::Constructions.construction_get_conductance(construction).round(3)
+      construction_info[:solar_transmittance] = OpenstudioStandards::Constructions.construction_get_solar_transmittance(construction).round(3)
+      construction_info[:visible_tranmittance] = OpenstudioStandards::Constructions.construction_get_visible_transmittance(construction).round(3)
     end
 
     #Exterior
@@ -1039,11 +1039,15 @@ def necb_2011_qaqc(qaqc, model)
     end
   end
 
-  #*TODO*
+  # @todo ?
   necb_section_name = "NECB2011-5.2.10.1"
   qaqc[:air_loops].each do |air_loop_info|
     unless air_loop_info[:supply_fan][:max_air_flow_rate_m3_per_s] == -1.0
-      hrv_calc = 0.00123*air_loop_info[:outdoor_air_L_per_s]*(21-BTAP::Environment::WeatherFile.new( model.getWeatherFile.path.get.to_s ).db990) #=AP46*(21-O$1)
+      weather_file_path = model.weatherFile.get.path.get.to_s
+      stat_file_path = weather_file_path.gsub('.epw', '.stat')
+      stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+      db990 = stat_file.heating_design_info[2]
+      hrv_calc = 0.00123 * air_loop_info[:outdoor_air_L_per_s] * (21 - db990) #=AP46*(21-O$1)
       hrv_reqd = hrv_calc > 150 ? true : false
       #qaqc[:information] << "[Info][TEST-PASS][#{necb_section_name}]:#{test_text} result value:#{result_value} #{bool_operator} expected value:#{expected_value}"
       hrv_present = false

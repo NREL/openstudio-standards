@@ -39,11 +39,10 @@ end
 # A function that writes error message to log file and stop the execution.
 #
 # @param msg [String] error message
-# @param log_level [OpenStudio::LogLevel] log level, eg. OpenStudio::Info
 # @param log_path [String] the log file directory
 # @param debug [Boolean] debug mode
 def terminate_prm_write_log(msg, log_path, debug = false)
-  OpenStudio.logFree(OpenStudio::ERROR, 'prm.log', msg)
+  OpenStudio.logFree(OpenStudio::Error, 'prm.log', msg)
   log_messages_to_file_prm("#{log_path}/prm.log", debug)
   raise msg
 end
@@ -52,7 +51,7 @@ end
 #
 # @param file_path [String] the file path to the log file
 # @param debug [Boolean] debug mode
-# @return message [Array] array of message strings
+# @return [Array] array of message strings
 def log_messages_to_file_prm(file_path, debug = false)
   messages = []
 

@@ -34,16 +34,16 @@ class NECB2011
   # to have the specified values. This method does not alter any
   # loads directly assigned to spaces.  This method skips plenums.
   #
-  # @param set_people [Bool] if true, set the people density.
+  # @param set_people [Boolean] if true, set the people density.
   # Also, assign reasonable clothing, air velocity, and work efficiency inputs
   # to allow reasonable thermal comfort metrics to be calculated.
-  # @param set_lights [Bool] if true, set the lighting density, lighting fraction
+  # @param set_lights [Boolean] if true, set the lighting density, lighting fraction
   # to return air, fraction radiant, and fraction visible.
-  # @param set_electric_equipment [Bool] if true, set the electric equipment density
-  # @param set_gas_equipment [Bool] if true, set the gas equipment density
-  # @param set_ventilation [Bool] if true, set the ventilation rates (per-person and per-area)
-  # @param set_infiltration [Bool] if true, set the infiltration rates
-  # @return [Bool] returns true if successful, false if not
+  # @param set_electric_equipment [Boolean] if true, set the electric equipment density
+  # @param set_gas_equipment [Boolean] if true, set the gas equipment density
+  # @param set_ventilation [Boolean] if true, set the ventilation rates (per-person and per-area)
+  # @param set_infiltration [Boolean] if true, set the infiltration rates
+  # @return [Boolean] returns true if successful, false if not
   def space_type_apply_internal_loads(space_type:,
                                       set_people: true,
                                       set_lights: true,
@@ -89,7 +89,7 @@ class NECB2011
 
       # Remove all but the first instance
       instances = space_type.people.sort
-      if instances.size.zero?
+      if instances.empty?
         # Create a new definition and instance
         definition = OpenStudio::Model::PeopleDefinition.new(space_type.model)
         definition.setName("#{space_type.name} People Definition")
@@ -181,7 +181,7 @@ class NECB2011
 
       # Remove all but the first instance
       instances = space_type.electricEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::ElectricEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Elec Equip Definition")
         instance = OpenStudio::Model::ElectricEquipment.new(definition)
@@ -230,7 +230,7 @@ class NECB2011
 
       # Remove all but the first instance
       instances = space_type.gasEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::GasEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Gas Equip Definition")
         instance = OpenStudio::Model::GasEquipment.new(definition)
@@ -340,7 +340,7 @@ class NECB2011
 
     # Remove all but the first instance
     instances = space_type.spaceInfiltrationDesignFlowRates.sort
-    if instances.size.zero?
+    if instances.empty?
       instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space_type.model)
       instance.setName("#{space_type.name} Infiltration")
       instance.setSpaceType(space_type)

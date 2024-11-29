@@ -30,7 +30,7 @@ class ASHRAE9012013 < ASHRAE901
 
     # Primary Sidelighting
     # Check if the primary sidelit area contains less than 150W of lighting
-    if areas['primary_sidelighted_area'] == 0.0
+    if areas['primary_sidelighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2 per 9.4.1.1(e).")
       req_pri_ctrl = false
     elsif areas['primary_sidelighted_area'] * space_lpd_w_per_m2 < 150.0
@@ -46,7 +46,7 @@ class ASHRAE9012013 < ASHRAE901
 
     # Secondary Sidelighting
     # Check if the primary and secondary sidelit areas contains less than 300W of lighting
-    if areas['secondary_sidelighted_area'] == 0.0
+    if areas['secondary_sidelighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2 per 9.4.1.1(e).")
       req_sec_ctrl = false
     elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 300
@@ -62,7 +62,7 @@ class ASHRAE9012013 < ASHRAE901
 
     # Toplighting
     # Check if the toplit area contains less than 150W of lighting
-    if areas['toplighted_area'] == 0.0
+    if areas['toplighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2 per 9.4.1.1(f).")
       req_top_ctrl = false
     elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 150
@@ -73,20 +73,17 @@ class ASHRAE9012013 < ASHRAE901
     # Exceptions
     if space.spaceType.is_initialized
       case space.spaceType.get.standardsSpaceType.to_s
-      # Retail spaces exception (c) to Section 9.4.1.4
-      # req_sec_ctrl set to true to create a second reference point
       when 'Core_Retail'
+        # Retail spaces exception (c) to Section 9.4.1.4
+        # req_sec_ctrl set to true to create a second reference point
         req_pri_ctrl = false
         req_sec_ctrl = true
-      when 'Entry', 'Front_Retail', 'Point_of_Sale'
+      when 'Entry', 'Front_Retail', 'Point_of_Sale', 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
+        # Retail, Strip mall
         req_pri_ctrl = false
         req_sec_ctrl = false
-      # Strip mall
-      when 'Strip mall - type 1', 'Strip mall - type 2', 'Strip mall - type 3'
-        req_pri_ctrl = false
-        req_sec_ctrl = false
-      # Residential apartments
       when 'Apartment', 'Apartment_topfloor_NS', 'Apartment_topfloor_WE'
+        # Residential apartments
         req_top_ctrl = false
         req_pri_ctrl = false
         req_sec_ctrl = false
@@ -102,9 +99,9 @@ class ASHRAE9012013 < ASHRAE901
   # @param areas [Hash] a hash of daylighted areas
   # @param sorted_windows [Hash] a hash of windows, sorted by priority
   # @param sorted_skylights [Hash] a hash of skylights, sorted by priority
-  # @param req_top_ctrl [Bool] if toplighting controls are required
-  # @param req_pri_ctrl [Bool] if primary sidelighting controls are required
-  # @param req_sec_ctrl [Bool] if secondary sidelighting controls are required
+  # @param req_top_ctrl [Boolean] if toplighting controls are required
+  # @param req_pri_ctrl [Boolean] if primary sidelighting controls are required
+  # @param req_sec_ctrl [Boolean] if secondary sidelighting controls are required
   # @return [Array] array of 4 items
   #   [sensor 1 fraction, sensor 2 fraction, sensor 1 window, sensor 2 window]
   def space_daylighting_fractions_and_windows(space,
@@ -123,7 +120,7 @@ class ASHRAE9012013 < ASHRAE901
     space_area_m2 = space.floorArea
 
     # get the climate zone
-    climate_zone = model_standards_climate_zone(space.model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(space.model)
 
     if req_top_ctrl && req_pri_ctrl && req_sec_ctrl
       # Sensor 1 controls toplighted area
@@ -185,7 +182,7 @@ class ASHRAE9012013 < ASHRAE901
   #
   # @return [Double] the baseline infiltration rate, in cfm/ft^2
   # defaults to no infiltration.
-  def space_infiltration_rate_75_pa(space)
+  def space_infiltration_rate_75_pa(space = nil)
     basic_infil_rate_cfm_per_ft2 = 1.0
     return basic_infil_rate_cfm_per_ft2
   end

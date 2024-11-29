@@ -5,7 +5,7 @@ class Standard
   #
   # @param condenser_loop [<OpenStudio::Model::PlantLoop>] a condenser loop served by a cooling tower
   # @param design_wet_bulb_c [Double] the outdoor design wetbulb conditions in degrees Celsius
-  # @return [Bool] returns true if successful, false if not
+  # @return [Boolean] returns true if successful, false if not
   def prototype_apply_condenser_water_temperatures(condenser_loop,
                                                    design_wet_bulb_c: nil)
     sizing_plant = condenser_loop.sizingPlant
@@ -77,10 +77,8 @@ class Standard
     # get or create a setpoint manager
     cw_t_stpt_manager = nil
     condenser_loop.supplyOutletNode.setpointManagers.each do |spm|
-      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized
-        if spm.name.get.include? 'Setpoint Manager Follow OATwb'
-          cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
-        end
+      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized && spm.name.get.include?('Setpoint Manager Follow OATwb')
+        cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
       end
     end
     if cw_t_stpt_manager.nil?

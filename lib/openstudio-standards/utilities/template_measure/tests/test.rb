@@ -7,8 +7,8 @@ begin
 rescue LoadError
   puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
 end
-require_relative '../measure.rb'
-require_relative '../resources/BTAPMeasureHelper.rb'
+require_relative '../measure'
+require_relative '../resources/BTAPMeasureHelper'
 require 'minitest/autorun'
 
 class BTAPModelMeasure_Test < Minitest::Test
@@ -79,16 +79,15 @@ class BTAPModelMeasure_Test < Minitest::Test
     # Option 1: Model CreationCreate Empty Model object and start doing things to it. Here I am creating an empty model
     # and adding surface geometry to the model
     model = OpenStudio::Model::Model.new
-    # and adding surface geometry to the model using the wizard.
-    BTAP::Geometry::Wizards.create_shape_rectangle(model,
-                                                   length = 100.0,
-                                                   width = 100.0,
-                                                   above_ground_storys = 3,
-                                                   under_ground_storys = 1,
-                                                   floor_to_floor_height = 3.8,
-                                                   plenum_height = 1,
-                                                   perimeter_zone_depth = 4.57,
-                                                   initial_height = 0.0)
+    OpenstudioStandards::Geometry.create_shape_rectangle(model,
+                                                         length = 100.0,
+                                                         width = 100.0,
+                                                         above_ground_storys = 3,
+                                                         under_ground_storys = 1,
+                                                         floor_to_floor_height = 3.8,
+                                                         plenum_height = 1,
+                                                         perimeter_zone_depth = 4.57,
+                                                         initial_height = 0.0)
     # If we wanted to apply some aspects of a standard to our model we can by using a factory method to bring the
     # standards we want into our tests. So to bring the necb2011 we write.
     necb2011_standard = Standard.build('NECB2011')
@@ -104,10 +103,11 @@ class BTAPModelMeasure_Test < Minitest::Test
     BTAP::FileIO.save_osm(model, File.join(File.dirname(__FILE__), 'output', 'saved_file.osm'))
 
     # We can even call the standard methods to apply to the model.
-    necb2011_standard.model_add_design_days_and_weather_file(model, 'NECB HDD Method', 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw')
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_BC_Vancouver.Intl.AP.718920_CWEC2020.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
     puts BTAP::FileIO.compare_osm_files(before_measure_model, model)
-    necb2011_standard.apply_standard_construction_properties(model) # standards candidate
+    necb2011_standard.apply_standard_construction_properties(model: model) # standards candidate
 
     # Another simple way is to create an NECB
     # building using the helper method below.

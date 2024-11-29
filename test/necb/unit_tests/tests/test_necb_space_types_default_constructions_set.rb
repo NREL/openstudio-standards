@@ -6,9 +6,6 @@ include(NecbHelper)
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant.
 class NECB_SpaceTypes_DefaultConstructions_Test < Minitest::Test
 
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-
   def setup()
     define_folders(__dir__)
     define_std_ranges
@@ -21,7 +18,7 @@ class NECB_SpaceTypes_DefaultConstructions_Test < Minitest::Test
     @model = OpenStudio::Model::Model.new
     #Create only above ground geometry (Used for infiltration tests)
     length = 100.0; width = 100.0; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-    BTAP::Geometry::Wizards::create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+    OpenstudioStandards::Geometry.create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
     header_output = ""
     output = ""
     #Iterate through all spacetypes/buildingtypes.
