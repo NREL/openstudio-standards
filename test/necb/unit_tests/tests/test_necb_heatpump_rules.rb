@@ -3,11 +3,6 @@ require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
 class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
-<<<<<<< HEAD
-  # Set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-=======
->>>>>>> nrcan_nrc
 
   def setup()
     define_folders(__dir__)
