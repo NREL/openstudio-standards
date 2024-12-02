@@ -378,8 +378,7 @@ class Standard
         # main water heater, so the booster is responsible for a smaller delta-T.
         if booster_water_heater_fraction > 0
           # find_water_heater_capacity_volume_and_parasitic
-          booster_water_heater_sizing = OpenstudioStandards::ServiceWaterHeating.water_heater_sizing_from_water_use_equipment(model,
-                                                                                                                              [booster_water_use_equip],
+          booster_water_heater_sizing = OpenstudioStandards::ServiceWaterHeating.water_heater_sizing_from_water_use_equipment([booster_water_use_equip],
                                                                                                                               water_heater_efficiency: 1.0,
                                                                                                                               inlet_temperature: service_water_temperature_f,
                                                                                                                               supply_temperature: booster_water_temperature_f)
