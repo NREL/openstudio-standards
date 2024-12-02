@@ -153,7 +153,7 @@
     {
       "climate_zone": "2B",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -178,7 +178,7 @@
     {
       "climate_zone": "2B",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -253,7 +253,7 @@
     {
       "climate_zone": "3B",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -278,7 +278,7 @@
     {
       "climate_zone": "3B",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -303,7 +303,7 @@
     {
       "climate_zone": "3C",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -328,7 +328,7 @@
     {
       "climate_zone": "3C",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -403,7 +403,7 @@
     {
       "climate_zone": "4B",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -428,7 +428,7 @@
     {
       "climate_zone": "4B",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -453,7 +453,7 @@
     {
       "climate_zone": "4C",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -478,7 +478,7 @@
     {
       "climate_zone": "4C",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -503,7 +503,7 @@
     {
       "climate_zone": "5A",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -528,7 +528,7 @@
     {
       "climate_zone": "5A",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -553,7 +553,7 @@
     {
       "climate_zone": "5B",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -578,7 +578,7 @@
     {
       "climate_zone": "5B",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -603,7 +603,7 @@
     {
       "climate_zone": "5C",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -628,7 +628,7 @@
     {
       "climate_zone": "5C",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -653,7 +653,7 @@
     {
       "climate_zone": "6A",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -678,7 +678,7 @@
     {
       "climate_zone": "6A",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -703,7 +703,7 @@
     {
       "climate_zone": "6B",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -728,7 +728,7 @@
     {
       "climate_zone": "6B",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 65000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -753,7 +753,7 @@
     {
       "climate_zone": "7",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -778,7 +778,7 @@
     {
       "climate_zone": "7",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -803,7 +803,7 @@
     {
       "climate_zone": "7A",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -828,7 +828,7 @@
     {
       "climate_zone": "7A",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -853,7 +853,7 @@
     {
       "climate_zone": "7B",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -878,7 +878,7 @@
     {
       "climate_zone": "7B",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -903,7 +903,7 @@
     {
       "climate_zone": "8",
       "data_center": false,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
@@ -928,7 +928,7 @@
     {
       "climate_zone": "8",
       "data_center": true,
-      "minimum_capacity": null,
+      "minimum_capacity": 135000,
       "fan_cooling_application": "All",
       "minimum_water_cooled_chilled_water_capacity_no_fan_cooling": null,
       "minimum_air_cooled_chilled_water_or_district_chilled_water_capacity_no_fan_cooling": null,
