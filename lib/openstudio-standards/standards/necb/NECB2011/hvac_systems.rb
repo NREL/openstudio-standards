@@ -299,9 +299,23 @@ class NECB2011
     # Calculate average exhaust temperature (OA flow weighted average)
     avg_exhaust_temp = sum_zone_oa > 0 ? sum_zone_oa_times_heat_design_t / sum_zone_oa : 0.0
 
+    # for debugging/testing
+    #      puts "average exhaust temp = #{avg_exhaust_temp}"
+    #      puts "sum_zone_oa = #{sum_zone_oa}"
+
     # Get January winter design temperature
-    weather_file = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get)
-    outdoor_temp = weather_file.heating_design_info[1]
+    # get model weather file name
+    weather_file_path = air_loop_hvac.model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+
+    # get winter(heating) design temp stored in array
+    # Note that the NECB2011 specifies using the 2.5% january design temperature
+    # The outdoor temperature used here is the 0.4% heating design temperature of the coldest month, available in stat file
+    outdoor_temp = stat_file.heating_design_info[1]
+
+    #      for debugging/testing
+    #      puts "outdoor design temp = #{outdoor_temp}"
 
     # Calculate exhaust heat content
     exhaust_heat_content = 0.00123 * sum_zone_oa * 1000.0 * (avg_exhaust_temp - outdoor_temp)

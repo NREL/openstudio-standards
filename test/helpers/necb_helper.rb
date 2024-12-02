@@ -48,6 +48,9 @@ module NecbHelper
 
   # Hold an array of the instantiated standards (to save recreating them all the time).
   @@standards = []
+  
+  # Default to treu for PERFORM_STANDARDS in testing.
+  PERFORM_STANDARDS = true
 
   # Standard path definitions for NECB testing.
   def define_folders(file_folder)

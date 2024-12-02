@@ -99,7 +99,8 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
     begin
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)

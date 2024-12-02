@@ -241,7 +241,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       has_hrv = false
       exhaust_heat_content_kW = standard.calculate_exhaust_heat(air_loop_hvac)
       air_loop_hvac_name = air_loop_hvac.name.get
-      hdd = BTAP::Environment::WeatherFile.new(air_loop_hvac.model.weatherFile.get.path.get).hdd18
+      hdd = standard.get_necb_hdd18(model)
       has_hrv = standard.air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, 'NECB')
       flow_L_per_s = OpenStudio.convert(flow, 'm^3/s', 'L/s').get
       flow_ft3_per_min = OpenStudio.convert(flow, 'm^3/s', 'ft^3/min').get
