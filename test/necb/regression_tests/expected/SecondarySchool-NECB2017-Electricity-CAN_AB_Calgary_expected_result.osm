@@ -7396,7 +7396,7 @@ OS:DefaultScheduleSet,
   {6ed7d6d5-00fa-40e1-b339-c3bc189c5d30}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -7983,21 +7983,6 @@ OS:Schedule:Day,
   0,                                      !- Minute 4
   0.05;                                   !- Value Until Time 4
 
-OS:Schedule:Ruleset,
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Handle
-  Always On,                              !- Name
-  {e8a81f5e-628f-42ec-828b-7d5019c50aed}, !- Schedule Type Limits Name
-  {8b49e114-bf92-4d3b-8969-c8381ebb4f37}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {8b49e114-bf92-4d3b-8969-c8381ebb4f37}, !- Handle
-  Always On Default,                      !- Name
-  {e8a81f5e-628f-42ec-828b-7d5019c50aed}, !- Schedule Type Limits Name
-  No,                                     !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
-
 OS:ThermostatSetpoint:DualSetpoint,
   {e04a4f3c-f535-4858-a148-2ca51a59918e}, !- Handle
   Space Function Audience seating area permanent - auditorium Thermostat, !- Name
@@ -8358,7 +8343,7 @@ OS:DefaultScheduleSet,
   {3c62eb74-4cd3-4e9a-abcd-0fafa2a82c63}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -9119,7 +9104,7 @@ OS:DefaultScheduleSet,
   {6ed7d6d5-00fa-40e1-b339-c3bc189c5d30}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -9363,7 +9348,7 @@ OS:DefaultScheduleSet,
   {3c62eb74-4cd3-4e9a-abcd-0fafa2a82c63}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -9602,7 +9587,7 @@ OS:DefaultScheduleSet,
   {3c62eb74-4cd3-4e9a-abcd-0fafa2a82c63}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -9700,7 +9685,7 @@ OS:DefaultScheduleSet,
   {f6da3b94-f996-40df-9f5b-cc4036b9f8a8}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -10632,7 +10617,7 @@ OS:DefaultScheduleSet,
   {f6da3b94-f996-40df-9f5b-cc4036b9f8a8}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -10730,7 +10715,7 @@ OS:DefaultScheduleSet,
   {6ed7d6d5-00fa-40e1-b339-c3bc189c5d30}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -10981,7 +10966,7 @@ OS:DefaultScheduleSet,
   {6ed7d6d5-00fa-40e1-b339-c3bc189c5d30}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -11079,7 +11064,7 @@ OS:DefaultScheduleSet,
   {a749f695-23ce-45dc-8be7-086df94f7403}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -11840,7 +11825,7 @@ OS:DefaultScheduleSet,
   {3c62eb74-4cd3-4e9a-abcd-0fafa2a82c63}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {fbf21915-9ca2-4317-ab25-59e830ae59df}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 

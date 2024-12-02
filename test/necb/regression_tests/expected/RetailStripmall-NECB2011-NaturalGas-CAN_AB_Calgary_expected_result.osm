@@ -1,7 +1,7 @@
 
 OS:Version,
-  {c3d8bc1a-6ef7-4be4-9a55-aaeffabb7576}, !- Handle
-  3.6.1;                                  !- Version Identifier
+  {3fb678b9-9afc-43fd-8436-bcc97c0d3ba9}, !- Handle
+  3.7.0;                                  !- Version Identifier
 
 OS:ScheduleTypeLimits,
   {0a2fabd7-403e-498a-8665-df0dbf403558}, !- Handle
@@ -1635,7 +1635,7 @@ OS:DefaultScheduleSet,
   {0eaeb53b-c7c5-4062-b9bb-72b2dd0c6dfd}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {d26d36cb-200e-4838-a9dd-af56d80e0dc5}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -2212,21 +2212,6 @@ OS:Schedule:Day,
   24,                                     !- Hour 5
   0,                                      !- Minute 5
   0.05;                                   !- Value Until Time 5
-
-OS:Schedule:Ruleset,
-  {d26d36cb-200e-4838-a9dd-af56d80e0dc5}, !- Handle
-  Always On,                              !- Name
-  {fdc841bf-681c-47d8-9ed3-b01933a4083d}, !- Schedule Type Limits Name
-  {056e801c-1ab6-45bb-858c-ad5696b38f47}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {056e801c-1ab6-45bb-858c-ad5696b38f47}, !- Handle
-  Always On Default,                      !- Name
-  {fdc841bf-681c-47d8-9ed3-b01933a4083d}, !- Schedule Type Limits Name
-  ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
 
 OS:ThermostatSetpoint:DualSetpoint,
   {64e6afaf-f9af-4eb2-955c-c289270d937f}, !- Handle
@@ -5185,7 +5170,8 @@ OS:Boiler:HotWater,
   {46e81af8-fd36-4f7f-ab34-fbe2bd3928e3}, !- Boiler Water Outlet Node Name
   99,                                     !- Water Outlet Upper Temperature Limit {C}
   ConstantFlow,                           !- Boiler Flow Mode
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
+  0,                                      !- Off Cycle Parasitic Fuel Load {W}
   1,                                      !- Sizing Factor
   General;                                !- End-Use Subcategory
 
@@ -5205,7 +5191,8 @@ OS:Boiler:HotWater,
   {8278f354-e2d8-4961-ad34-01b14b00b172}, !- Boiler Water Outlet Node Name
   99,                                     !- Water Outlet Upper Temperature Limit {C}
   ConstantFlow,                           !- Boiler Flow Mode
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
+  0,                                      !- Off Cycle Parasitic Fuel Load {W}
   1,                                      !- Sizing Factor
   General;                                !- End-Use Subcategory
 
@@ -5590,6 +5577,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -5660,9 +5648,9 @@ OS:Coil:Heating:Gas,
   {b5113f17-0cf6-4471-af53-1f003aea639c}, !- Air Inlet Node Name
   {454daf68-2a28-4e2c-9bf6-ea738c093a3d}, !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {d13d3ca0-813c-4031-8105-6e9b25c19732}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:Controller:OutdoorAir,
   {26446674-3109-4b3c-b83a-ed34d9f68ce4}, !- Handle
@@ -5691,7 +5679,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {60503beb-c46e-41e2-804c-6083cc5a5c3a}, !- Handle
@@ -6120,6 +6109,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -6190,9 +6180,9 @@ OS:Coil:Heating:Gas,
   {0b70f73b-5720-47ae-ab24-014bd34022ac}, !- Air Inlet Node Name
   {fb4df6c8-d7c8-47bf-9ede-bc9f74f77259}, !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {d13d3ca0-813c-4031-8105-6e9b25c19732}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:Controller:OutdoorAir,
   {b765ded9-f837-473e-b59f-3da93ee0ffcb}, !- Handle
@@ -6221,7 +6211,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {28420943-de2b-4f92-bdb3-e17fd486a34b}, !- Handle
@@ -6663,6 +6654,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -6733,9 +6725,9 @@ OS:Coil:Heating:Gas,
   {36c6f8a1-9cbb-40a1-a277-adc17f2a9e0d}, !- Air Inlet Node Name
   {a73a58a2-c681-421f-904a-249bfcc1facc}, !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {d13d3ca0-813c-4031-8105-6e9b25c19732}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:Controller:OutdoorAir,
   {05ad0e2e-5dce-423f-bf14-f2fe24bbe13d}, !- Handle
@@ -6764,7 +6756,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {895cfb7a-2cb2-4332-846b-06fa2bd7f0d0}, !- Handle

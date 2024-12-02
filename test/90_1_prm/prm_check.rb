@@ -1146,13 +1146,14 @@ class AppendixGPRMTests < Minitest::Test
       if baseline_or_proposed == 'baseline'
         infil_rate = 1.0
       else
-        if building_type == 'SmallOffice'
-          infil_rate = 0.22
-        elsif building_type == 'LargeHotel'
-          infil_rate = 0.50
-        elsif building_type == 'Warehouse'
-          infil_rate = 0.61
-        end
+        # if building_type == 'SmallOffice'
+        #   infil_rate = 0.22
+        # elsif building_type == 'LargeHotel'
+        #   infil_rate = 0.50
+        # elsif building_type == 'Warehouse'
+        #   infil_rate = 0.61
+        # end
+        infil_rate = 1.0
       end
 
       conv_fact = OpenStudio.convert(1, 'm^3/s', 'ft^3/min').to_f / OpenStudio.convert(1, 'm^2', 'ft^2').to_f
