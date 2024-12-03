@@ -600,11 +600,11 @@ class ASHRAE901PRM < Standard
       climate_zone = '8' if climate_zone.include?('8')
 
       search_criteria = {
-        'template' => template,
-        'climate_id' => climate_zone
+        'climate_id' => climate_zone,
+        'data_center' => false,
       }
-      econ_limits = model_find_object(standards_data['prm_economizers'], search_criteria)
-      drybulb_limit_f = econ_limits['high_limit_shutoff']
+      econ_limits = model_find_object(standards_data['economizers'], search_criteria)
+      drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
     when 'FixedEnthalpy'
       enthalpy_limit_btu_per_lb = 28
     when 'FixedDewPointAndDryBulb'

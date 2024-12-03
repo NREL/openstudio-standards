@@ -2052,6 +2052,7 @@ Standard.class_eval do
 
         # Process climate zone:
         # Moisture regime is not needed for climate zone 8
+        climate_zone_code = climate_zone
         climate_zone = climate_zone.split('-')[-1]
         climate_zone = '8' if climate_zone.include?('8')
 
@@ -2075,7 +2076,7 @@ Standard.class_eval do
       if economizer_required
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
-        economizer_type = model_economizer_type(model, climate_zone)
+        economizer_type = model_economizer_type(model, climate_zone_code)
 
         # Set the economizer type
         # Get the OA system and OA controller
@@ -2092,7 +2093,7 @@ Standard.class_eval do
 
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.
-        unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone)
+        unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone_code)
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for climate zone #{climate_zone}. Economizer type will be switched to No Economizer.")
           oa_control.setEconomizerControlType('NoEconomizer')
         end
