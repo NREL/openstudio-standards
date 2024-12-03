@@ -28,6 +28,11 @@
 :ground_floor_cond: NECB_Default
 :ground_roof_cond: NECB_Default
 :ground_wall_cond: NECB_Default
+:hvac_system_primary: NECB_Default,
+:hvac_system_dwelling_units: NECB_Default,
+:hvac_system_washrooms: NECB_Default,
+:hvac_system_corridor: NECB_Default,
+:hvac_system_storage: NECB_Default,
 :infiltration_scale: NECB_Default
 :lights_scale: NECB_Default
 :lights_type: NECB_Default

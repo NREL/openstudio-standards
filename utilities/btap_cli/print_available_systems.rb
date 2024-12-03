@@ -151,7 +151,11 @@ def system3()
         hw_loop = nil
         if (baseboard_type == "Hot Water")
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            NECB.setup_hw_loop_with_components(model, hw_loop, 'Electricity', model.alwaysOnDiscreteSchedule)
+            NECB.setup_hw_loop_with_components( model, 
+                                                hw_loop, 
+                                                'Electricity', 
+                                                'Electricity',
+                                                model.alwaysOnDiscreteSchedule)
         end
 
         if (mau_type == false and necb_reference_hp == true) or 
@@ -197,7 +201,11 @@ def system4()
         hw_loop = nil
         if (baseboard_type == "Hot Water")
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            NECB.setup_hw_loop_with_components(model, hw_loop, 'Electricity', model.alwaysOnDiscreteSchedule)
+            NECB.setup_hw_loop_with_components( model, 
+                                                hw_loop, 
+                                                'Electricity',
+                                                'Electricity',
+                                                 model.alwaysOnDiscreteSchedule)
         end
         arguments = Hash[
             "necb_reference_hp", necb_reference_hp, 
@@ -332,6 +340,16 @@ system3()
 system4()
 system5()
 system6()
+
+$successes.each do |hash|
+    if hash.values.any? { |value| value == 'Hot Water' }
+        hash['needs_boiler'] = true
+    else
+        hash['needs_boiler'] = false
+    end
+end
+
+
 puts ("Successes: #{$successes}")
 puts("Failures: #{$failures}")
 #Save $failures hash to the csv file.
@@ -365,8 +383,8 @@ end
 end
 
 # save $successes array of hashes as a pretty yaml file.
-File.open('successes.yaml', 'w') do |file|
-    file.write($successes.to_yaml)
+File.open('successes.json', 'w') do |file|
+    file.write(JSON.pretty_generate($successes))
 end
 
 cvslist = ["sys_1.csv","sys_2.csv","sys_3.csv","sys_4.csv","sys_5.csv","sys_6.csv"]
@@ -399,6 +417,19 @@ workbook.worksheets.delete_at(0)
 
 # Write the workbook to an Excel file
 workbook.write('systems.xlsx')
+
+# ---------------------------------------------
+# Iterate over the $successes array of hashes
+
+
+# $successes.each do |success|
+    model = create_model()
+    standard = Standard.build('NECB2011') 
+    description = 'PSZ RTU ASHP with Gas and ASHP with Gas Supp. Heat Coils and Hot Water Baseboard'
+    #description = success['description']
+    puts("Creating HVAC system: #{description}")
+    standard.create_hvac_by_name(model: model, hvac_system_name: description, zones: model.getThermalZones, hw_loop: nil)
+# end
 
 
 
