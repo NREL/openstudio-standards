@@ -727,7 +727,23 @@
       ]
     },
     {
-      "space_type": "Strip mall",
+      "space_type": "Strip mall - type 1",
+      "building_type": "StripMall",
+      "water_use_equipment": [
+        {
+          "equipment_name": null,
+          "peak_flow_rate": 1.8,
+          "peak_flow_rate_per_area": null,
+          "loop_type": "One Per Space",
+          "temperature": 140.0,
+          "flow_rate_schedule": "RetailStripmall Type1_SWH_SCH",
+          "sensible_fraction": 0.2,
+          "latent_fraction": 0.05
+        }
+      ]
+    },
+    {
+      "space_type": "Strip mall - type 2",
       "building_type": "StripMall",
       "water_use_equipment": [
         {
@@ -737,6 +753,22 @@
           "loop_type": "One Per Space",
           "temperature": 140.0,
           "flow_rate_schedule": "RetailStripmall Type2_SWH_SCH",
+          "sensible_fraction": 0.2,
+          "latent_fraction": 0.05
+        }
+      ]
+    },
+    {
+      "space_type": "Strip mall - type 3",
+      "building_type": "StripMall",
+      "water_use_equipment": [
+        {
+          "equipment_name": null,
+          "peak_flow_rate": 1.8,
+          "peak_flow_rate_per_area": null,
+          "loop_type": "One Per Space",
+          "temperature": 140.0,
+          "flow_rate_schedule": "RetailStripmall Type3_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
         }

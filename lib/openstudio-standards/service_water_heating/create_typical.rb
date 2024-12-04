@@ -237,13 +237,15 @@ module OpenstudioStandards
           # find_water_heater_capacity_volume_and_parasitic
           booster_water_heater_sizing = OpenstudioStandards::ServiceWaterHeating.water_heater_sizing_from_water_use_equipment(booster_water_use_equipment,
                                                                                                                               water_heater_efficiency: 1.0,
+                                                                                                                              inlet_temperature: 140.0,
                                                                                                                               supply_temperature: 180.0)
 
           # Note that booster water heaters are always assumed to be electric resistance
+          booster_water_temperature_c = OpenStudio.convert(180.0, 'F', 'C').get
           swh_booster_loop = OpenstudioStandards::ServiceWaterHeating.create_booster_water_heating_loop(model,
                                                                                                         system_name: 'Booster Water Loop',
                                                                                                         water_heater_capacity: booster_water_heater_sizing[:water_heater_capacity],
-                                                                                                        service_water_temperature: 180.0,
+                                                                                                        service_water_temperature: booster_water_temperature_c,
                                                                                                         service_water_loop: shared_swh_loop)
 
           # Add loop to array

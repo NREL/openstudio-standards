@@ -47,6 +47,8 @@ Restroom,SecondarySchool,,,0.02,Shared,140,SchoolSecondary BLDG_SWH_SCH,0.2,0.05
 GuestRoom123Occ,SmallHotel,,,0.006324786,Shared,140,HotelSmall GuestRoom_SHW_Sch,0.2,0.05
 GuestRoom123Vac,SmallHotel,,,0.006324786,Shared,140,HotelSmall AlwaysOff,0.2,0.05
 Laundry,SmallHotel,,,0.064102564,One Per Space,140,HotelSmall LaundryRoom_SHW_Sch,0.2,0.05
-Strip mall,StripMall,,1.8,,One Per Space,140,RetailStripmall Type2_SWH_SCH,0.2,0.05
+Strip mall - type 1,StripMall,,1.8,,One Per Space,140,RetailStripmall Type1_SWH_SCH,0.2,0.05
+Strip mall - type 2,StripMall,,1.8,,One Per Space,140,RetailStripmall Type2_SWH_SCH,0.2,0.05
+Strip mall - type 3,StripMall,,1.8,,One Per Space,140,RetailStripmall Type3_SWH_SCH,0.2,0.05
 Bakery,SuperMarket,,,0.002141786,Shared,140,SuperMarket Bldg Swh,0.2,0.05
 Deli,SuperMarket,,,0.002141786,Shared,140,SuperMarket Bldg Swh,0.2,0.05
