@@ -15,7 +15,7 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
   # "if capacity <= 1750 kW ---> one cell
   # if capacity > 1750 kW ---> number of cells = capacity/1750 rounded up"
   # power = 0.015 x capacity in kW
-  def test_number_of_coolingtowers
+  def test_coolingtowers
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define static test parameters.
@@ -31,19 +31,44 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
 
     # Define references (per vintage in this case).
     test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 xxx"}
+    test_cases[:NECB2015] = {:Reference => "NECB 2015 p3 xxx"}
     
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = {:Vintage => ["NECB2011"], 
                        :chiller_types => ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'],
                        :TestCase => ["Single"], 
-                       :TestPars => {:tested_capacity_kW => 1500}}
+                       :TestPars => {:tested_capacity_kW => 1000,
+                                     :clgtowerFanPowerFr => 0.015,
+                                     :designInletTwb => 24.0,
+                                     :designApproachT => 5.0}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     test_cases_hash = {:Vintage => ["NECB2011"], 
                        :chiller_types => ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'],
                        :TestCase => ["Twin"], 
-                       :TestPars => {:tested_capacity_kW => 2500}}
+                       :TestPars => {:tested_capacity_kW => 4000,
+                                     :clgtowerFanPowerFr => 0.015,
+                                     :designInletTwb => 24.0,
+                                     :designApproachT => 5.0}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => ["NECB2015"], 
+                       :chiller_types => ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'],
+                       :TestCase => ["Single"], 
+                       :TestPars => {:tested_capacity_kW => 1000,
+                                     :clgtowerFanPowerFr => 0.013,
+                                     :designInletTwb => 24.0,
+                                     :designApproachT => 5.0}}
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    test_cases_hash = {:Vintage => ["NECB2015"], 
+                       :chiller_types => ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'],
+                       :TestCase => ["Twin"], 
+                       :TestPars => {:tested_capacity_kW => 4000,
+                                     :clgtowerFanPowerFr => 0.013,
+                                     :designInletTwb => 24.0,
+                                     :designApproachT => 5.0}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -71,7 +96,7 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
   # @param test_case [Hash] has the specific test parameters.
   # @return results of this case.
   # @note Companion method to test_number_of_coolingtowers that runs a specific test. Called by do_test_cases in necb_helper.rb.
-  def do_test_number_of_coolingtowers(test_pars:, test_case:)
+  def do_test_coolingtowers(test_pars:, test_case:)
     
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
@@ -81,134 +106,30 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
     # General inputs.
     test_name = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
-    mau_type = test_pars[:mau_type]
     heating_coil_type = test_pars[:heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
-    boiler_fueltype = test_pars[:FuelType]
+    boiler_fueltype = test_pars[:boiler_fueltype]
+    fan_type = test_pars[:fan_type]
     vintage = test_pars[:Vintage]
+    chiller_type = test_pars[:chiller_types]
 
     # Test specific inputs.
-    total_boiler_cap = test_case[:tested_capacity_kW]
-
-    # Set up remaining parameters for test.
-    template = "NECB2011"
-    standard = get_standard(template)
-    save_intermediate_models = false
+    chiller_cap = test_case[:tested_capacity_kW]
+    clgtowerFanPowerFr = test_case[:clgtowerFanPowerFr]
+    designInletTwb = test_case[:designInletTwb]
+    designApproachTemperature = test_case[:designApproachT]
     
+    # Define the test name. 
+    name = "sys6_#{vintage}_ChillerType_#{chiller_type}-#{chiller_cap}kW"
+    name_short = "#{chiller_type}_sys6"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
+    logger.info "Starting individual test: #{name}"
+    results = Hash.new
 
-    first_cutoff_twr_cap = 1750000.0
-    tol = 1.0e-3
-    # Generate the osm files for all relevant cases to generate the test data for system 6
-    boiler_fueltype = 'Electricity'
-    baseboard_type = 'Hot Water'
-    chiller_types = ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
-    fan_type = 'AF_or_BI_rdg_fancurve'
-    test_chiller_cap = [1000000.0, 4000000.0]
-    clgtowerFanPowerFr = 0.015
-    designInletTwb = 24.0
-    designApproachTemperature = 5.0
-    chiller_types.each do |chiller_type|
-      test_chiller_cap.each do |chiller_cap|
-        name = "sys6_#{template}_ChillerType_#{chiller_type}-#{chiller_cap}watts"
-        name_short = "#{chiller_type}_sys6"
-        output_folder = method_output_folder("#{test_name}/#{name_short}")
-        logger.info "Started individual test: #{name}"
+    # Wrap test in begin/rescue/ensure.
+    begin
 
-        # Load model and set climate file.
-        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
-        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
-        standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
-                                                                            zones: model.getThermalZones,
-                                                                            heating_coil_type: heating_coil_type,
-                                                                            baseboard_type: baseboard_type,
-                                                                            chiller_type: chiller_type,
-                                                                            fan_type: fan_type,
-                                                                            hw_loop: hw_loop)
-        # Save the model after btap hvac.
-        BTAP::FileIO.save_osm(model, "#{output_folder}/hvacrb")
-        model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
-
-        # Run the measure.
-        run_sizing(model: model, template: template, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
-
-        necb2011_refCOP = 5.0
-        model.getChillerElectricEIRs.each do |ichiller|
-          if ichiller.name.to_s.include? 'Primary' then necb2011_refCOP = ichiller.referenceCOP end
-        end
-        tower_cap = chiller_cap * (1.0 + 1.0/necb2011_refCOP)
-        this_is_the_first_cap_range = false
-        this_is_the_second_cap_range = false
-        if tower_cap < first_cutoff_twr_cap
-          this_is_the_first_cap_range = true
-        else
-          this_is_the_second_cap_range = true
-        end
-
-        # Compare tower number of cells to expected value.
-        tower = model.getCoolingTowerSingleSpeeds[0]
-        num_of_cells_is_correct = false
-        if this_is_the_first_cap_range
-          necb2011_num_cells = 1
-        elsif this_is_the_second_cap_range
-          necb2011_num_cells = (tower_cap/first_cutoff_twr_cap + 0.5).round
-        end
-        if tower.numberofCells == necb2011_num_cells then num_of_cells_is_correct = true end
-        assert(num_of_cells_is_correct, "Tower number of cells is not correct based on #{template}")
-
-        # Compare the fan power to expected value.
-        fan_power = clgtowerFanPowerFr * tower_cap
-        tower_fan_power_is_correct = false
-        rel_diff = (fan_power - tower.fanPoweratDesignAirFlowRate.to_f).abs/fan_power
-        if rel_diff < tol then tower_fan_power_is_correct = true end
-        assert(tower_fan_power_is_correct, "Tower fan power is not correct based on #{template}")
-
-        # Compare design inlet wetbulb to expected value.
-        tower_Twb_is_correct = false
-        rel_diff = (tower.designInletAirWetBulbTemperature.to_f - designInletTwb).abs/designInletTwb
-        if rel_diff < tol then tower_Twb_is_correct = true end
-        assert(tower_Twb_is_correct, "Tower inlet wet-bulb is not correct based on #{template}")
-
-        # Compare design approach temperature to expected value.
-        tower_appT_is_correct = false
-        rel_diff = (tower.designApproachTemperature.to_f - designApproachTemperature).abs/designApproachTemperature
-        if rel_diff < tol then tower_appT_is_correct = true end
-        assert(tower_appT_is_correct, "Tower approach temperature is not correct based on #{template}")
-      end
-    end
-  end
-
-  # NECB2015 rules for cooling tower.
-  # power = 0.013 x capacity in kW.
-  def test_coolingtower_power
-
-    # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-
-    # Set up remaining parameters for test.
-    template = 'NECB2015'
-    standard = get_standard(template)
-
-    # Generate the osm files for all relevant cases to generate the test data for system 6.
-    boiler_fueltype = 'Electricity'
-    baseboard_type = 'Hot Water'
-    chiller_types = ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating']
-    heating_coil_type = 'Hot Water'
-    fan_type = 'AF_or_BI_rdg_fancurve'
-    chiller_cap = 1000000.0
-    clgtowerFanPowerFr = 0.013
-
-    chiller_types.each do |chiller_type|
-      name = "sys6_#{template}_ChillerType_#{chiller_type}-#{chiller_cap}watts"
-      name_short = "#{chiller_type}_sys6"
-      output_folder = method_output_folder("#{test_name}/#{name_short}")
-      logger.info "Started individual test: #{name}"
+      #test_chiller_cap = [1 000 000.0, 4 000 000.0]
 
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
@@ -218,6 +139,7 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
+      standard = get_standard(vintage)
       standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
                                                                           zones: model.getThermalZones,
@@ -226,26 +148,50 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
                                                                           chiller_type: chiller_type,
                                                                           fan_type: fan_type,
                                                                           hw_loop: hw_loop)
-      model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
 
-      # Run sizing.
-      run_sizing(model: model, template: template, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
+      # Set the chiller capacity, remember to convert to W.
+      model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap*1000.0) }
 
-      refCOP = 5.0
-      model.getChillerElectricEIRs.each do |ichiller|
-        if ichiller.name.to_s.include? 'Primary' then refCOP = ichiller.referenceCOP end
-      end
-      tower_cap = chiller_cap * (1.0 + 1.0/refCOP)
-
-      # Compare the fan power to expected value.
-      tol = 1.0e-3
-      fan_power = clgtowerFanPowerFr * tower_cap
-      tower_fan_power_is_correct = false
-      tower = model.getCoolingTowerSingleSpeeds[0]
-      rel_diff = (fan_power - tower.fanPoweratDesignAirFlowRate.to_f).abs/fan_power
-      if rel_diff < tol then tower_fan_power_is_correct = true end
-      assert(tower_fan_power_is_correct, "Tower fan power is not correct based on #{template}")
+      # Run the measure.
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
+    rescue => error
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
+    
+    # Calculate the tower capacity.
+    refCOP = 5.0
+    model.getChillerElectricEIRs.each do |ichiller|
+      if ichiller.name.to_s.include? 'Primary' then refCOP = ichiller.referenceCOP end
+    end
+    tower_cap = chiller_cap * (1.0 + 1.0/refCOP)
+    fan_power = clgtowerFanPowerFr * tower_cap
+    
+    # Get the tower(s) and calculate output metrics.
+    tower_results = Hash.new
+    model.getCoolingTowerSingleSpeeds.each do |tower|
+      tower_Twb = tower.designInletAirWetBulbTemperature.to_f
+      tower_appT = tower.designApproachTemperature.to_f
+
+    # Add this test case to results and return the hash.
+      tower_results[tower.name.to_s.to_sym] = {
+        tower_capacity_kW: tower_cap.signif,
+        number_of_cells: tower.numberofCells,
+        fan_power: fan_power.signif(3),
+        design_inlet_Twb_degC: tower_Twb.signif(3),
+        design_approach_T_degC: tower_appT.signif(3)
+      }
+    end
+    results = {
+      name: name,
+      tested_capacity_kW: chiller_cap.signif,
+      reference_COP: refCOP.signif(3),
+      tower_results: tower_results    
+    }
+
+    logger.info "Completed individual test: #{name}"
+    return results
   end
 
 end
