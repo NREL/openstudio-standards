@@ -149,16 +149,16 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       chillerID = "Chiller-#{chiller_count}"
       results[chillerID.to_sym] = {
         name: chiller.name.to_s,
-        capacity_kW: chiller_capacity.signif,
+        capacity_kW: chiller_capacity.signif(3),
         capacity_ton: OpenStudio.convert(chiller_capacity, 'kW', 'ton').get.signif,
         capacity_BTUh: OpenStudio.convert(chiller_capacity, 'kW', 'kBtu/hr').get.signif,
-        COP_kW_kW: chiller.referenceCOP.to_f.signif,
+        COP_kW_kW: chiller.referenceCOP.to_f.signif(3),
         COP_kW_ton: OpenStudio.convert((1.0/chiller.referenceCOP.to_f), '1/kW', '1/ton').get.signif
       }
     end
     results[:All] = {
-      tested_capacity_kW: (chiller_cap.to_f).signif, 
-      total_capacity_kW: (total_capacity).signif, 
+      tested_capacity_kW: (chiller_cap.to_f).signif(3), 
+      total_capacity_kW: (total_capacity).signif(3), 
       number_of_chillers: chiller_count,
     }
 
@@ -295,15 +295,15 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       chillerID = "Chiller-#{chiller_count}"
       results[chillerID.to_sym] = {
         name: chiller.name.to_s,
-        capacity_kW: chiller_capacity.signif,
-        capacity_ton: OpenStudio.convert(chiller_capacity, 'kW', 'ton').get.signif,
-        capacity_BTUh: OpenStudio.convert(chiller_capacity, 'kW', 'kBtu/hr').get.signif,
-        minimum_part_load_ratio: chiller.minimumPartLoadRatio.signif
+        capacity_kW: chiller_capacity.signif(3),
+        capacity_ton: OpenStudio.convert(chiller_capacity, 'kW', 'ton').get.signif(3),
+        capacity_BTUh: OpenStudio.convert(chiller_capacity, 'kW', 'kBtu/hr').get.signif(3),
+        minimum_part_load_ratio: chiller.minimumPartLoadRatio.signif(3)
       }
     end
     results[:All] = {
-      tested_capacity_kW: (chiller_cap.to_f).signif, 
-      total_capacity_kW: (total_capacity).signif, 
+      tested_capacity_kW: (chiller_cap.to_f).signif(3), 
+      total_capacity_kW: (total_capacity).signif(3), 
       number_of_chillers: chiller_count,
     }
 
@@ -429,11 +429,11 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
       eff_curve_name, eff_curve_type, corr_coeff = get_chiller_eff_curve_data(chiller)
       chiller_capacity = (chiller.referenceCapacity.to_f)/1000.0
-      capacity_kW = chiller_capacity.signif
+      capacity_kW = chiller_capacity
       chiller_name = chiller.name.get
       results[chiller_name.to_sym] = {
           chiller_name: chiller_name,
-          capacity_kW: capacity_kW,
+          capacity_kW: capacity_kW.signif(3),
           eff_curve_name: eff_curve_name,
           eff_curve_type: eff_curve_type,
           curve_coefficients: corr_coeff
