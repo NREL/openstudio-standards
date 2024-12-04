@@ -173,7 +173,7 @@ class NECB2011
     end
     min_oa_flow_cfm = OpenStudio.convert(min_oa_flow_m3_per_s, 'm^3/s', 'cfm').get
 
-    # Calculate the percent OA at design airflow
+    # Calculate the fraction OA at design airflow.
     pct_oa = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
 
     # The NECB2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
@@ -195,30 +195,8 @@ class NECB2011
       erv_required = true
     end
 
+    # Calculate the heat content pof the exhaust air.
     exhaust_heat_content = calculate_exhaust_heat(air_loop_hvac)
-    # for debugging/testing
-    #      puts "average exhaust temp = #{avg_exhaust_temp}"
-    #      puts "sum_zone_oa = #{sum_zone_oa}"
-
-    # Get January winter design temperature
-    # get model weather file name
-    weather_file_path = air_loop_hvac.model.weatherFile.get.path.get.to_s
-    stat_file_path = weather_file_path.gsub('.epw', '.stat')
-    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
-
-    # get winter(heating) design temp stored in array
-    # Note that the NECB2011 specifies using the 2.5% january design temperature
-    # The outdoor temperature used here is the 0.4% heating design temperature of the coldest month, available in stat file
-    outdoor_temp = stat_file.heating_design_info[1]
-
-    #      for debugging/testing
-    #      puts "outdoor design temp = #{outdoor_temp}"
-
-    # Calculate exhaust heat content
-    exhaust_heat_content = 0.00123 * sum_zone_oa * 1000.0 * (avg_exhaust_temp - outdoor_temp)
-
-    # for debugging/testing
-    #      puts "exhaust heat content = #{exhaust_heat_content}"
 
     # Modify erv_required based on exhaust heat content
     if exhaust_heat_content > 150.0
