@@ -20,8 +20,8 @@
             1.0
           ]
         },
-        "Primary Boiler 310kBtu/hr 0.83 Thermal Eff": {
-          "boiler_name": "Primary Boiler 310kBtu/hr 0.83 Thermal Eff",
+        "Primary Boiler 313kBtu/hr 0.83 Thermal Eff": {
+          "boiler_name": "Primary Boiler 313kBtu/hr 0.83 Thermal Eff",
           "boiler_eff": 0.83,
           "eff_curve_name": "BOILER-EFFFPLR-NECB2011",
           "eff_curve_type": "OS_Curve_Cubic",
