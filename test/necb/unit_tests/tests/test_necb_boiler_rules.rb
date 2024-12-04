@@ -311,7 +311,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       boiler_capacity = (boiler.nominalCapacity.to_f)/1000.0
       total_capacity += boiler_capacity
       boilerID = "Boiler-#{boiler_count}"
-      results[boilerID.to_sym]= {
+      results[boilerID.to_sym] = {
         name: boiler.name.to_s,
         boiler_capacity_kW: (boiler_capacity).signif, 
         minimum_part_load_ratio: boiler.minimumPartLoadRatio
@@ -320,7 +320,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     results[:All]= {
       tested_capacity_kW: (total_boiler_cap.to_f).signif, 
       total_capacity_kW: (total_capacity).signif, 
-      number_of_boilers: boiler_count,
+      number_of_boilers: boiler_count
     }
     logger.info "Completed individual test: #{name}"
     return results
