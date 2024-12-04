@@ -8,7 +8,7 @@
       "small": {
         "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -31,7 +31,7 @@
       "small": {
         "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -54,7 +54,7 @@
       "small": {
         "Primary Chiller WaterCooled Rotary Screw 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Rotary Screw 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Screw_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -77,7 +77,7 @@
       "small": {
         "Primary Chiller WaterCooled Reciprocating 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Reciprocating 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -104,7 +104,7 @@
       "small": {
         "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -127,7 +127,7 @@
       "small": {
         "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -150,7 +150,7 @@
       "small": {
         "Primary Chiller WaterCooled Rotary Screw 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Rotary Screw 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Screw_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -173,7 +173,7 @@
       "small": {
         "Primary Chiller WaterCooled Reciprocating 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Reciprocating 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -200,7 +200,7 @@
       "small": {
         "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -223,7 +223,7 @@
       "small": {
         "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -246,7 +246,7 @@
       "small": {
         "Primary Chiller WaterCooled Rotary Screw 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Rotary Screw 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Screw_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -269,7 +269,7 @@
       "small": {
         "Primary Chiller WaterCooled Reciprocating 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Reciprocating 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -296,7 +296,7 @@
       "small": {
         "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Scroll 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -319,7 +319,7 @@
       "small": {
         "Primary Chiller WaterCooled Centrifugal 28tons 0.7kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.7kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -342,7 +342,7 @@
       "small": {
         "Primary Chiller WaterCooled Rotary Screw 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Rotary Screw 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Screw_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
@@ -365,7 +365,7 @@
       "small": {
         "Primary Chiller WaterCooled Reciprocating 28tons 0.8kW/ton": {
           "chiller_name": "Primary Chiller WaterCooled Reciprocating 28tons 0.8kW/ton",
-          "capacity_kW": 99.39,
+          "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
           "curve_coefficients": [
