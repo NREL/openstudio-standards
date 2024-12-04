@@ -2019,6 +2019,9 @@ Standard.class_eval do
     econ_max_70_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 70 pct Default')
     econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
 
+    # Store original climate zones
+    climate_zone_code = climate_zone
+
     # Check each airloop
     model.getAirLoopHVACs.sort.each do |air_loop|
       economizer_required = false
@@ -2052,7 +2055,6 @@ Standard.class_eval do
 
         # Process climate zone:
         # Moisture regime is not needed for climate zone 8
-        climate_zone_code = climate_zone
         climate_zone = climate_zone.split('-')[-1]
         climate_zone = '8' if climate_zone.include?('8')
 
