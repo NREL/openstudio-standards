@@ -185,7 +185,7 @@ class Standard
     end
 
     # If specific as IEER
-    unless ac_props['minimum_integrated_energy_efficiency_ratio'].nil? && (!ac_props['minimum_energy_efficiency_ratio'].nil? || !ac_props['minimum_energy_efficiency_ratio_2'].nil?)
+    unless ac_props['minimum_integrated_energy_efficiency_ratio'].nil? && !cop.nil?
       min_ieer = ac_props['minimum_integrated_energy_efficiency_ratio']
       cop = ieer_to_cop_no_fan(min_ieer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_ieer}IEER"
