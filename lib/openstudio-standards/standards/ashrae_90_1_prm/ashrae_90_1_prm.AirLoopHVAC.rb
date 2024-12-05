@@ -600,7 +600,7 @@ class ASHRAE901PRM < Standard
       climate_zone = '8' if climate_zone.include?('8')
 
       search_criteria = {
-        'climate_id' => climate_zone,
+        'climate_zone' => climate_zone,
         'data_center' => false,
       }
       econ_limits = model_find_object(standards_data['economizers'], search_criteria)
