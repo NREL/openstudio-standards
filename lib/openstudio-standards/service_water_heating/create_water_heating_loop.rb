@@ -119,19 +119,19 @@ module OpenstudioStandards
                                                                               use_ems_control: false)
       else
         OpenstudioStandards::ServiceWaterHeating.create_water_heater(model,
-                                                                      water_heater_capacity: water_heater_capacity,
-                                                                      water_heater_volume: water_heater_volume,
-                                                                      water_heater_fuel: water_heater_fuel,
-                                                                      on_cycle_parasitic_fuel_consumption_rate: on_cycle_parasitic_fuel_consumption_rate,
-                                                                      off_cycle_parasitic_fuel_consumption_rate: off_cycle_parasitic_fuel_consumption_rate,
-                                                                      service_water_temperature: service_water_temperature,
-                                                                      service_water_temperature_schedule: swh_temp_sch,
-                                                                      set_peak_use_flowrate: false,
-                                                                      peak_flowrate: 0.0,
-                                                                      flowrate_schedule: nil,
-                                                                      water_heater_thermal_zone: water_heater_thermal_zone,
-                                                                      number_of_water_heaters: number_of_water_heaters,
-                                                                      service_water_loop: service_water_loop)
+                                                                     water_heater_capacity: water_heater_capacity,
+                                                                     water_heater_volume: water_heater_volume,
+                                                                     water_heater_fuel: water_heater_fuel,
+                                                                     on_cycle_parasitic_fuel_consumption_rate: on_cycle_parasitic_fuel_consumption_rate,
+                                                                     off_cycle_parasitic_fuel_consumption_rate: off_cycle_parasitic_fuel_consumption_rate,
+                                                                     service_water_temperature: service_water_temperature,
+                                                                     service_water_temperature_schedule: swh_temp_sch,
+                                                                     set_peak_use_flowrate: false,
+                                                                     peak_flowrate: 0.0,
+                                                                     flowrate_schedule: nil,
+                                                                     water_heater_thermal_zone: water_heater_thermal_zone,
+                                                                     number_of_water_heaters: number_of_water_heaters,
+                                                                     service_water_loop: service_water_loop)
       end
 
       # add pipe losses if requested

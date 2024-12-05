@@ -192,7 +192,7 @@ module OpenstudioStandards
         if model.getBuilding.standardsBuildingType.is_initialized
           circulating = OpenstudioStandards::ServiceWaterHeating.circulating_building_type?(model.getBuilding.standardsBuildingType.get)
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ServiceWaterHeating', "Unable to determine the standards building type. Assuming the building does not have a circulating service water heating loop.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ServiceWaterHeating', 'Unable to determine the standards building type. Assuming the building does not have a circulating service water heating loop.')
           circulating = false
         end
       end

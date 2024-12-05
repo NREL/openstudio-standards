@@ -1,6 +1,4 @@
-
 # These methods convert space type service water heating equipment data to and from .csv for editing.
-
 private
 
 require 'csv'
@@ -55,10 +53,10 @@ def csv_to_json(input_csv = 'typical_water_use_equipment.csv',
 
     if space_type_hash.nil?
       space_type_hash = {
-                          space_type: space_type,
-                          building_type: building_type,
-                          water_use_equipment: [water_use_entry]
-                        }
+        space_type: space_type,
+        building_type: building_type,
+        water_use_equipment: [water_use_entry]
+      }
       # Add the space_type_hash to the result array
       result[:space_types] << space_type_hash
     else
@@ -67,7 +65,7 @@ def csv_to_json(input_csv = 'typical_water_use_equipment.csv',
   end
 
   # Write to the output JSON file
-  File.open(output_json, 'w') do |file|
+  File.write(output_json) do |file|
     file.write(JSON.pretty_generate(result))
   end
 
@@ -75,7 +73,7 @@ def csv_to_json(input_csv = 'typical_water_use_equipment.csv',
 end
 
 # convert to json
-csv_to_json()
+csv_to_json
 
 def json_to_csv(input_json = 'typical_water_use_equipment.json',
                 output_csv = 'typical_water_use_equipment_converted.csv')

@@ -63,7 +63,7 @@ module OpenstudioStandards
       water_heater_capacity_w = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'W').get
 
       # Calculate volume based on capacity
-       # A.1.4 Total Storage Volume and Water Heater Capacity of PrototypeModelEnhancements_2014_0.pdf shows 1 gallon of storage to 1 kBtu/h of capacity
+      # A.1.4 Total Storage Volume and Water Heater Capacity of PrototypeModelEnhancements_2014_0.pdf shows 1 gallon of storage to 1 kBtu/h of capacity
       water_heater_capacity_kbtu_per_hr = OpenStudio.convert(water_heater_capacity_btu_per_hr, 'Btu/hr', 'kBtu/hr').get
       water_heater_volume_gal = water_heater_capacity_kbtu_per_hr * capacity_to_volume_ratio
 
