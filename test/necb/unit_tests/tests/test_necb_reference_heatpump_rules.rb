@@ -19,8 +19,6 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
   def test_ref_heatpump_heating_capacity
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-
     # Test all systems and templates, to ensure future editions and additional systems follow this rule
     templates = ['NECB2011', 'NECB2015', 'NECB2017']
     sys_numbers = ['sys1', 'sys3', 'sys4', 'sys6']
@@ -29,6 +27,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
       sys_numbers.each do |sys_number|
         necb_reference_hp_supp_fuels.each do |necb_reference_hp_supp_fuel|
           name = "ref_heatpump_heating_capacity_#{template}_#{sys_number}"
+          name_short = "ref_hp_heat_cap_#{template}_#{sys_number}"
+          output_folder = method_output_folder("#{__method__}/#{name_short}")
           standard = get_standard(template)
 
           # Set standard to use reference hp rules.
@@ -47,7 +47,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
           # Save baseline model.
-          BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
           # Set up hvac system.
           standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -96,7 +96,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           end
 
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
+          run_sizing(model: model, template: template, save_model_versions: false, output_dir: output_folder, necb_ref_hp: true) if PERFORM_STANDARDS
 
           # Non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -273,7 +273,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           end
 
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
+          run_sizing(model: model, template: template, save_model_versions: false, output_dir: output_folder, necb_ref_hp: true) if PERFORM_STANDARDS
 
           # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -312,8 +312,6 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
   def test_ref_heatpump_curve
 
     # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-
     templates = ['NECB2011', 'NECB2015', 'NECB2017']
     sys_numbers = ['sys1', 'sys3', 'sys4', 'sys6']
     necb_reference_hp_supp_fuels = ['NaturalGas', 'Electricity', 'FuelOilNo2']
@@ -321,6 +319,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
       sys_numbers.each do |sys_number|
         necb_reference_hp_supp_fuels.each do |necb_reference_hp_supp_fuel|
           name = "ref_heatpump_curve_#{template}_#{sys_number}"
+          name_short = "ref_hp_curve_#{template}_#{sys_number}"
+          output_folder = method_output_folder("#{__method__}/#{name_short}")
           standard = get_standard(template)
           # set standard to use reference hp rules
           necb_reference_hp = true
@@ -335,7 +335,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
           OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           # save baseline
-          BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
           # set up hvac system
           standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -375,7 +375,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           end
 
           # Run sizing.
-          run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
+          run_sizing(model: model, template: template, save_model_versions: false, output_dir: output_folder, necb_ref_hp: true) if PERFORM_STANDARDS
 
           #get expected cooling values
           cooling_curve_expected_result_file = File.join(@expected_results_folder, "necb2011_reference_heatpump_cooling_curves_expected_results.csv")
@@ -741,8 +741,6 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
   def test_ref_heatpump_sizing_factor
 
   # Set up remaining parameters for test.
-  output_folder = method_output_folder(__method__)
-
   templates = ['NECB2011', 'NECB2015', 'NECB2017']
   sys_numbers = ['sys1', 'sys3', 'sys4', 'sys6']
   necb_reference_hp_supp_fuels = ['NaturalGas', 'Electricity', 'FuelOilNo2']
@@ -750,8 +748,10 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
     sys_numbers.each do |sys_number|
       necb_reference_hp_supp_fuels.each do |necb_reference_hp_supp_fuel|
         name = "test_ref_heatpump_sizing_factor_#{template}_#{sys_number}"
+        name_short = "ref_hp_size_factor_#{template}_#{sys_number}"
         puts"name#{name}"
         puts "necb_reference_hp_supp_fuel #{necb_reference_hp_supp_fuel}"
+        output_folder = method_output_folder("#{__method__}/#{name_short}")
         standard = get_standard(template)
 
         # set standard to use reference hp rules
@@ -767,7 +767,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
         OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         # save baseline
-        BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
         # set up hvac system
         standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -807,7 +807,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         end
 
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
+        run_sizing(model: model, template: template, save_model_versions: false, output_dir: output_folder, necb_ref_hp: true) if PERFORM_STANDARDS
 
         no_over_sizing = true
         model.getThermalZones.each do |zone|
@@ -827,8 +827,6 @@ end
 def test_ref_heatpump_heating_low_temp
 
   # Set up remaining parameters for test.
-  output_folder = method_output_folder(__method__)
-
   templates = ['NECB2011', 'NECB2015', 'NECB2017']
   sys_numbers = ['sys1', 'sys3', 'sys4', 'sys6']
   necb_reference_hp_supp_fuels = ['NaturalGas', 'Electricity', 'FuelOilNo2']
@@ -836,6 +834,8 @@ def test_ref_heatpump_heating_low_temp
     sys_numbers.each do |sys_number|
       necb_reference_hp_supp_fuels.each do |necb_reference_hp_supp_fuel|
         name = "ref_heatpump_heating_low_temp_#{template}_#{sys_number}"
+        name_short = "ref_hp_heat_low_t_#{template}_#{sys_number}"
+        output_folder = method_output_folder("#{__method__}/#{name_short}")
         standard = get_standard(template)
 
         # Set standard to use reference hp rules.
@@ -854,7 +854,7 @@ def test_ref_heatpump_heating_low_temp
         OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
         # Save baseline model.
-        BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
         # Set up hvac system.
         standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
@@ -894,8 +894,8 @@ def test_ref_heatpump_heating_low_temp
         end
 
         # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, necb_ref_hp: true)
-
+        run_sizing(model: model, template: template, save_model_versions: false, output_dir: output_folder, necb_ref_hp: true) if PERFORM_STANDARDS
+        
         # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
         unless sys_number == 'sys6'
           model.getAirLoopHVACUnitaryHeatPumpAirToAirs.each do |heatpump|
