@@ -25,6 +25,11 @@ class ASHRAE9012013 < ASHRAE901
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} no economizer")
       return [nil, nil, nil]
     when 'FixedDryBulb'
+      # Process climate zone:
+      # Moisture regime is not needed for climate zone 8
+      climate_zone = climate_zone.split('-')[-1]
+      climate_zone = '8' if climate_zone.include?('8')
+      
       search_criteria = {
         'template' => template,
         'climate_zone' => climate_zone
