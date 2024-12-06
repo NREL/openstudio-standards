@@ -113,50 +113,53 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
 
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
-    actual_heatpump_cop = []
-
-    # Load model and set climate file.
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
-    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-
-    hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
-    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                                zones: model.getThermalZones,
-                                                                                                heating_coil_type: heating_coil_type,
-                                                                                                baseboard_type: baseboard_type,
-                                                                                                hw_loop: hw_loop,
-                                                                                                new_auto_zoner: false)
-    # According to NECB 2011, Section 8.4.4.14, the heat pump must be sized based on its cooling capacity.
-    dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
-    dx_clg_coils.each do |coil|
-      coil.setRatedTotalCoolingCapacity(cap * 1000)
-      flow_rate = cap * 1000 * 5.0e-5
-      coil.setRatedAirFlowRate(flow_rate)
-    end
 
     # Wrap test in begin/rescue/ensure.
     begin
+
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                  zones: model.getThermalZones,
+                                                                                                  heating_coil_type: heating_coil_type,
+                                                                                                  baseboard_type: baseboard_type,
+                                                                                                  hw_loop: hw_loop,
+                                                                                                  new_auto_zoner: false)
+      # According to NECB 2011, Section 8.4.4.14, the heat pump must be sized based on its cooling capacity.
+      dx_clg_coils = model.getCoilCoolingDXSingleSpeeds
+      dx_clg_coils.each do |coil|
+        coil.setRatedTotalCoolingCapacity(cap * 1000.0)
+        flow_rate = cap * 1000.0 * 5.0e-5
+        coil.setRatedAirFlowRate(flow_rate)
+      end
+
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
-      actual_heatpump_cop = model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
-
-      capacity_btu_per_hr = OpenStudio.convert(cap.to_f, 'kW', 'Btu/hr').get
-      actual_heatpump_copH = actual_heatpump_cop / (1.48E-7 * capacity_btu_per_hr + 1.062)
-      # https://github.com/NREL/openstudio-standards/blob/971514ee0a64262a9c81788fd85fc60d8dd69980/lib/openstudio-standards/prototypes/common/objects/Prototype.utilities.rb#L379C7-L379C58
-      results = {
-        test_capacity_kW: cap.signif,
-        test_capacity_btu_per_hr: capacity_btu_per_hr.signif,
-        actual_heatpump_cop: actual_heatpump_cop.round(2),
-        actual_heatpump_copH: actual_heatpump_copH.round(2)
-      }
-
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
+      
+    actual_heatpump_cop = model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
+
+    capacity_btu_per_hr = OpenStudio.convert(cap.to_f, 'kW', 'Btu/hr').get
+    actual_heatpump_copH = actual_heatpump_cop / (1.48E-7 * capacity_btu_per_hr + 1.062)
+    # https://github.com/NREL/openstudio-standards/blob/971514ee0a64262a9c81788fd85fc60d8dd69980/lib/openstudio-standards/prototypes/common/objects/Prototype.utilities.rb#L379C7-L379C58
+    results = {
+      test_capacity_kW: cap.signif,
+      test_capacity_btu_per_hr: capacity_btu_per_hr.signif,
+      actual_heatpump_cop: actual_heatpump_cop.round(2),
+      actual_heatpump_copH: actual_heatpump_copH.round(2)
+    }
+
 
     # Add this test case to results and return the hash.
 
@@ -226,25 +229,32 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
 
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
-    actual_heatpump_cop = []
 
-    # Load model and set climate file.
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
-    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+    # Wrap test in begin/rescue/ensure.
+    begin
 
-    hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
-    standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                                zones: model.getThermalZones,
-                                                                                                heating_coil_type: heating_coil_type,
-                                                                                                baseboard_type: baseboard_type,
-                                                                                                hw_loop: hw_loop,
-                                                                                                new_auto_zoner: false)
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
-    run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                  zones: model.getThermalZones,
+                                                                                                  heating_coil_type: heating_coil_type,
+                                                                                                  baseboard_type: baseboard_type,
+                                                                                                  hw_loop: hw_loop,
+                                                                                                  new_auto_zoner: false)
+
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
+    rescue => error
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
+    end
 
     dx_units = model.getCoilHeatingDXSingleSpeeds
     results = {}
