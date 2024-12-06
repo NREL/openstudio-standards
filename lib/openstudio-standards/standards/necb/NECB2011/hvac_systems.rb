@@ -2523,4 +2523,11 @@ class NECB2011
     air_terminal_single_duct_vav_reheat.setMaximumReheatAirTemperature(43.0)
     return true
   end
+
+  # Using a dummy method to overload the NREL one which applies VRF defaults.  This is to avoid the NREL method
+  # conflicting with NRCan's VRF ECMs.
+  def air_conditioner_variable_refrigerant_flow_apply_efficiency_and_curves(air_conditioner_variable_refrigerant_flow)
+    return
+  end
+
 end
