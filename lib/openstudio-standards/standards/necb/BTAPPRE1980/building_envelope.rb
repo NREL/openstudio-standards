@@ -25,19 +25,21 @@ class BTAPPRE1980
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
   #
-  def apply_standard_skylight_to_roof_ratio(model:, srr_set: -1.0)
+  def apply_standard_skylight_to_roof_ratio(model:, srr_set: -1.0, osut: false)
     # If srr_set is between 1.0 and 1.2 set it to the maximum allowed by the NECB.  If srr_set is between 0.0 and 1.0
     # apply whatever was passed.  If srr_set >= 1.2 then set the existing srr of the building to be the necb maximum
     # only if the the srr exceeds this maximum (otherwise leave it to be whatever was modeled).
-
+    #
     # srr_set settings:
-    # 0-1:  Remove all skylights and add skylights to match this srr
-    # -1:  Remove all skylights and add skylights to match max srr from NECB
-    # -2:  Do not apply any srr changes, leave skylights alone (also works for srr > 1)
-    # -3:  Use old method which reduces existing skylight size (if necessary) to meet maximum NECB skylight limit
-    # <-3.1:  Remove all the skylights
-    # > 1:  Do nothing
-
+    #   0-1:  Remove all skylights and add skylights to match this srr
+    #    -1:  Remove all skylights and add skylights to match max srr from NECB
+    #    -2:  Do not apply any srr changes, leave skylights alone (also works for srr > 1)
+    #    -3:  Use old method which reduces existing skylight size (if necessary) to meet maximum NECB skylight limit
+    # <-3.1:  Remove all skylights
+    #   > 1:  Do nothing
+    #
+    # By default, :osut is set to 'false'. If :osut is set to 'true', SRR is
+    # instead met using OSut's addSkylights (:srr_set numeric values may apply). @todo
     return if srr_set.to_f > 1.0
     return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f) if srr_set.to_f >= 0.0 && srr_set <= 1.0
 
