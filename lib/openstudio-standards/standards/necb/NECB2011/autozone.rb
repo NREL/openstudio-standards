@@ -918,9 +918,9 @@ class NECB2011
                                                                 multispeed: false)
           else
             create_hvac_by_name( model: model,
-                                        hvac_system_primary: hvac_system_primary,
-                                        hw_loop: @hw_loop, 
-                                        zones: curr_zones
+                                 hvac_system_name: hvac_system_primary,
+                                 hw_loop: @hw_loop,
+                                 zones: curr_zones
             )                            
           end
         end
@@ -936,9 +936,9 @@ class NECB2011
                                     hw_loop: @hw_loop)
           else
             create_hvac_by_name( model: model,
-                                        hvac_system_primary: hvac_system_primary,
-                                        hw_loop: @hw_loop, 
-                                        zones: curr_zones
+                                 hvac_system_name: hvac_system_primary,
+                                 hw_loop: @hw_loop,
+                                 zones: curr_zones
             )                            
           end
         end
@@ -955,9 +955,9 @@ class NECB2011
                                                                                   multispeed: false)
           else
             create_hvac_by_name( model: model,
-                                        hvac_system_primary: hvac_system_primary,
-                                        hw_loop: @hw_loop, 
-                                        zones: curr_zones
+                                 hvac_system_name: hvac_system_primary,
+                                 hw_loop: @hw_loop,
+                                 zones: curr_zones
             )                            
           end
         end
@@ -974,9 +974,9 @@ class NECB2011
                                                                         hw_loop: @hw_loop)
           else
             create_hvac_by_name( model: model,
-                                        hvac_system_primary: hvac_system_primary,
-                                        hw_loop: @hw_loop, 
-                                        zones: curr_zones
+                                 hvac_system_name: hvac_system_primary,
+                                 hw_loop: @hw_loop,
+                                 zones: curr_zones
             )        
           end
         end
@@ -992,9 +992,9 @@ class NECB2011
                                     hw_loop: @hw_loop)
           else
             create_hvac_by_name( model: model,
-                                        hvac_system_primary: hvac_system_primary,
-                                        hw_loop: @hw_loop,
-                                        zones: curr_zones
+                                 hvac_system_name: hvac_system_primary,
+                                 hw_loop: @hw_loop,
+                                 zones: curr_zones
             )
           end
         end
@@ -1019,9 +1019,9 @@ class NECB2011
           end
         else
           create_hvac_by_name( model: model,
-                                      hvac_system_primary: hvac_system_primary,
-                                      hw_loop: @hw_loop,
-                                      zones: sys_zones
+                               hvac_system_name: hvac_system_primary,
+                               hw_loop: @hw_loop,
+                               zones: sys_zones
           )
         end
       
@@ -1036,9 +1036,9 @@ class NECB2011
                                     hw_loop: @hw_loop)
           else
             create_hvac_by_name( model: model,
-                                        hvac_system_primary: hvac_system_primary,
-                                        hw_loop: @hw_loop,
-                                        zones: curr_zones
+                                 hvac_system_name: hvac_system_primary,
+                                 hw_loop: @hw_loop,
+                                 zones: curr_zones
             )
           end
         end
@@ -1368,7 +1368,8 @@ class NECB2011
 
   def create_hvac_by_name(model:, hvac_system_name:, zones:, hw_loop: nil)
     # Get the HVAC system properties
-    standard = Standard.build('NECB2011')
+    template = determine_spacetype_vintage(model)
+    standard =  Standard.build(template)
     # Get the HVAC system properties from  lib/openstudio-standards/standards/necb/NECB2011/data/systems.json from description field.
     hvac_system_data = standard.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_name }
     raise("Could not find hvac_system_data for #{hvac_system_name}") if hvac_system_data.nil?
