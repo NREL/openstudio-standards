@@ -2191,7 +2191,7 @@ class NECB2011
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
   # heating, cooling, supply fan, zone heating, zone cooling, and return fan
-  def assign_base_sys_name(airloop, sys_abbr:, sys_oa:, sys_name_pars:)
+  def assign_base_sys_name(air_loop:, sys_abbr:, sys_oa:, sys_name_pars:)
     sys_name = "#{sys_abbr}|#{sys_oa}|"
     sys_name_pars.each do |key, value|
       case key.downcase
@@ -2209,21 +2209,30 @@ class NECB2011
           sys_name += 'sh>c-e'
         when 'hot water'
           sys_name += 'sh>c-hw'
-        when 'gas'
+        when 'gas', 'g'
           sys_name += 'sh>c-g'
-        when 'dx'
+        when 'dx' , 'ashp'
           sys_name += 'sh>ashp'
+        when 'ashp>c-g'
+          sys_name += 'sh>ashp>c-g'
+        when 'ashp>c-e'
+          sys_name += 'sh>ashp>c-e'
         when 'ccashp'
           sys_name += 'sh>ccashp'
-        when 'ashp'
-          sys_name += 'sh>ashp'
+        when 'ccashp>c-g'
+          sys_name += 'sh>ccashp>c-g'
+        when 'ccashp>c-e'
+          sys_name += 'sh>ccashp>c-e'
+          
+        else
+          sys_name += 'sh>none'
         end
 
       when 'sys_clg'
         case value.downcase
         when 'none'
           sys_name += 'sc>none'
-        when 'chilled water'
+        when 'chilled water','hydronic'
           sys_name += 'sc>c-chw'
         when 'dx'
           if sys_name_pars['sys_htg'] == 'dx'
@@ -2256,9 +2265,9 @@ class NECB2011
         when 'hot water'
           sys_name += 'zh>b-hw'
         when 'tpfc'
-          sys_name += 'zh>fpfc'
-        when 'fpfc'
           sys_name += 'zh>tpfc'
+        when 'fpfc'
+          sys_name += 'zh>fpfc'
         when 'pthp'
           sys_name += 'zh>pthp'
         end
@@ -2290,7 +2299,10 @@ class NECB2011
       sys_name += '|'
     end
 
-    airloop.setName(sys_name)
+    air_loop.setName(sys_name)
+    return detect_air_system_type(air_loop: air_loop, 
+                                  old_system_name: sys_name, 
+                                  sys_abbr: sys_abbr)
   end
 
   # Method to update the base system name based on the inputs provided.
