@@ -30,6 +30,8 @@ module OpenstudioStandards
       model.getSpaces.sort.each do |space|
         next unless space.spaceType.is_initialized
 
+        total_space_floor_area_m2 = space.floorArea * space.multiplier
+        total_space_floor_area_ft2 = OpenStudio.convert(total_space_floor_area_m2, 'm^2', 'ft^2').get
         space_type = space.spaceType.get
 
         next unless space_type.standardsSpaceType.is_initialized
@@ -79,11 +81,6 @@ module OpenstudioStandards
           # skip undefined equipment
           next unless peak_flow_rate_gal_per_hr > 0.0 || peak_flow_rate_gal_per_hr_per_ft2 > 0.0
 
-          # calculate flow rate
-          if peak_flow_rate_gal_per_hr.zero? && peak_flow_rate_gal_per_hr_per_ft2 > 0.0
-
-          end
-
           # If there is no SWH schedule, assume no SWH use for this space type.
           unless flow_rate_schedule
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ServiceWaterHeating', "No service water heating schedule was specified for space type #{space_type.name} with standards space type #{standards_space_type}. Assuming an always off schedule.")
@@ -95,7 +92,7 @@ module OpenstudioStandards
           when 'One Per Unit'
             # calculate peak flow rate
             if peak_flow_rate_gal_per_hr.zero? && peak_flow_rate_gal_per_hr_per_ft2 > 0.0
-              peak_flow_rate_gal_per_hr = num_units * peak_flow_rate_gal_per_hr_per_ft2 * OpenStudio.convert(space.floorArea * space.multiplier, 'm^2', 'ft^2').get
+              peak_flow_rate_gal_per_hr = num_units * peak_flow_rate_gal_per_hr_per_ft2 * total_space_floor_area_ft2
             else
               peak_flow_rate_gal_per_hr *= num_units
             end
@@ -105,7 +102,7 @@ module OpenstudioStandards
           else
             # calculate peak flow rate
             if peak_flow_rate_gal_per_hr.zero? && peak_flow_rate_gal_per_hr_per_ft2 > 0.0
-              peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr_per_ft2 * OpenStudio.convert(space.floorArea * space.multiplier, 'm^2', 'ft^2').get
+              peak_flow_rate_gal_per_hr = peak_flow_rate_gal_per_hr_per_ft2 * total_space_floor_area_ft2
             end
           end
 
@@ -162,7 +159,7 @@ module OpenstudioStandards
                                                                                                 water_heater_fuel: dedicated_water_heating_fuel,
                                                                                                 number_of_water_heaters: num_water_heaters,
                                                                                                 add_piping_losses: true,
-                                                                                                floor_area: OpenStudio.convert(space.floorArea * space.multiplier, 'ft^2', 'm^2').get,
+                                                                                                floor_area: total_space_floor_area_m2,
                                                                                                 number_of_stories: 1)
 
           # add loop to array

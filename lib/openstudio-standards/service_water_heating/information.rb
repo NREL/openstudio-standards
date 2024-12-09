@@ -31,19 +31,7 @@ module OpenstudioStandards
         next if water_use_equip_sch.empty?
 
         water_use_equip_sch = water_use_equip_sch.get
-        if water_use_equip_sch.to_ScheduleRuleset.is_initialized
-          water_use_equip_sch = water_use_equip_sch.to_ScheduleRuleset.get
-          max_sch_value = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(water_use_equip_sch)['max']
-        elsif water_use_equip_sch.to_ScheduleConstant.is_initialized
-          water_use_equip_sch = water_use_equip_sch.to_ScheduleConstant.get
-          max_sch_value = OpenstudioStandards::Schedules.schedule_constant_get_min_max(water_use_equip_sch)['max']
-        elsif water_use_equip_sch.to_ScheduleCompact.is_initialized
-          water_use_equip_sch = water_use_equip_sch.to_ScheduleCompact.get
-          max_sch_value = OpenstudioStandards::Schedules.schedule_compact_get_min_max(water_use_equip_sch)['max']
-        else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "The peak flow rate fraction for #{water_use_equip_sch.name} could not be determined, assuming 1 for water heater sizing purposes.")
-          max_sch_value = 1.0
-        end
+        max_sch_value = OpenstudioStandards::Schedules.schedule_get_min_max(water_use_equip_sch)['max']
 
         # Get peak flow rate from water use equipment definition
         peak_flow_rate_m3_per_s = water_use_equip.waterUseEquipmentDefinition.peakFlowRate
@@ -54,7 +42,7 @@ module OpenstudioStandards
       end
 
       # Sum gph values from water use equipment to use in formula
-      total_adjusted_flow_rate_gal_per_hr = adjusted_max_flow_rates_gal_per_hr.inject(:+)
+      total_adjusted_flow_rate_gal_per_hr = adjusted_max_flow_rates_gal_per_hr.sum
 
       # Calculate capacity based on analysis of combined water use equipment maximum flow rates and schedules
       # Max gal/hr * 8.4 lb/gal * 1 Btu/lb F * (120F - 40F)/0.8 = Btu/hr
