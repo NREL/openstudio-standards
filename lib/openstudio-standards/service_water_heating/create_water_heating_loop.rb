@@ -119,19 +119,19 @@ module OpenstudioStandards
                                                                               use_ems_control: false)
       else
         OpenstudioStandards::ServiceWaterHeating.create_water_heater(model,
-                                                                      water_heater_capacity: water_heater_capacity,
-                                                                      water_heater_volume: water_heater_volume,
-                                                                      water_heater_fuel: water_heater_fuel,
-                                                                      on_cycle_parasitic_fuel_consumption_rate: on_cycle_parasitic_fuel_consumption_rate,
-                                                                      off_cycle_parasitic_fuel_consumption_rate: off_cycle_parasitic_fuel_consumption_rate,
-                                                                      service_water_temperature: service_water_temperature,
-                                                                      service_water_temperature_schedule: swh_temp_sch,
-                                                                      set_peak_use_flowrate: false,
-                                                                      peak_flowrate: 0.0,
-                                                                      flowrate_schedule: nil,
-                                                                      water_heater_thermal_zone: water_heater_thermal_zone,
-                                                                      number_of_water_heaters: number_of_water_heaters,
-                                                                      service_water_loop: service_water_loop)
+                                                                     water_heater_capacity: water_heater_capacity,
+                                                                     water_heater_volume: water_heater_volume,
+                                                                     water_heater_fuel: water_heater_fuel,
+                                                                     on_cycle_parasitic_fuel_consumption_rate: on_cycle_parasitic_fuel_consumption_rate,
+                                                                     off_cycle_parasitic_fuel_consumption_rate: off_cycle_parasitic_fuel_consumption_rate,
+                                                                     service_water_temperature: service_water_temperature,
+                                                                     service_water_temperature_schedule: swh_temp_sch,
+                                                                     set_peak_use_flowrate: false,
+                                                                     peak_flowrate: 0.0,
+                                                                     flowrate_schedule: nil,
+                                                                     water_heater_thermal_zone: water_heater_thermal_zone,
+                                                                     number_of_water_heaters: number_of_water_heaters,
+                                                                     service_water_loop: service_water_loop)
       end
 
       # add pipe losses if requested
@@ -166,6 +166,7 @@ module OpenstudioStandards
     # Creates a booster water heater on its own loop and attaches it to the main service water heating loop.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param system_name [String] the name of the system. nil results in the default.
     # @param water_heater_capacity [Double] water heater capacity, in W. Defaults to 8 kW / 27.283 kBtu/hr
     # @param water_heater_volume [Double] water heater volume, in m^3. Defaults to 0.0227 m^3 / 6 gal
     # @param water_heater_fuel [String] water heating fuel. Valid choices are 'NaturalGas', 'Electricity'.
@@ -179,6 +180,7 @@ module OpenstudioStandards
     # @param service_water_loop [OpenStudio::Model::PlantLoop] if provided, add the water heater to this loop
     # @return [OpenStudio::Model::PlantLoop] The booster water loop OpenStudio PlantLoop object
     def self.create_booster_water_heating_loop(model,
+                                               system_name: 'Booster Water Loop',
                                                water_heater_capacity: 8000.0,
                                                water_heater_volume: OpenStudio.convert(6.0, 'gal', 'm^3').get,
                                                water_heater_fuel: 'Electricity',
