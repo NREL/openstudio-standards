@@ -411,7 +411,13 @@ module OpenstudioStandards
             custom_cor_val = width * core_ratio_adj
             custom_perim_val = (width - custom_cor_val) / 2.0
           end
-          actual_perim = custom_perim_val
+          # use perimeter zone depth if the custom perimeter value is within 1 milimeter
+          if (custom_perim_val - perimeter_zone_depth).abs < 0.001
+            actual_perim = perimeter_zone_depth
+          else
+            actual_perim = custom_perim_val
+          end
+
           double_loaded_corridor = true
         else
           actual_perim = perimeter_zone_depth

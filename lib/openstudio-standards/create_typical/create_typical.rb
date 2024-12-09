@@ -28,6 +28,7 @@ module OpenstudioStandards
     #  Options are 'Inferred', 'Mass', 'Metal Building', 'WoodFramed', 'SteelFramed'
     # @param add_space_type_loads [Boolean] Populate existing standards space types in the model with internal loads
     # @param add_daylighting_controls [Boolean] Add daylighting controls
+    # @param add_infiltration [Boolean] Adds infiltration to the model based on cosntruction
     # @param add_elevators [Boolean] Apply elevators directly to a space in the model instead of to a space type
     # @param add_internal_mass [Boolean] Add internal mass to each space
     # @param add_exterior_lights [Boolean] Add exterior lightings objects to parking, canopies, and facades
@@ -66,6 +67,7 @@ module OpenstudioStandards
                                                 wall_construction_type: 'Inferred',
                                                 add_space_type_loads: true,
                                                 add_daylighting_controls: true,
+                                                add_infiltration: true,
                                                 add_elevators: true,
                                                 add_internal_mass: true,
                                                 add_exterior_lights: true,
@@ -225,8 +227,7 @@ module OpenstudioStandards
         end
 
         model.getSpaceTypes.sort.each do |space_type|
-          # Don't add infiltration here; will be added later in the script
-          test = standard.space_type_apply_internal_loads(space_type, true, true, true, true, true, false)
+          test = standard.space_type_apply_internal_loads(space_type, true, true, true, true, true)
           if test == false
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CreateTypical', "Could not add loads for #{space_type.name}. Not expected for #{template}")
             next
@@ -234,7 +235,7 @@ module OpenstudioStandards
 
           # apply internal load schedules
           # the last bool test it to make thermostat schedules. They are now added in HVAC section instead of here
-          standard.space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, false)
+          standard.space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, false)
 
           # extend space type name to include the template. Consider this as well for load defs
           space_type.setName("#{space_type.name} - #{template}")
@@ -399,15 +400,22 @@ module OpenstudioStandards
           surface.setOutsideBoundaryCondition('Adiabatic')
         end
 
-        # modify the infiltration rates
-        if remove_objects
-          model.getSpaceInfiltrationDesignFlowRates.each(&:remove)
-        end
-        standard.model_apply_infiltration_standard(model)
-        standard.model_modify_infiltration_coefficients(model, primary_bldg_type, climate_zone)
 
         # set ground temperatures from DOE prototype buildings
         OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
+      end
+
+      # add infiltration
+      if add_infiltration
+        if remove_objects
+          model.getSpaceInfiltrationDesignFlowRates.each(&:remove)
+        end
+
+        # use NIST method for determining infiltration
+        # this sets a default always on; schedules are adjusted later if HVAC is added
+        OpenstudioStandards::Infiltration.model_set_nist_infiltration(model,
+                                                                      airtightness_value: standard.default_airtightness,
+                                                                      air_barrier: standard.default_air_barrier)
       end
 
       # add elevators (returns ElectricEquipment object)
@@ -575,7 +583,7 @@ module OpenstudioStandards
           next if standard.space_type_get_standards_data(space_type).empty?
 
           # the last bool test it to make thermostat schedules. They are added to the model but not assigned
-          standard.space_type_apply_internal_load_schedules(space_type, false, false, false, false, false, false, true)
+          standard.space_type_apply_internal_load_schedules(space_type, false, false, false, false, false, true)
 
           # identify thermal thermostat and apply to zones (apply_internal_load_schedules names )
           model.getThermostatSetpointDualSetpoints.sort.each do |thermostat|
@@ -803,6 +811,11 @@ module OpenstudioStandards
           # Apply the HVAC efficiency standard
           standard.model_apply_hvac_efficiency_standard(model, climate_zone)
         end
+
+        # adjust infiltration schedules
+        if add_infiltration
+          OpenstudioStandards::Infiltration.model_set_nist_infiltration_schedules(model)
+        end
       end
 
       # set unmet hours tolerance
@@ -919,13 +932,13 @@ module OpenstudioStandards
           space_types_new << space_type
 
           # add internal loads (the nil check isn't necessary, but I will keep it in as a warning instad of an error)
-          test = standard.space_type_apply_internal_loads(space_type, true, true, true, true, true, true)
+          test = standard.space_type_apply_internal_loads(space_type, true, true, true, true, true)
           if test.nil?
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CreateTypical', "Could not add loads for #{space_type.name}. Not expected for #{template} #{lookup_building_type}")
           end
 
           # the last bool test it to make thermostat schedules. They are added to the model but not assigned
-          standard.space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
+          standard.space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true)
 
           # assign colors
           standard.space_type_apply_rendering_color(space_type)
