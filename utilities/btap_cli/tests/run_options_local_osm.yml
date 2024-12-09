@@ -55,6 +55,7 @@
 :skylight_cond: NECB_Default
 :skylight_solar_trans: NECB_Default
 :srr_set: NECB_Default
+:srr_opt: ''
 :template: NECB2017
 :npv_start_year: NECB_Default
 :npv_end_year: NECB_Default

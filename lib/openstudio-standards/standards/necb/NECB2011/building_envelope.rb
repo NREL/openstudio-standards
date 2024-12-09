@@ -160,26 +160,29 @@ class NECB2011
 
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
-  #
-  def apply_standard_skylight_to_roof_ratio(model:, srr_set: -1.0)
+  def apply_standard_skylight_to_roof_ratio(model:, srr_set: -1.0, srr_opt: '')
     # If srr_set is between 1.0 and 1.2 set it to the maximum allowed by the NECB.  If srr_set is between 0.0 and 1.0
     # apply whatever was passed.  If srr_set >= 1.2 then set the existing srr of the building to be the necb maximum
     # only if the the srr exceeds this maximum (otherwise leave it to be whatever was modeled).
-
+    #
     # srr_set settings:
-    # 0-1:  Remove all skylights and add skylights to match this srr
-    # -1:  Remove all skylights and add skylights to match max srr from NECB
-    # -2:  Do not apply any srr changes, leave skylights alone (also works for srr > 1)
-    # -3:  Use old method which reduces existing skylight size (if necessary) to meet maximum NECB skylight limit
+    #   0-1:  Remove all skylights and add skylights to match this srr
+    #    -1:  Remove all skylights and add skylights to match max srr from NECB
+    #    -2:  Do not apply any srr changes, leave skylights alone (also works for srr > 1)
+    #    -3:  Use old method which reduces existing skylight size (if necessary) to meet maximum NECB skylight limit
     # <-3.1:  Remove all skylights
-    # > 1:  Do nothing
-
+    #   > 1:  Do nothing
+    #
+    # By default, :srr_opt is an empty string (" "). If set to "osut", SRR is
+    # instead met using OSut's addSkylights (:srr_set numeric values may apply).
     return if srr_set.to_f > 1.0
-    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f) if srr_set.to_f >= 0.0 && srr_set.to_f <= 1.0
+    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f, srr_opt: srr_opt) if srr_set.to_f >= 0.0 && srr_set <= 1.0
+
     # Get the maximum NECB srr
-    return apply_max_srr_nrcan(model: model, srr_lim: get_standards_constant('skylight_to_roof_ratio_max_value').to_f) if srr_set.to_f >= -1.1 && srr_set.to_f <= -0.9
+    return apply_max_srr_nrcan(model: model, srr_lim: get_standards_constant('skylight_to_roof_ratio_max_value').to_f, srr_opt: srr_opt) if srr_set.to_f >= -1.1 && srr_set.to_f <= -0.9
+
     return if srr_set.to_f >= -2.1 && srr_set.to_f <= -1.9
-    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f) if srr_set.to_f < -3.1
+    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f, srr_opt: srr_opt) if srr_set.to_f < -3.1
     return unless srr_set.to_f >= -3.1 && srr_set.to_f <= -2.9
 
     # SRR limit
@@ -197,6 +200,7 @@ class NECB2011
     sh_sky_m2 = 0
     total_roof_m2 = 0.001
     total_subsurface_m2 = 0
+
     model.getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       wall_area_m2 = 0
@@ -724,44 +728,116 @@ class NECB2011
     return true
   end
 
-  # This method is similar to the 'apply_max_fdwr' method above but applies the maximum skylight to roof area ratio to a
-  # building as per NECB 2011 8.4.4.3 and 3.2.1.4 (or equivalent in other versions of the NECB).  It first checks for all
-  # exterior roofs adjacent to conditioned spaces.  It distinguishes between plenums and other conditioned spaces.  It
-  # uses only the non-plenum roof area to calculate the maximum skylight area to be applied to the building.
-  def apply_max_srr_nrcan(model:, srr_lim:)
-    # First determine which roof surfaces are adjacent to heated spaces (both plenum and non-plenum).
-    exp_surf_info = find_exposed_conditioned_roof_surfaces(model)
-    # If the non-plenum roof area is very small raise a warning.  It may be perfectly fine but it is probably a good
-    # idea to warn the user.
-    if exp_surf_info['exp_nonplenum_roof_area_m2'] < 0.1
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'This building has no exposed ceilings adjacent to spaces that are not attics or plenums.  No skylights will be added.')
-      return false
-    end
-
-    # If the SRR is greater than one something is seriously wrong so raise an error.  If it is less than 0.001 assume
-    # all the skylights should go.
-    if srr_lim > 1
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'This building requires a larger skylight area than there is roof area.')
-      return false
-    elsif srr_lim < 0.001
-      exp_surf_info['exp_nonplenum_roofs'].sort.each do |exp_surf|
-        exp_surf.subSurfaces.sort.each(&:remove)
-      end
-      return true
-    end
-
+  # This method is similar to the 'apply_max_fdwr' method above, but applies a maximum skylight-to-roof-area-ratio (SRR)
+  # to a building model, as per NECB 2011 8.4.4.3 and 3.2.1.4 (or equivalent in other NECB vintages). There are 2 options:
+  #
+  # OPTION A: Default, initial BTAP solution. It first checks for all exterior roofs adjacent to conditioned spaces.
+  #           It distinguishes between plenums and other conditioned spaces. It uses only the non-plenum roof area to
+  #           calculate the maximum skylight area to be applied to the building.
+  #
+  # OPTION B: Selected if srr_opt == 'osut'. OSut's 'addSkylights' attempts to meet the requested SRR% target, even if
+  #           occupied spaces to toplight are under unoccupied plenums or attics - skylight wells are added if needed.
+  #           With attics, skylight well walls are considered part of the 'building envelope' (and therefore insulated
+  #           like exterior walls). The method returns a building 'gross roof area' (see attr_reader :osut), which
+  #           excludes the area of attic roof overhangs.
+  def apply_max_srr_nrcan(model:, srr_lim:, srr_opt: '')
     construct_set = model.getBuilding.defaultConstructionSet.get
     skylight_construct_set = construct_set.defaultExteriorSubSurfaceConstructions.get.skylightConstruction.get
 
-    # Go through all of exposed roofs adjacent to heated, non-plenum spaces, remove any existing subsurfaces, and add
-    # a skylight in the centroid of the surface, with the same shape of the surface, only scaled to be the area
-    # determined by the SRR.  The name of the skylight will be the surface name with the subsurface type attached
-    # ('skylight' in this case).  Note that this method will only work if the surface does not fold into itself (like an
-    # L or a V).
-    exp_surf_info['exp_nonplenum_roofs'].sort.each do |roof|
-      # sub_surface_create_centered_subsurface_from_scaled_surface(roof, srr_lim, model)
-      sub_surface_create_scaled_subsurfaces_from_surface(surface: roof, area_fraction: srr_lim, construction: skylight_construct_set)
+    unless srr_opt.to_s.downcase == 'osut' # OPTION A
+      # First determine which roof surfaces are adjacent to heated spaces (both plenum and non-plenum).
+      exp_surf_info = find_exposed_conditioned_roof_surfaces(model)
+      # If the non-plenum roof area is very small raise a warning.  It may be perfectly fine but it is probably a good
+      # idea to warn the user.
+      if exp_surf_info['exp_nonplenum_roof_area_m2'] < 0.1
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'This building has no exposed ceilings adjacent to spaces that are not attics or plenums.  No skylights will be added.')
+        return false
+      end
+
+      # If the SRR is greater than one something is seriously wrong so raise an error.  If it is less than 0.001 assume
+      # all the skylights should go.
+      if srr_lim > 1
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'This building requires a larger skylight area than there is roof area.')
+        return false
+      elsif srr_lim < 0.001
+        exp_surf_info['exp_nonplenum_roofs'].sort.each do |exp_surf|
+          exp_surf.subSurfaces.sort.each(&:remove)
+        end
+        return true
+      end
+
+      # Go through all of exposed roofs adjacent to heated, non-plenum spaces, remove any existing subsurfaces, and add
+      # a skylight in the centroid of the surface, with the same shape of the surface, only scaled to be the area
+      # determined by the SRR.  The name of the skylight will be the surface name with the subsurface type attached
+      # ('skylight' in this case).  Note that this method will only work if the surface does not fold into itself (like an
+      # L or a V).
+      exp_surf_info['exp_nonplenum_roofs'].sort.each do |roof|
+        # sub_surface_create_centered_subsurface_from_scaled_surface(roof, srr_lim, model)
+        sub_surface_create_scaled_subsurfaces_from_surface(surface: roof, area_fraction: srr_lim, construction: skylight_construct_set)
+      end
+    else # OPTION B
+      spaces = model.getSpaces
+      types  = model.getSpaceTypes
+      roofs  = TBD.facets(spaces, "Outdoors", "RoofCeiling")
+
+      # A model's 'nominal' gross roof area (gra0) may be greater than its
+      # 'effective' gross roof area (graX). For instance, the "SmallOffice"
+      # prototype model has (unconditioned) attic roof overhangs that end up
+      # tallied as a gross roof area in OpenStudio and EnergyPlus. See:
+      #
+      #   github.com/rd2/osut/blob/117c7dceb59fd8aab771da8ba672c14c97d23bd0
+      #   /lib/osut/utils.rb#L6268
+      #
+      gra0 = roofs.sum(&:grossArea)    # nominal gross roof area
+      graX = TBD.grossRoofArea(spaces) # effective gross roof area
+
+      unless gra0.round > 0
+        msg = 'Invalid nominal gross roof area. No skylights will be added.'
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', msg)
+        return false
+      end
+
+      unless graX.round > 0
+        msg = 'Invalid effective gross roof area. No skylights will be added.'
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', msg)
+        return false
+      end
+
+      self.osut[:gra0] = gra0
+      self.osut[:graX] = graX
+
+      # Relying on the total area of attic roof surfaces (for SRR%) exagerrates
+      # the requested skylight area, often by 10% to 15%. This makes it unfair
+      # for NECBs, and more challenging when dealing with skylight wells. This
+      # issue only applies with attics - not plenums. Trim down SRR if required.
+      target = (srr_lim * graX / gra0) * graX
+
+      # Filtering out tiny roof surfaces, twisty corridors, etc.
+      types = types.reject { |tp| tp.nameString.downcase.include?("undefined") }
+      types = types.reject { |tp| tp.nameString.downcase.include?("mech"     ) }
+      types = types.reject { |tp| tp.nameString.downcase.include?("elec"     ) }
+      types = types.reject { |tp| tp.nameString.downcase.include?("toilet"   ) }
+      types = types.reject { |tp| tp.nameString.downcase.include?("locker"   ) }
+      types = types.reject { |tp| tp.nameString.downcase.include?("shower"   ) }
+      types = types.reject { |tp| tp.nameString.downcase.include?("washroom" ) }
+      types = types.reject { |tp| tp.nameString.downcase.include?("corr"     ) }
+      types = types.reject { |tp| tp.nameString.downcase.include?("stair"    ) }
+
+      spaces = spaces.reject { |sp| sp.spaceType.empty? }
+      spaces = spaces.select { |sp| types.include?(sp.spaceType.get) }
+
+      TBD.addSkyLights(spaces, {area: target})
+
+      skys = TBD.facets(model.getSpaces, "Outdoors", "Skylight")
+      skm2 = skys.sum(&:grossArea)
+
+      unless skm2.round == target.round
+        msg = "Skylights m2: failed to meet #{target.round} (vs #{skm2.round})"
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', msg)
+        return false
+      end
     end
+
     return true
   end
 end

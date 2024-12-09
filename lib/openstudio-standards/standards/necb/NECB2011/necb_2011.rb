@@ -7,6 +7,7 @@ class NECB2011 < Standard
   @template = new.class.name
   register_standard(@template)
   attr_reader :tbd
+  attr_reader :osut
   attr_reader :template
   attr_accessor :standards_data
   attr_accessor :space_type_map
@@ -149,6 +150,8 @@ class NECB2011 < Standard
     @standards_data = load_standards_database_new
     corrupt_standards_database
     @tbd = nil
+    @osut = {gra0: 0, graX: 0, status: 0, logs: []}
+
     # puts "loaded these tables..."
     # puts @standards_data.keys.size
     # raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
@@ -208,7 +211,7 @@ class NECB2011 < Standard
     end
   end
 
-  # This method is a wrapper to create the 16 archetypes easily. # 55 args
+  # This method is a wrapper to create the 16 archetypes easily.
   def model_create_prototype_model(template:,
                                    building_type:,
                                    epw_file:,
@@ -245,6 +248,7 @@ class NECB2011 < Standard
                                    rotation_degrees: nil,
                                    fdwr_set: -1.0,
                                    srr_set: -1.0,
+                                   srr_opt: '',
                                    nv_type: nil,
                                    nv_opening_fraction: nil,
                                    nv_temp_out_min: nil,
@@ -272,7 +276,38 @@ class NECB2011 < Standard
                                    necb_hdd: true,
                                    boiler_fuel: nil,
                                    boiler_cap_ratio: nil)
+
     model = load_building_type_from_library(building_type: building_type)
+
+    # Tag spaces as un/conditioned with "space_conditioning_category". For now,
+    # this is simply determined based on whether spaces are:
+    #   - part of the total floor area (i.e. occupied)
+    #   - have "attic" included in their identifiers (i.e. unconditioned)
+    #
+    # As per ASHRE 90.1, OpenStudio-Standards distinguishes between:
+    #   - "nonresconditioned" vs
+    #   - "nonresconditioned"
+    #
+    # Sticking to "nonresconditioned" - NECBs don't care. This could be further
+    # refined in future BTAP versions though, e.g.:
+    #   - relying on user-defined thermostats
+    #   - expanded to cover semi-heated and refrigerated spaces
+    tag = "space_conditioning_category"
+
+    model.getSpaces.each do |space|
+      next unless space.additionalProperties.getFeatureAsString(tag).empty?
+
+      if space.partofTotalFloorArea
+        space.additionalProperties.setFeature(tag, "nonresconditioned")
+      else
+        if space.nameString.downcase.include?("attic")
+            space.additionalProperties.setFeature(tag, "unconditioned")
+        else # treat all other cases as indirectly-conditioned e.g. plenums
+          space.additionalProperties.setFeature(tag, "nonresconditioned")
+        end
+      end
+    end
+
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
                                 tbd_interpolate: tbd_interpolate,
@@ -309,6 +344,7 @@ class NECB2011 < Standard
                                 rotation_degrees: rotation_degrees,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
+                                srr_opt: srr_opt,
                                 nv_type: nv_type, # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_nv'
                                 nv_opening_fraction: nv_opening_fraction, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1), (3) opening fraction of windows, which can be a float number between 0.0 and 1.0
                                 nv_temp_out_min: nv_temp_out_min, # options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC), (3) minimum outdoor air temperature (in Celsius) below which natural ventilation is shut down
@@ -386,6 +422,7 @@ class NECB2011 < Standard
                            skylight_solar_trans: nil,
                            fdwr_set: nil,
                            srr_set: nil,
+                           srr_opt: '',
                            rotation_degrees: nil,
                            scale_x: nil,
                            scale_y: nil,
@@ -420,6 +457,7 @@ class NECB2011 < Standard
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
+    srr_opt = convert_arg_to_string(variable: srr_opt, default: '')
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
@@ -460,7 +498,8 @@ class NECB2011 < Standard
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
                                srr_set: srr_set,
-                               necb_hdd: necb_hdd)
+                               necb_hdd: necb_hdd,
+                               srr_opt: srr_opt)
     apply_thermal_bridging(model: model,
                            tbd_option: tbd_option,
                            tbd_interpolate: tbd_interpolate,
@@ -968,34 +1007,26 @@ class NECB2011 < Standard
   end
 
   # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
-  #     # fdwr_set/srr_set settings:
-  #     # 0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
-  #     # -1:  Remove all windows/skylights and add windows/skylights to match max fdwr/srr from NECB
-  #     # -2:  Do not apply any fdwr/srr changes, leave windows/skylights alone (also works for fdwr/srr > 1)
-  #     # -3:  Use old method which reduces existing window/skylight size (if necessary) to meet maximum NECB fdwr/srr
-  #     # limit
-  #     # <-3.1:  Remove all the windows/skylights
-  #     # > 1:  Do nothing
-  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0, necb_hdd: true)
+  #
+  # fdwr_set/srr_set settings:
+  #   0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
+  #    -1:  Remove all windows/skylights and add windows/skylights to match max fdwr/srr from NECB
+  #    -2:  Do not apply any fdwr/srr changes, leave windows/skylights alone (also works for fdwr/srr > 1)
+  #    -3:  Use old method which reduces existing window/skylight size (if necessary) to meet maximum NECB fdwr/srr limit
+  # <-3.1:  Remove all the windows/skylights
+  #   > 1:  Do nothing
+  #
+  # By default, :srr_opt is an empty string (" "). If set to "osut", SRR is
+  # instead met using OSut's 'addSkylights' (:srr_set numeric values may apply).
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0, necb_hdd: true, srr_opt: '')
     fdwr_set = -1.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil?
     srr_set = -1.0 if (srr_set == 'NECB_default') || srr_set.nil?
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: necb_hdd)
-    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set, srr_opt: srr_opt)
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
-
-  ##
-  # Optionally uprates, then derates, envelope surfaces due to MAJOR thermal
-  # bridges (e.g. roof parapets, corners, fenestration perimeters). See
-  # lib/openstudio-standards/btap/bridging.rb, which relies on the Thermal
-  # Bridging & Derating (TBD) gem.
-  #
-  # @param model [OpenStudio::Model::Model] an OpenStudio model
-  # @param tbd_option [String] BTAP/TBD option
-  #
-  # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
 
   ##
   # (Optionally) uprates, then derates, envelope surface constructions due to
@@ -2495,5 +2526,3 @@ class NECB2011 < Standard
     return boiler_cap_ratios
   end
 end
-
-
