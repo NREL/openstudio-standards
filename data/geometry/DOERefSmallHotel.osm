@@ -17239,7 +17239,7 @@ OS:SpaceType,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Handle
@@ -17256,7 +17256,7 @@ OS:SpaceType,
   {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Elec/MechRoom;                          !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Handle
@@ -17273,7 +17273,7 @@ OS:SpaceType,
   {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  ElevatorCore;                           !- Standards Space Type
+  shaft;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Handle
@@ -17290,7 +17290,7 @@ OS:SpaceType,
   {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  StaffLounge;                            !- Standards Space Type
+  lounge/breakroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Handle
@@ -17307,7 +17307,7 @@ OS:SpaceType,
   {13d8edca-f17b-4a9f-8402-de08ca4175c3}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Exercise;                               !- Standards Space Type
+  exercise area;      !- Standards Space Type
 
 OS:Rendering:Color,
   {13d8edca-f17b-4a9f-8402-de08ca4175c3}, !- Handle
@@ -17324,7 +17324,7 @@ OS:SpaceType,
   {4b81ad58-3059-4888-a5f0-4667974bbc33}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  GuestLounge;                            !- Standards Space Type
+  lounge/breakroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {4b81ad58-3059-4888-a5f0-4667974bbc33}, !- Handle
@@ -17341,7 +17341,7 @@ OS:SpaceType,
   {5f90fb4b-00a3-4f7c-9da6-bb0d2f6c8dbd}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5f90fb4b-00a3-4f7c-9da6-bb0d2f6c8dbd}, !- Handle
@@ -17358,7 +17358,7 @@ OS:SpaceType,
   {35d16a43-528e-4bb0-b366-0307cf03d08b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Stair;                                  !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:Rendering:Color,
   {35d16a43-528e-4bb0-b366-0307cf03d08b}, !- Handle
@@ -17375,7 +17375,7 @@ OS:SpaceType,
   {b33dba6b-b3dc-431f-999e-546c9d49159b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Storage;                                !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {b33dba6b-b3dc-431f-999e-546c9d49159b}, !- Handle
@@ -17392,7 +17392,7 @@ OS:SpaceType,
   {ad242bae-a693-422e-8f2d-435218ff6c70}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  GuestRoom;                              !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {ad242bae-a693-422e-8f2d-435218ff6c70}, !- Handle
@@ -17409,7 +17409,7 @@ OS:SpaceType,
   {d196909f-e708-424c-8b62-e23fef048807}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Laundry;                                !- Standards Space Type
+  laundry/washing;      !- Standards Space Type
 
 OS:Rendering:Color,
   {d196909f-e708-424c-8b62-e23fef048807}, !- Handle
@@ -17426,7 +17426,7 @@ OS:SpaceType,
   {49de8715-0c8d-4155-8d49-022f93ad0fe6}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Mechanical;                             !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {49de8715-0c8d-4155-8d49-022f93ad0fe6}, !- Handle
@@ -17443,7 +17443,7 @@ OS:SpaceType,
   {db9b36bb-e838-4180-8395-ff6c263593da}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Meeting;                                !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:Rendering:Color,
   {db9b36bb-e838-4180-8395-ff6c263593da}, !- Handle
@@ -17460,7 +17460,7 @@ OS:SpaceType,
   {ce525ba1-8b6c-4461-8bbc-16843874a57e}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  PublicRestroom;                         !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {ce525ba1-8b6c-4461-8bbc-16843874a57e}, !- Handle
@@ -17477,7 +17477,7 @@ OS:SpaceType,
   {74928bcc-d6f5-4e09-ab22-149fe06810a7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SmallHotel,                             !- Standards Building Type
-  Attic;                                  !- Standards Space Type
+  attic;      !- Standards Space Type
 
 OS:Rendering:Color,
   {74928bcc-d6f5-4e09-ab22-149fe06810a7}, !- Handle
