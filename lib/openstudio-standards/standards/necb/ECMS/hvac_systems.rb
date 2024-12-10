@@ -819,9 +819,9 @@ class ECMS
     sys_name_pars['sys_rf'] = 'none'
     sys_name_pars['sys_rf'] = 'cv' if sys_ret_fan_type == 'constant_volume'
     sys_name_pars['sys_rf'] = 'vv' if sys_ret_fan_type == 'variable_volume'
-    assign_base_sys_name( air_loop: airloop, 
-                          sys_abbr: sys_abbr, 
-                          sys_oa: sys_vent_type, 
+    assign_base_sys_name( air_loop: airloop,
+                          sys_abbr: sys_abbr,
+                          sys_oa: sys_vent_type,
                           sys_name_pars: sys_name_pars)
     return airloop, clg_eqpt, htg_eqpt, return_fan
   end
@@ -3536,11 +3536,11 @@ class ECMS
 
     # Create the hot water loop if necessary.
     hw_loop = standard.create_hw_loop_if_required(
-      baseboard_type,
-      boiler_fueltype,
-      backup_boiler_fueltype,
-      mau_heating_coil_type,
-      model
+      baseboard_type: baseboard_type,
+      boiler_fueltype: boilder_fueltype,
+      backup_boiler_fueltype: backup_boiler_fueltype,
+      mau_heating_coil_type: mau_heating_coil_type,
+      model: model
     )
 
     # Add baseboard heaters to each heated zone.
