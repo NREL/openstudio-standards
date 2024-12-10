@@ -362,8 +362,7 @@ class BTAPDatapoint
     return exit_code
   end
 
-
-  def output_hourly_data(model, output_folder,datapoint_id)
+  def output_hourly_data(model, output_folder, datapoint_id)
     osm_path = File.join(output_folder, "run_dir/in.osm")
     sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
     csv_output = File.join(output_folder, "hourly.csv")
@@ -374,20 +373,18 @@ class BTAPDatapoint
       hours_of_year << (d + (60 * 60) * increment).strftime('%Y-%m-%d %H:%M')
     end
 
-
     array_of_hashes = []
 
-
-#Find hourly outputs available for this datapoint.
+    # Find hourly outputs available for this datapoint.
     query = "
         SELECT ReportDataDictionaryIndex
         FROM ReportDataDictionary
         WHERE ReportingFrequency == 'Hourly'
                                                        "
-# Get hourly data for each output.
+    # Get hourly data for each output.
     model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
 
-      #Get Name
+      # Get Name
       query = "
         SELECT Name
         FROM ReportDataDictionary
@@ -395,7 +392,7 @@ class BTAPDatapoint
       "
       name = model.sqlFile.get.execAndReturnFirstString(query).get
 
-      #Get KeyValue
+      # Get KeyValue
       query = "
         SELECT KeyValue
         FROM ReportDataDictionary
@@ -412,7 +409,7 @@ class BTAPDatapoint
         key_value = ""
       end
 
-      #Get Units
+      # Get Units
       query = "
         SELECT Units
         FROM ReportDataDictionary
@@ -420,7 +417,7 @@ class BTAPDatapoint
       "
       units = model.sqlFile.get.execAndReturnFirstString(query).get
 
-      #Get hourly data
+      # Get hourly data
       query = "
                     Select Value
                     FROM ReportData
@@ -431,7 +428,7 @@ class BTAPDatapoint
 
       hourly_hash = Hash[hours_of_year.zip(hourly_values)]
 
-      data_hash = {"datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units}.merge(hourly_hash)
+      data_hash = { "datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units }.merge(hourly_hash)
       array_of_hashes << data_hash
     end
 
@@ -444,4 +441,31 @@ class BTAPDatapoint
       end
     end
   end
+
+  def output_timestep_data(model, output_folder,datapoint_id) #Sara TODO
+    osm_path = File.join(output_folder, "run_dir/in.osm")
+    sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
+    csv_output = File.join(output_folder, "timestep.csv")
+
+    ##
+    number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
+    puts "number_of_timesteps_per_hour #{number_of_timesteps_per_hour}"
+
+    timesteps_of_year = []
+    d = Time.new(2006, 1, 1, 1)
+    # (0...8760).each do |increment| #TODO
+    #   timesteps_of_year << (d + (60 * 60) * increment).strftime('%Y-%m-%d %H:%M') #TODO
+    # end
+
+    array_of_hashes = []
+
+    # Find hourly outputs available for this datapoint.
+    query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE ReportingFrequency == 'Zone Timestep'
+                                                       "
+
+  end
+
 end
