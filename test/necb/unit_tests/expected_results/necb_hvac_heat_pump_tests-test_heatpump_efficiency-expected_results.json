@@ -2,38 +2,33 @@
   "VarType": "Vintage",
   "NECB2011": {
     "VarType": "FuelType",
-    "Reference": "NECB 2011 p3:Table 5.2.12.1.",
+    "Reference": "NECB 2011 p3:Table 5.2.12.1. (page 5-13)",
     "Electricity": {
       "VarType": "TestCase",
-      "case-1": {
+      "Small single package (CSA-C656)": {
         "test_capacity_kW": 9.5,
-        "test_capacity_btu_per_hr": 32420,
-        "actual_heatpump_cop": 4.12,
-        "actual_heatpump_copH": 3.86
+        "test_capacity_btu_per_hr": 32400,
+        "SEER": 14.0
       },
-      "case-2": {
+      "Medium single package (CSA-C746)": {
         "test_capacity_kW": 29.5,
-        "test_capacity_btu_per_hr": 100700,
-        "actual_heatpump_cop": 3.22,
-        "actual_heatpump_copH": 2.99
+        "test_capacity_btu_per_hr": 101000,
+        "COP (with fan)": 3.3
       },
-      "case-3": {
-        "test_capacity_kW": 55.0,
-        "test_capacity_btu_per_hr": 187700,
-        "actual_heatpump_cop": 3.1,
-        "actual_heatpump_copH": 2.84
+      "Medium large single package (CSA-C746)": {
+        "test_capacity_kW": 47.5,
+        "test_capacity_btu_per_hr": 162000,
+        "COP (with fan)": 3.3
       },
-      "case-4": {
-        "test_capacity_kW": 146.5,
-        "test_capacity_btu_per_hr": 499900,
-        "actual_heatpump_cop": 2.78,
-        "actual_heatpump_copH": 2.45
+      "Large single package (CSA-C746)": {
+        "test_capacity_kW": 147,
+        "test_capacity_btu_per_hr": 500000,
+        "COP (with fan)": 3.2
       },
-      "case-5": {
-        "test_capacity_kW": 233,
-        "test_capacity_btu_per_hr": 795000,
-        "actual_heatpump_cop": 2.78,
-        "actual_heatpump_copH": 2.36
+      "Extra large single package (AHRI 340/360)": {
+        "test_capacity_kW": 300,
+        "test_capacity_btu_per_hr": 1020000,
+        "COP (with fan)": 3.2
       }
     }
   },
@@ -42,35 +37,30 @@
     "Reference": "NECB 2015 p1:Table 5.2.12.1.",
     "Electricity": {
       "VarType": "TestCase",
-      "case-1": {
+      "Small single package (CSA-C656)": {
         "test_capacity_kW": 9.5,
-        "test_capacity_btu_per_hr": 32420,
-        "actual_heatpump_cop": 4.12,
-        "actual_heatpump_copH": 3.86
+        "test_capacity_btu_per_hr": 32400,
+        "SEER": 14.0
       },
-      "case-2": {
+      "Medium single package (CSA-C746)": {
         "test_capacity_kW": 29.5,
-        "test_capacity_btu_per_hr": 100700,
-        "actual_heatpump_cop": 3.55,
-        "actual_heatpump_copH": 3.3
+        "test_capacity_btu_per_hr": 101000,
+        "heating COP (with fan)": 3.3
       },
-      "case-3": {
-        "test_capacity_kW": 55.0,
-        "test_capacity_btu_per_hr": 187700,
-        "actual_heatpump_cop": 3.49,
-        "actual_heatpump_copH": 3.2
+      "Medium large single package (CSA-C746)": {
+        "test_capacity_kW": 47.5,
+        "test_capacity_btu_per_hr": 162000,
+        "heating COP (with fan)": 3.2
       },
-      "case-4": {
-        "test_capacity_kW": 146.5,
-        "test_capacity_btu_per_hr": 499900,
-        "actual_heatpump_cop": 3.64,
-        "actual_heatpump_copH": 3.2
+      "Large single package (CSA-C746)": {
+        "test_capacity_kW": 147,
+        "test_capacity_btu_per_hr": 500000,
+        "heating COP (with fan)": 3.2
       },
-      "case-5": {
-        "test_capacity_kW": 233,
-        "test_capacity_btu_per_hr": 795000,
-        "actual_heatpump_cop": 3.77,
-        "actual_heatpump_copH": 3.2
+      "Extra large single package (AHRI 340/360)": {
+        "test_capacity_kW": 300,
+        "test_capacity_btu_per_hr": 1020000,
+        "heating COP (with fan)": 3.2
       }
     }
   },
@@ -79,35 +69,30 @@
     "Reference": "NECB 2017 p2:Table 5.2.12.1.",
     "Electricity": {
       "VarType": "TestCase",
-      "case-1": {
+      "Small single package (CSA-C656)": {
         "test_capacity_kW": 9.5,
-        "test_capacity_btu_per_hr": 32420,
-        "actual_heatpump_cop": 4.12,
-        "actual_heatpump_copH": 3.86
+        "test_capacity_btu_per_hr": 32400,
+        "SEER": 14.0
       },
-      "case-2": {
+      "Medium single package (CSA-C746)": {
         "test_capacity_kW": 29.5,
-        "test_capacity_btu_per_hr": 100700,
-        "actual_heatpump_cop": 3.55,
-        "actual_heatpump_copH": 3.3
+        "test_capacity_btu_per_hr": 101000,
+        "heating COP (with fan)": 3.3
       },
-      "case-3": {
-        "test_capacity_kW": 55.0,
-        "test_capacity_btu_per_hr": 187700,
-        "actual_heatpump_cop": 3.49,
-        "actual_heatpump_copH": 3.2
+      "Medium large single package (CSA-C746)": {
+        "test_capacity_kW": 47.5,
+        "test_capacity_btu_per_hr": 162000,
+        "heating COP (with fan)": 3.2
       },
-      "case-4": {
-        "test_capacity_kW": 146.5,
-        "test_capacity_btu_per_hr": 499900,
-        "actual_heatpump_cop": 3.64,
-        "actual_heatpump_copH": 3.2
+      "Large single package (CSA-C746)": {
+        "test_capacity_kW": 147,
+        "test_capacity_btu_per_hr": 500000,
+        "heating COP (with fan)": 3.2
       },
-      "case-5": {
-        "test_capacity_kW": 233,
-        "test_capacity_btu_per_hr": 795000,
-        "actual_heatpump_cop": 3.77,
-        "actual_heatpump_copH": 3.2
+      "Extra large single package (AHRI 340/360)": {
+        "test_capacity_kW": 300,
+        "test_capacity_btu_per_hr": 1020000,
+        "heating COP (with fan)": 3.2
       }
     }
   },
@@ -116,35 +101,30 @@
     "Reference": "NECB 2020 p1:Table 5.2.12.1.-A",
     "Electricity": {
       "VarType": "TestCase",
-      "case-1": {
+      "Small single package (CSA-C656)": {
         "test_capacity_kW": 9.5,
-        "test_capacity_btu_per_hr": 32420,
-        "actual_heatpump_cop": 4.31,
-        "actual_heatpump_copH": 4.04
+        "test_capacity_btu_per_hr": 32400,
+        "HSPF": 7.4
       },
-      "case-2": {
+      "Medium single package (CSA-C746)": {
         "test_capacity_kW": 29.5,
-        "test_capacity_btu_per_hr": 100700,
-        "actual_heatpump_cop": 3.55,
-        "actual_heatpump_copH": 3.3
+        "test_capacity_btu_per_hr": 101000,
+        "COP_h (with fan)": 3.3
       },
-      "case-3": {
-        "test_capacity_kW": 55.0,
-        "test_capacity_btu_per_hr": 187700,
-        "actual_heatpump_cop": 3.49,
-        "actual_heatpump_copH": 3.2
+      "Medium large single package (CSA-C746)": {
+        "test_capacity_kW": 47.5,
+        "test_capacity_btu_per_hr": 162000,
+        "COP_h (with fan)": 3.2
       },
-      "case-4": {
-        "test_capacity_kW": 146.5,
-        "test_capacity_btu_per_hr": 499900,
-        "actual_heatpump_cop": 3.64,
-        "actual_heatpump_copH": 3.2
+      "Large single package (CSA-C746)": {
+        "test_capacity_kW": 147,
+        "test_capacity_btu_per_hr": 500000,
+        "COP_h (with fan)": 3.2
       },
-      "case-5": {
-        "test_capacity_kW": 233,
-        "test_capacity_btu_per_hr": 795000,
-        "actual_heatpump_cop": 3.77,
-        "actual_heatpump_copH": 3.2
+      "Extra large single package (AHRI 340/360)": {
+        "test_capacity_kW": 300,
+        "test_capacity_btu_per_hr": 1020000,
+        "COP_h (with fan)": 3.2
       }
     }
   },
@@ -152,35 +132,30 @@
     "VarType": "FuelType",
     "Electricity": {
       "VarType": "TestCase",
-      "case-1": {
+      "Small single package (CSA-C656)": {
         "test_capacity_kW": 9.5,
-        "test_capacity_btu_per_hr": 32420,
-        "actual_heatpump_cop": 3.2,
-        "actual_heatpump_copH": 3.0
+        "test_capacity_btu_per_hr": 32400,
+        "SEER": 10.7
       },
-      "case-2": {
+      "Medium single package (CSA-C746)": {
         "test_capacity_kW": 29.5,
-        "test_capacity_btu_per_hr": 100700,
-        "actual_heatpump_cop": 3.23,
-        "actual_heatpump_copH": 3.0
+        "test_capacity_btu_per_hr": 101000,
+        "COP (with fan)": 3.0
       },
-      "case-3": {
-        "test_capacity_kW": 55.0,
-        "test_capacity_btu_per_hr": 187700,
-        "actual_heatpump_cop": 3.27,
-        "actual_heatpump_copH": 3.0
+      "Medium large single package (CSA-C746)": {
+        "test_capacity_kW": 47.5,
+        "test_capacity_btu_per_hr": 162000,
+        "COP (with fan)": 3.0
       },
-      "case-4": {
-        "test_capacity_kW": 146.5,
-        "test_capacity_btu_per_hr": 499900,
-        "actual_heatpump_cop": 3.41,
-        "actual_heatpump_copH": 3.0
+      "Large single package (CSA-C746)": {
+        "test_capacity_kW": 147,
+        "test_capacity_btu_per_hr": 500000,
+        "COP (with fan)": 3.0
       },
-      "case-5": {
-        "test_capacity_kW": 233,
-        "test_capacity_btu_per_hr": 795000,
-        "actual_heatpump_cop": 3.54,
-        "actual_heatpump_copH": 3.0
+      "Extra large single package (AHRI 340/360)": {
+        "test_capacity_kW": 300,
+        "test_capacity_btu_per_hr": 1020000,
+        "COP (with fan)": 3.0
       }
     }
   },
@@ -188,35 +163,30 @@
     "VarType": "FuelType",
     "Electricity": {
       "VarType": "TestCase",
-      "case-1": {
+      "Small single package (CSA-C656)": {
         "test_capacity_kW": 9.5,
-        "test_capacity_btu_per_hr": 32420,
-        "actual_heatpump_cop": 3.2,
-        "actual_heatpump_copH": 3.0
+        "test_capacity_btu_per_hr": 32400,
+        "SEER": 10.7
       },
-      "case-2": {
+      "Medium single package (CSA-C746)": {
         "test_capacity_kW": 29.5,
-        "test_capacity_btu_per_hr": 100700,
-        "actual_heatpump_cop": 3.23,
-        "actual_heatpump_copH": 3.0
+        "test_capacity_btu_per_hr": 101000,
+        "COP (with fan)": 3.0
       },
-      "case-3": {
-        "test_capacity_kW": 55.0,
-        "test_capacity_btu_per_hr": 187700,
-        "actual_heatpump_cop": 3.27,
-        "actual_heatpump_copH": 3.0
+      "Medium large single package (CSA-C746)": {
+        "test_capacity_kW": 47.5,
+        "test_capacity_btu_per_hr": 162000,
+        "COP (with fan)": 3.0
       },
-      "case-4": {
-        "test_capacity_kW": 146.5,
-        "test_capacity_btu_per_hr": 499900,
-        "actual_heatpump_cop": 3.41,
-        "actual_heatpump_copH": 3.0
+      "Large single package (CSA-C746)": {
+        "test_capacity_kW": 147,
+        "test_capacity_btu_per_hr": 500000,
+        "COP (with fan)": 3.0
       },
-      "case-5": {
-        "test_capacity_kW": 233,
-        "test_capacity_btu_per_hr": 795000,
-        "actual_heatpump_cop": 3.54,
-        "actual_heatpump_copH": 3.0
+      "Extra large single package (AHRI 340/360)": {
+        "test_capacity_kW": 300,
+        "test_capacity_btu_per_hr": 1020000,
+        "COP (with fan)": 3.0
       }
     }
   }

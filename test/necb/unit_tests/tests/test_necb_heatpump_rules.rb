@@ -25,47 +25,46 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
 
     # Define test cases.
     test_cases = {}
+
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:Table 5.2.12.1." }
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:Table 5.2.12.1. (page 5-13)" }
     test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:Table 5.2.12.1." }
     test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:Table 5.2.12.1." }
     test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:Table 5.2.12.1.-A" }
 
-    # Test cases. Three cases for NG and FuelOil, one for Electric.
-    # Results and name are tbd here as they will be calculated in the test.
-
+    # Test cases. 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :FuelType => ["Electricity"],
-                        :TestCase => ["case-1"],
+                        :TestCase => ["Small single package (CSA-C656)"],
                         :TestPars => { :test_capacity_kW => 9.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :FuelType => ["Electricity"],
-                        :TestCase => ["case-2"],
+                        :TestCase => ["Medium single package (CSA-C746)"],
                         :TestPars => { :test_capacity_kW => 29.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :FuelType => ["Electricity"],
-                        :TestCase => ["case-3"],
-                        :TestPars => { :test_capacity_kW => 55.0 } }
+                        :TestCase => ["Medium large single package (CSA-C746)"],
+                        :TestPars => { :test_capacity_kW => 47.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :FuelType => ["Electricity"],
-                        :TestCase => ["case-4"],
+                        :TestCase => ["Large single package (CSA-C746)"],
                         :TestPars => { :test_capacity_kW => 146.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :FuelType => ["Electricity"],
-                        :TestCase => ["case-5"],
-                        :TestPars => { :test_capacity_kW => 233 } }
+                        :TestCase => ["Extra large single package (AHRI 340/360)"],
+                        :TestPars => { :test_capacity_kW => 300.0 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -148,16 +147,34 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
       return {ERROR: msg}
     end
       
-    actual_heatpump_cop = model.getCoilHeatingDXSingleSpeeds[0].ratedCOP.to_f
-
     capacity_btu_per_hr = OpenStudio.convert(cap.to_f, 'kW', 'Btu/hr').get
-    actual_heatpump_copH = actual_heatpump_cop / (1.48E-7 * capacity_btu_per_hr + 1.062)
-    # https://github.com/NREL/openstudio-standards/blob/971514ee0a64262a9c81788fd85fc60d8dd69980/lib/openstudio-standards/prototypes/common/objects/Prototype.utilities.rb#L379C7-L379C58
+    heating_coil = model.getCoilHeatingDXSingleSpeeds[0]
+    rated_cop = heating_coil.ratedCOP.to_f
+    # Figure out the performance metric used in NECB and report that value
+    if cap < 19 then
+      if vintage == 'NECB2020' then
+        metric = 'HSPF'
+        hspf = 1.0593*rated_cop*rated_cop - 4.0795*rated_cop + 8.1583 # Curve fit of NREL equation in hspf_to_cop_no_fan. For range 5.5 to 8.4 (HSPF)
+        value = hspf.signif(2)
+      else
+        metric = 'SEER'
+        value = standard.cop_no_fan_to_seer(rated_cop).signif(3)
+      end
+    else
+      if vintage == 'NECB2020' then
+        metric = 'COP_h (with fan)'
+      elsif vintage == 'NECB2015' || vintage == 'NECB2017' then
+        metric = 'heating COP (with fan)'
+      else
+        metric = 'COP (with fan)'
+      end
+      cop_with_fan = rated_cop / ((1.48E-7 * capacity_btu_per_hr) + 1.062)
+      value = cop_with_fan.signif(3)
+    end
     results = {
-      test_capacity_kW: cap.signif,
-      test_capacity_btu_per_hr: capacity_btu_per_hr.signif,
-      actual_heatpump_cop: actual_heatpump_cop.round(2),
-      actual_heatpump_copH: actual_heatpump_copH.round(2)
+      test_capacity_kW: cap.signif(3),
+      test_capacity_btu_per_hr: capacity_btu_per_hr.signif(3),
+      metric.to_sym => value
     }
 
 
@@ -182,9 +199,7 @@ class NECB_HVAC_Heat_Pump_Tests < Minitest::Test
     # Define test cases.
     test_cases = {}
 
-    # Test cases. Three cases for NG and FuelOil, one for Electric.
-    # Results and name are tbd here as they will be calculated in the test.
-
+    # Curve name is tbd here as they will be generated in the test.
     test_cases_hash = { :Vintage => @AllTemplates,
                         :FuelType => ["Electricity"],
                         :TestCase => ["case-1"],
