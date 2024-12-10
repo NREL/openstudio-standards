@@ -51,6 +51,8 @@ module OpenstudioStandards
 
   # HVAC Module
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
+  require_relative 'openstudio-standards/hvac/components/create'
+  require_relative 'openstudio-standards/hvac/components/modify'
 
   # CreateTypical Module
   require_relative 'openstudio-standards/create_typical/enumerations'
