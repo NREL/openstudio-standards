@@ -261,6 +261,7 @@ class Standard
 
   # Convert from SEER to COP (with fan) for cooling coils
   # per the method specified in Thornton et al. 2011
+  # https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-20405.pdf
   #
   # @param seer [Double] seasonal energy efficiency ratio (SEER)
   # @return [Double] Coefficient of Performance (COP)
