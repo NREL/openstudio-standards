@@ -139,7 +139,7 @@ GEM
     stringio (3.1.2)
     tbd (3.4.4)
       json-schema (~> 4)
-      osut (0.3.0)
+      osut (0.6.0)
       topolys (0.6.2)
     thor (1.3.2)
     tilt (2.4.0)

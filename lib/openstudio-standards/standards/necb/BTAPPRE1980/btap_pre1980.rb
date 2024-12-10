@@ -54,15 +54,15 @@ class BTAPPRE1980 < NECB2011
   # <-3.1:  Remove all the windows/skylights
   #   > 1:  Do nothing
   #
-  # By default, :osut is set to 'false'. If :osut is set to 'true', SRR is
-  # instead met using OSut's addSkylights (:srr_set numeric values may apply).
-  def apply_fdwr_srr_daylighting(model:, fdwr_set: -2.0, srr_set: -2.0, necb_hdd: true, osut: false)
+  # By default, :srr_opt is an empty string (" "). If set to "osut", SRR is
+  # instead met using OSut's 'addSkylights' (:srr_set numeric values may apply).
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -2.0, srr_set: -2.0, necb_hdd: true, srr_opt: '')
     fdwr_set = -2.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil? || (fdwr_set.to_f.round(0) == -1.0)
     srr_set = -2.0 if (srr_set == 'NECB_default') || srr_set.nil? || (srr_set.to_f.round(0) == -1.0)
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: true)
-    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set, osut: osut)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set, srr_opt: srr_opt)
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
