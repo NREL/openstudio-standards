@@ -594,15 +594,17 @@ class ASHRAE901PRM < Standard
     when 'NoEconomizer'
       return [nil, nil, nil]
     when 'FixedDryBulb'
-      climate_zone_code = climate_zone.split('-')[-1]
-      climate_zone_code = 7 if ['7A', '7B'].include? climate_zone_code
-      climate_zone_code = 8 if ['8A', '8B'].include? climate_zone_code
+      # Process climate zone:
+      # Moisture regime is not needed for climate zone 8
+      climate_zone = climate_zone.split('-')[-1]
+      climate_zone = '8' if climate_zone.include?('8')
+
       search_criteria = {
-        'template' => template,
-        'climate_id' => climate_zone_code
+        'climate_zone' => climate_zone,
+        'data_center' => false,
       }
-      econ_limits = model_find_object(standards_data['prm_economizers'], search_criteria)
-      drybulb_limit_f = econ_limits['high_limit_shutoff']
+      econ_limits = model_find_object(standards_data['economizers'], search_criteria)
+      drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
     when 'FixedEnthalpy'
       enthalpy_limit_btu_per_lb = 28
     when 'FixedDewPointAndDryBulb'
