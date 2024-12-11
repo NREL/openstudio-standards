@@ -60,4 +60,15 @@ class SystemFuels
   def set_swh_fuel(swh_fuel:)
     @swh_fueltype = swh_fuel
   end
+
+  # Reset system fuels to match parameters defined by hvac_system_primary
+  def set_fuel_to_hvac_system_primary(hvac_system_primary:, standards_data:)
+    hvac_system_data = standards_data['hvac_types'].find { |system| system['description'] == hvac_system_primary }
+    return if hvac_system_data.empty?
+    @baseboard_type = hvac_system_data["baseboard_type"].to_s
+    @mau_heating_coil_type = hvac_system_data["mau_heating_type"].to_s
+    @mau_type = hvac_system_data["mau_type"].to_bool
+    @necb_reference_hp = hvac_system_data["necb_reference_hp"].to_bool
+    @necb_reference_hp_supp_fuel = hvac_system_data["necb_reference_hp_supp_fuel"]
+  end
 end
