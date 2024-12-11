@@ -37,12 +37,12 @@ class NECB_Skylights_Tests < Minitest::Test
       'MediumOffice',
       # 'NorthernEducation',
       'QuickServiceRestaurant',
-      # 'SmallOffice'
+      'SmallOffice'
     ]
 
     # NOTE: Skipping NorthernEducation for now:
-    #   - Standards.Model.rb:5432: warning: instance variable @space_type_map not initialized
-    #   - model works in isolation (e.g. SDK 3.6.1, 3.7.0, 3.8.0)
+    #   Minitest::UnexpectedError: RuntimeError: validation of model failed.
+    #   ... /openstudio-standards/lib/openstudio-standards/standards/necb/NECB2011/necb_2011.rb:714:in `apply_loads'
 
     # Range of test options. NECB2011 for now. Skipping later NECBs - they're
     # systematically easier to deploy, given their lower reference building SRR
@@ -60,7 +60,6 @@ class NECB_Skylights_Tests < Minitest::Test
         @buildings.sort.each   do |building|
           @templates.sort.each do |template|
             cas = "CASE #{option} | #{building} (#{template})"
-            puts; puts; puts cas; puts "--- --- --- --- --- -- ---"
             srr = case template
                   when 'NECB2020' then 0.02
                   when 'NECB2017' then 0.02
@@ -141,8 +140,6 @@ class NECB_Skylights_Tests < Minitest::Test
             # SRR% of 4.5%. The effective 'ratio' would vary based on geometry,
             # e.g. larger building footprint, wider overhangs.
             ratio = gra0.round > graX.round ? skm2 / graX : skm2 / gra0
-
-            puts; puts "#{gra0.round} vs #{graX.round} #{skm2.round}"; puts
 
             assert(ratio.round(2) == srr, "BTAP/OSut: Incorrect SRR (#{cas})?")
 

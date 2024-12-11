@@ -301,7 +301,7 @@ class NECB2011 < Standard
         space.additionalProperties.setFeature(tag, "nonresconditioned")
       else
         if space.nameString.downcase.include?("attic")
-            space.additionalProperties.setFeature(tag, "unconditioned")
+          space.additionalProperties.setFeature(tag, "unconditioned")
         else # treat all other cases as indirectly-conditioned e.g. plenums
           space.additionalProperties.setFeature(tag, "nonresconditioned")
         end

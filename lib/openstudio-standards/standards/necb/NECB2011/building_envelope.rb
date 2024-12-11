@@ -776,6 +776,7 @@ class NECB2011
         sub_surface_create_scaled_subsurfaces_from_surface(surface: roof, area_fraction: srr_lim, construction: skylight_construct_set)
       end
     else # OPTION B
+      TBD.clean!
       spaces = model.getSpaces
       types  = model.getSpaceTypes
       roofs  = TBD.facets(spaces, "Outdoors", "RoofCeiling")
@@ -810,7 +811,7 @@ class NECB2011
       # the requested skylight area, often by 10% to 15%. This makes it unfair
       # for NECBs, and more challenging when dealing with skylight wells. This
       # issue only applies with attics - not plenums. Trim down SRR if required.
-      target = (srr_lim * graX / gra0) * graX
+      target = (srr_lim * graX / gra0) * gra0
 
       # Filtering out tiny roof surfaces, twisty corridors, etc.
       types = types.reject { |tp| tp.nameString.downcase.include?("undefined") }
@@ -827,6 +828,7 @@ class NECB2011
       spaces = spaces.select { |sp| types.include?(sp.spaceType.get) }
 
       TBD.addSkyLights(spaces, {area: target})
+      self.osut[:logs] = TBD.logs
 
       skys = TBD.facets(model.getSpaces, "Outdoors", "Skylight")
       skm2 = skys.sum(&:grossArea)
