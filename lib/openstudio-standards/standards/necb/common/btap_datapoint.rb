@@ -264,6 +264,9 @@ class BTAPDatapoint
 
         #output hourly data
         self.output_hourly_data(model,@dp_temp_folder, @options[:datapoint_id])
+
+        # Output timestep data
+        self.output_timestep_data(model,@dp_temp_folder, @options[:datapoint_id]) #Sara
       end
     rescue StandardError => bang
       puts "Error occured: #{bang}"
@@ -442,30 +445,97 @@ class BTAPDatapoint
     end
   end
 
-  def output_timestep_data(model, output_folder,datapoint_id) #Sara TODO
+  def output_timestep_data(model, output_folder,datapoint_id) #Sara
     osm_path = File.join(output_folder, "run_dir/in.osm")
     sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
     csv_output = File.join(output_folder, "timestep.csv")
 
-    ##
+    # Get number of timesteps from the model
     number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
-    puts "number_of_timesteps_per_hour #{number_of_timesteps_per_hour}"
+
+    # Calculate number of timesteps of the whole year
+    number_of_timesteps_of_year = 365 * 24 * number_of_timesteps_per_hour
 
     timesteps_of_year = []
     d = Time.new(2006, 1, 1, 1)
-    # (0...8760).each do |increment| #TODO
-    #   timesteps_of_year << (d + (60 * 60) * increment).strftime('%Y-%m-%d %H:%M') #TODO
-    # end
-
+    (0...number_of_timesteps_of_year).each do |increment|
+      timesteps_of_year << (d + (60 * 60 / number_of_timesteps_per_hour) * increment).strftime('%Y-%m-%d %H:%M')
+    end
     array_of_hashes = []
 
-    # Find hourly outputs available for this datapoint.
+    # Find timestep outputs available for this datapoint.
     query = "
         SELECT ReportDataDictionaryIndex
         FROM ReportDataDictionary
         WHERE ReportingFrequency == 'Zone Timestep'
                                                        "
 
-  end
+    # Get timestep data for each output.
+    model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
+      puts "rdd_index #{rdd_index}"
+
+      # Get Name
+      query = "
+        SELECT Name
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      name = model.sqlFile.get.execAndReturnFirstString(query).get
+      puts "name #{name}"
+
+      # Get KeyValue
+      query = "
+        SELECT KeyValue
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+
+      # In some cases KeyValue has a value and sometimes it does not.  In some cases KeyValue is null.  If the command
+      # below is run and KeyValue is null then the command fails and returns an error.  The fix below assumes that if
+      # the command below fails it is because KeyValue is null.  In that case the "key_value" variable is set to a
+      # blank.
+      begin
+        key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+      rescue StandardError => bang
+        key_value = ""
+      end
+      puts "key_value #{key_value}"
+
+      # Get Units
+      query = "
+        SELECT Units
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      units = model.sqlFile.get.execAndReturnFirstString(query).get
+      puts "units #{units}"
+
+      # Get timestep data
+      query = "
+        Select Value
+        FROM ReportData
+        WHERE
+        ReportDataDictionaryIndex = #{rdd_index}
+      "
+      timestep_values = model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+
+      timestep_hash = Hash[timesteps_of_year.zip(timestep_values)]
+
+      data_hash = { "datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units }.merge(timestep_hash)
+      array_of_hashes << data_hash
+    end #model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
+
+
+    CSV.open(csv_output, "wb") do |csv|
+      unless array_of_hashes.empty?
+        csv << array_of_hashes.first.keys # adds the attributes name on the first line
+        array_of_hashes.each do |hash|
+          csv << hash.values
+        end
+      end
+    end
+
+
+  end #output_timestep_data
 
 end
