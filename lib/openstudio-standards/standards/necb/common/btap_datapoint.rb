@@ -455,15 +455,23 @@ class BTAPDatapoint
 
     # Calculate number of timesteps of the whole year
     number_of_timesteps_of_year = 365 * 24 * number_of_timesteps_per_hour
+    puts "number_of_timesteps_of_year #{number_of_timesteps_of_year}"
 
     timesteps_of_year = []
-    d = Time.new(2006, 1, 1, 1)
+    d = Time.new(2006, 1, 1, 0)
     (0...number_of_timesteps_of_year).each do |increment|
       timesteps_of_year << (d + (60 * 60 / number_of_timesteps_per_hour) * increment).strftime('%Y-%m-%d %H:%M')
     end
+    # #Sara TODO: change to timestep, this was just for testing
+    # d = Time.new(2006, 1, 1, 1)
+    # (0...365).each do |increment|
+    #   timesteps_of_year << (d + (60 * 60 * 24) * increment).strftime('%Y-%m-%d %H:%M')
+    # end
     array_of_hashes = []
+    array_of_hashes_transposed = []
 
     # Find timestep outputs available for this datapoint.
+    # #Sara TODO correct  WHERE ReportingFrequency == 'Zone Timestep' #Daily
     query = "
         SELECT ReportDataDictionaryIndex
         FROM ReportDataDictionary
@@ -518,19 +526,80 @@ class BTAPDatapoint
         ReportDataDictionaryIndex = #{rdd_index}
       "
       timestep_values = model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+      puts "timestep_values #{timestep_values}"
 
       timestep_hash = Hash[timesteps_of_year.zip(timestep_values)]
+      puts "timestep_hash #{timestep_hash}"
 
       data_hash = { "datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units }.merge(timestep_hash)
+      puts "data_hash #{data_hash}"
+
       array_of_hashes << data_hash
+
+
+      #Sara TODO transpose columns and rows in timestep output START
+      number_of_timesteps = timesteps_of_year.length()
+
+      array = [datapoint_id]
+      array_datapoint_id = array.zip(*[array]*number_of_timesteps).flatten
+      timestep_hash_datapoint_id = Hash[timesteps_of_year.zip(array_datapoint_id)]
+
+      array = [name]
+      array_name = array.zip(*[array]*number_of_timesteps).flatten
+      timestep_hash_name = Hash[timesteps_of_year.zip(array_name)]
+
+      array = [key_value]
+      array_key_value = array.zip(*[array]*number_of_timesteps).flatten
+      timestep_hash_key_value = Hash[timesteps_of_year.zip(array_key_value)]
+
+      array = [units]
+      array_units = array.zip(*[array]*number_of_timesteps).flatten
+      timestep_hash_units = Hash[timesteps_of_year.zip(array_units)]
+
+      timestep_hash_values = Hash[timesteps_of_year.zip(timestep_values)]
+
+      data_hash_transposed = Hash.new
+      timestep_hash_values.keys.each do |key|
+        data_hash_transposed[key] = [timestep_hash_datapoint_id[key], timestep_hash_name[key], timestep_hash_key_value[key], timestep_hash_units[key], timestep_hash_values[key]]
+      end
+
+      array_of_hashes_transposed << data_hash_transposed
+      #Sara TODO transpose columns and rows in timestep output END
+
     end #model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
+    puts "Sara array_of_hashes_transposed #{array_of_hashes_transposed}"
 
+    # # This csv file has timesteps as the first row
+    # CSV.open(csv_output, "wb") do |csv|
+    #   unless array_of_hashes.empty?
+    #     csv << array_of_hashes.first.keys # adds the attributes name on the first line
+    #     array_of_hashes.each do |hash|
+    #       csv << hash.values
+    #     end
+    #   end
+    # end
 
+    # This csv file has timesteps as the first column
+    header = ['Timesteps', 'datapoint_id', 'Name', 'KeyValue', 'Units', 'Value']
     CSV.open(csv_output, "wb") do |csv|
-      unless array_of_hashes.empty?
-        csv << array_of_hashes.first.keys # adds the attributes name on the first line
-        array_of_hashes.each do |hash|
-          csv << hash.values
+      csv << header
+      array_of_hashes_transposed.each do |hash|
+        hash.keys().each do |timestep|
+          row_timestep = timestep
+          row_datapoint_id = hash[timestep][0]
+          row_name = hash[timestep][1]
+          row_key_value = hash[timestep][2]
+          row_units = hash[timestep][3]
+          row_value = hash[timestep][4]
+
+          row = CSV::Row.new(header,[])
+          row['Timesteps'] = row_timestep
+          row['datapoint_id'] = row_datapoint_id
+          row['Name'] = row_name
+          row['KeyValue'] = row_key_value
+          row['Units'] = row_units
+          row['Value'] = row_value
+          csv << row
         end
       end
     end
