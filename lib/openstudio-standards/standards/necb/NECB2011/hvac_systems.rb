@@ -2529,5 +2529,4 @@ class NECB2011
   def air_conditioner_variable_refrigerant_flow_apply_efficiency_and_curves(air_conditioner_variable_refrigerant_flow)
     return
   end
-
 end
