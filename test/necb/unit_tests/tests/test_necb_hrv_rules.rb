@@ -20,8 +20,10 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                         fueltype: 'Electricity',
                         heating_coil_type: 'DX',
                         baseboard_type: 'Hot Water' }
+    
     # Define test cases.
     test_cases = {}
+
     # Define references (per vintage in this case).
     test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 5.2.10.1." }
     test_cases[:NECB2015] = { :Reference => "NECB 2015 p1 5.2.10.1.(1)" }
@@ -60,11 +62,11 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 4 OAF 15% - HRV required"],
+                        :TestCase => ["CZ 4 OAF 15% - HRV not required"],
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.15,
                                        :flow => 10.0,
-                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+                                       :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -73,7 +75,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.25,
                                        :flow => 10.0,
-                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+                                       :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -82,7 +84,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.35,
                                        :flow => 5.0,
-                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+                                       :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -91,7 +93,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.45,
                                        :flow => 3.0,
-                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+                                       :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -100,7 +102,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.55,
                                        :flow => 2.0,
-                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+                                       :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -109,7 +111,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.65,
                                        :flow => 1.6,
-                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+                                       :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -118,7 +120,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.75,
                                        :flow => 1.0,
-                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+                                       :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -127,7 +129,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                         :TestPars => { :multiplier_factor => 1.0,
                                        :oaf => 0.55,
                                        :flow => 1.4,
-                                       :weather_file_name => "CAN_BC_Victoria.Intl.AP.717990_CWEC2016.epw" } }
+                                       :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -241,22 +243,28 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       has_hrv = false
       exhaust_heat_content_kW = standard.calculate_exhaust_heat(air_loop_hvac)
       air_loop_hvac_name = air_loop_hvac.name.get
-      hdd = standard.get_necb_hdd18(model)
+      hdd = standard.get_necb_hdd18(model: model)
       has_hrv = standard.air_loop_hvac_energy_recovery_ventilator_required?(air_loop_hvac, 'NECB')
       flow_L_per_s = OpenStudio.convert(flow, 'm^3/s', 'L/s').get
       flow_ft3_per_min = OpenStudio.convert(flow, 'm^3/s', 'ft^3/min').get
 
-      # Recover HRV efficiency (if present)
-      latentEffectivenessat100CoolingAirFlow = 'n/a'
-      latentEffectivenessat100HeatingAirFlow = 'n/a'
-      latentEffectivenessat75CoolingAirFlow = 'n/a'
-      latentEffectivenessat75HeatingAirFlow = 'n/a'
-      sensibleEffectivenessat100CoolingAirFlow = 'n/a'
-      sensibleEffectivenessat100HeatingAirFlow = 'n/a'
-      sensibleEffectivenessat75CoolingAirFlow = 'n/a'
-      sensibleEffectivenessat75HeatingAirFlow = 'n/a'
+      # Conditional hash construction
+      result_entry = {
+        name: air_loop_hvac_name,
+        city: city,
+        multiplier_factor: multiplier_factor,
+        exhaust_heat_content_kW: exhaust_heat_content_kW.signif(3),
+        oa_flow_fraction: oaf.signif(3),
+        flow_L_per_s: flow_L_per_s.signif(3),
+        flow_ft3_per_min: flow_ft3_per_min.signif(3),
+        hdd: hdd,
+        has_hrv: has_hrv
+      }
+
+      # Conditionally add the effectiveness lines if has_hrv is true
       if has_hrv
         hrv_objs = model.getHeatExchangerAirToAirSensibleAndLatents.first
+        
         # Check all effectiveness values
         latentEffectivenessat100CoolingAirFlow = hrv_objs.latentEffectivenessat100CoolingAirFlow
         latentEffectivenessat100HeatingAirFlow = hrv_objs.latentEffectivenessat100HeatingAirFlow
@@ -266,29 +274,20 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
         sensibleEffectivenessat100HeatingAirFlow = hrv_objs.sensibleEffectivenessat100HeatingAirFlow
         sensibleEffectivenessat75CoolingAirFlow = hrv_objs.sensibleEffectivenessat75CoolingAirFlow
         sensibleEffectivenessat75HeatingAirFlow = hrv_objs.sensibleEffectivenessat75HeatingAirFlow
+        result_entry.merge!({
+          latent_effectiveness_100_cooling: latentEffectivenessat100CoolingAirFlow,
+          latent_effectiveness_100_heating: latentEffectivenessat100HeatingAirFlow,
+          latent_effectiveness_75_cooling: latentEffectivenessat75CoolingAirFlow,
+          latent_effectiveness_75_heating: latentEffectivenessat75HeatingAirFlow,
+          sensible_effectiveness_100_cooling: sensibleEffectivenessat100CoolingAirFlow,
+          sensible_effectiveness_100_heating: sensibleEffectivenessat100HeatingAirFlow,
+          sensible_effectiveness_75_cooling: sensibleEffectivenessat75CoolingAirFlow,
+          sensible_effectiveness_75_heating: sensibleEffectivenessat75HeatingAirFlow
+        })
       end
 
-      # Add this test case to results and return the hash.
-      results << {
-        name: air_loop_hvac_name,
-        city: city,
-        multiplier_factor: multiplier_factor,
-        exhaust_heat_content_kW: exhaust_heat_content_kW.signif(3),
-        oa_flow_fraction: oaf.signif(3),
-        flow_L_per_s: flow_L_per_s.signif(3),
-        flow_ft3_per_min: flow_ft3_per_min.signif(3),
-        hdd: hdd,
-        has_hrv: has_hrv,
-        latent_effectiveness_100_cooling: latentEffectivenessat100CoolingAirFlow,
-        latent_effectiveness_100_heating: latentEffectivenessat100HeatingAirFlow,
-        latent_effectiveness_75_cooling: latentEffectivenessat75CoolingAirFlow,
-        latent_effectiveness_75_heating: latentEffectivenessat75HeatingAirFlow,
-        sensible_effectiveness_100_cooling: sensibleEffectivenessat100CoolingAirFlow,
-        sensible_effectiveness_100_heating: sensibleEffectivenessat100HeatingAirFlow,
-        sensible_effectiveness_75_cooling: sensibleEffectivenessat75CoolingAirFlow,
-        sensible_effectiveness_75_heating: sensibleEffectivenessat75HeatingAirFlow
-      }
-
+      # Add the constructed hash to the results array
+      results << result_entry
       logger.info "Completed individual test: #{name}"
     end
 
