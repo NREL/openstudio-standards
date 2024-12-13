@@ -266,7 +266,7 @@ class BTAPDatapoint
         self.output_hourly_data(model,@dp_temp_folder, @options[:datapoint_id])
 
         # Output timestep data
-        self.output_timestep_data(model,@dp_temp_folder, @options[:datapoint_id]) #Sara
+        self.output_timestep_data(model,@dp_temp_folder, @options[:datapoint_id])
       end
     rescue StandardError => bang
       puts "Error occured: #{bang}"
@@ -445,7 +445,7 @@ class BTAPDatapoint
     end
   end
   #=====================================================================================================================
-  def output_timestep_data(model, output_folder,datapoint_id) #Sara
+  def output_timestep_data(model, output_folder,datapoint_id)
     osm_path = File.join(output_folder, "run_dir/in.osm")
     sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
     csv_output = File.join(output_folder, "timestep.csv")
@@ -455,7 +455,6 @@ class BTAPDatapoint
     #===================================================================================================================
     # Calculate number of timesteps of the whole year
     number_of_timesteps_of_year = 365 * 24 * number_of_timesteps_per_hour
-    puts "number_of_timesteps_of_year #{number_of_timesteps_of_year}"
 
     timesteps_of_year = []
     d = Time.new(2006, 1, 1, 0)
@@ -465,10 +464,10 @@ class BTAPDatapoint
     timesteps_index = Array(0..number_of_timesteps_of_year-1)
     #===================================================================================================================
     # Create a hash with indices ('timesteps_index') as keys and timesteps as values ('timesteps_of_year')
-    timesteps_of_year_with_index = Hash[timesteps_index.zip(timesteps_of_year)] #Note from Sara Gilani: I had to do this as when I used 'timesteps_of_year' as keys to create all hashes below, it did not create the right number of timesteps for the whole year.
-    puts "timesteps_of_year length #{timesteps_of_year.length()}"
-    puts "timesteps_of_year class #{timesteps_of_year.class}"
-    puts "timesteps_of_year_with_index length #{timesteps_of_year_with_index.length()}"
+    # Note from Sara Gilani: 'I had to do this, as when I used 'timesteps_of_year' as keys to create all hashes below
+    # (e.g. timestep_hash_datapoint_id, timestep_hash_name, timestep_hash_key_value, ...),
+    # it did not create the right number of timesteps for the whole year'
+    timesteps_of_year_with_index = Hash[timesteps_index.zip(timesteps_of_year)]
     #===================================================================================================================
     array_of_hashes = []
     array_of_hashes_transposed = []
@@ -482,8 +481,7 @@ class BTAPDatapoint
     #===================================================================================================================
     # Get timestep data for each output.
     model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
-      puts "rdd_index #{rdd_index}"
-
+      #=================================================================================================================
       # Get Name
       query = "
         SELECT Name
@@ -491,7 +489,6 @@ class BTAPDatapoint
         WHERE ReportDataDictionaryIndex == #{rdd_index}
       "
       name = model.sqlFile.get.execAndReturnFirstString(query).get
-      puts "name #{name}"
       #=================================================================================================================
       # Get KeyValue
       query = "
@@ -509,7 +506,6 @@ class BTAPDatapoint
       rescue StandardError => bang
         key_value = ""
       end
-      puts "key_value #{key_value}"
       #=================================================================================================================
       # Get Units
       query = "
@@ -518,7 +514,6 @@ class BTAPDatapoint
         WHERE ReportDataDictionaryIndex == #{rdd_index}
       "
       units = model.sqlFile.get.execAndReturnFirstString(query).get
-      puts "units #{units}"
       #=================================================================================================================
       # Get timestep data
       query = "
@@ -528,8 +523,6 @@ class BTAPDatapoint
         ReportVariableDataDictionaryIndex = #{rdd_index}
       "
       timestep_values = model.sqlFile.get.execAndReturnVectorOfDouble(query).get
-      puts "timestep_values length #{timestep_values.length()}"
-      puts "timestep_values class #{timestep_values.class}"
 
       timestep_hash = Hash[timesteps_index.zip(timestep_values)]
 
