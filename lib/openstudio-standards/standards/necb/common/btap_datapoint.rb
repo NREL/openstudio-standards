@@ -444,15 +444,15 @@ class BTAPDatapoint
       end
     end
   end
-
+  #=====================================================================================================================
   def output_timestep_data(model, output_folder,datapoint_id) #Sara
     osm_path = File.join(output_folder, "run_dir/in.osm")
     sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
     csv_output = File.join(output_folder, "timestep.csv")
-
+    #===================================================================================================================
     # Get number of timesteps from the model
     number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
-
+    #===================================================================================================================
     # Calculate number of timesteps of the whole year
     number_of_timesteps_of_year = 365 * 24 * number_of_timesteps_per_hour
     puts "number_of_timesteps_of_year #{number_of_timesteps_of_year}"
@@ -462,22 +462,24 @@ class BTAPDatapoint
     (0...number_of_timesteps_of_year).each do |increment|
       timesteps_of_year << (d + (60 * 60 / number_of_timesteps_per_hour) * increment).strftime('%Y-%m-%d %H:%M')
     end
-    # #Sara TODO: change to timestep, this was just for testing
-    # d = Time.new(2006, 1, 1, 1)
-    # (0...365).each do |increment|
-    #   timesteps_of_year << (d + (60 * 60 * 24) * increment).strftime('%Y-%m-%d %H:%M')
-    # end
+    timesteps_index = Array(0..number_of_timesteps_of_year-1)
+    #===================================================================================================================
+    # Create a hash with indices ('timesteps_index') as keys and timesteps as values ('timesteps_of_year')
+    timesteps_of_year_with_index = Hash[timesteps_index.zip(timesteps_of_year)] #Note from Sara Gilani: I had to do this as when I used 'timesteps_of_year' as keys to create all hashes below, it did not create the right number of timesteps for the whole year.
+    puts "timesteps_of_year length #{timesteps_of_year.length()}"
+    puts "timesteps_of_year class #{timesteps_of_year.class}"
+    puts "timesteps_of_year_with_index length #{timesteps_of_year_with_index.length()}"
+    #===================================================================================================================
     array_of_hashes = []
     array_of_hashes_transposed = []
-
+    #===================================================================================================================
     # Find timestep outputs available for this datapoint.
-    # #Sara TODO correct  WHERE ReportingFrequency == 'Zone Timestep' #Daily
     query = "
         SELECT ReportDataDictionaryIndex
         FROM ReportDataDictionary
         WHERE ReportingFrequency == 'Zone Timestep'
                                                        "
-
+    #===================================================================================================================
     # Get timestep data for each output.
     model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
       puts "rdd_index #{rdd_index}"
@@ -490,14 +492,14 @@ class BTAPDatapoint
       "
       name = model.sqlFile.get.execAndReturnFirstString(query).get
       puts "name #{name}"
-
+      #=================================================================================================================
       # Get KeyValue
       query = "
         SELECT KeyValue
         FROM ReportDataDictionary
         WHERE ReportDataDictionaryIndex == #{rdd_index}
       "
-
+      #=================================================================================================================
       # In some cases KeyValue has a value and sometimes it does not.  In some cases KeyValue is null.  If the command
       # below is run and KeyValue is null then the command fails and returns an error.  The fix below assumes that if
       # the command below fails it is because KeyValue is null.  In that case the "key_value" variable is set to a
@@ -508,7 +510,7 @@ class BTAPDatapoint
         key_value = ""
       end
       puts "key_value #{key_value}"
-
+      #=================================================================================================================
       # Get Units
       query = "
         SELECT Units
@@ -517,58 +519,64 @@ class BTAPDatapoint
       "
       units = model.sqlFile.get.execAndReturnFirstString(query).get
       puts "units #{units}"
-
+      #=================================================================================================================
       # Get timestep data
       query = "
-        Select Value
-        FROM ReportData
+        Select VariableValue
+        FROM ReportVariableData
         WHERE
-        ReportDataDictionaryIndex = #{rdd_index}
+        ReportVariableDataDictionaryIndex = #{rdd_index}
       "
       timestep_values = model.sqlFile.get.execAndReturnVectorOfDouble(query).get
-      puts "timestep_values #{timestep_values}"
+      puts "timestep_values length #{timestep_values.length()}"
+      puts "timestep_values class #{timestep_values.class}"
 
-      timestep_hash = Hash[timesteps_of_year.zip(timestep_values)]
-      puts "timestep_hash #{timestep_hash}"
+      timestep_hash = Hash[timesteps_index.zip(timestep_values)]
 
       data_hash = { "datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units }.merge(timestep_hash)
-      puts "data_hash #{data_hash}"
 
       array_of_hashes << data_hash
 
-
-      #Sara TODO transpose columns and rows in timestep output START
+      #=================================================================================================================
+      # Create a hash of data for having timesteps as rows instead of columns that is used for hourly outputs START
       number_of_timesteps = timesteps_of_year.length()
 
       array = [datapoint_id]
       array_datapoint_id = array.zip(*[array]*number_of_timesteps).flatten
-      timestep_hash_datapoint_id = Hash[timesteps_of_year.zip(array_datapoint_id)]
+      timestep_hash_datapoint_id = Hash[timesteps_index.zip(array_datapoint_id)]
 
       array = [name]
       array_name = array.zip(*[array]*number_of_timesteps).flatten
-      timestep_hash_name = Hash[timesteps_of_year.zip(array_name)]
+      timestep_hash_name = Hash[timesteps_index.zip(array_name)]
 
       array = [key_value]
       array_key_value = array.zip(*[array]*number_of_timesteps).flatten
-      timestep_hash_key_value = Hash[timesteps_of_year.zip(array_key_value)]
+      timestep_hash_key_value = Hash[timesteps_index.zip(array_key_value)]
 
       array = [units]
       array_units = array.zip(*[array]*number_of_timesteps).flatten
-      timestep_hash_units = Hash[timesteps_of_year.zip(array_units)]
+      timestep_hash_units = Hash[timesteps_index.zip(array_units)]
 
-      timestep_hash_values = Hash[timesteps_of_year.zip(timestep_values)]
+      timestep_hash_values = Hash[timesteps_index.zip(timestep_values)]
 
       data_hash_transposed = Hash.new
       timestep_hash_values.keys.each do |key|
-        data_hash_transposed[key] = [timestep_hash_datapoint_id[key], timestep_hash_name[key], timestep_hash_key_value[key], timestep_hash_units[key], timestep_hash_values[key]]
+        data_hash_transposed[key] = [
+          timesteps_of_year_with_index[key],
+          timestep_hash_datapoint_id[key],
+          timestep_hash_name[key],
+          timestep_hash_key_value[key],
+          timestep_hash_units[key],
+          timestep_hash_values[key]
+        ]
       end
 
       array_of_hashes_transposed << data_hash_transposed
-      #Sara TODO transpose columns and rows in timestep output END
+      # Create a hash of data for having timesteps as rows instead of columns that is used for hourly outputs END
+      #=================================================================================================================
 
     end #model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
-    puts "Sara array_of_hashes_transposed #{array_of_hashes_transposed}"
-
+    #===================================================================================================================
     # # This csv file has timesteps as the first row
     # CSV.open(csv_output, "wb") do |csv|
     #   unless array_of_hashes.empty?
@@ -578,22 +586,24 @@ class BTAPDatapoint
     #     end
     #   end
     # end
-
+    #===================================================================================================================
     # This csv file has timesteps as the first column
-    header = ['Timesteps', 'datapoint_id', 'Name', 'KeyValue', 'Units', 'Value']
+    header = ['Index', 'Timestep', 'datapoint_id', 'Name', 'KeyValue', 'Units', 'Value']
     CSV.open(csv_output, "wb") do |csv|
       csv << header
       array_of_hashes_transposed.each do |hash|
-        hash.keys().each do |timestep|
-          row_timestep = timestep
-          row_datapoint_id = hash[timestep][0]
-          row_name = hash[timestep][1]
-          row_key_value = hash[timestep][2]
-          row_units = hash[timestep][3]
-          row_value = hash[timestep][4]
+        hash.keys().each do |index|
+          row_index = index
+          row_timestep = hash[index][0]
+          row_datapoint_id = hash[index][1]
+          row_name = hash[index][2]
+          row_key_value = hash[index][3]
+          row_units = hash[index][4]
+          row_value = hash[index][5]
 
           row = CSV::Row.new(header,[])
-          row['Timesteps'] = row_timestep
+          row['Index'] = row_index
+          row['Timestep'] = row_timestep
           row['datapoint_id'] = row_datapoint_id
           row['Name'] = row_name
           row['KeyValue'] = row_key_value
@@ -603,8 +613,7 @@ class BTAPDatapoint
         end
       end
     end
-
-
+    #===================================================================================================================
   end #output_timestep_data
-
+  #=====================================================================================================================
 end
