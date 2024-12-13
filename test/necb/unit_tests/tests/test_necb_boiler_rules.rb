@@ -14,7 +14,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   #  Makes use of the template design pattern with the work done by the do_* method below (i.e. 'do_' prepended to the current method name)
   def test_boiler_efficiency
     logger.info "Starting suite of tests for: #{__method__}"
-    
+
     # Define test parameters that apply to all tests.
     test_parameters = {test_method: __method__,
                        save_intermediate_models: true,
@@ -64,7 +64,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
                                      :efficiency_value => "tbd"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-      
+
     # Create empty results hash and call the template method that runs the individual test cases.
     test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
