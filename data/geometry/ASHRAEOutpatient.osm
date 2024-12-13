@@ -32849,7 +32849,7 @@ OS:SpaceType,
   {54db1ed1-80e8-486f-899f-035e0e97239f}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Anesthesia;                             !- Standards Space Type
+  exam/treatment;      !- Standards Space Type
 
 OS:Rendering:Color,
   {54db1ed1-80e8-486f-899f-035e0e97239f}, !- Handle
@@ -32866,7 +32866,7 @@ OS:SpaceType,
   {df814a82-3e83-4733-b2cb-dcb620901a69}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  BioHazard;                              !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {df814a82-3e83-4733-b2cb-dcb620901a69}, !- Handle
@@ -32883,7 +32883,7 @@ OS:SpaceType,
   {81ab0734-072e-4c44-8dc3-3e9acde5d403}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Cafe;                                   !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {81ab0734-072e-4c44-8dc3-3e9acde5d403}, !- Handle
@@ -32900,7 +32900,7 @@ OS:SpaceType,
   {5192d441-bb7c-41bf-b24a-ddcdeab8b747}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  CleanWork;                              !- Standards Space Type
+  exam/treatment;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5192d441-bb7c-41bf-b24a-ddcdeab8b747}, !- Handle
@@ -32917,7 +32917,7 @@ OS:SpaceType,
   {7602e6ab-d574-4523-819b-9dbc607dd42d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Conference;                             !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:Rendering:Color,
   {7602e6ab-d574-4523-819b-9dbc607dd42d}, !- Handle
@@ -32934,7 +32934,7 @@ OS:SpaceType,
   {7914d0d4-bf0c-4db6-a57d-430cdc4f66e5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  DressingRoom;                           !- Standards Space Type
+  dressing room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {7914d0d4-bf0c-4db6-a57d-430cdc4f66e5}, !- Handle
@@ -32951,7 +32951,7 @@ OS:SpaceType,
   {cc039449-da7a-4737-abda-1ed339cc2113}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Elec/MechRoom;                          !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {cc039449-da7a-4737-abda-1ed339cc2113}, !- Handle
@@ -32968,7 +32968,7 @@ OS:SpaceType,
   {3f5f4d2b-499b-44c9-9d63-c3e20024f78a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  ElevatorPumpRoom;                       !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3f5f4d2b-499b-44c9-9d63-c3e20024f78a}, !- Handle
@@ -32985,7 +32985,7 @@ OS:SpaceType,
   {289ef889-859b-4541-9e5c-5c8c30d7385b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Exam;                                   !- Standards Space Type
+  exam/treatment;      !- Standards Space Type
 
 OS:Rendering:Color,
   {289ef889-859b-4541-9e5c-5c8c30d7385b}, !- Handle
@@ -33002,7 +33002,7 @@ OS:SpaceType,
   {ba4eb9cb-3586-4e65-8541-aa3bc11a1870}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Hall;                                   !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {ba4eb9cb-3586-4e65-8541-aa3bc11a1870}, !- Handle
@@ -33019,7 +33019,7 @@ OS:SpaceType,
   {f91b1f68-0eb5-4dc0-bed8-27c4961be65c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Hall_infil;                             !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f91b1f68-0eb5-4dc0-bed8-27c4961be65c}, !- Handle
@@ -33036,7 +33036,7 @@ OS:SpaceType,
   {a51b5b7a-405b-44dd-bfab-772935555963}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  IT_Room;                                !- Standards Space Type
+  datacenter/low ite;      !- Standards Space Type
 
 OS:Rendering:Color,
   {a51b5b7a-405b-44dd-bfab-772935555963}, !- Handle
@@ -33053,7 +33053,7 @@ OS:SpaceType,
   {c27e1678-d235-4fee-8262-bb1ce2382bce}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Janitor;                                !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {c27e1678-d235-4fee-8262-bb1ce2382bce}, !- Handle
@@ -33070,7 +33070,7 @@ OS:SpaceType,
   {bb1dfeec-30eb-452a-b65f-b21605006fef}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Lobby;                                  !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {bb1dfeec-30eb-452a-b65f-b21605006fef}, !- Handle
@@ -33087,7 +33087,7 @@ OS:SpaceType,
   {26d485d2-cba6-4799-b13e-18c565e3e3cf}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  LockerRoom;                             !- Standards Space Type
+  locker room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {26d485d2-cba6-4799-b13e-18c565e3e3cf}, !- Handle
@@ -33104,7 +33104,7 @@ OS:SpaceType,
   {b8e825b7-b2c6-405c-80c9-b3397e74a948}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Lounge;                                 !- Standards Space Type
+  lounge/breakroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {b8e825b7-b2c6-405c-80c9-b3397e74a948}, !- Handle
@@ -33121,7 +33121,7 @@ OS:SpaceType,
   {0395a4ae-877c-4061-af54-9cd5b80d45b8}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  MRI;                                    !- Standards Space Type
+  imaging;      !- Standards Space Type
 
 OS:Rendering:Color,
   {0395a4ae-877c-4061-af54-9cd5b80d45b8}, !- Handle
@@ -33138,7 +33138,7 @@ OS:SpaceType,
   {ace49159-7d8c-4a75-8dc7-e541dfa842c4}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  MRI_Control;                            !- Standards Space Type
+  imaging;      !- Standards Space Type
 
 OS:Rendering:Color,
   {ace49159-7d8c-4a75-8dc7-e541dfa842c4}, !- Handle
@@ -33155,7 +33155,7 @@ OS:SpaceType,
   {77acad34-fb1e-4cf2-8618-5fc821e8f9b8}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  MedGas;                                 !- Standards Space Type
+  exam/treatment;      !- Standards Space Type
 
 OS:Rendering:Color,
   {77acad34-fb1e-4cf2-8618-5fc821e8f9b8}, !- Handle
@@ -33172,7 +33172,7 @@ OS:SpaceType,
   {35a9786d-f066-4808-be66-249cfd71d65f}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  NurseStation;                           !- Standards Space Type
+  nurses station;      !- Standards Space Type
 
 OS:Rendering:Color,
   {35a9786d-f066-4808-be66-249cfd71d65f}, !- Handle
@@ -33189,7 +33189,7 @@ OS:SpaceType,
   {4cf0a6c9-ba59-44d7-8119-29d3da151dce}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  OR;                                     !- Standards Space Type
+  operating room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {4cf0a6c9-ba59-44d7-8119-29d3da151dce}, !- Handle
@@ -33206,7 +33206,7 @@ OS:SpaceType,
   {7c8180e8-b8e3-4750-9762-7b69c07b8647}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {7c8180e8-b8e3-4750-9762-7b69c07b8647}, !- Handle
@@ -33223,7 +33223,7 @@ OS:SpaceType,
   {d6c6ee5b-09e3-41f0-8e1d-8165c403885c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  PACU;                                   !- Standards Space Type
+  patient room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {d6c6ee5b-09e3-41f0-8e1d-8165c403885c}, !- Handle
@@ -33240,7 +33240,7 @@ OS:SpaceType,
   {3202c1e4-552a-47fb-8849-e9ff9f27e91d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  PhysicalTherapy;                        !- Standards Space Type
+  physical therapy;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3202c1e4-552a-47fb-8849-e9ff9f27e91d}, !- Handle
@@ -33257,7 +33257,7 @@ OS:SpaceType,
   {a5da6dba-3010-4e50-a08d-c8c1acce154d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  PreOp;                                  !- Standards Space Type
+  operating room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {a5da6dba-3010-4e50-a08d-c8c1acce154d}, !- Handle
@@ -33274,7 +33274,7 @@ OS:SpaceType,
   {6701b661-88af-4156-b574-546ca60f54f3}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  ProcedureRoom;                          !- Standards Space Type
+  operating room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {6701b661-88af-4156-b574-546ca60f54f3}, !- Handle
@@ -33291,7 +33291,7 @@ OS:SpaceType,
   {4b78b7ad-f448-49f3-9fd5-d2818cf20fb6}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Soil Work;                              !- Standards Space Type
+  exam/treatment;      !- Standards Space Type
 
 OS:Rendering:Color,
   {4b78b7ad-f448-49f3-9fd5-d2818cf20fb6}, !- Handle
@@ -33308,7 +33308,7 @@ OS:SpaceType,
   {b4cea8ff-7836-4a99-a993-03779f4aae86}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Stair;                                  !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:Rendering:Color,
   {b4cea8ff-7836-4a99-a993-03779f4aae86}, !- Handle
@@ -33325,7 +33325,7 @@ OS:SpaceType,
   {da52f6e0-3816-4e10-945c-7718ea541018}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Toilet;                                 !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {da52f6e0-3816-4e10-945c-7718ea541018}, !- Handle
@@ -33342,7 +33342,7 @@ OS:SpaceType,
   {e3e7be2a-044d-4f10-9603-da2aa55c6110}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Xray;                                   !- Standards Space Type
+  imaging;      !- Standards Space Type
 
 OS:Rendering:Color,
   {e3e7be2a-044d-4f10-9603-da2aa55c6110}, !- Handle
@@ -33359,7 +33359,7 @@ OS:SpaceType,
   {7c28a49a-f63e-46c6-9dd3-e4c2cbe8d622}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Reception;                              !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {7c28a49a-f63e-46c6-9dd3-e4c2cbe8d622}, !- Handle
@@ -33376,7 +33376,7 @@ OS:SpaceType,
   {158cc556-36f0-4c04-b601-3a3ac73f51ac}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Outpatient,                             !- Standards Building Type
-  Undeveloped;                            !- Standards Space Type
+  shaft;      !- Standards Space Type
 
 OS:Rendering:Color,
   {158cc556-36f0-4c04-b601-3a3ac73f51ac}, !- Handle
