@@ -30,8 +30,8 @@ class NECB_BTAP_Data_Reporting < Minitest::Test
     # Test cases. Three cases for NG.
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = {:Vintage => ['NECB2011'], # @AllTemplates, 
-                       :TestCase => ["high values"], 
-                       :TestPars => {:tbd => 0.278}}
+                       :TestCase => ["case 1"], 
+                       :TestPars => {:tbd => 'tbd'}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     
