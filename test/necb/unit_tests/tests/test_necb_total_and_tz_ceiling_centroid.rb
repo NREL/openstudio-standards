@@ -18,18 +18,18 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
     
     # Define test parameters that apply to all tests.
     test_parameters = {test_method: __method__,
-                       save_intermediate_models: true}
+                       save_intermediate_models: true,
+                       EpwFile: 'CAN_BC_Vancouver.Intl.AP.718920_CWEC2020.epw'}
 
     # Define test cases. 
     test_cases = Hash.new
 
-    # Define references (per vintage in this case).
-    #test_cases[:NECB2011] = {:Reference => "tbd"}
+    # Define references.
+    test_cases = {:Reference => "BTAP test - checking geometry data used in costing"}
     
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = {:Vintage => @AllTemplates, 
-                       :EpwFile => ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'],
                        :TestCase => ["case-1"], 
                        :TestPars => {:value => :tbd}}
     new_test_cases = make_test_cases_json(test_cases_hash)
@@ -67,8 +67,10 @@ class NECB_Ceiling_Centroid_Test < Minitest::Test
     # General inputs.
     test_name = test_pars[:test_method]
     save_intermediate_models = test_pars[:save_intermediate_models]
-    vintage = test_pars[:Vintage]
     epw_file = test_pars[:EpwFile]
+    
+    # Variable inputs.
+    vintage = test_pars[:Vintage]
 
     # Define the test name. 
     name = "#{vintage}_ceiling_centroid"
