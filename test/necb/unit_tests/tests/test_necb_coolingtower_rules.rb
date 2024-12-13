@@ -174,9 +174,9 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
 
       # Add this test case to results and return the hash.
       tower_results[tower.name.to_s.to_sym] = {
-        tower_capacity_kW: tower_cap.signif,
+        tower_capacity_kW: tower_cap.signif(3),
         number_of_cells: tower.numberofCells,
-        fan_power: fan_power.signif(3),
+        fan_power_kW: fan_power.signif(3),
         design_inlet_wet_bulb_degC: tower_Twb.signif(3),
         design_inlet_dry_bulb_degC: tower_dryBulbT.signif(3),
         design_approach_T_degC: tower_appT.signif(3)
@@ -194,7 +194,7 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
 
     results = {
       name: name,
-      tested_capacity_kW: chiller_cap.signif,
+      tested_capacity_kW: chiller_cap.signif(3),
       reference_COP: refCOP.signif(3),
       outlet_temp: all_values,
       tower_results: tower_results
