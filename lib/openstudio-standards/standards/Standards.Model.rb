@@ -2301,6 +2301,9 @@ class Standard
     model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_efficiency_and_curves(obj) }
     model.getCoilHeatingGasMultiStages.each { |obj| coil_heating_gas_multi_stage_apply_efficiency_and_curves(obj) }
 
+    # VRFs
+    model.getAirConditionerVariableRefrigerantFlows.sort.each { |obj| air_conditioner_variable_refrigerant_flow_apply_efficiency_and_curves(obj) }
+
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', "Finished applying HVAC efficiency standards for #{template} template.")
     return true
   end
