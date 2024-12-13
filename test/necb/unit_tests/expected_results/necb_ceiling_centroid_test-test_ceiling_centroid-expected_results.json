@@ -1,5 +1,6 @@
 {
   "VarType": "Vintage",
+  "Reference": "BTAP test - checking geometry data used in costing",
   "NECB2011": {
     "VarType": "EpwFile",
     "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw": {
