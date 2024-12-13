@@ -42,7 +42,7 @@ class Standard
 
     # Look up the efficiency characteristics
     if computer_room_air_conditioner
-      equipment_type = 'unitary_acs'
+      equipment_type = 'computer_room_acs'
     else
       equipment_type = 'water_source_heat_pumps'
     end

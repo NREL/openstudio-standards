@@ -6004,7 +6004,6 @@ class Standard
     supply_fan.setPressureRise(270.64755)
     exhaust_fan.setPressureRise(270.64755)
 
-
     # Create ERV Controller
     erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
     erv_controller.setName("#{thermal_zone.name} ERV Controller")
