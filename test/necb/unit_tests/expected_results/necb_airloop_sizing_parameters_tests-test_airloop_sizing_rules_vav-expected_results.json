@@ -2,7 +2,7 @@
   "VarType": "Vintage",
   "NECB2011": {
     "VarType": "FuelType",
-    "Reference": "NECB 2011 p3:8.4.4.9.(1b,2b), 8.4.4.19.(2a,2b)",
+    "Reference": "NECB 2011 p3:8.4.4.9.(1b,2b), 8.4.4.19.(2a, 2b)",
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
@@ -58,7 +58,7 @@
   },
   "NECB2015": {
     "VarType": "FuelType",
-    "Reference": "NECB 2015 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a,2b)",
+    "Reference": "NECB 2015 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)",
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
@@ -114,7 +114,7 @@
   },
   "NECB2017": {
     "VarType": "FuelType",
-    "Reference": "NECB 2017 p2:8.4.4.8.(1b,2b), 8.4.4.18.(2a,2b)",
+    "Reference": "NECB 2017 p2:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)",
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
@@ -170,7 +170,7 @@
   },
   "NECB2020": {
     "VarType": "FuelType",
-    "Reference": "NECB 2020 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a,2b)",
+    "Reference": "NECB 2020 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)",
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {

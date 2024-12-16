@@ -1,5 +1,4 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
 
@@ -27,10 +26,10 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
     # Define test cases.
     test_cases = {}
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.9.(1b,2b), 8.4.4.19.(2a,2b)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a,2b)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.8.(1b,2b), 8.4.4.18.(2a,2b)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a,2b)" }
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.9.(1b,2b), 8.4.4.19.(2a, 2b)" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)" }
 
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = { :Vintage => @AllTemplates,
@@ -61,6 +60,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
   # @param test_case [Hash] has the specific test parameters.
   # @return results of this case.
   def do_test_airloop_sizing_rules_vav(test_pars:, test_case:)
+
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
@@ -114,6 +114,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
     results = Hash.new
     airloops.each do |iloop|
       iloop_name = iloop.name.get
+
       # Initialize an array to store thermal zone results for this air loop
       thermal_zone_results = []
       thermal_zones = iloop.thermalZones
@@ -140,13 +141,12 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
           cooling_sizing_factor: cooling_sizing_factor.to_f.signif(2),
           design_clg_supply_temp_input_method: design_clg_supply_temp_input_method,
           design_htg_supply_temp_input_method: design_htg_supply_temp_input_method,
-          heating_sizing_temp_diff: heating_sizing_temp_diff,
-          cooling_sizing_temp_diff: cooling_sizing_temp_diff
+          heating_sizing_temp_diff: heating_sizing_temp_diff.signif(3),
+          cooling_sizing_temp_diff: cooling_sizing_temp_diff.signif(3)
         }
       end
       results[iloop_name] = thermal_zone_results
     end
-    return results
     # necb_min_flow_rate = 0.002 * tot_floor_area
     # demand_comps = iloop.demandComponents
     # tot_min_flow_rate = 0.0
@@ -161,7 +161,9 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
     # if diff > tol then min_flow_rate_set_correctly = false end
     # assert(min_flow_rate_set_correctly, "test_airloop_sizing_rules_vav: Minimum vav box flow rate does not match necb requirement #{name}")
     logger.info "Completed individual test: #{name}"
+    return results
   end
+
   # Test to validate sizing rules for air loop
   def test_airloop_sizing_rules_heatpump
     logger.info "Starting suite of tests for: #{__method__}"
@@ -176,11 +178,12 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
     # Define test cases.
     test_cases = {}
+
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.9.(1b), 8.4.4.14.(2b), 8.4.4.19.(2a,2b)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a,2b)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a,2b)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a,2b)" }
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.9.(1b), 8.4.4.14.(2b), 8.4.4.19.(2a, 2b)" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a, 2b)" }
 
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = { :Vintage => @AllTemplates,
@@ -211,6 +214,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
   # @param test_case [Hash] has the specific test parameters.
   # @return results of this case.
   def do_test_airloop_sizing_rules_heatpump(test_pars:, test_case:)
+
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
@@ -233,6 +237,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
     # Wrap test in begin/rescue/ensure.
     begin
+
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
       weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
@@ -261,6 +266,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
     results = Hash.new
     airloops.each do |iloop|
       iloop_name = iloop.name.get
+
       # Initialize an array to store thermal zone results for this air loop
       thermal_zone_results = []
       thermal_zones = iloop.thermalZones
@@ -281,12 +287,13 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
           thermal_zone_name: izone_name,
           heating_sizing_factor: heating_sizing_factor.to_f.signif(2),
           cooling_sizing_factor: cooling_sizing_factor.to_f.signif(2),
-          heating_sizing_temp_diff: heating_sizing_temp_diff,
-          cooling_sizing_temp_diff: cooling_sizing_temp_diff
+          heating_sizing_temp_diff: heating_sizing_temp_diff.signif(3),
+          cooling_sizing_temp_diff: cooling_sizing_temp_diff.signif(3)
         }
       end
       results[iloop_name] = thermal_zone_results
     end
+    logger.info "Completed individual test: #{name}"
     return results
   end
 end
