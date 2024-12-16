@@ -152,8 +152,7 @@ class NECB2011
                                baseline_system_zones_map_option: baseline_system_zones_map_option)
 
     # Assign a single system 4 for all wet spaces.. and assign the control zone to the one with the largest load.
-    auto_system_wet_spaces(
-                           hvac_system_washrooms: hvac_system_washrooms,
+    auto_system_wet_spaces(hvac_system_washrooms: hvac_system_washrooms,
                            baseboard_type: self.fuel_type_set.baseboard_type,
                            necb_reference_hp: self.fuel_type_set.necb_reference_hp,
                            necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
@@ -162,8 +161,7 @@ class NECB2011
                            model: model)
 
     # Assign a single system 4 for all storage spaces.. and assign the control zone to the one with the largest load.
-    auto_system_storage_spaces(
-                               hvac_system_storage: hvac_system_storage,
+    auto_system_storage_spaces(hvac_system_storage: hvac_system_storage,
                                baseboard_type: self.fuel_type_set.baseboard_type,
                                necb_reference_hp: self.fuel_type_set.necb_reference_hp,
                                necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
@@ -172,8 +170,7 @@ class NECB2011
                                model: model)
 
     # Assign the wild spaces to a single system 4 system with a control zone with the largest load.
-    auto_system_wild_spaces(
-                            hvac_system_corridor: hvac_system_corridor,
+    auto_system_wild_spaces(hvac_system_corridor: hvac_system_corridor,
                             baseboard_type: self.fuel_type_set.baseboard_type,
                             necb_reference_hp: self.fuel_type_set.necb_reference_hp,
                             necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
@@ -1317,10 +1314,10 @@ class NECB2011
                                                                   baseboard_type: baseboard_type,
                                                                   hw_loop: @hw_loop)
     else
-      create_hvac_by_name( model: model,
-                                  hvac_system_name: hvac_system_washrooms,
-                                  zones: tz,
-                                  hw_loop: @hw_loop) # Add this method to create the system.
+      create_hvac_by_name(model: model,
+                          hvac_system_name: hvac_system_storage,
+                          zones: tz,
+                          hw_loop: @hw_loop) # Add this method to create the system.
     end
 
   end

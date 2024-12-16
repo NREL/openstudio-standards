@@ -351,6 +351,78 @@
               "needs_boiler": false
             },
             {
+              "description": "TPFC MAU DX Coils with Scroll Chiller",
+              "name": "sys_5|doas|shr>none|sc>dx|sh>c-g|ssf>cv|zh>tpfc|zc>tpfc|srf>none|",
+              "chiller_type": "Scroll",
+              "fan_coil_type": "TPFC",
+              "mau_cooling_type": "DX",
+              "system": "sys_5",
+              "needs_boiler": false
+            },
+            {
+              "description": "TPFC MAU DX Coils with Centrifugal Chiller",
+              "name": "sys_5|doas|shr>none|sc>dx|sh>c-g|ssf>cv|zh>tpfc|zc>tpfc|srf>none|",
+              "chiller_type": "Centrifugal",
+              "fan_coil_type": "TPFC",
+              "mau_cooling_type": "DX",
+              "system": "sys_5",
+              "needs_boiler": false
+            },
+            {
+              "description": "TPFC MAU DX Coils with Rotary Screw Chiller",
+              "name": "sys_5|doas|shr>none|sc>dx|sh>c-g|ssf>cv|zh>tpfc|zc>tpfc|srf>none|",
+              "chiller_type": "RotaryScrew",
+              "fan_coil_type": "TPFC",
+              "mau_cooling_type": "DX",
+              "system": "sys_5",
+              "needs_boiler": false
+            },
+            {
+              "description": "TPFC MAU DX Coils with Reciprocating Chiller",
+              "name": "sys_5|doas|shr>none|sc>dx|sh>c-g|ssf>cv|zh>tpfc|zc>tpfc|srf>none|",
+              "chiller_type": "Reciprocating",
+              "fan_coil_type": "TPFC",
+              "mau_cooling_type": "DX",
+              "system": "sys_5",
+              "needs_boiler": false
+            },
+            {
+              "description": "TPFC MAU Chilled Water Coils with Scroll Chiller",
+              "name": "sys_5|doas|shr>none|sc>c-chw|sh>c-g|ssf>cv|zh>tpfc|zc>tpfc|srf>none|",
+              "chiller_type": "Scroll",
+              "fan_coil_type": "TPFC",
+              "mau_cooling_type": "Hydronic",
+              "system": "sys_5",
+              "needs_boiler": false
+            },
+            {
+              "description": "TPFC MAU Chilled Water Coils with Centrifugal Chiller",
+              "name": "sys_5|doas|shr>none|sc>c-chw|sh>c-g|ssf>cv|zh>tpfc|zc>tpfc|srf>none|",
+              "chiller_type": "Centrifugal",
+              "fan_coil_type": "TPFC",
+              "mau_cooling_type": "Hydronic",
+              "system": "sys_5",
+              "needs_boiler": false
+            },
+            {
+              "description": "TPFC MAU Chilled Water Coils with Rotary Screw Chiller",
+              "name": "sys_5|doas|shr>none|sc>c-chw|sh>c-g|ssf>cv|zh>tpfc|zc>tpfc|srf>none|",
+              "chiller_type": "RotaryScrew",
+              "fan_coil_type": "TPFC",
+              "mau_cooling_type": "Hydronic",
+              "system": "sys_5",
+              "needs_boiler": false
+            },
+            {
+              "description": "TPFC MAU Chilled Water Coils with Reciprocating Chiller",
+              "name": "sys_5|doas|shr>none|sc>c-chw|sh>c-g|ssf>cv|zh>tpfc|zc>tpfc|srf>none|",
+              "chiller_type": "Reciprocating",
+              "fan_coil_type": "TPFC",
+              "mau_cooling_type": "Hydronic",
+              "system": "sys_5",
+              "needs_boiler": false
+            },
+            {
               "description": "MZ BU RTU Electric Heating Coil Scroll Chiller and Electric Baseboard",
               "name": "sys_6|mixed|shr>none|sc>c-chw|sh>c-e|ssf>vv|zh>b-e|zc>none|srf>vv|",
               "baseboard_type": "Electric",
