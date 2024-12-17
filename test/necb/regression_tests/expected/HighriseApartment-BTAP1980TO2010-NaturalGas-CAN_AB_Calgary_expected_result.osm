@@ -15767,7 +15767,7 @@ OS:DefaultScheduleSet,
   {cbbd59cb-82b7-4e01-9c8c-cab348b6d48d}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {f125845d-5665-4a68-b66a-de2c17d1c191}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -16363,21 +16363,6 @@ OS:Schedule:Day,
   0,                                      !- Minute 9
   0.5;                                    !- Value Until Time 9
 
-OS:Schedule:Ruleset,
-  {f125845d-5665-4a68-b66a-de2c17d1c191}, !- Handle
-  Always On,                              !- Name
-  {f3f5a5ce-93d8-41a6-baf6-b6a476e79f49}, !- Schedule Type Limits Name
-  {de29cd1b-a0bd-47c8-a3b5-805ab1f11de3}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {de29cd1b-a0bd-47c8-a3b5-805ab1f11de3}, !- Handle
-  Always On Default,                      !- Name
-  {f3f5a5ce-93d8-41a6-baf6-b6a476e79f49}, !- Schedule Type Limits Name
-  No,                                     !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
-
 OS:ThermostatSetpoint:DualSetpoint,
   {a3fd5a57-bab9-4812-8ef0-fb454b11eb68}, !- Handle
   Space Function Corr. < 2.4m wide-sch-G Thermostat, !- Name
@@ -16714,7 +16699,7 @@ OS:DefaultScheduleSet,
   {cbbd59cb-82b7-4e01-9c8c-cab348b6d48d}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {f125845d-5665-4a68-b66a-de2c17d1c191}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
