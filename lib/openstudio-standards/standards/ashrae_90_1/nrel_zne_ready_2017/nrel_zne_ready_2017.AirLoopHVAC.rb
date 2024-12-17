@@ -787,7 +787,6 @@ class NRELZNEReady2017 < ASHRAE901
           erv.setSensibleEffectivenessat75CoolingAirFlow(0.887)
           erv.setLatentEffectivenessat75HeatingAirFlow(0.0)
           erv.setLatentEffectivenessat75CoolingAirFlow(0.0)
-          end
         else
           erv.setSensibleEffectivenessat100HeatingAirFlow(0.755)
           erv.setLatentEffectivenessat100HeatingAirFlow(0.564)
@@ -820,7 +819,7 @@ class NRELZNEReady2017 < ASHRAE901
         end
       end
     else
-      values = Hash.new{|hash, key| hash[key] = Hash.new}
+      values = Hash.new{ |hash, key| hash[key] = {} }
       if heat_exchanger_type == 'Plate'
         if erv_type == 'HRV'
           values['Sensible Heating'][0.75] = 0.887
@@ -840,6 +839,7 @@ class NRELZNEReady2017 < ASHRAE901
           values['Sensible Cooling'][1.0] = 0.755
           values['Latent Cooling'][0.75] = 0.625
           values['Latent Cooling'][1.0] = 0.564
+        end
       else
         if erv_type == 'HRV'
           values['Sensible Heating'][0.75] = 0.79
