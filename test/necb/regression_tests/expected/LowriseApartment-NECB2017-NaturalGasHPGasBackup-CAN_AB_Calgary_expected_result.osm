@@ -1,7 +1,7 @@
 
 OS:Version,
-  {45346b8c-cd09-439b-8da3-748dac9f4b10}, !- Handle
-  3.6.1;                                  !- Version Identifier
+  {62da58ff-ecaf-44bb-b5f4-4908f867f503}, !- Handle
+  3.7.0;                                  !- Version Identifier
 
 OS:ScheduleTypeLimits,
   {bd1ad870-fc90-4d13-afc3-8697a111041b}, !- Handle
@@ -6719,7 +6719,7 @@ OS:DefaultScheduleSet,
   {4cd73cb7-6eb9-445c-b936-accb024db209}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {75b0bbf9-7670-4672-97a1-78c7efe59dbf}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -7307,21 +7307,6 @@ OS:Schedule:Day,
   0,                                      !- Minute 9
   0.5;                                    !- Value Until Time 9
 
-OS:Schedule:Ruleset,
-  {75b0bbf9-7670-4672-97a1-78c7efe59dbf}, !- Handle
-  Always On,                              !- Name
-  {731fe34b-7e4d-4eae-a349-20241c9b6aa0}, !- Schedule Type Limits Name
-  {ffd96a07-a03a-4834-9ac4-959b501333ec}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {ffd96a07-a03a-4834-9ac4-959b501333ec}, !- Handle
-  Always On Default,                      !- Name
-  {731fe34b-7e4d-4eae-a349-20241c9b6aa0}, !- Schedule Type Limits Name
-  ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
-
 OS:ThermostatSetpoint:DualSetpoint,
   {5e44e66a-3448-41db-800c-8e1f5dbf7d68}, !- Handle
   Space Function Corridor/Transition area other-sch-G Thermostat, !- Name
@@ -7640,7 +7625,7 @@ OS:DefaultScheduleSet,
   {4cd73cb7-6eb9-445c-b936-accb024db209}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {75b0bbf9-7670-4672-97a1-78c7efe59dbf}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -12722,7 +12707,8 @@ OS:Boiler:HotWater,
   {2cdd3f49-f59d-47aa-a81a-ee37664d2611}, !- Boiler Water Outlet Node Name
   99,                                     !- Water Outlet Upper Temperature Limit {C}
   ConstantFlow,                           !- Boiler Flow Mode
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
+  0,                                      !- Off Cycle Parasitic Fuel Load {W}
   1,                                      !- Sizing Factor
   General;                                !- End-Use Subcategory
 
@@ -12742,7 +12728,8 @@ OS:Boiler:HotWater,
   {2017fd0b-5cd2-4f15-afe9-a9249f3d423e}, !- Boiler Water Outlet Node Name
   99,                                     !- Water Outlet Upper Temperature Limit {C}
   ConstantFlow,                           !- Boiler Flow Mode
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
+  0,                                      !- Off Cycle Parasitic Fuel Load {W}
   1,                                      !- Sizing Factor
   General;                                !- End-Use Subcategory
 
@@ -13811,6 +13798,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -13901,6 +13889,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -13934,7 +13923,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {df04b475-a118-4cbf-a96a-b7ab03899512}, !- Handle
@@ -14104,9 +14094,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {7481154c-e6d8-44f4-a895-729e714953af}, !- Handle
@@ -14243,9 +14233,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {39e089fd-dd19-421a-ac87-3eea06cd262d}, !- Handle
@@ -14388,9 +14378,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {99cbee60-1b93-4edc-9503-75ba1eb6c449}, !- Handle
@@ -14533,9 +14523,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {debf0d1e-b084-4019-9943-d7df5cbd534d}, !- Handle
@@ -14678,9 +14668,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {b4bc64f2-7087-427f-bf92-f7829928ea8c}, !- Handle
@@ -14823,9 +14813,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {6bc5dfe2-b4f7-4dc0-a745-7fd94586021a}, !- Handle
@@ -14968,9 +14958,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {e87a5b7a-7cf8-48a4-8c30-074086618f1e}, !- Handle
@@ -15113,9 +15103,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {adfc58e6-5976-4a6e-8dd7-4a870eff16a2}, !- Handle
@@ -15258,9 +15248,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {dda498e3-9b54-4472-994b-57edcc11c3b4}, !- Handle
@@ -15403,9 +15393,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {1d9ecb69-d228-4828-af07-fc72d1f1b05d}, !- Handle
@@ -15548,9 +15538,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {db8e8236-fcf2-4992-a06d-b54aaaf12247}, !- Handle
@@ -15693,9 +15683,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {49a6992d-3cba-4c14-815a-741088fd9bc5}, !- Handle
@@ -15838,9 +15828,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {de1944eb-08dc-4724-9940-c51c44de8cfa}, !- Handle
@@ -15983,9 +15973,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {95e53666-f877-4187-9739-3e4d12f50b8c}, !- Handle
@@ -16128,9 +16118,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {decc1ee0-267b-448d-9282-0abb9ab641a0}, !- Handle
@@ -16273,9 +16263,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {ac45bcf9-570c-4f33-acc2-7e307e61d5d0}, !- Handle
@@ -16418,9 +16408,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {0a615561-2374-4c0b-b2bc-4a2811a71c09}, !- Handle
@@ -16563,9 +16553,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:Reheat,
   {b7081b01-7d11-4436-86d1-66fad8e71e04}, !- Handle
@@ -16918,6 +16908,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   autosize,                               !- Evaporative Condenser Air Flow Rate {m3/s}
   autosize,                               !- Evaporative Condenser Pump Rated Power Consumption {W}
   0,                                      !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                                     !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                                       !- Supply Water Storage Tank Name
   ,                                       !- Condensate Collection Water Storage Tank Name
@@ -16993,6 +16984,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   -10,                                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   ,                                       !- Crankcase Heater Capacity {W}
+  ,                                       !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                              !- Defrost Strategy
   Timed,                                  !- Defrost Control
@@ -17026,7 +17018,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenOAFlowGreaterThanMinimum;     !- Heat Recovery Bypass Control Type
+  BypassWhenOAFlowGreaterThanMinimum,     !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {4dbff37c-efb1-43d0-97b0-aa5b21db8b4e}, !- Handle
@@ -17067,9 +17060,9 @@ OS:Coil:Heating:Gas,
   ,                                       !- Air Inlet Node Name
   ,                                       !- Air Outlet Node Name
   ,                                       !- Temperature Setpoint Node Name
-  0,                                      !- Parasitic Electric Load {W}
+  0,                                      !- On Cycle Parasitic Electric Load {W}
   {c51c83f8-316b-4d03-912b-a8fd967a855f}, !- Part Load Fraction Correlation Curve Name
-  0;                                      !- Parasitic Gas Load {W}
+  0;                                      !- Off Cycle Parasitic Gas Load {W}
 
 OS:AirLoopHVAC:UnitaryHeatPump:AirToAir,
   {bee2cd9e-fe40-465b-9add-bcedc118daca}, !- Handle

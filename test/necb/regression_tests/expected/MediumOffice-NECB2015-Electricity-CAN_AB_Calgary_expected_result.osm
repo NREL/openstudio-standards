@@ -1,7 +1,7 @@
 
 OS:Version,
-  {76937f29-51b8-4b86-91a1-04d1d0fb8fe7}, !- Handle
-  3.6.1;                                  !- Version Identifier
+  {208dd0bc-f9be-4a27-8047-2a329864b0a5}, !- Handle
+  3.7.0;                                  !- Version Identifier
 
 OS:ScheduleTypeLimits,
   {8dbf74e3-0a50-4ff0-b7f1-3e645271bc8c}, !- Handle
@@ -2962,24 +2962,9 @@ OS:DefaultScheduleSet,
   ,                                       !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {683b4c74-32aa-4982-bb52-94f355272bb7}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
-
-OS:Schedule:Ruleset,
-  {683b4c74-32aa-4982-bb52-94f355272bb7}, !- Handle
-  Always On,                              !- Name
-  {1a126cd4-229d-4bbb-8c03-6dae0ef4df5b}, !- Schedule Type Limits Name
-  {ec9a8c66-3643-4b8a-b37c-8ddf8bf2beed}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {ec9a8c66-3643-4b8a-b37c-8ddf8bf2beed}, !- Handle
-  Always On Default,                      !- Name
-  {1a126cd4-229d-4bbb-8c03-6dae0ef4df5b}, !- Schedule Type Limits Name
-  ,                                       !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
 
 OS:ScheduleTypeLimits,
   {1a126cd4-229d-4bbb-8c03-6dae0ef4df5b}, !- Handle
@@ -3169,7 +3154,7 @@ OS:DefaultScheduleSet,
   {8dc6face-5e86-4298-b746-db302ea60345}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {683b4c74-32aa-4982-bb52-94f355272bb7}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
@@ -10217,7 +10202,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {85bc860b-0a02-4fae-93a2-71314cfbed8d}, !- Handle
@@ -11167,7 +11153,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {2123ba0c-b7fd-4894-a8cb-007fde480c09}, !- Handle
@@ -12117,7 +12104,8 @@ OS:Controller:OutdoorAir,
   ,                                       !- Humidistat Control Zone Name
   ,                                       !- High Humidity Outdoor Air Flow Ratio
   ,                                       !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
-  BypassWhenWithinEconomizerLimits;       !- Heat Recovery Bypass Control Type
+  BypassWhenWithinEconomizerLimits,       !- Heat Recovery Bypass Control Type
+  InterlockedWithMechanicalCooling;       !- Economizer Operation Staging
 
 OS:Controller:MechanicalVentilation,
   {7889ab64-eb56-4ae7-9aa0-d52cfa4a6d37}, !- Handle

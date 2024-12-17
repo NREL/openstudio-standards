@@ -118,4 +118,18 @@ class TestGeometryCreateBar < Minitest::Test
     result = @geo.create_bar_from_building_type_ratios(model, args)
     assert(result)
   end
+
+  def test_create_bar_from_building_type_ratios_low_aspect_ratio
+    model = OpenStudio::Model::Model.new
+
+    args = {}
+    args['total_bldg_floor_area'] = 100000.0
+    args['bldg_type_a'] = 'SecondarySchool'
+    args['num_stories_above_grade'] = 6.0
+    args['bar_division_method'] = 'Multiple Space Types - Individual Stories Sliced'
+    args['ns_to_ew_ratio'] = 0.2
+    args['perim_mult'] = 1.0
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+    assert(result)
+  end
 end

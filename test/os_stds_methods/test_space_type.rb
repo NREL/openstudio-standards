@@ -13,8 +13,7 @@ class TestSpaceType < Minitest::Test
     set_electric_equipment = true
     set_gas_equipment = true
     set_ventilation = true
-    set_infiltration = true
-    value = std.space_type_apply_internal_loads(data_center_space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+    value = std.space_type_apply_internal_loads(data_center_space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation)
     assert(!value.nil?)
   end
 end
