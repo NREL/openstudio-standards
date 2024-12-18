@@ -1890,7 +1890,7 @@ class Standard
   # @param heat_exchanger_type [String] heat exchanger type Rotary or Plate
   # @return [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] erv to apply efficiency values
   def air_loop_hvac_apply_energy_recovery_ventilator_efficiency(erv, erv_type: 'ERV', heat_exchanger_type: 'Rotary')
-    if erv.model.version < OpenStudio::VersionString('3.8.0')
+    if erv.model.version < OpenStudio::VersionString.new('3.8.0')
       erv.setSensibleEffectivenessat100HeatingAirFlow(0.7)
       erv.setLatentEffectivenessat100HeatingAirFlow(0.6)
       erv.setSensibleEffectivenessat75HeatingAirFlow(0.7)
