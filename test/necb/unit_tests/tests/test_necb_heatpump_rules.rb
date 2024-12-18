@@ -28,8 +28,8 @@ class NECB_HVAC_Heatpump_Tests < Minitest::Test
 
     # Define references (per vintage in this case).
     test_cases[:NECB2011] = { :Reference => "NECB 2011 p3: Table 5.2.12.1. (page 5-13); Table 8.4.4.21.-E" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1: Table 5.2.12.1.; Table 8.4.4.21.-E" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2: Table 5.2.12.1.; Table 8.4.4.21.-E" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1: Table 5.2.12.1. (page 5-14); Table 8.4.4.21.-E" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2: Table 5.2.12.1. (page 5-16); Table 8.4.4.21.-E" }
     test_cases[:NECB2020] = { :Reference => "NECB 2020 p1: Table 5.2.12.1.-A; 8.4.5.7." }
 
     # Test cases. 
@@ -150,6 +150,7 @@ class NECB_HVAC_Heatpump_Tests < Minitest::Test
     capacity_btu_per_hr = OpenStudio.convert(cap.to_f, 'kW', 'Btu/hr').get
     heating_coil = model.getCoilHeatingDXSingleSpeeds[0]
     rated_cop = heating_coil.ratedCOP.to_f
+
     # Figure out the performance metric used in NECB and report that value
     if cap < 19 then
       if vintage == 'NECB2020' then
