@@ -5933,6 +5933,10 @@ class Standard
   def model_add_residential_erv(model,
                                 thermal_zones,
                                 min_oa_flow_m3_per_s_per_m2 = nil)
+    # Determine ERR and design basis when energy recovery is required
+    # enthalpy_recovery_ratio = nil will trigger an ERV with no effectiveness that only provides OA
+    enthalpy_recovery_ratio = nil
+
     # Process climate zone:
     # Moisture regime is not needed for climate zone 7 and 8
     climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
@@ -6001,28 +6005,19 @@ class Standard
     thermal_zones.each do |thermal_zone|
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding standalone ERV for #{thermal_zone.name}.")
 
-      # Determine ERR and design basis when energy recovery is required
-      # enthalpy_recovery_ratio = nil will trigger an ERV with no effectiveness that only provides OA
-      enthalpy_recovery_ratio = nil
-
       # Fan power with energy recovery = 0.934 W/cfm
       supply_fan = create_fan_by_name(model,
                                       'ERV_Supply_Fan',
                                       fan_name: "#{thermal_zone.name} ERV Supply Fan")
       exhaust_fan = create_fan_by_name(model,
-                                       'ERV_Supply_Fan',
-                                       fan_name: "#{thermal_zone.name} ERV Exhaust Fan")
+                                        'ERV_Supply_Fan',
+                                        fan_name: "#{thermal_zone.name} ERV Exhaust Fan")
       supply_fan.setMotorEfficiency(0.48)
       exhaust_fan.setMotorEfficiency(0.48)
       supply_fan.setFanTotalEfficiency(0.303158)
       exhaust_fan.setFanTotalEfficiency(0.303158)
       supply_fan.setPressureRise(270.64755)
       exhaust_fan.setPressureRise(270.64755)
-
-      # Create ERV Controller
-      erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
-      erv_controller.setName("#{thermal_zone.name} ERV Controller")
-      erv_controller.setControlHighIndoorHumidityBasedonOutdoorHumidityRatio(false)
 
       # Create heat exchanger
       heat_exchanger = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
@@ -6038,9 +6033,14 @@ class Standard
       # TODO: heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio should be refactored to take both ERR requirements (heating and cooling); PNNL to refactor based on regressions developed from manufacturer data
       heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio(heat_exchanger, enthalpy_recovery_ratio, design_conditions, climate_zone)
 
+      # Create ERV Controller
+      erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
+      erv_controller.setName("#{thermal_zone.name} ERV Controller")
+      erv_controller.setControlHighIndoorHumidityBasedonOutdoorHumidityRatio(false)
+
+      # Create ERV
       erv = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
       erv.setName("#{thermal_zone.name} ERV")
-
       erv.setController(erv_controller)
       erv.addToThermalZone(thermal_zone)
 
