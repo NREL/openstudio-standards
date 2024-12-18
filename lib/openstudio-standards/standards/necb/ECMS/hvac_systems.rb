@@ -3537,7 +3537,7 @@ class ECMS
     # Create the hot water loop if necessary.
     hw_loop = standard.create_hw_loop_if_required(
       baseboard_type: baseboard_type,
-      boiler_fueltype: boilder_fueltype,
+      boiler_fueltype: boiler_fueltype,
       backup_boiler_fueltype: backup_boiler_fueltype,
       mau_heating_coil_type: mau_heating_coil_type,
       model: model
