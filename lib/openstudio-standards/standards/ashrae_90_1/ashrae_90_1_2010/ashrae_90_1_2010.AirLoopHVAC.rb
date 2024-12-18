@@ -35,10 +35,10 @@ class ASHRAE9012010 < ASHRAE901
       econ_limits = model_find_object(standards_data['economizers'], search_criteria)
       drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
     when 'FixedEnthalpy'
-      enthalpy_limit_btu_per_lb = 28
+      enthalpy_limit_btu_per_lb = 28.0
     when 'FixedDewPointAndDryBulb'
-      drybulb_limit_f = 75
-      dewpoint_limit_f = 55
+      drybulb_limit_f = 75.0
+      dewpoint_limit_f = 55.0
     end
 
     return [drybulb_limit_f, enthalpy_limit_btu_per_lb, dewpoint_limit_f]
