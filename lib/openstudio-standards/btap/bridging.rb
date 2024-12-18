@@ -1502,7 +1502,7 @@ module BTAP
           next unless construction[:stypes  ] == stypes
           next     if construction[:surfaces].empty?
 
-          construction[:surfaces].values.each { |surface| surface.setConstruction(construction[:uo]) }
+          # construction[:surfaces].values.each { |surface| surface.setConstruction(construction[:uo]) }
         end
       end
 
