@@ -23,8 +23,8 @@ require 'json'
 # minimum_space_size: Not yet supported. Only add this water use if the space is above this size of floor area.
 # minimum_tank_volume: Not yet supported. The minimum tank volume to use for dedicated loops. The default is 40 gallons.
 
-def csv_to_json(input_csv = 'typical_water_use_equipment.csv',
-                output_json = 'typical_water_use_equipment.json')
+def csv_to_json(input_csv = 'typical_exhaust.csv',
+                output_json = 'typical_exhaust.json')
   # Initialize the structure
   result = {
     space_types: []
@@ -34,34 +34,16 @@ def csv_to_json(input_csv = 'typical_water_use_equipment.csv',
   CSV.foreach(input_csv, headers: true, header_converters: :symbol) do |row|
     space_type = row[:space_type]
     building_type = row[:building_type]
+    exhaust_per_area = row[:exhaust_per_area]
 
-    # Add water_use_equipment entry
-    water_use_entry = {
-      equipment_name: row[:equipment_name],
-      peak_flow_rate: row[:peak_flow_rate]&.to_f, # gallons / hour
-      peak_flow_rate_per_area: row[:peak_flow_rate_per_area]&.to_f, # gallons / hour-ft^2
-      loop_type: row[:loop_type],
-      temperature: row[:temperature]&.to_f, # deg F
-      flow_rate_schedule: row[:flow_rate_schedule],
-      sensible_fraction: row[:sensible_fraction]&.to_f,
-      latent_fraction: row[:latent_fraction]&.to_f
+    space_type_hash = {
+      space_type: space_type,
+      building_type: building_type,
+      exhaust_per_area: exhaust_per_area
     }
 
-    # Initialize a new space_type entry if it doesn't exist
-    space_type_hash = result[:space_types].select { |hash| (hash[:space_type] == space_type) && (hash[:building_type] == building_type) }
-    space_type_hash = space_type_hash[0]
-
-    if space_type_hash.nil?
-      space_type_hash = {
-        space_type: space_type,
-        building_type: building_type,
-        water_use_equipment: [water_use_entry]
-      }
-      # Add the space_type_hash to the result array
-      result[:space_types] << space_type_hash
-    else
-      space_type_hash[:water_use_equipment] << water_use_entry
-    end
+    # Add the space_type_hash to the result array
+    result[:space_types] << space_type_hash
   end
 
   # Write to the output JSON file
@@ -73,8 +55,8 @@ end
 # convert to json
 csv_to_json
 
-def json_to_csv(input_json = 'typical_water_use_equipment.json',
-                output_csv = 'typical_water_use_equipment_converted.csv')
+def json_to_csv(input_json = 'typical_exhaust.json',
+                output_csv = 'typical_exhaust.csv')
   # Read the JSON file
   data = JSON.parse(File.read(input_json), symbolize_names: true)
 
@@ -82,14 +64,7 @@ def json_to_csv(input_json = 'typical_water_use_equipment.json',
   headers = [
     :space_type,
     :building_type,
-    :equipment_name,
-    :peak_flow_rate,
-    :peak_flow_rate_per_area,
-    :loop_type,
-    :temperature,
-    :flow_rate_schedule,
-    :sensible_fraction,
-    :latent_fraction
+    :exhaust_per_area
   ]
 
   # Write the CSV file
@@ -97,21 +72,13 @@ def json_to_csv(input_json = 'typical_water_use_equipment.json',
     data[:space_types].each do |space_type_entry|
       space_type = space_type_entry[:space_type]
       building_type = space_type_entry[:building_type]
+      exhaust_per_area = space_type_entry[:exhaust_per_area]
 
-      space_type_entry[:water_use_equipment].each do |equipment|
-        csv << [
-          space_type,
-          building_type,
-          equipment[:equipment_name],
-          equipment[:peak_flow_rate],
-          equipment[:peak_flow_rate_per_area],
-          equipment[:loop_type],
-          equipment[:temperature],
-          equipment[:flow_rate_schedule],
-          equipment[:sensible_fraction],
-          equipment[:latent_fraction]
-        ]
-      end
+      csv << [
+        space_type,
+        building_type,
+        exhaust_per_area
+      ]
     end
   end
 
