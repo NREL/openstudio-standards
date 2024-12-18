@@ -128,7 +128,7 @@ class NECB_DCV_Tests < Minitest::Test
                                               baseline_system_zones_map_option: nil  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
                 )
 
-                # # comment out for regular tests
+                ### comment out for regular tests
                 # BTAP::FileIO.save_osm(model, File.join(@output_folder,"#{template}-#{building_type}-#{dcv_type}.osm"))
                 # puts File.join(@output_folder,"#{template}-#{building_type}-#{dcv_type}.osm")
 
