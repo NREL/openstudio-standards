@@ -17,7 +17,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
       test_method: __method__,
       save_intermediate_models: true,
       mau_type: true,
-      speeds: 'single',
+      speeds: 'single', # Only single for now aas multi stage does not work.
       baseboard_type: 'Hot Water',
       fuelType: 'NaturalGas'
     }
@@ -25,45 +25,45 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     # Define test cases.
     test_cases = {}
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:Table 5.2.12.1." }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:Table 5.2.12.1." }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:Table 5.2.12.1." }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:Table 5.2.12.1.-A" }
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:Table 5.2.12.1. Evaporatively Cooled and Water Evaporatively Cooled Unitary Air Conditioners and Heat Pumps — Electrically Operated (page 5-14)" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:Table 5.2.12.1. Evaporatively Cooled and Water Evaporatively Cooled Unitary Air Conditioners and Heat Pumps — Electrically Operated (page 5-15)" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:Table 5.2.12.1. Evaporatively Cooled and Water Evaporatively Cooled Unitary Air Conditioners and Heat Pumps — Electrically Operated (page 5-16)" }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:Table 5.2.12.1.-C" }
 
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
 
     test_cases_hash = { :Vintage => @AllTemplates,
-                        :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["case-1"],
+                        :unitary_heating_types => ['Electric Resistance', 'All Other'], # DX is tested in the heatpump tests.
+                        :TestCase => ["Small single package (evaporatively cooled)"],
                         :TestPars => { :test_capacity_kW => 9.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["case-2"],
+                        :TestCase => ["Medium single package (Evaporatively cooled and water evaporatively cooled, split and single-package)"],
                         :TestPars => { :test_capacity_kW => 29.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["case-3"],
+                        :TestCase => ["Medium large single package (Evaporatively cooled and water evaporatively cooled, split and single-package)"],
                         :TestPars => { :test_capacity_kW => 55.0 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["case-4"],
+                        :TestCase => ["Large single package (Water evaporatively cooled air conditioners, split and single-package)"],
                         :TestPars => { :test_capacity_kW => 146.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["case-5"],
+                        :TestCase => ["Extra large single package (AHRI 340/360)"],
                         :TestPars => { :test_capacity_kW => 253 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -94,6 +94,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
+
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
     test_name = test_pars[:test_method]
@@ -102,19 +103,23 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     baseboard_type = test_pars[:baseboard_type]
     fueltype = test_pars[:fuelType]
     heating_type = test_pars[:unitary_heating_types]
+
     # Test specific inputs.
     cap = test_case[:test_capacity_kW]
     vintage = test_pars[:Vintage]
     standard = get_standard(vintage)
+
     # Define the test name.
     name = "#{vintage}_sys3_MauHtgCoilType-#{heating_type}_Speed-#{speed}_cap-#{cap.to_int}kW"
     name_short = "#{vintage}_#{heating_type}_cap-#{cap.to_int}kW"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
+    results = {}
 
     # Wrap test in begin/rescue/ensure.
     begin
 
+      # Map the heating fuel type to value recognised in standards.
       if heating_type == 'Electric Resistance'
         heating_coil_type = 'Electric'
       elsif heating_type == 'All Other'
@@ -151,31 +156,44 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
                                                                                                    new_auto_zoner: false)
       end
 
-      # Save the model after btap hvac.
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-
       # Run the measure.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
 
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
-    results = {}
+    
+    # Extract results and generate hash.
+    capacity_btu_per_hr = OpenStudio.convert(cap.to_f, 'kW', 'Btu/hr').get
     dx_units = model.getCoilCoolingDXSingleSpeeds
+    results_coil = []
     dx_units.each do |dx_unit|
       dx_unit_name = dx_unit.name.get
-      cop = dx_unit.ratedCOP.to_f
-      seer = standard.cop_to_seer_cooling_with_fan(cop.to_f)
-      eer = standard.cop_to_eer(cop.to_f)
-      # Add this test case to results and return the hash.
-      results[dx_unit_name] = {
+      rated_cop = dx_unit.ratedCOP.to_f
+      cop_with_fan = rated_cop / ((1.48E-7 * capacity_btu_per_hr) + 1.062)
+
+      # Figure out the performance metric used in NECB and report that value
+      if cap < 19 then
+        metric = 'SEER'
+        value = standard.cop_no_fan_to_seer(rated_cop).signif(3)
+      else
+        metric = 'EER'
+        value = standard.cop_no_fan_to_eer(rated_cop).signif(3)
+      end
+      results_coil << {
+        name: dx_unit_name,
         speed: speed,
-        tested_capacity_kW: cap.round(2),
-        cop: cop.round(2),
-        seer: seer.round(2),
-        eer: eer.round(2)
+        heating_coil_type: heating_coil_type,
+        test_capacity_kW: cap.signif(3),
+        test_capacity_btu_per_hr: capacity_btu_per_hr.signif(3),
+        rated_COP: rated_cop.signif(3),
+        COP_with_fan: cop_with_fan.signif(3),
+        metric.to_sym => value
       }
     end
+    results[:coils] = results_coil
     logger.info "Completed individual test: #{name}"
     results = results.sort.to_h
 
@@ -238,35 +256,42 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     fueltype = test_pars[:FuelType]
     vintage = test_pars[:Vintage]
     standard = get_standard(vintage)
+
     # Define the test name.
     name = "#{vintage}_sys2_CoolingType_#{fueltype}_kW_chiller_type-#{chiller_type}_#{mau_cooling_type}"
     name_short = "#{vintage.downcase}_sys2_CoolingType-#{chiller_type}_#{mau_cooling_type}"
-
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
-
-    # Load model and set climate file.
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
-    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-
-    hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
-
-    standard.add_sys2_FPFC_sys5_TPFC(model: model,
-                                     zones: model.getThermalZones,
-                                     chiller_type: chiller_type,
-                                     fan_coil_type: 'FPFC',
-                                     mau_cooling_type: mau_cooling_type,
-                                     hw_loop: hw_loop)
-
-    run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
-
-    dx_units = model.getCoilCoolingDXSingleSpeeds
     results = {}
 
+    # Wrap test in begin/rescue/ensure.
+    begin
+
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+
+      standard.add_sys2_FPFC_sys5_TPFC(model: model,
+                                      zones: model.getThermalZones,
+                                      chiller_type: chiller_type,
+                                      fan_coil_type: 'FPFC',
+                                      mau_cooling_type: mau_cooling_type,
+                                      hw_loop: hw_loop)
+
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
+    rescue => error
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
+    end
+
+    dx_units = model.getCoilCoolingDXSingleSpeeds
     dx_units.each do |dx_unit|
       dx_unit_name = dx_unit.name.get
       results[dx_unit_name] ||= {} # Initialize hash for dx_unit_name
