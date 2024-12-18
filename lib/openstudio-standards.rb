@@ -37,9 +37,11 @@ module OpenstudioStandards
 
   # ServiceWaterHeating Module
   require_relative 'openstudio-standards/service_water_heating/create_piping_losses'
+  require_relative 'openstudio-standards/service_water_heating/create_typical'
   require_relative 'openstudio-standards/service_water_heating/create_water_heater'
   require_relative 'openstudio-standards/service_water_heating/create_water_heating_loop'
   require_relative 'openstudio-standards/service_water_heating/create_water_use'
+  require_relative 'openstudio-standards/service_water_heating/information'
 
   # Space Module
   require_relative 'openstudio-standards/space/space'
@@ -241,6 +243,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm.Fan"
 
   # Model Objects
+  require_relative "#{stds}/Standards.AirConditionerVariableRefrigerantFlow"
   require_relative "#{stds}/Standards.AirLoopHVAC"
   require_relative "#{stds}/Standards.AirTerminalSingleDuctParallelPIUReheat"
   require_relative "#{stds}/Standards.AirTerminalSingleDuctVAVReheat"
@@ -384,10 +387,12 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.Model"
   # DOE 1980-2004
+  require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirConditionerVariableRefrigerantFlow"
   require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.Model"
   require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.PlantLoop"
   # DOE Pre-1980
+  require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.AirConditionerVariableRefrigerantFlow"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.AirLoopHVAC"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.Model"
   require_relative "#{stds}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.PlantLoop"
