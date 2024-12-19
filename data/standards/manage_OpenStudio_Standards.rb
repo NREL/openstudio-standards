@@ -151,7 +151,7 @@ def unique_properties(sheet_name)
          when 'climate_zones'
            ['name', 'standard']
          when 'energy_recovery'
-           ['template', 'climate_zone', 'under_8000_hours', 'nontransient_dwelling', 'enthalpy_recovery_ratio_design_conditions']
+           ['climate_zone', 'under_8000_hours', 'nontransient_dwelling', 'percent_oa_0_to_10', 'percent_oa_10_to_20 ', 'percent_oa_20_to_30', 'percent_oa_30_to_40', 'percent_oa_40_to_50', 'percent_oa_50_to_60', 'percent_oa_60_to_70', 'percent_oa_70_to_80', 'percent_oa_greater_than_80', 'design_conditions', 'energy_recovery_effectiveness', 'enthalpy_recovery_ratio', 'sensible_energy_recovery_ratio']
          when 'space_types_lighting_control'
            ['template', 'building_type', 'space_type']
          when 'prm_hvac_bldg_type'
