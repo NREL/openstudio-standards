@@ -133,6 +133,8 @@ class NECB2011
                                           hvac_system_corridor: hvac_system_corridor,
                                           hvac_system_storage: hvac_system_storage
                                           )
+    # Determine if dwelling units, wet spaces, storage spaces, and wild spaces should have their own space or be part of common spaces
+    common_system_spaces = add_to_common_system?(model: model, hvac_system_dwelling_units: hvac_system_dwelling_units, hvac_system_washrooms: hvac_system_washrooms, hvac_system_corridor: hvac_system_corridor, hvac_system_storage: hvac_system_storage)
     # Rule that all dwelling units have their own zone and system.
     auto_system_dwelling_units(model: model,
                                hvac_system_dwelling_units: hvac_system_dwelling_units,
@@ -192,6 +194,7 @@ class NECB2011
                                  mau_cooling_type: self.fuel_type_set.mau_cooling_type,
                                  mau_heating_coil_type: self.fuel_type_set.mau_heating_coil_type,
                                  mau_type: self.fuel_type_set.mau_type
+                                 common_system_spaces: common_system_spaces
     )
     model_add_swh(model: model,
                   shw_scale: shw_scale)
@@ -848,10 +851,10 @@ class NECB2011
       # If no dwelling unit hvac system is defined then check if a HW loop is needed based on the system type
       if hvac_system_dwelling_units.nil? || hvac_system_dwelling_units.to_s.downcase == 'necb_default'
         hw_loop_needed = true if hw_loop_required_from_spaces(spaces: dwelling_units, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
-      else
+      #else
         # If a dwelling unit hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item
-        hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_dwelling_units }
-        hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+        #hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_dwelling_units }
+        #hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
       end
     end
 
@@ -861,10 +864,10 @@ class NECB2011
       # If no washroom hvac system is defined then check if a HW loop is needed based on the system type
       if hvac_system_washrooms.nil? || hvac_system_washrooms.to_s.downcase == 'necb_default'
         hw_loop_needed = true if hw_loop_required_from_spaces(spaces: washroom_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
-      else
+      #else
         # If a washroom hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item
-        hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_washrooms }
-        hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+        #hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_washrooms }
+        #hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
       end
     end
 
@@ -874,10 +877,10 @@ class NECB2011
       # If no corridor hvac system is defined then check if a HW loop is needed based on the system type
       if hvac_system_corridor.nil? || hvac_system_corridor.to_s.downcase == 'necb_default'
         hw_loop_needed = true if hw_loop_required_from_spaces(spaces: corridor_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
-      else
+      #else
         # If a corridor hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item
-        hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_corridor }
-        hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+        #hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_corridor }
+        #hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
       end
     end
 
@@ -887,9 +890,9 @@ class NECB2011
       # If no storage space hvac system is defined then check if a HW loop is needed based on the system type
       if hvac_system_storage.nil? || hvac_system_storage.to_s.downcase == 'necb_default'
         hw_loop_needed = true if hw_loop_required_from_spaces(spaces: storage_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
-      else
+      #else
         # If a storage space hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item
-        hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_storage }
+        #hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_storage }
         hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
       end
     end
@@ -1109,13 +1112,18 @@ class NECB2011
                                    mau_cooling_type:,
                                    mau_heating_coil_type:,
                                    mau_type:,
-                                   model:)
+                                   model:
+                                   common_system_spaces: [])
 
     zones = []
     other_spaces = model.getSpaces.select do |space|
       !is_a_necb_dwelling_unit?(space) &&
         !is_an_necb_wildcard_space?(space) &&
         !is_an_necb_storage_space?(space)
+    end
+    # Add any dwelling units, washrooms, cooridors, or storage spaces to the list of other spaces if a non-default system type was assigned to them
+    unless common_spaces.empty? || common_spaces.nil?
+      other_spaces = other_spaces + common_spaces
     end
     other_spaces.each do |space|
       zones << space.thermalZone.get
@@ -1238,23 +1246,23 @@ class NECB2011
           end # end if
         end # end when 3
       end # Sys_zone loop
-    else # New HVAC system
-      system_zones_hash.each_pair do |system, sys_zones|
-        if dwelling_shared_ahu
-          create_hvac_by_name( model: model,
-                                      hvac_system_name: hvac_system_dwelling_units,
-                                      zones: sys_zones,
-                                      hw_loop: @hw_loop) # Add this method to create the system.
-        else
-          # Create a separate air loop for each unit.
-          sys_zones.each do |zone|
-            create_hvac_by_name( model: model,
-                                 hvac_system_name: hvac_system_dwelling_units,
-                                 zones: [zone],
-                                 hw_loop: @hw_loop) # Add this method to create the system.
-          end # zone
-        end # if
-      end # Sys_zone loop
+#    else # New HVAC system
+#      system_zones_hash.each_pair do |system, sys_zones|
+#        if dwelling_shared_ahu
+#          create_hvac_by_name( model: model,
+#                                      hvac_system_name: hvac_system_dwelling_units,
+#                                      zones: sys_zones,
+#                                      hw_loop: @hw_loop) # Add this method to create the system.
+#        else
+#          # Create a separate air loop for each unit.
+#          sys_zones.each do |zone|
+#            create_hvac_by_name( model: model,
+#                                 hvac_system_name: hvac_system_dwelling_units,
+#                                 zones: [zone],
+#                                 hw_loop: @hw_loop) # Add this method to create the system.
+#          end # zone
+#        end # if
+#      end # Sys_zone loop
     end # if new HVAC system
   end
 
@@ -1281,11 +1289,11 @@ class NECB2011
                                                                   heating_coil_type: heating_coil_type_sys4,
                                                                   baseboard_type: baseboard_type,
                                                                   hw_loop: @hw_loop)
-    else
-      create_hvac_by_name( model: model,
-                                  hvac_system_name: hvac_system_washrooms,
-                                  zones: wet_tz,
-                                  hw_loop: @hw_loop) # Add this method to create the system.
+    #else
+    #  create_hvac_by_name( model: model,
+    #                              hvac_system_name: hvac_system_washrooms,
+    #                              zones: wet_tz,
+    #                              hw_loop: @hw_loop) # Add this method to create the system.
     end
   end
 
@@ -1313,11 +1321,11 @@ class NECB2011
                                                                   heating_coil_type: heating_coil_type_sys4,
                                                                   baseboard_type: baseboard_type,
                                                                   hw_loop: @hw_loop)
-    else
-      create_hvac_by_name(model: model,
-                          hvac_system_name: hvac_system_storage,
-                          zones: tz,
-                          hw_loop: @hw_loop) # Add this method to create the system.
+    #else
+    #  create_hvac_by_name(model: model,
+    #                      hvac_system_name: hvac_system_storage,
+    #                      zones: tz,
+    #                      hw_loop: @hw_loop) # Add this method to create the system.
     end
 
   end
@@ -1347,11 +1355,11 @@ class NECB2011
                                                                   heating_coil_type: heating_coil_type_sys4,
                                                                   baseboard_type: baseboard_type,
                                                                   hw_loop: @hw_loop)
-    else
-      create_hvac_by_name( model: model,
-                                  hvac_system_name: hvac_system_corridor,
-                                  zones: zones,
-                                  hw_loop: @hw_loop) # Add this method to create the system.
+    #else
+    #  create_hvac_by_name( model: model,
+    #                              hvac_system_name: hvac_system_corridor,
+    #                              zones: zones,
+    #                              hw_loop: @hw_loop) # Add this method to create the system.
     end
   end
 
@@ -1515,5 +1523,37 @@ class NECB2011
     return hw_loop_needed
   end
 
+  # Method to determine if dwelling_units, washrooms, corridors, or storage spaces should be added to the common HVAC system.
+  def add_to_common_system?(model:, hvac_system_dwelling_units: nil, hvac_system_washrooms: nil, hvac_system_corridor: nil, hvac_system_storage: nil)
+    common_spaces = []
+    # Find Dwelling Units and determine if they should be added
+    dwelling_units = model.getSpaces.select { |space| is_a_necb_dwelling_unit?(space) }
+    unless dwelling_units.empty? || hvac_system_dwelling_units.nil? || hvac_system_dwelling_units.to_s.downcase == 'necb_default'
+      # If a dwelling unit hvac system is defined and dwelling units are present then add them to them to the common_spaces
+      common_spaces = common_spaces + dwelling_units
+    end
+
+    # Find washrooms and determine if they should be added
+    washroom_spaces = model.getSpaces.select { |space| is_an_necb_wet_space?(space) }
+    unless washroom_spaces.empty? || hvac_system_washrooms.nil? || hvac_system_washrooms.to_s.downcase == 'necb_default'
+      # If a washroom hvac system is defined and washrooms/wet spaces are present then add them to the common_spaces
+      common_spaces = common_spaces + washroom_spaces
+    end
+
+    # Find corridors and determine if they should be added
+    corridor_spaces = model.getSpaces.select { |space| is_an_necb_wildcard_space?(space) }
+    unless corridor_spaces.empty? || hvac_system_corridor.nil? || hvac_system_corridor.to_s.downcase == 'necb_default'
+      # If a corridor hvac system is defined and corridors are present then add them to the common spaces
+      common_spaces = common_spaces + corridor_spaces
+    end
+
+    # Find storage spaces and determine if they should be added
+    storage_spaces = model.getSpaces.select { |space| is_an_necb_storage_space?(space) }
+    unless storage_spaces.empty? || hvac_system_storage.nil? || hvac_system_storage.to_s.downcase == 'necb_default'
+      # If a storage space hvac system is defined and storage spaces are present then add them to the common spaces
+      common_spaces = common_spaces + storage_spaces
+    end
+    return common_spaces
+  end
 
 end
