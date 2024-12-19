@@ -193,7 +193,7 @@ class NECB2011
                                  heating_coil_type_sys6: self.fuel_type_set.heating_coil_type_sys6,
                                  mau_cooling_type: self.fuel_type_set.mau_cooling_type,
                                  mau_heating_coil_type: self.fuel_type_set.mau_heating_coil_type,
-                                 mau_type: self.fuel_type_set.mau_type
+                                 mau_type: self.fuel_type_set.mau_type,
                                  common_system_spaces: common_system_spaces
     )
     model_add_swh(model: model,
@@ -1112,7 +1112,7 @@ class NECB2011
                                    mau_cooling_type:,
                                    mau_heating_coil_type:,
                                    mau_type:,
-                                   model:
+                                   model:,
                                    common_system_spaces: [])
 
     zones = []
@@ -1122,8 +1122,8 @@ class NECB2011
         !is_an_necb_storage_space?(space)
     end
     # Add any dwelling units, washrooms, cooridors, or storage spaces to the list of other spaces if a non-default system type was assigned to them
-    unless common_spaces.empty? || common_spaces.nil?
-      other_spaces = other_spaces + common_spaces
+    unless common_system_spaces.empty? || common_system_spaces.nil?
+      other_spaces = other_spaces + common_system_spaces
     end
     other_spaces.each do |space|
       zones << space.thermalZone.get
