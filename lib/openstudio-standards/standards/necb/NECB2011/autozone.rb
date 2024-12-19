@@ -134,7 +134,7 @@ class NECB2011
                                           hvac_system_storage: hvac_system_storage
                                           )
     # Determine if dwelling units, wet spaces, storage spaces, and wild spaces should have their own space or be part of common spaces
-    common_system_spaces = add_to_common_system?(model: model, hvac_system_dwelling_units: hvac_system_dwelling_units, hvac_system_washrooms: hvac_system_washrooms, hvac_system_corridor: hvac_system_corridor, hvac_system_storage: hvac_system_storage)
+    common_system_spaces = spaces_to_add_to_common_system(model: model, hvac_system_dwelling_units: hvac_system_dwelling_units, hvac_system_washrooms: hvac_system_washrooms, hvac_system_corridor: hvac_system_corridor, hvac_system_storage: hvac_system_storage)
     # Rule that all dwelling units have their own zone and system.
     auto_system_dwelling_units(model: model,
                                hvac_system_dwelling_units: hvac_system_dwelling_units,
@@ -654,6 +654,8 @@ class NECB2011
 
   # Check to see if this is a wildcard space that the NECB does not have a specified schedule or system for.
   def is_an_necb_wildcard_space?(space)
+    # Avoid including washrooms and locker rooms as both wildcard and wet spaces
+    return nil if space.spaceType.get.standardsSpaceType.get.include?('Locker room') || space.spaceType.get.standardsSpaceType.get.include?('Washroom')
     space_type_table = @standards_data['space_types']
     space_type_data = model_find_object(space_type_table,
                                         'template' => self.class.name,
@@ -1424,10 +1426,8 @@ class NECB2011
 
   def create_hvac_by_name(model:, hvac_system_name:, zones:, hw_loop: nil)
     # Get the HVAC system properties
-    template = determine_spacetype_vintage(model)
-    standard =  Standard.build(template)
     # Get the HVAC system properties from  lib/openstudio-standards/standards/necb/NECB2011/data/systems.json from description field.
-    hvac_system_data = standard.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_name }
+    hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_name }
     raise("Could not find hvac_system_data for #{hvac_system_name}") if hvac_system_data.nil?
 
 
@@ -1524,7 +1524,7 @@ class NECB2011
   end
 
   # Method to determine if dwelling_units, washrooms, corridors, or storage spaces should be added to the common HVAC system.
-  def add_to_common_system?(model:, hvac_system_dwelling_units: nil, hvac_system_washrooms: nil, hvac_system_corridor: nil, hvac_system_storage: nil)
+  def spaces_to_add_to_common_system(model:, hvac_system_dwelling_units: nil, hvac_system_washrooms: nil, hvac_system_corridor: nil, hvac_system_storage: nil)
     common_spaces = []
     # Find Dwelling Units and determine if they should be added
     dwelling_units = model.getSpaces.select { |space| is_a_necb_dwelling_unit?(space) }
