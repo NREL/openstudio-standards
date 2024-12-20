@@ -25,45 +25,43 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     # Define test cases.
     test_cases = {}
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:Table 5.2.12.1. Evaporatively Cooled and Water Evaporatively Cooled Unitary Air Conditioners and Heat Pumps — Electrically Operated (page 5-14)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:Table 5.2.12.1. Evaporatively Cooled and Water Evaporatively Cooled Unitary Air Conditioners and Heat Pumps — Electrically Operated (page 5-15)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:Table 5.2.12.1. Evaporatively Cooled and Water Evaporatively Cooled Unitary Air Conditioners and Heat Pumps — Electrically Operated (page 5-16)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:Table 5.2.12.1.-C" }
+    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-13)" }
+    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-14)" }
+    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-15)" }
+    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:Table 5.2.12.1-A" }
 
-    # Test cases. Three cases for NG and FuelOil, one for Electric.
-    # Results and name are tbd here as they will be calculated in the test.
-
+    # Test cases. 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'], # DX is tested in the heatpump tests.
-                        :TestCase => ["Small single package (evaporatively cooled)"],
+                        :TestCase => ["Small single package system"],
                         :TestPars => { :test_capacity_kW => 9.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["Medium single package (Evaporatively cooled and water evaporatively cooled, split and single-package)"],
+                        :TestCase => ["Medium single package (All phases)"],
                         :TestPars => { :test_capacity_kW => 29.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["Medium large single package (Evaporatively cooled and water evaporatively cooled, split and single-package)"],
+                        :TestCase => ["Medium large single package (All phases, split and single packages)"],
                         :TestPars => { :test_capacity_kW => 55.0 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["Large single package (Water evaporatively cooled air conditioners, split and single-package)"],
+                        :TestCase => ["Large single package (All phases, split and single packages)"],
                         :TestPars => { :test_capacity_kW => 146.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
     test_cases_hash = { :Vintage => @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["Extra large single package (AHRI 340/360)"],
+                        :TestCase => ["Extra large single package (All phases, split and single packages)"],
                         :TestPars => { :test_capacity_kW => 253 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -79,6 +77,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     # Read expected results.
     file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
     expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
+
     # Check if test results match expected.
     msg = "Unitary efficiencies test results do not match what is expected in test"
     compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
@@ -170,20 +169,25 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     dx_units = model.getCoilCoolingDXSingleSpeeds
     results_coil = []
     dx_units.each do |dx_unit|
-      dx_unit_name = dx_unit.name.get
+      dx_unit_name = dx_unit.name.get.to_s
       rated_cop = dx_unit.ratedCOP.to_f
       cop_with_fan = rated_cop / ((1.48E-7 * capacity_btu_per_hr) + 1.062)
 
-      # Figure out the performance metric used in NECB and report that value
+      # Figure out the performance metric used in the vintage/NECB and report that value.
       if cap < 19 then
-        metric = 'SEER'
-        value = standard.cop_no_fan_to_seer(rated_cop).signif(3)
+        if vintage == 'BTAPPRE1980' || vintage == 'BTAP1980TO2010' then
+          metric = 'EER'
+          value = standard.cop_no_fan_to_eer(rated_cop).signif(3)
+        else
+          metric = 'SEER'
+          value = standard.cop_no_fan_to_seer(rated_cop).signif(3)
+        end
       else
         metric = 'EER'
         value = standard.cop_no_fan_to_eer(rated_cop).signif(3)
       end
       results_coil << {
-        name: dx_unit_name,
+        name: "#{dx_unit_name}",
         speed: speed,
         heating_coil_type: heating_coil_type,
         test_capacity_kW: cap.signif(3),
@@ -193,6 +197,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
         metric.to_sym => value
       }
     end
+    results_coil.sort_by! { |entry| entry[:name] } # Need to sort here as the array comparison code cannot handle different orders.
     results[:coils] = results_coil
     logger.info "Completed individual test: #{name}"
     results = results.sort.to_h
