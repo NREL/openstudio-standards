@@ -1,6 +1,6 @@
 {
     "tables": {
-      "hvac_types": {
+      "hvac_types_with_sys5": {
         "data_type": "table",
         "refs": [
           "assumption"
@@ -271,7 +271,7 @@
               "needs_boiler": false
             },
             {
-              "description": "PSZ RTU ASHP with Gas and ASHP with Gas Supp. Heat Coils and Hot Water Baseboard",
+              "description": "PSZ RTU ASHP with exhaust with Gas and ASHP with Gas Supp. Heat Coils and Hot Water Baseboard",
               "name": "sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
               "baseboard_type": "Hot Water",
               "heating_coil_type": "DX",
@@ -281,7 +281,7 @@
               "needs_boiler": true
             },
             {
-              "description": "PSZ RTU ASHP with Gas and ASHP with Gas Supp. Heat Coils and Electric Baseboard",
+              "description": "PSZ RTU with exhaust ASHP with Gas and ASHP with Gas Supp. Heat Coils and Electric Baseboard",
               "name": "sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none|",
               "baseboard_type": "Electric",
               "heating_coil_type": "DX",
@@ -291,7 +291,7 @@
               "needs_boiler": false
             },
             {
-              "description": "PSZ RTU ASHP with Electric and ASHP with Electric Supp. Heat Coils and Hot Water Baseboard",
+              "description": "PSZ RTU with exhaust ASHP with Electric and ASHP with Electric Supp. Heat Coils and Hot Water Baseboard",
               "name": "sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-hw|zc>none|srf>none|",
               "baseboard_type": "Hot Water",
               "heating_coil_type": "DX",
@@ -301,7 +301,7 @@
               "needs_boiler": true
             },
             {
-              "description": "PSZ RTU ASHP with Electric and ASHP with Electric Supp. Heat Coils and Electric Baseboard",
+              "description": "PSZ RTU with exhaust ASHP with Electric and ASHP with Electric Supp. Heat Coils and Electric Baseboard",
               "name": "sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none|",
               "baseboard_type": "Electric",
               "heating_coil_type": "DX",
@@ -311,7 +311,7 @@
               "needs_boiler": false
             },
             {
-              "description": "PSZ RTU Gas and DX Coils and Hot Water Baseboard",
+              "description": "PSZ RTU with exhaust Gas and DX Coils and Hot Water Baseboard",
               "name": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
               "baseboard_type": "Hot Water",
               "heating_coil_type": "Gas",
@@ -321,7 +321,7 @@
               "needs_boiler": true
             },
             {
-              "description": "PSZ RTU Gas and DX Coils and Electric Baseboard",
+              "description": "PSZ RTU with exhaust Gas and DX Coils and Electric Baseboard",
               "name": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-e|zc>none|srf>none|",
               "baseboard_type": "Electric",
               "heating_coil_type": "Gas",
@@ -331,7 +331,7 @@
               "needs_boiler": false
             },
             {
-              "description": "PSZ RTU Electric and DX Coils and Hot Water Baseboard",
+              "description": "PSZ RTU with exhaust Electric and DX Coils and Hot Water Baseboard",
               "name": "sys_4|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-hw|zc>none|srf>none|",
               "baseboard_type": "Hot Water",
               "heating_coil_type": "Electric",
@@ -341,7 +341,7 @@
               "needs_boiler": true
             },
             {
-              "description": "PSZ RTU Electric and DX Coils and Electric Baseboard",
+              "description": "PSZ RTU with exhaust Electric and DX Coils and Electric Baseboard",
               "name": "sys_4|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none|",
               "baseboard_type": "Electric",
               "heating_coil_type": "Electric",
