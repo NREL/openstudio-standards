@@ -46,7 +46,6 @@ class ECM_SWH_Tests < Minitest::Test
                         :TestPars => { :epw_file => "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
     test_cases_hash = { :Vintage => ["NECB2011", "BTAPPRE1980", "BTAP1980TO2010"],
                         :FuelType => ["NaturalGas"],
@@ -75,7 +74,7 @@ class ECM_SWH_Tests < Minitest::Test
   # @param test_pars [Hash] has the static parameters.
   # @param test_case [Hash] has the specific test parameters.
   # @return results of this case.
-  # @note Companion method to test_number_of_water_heaters that runs a specific test. Called by do_test_cases in necb_helper.rb.
+  # @note Companion method to test_add_swh_test_output_info that runs a specific test. Called by do_test_cases in necb_helper.rb.
 
   def do_test_add_swh_test_output_info(test_pars:, test_case:)
     # Debug.
@@ -90,12 +89,24 @@ class ECM_SWH_Tests < Minitest::Test
     epw_file = test_case[:epw_file]
     epw_file_name = epw_file.split(".")[0]
     # Define the test name.
-    name = "#{vintage}_#{fueltype}_#{epw_file_name}"
-    name_short = "#{vintage}_#{fueltype}_#{epw_file_name}"
+    name = "#{vintage}_#{fueltype}_#{epw_file_name}_#{shw_ecm}"
+    name_short = "#{vintage}_#{fueltype}_#{epw_file_name}_#{shw_ecm}"
 
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
-
+    results = {}
+    output_array = []
+    index = 0
+    break_time = false
+    # There are many more spacetypes in the spacetypes.json file than in Outpatient.osm.  The test takes the first
+    # however many spacetypes can fit in Outpatient.osm from the spacetypes.json file and then applies them.  I
+    # think it is 20 for NECB2011 and 18 for NECB2015.  It then runs the model_add_swh method from the NECB2011
+    # standards class and gets information for the shw tank, pump, and water use equipment from the resulting model.
+    # It then repeats the process until all spacetypes in the spacetypes.json file have been applied and testing
+    # on the Outpatient file.
+    # while break_time == false do
+    model = nil
+    standard = nil
     # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
     # Set the weather file.
@@ -117,8 +128,7 @@ class ECM_SWH_Tests < Minitest::Test
     # Determine the total number of space types retrieved from the JSON file.
     space_type_data_size = space_type_data.size
     space_type_names = []
-    index = 0
-    break_time = false
+
     # Go through each space type in the model and change its name to that of the next space type in the JSON file.
     space_types.sort.each do |space_type|
       space_type.setNameProtected("Space Function" + " " + space_type_data[index]["space_type"])
@@ -144,20 +154,25 @@ class ECM_SWH_Tests < Minitest::Test
     ecm_standard = get_standard("ECMS")
     shw_measures = ecm_standard.standards_data['tables']['shw_eff_ecm']['table']
 
-    # Apply measure info if gas.
-    # Apply_shw_ecm = false
     model.getWaterHeaterMixeds.sort.each do |waterheater_test|
+      wh_name = waterheater_test.name
       if waterheater_test.heaterFuelType == "NaturalGas"
         shw_measure = shw_measures.select { |shw_measure_info| shw_measure_info["name"] == shw_ecm }[0]
         ecm_standard.modify_shw_efficiency(model: model, shw_eff: shw_measure)
       end
+      results[wh_name] = add_shw_test_output_info(model: model, output_array: output_array, template: vintage, epw_file: epw_file, space_type_names: space_type_names)
     end
+    logger.info "Completed individual test: #{name}"
+    return results
+  end
+
+  def add_shw_test_output_info(model:, output_array:, template:, epw_file:, space_type_names:)
     # Go through the model and check what tank, pump, and water use connections were added.
     plantloops = model.getPlantLoops
 
     # Before doing anything check if any plant loops are present.  If it is continue, otherwise skip to the next
     # set of space types.
-    results = {}
+
     unless plantloops.empty?
       # Start with the demand components (water use connections).
       demand_comps = plantloops[0].demandComponents
@@ -169,51 +184,50 @@ class ECM_SWH_Tests < Minitest::Test
           water_conns << demand_comp.to_WaterUseConnections.get
         end
       end
-
       # Go through the water use connections and get the flow rate and schedule information.
       water_conns.sort.each do |water_conn|
         day_scheds = []
         water_equip = water_conn.waterUseEquipment
-        next if water_equip.empty? # Skip if no water use equipment
-
-        flow_rate_fract_sched = water_equip[0].flowRateFractionSchedule
-        if flow_rate_fract_sched.is_initialized
-          sched = flow_rate_fract_sched.get.to_ScheduleRuleset
-          if sched.is_initialized
-            sched.get.scheduleRules.sort.each do |sched_rule|
-              day_sched = {
-                "day_sched_name" => sched_rule.daySchedule.name.to_s,
-                "times" => sched_rule.daySchedule.times,
-                "values" => sched_rule.daySchedule.values
-              }
-              day_scheds << day_sched
-            end
-          end
+        flow_rate_fract_sched = water_equip[0].flowRateFractionSchedule.get.to_ScheduleRuleset.get
+        flow_rate_fract_sched.scheduleRules.sort.each do |sched_rule|
+          day_sched = {
+            "day_sched_name" => sched_rule.daySchedule.name,
+            "times" => sched_rule.daySchedule.times,
+            "values" => sched_rule.daySchedule.values
+          }
+          day_scheds << day_sched
         end
-        # Handle flow rate truncation
+        # The next bit of code truncates the flow rate because sometimes the last digit will change depending on
+        # the vagaries of Ruby, the processor, whatever and cause the test to fail when really it should have
+        # passed.  Thinking about this more I made it way too complicated.  I could have just truncated the result
+        # but decided to keep the same number of (non-zero) significant digits regardless of if the result was
+        # scaled by 10E-6 or 10E-7 the two common ones).  Hence the next few lines of code where I check if the flow
+        # rate is 10E-6 or 10E-7, keep the result to 12 digits, then convert it back to the right flow rate.
+
         water_equip_def = water_equip[0].waterUseEquipmentDefinition
         digit_exponent = 10 ** 7
         last_digit_check = water_equip_def.peakFlowRate * digit_exponent
-        digit_exponent = 10 ** 6 if last_digit_check >= 10
-
+        if last_digit_check >= 10
+          digit_exponent = 10 ** 6
+        end
         exponent_mult = (10 ** 12) * digit_exponent
         last_digit_check = (water_equip_def.peakFlowRate * exponent_mult).to_i
         water_flow_out = last_digit_check.to_f / exponent_mult
-
-        # Put the water use equipment data in a hash
+        # Put the water use equipment name, flow rate, and schedule in a hash
         equip_info = {
-          "equip_name" => water_equip[0].name.to_s,
+          "equip_name" => water_equip[0].name,
           "flow_rate_m3_per_s" => water_flow_out,
           "day_schedules" => day_scheds
         }
+        # Add the above hash containing info for all of the water use equipment defined in the model.
         demand_equip_info << equip_info
       end
-
-      # Collect supply component information
       pumps = []
       water_heaters = []
-
-      plantloops[0].supplyComponents.sort.each do |supplycomp|
+      # Next get the supply component information.
+      supply_comps = plantloops[0].supplyComponents
+      # Go through each of the supply components and get either the pumps or the water heaters.
+      supply_comps.sort.each do |supplycomp|
         case supplycomp.iddObjectType.valueName.to_s
         when 'OS_Pump_ConstantSpeed'
           pumps << supplycomp.to_PumpConstantSpeed.get
@@ -221,35 +235,36 @@ class ECM_SWH_Tests < Minitest::Test
           water_heaters << supplycomp.to_WaterHeaterMixed.get
         end
       end
-
-      # Build supply equipment info
-      if water_heaters.any? && pumps.any?
-        water_heater = water_heaters[0]
-        pump = pumps[0]
-
-        part_load_curve_name = water_heater.partLoadFactorCurve.is_initialized ? water_heater.partLoadFactorCurve.get.name.to_s : "none"
-
-        supply_equip_info = {
-          "water_heater_fuel_type" => water_heater.heaterFuelType.to_s,
-          "water_heater_vol_m3" => water_heater.tankVolume,
-          "water_heater_capacity_w" => water_heater.heaterMaximumCapacity,
-          "water_heater_efficiency" => water_heater.heaterThermalEfficiency,
-          "water_heater_part_load_curve_name" => part_load_curve_name,
-          "pump_head_Pa" => pump.ratedPumpHead.to_f.round(8),
-          "pump_motor_eff" => pump.motorEfficiency
-        }
-        # Build result hash
-        results = {
-          "template" => vintage,
-          "water_heater_name" => water_heater.name.to_s,
-          "space_types" => space_type_names,
-          "supply_equipment" => supply_equip_info,
-          "demand_equipment" => demand_equip_info
-        }
+      # Add the water heater tank volume and capacity and the pump head and moter efficiency to a hash.  Although
+      # I collect all of the pumps and water heaters in the plant loop above here I assume there is only one of
+      # each in the model.  I really should check, but I don't.
+      # Adding water heater efficiency and part load curve (if one is applied).
+      part_load_curve_name = "none"
+      if water_heaters[0].partLoadFactorCurve.is_initialized
+        part_load_curve_name = water_heaters[0].partLoadFactorCurve.get.name.to_s
       end
-
-      logger.info "Completed individual test: #{name}"
-      return results
+      supply_equip_info = {
+        "water_heater_fuel_type" => water_heaters[0].heaterFuelType,
+        "water_heater_vol_m3" => water_heaters[0].tankVolume,
+        "water_heater_capacity_w" => water_heaters[0].heaterMaximumCapacity,
+        "water_heater_efficiency" => water_heaters[0].heaterThermalEfficiency,
+        "water_heater_part_load_curve_name" => part_load_curve_name,
+        "pump_head_Pa" => pumps[0].ratedPumpHead.to_f.round(8),
+        "pump_motor_eff" => pumps[0].motorEfficiency
+      }
+      # make hash containing the template applied, weather file used, water heater name, space types applied (or
+      # I should say renamed), the supply equipment info (from the supply_equip_info hash) and demand equipment info
+      # (from the demand_equip_info array defined above).
+      set_output = {
+        "template" => template,
+        "epw_file" => epw_file,
+        "water_heater_name" => water_heaters[0].name,
+        "space_types" => space_type_names,
+        "suppy_equipment" => supply_equip_info,
+        "demand_equipment" => demand_equip_info
+      }
+      # Add this hash to an array containing the same info for all of the sets of space types applied to the model.
+      output_array << set_output
     end
   end
 end
