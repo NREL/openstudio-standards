@@ -947,9 +947,20 @@ class NECB2011
                          necb_reference_hp_supp_fuel:'DefaultFuel')
     # The goal is to minimize the number of system when possible.
     system_zones_hash = {}
+    system_selection = nil
     zones.each do |zone|
-      system_zones_hash[get_necb_thermal_zone_system_selection(zone)] = [] if system_zones_hash[get_necb_thermal_zone_system_selection(zone)].nil?
-      system_zones_hash[get_necb_thermal_zone_system_selection(zone)] << zone
+      # Define the system type based on the space type data or use the custom one (hvac_system_primary) if is defined.
+      if hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == 'necb_default'
+        system_selection = get_necb_thermal_zone_system_selection(zone)
+      else
+        system_data = @standards_data['hvac_types']
+        selected_systems = system_data.select { |ind_system| ind_system["description"].to_s.downcase == hvac_system_primary.to_s.downcase }
+        raise ("Could not find the provided HVAC system name in the HVAC system library. Please check the spelling of HVAC system name you defined. Provided HVAC system name: #{hvac_system_primary}") if selected_systems.empty?
+        raise ("More than one HVAC systems match the provided HVAC system name.  Please check the spelling of the provided HVAC system name. Provided HVAC system name: #{hvac_system_primary}") if selected_systems.size > 1
+        system_selection = selected_systems[0]["system"][4].to_i
+      end
+      system_zones_hash[system_selection] = [] if system_zones_hash[system_selection].nil?
+      system_zones_hash[system_selection] << zone
     end
     # puts JSON.pretty_generate(system_zones_hash)
     # go through each system and zones pairs to
