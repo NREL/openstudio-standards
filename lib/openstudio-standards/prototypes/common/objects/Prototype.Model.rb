@@ -2019,6 +2019,9 @@ Standard.class_eval do
     econ_max_70_pct_oa_sch.defaultDaySchedule.setName('Economizer Max OA Fraction 70 pct Default')
     econ_max_70_pct_oa_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.7)
 
+    # Store original climate zones
+    climate_zone_code = climate_zone
+
     # Check each airloop
     model.getAirLoopHVACs.sort.each do |air_loop|
       economizer_required = false
@@ -2050,6 +2053,11 @@ Standard.class_eval do
         # specified, economizer requirements were aimed at comfort
         # cooling, not computer room cooling (as per input from the MSC).
 
+        # Process climate zone:
+        # Moisture regime is not needed for climate zone 8
+        climate_zone = climate_zone.split('-')[-1]
+        climate_zone = '8' if climate_zone.include?('8')
+
         # Get the size threshold requirement
         search_criteria = {
           'template' => template,
@@ -2057,7 +2065,7 @@ Standard.class_eval do
           'data_center' => true
         }
         econ_limits = model_find_object(standards_data['economizers'], search_criteria)
-        minimum_capacity_btu_per_hr = econ_limits['capacity_limit']
+        minimum_capacity_btu_per_hr = econ_limits['minimum_capacity']
         economizer_required = !minimum_capacity_btu_per_hr.nil?
       elsif @instvarbuilding_type == 'LargeOffice' && air_loop_hvac_include_wshp?(air_loop)
         # WSHP serving the IT closets are assumed to always be too
@@ -2070,7 +2078,7 @@ Standard.class_eval do
       if economizer_required
         # If an economizer is required, determine the economizer type
         # in the prototype buildings, which depends on climate zone.
-        economizer_type = model_economizer_type(model, climate_zone)
+        economizer_type = model_economizer_type(model, climate_zone_code)
 
         # Set the economizer type
         # Get the OA system and OA controller
@@ -2087,7 +2095,7 @@ Standard.class_eval do
 
         # Check that the economizer type set by the prototypes
         # is not prohibited by code.  If it is, change to no economizer.
-        unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone)
+        unless air_loop_hvac_economizer_type_allowable?(air_loop, climate_zone_code)
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Model', "#{air_loop.name} is required to have an economizer, but the type chosen, #{economizer_type} is prohibited by code for climate zone #{climate_zone}. Economizer type will be switched to No Economizer.")
           oa_control.setEconomizerControlType('NoEconomizer')
         end

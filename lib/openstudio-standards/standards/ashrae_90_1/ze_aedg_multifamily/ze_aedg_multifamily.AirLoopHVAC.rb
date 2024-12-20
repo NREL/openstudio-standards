@@ -26,42 +26,17 @@ class ZEAEDGMultifamily < ASHRAE901
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} no economizer")
       return [nil, nil, nil]
     when 'FixedDryBulb'
-      case climate_zone
-      when 'ASHRAE 169-2006-0B',
-           'ASHRAE 169-2006-1B',
-           'ASHRAE 169-2006-2B',
-           'ASHRAE 169-2006-3B',
-           'ASHRAE 169-2006-3C',
-           'ASHRAE 169-2006-4B',
-           'ASHRAE 169-2006-4C',
-           'ASHRAE 169-2006-5B',
-           'ASHRAE 169-2006-5C',
-           'ASHRAE 169-2006-6B',
-           'ASHRAE 169-2006-7A',
-           'ASHRAE 169-2006-7B',
-           'ASHRAE 169-2006-8A',
-           'ASHRAE 169-2006-8B',
-           'ASHRAE 169-2013-0B',
-           'ASHRAE 169-2013-1B',
-           'ASHRAE 169-2013-2B',
-           'ASHRAE 169-2013-3B',
-           'ASHRAE 169-2013-3C',
-           'ASHRAE 169-2013-4B',
-           'ASHRAE 169-2013-4C',
-           'ASHRAE 169-2013-5B',
-           'ASHRAE 169-2013-5C',
-           'ASHRAE 169-2013-6B',
-           'ASHRAE 169-2013-7A',
-           'ASHRAE 169-2013-7B',
-           'ASHRAE 169-2013-8A',
-           'ASHRAE 169-2013-8B'
-        drybulb_limit_f = 75.0
-      when 'ASHRAE 169-2006-5A',
-           'ASHRAE 169-2006-6A',
-           'ASHRAE 169-2013-5A',
-           'ASHRAE 169-2013-6A'
-        drybulb_limit_f = 70.0
-      end
+      # Process climate zone:
+      # Moisture regime is not needed for climate zone 8
+      climate_zone = climate_zone.split('-')[-1]
+      climate_zone = '8' if climate_zone.include?('8')
+
+      search_criteria = {
+        'template' => template,
+        'climate_zone' => climate_zone
+      }
+      econ_limits = model_find_object(standards_data['economizers'], search_criteria)
+      drybulb_limit_f = econ_limits['fixed_dry_bulb_high_limit_shutoff_temp']
     when 'FixedEnthalpy'
       enthalpy_limit_btu_per_lb = 28.0
     when 'FixedDewPointAndDryBulb'
