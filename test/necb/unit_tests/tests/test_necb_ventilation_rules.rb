@@ -1,7 +1,6 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/necb_helper'
 include(NecbHelper)
-require 'time'
 
 class NECB_HVAC_Ventilation_Tests < Minitest::Test
 
@@ -15,21 +14,20 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
 
   # Test to validate the ventilation requirements.
   # Makes use of the template design pattern with the work done by the do_* method below (i.e. 'do_' prepended to the current method name)
-
   def test_ventilation
     logger.info "Starting suite of tests for: #{__method__}"
-    # Add start time to log.
-    start_time = Time.now
+    
     # Define test parameters that apply to all tests.
     test_parameters = { test_method: __method__,
                         save_intermediate_models: true,
                         fueltype: 'Electricity' }
-    # Define test cases.
+    
+                        # Define test cases.
     test_cases = {}
 
     test_cases_hash = {
       :Vintage => @AllTemplates,
-      :BuildingType => @CommonBuildings,
+      :SpaceType => @SpaceTypes,
       :TestCase => ["ZoneResults"],
       :TestPars => {  } # :oaf => "tbd"
     }
@@ -43,16 +41,15 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     file_root = "#{self.class.name}-#{__method__}".downcase
     test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
     File.write(test_result_file, JSON.pretty_generate(test_results))
+
     # Read expected results.
     file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
     expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
+
     # Check if test results match expected.
     msg = "Ventilation test results do not match what is expected in test"
     compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
-	  end_time = Time.now
-    duration = end_time - start_time
-    logger.info "Total time taken: #{duration} seconds"
   end
 
   # @param test_pars [Hash] has the static parameters.
@@ -70,25 +67,53 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     save_intermediate_models = test_pars[:save_intermediate_models]
     fueltype = test_pars[:fueltype]
     vintage = test_pars[:Vintage]
-    building_type = test_pars[:BuildingType]
+    space_type = test_pars[:SpaceType]
 
-    name = "#{vintage}_building_type_#{building_type}_ventilation"
-    name_short = "#{vintage}_#{building_type}_vent"
+    name = "#{vintage}_building_type_#{space_type}_ventilation"
+    name_short = "#{vintage}_#{space_type}"
     output_folder = method_output_folder("#{test_name}/#{name_short}/")
     logger.info "Starting individual test: #{name}"
     results = Array.new
 	
+    # (1) load 5 zone model
+    # (2) loop through space types in the model and change them to the desired space type
+    # (3) call standard.model_add_loads(model, 'NECB_Default', 1.0) (or call standard.apply_loads(model: model))
+    # (4) check ventilation
+
     # Wrap test in begin/rescue/ensure.
     begin
-      epw_file = "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw"
+      # Create model and set climate file.
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "fsr.osm"))
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
+
+      # Create a new space type and assign it to the spaces in the model.
+      test_spacetype = OpenStudio::Model::SpaceType.new(model)
+      test_spacetype.setStandardsBuildingType('Space Function')
+      test_spacetype.setStandardsSpaceType(space_type)
+      test_spacetype.setName("Space Function #{space_type}") # NRCan use setNameProtected in the water heating test.
+      logger.info "Looping through spaces:"
+      model.getSpaces.each do |space|
+        logger.info "  Space: #{space.name}"
+        space.setSpaceType(test_spacetype)
+        logger.info "  New spacetype: #{test_spacetype}"
+      end
+
+      # Map space type name to match current vintage. 
       standard = get_standard(vintage)
-      model = standard.model_create_prototype_model(template: vintage,
-                                                    building_type: building_type,
-                                                    epw_file: epw_file,
-                                                    primary_heating_fuel: fueltype,
-                                                    sizing_run_dir: output_folder)
+      standard.validate_and_upate_space_types(model)
+
+      # Recover the vintage and set the ventilation rate
+      #standard.apply_loads(model: model) # 
+      standard.model_add_loads(model, 'NECB_Default', 1.0)
+      
+      # Run the standards as we need a result file for the analysis.
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
+
     rescue StandardError => error
-      msg = "Model creation failed for #{vintage} #{building_type}\n#{__FILE__}::#{__method__} #{error.message}"
+      msg = "Model creation failed for #{vintage} #{space_type}\n#{__FILE__}::#{__method__} #{error.message}"
       logger.error(msg)
       return [ERROR: msg]
     end
@@ -105,17 +130,18 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
         spaces = zone.spaces
         spaces.each do |space|
           space_type = space.spaceType.get
-          outdoor_air = space_type.designSpecificationOutdoorAir.get
-          
+
           # Initialize variables.
           oa_flow_per_floor_area = 0.0
           oa_flow_per_person = 0.0
-
-          # Assign values conditionally.
-          oa_flow_per_floor_area = outdoor_air.outdoorAirFlowperFloorArea if outdoor_air.outdoorAirFlowperFloorArea > 0.0
+          if space_type.designSpecificationOutdoorAir.is_initialized then 
+            outdoor_air = space_type.designSpecificationOutdoorAir.get
+            oa_flow_per_floor_area = outdoor_air.outdoorAirFlowperFloorArea if outdoor_air.outdoorAirFlowperFloorArea > 0.0
+            oa_flow_per_person = outdoor_air.outdoorAirFlowperPerson if outdoor_air.outdoorAirFlowperPerson > 0.0
+          end
+          
+          # Convert values so we have both common units in the output.
           oa_flow_in_ft3_per_min_per_ft2 = OpenStudio.convert(oa_flow_per_floor_area, 'm^3/s*m^2', 'ft^3/min*ft^2').get
-
-          oa_flow_per_person = outdoor_air.outdoorAirFlowperPerson if outdoor_air.outdoorAirFlowperPerson > 0.0
           oa_flow_in_ft3_per_min_per_person = OpenStudio.convert(oa_flow_per_person, 'm^3/s*person', 'ft^3/min*person').get
 
           # Recover zone variables.
@@ -130,6 +156,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
           # Add this test case to results and return the array.
           results << {
             zone_name: zone_name,
+            space_type_name: space_type.name,
             std_oa_flow_per_floor_area: oa_flow_per_floor_area.signif(3),
             std_oa_flow_per_person: oa_flow_per_person.signif(3),
             zone_area_m2: zone_area.signif(3),
