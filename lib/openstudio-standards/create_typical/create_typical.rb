@@ -512,7 +512,7 @@ module OpenstudioStandards
           end
         end
 
-        typical_swh = standard.model_add_typical_swh(model, water_heater_fuel: service_water_heating_fuel)
+        typical_swh = OpenstudioStandards::ServiceWaterHeating.create_typical_service_water_heating(model, water_heating_fuel: service_water_heating_fuel)
         midrise_swh_loops = []
         stripmall_swh_loops = []
         typical_swh.each do |loop|
