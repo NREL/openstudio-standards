@@ -39,7 +39,7 @@ class ECM_SWH_Tests < Minitest::Test
 
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => ["NECB2011", "BTAPPRE1980", "BTAP1980TO2010"],
+    test_cases_hash = { :Vintage => ["BTAPPRE1980", "BTAP1980TO2010", "NECB2011"],
                         :FuelType => ["NaturalGas"],
                         :shw_ecms => ["NECB_Default", "Natural Gas Power Vent with Electric Ignition"],
                         :TestCase => ["AB_Calgary"],
@@ -47,13 +47,14 @@ class ECM_SWH_Tests < Minitest::Test
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2011", "BTAPPRE1980", "BTAP1980TO2010"],
+    test_cases_hash = { :Vintage => ["BTAPPRE1980", "BTAP1980TO2010", "NECB2011"],
                         :FuelType => ["NaturalGas"],
                         :shw_ecms => ["NECB_Default", "Natural Gas Power Vent with Electric Ignition"],
                         :TestCase => ["NT_Yellowknife"],
                         :TestPars => { :epw_file => "CAN_NT_Yellowknife.AP.719360_CWEC2020.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
+
     test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
     # Write test results.
@@ -75,7 +76,6 @@ class ECM_SWH_Tests < Minitest::Test
   # @param test_case [Hash] has the specific test parameters.
   # @return results of this case.
   # @note Companion method to test_add_swh_test_output_info that runs a specific test. Called by do_test_cases in necb_helper.rb.
-
   def do_test_add_swh_test_output_info(test_pars:, test_case:)
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
@@ -94,6 +94,10 @@ class ECM_SWH_Tests < Minitest::Test
 
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
+    # get shw efficiency measure data from ECMS class shw_set.json
+    ecm_standard = get_standard("ECMS")
+    shw_measures = ecm_standard.standards_data['tables']['shw_eff_ecm']['table']
+
     results = {}
     output_array = []
     index = 0
@@ -104,65 +108,63 @@ class ECM_SWH_Tests < Minitest::Test
     # standards class and gets information for the shw tank, pump, and water use equipment from the resulting model.
     # It then repeats the process until all spacetypes in the spacetypes.json file have been applied and testing
     # on the Outpatient file.
-    # while break_time == false do
-    model = nil
-    standard = nil
-    # Load model and set climate file.
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
-    # Set the weather file.
+    while break_time == false do
+      model = nil
+      standard = nil
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
+      # Set the weather file.
 
-    BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-    # Get spacetypes from JSON.  I say I use all of the spacetypes but really it is only those with a
-    # "buliding_type" of "Space Function".
-    standard = get_standard(vintage)
+      BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+      # Get spacetypes from JSON.  I say I use all of the spacetypes but really it is only those with a
+      # "buliding_type" of "Space Function".
+      standard = get_standard(vintage)
 
-    search_criteria = {
-      "template" => vintage,
-      "building_type" => "Space Function"
-    }
-    standards_table = standard.standards_data['space_types']
-    space_type_data = standard.model_find_objects(standards_table, search_criteria)
-    # Get the space types in the model.
-    space_types = model.getSpaceTypes
-    # Determine the total number of space types retrieved from the JSON file.
-    space_type_data_size = space_type_data.size
-    space_type_names = []
+      search_criteria = {
+        "template" => vintage,
+        "building_type" => "Space Function"
+      }
+      standards_table = standard.standards_data['space_types']
+      space_type_data = standard.model_find_objects(standards_table, search_criteria)
+      # Get the space types in the model.
+      space_types = model.getSpaceTypes
+      # Determine the total number of space types retrieved from the JSON file.
+      space_type_data_size = space_type_data.size
+      space_type_names = []
 
-    # Go through each space type in the model and change its name to that of the next space type in the JSON file.
-    space_types.sort.each do |space_type|
-      space_type.setNameProtected("Space Function" + " " + space_type_data[index]["space_type"])
-      space_type_names << space_type.name
-      # If you still have space types left in the JSON file go to the next one.  If not, start at the beginning
-      # again and when you finish renaming the space types in the osm file go to the next weather location or
-      # version of NECB (or stop when you are done).
-      if index >= (space_type_data_size - 1)
-        index = 0
-        break_time = true
-      else
-        index += 1
+      # Go through each space type in the model and change its name to that of the next space type in the JSON file.
+      space_types.sort.each do |space_type|
+        space_type.setNameProtected("Space Function" + " " + space_type_data[index]["space_type"])
+        space_type_names << space_type.name
+        # If you still have space types left in the JSON file go to the next one.  If not, start at the beginning
+        # again and when you finish renaming the space types in the osm file go to the next weather location or
+        # version of NECB (or stop when you are done).
+        if index >= (space_type_data_size - 1)
+          index = 0
+          break_time = true
+        else
+          index += 1
+        end
       end
-    end
 
-    # apply swh to the renamed space types (model_add_swh only looks at the name of the space type not what is
-    # actually in it).
-    standard.model_add_swh(model: model, swh_fueltype: fueltype, shw_scale: 'NECB_Default')
-    # Apply the water heater mixed efficiencies
-    model.getWaterHeaterMixeds.sort.each { |obj| standard.water_heater_mixed_apply_efficiency(obj) }
+      # apply swh to the renamed space types (model_add_swh only looks at the name of the space type not what is
+      # actually in it).
+      standard.model_add_swh(model: model, swh_fueltype: fueltype, shw_scale: 'NECB_Default')
+      # Apply the water heater mixed efficiencies
+      model.getWaterHeaterMixeds.sort.each { |obj| standard.water_heater_mixed_apply_efficiency(obj) }
 
-    # get shw efficiency measure data from ECMS class shw_set.json
-    ecm_standard = get_standard("ECMS")
-    shw_measures = ecm_standard.standards_data['tables']['shw_eff_ecm']['table']
-
-    model.getWaterHeaterMixeds.sort.each do |waterheater_test|
-      wh_name = waterheater_test.name
-      if waterheater_test.heaterFuelType == "NaturalGas"
-        shw_measure = shw_measures.select { |shw_measure_info| shw_measure_info["name"] == shw_ecm }[0]
-        ecm_standard.modify_shw_efficiency(model: model, shw_eff: shw_measure)
+      model.getWaterHeaterMixeds.sort.each do |waterheater_test|
+        wh_name = waterheater_test.name
+        if waterheater_test.heaterFuelType == "NaturalGas"
+          shw_measure = shw_measures.select { |shw_measure_info| shw_measure_info["name"] == shw_ecm }[0]
+          ecm_standard.modify_shw_efficiency(model: model, shw_eff: shw_measure)
+        end
+        add_shw_test_output_info(model: model, output_array: output_array, template: vintage, epw_file: epw_file, space_type_names: space_type_names)
       end
-      results[wh_name] = add_shw_test_output_info(model: model, output_array: output_array, template: vintage, epw_file: epw_file, space_type_names: space_type_names)
     end
     logger.info "Completed individual test: #{name}"
+    results[name] = output_array
     return results
   end
 
