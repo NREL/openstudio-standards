@@ -1919,7 +1919,7 @@ class Standard
       values['Sensible Cooling'][1.0] = 0.75
       values['Latent Cooling'][0.75] = 0.6
       values['Latent Cooling'][1.0] = 0.6
-      erv = OpenstudioStandards.heat_exchanger_air_to_air_set_effectiveness_values(erv, defaults: false, values: values)
+      erv = OpenstudioStandards::HVAC.heat_exchanger_air_to_air_set_effectiveness_values(erv, defaults: false, values: values)
     end
     return erv
   end

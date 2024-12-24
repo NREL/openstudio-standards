@@ -400,7 +400,7 @@ class NECB2011
       values['Sensible Cooling'][1.0] = erv_info['SensibleEffectivenessat100CoolingAirFlow']
       values['Latent Cooling'][0.75] = erv_info['LatentEffectivenessat75CoolingAirFlow']
       values['Latent Cooling'][1.0] = erv_info['LatentEffectivenessat100CoolingAirFlow']
-      heat_exchanger_air_to_air_sensible_and_latent = OpenstudioStandards.heat_exchanger_air_to_air_set_effectiveness_values(heat_exchanger_air_to_air_sensible_and_latent, defaults: false, values: values)
+      heat_exchanger_air_to_air_sensible_and_latent = OpenstudioStandards::HVAC.heat_exchanger_air_to_air_set_effectiveness_values(heat_exchanger_air_to_air_sensible_and_latent, defaults: false, values: values)
     end
     heat_exchanger_air_to_air_sensible_and_latent.setSupplyAirOutletTemperatureControl(erv_info['SupplyAirOutletTemperatureControl'])
     heat_exchanger_air_to_air_sensible_and_latent.setFrostControlType(erv_info['FrostControlType'])

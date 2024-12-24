@@ -27,7 +27,7 @@ class Standard
       values['Sensible Cooling'][1.0] = full_cool_sens_eff
       values['Latent Cooling'][0.75] = part_cool_lat_eff
       values['Latent Cooling'][1.0] = full_cool_lat_eff
-      OpenstudioStandards.heat_exchanger_air_to_air_set_effectiveness_values(heat_exchanger_air_to_air_sensible_and_latent, defaults: false, values: values)
+      OpenstudioStandards::HVAC.heat_exchanger_air_to_air_set_effectiveness_values(heat_exchanger_air_to_air_sensible_and_latent, defaults: false, values: values)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HeatExchangerSensLat', "For #{heat_exchanger_air_to_air_sensible_and_latent.name}: Set sensible and latent effectiveness.")

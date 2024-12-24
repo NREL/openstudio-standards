@@ -663,7 +663,7 @@ class NRELZNEReady2017 < ASHRAE901
           values['Latent Cooling'][1.0] = 0.74
         end
       end
-      OpenstudioStandards.heat_exchanger_air_to_air_set_effectiveness_values(erv, defaults: false, values: values)
+      OpenstudioStandards::HVAC.heat_exchanger_air_to_air_set_effectiveness_values(erv, defaults: false, values: values)
     end
 
     return erv

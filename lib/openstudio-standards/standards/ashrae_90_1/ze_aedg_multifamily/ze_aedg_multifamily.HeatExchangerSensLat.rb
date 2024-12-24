@@ -48,7 +48,7 @@ class ZEAEDGMultifamily < ASHRAE901
         values['Latent Cooling'][0.75] = 0.78
         values['Latent Cooling'][1.0] = 0.74
       end
-      OpenstudioStandards.heat_exchanger_air_to_air_set_effectiveness_values(heat_exchanger_air_to_air_sensible_and_latent, defaults: false, values: values)
+      OpenstudioStandards::HVAC.heat_exchanger_air_to_air_set_effectiveness_values(heat_exchanger_air_to_air_sensible_and_latent, defaults: false, values: values)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.ze_aedg_multifamily.HeatExchangerAirToAirSensibleAndLatent', "For #{heat_exchanger_air_to_air_sensible_and_latent.name}, set sensible and latent effectiveness to #{heat_exchanger_type} values.")
