@@ -125,9 +125,10 @@ module OpenstudioStandards
 
       # use existing independent variable object if found and matches inputs
       iv = nil
-      curve = OpenStudio::Model::OptionalTableLookup.new
+      table = OpenStudio::Model::OptionalTableLookup.new
       if hx.send(method_name).is_initialized
-        curve = hx.send(method_name).get.to_TableLookup.get
+        table = hx.send(method_name).get.to_TableLookup
+        curve = table.get
         iv_existing = curve.independentVariables.first
         if values_hash.keys.sort == iv_existing.values.sort
           iv = iv_existing
@@ -160,7 +161,7 @@ module OpenstudioStandards
       values.each { |v| t.addOutputValue(v) }
 
       # remove curve if found
-      curve.remove if curve.is_initialized
+      table.get.remove if table.is_initialized
 
       return t
     end
