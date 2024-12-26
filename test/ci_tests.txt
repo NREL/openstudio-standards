@@ -86,7 +86,6 @@ doe_prototype_test_courthouse.rb
 
 doe_prototype/test_add_c_factor_wall.rb
 doe_prototype/test_add_elevators.rb
-doe_prototype/test_add_exhaust.rb
 doe_prototype/test_add_exterior_lights.rb
 doe_prototype/test_add_f_factor_floor.rb
 doe_prototype/test_add_refrigeration.rb
