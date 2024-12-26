@@ -14,7 +14,7 @@ module OpenstudioStandards
                                 make_up_air_source_zone: nil,
                                 make_up_air_fraction: 0.5)
       # load exhaust fan data
-      data = JSON.parse(File.read("#{__dir__}/data/exhaust_fans.json"), symbolize_names: true)
+      data = JSON.parse(File.read("#{__dir__}/data/typical_exhaust.json"), symbolize_names: true)
 
       # loop through spaces to get standards space information
       space_type_hash = {}
@@ -42,6 +42,7 @@ module OpenstudioStandards
           exhaust_fan_properties = exhaust_fan_properties[0]
 
           # excluding space.multiplier since used to calc loads in zone
+          space_type_hash[space_type] = {}
           space_type_hash[space_type][:floor_area_m2] = space.floorArea
           space_type_hash[space_type][:exhaust_cfm_per_area_ft2] = exhaust_fan_properties[:exhaust_per_area]
         end
@@ -51,7 +52,7 @@ module OpenstudioStandards
       exhaust_m3_per_s = 0.0
       space_type_hash.each do |space_type, fields|
         floor_area_ft2 = OpenStudio.convert(fields[:floor_area_m2], 'm^2', 'ft^2').get
-        cfm = fields[:exhaust_cfm_per_area_ft2] * floor_area_ft2
+        cfm = fields[:exhaust_cfm_per_area_ft2].to_f * floor_area_ft2.to_f
         exhaust_m3_per_s += OpenStudio.convert(cfm, 'cfm', 'm^3/s').get
       end
 
@@ -77,9 +78,9 @@ module OpenstudioStandards
       # add objects to account for makeup air
       unless make_up_air_source_zone.nil?
         # add balanced exhaust schedule to zone_exhaust_fan
-        balanced_exhaust_schedule = @sch.create_constant_schedule_ruleset(make_up_air_source_zone.model, make_up_air_fraction,
-                                                                          name: "#{exhaust_zone.name} Balanced Exhaust Fraction Schedule",
-                                                                          schedule_type_limit: 'Fraction')
+        balanced_exhaust_schedule = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(make_up_air_source_zone.model, make_up_air_fraction,
+                                                                                                    name: "#{exhaust_zone.name} Balanced Exhaust Fraction Schedule",
+                                                                                                    schedule_type_limit: 'Fraction')
         zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_exhaust_schedule)
 
         # use max value of balanced exhaust fraction schedule for maximum flow rate
@@ -87,7 +88,7 @@ module OpenstudioStandards
         transfer_air_m3_per_s = exhaust_m3_per_s * max_sch_val
 
         # add dummy exhaust fan to account for loss of transfer air
-        transfer_air_source_zone_exhaust = OpenStudio::Model::FanZoneExhaust.new(thermal_zone.model)
+        transfer_air_source_zone_exhaust = OpenStudio::Model::FanZoneExhaust.new(exhaust_zone.model)
         transfer_air_source_zone_exhaust.setName("#{exhaust_zone.name} Transfer Air Source")
         transfer_air_source_zone_exhaust.setAvailabilitySchedule(exhaust_availability_schedule)
         transfer_air_source_zone_exhaust.setMaximumFlowRate(transfer_air_m3_per_s)
