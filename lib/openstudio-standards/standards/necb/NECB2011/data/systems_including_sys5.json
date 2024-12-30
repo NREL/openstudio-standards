@@ -109,7 +109,7 @@
               "fan_coil_type": "FPFC",
               "mau_cooling_type": "DX",
               "system": "sys_2",
-              "needs_boiler": false
+              "needs_boiler": true
             },
             {
               "description": "FPFC MAU DX Coils with Centrifugal Chiller",
@@ -118,7 +118,7 @@
               "fan_coil_type": "FPFC",
               "mau_cooling_type": "DX",
               "system": "sys_2",
-              "needs_boiler": false
+              "needs_boiler": true
             },
             {
               "description": "FPFC MAU DX Coils with Rotary Screw Chiller",
@@ -127,7 +127,7 @@
               "fan_coil_type": "FPFC",
               "mau_cooling_type": "DX",
               "system": "sys_2",
-              "needs_boiler": false
+              "needs_boiler": true
             },
             {
               "description": "FPFC MAU DX Coils with Reciprocating Chiller",
@@ -136,7 +136,7 @@
               "fan_coil_type": "FPFC",
               "mau_cooling_type": "DX",
               "system": "sys_2",
-              "needs_boiler": false
+              "needs_boiler": true
             },
             {
               "description": "FPFC MAU Chilled Water Coils with Scroll Chiller",
@@ -145,7 +145,7 @@
               "fan_coil_type": "FPFC",
               "mau_cooling_type": "Hydronic",
               "system": "sys_2",
-              "needs_boiler": false
+              "needs_boiler": true
             },
             {
               "description": "FPFC MAU Chilled Water Coils with Centrifugal Chiller",
@@ -154,7 +154,7 @@
               "fan_coil_type": "FPFC",
               "mau_cooling_type": "Hydronic",
               "system": "sys_2",
-              "needs_boiler": false
+              "needs_boiler": true
             },
             {
               "description": "FPFC MAU Chilled Water Coils with Rotary Screw Chiller",
@@ -163,7 +163,7 @@
               "fan_coil_type": "FPFC",
               "mau_cooling_type": "Hydronic",
               "system": "sys_2",
-              "needs_boiler": false
+              "needs_boiler": true
             },
             {
               "description": "FPFC MAU Chilled Water Coils with Reciprocating Chiller",
@@ -172,7 +172,7 @@
               "fan_coil_type": "FPFC",
               "mau_cooling_type": "Hydronic",
               "system": "sys_2",
-              "needs_boiler": false
+              "needs_boiler": true
             },
             {
               "description": "PSZ RTU ASHP with Gas and ASHP with Gas Supp. Heat Coils and Hot Water Baseboard",
