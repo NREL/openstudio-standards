@@ -953,11 +953,19 @@ class NECB2011
       if hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == 'necb_default'
         system_selection = get_necb_thermal_zone_system_selection(zone)
       else
+        zone_space_count = 0
+        null_space_count = 0
+        zone.spaces.sort.each do |space|
+          zone_space_count += 1
+          null_space_count += 1 if space.spaceType.get.name.to_s.downcase.include?("undefined")
+        end
         system_data = @standards_data['hvac_types']
         selected_systems = system_data.select { |ind_system| ind_system["description"].to_s.downcase == hvac_system_primary.to_s.downcase }
         raise ("Could not find the provided HVAC system name in the HVAC system library. Please check the spelling of HVAC system name you defined. Provided HVAC system name: #{hvac_system_primary}") if selected_systems.empty?
         raise ("More than one HVAC systems match the provided HVAC system name.  Please check the spelling of the provided HVAC system name. Provided HVAC system name: #{hvac_system_primary}") if selected_systems.size > 1
         system_selection = selected_systems[0]["system"][4].to_i
+        # Do not inculde zones exclusively containing undefined spaces
+        system_selection = nil if null_space_count > 0 && zone_space_count == null_space_count
       end
       system_zones_hash[system_selection] = [] if system_zones_hash[system_selection].nil?
       system_zones_hash[system_selection] << zone
