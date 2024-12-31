@@ -20,7 +20,7 @@ module OpenstudioStandards
     # @param cooling_fuel [String] The primary HVAC cooling fuel type
     #   Options are 'Electricity', 'DistrictCooling', 'DistrictAmbient'
     # @param kitchen_makeup [String] Source of makeup air for kitchen exhaust
-    #   Options are 'None', 'Largest Zone', 'Adjacent'
+    #   Options are 'None', 'Adjacent'
     # @param exterior_lighting_zone [String] The exterior lighting zone for exterior lighting allowance.
     #   Options are '0 - Undeveloped Areas Parks', '1 - Developed Areas Parks', '2 - Neighborhood', '3 - All Other Areas', '4 - High Activity'
     # @param add_constructions [Boolean] Create and apply default construction set
@@ -471,17 +471,10 @@ module OpenstudioStandards
           model.getFanZoneExhausts.each(&:remove)
         end
 
-        zone_exhaust_fans = standard.model_add_exhaust(model, kitchen_makeup) # second argument is strategy for finding makeup zones for exhaust zones
-        zone_exhaust_fans.each do |k, v|
-          max_flow_rate_ip = OpenStudio.convert(k.maximumFlowRate.get, 'm^3/s', 'cfm').get
-          if v.key?(:zone_mixing)
-            zone_mixing = v[:zone_mixing]
-            mixing_source_zone_name = zone_mixing.sourceZone.get.name
-            mixing_design_flow_rate_ip = OpenStudio.convert(zone_mixing.designFlowRate.get, 'm^3/s', 'cfm').get
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding #{OpenStudio.toNeatString(max_flow_rate_ip, 0, true)} (cfm) of exhaust to #{k.thermalZone.get.name}, with #{OpenStudio.toNeatString(mixing_design_flow_rate_ip, 0, true)} (cfm) of makeup air from #{mixing_source_zone_name}")
-          else
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding #{OpenStudio.toNeatString(max_flow_rate_ip, 0, true)} (cfm) of exhaust to #{k.thermalZone.get.name}")
-          end
+        zone_exhaust_fans = standard.model_add_exhaust(model, makeup_source: kitchen_makeup)
+        zone_exhaust_fans.each do |zone_exhaust_fan|
+          max_flow_rate_ip = OpenStudio.convert(zone_exhaust_fan.maximumFlowRate.get, 'm^3/s', 'cfm').get
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding #{OpenStudio.toNeatString(max_flow_rate_ip, 0, true)} (cfm) of exhaust to #{zone_exhaust_fan.thermalZone.get.name}")
         end
       end
 
