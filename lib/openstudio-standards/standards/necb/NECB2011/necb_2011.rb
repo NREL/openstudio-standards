@@ -443,7 +443,7 @@ class NECB2011 < Standard
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
     swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
 
-    # Check if custom systems are assigned to dwelling units, washrooms, corridors, and storage rooms.  If they are set
+    # Check if custom systems are assigned to dwelling units, washrooms, corridors, and storage rooms.  If they are, set
     # them to be the same as the primary system type.  If no primary system type is defined then set them to be nil.
     hvac_system_dwelling_units, hvac_system_corridor, hvac_system_storage, hvac_system_washrooms = reset_hvac_system_if_required(hvac_system_primary: hvac_system_primary,
                                                                                                                                  hvac_system_dwelling_units: hvac_system_dwelling_units,
@@ -2541,10 +2541,10 @@ class NECB2011 < Standard
   # their default or to the primary system type (if one is defined and the other sytems are not set to default)
   def reset_hvac_system_if_required(hvac_system_primary: nil, hvac_system_dwelling_units: nil, hvac_system_corridor: nil, hvac_system_storage: nil, hvac_system_washrooms: nil)
     if hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == "necb_default"
-      hvac_system_dwelling_units = nil
-      hvac_system_corridor = nil
-      hvac_system_storage = nil
-      hvac_system_washrooms = nil
+      hvac_system_dwelling_units = "NECB_Default"
+      hvac_system_corridor = "NECB_Default"
+      hvac_system_storage = "NECB_Default"
+      hvac_system_washrooms = "NECB_Default"
     else
       hvac_system_dwelling_units = hvac_system_primary unless hvac_system_dwelling_units.nil? || hvac_system_dwelling_units.to_s.downcase == "necb_default"
       hvac_system_corridor = hvac_system_primary unless hvac_system_corridor.nil? || hvac_system_corridor.to_s.downcase == "necb_default"

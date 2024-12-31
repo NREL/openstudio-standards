@@ -65,11 +65,11 @@ class SystemFuels
   def set_fuel_to_hvac_system_primary(hvac_system_primary:, standards_data:)
     hvac_system_data = standards_data['hvac_types'].find { |system| system['description'].to_s.downcase == hvac_system_primary.to_s.downcase }
     return if hvac_system_data.nil? || hvac_system_data.empty?
-    @baseboard_type = hvac_system_data["baseboard_type"].to_s
-    @mau_heating_coil_type = hvac_system_data["mau_heating_type"].to_s
-    @mau_type = hvac_system_data["mau_type"].to_bool
-    @necb_reference_hp = hvac_system_data["necb_reference_hp"].to_bool
-    @necb_reference_hp_supp_fuel = hvac_system_data["necb_reference_hp_supp_fuel"]
+    @baseboard_type = hvac_system_data["baseboard_type"].to_s unless hvac_system_data["baseboard_type"].nil?
+    @mau_heating_coil_type = hvac_system_data["mau_heating_type"].to_s unless hvac_system_data["mau_heating_type"].nil?
+    @mau_type = hvac_system_data["mau_type"].to_bool unless hvac_system_data["mau_type"].nil?
+    @necb_reference_hp = hvac_system_data["necb_reference_hp"].to_bool unless hvac_system_data["necb_reference_hp"].nil?
+    @necb_reference_hp_supp_fuel = hvac_system_data["necb_reference_hp_supp_fuel"] unless hvac_system_data["necb_reference_hp_supp_fuel"].nil?
     # If applying a hvac_system_primary with an NECB reference HP, make sure that the system 4 systems (if left at
     # NECB_Default) work with the NECB reference HP.
     if hvac_system_data["necb_reference_hp"].to_bool

@@ -850,51 +850,51 @@ class NECB2011
     # Find Dwelling Units and determine if a HW loop is needed
     dwelling_units = model.getSpaces.select { |space| is_a_necb_dwelling_unit?(space) }
     unless dwelling_units.empty?
-      # If no dwelling unit hvac system is defined then check if a HW loop is needed based on the system type
+      # If no dwelling unit hvac system is defined then check if a HW loop is needed based on the system type.
       if hvac_system_dwelling_units.nil? || hvac_system_dwelling_units.to_s.downcase == 'necb_default'
         hw_loop_needed = true if hw_loop_required_from_spaces(spaces: dwelling_units, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
-      #else
-        # If a dwelling unit hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item
-        #hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_dwelling_units }
-        #hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+      else
+        # If a dwelling unit hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
+        hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_dwelling_units }
+        hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
       end
     end
 
     # Find washrooms and determine if a HW loop is needed
     washroom_spaces = model.getSpaces.select { |space| is_an_necb_wet_space?(space) }
     unless washroom_spaces.empty?
-      # If no washroom hvac system is defined then check if a HW loop is needed based on the system type
+      # If no washroom hvac system is defined then check if a HW loop is needed based on the system type.
       if hvac_system_washrooms.nil? || hvac_system_washrooms.to_s.downcase == 'necb_default'
         hw_loop_needed = true if hw_loop_required_from_spaces(spaces: washroom_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
-      #else
-        # If a washroom hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item
-        #hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_washrooms }
-        #hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+      else
+        # If a washroom hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
+        hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_washrooms }
+        hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
       end
     end
 
     # Find corridors and determine if a HW loop is needed
     corridor_spaces = model.getSpaces.select { |space| is_an_necb_wildcard_space?(space) }
     unless corridor_spaces.empty?
-      # If no corridor hvac system is defined then check if a HW loop is needed based on the system type
+      # If no corridor hvac system is defined then check if a HW loop is needed based on the system type.
       if hvac_system_corridor.nil? || hvac_system_corridor.to_s.downcase == 'necb_default'
         hw_loop_needed = true if hw_loop_required_from_spaces(spaces: corridor_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
-      #else
-        # If a corridor hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item
-        #hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_corridor }
-        #hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+      else
+        # If a corridor hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
+        hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_corridor }
+        hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
       end
     end
 
     # Find storage spaces and determine if a HW loop is needed
     storage_spaces = model.getSpaces.select { |space| is_an_necb_storage_space?(space) }
     unless storage_spaces.empty?
-      # If no storage space hvac system is defined then check if a HW loop is needed based on the system type
+      # If no storage space hvac system is defined then check if a HW loop is needed based on the system type.
       if hvac_system_storage.nil? || hvac_system_storage.to_s.downcase == 'necb_default'
         hw_loop_needed = true if hw_loop_required_from_spaces(spaces: storage_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
-      #else
-        # If a storage space hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item
-        #hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_storage }
+      else
+        # If a storage space hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
+        hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_storage }
         hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
       end
     end
@@ -911,7 +911,7 @@ class NECB2011
       if hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == 'necb_default'
         hw_loop_needed = true if hw_loop_required_from_spaces(spaces: other_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
       else
-        # If an hvac system is defined for the remaining spaces then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item
+        # If an hvac system is defined for the remaining spaces then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_primary }
         hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
       end
@@ -1204,7 +1204,7 @@ class NECB2011
     end
     zones.uniq!
 
-    if hvac_system_dwelling_units == 'NECB_Default' or hvac_system_dwelling_units.nil?
+    if hvac_system_dwelling_units.to_s.downcase == 'necb_default' || hvac_system_dwelling_units.nil?
 
       # sort system 1 or 3 used for each dwelling unit as per T8.4.4.8.A NECB 2011-17
       zones.each do |zone|
@@ -1302,7 +1302,7 @@ class NECB2011
     wet_tz.uniq!
     # create a system 4 for the wet zones.
     return if wet_tz.empty?
-    if hvac_system_washrooms == 'NECB_Default' or hvac_system_washrooms.nil?
+    if hvac_system_washrooms.to_s.downcase == 'necb_default' || hvac_system_washrooms.nil?
       add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                   necb_reference_hp: necb_reference_hp,
                                                                   necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -1333,7 +1333,7 @@ class NECB2011
     tz.uniq!
 
     return if tz.empty?
-    if hvac_system_storage == 'NECB_Default' or hvac_system_storage.nil?
+    if hvac_system_storage.to_s.downcase == 'necb_default' || hvac_system_storage.nil?
       # create a system 4 for the  zones.
       add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                   necb_reference_hp: necb_reference_hp,
@@ -1366,8 +1366,7 @@ class NECB2011
 
     return if zones.empty?
 
-    if hvac_system_corridor == 'NECB_Default' or hvac_system_corridor.nil?
-
+    if hvac_system_corridor.to_s.downcase == 'necb_default' || hvac_system_corridor.nil?
       # create a system 4 for the wild zones.
       add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                   necb_reference_hp: necb_reference_hp,
