@@ -9,6 +9,7 @@ class SystemFuels
   attr_accessor :mau_heating_coil_type
   attr_accessor :mau_cooling_type
   attr_accessor :chiller_type
+  attr_accessor :heating_coil_type_sys2
   attr_accessor :heating_coil_type_sys3
   attr_accessor :heating_coil_type_sys4
   attr_accessor :heating_coil_type_sys6
@@ -33,6 +34,7 @@ class SystemFuels
     @mau_cooling_type = system_fuel_defaults['mau_cooling_type']
     @chiller_type = system_fuel_defaults['chiller_type']
     @mau_heating_coil_type = system_fuel_defaults['mau_heating_coil_type']
+    @heating_coil_type_sys2 = system_fuel_defaults['heating_coil_type_sys2']
     @heating_coil_type_sys3 = system_fuel_defaults['heating_coil_type_sys3']
     @heating_coil_type_sys4 = system_fuel_defaults['heating_coil_type_sys4']
     @heating_coil_type_sys6 = system_fuel_defaults['heating_coil_type_sys6']
