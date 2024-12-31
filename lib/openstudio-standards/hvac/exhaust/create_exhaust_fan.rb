@@ -24,8 +24,7 @@ module OpenstudioStandards
 
         space_type = space.spaceType.get
         if space_type_hash.key?(space_type)
-          # excluding space.multiplier since used to calc loads in zone
-          space_type_hash[space_type][:floor_area_m2] += space.floorArea
+          space_type_hash[space_type][:floor_area_m2] += space.floorArea * space.multiplier
         else
           next unless space_type.standardsBuildingType.is_initialized
           next unless space_type.standardsSpaceType.is_initialized
@@ -41,9 +40,8 @@ module OpenstudioStandards
 
           exhaust_fan_properties = exhaust_fan_properties[0]
 
-          # excluding space.multiplier since used to calc loads in zone
           space_type_hash[space_type] = {}
-          space_type_hash[space_type][:floor_area_m2] = space.floorArea
+          space_type_hash[space_type][:floor_area_m2] = space.floorArea * space.multiplier
           space_type_hash[space_type][:exhaust_cfm_per_area_ft2] = exhaust_fan_properties[:exhaust_per_area]
         end
       end
