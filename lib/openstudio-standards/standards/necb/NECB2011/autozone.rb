@@ -1138,6 +1138,7 @@ class NECB2011
 
     zones = []
     other_spaces = model.getSpaces.select do |space|
+      !is_an_necb_wet_space?(space) &&
       !is_a_necb_dwelling_unit?(space) &&
         !is_an_necb_wildcard_space?(space) &&
         !is_an_necb_storage_space?(space)
