@@ -37,9 +37,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1204,
+            "tower_capacity_kW": 1200,
             "number_of_cells": 1,
-            "fan_power": 18.1,
+            "fan_power_kW": 18.1,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -78,9 +78,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4727,
+            "tower_capacity_kW": 4730,
             "number_of_cells": 3,
-            "fan_power": 70.9,
+            "fan_power_kW": 70.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -122,9 +122,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1182,
+            "tower_capacity_kW": 1180,
             "number_of_cells": 1,
-            "fan_power": 17.7,
+            "fan_power_kW": 17.7,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -163,9 +163,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4683,
+            "tower_capacity_kW": 4680,
             "number_of_cells": 3,
-            "fan_power": 70.2,
+            "fan_power_kW": 70.2,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -207,9 +207,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1204,
+            "tower_capacity_kW": 1200,
             "number_of_cells": 1,
-            "fan_power": 18.1,
+            "fan_power_kW": 18.1,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -248,9 +248,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4727,
+            "tower_capacity_kW": 4730,
             "number_of_cells": 3,
-            "fan_power": 70.9,
+            "fan_power_kW": 70.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -292,9 +292,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1204,
+            "tower_capacity_kW": 1200,
             "number_of_cells": 1,
-            "fan_power": 18.1,
+            "fan_power_kW": 18.1,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -333,9 +333,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4727,
+            "tower_capacity_kW": 4730,
             "number_of_cells": 3,
-            "fan_power": 70.9,
+            "fan_power_kW": 70.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -381,9 +381,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1204,
+            "tower_capacity_kW": 1200,
             "number_of_cells": 1,
-            "fan_power": 15.7,
+            "fan_power_kW": 15.7,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -422,9 +422,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4727,
+            "tower_capacity_kW": 4730,
             "number_of_cells": 3,
-            "fan_power": 61.4,
+            "fan_power_kW": 61.4,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -466,9 +466,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1182,
+            "tower_capacity_kW": 1180,
             "number_of_cells": 1,
-            "fan_power": 15.4,
+            "fan_power_kW": 15.4,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -507,9 +507,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4683,
+            "tower_capacity_kW": 4680,
             "number_of_cells": 3,
-            "fan_power": 60.9,
+            "fan_power_kW": 60.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -551,9 +551,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1204,
+            "tower_capacity_kW": 1200,
             "number_of_cells": 1,
-            "fan_power": 15.7,
+            "fan_power_kW": 15.7,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -592,9 +592,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4727,
+            "tower_capacity_kW": 4730,
             "number_of_cells": 3,
-            "fan_power": 61.4,
+            "fan_power_kW": 61.4,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -636,9 +636,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1204,
+            "tower_capacity_kW": 1200,
             "number_of_cells": 1,
-            "fan_power": 15.7,
+            "fan_power_kW": 15.7,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -677,9 +677,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4727,
+            "tower_capacity_kW": 4730,
             "number_of_cells": 3,
-            "fan_power": 61.4,
+            "fan_power_kW": 61.4,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -725,9 +725,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1204,
+            "tower_capacity_kW": 1200,
             "number_of_cells": 1,
-            "fan_power": 15.7,
+            "fan_power_kW": 15.7,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -766,9 +766,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4727,
+            "tower_capacity_kW": 4730,
             "number_of_cells": 3,
-            "fan_power": 61.4,
+            "fan_power_kW": 61.4,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -810,9 +810,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1182,
+            "tower_capacity_kW": 1180,
             "number_of_cells": 1,
-            "fan_power": 15.4,
+            "fan_power_kW": 15.4,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -851,9 +851,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4683,
+            "tower_capacity_kW": 4680,
             "number_of_cells": 3,
-            "fan_power": 60.9,
+            "fan_power_kW": 60.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -895,9 +895,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1204,
+            "tower_capacity_kW": 1200,
             "number_of_cells": 1,
-            "fan_power": 15.7,
+            "fan_power_kW": 15.7,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -936,9 +936,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4727,
+            "tower_capacity_kW": 4730,
             "number_of_cells": 3,
-            "fan_power": 61.4,
+            "fan_power_kW": 61.4,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -980,9 +980,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1204,
+            "tower_capacity_kW": 1200,
             "number_of_cells": 1,
-            "fan_power": 15.7,
+            "fan_power_kW": 15.7,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1021,9 +1021,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4727,
+            "tower_capacity_kW": 4730,
             "number_of_cells": 3,
-            "fan_power": 61.4,
+            "fan_power_kW": 61.4,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1069,9 +1069,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1193,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 15.5,
+            "fan_power_kW": 15.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1112,7 +1112,7 @@
           "Cooling Tower Single Speed 1": {
             "tower_capacity_kW": 4710,
             "number_of_cells": 3,
-            "fan_power": 61.2,
+            "fan_power_kW": 61.2,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1156,7 +1156,7 @@
           "Cooling Tower Single Speed 1": {
             "tower_capacity_kW": 1180,
             "number_of_cells": 1,
-            "fan_power": 15.3,
+            "fan_power_kW": 15.3,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1195,9 +1195,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4665,
+            "tower_capacity_kW": 4660,
             "number_of_cells": 3,
-            "fan_power": 60.6,
+            "fan_power_kW": 60.6,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1239,9 +1239,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1193,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 15.5,
+            "fan_power_kW": 15.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1282,7 +1282,7 @@
           "Cooling Tower Single Speed 1": {
             "tower_capacity_kW": 4710,
             "number_of_cells": 3,
-            "fan_power": 61.2,
+            "fan_power_kW": 61.2,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1324,9 +1324,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1193,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 15.5,
+            "fan_power_kW": 15.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1367,7 +1367,7 @@
           "Cooling Tower Single Speed 1": {
             "tower_capacity_kW": 4710,
             "number_of_cells": 3,
-            "fan_power": 61.2,
+            "fan_power_kW": 61.2,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1412,9 +1412,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1192,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 17.9,
+            "fan_power_kW": 17.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1453,9 +1453,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4769,
+            "tower_capacity_kW": 4770,
             "number_of_cells": 3,
-            "fan_power": 71.5,
+            "fan_power_kW": 71.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1497,9 +1497,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1192,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 17.9,
+            "fan_power_kW": 17.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1538,9 +1538,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4769,
+            "tower_capacity_kW": 4770,
             "number_of_cells": 3,
-            "fan_power": 71.5,
+            "fan_power_kW": 71.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1582,9 +1582,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1192,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 17.9,
+            "fan_power_kW": 17.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1623,9 +1623,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4769,
+            "tower_capacity_kW": 4770,
             "number_of_cells": 3,
-            "fan_power": 71.5,
+            "fan_power_kW": 71.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1667,9 +1667,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1192,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 17.9,
+            "fan_power_kW": 17.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1708,9 +1708,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4769,
+            "tower_capacity_kW": 4770,
             "number_of_cells": 3,
-            "fan_power": 71.5,
+            "fan_power_kW": 71.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1755,9 +1755,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1192,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 17.9,
+            "fan_power_kW": 17.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1796,9 +1796,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4769,
+            "tower_capacity_kW": 4770,
             "number_of_cells": 3,
-            "fan_power": 71.5,
+            "fan_power_kW": 71.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1840,9 +1840,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1192,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 17.9,
+            "fan_power_kW": 17.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1881,9 +1881,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4769,
+            "tower_capacity_kW": 4770,
             "number_of_cells": 3,
-            "fan_power": 71.5,
+            "fan_power_kW": 71.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1925,9 +1925,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1192,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 17.9,
+            "fan_power_kW": 17.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -1966,9 +1966,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4769,
+            "tower_capacity_kW": 4770,
             "number_of_cells": 3,
-            "fan_power": 71.5,
+            "fan_power_kW": 71.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -2010,9 +2010,9 @@
         "tested_capacity_kW": 1000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 1192,
+            "tower_capacity_kW": 1190,
             "number_of_cells": 1,
-            "fan_power": 17.9,
+            "fan_power_kW": 17.9,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
@@ -2051,9 +2051,9 @@
         "tested_capacity_kW": 4000,
         "tower_results": {
           "Cooling Tower Single Speed 1": {
-            "tower_capacity_kW": 4769,
+            "tower_capacity_kW": 4770,
             "number_of_cells": 3,
-            "fan_power": 71.5,
+            "fan_power_kW": 71.5,
             "design_inlet_wet_bulb_degC": 24.0,
             "design_inlet_dry_bulb_degC": 35.0,
             "design_approach_T_degC": 5.0
