@@ -1515,7 +1515,9 @@ class NECB2011
 
     # Find the space type for each space and get the system type associated with each space type
     spaces.sort.each do |space|
-      systems_used << get_necb_spacetype_system_selection(space)
+      space_system = get_necb_spacetype_system_selection(space)
+      space_system = 4 if (space_system.nil? || space_system.empty?) && (is_an_necb_storage_space?(space) || is_an_necb_wet_space?(space) || is_an_necb_wildcard_space?(space))
+      systems_used << space_system
       systems_used.uniq!
     end
 
