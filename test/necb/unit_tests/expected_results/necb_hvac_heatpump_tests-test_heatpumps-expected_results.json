@@ -264,7 +264,7 @@
   },
   "NECB2015": {
     "VarType": "FuelType",
-    "Reference": "NECB 2015 p1: Table 5.2.12.1.; Table 8.4.4.21.-E",
+    "Reference": "NECB 2015 p1: Table 5.2.12.1. (page 5-14); Table 8.4.4.21.-E",
     "Electricity": {
       "VarType": "TestCase",
       "Small single package (CSA-C656)": {
@@ -526,7 +526,7 @@
   },
   "NECB2017": {
     "VarType": "FuelType",
-    "Reference": "NECB 2017 p2: Table 5.2.12.1.; Table 8.4.4.21.-E",
+    "Reference": "NECB 2017 p2: Table 5.2.12.1. (page 5-16); Table 8.4.4.21.-E",
     "Electricity": {
       "VarType": "TestCase",
       "Small single package (CSA-C656)": {
