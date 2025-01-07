@@ -740,14 +740,24 @@ class NECB2011
 
     # Set cooling tower properties now that the new COP of the chiller is set
     if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
+      # Get the cooling tower based on the condenser water loop rather than assume that there is only one cooling tower loop.
+      clg_towers = []
+      tower_cap = capacity_w * (1.0 + 1.0 / chiller_electric_eir.referenceCOP)
+      condenser_loop = chiller_electric_eir.condenserWaterLoop.get
+      condenser_loop.supplyComponents.each do |supply_comp|
+        if supply_comp.to_CoolingTowerSingleSpeed.is_initialized
+          clg_towers << supply_comp.to_CoolingTowerSingleSpeed.get
+        end
+      end
       # Single speed tower model assumes 25% extra for compressor power
       tower_cap = capacity_w * (1.0 + 1.0 / chiller_electric_eir.referenceCOP)
       if (tower_cap / 1000.0) < 1750
-        clg_tower_objs[0].setNumberofCells(1)
+        clg_towers[0].setNumberofCells(1)
       else
-        clg_tower_objs[0].setNumberofCells((tower_cap / (1000 * 1750) + 0.5).round)
+        clg_towers[0].setNumberofCells((tower_cap / (1000 * 1750) + 0.5).round)
       end
-      clg_tower_objs[0].setFanPoweratDesignAirFlowRate(0.015 * tower_cap)
+            # Only apply cooling tower fan power if power is greater than 500 W.  This is to avoid EnergyPlus issues with some small cooling towers.
+      clg_towers[0].setFanPoweratDesignAirFlowRate(0.015 * tower_cap) if (tower_cap * 0.015 > 500.0)
     end
 
     # Append the name with size and kw/ton
@@ -2223,7 +2233,6 @@ class NECB2011
           sys_name += 'sh>ccashp>c-g'
         when 'ccashp>c-e'
           sys_name += 'sh>ccashp>c-e'
-          
         else
           sys_name += 'sh>none'
         end
@@ -2300,8 +2309,8 @@ class NECB2011
     end
 
     air_loop.setName(sys_name)
-    return detect_air_system_type(air_loop: air_loop, 
-                                  old_system_name: sys_name, 
+    return detect_air_system_type(air_loop: air_loop,
+                                  old_system_name: sys_name,
                                   sys_abbr: sys_abbr)
   end
 
