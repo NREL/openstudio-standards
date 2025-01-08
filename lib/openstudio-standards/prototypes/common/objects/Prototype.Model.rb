@@ -684,35 +684,48 @@ Standard.class_eval do
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished creating thermal zones')
   end
 
-  # Loop through thermal zones and model_run(model)  thermal_zone.add_exhaust
-  # If kitchen_makeup is "None" then exhaust will be modeled in every kitchen zone without makeup air
-  # If kitchen_makeup is "Adjacent" then exhaust will be modeled in every kitchen zone. Makeup air will be provided when there as an adjacent dining,cafe, or cafeteria zone of the same building type.
-  # If kitchen_makeup is "Largest Zone" then exhaust will only be modeled in the largest kitchen zone, but the flow rate will be based on the kitchen area for all zones. Makeup air will be modeled in the largest dining,cafe, or cafeteria zone of the same building type.
+  # Add exhaust fans and makeup air to the model
   #
-  # @param kitchen_makeup [String] Valid choices are None, Largest Zone, Adjacent
-  # @return [Hash] Hash of newly made exhaust fan objects along with secondary exhaust and zone mixing objects
-  def model_add_exhaust(model, kitchen_makeup = 'Adjacent')
-    zone_exhaust_fans = {}
-
-    # apply use specified kitchen_makup logic
-    if ['Adjacent', 'Largest Zone'].include?(kitchen_makeup)
-      # common code for Adjacent and Largest Zone
-
-      # populate standard_space_types_with_makup_air
-      standard_space_types_with_makup_air = {}
-      standard_space_types_with_makup_air[['FullServiceRestaurant', 'Kitchen']] = ['FullServiceRestaurant', 'Dining']
-      standard_space_types_with_makup_air[['QuickServiceRestaurant', 'Kitchen']] = ['QuickServiceRestaurant', 'Dining']
-      standard_space_types_with_makup_air[['Hospital', 'Kitchen']] = ['Hospital', 'Dining']
-      standard_space_types_with_makup_air[['SecondarySchool', 'Kitchen']] = ['SecondarySchool', 'Cafeteria']
-      standard_space_types_with_makup_air[['PrimarySchool', 'Kitchen']] = ['PrimarySchool', 'Cafeteria']
-      standard_space_types_with_makup_air[['LargeHotel', 'Kitchen']] = ['LargeHotel', 'Cafe']
-
-      # gather information on zones organized by standards building type and space type. zone may be in this multiple times if it has multiple space types
-      zones_by_standards = {}
-
+  # @param makeup_source [String] Valid choices are 'None', 'Adjacent'
+  #   'None' (default) does not add makeup air
+  #   'Adjacent' makeup air provided from the thermal zone of the largest adjacent dining, cafe, or cafeteria space of the same building type
+  # @param remove_existing_exhaust_fans [Boolean] remove existing exhaust fans
+  # @return [Array<OpenStudio::Model::FanZoneExhaust>] Array of zone exhuast fans
+  def model_add_exhaust(model,
+                        makeup_source: 'None',
+                        remove_existing_exhaust_fans: true)
+    # remove existing exhaust fans
+    if remove_existing_exhaust_fans
       model.getThermalZones.sort.each do |thermal_zone|
-        # get space type ratio for spaces in zone
-        space_type_hash = {} # key is  space type,  value hash with floor area, standards building type, standards space type, and array of adjacent zones
+        thermal_zone.equipment.each { |equip| equip.remove if equip.to_FanZoneExhaust.is_initialized }
+      end
+    end
+
+    # placeholder for zone exhaust fans
+    zone_exhaust_fans = []
+
+    # populate standard_space_types_with_makup_air
+    standard_space_types_with_makup_air = {}
+    standard_space_types_with_makup_air[['FullServiceRestaurant', 'Kitchen']] = ['FullServiceRestaurant', 'Dining']
+    standard_space_types_with_makup_air[['QuickServiceRestaurant', 'Kitchen']] = ['QuickServiceRestaurant', 'Dining']
+    standard_space_types_with_makup_air[['Hospital', 'Kitchen']] = ['Hospital', 'Dining']
+    standard_space_types_with_makup_air[['SecondarySchool', 'Kitchen']] = ['SecondarySchool', 'Cafeteria']
+    standard_space_types_with_makup_air[['PrimarySchool', 'Kitchen']] = ['PrimarySchool', 'Cafeteria']
+    standard_space_types_with_makup_air[['LargeHotel', 'Kitchen']] = ['LargeHotel', 'Cafe']
+
+    # apply make up air kitchen spaces
+    if makeup_source == 'Adjacent'
+      # loop through thermal zones and add exhaust
+      model.getThermalZones.sort.each do |thermal_zone|
+        has_exhaust_fan = false
+        thermal_zone.equipment.each { |equip| has_exhaust_fan = true if equip.to_FanZoneExhaust.is_initialized }
+
+        if has_exhaust_fan
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.Model', "Thermal zone #{thermal_zone.name} already has an exhaust fan. None will be added.")
+          next
+        end
+
+        # loop through space types and add exhaust fans to kitchen spaces
         thermal_zone.spaces.each do |space|
           next unless space.spaceType.is_initialized
           next unless space.partofTotalFloorArea
@@ -721,182 +734,81 @@ Standard.class_eval do
           next unless space_type.standardsBuildingType.is_initialized
           next unless space_type.standardsSpaceType.is_initialized
 
-          # add entry in hash for space_type_standardsif it doesn't already exist
-          unless space_type_hash.key?(space_type)
-            space_type_hash[space_type] = {}
-            space_type_hash[space_type][:effective_floor_area] = 0.0
-            space_type_hash[space_type][:standards_array] = [space_type.standardsBuildingType.get, space_type.standardsSpaceType.get]
-            if kitchen_makeup == 'Adjacent'
-              space_type_hash[space_type][:adjacent_zones] = []
+          standards_building_type = space_type.standardsBuildingType.get
+          standards_space_type = space_type.standardsSpaceType.get
+
+          # get makeup air source
+          makeup_target_space_type = [standards_building_type, standards_space_type]
+          makeup_source_space_type = standard_space_types_with_makup_air[makeup_target_space_type]
+
+          # skip if nil
+          next if makeup_source_space_type.nil?
+
+          # get largest adjacent zone matching the makeup_source_space_type
+          makeup_space = nil
+          adjacent_zones = OpenstudioStandards::Geometry.thermal_zone_get_adjacent_zones_with_shared_walls(thermal_zone)
+          adjacent_zones.each do |adjacent_zone|
+            adjacent_zone.spaces.each do |adjacent_space|
+              next unless adjacent_space.spaceType.is_initialized
+              next unless adjacent_space.partofTotalFloorArea
+
+              adjacent_space_type = adjacent_space.spaceType.get
+              next unless adjacent_space_type.standardsBuildingType.is_initialized
+              next unless adjacent_space_type.standardsSpaceType.is_initialized
+
+              adjacent_standards_building_type = adjacent_space_type.standardsBuildingType.get
+              adjacent_standards_space_type = adjacent_space_type.standardsSpaceType.get
+
+              # filter out adjacent spaces not matching the makeup_source_space_type criteria
+              next unless (makeup_source_space_type[0] == adjacent_standards_building_type) && (makeup_source_space_type[1] == adjacent_standards_space_type)
+
+              # set makeup_space if not set or if adjacent space is larger
+              if makeup_space.nil? || (adjacent_space.floorArea > makeup_space.floorArea)
+                makeup_space = adjacent_space
+              end
             end
           end
 
-          # populate floor area
-          space_type_hash[space_type][:effective_floor_area] += space.floorArea * space.multiplier
-
-          # @todo populate adjacent zones (need to add methods to space and zone for this)
-          if kitchen_makeup == 'Adjacent'
-            space_type_hash[space_type][:adjacent_zones] << nil
+          if makeup_space.nil?
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.Model', "Model has zone #{thermal_zone.name} with standards types #{makeup_target_space_type} but no adjacent zone with #{makeup_source_space_type}. Exhaust will be added, but no makeup air.")
+            makeup_thermal_zone = nil
+          else
+            makeup_thermal_zone = makeup_space.thermalZone.get
           end
 
-          # populate zones_by_standards
-          unless zones_by_standards.key?(space_type_hash[space_type][:standards_array])
-            zones_by_standards[space_type_hash[space_type][:standards_array]] = {}
+          zone_exhaust_fan = OpenstudioStandards::HVAC.create_exhaust_fan(thermal_zone, make_up_air_source_zone: makeup_thermal_zone)
+          unless zone_exhaust_fan.nil?
+            # set fan pressure rise
+            fan_zone_exhaust_apply_prototype_fan_pressure_rise(zone_exhaust_fan)
+
+            # update efficiency and pressure rise
+            prototype_fan_apply_prototype_fan_efficiency(zone_exhaust_fan)
+
+            zone_exhaust_fans << zone_exhaust_fan
           end
-          zones_by_standards[space_type_hash[space_type][:standards_array]][thermal_zone] = space_type_hash
         end
       end
+    end
 
-      if kitchen_makeup == 'Largest Zone'
+    # loop through thermal zones and add exhaust fans
+    model.getThermalZones.sort.each do |thermal_zone|
+      has_exhaust_fan = false
+      thermal_zone.equipment.each { |equip| has_exhaust_fan = true if equip.to_FanZoneExhaust.is_initialized }
 
-        zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust model_run(model)  on it
-
-        # loop through standard_space_types_with_makup_air
-        standard_space_types_with_makup_air.each do |makeup_target, makeup_source|
-          # hash to manage lookups
-          markup_target_effective_floor_area = {}
-          markup_source_effective_floor_area = {}
-
-          if zones_by_standards.key?(makeup_target)
-
-            # process zones of each makeup_target
-            zones_by_standards[makeup_target].each do |thermal_zone, space_type_hash|
-              effective_floor_area = 0.0
-              space_type_hash.each do |space_type, hash|
-                effective_floor_area += space_type_hash[space_type][:effective_floor_area]
-              end
-              markup_target_effective_floor_area[thermal_zone] = effective_floor_area
-            end
-
-            # find zone with largest effective area of this space type
-            largest_target_zone = markup_target_effective_floor_area.key(markup_target_effective_floor_area.values.max)
-
-            # find total effective area to calculate exhaust, then divide by zone multiplier when add exhaust
-            target_effective_floor_area = markup_target_effective_floor_area.values.reduce(0, :+)
-
-            # find zones that match makeup_target with makeup_source
-            if zones_by_standards.key?(makeup_source)
-
-              # process zones of each makeup_source
-              zones_by_standards[makeup_source].each do |thermal_zone, space_type_hash|
-                effective_floor_area = 0.0
-                space_type_hash.each do |space_type, hash|
-                  effective_floor_area += space_type_hash[space_type][:effective_floor_area]
-                end
-
-                markup_source_effective_floor_area[thermal_zone] = effective_floor_area
-              end
-              # find zone with largest effective area of this space type
-              largest_source_zone = markup_source_effective_floor_area.key(markup_source_effective_floor_area.values.max)
-            else
-
-              # issue warning that makeup air wont be made but still make exhaust
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Model has zone with #{makeup_target} but not #{makeup_source}. Exhaust will be added, but no makeup air.")
-              next
-
-            end
-
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Largest #{makeup_target} is #{largest_target_zone.name} which will provide exhaust for #{target_effective_floor_area} m^2")
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Largest #{makeup_source} is #{largest_source_zone.name} which will provide makeup air for #{makeup_target}")
-
-            # add in extra arguments for makeup air
-            exhaust_makeup_inputs = {}
-            exhaust_makeup_inputs[makeup_target] = {} # for now only one makeup target per zone, but method could have multiple
-            exhaust_makeup_inputs[makeup_target][:target_effective_floor_area] = target_effective_floor_area
-            exhaust_makeup_inputs[makeup_target][:source_zone] = largest_source_zone
-
-            # add exhaust
-            next if zones_applied.include?(largest_target_zone) # would only hit this if zone has two space types each requesting makeup air
-
-            zone_exhaust_hash = thermal_zone_add_exhaust(largest_target_zone, exhaust_makeup_inputs)
-            zones_applied << largest_target_zone
-            zone_exhaust_fans.merge!(zone_exhaust_hash)
-
-          end
-        end
-
-        # add exhaust to zones that did not contain space types with standard_space_types_with_makup_air
-        zones_by_standards.each do |standards_array, zones_hash|
-          next if standard_space_types_with_makup_air.key?(standards_array)
-
-          # loop through zones adding exhaust
-          zones_hash.each do |thermal_zone, space_type_hash|
-            next if zones_applied.include?(thermal_zone)
-
-            # add exhaust
-            zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
-            zones_applied << thermal_zone
-            zone_exhaust_fans.merge!(zone_exhaust_hash)
-          end
-        end
-
-      else # kitchen_makeup == "Adjacent"
-
-        zones_applied = [] # add thermal zones to this ones they have had thermal_zone.add_exhaust model_run(model)  on it
-
-        standard_space_types_with_makup_air.each do |makeup_target, makeup_source|
-          if zones_by_standards.key?(makeup_target)
-            # process zones of each makeup_target
-            zones_by_standards[makeup_target].each do |thermal_zone, space_type_hash|
-              # get adjacent zones
-              adjacent_zones = OpenstudioStandards::Geometry.thermal_zone_get_adjacent_zones_with_shared_walls(thermal_zone)
-
-              # find adjacent zones matching key and value from standard_space_types_with_makup_air
-              first_adjacent_makeup_source = nil
-              adjacent_zones.each do |adjacent_zone|
-                next unless first_adjacent_makeup_source.nil?
-
-                if zones_by_standards.key?(makeup_source) && zones_by_standards[makeup_source].key?(adjacent_zone)
-                  first_adjacent_makeup_source = adjacent_zone
-
-                  # @todo add in extra arguments for makeup air
-                  exhaust_makeup_inputs = {}
-                  exhaust_makeup_inputs[makeup_target] = {} # for now only one makeup target per zone, but method could have multiple
-                  exhaust_makeup_inputs[makeup_target][:source_zone] = first_adjacent_makeup_source
-
-                  # add exhaust
-                  zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone, exhaust_makeup_inputs)
-                  zones_applied << thermal_zone
-                  zone_exhaust_fans.merge!(zone_exhaust_hash)
-                end
-              end
-
-              if first_adjacent_makeup_source.nil?
-
-                # issue warning that makeup air wont be made but still make exhaust
-                OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "Model has zone with #{makeup_target} but no adjacent zone with #{makeup_source}. Exhaust will be added, but no makeup air.")
-
-                # add exhaust
-                zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
-                zones_applied << thermal_zone
-                zone_exhaust_fans.merge!(zone_exhaust_hash)
-
-              end
-            end
-
-          end
-        end
-
-        # add exhaust for rest of zones
-        model.getThermalZones.sort.each do |thermal_zone|
-          next if zones_applied.include?(thermal_zone)
-
-          # add exhaust
-          zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
-          zone_exhaust_fans.merge!(zone_exhaust_hash)
-        end
-      end
-    else
-      if kitchen_makeup != 'None'
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Model', "#{kitchen_makeup} is an unexpected value for kitchen_makup arg, will use None.")
+      if has_exhaust_fan
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Prototype.Model', "Thermal zone #{thermal_zone.name} already has an exhaust fan. None will be added.")
+        next
       end
 
-      # loop through thermal zones
-      model.getThermalZones.sort.each do |thermal_zone|
-        zone_exhaust_hash = thermal_zone_add_exhaust(thermal_zone)
+      zone_exhaust_fan = OpenstudioStandards::HVAC.create_exhaust_fan(thermal_zone)
+      unless zone_exhaust_fan.nil?
+        # set fan pressure rise
+        fan_zone_exhaust_apply_prototype_fan_pressure_rise(zone_exhaust_fan)
 
-        # populate zone_exhaust_fans
-        zone_exhaust_fans.merge!(zone_exhaust_hash)
+        # update efficiency and pressure rise
+        prototype_fan_apply_prototype_fan_efficiency(zone_exhaust_fan)
+
+        zone_exhaust_fans << zone_exhaust_fan
       end
     end
 

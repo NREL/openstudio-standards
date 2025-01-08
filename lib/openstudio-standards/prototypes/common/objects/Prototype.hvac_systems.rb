@@ -1460,23 +1460,21 @@ class Standard
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
 
       # create the ERV and set its properties
-      erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      erv.addToNode(oa_system.outboardOANode.get)
-      erv.setHeatExchangerType('Rotary')
       # @todo come up with scheme for estimating power of ERV motor wheel which might require knowing airflow.
       # erv.setNominalElectricPower(value_new)
-      erv.setEconomizerLockout(true)
-      erv.setSupplyAirOutletTemperatureControl(false)
-
-      erv.setSensibleEffectivenessat100HeatingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75HeatingAirFlow(0.81)
-      erv.setLatentEffectivenessat100HeatingAirFlow(0.68)
-      erv.setLatentEffectivenessat75HeatingAirFlow(0.73)
-
-      erv.setSensibleEffectivenessat100CoolingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75CoolingAirFlow(0.81)
-      erv.setLatentEffectivenessat100CoolingAirFlow(0.68)
-      erv.setLatentEffectivenessat75CoolingAirFlow(0.73)
+      erv = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(model,
+                                                                              name: "#{zone.name} ERV HX",
+                                                                              type: "Rotary",
+                                                                              economizer_lockout: true,
+                                                                              sensible_heating_100_eff: 0.76,
+                                                                              sensible_heating_75_eff: 0.81,
+                                                                              latent_heating_100_eff: 0.68,
+                                                                              latent_heating_75_eff: 0.73,
+                                                                              sensible_cooling_100_eff: 0.76,
+                                                                              sensible_cooling_75_eff: 0.81,
+                                                                              latent_cooling_100_eff: 0.68,
+                                                                              latent_cooling_75_eff: 0.73)
+      erv.addToNode(oa_system.outboardOANode.get)
 
       # increase fan static pressure to account for ERV
       erv_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
@@ -5695,19 +5693,19 @@ class Standard
       # erv_controller.setTimeofDayEconomizerFlowControlSchedule(self.alwaysOnDiscreteSchedule)
       # erv_controller.setHighHumidityControlFlag(false)
 
-      heat_exchanger = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      heat_exchanger.setName("#{zone.name} ERV HX")
-      heat_exchanger.setHeatExchangerType('Plate')
-      heat_exchanger.setEconomizerLockout(false)
-      heat_exchanger.setSupplyAirOutletTemperatureControl(false)
-      heat_exchanger.setSensibleEffectivenessat100HeatingAirFlow(0.76)
-      heat_exchanger.setSensibleEffectivenessat75HeatingAirFlow(0.81)
-      heat_exchanger.setLatentEffectivenessat100HeatingAirFlow(0.68)
-      heat_exchanger.setLatentEffectivenessat75HeatingAirFlow(0.73)
-      heat_exchanger.setSensibleEffectivenessat100CoolingAirFlow(0.76)
-      heat_exchanger.setSensibleEffectivenessat75CoolingAirFlow(0.81)
-      heat_exchanger.setLatentEffectivenessat100CoolingAirFlow(0.68)
-      heat_exchanger.setLatentEffectivenessat75CoolingAirFlow(0.73)
+      heat_exchanger = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(model,
+                                                                                          name: "#{zone.name} ERV HX",
+                                                                                          type: "Plate",
+                                                                                          economizer_lockout: false,
+                                                                                          supply_air_outlet_temperature_control: false,
+                                                                                          sensible_heating_100_eff: 0.76,
+                                                                                          sensible_heating_75_eff: 0.81,
+                                                                                          latent_heating_100_eff: 0.68,
+                                                                                          latent_heating_75_eff: 0.73,
+                                                                                          sensible_cooling_100_eff: 0.76,
+                                                                                          sensible_cooling_75_eff: 0.81,
+                                                                                          latent_cooling_100_eff: 0.68,
+                                                                                          latent_cooling_75_eff: 0.73)
 
       zone_hvac = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
       zone_hvac.setName("#{zone.name} ERV")
@@ -6020,17 +6018,16 @@ class Standard
       exhaust_fan.setPressureRise(270.64755)
 
       # Create heat exchanger
-      heat_exchanger = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      heat_exchanger.setName("#{thermal_zone.name} ERV HX")
-      heat_exchanger.setSupplyAirOutletTemperatureControl(false)
-      heat_exchanger.setHeatExchangerType('Rotary')
-      heat_exchanger.setEconomizerLockout(false)
-      heat_exchanger.setFrostControlType('ExhaustOnly')
+      heat_exchanger = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(model,
+                                                                                          name: "#{thermal_zone.name} ERV HX",
+                                                                                          type: 'Rotary',
+                                                                                          economizer_lockout: false,
+                                                                                          supply_air_outlet_temperature_control: false,
+                                                                                          frost_control_type: 'ExhaustOnly')
       heat_exchanger.setThresholdTemperature(-23.3)
       heat_exchanger.setInitialDefrostTimeFraction(0.167)
       heat_exchanger.setRateofDefrostTimeFractionIncrease(1.44)
       heat_exchanger.setAvailabilitySchedule(model_add_schedule(model, 'Always On - No Design Day'))
-      # TODO: heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio should be refactored to take both ERR requirements (heating and cooling); PNNL to refactor based on regressions developed from manufacturer data
       heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio(heat_exchanger, enthalpy_recovery_ratio, design_conditions, climate_zone)
 
       # Create ERV Controller

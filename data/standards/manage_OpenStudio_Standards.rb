@@ -90,7 +90,7 @@ def unique_properties(sheet_name)
            ['template']
          when 'materials'
            ['name', 'code_category']
-         when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh', 'space_types_exhaust'
+         when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh'
            ['template', 'building_type', 'space_type']
          when 'exterior_lighting'
            ['exterior_lighting_zone_number', 'template']
