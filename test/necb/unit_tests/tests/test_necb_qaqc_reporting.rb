@@ -39,8 +39,8 @@ class NECB_QAQC_Reporting < Minitest::Test
     qaqc[:openstudio_version] = "test"
     qaqc[:energyplus_version] = "test"
     # Create the test file.  If no expected results file exists create the expected results file from the test results.
-    qaqc_expected_results = File.join(@expected_results_folder, 'qaqc_report_expected_result.json')
-    qaqc_test_results = File.join(@test_results_folder, 'qaqc_report_test_result.json')
+    qaqc_expected_results = File.join(@expected_results_folder, 'qaqc_report_expected_results.json')
+    qaqc_test_results = File.join(@test_results_folder, 'qaqc_report_test_results.json')
     unless File.exist?(qaqc_expected_results)
       puts("No expected results file, creating one based on test results")
       File.write(qaqc_expected_results, JSON.pretty_generate(qaqc))
