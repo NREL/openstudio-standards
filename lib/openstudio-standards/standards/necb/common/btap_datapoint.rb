@@ -178,7 +178,8 @@ class BTAPDatapoint
                                        tbd_option: @options[:tbd_option],
                                        necb_hdd: @options[:necb_hdd],
                                        boiler_fuel: @options[:boiler_fuel],
-                                       boiler_cap_ratio: @options[:boiler_cap_ratio]
+                                       boiler_cap_ratio: @options[:boiler_cap_ratio],
+                                       swh_fuel: @options[:swh_fuel]
                                        )
       end
 
@@ -263,6 +264,9 @@ class BTAPDatapoint
 
         #output hourly data
         self.output_hourly_data(model,@dp_temp_folder, @options[:datapoint_id])
+
+        # Output timestep data
+        self.output_timestep_data(model,@dp_temp_folder, @options[:datapoint_id])
       end
     rescue StandardError => bang
       puts "Error occured: #{bang}"
@@ -361,8 +365,7 @@ class BTAPDatapoint
     return exit_code
   end
 
-
-  def output_hourly_data(model, output_folder,datapoint_id)
+  def output_hourly_data(model, output_folder, datapoint_id)
     osm_path = File.join(output_folder, "run_dir/in.osm")
     sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
     csv_output = File.join(output_folder, "hourly.csv")
@@ -373,20 +376,18 @@ class BTAPDatapoint
       hours_of_year << (d + (60 * 60) * increment).strftime('%Y-%m-%d %H:%M')
     end
 
-
     array_of_hashes = []
 
-
-#Find hourly outputs available for this datapoint.
+    # Find hourly outputs available for this datapoint.
     query = "
         SELECT ReportDataDictionaryIndex
         FROM ReportDataDictionary
         WHERE ReportingFrequency == 'Hourly'
                                                        "
-# Get hourly data for each output.
+    # Get hourly data for each output.
     model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
 
-      #Get Name
+      # Get Name
       query = "
         SELECT Name
         FROM ReportDataDictionary
@@ -394,7 +395,7 @@ class BTAPDatapoint
       "
       name = model.sqlFile.get.execAndReturnFirstString(query).get
 
-      #Get KeyValue
+      # Get KeyValue
       query = "
         SELECT KeyValue
         FROM ReportDataDictionary
@@ -411,7 +412,7 @@ class BTAPDatapoint
         key_value = ""
       end
 
-      #Get Units
+      # Get Units
       query = "
         SELECT Units
         FROM ReportDataDictionary
@@ -419,7 +420,7 @@ class BTAPDatapoint
       "
       units = model.sqlFile.get.execAndReturnFirstString(query).get
 
-      #Get hourly data
+      # Get hourly data
       query = "
                     Select Value
                     FROM ReportData
@@ -430,7 +431,7 @@ class BTAPDatapoint
 
       hourly_hash = Hash[hours_of_year.zip(hourly_values)]
 
-      data_hash = {"datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units}.merge(hourly_hash)
+      data_hash = { "datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units }.merge(hourly_hash)
       array_of_hashes << data_hash
     end
 
@@ -443,4 +444,169 @@ class BTAPDatapoint
       end
     end
   end
+  #=====================================================================================================================
+  def output_timestep_data(model, output_folder,datapoint_id)
+    osm_path = File.join(output_folder, "run_dir/in.osm")
+    sql_path = File.join(output_folder, "run_dir/run/eplusout.sql")
+    csv_output = File.join(output_folder, "timestep.csv")
+    #===================================================================================================================
+    # Get number of timesteps from the model
+    number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
+    #===================================================================================================================
+    # Calculate number of timesteps of the whole year
+    number_of_timesteps_of_year = 365 * 24 * number_of_timesteps_per_hour
+
+    timesteps_of_year = []
+    d = Time.new(2006, 1, 1, 0)
+    (0...number_of_timesteps_of_year).each do |increment|
+      timesteps_of_year << (d + (60 * 60 / number_of_timesteps_per_hour) * increment).strftime('%Y-%m-%d %H:%M')
+    end
+    timesteps_index = Array(0..number_of_timesteps_of_year-1)
+    #===================================================================================================================
+    # Create a hash with indices ('timesteps_index') as keys and timesteps as values ('timesteps_of_year')
+    # Note from Sara Gilani: 'I had to do this, as when I used 'timesteps_of_year' as keys to create all hashes below
+    # (e.g. timestep_hash_datapoint_id, timestep_hash_name, timestep_hash_key_value, ...),
+    # it did not create the right number of timesteps for the whole year'
+    timesteps_of_year_with_index = Hash[timesteps_index.zip(timesteps_of_year)]
+    #===================================================================================================================
+    array_of_hashes = []
+    array_of_hashes_transposed = []
+    #===================================================================================================================
+    # Find timestep outputs available for this datapoint.
+    query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE ReportingFrequency == 'Zone Timestep'
+                                                       "
+    #===================================================================================================================
+    # Get timestep data for each output.
+    model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
+      #=================================================================================================================
+      # Get Name
+      query = "
+        SELECT Name
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      name = model.sqlFile.get.execAndReturnFirstString(query).get
+      #=================================================================================================================
+      # Get KeyValue
+      query = "
+        SELECT KeyValue
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      #=================================================================================================================
+      # In some cases KeyValue has a value and sometimes it does not.  In some cases KeyValue is null.  If the command
+      # below is run and KeyValue is null then the command fails and returns an error.  The fix below assumes that if
+      # the command below fails it is because KeyValue is null.  In that case the "key_value" variable is set to a
+      # blank.
+      begin
+        key_value = model.sqlFile.get.execAndReturnFirstString(query).get
+      rescue StandardError => bang
+        key_value = ""
+      end
+      #=================================================================================================================
+      # Get Units
+      query = "
+        SELECT Units
+        FROM ReportDataDictionary
+        WHERE ReportDataDictionaryIndex == #{rdd_index}
+      "
+      units = model.sqlFile.get.execAndReturnFirstString(query).get
+      #=================================================================================================================
+      # Get timestep data
+      query = "
+        Select VariableValue
+        FROM ReportVariableData
+        WHERE
+        ReportVariableDataDictionaryIndex = #{rdd_index}
+      "
+      timestep_values = model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+
+      timestep_hash = Hash[timesteps_index.zip(timestep_values)]
+
+      data_hash = { "datapoint_id": datapoint_id, "Name": name, "KeyValue": key_value, "Units": units }.merge(timestep_hash)
+
+      array_of_hashes << data_hash
+
+      #=================================================================================================================
+      # Create a hash of data for having timesteps as rows instead of columns that is used for hourly outputs START
+      number_of_timesteps = timesteps_of_year.length()
+
+      array = [datapoint_id]
+      array_datapoint_id = array.zip(*[array]*number_of_timesteps).flatten
+      timestep_hash_datapoint_id = Hash[timesteps_index.zip(array_datapoint_id)]
+
+      array = [name]
+      array_name = array.zip(*[array]*number_of_timesteps).flatten
+      timestep_hash_name = Hash[timesteps_index.zip(array_name)]
+
+      array = [key_value]
+      array_key_value = array.zip(*[array]*number_of_timesteps).flatten
+      timestep_hash_key_value = Hash[timesteps_index.zip(array_key_value)]
+
+      array = [units]
+      array_units = array.zip(*[array]*number_of_timesteps).flatten
+      timestep_hash_units = Hash[timesteps_index.zip(array_units)]
+
+      timestep_hash_values = Hash[timesteps_index.zip(timestep_values)]
+
+      data_hash_transposed = Hash.new
+      timestep_hash_values.keys.each do |key|
+        data_hash_transposed[key] = [
+          timesteps_of_year_with_index[key],
+          timestep_hash_datapoint_id[key],
+          timestep_hash_name[key],
+          timestep_hash_key_value[key],
+          timestep_hash_units[key],
+          timestep_hash_values[key]
+        ]
+      end
+
+      array_of_hashes_transposed << data_hash_transposed
+      # Create a hash of data for having timesteps as rows instead of columns that is used for hourly outputs END
+      #=================================================================================================================
+
+    end #model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
+    #===================================================================================================================
+    # # This csv file has timesteps as the first row
+    # CSV.open(csv_output, "wb") do |csv|
+    #   unless array_of_hashes.empty?
+    #     csv << array_of_hashes.first.keys # adds the attributes name on the first line
+    #     array_of_hashes.each do |hash|
+    #       csv << hash.values
+    #     end
+    #   end
+    # end
+    #===================================================================================================================
+    # This csv file has timesteps as the first column
+    header = ['Index', 'Timestep', 'datapoint_id', 'Name', 'KeyValue', 'Units', 'Value']
+    CSV.open(csv_output, "wb") do |csv|
+      csv << header
+      array_of_hashes_transposed.each do |hash|
+        hash.keys().each do |index|
+          row_index = index
+          row_timestep = hash[index][0]
+          row_datapoint_id = hash[index][1]
+          row_name = hash[index][2]
+          row_key_value = hash[index][3]
+          row_units = hash[index][4]
+          row_value = hash[index][5]
+
+          row = CSV::Row.new(header,[])
+          row['Index'] = row_index
+          row['Timestep'] = row_timestep
+          row['datapoint_id'] = row_datapoint_id
+          row['Name'] = row_name
+          row['KeyValue'] = row_key_value
+          row['Units'] = row_units
+          row['Value'] = row_value
+          csv << row
+        end
+      end
+    end
+    #===================================================================================================================
+  end #output_timestep_data
+  #=====================================================================================================================
 end

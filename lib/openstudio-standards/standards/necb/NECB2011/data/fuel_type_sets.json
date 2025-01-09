@@ -126,7 +126,7 @@
           "hp_supp_heating_coil_type": null,
           "necb_reference_hp":false,
           "fan_type": "var_speed_drive",
-          "swh_fueltype": "Electricity",
+          "swh_fueltype": "FuelOilNo2",
           "ecm_fueltype": "Electricity"
 
         }
