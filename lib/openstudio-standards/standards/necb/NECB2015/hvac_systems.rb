@@ -104,14 +104,23 @@ class NECB2015
 
     # Set cooling tower properties now that the new COP of the chiller is set
     if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
-      # Single speed tower model assumes 25% extra for compressor power
+      # Get the cooling tower based on the condenser water loop rather than assume that there is only one cooling tower loop.
+      clg_towers = []
       tower_cap = capacity_w * (1.0 + 1.0 / chiller_electric_eir.referenceCOP)
-      if (tower_cap / 1000.0) < 1750
-        clg_tower_objs[0].setNumberofCells(1)
-      else
-        clg_tower_objs[0].setNumberofCells((tower_cap / (1000 * 1750) + 0.5).round)
+      condenser_loop = chiller_electric_eir.condenserWaterLoop.get
+      condenser_loop.supplyComponents.each do |supply_comp|
+        if supply_comp.to_CoolingTowerSingleSpeed.is_initialized
+          clg_towers << supply_comp.to_CoolingTowerSingleSpeed.get
+        end
       end
-      clg_tower_objs[0].setFanPoweratDesignAirFlowRate(0.013 * tower_cap)
+      # Single speed tower model assumes 25% extra for compressor power
+      if (tower_cap / 1000.0) < 1750
+        clg_towers[0].setNumberofCells(1)
+      else
+        clg_towers[0].setNumberofCells((tower_cap / (1000 * 1750) + 0.5).round)
+      end
+      # Only apply cooling tower fan power if power is greater than 500 W.  This is to avoid EnergyPlus issues with some small cooling towers.
+      clg_towers[0].setFanPoweratDesignAirFlowRate(0.013 * tower_cap) if (tower_cap * 0.013 > 600.0)
     end
 
     # Append the name with size and kw/ton
@@ -166,7 +175,7 @@ class NECB2015
       var_spd_pumps = pumps.select {|pump| pump.to_PumpVariableSpeed.is_initialized}
       # EnergyPlus doesn't currently properly account for variable speed pumps operation in the condenser loop.
       # This code is an approximation for a correction to the pump head when the loop has variable speed pumps for ground-source condenser loops.
-      # These estimates were confirmed with OS runs using Montreal weather file for offices, schoold, and apartment bldgs. Office estimates are 
+      # These estimates were confirmed with OS runs using Montreal weather file for offices, schoold, and apartment bldgs. Office estimates are
       # then for other bldg types.
       if plantloop.name.to_s.upcase.include? "GLHX"
         max_powertoload = 21.0

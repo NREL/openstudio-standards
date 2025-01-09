@@ -432,9 +432,6 @@ class NECB2011 < Standard
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
     self.fuel_type_set = SystemFuels.new()
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
-    unless hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == 'necb_default'
-      fuel_type_set.set_fuel_to_hvac_system_primary(hvac_system_primary: hvac_system_primary, standards_data: @standards_data)
-    end
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
@@ -442,6 +439,14 @@ class NECB2011 < Standard
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
     swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
+
+    # Check if custom systems are assigned to dwelling units, washrooms, corridors, and storage rooms.  If they are, set
+    # them to be the same as the primary system type.  If no primary system type is defined then set them to be nil.
+    hvac_system_dwelling_units, hvac_system_corridor, hvac_system_storage, hvac_system_washrooms = reset_hvac_system_if_required(hvac_system_primary: hvac_system_primary,
+                                                                                                                                 hvac_system_dwelling_units: hvac_system_dwelling_units,
+                                                                                                                                 hvac_system_corridor: hvac_system_corridor,
+                                                                                                                                 hvac_system_storage: hvac_system_storage,
+                                                                                                                                 hvac_system_washrooms: hvac_system_washrooms)
 
     boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
     self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
@@ -2527,4 +2532,23 @@ class NECB2011 < Standard
     }
     return boiler_cap_ratios
   end
+
+  # Until someone has time to allow dwelling units, washrooms, cooridors, and storage rooms can get their own custom
+  # system types (beyond the default necb_system), this metod will set the system type for those rooms to either be
+  # their default or to the primary system type (if one is defined and the other sytems are not set to default)
+  def reset_hvac_system_if_required(hvac_system_primary: nil, hvac_system_dwelling_units: nil, hvac_system_corridor: nil, hvac_system_storage: nil, hvac_system_washrooms: nil)
+    if hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == "necb_default"
+      hvac_system_dwelling_units = "NECB_Default"
+      hvac_system_corridor = "NECB_Default"
+      hvac_system_storage = "NECB_Default"
+      hvac_system_washrooms = "NECB_Default"
+    else
+      hvac_system_dwelling_units = hvac_system_primary unless hvac_system_dwelling_units.nil? || hvac_system_dwelling_units.to_s.downcase == "necb_default"
+      hvac_system_corridor = hvac_system_primary unless hvac_system_corridor.nil? || hvac_system_corridor.to_s.downcase == "necb_default"
+      hvac_system_storage = hvac_system_primary unless hvac_system_storage.nil? || hvac_system_storage.to_s.downcase == "necb_default"
+      hvac_system_washrooms = hvac_system_primary unless hvac_system_washrooms.nil? || hvac_system_washrooms.to_s.downcase == "necb_default"
+    end
+    return hvac_system_dwelling_units, hvac_system_corridor, hvac_system_storage, hvac_system_washrooms
+  end
+
 end
