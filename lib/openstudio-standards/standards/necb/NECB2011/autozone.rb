@@ -103,7 +103,8 @@ class NECB2011
                     shw_scale:,
                     baseline_system_zones_map_option:)
     raise('validation of model failed.') unless validate_initial_model(model)
-
+    # Store fuel type information in case hvac_system_primary requires a reset
+    init_fuel_type = get_fuel_type_information()
     # Check to see if model is using another vintage of spacetypes. If so overwrite the @standards for the object with the
     # other spacetype data. This is required for correct system mapping.
     template = determine_spacetype_vintage(model)
@@ -151,7 +152,8 @@ class NECB2011
                                mau_cooling_type: self.fuel_type_set.mau_cooling_type,
                                mau_heating_coil_type: self.fuel_type_set.mau_heating_coil_type,
                                mau_type: self.fuel_type_set.mau_type,
-                               baseline_system_zones_map_option: baseline_system_zones_map_option)
+                               baseline_system_zones_map_option: baseline_system_zones_map_option,
+                               init_fuel_type: init_fuel_type)
 
     # Assign a single system 4 for all wet spaces.. and assign the control zone to the one with the largest load.
     auto_system_wet_spaces(hvac_system_washrooms: hvac_system_washrooms,
@@ -160,7 +162,8 @@ class NECB2011
                            necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
                            boiler_fueltype: self.fuel_type_set.boiler_fueltype,
                            heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
-                           model: model)
+                           model: model,
+                           init_fuel_type: init_fuel_type)
 
     # Assign a single system 4 for all storage spaces.. and assign the control zone to the one with the largest load.
     auto_system_storage_spaces(hvac_system_storage: hvac_system_storage,
@@ -169,7 +172,8 @@ class NECB2011
                                necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
                                boiler_fueltype: self.fuel_type_set.boiler_fueltype,
                                heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
-                               model: model)
+                               model: model,
+                               init_fuel_type: init_fuel_type)
 
     # Assign the wild spaces to a single system 4 system with a control zone with the largest load.
     auto_system_wild_spaces(hvac_system_corridor: hvac_system_corridor,
@@ -177,7 +181,8 @@ class NECB2011
                             necb_reference_hp: self.fuel_type_set.necb_reference_hp,
                             necb_reference_hp_supp_fuel: self.fuel_type_set.necb_reference_hp_supp_fuel,
                             heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
-                            model: model)
+                            model: model,
+                            init_fuel_type: init_fuel_type)
     # do the regular assignment for the rest and group where possible.
     auto_system_all_other_spaces(model: model,
                                  hvac_system_primary: hvac_system_primary,
@@ -194,7 +199,8 @@ class NECB2011
                                  mau_cooling_type: self.fuel_type_set.mau_cooling_type,
                                  mau_heating_coil_type: self.fuel_type_set.mau_heating_coil_type,
                                  mau_type: self.fuel_type_set.mau_type,
-                                 common_system_spaces: common_system_spaces
+                                 common_system_spaces: common_system_spaces,
+                                 init_fuel_type: init_fuel_type
     )
     model_add_swh(model: model,
                   shw_scale: shw_scale)
@@ -1134,8 +1140,14 @@ class NECB2011
                                    mau_heating_coil_type:,
                                    mau_type:,
                                    model:,
-                                   common_system_spaces: [])
-
+                                   common_system_spaces: [],
+                                   init_fuel_type:)
+    # Reset fuel type set to those defined by the user
+    fuel_type_set.reset_default_fuel_info(init_fuel_type: init_fuel_type)
+    # Set fuel type info based on hvac_system_primary (if set)
+    unless hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == 'necb_default'
+      fuel_type_set.set_fuel_to_hvac_system_primary(hvac_system_primary: hvac_system_primary, standards_data: @standards_data)
+    end
     zones = []
     other_spaces = model.getSpaces.select do |space|
       !is_an_necb_wet_space?(space) &&
@@ -1169,6 +1181,8 @@ class NECB2011
                        zones: zones,
                        necb_reference_hp: necb_reference_hp,
                        necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel)
+    # Reset fuel type set back to those defined by the user
+    fuel_type_set.reset_default_fuel_info(init_fuel_type: init_fuel_type)
   end
 
   # This method will ensure that all dwelling units are assigned to a system 1 or 3.
@@ -1190,7 +1204,10 @@ class NECB2011
                                  mau_heating_coil_type:,
                                  mau_type:,
                                  model:,
-                                 baseline_system_zones_map_option:)
+                                 baseline_system_zones_map_option:,
+                                 init_fuel_type:)
+    # Reset fuel type set to those defined by the user
+    fuel_type_set.reset_default_fuel_info(init_fuel_type: init_fuel_type)
     system_zones_hash = {}
     # Determine if dwelling units have a shared AHU.  If user entered building stories > 4 then set to true.
     if baseline_system_zones_map_option == 'one_sys_per_dwelling_unit'
@@ -1295,7 +1312,10 @@ class NECB2011
                              necb_reference_hp_supp_fuel:'DefaultFuel',
                              boiler_fueltype:,
                              heating_coil_type_sys4:,
-                             model:)
+                             model:,
+                             init_fuel_type:)
+    # Reset fuel type set to those defined by the user
+    fuel_type_set.reset_default_fuel_info(init_fuel_type: init_fuel_type)
     # Determine what zones are wet zones.
     wet_tz = []
     wet_spaces = model.getSpaces.select { |space| is_an_necb_wet_space?(space) }
@@ -1326,7 +1346,10 @@ class NECB2011
                                  necb_reference_hp_supp_fuel:'DefaultFuel',
                                  boiler_fueltype:,
                                  heating_coil_type_sys4:,
-                                 model:)
+                                 model:,
+                                 init_fuel_type:)
+    # Reset fuel type set to those defined by the user
+    fuel_type_set.reset_default_fuel_info(init_fuel_type: init_fuel_type)
     # Determine what zones are storage zones.
     tz = []
     storage_spaces = model.getSpaces.select { |space| is_an_necb_storage_space?(space) }
@@ -1358,7 +1381,10 @@ class NECB2011
                               necb_reference_hp: false,
                               necb_reference_hp_supp_fuel: 'Defaultfuel',
                               heating_coil_type_sys4:,
-                              model:)
+                              model:,
+                              init_fuel_type:)
+    # Reset fuel type set to those defined by the user
+    fuel_type_set.reset_default_fuel_info(init_fuel_type: init_fuel_type)
 
     zones = []
     wild_spaces = model.getSpaces.select { |space| !is_an_necb_wet_space?(space) && is_an_necb_wildcard_space?(space) }
@@ -1575,6 +1601,31 @@ class NECB2011
       common_spaces = common_spaces + storage_spaces
     end
     return common_spaces
+  end
+
+  def get_fuel_type_information()
+    init_fuel_type = {
+      name: fuel_type_set.name,
+      boiler_fueltype: fuel_type_set.boiler_fueltype,
+      backup_boiler_fueltype: fuel_type_set.backup_boiler_fueltype,
+      primary_boiler_cap_frac: fuel_type_set.primary_boiler_cap_frac,
+      secondary_boiler_cap_frac: fuel_type_set.secondary_boiler_cap_frac,
+      baseboard_type: fuel_type_set.baseboard_type,
+      mau_type: fuel_type_set.mau_type,
+      mau_heating_coil_type: fuel_type_set.mau_heating_coil_type,
+      mau_cooling_type: fuel_type_set.mau_cooling_type,
+      chiller_type: fuel_type_set.chiller_type,
+      heating_coil_type_sys2: fuel_type_set.heating_coil_type_sys2,
+      heating_coil_type_sys3: fuel_type_set.heating_coil_type_sys3,
+      heating_coil_type_sys4: fuel_type_set.heating_coil_type_sys4,
+      heating_coil_type_sys6: fuel_type_set.heating_coil_type_sys6,
+      necb_reference_hp: fuel_type_set.necb_reference_hp,
+      necb_reference_hp_supp_fuel: fuel_type_set.necb_reference_hp_supp_fuel,
+      fan_type: fuel_type_set.fan_type,
+      ecm_fueltype: fuel_type_set.ecm_fueltype,
+      swh_fueltype: fuel_type_set.swh_fueltype
+    }
+    return init_fuel_type
   end
 
 end

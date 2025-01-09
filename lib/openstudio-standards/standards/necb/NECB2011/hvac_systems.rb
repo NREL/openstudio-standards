@@ -757,7 +757,7 @@ class NECB2011
         clg_towers[0].setNumberofCells((tower_cap / (1000 * 1750) + 0.5).round)
       end
             # Only apply cooling tower fan power if power is greater than 500 W.  This is to avoid EnergyPlus issues with some small cooling towers.
-      clg_towers[0].setFanPoweratDesignAirFlowRate(0.015 * tower_cap) if (tower_cap * 0.015 > 500.0)
+      clg_towers[0].setFanPoweratDesignAirFlowRate(0.015 * tower_cap) if (tower_cap * 0.015 > 600.0)
     end
 
     # Append the name with size and kw/ton

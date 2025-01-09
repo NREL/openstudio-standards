@@ -78,4 +78,27 @@ class SystemFuels
       @heating_coil_type_sys4 = "DX"
     end
   end
+
+  # Reset to default fuel info
+  def reset_default_fuel_info(init_fuel_type:)
+    @name = init_fuel_type[:name]
+    @boiler_fueltype = init_fuel_type[:boiler_fueltype]
+    @backup_boiler_fueltype = init_fuel_type[:backup_boiler_fueltype]
+    @primary_boiler_cap_frac = init_fuel_type[:primary_boiler_cap_frac]
+    @secondary_boiler_cap_frac = init_fuel_type[:secondary_boiler_cap_frac]
+    @baseboard_type = init_fuel_type[:baseboard_type]
+    @mau_type = init_fuel_type[:mau_type]
+    @mau_heating_coil_type = init_fuel_type[:mau_heating_coil_type]
+    @mau_cooling_type = init_fuel_type[:mau_cooling_type]
+    @chiller_type = init_fuel_type[:chiller_type]
+    @heating_coil_type_sys2 = init_fuel_type[:heating_coil_type_sys2]
+    @heating_coil_type_sys3 = init_fuel_type[:heating_coil_type_sys3]
+    @heating_coil_type_sys4 = init_fuel_type[:heating_coil_type_sys4]
+    @heating_coil_type_sys6 = init_fuel_type[:heating_coil_type_sys6]
+    @necb_reference_hp = init_fuel_type[:necb_reference_hp]
+    @necb_reference_hp_supp_fuel = init_fuel_type[:necb_reference_hp_supp_fuel]
+    @fan_type = init_fuel_type[:fan_type]
+    @ecm_fueltype = init_fuel_type[:ecm_fueltype]
+    @swh_fueltype = init_fuel_type[:swh_fueltype]
+  end
 end
