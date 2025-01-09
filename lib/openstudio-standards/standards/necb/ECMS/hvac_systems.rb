@@ -2101,12 +2101,18 @@ class ECMS
     hw_loop_htg_eqpt.setMinimumPartLoadRatio(0.2)
     hw_loop.setLoadDistributionScheme('SequentialLoad')
     model.getCoilHeatingWaters.sort.each {|coil| hw_loop.addDemandBranchForComponent(coil)}
-    # add boiler in series with heat pump
-    boiler = OpenStudio::Model::BoilerHotWater.new(model)
-    boiler.setFuelType(heating_fuel)
-    boiler.setBoilerFlowMode('LeavingSetpointModulated')
+    # add one boiler if the primary and backup boiler fuel types are the same.  Add two boilers if the primary and
+    # secondary boiler fuel types differ.
     hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
-    boiler.addToNode(hw_loop_htg_eqpt_outlet_node)
+    boiler_fuels = []
+    boiler_fuels[0] = standard.fuel_type_set.boiler_fueltype
+    boiler_fuels[1] = standard.fuel_type_set.backup_boiler_fueltype unless standard.fuel_type_set.backup_boiler_fueltype == boiler_fuels[0]
+    boiler_fuels.each do |boiler_fuel|
+      boiler = OpenStudio::Model::BoilerHotWater.new(model)
+      boiler.setFuelType(boiler_fuel)
+      hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
+      boiler.addToNode(hw_loop_htg_eqpt_outlet_node)
+    end
     # add setpoint manager at the exit of the heat pump heating comp
     sch = OpenStudio::Model::ScheduleConstant.new(model)
     sch.setValue(50.0)
@@ -2198,26 +2204,36 @@ class ECMS
   #=============================================================================================================================
   # Apply efficiency for ECM 'hs15_cashp_fancoils'
   def apply_efficiency_ecm_hs15_cashp_fancoils(model, standard)
-    heatpump_siz_factor = 0.4 # heating heat pump sizing fraction
+    heatpump_siz_f = 0.4 # heating heat pump sizing fraction
     # get heat pump heating and boiler objects
     hw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'heating'}
     raise("apply_efficiency_ecm_hs15_cashp_fancoils: no hot-water loop is found") if hw_loop.empty?
     hw_loop = hw_loop[0].to_PlantLoop.get
     heatpump_htg = hw_loop.supplyComponents.select {|comp| comp.to_HeatPumpPlantLoopEIRHeating.is_initialized}
-    boiler = hw_loop.supplyComponents.select {|comp| comp.to_BoilerHotWater.is_initialized}
+    hw_boilers = hw_loop.supplyComponents.select {|comp| comp.to_BoilerHotWater.is_initialized}
     raise("apply_efficiency_ecm_hs15_cashp_fancoils: no air-source heat pump found on hot-water loop #{hw_loop.name.to_s}") if heatpump_htg.empty?
-    raise("apply_efficiency_ecm_hs15_cashp_fancoils: no boiler found on hot-water loop #{hw_loop.name.to_s}") if boiler.empty?
+    raise("apply_efficiency_ecm_hs15_cashp_fancoils: no boiler found on hot-water loop #{hw_loop.name.to_s}") if hw_boilers.empty?
     heatpump_htg = heatpump_htg[0].to_HeatPumpPlantLoopEIRHeating.get
-    boiler = boiler[0].to_BoilerHotWater.get
-    # boiler capacity
-    if boiler.autosizedNominalCapacity.is_initialized
-      blr_cap = boiler.autosizedNominalCapacity.to_f
-    elsif boiler.nominalCapacity.is_initialized
-      blr_cap = boiler.nominalCapacity.to_f
+    primary_boiler = hw_boilers[0].to_BoilerHotWater.get
+    # boiler total capacity
+    if primary_boiler.autosizedNominalCapacity.is_initialized
+      tot_hw_boiler_cap = primary_boiler.autosizedNominalCapacity.to_f
+    elsif primary_boiler.nominalCapacity.is_initialized
+      tot_hw_boiler_cap = primary_boiler.nominalCapacity.to_f
     else
-      raise("apply_efficiency_ecm_hs15_cashp_fancoils: capacity of boiler #{boiler.name.to_s} is not defined")
+      raise("apply_efficiency_ecm_hs15_cashp_fancoils: capacity of boiler #{primary_boiler.name.to_s} is not defined")
     end
-    boiler.setNominalCapacity(blr_cap)
+    # If two boilers are present set their capacities by multiplying the capacity not handled by the GSHP by the defined
+    # primary and secondary boiler capacity ratios, respectively. If one boiler is defined then set its capacity to the
+    # amount not handled by the GSHP.
+    hw_boiler_cap = [ 1.0 ]
+    if hw_boilers.size > 1
+      standard.fuel_type_set.primary_boiler_cap_frac.nil? ? hw_boiler_cap[0] = 0.75 : hw_boiler_cap[0] = standard.fuel_type_set.primary_boiler_cap_frac
+      standard.fuel_type_set.secondary_boiler_cap_frac.nil? ? hw_boiler_cap[1] = 1.0 - hw_boiler_cap[0] : hw_boiler_cap[1] = standard.fuel_type_set.secondary_boiler_cap_frac
+    end
+    hw_boilers.sort.each_with_index do |hw_boiler, boiler_index|
+      hw_boiler.to_BoilerHotWater.get.setNominalCapacity((tot_hw_boiler_cap*hw_boiler_cap[boiler_index]))
+    end
     # get heat pump cooling object
     chw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'cooling'}
     raise("apply_efficiency_ecm_hs15_cashp_fancoils: no chilled-water loop is found") if chw_loop.empty?
@@ -2234,7 +2250,7 @@ class ECMS
       raise("apply_efficiency_ecm_hs15_cashp_fancoils: capacity of air-source heat pump #{heatpump_htg.name.to_s} is not defined")
     end
     # set final heating capacity and cooling capacities of air-source heat pump
-    hp_htg_cap = heatpump_siz_factor*blr_cap
+    hp_htg_cap = heatpump_siz_f*tot_hw_boiler_cap
     hp_htg_cap = hp_clg_cap if hp_clg_cap > hp_htg_cap
     heatpump_htg.setReferenceCapacity(hp_htg_cap)
     heatpump_clg.setReferenceCapacity(hp_htg_cap)
