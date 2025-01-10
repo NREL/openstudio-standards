@@ -84,6 +84,7 @@ class NECB_Default_System_Selection_Tests < Minitest::Test
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
+    
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
     test_name = test_pars[:test_method]
@@ -98,12 +99,14 @@ class NECB_Default_System_Selection_Tests < Minitest::Test
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
     results = {}
+
     # Create new model for testing.
     standard = Standard.build(vintage)
     model = OpenStudio::Model::Model.new
+
     # Create only above ground geometry for this test.
     length = 100.0; width = 100.0; num_above_ground_floors = number_of_floors; num_under_ground_floors = 0; floor_to_floor_height = 3.8; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-    BTAP::Geometry::Wizards::create_shape_rectangle(model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+    OpenstudioStandards::Geometry.create_shape_rectangle(model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
 
     mapped_space_type = ""
     space_type_map = standard.standards_lookup_table_many(table_name: 'space_type_upgrade_map').detect do |row|
