@@ -144,31 +144,47 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
           oa_flow_in_ft3_per_min_per_ft2 = OpenStudio.convert(oa_flow_per_floor_area, 'm^3/s*m^2', 'ft^3/min*ft^2').get
           oa_flow_in_ft3_per_min_per_person = OpenStudio.convert(oa_flow_per_person, 'm^3/s*person', 'ft^3/min*person').get
 
-          # Recover zone variables.
-          zone_area = zone.floorArea
-          zone_area_ft2 = OpenStudio.convert(zone_area, 'm^2', 'ft^2').get
-          zone_num_people = zone.numberOfPeople
+          # Recover space variables.
+          space_area = space.floorArea
+          space_area_ft2 = OpenStudio.convert(space_area, 'm^2', 'ft^2').get
+          space_num_people = space.numberOfPeople
+
+          # Recover info from the additional properties object.
+          notes = outdoor_air.additionalProperties
+          ref_OA_area = notes.getFeatureAsDouble("Ref OA per area").is_initialized ? notes.getFeatureAsDouble("Ref OA per area").get : 0.0
+          ref_OA_person = notes.getFeatureAsDouble("Ref OA per person").is_initialized ? notes.getFeatureAsDouble("Ref OA per person").get : 0.0
+          ref_OA_ach = notes.getFeatureAsDouble("Ref OA ach").is_initialized ? notes.getFeatureAsDouble("Ref OA ach").get : 0.0
+          ref_occupancy = notes.getFeatureAsDouble("Ref occupancy per 1000ft2").is_initialized ? notes.getFeatureAsDouble("Ref occupancy per 1000ft2").get : 0.0
+          ref_standard = notes.getFeatureAsString("Ref standard").is_initialized ? notes.getFeatureAsString("Ref standard").get : "undefined"
+          ref_space_type = notes.getFeatureAsString("Ref space type").is_initialized ? notes.getFeatureAsString("Ref space type").get : "undefined"
 
           # Calculate expected ventilation rate.
-          calculated_ventilation_rate = (zone_num_people * oa_flow_per_person + zone_area * oa_flow_per_floor_area) * zone.multiplier
+          calculated_ventilation_rate = (space_num_people * oa_flow_per_person + space_area * oa_flow_per_floor_area) * space.multiplier
           calculated_ventilation_rate_ft3_per_min = OpenStudio.convert(calculated_ventilation_rate, 'm^3/s', 'ft^3/min').get
           
           # Add this test case to results and return the array.
           results << {
             zone_name: zone_name,
-            space_type_name: space_type.name,
-            std_oa_flow_per_floor_area: oa_flow_per_floor_area.signif(3),
-            std_oa_flow_per_person: oa_flow_per_person.signif(3),
-            zone_area_m2: zone_area.signif(3),
-            zone_area_ft2: zone_area_ft2.signif(3),
-            zone_num_people: zone_num_people.signif(3),
-            NECB_occ_density_per_1000ft2: (1000.0/(zone_area_ft2/zone_num_people)).signif(3),
-            NECB_occ_density_m2_per_occupant: (OpenStudio.convert((zone_area_ft2/zone_num_people), 'ft^2', 'm^2')).get.signif(2),
-            oa_flow_cfm_per_person: oa_flow_in_ft3_per_min_per_person.signif(3),
-            oa_flow_cfm_per_ft2: oa_flow_in_ft3_per_min_per_ft2.signif(3),
-            calculated_ventilation_rate_cfm: calculated_ventilation_rate_ft3_per_min.signif(3),
-            calculated_ventilation_rate_m3_per_s: calculated_ventilation_rate.signif(3),
-            sql_vbz_rate_m3_per_s: vbz_rate.signif(3)
+            vintage_space_type_name: space_type.name,
+            ventilation_standard_reference: ref_standard,
+            ventilation_standard_space_type: ref_space_type,
+            ventilation_standard_occupancy_per_1000ft2: ref_occupancy.signif(3),
+            ventilation_standard_OA_cfm_per_area_ft2: ref_OA_area.signif(4),
+            ventilation_standard_OA_cfm_per_person: ref_OA_person.signif(4),
+            ventilation_standard_OA_ach: ref_OA_ach.signif(4),
+            #adjusted_OA_flow_per_floor_area_m3_s_per_m2: oa_flow_per_floor_area.signif(4),
+            adjusted_OA_flow_cfm_per_ft2: oa_flow_in_ft3_per_min_per_ft2.signif(4),
+            #adjusted_OA_flow_per_person_m3_s_per_person: oa_flow_per_person.signif(4),
+            adjusted_OA_flow_cfm_per_person: oa_flow_in_ft3_per_min_per_person.signif(4),
+            space_area_m2: space_area.signif(4),
+            space_area_ft2: space_area_ft2.signif(4),
+            vintage_occupancy_m2_per_person: (OpenStudio.convert((space_area_ft2/space_num_people), 'ft^2', 'm^2')).get.signif(4),
+            vintage_occupancy_per_1000ft2: (1000.0/(space_area_ft2/space_num_people)).signif(4),
+            space_num_people: space_num_people.signif(4),
+            expected_ventilation_rate_cfm: calculated_ventilation_rate_ft3_per_min.signif(4),
+            simulated_ventilation_rate_cfm: OpenStudio.convert(vbz_rate, 'm^3/s', 'ft^3/min').get.signif(4),
+            expected_ventilation_rate_m3_per_s: calculated_ventilation_rate.signif(4),
+            simulated_ventilation_rate_m3_per_s: vbz_rate.signif(4)
           }
         end
       end
