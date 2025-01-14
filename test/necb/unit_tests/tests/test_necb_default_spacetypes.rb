@@ -32,7 +32,6 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
     # Define references (per vintage in this case).
     test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 Table 5.2.12.1" }
 
-    # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = { :Vintage => @AllTemplates,
                         :SpaceType => @AllSpaceTypes,
