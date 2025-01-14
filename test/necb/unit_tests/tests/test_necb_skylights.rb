@@ -139,8 +139,15 @@ class NECB_Skylights_Tests < Minitest::Test
             # EnergyPlus, OpenStudio & OpenStudio-Standards would report here a
             # SRR% of 4.5%. The effective 'ratio' would vary based on geometry,
             # e.g. larger building footprint, wider overhangs.
-            ratio = gra0.round > graX.round ? skm2 / graX : skm2 / gra0
+            if building == 'SmallOffice'
+              err_msg = "BTAP/OSut: GRA0 <= GRAX (#{cas})?"
+              assert(gra0.round > graX.round, err_msg)
+            else
+              err_msg = "BTAP/OSut: GRA0 != GRAX (#{cas})?"
+              assert(gra0.round == graX.round, err_msg)
+            end
 
+            ratio = skm2 / graX
             assert(ratio.round(2) == srr, "BTAP/OSut: Incorrect SRR (#{cas})?")
 
             # Higher level feedback.

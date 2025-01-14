@@ -811,7 +811,7 @@ class NECB2011
       # the requested skylight area, often by 10% to 15%. This makes it unfair
       # for NECBs, and more challenging when dealing with skylight wells. This
       # issue only applies with attics - not plenums. Trim down SRR if required.
-      target = (srr_lim * graX / gra0) * gra0
+      target = srr_lim * graX
 
       # Filtering out tiny roof surfaces, twisty corridors, etc.
       types = types.reject { |tp| tp.nameString.downcase.include?("undefined") }
