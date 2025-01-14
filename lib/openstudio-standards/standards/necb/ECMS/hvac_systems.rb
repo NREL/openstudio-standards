@@ -1804,13 +1804,14 @@ class ECMS
     boiler_fuels = []
     boiler_fuels[0] = standard.fuel_type_set.boiler_fueltype
     boiler_fuels[1] = standard.fuel_type_set.backup_boiler_fueltype unless standard.fuel_type_set.backup_boiler_fueltype == boiler_fuels[0]
+    hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
+    hw_boilers = []
     boiler_fuels.each do |boiler_fuel|
       boiler = OpenStudio::Model::BoilerHotWater.new(model)
       boiler.setFuelType(boiler_fuel)
-      hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
-      boiler.addToNode(hw_loop_htg_eqpt_outlet_node)
+      hw_boilers << boiler
     end
-
+    hw_boilers.reverse().each {|boiler| boiler.addToNode(hw_loop_htg_eqpt_outlet_node)}
     # add chilled-water loop
     chw_loop,chw_loop_clg_eqpt = add_plantloop(model: model,
                                                loop_htg_eqpt_type: 'none',
@@ -1923,7 +1924,7 @@ class ECMS
       standard.fuel_type_set.primary_boiler_cap_frac.nil? ? hw_boiler_cap[0] = 0.75 : hw_boiler_cap[0] = standard.fuel_type_set.primary_boiler_cap_frac
       standard.fuel_type_set.secondary_boiler_cap_frac.nil? ? hw_boiler_cap[1] = 1.0 - hw_boiler_cap[0] : hw_boiler_cap[1] = standard.fuel_type_set.secondary_boiler_cap_frac
     end
-    hw_boilers.sort.each_with_index do |hw_boiler, boiler_index|
+    hw_boilers.each_with_index do |hw_boiler, boiler_index|
       hw_boiler.to_BoilerHotWater.get.setNominalCapacity((tot_hw_boiler_cap*hw_boiler_cap[boiler_index]))
     end
     # set cooling capacity of chillers
@@ -2107,12 +2108,13 @@ class ECMS
     boiler_fuels = []
     boiler_fuels[0] = standard.fuel_type_set.boiler_fueltype
     boiler_fuels[1] = standard.fuel_type_set.backup_boiler_fueltype unless standard.fuel_type_set.backup_boiler_fueltype == boiler_fuels[0]
-    boiler_fuels.reverse().each do |boiler_fuel|
+    hw_boilers = []
+    boiler_fuels.each do |boiler_fuel|
       boiler = OpenStudio::Model::BoilerHotWater.new(model)
       boiler.setFuelType(boiler_fuel)
-      hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
-      boiler.addToNode(hw_loop_htg_eqpt_outlet_node)
+      hw_boilers << boiler
     end
+    hw_boilers.reverse().each {|boiler| boiler.addToNode(hw_loop_htg_eqpt_outlet_node)}
     # add setpoint manager at the exit of the heat pump heating comp
     sch = OpenStudio::Model::ScheduleConstant.new(model)
     sch.setValue(50.0)
