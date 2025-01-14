@@ -1,6 +1,6 @@
 [
     {
-        "name": "conference_meeting_multipurpose",
+        "name": "conference_meeting_multipurpose_occupancy",
         "category": "Occupancy",
         "units": null,
         "day_types": "Default|SmrDsn|Wkdy",
@@ -19,5 +19,15 @@
             ["et", {"+":-2}, "peak", {}],
             ["et", {}, "base", {}]
         ]
+    },
+    {
+        "name": "conference_meeting_multipurpose_equipment",
+        "category": "Equipment",
+        "units": null,
+        "day_types": "Default|SmrDsn|Wkdy",
+        "type": "derived",
+        "base": 0.3,
+        "peak": 0.9,
+        "response": 0.4
     }
 ]
