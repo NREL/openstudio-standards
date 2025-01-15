@@ -75,14 +75,14 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     logger.info "Starting individual test: #{name}"
     results = Array.new
 	
-    # (1) load 5 zone model
+    # (1) load fsr 3 zone model (2 occupied, 1 attic zone)
     # (2) loop through space types in the model and change them to the desired space type
-    # (3) call standard.model_add_loads(model, 'NECB_Default', 1.0) (or call standard.apply_loads(model: model))
+    # (3) call standard.model_add_loads(model, 'NECB_Default', 1.0) 
     # (4) check ventilation
 
     # Wrap test in begin/rescue/ensure.
     begin
-      # Create model and set climate file.
+      
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "fsr.osm"))
       weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
@@ -100,7 +100,7 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
         space.setSpaceType(test_spacetype)
         logger.info "  New spacetype: #{test_spacetype}"
       end
-
+      
       # Map space type name to match current vintage. 
       standard = get_standard(vintage)
       standard.validate_and_upate_space_types(model)
