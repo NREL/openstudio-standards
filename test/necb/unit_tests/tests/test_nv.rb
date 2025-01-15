@@ -65,7 +65,7 @@ class ECM_NatVent_Tests < Minitest::Test
 
 
     # Create ECM object. Required????
-    ecm = ECMS.new
+    #ecm = ECMS.new
 
 
     # Define local variables. These are extracted from the supplied hashes.
@@ -91,14 +91,7 @@ class ECM_NatVent_Tests < Minitest::Test
     begin
 
     # Test results storage array.
-    @test_results_array = []
-
-    #result = {}
-    #result['template'] = template
-    #result['epw_file'] = epw_file
-    #result['building_type'] = building_type
-    #result['primary_heating_fuel'] = primary_heating_fuel
-    #result['nv_type'] = nv_type
+    #@test_results_array = []
 
       # Make an empty model. Required???
       model = OpenStudio::Model::Model.new
@@ -163,9 +156,7 @@ class ECM_NatVent_Tests < Minitest::Test
                                     airloop_economizer_type: nil, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
                                     baseline_system_zones_map_option: nil  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
       )
-
       BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm") if save_intermediate_models
-
     rescue StandardError => error
       msg = "Model creation failed for #{name}\n#{__FILE__}::#{__method__} #{error.message}"
       logger.error(msg)
@@ -174,10 +165,8 @@ class ECM_NatVent_Tests < Minitest::Test
 
     ##### Gather information about ZoneVentilationDesignFlowRate & ZoneVentilationWindandStackOpenArea
     model.getHVACComponents.sort.each do |hvac_component|
-      # puts hvac_component
       if hvac_component.to_ZoneHVACComponent.is_initialized
         zn_hvac_component = hvac_component.to_ZoneHVACComponent.get
-        # puts zn_hvac_component
 
         ### Gather information about ZoneVentilationDesignFlowRate
         if zn_hvac_component.to_ZoneVentilationDesignFlowRate.is_initialized
@@ -197,7 +186,6 @@ class ECM_NatVent_Tests < Minitest::Test
             results["#{space.name.to_s} - #{zn_vent_design_flow_rate_name} - MaximumOutdoorTemperature"] = zn_vent_design_flow_rate.maximumOutdoorTemperature
             results["#{space.name.to_s} - #{zn_vent_design_flow_rate_name} - DeltaTemperature"] = zn_vent_design_flow_rate.deltaTemperature
           end
-
         end
 
         ### Gather information about ZoneVentilationWindandStackOpenArea
@@ -217,9 +205,7 @@ class ECM_NatVent_Tests < Minitest::Test
             results["#{space.name.to_s} - #{zn_vent_wind_and_stack_name} - MaximumOutdoorTemperature"] = zn_vent_wind_and_stack.maximumOutdoorTemperature
             results["#{space.name.to_s} - #{zn_vent_wind_and_stack_name} - DeltaTemperature"] = zn_vent_wind_and_stack.deltaTemperature
           end
-
         end
-
       end #if hvac_component.to_ZoneHVACComponent.is_initialized
     end #model.getHVACComponents.sort.each do |hvac_component|
 
@@ -239,6 +225,7 @@ class ECM_NatVent_Tests < Minitest::Test
         end
       end
     end
+    logger.info "Completed individual test: #{name}"
     return results
   end
 end
