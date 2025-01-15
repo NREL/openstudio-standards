@@ -1502,7 +1502,8 @@ module BTAP
           next unless construction[:stypes  ] == stypes
           next     if construction[:surfaces].empty?
 
-          # construction[:surfaces].values.each { |surface| surface.setConstruction(construction[:uo]) }
+         BTAP::Geometry::Surfaces.set_surfaces_construction_conductance(construction[:surfaces].values, construction[:uo])
+         # construction[:surfaces].values.each { |surface| surface.setConstruction(construction[:uo]) }
         end
       end
 
