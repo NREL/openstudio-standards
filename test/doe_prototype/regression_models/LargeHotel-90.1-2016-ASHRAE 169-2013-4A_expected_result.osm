@@ -21808,20 +21808,20 @@ OS:Schedule:Day,
 
 OS:Fan:ZoneExhaust,
   {1cea7c51-81bc-49e4-bcc6-4cf833f79361}, !- Handle
-  Dining_Flr_6 Exhaust Fan,               !- Name
+  Dining_Flr_6 ZN Exhaust Fan,               !- Name
   {a56f7cb3-1c6e-46f1-84f3-36ed0ebf93f3}, !- Availability Schedule Name
   0.385,                                  !- Fan Total Efficiency
   124.544455,                             !- Pressure Rise {Pa}
   0.9438948864,                           !- Maximum Flow Rate {m3/s}
   {7f9bf2da-f48c-43f0-b6e3-f5b21d5ec5af}, !- Air Inlet Node Name
   {16282a39-dfe5-41df-9ffd-1b9654931982}, !- Air Outlet Node Name
-  Zone Exhaust Fans,                      !- End-Use Subcategory
+  General,                                !- End-Use Subcategory
   ,                                       !- Flow Fraction Schedule Name
   Decoupled;                              !- System Availability Manager Coupling Mode
 
 OS:Node,
   {21978fe1-1ff2-47a4-9457-0a85989e470d}, !- Handle
-  Dining_Flr_6 Exhaust Fan Inlet Air Node, !- Name
+  Dining_Flr_6 ZN Exhaust Fan Inlet Air Node, !- Name
   {8841b5e8-a4b3-42f2-b6cd-91eba83ec41f}, !- Inlet Port
   {7f9bf2da-f48c-43f0-b6e3-f5b21d5ec5af}; !- Outlet Port
 
@@ -21841,7 +21841,7 @@ OS:Connection,
 
 OS:Node,
   {3feab960-480c-4f9a-a18e-65f203f54822}, !- Handle
-  Dining_Flr_6 Exhaust Fan Outlet Air Node, !- Name
+  Dining_Flr_6 ZN Exhaust Fan Outlet Air Node, !- Name
   {16282a39-dfe5-41df-9ffd-1b9654931982}, !- Inlet Port
   ;                                       !- Outlet Port
 
@@ -21854,20 +21854,20 @@ OS:Connection,
 
 OS:Fan:ZoneExhaust,
   {0cea8603-a7e0-4cb4-9c3d-33a8f712c834}, !- Handle
-  Banquet_Flr_6 Exhaust Fan,              !- Name
+  Banquet_Flr_6 ZN Exhaust Fan,              !- Name
   {a56f7cb3-1c6e-46f1-84f3-36ed0ebf93f3}, !- Availability Schedule Name
   0.385,                                  !- Fan Total Efficiency
   124.544455,                             !- Pressure Rise {Pa}
   0.9438948864,                           !- Maximum Flow Rate {m3/s}
   {631fdcce-66de-4690-b8e5-1050cab25ffa}, !- Air Inlet Node Name
   {c5100463-83ef-418e-b22d-ad8e0f73e64d}, !- Air Outlet Node Name
-  Zone Exhaust Fans,                      !- End-Use Subcategory
+  General,                                !- End-Use Subcategory
   ,                                       !- Flow Fraction Schedule Name
   Decoupled;                              !- System Availability Manager Coupling Mode
 
 OS:Node,
   {1c3ac650-985e-44cf-9c7b-7ad2461b41db}, !- Handle
-  Banquet_Flr_6 Exhaust Fan Inlet Air Node, !- Name
+  Banquet_Flr_6 ZN Exhaust Fan Inlet Air Node, !- Name
   {c55d397d-ebd6-4411-85e2-ac1d20d04a56}, !- Inlet Port
   {631fdcce-66de-4690-b8e5-1050cab25ffa}; !- Outlet Port
 
@@ -21887,7 +21887,7 @@ OS:Connection,
 
 OS:Node,
   {e7bcbf68-bf40-48ed-808f-37d17f9ee61b}, !- Handle
-  Banquet_Flr_6 Exhaust Fan Outlet Air Node, !- Name
+  Banquet_Flr_6 ZN Exhaust Fan Outlet Air Node, !- Name
   {c5100463-83ef-418e-b22d-ad8e0f73e64d}, !- Inlet Port
   ;                                       !- Outlet Port
 
@@ -21944,14 +21944,14 @@ OS:Schedule:Day,
 
 OS:Fan:ZoneExhaust,
   {510bba98-95fe-48c6-9acf-ad9abc5a5b51}, !- Handle
-  Kitchen_Flr_6 Exhaust Fan,              !- Name
+  Kitchen_Flr_6 ZN Exhaust Fan,              !- Name
   {a56f7cb3-1c6e-46f1-84f3-36ed0ebf93f3}, !- Availability Schedule Name
   0.385,                                  !- Fan Total Efficiency
   124.544455,                             !- Pressure Rise {Pa}
   1.8877897728,                           !- Maximum Flow Rate {m3/s}
   {383b6976-f7fd-4d01-886f-ee8f0c2bd496}, !- Air Inlet Node Name
   {6193354b-d5fe-47a0-a89b-102f440e1e11}, !- Air Outlet Node Name
-  Zone Exhaust Fans,                      !- End-Use Subcategory
+  General,                                !- End-Use Subcategory
   ,                                       !- Flow Fraction Schedule Name
   Decoupled,                              !- System Availability Manager Coupling Mode
   ,                                       !- Minimum Zone Temperature Limit Schedule Name
@@ -21967,7 +21967,7 @@ OS:ScheduleTypeLimits,
 
 OS:Node,
   {d31e3c59-a7d0-4b5f-baa1-4409b0b180ef}, !- Handle
-  Kitchen_Flr_6 Exhaust Fan Inlet Air Node, !- Name
+  Kitchen_Flr_6 ZN Exhaust Fan Inlet Air Node, !- Name
   {d8c38002-4da0-4830-a5f9-32c8ba4e8f36}, !- Inlet Port
   {383b6976-f7fd-4d01-886f-ee8f0c2bd496}; !- Outlet Port
 
@@ -21987,7 +21987,7 @@ OS:Connection,
 
 OS:Node,
   {f28a0d88-9640-447f-a8f7-15bde2524d99}, !- Handle
-  Kitchen_Flr_6 Exhaust Fan Outlet Air Node, !- Name
+  Kitchen_Flr_6 ZN Exhaust Fan Outlet Air Node, !- Name
   {6193354b-d5fe-47a0-a89b-102f440e1e11}, !- Inlet Port
   ;                                       !- Outlet Port
 
@@ -22035,20 +22035,20 @@ OS:Schedule:Day,
 
 OS:Fan:ZoneExhaust,
   {5e0f248e-cf7e-445f-974d-35b3a21a8503}, !- Handle
-  Laundry_Flr_1 Exhaust Fan,              !- Name
+  Laundry_Flr_1 ZN Exhaust Fan,              !- Name
   {2b8fda2c-de5b-446c-a132-703724c90a1b}, !- Availability Schedule Name
   0.385,                                  !- Fan Total Efficiency
   124.544455,                             !- Pressure Rise {Pa}
   0.2359737216,                           !- Maximum Flow Rate {m3/s}
   {cb46a9ab-c4d5-4aa3-a079-e07f08e9f5f1}, !- Air Inlet Node Name
   {9ee16fde-6ce8-4fb6-b14d-8f017440aa98}, !- Air Outlet Node Name
-  Zone Exhaust Fans,                      !- End-Use Subcategory
+  General,                                !- End-Use Subcategory
   ,                                       !- Flow Fraction Schedule Name
   Decoupled;                              !- System Availability Manager Coupling Mode
 
 OS:Node,
   {31ca6ae4-4c07-4255-a40d-ae508390644e}, !- Handle
-  Laundry_Flr_1 Exhaust Fan Inlet Air Node, !- Name
+  Laundry_Flr_1 ZN Exhaust Fan Inlet Air Node, !- Name
   {77bb47e8-50ac-4bac-b28f-8c6f3b31436a}, !- Inlet Port
   {cb46a9ab-c4d5-4aa3-a079-e07f08e9f5f1}; !- Outlet Port
 
@@ -22068,7 +22068,7 @@ OS:Connection,
 
 OS:Node,
   {778d5083-8aa4-4c63-a5ed-e2e8c7162709}, !- Handle
-  Laundry_Flr_1 Exhaust Fan Outlet Air Node, !- Name
+  Laundry_Flr_1 ZN Exhaust Fan Outlet Air Node, !- Name
   {9ee16fde-6ce8-4fb6-b14d-8f017440aa98}, !- Inlet Port
   ;                                       !- Outlet Port
 
