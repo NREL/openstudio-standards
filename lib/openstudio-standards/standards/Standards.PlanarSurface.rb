@@ -94,9 +94,17 @@ class Standard
         end
         case stds_type
         when 'Metal Framing', 'Metal Framing with Thermal Break'
-          stds_type = 'Metal framing (all other)'
+          if template == '90.1-2013'
+            stds_type = 'Metal framing, fixed'
+          else
+            stds_type = 'Metal framing (all other)'
+          end
         when 'Non-Metal Framing'
-          stds_type = 'Nonmetal framing (all)'
+          if template == '90.1-2013'
+            stds_type = 'Nonmetal framing, all'
+          else
+            stds_type = 'Nonmetal framing (all)'
+          end
         when 'Any Vertical Glazing'
           stds_type = 'Any Vertical Glazing'
         else

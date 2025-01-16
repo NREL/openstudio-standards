@@ -133,7 +133,7 @@ class Standard
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
   # @return [String] returns name of the boiler curve to be used, or nil if not applicable
   def boiler_get_eff_fplr(boiler_hot_water)
-    return nil
+    return 'Boiler Constant Efficiency Curve'
   end
 
   # Applies the standard efficiency ratings and typical performance curves to this object.

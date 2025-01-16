@@ -254,5 +254,12 @@ class AppendixGPRMTests < Minitest::Test
     model_hash = prm_test_helper('wwr', require_prototype = false, require_baseline = true)
     check_wwr(model_hash['baseline'])
   end
+
+  def test_pri_sec_loop_configuration
+    model_hash = prm_test_helper('pri_sec_loop', require_prototype = false, require_baseline = true)
+
+    check_pri_sec_loop(model_hash['baseline'])
+  end
+
 end
 
