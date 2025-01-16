@@ -524,6 +524,7 @@ class BTAPData
     #===================================================================================================================
     ### OERD's electricity rates for commercial buildings
     # Note: provinces' abbreviations were checked with: /standards/necb/NECB2011/data/province_map.json
+    # Note: OERD's electricity rate does not provide rates for three P/Ts: YT, NT, NU. To avoid errors in simulation runs, I have assigned a dummy value for each.
     dollar_kW_month = {
       "AB" => 13.68,
       "BC" => 10.20,
@@ -534,7 +535,10 @@ class BTAPData
       "ON" => 12.25,
       "PE" => 13.70,
       "QC" => 14.90,
-      "SK" => 20.02
+      "SK" => 20.02,
+      "YT" => 10000000,
+      "NT" => 10000000,
+      "NU" => 10000000
     }
     dollar_kWh = {
       "AB" => 0.15,
@@ -546,7 +550,10 @@ class BTAPData
       "ON" => 0.16,
       "PEI" => 0.17,
       "QC" => 0.09,
-      "SK" => 0.19
+      "SK" => 0.19,
+      "YT" => 100000,
+      "NT" => 100000,
+      "NU" => 100000
     }
     #===================================================================================================================
     #===================================================================================================================
