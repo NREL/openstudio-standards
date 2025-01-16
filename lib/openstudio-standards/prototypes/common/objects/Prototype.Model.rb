@@ -58,6 +58,7 @@ Standard.class_eval do
       model_system_outdoor_air_sizing_vrp_method(air_loop)
       air_loop_hvac_apply_vav_damper_action(air_loop)
     end
+    model_add_exhaust(model, makeup_source: 'Adjacent')
     model_add_constructions(model, @instvarbuilding_type, climate_zone)
     model_fenestration_orientation(model, climate_zone)
     model_custom_hvac_tweaks(model, @instvarbuilding_type, climate_zone, @prototype_input)
