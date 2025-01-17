@@ -48,7 +48,7 @@ class ECM_NatVent_Tests < Minitest::Test
     expected_results = JSON.parse(File.read(file_name), { symbolize_names: true })
 
     # Check if test results match expected.
-    msg = "Ventilation test results do not match what is expected in test"
+    msg = "Natural ventilation ECM test results do not match what is expected in test"
     compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
     logger.info "Finished suite of tests for: #{__method__}"
   end
@@ -62,11 +62,6 @@ class ECM_NatVent_Tests < Minitest::Test
     # Debug.
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
-
-
-    # Create ECM object. Required????
-    #ecm = ECMS.new
-
 
     # Define local variables. These are extracted from the supplied hashes.
     test_name = test_pars[:test_method]
@@ -89,12 +84,6 @@ class ECM_NatVent_Tests < Minitest::Test
 
     # Wrap test in begin/rescue/ensure.
     begin
-
-    # Test results storage array.
-    #@test_results_array = []
-
-      # Make an empty model. Required???
-      model = OpenStudio::Model::Model.new
 
       # Load osm geometry and spactypes from library.
       standard = get_standard(vintage)
