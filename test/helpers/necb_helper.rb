@@ -116,9 +116,13 @@ module NecbHelper
       if loop_k.to_s == "TestPars" then
         loop_v.each {|key, value| expected_results_template[key] = value}
       else
-        temp = Hash.new
-        temp["VarType".to_sym] = loop_k.to_s
-        loop_v.each {|key| temp[key.to_sym] = expected_results_template}
+        temp = loop_v.each_with_object({ VarType: loop_k.to_s }) do |key, hash|
+          if key.respond_to?(:to_sym)
+            hash[key.to_sym] = expected_results_template
+          else
+            hash[key] = expected_results_template
+          end
+        end
         expected_results_template = temp.clone
       end
       logger.debug "expected_results_template #{expected_results_template}"
@@ -289,6 +293,92 @@ module NecbHelper
 
     # Save model after sizing.
     BTAP::FileIO.save_osm(model, "#{output_dir}/post-sizing.osm") if save_model_versions
+  end
+  
+  # @note Helper method to return the part load curve data.
+  # @param curve [OS::ChillerElectricEIR.<curve>] an openstudio curve.
+  # @return the efficiency curve name [String], curve type [String] and the curve coefficients [Hash] (curve type dependent).
+  def get_curve_info(curve)
+    corr_coeff = {}
+    eff_curve = nil
+    eff_curve_type = curve.iddObjectType.valueName.to_s
+    case eff_curve_type
+    when "OS_Curve_Bicubic"
+      eff_curve = curve.to_CurveBicubic.get
+      corr_coeff = {
+        const: eff_curve.coefficient1Constant,
+        x: eff_curve.coefficient2x,
+        x2: eff_curve.coefficient3xPOW2,
+        y: eff_curve.coefficient4y,
+        y2: eff_curve.coefficient5yPOW2,
+        xy: eff_curve.coefficient6xTIMESY,
+        x3: eff_curve.coefficient7xPOW3,
+        y3: eff_curve.coefficient8yPOW3,
+        x2y: eff_curve.coefficient9xPOW2TIMESY,
+        xy2: eff_curve.coefficient10xTIMESYPOW2,
+        minX: eff_curve.minimumValueofx,
+        maxX: eff_curve.maximumValueofx,
+        minY: eff_curve.minimumValueofy,
+        maxY: eff_curve.maximumValueofy
+      }
+    when "OS_Curve_Biquadratic"
+      eff_curve = curve.to_CurveBiquadratic.get
+      corr_coeff = {
+        const: eff_curve.coefficient1Constant,
+        x: eff_curve.coefficient2x,
+        x2: eff_curve.coefficient3xPOW2,
+        y: eff_curve.coefficient4y,
+        y2: eff_curve.coefficient5yPOW2,
+        xy: eff_curve.coefficient6xTIMESY,
+        minX: eff_curve.minimumValueofx,
+        maxX: eff_curve.maximumValueofx,
+        minY: eff_curve.minimumValueofy,
+        maxY: eff_curve.maximumValueofy
+      }
+    when "OS_Curve_Cubic"
+      eff_curve = curve.to_CurveCubic.get
+      corr_coeff = {
+        const: eff_curve.coefficient1Constant,
+        x: eff_curve.coefficient2x,
+        x2: eff_curve.coefficient3xPOW2,
+        x3: eff_curve.coefficient4xPOW3,
+        minX: eff_curve.minimumValueofx,
+        maxX: eff_curve.maximumValueofx
+      }
+    when "OS_Curve_Linear"
+      eff_curve = curve.to_CurveLinear.get
+      corr_coeff = {
+        const: eff_curve.coefficient1Constant,
+        x: eff_curve.coefficient2x,
+        minX: eff_curve.minimumValueofx,
+        maxX: eff_curve.maximumValueofx
+      }
+    when "OS_Curve_Quadratic"
+      eff_curve = curve.to_CurveQuadratic.get
+      corr_coeff = {
+        const: eff_curve.coefficient1Constant,
+        x: eff_curve.coefficient2x,
+        x2: eff_curve.coefficient3xPOW2,
+        minX: eff_curve.minimumValueofx,
+        maxX: eff_curve.maximumValueofx
+      }
+    when "OS_Curve_QuadraticLinear"
+      eff_curve = curve.to_CurveQuadraticLinear.get
+      corr_coeff = {
+        const: eff_curve.coefficient1Constant,
+        x: eff_curve.coefficient2x,
+        x2: eff_curve.coefficient3xPOW2,
+        y: eff_curve.coefficient4y,
+        xy: eff_curve.coefficient5xTIMESY,
+        x2y: eff_curve.coefficient6xPOW2TIMESY,
+        minX: eff_curve.minimumValueofx,
+        maxX: eff_curve.maximumValueofx,
+        minY: eff_curve.minimumValueofy,
+        maxY: eff_curve.maximumValueofy
+      }
+    end
+    eff_curve_name = eff_curve.name.get
+    return eff_curve_name, eff_curve_type, corr_coeff
   end
 
   # Check if two files are identical with some added smarts.
