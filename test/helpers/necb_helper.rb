@@ -109,6 +109,8 @@ module NecbHelper
   #  see test/necb/unit_tests/tests/test_necb_boiler_rules.rb for examples.
   # @return a nested json containing the test case descriptions and placeholders for results.
   # @note Expects the last two entries in the hash to be TestCase and TestPars.
+  # Also expects :TestMethod and :SaveIntermediateModels (rule is if in CamelCase then 
+  # expected here or in the in the do_* method)
   def make_test_cases_json(test_cases_loop_hash)
     expected_results_template = Hash.new
     test_cases_loop_hash.reverse_each do |loop_k, loop_v|
@@ -177,7 +179,7 @@ module NecbHelper
         logger.debug  "Current test: #{value}"
 
         # Run this test case. By default call the do_testMethod method.
-        method_name = "do_#{test_pars[:test_method]}"
+        method_name = "do_#{test_pars[:TestMethod]}"
         case_results = self.send(method_name, test_pars: test_pars, test_case: value)
         logger.debug  "Test case results: #{case_results}"
         test_results[key] = case_results
