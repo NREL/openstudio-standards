@@ -11,18 +11,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.94418,
-            0.0337102,
-            9.75564e-05,
-            -0.00322114,
-            -4.91832e-05,
-            -0.000177584,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.94418,
+            "x": 0.0337102,
+            "x2": 9.75564e-05,
+            "y": -0.00322114,
+            "y2": -4.91832e-05,
+            "xy": -0.000177584,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -34,18 +34,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.707908,
-            -0.00200657,
-            -0.00259605,
-            0.0300588,
-            -0.00105643,
-            0.0020457,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.707908,
+            "x": -0.00200657,
+            "x2": -0.00259605,
+            "y": 0.0300588,
+            "y2": -0.00105643,
+            "xy": 0.0020457,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -57,18 +57,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Screw_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.812998,
-            -0.0142532,
-            -0.00161799,
-            0.0263844,
-            -0.00091543,
-            0.00169601,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.812998,
+            "x": -0.0142532,
+            "x2": -0.00161799,
+            "y": 0.0263844,
+            "y2": -0.00091543,
+            "xy": 0.00169601,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -80,18 +80,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            1.03031,
-            0.0334698,
-            0.00023639,
-            -0.00729587,
-            -2.3166e-05,
-            -0.000148943,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 1.03031,
+            "x": 0.0334698,
+            "x2": 0.00023639,
+            "y": -0.00729587,
+            "y2": -2.3166e-05,
+            "xy": -0.000148943,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     }
@@ -107,18 +107,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.94418,
-            0.0337102,
-            9.75564e-05,
-            -0.00322114,
-            -4.91832e-05,
-            -0.000177584,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.94418,
+            "x": 0.0337102,
+            "x2": 9.75564e-05,
+            "y": -0.00322114,
+            "y2": -4.91832e-05,
+            "xy": -0.000177584,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -130,18 +130,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.707908,
-            -0.00200657,
-            -0.00259605,
-            0.0300588,
-            -0.00105643,
-            0.0020457,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.707908,
+            "x": -0.00200657,
+            "x2": -0.00259605,
+            "y": 0.0300588,
+            "y2": -0.00105643,
+            "xy": 0.0020457,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -153,18 +153,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Screw_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.812998,
-            -0.0142532,
-            -0.00161799,
-            0.0263844,
-            -0.00091543,
-            0.00169601,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.812998,
+            "x": -0.0142532,
+            "x2": -0.00161799,
+            "y": 0.0263844,
+            "y2": -0.00091543,
+            "xy": 0.00169601,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -176,18 +176,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            1.03031,
-            0.0334698,
-            0.00023639,
-            -0.00729587,
-            -2.3166e-05,
-            -0.000148943,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 1.03031,
+            "x": 0.0334698,
+            "x2": 0.00023639,
+            "y": -0.00729587,
+            "y2": -2.3166e-05,
+            "xy": -0.000148943,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     }
@@ -203,18 +203,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.94418,
-            0.0337102,
-            9.75564e-05,
-            -0.00322114,
-            -4.91832e-05,
-            -0.000177584,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.94418,
+            "x": 0.0337102,
+            "x2": 9.75564e-05,
+            "y": -0.00322114,
+            "y2": -4.91832e-05,
+            "xy": -0.000177584,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -226,18 +226,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.707908,
-            -0.00200657,
-            -0.00259605,
-            0.0300588,
-            -0.00105643,
-            0.0020457,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.707908,
+            "x": -0.00200657,
+            "x2": -0.00259605,
+            "y": 0.0300588,
+            "y2": -0.00105643,
+            "xy": 0.0020457,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -249,18 +249,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Screw_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.812998,
-            -0.0142532,
-            -0.00161799,
-            0.0263844,
-            -0.00091543,
-            0.00169601,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.812998,
+            "x": -0.0142532,
+            "x2": -0.00161799,
+            "y": 0.0263844,
+            "y2": -0.00091543,
+            "xy": 0.00169601,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -272,18 +272,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            1.03031,
-            0.0334698,
-            0.00023639,
-            -0.00729587,
-            -2.3166e-05,
-            -0.000148943,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 1.03031,
+            "x": 0.0334698,
+            "x2": 0.00023639,
+            "y": -0.00729587,
+            "y2": -2.3166e-05,
+            "xy": -0.000148943,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     }
@@ -299,18 +299,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Scroll_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.94418,
-            0.0337102,
-            9.75564e-05,
-            -0.00322114,
-            -4.91832e-05,
-            -0.000177584,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.94418,
+            "x": 0.0337102,
+            "x2": 9.75564e-05,
+            "y": -0.00322114,
+            "y2": -4.91832e-05,
+            "xy": -0.000177584,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -322,18 +322,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.707908,
-            -0.00200657,
-            -0.00259605,
-            0.0300588,
-            -0.00105643,
-            0.0020457,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.707908,
+            "x": -0.00200657,
+            "x2": -0.00259605,
+            "y": 0.0300588,
+            "y2": -0.00105643,
+            "xy": 0.0020457,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -345,18 +345,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Screw_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            0.812998,
-            -0.0142532,
-            -0.00161799,
-            0.0263844,
-            -0.00091543,
-            0.00169601,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 0.812998,
+            "x": -0.0142532,
+            "x2": -0.00161799,
+            "y": 0.0263844,
+            "y2": -0.00091543,
+            "xy": 0.00169601,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     },
@@ -368,18 +368,18 @@
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Reciprocating_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
-          "curve_coefficients": [
-            1.03031,
-            0.0334698,
-            0.00023639,
-            -0.00729587,
-            -2.3166e-05,
-            -0.000148943,
-            5.0,
-            10.0,
-            24.0,
-            35.0
-          ]
+          "curve_coefficients": {
+            "const": 1.03031,
+            "x": 0.0334698,
+            "x2": 0.00023639,
+            "y": -0.00729587,
+            "y2": -2.3166e-05,
+            "xy": -0.000148943,
+            "minX": 5.0,
+            "maxX": 10.0,
+            "minY": 24.0,
+            "maxY": 35.0
+          }
         }
       }
     }
