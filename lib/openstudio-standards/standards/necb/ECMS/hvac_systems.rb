@@ -2139,7 +2139,7 @@ class ECMS
     chw_loop_clg_eqpt.setMinimumPartLoadRatio(0.2)
     hw_loop_htg_eqpt.setCompanionCoolingHeatPump(chw_loop_clg_eqpt)
     model.getCoilCoolingWaters.sort.each {|coil| chw_loop.addDemandBranchForComponent(coil)}
-    # use these performance curves given in one of the E+ examples for a central air-to-water heat pump from Trane
+    # use performance curves given in one of the E+ examples for a central air-to-water heat pump from Trane
     # heating capft curve
     hcapft = OpenStudio::Model::CurveBiquadratic.new(model)
     hcapft.setCoefficient1Constant(0.794900878202383)
