@@ -15,9 +15,9 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
-    test_parameters = { test_method: __method__,
-                        save_intermediate_models: true,
-                        fueltype: 'Electricity',
+    test_parameters = { TestMethod: __method__,
+                        SaveIntermediateModels: true,
+                        fuel_type: 'Electricity',
                         heating_coil_type: 'DX',
                         baseboard_type: 'Hot Water' }
     
@@ -25,15 +25,15 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     test_cases = {}
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 5.2.10.1." }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1 5.2.10.1.(1)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2 5.2.10.1.(1), Table 5.2.10.1.-B" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1 5.2.10.1.(1), Table 5.2.10.1.-B" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3 5.2.10.1." }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1 5.2.10.1.(1)" }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2 5.2.10.1.(1), Table 5.2.10.1.-B" }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1 5.2.10.1.(1), Table 5.2.10.1.-B" }
 
     # For compliance with NECB 2011 and NECB 2015, HRV is mandated when exhaust heat exceeds 150 kW.
-    test_cases_hash = { :Vintage => ["NECB2011", "NECB2015"],
-                        :TestCase => ["HRV not required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2011", "NECB2015"],
+                        TestCase: ["HRV not required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.25,
                                        :flow => 10.0,
                                        :weather_file_name => "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw" } }
@@ -41,9 +41,9 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     merge_test_cases!(test_cases, new_test_cases)
 
     # A multiplier of 80 is applied to simulate cases where exhaust heat surpasses the 150 kW threshold.
-    test_cases_hash = { :Vintage => ["NECB2011", "NECB2015"],
-                        :TestCase => ["HRV required"],
-                        :TestPars => { :multiplier_factor => 80.0,
+    test_cases_hash = { vintage: ["NECB2011", "NECB2015"],
+                        TestCase: ["HRV required"],
+                        TestPars: { :multiplier_factor => 80.0,
                                        :oaf => 0.25,
                                        :flow => 10.0,
                                        :weather_file_name => "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw" } }
@@ -52,81 +52,81 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
 
     # In compliance with NECB 2017 and NECB 2020 standards, HRV is mandated when the Heating Degree Days (HDD) surpass 3000;
     # Otherwise, its necessity hinges on airflow thresholds. Subsequent test cases will encompass various air flow ranges.
-    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 5 - HRV required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2017", "NECB2020"],
+                        TestCase: ["CZ 5 - HRV required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.25,
                                        :flow => 10.0,
                                        :weather_file_name => "CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 4 OAF 15% - HRV not required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2017", "NECB2020"],
+                        TestCase: ["CZ 4 OAF 15% - HRV not required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.15,
                                        :flow => 10.0,
                                        :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 4 OAF 25% - HRV required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2017", "NECB2020"],
+                        TestCase: ["CZ 4 OAF 25% - HRV required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.25,
                                        :flow => 10.0,
                                        :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 4 OAF 35% - HRV required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2017", "NECB2020"],
+                        TestCase: ["CZ 4 OAF 35% - HRV required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.35,
                                        :flow => 5.0,
                                        :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 4 OAF 45% - HRV required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2017", "NECB2020"],
+                        TestCase: ["CZ 4 OAF 45% - HRV required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.45,
                                        :flow => 3.0,
                                        :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 4 OAF 55% - HRV required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2017", "NECB2020"],
+                        TestCase: ["CZ 4 OAF 55% - HRV required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.55,
                                        :flow => 2.0,
                                        :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 4 OAF 65% - HRV required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2017", "NECB2020"],
+                        TestCase: ["CZ 4 OAF 65% - HRV required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.65,
                                        :flow => 1.6,
                                        :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 4 OAF 75% - HRV required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2017", "NECB2020"],
+                        TestCase: ["CZ 4 OAF 75% - HRV required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.75,
                                        :flow => 1.0,
                                        :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["NECB2017", "NECB2020"],
-                        :TestCase => ["CZ 4 OAF 55% - HRV not required"],
-                        :TestPars => { :multiplier_factor => 1.0,
+    test_cases_hash = { vintage: ["NECB2017", "NECB2020"],
+                        TestCase: ["CZ 4 OAF 55% - HRV not required"],
+                        TestPars: { :multiplier_factor => 1.0,
                                        :oaf => 0.55,
                                        :flow => 1.4,
                                        :weather_file_name => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw" } }
@@ -159,12 +159,12 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
 
     # Define local variables. These are extracted from the supplied hashes.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    fueltype = test_pars[:fueltype]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
     baseboard_type = test_pars[:baseboard_type]
     heating_coil_type = test_pars[:heating_coil_type]
-    vintage = test_pars[:Vintage]
+    vintage = test_pars[:vintage]
     weather_file_name = test_case[:weather_file_name]
     # Extract the city name from the weather file name
     city = weather_file_name.split('_')[2]
@@ -188,7 +188,7 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                   zones: model.getThermalZones,
                                                                                                   heating_coil_type: heating_coil_type,

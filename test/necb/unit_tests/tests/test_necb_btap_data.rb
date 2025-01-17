@@ -15,23 +15,23 @@ class NECB_BTAP_Data_Reporting < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: true,
-                       FuelType: 'NaturalGas',
-                       EpwFile: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw',
-                       Archetype: 'FullServiceRestaurant'}
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: true,
+                       fuel_type: 'NaturalGas',
+                       epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw',
+                       archetype: 'FullServiceRestaurant'}
 
     # Define test cases. 
     test_cases = Hash.new
 
     # Define references.
-    test_cases = {:Reference => "BTAP test - checking creation of btap_data report"}
+    test_cases = {Reference: "BTAP test - checking creation of btap_data report"}
     
     # Test cases. Three cases for NG.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = {:Vintage => ['NECB2011'], # @AllTemplates, 
-                       :TestCase => ["case 1"], 
-                       :TestPars => {:tbd => 'tbd'}}
+    test_cases_hash = {vintage: ['NECB2011'], # @AllTemplates, 
+                       TestCase: ["case 1"], 
+                       TestPars: {:tbd => 'tbd'}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
     
@@ -66,14 +66,14 @@ class NECB_BTAP_Data_Reporting < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    fuel_type = test_pars[:FuelType]
-    epw_file = test_pars[:EpwFile]
-    building_type = test_pars[:Archetype]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
+    epw_file = test_pars[:epw_file]
+    building_type = test_pars[:archetype]
     
     # Variable inputs.
-    vintage = test_pars[:Vintage]
+    vintage = test_pars[:vintage]
 
     # Test case inputs.
     

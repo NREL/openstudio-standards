@@ -16,8 +16,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: true,
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: true,
                        mau_type: true, 
                        mau_heating_coil_type: 'Hot Water',
                        baseboard_type: 'Hot Water'}
@@ -26,39 +26,39 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 Table 5.2.12.1"}
+    test_cases[:NECB2011] = {Reference: "NECB 2011 p3 Table 5.2.12.1"}
     
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :FuelType => ["Electricity"],
-                       :TestCase => ["case-1"], 
-                       :TestPars => {:tested_capacity_kW => 10.0,
+    test_cases_hash = {vintage: @AllTemplates, 
+                       fuel_type: ["Electricity"],
+                       TestCase: ["case-1"], 
+                       TestPars: {:tested_capacity_kW => 10.0,
                                      :efficiency_metric => "thermal efficiency"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :FuelType => ["NaturalGas", "FuelOilNo2"],
-                       :TestCase => ["case-1"], 
-                       :TestPars => {:name => "tbd",
+    test_cases_hash = {vintage: @AllTemplates, 
+                       fuel_type: ["NaturalGas", "FuelOilNo2"],
+                       TestCase: ["case-1"], 
+                       TestPars: {:name => "tbd",
                                      :tested_capacity_kW => 43.96,
                                      :efficiency_metric => "annual fuel utilization efficiency",
                                      :efficiency_value => "tbd"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :FuelType => ["NaturalGas", "FuelOilNo2"],
-                       :TestCase => ["case-2"], 
-                       :TestPars => {:name => "tbd",
+    test_cases_hash = {vintage: @AllTemplates, 
+                       fuel_type: ["NaturalGas", "FuelOilNo2"],
+                       TestCase: ["case-2"], 
+                       TestPars: {:name => "tbd",
                                      :tested_capacity_kW => 410.3,
                                      :efficiency_metric => "thermal efficiency",
                                      :efficiency_value => "tbd"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :FuelType => ["NaturalGas", "FuelOilNo2"],
-                       :TestCase => ["case-3"], 
-                       :TestPars => {:name => "tbd",
+    test_cases_hash = {vintage: @AllTemplates, 
+                       fuel_type: ["NaturalGas", "FuelOilNo2"],
+                       TestCase: ["case-3"], 
+                       TestPars: {:name => "tbd",
                                      :tested_capacity_kW => 2510,
                                      :efficiency_metric => "combustion efficiency",
                                      :efficiency_value => "tbd"}}
@@ -95,21 +95,21 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     mau_type = test_pars[:mau_type]
     mau_heating_coil_type = test_pars[:mau_heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
-    fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
 
     # Test specific inputs.
     boiler_cap = test_case[:tested_capacity_kW]
     efficiency_metric = test_case[:efficiency_metric]
 
     # Define the test name. 
-    name = "#{vintage}_sys1_Boiler-#{fueltype}_cap-#{boiler_cap.to_int}kW_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
-    name_short = "#{vintage}_sys1_Boiler-#{fueltype}_cap-#{boiler_cap.to_int}kW"
+    name = "#{vintage}_sys1_Boiler-#{fuel_type}_cap-#{boiler_cap.to_int}kW_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
+    name_short = "#{vintage}_sys1_Boiler-#{fuel_type}_cap-#{boiler_cap.to_int}kW"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
     results = Hash.new
@@ -126,7 +126,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                     zones: model.getThermalZones,
                                                     mau_type: mau_type,
@@ -184,9 +184,9 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: true,
-                       boiler_fueltype: 'NaturalGas',
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: true,
+                       fuel_type: 'NaturalGas',
                        mau_type: true, 
                        heating_coil_type: 'Electric',
                        baseboard_type: 'Hot Water'}
@@ -195,26 +195,26 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 8.4.4.10.(6) clauses b,c,d"}
+    test_cases[:NECB2011] = {Reference: "NECB 2011 p3 8.4.4.10.(6) clauses b,c,d"}
     
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :FuelType => ["NaturalGas"],
-                       :TestCase => ["Single_Small_Boiler"], 
-                       :TestPars => {:tested_capacity_kW => 100}}
+    test_cases_hash = {vintage: @AllTemplates, 
+                       fuel_type: ["NaturalGas"],
+                       TestCase: ["Single_Small_Boiler"], 
+                       TestPars: {:tested_capacity_kW => 100}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :FuelType => ["NaturalGas"],
-                       :TestCase => ["Two_Equal_Sized_Boilers"], 
-                       :TestPars => {:tested_capacity_kW => 200}}
+    test_cases_hash = {vintage: @AllTemplates, 
+                       fuel_type: ["NaturalGas"],
+                       TestCase: ["Two_Equal_Sized_Boilers"], 
+                       TestPars: {:tested_capacity_kW => 200}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :FuelType => ["NaturalGas"],
-                       :TestCase => ["Single_Large_Boiler"], 
-                       :TestPars => {:tested_capacity_kW => 400}}
+    test_cases_hash = {vintage: @AllTemplates, 
+                       fuel_type: ["NaturalGas"],
+                       TestCase: ["Single_Large_Boiler"], 
+                       TestPars: {:tested_capacity_kW => 400}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -250,20 +250,20 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     mau_type = test_pars[:mau_type]
     heating_coil_type = test_pars[:heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
-    boiler_fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
 
     # Test specific inputs.
     total_boiler_cap = test_case[:tested_capacity_kW]
 
     # Define the test name. 
-    name = "#{vintage}_Sys1_#{total_boiler_cap.round(0)}kW_#{boiler_fueltype}_boiler_HeatingCoilType-#{heating_coil_type}_Baseboard-#{baseboard_type}"
-    name_short = "#{vintage}_sys1_#{total_boiler_cap.round(0)}kW_#{boiler_fueltype}_boiler"
+    name = "#{vintage}_Sys1_#{total_boiler_cap.round(0)}kW_#{fuel_type}_boiler_HeatingCoilType-#{heating_coil_type}_Baseboard-#{baseboard_type}"
+    name_short = "#{vintage}_sys1_#{total_boiler_cap.round(0)}kW_#{fuel_type}_boiler"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
     results = Hash.new
@@ -280,7 +280,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                   zones: model.getThermalZones,
                                                                                                   heating_coil_type: heating_coil_type,
@@ -331,8 +331,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: true,
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: true,
                        mau_type: true, 
                        mau_heating_coil_type: 'Hot Water',
                        baseboard_type: 'Hot Water'}
@@ -341,14 +341,14 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 8.4.4.22 (maybe)"}
+    test_cases[:NECB2011] = {Reference: "NECB 2011 p3 8.4.4.22 (maybe)"}
     
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = {:Vintage => ['NECB2011'], # @AllTemplates, 
-                       :FuelType => ["NaturalGas"],
-                       :TestCase => ["case-1"], 
-                       :TestPars => {:name => "tbd"}}
+    test_cases_hash = {vintage: ['NECB2011'], # @AllTemplates, 
+                       fuel_type: ["NaturalGas"],
+                       TestCase: ["case-1"], 
+                       TestPars: {:name => "tbd"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -382,15 +382,15 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     mau_type = test_pars[:mau_type]
     mau_heating_coil_type = test_pars[:mau_heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
-    boiler_fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
 
-    name = "#{vintage}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
+    name = "#{vintage}_sys1_Boiler-#{fuel_type}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
     name_short = "#{vintage}_sys1"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
@@ -408,7 +408,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                     zones: model.getThermalZones,
                                                     mau_type: mau_type,
@@ -449,8 +449,8 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all cases. 
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: false,
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: false,
                        mau_type: true, 
                        mau_heating_coil_type: 'Hot Water',
                        baseboard_type: 'Hot Water'}
@@ -460,9 +460,9 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     boilers = standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"] # Used to get the case names and data.
     test_cases = Hash.new
     boilers.each do |boiler|
-      test_cases_hash = {:Vintage => @AllTemplates, 
-                         :TestCase => [boiler["name"]], 
-                         :TestPars => {:Reference=>boiler["notes"],
+      test_cases_hash = {vintage: @AllTemplates, 
+                         TestCase: [boiler["name"]], 
+                         TestPars: {:Reference=>boiler["notes"],
                                        :boiler_name=>boiler["name"], 
                                        :boiler_eff=>boiler["efficiency"], 
                                        :eff_curve_name=>boiler["part_load_curve"]}}
@@ -500,21 +500,21 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     mau_type = test_pars[:mau_type]
     mau_heating_coil_type = test_pars[:mau_heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
-    vintage = test_pars[:Vintage]
+    vintage = test_pars[:vintage]
     reference = test_case[:Reference]
 
     # Test specific inputs.
     boiler_name = test_case[:boiler_name]
-    boiler_fueltype = 'NaturalGas'
+    fuel_type = 'NaturalGas'
     boiler_cap = 1500000
 
     # Define the test name. 
-    name = "#{vintage}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{boiler_name}"
+    name = "#{vintage}_sys1_Boiler-#{fuel_type}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{boiler_name}"
     name_short = "#{vintage}_sys1"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Started individual test: #{name}"
@@ -533,7 +533,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                       zones: model.getThermalZones,
                                                       mau_type: mau_type,

@@ -18,18 +18,18 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = { test_method: __method__,
-                        save_intermediate_models: true,
-                        fueltype: 'Electricity' }
+    test_parameters = { TestMethod: __method__,
+                        SaveIntermediateModels: true,
+                        fuel_type: 'Electricity' }
     
                         # Define test cases.
     test_cases = {}
 
     test_cases_hash = {
-      :Vintage => @AllTemplates,
+      vintage: @AllTemplates,
       :SpaceType => @SpaceTypes,
-      :TestCase => ["ZoneResults"],
-      :TestPars => {  } # :oaf => "tbd"
+      TestCase: ["ZoneResults"],
+      TestPars: {  } # :oaf => "tbd"
     }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -63,10 +63,10 @@ class NECB_HVAC_Ventilation_Tests < Minitest::Test
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
     
     # Define local variables. These are extracted from the supplied hashes.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    fueltype = test_pars[:fueltype]
-    vintage = test_pars[:Vintage]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
     space_type = test_pars[:SpaceType]
 
     name = "#{vintage}_building_type_#{space_type}_ventilation"

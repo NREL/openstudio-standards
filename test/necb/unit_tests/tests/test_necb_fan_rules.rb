@@ -16,9 +16,9 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: true,
-                       boiler_fueltype: 'NaturalGas',
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: true,
+                       fuel_type: 'NaturalGas',
                        baseboard_type: 'Hot Water',
                        chiller_type: 'Scroll',
                        heating_coil_type: 'Electric',
@@ -28,22 +28,22 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3: 8.4.4.19.(4); 8.4.4.18."}
+    test_cases[:NECB2011] = {Reference: "NECB 2011 p3: 8.4.4.19.(4); 8.4.4.18."}
     
     # Test cases. Define each case seperately as they have unique kW values to test.
-    test_cases_hash = {:Vintage => ['NECB2011'], 
-                       :TestCase => ["small"], 
-                       :TestPars => {:tested_max_flow_L_s => 1000}}
+    test_cases_hash = {vintage: ['NECB2011'], 
+                       TestCase: ["small"], 
+                       TestPars: {:tested_max_flow_L_s => 1000}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2011'], 
-                       :TestCase => ["medium"], 
-                       :TestPars => {:tested_max_flow_L_s => 10000}}
+    test_cases_hash = {vintage: ['NECB2011'], 
+                       TestCase: ["medium"], 
+                       TestPars: {:tested_max_flow_L_s => 10000}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2011'], 
-                       :TestCase => ["large"], 
-                       :TestPars => {:tested_max_flow_L_s => 40000}}
+    test_cases_hash = {vintage: ['NECB2011'], 
+                       TestCase: ["large"], 
+                       TestPars: {:tested_max_flow_L_s => 40000}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -77,10 +77,10 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    boiler_fueltype = test_pars[:boiler_fueltype]
-    vintage = test_pars[:Vintage]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
     chiller_type = test_pars[:chiller_type]
     baseboard_type = test_pars[:baseboard_type]
     heating_coil_type = test_pars[:heating_coil_type]
@@ -106,7 +106,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
                                                                           zones: model.getThermalZones,
                                                                           heating_coil_type: heating_coil_type,
@@ -184,9 +184,9 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: true,
-                       boiler_fueltype: 'NaturalGas',
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: true,
+                       fuel_type: 'NaturalGas',
                        mau_type: true,
                        mau_heating_coil_type: 'Hot Water',
                        baseboard_type: 'Hot Water'}
@@ -195,12 +195,12 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3: 8.4.4.19.(3)"}
+    test_cases[:NECB2011] = {Reference: "NECB 2011 p3: 8.4.4.19.(3)"}
     
     # Test cases. Define each case seperately as they have unique kW values to test.
-    test_cases_hash = {:Vintage => ['NECB2011'], 
-                       :TestCase => ["cav_fan"], 
-                       :TestPars => {:tested_max_flow_L_s => 10000}}
+    test_cases_hash = {vintage: ['NECB2011'], 
+                       TestCase: ["cav_fan"], 
+                       TestPars: {:tested_max_flow_L_s => 10000}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -234,13 +234,13 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    boiler_fueltype = test_pars[:boiler_fueltype]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
     baseboard_type = test_pars[:baseboard_type]
     mau_type = test_pars[:mau_type]
     mau_heating_coil_type = test_pars[:mau_heating_coil_type]
-    vintage = test_pars[:Vintage]
+    vintage = test_pars[:vintage]
 
     # Test specific inputs.
     fan_flow = test_case[:tested_max_flow_L_s]
@@ -263,7 +263,7 @@ class NECB_HVAC_Fan_Rules_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                               zones: model.getThermalZones,
                                                               mau_type: mau_type,

@@ -102,47 +102,47 @@ class NECB_HDD_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: false}
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: false}
 
     # Define test cases. 
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB2011 8.4.4.1"}
-    test_cases[:NECB2015] = {:Reference => "xx"}
-    test_cases[:NECB2017] = {:Reference => "xx"}
-    test_cases[:NECB2020] = {:Reference => "xx"}
+    test_cases[:NECB2011] = {Reference: "NECB2011 8.4.4.1"}
+    test_cases[:NECB2015] = {Reference: "xx"}
+    test_cases[:NECB2017] = {Reference: "xx"}
+    test_cases[:NECB2020] = {Reference: "xx"}
     
     # Test cases. Define each case seperately as they have unique locations.
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ["climate_zone_4"], 
-                       :TestPars => {:epw_file => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw"}}
+    test_cases_hash = {vintage: @AllTemplates, 
+                       TestCase: ["climate_zone_4"], 
+                       TestPars: {:epw_file => "CAN_BC_Vancouver.Intl.AP.718920_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ["climate_zone_5"], 
-                       :TestPars => {:epw_file => "CAN_BC_Kamloops.AP.718870_CWEC2016.epw"}}
+    test_cases_hash = {vintage: @AllTemplates, 
+                       TestCase: ["climate_zone_5"], 
+                       TestPars: {:epw_file => "CAN_BC_Kamloops.AP.718870_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ["climate_zone_6"], 
-                       :TestPars => {:epw_file => "CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw"}}
+    test_cases_hash = {vintage: @AllTemplates, 
+                       TestCase: ["climate_zone_6"], 
+                       TestPars: {:epw_file => "CAN_ON_Ottawa-Macdonald-Cartier.Intl.AP.716280_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ["climate_zone_7a"], 
-                       :TestPars => {:epw_file => "CAN_AB_Banff.CS.711220_CWEC2016.epw"}}
+    test_cases_hash = {vintage: @AllTemplates, 
+                       TestCase: ["climate_zone_7a"], 
+                       TestPars: {:epw_file => "CAN_AB_Banff.CS.711220_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ["climate_zone_7b"], 
-                       :TestPars => {:epw_file => "CAN_ON_Armstrong.AP.718410_CWEC2016.epw"}}
+    test_cases_hash = {vintage: @AllTemplates, 
+                       TestCase: ["climate_zone_7b"], 
+                       TestPars: {:epw_file => "CAN_ON_Armstrong.AP.718410_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => @AllTemplates, 
-                       :TestCase => ["climate_zone_8"], 
-                       :TestPars => {:epw_file => "CAN_NU_Resolute.AP.719240_CWEC2016.epw"}}
+    test_cases_hash = {vintage: @AllTemplates, 
+                       TestCase: ["climate_zone_8"], 
+                       TestPars: {:epw_file => "CAN_NU_Resolute.AP.719240_CWEC2016.epw"}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -176,9 +176,9 @@ class NECB_HDD_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    vintage = test_pars[:Vintage]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    vintage = test_pars[:vintage]
     
     # Test specific inputs.
     epw_file = test_case[:epw_file]

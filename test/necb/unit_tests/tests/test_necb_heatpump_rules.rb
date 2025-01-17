@@ -17,8 +17,8 @@ class NECB_HVAC_Heatpump_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true,
+      TestMethod: __method__,
+      SaveIntermediateModels: true,
       heating_coil_type: 'DX',
       baseboard_type: 'Hot Water'
     }
@@ -27,44 +27,44 @@ class NECB_HVAC_Heatpump_Tests < Minitest::Test
     test_cases = {}
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3: Table 5.2.12.1. (page 5-13); Table 8.4.4.21.-E" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1: Table 5.2.12.1. (page 5-14); Table 8.4.4.21.-E" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2: Table 5.2.12.1. (page 5-16); Table 8.4.4.21.-E" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1: Table 5.2.12.1.-A; 8.4.5.7." }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3: Table 5.2.12.1. (page 5-13); Table 8.4.4.21.-E" }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1: Table 5.2.12.1. (page 5-14); Table 8.4.4.21.-E" }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2: Table 5.2.12.1. (page 5-16); Table 8.4.4.21.-E" }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1: Table 5.2.12.1.-A; 8.4.5.7." }
 
     # Test cases. 
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["Electricity"],
-                        :TestCase => ["Small single package (CSA-C656)"],
-                        :TestPars => { :test_capacity_kW => 9.5 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["Electricity"],
+                        TestCase: ["Small single package (CSA-C656)"],
+                        TestPars: { :test_capacity_kW => 9.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["Electricity"],
-                        :TestCase => ["Medium single package (CSA-C746)"],
-                        :TestPars => { :test_capacity_kW => 29.5 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["Electricity"],
+                        TestCase: ["Medium single package (CSA-C746)"],
+                        TestPars: { :test_capacity_kW => 29.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["Electricity"],
-                        :TestCase => ["Medium large single package (CSA-C746)"],
-                        :TestPars => { :test_capacity_kW => 47.5 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["Electricity"],
+                        TestCase: ["Medium large single package (CSA-C746)"],
+                        TestPars: { :test_capacity_kW => 47.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["Electricity"],
-                        :TestCase => ["Large single package (CSA-C746)"],
-                        :TestPars => { :test_capacity_kW => 146.5 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["Electricity"],
+                        TestCase: ["Large single package (CSA-C746)"],
+                        TestPars: { :test_capacity_kW => 146.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["Electricity"],
-                        :TestCase => ["Extra large single package (AHRI 340/360)"],
-                        :TestPars => { :test_capacity_kW => 300.0 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["Electricity"],
+                        TestCase: ["Extra large single package (AHRI 340/360)"],
+                        TestPars: { :test_capacity_kW => 300.0 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -97,17 +97,17 @@ class NECB_HVAC_Heatpump_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     heating_coil_type = test_pars[:heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
-    fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
     standard = get_standard(vintage)
     # Test specific inputs.
     cap = test_case[:test_capacity_kW]
     # Define the test name.
-    name = "#{vintage}_sys3_HtgDXCoilCap_#{fueltype}_cap-#{cap.to_int}kW__Baseboard-#{baseboard_type}"
+    name = "#{vintage}_sys3_HtgDXCoilCap_#{fuel_type}_cap-#{cap.to_int}kW__Baseboard-#{baseboard_type}"
     name_short = "#{vintage}_sys3_HtgDXCoilCap_cap-#{cap.to_int}kW"
 
     output_folder = method_output_folder("#{test_name}/#{name_short}")
@@ -124,7 +124,7 @@ class NECB_HVAC_Heatpump_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                   zones: model.getThermalZones,
                                                                                                   heating_coil_type: heating_coil_type,

@@ -22,7 +22,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     save_intermediate_models = false
 
     # Generate the osm files for all relevant cases to generate the test data for system 3.
-    boiler_fueltype = 'NaturalGas'
+    fuel_type = 'NaturalGas'
     baseboard_type = 'Hot Water'
     unitary_heating_types = ['Electric Resistance', 'All Other']
     unitary_ecms = ['Carrier WeatherExpert','Lennox Model L Ultra High Efficiency']
@@ -96,7 +96,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
               always_on = model.alwaysOnDiscreteSchedule
-              standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+              standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
               case speed
               when 'single'
                 standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,

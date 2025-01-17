@@ -14,55 +14,55 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true,
+      TestMethod: __method__,
+      SaveIntermediateModels: true,
       mau_type: true,
       speeds: 'single', # Only single for now aas multi stage does not work.
       baseboard_type: 'Hot Water',
-      fuelType: 'NaturalGas'
+      fuel_type: 'NaturalGas'
     }
 
     # Define test cases.
     test_cases = {}
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-13)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-14)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-15)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:Table 5.2.12.1-A" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-13)" }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-14)" }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-15)" }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1:Table 5.2.12.1-A" }
 
     # Test cases. 
-    test_cases_hash = { :Vintage => @AllTemplates,
+    test_cases_hash = { vintage: @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'], # DX is tested in the heatpump tests.
-                        :TestCase => ["Small single package system"],
-                        :TestPars => { :test_capacity_kW => 9.5 } }
+                        TestCase: ["Small single package system"],
+                        TestPars: { :test_capacity_kW => 9.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
+    test_cases_hash = { vintage: @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["Medium single package (All phases)"],
-                        :TestPars => { :test_capacity_kW => 29.5 } }
+                        TestCase: ["Medium single package (All phases)"],
+                        TestPars: { :test_capacity_kW => 29.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
+    test_cases_hash = { vintage: @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["Medium large single package (All phases, split and single packages)"],
-                        :TestPars => { :test_capacity_kW => 55.0 } }
+                        TestCase: ["Medium large single package (All phases, split and single packages)"],
+                        TestPars: { :test_capacity_kW => 55.0 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
+    test_cases_hash = { vintage: @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["Large single package (All phases, split and single packages)"],
-                        :TestPars => { :test_capacity_kW => 146.5 } }
+                        TestCase: ["Large single package (All phases, split and single packages)"],
+                        TestPars: { :test_capacity_kW => 146.5 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
+    test_cases_hash = { vintage: @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'],
-                        :TestCase => ["Extra large single package (All phases, split and single packages)"],
-                        :TestPars => { :test_capacity_kW => 253 } }
+                        TestCase: ["Extra large single package (All phases, split and single packages)"],
+                        TestPars: { :test_capacity_kW => 253 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -96,16 +96,16 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     speed = test_pars[:speeds]
     baseboard_type = test_pars[:baseboard_type]
-    fueltype = test_pars[:fuelType]
+    fuel_type = test_pars[:fuel_type]
     heating_type = test_pars[:unitary_heating_types]
 
     # Test specific inputs.
     cap = test_case[:test_capacity_kW]
-    vintage = test_pars[:Vintage]
+    vintage = test_pars[:vintage]
     standard = get_standard(vintage)
 
     # Define the test name.
@@ -132,7 +132,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       case speed
       when 'single'
         standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
@@ -211,8 +211,8 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true,
+      TestMethod: __method__,
+      SaveIntermediateModels: true,
       chiller_type: 'Scroll',
       mau_cooling_type: 'DX'
     }
@@ -223,10 +223,10 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
 
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["NaturalGas"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :curve_name => "tbd" } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["NaturalGas"],
+                        TestCase: ["case-1"],
+                        TestPars: { :curve_name => "tbd" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -254,16 +254,16 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     chiller_type = test_pars[:chiller_type]
     mau_cooling_type = test_pars[:mau_cooling_type]
-    fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
     standard = get_standard(vintage)
 
     # Define the test name.
-    name = "#{vintage}_sys2_CoolingType_#{fueltype}_kW_chiller_type-#{chiller_type}_#{mau_cooling_type}"
+    name = "#{vintage}_sys2_CoolingType_#{fuel_type}_kW_chiller_type-#{chiller_type}_#{mau_cooling_type}"
     name_short = "#{vintage.downcase}_sys2_CoolingType-#{chiller_type}_#{mau_cooling_type}"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
@@ -280,7 +280,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
 
       standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                       zones: model.getThermalZones,

@@ -18,19 +18,19 @@ class ECM_NatVent_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = { test_method: __method__,
-                        save_intermediate_models: true,
+    test_parameters = { TestMethod: __method__,
+                        SaveIntermediateModels: true,
                         epw_file: 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw',
-                        fueltype: 'NaturalGas' }
+                        fuel_type: 'NaturalGas' }
     
     # Define test cases.
     test_cases = {}
 
     test_cases_hash = {
-      :Vintage => ['NECB2017'], #@AllTemplates,
-      :Archetype => ['FullServiceRestaurant', 'Hospital'],
-      :TestCase => ["ZoneResults"],
-      :TestPars => {  } # :oaf => "tbd"
+      vintage: ['NECB2017'], #@AllTemplates,
+      archetype: ['FullServiceRestaurant', 'Hospital'],
+      TestCase: ["ZoneResults"],
+      TestPars: {  } # :oaf => "tbd"
     }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -64,14 +64,14 @@ class ECM_NatVent_Tests < Minitest::Test
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
 
     # Define local variables. These are extracted from the supplied hashes.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    vintage = test_pars[:Vintage]
-    building_type = test_pars[:Archetype]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    vintage = test_pars[:vintage]
+    building_type = test_pars[:archetype]
     epw_file = test_pars[:epw_file]
-    fueltype = test_pars[:fueltype]
+    fuel_type = test_pars[:fuel_type]
 
-    name = "#{vintage}_#{building_type}_#{fueltype}_#{epw_file}"
+    name = "#{vintage}_#{building_type}_#{fuel_type}_#{epw_file}"
     name_short = "#{vintage}_#{building_type}"
     output_folder = method_output_folder("#{test_name}/#{name_short}/")
     logger.info "Starting individual test: #{name}"
@@ -93,7 +93,7 @@ class ECM_NatVent_Tests < Minitest::Test
       standard.model_apply_standard(model: model,
                                     epw_file: epw_file,
                                     sizing_run_dir: output_folder,
-                                    primary_heating_fuel: fueltype,
+                                    primary_heating_fuel: fuel_type,
                                     dcv_type: nil, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                     lights_type: nil, # Two options: (1) 'NECB_Default', (2) 'LED'
                                     lights_scale: nil,

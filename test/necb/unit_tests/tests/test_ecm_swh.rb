@@ -23,8 +23,8 @@ class ECM_SWH_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters.
-    test_parameters = { test_method: __method__,
-                        save_intermediate_models: true,
+    test_parameters = { TestMethod: __method__,
+                        SaveIntermediateModels: true,
                         baseboard_type: 'Hot Water',
                         heating_coil_type: 'DX' }
 
@@ -32,26 +32,26 @@ class ECM_SWH_Tests < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 Table 6.2.2.1." }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 Table 6.2.2.1." }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 Table 6.2.2.1." }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 Table 6.2.2.1." }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 Table 6.2.2.1." }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 Table 6.2.2.1." }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 Table 6.2.2.1." }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 Table 6.2.2.1." }
 
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => ["BTAPPRE1980", "BTAP1980TO2010", "NECB2011"],
-                        :FuelType => ["NaturalGas"],
+    test_cases_hash = { vintage: ["BTAPPRE1980", "BTAP1980TO2010", "NECB2011"],
+                        fuel_type: ["NaturalGas"],
                         :shw_ecms => ["NECB_Default", "Natural Gas Power Vent with Electric Ignition"],
-                        :TestCase => ["AB_Calgary"],
-                        :TestPars => { :epw_file => "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw" } }
+                        TestCase: ["AB_Calgary"],
+                        TestPars: { :epw_file => "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => ["BTAPPRE1980", "BTAP1980TO2010", "NECB2011"],
-                        :FuelType => ["NaturalGas"],
+    test_cases_hash = { vintage: ["BTAPPRE1980", "BTAP1980TO2010", "NECB2011"],
+                        fuel_type: ["NaturalGas"],
                         :shw_ecms => ["NECB_Default", "Natural Gas Power Vent with Electric Ignition"],
-                        :TestCase => ["NT_Yellowknife"],
-                        :TestPars => { :epw_file => "CAN_NT_Yellowknife.AP.719360_CWEC2020.epw" } }
+                        TestCase: ["NT_Yellowknife"],
+                        TestPars: { :epw_file => "CAN_NT_Yellowknife.AP.719360_CWEC2020.epw" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -81,16 +81,16 @@ class ECM_SWH_Tests < Minitest::Test
     logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
     # Define local variables. These are extracted from the supplied hashes.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    vintage = test_pars[:Vintage]
-    fueltype = test_pars[:FuelType]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    vintage = test_pars[:vintage]
+    fuel_type = test_pars[:fuel_type]
     shw_ecm = test_pars[:shw_ecms]
     epw_file = test_case[:epw_file]
     epw_file_name = epw_file.split(".")[0]
     # Define the test name.
-    name = "#{vintage}_#{fueltype}_#{epw_file_name}_#{shw_ecm}"
-    name_short = "#{vintage}_#{fueltype}_#{epw_file_name}_#{shw_ecm}"
+    name = "#{vintage}_#{fuel_type}_#{epw_file_name}_#{shw_ecm}"
+    name_short = "#{vintage}_#{fuel_type}_#{epw_file_name}_#{shw_ecm}"
 
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
@@ -150,13 +150,13 @@ class ECM_SWH_Tests < Minitest::Test
 
       # apply swh to the renamed space types (model_add_swh only looks at the name of the space type not what is
       # actually in it).
-      standard.model_add_swh(model: model, swh_fueltype: fueltype, shw_scale: 'NECB_Default')
+      standard.model_add_swh(model: model, swh_fuel_type: fuel_type, shw_scale: 'NECB_Default')
       # Apply the water heater mixed efficiencies
       model.getWaterHeaterMixeds.sort.each { |obj| standard.water_heater_mixed_apply_efficiency(obj) }
 
       model.getWaterHeaterMixeds.sort.each do |waterheater_test|
         wh_name = waterheater_test.name
-        if waterheater_test.heaterFuelType == "NaturalGas"
+        if waterheater_test.heaterfuel_type == "NaturalGas"
           shw_measure = shw_measures.select { |shw_measure_info| shw_measure_info["name"] == shw_ecm }[0]
           ecm_standard.modify_shw_efficiency(model: model, shw_eff: shw_measure)
         end
@@ -246,7 +246,7 @@ class ECM_SWH_Tests < Minitest::Test
         part_load_curve_name = water_heaters[0].partLoadFactorCurve.get.name.to_s
       end
       supply_equip_info = {
-        "water_heater_fuel_type" => water_heaters[0].heaterFuelType,
+        "water_heater_fuel_type" => water_heaters[0].heaterfuel_type,
         "water_heater_vol_m3" => water_heaters[0].tankVolume,
         "water_heater_capacity_w" => water_heaters[0].heaterMaximumCapacity,
         "water_heater_efficiency" => water_heaters[0].heaterThermalEfficiency,

@@ -15,8 +15,8 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true,
+      TestMethod: __method__,
+      SaveIntermediateModels: true,
       baseboard_type: 'Hot Water',
       chiller_type: 'Reciprocating',
       heating_coil_type: 'Electric',
@@ -26,16 +26,16 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
     # Define test cases.
     test_cases = {}
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.9.(1b,2b), 8.4.4.19.(2a, 2b)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3:8.4.4.9.(1b,2b), 8.4.4.19.(2a, 2b)" }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1:8.4.4.8.(1b,2b), 8.4.4.18.(2a, 2b)" }
 
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["Electricity"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :name => "tbd" } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["Electricity"],
+                        TestCase: ["case-1"],
+                        TestPars: { :name => "tbd" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -67,18 +67,18 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
+    test_name = test_pars[:TestMethod]
     baseboard_type = test_pars[:baseboard_type]
     heating_coil_type = test_pars[:heating_coil_type]
     fan_type = test_pars[:fan_type]
     chiller_type = test_pars[:chiller_type]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
 
     # Define the test name.
-    name = "#{vintage}_#{fueltype}_sys6"
-    name_short = "#{vintage}_#{fueltype}"
+    name = "#{vintage}_#{fuel_type}_sys6"
+    name_short = "#{vintage}_#{fuel_type}"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     standard = get_standard(vintage)
     logger.info "Starting individual test: #{name}"
@@ -93,7 +93,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
         model: model,
         zones: model.getThermalZones,
@@ -170,8 +170,8 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true,
+      TestMethod: __method__,
+      SaveIntermediateModels: true,
       baseboard_type: 'Hot Water',
       heating_coil_type: 'DX'
     }
@@ -180,16 +180,16 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
     test_cases = {}
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.9.(1b), 8.4.4.14.(2b), 8.4.4.19.(2a, 2b)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a, 2b)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a, 2b)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3:8.4.4.9.(1b), 8.4.4.14.(2b), 8.4.4.19.(2a, 2b)" }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a, 2b)" }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1:8.4.4.8.(1b), 8.4.4.13.(2b), 8.4.4.18.(2a, 2b)" }
 
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["NaturalGas"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :name => "tbd" } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["NaturalGas"],
+                        TestCase: ["case-1"],
+                        TestPars: { :name => "tbd" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -221,16 +221,16 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
+    test_name = test_pars[:TestMethod]
     baseboard_type = test_pars[:baseboard_type]
     heating_coil_type = test_pars[:heating_coil_type]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
 
     # Define the test name.
-    name = "#{vintage}_#{fueltype}_sys3"
-    name_short = "#{vintage}_#{fueltype}"
+    name = "#{vintage}_#{fuel_type}_sys3"
+    name_short = "#{vintage}_#{fuel_type}"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     standard = get_standard(vintage)
     logger.info "Starting individual test: #{name}"
@@ -246,7 +246,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
         model: model,
         zones: model.getThermalZones,

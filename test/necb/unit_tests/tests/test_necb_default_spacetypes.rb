@@ -22,22 +22,22 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true
+      TestMethod: __method__,
+      SaveIntermediateModels: true
     }
 
     # Define test cases.
     test_cases = {}
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 Table 5.2.12.1" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3 Table 5.2.12.1" }
 
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => @AllTemplates,
+    test_cases_hash = { vintage: @AllTemplates,
                         :SpaceType => @AllSpaceTypes,
-                        :FuelType => ["Electricity"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :name => "tbd" }
+                        fuel_type: ["Electricity"],
+                        TestCase: ["case-1"],
+                        TestPars: { :name => "tbd" }
     }
 
     new_test_cases = make_test_cases_json(test_cases_hash)
@@ -72,10 +72,10 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
     space_type = test_pars[:SpaceType]
     standard = get_standard(vintage)
 

@@ -15,24 +15,24 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
-    test_parameters = { test_method: __method__,
-                        save_intermediate_models: false,
+    test_parameters = { TestMethod: __method__,
+                        SaveIntermediateModels: false,
                         stage_types: 'single' }
 
     # Define test cases.
     test_cases = {}
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 Table 5.2.12.1" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1 Table 5.2.12.1" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2 Table 5.2.12.1" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1 Table 5.2.12.1.-O" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3 Table 5.2.12.1" }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1 Table 5.2.12.1" }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2 Table 5.2.12.1" }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1 Table 5.2.12.1.-O" }
 
     # Test cases. Two cases for NG and one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => @AllTemplates,
+    test_cases_hash = { vintage: @AllTemplates,
                         :heating_coil_types => ['Electric'],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :tested_capacity_kW => 10.0,
+                        TestCase: ["case-1"],
+                        TestPars: { :tested_capacity_kW => 10.0,
                                        :baseboard_type => "Electric",
                                        :efficiency_metric => "thermal efficiency" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
@@ -40,19 +40,19 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # AFUE : Testing the capacity of 58.65 kW lies within the range of 0-117.23 kW for NECB2011, 0-66 kW for NECB2015 and NECB2017, also 0-66 kW for NECB2020
     # Thermal efficiency : Testing the capacity of 127.3 kW lies within the range of 117.3-2930 kW for NECB2011, 66.1-2930 kW for NECB2015 and NECB2017, also 66.1-2930 kW for NECB2020
-    test_cases_hash = { :Vintage => @AllTemplates,
+    test_cases_hash = { vintage: @AllTemplates,
                         :heating_coil_types => ["NaturalGas"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :tested_capacity_kW => 58.65,
+                        TestCase: ["case-1"],
+                        TestPars: { :tested_capacity_kW => 58.65,
                                        :baseboard_type => "Hot Water",
                                        :efficiency_metric => "annual fuel utilization efficiency" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
+    test_cases_hash = { vintage: @AllTemplates,
                         :heating_coil_types => ["NaturalGas"],
-                        :TestCase => ["case-2"],
-                        :TestPars => { :tested_capacity_kW => 127.3,
+                        TestCase: ["case-2"],
+                        TestPars: { :tested_capacity_kW => 127.3,
                                        :baseboard_type => "Hot Water",
                                        :efficiency_metric => "thermal efficiency" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
@@ -86,11 +86,11 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
 
     # Define local variables. These are extracted from the supplied hashes.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     heating_coil_type = test_pars[:heating_coil_types]
     baseboard_type = test_case[:baseboard_type]
-    vintage = test_pars[:Vintage]
+    vintage = test_pars[:vintage]
 
     # Test specific inputs.
     furnace_cap = test_case[:tested_capacity_kW]
@@ -172,8 +172,8 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
-    test_parameters = { test_method: __method__,
-                        save_intermediate_models: false,
+    test_parameters = { TestMethod: __method__,
+                        SaveIntermediateModels: false,
                         heating_coil_type: 'Gas',
                         baseboard_type: 'Hot Water' }
 
@@ -181,16 +181,16 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 Table 8.4.4.22.A" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1 Table 8.4.4.21.-A" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2 Table 8.4.4.21.-A" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1 Table 8.4.5.3" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3 Table 8.4.4.22.A" }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1 Table 8.4.4.21.-A" }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2 Table 8.4.4.21.-A" }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1 Table 8.4.5.3" }
 
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["NaturalGas"],
-                        :TestCase => ["SingleStage"],
-                        :TestPars => { :stage => "Single" } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["NaturalGas"],
+                        TestCase: ["SingleStage"],
+                        TestPars: { :stage => "Single" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -224,15 +224,15 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     heating_coil_type = test_pars[:heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
-    furnace_fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    furnace_fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
     stage_type = test_case[:stage]
 
-    name = "#{vintage}_sys3_Furnace-#{furnace_fueltype}_#{heating_coil_type}_Baseboard-#{baseboard_type}"
+    name = "#{vintage}_sys3_Furnace-#{furnace_fuel_type}_#{heating_coil_type}_Baseboard-#{baseboard_type}"
     name_short = "#{vintage}_sys3_Furnace"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
 
@@ -249,7 +249,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fuel_type, always_on)
       # Single stage furnace.
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                   zones: model.getThermalZones,
@@ -299,9 +299,9 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
-    test_parameters = { test_method: __method__,
-                        save_intermediate_models: false,
-                        furnace_fueltype: 'NaturalGas',
+    test_parameters = { TestMethod: __method__,
+                        SaveIntermediateModels: false,
+                        furnace_fuel_type: 'NaturalGas',
                         heating_coil_type: 'Gas',
                         baseboard_type: 'Hot Water' }
 
@@ -309,30 +309,30 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 " }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1 " }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2 " }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1 " }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3 " }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1 " }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2 " }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1 " }
 
     # Test cases.
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :TestCase => ["Test-small"],
-                        :TestPars => { :capacity_kW => 33.0 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        TestCase: ["Test-small"],
+                        TestPars: { :capacity_kW => 33.0 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :TestCase => ["Test-medium"],
-                        :TestPars => { :capacity_kW => 67.0  } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        TestCase: ["Test-medium"],
+                        TestPars: { :capacity_kW => 67.0  } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :TestCase => ["Test-large"],
-                        :TestPars => { :capacity_kW => 133.0 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        TestCase: ["Test-large"],
+                        TestPars: { :capacity_kW => 133.0 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :TestCase => ["Test-xlarge"],
-                        :TestPars => { :capacity_kW => 199.0 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        TestCase: ["Test-xlarge"],
+                        TestPars: { :capacity_kW => 199.0 } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -366,12 +366,12 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    furnace_fueltype = test_pars[:furnace_fueltype]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    furnace_fuel_type = test_pars[:furnace_fuel_type]
     heating_coil_type = test_pars[:heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
-    vintage = test_pars[:Vintage]
+    vintage = test_pars[:vintage]
  
     # Test specific values.
     cap = test_case[:capacity_kW]
@@ -395,7 +395,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fuel_type, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
                                                                                                  zones: model.getThermalZones,
                                                                                                  heating_coil_type: heating_coil_type,

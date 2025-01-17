@@ -17,8 +17,8 @@ class NECB_QAQC_Reporting < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: true,
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: true,
                        building_type: 'FullServiceRestaurant',
                        fuel_type: 'NaturalGas',
                        epw_file: 'CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw'
@@ -28,13 +28,13 @@ class NECB_QAQC_Reporting < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => 'NECB 2011 p3 Table 5.2.12.1'}
+    test_cases[:NECB2011] = {Reference: 'NECB 2011 p3 Table 5.2.12.1'}
     
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = {:vintage => ['NECB2011'], #@AllTemplates, 
-                       :TestCase => ['case-1'], 
-                       :TestPars => {}
+    test_cases_hash = {vintage: ['NECB2011'], #@AllTemplates, 
+                       TestCase: ['case-1'], 
+                       TestPars: {}
                       }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -69,8 +69,8 @@ class NECB_QAQC_Reporting < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     fuel_type = test_pars[:fuel_type]
     vintage = test_pars[:vintage]
     epw_file = test_pars[:epw_file]

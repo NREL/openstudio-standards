@@ -58,12 +58,12 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                         prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
 
     # Add hvac system.
-    boiler_fueltype = 'Electricity'
+    fuel_type = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model,hw_loop, fuel_type, always_on)
     standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
@@ -137,12 +137,12 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                             prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
 
         # Add hvac system.
-        boiler_fueltype = 'Electricity'
+        fuel_type = 'Electricity'
         baseboard_type = 'Hot Water'
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model,hw_loop, fuel_type, always_on)
         standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                     zones: model.getThermalZones,
                                                                                                     heating_coil_type: heating_coil_type,
@@ -241,12 +241,12 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                             prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
 
         # Add hvac system.
-        boiler_fueltype = 'Electricity'
+        fuel_type = 'Electricity'
         baseboard_type = 'Hot Water'
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model,hw_loop, fuel_type, always_on)
         standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                     zones: model.getThermalZones,
                                                                                                     heating_coil_type: heating_coil_type,
@@ -344,15 +344,15 @@ class NECB_SWH_Additional_Tests < Minitest::Test
       prototype_input['main_water_heater_capacity'] = 100000.0
       prototype_input['main_water_heater_fuel'] = 'NaturalGas'
       prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-      standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel', shw_scale: 1.0)
+      standard.model_add_swh(model: model, swh_fuel_type: 'DefaultFuel', shw_scale: 1.0)
 
       # Add HVAC system.
-      boiler_fueltype = 'NaturalGas'
+      fuel_type = 'NaturalGas'
       baseboard_type = 'Hot Water'
       heating_coil_type = 'DX'
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model,hw_loop, fuel_type, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                   zones: model.getThermalZones,
                                                                                                   heating_coil_type: heating_coil_type,

@@ -16,10 +16,10 @@ class NECB_scaling_loads_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
 
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: true,
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: true,
                        epw_file: 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw', 
-                       FuelType: 'NaturalGas'}
+                       fuel_type: 'NaturalGas'}
 
     # Define test cases. 
     test_cases = Hash.new
@@ -29,24 +29,24 @@ class NECB_scaling_loads_Tests < Minitest::Test
     
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = {:Vintage => ["NECB2011"], #@AllTemplates, 
-                       :BuildingType => ["FullServiceRestaurant"],
-                       :TestCase => ["case zero"], 
-                       :TestPars => {:scaling_factor => 0.0}}
+    test_cases_hash = {vintage: ["NECB2011"], #@AllTemplates, 
+                       archetype: ["FullServiceRestaurant"],
+                       TestCase: ["case zero"], 
+                       TestPars: {:scaling_factor => 0.0}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = {:Vintage => ["NECB2011"], #@AllTemplates, 
-                       :BuildingType => ["FullServiceRestaurant"],
-                       :TestCase => ["case half"], 
-                       :TestPars => {:scaling_factor => 0.5}}
+    test_cases_hash = {vintage: ["NECB2011"], #@AllTemplates, 
+                       archetype: ["FullServiceRestaurant"],
+                       TestCase: ["case half"], 
+                       TestPars: {:scaling_factor => 0.5}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = {:Vintage => ["NECB2011"], #@AllTemplates, 
-                       :BuildingType => ["FullServiceRestaurant"],
-                       :TestCase => ["case one+half"], 
-                       :TestPars => {:scaling_factor => 1.5}}
+    test_cases_hash = {vintage: ["NECB2011"], #@AllTemplates, 
+                       archetype: ["FullServiceRestaurant"],
+                       TestCase: ["case one+half"], 
+                       TestPars: {:scaling_factor => 1.5}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -80,21 +80,21 @@ class NECB_scaling_loads_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # Static inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     epw_file = test_pars[:epw_file]
-    fueltype = test_pars[:FuelType]
+    fuel_type = test_pars[:fuel_type]
 
     # Variable inputs.
-    vintage = test_pars[:Vintage]
-    building_type = test_pars[:BuildingType]
+    vintage = test_pars[:vintage]
+    building_type = test_pars[:archetype]
 
     # Test case specific inuts.
     loads_scale = test_case[:scaling_factor]
 
     # Define the test name. 
-    name = "#{vintage}_load_scaling-#{fueltype}_scale-#{loads_scale.to_int}"
-    name_short = "#{vintage}_scale-#{fueltype}-#{loads_scale.to_int}"
+    name = "#{vintage}_load_scaling-#{fuel_type}_scale-#{loads_scale.to_int}"
+    name_short = "#{vintage}_scale-#{fuel_type}-#{loads_scale.to_int}"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
     results = Hash.new
@@ -115,7 +115,7 @@ class NECB_scaling_loads_Tests < Minitest::Test
       standard.model_apply_standard(model: model,
                                     epw_file: epw_file,
                                     sizing_run_dir: output_folder,
-                                    primary_heating_fuel: fueltype,
+                                    primary_heating_fuel: fuel_type,
                                     dcv_type: nil, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                     lights_type: nil, # Two options: (1) 'NECB_Default', (2) 'LED'
                                     lights_scale: nil,

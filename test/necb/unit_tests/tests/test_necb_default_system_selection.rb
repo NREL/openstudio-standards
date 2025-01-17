@@ -21,40 +21,40 @@ class NECB_Default_System_Selection_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true
+      TestMethod: __method__,
+      SaveIntermediateModels: true
     }
 
     # Define test cases.
     test_cases = {}
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3 Table 8.4.4.8.A." }
-    test_cases[:NECB2015] = { :Reference => "NECB 2011 p3 Table 8.4.4.7.-A" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2011 p3 Table 8.4.4.7.-A" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2011 p3 Table 8.4.4.7.-A." }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3 Table 8.4.4.8.A." }
+    test_cases[:NECB2015] = { Reference: "NECB 2011 p3 Table 8.4.4.7.-A" }
+    test_cases[:NECB2017] = { Reference: "NECB 2011 p3 Table 8.4.4.7.-A" }
+    test_cases[:NECB2020] = { Reference: "NECB 2011 p3 Table 8.4.4.7.-A." }
 
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :SpaceType => @AllSpaceTypes,
-                        :TestCase => ["case-1"],
-                        :TestPars => { :number_of_floors => 2 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        space_type: @AllSpaceTypes,
+                        TestCase: ["case-1"],
+                        TestPars: { :number_of_floors => 2 } }
 
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :SpaceType => @AllSpaceTypes,
-                        :TestCase => ["case-2"],
-                        :TestPars => { :number_of_floors => 4 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        space_type: @AllSpaceTypes,
+                        TestCase: ["case-2"],
+                        TestPars: { :number_of_floors => 4 } }
 
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :SpaceType => @AllSpaceTypes,
-                        :TestCase => ["case-3"],
-                        :TestPars => { :number_of_floors => 5 } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        space_type: @AllSpaceTypes,
+                        TestCase: ["case-3"],
+                        TestPars: { :number_of_floors => 5 } }
 
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -87,10 +87,10 @@ class NECB_Default_System_Selection_Tests < Minitest::Test
     
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    vintage = test_pars[:Vintage]
-    space_type = test_pars[:SpaceType]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    vintage = test_pars[:vintage]
+    space_type = test_pars[:space_type]
     number_of_floors = test_case[:number_of_floors]
 
     # Define the test name.

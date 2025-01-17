@@ -25,8 +25,8 @@ class NECB_PumpPower_Test < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true,
+      TestMethod: __method__,
+      SaveIntermediateModels: true,
       baseboard_type: 'Hot Water',
       chiller_type: 'Scroll',
       heating_coil_type: 'Hot Water',
@@ -38,16 +38,16 @@ class NECB_PumpPower_Test < Minitest::Test
     test_cases = {}
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:Table 5.2.6.3." }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:Table 5.2.6.3." }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:Table 5.2.6.3." }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1:Table 5.2.6.3." }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2:Table 5.2.6.3." }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1:Table 5.2.6.3." }
 
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => @SomeTemplates,
-                        :FuelType => ["Electricity"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :tested_capacity_kW => 10.0,
+    test_cases_hash = { vintage: @SomeTemplates,
+                        fuel_type: ["Electricity"],
+                        TestCase: ["case-1"],
+                        TestPars: { :tested_capacity_kW => 10.0,
                                        :efficiency_metric => "thermal efficiency" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -79,20 +79,20 @@ class NECB_PumpPower_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     chiller_type = test_pars[:chiller_type]
     fan_type = test_pars[:fan_type]
     chiller_cap = test_pars[:chiller_cap]
     baseboard_type = test_pars[:baseboard_type]
     heating_coil_type = test_pars[:heating_coil_type]
-    fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
     standard = get_standard(vintage)
 
     # Define the test name.
-    name = "#{vintage}_sys6_#{fueltype}_ChillerType_#{chiller_type}_#{chiller_cap}watts_baseboard_type-#{baseboard_type}_heating_coil_type-#{heating_coil_type}_Baseboard-#{baseboard_type}"
-    name_short = "#{vintage}_sys6_#{fueltype}_ChillerType-#{chiller_type}-#{chiller_cap}watts"
+    name = "#{vintage}_sys6_#{fuel_type}_ChillerType_#{chiller_type}_#{chiller_cap}watts_baseboard_type-#{baseboard_type}_heating_coil_type-#{heating_coil_type}_Baseboard-#{baseboard_type}"
+    name_short = "#{vintage}_sys6_#{fuel_type}_ChillerType-#{chiller_type}-#{chiller_cap}watts"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Starting individual test: #{name}"
 
@@ -105,7 +105,7 @@ class NECB_PumpPower_Test < Minitest::Test
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
         model: model,
         zones: model.getThermalZones,

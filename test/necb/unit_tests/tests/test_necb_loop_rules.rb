@@ -19,8 +19,8 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true,
+      TestMethod: __method__,
+      SaveIntermediateModels: true,
       baseboard_type: 'Hot Water',
       chiller_type: 'Scroll',
       heating_coil_type: 'Electric',
@@ -30,16 +30,16 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
     # Define test cases.
     test_cases = {}
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3:8.4.4.10.(6h)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1:8.4.4.9.(6h)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2:8.4.4.9.(6h)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1:8.4.4.9.(6h)" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3:8.4.4.10.(6h)" }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1:8.4.4.9.(6h)" }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2:8.4.4.9.(6h)" }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1:8.4.4.9.(6h)" }
 
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["NaturalGas"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :name => "tbd" } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["NaturalGas"],
+                        TestCase: ["case-1"],
+                        TestPars: { :name => "tbd" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -71,19 +71,19 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
+    test_name = test_pars[:TestMethod]
     baseboard_type = test_pars[:baseboard_type]
     heating_coil_type = test_pars[:heating_coil_type]
     fan_type = test_pars[:fan_type]
     chiller_type = test_pars[:chiller_type]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
     hasVariablePump = true
     results = {}
     # Define the test name.
-    name = "#{vintage}_#{fueltype}"
-    name_short = "#{vintage}_#{fueltype}"
+    name = "#{vintage}_#{fuel_type}"
+    name_short = "#{vintage}_#{fuel_type}"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     standard = get_standard(vintage)
     logger.info "Starting individual test: #{name}"
@@ -98,7 +98,7 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
       # Generate the osm files for all relevant cases to generate the test data for system 6
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
                                                                           zones: model.getThermalZones,
                                                                           heating_coil_type: heating_coil_type,
@@ -148,8 +148,8 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     # Define test parameters that apply to all tests.
     test_parameters = {
-      test_method: __method__,
-      save_intermediate_models: true,
+      TestMethod: __method__,
+      SaveIntermediateModels: true,
       chiller_type: 'Centrifugal',
       mau_cooling_type: 'DX',
       fan_coil_type: 'FPFC'
@@ -157,16 +157,16 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
 
     # Define test cases.
     test_cases = {}
-    test_cases[:NECB2011] = { :Reference => "NECB 2011 p3: 8.4.4.11.(6g); 8.4.4.12.(1b,6c)" }
-    test_cases[:NECB2015] = { :Reference => "NECB 2015 p1: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)" }
-    test_cases[:NECB2017] = { :Reference => "NECB 2017 p2: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)" }
-    test_cases[:NECB2020] = { :Reference => "NECB 2020 p1: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3: 8.4.4.11.(6g); 8.4.4.12.(1b,6c)" }
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p1: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)" }
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p2: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)" }
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p1: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)" }
 
     # Results and name are tbd here as they will be calculated in the test.
-    test_cases_hash = { :Vintage => @AllTemplates,
-                        :FuelType => ["Electricity"],
-                        :TestCase => ["case-1"],
-                        :TestPars => { :name => "tbd" } }
+    test_cases_hash = { vintage: @AllTemplates,
+                        fuel_type: ["Electricity"],
+                        TestCase: ["case-1"],
+                        TestPars: { :name => "tbd" } }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -198,18 +198,18 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    fueltype = test_pars[:FuelType]
-    vintage = test_pars[:Vintage]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
     chiller_type = test_pars[:chiller_type]
     mau_cooling_type = test_pars[:mau_cooling_type]
     fan_coil_type = test_pars[:fan_coil_type]
     hasVariablePump = true
     results = {}
     # Define the test name.
-    name = "#{vintage}_#{fueltype}_sys2_chw"
-    name_short = "#{vintage}_#{fueltype}_sys2_chw"
+    name = "#{vintage}_#{fuel_type}_sys2_chw"
+    name_short = "#{vintage}_#{fuel_type}_sys2_chw"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     standard = get_standard(vintage)
     logger.info "Starting individual test: #{name}"
@@ -224,7 +224,7 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
       # Generate the osm files for all relevant cases to generate the test data for system 6
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                        zones: model.getThermalZones,
                                        chiller_type: chiller_type,

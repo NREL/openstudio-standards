@@ -17,49 +17,49 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: false,
-                       boiler_fueltype: 'Electricity',
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: false,
+                       fuel_type: 'Electricity',
                        mau_cooling_type: 'Hydronic'}
 
     # Define test cases. 
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 Table 5.2.12.1. Points to CSA-C743-09"}
-    test_cases[:NECB2015] = {:Reference => "NECB 2015 p1 Table 5.2.12.1. Points to CSA-C743-09"}
-    test_cases[:NECB2017] = {:Reference => "NECB 2017 p2 Table 5.2.12.1. Points to CSA-C743-09"}
-    test_cases[:NECB2020] = {:Reference => "NECB 2020 p1 Table 5.2.12.1.-K (Path B)"}
+    test_cases[:NECB2011] = {Reference: "NECB 2011 p3 Table 5.2.12.1. Points to CSA-C743-09"}
+    test_cases[:NECB2015] = {Reference: "NECB 2015 p1 Table 5.2.12.1. Points to CSA-C743-09"}
+    test_cases[:NECB2017] = {Reference: "NECB 2017 p2 Table 5.2.12.1. Points to CSA-C743-09"}
+    test_cases[:NECB2020] = {Reference: "NECB 2020 p1 Table 5.2.12.1.-K (Path B)"}
     
     # Test cases. Define each case seperately as they have unique kW values to test accross the vintages/chiller types.
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
-                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["small"], 
-                       :TestPars => {:tested_capacity_kW => 132}}
+    test_cases_hash = {vintage: ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
+                       chiller_type: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       TestCase: ["small"], 
+                       TestPars: {:tested_capacity_kW => 132}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
-                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["medium"], 
-                       :TestPars => {:tested_capacity_kW => 396}}
+    test_cases_hash = {vintage: ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
+                       chiller_type: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       TestCase: ["medium"], 
+                       TestPars: {:tested_capacity_kW => 396}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
-                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["large"], 
-                       :TestPars => {:tested_capacity_kW => 791}}
+    test_cases_hash = {vintage: ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
+                       chiller_type: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       TestCase: ["large"], 
+                       TestPars: {:tested_capacity_kW => 791}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
-                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["x-large"], 
-                       :TestPars => {:tested_capacity_kW => 1200}}
+    test_cases_hash = {vintage: ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
+                       chiller_type: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       TestCase: ["x-large"], 
+                       TestPars: {:tested_capacity_kW => 1200}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2020'], 
-                       :ChillerType => ["Scroll", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["xx-large"], 
-                       :TestPars => {:tested_capacity_kW => 2200}}
+    test_cases_hash = {vintage: ['NECB2020'], 
+                       chiller_type: ["Scroll", "Rotary Screw", "Reciprocating"],
+                       TestCase: ["xx-large"], 
+                       TestPars: {:tested_capacity_kW => 2200}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -93,12 +93,12 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
     mau_cooling_type = test_pars[:mau_cooling_type]
-    boiler_fueltype = test_pars[:boiler_fueltype]
-    vintage = test_pars[:Vintage]
-    chiller_type = test_pars[:ChillerType]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
+    chiller_type = test_pars[:chiller_type]
 
     # Test specific inputs.
     chiller_cap = test_case[:tested_capacity_kW]
@@ -120,7 +120,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                       zones: model.getThermalZones,
                                       chiller_type: chiller_type,
@@ -174,9 +174,9 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: false,
-                       boiler_fueltype: 'Electricity',
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: false,
+                       fuel_type: 'Electricity',
                        baseboard_type: 'Hot Water',
                        heating_coil_type: 'Hot Water',
                        fan_type: 'AF_or_BI_rdg_fancurve'}
@@ -185,22 +185,22 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 8.4.4.11.(6)"}
-    test_cases[:NECB2015] = {:Reference => "xx"}
-    test_cases[:NECB2017] = {:Reference => "xx"}
-    test_cases[:NECB2020] = {:Reference => "NECB 2011 p3 8.4.4.10.(6)"}
+    test_cases[:NECB2011] = {Reference: "NECB 2011 p3 8.4.4.11.(6)"}
+    test_cases[:NECB2015] = {Reference: "xx"}
+    test_cases[:NECB2017] = {Reference: "xx"}
+    test_cases[:NECB2020] = {Reference: "NECB 2011 p3 8.4.4.10.(6)"}
     
     # Test cases. Define each case seperately as they have unique kW values to test accross the vintages/chiller types.
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
-                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["single"], 
-                       :TestPars => {:tested_capacity_kW => 800}}
+    test_cases_hash = {vintage: ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
+                       chiller_type: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       TestCase: ["single"], 
+                       TestPars: {:tested_capacity_kW => 800}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
-                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["twin"], 
-                       :TestPars => {:tested_capacity_kW => 3200}}
+    test_cases_hash = {vintage: ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
+                       chiller_type: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       TestCase: ["twin"], 
+                       TestPars: {:tested_capacity_kW => 3200}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -234,14 +234,14 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    boiler_fueltype = test_pars[:boiler_fueltype]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
     baseboard_type = test_pars[:baseboard_type]
     heating_coil_type = test_pars[:heating_coil_type]
     fan_type = test_pars[:fan_type]
-    vintage = test_pars[:Vintage]
-    chiller_type = test_pars[:ChillerType]
+    vintage = test_pars[:vintage]
+    chiller_type = test_pars[:chiller_type]
 
     # Test specific inputs.
     chiller_cap = test_case[:tested_capacity_kW]
@@ -264,7 +264,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
                                                                           zones: model.getThermalZones,
                                                                           heating_coil_type: heating_coil_type,
@@ -316,9 +316,9 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = {test_method: __method__,
-                       save_intermediate_models: false,
-                       boiler_fueltype: 'NaturalGas',
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: false,
+                       fuel_type: 'NaturalGas',
                        mau_cooling_type: 'Hydronic',
                        
                        baseboard_type: 'Hot Water',
@@ -329,17 +329,17 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     test_cases = Hash.new
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = {:Reference => "NECB 2011 p3 Table 8.4.4.22.C"}
-    test_cases[:NECB2015] = {:Reference => "xx"}
-    test_cases[:NECB2017] = {:Reference => "xx"}
-    test_cases[:NECB2020] = {:Reference => "xx"}
+    test_cases[:NECB2011] = {Reference: "NECB 2011 p3 Table 8.4.4.22.C"}
+    test_cases[:NECB2015] = {Reference: "xx"}
+    test_cases[:NECB2017] = {Reference: "xx"}
+    test_cases[:NECB2020] = {Reference: "xx"}
     
     # Test cases. Define each case seperately as they have unique kW values to test accross the vintages/chiller types.
-    test_cases_hash = {:Vintage => ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
-    #test_cases_hash = {:Vintage => ['NECB2011'], 
-                       :ChillerType => ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
-                       :TestCase => ["small"], 
-                       :TestPars => {:tested_capacity_kW => 800}}
+    test_cases_hash = {vintage: ['NECB2011', 'NECB2015', 'NECB2017', 'NECB2020'], 
+    #test_cases_hash = {vintage: ['NECB2011'], 
+                       chiller_type: ["Scroll", "Centrifugal", "Rotary Screw", "Reciprocating"],
+                       TestCase: ["small"], 
+                       TestPars: {:tested_capacity_kW => 800}}
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
 
@@ -373,16 +373,16 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     # Define local variables. These are extracted from the supplied hashes.
     # General inputs.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    boiler_fueltype = test_pars[:boiler_fueltype]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    fuel_type = test_pars[:fuel_type]
     mau_cooling_type = test_pars[:mau_cooling_type]
 
     baseboard_type = test_pars[:baseboard_type]
     heating_coil_type = test_pars[:heating_coil_type]
     fan_type = test_pars[:fan_type]
-    vintage = test_pars[:Vintage]
-    chiller_type = test_pars[:ChillerType]
+    vintage = test_pars[:vintage]
+    chiller_type = test_pars[:chiller_type]
 
     # Test specific inputs.
     chiller_cap = test_case[:tested_capacity_kW]
@@ -405,7 +405,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
       standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                        zones: model.getThermalZones,
                                        chiller_type: chiller_type,

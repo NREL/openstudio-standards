@@ -18,21 +18,21 @@ class ECM_VSDchiller_Tests < Minitest::Test
     logger.info "Starting suite of tests for: #{__method__}"
     
     # Define test parameters that apply to all tests.
-    test_parameters = { test_method: __method__,
-                        save_intermediate_models: true,
+    test_parameters = { TestMethod: __method__,
+                        SaveIntermediateModels: true,
                         epw_file: 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw',
-                        fueltype: 'NaturalGas',
+                        fuel_type: 'NaturalGas',
                         chiller_type: 'VSD'}
     
     # Define test cases. 
     test_cases = {}
 
     test_cases_hash = {
-      :Vintage => ['NECB2011'], #@AllTemplates,
-      :Archetype => ['LargeOffice'], # others?
-      :chiller_capacity_kW => [235, 606, 819, 993, 1220, 1536, 1773], # Approx mid point of defined VSD chillers.
-      :TestCase => ['Test Case'],
-      :TestPars => {  } # none.
+      vintage: ['NECB2011'], #@AllTemplates,
+      archetype: ['LargeOffice'], # others?
+      chiller_capacity_kW: [235, 606, 819, 993, 1220, 1536, 1773], # Approx mid point of defined VSD chillers.
+      TestCase: ['Test Case'],
+      TestPars: {  } # none.
     }
     new_test_cases = make_test_cases_json(test_cases_hash)
     merge_test_cases!(test_cases, new_test_cases)
@@ -66,12 +66,12 @@ class ECM_VSDchiller_Tests < Minitest::Test
     logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
 
     # Define local variables. These are extracted from the supplied hashes.
-    test_name = test_pars[:test_method]
-    save_intermediate_models = test_pars[:save_intermediate_models]
-    vintage = test_pars[:Vintage]
-    building_type = test_pars[:Archetype]
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    vintage = test_pars[:vintage]
+    building_type = test_pars[:archetype]
     epw_file = test_pars[:epw_file]
-    primary_heating_fuel = test_pars[:fueltype]
+    primary_heating_fuel = test_pars[:fuel_type]
     chiller_type = test_pars[:chiller_type]
     chiller_cap = test_pars[:chiller_capacity_kW].to_f
 
