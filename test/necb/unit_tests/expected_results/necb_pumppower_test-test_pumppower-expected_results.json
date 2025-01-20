@@ -1,8 +1,8 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2015": {
-    "VarType": "FuelType",
-    "Reference": "NECB 2015 p1:Table 5.2.6.3.", 
+    "VarType": "fuel_type",
+    "Reference": "NECB 2015 p1:Table 5.2.6.3.",
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
@@ -34,7 +34,7 @@
     }
   },
   "NECB2017": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2017 p2:Table 5.2.6.3.",
     "Electricity": {
       "VarType": "TestCase",
@@ -67,7 +67,7 @@
     }
   },
   "NECB2020": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2020 p1:Table 5.2.6.3.",
     "Electricity": {
       "VarType": "TestCase",

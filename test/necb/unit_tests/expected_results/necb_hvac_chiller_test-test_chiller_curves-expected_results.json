@@ -1,7 +1,7 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2011": {
-    "VarType": "ChillerType",
+    "VarType": "chiller_type",
     "Reference": "NECB 2011 p3 Table 8.4.4.22.C",
     "Scroll": {
       "VarType": "TestCase",
@@ -97,7 +97,7 @@
     }
   },
   "NECB2015": {
-    "VarType": "ChillerType",
+    "VarType": "chiller_type",
     "Reference": "xx",
     "Scroll": {
       "VarType": "TestCase",
@@ -193,7 +193,7 @@
     }
   },
   "NECB2017": {
-    "VarType": "ChillerType",
+    "VarType": "chiller_type",
     "Reference": "xx",
     "Scroll": {
       "VarType": "TestCase",
@@ -289,7 +289,7 @@
     }
   },
   "NECB2020": {
-    "VarType": "ChillerType",
+    "VarType": "chiller_type",
     "Reference": "xx",
     "Scroll": {
       "VarType": "TestCase",

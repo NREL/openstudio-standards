@@ -1,5 +1,5 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "Reference": "BTAP test - checking creation of btap_data report",
   "NECB2011": {
     "VarType": "TestCase",

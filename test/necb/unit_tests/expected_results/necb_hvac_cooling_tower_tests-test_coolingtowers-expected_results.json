@@ -1,5 +1,5 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2011": {
     "VarType": "chiller_types",
     "Reference": "NECB 2011 p3: Section 8.4.4.12.",

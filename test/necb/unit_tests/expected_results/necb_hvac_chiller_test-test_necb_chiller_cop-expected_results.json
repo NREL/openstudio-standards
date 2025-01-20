@@ -1,7 +1,7 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2011": {
-    "VarType": "ChillerType",
+    "VarType": "chiller_type",
     "Reference": "NECB 2011 p3 Table 5.2.12.1. Points to CSA-C743-09",
     "Scroll": {
       "VarType": "TestCase",
@@ -349,7 +349,7 @@
     }
   },
   "NECB2015": {
-    "VarType": "ChillerType",
+    "VarType": "chiller_type",
     "Reference": "NECB 2015 p1 Table 5.2.12.1. Points to CSA-C743-09",
     "Scroll": {
       "VarType": "TestCase",
@@ -697,7 +697,7 @@
     }
   },
   "NECB2017": {
-    "VarType": "ChillerType",
+    "VarType": "chiller_type",
     "Reference": "NECB 2017 p2 Table 5.2.12.1. Points to CSA-C743-09",
     "Scroll": {
       "VarType": "TestCase",
@@ -1045,7 +1045,7 @@
     }
   },
   "NECB2020": {
-    "VarType": "ChillerType",
+    "VarType": "chiller_type",
     "Reference": "NECB 2020 p1 Table 5.2.12.1.-K (Path B)",
     "Scroll": {
       "VarType": "TestCase",

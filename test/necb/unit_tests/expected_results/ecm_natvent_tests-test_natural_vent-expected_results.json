@@ -1,7 +1,7 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2017": {
-    "VarType": "Archetype",
+    "VarType": "archetype",
     "FullServiceRestaurant": {
       "VarType": "TestCase",
       "ZoneResults": {

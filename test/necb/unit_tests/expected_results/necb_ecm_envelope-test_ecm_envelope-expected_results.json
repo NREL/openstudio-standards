@@ -1,5 +1,5 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "Reference": "ECM test - setting specific thermal transmittance values (W/m2K)",
   "BTAPPRE1980": {
     "VarType": "TestCase",

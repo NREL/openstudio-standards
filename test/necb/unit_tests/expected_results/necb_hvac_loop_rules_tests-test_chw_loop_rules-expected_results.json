@@ -1,7 +1,7 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2011": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2011 p3: 8.4.4.11.(6g); 8.4.4.12.(1b,6c)",
     "Electricity": {
       "VarType": "TestCase",
@@ -149,7 +149,7 @@
     }
   },
   "NECB2017": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2017 p2: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)",
     "Electricity": {
       "VarType": "TestCase",
@@ -223,7 +223,7 @@
     }
   },
   "NECB2020": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2020 p1: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)",
     "Electricity": {
       "VarType": "TestCase",
@@ -297,7 +297,7 @@
     }
   },
   "BTAPPRE1980": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
@@ -370,7 +370,7 @@
     }
   },
   "BTAP1980TO2010": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {

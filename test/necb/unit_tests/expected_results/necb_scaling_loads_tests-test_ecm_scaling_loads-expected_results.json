@@ -1,8 +1,8 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "Reference": "ECM functionality built into BTAP",
   "NECB2011": {
-    "VarType": "BuildingType",
+    "VarType": "archetype",
     "FullServiceRestaurant": {
       "VarType": "TestCase",
       "case zero": {

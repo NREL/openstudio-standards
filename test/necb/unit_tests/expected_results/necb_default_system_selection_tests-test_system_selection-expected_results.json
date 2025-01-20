@@ -1,7 +1,7 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2011": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
     "Reference": "NECB 2011 p3 Table 8.4.4.8.A.",
     "Audience - auditorium": {
       "VarType": "TestCase",
@@ -1118,7 +1118,7 @@
     }
   },
   "NECB2015": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
     "Reference": "NECB 2011 p3 Table 8.4.4.7.-A",
     "Audience - auditorium": {
       "VarType": "TestCase",
@@ -2235,7 +2235,7 @@
     }
   },
   "NECB2017": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
     "Reference": "NECB 2011 p3 Table 8.4.4.7.-A",
     "Audience - auditorium": {
       "VarType": "TestCase",
@@ -3352,7 +3352,7 @@
     }
   },
   "NECB2020": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
     "Reference": "NECB 2011 p3 Table 8.4.4.7.-A.",
     "Audience - auditorium": {
       "VarType": "TestCase",
@@ -4469,7 +4469,7 @@
     }
   },
   "BTAPPRE1980": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
     "Audience - auditorium": {
       "VarType": "TestCase",
       "case-1": {
@@ -5585,7 +5585,7 @@
     }
   },
   "BTAP1980TO2010": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
     "Audience - auditorium": {
       "VarType": "TestCase",
       "case-1": {

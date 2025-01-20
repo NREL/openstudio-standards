@@ -1,10 +1,10 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2011": {
     "VarType": "SpaceType",
     "Reference": "NECB 2011 p3 Table 5.2.12.1",
     "Audience - auditorium": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -69,7 +69,7 @@
       }
     },
     "Classroom/lecture/training": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -134,7 +134,7 @@
       }
     },
     "Conf./meet./multi-purpose": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -199,7 +199,7 @@
       }
     },
     "Corr. < 2.4m wide-sch-G": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -262,7 +262,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -325,7 +325,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -388,7 +388,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -451,7 +451,7 @@
       }
     },
     "Dining - bar lounge/leisure": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -516,7 +516,7 @@
       }
     },
     "Dining - family space": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -581,7 +581,7 @@
       }
     },
     "Dwelling Unit(s)": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -646,7 +646,7 @@
       }
     },
     "Electrical/Mechanical-sch-A": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -709,7 +709,7 @@
       }
     },
     "Electrical/Mechanical-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -772,7 +772,7 @@
       }
     },
     "Electrical/Mechanical-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -835,7 +835,7 @@
       }
     },
     "Electrical/Mechanical-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -898,7 +898,7 @@
       }
     },
     "Electrical/Mechanical-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -961,7 +961,7 @@
       }
     },
     "Food preparation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1026,7 +1026,7 @@
       }
     },
     "Gym - fitness": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1091,7 +1091,7 @@
       }
     },
     "Gym - play": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1156,7 +1156,7 @@
       }
     },
     "Hospital - emergency": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1221,7 +1221,7 @@
       }
     },
     "Hospital - exam": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1286,7 +1286,7 @@
       }
     },
     "Hospital - laundry/washing": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1351,7 +1351,7 @@
       }
     },
     "Hospital - lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1416,7 +1416,7 @@
       }
     },
     "Hospital - nurses station": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1481,7 +1481,7 @@
       }
     },
     "Hospital - operating room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1546,7 +1546,7 @@
       }
     },
     "Hospital - patient room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1611,7 +1611,7 @@
       }
     },
     "Hospital - physical therapy": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1676,7 +1676,7 @@
       }
     },
     "Hospital - radiology/imaging": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1741,7 +1741,7 @@
       }
     },
     "Hospital - recovery": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1806,7 +1806,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-B": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1869,7 +1869,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1932,7 +1932,7 @@
       }
     },
     "Hotel/Motel - dining": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -1997,7 +1997,7 @@
       }
     },
     "Hotel/Motel - lobby": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2062,7 +2062,7 @@
       }
     },
     "Hotel/Motel - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2127,7 +2127,7 @@
       }
     },
     "Hway lodging - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2192,7 +2192,7 @@
       }
     },
     "Lab - research": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2257,7 +2257,7 @@
       }
     },
     "Library - reading": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2322,7 +2322,7 @@
       }
     },
     "Lobby - elevator": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2385,7 +2385,7 @@
       }
     },
     "Lobby - other": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2448,7 +2448,7 @@
       }
     },
     "Locker room-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2511,7 +2511,7 @@
       }
     },
     "Lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2576,7 +2576,7 @@
       }
     },
     "Office - enclosed": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2641,7 +2641,7 @@
       }
     },
     "Office - open plan": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2706,7 +2706,7 @@
       }
     },
     "Retail - mall concourse": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2771,7 +2771,7 @@
       }
     },
     "Retail - sales": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2836,7 +2836,7 @@
       }
     },
     "Stairway-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2899,7 +2899,7 @@
       }
     },
     "Stairway-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -2962,7 +2962,7 @@
       }
     },
     "Storage area - occsens": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3027,7 +3027,7 @@
       }
     },
     "Storage area": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3092,7 +3092,7 @@
       }
     },
     "Warehouse - fine": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3157,7 +3157,7 @@
       }
     },
     "Warehouse - med/blk": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3222,7 +3222,7 @@
       }
     },
     "Washroom-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3285,7 +3285,7 @@
       }
     },
     "Washroom-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3348,7 +3348,7 @@
       }
     },
     "Washroom-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3414,7 +3414,7 @@
   "NECB2015": {
     "VarType": "SpaceType",
     "Audience - auditorium": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3479,7 +3479,7 @@
       }
     },
     "Classroom/lecture/training": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3544,7 +3544,7 @@
       }
     },
     "Conf./meet./multi-purpose": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3609,7 +3609,7 @@
       }
     },
     "Corr. < 2.4m wide-sch-G": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3672,7 +3672,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3735,7 +3735,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3798,7 +3798,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3861,7 +3861,7 @@
       }
     },
     "Dining - bar lounge/leisure": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3926,7 +3926,7 @@
       }
     },
     "Dining - family space": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -3991,7 +3991,7 @@
       }
     },
     "Dwelling Unit(s)": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4056,7 +4056,7 @@
       }
     },
     "Electrical/Mechanical-sch-A": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4119,7 +4119,7 @@
       }
     },
     "Electrical/Mechanical-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4182,7 +4182,7 @@
       }
     },
     "Electrical/Mechanical-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4245,7 +4245,7 @@
       }
     },
     "Electrical/Mechanical-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4308,7 +4308,7 @@
       }
     },
     "Electrical/Mechanical-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4371,7 +4371,7 @@
       }
     },
     "Food preparation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4436,7 +4436,7 @@
       }
     },
     "Gym - fitness": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4501,7 +4501,7 @@
       }
     },
     "Gym - play": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4566,7 +4566,7 @@
       }
     },
     "Hospital - emergency": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4631,7 +4631,7 @@
       }
     },
     "Hospital - exam": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4696,7 +4696,7 @@
       }
     },
     "Hospital - laundry/washing": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4761,7 +4761,7 @@
       }
     },
     "Hospital - lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4826,7 +4826,7 @@
       }
     },
     "Hospital - nurses station": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4891,7 +4891,7 @@
       }
     },
     "Hospital - operating room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -4956,7 +4956,7 @@
       }
     },
     "Hospital - patient room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5021,7 +5021,7 @@
       }
     },
     "Hospital - physical therapy": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5086,7 +5086,7 @@
       }
     },
     "Hospital - radiology/imaging": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5151,7 +5151,7 @@
       }
     },
     "Hospital - recovery": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5216,7 +5216,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-B": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5279,7 +5279,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5342,7 +5342,7 @@
       }
     },
     "Hotel/Motel - dining": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5407,7 +5407,7 @@
       }
     },
     "Hotel/Motel - lobby": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5472,7 +5472,7 @@
       }
     },
     "Hotel/Motel - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5537,7 +5537,7 @@
       }
     },
     "Hway lodging - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5602,7 +5602,7 @@
       }
     },
     "Lab - research": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5667,7 +5667,7 @@
       }
     },
     "Library - reading": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5732,7 +5732,7 @@
       }
     },
     "Lobby - elevator": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5795,7 +5795,7 @@
       }
     },
     "Lobby - other": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5858,7 +5858,7 @@
       }
     },
     "Locker room-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5921,7 +5921,7 @@
       }
     },
     "Lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -5986,7 +5986,7 @@
       }
     },
     "Office - enclosed": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6051,7 +6051,7 @@
       }
     },
     "Office - open plan": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6116,7 +6116,7 @@
       }
     },
     "Retail - mall concourse": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6181,7 +6181,7 @@
       }
     },
     "Retail - sales": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6246,7 +6246,7 @@
       }
     },
     "Stairway-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6309,7 +6309,7 @@
       }
     },
     "Stairway-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6372,7 +6372,7 @@
       }
     },
     "Storage area - occsens": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6435,7 +6435,7 @@
       }
     },
     "Storage area": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6498,7 +6498,7 @@
       }
     },
     "Warehouse - fine": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6563,7 +6563,7 @@
       }
     },
     "Warehouse - med/blk": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6628,7 +6628,7 @@
       }
     },
     "Washroom-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6691,7 +6691,7 @@
       }
     },
     "Washroom-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6754,7 +6754,7 @@
       }
     },
     "Washroom-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6820,7 +6820,7 @@
   "NECB2017": {
     "VarType": "SpaceType",
     "Audience - auditorium": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6885,7 +6885,7 @@
       }
     },
     "Classroom/lecture/training": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -6950,7 +6950,7 @@
       }
     },
     "Conf./meet./multi-purpose": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7015,7 +7015,7 @@
       }
     },
     "Corr. < 2.4m wide-sch-G": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7078,7 +7078,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7141,7 +7141,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7204,7 +7204,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7267,7 +7267,7 @@
       }
     },
     "Dining - bar lounge/leisure": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7332,7 +7332,7 @@
       }
     },
     "Dining - family space": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7397,7 +7397,7 @@
       }
     },
     "Dwelling Unit(s)": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7462,7 +7462,7 @@
       }
     },
     "Electrical/Mechanical-sch-A": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7525,7 +7525,7 @@
       }
     },
     "Electrical/Mechanical-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7588,7 +7588,7 @@
       }
     },
     "Electrical/Mechanical-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7651,7 +7651,7 @@
       }
     },
     "Electrical/Mechanical-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7714,7 +7714,7 @@
       }
     },
     "Electrical/Mechanical-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7777,7 +7777,7 @@
       }
     },
     "Food preparation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7842,7 +7842,7 @@
       }
     },
     "Gym - fitness": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7907,7 +7907,7 @@
       }
     },
     "Gym - play": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -7972,7 +7972,7 @@
       }
     },
     "Hospital - emergency": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8037,7 +8037,7 @@
       }
     },
     "Hospital - exam": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8102,7 +8102,7 @@
       }
     },
     "Hospital - laundry/washing": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8167,7 +8167,7 @@
       }
     },
     "Hospital - lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8232,7 +8232,7 @@
       }
     },
     "Hospital - nurses station": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8297,7 +8297,7 @@
       }
     },
     "Hospital - operating room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8362,7 +8362,7 @@
       }
     },
     "Hospital - patient room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8427,7 +8427,7 @@
       }
     },
     "Hospital - physical therapy": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8492,7 +8492,7 @@
       }
     },
     "Hospital - radiology/imaging": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8557,7 +8557,7 @@
       }
     },
     "Hospital - recovery": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8622,7 +8622,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-B": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8685,7 +8685,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8748,7 +8748,7 @@
       }
     },
     "Hotel/Motel - dining": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8813,7 +8813,7 @@
       }
     },
     "Hotel/Motel - lobby": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8878,7 +8878,7 @@
       }
     },
     "Hotel/Motel - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -8943,7 +8943,7 @@
       }
     },
     "Hway lodging - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9008,7 +9008,7 @@
       }
     },
     "Lab - research": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9073,7 +9073,7 @@
       }
     },
     "Library - reading": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9138,7 +9138,7 @@
       }
     },
     "Lobby - elevator": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9201,7 +9201,7 @@
       }
     },
     "Lobby - other": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9264,7 +9264,7 @@
       }
     },
     "Locker room-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9327,7 +9327,7 @@
       }
     },
     "Lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9392,7 +9392,7 @@
       }
     },
     "Office - enclosed": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9457,7 +9457,7 @@
       }
     },
     "Office - open plan": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9522,7 +9522,7 @@
       }
     },
     "Retail - mall concourse": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9587,7 +9587,7 @@
       }
     },
     "Retail - sales": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9652,7 +9652,7 @@
       }
     },
     "Stairway-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9715,7 +9715,7 @@
       }
     },
     "Stairway-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9778,7 +9778,7 @@
       }
     },
     "Storage area - occsens": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9841,7 +9841,7 @@
       }
     },
     "Storage area": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9904,7 +9904,7 @@
       }
     },
     "Warehouse - fine": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -9969,7 +9969,7 @@
       }
     },
     "Warehouse - med/blk": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10034,7 +10034,7 @@
       }
     },
     "Washroom-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10097,7 +10097,7 @@
       }
     },
     "Washroom-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10160,7 +10160,7 @@
       }
     },
     "Washroom-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10226,7 +10226,7 @@
   "NECB2020": {
     "VarType": "SpaceType",
     "Audience - auditorium": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10291,7 +10291,7 @@
       }
     },
     "Classroom/lecture/training": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10356,7 +10356,7 @@
       }
     },
     "Conf./meet./multi-purpose": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10421,7 +10421,7 @@
       }
     },
     "Corr. < 2.4m wide-sch-G": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10484,7 +10484,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10547,7 +10547,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10610,7 +10610,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10673,7 +10673,7 @@
       }
     },
     "Dining - bar lounge/leisure": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10738,7 +10738,7 @@
       }
     },
     "Dining - family space": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10803,7 +10803,7 @@
       }
     },
     "Dwelling Unit(s)": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10868,7 +10868,7 @@
       }
     },
     "Electrical/Mechanical-sch-A": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10931,7 +10931,7 @@
       }
     },
     "Electrical/Mechanical-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -10994,7 +10994,7 @@
       }
     },
     "Electrical/Mechanical-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11057,7 +11057,7 @@
       }
     },
     "Electrical/Mechanical-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11120,7 +11120,7 @@
       }
     },
     "Electrical/Mechanical-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11183,7 +11183,7 @@
       }
     },
     "Food preparation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11248,7 +11248,7 @@
       }
     },
     "Gym - fitness": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11313,7 +11313,7 @@
       }
     },
     "Gym - play": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11378,7 +11378,7 @@
       }
     },
     "Hospital - emergency": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11443,7 +11443,7 @@
       }
     },
     "Hospital - exam": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11508,7 +11508,7 @@
       }
     },
     "Hospital - laundry/washing": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11573,7 +11573,7 @@
       }
     },
     "Hospital - lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11638,7 +11638,7 @@
       }
     },
     "Hospital - nurses station": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11703,7 +11703,7 @@
       }
     },
     "Hospital - operating room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11768,7 +11768,7 @@
       }
     },
     "Hospital - patient room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11833,7 +11833,7 @@
       }
     },
     "Hospital - physical therapy": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11898,7 +11898,7 @@
       }
     },
     "Hospital - radiology/imaging": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -11963,7 +11963,7 @@
       }
     },
     "Hospital - recovery": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12028,7 +12028,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-B": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12091,7 +12091,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12154,7 +12154,7 @@
       }
     },
     "Hotel/Motel - dining": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12219,7 +12219,7 @@
       }
     },
     "Hotel/Motel - lobby": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12284,7 +12284,7 @@
       }
     },
     "Hotel/Motel - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12349,7 +12349,7 @@
       }
     },
     "Hway lodging - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12414,7 +12414,7 @@
       }
     },
     "Lab - research": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12479,7 +12479,7 @@
       }
     },
     "Library - reading": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12544,7 +12544,7 @@
       }
     },
     "Lobby - elevator": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12607,7 +12607,7 @@
       }
     },
     "Lobby - other": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12670,7 +12670,7 @@
       }
     },
     "Locker room-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12733,7 +12733,7 @@
       }
     },
     "Lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12798,7 +12798,7 @@
       }
     },
     "Office - enclosed": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12863,7 +12863,7 @@
       }
     },
     "Office - open plan": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12928,7 +12928,7 @@
       }
     },
     "Retail - mall concourse": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -12993,7 +12993,7 @@
       }
     },
     "Retail - sales": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13058,7 +13058,7 @@
       }
     },
     "Stairway-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13121,7 +13121,7 @@
       }
     },
     "Stairway-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13184,7 +13184,7 @@
       }
     },
     "Storage area - occsens": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13247,7 +13247,7 @@
       }
     },
     "Storage area": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13310,7 +13310,7 @@
       }
     },
     "Warehouse - fine": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13375,7 +13375,7 @@
       }
     },
     "Warehouse - med/blk": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13440,7 +13440,7 @@
       }
     },
     "Washroom-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13503,7 +13503,7 @@
       }
     },
     "Washroom-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13566,7 +13566,7 @@
       }
     },
     "Washroom-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13632,7 +13632,7 @@
   "BTAPPRE1980": {
     "VarType": "SpaceType",
     "Audience - auditorium": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13697,7 +13697,7 @@
       }
     },
     "Classroom/lecture/training": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13762,7 +13762,7 @@
       }
     },
     "Conf./meet./multi-purpose": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13827,7 +13827,7 @@
       }
     },
     "Corr. < 2.4m wide-sch-G": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13890,7 +13890,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -13953,7 +13953,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14016,7 +14016,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14079,7 +14079,7 @@
       }
     },
     "Dining - bar lounge/leisure": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14144,7 +14144,7 @@
       }
     },
     "Dining - family space": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14209,7 +14209,7 @@
       }
     },
     "Dwelling Unit(s)": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14274,7 +14274,7 @@
       }
     },
     "Electrical/Mechanical-sch-A": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14337,7 +14337,7 @@
       }
     },
     "Electrical/Mechanical-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14400,7 +14400,7 @@
       }
     },
     "Electrical/Mechanical-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14463,7 +14463,7 @@
       }
     },
     "Electrical/Mechanical-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14526,7 +14526,7 @@
       }
     },
     "Electrical/Mechanical-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14589,7 +14589,7 @@
       }
     },
     "Food preparation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14654,7 +14654,7 @@
       }
     },
     "Gym - fitness": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14719,7 +14719,7 @@
       }
     },
     "Gym - play": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14784,7 +14784,7 @@
       }
     },
     "Hospital - emergency": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14849,7 +14849,7 @@
       }
     },
     "Hospital - exam": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14914,7 +14914,7 @@
       }
     },
     "Hospital - laundry/washing": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -14979,7 +14979,7 @@
       }
     },
     "Hospital - lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15044,7 +15044,7 @@
       }
     },
     "Hospital - nurses station": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15109,7 +15109,7 @@
       }
     },
     "Hospital - operating room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15174,7 +15174,7 @@
       }
     },
     "Hospital - patient room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15239,7 +15239,7 @@
       }
     },
     "Hospital - physical therapy": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15304,7 +15304,7 @@
       }
     },
     "Hospital - radiology/imaging": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15369,7 +15369,7 @@
       }
     },
     "Hospital - recovery": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15434,7 +15434,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-B": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15497,7 +15497,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15560,7 +15560,7 @@
       }
     },
     "Hotel/Motel - dining": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15625,7 +15625,7 @@
       }
     },
     "Hotel/Motel - lobby": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15690,7 +15690,7 @@
       }
     },
     "Hotel/Motel - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15755,7 +15755,7 @@
       }
     },
     "Hway lodging - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15820,7 +15820,7 @@
       }
     },
     "Lab - research": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15885,7 +15885,7 @@
       }
     },
     "Library - reading": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -15950,7 +15950,7 @@
       }
     },
     "Lobby - elevator": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16013,7 +16013,7 @@
       }
     },
     "Lobby - other": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16076,7 +16076,7 @@
       }
     },
     "Locker room-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16139,7 +16139,7 @@
       }
     },
     "Lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16204,7 +16204,7 @@
       }
     },
     "Office - enclosed": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16269,7 +16269,7 @@
       }
     },
     "Office - open plan": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16334,7 +16334,7 @@
       }
     },
     "Retail - mall concourse": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16399,7 +16399,7 @@
       }
     },
     "Retail - sales": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16464,7 +16464,7 @@
       }
     },
     "Stairway-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16527,7 +16527,7 @@
       }
     },
     "Stairway-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16590,7 +16590,7 @@
       }
     },
     "Storage area - occsens": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16655,7 +16655,7 @@
       }
     },
     "Storage area": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16720,7 +16720,7 @@
       }
     },
     "Warehouse - fine": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16785,7 +16785,7 @@
       }
     },
     "Warehouse - med/blk": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16850,7 +16850,7 @@
       }
     },
     "Washroom-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16913,7 +16913,7 @@
       }
     },
     "Washroom-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -16976,7 +16976,7 @@
       }
     },
     "Washroom-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17042,7 +17042,7 @@
   "BTAP1980TO2010": {
     "VarType": "SpaceType",
     "Audience - auditorium": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17107,7 +17107,7 @@
       }
     },
     "Classroom/lecture/training": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17172,7 +17172,7 @@
       }
     },
     "Conf./meet./multi-purpose": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17237,7 +17237,7 @@
       }
     },
     "Corr. < 2.4m wide-sch-G": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17300,7 +17300,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17363,7 +17363,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17426,7 +17426,7 @@
       }
     },
     "Corr. >= 2.4m wide-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17489,7 +17489,7 @@
       }
     },
     "Dining - bar lounge/leisure": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17554,7 +17554,7 @@
       }
     },
     "Dining - family space": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17619,7 +17619,7 @@
       }
     },
     "Dwelling Unit(s)": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17684,7 +17684,7 @@
       }
     },
     "Electrical/Mechanical-sch-A": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17747,7 +17747,7 @@
       }
     },
     "Electrical/Mechanical-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17810,7 +17810,7 @@
       }
     },
     "Electrical/Mechanical-sch-E": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17873,7 +17873,7 @@
       }
     },
     "Electrical/Mechanical-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17936,7 +17936,7 @@
       }
     },
     "Electrical/Mechanical-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -17999,7 +17999,7 @@
       }
     },
     "Food preparation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18064,7 +18064,7 @@
       }
     },
     "Gym - fitness": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18129,7 +18129,7 @@
       }
     },
     "Gym - play": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18194,7 +18194,7 @@
       }
     },
     "Hospital - emergency": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18259,7 +18259,7 @@
       }
     },
     "Hospital - exam": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18324,7 +18324,7 @@
       }
     },
     "Hospital - laundry/washing": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18389,7 +18389,7 @@
       }
     },
     "Hospital - lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18454,7 +18454,7 @@
       }
     },
     "Hospital - nurses station": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18519,7 +18519,7 @@
       }
     },
     "Hospital - operating room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18584,7 +18584,7 @@
       }
     },
     "Hospital - patient room": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18649,7 +18649,7 @@
       }
     },
     "Hospital - physical therapy": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18714,7 +18714,7 @@
       }
     },
     "Hospital - radiology/imaging": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18779,7 +18779,7 @@
       }
     },
     "Hospital - recovery": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18844,7 +18844,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-B": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18907,7 +18907,7 @@
       }
     },
     "Hospital corr. >= 2.4m-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -18970,7 +18970,7 @@
       }
     },
     "Hotel/Motel - dining": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19035,7 +19035,7 @@
       }
     },
     "Hotel/Motel - lobby": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19100,7 +19100,7 @@
       }
     },
     "Hotel/Motel - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19165,7 +19165,7 @@
       }
     },
     "Hway lodging - rooms": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19230,7 +19230,7 @@
       }
     },
     "Lab - research": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19295,7 +19295,7 @@
       }
     },
     "Library - reading": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19360,7 +19360,7 @@
       }
     },
     "Lobby - elevator": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19423,7 +19423,7 @@
       }
     },
     "Lobby - other": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19486,7 +19486,7 @@
       }
     },
     "Locker room-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19549,7 +19549,7 @@
       }
     },
     "Lounge/recreation": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19614,7 +19614,7 @@
       }
     },
     "Office - enclosed": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19679,7 +19679,7 @@
       }
     },
     "Office - open plan": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19744,7 +19744,7 @@
       }
     },
     "Retail - mall concourse": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19809,7 +19809,7 @@
       }
     },
     "Retail - sales": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19874,7 +19874,7 @@
       }
     },
     "Stairway-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -19937,7 +19937,7 @@
       }
     },
     "Stairway-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -20000,7 +20000,7 @@
       }
     },
     "Storage area - occsens": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -20065,7 +20065,7 @@
       }
     },
     "Storage area": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -20130,7 +20130,7 @@
       }
     },
     "Warehouse - fine": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -20195,7 +20195,7 @@
       }
     },
     "Warehouse - med/blk": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -20260,7 +20260,7 @@
       }
     },
     "Washroom-sch-D": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -20323,7 +20323,7 @@
       }
     },
     "Washroom-sch-F": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {
@@ -20386,7 +20386,7 @@
       }
     },
     "Washroom-sch-H": {
-      "VarType": "FuelType",
+      "VarType": "fuel_type",
       "Electricity": {
         "VarType": "TestCase",
         "case-1": {

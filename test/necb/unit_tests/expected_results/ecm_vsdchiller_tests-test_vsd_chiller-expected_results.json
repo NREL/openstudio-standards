@@ -1,7 +1,7 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2011": {
-    "VarType": "Archetype",
+    "VarType": "archetype",
     "LargeOffice": {
       "VarType": "chiller_capacity_kW",
       "235": {

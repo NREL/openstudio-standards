@@ -1,5 +1,5 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "Reference": "ECM test - checking hs14 CGSHP curves",
   "NECB2017": {
     "VarType": "TestCase",

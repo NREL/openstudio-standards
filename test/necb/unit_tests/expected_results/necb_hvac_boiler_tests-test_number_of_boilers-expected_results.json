@@ -1,7 +1,7 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2011": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2011 p3 8.4.4.10.(6) clauses b,c,d",
     "NaturalGas": {
       "VarType": "TestCase",
@@ -49,7 +49,7 @@
     }
   },
   "NECB2015": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single_Small_Boiler": {
@@ -96,7 +96,7 @@
     }
   },
   "NECB2017": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single_Small_Boiler": {
@@ -143,7 +143,7 @@
     }
   },
   "NECB2020": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single_Small_Boiler": {
@@ -190,7 +190,7 @@
     }
   },
   "BTAPPRE1980": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single_Small_Boiler": {
@@ -237,7 +237,7 @@
     }
   },
   "BTAP1980TO2010": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "NaturalGas": {
       "VarType": "TestCase",
       "Single_Small_Boiler": {

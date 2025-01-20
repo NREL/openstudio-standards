@@ -1,7 +1,7 @@
 {
-  "VarType": "Vintage",
+  "VarType": "vintage",
   "NECB2011": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2011 p3 Table 8.4.4.22.A",
     "NaturalGas": {
       "VarType": "TestCase",
@@ -65,7 +65,7 @@
     }
   },
   "NECB2015": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2015 p1 Table 8.4.4.21.-A",
     "NaturalGas": {
       "VarType": "TestCase",
@@ -129,7 +129,7 @@
     }
   },
   "NECB2017": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2017 p2 Table 8.4.4.21.-A",
     "NaturalGas": {
       "VarType": "TestCase",
@@ -193,7 +193,7 @@
     }
   },
   "NECB2020": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2020 p1 Table 8.4.5.3",
     "NaturalGas": {
       "VarType": "TestCase",
@@ -257,7 +257,7 @@
     }
   },
   "BTAPPRE1980": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "NaturalGas": {
       "VarType": "TestCase",
       "SingleStage": [
@@ -320,7 +320,7 @@
     }
   },
   "BTAP1980TO2010": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "NaturalGas": {
       "VarType": "TestCase",
       "SingleStage": [
