@@ -1,0 +1,61 @@
+{
+  "VarType": "vintage",
+  "NECB2011": {
+    "VarType": "swh_capacity_kW",
+    "Reference": "NECB 2011 xxx",
+    "10.0": {
+      "VarType": "swh_volume_L",
+      "200.0": {
+        "VarType": "TestCase",
+        "Case 1": {
+          "SWH_unit-1": {
+            "name": "52834gal Electricity Water Heater - 34kBtu/hr 1 Therm Eff",
+            "efficiency": 1.0,
+            "volume": 0.2,
+            "off_cycle_UA_WperK": 2.057,
+            "on_cycle_UA_WperK": 2.057
+          }
+        }
+      },
+      "300.0": {
+        "VarType": "TestCase",
+        "Case 1": {
+          "SWH_unit-1": {
+            "name": "79252gal Electricity Water Heater - 34kBtu/hr 1 Therm Eff",
+            "efficiency": 1.0,
+            "volume": 0.3,
+            "off_cycle_UA_WperK": 2.78,
+            "on_cycle_UA_WperK": 2.78
+          }
+        }
+      }
+    },
+    "20.0": {
+      "VarType": "swh_volume_L",
+      "200.0": {
+        "VarType": "TestCase",
+        "Case 1": {
+          "SWH_unit-1": {
+            "name": "52834gal Electricity Water Heater - 68kBtu/hr 1 Therm Eff",
+            "efficiency": 1.0,
+            "volume": 0.2,
+            "off_cycle_UA_WperK": 2.068,
+            "on_cycle_UA_WperK": 2.068
+          }
+        }
+      },
+      "300.0": {
+        "VarType": "TestCase",
+        "Case 1": {
+          "SWH_unit-1": {
+            "name": "79252gal Electricity Water Heater - 68kBtu/hr 1 Therm Eff",
+            "efficiency": 1.0,
+            "volume": 0.3,
+            "off_cycle_UA_WperK": 2.499,
+            "on_cycle_UA_WperK": 2.499
+          }
+        }
+      }
+    }
+  }
+}

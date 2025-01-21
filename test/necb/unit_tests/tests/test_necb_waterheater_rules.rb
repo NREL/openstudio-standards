@@ -80,13 +80,13 @@ class NECB_SWH_Additional_Tests < Minitest::Test
     vintage = test_pars[:vintage]
 
     # Test specific inputs.
-    swh_volume_L = test_case[:swh_volume_L]
-    swh_temperature_degC = test_case[:swh_temperature_degC]
-    swh_pump_head = test_case[:swh_pump_head]
-    swh_pump_motor_efficiency = test_case[:swh_pump_motor_efficiency]
-    swh_capacity_kW = test_case[:swh_capacity_kW]
+    swh_volume_L = test_case[:swh_volume_L].to_f
+    swh_temperature_degC = test_case[:swh_temperature_degC].to_f
+    swh_pump_head = test_case[:swh_pump_head].to_f
+    swh_pump_motor_efficiency = test_case[:swh_pump_motor_efficiency].to_f
+    swh_capacity_kW = test_case[:swh_capacity_kW].to_f
     swh_fuel = test_case[:swh_fuel]
-    swh_parasitic_fuel_consumption_rate = test_case[:swh_parasitic_fuel_consumption_rate]
+    swh_parasitic_fuel_consumption_rate = test_case[:swh_parasitic_fuel_consumption_rate].to_f
 
     # Define the test name. 
     name = "#{vintage}-swh_#{swh_capacity_kW.round(0)}kW-swh_fuel_#{swh_fuel}"
@@ -97,8 +97,6 @@ class NECB_SWH_Additional_Tests < Minitest::Test
 
     # Wrap test in begin/rescue/ensure.
     begin
-
-
 
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
@@ -130,7 +128,7 @@ class NECB_SWH_Additional_Tests < Minitest::Test
                                                                                                   hw_loop: hw_loop,
                                                                                                   new_auto_zoner: false)
 
-      # Run sizing. Is this required?
+      # Run sizing. 
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       msg = "#{__FILE__}::#{__method__} #{error.message}"
@@ -147,108 +145,157 @@ class NECB_SWH_Additional_Tests < Minitest::Test
     return results
   end
 
-  # Test to validate efficiency and standby losses of electric shw heater (NECB 2011).
-  def test_NECB2011_swh_elec_efficiency_standby_losses
+  # Test to validate efficiency and standby losses of shw heater.
+  def test_swh_eff_standby_losses
+    logger.info "Starting suite of tests for: #{__method__}"
 
-    # Set up remaining parameters for test.
-    output_folder = method_output_folder(__method__)
-    template="NECB2011"
-    standard = get_standard(template)
-    save_intermediate_models = false
+    # Define test parameters.
+    test_parameters = {TestMethod: __method__,
+                       SaveIntermediateModels: true,
+                       fuel_type: 'Electricity',
+                       heating_coil_type: 'DX',
+                       baseboard_type: 'Hot Water'}
 
-    # Test tank capacities and volumes (liters).
-    test_caps = [10.0,20.0]
-    test_vols = [200.0,300.0]
+    # Define test cases. 
+    test_cases = Hash.new
 
-    test_caps.each do |icap|
-      test_vols.each do |ivol|
-        name = "shw_cap-#{icap}kW-vol-#{ivol}liters-2011"
-        name.gsub!(/\s+/, "-")
-        puts "***************#{name}***************\n"
+    # Define references (per vintage in this case).
+    test_cases[:NECB2011] = {Reference: 'NECB 2011 xxx'}
+    
+    # Results and name are tbd here as they will be calculated in the test.
+    test_cases_hash = {vintage: ['NECB2011'], #@AllTemplates, 
+                       swh_capacity_kW: [10.0,20.0],
+                       swh_volume_L: [200.0,300.0],
+                       TestCase: ['Case 1'], 
+                       TestPars: {swh_temperature_degC: 60.0,
+                                  swh_pump_head: 1.0,
+                                  swh_pump_motor_efficiency: 0.7,
+                                  swh_fuel: 'Electricity',
+                                  swh_parasitic_fuel_consumption_rate: 1.0}
+                      }
+    new_test_cases = make_test_cases_json(test_cases_hash)
+    merge_test_cases!(test_cases, new_test_cases)
+    
+    # Set the expected results filename.
+    file_root = "#{self.class.name}-#{__method__}".downcase
+    file_name = File.join(@expected_results_folder, "#{file_root}-expected_results.json")
+    expected_results = JSON.parse(File.read(file_name), {symbolize_names: true})
+  
+    # Create empty results hash and call the template method that runs the individual test cases.
+    test_results = do_test_cases(test_cases: test_cases, test_pars: test_parameters)
 
-        # Load model and set climate file.
-        model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
-        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+    # Write test results.
+    test_result_file = File.join(@test_results_folder, "#{file_root}-test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_results))
 
-        # Add SWH loop.
-        prototype_input = {}
-        prototype_input['main_water_heater_volume'] = 100.0
-        prototype_input['main_service_water_temperature'] = 60.0
-        prototype_input['main_service_water_pump_head'] = 1.0
-        prototype_input['main_service_water_pump_motor_efficiency'] = 0.7
-        prototype_input['main_water_heater_capacity'] = 100000.0
-        prototype_input['main_water_heater_fuel'] = 'Electricity'
-        prototype_input['main_service_water_parasitic_fuel_consumption_rate'] = 1.0
-        standard.model_add_swh_loop(model,
-                            'Main Service Water Loop',
-                            nil,
-                            prototype_input['main_service_water_temperature'],
-                            prototype_input['main_service_water_pump_head'],
-                            prototype_input['main_service_water_pump_motor_efficiency'],
-                            prototype_input['main_water_heater_capacity'],
-                            prototype_input['main_water_heater_volume'],
-                            prototype_input['main_water_heater_fuel'],
-                            prototype_input['main_service_water_parasitic_fuel_consumption_rate'])
+    # Check if test results match expected.
+    msg = "Boiler efficiencies test results do not match what is expected in test"
+    compare_results(expected_results: expected_results, test_results: test_results, msg: msg, type: 'json_data')
 
-        # Add hvac system.
-        fuel_type = 'Electricity'
-        baseboard_type = 'Hot Water'
-        heating_coil_type = 'DX'
-        hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model,hw_loop, fuel_type, always_on)
-        standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
-                                                                                                    zones: model.getThermalZones,
-                                                                                                    heating_coil_type: heating_coil_type,
-                                                                                                    baseboard_type: baseboard_type,
-                                                                                                    hw_loop: hw_loop,
-                                                                                                    new_auto_zoner: false)
-        # Set volume and capacity of water tank.
-        shw_units = model.getWaterHeaterMixeds
-        shw_units[0].setHeaterMaximumCapacity(1000.0*icap)
-        shw_units[0].setTankVolume(ivol/1000.0)
+    logger.info "Finished suite of tests for: #{__method__}"
+  end
+  
+  # @param test_pars [Hash] has the static parameters.
+  # @param test_case [Hash] has the specific test parameters.
+  # @return results of this case.
+  # @note Companion method to test_swh_eff_standby_losses that runs a specific test. Called by do_test_cases in necb_helper.rb.
+  def do_test_swh_eff_standby_losses(test_pars:, test_case:)
+    
+    # Debug.
+    logger.debug "test_pars: #{JSON.pretty_generate(test_pars)}"
+    logger.debug "test_case: #{JSON.pretty_generate(test_case)}"
 
-        # Run sizing.
-        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
+    # Define local variables. These are extracted from the supplied hashes.
+    # General inputs.
+    test_name = test_pars[:TestMethod]
+    save_intermediate_models = test_pars[:SaveIntermediateModels]
+    heating_coil_type = test_pars[:heating_coil_type]
+    baseboard_type = test_pars[:baseboard_type]
+    fuel_type = test_pars[:fuel_type]
+    vintage = test_pars[:vintage]
+    swh_volume_L = test_pars[:swh_volume_L].to_f
+    swh_capacity_kW = test_pars[:swh_capacity_kW].to_f
 
-        # Get standard water tank efficiency and standby losses.
-        actual_shw_tank_eff = shw_units[0].heaterThermalEfficiency.to_f
-        shw_units = model.getWaterHeaterMixeds
-        #actual_shw_tank_vol = shw_units[0].tankVolume.to_f
-        actual_offcycle_ua = shw_units[0].offCycleLossCoefficienttoAmbientTemperature.to_f
-        actual_oncycle_ua = shw_units[0].onCycleLossCoefficienttoAmbientTemperature.to_f
-        vol_gal = OpenStudio.convert(ivol/1000.0, 'm^3', 'gal').get
-        if icap < 12.0
-          expected_eff = 1.0
-          if ivol < 270.0
-            ua_w = 40 + 0.2 * ivol
-          else
-            ua_w = 0.472 * ivol - 33.5
-          end
-          ua_btu_p_hr = OpenStudio.convert(ua_w, 'W', 'Btu/hr').get
-        else
-          expected_eff = 1.0
-          ua_btu_p_hr = 20 + (35 * Math.sqrt(vol_gal))
-        end
-        ua_btu_p_hr_p_f = ua_btu_p_hr/70.0
-        expected_ua_w_p_k = OpenStudio.convert(ua_btu_p_hr_p_f, 'Btu/hr*R', 'W/K').get
-        tol = 1.0e-5
-        rel_diff = (actual_shw_tank_eff-expected_eff).abs/expected_eff
-        value_is_correct = true
-        if rel_diff > tol then value_is_correct = false end
-        assert(value_is_correct,"SHW efficiency test results do not match expected results!")
-        rel_diff = (actual_offcycle_ua-expected_ua_w_p_k).abs/expected_ua_w_p_k
-        value_is_correct = true
-        if rel_diff > tol then value_is_correct = false end
-        assert(value_is_correct,"SHW off cycle standby loss test results do not match expected results!")
-        rel_diff = (actual_oncycle_ua-expected_ua_w_p_k).abs/expected_ua_w_p_k
-        value_is_correct = true
-        if rel_diff > tol then value_is_correct = false end
-        assert(value_is_correct,"SHW on cycle standby loss test results do not match expected results!")
+    # Test specific inputs.
+    swh_temperature_degC = test_case[:swh_temperature_degC].to_f
+    swh_pump_head = test_case[:swh_pump_head].to_f
+    swh_pump_motor_efficiency = test_case[:swh_pump_motor_efficiency].to_f
+    swh_fuel = test_case[:swh_fuel]
+    swh_parasitic_fuel_consumption_rate = test_case[:swh_parasitic_fuel_consumption_rate].to_f
+
+    # Define the test name. 
+    name = "#{vintage}-swh_#{swh_capacity_kW.round(0)}kW-volume_#{swh_volume_L}L"
+    name_short = "#{vintage}-#{swh_capacity_kW.round(0)}kW-#{swh_volume_L}L"
+    output_folder = method_output_folder("#{test_name}/#{name_short}")
+    logger.info "Starting individual test: #{name}"
+    results = Hash.new
+
+    # Wrap test in begin/rescue/ensure.
+    begin
+
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
+      standard = get_standard(vintage)
+      standard.model_add_swh_loop(model,
+                        'Main Service Water Loop',
+                        nil,
+                        swh_temperature_degC,
+                        swh_pump_head,
+                        swh_pump_motor_efficiency,
+                        (swh_capacity_kW*1000.0),
+                        swh_volume_L,
+                        swh_fuel,
+                        swh_parasitic_fuel_consumption_rate)
+
+      # Add hvac system.
+      hw_loop = OpenStudio::Model::PlantLoop.new(model)
+      always_on = model.alwaysOnDiscreteSchedule
+      standard.setup_hw_loop_with_components(model,hw_loop, fuel_type, always_on)
+      standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
+                                                                                                  zones: model.getThermalZones,
+                                                                                                  heating_coil_type: heating_coil_type,
+                                                                                                  baseboard_type: baseboard_type,
+                                                                                                  hw_loop: hw_loop,
+                                                                                                  new_auto_zoner: false)
+      # Set volume and capacity of water tank.
+      swh_units = model.getWaterHeaterMixeds
+      swh_units.each do |unit|
+        unit.setHeaterMaximumCapacity(swh_capacity_kW*1000.0)
+        unit.setTankVolume(swh_volume_L/1000.0)
       end
+
+      # Run sizing. 
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
+    rescue => error
+      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
+
+    # Extract the results.
+    unit_count = 0
+    swh_units = model.getWaterHeaterMixeds
+    swh_units.each do |unit|
+      unit_count += 1
+      swh_tank_eff = unit.heaterThermalEfficiency.to_f
+      swh_tank_vol = unit.tankVolume.to_f
+      offcycle_ua = unit.offCycleLossCoefficienttoAmbientTemperature.to_f
+      oncycle_ua = unit.onCycleLossCoefficienttoAmbientTemperature.to_f
+      unitID = "SWH_unit-#{unit_count}"
+      results[unitID.to_sym] = {
+        name: unit.name.to_s,
+        efficiency: swh_tank_eff.signif(3),
+        volume: swh_tank_vol.signif(3),
+        off_cycle_UA_WperK: offcycle_ua.signif(4),
+        on_cycle_UA_WperK: oncycle_ua.signif(4)
+      }
+    end
+    logger.info "Completed individual test: #{name}"
+    return results
   end
 
   # Test to validate efficiency and standby losses of electric SWH heater (NECB 2020).
