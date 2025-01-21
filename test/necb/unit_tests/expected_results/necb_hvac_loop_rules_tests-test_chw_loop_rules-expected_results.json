@@ -75,7 +75,7 @@
     }
   },
   "NECB2015": {
-    "VarType": "FuelType",
+    "VarType": "fuel_type",
     "Reference": "NECB 2015 p1: 8.4.4.10.(6g); 8.4.4.11.(1b,6c)",
     "Electricity": {
       "VarType": "TestCase",
