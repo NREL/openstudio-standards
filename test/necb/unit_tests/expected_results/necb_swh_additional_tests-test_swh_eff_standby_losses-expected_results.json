@@ -10,8 +10,9 @@
         "Case 1": {
           "SWH_unit-1": {
             "name": "52834gal Electricity Water Heater - 34kBtu/hr 1 Therm Eff",
+            "volume_L": 200,
+            "capacity_kW": 10.0,
             "efficiency": 1.0,
-            "volume": 0.2,
             "off_cycle_UA_WperK": 2.057,
             "on_cycle_UA_WperK": 2.057
           }
@@ -22,8 +23,9 @@
         "Case 1": {
           "SWH_unit-1": {
             "name": "79252gal Electricity Water Heater - 34kBtu/hr 1 Therm Eff",
+            "volume_L": 300,
+            "capacity_kW": 10.0,
             "efficiency": 1.0,
-            "volume": 0.3,
             "off_cycle_UA_WperK": 2.78,
             "on_cycle_UA_WperK": 2.78
           }
@@ -37,8 +39,9 @@
         "Case 1": {
           "SWH_unit-1": {
             "name": "52834gal Electricity Water Heater - 68kBtu/hr 1 Therm Eff",
+            "volume_L": 200,
+            "capacity_kW": 20.0,
             "efficiency": 1.0,
-            "volume": 0.2,
             "off_cycle_UA_WperK": 2.068,
             "on_cycle_UA_WperK": 2.068
           }
@@ -49,10 +52,72 @@
         "Case 1": {
           "SWH_unit-1": {
             "name": "79252gal Electricity Water Heater - 68kBtu/hr 1 Therm Eff",
+            "volume_L": 300,
+            "capacity_kW": 20.0,
             "efficiency": 1.0,
-            "volume": 0.3,
             "off_cycle_UA_WperK": 2.499,
             "on_cycle_UA_WperK": 2.499
+          }
+        }
+      }
+    }
+  },
+  "NECB2020": {
+    "VarType": "swh_capacity_kW",
+    "10.0": {
+      "VarType": "swh_volume_L",
+      "200.0": {
+        "VarType": "TestCase",
+        "Case 1": {
+          "SWH_unit-1": {
+            "name": "52834gal Electricity Water Heater - 34kBtu/hr 1 Therm Eff",
+            "volume_L": 200,
+            "capacity_kW": 10.0,
+            "efficiency": 1.0,
+            "off_cycle_UA_WperK": 2.057,
+            "on_cycle_UA_WperK": 2.057
+          }
+        }
+      },
+      "300.0": {
+        "VarType": "TestCase",
+        "Case 1": {
+          "SWH_unit-1": {
+            "name": "79252gal Electricity Water Heater - 34kBtu/hr 1 Therm Eff",
+            "volume_L": 300,
+            "capacity_kW": 10.0,
+            "efficiency": 1.0,
+            "off_cycle_UA_WperK": 2.78,
+            "on_cycle_UA_WperK": 2.78
+          }
+        }
+      }
+    },
+    "20.0": {
+      "VarType": "swh_volume_L",
+      "200.0": {
+        "VarType": "TestCase",
+        "Case 1": {
+          "SWH_unit-1": {
+            "name": "52834gal Electricity Water Heater - 68kBtu/hr 1 Therm Eff",
+            "volume_L": 200,
+            "capacity_kW": 20.0,
+            "efficiency": 1.0,
+            "off_cycle_UA_WperK": 0.02085,
+            "on_cycle_UA_WperK": 0.02085
+          }
+        }
+      },
+      "300.0": {
+        "VarType": "TestCase",
+        "Case 1": {
+          "SWH_unit-1": {
+            "name": "79252gal Electricity Water Heater - 68kBtu/hr 1 Therm Eff",
+            "volume_L": 300,
+            "capacity_kW": 20.0,
+            "efficiency": 1.0,
+            "off_cycle_UA_WperK": 0.01647,
+            "on_cycle_UA_WperK": 0.01647
           }
         }
       }
