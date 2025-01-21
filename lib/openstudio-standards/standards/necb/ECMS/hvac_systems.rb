@@ -2094,7 +2094,7 @@ class ECMS
            loop_spm_type: 'Scheduled',
            loop_setpoint: 50.0,
            loop_temp_diff: 5.0)
-    # set additional parameters for heating heat pump 
+    # set additional parameters for heating heat pump
     hw_loop_htg_eqpt.setCondenserType('AirSoure')
     hw_loop_htg_eqpt.setMinimumSourceInletTemperature(-15.0)
     hw_loop_htg_eqpt.setReferenceCoefficientofPerformance(3.0)
@@ -2228,7 +2228,7 @@ class ECMS
     else
       raise("apply_efficiency_ecm_hs15_cashp_fancoils: capacity of boiler #{primary_boiler.name.to_s} is not defined")
     end
-    # If two boilers are present set their capacities by multiplying the total capacity by the defined primary and secondary 
+    # If two boilers are present set their capacities by multiplying the total capacity by the defined primary and secondary
     # boiler capacity ratios, respectively.
     hw_boiler_cap = [ 1.0 ]
     if hw_boilers.size > 1
@@ -2258,7 +2258,6 @@ class ECMS
     hp_htg_cap = hp_clg_cap if hp_clg_cap > hp_htg_cap
     heatpump_htg.setReferenceCapacity(hp_htg_cap)
     heatpump_clg.setReferenceCapacity(hp_htg_cap)
-  
    return
  end
 

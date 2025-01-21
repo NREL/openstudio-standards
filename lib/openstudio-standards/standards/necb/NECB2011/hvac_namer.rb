@@ -55,7 +55,7 @@ class NECB2011
         unitary_sup_heating_coil_gas = ( unitary_hp && unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingGas.is_initialized()) ? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingGas.get : false
         unitary_sup_heating_coil_ashp =( unitary_hp && unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingDXSingleSpeed.is_initialized()) ? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplementalHeatingCoil.to_CoilHeatingDXSingleSpeed.get : false
         unitary_supply_fan_on_off = unitary_hp and unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplyAirFan.to_FanOnOff.is_initialized() ? unitary_hp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.supplyAirFan.to_FanOnOff.get : false
-        
+
         # Main AirLoopHVAC Components
         # Heating Coils
         heating_coil_elect = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilHeatingElectric.is_initialized } ? air_loop.components.detect() { |equip| equip.to_CoilHeatingElectric.is_initialized}.to_CoilHeatingElectric.get : false
@@ -68,15 +68,15 @@ class NECB2011
         cooling_coil_ccashp = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingDXSingleSpeed.is_initialized and heating_coil_ccashp}
         cooling_coil_dx = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingDXSingleSpeed.is_initialized and (heating_coil_gas or heating_coil_elect or heating_coil_water)}
         cooling_coil_water = air_loop.components.detect(proc {false}) { |equip| equip.to_CoilCoolingWater.is_initialized } ? air_loop.components.detect() { |equip| equip.to_CoilCoolingWater.is_initialized}.to_CoilCoolingWater.get : false
-        
+
         # MAU Chiller Type
         chiller_type = get_chiller_type_from_water_coil(cooling_coil_water: cooling_coil_water)
-        
+
         # Zone Baseboard Heating.
         zone_htg_b_elec = air_loop.thermalZones.first.respond_to?(:equipment) ? air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Electric') } : false
         zone_htg_b_water = air_loop.thermalZones.first.respond_to?(:equipment) ? air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Baseboard Convective Water') } : false
 
-        # Zone VAV with Reheat. 
+        # Zone VAV with Reheat.
         zone_vav_rh = air_loop.components.detect(proc {false}) { |equip| equip.to_AirTerminalSingleDuctVAVReheat.is_initialized()} ? air_loop.components.detect() { |equip| equip.to_AirTerminalSingleDuctVAVReheat.is_initialized()}.to_AirTerminalSingleDuctVAVReheat.get : false
 
 
@@ -95,13 +95,13 @@ class NECB2011
                     raise('unknown schedule type')
                 end
             cooling_coil_water = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.to_ZoneHVACFourPipeFanCoil().is_initialized()}.to_ZoneHVACFourPipeFanCoil.get.coolingCoil.to_CoilCoolingWater.get
-            
-            # If chiller was not detected, from MAU or RTU, then detect it from the fan coil. 
+
+            # If chiller was not detected, from MAU or RTU, then detect it from the fan coil.
             chiller_type = get_chiller_type_from_water_coil(cooling_coil_water: cooling_coil_water) if not chiller_type
             end
-        end  
+        end
 
-        
+
         if air_loop.thermalZones.first.respond_to?(:equipment)
             zone_htg_pthp = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('Zone HVAC Packaged Terminal Heat Pump') }
             zone_clg_ptac = air_loop.thermalZones.first.equipment.detect(proc {false}) { |equip| equip.nameString.include?('PTAC') }
@@ -121,7 +121,7 @@ class NECB2011
         fans_cv = air_loop.components.select{ |equip| equip.to_FanConstantVolume.is_initialized()}
         case fans_vv.size
         when 1
-            supply_fan_vv = fans_vv[1].to_FanVariableVolume.get
+            supply_fan_vv = fans_vv[0].to_FanVariableVolume.get
             return_fan_vv = false
         when 2
             return_fan_vv = fans_vv[0].to_FanVariableVolume.get
@@ -169,7 +169,7 @@ class NECB2011
         end
 
 
-            
+
         # Determine if the system is a DOAS based on
         # whether there is 100% OA in heating and cooling sizing.
         puts "allOutdoorAirinCooling #{air_loop.sizingSystem.allOutdoorAirinCooling}"
@@ -442,7 +442,7 @@ class NECB2011
             end
             desc= ref_system_desc[ref_sys] % [air_unit_type,coils,zone_system]
         when "sys_2"
-            desc= ref_system_desc[ref_sys] % [air_unit_type,sc_map[sc],chiller_map[chiller]] 
+            desc= ref_system_desc[ref_sys] % [air_unit_type,sc_map[sc],chiller_map[chiller]]
         when "sys_3"
             coils = ""
             # if heating and cooling coils are the same, only list it once
@@ -479,10 +479,10 @@ class NECB2011
             desc= ref_system_desc[ref_sys] % [air_unit_type, sh_map[sh],chiller_map[chiller], zone_system]
             fixed_name = "#{ref_sys}|#{oa}|shr>none|#{sh}|#{sc}|#{ssf}|#{zh}|#{zc}|#{srf}|"
         else
-            
+
         end
 
-        # 
+        #
 
         return old_system_name, fixed_name, name, desc
     end
