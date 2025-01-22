@@ -119,8 +119,8 @@ class NECB2015
       else
         clg_towers[0].setNumberofCells((tower_cap / (1000 * 1750) + 0.5).round)
       end
-      # Only apply cooling tower fan power if power is greater than 500 W.  This is to avoid EnergyPlus issues with some small cooling towers.
-      clg_towers[0].setFanPoweratDesignAirFlowRate(0.013 * tower_cap) if (tower_cap * 0.013 > 600.0)
+      # Only apply cooling tower fan power if power is greater than 1kW.  This is to avoid EnergyPlus issues with some small cooling towers.
+      clg_towers[0].setFanPoweratDesignAirFlowRate(0.013 * tower_cap) if (tower_cap * 0.013 > 1000.0)
     end
 
     # Append the name with size and kw/ton
@@ -147,7 +147,7 @@ class NECB2015
       max_total_loop_pump_power_table = @standards_data['max_total_loop_pump_power']
       plantloop.supplyComponents.each do |supplycomp|
         case supplycomp.iddObjectType.valueName.to_s
-          when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit', 
+          when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit',
             'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData', 'OS_HeatPump_PlantLoop_EIR_Heating', 'OS_HeatPump_PlantLoop_EIR_Cooling'
             search_hash = { 'hydronic_system_type' => 'WSHP' }
             max_powertoload = model_find_object(max_total_loop_pump_power_table, search_hash)['total_normalized_pump_power_wperkw']
