@@ -28,6 +28,9 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
     heating_coil_type = 'Electric'
     fan_type = 'AF_or_BI_rdg_fancurve'
 
+    primary_heating_fuel = boiler_fueltype
+    standard.fuel_type_set = SystemFuels.new()
+    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: primary_heating_fuel)
     name = "sys6"
     name.gsub!(/\s+/, "-")
     puts "***************#{name}***************\n"
@@ -94,6 +97,10 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
     boiler_fueltype = 'Electricity'
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'DX'
+
+    primary_heating_fuel = boiler_fueltype
+    standard.fuel_type_set = SystemFuels.new()
+    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: primary_heating_fuel)
 
     name = "sys2_chw"
     name.gsub!(/\s+/, "-")

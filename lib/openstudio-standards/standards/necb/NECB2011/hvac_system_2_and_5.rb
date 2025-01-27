@@ -78,7 +78,27 @@ class NECB2011
     # Assume direct-fired gas heating coil for now; need to add logic
     # to set up hydronic or electric coil depending on proposed?
 
-    htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+    # Get Heating Coil from heating coil type sys2.  If set to DX use NECB reference HP supplemental fuel.
+    # TODO: If set to DX incorporate DX heating coil and supplemental heating type.
+    if self.fuel_type_set.heating_coil_type_sys2 == "DX"
+      htg_coil_fuel = self.fuel_type_set.necb_reference_hp_supp_fuel
+    else
+      htg_coil_fuel = self.fuel_type_set.heating_coil_type_sys2
+    end
+
+    case htg_coil_fuel
+    when 'Electric' # Electric Coil
+      htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+    when 'Electricity' # Electric Coil
+      htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+    when 'Gas' # Natural Gas Coil
+      htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+    when 'Hot Water' # Hot Water Coil
+      htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
+      hw_loop.addDemandBranchForComponent(htg_coil)
+    else # Default to Natural Gas Coil
+      htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+    end
 
     # Add DX or hydronic cooling coil
     if mau_cooling_type == 'DX'
@@ -169,7 +189,7 @@ class NECB2011
     sys_name_pars['zone_htg'] = fan_coil_type
     sys_name_pars['zone_clg'] = fan_coil_type
     sys_name_pars['sys_rf'] = 'none'
-    assign_base_sys_name(mau_air_loop,
+    return assign_base_sys_name(air_loop: mau_air_loop,
                          sys_abbr: sys_abbr,
                          sys_oa: 'doas',
                          sys_name_pars: sys_name_pars)
