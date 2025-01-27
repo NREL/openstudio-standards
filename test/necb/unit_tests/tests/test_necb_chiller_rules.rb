@@ -24,6 +24,9 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     templates.each do |template|
       standard = get_standard(template)
+      primary_heating_fuel = "Electricity"
+      standard.fuel_type_set = SystemFuels.new()
+      standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: primary_heating_fuel)
       expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
 
       # Initialize hashes for storing expected chiller cop data from file.

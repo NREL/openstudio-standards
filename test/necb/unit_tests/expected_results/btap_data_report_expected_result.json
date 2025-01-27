@@ -605,6 +605,8 @@
   "phius_necb_meet_cooling_peak_load": "False",
   "bc_step_code_tedi_kwh_per_m_sq": 388.41608211110974,
   "bc_step_code_meui_kwh_per_m_sq": 665.6993408203125,
+  "cost_utility_oerd_electricity_peak_annual_cost_per_m_sq": 6.11,
+  "cost_utility_oerd_electricity_energy_annual_cost_per_m_sq": 24.17,
   "env_outdoor_walls_average_conductance-w_per_m_sq_k": 0.278,
   "env_outdoor_roofs_average_conductance-w_per_m_sq_k": 0.183,
   "env_outdoor_floors_average_conductance-w_per_m_sq_k": null,

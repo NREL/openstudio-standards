@@ -119,16 +119,16 @@ class NECB2011
     sys_name_pars['sys_clg'] = 'dx'
     sys_name_pars['sys_clg'] = 'ashp' if necb_reference_hp
     sys_name_pars['sys_htg'] = heating_coil_type
-    sys_name_pars['sys_htg'] = 'ashp' if necb_reference_hp
+      sys_name_pars['sys_htg'] = 'ashp>c-g' if necb_reference_hp and necb_reference_hp_supp_fuel == "NaturalGas"
+      sys_name_pars['sys_htg'] = 'ashp>c-e' if necb_reference_hp and necb_reference_hp_supp_fuel == "Electricity"
     sys_name_pars['sys_sf'] = 'cv'
     sys_name_pars['zone_htg'] = baseboard_type
     sys_name_pars['zone_clg'] = 'none'
     sys_name_pars['sys_rf'] = 'none'
-    assign_base_sys_name(air_loop,
+    return assign_base_sys_name( air_loop: air_loop,
                          sys_abbr: 'sys_3',
                          sys_oa: 'mixed',
                          sys_name_pars: sys_name_pars)
-    return true
   end
 
   def add_system_3_and_8_airloop(heating_coil_type, model, system_data, control_zone, necb_reference_hp:false, necb_reference_hp_supp_fuel:'DefaultFuel', necb_reference_hp_fancoil: false, hw_loop: nil)
