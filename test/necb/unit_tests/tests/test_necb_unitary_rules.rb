@@ -35,6 +35,10 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
       standard = get_standard(template)
       unitary_res_file_output_text = "Heating Type,Min Capacity (Btu per hr),Max Capacity (Btu per hr),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER)\n"
 
+      primary_heating_fuel = boiler_fueltype
+      standard.fuel_type_set = SystemFuels.new()
+      standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: primary_heating_fuel)
+
       # Initialize hashes for storing expected unitary efficiency data from file
       heating_type_min_cap = {}
       heating_type_min_cap['Electric Resistance'] = []
@@ -83,7 +87,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
           index = 0
           heating_type_cap[heating_type].each do |unitary_cap|
             # For single speed the capacity used in the name is the exact capacity of the dx coil in the model
-            # For multi speed the capacity of the coil (with name including Speed 1) is different from the capacity 
+            # For multi speed the capacity of the coil (with name including Speed 1) is different from the capacity
             # 'unitary_cap' used in the name, but it is in the same efficiency capacity interval as 'unitary_cap'.
             name = "#{template}_sys3_MuaHtgCoilType-#{heating_coil_type}_Speed-#{speed}_UnitaryCap-#{unitary_cap}watts"
             name.gsub!(/\s+/, "-")
@@ -114,9 +118,9 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
               end
             when 'multi'
               # For multi speed use the outdoor air values (m3/s/m2) to set the outdoor air requirement of the airloops.
-              # Using the outdoor air flow rate for the the same list index as the capacity 'unitary_cap' generates a 
-              # capacity for the dx coil (with the name that includes 'Speed 1') that's in the desired effiency capacity 
-              # interval as the capacity 'unitary_cap' of the loop.  
+              # Using the outdoor air flow rate for the the same list index as the capacity 'unitary_cap' generates a
+              # capacity for the dx coil (with the name that includes 'Speed 1') that's in the desired effiency capacity
+              # interval as the capacity 'unitary_cap' of the loop.
               standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
                                                                                                           zones: model.getThermalZones,
                                                                                                           heating_coil_type: heating_coil_type,
@@ -201,6 +205,9 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     chiller_type = 'Scroll'
     mua_cooling_type = 'DX'
 
+    primary_heating_fuel = boiler_fueltype
+    standard.fuel_type_set = SystemFuels.new()
+    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: primary_heating_fuel)
     name = "#{template.downcase}_sys2_CoolingType-#{mua_cooling_type}"
     name.gsub!(/\s+/, "-")
     puts "***************#{name}***************\n"
