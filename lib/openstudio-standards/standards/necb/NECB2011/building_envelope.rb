@@ -160,7 +160,6 @@ class NECB2011
 
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
-  #
   def apply_standard_skylight_to_roof_ratio(model:, srr_set: -1.0, srr_opt: '')
     # If srr_set is between 1.0 and 1.2 set it to the maximum allowed by the NECB.  If srr_set is between 0.0 and 1.0
     # apply whatever was passed.  If srr_set >= 1.2 then set the existing srr of the building to be the necb maximum
@@ -178,8 +177,10 @@ class NECB2011
     # instead met using OSut's addSkylights (:srr_set numeric values may apply).
     return if srr_set.to_f > 1.0
     return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f, srr_opt: srr_opt) if srr_set.to_f >= 0.0 && srr_set.to_f <= 1.0
+
     # Get the maximum NECB srr
     return apply_max_srr_nrcan(model: model, srr_lim: get_standards_constant('skylight_to_roof_ratio_max_value').to_f, srr_opt: srr_opt) if srr_set.to_f >= -1.1 && srr_set.to_f <= -0.9
+
     return if srr_set.to_f >= -2.1 && srr_set.to_f <= -1.9
     return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f, srr_opt: srr_opt) if srr_set.to_f < -3.1
     return unless srr_set.to_f >= -3.1 && srr_set.to_f <= -2.9
@@ -837,7 +838,7 @@ class NECB2011
         return false
       end
     end
-    
+
     return true
   end
 end
