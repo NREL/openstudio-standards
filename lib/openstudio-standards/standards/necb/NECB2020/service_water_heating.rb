@@ -20,6 +20,7 @@ class NECB2020
     else
       capacity_w = capacity_w.get
     end
+    capacity_kw = capacity_w/1000.0
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -35,6 +36,7 @@ class NECB2020
     end
     volume_gal = OpenStudio.convert(volume_m3, 'm^3', 'gal').get
     volume_litre = OpenStudio.convert(volume_m3, 'm^3', 'L').get
+    
     # Get the heater fuel type
     fuel_type = water_heater_mixed.heaterFuelType
     unless fuel_type == 'NaturalGas' || fuel_type == 'Electricity' || fuel_type == 'FuelOilNo2'
@@ -47,12 +49,12 @@ class NECB2020
     # From PNNL http://www.energycodes.gov/sites/default/files/documents/PrototypeModelEnhancements_2014_0.pdf
     # Appendix A: Service Water Heating
 	  # and modified by PCF 1630 as noted below.
-
     water_heater_eff = nil
     ua_btu_per_hr_per_f = nil
     sl_btu_per_hr = nil
     q_load_btu_per_hr = nil
     uef = nil
+
     case fuel_type
     when 'Electricity'
       volume_litre_per_s = volume_m3 * 1000
@@ -97,11 +99,7 @@ class NECB2020
       #  https://www.ecfr.gov/current/title-10/chapter-II/subchapter-D/part-430/subpart-B/appendix-Appendix%20E%20to%20Subpart%20B%20of%20Part%20430 
       #  
 
-      # Assume fhr = peak demand flow **** This call re-sizes the equipment which we do not want.
-      tank_param = auto_size_shw_capacity(model:water_heater_mixed.model, shw_scale: 'NECB_Default')
-      fhr_L_per_hr = tank_param['loop_peak_flow_rate_SI']
-      fhr_L_per_hr = fhr_L_per_hr * 3600000.0
-
+      # Assume first hour rating.
       # Rule of thumb is FHR is 70% tank_volume + ~40 Gal
       #  Ref: https://www.waterheaterpros.com/first-hour-rating#:~:text=To%20find%20a%20water%20heater%27s,can%20deliver%20at%20peak%20hours.
       fhr_L_per_hr = volume_litre + 151.0
@@ -130,7 +128,6 @@ class NECB2020
 
         # From PNNL-23269?
         re = water_heater_eff + q_load_btu*(uef-water_heater_eff)/(24*capacity_btu_per_hr*uef)
-        puts "######## RE #{re}; eff #{water_heater_eff}"
         ua_btu_per_hr_per_f = (water_heater_eff-re)*capacity_btu_per_hr/(125-67.5)  
 
       elsif capacity_w <= 22000 and volume_litre >= 208 and volume_litre < 380
@@ -186,7 +183,6 @@ class NECB2020
         ua_btu_per_hr_per_f = (water_heater_eff-re)*capacity_btu_per_hr/(125-67.5)      
         
       else # all other water heaters
-        capacity_kw = capacity_w/1000
         capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
         # thermal efficiency (NECB2020)
         et = 0.9
@@ -200,7 +196,6 @@ class NECB2020
 
     # Convert to SI
     ua_w_per_k = OpenStudio.convert(ua_btu_per_hr_per_f, 'Btu/hr*R', 'W/K').get
-    puts "######## UA_WpK #{ua_w_per_k}; US units #{ua_btu_per_hr_per_f}"
     # Set the water heater properties
     # Efficiency
     water_heater_mixed.setHeaterThermalEfficiency(water_heater_eff)
