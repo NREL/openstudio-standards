@@ -228,7 +228,7 @@ module BTAP
     #     respectively. This is expected to change in the future ...
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # Preset BTAP/TBD wall construction parameters (to be revised @todo).
+    # Preset BTAP/TBD wall construction parameters (to be revised, @todo).
     #   :sptypes   : BTAP/TBD Hash of linked NECB SpaceTypes (symbols)
     #   :uos       : BTAP/TBD Hash of associated of Uo sub-variants
     #   :lp or :hp : low- or high-performance attribute
@@ -252,7 +252,7 @@ module BTAP
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
     # A construction sub-variant is identified strictly by its Uo factor:
     #
-    #   e.g. "314" describes a Uo factor of 0.314 W/m2.K.
+    #   e.g. "314" describes a Uo factor of 0.314 W/m2.K
     #
     # Uo sub-variants point to empty arrays. These arrays initially held layer
     # identifiers (integers), for BTAP costing only. These arrays may be
