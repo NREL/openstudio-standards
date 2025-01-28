@@ -227,8 +227,9 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
-      return []
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Extract the results for checking.

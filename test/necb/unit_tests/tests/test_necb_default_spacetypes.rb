@@ -280,7 +280,9 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
 
       end
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
     logger.info "Completed individual test: #{name}"
     results = results.sort.to_h

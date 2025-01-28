@@ -169,7 +169,7 @@ class NECB_scaling_loads_Tests < Minitest::Test
       )
 
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end

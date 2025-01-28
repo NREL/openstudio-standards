@@ -98,7 +98,7 @@ class NECB_BTAP_Data_Reporting < Minitest::Test
 
       standard.model_run_simulation_and_log_errors(model, output_folder)
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end

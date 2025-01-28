@@ -96,7 +96,7 @@ class ECM_HS14_CGSHP_FanCoils_Tests < Minitest::Test
                                                     sizing_run_dir: output_folder,
                                                     ecm_system_name: ecm_system)
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end

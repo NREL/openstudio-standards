@@ -159,7 +159,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
 
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end
@@ -291,7 +291,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end

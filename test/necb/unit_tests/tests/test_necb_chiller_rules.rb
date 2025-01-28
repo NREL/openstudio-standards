@@ -132,7 +132,9 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Recover the COP for checking. 
@@ -277,8 +279,9 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       # Run the standards.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      logger.error "#{__FILE__}::#{__method__}: #{error.message}"
-      return {"ERROR" => error.message}
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Recover the chillers for checking. 
@@ -416,7 +419,9 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     # Extract the results for checking. There are sometimes two chillers.

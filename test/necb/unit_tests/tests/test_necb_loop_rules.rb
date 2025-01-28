@@ -109,7 +109,9 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models)
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
     loops = model.getPlantLoops
     loops.each do |iloop|
@@ -235,7 +237,9 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models)
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
     loops = model.getPlantLoops
     loops.each do |iloop|

@@ -110,7 +110,7 @@ class NECB_ECM_Envelope < Minitest::Test
                                                     ext_roof_cond: roof_cond,
                                                     ground_floor_cond: ground_floor_cond)
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end

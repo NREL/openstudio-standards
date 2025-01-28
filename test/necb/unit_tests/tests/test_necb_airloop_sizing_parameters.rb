@@ -107,7 +107,9 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
       run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     airloops = model.getAirLoopHVACs
@@ -259,7 +261,9 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
       run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
 
     rescue => error
-      logger.error "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
+      logger.error(msg)
+      return {ERROR: msg}
     end
 
     airloops = model.getAirLoopHVACs

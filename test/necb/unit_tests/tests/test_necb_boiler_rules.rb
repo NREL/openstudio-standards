@@ -140,7 +140,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end
@@ -292,7 +292,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Run sizing. Is this required?
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end
@@ -419,7 +419,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end
@@ -548,7 +548,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       # Customize the efficiency. Specify the name and the method will look up the correct boiler.
       standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: boiler_name)
     rescue => error
-      msg = "#{__FILE__}::#{__method__} #{error.message}"
+      msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
       return {ERROR: msg}
     end
