@@ -176,7 +176,7 @@ class NECB2011
     # By default, :srr_opt is an empty string (" "). If set to "osut", SRR is
     # instead met using OSut's addSkylights (:srr_set numeric values may apply).
     return if srr_set.to_f > 1.0
-    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f, srr_opt: srr_opt) if srr_set.to_f >= 0.0 && srr_set <= 1.0
+    return apply_max_srr_nrcan(model: model, srr_lim: srr_set.to_f, srr_opt: srr_opt) if srr_set.to_f >= 0.0 && srr_set.to_f <= 1.0
 
     # Get the maximum NECB srr
     return apply_max_srr_nrcan(model: model, srr_lim: get_standards_constant('skylight_to_roof_ratio_max_value').to_f, srr_opt: srr_opt) if srr_set.to_f >= -1.1 && srr_set.to_f <= -0.9

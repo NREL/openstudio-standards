@@ -8,6 +8,8 @@ class NECB2011 < Standard
   register_standard(@template)
   attr_reader :tbd
   attr_reader :osut
+  attr_reader :activity
+  attr_reader :structure
   attr_reader :template
   attr_accessor :standards_data
   attr_accessor :space_type_map
@@ -150,6 +152,8 @@ class NECB2011 < Standard
     @standards_data = load_standards_database_new
     corrupt_standards_database
     @tbd = nil
+    @activity = nil
+    @structure = nil
     @osut = {gra0: 0, graX: 0, status: 0, logs: []}
 
     # puts "loaded these tables..."
@@ -286,10 +290,12 @@ class NECB2011 < Standard
     #
     # As per ASHRE 90.1, OpenStudio-Standards distinguishes between:
     #   - "nonresconditioned" vs
-    #   - "nonresconditioned"
+    #   - "resconditioned"
     #
-    # Sticking to "nonresconditioned" - NECBs don't care. This could be further
-    # refined in future BTAP versions though, e.g.:
+    # Sticking to "nonresconditioned" - NECBs do not distinguish between "res"
+    # vs "non-res" (for e.g. envelope), as opposed to ASHRAE 90.1.
+    #
+    # The solution could be further refined in future BTAP versions by e.g.:
     #   - relying on user-defined thermostats
     #   - expanded to cover semi-heated and refrigerated spaces
     tag = "space_conditioning_category"
@@ -498,8 +504,8 @@ class NECB2011 < Standard
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
                                srr_set: srr_set,
-                               necb_hdd: necb_hdd,
-                               srr_opt: srr_opt)
+                               srr_opt: srr_opt,
+                               necb_hdd: necb_hdd)
     apply_thermal_bridging(model: model,
                            tbd_option: tbd_option,
                            tbd_interpolate: tbd_interpolate,
@@ -1026,6 +1032,16 @@ class NECB2011 < Standard
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: necb_hdd)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set, srr_opt: srr_opt)
     # model_add_daylighting_controls(model) # to be removed after refactor.
+  end
+
+  ##
+  # Assigns BTAP building ACTIVITY (based on NECB 2011 building types).
+  #
+  # @param model [OpenStudio::Model::Model] a model
+  #
+  # @return [Symbol] BTAP building ACTIVITY (:office if failed, see logs)
+  def assign_building_activity(model: nil)
+    @activity = BTAP::Activity.new(model, 2011)
   end
 
   ##
