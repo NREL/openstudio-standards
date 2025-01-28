@@ -70,9 +70,9 @@ class SystemFuels
     @heating_coil_type_sys3 = "Hot Water" unless @heating_coil_type_sys3 == 'DX'
     @heating_coil_type_sys4 = "Hot Water" unless @heating_coil_type_sys4 == 'DX'
     @heating_coil_type_sys6 = "Hot Water" unless @heating_coil_type_sys6 == 'DX'
-    if @mau_cooling_type == 'DX' || @heating_coil_type_sys3 == 'DX' || @heating_coil_type_sys4 == 'DX' || @heating_coil_type_sys6 == 'DX'
-      @necb_reference_hp_supp_fuel = 'Hot Water'
-    end
+    #if @mau_cooling_type == 'DX' || @heating_coil_type_sys3 == 'DX' || @heating_coil_type_sys4 == 'DX' || @heating_coil_type_sys6 == 'DX' || @heating_coil_type_sys2 == 'DX'
+    #  @necb_reference_hp_supp_fuel = 'Hot Water'
+    #end
   end
 
   # Reset system fuels to match parameters defined by hvac_system_primary
