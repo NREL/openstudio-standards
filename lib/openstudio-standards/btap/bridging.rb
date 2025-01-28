@@ -1,5 +1,5 @@
 # **************************************************************************** /
-# *  Copyright (c) 2008-2024, Natural Resources Canada
+# *  Copyright (c) 2008-2025, Natural Resources Canada
 # *  All rights reserved.
 # *
 # *  This library is free software; you can redistribute it and/or
@@ -54,6 +54,7 @@ module BTAP
     #
     # NOTE: This will soon be revised, largely inferred from building structure
     #       selection.
+    #
     #
     # ---- (Basic) Low Performance (LP) assemblies
     #
@@ -227,7 +228,7 @@ module BTAP
     #     respectively. This is expected to change in the future ...
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # Preset BTAP/TBD wall construction parameters (to be revised ... @todo).
+    # Preset BTAP/TBD wall construction parameters (to be revised @todo).
     #   :sptypes   : BTAP/TBD Hash of linked NECB SpaceTypes (symbols)
     #   :uos       : BTAP/TBD Hash of associated of Uo sub-variants
     #   :lp or :hp : low- or high-performance attribute
@@ -252,6 +253,12 @@ module BTAP
     # A construction sub-variant is identified strictly by its Uo factor:
     #
     #   e.g. "314" describes a Uo factor of 0.314 W/m2.K.
+    #
+    # Uo sub-variants point to empty arrays. These arrays initially held layer
+    # identifiers (integers), for BTAP costing only. These arrays may be
+    # reactivated at some point e.g. as Hash entries as additional metadata,
+    # e.g. $/m2, kg CO2/m2. Although potentially useful, such metadata should
+    # ideally be held elsewhere within BTAP. Maintaining empty arrays for now.
     @@data[MASS2][:uos]["314"] = []
     @@data[MASS2][:uos]["278"] = []
     @@data[MASS2][:uos]["247"] = []
@@ -434,6 +441,7 @@ module BTAP
     #     generic "bad" BETBG set
     #   - while "good" BTAP values are those of the generic BETBG
     #     "efficient" set
+
     @@data[MASS2][ :bad][:id          ] = MASS2_BAD
     @@data[MASS2][ :bad][:rimjoist    ] = { psi: 0.470 }
     @@data[MASS2][ :bad][:parapet     ] = { psi: 0.500 }
@@ -945,7 +953,7 @@ module BTAP
       initial  = true
       complies = false
       comply   = {}     # specific to :walls, :floors & :roofs
-      perform  = :lp    # Low-performance wall constructions (revise, @todo ...)
+      perform  = :lp    # Low-performance wall constructions (revise, @todo)
       quality  = :bad   # default PSI factors - BTAP users can reset to :good
       quality  = :good if argh.key?(:quality) && argh[:quality] == :good
       combo    = "#{perform.to_s}_#{quality.to_s}".to_sym # e.g. :lp_bad
@@ -1704,7 +1712,7 @@ end
 #       BTAP costing requires extending the areas (m2) of OpenStudio wall
 #       surfaces (along parapet edges) by 3'-6" (1.1 m) x parapet lengths, to
 #       account for the extra cost of completely wrapping the parapet in
-#       insulation for "good" (HP) details. See final TBD tally. @todo.
+#       insulation for "good" (HP) details. See final TBD tally, @todo.
 #
 # NOTE: Overview of current BTAP building/space type construction link, e.g.:
 #
