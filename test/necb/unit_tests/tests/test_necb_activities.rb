@@ -82,10 +82,10 @@ class NECB_Activity_Tests < Minitest::Test
             end
 
             # @todo: More testing ...
-          end     # @fuels.sort.each     do |fuel     |
-        end       # @buildings.sort.each do |building |
-      end         # @epws.sort.each      do |site, epw|
-    end           # @templates.sort.each do |template |
+          end # @fuels.sort.each     do |fuel     |
+        end   # @buildings.sort.each do |building |
+      end     # @epws.sort.each      do |site, epw|
+    end       # @templates.sort.each do |template |
 
     # Temporary.
     fdback.each { |msg| puts msg }
