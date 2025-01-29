@@ -107,7 +107,7 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
                                                                           fan_type: fan_type,
                                                                           hw_loop: hw_loop)
       # Run sizing.
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models)
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
@@ -235,7 +235,7 @@ class NECB_HVAC_Loop_Rules_Tests < Minitest::Test
                                        hw_loop: hw_loop)
 
       # Run sizing.
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models)
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
     rescue => error
       msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
