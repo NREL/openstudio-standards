@@ -29,6 +29,10 @@ module OpenstudioStandards
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
 
+  # Exterior Lighting Module
+  require_relative 'openstudio-standards/exterior_lighting/create'
+  require_relative 'openstudio-standards/exterior_lighting/information'
+
   # Schedules Module
   require_relative 'openstudio-standards/schedules/create'
   require_relative 'openstudio-standards/schedules/modify'
