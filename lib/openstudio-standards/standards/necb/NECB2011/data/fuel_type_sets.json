@@ -126,15 +126,15 @@
           "mau_heating_coil_type": "Hot Water",
           "mau_cooling_type": "DX",
           "chiller_type": "",
-          "heating_coil_type_sys2": "Electric",
-          "heating_coil_type_sys3": "Electric",
-          "heating_coil_type_sys4": "Electric",
-          "heating_coil_type_sys6": "Electric",
+          "heating_coil_type_sys2": "Gas",
+          "heating_coil_type_sys3": "Gas",
+          "heating_coil_type_sys4": "Gas",
+          "heating_coil_type_sys6": "Gas",
           "hp_supp_heating_coil_type": null,
           "necb_reference_hp":false,
           "fan_type": "var_speed_drive",
           "swh_fueltype": "FuelOilNo2",
-          "ecm_fueltype": "Electricity"
+          "ecm_fueltype": "Gas"
         }
       ]
     }

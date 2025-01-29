@@ -228,9 +228,9 @@ class NECB2011
           epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
           necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
         end
-        if necb_reference_hp_supp_fuel == 'NaturalGas'
+        if necb_reference_hp_supp_fuel == 'NaturalGas' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
           rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-        elsif necb_reference_hp_supp_fuel == 'Electricity' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
+        elsif necb_reference_hp_supp_fuel == 'Electricity'# or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
           rh_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
         elsif necb_reference_hp_supp_fuel == 'Hot Water'
           rh_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
@@ -256,6 +256,7 @@ class NECB2011
       sys_name_pars['sys_htg'] = 'ashp' if necb_reference_hp
       sys_name_pars['sys_htg'] = 'ashp>c-g' if necb_reference_hp and necb_reference_hp_supp_fuel == "NaturalGas"
       sys_name_pars['sys_htg'] = 'ashp>c-e' if necb_reference_hp and necb_reference_hp_supp_fuel == "Electricity"
+      sys_name_pars['sys_htg'] = 'ashp>c-hw' if necb_reference_hp and necb_reference_hp_supp_fuel == "HotWater"
       sys_name_pars['sys_sf'] = 'cv'
       sys_name_pars['zone_htg'] = baseboard_type
       sys_oa = 'doas'

@@ -119,8 +119,9 @@ class NECB2011
     sys_name_pars['sys_clg'] = 'dx'
     sys_name_pars['sys_clg'] = 'ashp' if necb_reference_hp
     sys_name_pars['sys_htg'] = heating_coil_type
-      sys_name_pars['sys_htg'] = 'ashp>c-g' if necb_reference_hp and necb_reference_hp_supp_fuel == "NaturalGas"
-      sys_name_pars['sys_htg'] = 'ashp>c-e' if necb_reference_hp and necb_reference_hp_supp_fuel == "Electricity"
+    sys_name_pars['sys_htg'] = 'ashp>c-g' if necb_reference_hp and necb_reference_hp_supp_fuel == "NaturalGas"
+    sys_name_pars['sys_htg'] = 'ashp>c-e' if necb_reference_hp and necb_reference_hp_supp_fuel == "Electricity"
+    sys_name_pars['sys_htg'] = 'ashp>c-hw' if necb_reference_hp and necb_reference_hp_supp_fuel == "Hot Water"
     sys_name_pars['sys_sf'] = 'cv'
     sys_name_pars['zone_htg'] = baseboard_type
     sys_name_pars['zone_clg'] = 'none'
@@ -161,12 +162,14 @@ class NECB2011
       sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
     end
 
-    if necb_reference_hp
+    #if necb_reference_hp
       #AirLoopHVACUnitaryHeatPumpAirToAir needs FanOnOff in order for the fan to turn off during off hours
-      fan = OpenStudio::Model::FanOnOff.new(model, always_on)
-    else
-      fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
-    end
+    #  fan = OpenStudio::Model::FanOnOff.new(model, always_on)
+    #else
+    #  fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
+    #end
+    # Not using unitary heat pump model until it works with backup hot water coils.  Fan stays as contant volume.# Not using unitary heat pump model until it works with backup hot water coils.  Fan stays as contant volume.
+    fan = OpenStudio::Model::FanConstantVolume.new(model, always_on)
 
     # Set up DX coil
     if necb_reference_hp #NECB curve characteristics
@@ -214,16 +217,16 @@ class NECB2011
     # Add the components to the air loop
     # in order from closest to zone to furthest from zone
     supply_inlet_node = air_loop.supplyInletNode
+    fan.addToNode(supply_inlet_node)
     if necb_reference_hp
-
       #create supplemental heating coil based on default regional fuel type
       if necb_reference_hp_supp_fuel == 'DefaultFuel'
         epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
         necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
       end
-      if necb_reference_hp_supp_fuel == 'NaturalGas'
+      if necb_reference_hp_supp_fuel == 'NaturalGas' or necb_reference_hp_supp_fuel == 'FuelOilNo2'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-      elsif necb_reference_hp_supp_fuel == 'Electricity' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
+      elsif necb_reference_hp_supp_fuel == 'Electricity'# or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
       elsif necb_reference_hp_supp_fuel == 'Hot Water'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
@@ -232,16 +235,15 @@ class NECB2011
         raise('Invalid fuel type selected for heat pump supplemental coil')
       end
       # This method will seem like an error in number of args..but this is due to swig voodoo.
-      air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model, always_on, fan, htg_coil, clg_coil, supplemental_htg_coil)
-      air_to_air_heatpump.setName("#{control_zone.name} ASHP")
-      air_to_air_heatpump.setControllingZone(control_zone)
-      air_to_air_heatpump.setSupplyAirFanOperatingModeSchedule(always_on)
-      air_to_air_heatpump.addToNode(supply_inlet_node)
-    else
-      fan.addToNode(supply_inlet_node)
-      htg_coil.addToNode(supply_inlet_node)
-      clg_coil.addToNode(supply_inlet_node)
+      #air_to_air_heatpump = OpenStudio::Model::AirLoopHVACUnitaryHeatPumpAirToAir.new(model, always_on, fan, htg_coil, clg_coil, supplemental_htg_coil)
+      #air_to_air_heatpump.setName("#{control_zone.name} ASHP")
+      #air_to_air_heatpump.setControllingZone(control_zone)
+      #air_to_air_heatpump.setSupplyAirFanOperatingModeSchedule(always_on)
+      #air_to_air_heatpump.addToNode(supply_inlet_node)
+      supplemental_htg_coil.addToNode(supply_inlet_node)
     end
+    htg_coil.addToNode(supply_inlet_node)
+    clg_coil.addToNode(supply_inlet_node)
     oa_system.addToNode(supply_inlet_node)
 
     # Add a setpoint manager single zone reheat to control the

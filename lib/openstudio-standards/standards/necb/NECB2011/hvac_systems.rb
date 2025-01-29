@@ -2227,12 +2227,16 @@ class NECB2011
           sys_name += 'sh>ashp>c-g'
         when 'ashp>c-e'
           sys_name += 'sh>ashp>c-e'
+        when 'ashp>c-hw'
+          sys_name += 'sh>ashp>c-hw'
         when 'ccashp'
           sys_name += 'sh>ccashp'
         when 'ccashp>c-g'
           sys_name += 'sh>ccashp>c-g'
         when 'ccashp>c-e'
           sys_name += 'sh>ccashp>c-e'
+        when 'ccashp>c-hw'
+          sys_name += 'sh>ccashp>c-hw'
         else
           sys_name += 'sh>none'
         end
@@ -2244,7 +2248,7 @@ class NECB2011
         when 'chilled water','hydronic'
           sys_name += 'sc>c-chw'
         when 'dx'
-          if sys_name_pars['sys_htg'] == 'dx'
+          if sys_name_pars['sys_htg'] == 'dx' || sys_name_pars['sys_htg'] == 'ashp>c-g' || sys_name_pars['sys_htg'] == 'ashp>c-e' || sys_name_pars['sys_htg'] == 'ashp>c-hw'
             sys_name += 'sc>ashp'
           else
             sys_name += 'sc>dx'
