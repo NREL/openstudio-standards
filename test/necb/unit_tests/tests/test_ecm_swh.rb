@@ -113,9 +113,6 @@ class ECM_SWH_Tests < Minitest::Test
       standard = nil
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
-      # Set the weather file.
-
-      BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
       # Get spacetypes from JSON.  I say I use all of the spacetypes but really it is only those with a
       # "buliding_type" of "Space Function".
@@ -150,13 +147,13 @@ class ECM_SWH_Tests < Minitest::Test
 
       # apply swh to the renamed space types (model_add_swh only looks at the name of the space type not what is
       # actually in it).
-      standard.model_add_swh(model: model, swh_fuel_type: fuel_type, shw_scale: 'NECB_Default')
+      standard.model_add_swh(model: model, swh_fueltype: fuel_type, shw_scale: 'NECB_Default')
       # Apply the water heater mixed efficiencies
       model.getWaterHeaterMixeds.sort.each { |obj| standard.water_heater_mixed_apply_efficiency(obj) }
 
       model.getWaterHeaterMixeds.sort.each do |waterheater_test|
         wh_name = waterheater_test.name
-        if waterheater_test.heaterfuel_type == "NaturalGas"
+        if waterheater_test.heaterFuelType == "NaturalGas"
           shw_measure = shw_measures.select { |shw_measure_info| shw_measure_info["name"] == shw_ecm }[0]
           ecm_standard.modify_shw_efficiency(model: model, shw_eff: shw_measure)
         end
@@ -246,7 +243,7 @@ class ECM_SWH_Tests < Minitest::Test
         part_load_curve_name = water_heaters[0].partLoadFactorCurve.get.name.to_s
       end
       supply_equip_info = {
-        "water_heater_fuel_type" => water_heaters[0].heaterfuel_type,
+        "water_heater_fuel_type" => water_heaters[0].heaterFuelType,
         "water_heater_vol_m3" => water_heaters[0].tankVolume,
         "water_heater_capacity_w" => water_heaters[0].heaterMaximumCapacity,
         "water_heater_efficiency" => water_heaters[0].heaterThermalEfficiency,
