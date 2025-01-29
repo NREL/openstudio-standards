@@ -218,17 +218,12 @@ module NecbHelper
   # Standard method to run sizing for NECB testing. Parameters:
   #   model - the model object to be operated on
   #   template - version of NECB to use
-  #   test_name - unique name of this test (used to create folders for output)
-  #   second_run - true if a second sizing run is required.
   #   necb_ref_hp = true if the caase is for the NECB reference model using heat pumps
-  #   sql_db_vars_map - ???
   #   save_model_versions - logical to trigger saving of osm files before and after standards applied
   #   output_dir - folder where the models are saved to (if requested)
   def run_sizing(model:,
                  template: 'NECB2011',
-                 second_run: false,
                  necb_ref_hp: false,
-                 sql_db_vars_map: nil,
                  save_model_versions: false,
                  output_dir: nil)
 
@@ -238,17 +233,9 @@ module NecbHelper
     logger.debug "  for template: #{template}"
 
     # Instantiate the required version of standards.
-    standard = get_standard(template)
-
-    # Define output folder if not passed. This should be removed once all calls updated.
-    if output_dir == nil then
-      test_class_name = self.class.ancestors[0].to_s.downcase
-      test_method_name = caller_locations.first.base_label
-      output_dir = File.join(@top_output_folder, test_class_name, test_method_name, template)
-    end
-    logger.debug "Output folder #{output_dir}"
 
     # Check output_dir exists, if not create.
+    logger.debug "Output folder #{output_dir}"
     unless Dir.exist? output_dir
       FileUtils.mkdir_p(output_dir)
     end
@@ -256,42 +243,23 @@ module NecbHelper
     # Save model before sizing.
     BTAP::FileIO.save_osm(model, "#{output_dir}/pre-sizing.osm") if save_model_versions
 
-    # Perform first sizing run.
-    sizing_folder = "#{output_dir}/SR1"
+    # Perform first sizing run. 
+    # (If test models updated could use: standard.apply_standard_efficiencies(model: model, sizing_run_dir: sizing_folder, necb_reference_hp: necb_ref_hp))
+    sizing_folder = "#{output_dir}/Testing"
+    standard = get_standard(template)
     if standard.model_run_sizing_run(model, sizing_folder) == false
       logger.error "Could not find sizing run #{sizing_folder}"
       assert(false, "Failure in sizing run wile running test: #{self.class.ancestors[0]}")
     else
-      logger.debug "Found sizing run #{sizing_folder}"
+      logger.debug "Found sizing run in #{sizing_folder}"
     end
 
-    # Apply HVAC assumptions for efficiency etc.
-    # Ensure we're doing this for NECB.
-    building_type = 'NECB'
-    climate_zone = 'NECB'
-
-    # Need to set prototype assumptions so that HRV added.
-    standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-
-    # Apply the HVAC efficiency standard.
-    standard.model_apply_hvac_efficiency_standard(model, climate_zone, necb_ref_hp: necb_ref_hp)
-
-    # Second sizing run (if requested).
-    if second_run
-
-      # Save model before sizing run 2.
-      BTAP::FileIO.save_osm(model, "#{output_dir}/pre-sizing2.osm") if save_model_versions
-
-      # Do another sizing run after applying the hvac assumptions and efficiency standards
-      #  to properly apply the pump rules.
-      sizing_folder = "#{output_dir}/SR2"
-      if standard.model_run_sizing_run(model, sizing_folder) == false
-        logger.error "Could not find second sizing run #{sizing_folder}"
-        assert(false, "Failure in sizing run wile running test: #{self.class.ancestors[0]}")
-      else
-        logger.debug "Found second sizing run #{sizing_folder}"
-      end
-    end
+    # Apply the prototype HVAC assumptions
+    standard.model_apply_prototype_hvac_assumptions(model, nil, 'NECB HDD Method')
+    # Apply the HVAC efficiency standard
+    sql_db_vars_map = {}
+    standard.model_apply_hvac_efficiency_standard(model, 'NECB HDD Method', sql_db_vars_map: sql_db_vars_map, necb_ref_hp: necb_ref_hp)
+    # (END of code from apply_standard_efficiencies)
 
     # Save model after sizing.
     BTAP::FileIO.save_osm(model, "#{output_dir}/post-sizing.osm") if save_model_versions
