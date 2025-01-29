@@ -104,7 +104,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
         hw_loop: hw_loop)
 
       # Run sizing.
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS if PERFORM_STANDARDS
 
     rescue => error
       msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
@@ -258,7 +258,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
         new_auto_zoner: false)
 
       # Run sizing.
-      run_sizing(model: model, template: vintage, test_name: name, save_model_versions: save_intermediate_models) if PERFORM_STANDARDS
+      run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS if PERFORM_STANDARDS
 
     rescue => error
       msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
