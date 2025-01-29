@@ -200,6 +200,7 @@ class NECB2011
     sh_sky_m2 = 0
     total_roof_m2 = 0.001
     total_subsurface_m2 = 0
+
     model.getSpaces.sort.each do |space|
       # Loop through all surfaces in this space
       wall_area_m2 = 0
