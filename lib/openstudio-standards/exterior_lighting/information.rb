@@ -129,8 +129,8 @@ module OpenstudioStandards
         end
 
         # other doors
-        unless entryways_properties[:others_doors_per_10000_ft2].nil?
-          other_doors += (ground_floor_area_ft2 / 10_000.0) * entryways_properties[:others_doors_per_10000_ft2]
+        unless entryways_properties[:other_doors_per_10000_ft2].nil?
+          other_doors += (ground_floor_area_ft2 / 10_000.0) * entryways_properties[:other_doors_per_10000_ft2]
         end
 
         # rollup doors
