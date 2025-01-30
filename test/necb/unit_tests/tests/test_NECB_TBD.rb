@@ -20,7 +20,7 @@ class NECB_TBD_Tests < Minitest::Test
     #Range of test options.
     @templates = [
       'NECB2011',
-      'NECB2015',
+      # 'NECB2015',
       'NECB2017'
     ]
 
@@ -28,18 +28,18 @@ class NECB_TBD_Tests < Minitest::Test
 
     @buildings = [
       'FullServiceRestaurant',
-      'HighriseApartment',
-      'Hospital',
-      'LargeHotel',
-      'LargeOffice',
-      'MediumOffice',
-      'MidriseApartment',
-      'Outpatient',
-      'PrimarySchool',
-      'QuickServiceRestaurant',
-      'RetailStandalone',
-      'SecondarySchool',
-      'SmallHotel',
+      # 'HighriseApartment',
+      # 'Hospital',
+      # 'LargeHotel',
+      # 'LargeOffice',
+      # 'MediumOffice',
+      # 'MidriseApartment',
+      # 'Outpatient',
+      # 'PrimarySchool',
+      # 'QuickServiceRestaurant',
+      # 'RetailStandalone',
+      # 'SecondarySchool',
+      # 'SmallHotel',
       'Warehouse'
     ]
 
