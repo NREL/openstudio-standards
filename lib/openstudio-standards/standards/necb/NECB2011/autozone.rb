@@ -130,7 +130,7 @@ class NECB2011
                                           heating_coil_type_sys2: self.fuel_type_set.heating_coil_type_sys2,
                                           heating_coil_type_sys3: self.fuel_type_set.heating_coil_type_sys3,
                                           heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
-                                          heating_coil_type_sys6: self.fuel_type_set.heating_coil_type_sys6
+                                          heating_coil_type_sys6: self.fuel_type_set.heating_coil_type_sys6,
                                           model: model,
                                           hvac_system_primary: hvac_system_primary,
                                           hvac_system_dwelling_units: hvac_system_dwelling_units,
@@ -862,7 +862,7 @@ class NECB2011
     unless dwelling_units.empty?
       # If no dwelling unit hvac system is defined then check if a HW loop is needed based on the system type.
       if hvac_system_dwelling_units.nil? || hvac_system_dwelling_units.to_s.downcase == 'necb_default'
-        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: dwelling_units, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
+        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: dwelling_units, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       else
         # If a dwelling unit hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_dwelling_units }
@@ -876,7 +876,7 @@ class NECB2011
     unless washroom_spaces.empty?
       # If no washroom hvac system is defined then check if a HW loop is needed based on the system type.
       if hvac_system_washrooms.nil? || hvac_system_washrooms.to_s.downcase == 'necb_default'
-        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: washroom_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
+        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: washroom_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       else
         # If a washroom hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_washrooms }
@@ -890,7 +890,7 @@ class NECB2011
     unless corridor_spaces.empty?
       # If no corridor hvac system is defined then check if a HW loop is needed based on the system type.
       if hvac_system_corridor.nil? || hvac_system_corridor.to_s.downcase == 'necb_default'
-        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: corridor_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
+        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: corridor_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       else
         # If a corridor hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_corridor }
@@ -904,7 +904,7 @@ class NECB2011
     unless storage_spaces.empty?
       # If no storage space hvac system is defined then check if a HW loop is needed based on the system type.
       if hvac_system_storage.nil? || hvac_system_storage.to_s.downcase == 'necb_default'
-        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: storage_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
+        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: storage_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       else
         # If a storage space hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_storage }
@@ -923,7 +923,7 @@ class NECB2011
     unless other_spaces.empty?
       # If a hvac system is defined for the remaining spaces then check if a HW loop is needed based on the system type
       if hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == 'necb_default'
-        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: other_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type)
+        hw_loop_needed = true if hw_loop_required_from_spaces(spaces: other_spaces, mau_heating_coil_type: mau_heating_coil_type, baseboard_type: baseboard_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       else
         # If an hvac system is defined for the remaining spaces then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_primary }
@@ -1639,17 +1639,17 @@ class NECB2011
 
   def boiler_required_from_heating_coils(sys_type:, mau_heating_coil_type:, heating_coil_type_sys2:, heating_coil_type_sys3:, heating_coil_type_sys4:, heating_coil_type_sys6:)
     requires_boiler = false
-    case sys_type
-    when "sys_1"
+    case sys_type.to_s
+    when 'sys_1'
       requires_boiler = true if mau_heating_coil_type.to_s == "Hot Water" || mau_heating_coil_type.to_s == "HotWater"
-    when "sys_2"
+    when 'sys_2'
       requires_boiler = true if heating_coil_type_sys2.to_s == "Hot Water" || heating_coil_type_sys2.to_s == "HotWater"
-    when "sys_3"
+    when 'sys_3'
       requires_boiler = true if heating_coil_type_sys3.to_s == "Hot Water" || heating_coil_type_sys3.to_s == "HotWater"
-    when "sys_4"
+    when 'sys_4'
       requires_boiler = true if heating_coil_type_sys4.to_s == "Hot Water" || heating_coil_type_sys4.to_s == "HotWater"
-    when "sys_6"
-      requires_boiler = true heating_coil_type_sys6.to_s == "Hot Water" || heating_coil_type_sys6.to_s == "HotWater"
+    when 'sys_6'
+      requires_boiler = true if heating_coil_type_sys6.to_s == "Hot Water" || heating_coil_type_sys6.to_s == "HotWater"
     else
       requires_boiler = false
     end
