@@ -196,6 +196,7 @@ class NECB2011
                                  boiler_fueltype: self.fuel_type_set.boiler_fueltype,
                                  chiller_type: self.fuel_type_set.chiller_type,
                                  fan_type: self.fuel_type_set.fan_type,
+                                 heating_coil_type_sys2: self.fuel_type_set.heating_coil_type_sys2,
                                  heating_coil_type_sys3: self.fuel_type_set.heating_coil_type_sys3,
                                  heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
                                  hw_loop: @hw_loop,
@@ -949,10 +950,11 @@ class NECB2011
                          boiler_fueltype:,
                          chiller_type:,
                          fan_type:,
+                         hw_loop:,
+                         heating_coil_type_sys2:,
                          heating_coil_type_sys3:,
                          heating_coil_type_sys4:,
                          heating_coil_type_sys6:,
-                         hw_loop:,
                          mau_cooling_type:,
                          mau_heating_coil_type:,
                          mau_type:,
@@ -1141,6 +1143,7 @@ class NECB2011
                                    boiler_fueltype:,
                                    chiller_type:,
                                    fan_type:,
+                                   heating_coil_type_sys2:,
                                    heating_coil_type_sys3:,
                                    heating_coil_type_sys4:,
                                    heating_coil_type_sys6:,
@@ -1179,6 +1182,7 @@ class NECB2011
                        boiler_fueltype: boiler_fueltype,
                        chiller_type: chiller_type,
                        fan_type: fan_type,
+                       heating_coil_type_sys2: heating_coil_type_sys2,
                        heating_coil_type_sys3: heating_coil_type_sys3,
                        heating_coil_type_sys4: heating_coil_type_sys4,
                        heating_coil_type_sys6: heating_coil_type_sys6,
@@ -1568,6 +1572,7 @@ class NECB2011
       when '3', '4'
         if (mau_heating_coil_type == 'Hot Water') || (baseboard_type == 'Hot Water') || (mau_heating_coil_type == 'HotWater') || baseboard_type == 'HotWater' || (heating_coil_type_sys4 == 'HotWater') || (heating_coil_type_sys4 == 'Hot Water') || (heating_coil_type_sys3 == 'HotWater') || (heating_coil_type_sys3 == 'Hot Water')
           hw_loop_needed = true if baseboard_type == 'Hot Water'
+          hw_loop_needed = true if (mau_heating_coil_type == 'Hot Water') || (mau_heating_coil_type == 'HotWater') || (heating_coil_type_sys4 == 'HotWater') || (heating_coil_type_sys4 == 'Hot Water') || (heating_coil_type_sys3 == 'HotWater') || (heating_coil_type_sys3 == 'Hot Water')
         end
       end
       if hw_loop_needed
