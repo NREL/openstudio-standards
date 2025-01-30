@@ -16,6 +16,9 @@ module OpenstudioStandards
         space_type = space.spaceType.is_initialized ? space.spaceType.get : nil
         next if space_type.nil?
 
+        # skip space if not part of floor area
+        next unless space.partofTotalFloorArea
+
         standards_building_type = space_type.standardsBuildingType.is_initialized ? space_type.standardsBuildingType.get : nil
         standards_space_type = space_type.standardsSpaceType.is_initialized ? space_type.standardsSpaceType.get : nil
         next if standards_space_type.nil?
@@ -27,7 +30,7 @@ module OpenstudioStandards
         # determine number of units
         number_of_units = 0
         case standards_space_type
-        when 'GuestRoom', 'GuestRm', 'GuestRmOcc', 'GuestRmUnOcc', 'PatientRoom', 'PatRoom'
+        when 'GuestRoom', 'GuestRm', 'GuestRmOcc', 'GuestRmUnOcc', 'GuestRoom123Occ', 'GuestRoom123Vac', 'GuestRoom4Occ', 'GuestRoom4Vac', 'PatientRoom', 'PatRoom'
           average_unit_size = OpenStudio.convert(350.0, 'ft^2', 'm^2').get
           average_unit_size = OpenStudio.convert(280.0, 'ft^2', 'm^2').get if standards_building_type == 'LargeHotel'
           number_of_units = floor_area / average_unit_size
@@ -96,6 +99,9 @@ module OpenstudioStandards
         number_of_beds = 0
         number_of_students = 0
         space_type.spaces.sort.each do |space|
+          # skip space if not part of floor area
+          next unless space.partofTotalFloorArea
+
           effective_number_of_spaces += space_properties[space][:effective_number_of_spaces]
           floor_area += space_properties[space][:floor_area]
           number_of_people += space_properties[space][:number_of_people]

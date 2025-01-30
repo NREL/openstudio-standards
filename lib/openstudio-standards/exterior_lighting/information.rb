@@ -88,7 +88,7 @@ module OpenstudioStandards
         ground_floor_area_ft2 = floor_area_ft2 / effective_num_stories[:above_grade]
 
         # load parking area properties for standards building type
-        parking_properties = parking_hsh.select { |hash| hash[:building_type] == building_type }
+        parking_properties = parking_hsh.select { |h| h[:building_type] == building_type }
 
         if parking_properties.nil? || parking_properties.empty?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.ExteriorLighting', "Could not find parking data for #{building_type}.")
