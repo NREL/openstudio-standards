@@ -127,6 +127,10 @@ class NECB2011
                                           boiler_fueltype: self.fuel_type_set.boiler_fueltype,
                                           backup_boiler_fueltype: self.fuel_type_set.backup_boiler_fueltype,
                                           mau_heating_coil_type: self.fuel_type_set.mau_heating_coil_type,
+                                          heating_coil_type_sys2: self.fuel_type_set.heating_coil_type_sys2,
+                                          heating_coil_type_sys3: self.fuel_type_set.heating_coil_type_sys3,
+                                          heating_coil_type_sys4: self.fuel_type_set.heating_coil_type_sys4,
+                                          heating_coil_type_sys6: self.fuel_type_set.heating_coil_type_sys6
                                           model: model,
                                           hvac_system_primary: hvac_system_primary,
                                           hvac_system_dwelling_units: hvac_system_dwelling_units,
@@ -848,7 +852,7 @@ class NECB2011
   ################################################# NECB Systems
 
   # Method will create a hot water loop if systems default fuel and medium sources require it.
-  def create_hw_loop_if_required(baseboard_type:, boiler_fueltype:, backup_boiler_fueltype:, mau_heating_coil_type:, model:, hvac_system_primary: nil, hvac_system_dwelling_units: nil, hvac_system_washrooms: nil, hvac_system_corridor: nil, hvac_system_storage: nil)
+  def create_hw_loop_if_required(baseboard_type:, boiler_fueltype:, backup_boiler_fueltype:, mau_heating_coil_type:, model:, hvac_system_primary: nil, hvac_system_dwelling_units: nil, hvac_system_washrooms: nil, hvac_system_corridor: nil, hvac_system_storage: nil, heating_coil_type_sys2:, heating_coil_type_sys3:, heating_coil_type_sys4:, heating_coil_type_sys6:)
     # get systems that will be used in the model based on the space types to determine if a hw_loop is required.
 
     hw_loop_needed = false
@@ -863,6 +867,7 @@ class NECB2011
         # If a dwelling unit hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_dwelling_units }
         hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+        hw_loop_needed = true if boiler_required_from_heating_coils(sys_type: hvac_system_data["system"].to_s, mau_heating_coil_type: mau_heating_coil_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       end
     end
 
@@ -876,6 +881,7 @@ class NECB2011
         # If a washroom hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_washrooms }
         hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+        hw_loop_needed = true if boiler_required_from_heating_coils(sys_type: hvac_system_data["system"].to_s, mau_heating_coil_type: mau_heating_coil_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       end
     end
 
@@ -889,6 +895,7 @@ class NECB2011
         # If a corridor hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_corridor }
         hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+        hw_loop_needed = true if boiler_required_from_heating_coils(sys_type: hvac_system_data["system"].to_s, mau_heating_coil_type: mau_heating_coil_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       end
     end
 
@@ -902,6 +909,7 @@ class NECB2011
         # If a storage space hvac system is defined then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_storage }
         hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+        hw_loop_needed = true if boiler_required_from_heating_coils(sys_type: hvac_system_data["system"].to_s, mau_heating_coil_type: mau_heating_coil_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       end
     end
 
@@ -920,6 +928,7 @@ class NECB2011
         # If an hvac system is defined for the remaining spaces then find it in the hvac_types array and check if it requires a HW loop based on the 'needs_boiler' item.
         hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_primary }
         hw_loop_needed = true if hvac_system_data["needs_boiler"].to_bool
+        hw_loop_needed = true if boiler_required_from_heating_coils(sys_type: hvac_system_data["system"].to_s, mau_heating_coil_type: mau_heating_coil_type, heating_coil_type_sys2: heating_coil_type_sys2, heating_coil_type_sys3: heating_coil_type_sys3, heating_coil_type_sys4: heating_coil_type_sys4, heating_coil_type_sys6: heating_coil_type_sys6)
       end
     end
 
@@ -1535,7 +1544,7 @@ class NECB2011
   end
 
   # Method will check if the spaces passed to it will require a hot water loop based on their associated system type.
-  def hw_loop_required_from_spaces(spaces:, mau_heating_coil_type:, baseboard_type:)
+  def hw_loop_required_from_spaces(spaces:, mau_heating_coil_type:, baseboard_type:, heating_coil_type_sys2:, heating_coil_type_sys3:, heating_coil_type_sys4:, heating_coil_type_sys6:)
     hw_loop_needed = false
     systems_used = []
 
@@ -1553,11 +1562,11 @@ class NECB2011
       when '2', '5', '7'
         hw_loop_needed = true
       when '1', '6'
-        if (mau_heating_coil_type == 'Hot Water') || (baseboard_type == 'Hot Water')
+        if (mau_heating_coil_type == 'Hot Water') || (baseboard_type == 'Hot Water') || (mau_heating_coil_type == 'HotWater') || baseboard_type == 'HotWater' || (heating_coil_type_sys6 == 'HotWater') || (heating_coil_type_sys6 == 'Hot Water')
           hw_loop_needed = true
         end
       when '3', '4'
-        if (mau_heating_coil_type == 'Hot Water') || (baseboard_type == 'Hot Water')
+        if (mau_heating_coil_type == 'Hot Water') || (baseboard_type == 'Hot Water') || (mau_heating_coil_type == 'HotWater') || baseboard_type == 'HotWater' || (heating_coil_type_sys4 == 'HotWater') || (heating_coil_type_sys4 == 'Hot Water') || (heating_coil_type_sys3 == 'HotWater') || (heating_coil_type_sys3 == 'Hot Water')
           hw_loop_needed = true if baseboard_type == 'Hot Water'
         end
       end
@@ -1626,6 +1635,25 @@ class NECB2011
       swh_fueltype: fuel_type_set.swh_fueltype
     }
     return init_fuel_type
+  end
+
+  def boiler_required_from_heating_coils(sys_type:, mau_heating_coil_type:, heating_coil_type_sys2:, heating_coil_type_sys3:, heating_coil_type_sys4:, heating_coil_type_sys6:)
+    requires_boiler = false
+    case sys_type
+    when "sys_1"
+      requires_boiler = true if mau_heating_coil_type.to_s == "Hot Water" || mau_heating_coil_type.to_s == "HotWater"
+    when "sys_2"
+      requires_boiler = true if heating_coil_type_sys2.to_s == "Hot Water" || heating_coil_type_sys2.to_s == "HotWater"
+    when "sys_3"
+      requires_boiler = true if heating_coil_type_sys3.to_s == "Hot Water" || heating_coil_type_sys3.to_s == "HotWater"
+    when "sys_4"
+      requires_boiler = true if heating_coil_type_sys4.to_s == "Hot Water" || heating_coil_type_sys4.to_s == "HotWater"
+    when "sys_6"
+      requires_boiler = true heating_coil_type_sys6.to_s == "Hot Water" || heating_coil_type_sys6.to_s == "HotWater"
+    else
+      requires_boiler = false
+    end
+    return requires_boiler
   end
 
 end
