@@ -411,11 +411,11 @@ class NECB2011
             epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
             necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
           end
-          if necb_reference_hp_supp_fuel == 'NaturalGas' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
+          if necb_reference_hp_supp_fuel == 'NaturalGas' || necb_reference_hp_supp_fuel == 'Gas'
             rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-          elsif necb_reference_hp_supp_fuel == 'Electricity'# or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
+          elsif necb_reference_hp_supp_fuel == 'Electricity' || necb_reference_hp_supp_fuel == 'Electric' || necb_reference_hp_supp_fuel == 'FuelOilNo2'
             rh_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-          elsif necb_reference_hp_supp_fuel == 'Hot Water'
+          elsif necb_reference_hp_supp_fuel == 'Hot Water' || necb_reference_hp_supp_fuel == 'HotWater'
             rh_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
             hw_loop.addDemandBranchForComponent(rh_coil)
           else

@@ -88,11 +88,11 @@ class NECB2011
     htg_coil_fuel = self.fuel_type_set.heating_coil_type_sys2
 
     case htg_coil_fuel
-    when 'Electric', 'Electricity' # Electric Coil
+    when 'Electric', 'Electricity', 'FuelOilNo2' # Electric Coil
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-    when 'Gas', 'FuelOilNo2' # Natural Gas Coil
+    when 'Gas', 'NaturalGas'# Natural Gas Coil
       htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-    when 'Hot Water' # Hot Water Coil
+    when 'Hot Water', 'HotWater' # Hot Water Coil
       htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
       hw_loop.addDemandBranchForComponent(htg_coil)
     when 'DX'
@@ -105,11 +105,11 @@ class NECB2011
     if htg_coil_fuel == 'DX'
       supplemental_htg_fuel = self.fuel_type_set.necb_reference_hp_supp_fuel
       case supplemental_htg_fuel
-      when 'Electric', 'Electricity'
+      when 'Electric', 'Electricity', 'FuelOilNo2'
         supp_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-      when 'Gas', 'NaturalGas', 'FuelOilNo2'
+      when 'Gas', 'NaturalGas'
         supp_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-      when 'Hot Water'
+      when 'Hot Water', 'HotWater'
         supp_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
         hw_loop.addDemandBranchForComponent(supp_htg_coil)
       else
@@ -120,7 +120,7 @@ class NECB2011
     if mau_cooling_type == 'DX'
       clg_coil = add_onespeed_DX_coil(model, tpfc_clg_availability_sch)
       clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
-    elsif mau_cooling_type == 'Hydronic'
+    elsif mau_cooling_type == 'Hydronic' || mau_cooling_type == 'Hot Water' || mau_cooling_type == 'HotWater'
       clg_coil = OpenStudio::Model::CoilCoolingWater.new(model, tpfc_clg_availability_sch)
       chw_loop.addDemandBranchForComponent(clg_coil)
     end
@@ -200,14 +200,14 @@ class NECB2011
     sys_abbr = 'sys_5' if fan_coil_type == 'TPFC'
     sys_name_pars = {}
     sys_name_pars['sys_hr'] = 'none'
-    sys_name_pars['sys_clg'] = 'Hydronic' if mau_cooling_type == 'Hydronic'
+    sys_name_pars['sys_clg'] = 'Hydronic' if mau_cooling_type == 'Hydronic' || mau_cooling_type == 'Hot Water' || mau_cooling_type == 'HotWater'
     sys_name_pars['sys_clg'] = 'DX' if mau_cooling_type == 'DX' && htg_coil_fuel != 'DX'
     sys_name_pars['sys_clg'] = 'ashp' if mau_cooling_type == 'DX' && htg_coil_fuel == 'DX'
-    sys_name_pars['sys_htg'] = 'g' if (htg_coil_fuel == 'Gas' || htg_coil_fuel == 'FuelOilNo2')
-    sys_name_pars['sys_htg'] = 'e' if (htg_coil_fuel == 'Electric' || htg_coil_fuel == 'Electricity')
-    sys_name_pars['sys_htg'] = 'ashp>c-g' if (htg_coil_fuel == 'DX' && (supplemental_htg_fuel == "NaturalGas" || supplemental_htg_fuel == "FuelOilNo2"))
-    sys_name_pars['sys_htg'] = 'ashp>c-e' if (htg_coil_fuel == 'DX' && (supplemental_htg_fuel == "Electricity" || supplemental_htg_fuel == "Electric"))
-    sys_name_pars['sys_htg'] = 'ashp>c-hw' if (htg_coil_fuel == 'DX' && supplemental_htg_fuel == "Hot Water")
+    sys_name_pars['sys_htg'] = 'g' if (htg_coil_fuel == 'Gas' || htg_coil_fuel == 'NaturalGas')
+    sys_name_pars['sys_htg'] = 'e' if (htg_coil_fuel == 'Electric' || htg_coil_fuel == 'Electricity' || htg_coil_fuel == 'FuelOilNo2')
+    sys_name_pars['sys_htg'] = 'ashp>c-g' if (htg_coil_fuel == 'DX' && (supplemental_htg_fuel == "NaturalGas" || supplemental_htg_fuel == "Gas"))
+    sys_name_pars['sys_htg'] = 'ashp>c-e' if (htg_coil_fuel == 'DX' && (supplemental_htg_fuel == "Electricity" || supplemental_htg_fuel == "Electric" || supplemental_htg_fuel == "FuelOilNo2"))
+    sys_name_pars['sys_htg'] = 'ashp>c-hw' if (htg_coil_fuel == 'DX' && (supplemental_htg_fuel == "Hot Water" || supplemental_htg_fuel == "HotWater"))
     sys_name_pars['sys_sf'] = 'cv'
     sys_name_pars['zone_htg'] = fan_coil_type
     sys_name_pars['zone_clg'] = fan_coil_type

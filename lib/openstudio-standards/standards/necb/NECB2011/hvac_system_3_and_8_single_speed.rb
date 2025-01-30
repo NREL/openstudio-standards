@@ -119,9 +119,9 @@ class NECB2011
     sys_name_pars['sys_clg'] = 'dx'
     sys_name_pars['sys_clg'] = 'ashp' if necb_reference_hp
     sys_name_pars['sys_htg'] = heating_coil_type
-    sys_name_pars['sys_htg'] = 'ashp>c-g' if necb_reference_hp and necb_reference_hp_supp_fuel == "NaturalGas"
-    sys_name_pars['sys_htg'] = 'ashp>c-e' if necb_reference_hp and necb_reference_hp_supp_fuel == "Electricity"
-    sys_name_pars['sys_htg'] = 'ashp>c-hw' if necb_reference_hp and necb_reference_hp_supp_fuel == "Hot Water"
+    sys_name_pars['sys_htg'] = 'ashp>c-g' if necb_reference_hp && (necb_reference_hp_supp_fuel == "NaturalGas" || necb_reference_hp_supp_fuel == "Gas")
+    sys_name_pars['sys_htg'] = 'ashp>c-e' if necb_reference_hp && (necb_reference_hp_supp_fuel == "Electricity" || necb_reference_hp_supp_fuel == "Electric" || necb_reference_hp_supp_fuel == "FuelOilNo2")
+    sys_name_pars['sys_htg'] = 'ashp>c-hw' if necb_reference_hp && (necb_reference_hp_supp_fuel == "Hot Water" || necb_reference_hp_supp_fuel == "HotWater")
     sys_name_pars['sys_sf'] = 'cv'
     sys_name_pars['zone_htg'] = baseboard_type
     sys_name_pars['zone_clg'] = 'none'
@@ -182,11 +182,11 @@ class NECB2011
 
     raise("Flag 'necb_reference_hp' is set to true while parameter 'heating_coil_type' is not set to DX") if (necb_reference_hp && (heating_coil_type != 'DX'))
     case heating_coil_type
-    when 'Electric' # electric coil
+    when 'Electric', 'Electricity', "FuelOilNo2" # electric coil
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-    when 'Gas'
+    when 'Gas', 'NaturalGas'
       htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-    when 'Hot Water'
+    when 'Hot Water', 'HotWater'
       htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
       hw_loop.addDemandBranchForComponent(htg_coil)
     when 'DX'
@@ -224,11 +224,11 @@ class NECB2011
         epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
         necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
       end
-      if necb_reference_hp_supp_fuel == 'NaturalGas' or necb_reference_hp_supp_fuel == 'FuelOilNo2'
+      if necb_reference_hp_supp_fuel == 'NaturalGas' || necb_reference_hp_supp_fuel == 'Gas'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-      elsif necb_reference_hp_supp_fuel == 'Electricity'# or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
+      elsif necb_reference_hp_supp_fuel == 'Electricity' || necb_reference_hp_supp_fuel == 'Electric' || necb_reference_hp_supp_fuel == 'FuelOilNo2'
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-      elsif necb_reference_hp_supp_fuel == 'Hot Water'
+      elsif necb_reference_hp_supp_fuel == 'Hot Water' || necb_reference_hp_supp_fuel == "HotWater"
         supplemental_htg_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
         hw_loop.addDemandBranchForComponent(supplemental_htg_coil)
       else
