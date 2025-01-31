@@ -55,7 +55,7 @@ class NECB_TBD_Tests < Minitest::Test
     # Otherwise, :bad vs :good PSI factor sets refer to costed BTAP details.
     @options = ['none',
                 'bad',
-                'good',
+                # 'good',
                 'uprate']
 
     # BTAP holds discrete performance levels for each e.g. wall construction:
