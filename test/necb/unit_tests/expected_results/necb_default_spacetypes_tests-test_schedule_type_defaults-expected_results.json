@@ -77,7 +77,7 @@
             "standards_space_type": "Classroom/lecture/training",
             "standards_building_type": "Space Function",
             "total_lpd": [
-              10.8
+              13.3
             ],
             "lpd_schedule_name": [
               "NECB-D-Lighting"
@@ -142,7 +142,7 @@
             "standards_space_type": "Conf./meet./multi-purpose",
             "standards_building_type": "Space Function",
             "total_lpd": [
-              10.7
+              13.2
             ],
             "lpd_schedule_name": [
               "NECB-C-Lighting"
@@ -2519,7 +2519,7 @@
             "standards_space_type": "Lounge/recreation",
             "standards_building_type": "Space Function",
             "total_lpd": [
-              7.61
+              9.4
             ],
             "lpd_schedule_name": [
               "NECB-B-Lighting"
@@ -3230,7 +3230,7 @@
             "standards_space_type": "Washroom-sch-D",
             "standards_building_type": "Space Function",
             "total_lpd": [
-              8.5
+              10.5
             ],
             "lpd_schedule_name": [
               "NECB-D-Lighting"
@@ -3293,7 +3293,7 @@
             "standards_space_type": "Washroom-sch-F",
             "standards_building_type": "Space Function",
             "total_lpd": [
-              8.5
+              10.5
             ],
             "lpd_schedule_name": [
               "NECB-F-Lighting"
@@ -3356,7 +3356,7 @@
             "standards_space_type": "Washroom-sch-H",
             "standards_building_type": "Space Function",
             "total_lpd": [
-              8.5
+              10.5
             ],
             "lpd_schedule_name": [
               "NECB-H-Lighting"

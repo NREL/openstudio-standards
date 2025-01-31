@@ -155,7 +155,9 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
         end
 
         st.lights.each do |light|
-          total_lpd << light.powerPerFloorArea.get * occSensLPDfactor
+          # In order to check and validate the LPD output against NECB 2011 codes:
+          # Divide by occSensLPDfactor because the LPD was already multiplied by this factor in the standards.
+          total_lpd << light.powerPerFloorArea.get / occSensLPDfactor
           lpd_sched << light.schedule.get.name
         end
         ensure_non_nil_power_and_schedule(total_lpd, lpd_sched)
