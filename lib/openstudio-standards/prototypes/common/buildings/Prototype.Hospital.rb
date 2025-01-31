@@ -321,7 +321,7 @@ module Hospital
           # Determine whether or not to use the high minimum guess.
           # Cutoff was determined by correlating apparent minimum guesses
           # to OA rates in prototypes since not well documented in papers.
-          zone_oa_per_area = thermal_zone_outdoor_airflow_rate_per_area(zone)
+          zone_oa_per_area = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
           airlp = air_terminal.airLoopHVAC.get
           case template
           when 'DOE Ref Pre-1980', 'DOE Ref 1980-2004'
@@ -392,7 +392,7 @@ module Hospital
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 

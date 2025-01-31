@@ -115,10 +115,8 @@ class Standard
       return false
     end
 
-    if space_type.standardsSpaceType.is_initialized
-      if space_type.standardsSpaceType.get.downcase.include?('plenum')
-        return false
-      end
+    if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+      return false
     end
 
     # Get the standards data
@@ -138,7 +136,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.people.sort
-      if instances.size.zero?
+      if instances.empty?
         # Create a new definition and instance
         definition = OpenStudio::Model::PeopleDefinition.new(space_type.model)
         definition.setName("#{space_type.name} People Definition")
@@ -230,7 +228,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.lights.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Lights Definition")
         instance = OpenStudio::Model::Lights.new(definition)
@@ -310,7 +308,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.electricEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::ElectricEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Elec Equip Definition")
         instance = OpenStudio::Model::ElectricEquipment.new(definition)
@@ -334,6 +332,9 @@ class Standard
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(elec_equip_per_area.to_f, 'W/ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric EPD to #{elec_equip_per_area} W/ft^2.")
         end
+        definition.resetFractionLatent unless definition.isFractionLatentDefaulted
+        definition.resetFractionRadiant unless definition.isFractionRadiantDefaulted
+        definition.resetFractionLost unless definition.isFractionLostDefaulted
         definition.setFractionLatent(elec_equip_frac_latent.to_f) if elec_equip_frac_latent
         definition.setFractionRadiant(elec_equip_frac_radiant.to_f) if elec_equip_frac_radiant
         definition.setFractionLost(elec_equip_frac_lost.to_f) if elec_equip_frac_lost
@@ -353,7 +354,7 @@ class Standard
 
       # Remove all but the first instance
       instances = space_type.gasEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::GasEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Gas Equip Definition")
         instance = OpenStudio::Model::GasEquipment.new(definition)
@@ -377,6 +378,9 @@ class Standard
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(gas_equip_per_area.to_f, 'Btu/hr*ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas EPD to #{gas_equip_per_area} Btu/hr*ft^2.")
         end
+        definition.resetFractionLatent unless definition.isFractionLatentDefaulted
+        definition.resetFractionRadiant unless definition.isFractionRadiantDefaulted
+        definition.resetFractionLost unless definition.isFractionLostDefaulted
         definition.setFractionLatent(gas_equip_frac_latent.to_f) if gas_equip_frac_latent
         definition.setFractionRadiant(gas_equip_frac_radiant.to_f) if gas_equip_frac_radiant
         definition.setFractionLost(gas_equip_frac_lost.to_f) if gas_equip_frac_lost
@@ -445,7 +449,7 @@ class Standard
     if set_infiltration && infiltration_have_info
       # Remove all but the first instance
       instances = space_type.spaceInfiltrationDesignFlowRates.sort
-      if instances.size.zero?
+      if instances.empty?
         instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space_type.model)
         instance.setName("#{space_type.name} Infiltration")
         instance.setSpaceType(space_type)
@@ -495,10 +499,8 @@ class Standard
       return false
     end
 
-    if space_type.standardsSpaceType.is_initialized
-      if space_type.standardsSpaceType.get.downcase.include?('plenum')
-        return false
-      end
+    if space_type.standardsSpaceType.is_initialized && space_type.standardsSpaceType.get.downcase.include?('plenum')
+      return false
     end
 
     # Get the standards data
@@ -535,7 +537,7 @@ class Standard
           space_area = space_type_space.floorArea
           space_height = space_volume / space_area
           # New lpd values
-          lighting_per_area_new = lighting_per_area + lighting_per_length * space_height
+          lighting_per_area_new = lighting_per_area + (lighting_per_length * space_height)
           lighting_per_area_hash[space_type_space.name.to_s] = lighting_per_area_new
         end
       end
@@ -544,7 +546,7 @@ class Standard
     if lights_have_info
       # Remove all but the first instance
       instances = space_type.lights.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Lights Definition")
         instance = OpenStudio::Model::Lights.new(definition)

@@ -88,14 +88,15 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
             # Load model and set climate file.
             model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-            BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+            weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+            OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
             BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-            
+
             always_on = model.alwaysOnDiscreteSchedule
             hw_loop = nil
             if baseboard_types[index] == 'Hot Water'
               hw_loop = OpenStudio::Model::PlantLoop.new(model)
-              standard.setup_hw_loop_with_components(model, hw_loop, heating_coil_type, always_on)
+              standard.setup_hw_loop_with_components(model, hw_loop, heating_coil_type, heating_coil_type, always_on)
             end
             sys3_heating_coil_type = 'Electric'
             sys3_heating_coil_type = 'Gas' if heating_coil_type == 'NaturalGas'
@@ -114,7 +115,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
                                                                                                          hw_loop: hw_loop,
                                                                                                          new_auto_zoner: false)
             end
-            
+
             if stage_type == 'single'
               model.getCoilHeatingGass.each { |coil| coil.setNominalCapacity(furnace_cap * 1000) }
             elsif stage_type == 'multi'
@@ -129,7 +130,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
             # Run sizing.
             run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
-          
+
             if stage_type == 'single'
               if heating_coil_type == 'NaturalGas'
                 actual_furnace_thermal_eff[heating_coil_type] << model.getCoilHeatingGass[0].gasBurnerEfficiency
@@ -178,7 +179,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
           end
           furnace_res_file_output_text += output_line_text
         end
-        
+
       end
 
       # Write test results file.
@@ -214,12 +215,13 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
       if stage_type == 'single'
         standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                     zones: model.getThermalZones,
@@ -235,7 +237,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
                                                                                                    hw_loop: hw_loop,
                                                                                                    new_auto_zoner: false)
       end
-      
+
       # Run sizing.
       run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
@@ -288,12 +290,13 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
                                                                                                  zones: model.getThermalZones,
                                                                                                  heating_coil_type: heating_coil_type,
@@ -304,7 +307,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
 
       # Run sizing.
       run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
-          
+
       actual_num_stages = model.getCoilHeatingGasMultiStages[0].stages.size
       assert(actual_num_stages == num_stages_needed[cap], "The actual number of stages for capacity #{cap} W is not #{num_stages_needed[cap]}")
     end

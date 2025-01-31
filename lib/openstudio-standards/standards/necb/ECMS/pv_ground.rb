@@ -39,8 +39,8 @@ class ECMS
 
     ##### Set default PV panels' tilt angle as the latitude
     if pv_ground_tilt_angle == 'NECB_Default'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      pv_ground_tilt_angle = epw.latitude.to_f
+      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+      pv_ground_tilt_angle = epw.latitude
     end
 
     ##### Set default PV panels' azimuth angle as south-facing arrays

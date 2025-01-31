@@ -89,7 +89,7 @@ class NECB2011
 
       # Remove all but the first instance
       instances = space_type.people.sort
-      if instances.size.zero?
+      if instances.empty?
         # Create a new definition and instance
         definition = OpenStudio::Model::PeopleDefinition.new(space_type.model)
         definition.setName("#{space_type.name} People Definition")
@@ -181,7 +181,7 @@ class NECB2011
 
       # Remove all but the first instance
       instances = space_type.electricEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::ElectricEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Elec Equip Definition")
         instance = OpenStudio::Model::ElectricEquipment.new(definition)
@@ -230,7 +230,7 @@ class NECB2011
 
       # Remove all but the first instance
       instances = space_type.gasEquipment.sort
-      if instances.size.zero?
+      if instances.empty?
         definition = OpenStudio::Model::GasEquipmentDefinition.new(space_type.model)
         definition.setName("#{space_type.name} Gas Equip Definition")
         instance = OpenStudio::Model::GasEquipment.new(definition)
@@ -333,7 +333,7 @@ class NECB2011
 
     # Remove all but the first instance
     instances = space_type.spaceInfiltrationDesignFlowRates.sort
-    if instances.size.zero?
+    if instances.empty?
       instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space_type.model)
       instance.setName("#{space_type.name} Infiltration")
       instance.setSpaceType(space_type)

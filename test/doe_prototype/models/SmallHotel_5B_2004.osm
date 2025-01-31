@@ -18383,7 +18383,7 @@ OS:Material:NoMass,
 
 OS:Construction,
   {23e9d1ce-6a25-473b-b5fa-3bc641b501fb}, !- Handle
-  U 1.17 SHGC 0.49 Simple Glazing Skylight, !- Name
+  U 1.17 SHGC 0.49 Simple Glazing, !- Name
   ,                                       !- Surface Rendering Name
   {25d88609-3547-4f4d-852e-ca212fb2c2c5}; !- Layer 1
 
@@ -36502,13 +36502,13 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {027ce669-eff5-43d1-bf49-48b57f71aa29}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F, !- Name
+  Water Heater Ambient Temp Schedule 70F, !- Name
   {56582bd8-3cde-41cd-ac06-f296ab31e201}, !- Schedule Type Limits Name
   {b76bfe66-ff35-4c48-920e-1cc9573e7416}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {b76bfe66-ff35-4c48-920e-1cc9573e7416}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default, !- Name
+  Water Heater Ambient Temp Schedule 70F Default, !- Name
   {56582bd8-3cde-41cd-ac06-f296ab31e201}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1
@@ -41475,13 +41475,13 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {39fd85f1-dcfd-495f-bd9a-02dfde5db1c7}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F 1, !- Name
+  Water Heater Ambient Temp Schedule 70F 1, !- Name
   {3c690bcc-9b0c-4c9a-a03c-2f276303496d}, !- Schedule Type Limits Name
   {32777d24-9a62-4159-9f15-b81fc7e32fa4}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {32777d24-9a62-4159-9f15-b81fc7e32fa4}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default 1, !- Name
+  Water Heater Ambient Temp Schedule 70F Default 1, !- Name
   {3c690bcc-9b0c-4c9a-a03c-2f276303496d}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1

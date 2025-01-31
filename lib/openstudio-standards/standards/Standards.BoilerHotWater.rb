@@ -15,14 +15,14 @@ class Standard
     fuel_type = nil
     case boiler_hot_water.fuelType
     when 'NaturalGas'
-      fuel_type = 'Gas'
+      fuel_type = 'NaturalGas'
     when 'Electricity'
       fuel_type = 'Electric'
     when 'FuelOilNo1', 'FuelOilNo2'
       fuel_type = 'Oil'
     else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuelType} is not yet supported.  Assuming 'Gas.'")
-      fuel_type = 'Gas'
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, a fuel type of #{fuel_type} is not yet supported.  Assuming 'NaturalGas'.")
+      fuel_type = 'NaturalGas'
     end
 
     search_criteria['fuel_type'] = fuel_type
@@ -128,6 +128,14 @@ class Standard
     return thermal_eff
   end
 
+  # Determine what part load efficiency degredation curve should be used for a boiler
+  #
+  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+  # @return [String] returns name of the boiler curve to be used, or nil if not applicable
+  def boiler_get_eff_fplr(boiler_hot_water)
+    return 'Boiler Constant Efficiency Curve'
+  end
+
   # Applies the standard efficiency ratings and typical performance curves to this object.
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
@@ -156,15 +164,19 @@ class Standard
       return successfully_set_all_properties
     end
 
-    # Make the EFFFPLR curve (not all boilers will have one)
+    # Get and assign boiler part load efficiency degradation curve
+    eff_fplr = nil
     if blr_props['efffplr']
       eff_fplr = model_add_curve(boiler_hot_water.model, blr_props['efffplr'])
-      if eff_fplr
-        boiler_hot_water.setNormalizedBoilerEfficiencyCurve(eff_fplr)
-      else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find eff_fplr curve, will not be set.")
-        successfully_set_all_properties = false
-      end
+    else
+      eff_fplr_curve_name = boiler_get_eff_fplr(boiler_hot_water)
+      eff_fplr = model_add_curve(boiler_hot_water.model, eff_fplr_curve_name)
+    end
+    if eff_fplr
+      boiler_hot_water.setNormalizedBoilerEfficiencyCurve(eff_fplr)
+    else
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name}, cannot find eff_fplr curve, will not be set.")
+      successfully_set_all_properties = false
     end
 
     # Get the minimum efficiency standards

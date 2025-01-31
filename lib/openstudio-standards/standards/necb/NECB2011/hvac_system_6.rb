@@ -57,7 +57,7 @@ class NECB2011
 
     # Make a Packaged VAV w/ PFP Boxes for each story of the building
     model.getBuildingStorys.sort.each do |story|
-      unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
+      unless (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).empty?
 
         air_loop = common_air_loop(model: model, system_data: system_data)
         air_loop.setName('Sys_6_VAV with Reheat')
@@ -109,7 +109,7 @@ class NECB2011
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
         # and hook the reheat coil to the HW loop
-        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
+        (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
           sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
@@ -215,7 +215,7 @@ class NECB2011
 
     # Make a Packaged VAV w/ PFP Boxes for each story of the building
     model.getBuildingStorys.sort.each do |story|
-      unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
+      unless (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).empty?
         air_loop = common_air_loop(model: model, system_data: system_data)
         air_loop.setName(system_data[:name])
         air_loop_sizing = air_loop.sizingSystem
@@ -277,7 +277,7 @@ class NECB2011
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
         # and hook the reheat coil to the HW loop
-        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
+        (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
           sizing_zone.setZoneCoolingDesignSupplyAirTemperature(system_data[:ZoneCoolingDesignSupplyAirTemperature])
@@ -341,7 +341,7 @@ class NECB2011
     always_on = model.alwaysOnDiscreteSchedule
 
     model.getBuildingStorys.sort.each do |story|
-      unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
+      unless (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).empty?
 
         air_loop = common_air_loop(model: model, system_data: system_data)
         air_loop.setName('Sys_6_CAV')
@@ -388,9 +388,9 @@ class NECB2011
         sat_stpt_manager.setMinimumSetpointTemperature(13)
         sat_stpt_manager.setMaximumSetpointTemperature(24)
         sat_stpt_manager.addToNode(supply_outlet_node)
-        
+
         # Make CAV terminals for each zone on this story that is in intersection with the zones array.
-        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
+        (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
           sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
@@ -408,8 +408,8 @@ class NECB2011
 
           # Create CAV RH (RH based on region's default fuel type)
           if necb_reference_hp_supp_fuel == 'DefaultFuel'
-            epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-            necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
+            epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+            necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
           end
           if necb_reference_hp_supp_fuel == 'NaturalGas'
             rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
@@ -432,12 +432,12 @@ class NECB2011
         assign_base_sys_name(air_loop,
                              sys_abbr: 'sys_6',
                              sys_oa: 'mixed',
-                             sys_name_pars: sys_name_pars)                
+                             sys_name_pars: sys_name_pars)
 
       end
     end
 
-    
+
 
   end
 end

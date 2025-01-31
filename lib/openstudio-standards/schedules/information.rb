@@ -8,12 +8,15 @@ module OpenstudioStandards
     # This method does not include summer and winter design day values.
     #
     # @param schedule [OpenStudio::Model::Schedule] OpenStudio Schedule object
+    # @param only_run_period_values [Bool] check values encountered only during the run period
+    #   Default to false. Only applicable to ScheduleRuleset schedules.
+    #   This will ignore ScheduleRules or the DefaultDaySchedule if never used.
     # return [Hash] returns a hash with 'min' and 'max' values
-    def self.schedule_get_min_max(schedule)
+    def self.schedule_get_min_max(schedule, only_run_period_values: false)
       case schedule.iddObjectType.valueName.to_s
       when 'OS_Schedule_Ruleset'
         schedule = schedule.to_ScheduleRuleset.get
-        result = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(schedule)
+        result = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(schedule, only_run_period_values: only_run_period_values)
       when 'OS_Schedule_Constant'
         schedule = schedule.to_ScheduleConstant.get
         result = OpenstudioStandards::Schedules.schedule_constant_get_min_max(schedule)
@@ -204,7 +207,7 @@ module OpenstudioStandards
       end
 
       # Error if no values were found
-      if vals.size.zero?
+      if vals.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Could not find any value in #{schedule_compact.name} when determining min and max.")
         result = { 'min' => nil, 'max' => nil }
         return result
@@ -247,7 +250,7 @@ module OpenstudioStandards
       end
 
       # Error if no values were found
-      if vals.size.zero?
+      if vals.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Could not find any value in #{schedule_compact.name} design day schedule when determining min and max.")
         result = { 'min' => nil, 'max' => nil }
         return result
@@ -283,6 +286,30 @@ module OpenstudioStandards
 
     # @!group Information:ScheduleDay
 
+    # Returns the ScheduleDay minimum and maximum values
+    #
+    # @param schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
+    # @return [Hash] returns a hash with 'min' and 'max' values
+    def self.schedule_day_get_min_max(schedule_day)
+      min = nil
+      max = nil
+      values = schedule_day.values
+      values.each do |value|
+        if min.nil?
+          min = value
+        else
+          if min > value then min = value end
+        end
+        if max.nil?
+          max = value
+        else
+          if max < value then max = value end
+        end
+      end
+
+      result = { 'min' => min, 'max' => max }
+    end
+
     # Returns the ScheduleDay daily equivalent full load hours (EFLH).
     #
     # @param schedule_day [OpenStudio::Model::ScheduleDay] OpenStudio ScheduleDay object
@@ -302,7 +329,6 @@ module OpenstudioStandards
 
       return daily_flh
     end
-
 
     # Returns an array of average hourly values from a ScheduleDay object
     # Returns 24 values
@@ -339,28 +365,91 @@ module OpenstudioStandards
 
     # @!group Information:ScheduleRuleset
 
-    # Returns the ScheduleRuleset minimum and maximum values encountered during the run-period.
+    # Returns the ScheduleRuleset minimum and maximum values.
     # This method does not include summer and winter design day values.
+    # By default the method reports values from all component day schedules even if unused,
+    # but can optionally report values encountered only during the run period.
     #
     # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param only_run_period_values [Bool] check values encountered only during the run period
+    #   Default to false. This will ignore ScheduleRules or the DefaultDaySchedule if never used.
     # @return [Hash] returns a hash with 'min' and 'max' values
-    def self.schedule_ruleset_get_min_max(schedule_ruleset)
+    def self.schedule_ruleset_get_min_max(schedule_ruleset, only_run_period_values: false)
       # validate schedule
       unless schedule_ruleset.to_ScheduleRuleset.is_initialized
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_min_max() failed because object #{schedule_ruleset} is not a ScheduleRuleset.")
         return nil
       end
 
-      # gather profiles
-      profiles = []
-      profiles << schedule_ruleset.defaultDaySchedule
-      schedule_ruleset.scheduleRules.each { |rule| profiles << rule.daySchedule }
+      # day schedules
+      day_schedules = []
 
-      # test profiles
+      # check only day schedules in the run period
+      if only_run_period_values
+        # get year
+        if schedule_ruleset.model.yearDescription.is_initialized
+          year_description = schedule_ruleset.model.yearDescription.get
+          year = year_description.assumedYear
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules.Information', 'Year description is not specified. Full load hours calculation will assume 2009, the default year OS uses.')
+          year = 2009
+        end
+
+        # get start and end month and day
+        run_period = schedule_ruleset.model.getRunPeriod
+        start_month = run_period.getBeginMonth
+        start_day = run_period.getBeginDayOfMonth
+        end_month = run_period.getEndMonth
+        end_day = run_period.getEndDayOfMonth
+
+        # set the start and end date
+        start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(start_month), start_day, year)
+        end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(end_month), end_day, year)
+
+        # Get the ordered list of all the day schedules
+        day_schs = schedule_ruleset.getDaySchedules(start_date, end_date)
+
+        # Get the array of which schedule is used on each day of the year
+        day_schs_used_each_day = schedule_ruleset.getActiveRuleIndices(start_date, end_date)
+
+        # Create a map that shows how many days each schedule is used
+        day_sch_freq = day_schs_used_each_day.group_by { |n| n }
+
+        # Build a hash that maps schedule day index to schedule day
+        schedule_index_to_day = {}
+        day_schs.each_with_index do |day_sch, i|
+          schedule_index_to_day[day_schs_used_each_day[i]] = day_sch
+        end
+
+        # Loop through each of the schedules and record which ones are used
+        day_sch_freq.each do |freq|
+          sch_index = freq[0]
+          number_of_days_sch_used = freq[1].size
+          next unless number_of_days_sch_used > 0
+
+          # Get the day schedule at this index
+          day_sch = nil
+          if sch_index == -1 # If index = -1, this day uses the default day schedule (not a rule)
+            day_sch = schedule_ruleset.defaultDaySchedule
+          else
+            day_sch = schedule_index_to_day[sch_index]
+          end
+
+          # add day schedule to array
+          day_schedules << day_sch
+        end
+      else
+        # use all day schedules
+        day_schedules << schedule_ruleset.defaultDaySchedule
+        schedule_ruleset.scheduleRules.each { |rule| day_schedules << rule.daySchedule }
+      end
+
+      # get min and max from day schedules array
       min = nil
       max = nil
-      profiles.each do |profile|
-        profile.values.each do |value|
+      day_schedules.each do |day_schedule|
+        values = day_schedule.values
+        values.each do |value|
           if min.nil?
             min = value
           else
@@ -403,7 +492,8 @@ module OpenstudioStandards
 
       min = nil
       max = nil
-      schedule.values.each do |value|
+      values = schedule.values
+      values.each do |value|
         if min.nil?
           min = value
         else
@@ -474,11 +564,11 @@ module OpenstudioStandards
 
         # Get the day schedule at this index
         day_sch = nil
-        day_sch = if sch_index == -1 # If index = -1, this day uses the default day schedule (not a rule)
-                    default_day_sch
-                  else
-                    schedule_index_to_day[sch_index]
-                  end
+        if sch_index == -1 # If index = -1, this day uses the default day schedule (not a rule)
+          day_sch = default_day_sch
+        else
+          day_sch = schedule_index_to_day[sch_index]
+        end
         daily_flh = OpenstudioStandards::Schedules.schedule_day_get_equivalent_full_load_hours(day_sch)
 
         # Multiply the daily EFLH by the number
@@ -743,6 +833,169 @@ module OpenstudioStandards
       return { 'start_time' => start_time, 'end_time' => end_time }
     end
 
+    # Returns the day schedules associated with a schedule ruleset
+    # Optionally includes summer and winter design days
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @param include_design_days [Bool] include summer and winter design day profiles
+    #   Defaults to false
+    # @return [Array<OpenStudio::Model::ScheduleDay>] array of day schedules
+    def self.schedule_ruleset_get_day_schedules(schedule_ruleset, include_design_days: false)
+      profiles = []
+      profiles << schedule_ruleset.defaultDaySchedule
+      schedule_ruleset.scheduleRules.each do |rule|
+        profiles << rule.daySchedule
+      end
+
+      if include_design_days
+
+        if schedule_ruleset.isSummerDesignDayScheduleDefaulted
+          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_day_schedules called for #{schedule_ruleset.name.get} with include_design_days: true, but the summer design day is defaulted. Duplicate design day will not be added.")
+        else
+          profiles << rule.summerDesignDaySchedule
+        end
+
+        if schedule_ruleset.isWinterDesignDayScheduleDefaulted
+          OpenStudio.logFree(OpenStudio::Warning, 'openstudio.standards.Schedules.Information', "Method schedule_ruleset_get_day_schedules called for #{schedule_ruleset.name.get} with include_design_days: true, but the winter design day is defaulted. Duplicate design day will not be added.")
+        else
+          profiles << rule.winterDesignDaySchedule
+        end
+
+      end
+
+      return profiles
+    end
+
+    # Return the annual days of year that covered by each rule of a schedule ruleset
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @return [Hash] hash of rule_index => [days_used]. Default day has rule_index = -1
+    def self.schedule_ruleset_get_annual_days_used(schedule_ruleset)
+      year_description = schedule_ruleset.model.getYearDescription
+      year = year_description.assumedYear
+      year_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('January'), 1, year)
+      year_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new('December'), 31, year)
+      sch_indices_vector = schedule_ruleset.getActiveRuleIndices(year_start_date, year_end_date)
+      days_used_hash = Hash.new { |h, k| h[k] = [] }
+      sch_indices_vector.uniq.sort.each do |rule_i|
+        sch_indices_vector.each_with_index { |rule, i| days_used_hash[rule_i] << (i + 1) if rule_i == rule }
+      end
+      return days_used_hash
+    end
+
+    # Returns the rule indices associated with defaultDay and Rule days for a given ScheduleRuleset
+    #
+    # @param schedule_ruleset [OpenStudio::Model::ScheduleRuleset] OpenStudio ScheduleRuleset object
+    # @return [Hash] hash of ScheduleDay => rule index. Default day has rule index of -1
+    def self.schedule_ruleset_get_schedule_day_rule_indices(schedule_ruleset)
+      schedule_day_hash = {}
+      schedule_day_hash[schedule_ruleset.defaultDaySchedule] = -1
+      schedule_ruleset.scheduleRules.each { |rule| schedule_day_hash[rule.daySchedule] = rule.ruleIndex }
+      return schedule_day_hash
+    end
+
     # @!endgroup Information:ScheduleRuleset
+
+    # @!group Information:Model
+
+    # Get the predominant air loop HVAC schedule in the model by floor area served.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @return [OpenStudio::Model::Schedule] OpenStudio Schedule object
+    def self.model_get_hvac_schedule(model)
+      # lookup from model, using largest air loop
+      # check multiple kinds of systems, including unitary systems
+      hvac_schedule = nil
+      largest_area = 0.0
+
+      model.getAirLoopHVACs.each do |air_loop|
+        air_loop_area = 0.0
+        air_loop.thermalZones.each { |tz| air_loop_area += tz.floorArea }
+        if air_loop_area > largest_area
+          hvac_schedule = air_loop.availabilitySchedule
+          largest_area = air_loop_area
+        end
+      end
+
+      model.getAirLoopHVACUnitarySystems.each do |unitary|
+        next unless unitary.thermalZone.is_initialized
+
+        air_loop_area = unitary.thermalZone.get.floorArea
+        if air_loop_area > largest_area
+          if unitary.availabilitySchedule.is_initialized
+            hvac_schedule = unitary.availabilitySchedule.get
+          else
+            hvac_schedule = model.alwaysOnDiscreteSchedule
+          end
+          largest_area = air_loop_area
+        end
+      end
+
+      model.getAirLoopHVACUnitaryHeatPumpAirToAirs.each do |unitary|
+        next unless unitary.controllingZone.is_initialized
+
+        air_loop_area = unitary.controllingZone.get.floorArea
+        if air_loop_area > largest_area
+          hvac_schedule = unitary.availabilitySchedule.get
+          largest_area = air_loop_area
+        end
+      end
+
+      model.getAirLoopHVACUnitaryHeatPumpAirToAirMultiSpeeds.each do |unitary|
+        next unless unitary.controllingZoneorThermostatLocation.is_initialized
+
+        air_loop_area = unitary.controllingZoneorThermostatLocation.get.floorArea
+        if air_loop_area > largest_area
+          if unitary.availabilitySchedule.is_initialized
+            hvac_schedule = unitary.availabilitySchedule.get
+          else
+            hvac_schedule = model.alwaysOnDiscreteSchedule
+          end
+          largest_area = air_loop_area
+        end
+      end
+
+      model.getFanZoneExhausts.each do |fan|
+        next unless fan.thermalZone.is_initialized
+
+        air_loop_area = fan.thermalZone.get.floorArea
+        if air_loop_area > largest_area
+          if fan.availabilitySchedule.is_initialized
+            hvac_schedule = fan.availabilitySchedule.get
+          else
+            hvac_schedule = model.alwaysOnDiscreteSchedule
+          end
+          largest_area = air_loop_area
+        end
+      end
+
+      building_area = model.getBuilding.floorArea
+      if largest_area < 0.05 * building_area
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Schedules', "The largest airloop or HVAC system serves #{largest_area.round(1)} m^2, which is less than 5% of the building area #{building_area.round(1)} m^2. Attempting to use building hours of operation schedule instead.")
+        default_schedule_set = model.getBuilding.defaultScheduleSet
+        if default_schedule_set.is_initialized
+          default_schedule_set = default_schedule_set.get
+          hoo = default_schedule_set.hoursofOperationSchedule
+          if hoo.is_initialized
+            hvac_schedule = hoo.get
+            largest_area = building_area
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules', 'Unable to determine building hours of operation schedule. Treating the building as if there is no HVAC system schedule.')
+            hvac_schedule = nil
+          end
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Schedules', 'Unable to determine building hours of operation schedule. Treating the building as if there is no HVAC system schedule.')
+          hvac_schedule = nil
+        end
+      end
+
+      unless hvac_schedule.nil?
+        area_fraction = 100.0 * largest_area / building_area
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Schedules', "Using schedule #{hvac_schedule.name} serving area #{largest_area.round(1)} m^2, #{area_fraction.round(0)}% of building area #{building_area.round(1)} m^2 as the building HVAC operation schedule.")
+      end
+
+      return hvac_schedule
+    end
+
+    # @!endgroup Information:Model
   end
 end

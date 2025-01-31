@@ -69,10 +69,10 @@ module OpenstudioStandards
             if data.nil?
               puts "lookup for #{target_standard},#{intended_surface_type},#{standards_construction_type}"
               check_elems << OpenStudio::Attribute.new('flag', "Didn't find construction for #{standards_construction_type} #{intended_surface_type} for #{space_type.name}.")
-            elsif intended_surface_type.include? 'ExteriorWall' || 'ExteriorFloor' || 'ExteriorDoor'
+            elsif ['ExteriorWall', 'ExteriorFloor', 'ExteriorDoor'].include? intended_surface_type
               space_type_const_properties[intended_surface_type]['u_value'] = data['assembly_maximum_u_value']
               space_type_const_properties[intended_surface_type]['reflectance'] = 0.30 # hard coded value
-            elsif intended_surface_type.include? 'ExteriorRoof'
+            elsif intended_surface_type == 'ExteriorRoof'
               space_type_const_properties[intended_surface_type]['u_value'] = data['assembly_maximum_u_value']
               space_type_const_properties[intended_surface_type]['reflectance'] = 0.55 # hard coded value
             else
@@ -155,12 +155,10 @@ module OpenstudioStandards
                 when 'Floor'
                   intended_surface_type = 'ExteriorFloor'
                 end
-              else
-                # currently only used for surfaces with outdoor boundary condition
               end
-              film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
+              film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
               thermal_conductance = surface_detail[:construction].thermalConductance.get
-              r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
+              r_value_with_film = (1 / thermal_conductance) + film_coefficients_r_value
               source_units = 'm^2*K/W'
               target_units = 'ft^2*h*R/Btu'
               r_value_ip = OpenStudio.convert(r_value_with_film, source_units, target_units).get
@@ -168,7 +166,7 @@ module OpenstudioStandards
               # @todo check with exterior air wall
 
               # stop if didn't find values (0 or infinity)
-              next if target_r_value_ip[surface_detail[:surface_type]] == 0.0
+              next if target_r_value_ip[surface_detail[:surface_type]] < 0.01
               next if target_r_value_ip[surface_detail[:surface_type]] == Float::INFINITY
 
               # check r avlues
@@ -196,12 +194,13 @@ module OpenstudioStandards
               # check for non opaque sub surfaces
               source_units = 'W/m^2*K'
               target_units = 'Btu/ft^2*h*R'
-              u_factor_si = std.construction_calculated_u_factor(sub_surface_detail[:construction].to_LayeredConstruction.get.to_Construction.get)
+              surface_construction = sub_surface_detail[:construction].to_LayeredConstruction.get
+              u_factor_si = OpenstudioStandards::Constructions.construction_get_conductance(surface_construction)
               u_factor_ip = OpenStudio.convert(u_factor_si, source_units, target_units).get
-              shgc = std.construction_calculated_solar_heat_gain_coefficient(sub_surface_detail[:construction].to_LayeredConstruction.get.to_Construction.get)
+              shgc = OpenstudioStandards::Constructions.construction_get_solar_transmittance(surface_construction)
 
               # stop if didn't find values (0 or infinity)
-              next if target_u_value_ip[sub_surface_detail[:surface_type]] == 0.0
+              next if target_u_value_ip[sub_surface_detail[:surface_type]] < 0.01
               next if target_u_value_ip[sub_surface_detail[:surface_type]] == Float::INFINITY
 
               # check u avlues
@@ -229,13 +228,11 @@ module OpenstudioStandards
                 if boundary_condition.to_s == 'Outdoors'
                   # @todo add additional intended surface types
                   if surface_type.to_s == 'Door' then intended_surface_type = 'ExteriorDoor' end
-                else
-                  # currently only used for surfaces with outdoor boundary condition
                 end
-                film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
+                film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
 
                 thermal_conductance = sub_surface_detail[:construction].thermalConductance.get
-                r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
+                r_value_with_film = (1 / thermal_conductance) + film_coefficients_r_value
                 source_units = 'm^2*K/W'
                 target_units = 'ft^2*h*R/Btu'
                 r_value_ip = OpenStudio.convert(r_value_with_film, source_units, target_units).get
@@ -243,7 +240,7 @@ module OpenstudioStandards
                 # @todo check what happens with exterior air wall
 
                 # stop if didn't find values (0 or infinity)
-                next if target_r_value_ip[sub_surface_detail[:surface_type]] == 0.0
+                next if target_r_value_ip[sub_surface_detail[:surface_type]] < 0.01
                 next if target_r_value_ip[sub_surface_detail[:surface_type]] == Float::INFINITY
 
                 # check r avlues
@@ -299,11 +296,11 @@ module OpenstudioStandards
 
             unless missing_surface_constructions.empty?
               check_elems << OpenStudio::Attribute.new('flag', "#{missing_surface_constructions.size} surfaces are missing constructions in #{space_type.name}. Spaces and can't be checked.")
-              end
+            end
 
             unless missing_sub_surface_constructions.empty?
               check_elems << OpenStudio::Attribute.new('flag', "#{missing_sub_surface_constructions.size} sub surfaces are missing constructions in #{space_type.name}. Spaces and can't be checked.")
-              end
+            end
 
             surface_details.uniq.each do |surface_detail|
               if surface_detail[:construction].thermalConductance.is_initialized
@@ -322,12 +319,11 @@ module OpenstudioStandards
                   when 'Floor'
                     intended_surface_type = 'ExteriorFloor'
                     standards_construction_type = 'Mass'
-                    end
-                  # currently only used for surfaces with outdoor boundary condition
+                  end
                 end
-                film_coefficients_r_value = std.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
+                film_coefficients_r_value = OpenstudioStandards::Constructions.film_coefficients_r_value(intended_surface_type, includes_int_film = true, includes_ext_film = true)
                 thermal_conductance = surface_detail[:construction].thermalConductance.get
-                r_value_with_film = 1 / thermal_conductance + film_coefficients_r_value
+                r_value_with_film = (1 / thermal_conductance) + film_coefficients_r_value
                 source_units = 'm^2*K/W'
                 target_units = 'ft^2*h*R/Btu'
                 r_value_ip = OpenStudio.convert(r_value_with_film, source_units, target_units).get
@@ -341,10 +337,10 @@ module OpenstudioStandards
                 if data.nil?
                   check_elems << OpenStudio::Attribute.new('flag', "Didn't find construction for #{standards_construction_type} #{intended_surface_type} for #{space.name}.")
                   next
-                elsif intended_surface_type.include? 'ExteriorWall' || 'ExteriorFloor' || 'ExteriorDoor'
+                elsif ['ExteriorWall', 'ExteriorFloor', 'ExteriorDoor'].include? intended_surface_type
                   assembly_maximum_u_value = data['assembly_maximum_u_value']
                   target_reflectance = 0.30
-                elsif intended_surface_type.include? 'ExteriorRoof'
+                elsif intended_surface_type == 'ExteriorRoof'
                   assembly_maximum_u_value = data['assembly_maximum_u_value']
                   target_reflectance = 0.55
                 else
@@ -354,7 +350,7 @@ module OpenstudioStandards
                 assembly_maximum_r_value_ip = 1 / assembly_maximum_u_value
 
                 # stop if didn't find values (0 or infinity)
-                next if assembly_maximum_r_value_ip == 0.0
+                next if assembly_maximum_r_value_ip < 0.01
                 next if assembly_maximum_r_value_ip == Float::INFINITY
 
                 # check r avlues

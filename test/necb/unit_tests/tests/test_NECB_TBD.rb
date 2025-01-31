@@ -20,8 +20,8 @@ class NECB_TBD_Tests < Minitest::Test
     #Range of test options.
     @templates = [
       'NECB2011',
-    # 'NECB2015',
-    # 'NECB2017'
+      # 'NECB2015',
+      'NECB2017'
     ]
 
     @epws = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']

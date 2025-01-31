@@ -58,7 +58,7 @@ class BTAPPRE1980
 
     # Make a Packaged VAV w/ PFP Boxes for each story of the building
     model.getBuildingStorys.sort.each do |story|
-      unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
+      unless (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).empty?
 
         air_loop = common_air_loop(model: model, system_data: system_data)
         air_loop.setName('Sys_6_VAV with Reheat')
@@ -114,7 +114,7 @@ class BTAPPRE1980
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
         # and hook the reheat coil to the HW loop
-        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
+        (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
           sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])
@@ -226,7 +226,7 @@ class BTAPPRE1980
 
     # Make a Packaged VAV w/ PFP Boxes for each story of the building
     model.getBuildingStorys.sort.each do |story|
-      unless (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).empty?
+      unless (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).empty?
 
         air_loop = common_air_loop(model: model, system_data: system_data)
         air_loop.setName(system_data[:name])
@@ -292,7 +292,7 @@ class BTAPPRE1980
 
         # Make a VAV terminal with HW reheat for each zone on this story that is in intersection with the zones array.
         # and hook the reheat coil to the HW loop
-        (BTAP::Geometry::BuildingStoreys.get_zones_from_storey(story) & zones).each do |zone|
+        (OpenstudioStandards::Geometry.building_story_get_thermal_zones(story) & zones).each do |zone|
           # Zone sizing parameters
           sizing_zone = zone.sizingZone
           sizing_zone.setZoneCoolingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneCoolingDesignSupplyAirTemperatureInputMethod])

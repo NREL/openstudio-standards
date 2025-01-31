@@ -23,7 +23,7 @@ module LargeHotel
     else
       transformer_efficiency = nil
     end
-    return true unless !transformer_efficiency.nil?
+    return true if transformer_efficiency.nil?
 
     model_add_transformer(model,
                           wired_lighting_frac: 0.0352,
@@ -66,7 +66,7 @@ module LargeHotel
         thermal_zone = space.thermalZone.get
 
         zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
-        zone_exhaust_fan.setName(space.name.to_s + ' Exhaust Fan')
+        zone_exhaust_fan.setName("#{space.name} Exhaust Fan")
         zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
         zone_exhaust_fan.setFanEfficiency(space_type_data['exhaust_fan_efficiency'])
         zone_exhaust_fan.setPressureRise(space_type_data['exhaust_fan_pressure_rise'])
@@ -242,7 +242,7 @@ module LargeHotel
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 

@@ -45,10 +45,11 @@ module College
     infiltration_entrydoor = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(model)
     infiltration_entrydoor.setName('entry door Infiltration')
     infiltration_per_zone_entrydoor = 0
-    if template == '90.1-2004'
+    case template
+    when '90.1-2004'
       infiltration_per_zone_entrydoor = 4.566024
       infiltration_entrydoor.setSchedule(model_add_schedule(model, 'College INFIL_Door_Opening_SCH'))
-    elsif template == '90.1-2007'
+    when '90.1-2007'
       case climate_zone
       when 'ASHRAE 169-2006-3A',
         'ASHRAE 169-2006-3B',
@@ -62,7 +63,7 @@ module College
         infiltration_per_zone_entrydoor = 4.566024
         infiltration_entrydoor.setSchedule(model_add_schedule(model, 'College INFIL_Door_Opening_SCH'))
       end
-    elsif template == '90.1-2010' || template == '90.1-2013'
+    when '90.1-2010', '90.1-2013'
       case climate_zone
       when 'ASHRAE 169-2006-3A',
         'ASHRAE 169-2006-3B',

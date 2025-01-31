@@ -62,7 +62,7 @@ module OpenstudioStandards
       sum_area_adj_num_people_ratio = 0.0
       space_type_ratio_hash.each do |space_type, ratios|
         # calculate num_people_ratios
-        area_adj_num_people_ratio  = (space_type.getPeoplePerFloorArea(1.0) / sum_of_num_people_per_m_2) * ratios[:floor_area_ratio]
+        area_adj_num_people_ratio = (space_type.getPeoplePerFloorArea(1.0) / sum_of_num_people_per_m_2) * ratios[:floor_area_ratio]
         sum_area_adj_num_people_ratio += area_adj_num_people_ratio
       end
 
@@ -81,10 +81,7 @@ module OpenstudioStandards
         ratios[:volume_ratio] = ratios[:floor_area_ratio]
 
         # update largest space type values
-        if largest_space_type.nil?
-          largest_space_type = space_type
-          largest_space_type_ratio = ratios[:floor_area_ratio]
-        elsif ratios[:floor_area_ratio] > largest_space_type_ratio
+        if largest_space_type.nil? || ratios[:floor_area_ratio] > largest_space_type_ratio
           largest_space_type = space_type
           largest_space_type_ratio = ratios[:floor_area_ratio]
         end
@@ -139,7 +136,7 @@ module OpenstudioStandards
         end
 
         # calculate metrics for all spaces included in building area to pass into space_type and space hash
-        # note: in the future this may be a subset of spaces if blending into multiple space types vs. just one.
+        # @note in the future this may be a subset of spaces if blending into multiple space types vs. just one.
         collection_totals = {}
         collection_totals[:floor_area] = 0.0
         collection_totals[:num_people] = 0.0
@@ -185,10 +182,7 @@ module OpenstudioStandards
           end
 
           # update largest space type values
-          if largest_space_type.nil?
-            largest_space_type = space_type
-            largest_space_type_ratio = space_type_totals[:floor_area]
-          elsif space_type_totals[:floor_area] > largest_space_type_ratio
+          if largest_space_type.nil? || space_type_totals[:floor_area] > largest_space_type_ratio
             largest_space_type = space_type
             largest_space_type_ratio = space_type_totals[:floor_area]
           end
@@ -246,7 +240,7 @@ module OpenstudioStandards
           if !space_loads_hash[:water_use_equipment].empty?
             OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "One or more water use equipment objects are associated with space #{space.name}. This can't be moved to a space type.")
           end
-          # note: If generating ratios without geometry can calculate people_ratio given space_types floor_area_ratio
+          # @note If generating ratios without geometry can calculate people_ratio given space_types floor_area_ratio
           space_hash[space] = { int_loads: space_loads_hash, totals: space_totals }
         end
 
@@ -475,9 +469,7 @@ module OpenstudioStandards
             cloned_load_def.setName("#{cloned_load_def.name} - pre-normalized value was #{orig_design_level.round} people.")
             load_inst.setPeopleDefinition(cloned_load_def)
           end
-        elsif load_def.peopleperSpaceFloorArea.is_initialized
-          load_inst.setMultiplier(load_inst.multiplier * floor_area_ratio)
-        elsif load_def.spaceFloorAreaperPerson.is_initialized
+        elsif load_def.peopleperSpaceFloorArea.is_initialized || load_def.spaceFloorAreaperPerson.is_initialized
           load_inst.setMultiplier(load_inst.multiplier * floor_area_ratio)
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "Unexpected value type for #{load_def.name}")
@@ -682,7 +674,8 @@ module OpenstudioStandards
 
       # space_infiltration_design_flow_rates
       source_space_or_space_type.spaceInfiltrationDesignFlowRates.each do |load_inst|
-        if load_inst.designFlowRateCalculationMethod == 'Flow/Space'
+        case load_inst.designFlowRateCalculationMethod
+        when 'Flow/Space'
           # edit load so normalized for building area
           if collection_floor_area == 0
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CreateTypical', "Can't determine building floor area to normalize #{load_def}. #{load_inst} will be asigned the the blended space without altering its values.")
@@ -691,13 +684,13 @@ module OpenstudioStandards
             load_inst.setFlowperSpaceFloorArea(eff_num_spaces * orig_design_level / collection_floor_area)
             load_inst.setName("#{load_inst.name} -  pre-normalized value was #{orig_design_level} m^3/sec")
           end
-        elsif load_inst.designFlowRateCalculationMethod == 'Flow/Area'
+        when 'Flow/Area'
           load_inst.setFlowperSpaceFloorArea(load_inst.flowperSpaceFloorArea.get * floor_area_ratio)
-        elsif load_inst.designFlowRateCalculationMethod == 'Flow/ExteriorArea'
+        when 'Flow/ExteriorArea'
           load_inst.setFlowperExteriorSurfaceArea(load_inst.flowperExteriorSurfaceArea.get * ext_surface_area_ratio)
-        elsif load_inst.designFlowRateCalculationMethod == 'Flow/ExteriorWallArea'
+        when 'Flow/ExteriorWallArea'
           load_inst.setFlowperExteriorWallArea(load_inst.flowperExteriorWallArea.get * ext_wall_area_ratio)
-        elsif load_inst.designFlowRateCalculationMethod == 'AirChanges/Hour'
+        when 'AirChanges/Hour'
           load_inst.setAirChangesperHour(load_inst.airChangesperHour.get * volume_ratio)
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "Unexpected value type for #{load_inst.name}")
@@ -755,10 +748,10 @@ module OpenstudioStandards
         end
         # add to values of blended OA load
         if oa.outdoorAirFlowperPerson > 0
-          blended_oa.setOutdoorAirFlowperPerson(blended_oa.outdoorAirFlowperPerson + oa.outdoorAirFlowperPerson * oa_num_people_ratio)
+          blended_oa.setOutdoorAirFlowperPerson(blended_oa.outdoorAirFlowperPerson + (oa.outdoorAirFlowperPerson * oa_num_people_ratio))
         end
         if oa.outdoorAirFlowperFloorArea > 0
-          blended_oa.setOutdoorAirFlowperFloorArea(blended_oa.outdoorAirFlowperFloorArea + oa.outdoorAirFlowperFloorArea * oa_floor_area_ratio)
+          blended_oa.setOutdoorAirFlowperFloorArea(blended_oa.outdoorAirFlowperFloorArea + (oa.outdoorAirFlowperFloorArea * oa_floor_area_ratio))
         end
         if oa.outdoorAirFlowRate > 0
 
@@ -775,15 +768,15 @@ module OpenstudioStandards
           end
 
           # can't normalize air flow rate, convert to air flow rate per floor area
-          blended_oa.setOutdoorAirFlowperFloorArea(blended_oa.outdoorAirFlowperFloorArea + quantity * oa.outdoorAirFlowRate / collection_floor_area)
+          blended_oa.setOutdoorAirFlowperFloorArea(blended_oa.outdoorAirFlowperFloorArea + (quantity * oa.outdoorAirFlowRate / collection_floor_area))
         end
         if oa.outdoorAirFlowAirChangesperHour > 0
           # floor area should be good approximation of area for multiplier
-          blended_oa.setOutdoorAirFlowAirChangesperHour(blended_oa.outdoorAirFlowAirChangesperHour + oa.outdoorAirFlowAirChangesperHour * oa_floor_area_ratio)
+          blended_oa.setOutdoorAirFlowAirChangesperHour(blended_oa.outdoorAirFlowAirChangesperHour + (oa.outdoorAirFlowAirChangesperHour * oa_floor_area_ratio))
         end
       end
 
-      # note: water_use_equipment can't be assigned to a space type. Leave it as is, if assigned to space type
+      # @note water_use_equipment can't be assigned to a space type. Leave it as is, if assigned to space type
       # @todo if we use this measure with new geometry need to find a way to pull water use equipment loads into new model
 
       return instances_array

@@ -15,7 +15,7 @@ class ASHRAE9012013 < ASHRAE901
     end
 
     # Only applies to equipment that is in vestibule zones
-    return true if thermal_zone_vestibule?(zone_hvac_component.thermalZone.get)
+    return true if OpenstudioStandards::ThermalZone.thermal_zone_vestibule?(zone_hvac_component.thermalZone.get)
 
     # If here, vestibule heating control not required
     return false

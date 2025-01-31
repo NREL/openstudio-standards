@@ -127,7 +127,9 @@ class ASHRAE901PRM < Standard
     if standard_space_type == 'computerroom'
       space.spaceType.get.electricEquipment.each do |elec_equipment|
         # Only create the schedule if it could not be found
-        if !schedule_found.is_initialized
+        if schedule_found.is_initialized
+          computer_room_equipment_schedule_ruleset = model.getScheduleRulesetByName(schedule_name).get
+        else
           computer_room_equipment_schedule_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
           computer_room_equipment_schedule_ruleset.setName(schedule_name)
           schedule_fractions = [0.25, 0.5, 0.75, 1.0, 0.25, 0.5, 0.75, 1.0, 0.25, 0.5, 0.75, 1.0]
@@ -152,8 +154,6 @@ class ASHRAE901PRM < Standard
           computer_room_equipment_schedule_ruleset.setCustomDay2Schedule(equipment_on)
           computer_room_equipment_schedule_ruleset.setSummerDesignDaySchedule(equipment_on)
           computer_room_equipment_schedule_ruleset.setWinterDesignDaySchedule(equipment_off)
-        else
-          computer_room_equipment_schedule_ruleset = model.getScheduleRulesetByName(schedule_name).get
         end
         elec_equipment.setSchedule(computer_room_equipment_schedule_ruleset)
       end

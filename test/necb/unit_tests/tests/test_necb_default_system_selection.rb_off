@@ -6,7 +6,7 @@ include(NecbHelper)
 
 
 # This class will perform tests that are Spacetype dependant, Test model will be created
-# to specifically test aspects of the NECB2011 code that are Spacetype dependant. 
+# to specifically test aspects of the NECB2011 code that are Spacetype dependant.
 class DefaultSystemSelectionTests < Minitest::Test
   #Standards
   Templates = ['NECB2011', 'NECB2015'] #,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
@@ -16,12 +16,12 @@ class DefaultSystemSelectionTests < Minitest::Test
   #  # being assigned the appropriate values for LPD.
   #  # @return [Bool] true if successful.
   def test_system_selection()
-    #report variables. 
+    #report variables.
     header_output = ""
     results_array = []
 
 
-    #Create new model for testing. 
+    #Create new model for testing.
     empty_model = OpenStudio::Model::Model.new
     #Hardcode heating load to 20kW
     heatingDesignLoad = 20.0
@@ -37,8 +37,9 @@ class DefaultSystemSelectionTests < Minitest::Test
           model.getBuilding
           model.building.get.setStandardsNumberOfAboveGroundStories(number_of_floors)
           #Set weather file
-          standard.model_add_design_days_and_weather_file(model, template, File.basename('CAN_BC_Vancouver.Intl.AP.718920_CWEC2020.epw'))
-          standard.model_add_ground_temperatures(model, 'HighriseApartment', 'NECB HDD Method')
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_BC_Vancouver.Intl.AP.718920_CWEC2020.epw')
+          OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+
           #Create Floors
           (1..number_of_floors).each {|floor| OpenStudio::Model::BuildingStory.new(model)}
 
@@ -86,7 +87,7 @@ class DefaultSystemSelectionTests < Minitest::Test
       end
     end
     test_result_file = File.join(@test_results_folder, 'space_type_system_selection_test_results.json')
-    #remove duplicates if any. 
+    #remove duplicates if any.
 
     #sort array.
     File.open(test_result_file,"w") do |f|

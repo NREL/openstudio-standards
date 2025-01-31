@@ -77,10 +77,8 @@ class Standard
     # get or create a setpoint manager
     cw_t_stpt_manager = nil
     condenser_loop.supplyOutletNode.setpointManagers.each do |spm|
-      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized
-        if spm.name.get.include? 'Setpoint Manager Follow OATwb'
-          cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
-        end
+      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized && spm.name.get.include?('Setpoint Manager Follow OATwb')
+        cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
       end
     end
     if cw_t_stpt_manager.nil?

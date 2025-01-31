@@ -509,25 +509,7 @@ class ZEAEDGMultifamily < ASHRAE901
            'ASHRAE 169-2013-4B',
            'ASHRAE 169-2013-4C',
            'ASHRAE 169-2013-5B'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
-          erv_cfm = nil
-        elsif pct_oa >= 0.2 && pct_oa < 0.3
-          erv_cfm = nil
-        elsif pct_oa >= 0.3 && pct_oa < 0.4
-          erv_cfm = nil
-        elsif pct_oa >= 0.4 && pct_oa < 0.5
-          erv_cfm = nil
-        elsif pct_oa >= 0.5 && pct_oa < 0.6
-          erv_cfm = nil
-        elsif pct_oa >= 0.6 && pct_oa < 0.7
-          erv_cfm = nil
-        elsif pct_oa >= 0.7 && pct_oa < 0.8
-          erv_cfm = nil
-        elsif pct_oa >= 0.8
-          erv_cfm = nil
-        end
+        erv_cfm = nil
       when 'ASHRAE 169-2006-0B',
            'ASHRAE 169-2006-1B',
            'ASHRAE 169-2006-2B',
@@ -536,15 +518,7 @@ class ZEAEDGMultifamily < ASHRAE901
            'ASHRAE 169-2013-1B',
            'ASHRAE 169-2013-2B',
            'ASHRAE 169-2013-5C'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
-          erv_cfm = nil
-        elsif pct_oa >= 0.2 && pct_oa < 0.3
-          erv_cfm = nil
-        elsif pct_oa >= 0.3 && pct_oa < 0.4
-          erv_cfm = nil
-        elsif pct_oa >= 0.4 && pct_oa < 0.5
+        if pct_oa < 0.5
           erv_cfm = nil
         elsif pct_oa >= 0.5 && pct_oa < 0.6
           erv_cfm = 26_000
@@ -584,7 +558,7 @@ class ZEAEDGMultifamily < ASHRAE901
            'ASHRAE 169-2006-5A',
            'ASHRAE 169-2006-6A',
            'ASHRAE 169-2013-0A',
-           'ASHRAE 169-2006-1A',
+           'ASHRAE 169-2013-1A',
            'ASHRAE 169-2013-2A',
            'ASHRAE 169-2013-3A',
            'ASHRAE 169-2013-4A',
@@ -655,9 +629,7 @@ class ZEAEDGMultifamily < ASHRAE901
            'ASHRAE 169-2013-3B',
            'ASHRAE 169-2013-4C',
            'ASHRAE 169-2013-5C'
-        if pct_oa < 0.1
-          erv_cfm = nil
-        elsif pct_oa >= 0.1 && pct_oa < 0.2
+        if pct_oa < 0.2
           erv_cfm = nil
         elsif pct_oa >= 0.2 && pct_oa < 0.3
           erv_cfm = 19_500

@@ -375,9 +375,7 @@ class ASHRAE9012010 < ASHRAE901
       return nil
     end
 
-    if pct_oa < 0.1
-      erv_cfm = nil
-    elsif pct_oa >= 0.1 && pct_oa < 0.2
+    if pct_oa < 0.2
       erv_cfm = nil
     elsif pct_oa >= 0.2 && pct_oa < 0.3
       erv_cfm = energy_recovery_limits['20_to_30_percent_oa']

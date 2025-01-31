@@ -89,25 +89,26 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
           # Load model and set climate file.
           model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+          OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                          zones: model.getThermalZones,
                                                          mau_type: mau_type,
                                                          mau_heating_coil_type: mau_heating_coil_type,
                                                          baseboard_type: baseboard_type,
                                                          hw_loop: hw_loop)
-          
+
           # Set the boiler capacity.
           model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
 
           # Run sizing.
           run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
-          
+
           # Recover the thermal efficiency set in the measure for checking below.
           model.getBoilerHotWaters.each do |iboiler|
             if iboiler.nominalCapacity.to_f > 1
@@ -177,7 +178,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
     baseboard_type = 'Hot Water'
     heating_coil_type = 'Electric'
     test_boiler_cap = [100000.0, 200000.0, 400000.0]
-    
+
     test_boiler_cap.each do |boiler_cap|
       name = "#{template}_sys1_Boiler-#{boiler_fueltype}_boiler_cap-#{boiler_cap}watts_HeatingCoilType#-#{heating_coil_type}_Baseboard-#{baseboard_type}"
       name.gsub!(/\s+/, "-")
@@ -185,12 +186,13 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
       # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
           model: model,
           zones: model.getThermalZones,
@@ -204,7 +206,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
 
       boilers = model.getBoilerHotWaters
-      
+
       # check that there are two boilers in the model.
       num_of_boilers_is_correct = false
       if boilers.size == 2 then
@@ -273,12 +275,13 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Load model and set climate file.
     model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
 
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
     standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                    zones: model.getThermalZones,
                                                    mau_type: mau_type,
@@ -330,15 +333,16 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
         name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{cust_eff_test["name"].to_s}"
         name.gsub!(/\s+/, "-")
         puts "***************#{name}***************\n"
-      
+
         # Load model and set climate file.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw').set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
-        
+
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                        zones: model.getThermalZones,
                                                        mau_type: mau_type,
