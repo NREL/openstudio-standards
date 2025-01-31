@@ -33,7 +33,6 @@ module BTAP
     #
     #   - range of clear-field Uo factors
     #   - range of PSI factors (i.e. MAJOR thermal bridging), e.g. corners
-    #   - costing parameters
     #
     # NOTE: This module is to be adapted once new BTAP structure/envelope data
     #       model/classes are in place, including file formats (e.g. CSV, JSON).
