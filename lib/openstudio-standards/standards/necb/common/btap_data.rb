@@ -89,6 +89,8 @@ class BTAPData
     bc_energy_step_code_performance_indicators
     # calculate net present value
     net_present_value(npv_start_year, npv_end_year, npv_discount_rate) unless cost_result.nil?
+    # calculates annual peak electricity cost (dollar)
+    oerd_electricity_cost(model)
 
     measure_metrics(qaqc)
     @btap_data
@@ -295,7 +297,7 @@ class BTAPData
     outdoor_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Wall')
     outdoor_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'RoofCeiling')
     outdoor_floors = BTAP::Geometry::Surfaces.filter_by_surface_types(outdoor_surfaces, 'Floor')
-    outdoor_subsurfaces = BTAP::Geometry::Surfaces.get_subsurfaces_from_surfaces(outdoor_surfaces)
+    outdoor_subsurfaces = outdoor_surfaces.flat_map(&:subSurfaces)
     ground_surfaces = BTAP::Geometry::Surfaces.filter_by_boundary_condition(surfaces, ['Ground', 'Foundation'])
     ground_walls = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'Wall')
     ground_roofs = BTAP::Geometry::Surfaces.filter_by_surface_types(ground_surfaces, 'RoofCeiling')
@@ -334,16 +336,16 @@ class BTAPData
                                       data['overhead_doors_area_m_sq']
 
     # Average Conductances by surface Type
-    data['outdoor_walls_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
-    data['outdoor_roofs_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
-    data['outdoor_floors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
-    data['ground_walls_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_walls).round(4) if !ground_walls.empty?
-    data['ground_roofs_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_roofs).round(4) if !ground_roofs.empty?
-    data['ground_floors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(ground_floors).round(4) if !ground_floors.empty?
-    data['windows_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(windows).round(4) if !windows.empty?
-    data['skylights_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(skylights).round(4) if !skylights.empty?
-    data['doors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(doors).round(4) if !doors.empty?
-    data['overhead_doors_average_conductance_w_per_m_sq_k'] = BTAP::Geometry::Surfaces.get_weighted_average_surface_conductance(overhead_doors).round(4) if !overhead_doors.empty?
+    data['outdoor_walls_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_walls).round(4) if !outdoor_walls.empty?
+    data['outdoor_roofs_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_roofs).round(4) if !outdoor_roofs.empty?
+    data['outdoor_floors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(outdoor_floors).round(4) if !outdoor_floors.empty?
+    data['ground_walls_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_walls).round(4) if !ground_walls.empty?
+    data['ground_roofs_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_roofs).round(4) if !ground_roofs.empty?
+    data['ground_floors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(ground_floors).round(4) if !ground_floors.empty?
+    data['windows_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(windows).round(4) if !windows.empty?
+    data['skylights_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(skylights).round(4) if !skylights.empty?
+    data['doors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(doors).round(4) if !doors.empty?
+    data['overhead_doors_average_conductance_w_per_m_sq_k'] = OpenstudioStandards::Constructions.surfaces_get_conductance(overhead_doors).round(4) if !overhead_doors.empty?
 
     # #Average Conductances for building whole weight factors
     !outdoor_walls.empty? ? o_wall_cond_weight = data['outdoor_walls_average_conductance_w_per_m_sq_k'] * data['outdoor_walls_area_m_sq'] : o_wall_cond_weight = 0
@@ -501,8 +503,11 @@ class BTAPData
     geography_data = {}
     geography_data['location_necb_hdd'] = @standard.get_necb_hdd18(model: @model, necb_hdd: true)
     geography_data['location_weather_file'] = File.basename(@model.getWeatherFile.path.get.to_s)
-    geography_data['location_epw_cdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).cdd18
-    geography_data['location_epw_hdd'] = BTAP::Environment::WeatherFile.new(@model.getWeatherFile.path.get.to_s).hdd18
+    weather_file_path = @model.weatherFile.get.path.get.to_s
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    geography_data['location_epw_cdd'] = stat_file.cdd18
+    geography_data['location_epw_hdd'] = stat_file.hdd18
     geography_data['location_necb_climate_zone'] = @standard.get_climate_zone_name(geography_data['location_necb_hdd'])
     geography_data['location_city'] = @model.getWeatherFile.city
     geography_data['location_state_province_region'] = @model.getWeatherFile.stateProvinceRegion
@@ -510,6 +515,125 @@ class BTAPData
     geography_data['location_latitude'] = @model.getWeatherFile.latitude
     geography_data['location_longitude'] = @model.getWeatherFile.longitude
     return geography_data
+  end
+
+  ### The 'annual_peak_electricity_cost_dollar' function calculates annual peak electricity cost (dollar)
+  ### for OEE-Electrification project using the OERD's electricity rates for commercial buildings
+  ### that Danielle Krauel of OEE provided to CE-O
+  def oerd_electricity_cost(model)
+    #===================================================================================================================
+    ### OERD's electricity rates for commercial buildings
+    ### Note: provinces' abbreviations were checked with: /standards/necb/NECB2011/data/province_map.json
+    ### Note: OERD's electricity rate does not provide rates for three P/Ts: YT, NT, NU. To avoid errors in simulation runs, I have assigned a dummy value for each.
+    dollar_kW_month = {
+      "AB" => 13.68,
+      "BC" => 10.20,
+      "MB" => 9.76,
+      "NB" => 10.05,
+      "NL" => 8.36,
+      "NS" => 12.62,
+      "ON" => 12.25,
+      "PE" => 13.70,
+      "QC" => 14.90,
+      "SK" => 20.02,
+      "YT" => 10000000,
+      "NT" => 10000000,
+      "NU" => 10000000
+    }
+    dollar_kWh = {
+      "AB" => 0.15,
+      "BC" => 0.11,
+      "MB" => 0.09,
+      "NB" => 0.16,
+      "NL" => 0.13,
+      "NS" => 0.22,
+      "ON" => 0.16,
+      "PEI" => 0.17,
+      "QC" => 0.09,
+      "SK" => 0.19,
+      "YT" => 100000,
+      "NT" => 100000,
+      "NU" => 100000
+    }
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    ##################### Calculate annual electricity peak cost using OERD's electricity rate #########################
+    #===================================================================================================================
+    ### Get number of timesteps from the model
+    number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
+    timestep_second = 3600 / number_of_timesteps_per_hour
+    #===================================================================================================================
+    ### Calculate number of timesteps of the whole year, and create dates/times for the whole year
+    number_of_timesteps_of_year = 365 * 24 * number_of_timesteps_per_hour
+    timesteps_of_year = []
+    d = Time.new(2006, 1, 1, 0)
+    (0...number_of_timesteps_of_year).each do |increment|
+      timesteps_of_year << (d + (60 * 60 / number_of_timesteps_per_hour) * increment).strftime('%Y-%m-%d %H:%M')
+    end
+    #===================================================================================================================
+    ### Find index for timestep data of 'Electricity:Facility' (J)
+    query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE Name=='Electricity:Facility' AND ReportingFrequency == 'Zone Timestep' AND Units == 'J'
+                                                       "
+    index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+    #===================================================================================================================
+    ### Get timestep output for Electricity:Facility output.
+    query = "
+      Select VariableValue
+      FROM ReportVariableData
+      WHERE
+      ReportVariableDataDictionaryIndex = #{index_timestep_electricity}
+    "
+    timestep_values = model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+    #===================================================================================================================
+    ### Calculate electricity peak (J) for each month of the year
+    # Find month of each timestep
+    keys_month = timesteps_of_year.map{ |timestep| DateTime.parse(timestep).to_date.month }
+    # Create a hash where its keys are months and values for eahc month are electricity energy use (J) of all timesteps for that month
+    hash_months_electricity = keys_month.zip(timestep_values).group_by(&:first).map{|key, value| [key, value.map(&:last)]}.to_h
+    # Find maximum of electricity energy use (J) among all timesteps for each month of the year
+    monthly_peak_J = hash_months_electricity.map { |key, value| [key, value.max()] }.to_h
+    #===================================================================================================================
+    ### Convert J to kW of maximum electricity energy use (J)
+    monthly_peak_kW = monthly_peak_J.map { |key, value| [key, value * 0.001 / timestep_second] }.to_h
+    #===================================================================================================================
+    ### Get province of the model and find its peak electricity price using the 'dollar_kW_month' hash
+    province = @btap_data['location_state_province_region']
+    province_dollar_kW_month = dollar_kW_month.fetch_values(province)[0]
+    #===================================================================================================================
+    ### Calculate cost of peak electricity for each month
+    monthly_peak_cost = monthly_peak_kW.map { |key, value| [key, value * province_dollar_kW_month] }.to_h
+    #===================================================================================================================
+    ### Calculate cost of peak electricity for the whole year in dollar
+    annual_peak_cost_dollar = monthly_peak_cost.values.sum
+    #===================================================================================================================
+    ### Calculate cost of peak electricity for the whole year in dollar normalized by floor area
+    annual_peak_cost_dollar_per_m_sq = annual_peak_cost_dollar / @btap_data['bldg_conditioned_floor_area_m_sq']
+    #===================================================================================================================
+    ### Merge the calculated value to @btap_data
+    @btap_data.merge!('cost_utility_oerd_electricity_peak_annual_cost_per_m_sq' => annual_peak_cost_dollar_per_m_sq.round(2))
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    ################### Calculate annual electricity energy use cost using OERD's electricity rate #####################
+    #===================================================================================================================
+    ### Get province of the model and find its peak electricity price using the 'dollar_kW_month' hash
+    province = @btap_data['location_state_province_region']
+    province_dollar_kWh = dollar_kWh.fetch_values(province)[0]
+    #===================================================================================================================
+    # Calculate cost of energy electricity for the whole year in dollar normalized by floor area
+    annual_energy_cost_dollar_per_m_sq = @btap_data['energy_eui_electricity_gj_per_m_sq'] * 277.778 * province_dollar_kWh
+    #===================================================================================================================
+    ### Merge the calculated value to @btap_data
+    @btap_data.merge!('cost_utility_oerd_electricity_energy_annual_cost_per_m_sq' => annual_energy_cost_dollar_per_m_sq.round(2))
+    #===================================================================================================================
   end
 
   def utility(model)
@@ -2053,41 +2177,112 @@ class BTAPData
       unit_density_per_ft_sq = 1.0 / bldg_conditioned_floor_area_ft_sq
     end
 
-    ### Get weather file name
-    weather_file = model.weatherFile.get.path.get.to_s
-#    weather_file = weather_file.split('/')[-1]
+    ### Get weather file
+    weather_file_path = model.weatherFile.get.path.get.to_s
+    epw_file = model.weatherFile.get.file.get
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
 
     ### Cooling Degree Days, base 50degF
-    cdd10_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).cdd10
+    cdd10_degree_c_days = stat_file.cdd10
     cdd50_degree_f_days = cdd10_degree_c_days * 9.0 / 5.0
 
     ### Heating Degree Days, base 65degF (note that base temperature of 18degC has been considered)
-    hdd18_degree_c_days = BTAP::Environment::WeatherFile.new(weather_file).hdd18
+    hdd18_degree_c_days = stat_file.hdd18
     hdd65_degree_f_days = hdd18_degree_c_days * 9.0 / 5.0
 
     ### Dehumidification degree days
     ### ('Dehumidification degree-days, base 0.010' in REF: Wright (2019))
-    dehumidification_degree_days = BTAP::Environment::WeatherFile.new(weather_file).calculate_humidity_ratio
+    dehumidification_degree_days = OpenstudioStandards::Weather.epw_file_get_dehumidification_degree_days(epw_file)
 
     ### annual global horizontal irradiance (GHI)
-    annual_ghi_kwh_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_annual_ghi
+
+    # Workaround for case when the weather file contains the February from a leap year but that February only has 28
+    # days of data.
+    has_leap_day = false
+
+    # Find the first day in February
+    feb_index = epw_file.data.find_index { |entry| entry.date.monthOfYear.value == 2 }
+
+    # Find the year for February
+    feb_year = epw_file.data[feb_index].year
+    # Determine if February's year is a leap year
+    leap_year = false
+    if (feb_year % 100) > 0
+      leap_year = true if (feb_year % 4) == 0
+    else
+      leap_year = true if (feb_year % 400) == 0
+    end
+    # If the February is from a leap year determine if it contains a leap day
+    if leap_year
+
+      day = epw_file.data[feb_index].date.dayOfMonth
+      inc = 0
+
+      while epw_file.data[feb_index].date.dayOfMonth == day
+        feb_index += 1
+        inc       += 1
+      end
+
+      has_leap_day = epw_file.data[feb_index + (inc * 28)].date.dayOfMonth == 29
+    end
+
+    # If the February is from a leap year and there is no leap day then do not use the faulty OpenStudio Epw
+    # .getTimeSeries method.  Otherwise, use the method.
+    if has_leap_day || !leap_year
+      ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get.values
+    else
+      # Access the data directly instead of using the OpenStudio API to avoid the faulty OpenStudioEpw
+      # .getTimeSeries method.
+
+      # Open the weather file
+      regex_csv = /[^,]+/
+      regex_num = /[0-9]/
+      f         = File.open(epw_file.path.to_s, 'r')
+      i         = 0
+
+      # Skip the header
+      i += 1 until f.readline[0] =~ regex_num
+
+      # Get all of the hourly weather data
+      lines         = IO.readlines(f)[i..-1]
+
+      # Get hourly weather data for a specific column
+      ghi_timeseries = lines.map {|line| Float(line.scan(regex_csv)[13])}
+    end
+
+    annual_ghi_kwh_per_m_sq = ghi_timeseries.sum / 1000.0
 
     ### THD-1 Temperature at the colder of the two heating design conditions in PHIUS, 2021
     ### ('Heating design temperature' in REF: Wright (2019))
-    thd_degree_c = BTAP::Environment::WeatherFile.new(weather_file).heating_design_info[1]
+    thd_degree_c = stat_file.heating_design_info[1]
     thd_degree_f = OpenStudio.convert(thd_degree_c, 'C', 'F').get
 
     ### TCD  Temperature at the cooling design condition in PHIUS, 2021
     ### ('Cooling design temperature' in REF: Wright (2019))
-    tcd_degree_c = BTAP::Environment::WeatherFile.new(weather_file).cooling_design_info[2]
+    tcd_degree_c = stat_file.cooling_design_info[2]
     tcd_degree_f = OpenStudio.convert(tcd_degree_c.to_f, 'C', 'F').get
 
     ### IGHL (Irradiance, Global, at the heating design condition) (Btu/h.ft2) in PHIUS, 2021
-    solar_irradiance_on_heating_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_heating_design_day
+    average_daily_global_irradiance_w_per_m2_array = []
+    model.getDesignDays.each do |design_day|
+      next unless design_day.dayType == 'WinterDesignDay'
+
+      average_daily_global_irradiance_w_per_m2 = OpenstudioStandards::Weather.design_day_average_global_irradiance(design_day)
+      average_daily_global_irradiance_w_per_m2_array << average_daily_global_irradiance_w_per_m2
+    end
+    solar_irradiance_on_heating_design_day_w_per_m_sq = average_daily_global_irradiance_w_per_m2_array.min
     solar_irradiance_on_heating_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_heating_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
 
     ### IGCL (Irradiance, Global, at the cooling design condition) (Btu/h.ft2) in PHIUS, 2021
-    solar_irradiance_on_cooling_design_day_w_per_m_sq = BTAP::Environment::WeatherFile.new(weather_file).get_ghi_on_cooling_design_day
+    average_daily_global_irradiance_w_per_m2_array = []
+    model.getDesignDays.each do |design_day|
+      next unless design_day.dayType == 'SummerDesignDay'
+
+      average_daily_global_irradiance_w_per_m2 = OpenstudioStandards::Weather.design_day_average_global_irradiance(design_day)
+      average_daily_global_irradiance_w_per_m2_array << average_daily_global_irradiance_w_per_m2
+    end
+    solar_irradiance_on_cooling_design_day_w_per_m_sq = average_daily_global_irradiance_w_per_m2_array.max
     solar_irradiance_on_cooling_design_day_btu_per_hr_ft_sq = OpenStudio.convert(solar_irradiance_on_cooling_design_day_w_per_m_sq.to_f, 'W/m^2', 'Btu/ft^2*h').get
 
     ### occupant density (persons per ft2 of floor area)

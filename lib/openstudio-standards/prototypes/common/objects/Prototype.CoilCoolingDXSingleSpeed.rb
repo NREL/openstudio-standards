@@ -30,7 +30,7 @@ class Standard
     if schedule.nil?
       # default always on
       coil_availability_schedule = model.alwaysOnDiscreteSchedule
-    elsif schedule.class == String
+    elsif schedule.instance_of?(String)
       coil_availability_schedule = model_add_schedule(model, schedule)
 
       if coil_availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'
@@ -40,8 +40,6 @@ class Standard
       end
     elsif !schedule.to_Schedule.empty?
       coil_availability_schedule = schedule
-    else
-      coil_availability_schedule = model.alwaysOnDiscreteSchedule
     end
     clg_coil.setAvailabilitySchedule(coil_availability_schedule)
 

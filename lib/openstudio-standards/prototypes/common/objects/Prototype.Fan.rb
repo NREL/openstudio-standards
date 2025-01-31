@@ -12,7 +12,7 @@ module PrototypeFan
   # @return [Boolean] returns true if successful, false if not
   def prototype_fan_apply_prototype_fan_efficiency(fan)
     # Do not modify dummy exhaust fans
-    return true unless !fan.name.to_s.downcase.include? 'dummy'
+    return true if fan.name.to_s.downcase.include? 'dummy'
 
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
@@ -48,10 +48,8 @@ module PrototypeFan
     # Minimum motor size for efficiency lookup
     # is 1 HP unless the motor serves an exhaust fan,
     # a powered VAV terminal, or a fan coil unit.
-    unless fan_small_fan?(fan)
-      if allowed_hp < 1.0
-        allowed_hp = 1.01
-      end
+    if !fan_small_fan?(fan) && allowed_hp < 1.0
+      allowed_hp = 1.01
     end
 
     # Find the motor efficiency
@@ -155,7 +153,8 @@ module PrototypeFan
 
     fan_json = get_fan_from_standards(standards_name: standards_name)
 
-    if fan_json['type'] == 'ConstantVolume'
+    case fan_json['type']
+    when 'ConstantVolume'
       create_fan_constant_volume_from_json(model,
                                            fan_json,
                                            fan_name: fan_name,
@@ -164,7 +163,7 @@ module PrototypeFan
                                            motor_efficiency: motor_efficiency,
                                            motor_in_airstream_fraction: motor_in_airstream_fraction,
                                            end_use_subcategory: end_use_subcategory)
-    elsif fan_json['type'] == 'OnOff'
+    when 'OnOff'
       create_fan_on_off_from_json(model,
                                   fan_json,
                                   fan_name: fan_name,
@@ -173,7 +172,7 @@ module PrototypeFan
                                   motor_efficiency: motor_efficiency,
                                   motor_in_airstream_fraction: motor_in_airstream_fraction,
                                   end_use_subcategory: end_use_subcategory)
-    elsif fan_json['type'] == 'VariableVolume'
+    when 'VariableVolume'
       fan_power_coefficient_1, fan_power_coefficient_2, fan_power_coefficient_3, fan_power_coefficient_4, fan_power_coefficient_5 = lookup_fan_curve_coefficients_from_json(fan_json['fan_curve']) if fan_json['fan_curve']
       create_fan_variable_volume_from_json(model,
                                            fan_json,
@@ -190,7 +189,7 @@ module PrototypeFan
                                            fan_power_coefficient_4: fan_power_coefficient_4,
                                            fan_power_coefficient_5: fan_power_coefficient_5,
                                            end_use_subcategory: end_use_subcategory)
-    elsif fan_json['type'] == 'ZoneExhaust'
+    when 'ZoneExhaust'
       create_fan_zone_exhaust_from_json(model,
                                         fan_json,
                                         fan_name: fan_name,

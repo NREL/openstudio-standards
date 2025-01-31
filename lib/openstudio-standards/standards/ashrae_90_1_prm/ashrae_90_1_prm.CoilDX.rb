@@ -26,11 +26,12 @@ module ASHRAEPRMCoilDX
 
     # cooling coil
     if coil_dx.iddObjectType.valueName.to_s.include? 'OS_Coil_Cooling_DX'
-      if sys_type == 'PTHP'
+      case sys_type
+      when 'PTHP'
         sub_category = 'PTHP'
-      elsif sys_type == 'PTAC'
+      when 'PTAC'
         sub_category = 'PTAC'
-      elsif sys_type == 'PSZ_HP'
+      when 'PSZ_HP'
         if capacity < 65000
           sub_category = 'Single Package'
         else

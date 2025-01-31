@@ -68,7 +68,7 @@ class ScheduleTranslator
     i_thru = -1
     i_for = -1
     i_until = -1
-    sUntil = ''
+    s_until = ''
 
     (3..@os_schedule.numFields - 1).each do |i|
       val = @os_schedule.getString(i).get
@@ -103,7 +103,7 @@ class ScheduleTranslator
         i_for += 1
         i_until = -1
 
-        arr = val.match(/for[:\s](.*)/i)[0].strip.downcase.split(' ')
+        arr = val.match(/for[:\s](.*)/i)[0].strip.downcase.split
         @schedule[i_thru][:for] << { daytype: arr, until: [] }
         next
       end
@@ -112,14 +112,14 @@ class ScheduleTranslator
         i_until += 1
 
         str = val.split(':')[1..2].join(':').strip
-        sUntil = str
+        s_until = str
 
         next
       end
 
       d_val = @os_schedule.getDouble(i).get
       # puts "thru: #{i_thru} for: #{i_for} until #{i_until}"
-      @schedule[i_thru][:for][i_for][:until] << { timestamp: sUntil, value: d_val }
+      @schedule[i_thru][:for][i_for][:until] << { timestamp: s_until, value: d_val }
     end
 
     # DEBUG spit out the schedule for quick check\

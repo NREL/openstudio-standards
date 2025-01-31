@@ -3,27 +3,29 @@
 --exclude lib/openstudio-standards/prototypes/common/buildings/Prototype.*.rb
 --exclude lib/openstudio-standards/utilities/convert_costing_constructions.rb
 --exclude lib/openstudio-standards/prototypes/common/do_not_edit_metaclasses.rb
---exclude lib/openstudio-standards/weather/Weather.Model.rb
---exclude lib/openstudio-standards/weather/Weather.stat_file.rb
 --exclude lib/openstudio-standards/utilities/sched_create.rb
 --exclude lib/openstudio-standards/utilities/os_sim_extract.rb
 --exclude lib/openstudio-standards/utilities/hash.rb
 --exclude lib/openstudio-standards/utilities/Add_template_field_to_json.rb
 --exclude lib/openstudio-standards/standards/necb/necb_2011/data/standards_data.rb
 --type-tag ref:"Technical References"
-lib/openstudio-standards/standards/**/*.rb
+lib/openstudio-standards/constructions/**/*.rb
+lib/openstudio-standards/create_typical/**/*.rb
+lib/openstudio-standards/daylighting/**/*.rb
+lib/openstudio-standards/geometry/**/*.rb
+lib/openstudio-standards/hvac/**/*.rb
+lib/openstudio-standards/infiltration/**/*.rb
 lib/openstudio-standards/prototypes/**/*.rb
-lib/openstudio-standards/utilities/**/*.rb
-lib/openstudio-standards/weather/**/*.rb
+lib/openstudio-standards/qaqc/**/*.rb
 lib/openstudio-standards/refs/references.rb
 lib/openstudio-standards/schedules/**/*.rb
-lib/openstudio-standards/geometry/**/*.rb
-lib/openstudio-standards/create_typical/**/*.rb
-lib/openstudio-standards/hvac/**/*.rb
-lib/openstudio-standards/constructions/**/*.rb
-lib/openstudio-standards/daylighting/**/*.rb
-lib/openstudio-standards/qaqc/**/*.rb
-
+lib/openstudio-standards/service_water_heating/**/*.rb
+lib/openstudio-standards/space/**/*.rb
+lib/openstudio-standards/sql_file/**/*.rb
+lib/openstudio-standards/standards/**/*.rb
+lib/openstudio-standards/thermal_zone/**/*.rb
+lib/openstudio-standards/utilities/**/*.rb
+lib/openstudio-standards/weather/**/*.rb
 -
 docs/Home.md
 docs/UserQuickStartGuide.md

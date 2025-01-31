@@ -53,24 +53,12 @@ class Standard
   def model_get_lookup_name(building_type)
     lookup_name = building_type
     case building_type
-    when 'SmallOffice'
-      lookup_name = 'Office'
-    when 'SmallOfficeDetailed'
-      lookup_name = 'Office'
-    when 'MediumOffice'
-      lookup_name = 'Office'
-    when 'MediumOfficeDetailed'
-      lookup_name = 'Office'
-    when 'LargeOffice'
-      lookup_name = 'Office'
-    when 'LargeOfficeDetailed'
+    when 'SmallOffice', 'SmallOfficeDetailed', 'MediumOffice', 'MediumOfficeDetailed', 'LargeOffice', 'LargeOfficeDetailed', 'Office'
       lookup_name = 'Office'
     when 'RetailStandalone'
       lookup_name = 'Retail'
     when 'RetailStripmall'
       lookup_name = 'StripMall'
-    when 'Office'
-      lookup_name = 'Office'
     end
     return lookup_name
   end
@@ -139,7 +127,7 @@ class Standard
     end
 
     # Check that standards data was loaded
-    if @standards_data.keys.size.zero?
+    if @standards_data.keys.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.standard', "OpenStudio Standards JSON data was not loaded correctly for #{template}.")
     end
     return @standards_data

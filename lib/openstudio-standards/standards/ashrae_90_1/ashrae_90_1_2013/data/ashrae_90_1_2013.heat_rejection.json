@@ -1,49 +1,94 @@
 {
   "heat_rejection": [
     {
-      "template": "90.1-2013",
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Centrifugal",
+      "test_fluid": null,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": 20,
+      "minimum_performance_btu_per_hr_per_hp": null
+    },
+    {
+      "equipment_type": "Open Cooling Tower",
+      "fan_type": "Propeller or Axial",
+      "test_fluid": null,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": 40.2,
+      "minimum_performance_btu_per_hr_per_hp": null
+    },
+    {
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Centrifugal",
+      "test_fluid": null,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 7.0,
-      "notes": "From 90.1-2013 Table 6.8.1-7"
+      "minimum_performance_gpm_per_hp": 7,
+      "minimum_performance_btu_per_hr_per_hp": null
     },
     {
-      "template": "90.1-2013",
       "equipment_type": "Closed Cooling Tower",
       "fan_type": "Propeller or Axial",
+      "test_fluid": null,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 14.0,
-      "notes": "From 90.1-2013 Table 6.8.1-7"
+      "minimum_performance_gpm_per_hp": 14,
+      "minimum_performance_btu_per_hr_per_hp": null
     },
     {
-      "template": "90.1-2013",
+      "equipment_type": "Evaporative Condenser",
+      "fan_type": "Centrifugal",
+      "test_fluid": "R-507A",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": null,
+      "minimum_performance_btu_per_hr_per_hp": 135000
+    },
+    {
+      "equipment_type": "Evaporative Condenser",
+      "fan_type": "Propeller or Axial",
+      "test_fluid": "R-507A",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": null,
+      "minimum_performance_btu_per_hr_per_hp": 157000
+    },
+    {
+      "equipment_type": "Evaporative Condenser",
+      "fan_type": "Centrifugal",
+      "test_fluid": "Ammonia",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": null,
+      "minimum_performance_btu_per_hr_per_hp": 110000
+    },
+    {
+      "equipment_type": "Evaporative Condenser",
+      "fan_type": "Propeller or Axial",
+      "test_fluid": "Ammonia",
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": null,
+      "minimum_performance_btu_per_hr_per_hp": 134000
+    },
+    {
+      "equipment_type": "Air Cooled Condensers",
+      "fan_type": null,
+      "test_fluid": null,
+      "start_date": "1919-09-09T00:00:00+00:00",
+      "end_date": "2999-09-09T00:00:00+00:00",
+      "minimum_performance_gpm_per_hp": null,
+      "minimum_performance_btu_per_hr_per_hp": 176000
+    },
+    {
       "equipment_type": "Dry Cooler",
       "fan_type": "Propeller or Axial",
+      "test_fluid": null,
       "start_date": "1919-09-09T00:00:00+00:00",
       "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 4.0,
-      "notes": "NOTE: Not required by code. Value provided by 90.1 Mechanical Subcommittee"
-    },
-    {
-      "template": "90.1-2013",
-      "equipment_type": "Open Cooling Tower",
-      "fan_type": "Centrifugal",
-      "start_date": "1919-09-09T00:00:00+00:00",
-      "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 20.0,
-      "notes": "From 90.1-2013 Table 6.8.1-7"
-    },
-    {
-      "template": "90.1-2013",
-      "equipment_type": "Open Cooling Tower",
-      "fan_type": "Propeller or Axial",
-      "start_date": "1919-09-09T00:00:00+00:00",
-      "end_date": "2999-09-09T00:00:00+00:00",
-      "minimum_performance": 40.2,
-      "notes": "From 90.1-2013 Table 6.8.1-7"
+      "minimum_performance_gpm_per_hp": 4,
+      "minimum_performance_btu_per_hr_per_hp": null
     }
   ]
 }

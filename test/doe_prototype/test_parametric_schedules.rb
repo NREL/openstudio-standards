@@ -47,23 +47,23 @@ class TestParametricSchedules < Minitest::Test
 
       # find and create hours of operation
       if v.has_key?(:fraction_of_daily_occ_range)
-        hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true,fraction_of_daily_occ_range: v[:fraction_of_daily_occ_range])
+        hours_of_operation = OpenstudioStandards::Schedules.model_infer_hours_of_operation_building(model,gen_occ_profile: true,fraction_of_daily_occ_range: v[:fraction_of_daily_occ_range])
       elsif v.has_key?(:inver_res)
-        hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true,invert_res: v[:inver_res])
+        hours_of_operation = OpenstudioStandards::Schedules.model_infer_hours_of_operation_building(model,gen_occ_profile: true,invert_res: v[:inver_res])
       else
-        hours_of_operation = standard.model_infer_hours_of_operation_building(model,gen_occ_profile: true)
+        hours_of_operation = OpenstudioStandards::Schedules.model_infer_hours_of_operation_building(model,gen_occ_profile: true)
       end
       assert(hours_of_operation.to_ScheduleRuleset.is_initialized)
       puts "Test: Created building hours of operation schedule named #{hours_of_operation.name}."
 
       # report back hours of operation
-      hours_of_operation_hash = standard.space_hours_of_operation(model.getSpaces.first)
+      hours_of_operation_hash = OpenStudioStandards::Space.space_hours_of_operation(model.getSpaces.first)
       assert(hours_of_operation_hash.size > 0)
       puts "Test: Extracted hours of operation schedule from space."
       puts "Test: #{hours_of_operation_hash.keys.first}: #{hours_of_operation_hash.values.inspect}"
 
       # model_setup_parametric_schedules
-      parametric_inputs = standard.model_setup_parametric_schedules(model,gather_data_only: false)
+      parametric_inputs = OpenstudioStandards::Schedules.model_setup_parametric_schedules(model,gather_data_only: false)
       assert(parametric_inputs.size > 0)
       puts "Test: Generated schedule profile formulas and saved as AdditionalProperties objects for #{parametric_inputs.size} schedules. Inspecting first entry returned."
       #puts "Test: #{parametric_inputs.keys.first.name}: #{parametric_inputs.values.first.inspect}"
@@ -113,7 +113,7 @@ class TestParametricSchedules < Minitest::Test
 =end
 
       # model_build_parametric_schedules
-      parametric_schedules = standard.model_apply_parametric_schedules(model)
+      parametric_schedules = OpenstudioStandards::Schedules.model_apply_parametric_schedules(model)
       assert(parametric_schedules.size > 0)
       puts "Test: Updated #{parametric_schedules.size} parametric schedules"
 

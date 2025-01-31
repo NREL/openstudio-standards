@@ -8,6 +8,7 @@ class ICCIECC2015 < ICCIECC
   attr_reader :template
 
   def initialize
+    super()
     @template = 'ICC IECC 2015'
     load_standards_database
   end

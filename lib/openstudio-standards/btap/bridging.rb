@@ -130,7 +130,7 @@ module BTAP
     UMAX       = 5.678
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # There are 3 distinct BTAP "building_envelope" classes to enrich with
+    # There are 2 distinct BTAP "building_envelope.rb" files to enrich with
     # TBD functionality (whether BTAP users choose to activate TBD or not):
     #
     #   1. BTAPPRE1980
@@ -138,10 +138,10 @@ module BTAP
     #   2. NECB2011
     #      - superclass for NECB2015
     #      - superclass for NECB2017 (inherits from NECB2015)
+    #      - superclass for NECB2020 (inherits from NECB2017)
     #      - superclass for ECMS
-    #   3. NECB2020
     #
-    # In all 3 classes, a BTAP/TBD option switch allows BTAP users to activate
+    # In both files, a BTAP/TBD option switch allows BTAP users to activate
     # or deactivate TBD functionality :
     #   - "none" : TBD is deactivated, i.e. no up/de-rating
     #   - "bad" or "good": (BTAP-costed) PSI factor sets, i.e. derating only
@@ -326,9 +326,8 @@ module BTAP
     @@data[ROOFS][:uos]["100"] = []
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # In BTAP costing, each NECB building/space type is linked to a default
-    # construction set, which holds one of the preceding wall options. This
-    # linkage is now extended to OpenStudio models (not just costing),
+    # In BTAP, each NECB building/space type is linked to a default construction
+    # set, which holds one of the preceding wall options. This is key here,
     # given the construction-specific nature of MAJOR thermal bridging.
     #
     # NOTE: Expect radical changes to the NECB building/space type model (@todo).
@@ -344,9 +343,6 @@ module BTAP
     # factor selection is based strictly on selected wall construction, i.e.
     # regardless of selected roof, fenestration, etc. The linkage remains valid
     # for both building and space types (regardless of NECB vintage).
-    #
-    # The implementation is likely to be revised in the future, yet would
-    # remain conceptually similar.
 
     # "BTAP-ExteriorWall-Mass-2" & "BTAP-ExteriorWall-Mass-2b"
     @@data[MASS2][:sptypes][:exercise       ] = {}
@@ -1571,9 +1567,8 @@ module BTAP
 
       tally_edges.each do |edge_type_full, value|
         edge_type = edge_type_full.delete_suffix('convex')
-        if ['head', 'jamb', 'sill'].include?(edge_type)
-          edge_type = 'fenestration'
-        end
+        edge_type = 'fenestration' if ['head', 'jamb', 'sill'].include?(edge_type)
+
         value.each do |wall_ref_and_quality, quantity|
           /(.*)\s(.*)/ =~ wall_ref_and_quality
           wall_reference = $1
@@ -1583,14 +1578,13 @@ module BTAP
             wall_reference = 'BTAP-ExteriorWall-SteelFramed-2'
           end
 
-          if edge_type == 'transition'
-            next
-          end
+          next if edge_type == 'transition'
 
           result = csv.find { |row| row['edge_type'] == edge_type &&
             row['quality'] == quality &&
             row['wall_reference'] == wall_reference
           }
+
           if result.nil?
             puts ("#{edge_type}-#{wall_reference}-#{quality}")
             puts "not found in tb database"
@@ -1602,23 +1596,21 @@ module BTAP
           id_layers_quantity_multipliers = result['id_layers_quantity_multipliers'].split(",")
 
           material_opaque_id_layers.zip(id_layers_quantity_multipliers).each do |id, scale|
-            if material_quantities[id].nil? then material_quantities[id] = 0.0 end
+            material_quantities[id] = 0.0 if material_quantities[id].nil?
             material_quantities[id] = material_quantities[id] + scale.to_f * quantity.to_f
           end
         end
       end
+
       material_opaque_id_quantities = []
+
       material_quantities.each do |id,quantity|
         material_opaque_id_quantities << { 'materials_opaque_id' => id, 'quantity' => quantity, 'domain'=> 'thermal_bridging' }
       end
 
       return material_opaque_id_quantities
     end
-
-
   end
-
-
 end
 
 # ----- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----- #

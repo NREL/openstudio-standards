@@ -2,6 +2,7 @@
 /.idea
 /netbeans
 /.vscode
+/.VSCodeCounter
 
 # Developer installation
 /.bundle/
@@ -48,3 +49,5 @@ coverage/
 /data/standards/openstudio_standards_duplicates_log.csv
 /data/standards/export
 /data/geometry/../*.osw
+
+/.venv

@@ -6631,13 +6631,13 @@ OS:Schedule:Day,
 
 OS:Schedule:Ruleset,
   {1d0ed74e-c640-4a68-b963-1c441aa867c6}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F, !- Name
+  Water Heater Ambient Temp Schedule 70F, !- Name
   {ec06a395-8911-4be9-9ae3-917f558f2ec2}, !- Schedule Type Limits Name
   {26cd08f9-b37e-4c5e-9c88-c08404bfa7eb}; !- Default Day Schedule Name
 
 OS:Schedule:Day,
   {26cd08f9-b37e-4c5e-9c88-c08404bfa7eb}, !- Handle
-  Water Heater Ambient Temp Schedule - 70F Default, !- Name
+  Water Heater Ambient Temp Schedule 70F Default, !- Name
   {ec06a395-8911-4be9-9ae3-917f558f2ec2}, !- Schedule Type Limits Name
   ,                                       !- Interpolate to Timestep
   24,                                     !- Hour 1

@@ -12,20 +12,20 @@ class ASHRAE9012013 < ASHRAE901
     # fuel requirements from Table G3.1.1-2
     new_fuel = nil
     case building_type
-    when 'SecondarySchool', 'PrimarySchool', # School/university
-         'SmallHotel', # Motel
-         'LargeHotel', # Hotel
-         'QuickServiceRestaurant', # Dining: Cafeteria/fast food
-         'FullServiceRestaurant', # Dining: Family
-         'MidriseApartment', 'HighriseApartment', # Multifamily
-         'Hospital', # Hospital
-         'Outpatient' # Health-care clinic
-      new_fuel = 'NaturalGas'
     when 'SmallOffice', 'MediumOffice', 'LargeOffice', 'SmallOfficeDetailed', 'MediumOfficeDetailed', 'LargeOfficeDetailed', # Office
          'RetailStandalone', 'RetailStripmall', # Retail
          'Warehouse' # Warehouse
       new_fuel = 'Electricity'
     else
+      # 'SecondarySchool', 'PrimarySchool', # School/university
+      # 'SmallHotel', # Motel
+      # 'LargeHotel', # Hotel
+      # 'QuickServiceRestaurant', # Dining: Cafeteria/fast food
+      # 'FullServiceRestaurant', # Dining: Family
+      # 'MidriseApartment', 'HighriseApartment', # Multifamily
+      # 'Hospital', # Hospital
+      # 'Outpatient' # Health-care clinic
+      # Or Unspecified
       new_fuel = 'NaturalGas'
     end
 

@@ -45,21 +45,24 @@ class BTAPPRE1980 < NECB2011
   end
 
   # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
-  #     # fdwr_set/srr_set settings:
-  #     # 0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
-  #     # -1:  Remove all windows/skylights and add windows/skylights to match max fdwr/srr from NECB
-  #     # -2:  Do not apply any fdwr/srr changes, leave windows/skylights alone (also works for fdwr/srr > 1)
-  #     # -3:  Use old method which reduces existing window/skylight size (if necessary) to meet maximum NECB fdwr/srr
-  #     # limit
-  #     # <-3.1:  Remove all the windows/skylights
-  #     # > 1:  Do nothing
-  def apply_fdwr_srr_daylighting(model:, fdwr_set: -2.0, srr_set: -2.0, necb_hdd: true)
+  #
+  # fdwr_set/srr_set settings:
+  #   0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
+  #    -1:  Remove all windows/skylights and add windows/skylights to match max fdwr/srr from NECB
+  #    -2:  Do not apply any fdwr/srr changes, leave windows/skylights alone (also works for fdwr/srr > 1)
+  #    -3:  Use old method which reduces existing window/skylight size (if necessary) to meet maximum NECB fdwr/srr limit
+  # <-3.1:  Remove all the windows/skylights
+  #   > 1:  Do nothing
+  #
+  # By default, :srr_opt is an empty string (" "). If set to "osut", SRR is
+  # instead met using OSut's 'addSkylights' (:srr_set numeric values may apply).
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -2.0, srr_set: -2.0, necb_hdd: true, srr_opt: '')
     fdwr_set = -2.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil? || (fdwr_set.to_f.round(0) == -1.0)
     srr_set = -2.0 if (srr_set == 'NECB_default') || srr_set.nil? || (srr_set.to_f.round(0) == -1.0)
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: true)
-    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set, srr_opt: srr_opt)
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
@@ -84,5 +87,31 @@ class BTAPPRE1980 < NECB2011
   # occupancy sensor control applied using lighting schedule, see apply_lighting_schedule method
   def set_occ_sensor_spacetypes(model, space_type_map)
     return true
+  end
+
+  # This method sets the primary heating fuel to either NaturalGas or Electricity if a HP fuel type is set.
+  def validate_primary_heating_fuel(primary_heating_fuel:, model:)
+    if primary_heating_fuel.to_s.downcase == 'defaultfuel' || primary_heating_fuel.to_s.downcase == 'necb_default'
+      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+      default_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
+      if default_fuel.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.swh', "Could not find a default fuel for #{epw.stateProvinceRegion}.  Using Electricity as the fuel type instead.")
+        return 'Electricity'
+      end
+      return default_fuel
+    end
+    return primary_heating_fuel unless primary_heating_fuel == 'NaturalGasHPGasBackup' || primary_heating_fuel == 'NaturalGasHPElecBackupMixed' || primary_heating_fuel == 'ElectricityHPElecBackup' || primary_heating_fuel == 'ElectricityHPGasBackupMixed'
+    case primary_heating_fuel
+    when "NaturalGasHPGasBackup"
+      primary_heating_fuel = 'NaturalGas'
+    when "NaturalGasHPElecBackupMixed"
+      primary_heating_fuel = 'NaturalGas'
+    when "ElectricityHPElecBackup"
+      primary_heating_fuel = 'Electricity'
+    when "ElectricityHPGasBackupMixed"
+      primary_heating_fuel = 'Electricity'
+    end
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Attemted to apply an NECB HP primary_heating_fuel to a vintage building type.  Replacing the selected primary_heating_fuel with #{primary_heating_fuel}.")
+    return primary_heating_fuel
   end
 end

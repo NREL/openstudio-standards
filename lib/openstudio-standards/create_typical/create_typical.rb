@@ -46,6 +46,10 @@ module OpenstudioStandards
     # @param enable_dst [Boolean] Enable daylight savings
     # @param unmet_hours_tolerance_r [Double] Thermostat setpoint tolerance for unmet hours in degrees Rankine
     # @param remove_objects [Boolean] Clean model of non-geometry objects. Only removes the same objects types as those added to the model.
+    # @param user_hvac_mapping [Hash] Hash defining a mapping of system types to zones.
+    #   Structure is:
+    #     ['systems'][N]['system_type'] = 'MY_CBECS_HVAC_TYPE' as defined in lib/openstudio-standards/hvac/cbecs_hvac.rb
+    #     ['systems'][N]['thermal_zones'] = ['Zone 1', 'Zone 2', ...]
     # @return [Boolean] returns true if successful, false if not
     def self.create_typical_building_from_model(model,
                                                 template,
@@ -79,7 +83,11 @@ module OpenstudioStandards
                                                 hoo_var_method: 'hours',
                                                 enable_dst: true,
                                                 unmet_hours_tolerance_r: 1.0,
-                                                remove_objects: true)
+                                                remove_objects: true,
+                                                user_hvac_mapping: nil,
+                                                sizing_run_directory: nil)
+      # sizing run directory
+      sizing_run_directory = Dir.pwd if sizing_run_directory.nil?
 
       # report initial condition of model
       initial_object_size = model.getModelObjects.size
@@ -135,8 +143,8 @@ module OpenstudioStandards
         end
 
         # check that weekday start time plus duration does not exceed 24 hrs
-        if (wkdy_op_hrs_start_time_hr + wkdy_op_hrs_duration_hr + (wkdy_op_hrs_start_time_min + wkdy_op_hrs_duration_min) / 60.0) > 24.0
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Weekday start time of #{wkdy_op_hrs_start} plus duration of #{wkdy_op_hrs_duration} is more than 24 hrs, hours of operation overlap midnight.")
+        if (wkdy_op_hrs_start_time_hr + wkdy_op_hrs_duration_hr + ((wkdy_op_hrs_start_time_min + wkdy_op_hrs_duration_min) / 60.0)) > 24.0
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Weekday start time of #{wkdy_op_hrs_start_time} plus duration of #{wkdy_op_hrs_duration} is more than 24 hrs, hours of operation overlap midnight.")
         end
       end
 
@@ -175,7 +183,7 @@ module OpenstudioStandards
         end
 
         # check that weekend start time plus duration does not exceed 24 hrs
-        if (wknd_op_hrs_start_time_hr + wknd_op_hrs_duration_hr + (wknd_op_hrs_start_time_min + wknd_op_hrs_duration_min) / 60.0) > 24.0
+        if (wknd_op_hrs_start_time_hr + wknd_op_hrs_duration_hr + ((wknd_op_hrs_start_time_min + wknd_op_hrs_duration_min) / 60.0)) > 24.0
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Weekend start time of #{wknd_op_hrs_start} plus duration of #{wknd_op_hrs_duration} is more than 24 hrs, hours of operation overlap midnight.")
         end
       end
@@ -251,10 +259,10 @@ module OpenstudioStandards
         # populate hash of building types
         if space_type.standardsBuildingType.is_initialized
           bldg_type = space_type.standardsBuildingType.get
-          if !building_types.key?(bldg_type)
-            building_types[bldg_type] = space_type.floorArea
-          else
+          if building_types.key?(bldg_type)
             building_types[bldg_type] += space_type.floorArea
+          else
+            building_types[bldg_type] = space_type.floorArea
           end
         else
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CreateTypical', "Can't identify building type for #{space_type.name}")
@@ -277,11 +285,11 @@ module OpenstudioStandards
 
       # adjust F factor constructions to avoid simulation errors
       model.getFFactorGroundFloorConstructions.each do |cons|
-        # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons = 0.15/1.95
-        if cons.area <= (0.135 + 0.03 + 0.15 / 1.95) * cons.perimeterExposed * cons.fFactor
-          # set minimum Rfic to > 1e-3
-          new_area = 0.233 * cons.perimeterExposed * cons.fFactor
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)}.")
+        # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons for 6" heavy concrete = 0.15m / 1.95 W/mK, 0.001 minimum resistance of Rfic resistive layer
+        if cons.area <= (0.135 + 0.03 + (0.15 / 1.95) + 0.001) * cons.perimeterExposed * cons.fFactor
+          # set minimum Rfic to ~ R1 = 0.18 m^2K/W
+          new_area = 0.422 * cons.perimeterExposed * cons.fFactor
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)} m2.")
           cons.setArea(new_area)
         end
       end
@@ -310,7 +318,7 @@ module OpenstudioStandards
           model.getBuilding.setDefaultConstructionSet(bldg_def_const_set)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding default construction set named #{bldg_def_const_set.name}")
         else
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "Could not create default construction set for the building type #{lookup_building_type} in climate zone #{climate_zone}.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "Could not create default construction set for the building type #{lookup_building_type} in climate zone #{climate_zone} with template #{template}.")
           return false
         end
 
@@ -399,7 +407,7 @@ module OpenstudioStandards
         standard.model_modify_infiltration_coefficients(model, primary_bldg_type, climate_zone)
 
         # set ground temperatures from DOE prototype buildings
-        standard.model_add_ground_temperatures(model, primary_bldg_type, climate_zone)
+        OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
       end
 
       # add elevators (returns ElectricEquipment object)
@@ -530,11 +538,10 @@ module OpenstudioStandards
         end
 
         # add daylight controls, need to perform a sizing run for 2010
-        if template == '90.1-2010' || template == 'ComStock 90.1-2010'
-          if standard.model_run_sizing_run(model, "#{Dir.pwd}/create_typical_building_from_model_SR0") == false
-            return false
-          end
+        if (template == '90.1-2010' || template == 'ComStock 90.1-2010') && (standard.model_run_sizing_run(model, "#{sizing_run_directory}/create_typical_building_from_model_SR0") == false)
+          return false
         end
+
         standard.model_add_daylighting_controls(model)
       end
 
@@ -609,97 +616,120 @@ module OpenstudioStandards
           standard.model_remove_prm_hvac(model)
         end
 
-        case hvac_system_type
-        when 'Inferred'
+        # If user does not map HVAC types to zones with a JSON file, run conventional approach to HVAC assignment
+        if user_hvac_mapping.nil?
+          case hvac_system_type
+          when 'Inferred'
 
-          # Get the hvac delivery type enum
-          hvac_delivery = case hvac_delivery_type
-                          when 'Forced Air'
-                            'air'
-                          when 'Hydronic'
-                            'hydronic'
-                          end
+            # Get the hvac delivery type enum
+            hvac_delivery = case hvac_delivery_type
+                            when 'Forced Air'
+                              'air'
+                            when 'Hydronic'
+                              'hydronic'
+                            end
 
-          # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
-          sys_groups = standard.model_group_zones_by_type(model, OpenStudio.convert(20_000, 'ft^2', 'm^2').get)
+            # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
+            min_area_m2 = OpenStudio.convert(20_000, 'ft^2', 'm^2').get
+            sys_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_occupancy_type(model, min_area_m2: min_area_m2)
 
-          # For each group, infer the HVAC system type.
-          sys_groups.each do |sys_group|
-            # Infer the primary system type
-            sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel = standard.model_typical_hvac_system_type(model,
-                                                                                                          climate_zone,
-                                                                                                          sys_group['type'],
-                                                                                                          hvac_delivery,
-                                                                                                          heating_fuel,
-                                                                                                          cooling_fuel,
-                                                                                                          OpenStudio.convert(sys_group['area_ft2'], 'ft^2', 'm^2').get,
-                                                                                                          sys_group['stories'])
+            # For each group, infer the HVAC system type.
+            sys_groups.each do |sys_group|
+              # Infer the primary system type
+              sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel = standard.model_typical_hvac_system_type(model,
+                                                                                                            climate_zone,
+                                                                                                            sys_group['type'],
+                                                                                                            hvac_delivery,
+                                                                                                            heating_fuel,
+                                                                                                            cooling_fuel,
+                                                                                                            OpenStudio.convert(sys_group['area_ft2'], 'ft^2', 'm^2').get,
+                                                                                                            sys_group['stories'])
 
-            # Infer the secondary system type for multizone systems
-            sec_sys_type = case sys_type
-                           when 'PVAV Reheat', 'VAV Reheat'
-                             'PSZ-AC'
-                           when 'PVAV PFP Boxes', 'VAV PFP Boxes'
-                             'PSZ-HP'
-                           else
-                             sys_type # same as primary system type
-                           end
+              # Infer the secondary system type for multizone systems
+              sec_sys_type = case sys_type
+                             when 'PVAV Reheat', 'VAV Reheat'
+                               'PSZ-AC'
+                             when 'PVAV PFP Boxes', 'VAV PFP Boxes'
+                               'PSZ-HP'
+                             else
+                               sys_type # same as primary system type
+                             end
 
-            # group zones
-            story_zone_lists = standard.model_group_zones_by_story(model, sys_group['zones'])
+              # group zones
+              story_zone_lists = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
 
-            # On each story, add the primary system to the primary zones
-            # and add the secondary system to any zones that are different.
-            story_zone_lists.each do |story_group|
-              # Differentiate primary and secondary zones, based on
-              # operating hours and internal loads (same as 90.1 PRM)
-              pri_sec_zone_lists = standard.model_differentiate_primary_secondary_thermal_zones(model, story_group)
-              system_zones = pri_sec_zone_lists['primary']
+              # On each story, add the primary system to the primary zones
+              # and add the secondary system to any zones that are different.
+              story_zone_lists.each do |story_group|
+                # Differentiate primary and secondary zones, based on
+                # operating hours and internal loads (same as 90.1 PRM)
+                pri_sec_zone_lists = standard.model_differentiate_primary_secondary_thermal_zones(model, story_group)
+                system_zones = pri_sec_zone_lists['primary']
 
-              # if the primary system type is PTAC, filter to cooled zones to prevent sizing error if no cooling
-              if sys_type == 'PTAC'
-                heated_and_cooled_zones = system_zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-                cooled_only_zones = system_zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-                system_zones = heated_and_cooled_zones + cooled_only_zones
-              end
-
-              # Add the primary system to the primary zones
-              unless standard.model_add_hvac_system(model, sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
-                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{sys_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
-                return false
-              end
-
-              # Add the secondary system to the secondary zones (if any)
-              if !pri_sec_zone_lists['secondary'].empty?
-                system_zones = pri_sec_zone_lists['secondary']
-                if (sec_sys_type == 'PTAC') || (sec_sys_type == 'PSZ-AC')
-                  heated_and_cooled_zones = system_zones.select { |zone| standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
-                  cooled_only_zones = system_zones.select { |zone| !standard.thermal_zone_heated?(zone) && standard.thermal_zone_cooled?(zone) }
+                # if the primary system type is PTAC, filter to cooled zones to prevent sizing error if no cooling
+                if sys_type == 'PTAC'
+                  heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                  cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
                   system_zones = heated_and_cooled_zones + cooled_only_zones
                 end
-                unless standard.model_add_hvac_system(model, sec_sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
+
+                # Add the primary system to the primary zones
+                unless standard.model_add_hvac_system(model, sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
                   OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{sys_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
+                  return false
+                end
+
+                # Add the secondary system to the secondary zones (if any)
+                if !pri_sec_zone_lists['secondary'].empty?
+                  system_zones = pri_sec_zone_lists['secondary']
+                  if (sec_sys_type == 'PTAC') || (sec_sys_type == 'PSZ-AC')
+                    heated_and_cooled_zones = system_zones.select { |zone| OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                    cooled_only_zones = system_zones.select { |zone| !OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone) && OpenstudioStandards::ThermalZone.thermal_zone_cooled?(zone) }
+                    system_zones = heated_and_cooled_zones + cooled_only_zones
+                  end
+                  unless standard.model_add_hvac_system(model, sec_sys_type, central_htg_fuel, zone_htg_fuel, clg_fuel, system_zones)
+                    OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{sys_type}' not recognized. Check input system type argument against Model.hvac.rb for valid hvac system type names.")
+                    return false
+                  end
+                end
+              end
+            end
+
+          else
+            # HVAC system_type specified
+            # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
+            min_area_m2 = OpenStudio.convert(20_000, 'ft^2', 'm^2').get
+            sys_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_occupancy_type(model, min_area_m2: min_area_m2)
+            sys_groups.each do |sys_group|
+              # group zones
+              story_zone_groups = OpenstudioStandards::Geometry.model_group_thermal_zones_by_building_story(model, sys_group['zones'])
+
+              # Add the user specified HVAC system for each story.
+              # Single-zone systems will get one per zone.
+              story_zone_groups.each do |zones|
+                unless OpenstudioStandards::HVAC.add_cbecs_hvac_system(model, standard, hvac_system_type, zones)
+                  OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against cbecs_hvac.rb in the HVAC module for valid HVAC system type names.")
                   return false
                 end
               end
             end
           end
-
         else
-          # HVAC system_type specified
-          # Group the zones by occupancy type.  Only split out non-dominant groups if their total area exceeds the limit.
-          sys_groups = standard.model_group_zones_by_type(model, OpenStudio.convert(20_000, 'ft^2', 'm^2').get)
-          sys_groups.each do |sys_group|
-            # group zones
-            story_zone_groups = standard.model_group_zones_by_story(model, sys_group['zones'])
+          # If user specified a mapping of HVAC systems to zones
+          user_hvac_mapping['systems'].each do |system_hash|
+            hvac_system_type = system_hash['system_type']
+            zone_names = system_hash['thermal_zones']
 
-            # Add the user specified HVAC system for each story.
-            # Single-zone systems will get one per zone.
-            story_zone_groups.each do |zones|
-              unless OpenstudioStandards::HVAC.add_cbecs_hvac_system(model, standard, hvac_system_type, zones)
-                OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against cbecs_hvac.rb in the HVAC module for valid HVAC system type names.")
-                return false
-              end
+            # Get OS:ThermalZone objects
+            zones = zone_names.map do |zone_name|
+              model.getThermalZoneByName(zone_name).get
+            end
+
+            puts "Adding #{hvac_system_type} to #{zone_names.join(', ')}"
+
+            unless OpenstudioStandards::HVAC.add_cbecs_hvac_system(model, standard, hvac_system_type, zones)
+              OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "HVAC system type '#{hvac_system_type}' not recognized. Check input system type argument against cbecs_hvac.rb in the HVAC module for valid HVAC system type names.")
+              return false
             end
           end
         end
@@ -708,11 +738,11 @@ module OpenstudioStandards
       # hours of operation
       if modify_wkdy_op_hrs || modify_wknd_op_hrs
         # Infer the current hours of operation schedule for the building
-        op_sch = standard.model_infer_hours_of_operation_building(model)
+        op_sch = OpenstudioStandards::Schedules.model_infer_hours_of_operation_building(model)
 
         # Convert existing schedules in the model to parametric schedules based on current hours of operation
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Generating parametric schedules from ruleset schedules using #{hoo_var_method} variable method for hours of operation formula.")
-        standard.model_setup_parametric_schedules(model, hoo_var_method: hoo_var_method)
+        OpenstudioStandards::Schedules.model_setup_parametric_schedules(model, hoo_var_method: hoo_var_method)
 
         # Create start and end times from start time and duration supplied
         wkdy_start_time = nil
@@ -731,16 +761,16 @@ module OpenstudioStandards
         end
 
         # Modify hours of operation, using weekdays values for all weekdays and weekend values for Saturday and Sunday
-        standard.schedule_ruleset_set_hours_of_operation(op_sch,
-                                                         wkdy_start_time: wkdy_start_time,
-                                                         wkdy_end_time: wkdy_end_time,
-                                                         sat_start_time: wknd_start_time,
-                                                         sat_end_time: wknd_end_time,
-                                                         sun_start_time: wknd_start_time,
-                                                         sun_end_time: wknd_end_time)
+        OpenstudioStandards::Schedules.schedule_ruleset_set_hours_of_operation(op_sch,
+                                                                               wkdy_start_time: wkdy_start_time,
+                                                                               wkdy_end_time: wkdy_end_time,
+                                                                               sat_start_time: wknd_start_time,
+                                                                               sat_end_time: wknd_end_time,
+                                                                               sun_start_time: wknd_start_time,
+                                                                               sun_end_time: wknd_end_time)
 
         # Apply new operating hours to parametric schedules to make schedules in model reflect modified hours of operation
-        parametric_schedules = standard.model_apply_parametric_schedules(model, error_on_out_of_order: false)
+        parametric_schedules = OpenstudioStandards::Schedules.model_apply_parametric_schedules(model, error_on_out_of_order: false)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Updated #{parametric_schedules.size} schedules with new hours of operation.")
       end
 
@@ -758,7 +788,7 @@ module OpenstudioStandards
           standard.model_apply_prm_sizing_parameters(model)
 
           # Perform a sizing run
-          if standard.model_run_sizing_run(model, "#{Dir.pwd}/create_typical_building_from_model_SR1") == false
+          if standard.model_run_sizing_run(model, "#{sizing_run_directory}/create_typical_building_from_model_SR1") == false
             return false
           end
 
@@ -792,7 +822,7 @@ module OpenstudioStandards
 
       # change night cycling control to "Thermostat" cycling and increase thermostat tolerance to 1.99999
       manager_night_cycles = model.getAvailabilityManagerNightCycles
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Changing thermostat tollerance to 1.99999 for #{manager_night_cycles.size} night cycle manager objects.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Changing thermostat tolerance to 1.99999 for #{manager_night_cycles.size} night cycle manager objects.")
       manager_night_cycles.each do |night_cycle|
         night_cycle.setThermostatTolerance(1.9999)
         night_cycle.setCyclingRunTimeControlType('Thermostat')

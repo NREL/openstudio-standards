@@ -40,32 +40,29 @@ module LargeDataCenterLowITE
 
       it_fan_power_ratio = 0.4 / (1 + 0.4) # assuming IT fan power is 0.4 of total CPU load
 
-      if space_type.name.get.downcase.include?('computer') || space_type.name.get.downcase.include?('datacenter')
-        if elec_equip_have_info
-          it_equipment_def = OpenStudio::Model::ElectricEquipmentITEAirCooledDefinition.new(model)
-          it_equipment_def.setName('IT equipment def')
-          it_equipment_def.setWattsperZoneFloorArea(OpenStudio.convert(elec_equip_per_area.to_f, 'W/ft^2', 'W/m^2').get)
-          it_equipment_def.setDesignFanAirFlowRateperPowerInput(0.0001)
-          it_equipment_def.setDesignFanPowerInputFraction(it_fan_power_ratio)
-          it_equipment_def.setDesignEnteringAirTemperature(22.5) # recommended SAT 18-27C, use the middle T as design
-          it_equipment_def.setAirFlowCalculationMethod('FlowControlWithApproachTemperatures')
-          # Set the approach temperatures based on CFD simulation results
-          it_equipment_def.setSupplyTemperatureDifference(9.67) # This is under fully open configuration assumption, based on the lookup table in scorecard
-          it_equipment_def.setReturnTemperatureDifference(-7.36) # This is under fully open configuration assumption, based on the lookup table in scorecard
-          # after the bug in OpenStudio core is fixed, this temperature schedules was enabled
-          it_equipment_def.setSupplyTemperatureDifferenceSchedule(model_add_schedule(model, 'LargeDataCenterLowITE SupplyApproachTemp_SCH')) # This is under fully open configuration assumption, based on the lookup table in scorecard
-          it_equipment_def.setReturnTemperatureDifferenceSchedule(model_add_schedule(model, 'LargeDataCenterLowITE ReturnApproachTemp_SCH'))
+      if (space_type.name.get.downcase.include?('computer') || space_type.name.get.downcase.include?('datacenter')) && elec_equip_have_info
+        it_equipment_def = OpenStudio::Model::ElectricEquipmentITEAirCooledDefinition.new(model)
+        it_equipment_def.setName('IT equipment def')
+        it_equipment_def.setWattsperZoneFloorArea(OpenStudio.convert(elec_equip_per_area.to_f, 'W/ft^2', 'W/m^2').get)
+        it_equipment_def.setDesignFanAirFlowRateperPowerInput(0.0001)
+        it_equipment_def.setDesignFanPowerInputFraction(it_fan_power_ratio)
+        it_equipment_def.setDesignEnteringAirTemperature(22.5) # recommended SAT 18-27C, use the middle T as design
+        it_equipment_def.setAirFlowCalculationMethod('FlowControlWithApproachTemperatures')
+        # Set the approach temperatures based on CFD simulation results
+        it_equipment_def.setSupplyTemperatureDifference(9.67) # This is under fully open configuration assumption, based on the lookup table in scorecard
+        it_equipment_def.setReturnTemperatureDifference(-7.36) # This is under fully open configuration assumption, based on the lookup table in scorecard
+        # after the bug in OpenStudio core is fixed, this temperature schedules was enabled
+        it_equipment_def.setSupplyTemperatureDifferenceSchedule(model_add_schedule(model, 'LargeDataCenterLowITE SupplyApproachTemp_SCH')) # This is under fully open configuration assumption, based on the lookup table in scorecard
+        it_equipment_def.setReturnTemperatureDifferenceSchedule(model_add_schedule(model, 'LargeDataCenterLowITE ReturnApproachTemp_SCH'))
 
-          it_equipment = OpenStudio::Model::ElectricEquipmentITEAirCooled.new(it_equipment_def)
-          it_equipment.setSpaceType(space_type)
-          it_equipment.setName("#{space_type.name} IT equipment")
-          unless elec_equip_sch.nil?
-            it_equipment.setDesignPowerInputSchedule(model_add_schedule(model, elec_equip_sch))
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set Design Power Input Schedule to #{elec_equip_sch}.")
-          end
-          it_equipment.setCPULoadingSchedule(model.alwaysOnDiscreteSchedule)
-
+        it_equipment = OpenStudio::Model::ElectricEquipmentITEAirCooled.new(it_equipment_def)
+        it_equipment.setSpaceType(space_type)
+        it_equipment.setName("#{space_type.name} IT equipment")
+        unless elec_equip_sch.nil?
+          it_equipment.setDesignPowerInputSchedule(model_add_schedule(model, elec_equip_sch))
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set Design Power Input Schedule to #{elec_equip_sch}.")
         end
+        it_equipment.setCPULoadingSchedule(model.alwaysOnDiscreteSchedule)
       end
     end
     # remove normal electric equipment

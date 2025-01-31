@@ -16,7 +16,7 @@ class NECB_SHW_tests < Minitest::Test
   # Additional constant ranges.
   Epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw', 'CAN_NT_Yellowknife.AP.719360_CWEC2020.epw']
 
-  # @return [Bool] true if successful. 
+  # @return [Boolean] true if successful.
   def test_shw_test()
     output_array = []
 
@@ -42,8 +42,9 @@ class NECB_SHW_tests < Minitest::Test
           standard = nil
           # Open the Outpatient model.
           model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
-          # Set the weather file.
-          BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+          # Set the weather file
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+          OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           # Get spacetypes from JSON.  I say I use all of the spacetypes but really it is only those with a
           # "buliding_type" of "Space Function".
           standard = get_standard(template)
@@ -75,7 +76,9 @@ class NECB_SHW_tests < Minitest::Test
           end
           # apply swh to the renamed space types (model_add_swh only looks at the name of the space type not what is
           # actually in it).
-          standard.model_add_swh(model: model, swh_fueltype: 'DefaultFuel', shw_scale: 'NECB_Default')
+          epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+          swh_fueltype = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
+          standard.model_add_swh(model: model, swh_fueltype: swh_fueltype, shw_scale: 'NECB_Default')
 		  #Apply the water heater mixed efficiencies
 		  model.getWaterHeaterMixeds.sort.each { |obj| standard.water_heater_mixed_apply_efficiency(obj) }
 
@@ -98,7 +101,7 @@ class NECB_SHW_tests < Minitest::Test
         end
       end #loop to the next epw_file
     end #loop to the next Template
-    #Write test report file. 
+    #Write test report file.
     test_result_file = File.join(@test_results_folder,'shw_test_results.json')
     File.open(test_result_file, 'w') {|f| f.write(JSON.pretty_generate(output_array)) }
 

@@ -6,6 +6,7 @@ class ComStockASHRAE9012019 < ASHRAE9012019
   attr_reader :template
 
   def initialize
+    super()
     @template = 'ComStock 90.1-2019'
     load_standards_database
   end

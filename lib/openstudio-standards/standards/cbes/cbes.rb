@@ -5,6 +5,7 @@
 # @ref [References::CBES]
 class CBES < Standard
   def initialize
+    super()
     load_standards_database
   end
 

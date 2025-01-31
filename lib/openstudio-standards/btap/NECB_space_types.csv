@@ -1,0 +1,120 @@
+﻿Activity,NECB 2011 Space Type,NECB 2015 Space Type,NECB 2017 Space Type,NECB 2020 Space Type
+undefined::common,undefined,undefined,undefined,undefined
+washroom::rp28,,Washroom - space designed to ANSI/IES RP28 (used primarily by residents),Washroom - space designed to ANSI/IES RP28 (used primarily by residents),Washroom - space designed to ANSI/IES RP28 (used primarily by residents)
+washroom::common,Washroom,Washroom - other,Washroom - other,Washroom - other
+atrium::common,Atrium,Atrium,Atrium,Atrium
+concourse::retail,Retail - mall concourse,Retail facility mall concourse,Retail facility mall concourse,Retail facility mall concourse
+concourse::hospital,Hospital concourse (>= 2.4m),,,
+concourse::terminal,Terminal (transportation) - concourse,"Terminal (tansportation facility, airport) - concourse","Terminal (tansportation facility, airport) - concourse","Terminal (tansportation facility, airport) - concourse"
+concourse::manufacturing,Manufactoring - concourse (>= 2.4m),,,
+concourse::common,Concourse (>= 2.4m wide),,,
+corridor::rp28,,Corridor/Transition area - space designed to ANSI/IES RP28 (and used primarily by residents),Corridor/Transition area - space designed to ANSI/IES RP28 (and used primarily by residents),Corridor/Transition area - space designed to ANSI/IES RP28 (and used primarily by residents)
+corridor::hospital,Hospital corridor (< 2.4m),Corridor/Transition area - hospital,Corridor/Transition area - hospital,Corridor/Transition area - hospital
+corridor::manufacturing,Manufacturing - corridor < 2.4m,Corridor/Transition area - manufacturing facility,Corridor/Transition area - manufacturing facility,Corridor/Transition area - manufacturing facility
+corridor::common,Corridor < 2.4m wide,Corridor/Transition area other,Corridor/Transition area other,Corridor/Transition area other
+stairway::common,Stairway,Stairway/Stairwell,Stairway/Stairwell,Stairway/Stairwell
+elevator::common,Foyer - elevator,Foyer - elevator,Foyer - elevator,Foyer - elevator
+lobby::rp28,,Lobby - space designed to ANSI/IES RP28 (used primarily by residents),Lobby - space designed to ANSI/IES RP28 (used primarily by residents),Lobby - space designed to ANSI/IES RP28 (used primarily by residents)
+lobby::hotel,Hotel/Motel - lobby,Lobby - hotel,Lobby - hotel,Lobby - hotel
+lobby::cineplex,Lobby - cineplex (motion picture),Lobby - cineplex (motion picture),Lobby - cineplex (motion picture),Lobby - cineplex (motion picture)
+lobby::theatre,Lobby - performance arts theatre,Lobby - performing arts theatre,Lobby - performing arts theatre,Lobby - performing arts theatre
+lobby::common,Lobby - other,Lobby - other,Lobby - other,Lobby - other
+restoration::museum,Museum - restoration,Museum restoration room,Museum restoration room,Museum restoration room
+exhibit::museum,Museum - exhibit,Museum - exhibit,Museum - exhibit,Museum - exhibit
+exhibit::convention,Convention centre - exhibit,Convention centre exhibit space,Convention centre exhibit space,Convention centre exhibit space
+baggage::terminal,Terminal (transportation) - baggage,Terminal (transportation) baggage/carousel,Terminal (transportation) baggage/carousel,Terminal (transportation) baggage/carousel
+counter::terminal,Terminal (transportation) - counter,Terminal (transportation) - ticket counter,Terminal (transportation) - ticket counter,Terminal (transportation) - ticket counter
+seating::terminal,Terminal (transportation) seating ,,,
+seating::common,,Seating area general,Seating area general,Seating area general
+auditorium::common,Audience - auditorium,Audience (permanent) - auditorium,Audience (permanent) - auditorium,Audience (permanent) - auditorium
+refectory::religious,Religious - fellowship/refectory,Religious building fellowship/refectory,Religious building fellowship/refectory,Religious building fellowship/refectory
+pulpit::religious,Religious - pulpit/choir,Religious building worship/pulpit/choir area,Religious building worship/pulpit/choir area,Religious building worship/pulpit/choir area
+chapel::rp28,,Space designed to ANSI/IES RP28 chapel (used primarily by residents),Space designed to ANSI/IES RP28 chapel (used primarily by residents),Space designed to ANSI/IES RP28 chapel (used primarily by residents)
+audience::religious,Religious - audience,Audience (permanent) - religious building,Audience (permanent) - religious building,Audience (permanent) - religious building
+audience::penitentiary,Penitentiary - audience,Audience (permament) - penitentiary,Audience (permament) - penitentiary,Audience (permament) - penitentiary
+audience::cineplex,Audience - cineplex (motion picture),Audience (permament) - cineplex (motion picture),Audience (permament) - cineplex (motion picture),Audience (permament) - cineplex (motion picture)
+audience::theatre,Audience - performance arts theatre,Audience (permament) - performing arts theatre,Audience (permament) - performing arts theatre,Audience (permament) - performing arts theatre
+audience::convention,Convention centre - audience,Audience (permament) - convention centre,Audience (permament) - convention centre,Audience (permament) - convention centre
+audience::gym,Gym - audience,Audience (permament) - gymnasium,Audience (permament) - gymnasium,Audience (permament) - gymnasium
+audience::arena,Sports arena - audience,Audience (permament) - sports arena,Audience (permament) - sports arena,Audience (permament) - sports arena
+audience::common,,Audience (permament) - other,Audience (permament) - other,Audience (permament) - other
+c1::arena,Sports arena - court c1,Sports arena playing area c1 facility,Sports arena playing area c1 facility,Sports arena playing area c1 facility
+c2::arena,Sports arena - court c2,Sports arena playing area c2 facility,Sports arena playing area c2 facility,Sports arena playing area c2 facility
+c3::arena,Sports arena - court c3,Sports arena playing area c3 facility,Sports arena playing area c3 facility,Sports arena playing area c3 facility
+c4::arena,Sports arena - court c4,Sports arena playing area c4 facility,Sports arena playing area c4 facility,Sports arena playing area c4 facility
+octogon::arena,"Sports arena - ring, octogon",,,
+exercise::gym,"Gym - exercise, fitness",Gymnasium/Fitness centre exercise area,Gymnasium/Fitness centre exercise area,Gymnasium/Fitness centre exercise area
+court::gym,Gym - court (play area),Gymnasium/Fitness centre court (playing area),Gymnasium/Fitness centre court (playing area),Gymnasium/Fitness centre court (playing area)
+locker::common,Locker room,Locker room,Locker room,Locker room
+dressing::theatre,Dressing/fitting - performance arts theatre,Dressing/Fitting room - performing arts theatre,Dressing/Fitting room - performing arts theatre,Dressing/Fitting room - performing arts theatre
+dressing::retail,Retail - dressing/fitting,Retail facility dressing/fitting room,Retail facility dressing/fitting room,Retail facility dressing/fitting room
+sales::retail,Retail - sales,,,
+sales::common,Sales area,Sales area,Sales area,Sales area
+dining::rp28,,Dining area - space designed to ANSI/IES RP28 (used primarily by residents),Dining area - space designed to ANSI/IES RP28 (used primarily by residents),Dining area - space designed to ANSI/IES RP28 (used primarily by residents)
+dining::penitentiary,Penitentiary - dining,Dining area - penitentiary,Dining area - penitentiary,Dining area - penitentiary
+dining::leisure,Dining - bar/leisure,Dining area - bar//leisure,Dining area - bar//leisure,Dining area - bar//leisure
+dining::fastfood,,Dining area - cafeteria/fastfood dining,Dining area - cafeteria/fastfood dining,Dining area - cafeteria/fastfood dining
+dining::restaurant,Dining - family restaurant,Dining area - family restaurant,Dining area - family restaurant,Dining area - family restaurant
+dining::motel,Motel/Hway lodging - dining,,,
+dining::hotel,Hotel - dining,,,
+dining::common,Dining - other,Dining area - other,Dining area - other,Dining area - other
+cuisine::common,Cuisine (preparation area),Cuisine (preparation area),Cuisine (preparation area),Cuisine (preparation area)
+rooms::motel,"Motel, Hway lodging - rooms",,,
+rooms::hotel,Hotel - rooms,,,
+rooms::common,,Guest rooms,Guest rooms,Guest rooms
+quarters::dorm,Dormitory - living quarters,Dormitory living quarters,Dormitory living quarters,Dormitory living quarters
+quarters::firehouse,Firehouse (fire station) - quarters,Firehouse (fire station) sleeping quarters,Firehouse (fire station) sleeping quarters,Firehouse (fire station) sleeping quarters
+units::residential,Residential dwelling unit(s),Residential dwelling units general,Residential dwelling units general,Residential dwelling units general
+units::care,,Dwelling units long term care,Dwelling units long term care,Dwelling units long term care
+recreation::rp28,,Space designed to ANSI/IES RP28 recreation room (used primarily by residents),Space designed to ANSI/IES RP28 recreation room (used primarily by residents),Space designed to ANSI/IES RP28 recreation room (used primarily by residents)
+meeting::common,Conference/meeting/multi-purpose,Conference/Meeting/Multi-purpose room,Conference/Meeting/Multi-purpose room,Conference/Meeting/Multi-purpose room
+bureau::common,Bureau (enclosed office),"Bureau (enclosed office, <= 25 m2)","Bureau (office enclosed, <= 25 m2)","Bureau (office enclosed, <= 25 m2)"
+workspace::common,,"Workspace (enclosed office, > 25 m2)","Workspace (enclosed office, > 25 m2)","Workspace (enclosed office, > 25 m2)"
+openplan::common,Openplan office,Openplan office,Openplan office,Openplan office
+bank::common,Bank - banking and offices,Banking activity area and offices,Banking activity area and offices,Banking activity area and offices
+copiers::common,,Copiers/Print room,Copiers/Print room,Copiers/Print room
+computer::common,,Computer room,Computer room,Computer room
+server::common,,Server room,Server room,Server room
+sorting::postal,Postal building - sorting,Postal building - sorting,Postal building - sorting,Postal building - sorting
+chambers::court,Courthouse - chambers,,,
+tribunal::court,Courthouse - tribunal (court room),Tribunal (court room),Tribunal (court room),Tribunal (court room)
+cell::court,Courthouse - cell,,,
+cell::common,,Confinement cell,Confinement cell,Confinement cell
+classroom::penitentiary,Penitentiary - classroom,Classroom/Lecture/room - Penitentary,Classroom/Lecture/Training - Penitentary,Classroom/Lecture/Training - Penitentary
+classroom::common,Classroom/lecture/training,Classroom/Lecture/Training - other,Classroom/Lecture/Training - other,
+reading::library,Library - reading,Library reading area,Library reading area,Library reading area
+stackes::library,Library - stacks,Library stacks,Library stacks,Library stacks
+researchlab::common,ResearchLab,,,
+teachinglab::common,TeachingLab (class),TeachingLab (class),TeachingLab (class),TeachingLab (class)
+lab::common,,Laboratory - other,Laboratory - other,Laboratory - other
+storage::common,,Storage (> 100 m2),Storage (> 100 m2),
+storeroom::common,Storeroom,"Storeroom (<= 5 m2, <= 100 m2)","Storeroom (<= 5 m2, <= 100 m2)",Storeroom (<= 5 m2)
+supplies::common,,Supplies (< 5 m2),Supplies (< 5 m2),Supplies (< 5 m2)
+supplies::hospital,Hospital - medical supplies,Hospital - medical supplies,Hospital - medical supplies,Hospital - medical supplies
+exam::hospital,Hospital - exam,Hospital - exam/treatment,Hospital - exam/treatment,Hospital - exam/treatment
+nursery::hospital,Hospital - nursery,Hospital - nursery,Hospital - nursery,Hospital - nursery
+nurses::hospital,Hospital - nurses station,Hospital - nurses station,Hospital - nurses station,Hospital - nurses station
+operating::hospital,Hospital - operating room,Hospital - operating room,Hospital - operating room,Hospital - operating room
+patient::hospital,Hospital - patient room,Hospital - patient room,Hospital - patient room,Hospital - patient room
+therapy::hospital,Hospital - physical therapy,Hospital - physical therapy,Hospital - physical therapy,Hospital - physical therapy
+imaging::hospital,Hospital - radiology/imaging,Hospital - radiology/imaging,Hospital - radiology/imaging,Hospital - radiology/imaging
+recovery::hospital,Hospital - recovery,Hospital - recovery,Hospital - recovery,Hospital - recovery
+laundry::hospital,Hospital - laundry/washing,,,
+laundry::common,,Laundry/Washing area,Laundry/Washing area,Laundry/Washing area
+lounge::hospital,Hospital - lounge,Lounge/Break room - hospital,Lounge/Break room - hospital,Lounge/Break room - hospital
+lounge::common,Lounge/Break room - other,Lounge/Break room - other,Lounge/Break room - other,Lounge/Break room - other
+pharmacy::hospital,Hospital - pharmacy,,,
+pharmacy::common,,Pharmacy area,Pharmacy area,Pharmacy area
+emergency::hospital,Hospital - emergency,,,
+emergency::common,,Emergency vehicle garage,Emergency vehicle garage,Emergency vehicle garage
+engineroom::firehouse,Firehouse (fire station) - engineroom,,,
+garage::parking,Parking garage space,Parking garage interior,Parking garage interior,Parking garage interior
+repair::automotive,Automotive - repair,Vehicle repair/maintenance area,Vehicle repair/maintenance area,Vehicle repair/maintenance area
+dock::common,,Loading dock interior,Loading dock interior,Loading dock interior
+bulky::warehouse,Warehouse - medium/bulky,Warehouse - medium to bulky palletized items,Warehouse - medium to bulky palletized items,Warehouse - medium to bulky palletized items
+finer::warehouse,Warehouse - finer,Warehouse - small (finer) hand-carried items,Warehouse - small (finer) hand-carried items,Warehouse - small (finer) hand-carried items
+workshop::common,Workshop space,Workshop,Workshop,Workshop
+bay::manufacturing,Manufacturing - low bay (H < 7.5m),Manufacturing facility low bay area (H < 7.5m),Manufacturing facility low bay area (H < 7.5m),Manufacturing facility low bay area (H < 7.5m)
+detailed::manufacturing,Manufactoring - detailed,Manufacturing facility detailed manufacturing area,Manufacturing facility detailed manufacturing area,Manufacturing facility detailed manufacturing area
+equipment::manufacturing,Manufactoring - equipment,Manufacturing facility equipment room,Manufacturing facility equipment room,Manufacturing facility equipment room
+mechanical::common,Electrical/Mechanical,Electrical/Mechanical room,Electrical/Mechanical room,Electrical/Mechanical room

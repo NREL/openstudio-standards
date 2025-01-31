@@ -3,8 +3,8 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
 
   def setup
     # Make a directory to save the resulting models
-    @test_dir = "#{Dir.pwd}/output"
-    if !Dir.exists?(@test_dir)
+    @test_dir = "#{__dir__}/output"
+    if !Dir.exist?(@test_dir)
       Dir.mkdir(@test_dir)
     end
     # Make a file to store the model comparisons
@@ -21,14 +21,14 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
       File.open(@combined_results_log, 'a') do |file|
         file.puts "Started @ #{Time.new}"
       end
-    end    
-    
+    end
+
   end
 
   # Dynamically create a test for each building type/template/climate zone
   # so that if one combo fails the others still run
-  def CreateDEERPrototypeBuildingTest.create_run_model_tests(building_types, 
-      templates, 
+  def CreateDEERPrototypeBuildingTest.create_run_model_tests(building_types,
+      templates,
       hvac_systems,
       climate_zones,
       create_models = true,
@@ -44,14 +44,14 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
           end
         end
       end
-    end  
- 
+    end
+
   end
-  
-  def CreateDEERPrototypeBuildingTest.create_building(building_type, 
+
+  def CreateDEERPrototypeBuildingTest.create_building(building_type,
       template,
       hvac_system,
-      climate_zone, 
+      climate_zone,
       create_models,
       run_models,
       compare_results,
@@ -60,27 +60,27 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
       method_name = "test_#{building_type}-#{template}-#{hvac_system}-#{climate_zone}".gsub(' ','_')
 
     define_method(method_name) do
-            
+
       # Start time
       start_time = Time.new
-            
+
       # Reset the log for this test
       reset_log
-            
+
       # Paths for this test run
-      
+
       model_name = "#{building_type}-#{template}-#{hvac_system}-#{climate_zone}"
-      
+
       run_dir = "#{@test_dir}/#{model_name}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       full_sim_dir = "#{run_dir}/AnnualRun"
       idf_path_string = "#{run_dir}/#{model_name}.idf"
-      idf_path = OpenStudio::Path.new(idf_path_string)            
+      idf_path = OpenStudio::Path.new(idf_path_string)
       osm_path_string = "#{run_dir}/final.osm"
       output_path = OpenStudio::Path.new(run_dir)
-            
+
       model = nil
       # Create the model, if requested
       if create_models
@@ -96,12 +96,12 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
 
         # Save the final osm
         model.save(osm_path_string, true)
-              
+
         # Convert the model to energyplus idf
         forward_translator = OpenStudio::EnergyPlus::ForwardTranslator.new
         idf = forward_translator.translateModel(model)
-        idf.save(idf_path,true)  
-            
+        idf.save(idf_path,true)
+
       end
 
       # Run the simulation, if requested
@@ -109,7 +109,7 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
 
         # Delete previous run directories if they exist
         FileUtils.rm_rf(full_sim_dir)
-            
+
         # Load the model from disk if not already in memory
         if model.nil?
           model = prototype_creator.safe_load_model(osm_path_string)
@@ -122,21 +122,21 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
         standard = Standard.build("#{template}")
         standard.model_run_simulation_and_log_errors(model, full_sim_dir)
 
-      end           
+      end
 
       # Compare the results against the legacy idf files if requested
       if compare_results
         puts "compare_results not yet available for DEER Prototype models"
       end
-            
+
       # Calculate run time
       run_time = Time.new - start_time
-            
+
       # Report out errors
       log_file_path = "#{run_dir}/openstudio-standards.log"
       messages = log_messages_to_file(log_file_path, debug)
-      errors = get_logs(OpenStudio::Error)         
-            
+      errors = get_logs(OpenStudio::Error)
+
       # Copy errors to combined log file
       File.open(@combined_results_log, 'a') do |file|
         file.puts "*** #{model_name}, Time: #{run_time.round} sec ***"
@@ -144,7 +144,7 @@ class CreateDEERPrototypeBuildingTest < Minitest::Test
           file.puts message
         end
       end
-            
+
       # Assert if there were any errors
       assert(errors.size == 0, errors)
 

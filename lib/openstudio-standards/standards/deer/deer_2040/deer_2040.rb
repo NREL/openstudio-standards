@@ -5,6 +5,7 @@ class DEER2040 < DEER
   attr_reader :template
 
   def initialize
+    super()
     @template = 'DEER 2040'
     load_standards_database
   end
