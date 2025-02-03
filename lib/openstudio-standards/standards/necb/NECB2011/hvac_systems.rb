@@ -2406,6 +2406,10 @@ class NECB2011
         end
       end
 
+      # If cooling supplied by something other than a DX coil do not follow NECB reference HP rule; proceed as usual
+      if clg_coil.nil?
+        return super(coil_heating_dx_single_speed)
+      end
       # Paired cooling coil parameters
       clg_coil = clg_coil.to_CoilCoolingDXSingleSpeed.get
       capacity_w = coil_cooling_dx_single_speed_find_capacity(clg_coil)
