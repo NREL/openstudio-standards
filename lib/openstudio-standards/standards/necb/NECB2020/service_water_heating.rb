@@ -102,7 +102,7 @@ class NECB2020
       # Assume first hour rating.
       # Rule of thumb is FHR is 70% tank_volume + ~40 Gal
       #  Ref: https://www.waterheaterpros.com/first-hour-rating#:~:text=To%20find%20a%20water%20heater%27s,can%20deliver%20at%20peak%20hours.
-      fhr_L_per_hr = volume_litre + 151.0
+      fhr_L_per_hr = 0.7*volume_litre + 151.0
 
       if capacity_w <= 22000 and volume_litre >= 76 and volume_litre < 208
         if fhr_L_per_hr < 68 # 18 US Gal - UEF draw pattern very small usage
