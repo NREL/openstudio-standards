@@ -1138,8 +1138,8 @@ class NECB2011
   # This method will deal with all non wet, non-wild, and non-dwelling units thermal zones.
   def auto_system_all_other_spaces(baseboard_type:,
                                    hvac_system_primary:,
-                                   necb_reference_hp:false,
-                                   necb_reference_hp_supp_fuel:'DefaultFuel',
+                                   necb_reference_hp: false,
+                                   necb_reference_hp_supp_fuel: 'DefaultFuel',
                                    boiler_fueltype:,
                                    chiller_type:,
                                    fan_type:,
@@ -1159,6 +1159,11 @@ class NECB2011
     # Set fuel type info based on hvac_system_primary (if set)
     unless hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == 'necb_default'
       fuel_type_set.set_fuel_to_hvac_system_primary(hvac_system_primary: hvac_system_primary, standards_data: @standards_data)
+      mau_type = fuel_type_set.mau_type unless fuel_type_set.mau_type.nil?
+      mau_heating_coil_type = fuel_type_set.mau_heating_coil_type unless fuel_type_set.mau_heating_coil_type.nil? || fuel_type_set.force_airloop_hot_water
+      necb_reference_hp = fuel_type_set.necb_reference_hp unless fuel_type_set.necb_reference_hp.nil?
+      necb_reference_hp_supp_fuel = fuel_type_set.necb_reference_hp_supp_fuel unless fuel_type_set.necb_reference_hp_supp_fuel.nil? || fuel_type_set.force_airloop_hot_water
+      heating_coil_type_sys4 = fuel_type_set.heating_coil_type_sys4 unless fuel_type_set.heating_coil_type_sys4.nil? || fuel_type_set.force_airloop_hot_water
     end
     zones = []
     other_spaces = model.getSpaces.select do |space|
@@ -1487,18 +1492,24 @@ class NECB2011
     # Get the HVAC system properties from  lib/openstudio-standards/standards/necb/NECB2011/data/systems.json from description field.
     hvac_system_data = self.standards_data['hvac_types'].find { |system| system['description'] == hvac_system_name }
     raise("Could not find hvac_system_data for #{hvac_system_name}") if hvac_system_data.nil?
-
+    necb_reference_hp_supp_fuel = hvac_system_data['necb_reference_hp_supp_fuel']
+    necb_reference_hp_supp_fuel = self.fuel_type_set.necb_reference_hp_supp_fuel if self.fuel_type_set.force_airloop_hot_water
+    mau_heating_coil_type = hvac_system_data['mau_heating_coil_type']
+    baseboard_type = hvac_system_data['baseboard_type']
+    baseboard_type = self.fuel_type_set.baseboard_type if self.fuel_type_set.force_boiler
+    heating_coil_type = hvac_system_data['heating_coil_type']
 
     case hvac_system_data['system']
     when 'sys_1'
+      mau_heating_coil_type = self.fuel_type_set.mau_heating_coil_type if self.fuel_type_set.force_airloop_hot_water
       add_sys1_unitary_ac_baseboard_heating_single_speed(
             model: model,
             necb_reference_hp: hvac_system_data['necb_reference_hp'],
-            necb_reference_hp_supp_fuel: hvac_system_data['necb_reference_hp_supp_fuel'],
+            necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
             zones: zones,
             mau_type: hvac_system_data['mau_type'],
-            mau_heating_coil_type: hvac_system_data['mau_heating_type'],
-            baseboard_type: hvac_system_data['baseboard_type'],
+            mau_heating_coil_type: mau_heating_coil_type,
+            baseboard_type: baseboard_type,
             hw_loop: hw_loop
             )
     when 'sys_2'
@@ -1509,22 +1520,24 @@ class NECB2011
                                             mau_cooling_type: hvac_system_data['mau_cooling_type'],
                                             hw_loop: hw_loop)
     when 'sys_3'
+      heating_coil_type = self.fuel_type_set.heating_coil_type_sys3 if self.fuel_type_set.force_airloop_hot_water
       add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
               model: model,
               necb_reference_hp: hvac_system_data['necb_reference_hp'],
-              necb_reference_hp_supp_fuel: hvac_system_data['necb_reference_hp_supp_fuel'],
+              necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
               zones: zones,
-              heating_coil_type: hvac_system_data['heating_coil_type'],
-              baseboard_type: hvac_system_data['baseboard_type'],
+              heating_coil_type: heating_coil_type,
+              baseboard_type: baseboard_type,
               hw_loop: hw_loop,
               new_auto_zoner: true)
     when 'sys_4'
+      heating_coil_type = self.fuel_type_set.heating_coil_type_sys4 if self.fuel_type_set.force_airloop_hot_water
       add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                    necb_reference_hp: hvac_system_data['necb_reference_hp'],
-                                                                   necb_reference_hp_supp_fuel: hvac_system_data['necb_reference_hp_supp_fuel'],
+                                                                   necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
                                                                    zones: zones,
-                                                                   heating_coil_type: hvac_system_data['heating_coil_type'],
-                                                                   baseboard_type: hvac_system_data['baseboard_type'],
+                                                                   heating_coil_type: heating_coil_type,
+                                                                   baseboard_type: baseboard_type,
                                                                    hw_loop: hw_loop)
     when 'sys_5'
       add_sys2_FPFC_sys5_TPFC( model: model,
@@ -1534,11 +1547,12 @@ class NECB2011
                                                 mau_cooling_type: hvac_system_data['mau_cooling_type'],
                                                 hw_loop: hw_loop)
     when 'sys_6'
+      heating_coil_type = self.fuel_type_set.heating_coil_type_sys6 if self.fuel_type_set.force_airloop_hot_water
       add_sys6_multi_zone_built_up_system_with_baseboard_heating(
                     model:model,
                     zones:zones,
-                    heating_coil_type: hvac_system_data['heating_coil_type'],
-                    baseboard_type: hvac_system_data['baseboard_type'],
+                    heating_coil_type: heating_coil_type,
+                    baseboard_type: baseboard_type,
                     chiller_type: hvac_system_data['chiller_type'],
                     fan_type: hvac_system_data['fan_type'],
                     hw_loop: hw_loop
