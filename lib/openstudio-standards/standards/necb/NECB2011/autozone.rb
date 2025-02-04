@@ -1494,7 +1494,7 @@ class NECB2011
     raise("Could not find hvac_system_data for #{hvac_system_name}") if hvac_system_data.nil?
     necb_reference_hp_supp_fuel = hvac_system_data['necb_reference_hp_supp_fuel']
     necb_reference_hp_supp_fuel = self.fuel_type_set.necb_reference_hp_supp_fuel if self.fuel_type_set.force_airloop_hot_water
-    mau_heating_coil_type = hvac_system_data['mau_heating_coil_type']
+    mau_heating_coil_type = hvac_system_data['mau_heating_type']
     baseboard_type = hvac_system_data['baseboard_type']
     baseboard_type = self.fuel_type_set.baseboard_type if self.fuel_type_set.force_boiler
     heating_coil_type = hvac_system_data['heating_coil_type']
