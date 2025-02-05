@@ -322,7 +322,7 @@ class NECB2011
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) && space.buildingStory.get == space_target.buildingStory.get # added since chris needs zones to not span floors for costing.
             adjust_wildcard_spacetype_schedule(space: space_target, schedule: dominant_schedule, lights_type: lights_type, lights_scale: lights_scale)
-            space_target.setThermalZone(zone)
+            #space_target.setThermalZone(zone) # removed
           end
         end
       end
@@ -370,7 +370,7 @@ class NECB2011
       model.getSpaces.select { |curr_space| !is_a_necb_dwelling_unit?(curr_space) && !is_an_necb_wildcard_space?(curr_space) }.each do |space_target|
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) && space.buildingStory.get == space_target.buildingStory.get # added since chris needs zones to not span floors for costing.
-            space_target.setThermalZone(zone)
+            #space_target.setThermalZone(zone) # removed
           end
         end
       end
@@ -426,7 +426,7 @@ class NECB2011
         if space_target.thermalZone.empty?
           if are_space_loads_similar?(space_1: space, space_2: space_target) &&
              (space.buildingStory.get == space_target.buildingStory.get) # added since chris needs zones to not span floors for costing.
-            space_target.setThermalZone(zone)
+            #space_target.setThermalZone(zone) # removed
           end
         end
       end
@@ -510,7 +510,7 @@ class NECB2011
           if are_space_loads_similar?(space_1: space, space_2: space_target) &&
              space.buildingStory.get == space_target.buildingStory.get # added since chris needs zones to not span floors for costing.
             adjust_wildcard_spacetype_schedule(space: space_target, schedule: dominant_floor_schedule, lights_type: @lights_type, lights_scale: @lights_scale)
-            space_target.setThermalZone(zone)
+            #space_target.setThermalZone(zone) # removed
           end
         end
       end
