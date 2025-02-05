@@ -30,11 +30,14 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
     test_cases = {}
 
     # Define references (per vintage in this case).
-    test_cases[:NECB2011] = { Reference: "NECB 2011 p3 Table 5.2.12.1" }
+    test_cases[:NECB2011] = { Reference: "NECB 2011 p3 Table 4.2.1.6., Table A-8.4.3.3.(1)B"}
+    test_cases[:NECB2015] = { Reference: "NECB 2015 p3 Table 4.2.1.6., Table A-8.4.3.2.(2)-B"}
+    test_cases[:NECB2017] = { Reference: "NECB 2017 p3 Table 4.2.1.6., Table A-8.4.3.2.(2)-B"}
+    test_cases[:NECB2020] = { Reference: "NECB 2020 p3 Table 4.2.1.6., Table A-8.4.3.2.(2)-B"}
 
     # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = { vintage: @AllTemplates,
-                        :SpaceType => @AllSpaceTypes,
+                        space_type: @AllSpaceTypes,
                         fuel_type: ["Electricity"],
                         TestCase: ["case-1"],
                         TestPars: { :name => "tbd" }
@@ -76,9 +79,8 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
     save_intermediate_models = test_pars[:SaveIntermediateModels]
     fuel_type = test_pars[:fuel_type]
     vintage = test_pars[:vintage]
-    space_type = test_pars[:SpaceType]
-    standard = get_standard(vintage)
-
+    space_type = test_pars[:space_type]
+    
     # Define the test name.
     name = "#{vintage}"
     name_short = "#{vintage}"
@@ -96,6 +98,7 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
       OpenstudioStandards::Geometry.create_shape_rectangle(model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
 
       # Find the mapped space type.
+      standard = get_standard(vintage)
       mapped_space_type = ""
       space_type_map = standard.standards_lookup_table_many(table_name: 'space_type_upgrade_map').detect do |row|
         if row["NECB2011_space_type"] == space_type
