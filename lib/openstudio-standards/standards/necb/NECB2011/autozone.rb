@@ -1503,7 +1503,7 @@ class NECB2011
 
     case hvac_system_data['system']
     when 'sys_1'
-      mau_heating_coil_type = self.fuel_type_set.mau_heating_coil_type if self.fuel_type_set.force_airloop_hot_water
+      mau_heating_coil_type = self.fuel_type_set.mau_heating_coil_type if self.fuel_type_set.force_airloop_hot_water && mau_heating_coil_type != 'DX'
       add_sys1_unitary_ac_baseboard_heating_single_speed(
             model: model,
             necb_reference_hp: hvac_system_data['necb_reference_hp'],
@@ -1522,7 +1522,7 @@ class NECB2011
                                             mau_cooling_type: hvac_system_data['mau_cooling_type'],
                                             hw_loop: hw_loop)
     when 'sys_3'
-      heating_coil_type = self.fuel_type_set.heating_coil_type_sys3 if self.fuel_type_set.force_airloop_hot_water
+      heating_coil_type = self.fuel_type_set.heating_coil_type_sys3 if self.fuel_type_set.force_airloop_hot_water && heating_coil_type != 'DX'
       add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
               model: model,
               necb_reference_hp: hvac_system_data['necb_reference_hp'],
@@ -1533,7 +1533,7 @@ class NECB2011
               hw_loop: hw_loop,
               new_auto_zoner: true)
     when 'sys_4'
-      heating_coil_type = self.fuel_type_set.heating_coil_type_sys4 if self.fuel_type_set.force_airloop_hot_water
+      heating_coil_type = self.fuel_type_set.heating_coil_type_sys4 if self.fuel_type_set.force_airloop_hot_water && heating_coil_type != 'DX'
       add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                                                                    necb_reference_hp: hvac_system_data['necb_reference_hp'],
                                                                    necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -1549,7 +1549,7 @@ class NECB2011
                                                 mau_cooling_type: hvac_system_data['mau_cooling_type'],
                                                 hw_loop: hw_loop)
     when 'sys_6'
-      heating_coil_type = self.fuel_type_set.heating_coil_type_sys6 if self.fuel_type_set.force_airloop_hot_water
+      heating_coil_type = self.fuel_type_set.heating_coil_type_sys6 if self.fuel_type_set.force_airloop_hot_water && heating_coil_type != 'DX'
       if heating_coil_type == 'DX'
         add_sys6_multi_zone_reference_hp_with_baseboard_heating(model: model,
                                                               zones: zones,
