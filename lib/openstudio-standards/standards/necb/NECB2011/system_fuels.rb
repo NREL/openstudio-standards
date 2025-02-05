@@ -118,5 +118,7 @@ class SystemFuels
     @fan_type = init_fuel_type[:fan_type]
     @ecm_fueltype = init_fuel_type[:ecm_fueltype]
     @swh_fueltype = init_fuel_type[:swh_fueltype]
+    @force_boiler = init_fuel_type[:force_boiler]
+    @force_airloop_hot_water = init_fuel_type[:force_airloop_hot_water]
   end
 end
