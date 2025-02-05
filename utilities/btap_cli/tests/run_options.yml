@@ -5,11 +5,11 @@
 :boiler_eff: NECB_Default
 :boiler_fuel: NECB_Default
 :boiler_cap_ratio: NECB_Default
-:building_type: FullServiceRestaurant
+:building_type: PrimarySchool
 :chiller_type: NECB_Default
 :compute_environment: local
 :datapoint_id: b7603ab9-6597-4ef0-830f-afbe65820746
-:daylighting_type: NECB_Default
+:daylighting_type: add_daylighting_controls
 :dcv_type: NECB_Default
 :door_construction_cond: NECB_Default
 :ecm_system_name: NECB_Default
@@ -39,7 +39,7 @@
 :oa_scale: NECB_Default
 :occupancy_loads_scale: NECB_Default
 :overhead_door_cond: NECB_Default
-:primary_heating_fuel: FuelOilNo2
+:primary_heating_fuel: Electricity
 :pv_ground_azimuth_angle: NECB_Default
 :pv_ground_module_description: NECB_Default
 :pv_ground_tilt_angle: NECB_Default
@@ -57,7 +57,7 @@
 :skylight_solar_trans: NECB_Default
 :srr_set: NECB_Default
 :swh_fuel: NECB_Default
-:template: NECB2017
+:template: NECB2011
 :npv_start_year: NECB_Default
 :npv_end_year: NECB_Default
 :npv_discount_rate: NECB_Default
