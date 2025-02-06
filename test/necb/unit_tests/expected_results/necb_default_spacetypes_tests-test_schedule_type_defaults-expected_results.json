@@ -1,8 +1,8 @@
 {
   "VarType": "vintage",
   "NECB2011": {
-    "VarType": "SpaceType",
-    "Reference": "NECB 2011 p3 Table 5.2.12.1",
+    "VarType": "space_type",
+    "Reference": "NECB 2011 p3 Table 4.2.1.6., Table A-8.4.3.3.(1)B",
     "Audience - auditorium": {
       "VarType": "fuel_type",
       "Electricity": {
@@ -3412,7 +3412,8 @@
     }
   },
   "NECB2015": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
+    "Reference": "NECB 2015 p3 Table 4.2.1.6., Table A-8.4.3.2.(2)-B",
     "Audience - auditorium": {
       "VarType": "fuel_type",
       "Electricity": {
@@ -6818,7 +6819,8 @@
     }
   },
   "NECB2017": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
+    "Reference": "NECB 2017 p3 Table 4.2.1.6., Table A-8.4.3.2.(2)-B",
     "Audience - auditorium": {
       "VarType": "fuel_type",
       "Electricity": {
@@ -10224,7 +10226,8 @@
     }
   },
   "NECB2020": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
+    "Reference": "NECB 2020 p3 Table 4.2.1.6., Table A-8.4.3.2.(2)-B",
     "Audience - auditorium": {
       "VarType": "fuel_type",
       "Electricity": {
@@ -13630,7 +13633,7 @@
     }
   },
   "BTAPPRE1980": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
     "Audience - auditorium": {
       "VarType": "fuel_type",
       "Electricity": {
@@ -17040,7 +17043,7 @@
     }
   },
   "BTAP1980TO2010": {
-    "VarType": "SpaceType",
+    "VarType": "space_type",
     "Audience - auditorium": {
       "VarType": "fuel_type",
       "Electricity": {
