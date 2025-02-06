@@ -104,6 +104,25 @@ module NecbHelper
     ]
   end
 
+  # Create a simple geometry for use in tests.
+  def make_test_geometry
+    
+    # Create new model for testing.
+    model = OpenStudio::Model::Model.new
+
+    # Create only above ground geometry.
+    length = 100.0
+    width = 100.0
+    num_above_ground_floors = 1
+    num_under_ground_floors = 0
+    floor_to_floor_height = 3.8
+    plenum_height = 1
+    perimeter_zone_depth = 4.57
+    initial_height = 10.0
+    OpenstudioStandards::Geometry.create_shape_rectangle(model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+    return model
+  end
+
   # Utility function to help make an expected results hash.
   # @param test_cases_loop_hash [Hash] defines the variables that the test will loop through.
   #  see test/necb/unit_tests/tests/test_necb_boiler_rules.rb for examples.
