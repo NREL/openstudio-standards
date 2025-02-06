@@ -91,7 +91,7 @@ class NECB_VintageMap_Test < Minitest::Test
         logger.debug "  full object: #{test_spacetype}"
       end
 
-      # Load the current vintage and updatet he space type.
+      # Load the current vintage and update the space type.
       standard = get_standard(vintage)
       standard.validate_and_upate_space_types(model)
     rescue => error
