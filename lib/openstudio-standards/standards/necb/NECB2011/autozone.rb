@@ -858,7 +858,11 @@ class NECB2011
 
     hw_loop_needed = false
 
+    # Create a boiler if the air loop will use fancoils for heating
     hw_loop_needed = true if self.fuel_type_set.set_airloop_fancoils_heating
+
+    # Create a boiler if one is forced by the user
+    hw_loop_needed = true if self.fuel_type_set.force_boiler
 
     # Find Dwelling Units and determine if a HW loop is needed
     dwelling_units = model.getSpaces.select { |space| is_a_necb_dwelling_unit?(space) }
