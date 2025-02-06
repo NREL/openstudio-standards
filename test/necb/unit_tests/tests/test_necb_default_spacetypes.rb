@@ -92,11 +92,8 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
     begin
 
       # Create new model for testing.
-      model = OpenStudio::Model::Model.new
-      # Create only above ground geometry (Used for infiltration tests)
-      length = 100.0; width = 100.0; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-      OpenstudioStandards::Geometry.create_shape_rectangle(model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
-
+      model = make_test_geometry
+      
       # Find the mapped space type.
       standard = get_standard(vintage)
       mapped_space_type = ""
