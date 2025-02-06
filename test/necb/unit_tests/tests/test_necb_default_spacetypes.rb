@@ -91,9 +91,9 @@ class NECB_Default_SpaceTypes_Tests < Minitest::Test
     # Wrap test in begin/rescue/ensure.
     begin
 
-      # Create new model for testing.
+      # Create new simple geometry only model for testing.
       model = make_test_geometry
-      
+
       # Find the mapped space type.
       standard = get_standard(vintage)
       mapped_space_type = ""
