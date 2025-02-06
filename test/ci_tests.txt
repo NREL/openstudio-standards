@@ -11,6 +11,7 @@ modules/geometry/test_geometry_create_bar.rb
 modules/geometry/test_geometry_create_bar.rb
 modules/geometry/test_geometry_create.rb
 modules/geometry/test_geometry_information.rb
+modules/hvac/test_hvac_exhaust.rb
 modules/infiltration/test_infiltration.rb
 modules/infiltration/test_nist_infiltration.rb
 modules/schedules/test_schedules_create.rb
@@ -18,6 +19,7 @@ modules/schedules/test_schedules_information.rb
 modules/schedules/test_schedules_modify.rb
 modules/schedules/test_schedules_parametric.rb
 modules/service_water_heating/test_create_piping_losses.rb
+modules/service_water_heating/test_create_typical.rb
 modules/service_water_heating/test_create_water_heater.rb
 modules/service_water_heating/test_create_water_heating_loop.rb
 modules/service_water_heating/test_create_water_use.rb
@@ -87,11 +89,9 @@ doe_prototype_test_courthouse.rb
 
 doe_prototype/test_add_c_factor_wall.rb
 doe_prototype/test_add_elevators.rb
-doe_prototype/test_add_exhaust.rb
 doe_prototype/test_add_exterior_lights.rb
 doe_prototype/test_add_f_factor_floor.rb
 doe_prototype/test_add_refrigeration.rb
-doe_prototype/test_add_swh.rb
 doe_prototype/test_effective_num_stories.rb
 doe_prototype/test_space_type_hash.rb
 doe_prototype/test_sim_control.rb

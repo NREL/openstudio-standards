@@ -3031,24 +3031,9 @@ OS:DefaultScheduleSet,
   ,                                       !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {d7109501-1786-4a36-8dfd-b615f1ecaab1}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
-
-OS:Schedule:Ruleset,
-  {d7109501-1786-4a36-8dfd-b615f1ecaab1}, !- Handle
-  Always On,                              !- Name
-  {86b85072-e24f-42af-8b0d-57f47e8d5def}, !- Schedule Type Limits Name
-  {abd628b3-2044-4a27-b88f-0db4ec39f55d}; !- Default Day Schedule Name
-
-OS:Schedule:Day,
-  {abd628b3-2044-4a27-b88f-0db4ec39f55d}, !- Handle
-  Always On Default,                      !- Name
-  {86b85072-e24f-42af-8b0d-57f47e8d5def}, !- Schedule Type Limits Name
-  No,                                     !- Interpolate to Timestep
-  24,                                     !- Hour 1
-  0,                                      !- Minute 1
-  1;                                      !- Value Until Time 1
 
 OS:ScheduleTypeLimits,
   {86b85072-e24f-42af-8b0d-57f47e8d5def}, !- Handle
@@ -3238,7 +3223,7 @@ OS:DefaultScheduleSet,
   {d086fb11-37d7-4e8d-9dab-5c598c69bc73}, !- Electric Equipment Schedule Name
   ,                                       !- Gas Equipment Schedule Name
   ,                                       !- Hot Water Equipment Schedule Name
-  {d7109501-1786-4a36-8dfd-b615f1ecaab1}, !- Infiltration Schedule Name
+  ,                                       !- Infiltration Schedule Name
   ,                                       !- Steam Equipment Schedule Name
   ;                                       !- Other Equipment Schedule Name
 
