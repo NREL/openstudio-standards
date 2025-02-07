@@ -249,7 +249,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fuel_type, furnace_fuel_type, always_on)
       # Single stage furnace.
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                   zones: model.getThermalZones,

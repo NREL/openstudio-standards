@@ -93,7 +93,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
         model: model,
         zones: model.getThermalZones,
@@ -248,7 +248,7 @@ class NECB_Airloop_Sizing_Parameters_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
         model: model,
         zones: model.getThermalZones,
