@@ -823,7 +823,7 @@ class NECB2011
     hw_loop_needed = false
 
     # Create a boiler if the air loop will use fancoils for heating
-    hw_loop_needed = true if self.fuel_type_set.set_airloop_fancoils_heating
+    hw_loop_needed = true if self.fuel_type_set.force_airloop_hot_water
 
     # Create a boiler if one is forced by the user
     hw_loop_needed = true if self.fuel_type_set.force_boiler
