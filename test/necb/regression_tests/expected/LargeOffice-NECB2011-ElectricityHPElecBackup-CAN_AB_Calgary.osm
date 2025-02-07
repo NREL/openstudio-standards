@@ -80,7 +80,7 @@ OS:AdditionalProperties,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000001},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none|, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none|, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0060-000000000024},  !- Availability Schedule
   {00000000-0000-0000-0010-000000000005},  !- Availability Manager List Name
@@ -5129,61 +5129,61 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_e_zc_none_srf_cv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {d16815a0-52f2-46f0-9561-ac896524ad6f}<23.9 && {d16815a0-52f2-46f0-9561-ac896524ad6f}>1.7, !- Program Line 1
-  SET {1d4880ef-e61d-488b-b216-9a3cf7112f5b} = 29.4, !- Program Line 2
-  SET {01533eb6-76fd-4433-94a7-7c24001b07a7} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {d16815a0-52f2-46f0-9561-ac896524ad6f}<23.9 && {d16815a0-52f2-46f0-9561-ac896524ad6f}>1.7, !- Program Line 4
-  SET {1d4880ef-e61d-488b-b216-9a3cf7112f5b} = 29.4, !- Program Line 5
-  SET {01533eb6-76fd-4433-94a7-7c24001b07a7} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {d16815a0-52f2-46f0-9561-ac896524ad6f}<23.9 && {d16815a0-52f2-46f0-9561-ac896524ad6f}>1.7, !- Program Line 7
-  SET {1d4880ef-e61d-488b-b216-9a3cf7112f5b} = 29.4, !- Program Line 8
-  SET {01533eb6-76fd-4433-94a7-7c24001b07a7} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {d16815a0-52f2-46f0-9561-ac896524ad6f}<23.9 && {d16815a0-52f2-46f0-9561-ac896524ad6f}>1.7, !- Program Line 10
-  SET {1d4880ef-e61d-488b-b216-9a3cf7112f5b} = 29.4, !- Program Line 11
-  SET {01533eb6-76fd-4433-94a7-7c24001b07a7} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {5a55b0cf-48f4-4953-b53e-a7fa0805e29a}<23.9 && {5a55b0cf-48f4-4953-b53e-a7fa0805e29a}>1.7, !- Program Line 1
+  SET {5dc49a51-7927-43ee-b775-0dc9436398b3} = 29.4, !- Program Line 2
+  SET {0282c7f2-b310-4992-aba3-bb5326e24ab8} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {5a55b0cf-48f4-4953-b53e-a7fa0805e29a}<23.9 && {5a55b0cf-48f4-4953-b53e-a7fa0805e29a}>1.7, !- Program Line 4
+  SET {5dc49a51-7927-43ee-b775-0dc9436398b3} = 29.4, !- Program Line 5
+  SET {0282c7f2-b310-4992-aba3-bb5326e24ab8} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {5a55b0cf-48f4-4953-b53e-a7fa0805e29a}<23.9 && {5a55b0cf-48f4-4953-b53e-a7fa0805e29a}>1.7, !- Program Line 7
+  SET {5dc49a51-7927-43ee-b775-0dc9436398b3} = 29.4, !- Program Line 8
+  SET {0282c7f2-b310-4992-aba3-bb5326e24ab8} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {5a55b0cf-48f4-4953-b53e-a7fa0805e29a}<23.9 && {5a55b0cf-48f4-4953-b53e-a7fa0805e29a}>1.7, !- Program Line 10
+  SET {5dc49a51-7927-43ee-b775-0dc9436398b3} = 29.4, !- Program Line 11
+  SET {0282c7f2-b310-4992-aba3-bb5326e24ab8} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {1d4880ef-e61d-488b-b216-9a3cf7112f5b} = NULL, !- Program Line 14
-  SET {01533eb6-76fd-4433-94a7-7c24001b07a7} = NULL, !- Program Line 15
+  SET {5dc49a51-7927-43ee-b775-0dc9436398b3} = NULL, !- Program Line 14
+  SET {0282c7f2-b310-4992-aba3-bb5326e24ab8} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_e_zc_none_srf_cv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {73bae35c-4e6e-4053-a47c-d40985b89bf1}<23.9 && {73bae35c-4e6e-4053-a47c-d40985b89bf1}>1.7, !- Program Line 1
-  SET {2ab4ac6d-e5d7-433a-9de2-0ad9bb9761fa} = 29.4, !- Program Line 2
-  SET {b13c75a1-7a3c-4e05-bff1-f09701c91040} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {73bae35c-4e6e-4053-a47c-d40985b89bf1}<23.9 && {73bae35c-4e6e-4053-a47c-d40985b89bf1}>1.7, !- Program Line 4
-  SET {2ab4ac6d-e5d7-433a-9de2-0ad9bb9761fa} = 29.4, !- Program Line 5
-  SET {b13c75a1-7a3c-4e05-bff1-f09701c91040} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {73bae35c-4e6e-4053-a47c-d40985b89bf1}<23.9 && {73bae35c-4e6e-4053-a47c-d40985b89bf1}>1.7, !- Program Line 7
-  SET {2ab4ac6d-e5d7-433a-9de2-0ad9bb9761fa} = 29.4, !- Program Line 8
-  SET {b13c75a1-7a3c-4e05-bff1-f09701c91040} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {73bae35c-4e6e-4053-a47c-d40985b89bf1}<23.9 && {73bae35c-4e6e-4053-a47c-d40985b89bf1}>1.7, !- Program Line 10
-  SET {2ab4ac6d-e5d7-433a-9de2-0ad9bb9761fa} = 29.4, !- Program Line 11
-  SET {b13c75a1-7a3c-4e05-bff1-f09701c91040} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {bde4dede-6145-4fa7-828c-e8857bb30d73}<23.9 && {bde4dede-6145-4fa7-828c-e8857bb30d73}>1.7, !- Program Line 1
+  SET {5e8adb3f-c6f3-4fc4-867f-483b91996e37} = 29.4, !- Program Line 2
+  SET {f0351a14-d927-4db9-b4b4-e18e76789b06} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {bde4dede-6145-4fa7-828c-e8857bb30d73}<23.9 && {bde4dede-6145-4fa7-828c-e8857bb30d73}>1.7, !- Program Line 4
+  SET {5e8adb3f-c6f3-4fc4-867f-483b91996e37} = 29.4, !- Program Line 5
+  SET {f0351a14-d927-4db9-b4b4-e18e76789b06} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {bde4dede-6145-4fa7-828c-e8857bb30d73}<23.9 && {bde4dede-6145-4fa7-828c-e8857bb30d73}>1.7, !- Program Line 7
+  SET {5e8adb3f-c6f3-4fc4-867f-483b91996e37} = 29.4, !- Program Line 8
+  SET {f0351a14-d927-4db9-b4b4-e18e76789b06} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {bde4dede-6145-4fa7-828c-e8857bb30d73}<23.9 && {bde4dede-6145-4fa7-828c-e8857bb30d73}>1.7, !- Program Line 10
+  SET {5e8adb3f-c6f3-4fc4-867f-483b91996e37} = 29.4, !- Program Line 11
+  SET {f0351a14-d927-4db9-b4b4-e18e76789b06} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {2ab4ac6d-e5d7-433a-9de2-0ad9bb9761fa} = NULL, !- Program Line 14
-  SET {b13c75a1-7a3c-4e05-bff1-f09701c91040} = NULL, !- Program Line 15
+  SET {5e8adb3f-c6f3-4fc4-867f-483b91996e37} = NULL, !- Program Line 14
+  SET {f0351a14-d927-4db9-b4b4-e18e76789b06} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000003},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_e_zc_none_srf_cv__3_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {06cce988-e0ce-4b06-b36d-87e6938e6a83}<23.9 && {06cce988-e0ce-4b06-b36d-87e6938e6a83}>1.7, !- Program Line 1
-  SET {e30d02b9-d396-4d4f-8d22-705faf4fdf71} = 29.4, !- Program Line 2
-  SET {90e23ad3-5e53-43f4-9830-cc9b312c36e0} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {06cce988-e0ce-4b06-b36d-87e6938e6a83}<23.9 && {06cce988-e0ce-4b06-b36d-87e6938e6a83}>1.7, !- Program Line 4
-  SET {e30d02b9-d396-4d4f-8d22-705faf4fdf71} = 29.4, !- Program Line 5
-  SET {90e23ad3-5e53-43f4-9830-cc9b312c36e0} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {06cce988-e0ce-4b06-b36d-87e6938e6a83}<23.9 && {06cce988-e0ce-4b06-b36d-87e6938e6a83}>1.7, !- Program Line 7
-  SET {e30d02b9-d396-4d4f-8d22-705faf4fdf71} = 29.4, !- Program Line 8
-  SET {90e23ad3-5e53-43f4-9830-cc9b312c36e0} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {06cce988-e0ce-4b06-b36d-87e6938e6a83}<23.9 && {06cce988-e0ce-4b06-b36d-87e6938e6a83}>1.7, !- Program Line 10
-  SET {e30d02b9-d396-4d4f-8d22-705faf4fdf71} = 29.4, !- Program Line 11
-  SET {90e23ad3-5e53-43f4-9830-cc9b312c36e0} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {d60c9278-55ec-4ed7-899d-8f4c0bb54921}<23.9 && {d60c9278-55ec-4ed7-899d-8f4c0bb54921}>1.7, !- Program Line 1
+  SET {68e38a6e-0ebb-4774-a1b3-48eee52abcf1} = 29.4, !- Program Line 2
+  SET {5264266a-dbba-4865-bfaa-c7cf8b791b06} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {d60c9278-55ec-4ed7-899d-8f4c0bb54921}<23.9 && {d60c9278-55ec-4ed7-899d-8f4c0bb54921}>1.7, !- Program Line 4
+  SET {68e38a6e-0ebb-4774-a1b3-48eee52abcf1} = 29.4, !- Program Line 5
+  SET {5264266a-dbba-4865-bfaa-c7cf8b791b06} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {d60c9278-55ec-4ed7-899d-8f4c0bb54921}<23.9 && {d60c9278-55ec-4ed7-899d-8f4c0bb54921}>1.7, !- Program Line 7
+  SET {68e38a6e-0ebb-4774-a1b3-48eee52abcf1} = 29.4, !- Program Line 8
+  SET {5264266a-dbba-4865-bfaa-c7cf8b791b06} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {d60c9278-55ec-4ed7-899d-8f4c0bb54921}<23.9 && {d60c9278-55ec-4ed7-899d-8f4c0bb54921}>1.7, !- Program Line 10
+  SET {68e38a6e-0ebb-4774-a1b3-48eee52abcf1} = 29.4, !- Program Line 11
+  SET {5264266a-dbba-4865-bfaa-c7cf8b791b06} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {e30d02b9-d396-4d4f-8d22-705faf4fdf71} = NULL, !- Program Line 14
-  SET {90e23ad3-5e53-43f4-9830-cc9b312c36e0} = NULL, !- Program Line 15
+  SET {68e38a6e-0ebb-4774-a1b3-48eee52abcf1} = NULL, !- Program Line 14
+  SET {5264266a-dbba-4865-bfaa-c7cf8b791b06} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -6767,43 +6767,43 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0048-000000000147},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Demand Inlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Demand Inlet Node, !- Name
   {00000000-0000-0000-0017-000000000049},  !- Inlet Port
   {00000000-0000-0000-0017-000000000051};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000148},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Demand Outlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Demand Outlet Node, !- Name
   {00000000-0000-0000-0017-000000000052},  !- Inlet Port
   {00000000-0000-0000-0017-000000000050};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000149},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Mixed Air Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Mixed Air Node, !- Name
   {00000000-0000-0000-0017-000000000057},  !- Inlet Port
   {00000000-0000-0000-0017-000000000058};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000150},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Outdoor Air Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0017-000000000053};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000151},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Relief Air Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Relief Air Node, !- Name
   {00000000-0000-0000-0017-000000000054},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000152},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Supply Inlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Supply Inlet Node, !- Name
   {00000000-0000-0000-0017-000000000047},  !- Inlet Port
   {00000000-0000-0000-0017-000000000056};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000153},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Supply Outlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Supply Outlet Node, !- Name
   {00000000-0000-0000-0017-000000000055},  !- Inlet Port
   {00000000-0000-0000-0017-000000000048};  !- Outlet Port
 
@@ -8423,7 +8423,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0058-000000000057},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Default, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Default, !- Name
   {00000000-0000-0000-0061-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   8,                                       !- Hour 1
@@ -8438,7 +8438,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0058-000000000058},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Summer Design Day, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0061-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -8447,7 +8447,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0058-000000000059},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Winter Design Day, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0061-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -9279,7 +9279,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0060-000000000024},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-e|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch, !- Name
   {00000000-0000-0000-0061-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0058-000000000057},  !- Default Day Schedule Name
   {00000000-0000-0000-0058-000000000058},  !- Summer Design Day Schedule Name
