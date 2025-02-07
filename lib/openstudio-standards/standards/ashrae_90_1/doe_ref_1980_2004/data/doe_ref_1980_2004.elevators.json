@@ -66,6 +66,22 @@
     },
     {
       "template": "DOE Ref 1980-2004",
+      "building_type": "Laboratory",
+      "elevator_type": "Hydraulic",
+      "number_of_elevators": 2.0,
+      "elevator_schedule": "Lab_BLDG_ELEVATORS",
+      "elevator_fan_schedule": "Lab ELEV_LIGHT_FAN_SCH_24_7",
+      "area_per_passenger_elevator": 45000.0,
+      "units_per_passenger_elevator": null,
+      "beds_per_passenger_elevator": null,
+      "area_per_freight_elevator": null,
+      "units_per_freight_elevator": null,
+      "beds_per_freight_elevator": null,
+      "additional_passenger_elevators": null,
+      "notes": "DOE Prototype Buildings"
+    },
+    {
+      "template": "DOE Ref 1980-2004",
       "building_type": "LargeHotel",
       "elevator_type": "Traction",
       "number_of_elevators": 6.0,

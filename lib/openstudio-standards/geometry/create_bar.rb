@@ -1,5 +1,5 @@
 module OpenstudioStandards
-  # This Module provides methods to create, modify, and get information about model geometry
+  # The Geometry module provides methods to create, modify, and get information about model geometry
   module Geometry
     # @!group CreateBar
     # Methods to create bar geometry
@@ -1044,7 +1044,7 @@ module OpenstudioStandards
         facade_area = typical_width_facade_area
         until (width_area + facade_area >= target_party_wall_area) || (width_counter == (args[:num_stories_above_grade].ceil * 2))
           # update facade area for top story
-          if width_counter == args[:num_stories_above_grade].ceil - 1 || ((width_counter == (args[:num_stories_above_grade].ceil * 2)) - 1)
+          if (width_counter == (args[:num_stories_above_grade].ceil - 1)) || (width_counter == ((args[:num_stories_above_grade].ceil * 2) - 1))
             facade_area = top_story_width_facade_area
           else
             facade_area = typical_width_facade_area
@@ -1061,7 +1061,7 @@ module OpenstudioStandards
         facade_area = typical_length_facade_area
         until (length_area + facade_area >= target_party_wall_area) || (length_counter == args[:num_stories_above_grade].ceil * 2)
           # update facade area for top story
-          if length_counter == args[:num_stories_above_grade].ceil - 1 || ((length_counter == args[:num_stories_above_grade].ceil * 2) - 1)
+          if (length_counter == (args[:num_stories_above_grade].ceil - 1)) || (length_counter == ((args[:num_stories_above_grade].ceil * 2) - 1))
             facade_area = top_story_length_facade_area
           else
             facade_area = typical_length_facade_area
@@ -1444,7 +1444,7 @@ module OpenstudioStandards
           final_floor_area = ratio_of_bldg_total * total_bldg_floor_area_si # I think I can just pass ratio but passing in area is cleaner
 
           # only add custom height space if 0 is used for floor_height
-          if defaulted_args.include?(:floor_height) && hash.key?(:story_height) && args[:custom_height_bar]
+          if defaulted_args.include?('floor_height') && hash.key?(:story_height) && args[:custom_height_bar]
             multi_height_space_types_hash[space_type] = { floor_area: final_floor_area, space_type: space_type, story_height: hash[:story_height] }
             if hash.key?(:orig_ratio) then multi_height_space_types_hash[space_type][:orig_ratio] = hash[:orig_ratio] end
             custom_story_heights << hash[:story_height]
@@ -1834,14 +1834,14 @@ module OpenstudioStandards
         end
 
         # disable party walls
-        args3['party_wall_stories_east'] = 0
-        args3['party_wall_stories_west'] = 0
-        args3['party_wall_stories_south'] = 0
-        args3['party_wall_stories_north'] = 0
+        args3[:party_wall_stories_east] = 0
+        args3[:party_wall_stories_west] = 0
+        args3[:party_wall_stories_south] = 0
+        args3[:party_wall_stories_north] = 0
 
         # setup stories
-        args3['num_stories_below_grade'] = 0
-        args3['num_stories_above_grade'] = 1
+        args3[:num_stories_below_grade] = 0
+        args3[:num_stories_above_grade] = 1
 
         # can make use of this when breaking out multi-height spaces
         bars['custom_height'][:floor_height] = floor_height
@@ -1924,7 +1924,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Target facade area by orientation not validated when partial top story is used')
       elsif dual_bar_calc_approach == 'stretched'
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Target facade area by orientation not validated when single stretched bar has to be used to meet target minimum perimeter multiplier')
-      elsif defaulted_args.include?(:floor_height) && args[:custom_height_bar] && !multi_height_space_types_hash.empty?
+      elsif defaulted_args.include?('floor_height') && args[:custom_height_bar] && !multi_height_space_types_hash.empty?
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Target facade area by orientation not validated when a dedicated bar is added for space types with custom heights')
       elsif args[:bar_width] > 0
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', 'Target facade area by orientation not validated when a dedicated custom bar width is defined')
@@ -1994,6 +1994,8 @@ module OpenstudioStandards
     # @option args [String] :template ('90.1-2013') target standard
     # @return [Boolean] returns true if successful, false if not
     def self.create_bar_from_building_type_ratios(model, args)
+      # convert arguments to symbols
+      args = args.transform_keys(&:to_sym)
       bldg_type_a = args.fetch(:bldg_type_a, 'SmallOffice')
       bldg_type_b = args.fetch(:bldg_type_b, nil)
       bldg_type_c = args.fetch(:bldg_type_c, nil)
@@ -2007,6 +2009,61 @@ module OpenstudioStandards
       bldg_type_c_fract_bldg_area = args.fetch(:bldg_type_c_fract_bldg_area, 0.0)
       bldg_type_d_fract_bldg_area = args.fetch(:bldg_type_d_fract_bldg_area, 0.0)
       template = args.fetch(:template, '90.1-2013')
+
+      # If DOE building type is supplied with a DEER template, map to the nearest DEER building type
+      if template.include?('DEER')
+        unless bldg_type_a.nil?
+          bldg_type_a_deer = OpenstudioStandards::CreateTypical.doe_to_deer_building_type(bldg_type_a)
+          if bldg_type_a_deer.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', "Could not find a DEER equivalent to #{bldg_type_a} to align with template #{template}.")
+            return false
+          elsif bldg_type_a == bldg_type_a_deer
+            # Already using a DEER building type with a DEER template, no need to change
+          else
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Mapped input of DOE building type #{bldg_type_a} to DEER building type #{bldg_type_a_deer} to match template #{template}")
+            bldg_type_a = bldg_type_a_deer
+          end
+        end
+
+        unless bldg_type_b.nil?
+          bldg_type_b_deer = OpenstudioStandards::CreateTypical.doe_to_deer_building_type(bldg_type_b)
+          if bldg_type_b_deer.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', "Could not find a DEER equivalent to #{bldg_type_b} to align with template #{template}.")
+            return false
+          elsif bldg_type_b == bldg_type_b_deer
+            # Already using a DEER building type with a DEER template, no need to change
+          else
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Mapped input of DOE building type #{bldg_type_b} to DEER building type #{bldg_type_b_deer} to match template #{template}")
+            bldg_type_b = bldg_type_b_deer
+          end
+        end
+
+        unless bldg_type_c.nil?
+          bldg_type_c_deer = OpenstudioStandards::CreateTypical.doe_to_deer_building_type(bldg_type_c)
+          if bldg_type_c_deer.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', "Could not find a DEER equivalent to #{bldg_type_c} to align with template #{template}.")
+            return false
+          elsif bldg_type_c == bldg_type_c_deer
+            # Already using a DEER building type with a DEER template, no need to change
+          else
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Mapped input of DOE building type #{bldg_type_c} to DEER building type #{bldg_type_c_deer} to match template #{template}")
+            bldg_type_c = bldg_type_c_deer
+          end
+        end
+
+        unless bldg_type_d.nil?
+          bldg_type_d_deer = OpenstudioStandards::CreateTypical.doe_to_deer_building_type(bldg_type_d)
+          if bldg_type_d_deer.nil?
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Geometry.Create', "Could not find a DEER equivalent to #{bldg_type_d} to align with template #{template}.")
+            return false
+          elsif bldg_type_d == bldg_type_d_deer
+            # Already using a DEER building type with a DEER template, no need to change
+          else
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Geometry.Create', "Mapped input of DOE building type #{bldg_type_d} to DEER building type #{bldg_type_d_deer} to match template #{template}")
+            bldg_type_d = bldg_type_d_deer
+          end
+        end
+      end
 
       # check that sum of fractions for b,c, and d is less than 1.0 (so something is left for primary building type)
       bldg_type_a_fract_bldg_area = 1.0 - bldg_type_b_fract_bldg_area - bldg_type_c_fract_bldg_area - bldg_type_d_fract_bldg_area
@@ -2071,6 +2128,9 @@ module OpenstudioStandards
       # call create_bar_from_args_and_building_type_hash to generate bar
       args[:primary_building_type] = bldg_type_a
       OpenstudioStandards::Geometry.create_bar_from_args_and_building_type_hash(model, args, building_type_hash)
+
+      # rename all surfaces and subsurfaces
+      OpenstudioStandards::Geometry.model_rename_surfaces_and_subsurfaces(model)
 
       return true
     end

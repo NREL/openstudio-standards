@@ -105,7 +105,7 @@ class NECB_PumpPower_Test < Minitest::Test
       BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
         model: model,
         zones: model.getThermalZones,

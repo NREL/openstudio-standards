@@ -24,6 +24,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
     # Define test cases.
     test_cases = {}
+    
     # Define references (per vintage in this case).
     test_cases[:NECB2011] = { Reference: "NECB 2011 p3:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-13)" }
     test_cases[:NECB2015] = { Reference: "NECB 2015 p1:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-14)" }
@@ -132,7 +133,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       case speed
       when 'single'
         standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
@@ -155,9 +156,8 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
                                                                                                    new_auto_zoner: false)
       end
 
-      # Run the measure.
+      # Run sizing.
       run_sizing(model: model, template: vintage, save_model_versions: save_intermediate_models, output_dir: output_folder) if PERFORM_STANDARDS
-
     rescue => error
       msg = "#{__FILE__}::#{__method__}\n#{error.full_message}"
       logger.error(msg)
@@ -280,7 +280,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
 
       standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                       zones: model.getThermalZones,

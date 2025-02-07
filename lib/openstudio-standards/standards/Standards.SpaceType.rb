@@ -332,6 +332,9 @@ class Standard
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(elec_equip_per_area.to_f, 'W/ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set electric EPD to #{elec_equip_per_area} W/ft^2.")
         end
+        definition.resetFractionLatent unless definition.isFractionLatentDefaulted
+        definition.resetFractionRadiant unless definition.isFractionRadiantDefaulted
+        definition.resetFractionLost unless definition.isFractionLostDefaulted
         definition.setFractionLatent(elec_equip_frac_latent.to_f) if elec_equip_frac_latent
         definition.setFractionRadiant(elec_equip_frac_radiant.to_f) if elec_equip_frac_radiant
         definition.setFractionLost(elec_equip_frac_lost.to_f) if elec_equip_frac_lost
@@ -375,6 +378,9 @@ class Standard
           definition.setWattsperSpaceFloorArea(OpenStudio.convert(gas_equip_per_area.to_f, 'Btu/hr*ft^2', 'W/m^2').get)
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas EPD to #{gas_equip_per_area} Btu/hr*ft^2.")
         end
+        definition.resetFractionLatent unless definition.isFractionLatentDefaulted
+        definition.resetFractionRadiant unless definition.isFractionRadiantDefaulted
+        definition.resetFractionLost unless definition.isFractionLostDefaulted
         definition.setFractionLatent(gas_equip_frac_latent.to_f) if gas_equip_frac_latent
         definition.setFractionRadiant(gas_equip_frac_radiant.to_f) if gas_equip_frac_radiant
         definition.setFractionLost(gas_equip_frac_lost.to_f) if gas_equip_frac_lost

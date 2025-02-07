@@ -1,5 +1,5 @@
-# Methods to obtain information about model spaces
 module OpenstudioStandards
+  # The ThermalZone module provides methods get information about model thermal zones
   module ThermalZone
     # Determine if the thermal zone is a plenum based on whether a majority of the spaces in the zone are plenums or not.
     #

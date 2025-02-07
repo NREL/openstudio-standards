@@ -296,6 +296,10 @@ class Standard
         # Change the chilled water loop to have a two-way common pipes
         chilled_water_loop.setCommonPipeSimulation('CommonPipe')
       elsif pri_sec_config == 'heat_exchanger'
+        # Check number of chillers
+        if num_chillers > 3
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "EMS Code for multiple chiller pump has not been written for greater than 3 chillers. This has #{num_chillers} chillers")
+        end
         # NOTE: PRECONDITIONING for `const_pri_var_sec` pump type is only applicable for PRM routine and only applies to System Type 7 and System Type 8
         # See: model_add_prm_baseline_system under Model object.
         # In this scenario, we will need to create a primary and secondary configuration:
@@ -309,10 +313,15 @@ class Standard
         secondary_chilled_water_loop.setName(secondary_loop_name)
         chw_sizing_control(model, secondary_chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
         chilled_water_loop.additionalProperties.setFeature('is_primary_loop', true)
+        chilled_water_loop.additionalProperties.setFeature('secondary_loop_name', secondary_chilled_water_loop.name.to_s)
         secondary_chilled_water_loop.additionalProperties.setFeature('is_secondary_loop', true)
-        # primary chilled water pump
+        # primary chilled water pumps are added when adding chillers
         # Add Constant pump, in plant loop, the number of chiller adjustment will assign pump to each chiller
-        pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        # pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        pri_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+        pump_variable_speed_set_control_type(pri_chw_pump, control_type = 'Riding Curve')
+        # This pump name is important for function add_ems_for_multiple_chiller_pumps_w_secondary_plant. If you update
+        # it here, you must update the logic there to account for this
         pri_chw_pump.setName("#{chilled_water_loop.name} Primary Pump")
         # Will need to adjust the pump power after a sizing run
         pri_chw_pump.setRatedPumpHead(OpenStudio.convert(15.0, 'ftH_{2}O', 'Pa').get / num_chillers)
@@ -375,8 +384,23 @@ class Standard
       dist_clg.autosizeNominalCapacity
       chilled_water_loop.addSupplyBranchForComponent(dist_clg)
     else
+
+      # use default efficiency from 90.1-2019
+      # 1.188 kw/ton for a 150 ton AirCooled chiller
+      # 0.66 kw/ton for a 150 ton Water Cooled positive displacement chiller
+      case chiller_cooling_type
+      when 'AirCooled'
+        default_cop = kw_per_ton_to_cop(1.188)
+      when 'WaterCooled'
+        default_cop = kw_per_ton_to_cop(0.66)
+      else
+        default_cop = kw_per_ton_to_cop(0.66)
+      end
+
       # make the correct type of chiller based these properties
       chiller_sizing_factor = (1.0 / num_chillers).round(2)
+
+      # Create chillers and set plant operation scheme
       num_chillers.times do |i|
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
         chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
@@ -391,18 +415,6 @@ class Standard
         chiller.setMinimumUnloadingRatio(0.25)
         chiller.setChillerFlowMode('ConstantFlow')
         chiller.setSizingFactor(chiller_sizing_factor)
-
-        # use default efficiency from 90.1-2019
-        # 1.188 kw/ton for a 150 ton AirCooled chiller
-        # 0.66 kw/ton for a 150 ton Water Cooled positive displacement chiller
-        case chiller_cooling_type
-        when 'AirCooled'
-          default_cop = kw_per_ton_to_cop(1.188)
-        when 'WaterCooled'
-          default_cop = kw_per_ton_to_cop(0.66)
-        else
-          default_cop = kw_per_ton_to_cop(0.66)
-        end
         chiller.setReferenceCOP(default_cop)
 
         # connect the chiller to the condenser loop if one was supplied
@@ -668,11 +680,10 @@ class Standard
                   summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
                 else
                   if dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
-                    summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb
+                    summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb.get
                     summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
                   end
                 end
-
               end
             end
           end
@@ -1020,22 +1031,25 @@ class Standard
     loop_stpt_manager.setName("#{ground_hx_loop.name} Supply Outlet Setpoint")
     loop_stpt_manager.addToNode(ground_hx_loop.supplyOutletNode)
 
+    # edit name to be EMS friendly
+    ground_hx_ems_name = ems_friendly_name(ground_hx.name)
+
     # sensor to read supply inlet temperature
     inlet_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model,
                                                                             'System Node Temperature')
-    inlet_temp_sensor.setName("#{ground_hx.name.to_s.gsub(/[ +-.]/, '_')} Inlet Temp Sensor")
+    inlet_temp_sensor.setName("#{ground_hx_ems_name} Inlet Temp Sensor")
     inlet_temp_sensor.setKeyName(ground_hx_loop.supplyInletNode.handle.to_s)
 
     # actuator to set supply outlet temperature
     outlet_temp_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hx_temp_sch,
                                                                                  'Schedule:Constant',
                                                                                  'Schedule Value')
-    outlet_temp_actuator.setName("#{ground_hx.name} Outlet Temp Actuator")
+    outlet_temp_actuator.setName("#{ground_hx_ems_name} Outlet Temp Actuator")
 
     # program to control outlet temperature
     # adjusts delta-t based on calculation of slope and intercept from control temperatures
     program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    program.setName("#{ground_hx.name.to_s.gsub(/[ +-.]/, '_')} Temperature Control")
+    program.setName("#{ground_hx_ems_name} Temperature Control")
     program_body = <<-EMS
       SET Tin = #{inlet_temp_sensor.handle}
       SET Tout = #{slope_c_per_c.round(2)} * Tin + #{intercept_c.round(1)}
@@ -1045,7 +1059,7 @@ class Standard
 
     # program calling manager
     pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    pcm.setName("#{program.name.to_s.gsub(/[ +-.]/, '_')} Calling Manager")
+    pcm.setName("#{program.name} Calling Manager")
     pcm.setCallingPoint('InsideHVACSystemIterationLoop')
     pcm.addProgram(program)
 
@@ -4451,20 +4465,20 @@ class Standard
       # Create a sensor to read the zone load
       zn_load_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model,
                                                                            'Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate')
-      zn_load_sensor.setName("#{zone_name_clean.to_s.gsub(/[ +-.]/, '_')} Clg Load Sensor")
+      zn_load_sensor.setName("#{ems_friendly_name(zone_name_clean)} Clg Load Sensor")
       zn_load_sensor.setKeyName(zone.handle.to_s)
 
       # Create an actuator to set the airloop availability
       air_loop_avail_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(air_loop_avail_sch,
                                                                                       'Schedule:Constant',
                                                                                       'Schedule Value')
-      air_loop_avail_actuator.setName("#{air_loop.name.to_s.gsub(/[ +-.]/, '_')} Availability Actuator")
+      air_loop_avail_actuator.setName("#{ems_friendly_name(air_loop.name)} Availability Actuator")
 
       # Create a program to turn on Evap Cooler if
       # there is a cooling load in the target zone.
       # Load < 0.0 is a cooling load.
       avail_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-      avail_program.setName("#{air_loop.name.to_s.gsub(/[ +-.]/, '_')} Availability Control")
+      avail_program.setName("#{ems_friendly_name(air_loop.name)} Availability Control")
       avail_program_body = <<-EMS
         IF #{zn_load_sensor.handle} < 0.0
           SET #{air_loop_avail_actuator.handle} = 1
@@ -4477,10 +4491,16 @@ class Standard
       programs << avail_program
 
       # Direct Evap Cooler
-      # @todo better assumptions for evap cooler performance and fan pressure rise
+      # @todo better assumptions for fan pressure rise
       evap = OpenStudio::Model::EvaporativeCoolerDirectResearchSpecial.new(model, model.alwaysOnDiscreteSchedule)
       evap.setName("#{zone.name} Evap Media")
+      # assume 90% design effectiveness from https://basc.pnnl.gov/resource-guides/evaporative-cooling-systems#edit-group-description
+      evap.setCoolerDesignEffectiveness(0.90)
       evap.autosizePrimaryAirDesignFlowRate
+      evap.autosizeRecirculatingWaterPumpPowerConsumption
+      # use suggested E+ default values of 90.0 W-s/m^3 for pump sizing factor and 3.0 for blowdown concentration
+      evap.setWaterPumpPowerSizingFactor(90.0)
+      evap.setBlowdownConcentrationRatio(3.0)
       evap.addToNode(air_loop.supplyInletNode)
 
       # Fan (cycling), must be inside unitary system to cycle on airloop

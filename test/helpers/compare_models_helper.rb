@@ -127,6 +127,7 @@ def object_name(object)
        'OS:ShadowCalculation',
        'OS:SimulationControl',
        'OS:Site:GroundTemperature:BuildingSurface',
+       'OS:Site:GroundTemperature:FCfactorMethod',
        'OS:Site:WaterMainsTemperature',
        'OS:Sizing:Parameters',
        'OS:SurfaceConvectionAlgorithm:Inside',

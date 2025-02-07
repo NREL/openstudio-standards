@@ -120,7 +120,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                       zones: model.getThermalZones,
                                       chiller_type: chiller_type,
@@ -266,7 +266,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
                                                                           zones: model.getThermalZones,
                                                                           heating_coil_type: heating_coil_type,
@@ -408,7 +408,7 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                        zones: model.getThermalZones,
                                        chiller_type: chiller_type,

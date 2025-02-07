@@ -114,7 +114,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       hw_loop = nil
       if baseboard_type == 'Hot Water'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
-        standard.setup_hw_loop_with_components(model, hw_loop, heating_coil_type, always_on)
+        standard.setup_hw_loop_with_components(model, hw_loop, heating_coil_type, heating_coil_type, always_on)
       end
       sys3_heating_coil_type = 'Electric'
       sys3_heating_coil_type = 'Gas' if heating_coil_type == 'NaturalGas'
@@ -395,7 +395,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fuel_type, furnace_fuel_type, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
                                                                                                  zones: model.getThermalZones,
                                                                                                  heating_coil_type: heating_coil_type,

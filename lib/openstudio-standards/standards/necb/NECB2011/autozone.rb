@@ -94,7 +94,6 @@ class NECB2011
   # Organizes Zones and assigns them to appropriate systems according to NECB 2011-17 systems spacetype rules in Sec 8.
   # requires requires fuel type to be assigned for each system aspect. Defaults to gas hydronic.
   def apply_systems(model:,
-                    primary_heating_fuel:,
                     sizing_run_dir:,
                     shw_scale:,
                     baseline_system_zones_map_option:)
@@ -121,6 +120,7 @@ class NECB2011
     model.getZoneHVACIdealLoadsAirSystems.each(&:remove)
     @hw_loop = create_hw_loop_if_required(self.fuel_type_set.baseboard_type,
                                           self.fuel_type_set.boiler_fueltype,
+                                          self.fuel_type_set.backup_boiler_fueltype,
                                           self.fuel_type_set.mau_heating_coil_type,
                                           model)
     # Rule that all dwelling units have their own zone and system.
@@ -179,7 +179,6 @@ class NECB2011
                                  mau_type: self.fuel_type_set.mau_type
     )
     model_add_swh(model: model,
-                  swh_fueltype: self.fuel_type_set.swh_fueltype,
                   shw_scale: shw_scale)
     model_apply_sizing_parameters(model)
     # set a larger tolerance for unmet hours from default 0.2 to 1.0C
@@ -823,7 +822,7 @@ class NECB2011
   ################################################# NECB Systems
 
   # Method will create a hot water loop if systems default fuel and medium sources require it.
-  def create_hw_loop_if_required(baseboard_type, boiler_fueltype, mau_heating_coil_type, model)
+  def create_hw_loop_if_required(baseboard_type, boiler_fueltype, backup_boiler_fueltype, mau_heating_coil_type, model)
     # get systems that will be used in the model based on the space types to determine if a hw_loop is required.
     systems_used = []
     model.getSpaces.sort.each do |space|
@@ -856,7 +855,7 @@ class NECB2011
     if hw_loop_needed
       @hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      setup_hw_loop_with_components(model, @hw_loop, boiler_fueltype, always_on)
+      setup_hw_loop_with_components(model, @hw_loop, boiler_fueltype, backup_boiler_fueltype, always_on)
     end
     return @hw_loop
   end

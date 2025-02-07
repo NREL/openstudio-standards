@@ -89,6 +89,8 @@ class BTAPData
     bc_energy_step_code_performance_indicators
     # calculate net present value
     net_present_value(npv_start_year, npv_end_year, npv_discount_rate) unless cost_result.nil?
+    # calculates annual peak electricity cost (dollar)
+    oerd_electricity_cost(model)
 
     measure_metrics(qaqc)
     @btap_data
@@ -513,6 +515,125 @@ class BTAPData
     geography_data['location_latitude'] = @model.getWeatherFile.latitude
     geography_data['location_longitude'] = @model.getWeatherFile.longitude
     return geography_data
+  end
+
+  ### The 'annual_peak_electricity_cost_dollar' function calculates annual peak electricity cost (dollar)
+  ### for OEE-Electrification project using the OERD's electricity rates for commercial buildings
+  ### that Danielle Krauel of OEE provided to CE-O
+  def oerd_electricity_cost(model)
+    #===================================================================================================================
+    ### OERD's electricity rates for commercial buildings
+    ### Note: provinces' abbreviations were checked with: /standards/necb/NECB2011/data/province_map.json
+    ### Note: OERD's electricity rate does not provide rates for three P/Ts: YT, NT, NU. To avoid errors in simulation runs, I have assigned a dummy value for each.
+    dollar_kW_month = {
+      "AB" => 13.68,
+      "BC" => 10.20,
+      "MB" => 9.76,
+      "NB" => 10.05,
+      "NL" => 8.36,
+      "NS" => 12.62,
+      "ON" => 12.25,
+      "PE" => 13.70,
+      "QC" => 14.90,
+      "SK" => 20.02,
+      "YT" => 10000000,
+      "NT" => 10000000,
+      "NU" => 10000000
+    }
+    dollar_kWh = {
+      "AB" => 0.15,
+      "BC" => 0.11,
+      "MB" => 0.09,
+      "NB" => 0.16,
+      "NL" => 0.13,
+      "NS" => 0.22,
+      "ON" => 0.16,
+      "PE" => 0.17,
+      "QC" => 0.09,
+      "SK" => 0.19,
+      "YT" => 100000,
+      "NT" => 100000,
+      "NU" => 100000
+    }
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    ##################### Calculate annual electricity peak cost using OERD's electricity rate #########################
+    #===================================================================================================================
+    ### Get number of timesteps from the model
+    number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
+    timestep_second = 3600 / number_of_timesteps_per_hour
+    #===================================================================================================================
+    ### Calculate number of timesteps of the whole year, and create dates/times for the whole year
+    number_of_timesteps_of_year = 365 * 24 * number_of_timesteps_per_hour
+    timesteps_of_year = []
+    d = Time.new(2006, 1, 1, 0)
+    (0...number_of_timesteps_of_year).each do |increment|
+      timesteps_of_year << (d + (60 * 60 / number_of_timesteps_per_hour) * increment).strftime('%Y-%m-%d %H:%M')
+    end
+    #===================================================================================================================
+    ### Find index for timestep data of 'Electricity:Facility' (J)
+    query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE Name=='Electricity:Facility' AND ReportingFrequency == 'Zone Timestep' AND Units == 'J'
+                                                       "
+    index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+    #===================================================================================================================
+    ### Get timestep output for Electricity:Facility output.
+    query = "
+      Select VariableValue
+      FROM ReportVariableData
+      WHERE
+      ReportVariableDataDictionaryIndex = #{index_timestep_electricity}
+    "
+    timestep_values = model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+    #===================================================================================================================
+    ### Calculate electricity peak (J) for each month of the year
+    # Find month of each timestep
+    keys_month = timesteps_of_year.map{ |timestep| DateTime.parse(timestep).to_date.month }
+    # Create a hash where its keys are months and values for eahc month are electricity energy use (J) of all timesteps for that month
+    hash_months_electricity = keys_month.zip(timestep_values).group_by(&:first).map{|key, value| [key, value.map(&:last)]}.to_h
+    # Find maximum of electricity energy use (J) among all timesteps for each month of the year
+    monthly_peak_J = hash_months_electricity.map { |key, value| [key, value.max()] }.to_h
+    #===================================================================================================================
+    ### Convert J to kW of maximum electricity energy use (J)
+    monthly_peak_kW = monthly_peak_J.map { |key, value| [key, value * 0.001 / timestep_second] }.to_h
+    #===================================================================================================================
+    ### Get province of the model and find its peak electricity price using the 'dollar_kW_month' hash
+    province = @btap_data['location_state_province_region']
+    province_dollar_kW_month = dollar_kW_month.fetch_values(province)[0]
+    #===================================================================================================================
+    ### Calculate cost of peak electricity for each month
+    monthly_peak_cost = monthly_peak_kW.map { |key, value| [key, value * province_dollar_kW_month] }.to_h
+    #===================================================================================================================
+    ### Calculate cost of peak electricity for the whole year in dollar
+    annual_peak_cost_dollar = monthly_peak_cost.values.sum
+    #===================================================================================================================
+    ### Calculate cost of peak electricity for the whole year in dollar normalized by floor area
+    annual_peak_cost_dollar_per_m_sq = annual_peak_cost_dollar / @btap_data['bldg_conditioned_floor_area_m_sq']
+    #===================================================================================================================
+    ### Merge the calculated value to @btap_data
+    @btap_data.merge!('cost_utility_oerd_electricity_peak_annual_cost_per_m_sq' => annual_peak_cost_dollar_per_m_sq.round(2))
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    #===================================================================================================================
+    ################### Calculate annual electricity energy use cost using OERD's electricity rate #####################
+    #===================================================================================================================
+    ### Get province of the model and find its peak electricity price using the 'dollar_kW_month' hash
+    province = @btap_data['location_state_province_region']
+    province_dollar_kWh = dollar_kWh.fetch_values(province)[0]
+    #===================================================================================================================
+    # Calculate cost of energy electricity for the whole year in dollar normalized by floor area
+    annual_energy_cost_dollar_per_m_sq = @btap_data['energy_eui_electricity_gj_per_m_sq'] * 277.778 * province_dollar_kWh
+    #===================================================================================================================
+    ### Merge the calculated value to @btap_data
+    @btap_data.merge!('cost_utility_oerd_electricity_energy_annual_cost_per_m_sq' => annual_energy_cost_dollar_per_m_sq.round(2))
+    #===================================================================================================================
   end
 
   def utility(model)

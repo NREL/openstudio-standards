@@ -38,9 +38,6 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
 
     # Test cases. Three cases for NG and FuelOil, one for Electric.
     # Results and name are tbd here as they will be calculated in the test.
-
-    # Test cases. Three cases for NG and FuelOil, one for Electric.
-    # Results and name are tbd here as they will be calculated in the test.
     test_cases_hash = { vintage: ["BTAPPRE1980", "BTAP1980TO2010", "NECB2011"],
                         :chiller_types => ['Scroll', 'Centrifugal', 'Rotary Screw', 'Reciprocating'],
                         TestCase: ["One Cell"],
@@ -136,7 +133,7 @@ class NECB_HVAC_Cooling_Tower_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model,hw_loop, fuel_type, fuel_type, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(model: model,
                                                                           zones: model.getThermalZones,
                                                                           heating_coil_type: heating_coil_type,
