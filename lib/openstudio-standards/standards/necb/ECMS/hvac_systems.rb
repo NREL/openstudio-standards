@@ -512,7 +512,7 @@ class ECMS
 
     # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water
 
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
@@ -533,6 +533,7 @@ class ECMS
                                            system_doas_flags: system_doas_flags)
       sys_supp_htg_eqpt_type = 'coil_electric'
       sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+      sys_supp_htg_eqpt_type = 'coil_hw' if standard.fuel_type_set.force_airloop_hot_water
       airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
@@ -543,7 +544,8 @@ class ECMS
                                            sys_clg_eqpt_type: air_sys_eqpt_type,
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
-                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
+                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'],
+                                           hw_loop: hw_loop)
       # Appy performance curves
       if air_sys_eqpt_type == 'ccashp'
         eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
@@ -1742,6 +1744,8 @@ class ECMS
 
     # Get the heating fuel type from the system fuels object defined by the standards object
     heating_fuel = standard.fuel_type_set.ecm_fueltype
+
+    #hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water
 
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
