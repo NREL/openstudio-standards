@@ -767,7 +767,7 @@ class ECMS
     when 'coil_hw'
       htg_eqpt = OpenStudio::Model::CoilHeatingWater.new(model)
       htg_eqpt.setName('CoilHeatingWater')
-      hw_loop.addDemandBranchForComponent(htg_eqpt)
+      hw_loop.addDemandBranchForComponent(htg_eqpt) unless hw_loop.nil?
     end
 
     return htg_eqpt
@@ -1744,8 +1744,6 @@ class ECMS
 
     # Get the heating fuel type from the system fuels object defined by the standards object
     heating_fuel = standard.fuel_type_set.ecm_fueltype
-
-    #hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water
 
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
