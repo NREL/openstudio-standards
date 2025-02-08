@@ -15049,7 +15049,7 @@ OS:CoolingTower:SingleSpeed,
   {00000000-0000-0000-0021-000000001102},  !- Water Outlet Node Name
   autosize,                                !- Design Water Flow Rate {m3/s}
   autosize,                                !- Design Air Flow Rate {m3/s}
-  195.553256055199,                        !- Fan Power at Design Air Flow Rate {W}
+  autosize,                                !- Fan Power at Design Air Flow Rate {W}
   autosize,                                !- U-Factor Times Area Value at Design Air Flow Rate {W/K}
   autosize,                                !- Air Flow Rate in Free Convection Regime {m3/s}
   autosize,                                !- U-Factor Times Area Value at Free Convection Air Flow Rate {W/K}
