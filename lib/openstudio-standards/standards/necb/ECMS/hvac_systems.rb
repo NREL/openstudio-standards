@@ -1237,11 +1237,12 @@ class ECMS
 
     # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water
 
     # Set supplemental heating for air loop
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_hw' if standard.fuel_type_set.force_airloop_hot_water
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1259,7 +1260,8 @@ class ECMS
         sys_clg_eqpt_type: 'ccashp',
         sys_supp_fan_type: sys_info['sys_supp_fan_type'],
         sys_ret_fan_type: sys_info['sys_ret_fan_type'],
-        sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type']
+        sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'],
+        hw_loop: hw_loop
       )
       # Apply performance curves
       eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
@@ -1560,11 +1562,12 @@ class ECMS
 
     # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water
 
     # Set supplemental heating fuel for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_hw' if standard.fuel_type_set.force_airloop_hot_water
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1581,7 +1584,8 @@ class ECMS
                                            sys_clg_eqpt_type: 'ashp',
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
-                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
+                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'],
+                                           hw_loop: hw_loop)
       eqpt_name = 'NECB2015_ASHP'
       coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
       coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
