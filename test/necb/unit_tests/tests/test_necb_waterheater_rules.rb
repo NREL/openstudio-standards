@@ -106,16 +106,15 @@ class NECB_WaterHeater_Rules < Minitest::Test
 
       # Add SWH loop.
       standard = get_standard(vintage)
-      standard.model_add_swh_loop(model,
-                        'Main Service Water Loop',
-                        nil,
-                        swh_temperature_degC,
-                        swh_pump_head,
-                        swh_pump_motor_efficiency,
-                        (swh_capacity_kW*1000.0),
-                        (swh_volume_L/1000.0),
-                        swh_fuel,
-                        swh_parasitic_fuel_consumption_rate)
+      OpenstudioStandards::ServiceWaterHeating.create_service_water_heating_loop(model,
+                                                                                system_name: 'Main Service Water Loop',
+                                                                                service_water_temperature: swh_temperature_degC,
+                                                                                service_water_pump_head: swh_pump_head,
+                                                                                service_water_pump_motor_efficiency: swh_pump_motor_efficiency,
+                                                                                water_heater_capacity: (swh_capacity_kW*1000.0),
+                                                                                water_heater_volume: (swh_volume_L/1000.0),
+                                                                                water_heater_fuel: swh_fuel)
+                                                                      
 
       # Add hvac system.
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
@@ -243,16 +242,14 @@ class NECB_WaterHeater_Rules < Minitest::Test
       model.getPlantLoops.each(&:remove)
       model.purgeUnusedResourceObjects
       standard = get_standard(vintage)
-      standard.model_add_swh_loop(model,
-                                  'Test Service Water Loop',
-                                  nil,
-                                  60.0,
-                                  1.0,
-                                  0.7,
-                                  (swh_capacity_kW*1000.0),
-                                  (swh_volume_L/1000.0),
-                                  swh_fuel,
-                                  1.0)
+      OpenstudioStandards::ServiceWaterHeating.create_service_water_heating_loop(model,
+                                                                                system_name: 'Test Service Water Loop',
+                                                                                service_water_temperature: 60.0,
+                                                                                service_water_pump_head: 1.0,
+                                                                                service_water_pump_motor_efficiency: 0.7,
+                                                                                water_heater_capacity: (swh_capacity_kW*1000.0),
+                                                                                water_heater_volume: (swh_volume_L/1000.0),
+                                                                                water_heater_fuel: swh_fuel)
 
       # Apply the water heater sizing rules.
       model.getWaterHeaterMixeds.each { |unit| standard.water_heater_mixed_apply_efficiency(unit) }
