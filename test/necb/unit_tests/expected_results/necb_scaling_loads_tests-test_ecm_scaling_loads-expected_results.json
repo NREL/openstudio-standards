@@ -38,8 +38,8 @@
         "Kitchen Infiltration - flowperSpaceFloorArea": 0,
         "Kitchen Infiltration - flowperExteriorSurfaceArea": 0.000125,
         "Kitchen Infiltration - airChangesperHour": 0,
-        "Dining Service Water Use Def 0.19gal/min - peakFlowRate": 1.19758e-05,
-        "Kitchen Service Water Use Def 0.04gal/min - peakFlowRate": 2.24787e-06,
+        "Dining 0.19gpm 140F - peakFlowRate": 1.19758e-05,
+        "Kitchen 0.04gpm 140F - peakFlowRate": 2.24787e-06,
         "24gal NaturalGas Water Heater - 16kBtu/hr 0.82 Therm Eff - tankVolume": 0.09217
       },
       "case one+half": {
@@ -72,8 +72,8 @@
         "Kitchen Infiltration - flowperSpaceFloorArea": 0,
         "Kitchen Infiltration - flowperExteriorSurfaceArea": 0.000375,
         "Kitchen Infiltration - airChangesperHour": 0,
-        "Dining Service Water Use Def 0.57gal/min - peakFlowRate": 3.59273e-05,
-        "Kitchen Service Water Use Def 0.11gal/min - peakFlowRate": 6.74361e-06,
+        "Dining 0.57gpm 140F - peakFlowRate": 3.59273e-05,
+        "Kitchen 0.11gpm 140F - peakFlowRate": 6.74361e-06,
         "73gal NaturalGas Water Heater - 49kBtu/hr 0.82 Therm Eff - tankVolume": 0.2765
       }
     }
