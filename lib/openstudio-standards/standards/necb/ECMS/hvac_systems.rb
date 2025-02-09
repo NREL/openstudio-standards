@@ -3779,6 +3779,10 @@ class ECMS
     boiler_fueltype = standard.fuel_type_set.boiler_fueltype
     backup_boiler_fueltype = standard.fuel_type_set.backup_boiler_fueltype
     baseboard_type = standard.fuel_type_set.baseboard_type
+    heating_coil_type_sys2 = standard.fuel_type_set.heating_coil_type_sys2
+    heating_coil_type_sys3 = standard.fuel_type_set.heating_coil_type_sys3
+    heating_coil_type_sys4 = standard.fuel_type_set.heating_coil_type_sys4
+    heating_coil_type_sys6 = standard.fuel_type_set.heating_coil_type_sys6
     mau_heating_coil_type = 'none'
 
     # Create the hot water loop if necessary.
@@ -3787,7 +3791,11 @@ class ECMS
       boiler_fueltype: boiler_fueltype,
       backup_boiler_fueltype: backup_boiler_fueltype,
       mau_heating_coil_type: mau_heating_coil_type,
-      model: model
+      model: model,
+      heating_coil_type_sys2: heating_coil_type_sys2,
+      heating_coil_type_sys3: heating_coil_type_sys3,
+      heating_coil_type_sys4: heating_coil_type_sys4,
+      heating_coil_type_sys6: heating_coil_type_sys6
     )
 
     # Add baseboard heaters to each heated zone.
