@@ -1408,7 +1408,7 @@ class ECMS
                              ecm_system_zones_map_option:,
                              standard:)
     hw_loop = nil
-    if standard.fuel_type_set.force_airloop_hot_water || standard.fuel_type_set.necb_reference_hp_supp_fuel.to_s.downcase == "hot water" || standard.fuel_type_set.force_boiler
+    if standard.fuel_type_set.force_airloop_hot_water || standard.fuel_type_set.necb_reference_hp_supp_fuel.to_s.downcase == "hot water"
       hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set)
     end
 
