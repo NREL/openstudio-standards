@@ -1,4 +1,5 @@
 :adv_dx_units: NECB_Default
+:airloop_fancoils_heating: NECB_Default
 :analysis_id: c3ae0124-f685-46a1-8798-433713d702fc
 :analysis_name: test_analysis_para
 :baseline_system_zones_map_option: NECB_Default
@@ -44,7 +45,7 @@
 :oa_scale: NECB_Default
 :occupancy_loads_scale: NECB_Default
 :overhead_door_cond: NECB_Default
-:primary_heating_fuel: FuelOilNo2
+:primary_heating_fuel: NaturalGasHPGasBackup
 :pv_ground_azimuth_angle: NECB_Default
 :pv_ground_module_description: NECB_Default
 :pv_ground_tilt_angle: NECB_Default

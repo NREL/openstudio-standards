@@ -18,6 +18,8 @@ class SystemFuels
   attr_accessor :fan_type
   attr_accessor :ecm_fueltype
   attr_accessor :swh_fueltype
+  attr_accessor :force_boiler
+  attr_accessor :force_airloop_hot_water
 
   def set_defaults(standards_data:, primary_heating_fuel:)
     # Get fuelset.
@@ -43,6 +45,8 @@ class SystemFuels
     @fan_type = system_fuel_defaults['fan_type']
     @swh_fueltype = system_fuel_defaults['swh_fueltype']
     @ecm_fueltype = system_fuel_defaults['ecm_fueltype']
+    @force_boiler = false
+    @force_airloop_hot_water = false
   end
 
   # Forces a boiler to be generated.  It searches boiler_fuel_type_sets.json for the boiler_fuel string and sets the
@@ -56,6 +60,7 @@ class SystemFuels
     @baseboard_type = boiler_fuel_defaults['baseboard_type']
     @mau_heating_coil_type = boiler_fuel_defaults['mau_heating_coil_type'] unless @mau_heating_coil_type == 'DX'
     @heating_coil_type_sys6 = boiler_fuel_defaults['heating_coil_type_sys6']
+    @force_boiler = true
   end
 
   # Reset the Service Hot Water fuel.
@@ -63,15 +68,28 @@ class SystemFuels
     @swh_fueltype = swh_fuel
   end
 
+  #Forces heating_coils to be 'Hot Water' except when using HPs
+  def set_airloop_fancoils_heating()
+    @force_airloop_hot_water = true
+    @mau_heating_coil_type = "Hot Water" unless @mau_heating_coil_type == 'DX'
+    @heating_coil_type_sys2 = "Hot Water" unless @heating_coil_type_sys2 == 'DX'
+    @heating_coil_type_sys3 = "Hot Water" unless @heating_coil_type_sys3 == 'DX'
+    @heating_coil_type_sys4 = "Hot Water" unless @heating_coil_type_sys4 == 'DX'
+    @heating_coil_type_sys6 = "Hot Water" unless @heating_coil_type_sys6 == 'DX'
+    if @mau_heating_coil_type == 'DX' || @heating_coil_type_sys3 == 'DX' || @heating_coil_type_sys4 == 'DX' || @heating_coil_type_sys6 == 'DX' || @heating_coil_type_sys2 == 'DX'
+      @necb_reference_hp_supp_fuel = 'Hot Water'
+    end
+  end
+
   # Reset system fuels to match parameters defined by hvac_system_primary
   def set_fuel_to_hvac_system_primary(hvac_system_primary:, standards_data:)
     hvac_system_data = standards_data['hvac_types'].find { |system| system['description'].to_s.downcase == hvac_system_primary.to_s.downcase }
     return if hvac_system_data.nil? || hvac_system_data.empty?
-    @baseboard_type = hvac_system_data["baseboard_type"].to_s unless hvac_system_data["baseboard_type"].nil?
-    @mau_heating_coil_type = hvac_system_data["mau_heating_type"].to_s unless hvac_system_data["mau_heating_type"].nil?
+    @baseboard_type = hvac_system_data["baseboard_type"].to_s unless hvac_system_data["baseboard_type"].nil? || @force_boiler == true
+    @mau_heating_coil_type = hvac_system_data["mau_heating_type"].to_s unless hvac_system_data["mau_heating_type"].nil? || @force_airloop_hot_water == true
     @mau_type = hvac_system_data["mau_type"].to_bool unless hvac_system_data["mau_type"].nil?
     @necb_reference_hp = hvac_system_data["necb_reference_hp"].to_bool unless hvac_system_data["necb_reference_hp"].nil?
-    @necb_reference_hp_supp_fuel = hvac_system_data["necb_reference_hp_supp_fuel"] unless hvac_system_data["necb_reference_hp_supp_fuel"].nil?
+    @necb_reference_hp_supp_fuel = hvac_system_data["necb_reference_hp_supp_fuel"] unless hvac_system_data["necb_reference_hp_supp_fuel"].nil? || @force_airloop_hot_water == true
     # If applying a hvac_system_primary with an NECB reference HP, make sure that the system 4 systems (if left at
     # NECB_Default) work with the NECB reference HP.
     if hvac_system_data["necb_reference_hp"].to_bool
@@ -100,5 +118,7 @@ class SystemFuels
     @fan_type = init_fuel_type[:fan_type]
     @ecm_fueltype = init_fuel_type[:ecm_fueltype]
     @swh_fueltype = init_fuel_type[:swh_fueltype]
+    @force_boiler = init_fuel_type[:force_boiler]
+    @force_airloop_hot_water = init_fuel_type[:force_airloop_hot_water]
   end
 end

@@ -276,7 +276,8 @@ class NECB2011 < Standard
                                    tbd_interpolate: false,
                                    necb_hdd: true,
                                    boiler_fuel: nil,
-                                   boiler_cap_ratio: nil)
+                                   boiler_cap_ratio: nil,
+                                   airloop_fancoils_heating: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
@@ -343,7 +344,8 @@ class NECB2011 < Standard
                                 baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
                                 necb_hdd: necb_hdd,
                                 boiler_fuel: boiler_fuel,
-                                boiler_cap_ratio: boiler_cap_ratio
+                                boiler_cap_ratio: boiler_cap_ratio,
+                                airloop_fancoils_heating: airloop_fancoils_heating
                                 )
   end
 
@@ -426,7 +428,8 @@ class NECB2011 < Standard
                            baseline_system_zones_map_option: nil,
                            necb_hdd: true,
                            boiler_fuel: nil,
-                           boiler_cap_ratio: nil)
+                           boiler_cap_ratio: nil,
+                           airloop_fancoils_heating: nil)
 
     apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
@@ -439,6 +442,7 @@ class NECB2011 < Standard
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
     swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
+    airloop_fancoils_heating = convert_arg_to_bool(variable: airloop_fancoils_heating, default: false)
 
     # Check if custom systems are assigned to dwelling units, washrooms, corridors, and storage rooms.  If they are, set
     # them to be the same as the primary system type.  If no primary system type is defined then set them to be nil.
@@ -451,6 +455,7 @@ class NECB2011 < Standard
     boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
     self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
     self.fuel_type_set.set_swh_fuel(swh_fuel: swh_fuel) unless swh_fuel.nil? || swh_fuel.to_s.downcase == 'defaultfuel'
+    self.fuel_type_set.set_airloop_fancoils_heating() if airloop_fancoils_heating
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|

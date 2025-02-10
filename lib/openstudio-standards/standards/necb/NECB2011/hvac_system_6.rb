@@ -411,11 +411,14 @@ class NECB2011
             epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
             necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
           end
-          if necb_reference_hp_supp_fuel == 'NaturalGas'
+          if necb_reference_hp_supp_fuel == 'NaturalGas' || necb_reference_hp_supp_fuel == 'Gas'
             rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
-          elsif necb_reference_hp_supp_fuel == 'Electricity' or  necb_reference_hp_supp_fuel == 'FuelOilNo2'
+          elsif necb_reference_hp_supp_fuel == 'Electricity' || necb_reference_hp_supp_fuel == 'Electric' || necb_reference_hp_supp_fuel == 'FuelOilNo2'
             rh_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
-          else #hot water coils is an option in the future
+          elsif necb_reference_hp_supp_fuel == 'Hot Water' || necb_reference_hp_supp_fuel == 'HotWater'
+            rh_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
+            hw_loop.addDemandBranchForComponent(rh_coil)
+          else
             raise('Invalid fuel type selected for heat pump supplemental coil')
           end
           cav_rh_terminal = OpenStudio::Model::AirTerminalSingleDuctConstantVolumeReheat.new(model, always_on, rh_coil)

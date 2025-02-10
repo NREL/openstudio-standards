@@ -512,7 +512,7 @@ class ECMS
 
     # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water
 
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
@@ -533,6 +533,7 @@ class ECMS
                                            system_doas_flags: system_doas_flags)
       sys_supp_htg_eqpt_type = 'coil_electric'
       sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+      sys_supp_htg_eqpt_type = 'coil_hw' if standard.fuel_type_set.force_airloop_hot_water
       airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
@@ -543,7 +544,8 @@ class ECMS
                                            sys_clg_eqpt_type: air_sys_eqpt_type,
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
-                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
+                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'],
+                                           hw_loop: hw_loop)
       # Appy performance curves
       if air_sys_eqpt_type == 'ccashp'
         eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
@@ -736,7 +738,7 @@ class ECMS
 
   # =============================================================================================================================
   # create air system heating equipment
-  def create_air_sys_htg_eqpt(model, htg_eqpt_type)
+  def create_air_sys_htg_eqpt(model, htg_eqpt_type, hw_loop = nil)
     always_on = model.alwaysOnDiscreteSchedule
     htg_eqpt = nil
     case htg_eqpt_type.downcase
@@ -765,6 +767,7 @@ class ECMS
     when 'coil_hw'
       htg_eqpt = OpenStudio::Model::CoilHeatingWater.new(model)
       htg_eqpt.setName('CoilHeatingWater')
+      hw_loop.addDemandBranchForComponent(htg_eqpt) unless hw_loop.nil?
     end
 
     return htg_eqpt
@@ -782,7 +785,8 @@ class ECMS
                      sys_clg_eqpt_type:,
                      sys_supp_fan_type:,
                      sys_ret_fan_type:,
-                     sys_setpoint_mgr_type:)
+                     sys_setpoint_mgr_type:,
+                     hw_loop: nil)
 
     # create all the needed components and the air loop
     airloop = create_airloop(model, sys_vent_type)
@@ -792,7 +796,7 @@ class ECMS
     return_fan = create_air_sys_fan(model, sys_ret_fan_type)
     return_fan.setName('Return Fan') if return_fan
     htg_eqpt = create_air_sys_htg_eqpt(model, sys_htg_eqpt_type)
-    supp_htg_eqpt = create_air_sys_htg_eqpt(model, sys_supp_htg_eqpt_type)
+    supp_htg_eqpt = create_air_sys_htg_eqpt(model, sys_supp_htg_eqpt_type, hw_loop)
     clg_eqpt = create_air_sys_clg_eqpt(model, sys_clg_eqpt_type)
     # add components to the air loop
     clg_eqpt.addToNode(airloop.supplyOutletNode) if clg_eqpt
@@ -1235,11 +1239,12 @@ class ECMS
 
     # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water
 
     # Set supplemental heating for air loop
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_hw' if standard.fuel_type_set.force_airloop_hot_water
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1257,7 +1262,8 @@ class ECMS
         sys_clg_eqpt_type: 'ccashp',
         sys_supp_fan_type: sys_info['sys_supp_fan_type'],
         sys_ret_fan_type: sys_info['sys_ret_fan_type'],
-        sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type']
+        sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'],
+        hw_loop: hw_loop
       )
       # Apply performance curves
       eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
@@ -1402,12 +1408,16 @@ class ECMS
                              ecm_system_zones_map_option:,
                              standard:)
     hw_loop = nil
+    if standard.fuel_type_set.force_airloop_hot_water || standard.fuel_type_set.necb_reference_hp_supp_fuel.to_s.downcase == "hot water"
+      hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set)
+    end
 
     # Get the heating fuel type from the system fuels object defined by the standards object
     heating_fuel = standard.fuel_type_set.ecm_fueltype
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_hw' if standard.fuel_type_set.force_airloop_hot_water || standard.fuel_type_set.necb_reference_hp_supp_fuel.to_s.downcase == "hot water"
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
     system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
@@ -1430,7 +1440,8 @@ class ECMS
                                            sys_clg_eqpt_type: 'ashp',
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
-                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
+                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'],
+                                           hw_loop: hw_loop)
       eqpt_name = 'HS11_PTHP'
       coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
       coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
@@ -1473,7 +1484,7 @@ class ECMS
   # =============================================================================================================================
   # Apply efficiencies and performance curves for ECM "hs11_ashp_pthp"
   def apply_efficiency_ecm_hs11_ashp_pthp(model,standard)
-    fr_backup_coil_cap_as_dx_coil_cap = 0.5 # fraction of electric backup heating coil capacity assigned to dx heating coil
+    fr_backup_coil_cap_as_dx_coil_cap = 0.5 # fraction of electric or hot-water backup heating coil capacity assigned to dx heating coil
     apply_efficiency_ecm_hs12_ashp_baseboard(model,standard)
     pthp_eqpt_name = 'HS11_PTHP'
     model.getAirLoopHVACs.sort.each do |isys|
@@ -1553,11 +1564,12 @@ class ECMS
 
     # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water
 
     # Set supplemental heating fuel for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_hw' if standard.fuel_type_set.force_airloop_hot_water
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1574,7 +1586,8 @@ class ECMS
                                            sys_clg_eqpt_type: 'ashp',
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
-                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'])
+                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'],
+                                           hw_loop: hw_loop)
       eqpt_name = 'NECB2015_ASHP'
       coil_cooling_dx_single_speed_apply_curves(clg_dx_coil,eqpt_name)
       coil_heating_dx_single_speed_apply_curves(htg_dx_coil,eqpt_name)
@@ -3766,6 +3779,10 @@ class ECMS
     boiler_fueltype = standard.fuel_type_set.boiler_fueltype
     backup_boiler_fueltype = standard.fuel_type_set.backup_boiler_fueltype
     baseboard_type = standard.fuel_type_set.baseboard_type
+    heating_coil_type_sys2 = standard.fuel_type_set.heating_coil_type_sys2
+    heating_coil_type_sys3 = standard.fuel_type_set.heating_coil_type_sys3
+    heating_coil_type_sys4 = standard.fuel_type_set.heating_coil_type_sys4
+    heating_coil_type_sys6 = standard.fuel_type_set.heating_coil_type_sys6
     mau_heating_coil_type = 'none'
 
     # Create the hot water loop if necessary.
@@ -3774,7 +3791,11 @@ class ECMS
       boiler_fueltype: boiler_fueltype,
       backup_boiler_fueltype: backup_boiler_fueltype,
       mau_heating_coil_type: mau_heating_coil_type,
-      model: model
+      model: model,
+      heating_coil_type_sys2: heating_coil_type_sys2,
+      heating_coil_type_sys3: heating_coil_type_sys3,
+      heating_coil_type_sys4: heating_coil_type_sys4,
+      heating_coil_type_sys6: heating_coil_type_sys6
     )
 
     # Add baseboard heaters to each heated zone.
