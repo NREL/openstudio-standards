@@ -108,14 +108,29 @@ class ECM_SWH_Tests < Minitest::Test
     # standards class and gets information for the shw tank, pump, and water use equipment from the resulting model.
     # It then repeats the process until all spacetypes in the spacetypes.json file have been applied and testing
     # on the Outpatient file.
-    while break_time == false do
-      model = nil
-      standard = nil
-      # Load model and set climate file.
-      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
+    # Configure variables that are constant during while loop (through space types).
+      # Load model.
+      #model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
+      #BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
       # Get spacetypes from JSON.  I say I use all of the spacetypes but really it is only those with a
       # "buliding_type" of "Space Function".
+      #standard = get_standard(vintage)
+
+      #search_criteria = {
+      #  "template" => vintage,
+      #  "building_type" => "Space Function"
+      #}
+      #standards_table = standard.standards_data['space_types']
+      #space_type_data = standard.model_find_objects(standards_table, search_criteria)
+      # Get the space types in the model.
+      #space_types = model.getSpaceTypes.sort
+      # Determine the total number of space types retrieved from the JSON file.
+      #space_type_data_size = space_type_data.size
+
+    logger.info "Starting while loop"
+    while break_time == false do
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "NECB2011Outpatient.osm"))
       standard = get_standard(vintage)
 
       search_criteria = {
@@ -124,14 +139,12 @@ class ECM_SWH_Tests < Minitest::Test
       }
       standards_table = standard.standards_data['space_types']
       space_type_data = standard.model_find_objects(standards_table, search_criteria)
-      # Get the space types in the model.
-      space_types = model.getSpaceTypes
-      # Determine the total number of space types retrieved from the JSON file.
+      space_types = model.getSpaceTypes.sort
       space_type_data_size = space_type_data.size
       space_type_names = []
 
       # Go through each space type in the model and change its name to that of the next space type in the JSON file.
-      space_types.sort.each do |space_type|
+      space_types.each do |space_type|
         space_type.setNameProtected("Space Function" + " " + space_type_data[index]["space_type"])
         space_type_names << space_type.name
         # If you still have space types left in the JSON file go to the next one.  If not, start at the beginning
@@ -139,6 +152,7 @@ class ECM_SWH_Tests < Minitest::Test
         # version of NECB (or stop when you are done).
         if index >= (space_type_data_size - 1)
           index = 0
+          logger.info "Breaking from while loop"
           break_time = true
         else
           index += 1
@@ -147,10 +161,12 @@ class ECM_SWH_Tests < Minitest::Test
 
       # apply swh to the renamed space types (model_add_swh only looks at the name of the space type not what is
       # actually in it).
+      logger.info "model_add_swh"
       standard.model_add_swh(model: model, swh_fueltype: fuel_type, shw_scale: 'NECB_Default')
       # Apply the water heater mixed efficiencies
       model.getWaterHeaterMixeds.sort.each { |obj| standard.water_heater_mixed_apply_efficiency(obj) }
 
+      logger.info "extracting results"
       model.getWaterHeaterMixeds.sort.each do |waterheater_test|
         wh_name = waterheater_test.name
         if waterheater_test.heaterFuelType == "NaturalGas"
