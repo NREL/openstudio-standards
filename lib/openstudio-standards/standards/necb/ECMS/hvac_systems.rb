@@ -2255,7 +2255,31 @@ class ECMS
     hp_htg_cap = hp_clg_cap if hp_clg_cap > hp_htg_cap
     heatpump_htg.setReferenceCapacity(hp_htg_cap)
     heatpump_clg.setReferenceCapacity(hp_htg_cap)
-  
+    # sensor for heat pump cooling load side heat transfer
+    heatpump_clg_load_s = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Heat Pump Load Side Heat Transfer Rate')
+    heatpump_clg_load_s.setName('HeatPumpClgLoad')
+    heatpump_clg_load_s.setKeyName(heatpump_clg.name.to_s)
+    # actuator for heat pump heating outlet node setpoint schedule
+    heatpump_htg_outlet_node = heatpump_htg.supplyOutletModelObject.get.to_Node.get
+    heatpump_htg_sch = heatpump_htg_outlet_node.setpointManagers[0].to_SetpointManagerScheduled.get.schedule.to_ScheduleConstant.get
+    heatpump_htg_sch_a = OpenStudio::Model::EnergyManagementSystemActuator.new(heatpump_htg_sch, 'Schedule:Constant', 'Schedule Value')
+    heatpump_htg_sch_a.setName('heatpump_htg_sch_a')
+    # energy management program to turn off heat pump heating side when the cooling side is on
+    heatpump_cltr_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    heatpump_cltr_prg.setName('HeatPumpCtrlPrg')
+    body = <<-EMS
+      IF (HeatPumpClgLoad > 0.0)
+        SET heatpump_htg_sch_a = -99.0
+      ELSE
+        SET heatpump_htg_sch_a = 50.0
+      ENDIF
+    EMS
+    heatpump_cltr_prg.setBody(body)
+    heat_pump_ctlr_pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    heat_pump_ctlr_pcm.setName('HeatPumpCtrlPCM')
+    heat_pump_ctlr_pcm.setCallingPoint('InsideHVACSystemIterationLoop')
+    heat_pump_ctlr_pcm.addProgram(heatpump_cltr_prg)
+
    return
  end
 
@@ -2280,7 +2304,6 @@ class ECMS
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency.")
       successfully_set_all_properties = false
     end
-
     # Make the COOL-CAP-FT curve
     cool_cap_ft = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_ft'])
 
