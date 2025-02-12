@@ -228,11 +228,11 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     save_intermediate_models = test_pars[:SaveIntermediateModels]
     heating_coil_type = test_pars[:heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
-    furnace_fuel_type = test_pars[:fuel_type]
+    fuel_type = test_pars[:fuel_type]
     vintage = test_pars[:vintage]
     stage_type = test_case[:stage]
 
-    name = "#{vintage}_sys3_Furnace-#{furnace_fuel_type}_#{heating_coil_type}_Baseboard-#{baseboard_type}"
+    name = "#{vintage}_sys3_Furnace-#{fuel_type}_#{heating_coil_type}_Baseboard-#{baseboard_type}"
     name_short = "#{vintage}_sys3_Furnace"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
 
@@ -249,7 +249,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fuel_type, furnace_fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       # Single stage furnace.
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                   zones: model.getThermalZones,
@@ -301,7 +301,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     # Define test parameters that apply to all tests.
     test_parameters = { TestMethod: __method__,
                         SaveIntermediateModels: false,
-                        furnace_fuel_type: 'NaturalGas',
+                        fuel_type: 'NaturalGas',
                         heating_coil_type: 'Gas',
                         baseboard_type: 'Hot Water' }
 
@@ -368,7 +368,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
     # General inputs.
     test_name = test_pars[:TestMethod]
     save_intermediate_models = test_pars[:SaveIntermediateModels]
-    furnace_fuel_type = test_pars[:furnace_fuel_type]
+    fuel_type = test_pars[:fuel_type]
     heating_coil_type = test_pars[:heating_coil_type]
     baseboard_type = test_pars[:baseboard_type]
     vintage = test_pars[:vintage]
@@ -395,7 +395,7 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
       standard = get_standard(vintage)
-      standard.setup_hw_loop_with_components(model, hw_loop, furnace_fuel_type, furnace_fuel_type, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_multi_speed(model: model,
                                                                                                  zones: model.getThermalZones,
                                                                                                  heating_coil_type: heating_coil_type,
