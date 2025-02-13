@@ -63,20 +63,16 @@ class Standard
       power = exterior_lighting_properties['parking_areas_and_drives']
       name_prefix = 'Parking Areas and Drives'
 
-      # create ext light def
+      # create exterior lights
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft^2 of lighting for #{multiplier} ft^2 of parking area.")
-      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
-      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
-      ext_lights_def.setDesignLevel(power)
-
-      # create ext light inst
-      # creating exterior lights object
-      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def, ext_lights_sch_other)
-      ext_lights.setMultiplier(multiplier)
-      ext_lights.setName(name_prefix)
-      ext_lights.setControlOption(exterior_lighting_properties['control_option'])
-      ext_lights.setEndUseSubcategory(name_prefix)
-      exterior_lights[name_prefix] = ext_lights
+      ext_lights = OpenstudioStandards::ExteriorLighting.model_create_exterior_lights(model,
+                                                                                      name: 'Parking Areas and Drives',
+                                                                                      power: power,
+                                                                                      units: 'W/ft^2',
+                                                                                      multiplier: multiplier,
+                                                                                      schedule: ext_lights_sch_other,
+                                                                                      control_option: exterior_lighting_properties['control_option'])
+      exterior_lights['Parking Areas and Drives'] = ext_lights
 
       # update installed power
       installed_power += power * multiplier
@@ -90,20 +86,17 @@ class Standard
       power = exterior_lighting_properties['building_facades']
       name_prefix = 'Building Facades'
 
-      # create ext light def
+      # create exterior lights
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft^2 of lighting for #{multiplier} ft^2 of building facade area.")
-      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
-      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
-      ext_lights_def.setDesignLevel(power)
+      ext_lights = OpenstudioStandards::ExteriorLighting.model_create_exterior_lights(model,
+                                                                                      name: 'Building Facades',
+                                                                                      power: power,
+                                                                                      units: 'W/ft^2',
+                                                                                      multiplier: multiplier,
+                                                                                      schedule: ext_lights_sch_facade_and_landscape,
+                                                                                      control_option: exterior_lighting_properties['control_option'])
+      exterior_lights['Building Facades'] = ext_lights
 
-      # create ext light inst
-      # creating exterior lights object
-      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def, ext_lights_sch_facade_and_landscape)
-      ext_lights.setMultiplier(multiplier)
-      ext_lights.setName(name_prefix)
-      ext_lights.setControlOption(exterior_lighting_properties['control_option'])
-      ext_lights.setEndUseSubcategory(name_prefix)
-      exterior_lights[name_prefix] = ext_lights
 
       # update installed power
       installed_power += power * multiplier
@@ -117,20 +110,16 @@ class Standard
       power = exterior_lighting_properties['main_entries']
       name_prefix = 'Main Entries'
 
-      # create ext light def
+      # create exterior lights
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft of lighting for #{multiplier} ft of main entry length.")
-      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
-      ext_lights_def.setName("#{name_prefix} Def (W/ft)")
-      ext_lights_def.setDesignLevel(power)
-
-      # create ext light inst
-      # creating exterior lights object
-      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def, ext_lights_sch_other)
-      ext_lights.setMultiplier(multiplier)
-      ext_lights.setName(name_prefix)
-      ext_lights.setControlOption(exterior_lighting_properties['control_option'])
-      ext_lights.setEndUseSubcategory(name_prefix)
-      exterior_lights[name_prefix] = ext_lights
+      ext_lights = OpenstudioStandards::ExteriorLighting.model_create_exterior_lights(model,
+                                                                                      name: 'Main Entries',
+                                                                                      power: power,
+                                                                                      units: 'W/ft',
+                                                                                      multiplier: multiplier,
+                                                                                      schedule: ext_lights_sch_other,
+                                                                                      control_option: exterior_lighting_properties['control_option'])
+      exterior_lights['Main Entries'] = ext_lights
 
       # update installed power
       installed_power += power * multiplier
@@ -144,20 +133,16 @@ class Standard
       power = exterior_lighting_properties['other_doors']
       name_prefix = 'Other Doors'
 
-      # create ext light def
+      # create exterior lights
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power.round(2)} W/ft of lighting for #{multiplier} ft of other doors.")
-      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
-      ext_lights_def.setName("#{name_prefix} Def (W/ft)")
-      ext_lights_def.setDesignLevel(power)
-
-      # create ext light inst
-      # creating exterior lights object
-      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def, ext_lights_sch_other)
-      ext_lights.setMultiplier(multiplier)
-      ext_lights.setName(name_prefix)
-      ext_lights.setControlOption(exterior_lighting_properties['control_option'])
-      ext_lights.setEndUseSubcategory(name_prefix)
-      exterior_lights[name_prefix] = ext_lights
+      ext_lights = OpenstudioStandards::ExteriorLighting.model_create_exterior_lights(model,
+                                                                                      name: 'Other Doors',
+                                                                                      power: power,
+                                                                                      units: 'W/ft',
+                                                                                      multiplier: multiplier,
+                                                                                      schedule: ext_lights_sch_other,
+                                                                                      control_option: exterior_lighting_properties['control_option'])
+      exterior_lights['Other Doors'] = ext_lights
 
       # update installed power
       installed_power += power * multiplier
@@ -171,20 +156,16 @@ class Standard
       power = exterior_lighting_properties['entry_canopies']
       name_prefix = 'Entry Canopies'
 
-      # create ext light def
+      # create exterior lights
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building entry canopies.")
-      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
-      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
-      ext_lights_def.setDesignLevel(power)
-
-      # create ext light inst
-      # creating exterior lights object
-      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def, ext_lights_sch_other)
-      ext_lights.setMultiplier(multiplier)
-      ext_lights.setName(name_prefix)
-      ext_lights.setControlOption(exterior_lighting_properties['control_option'])
-      ext_lights.setEndUseSubcategory(name_prefix)
-      exterior_lights[name_prefix] = ext_lights
+      ext_lights = OpenstudioStandards::ExteriorLighting.model_create_exterior_lights(model,
+                                                                                      name: 'Entry Canopies',
+                                                                                      power: power,
+                                                                                      units: 'W/ft^2',
+                                                                                      multiplier: multiplier,
+                                                                                      schedule: ext_lights_sch_other,
+                                                                                      control_option: exterior_lighting_properties['control_option'])
+      exterior_lights['Entry Canopies'] = ext_lights
 
       # update installed power
       installed_power += power * multiplier
@@ -198,20 +179,16 @@ class Standard
       power = exterior_lighting_properties['loading_areas_for_emergency_vehicles']
       name_prefix = 'Emergency Canopies'
 
-      # create ext light def
+      # create exterior lights
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/ft^2 of lighting for #{multiplier} ft^2 of building emergency canopies.")
-      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
-      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
-      ext_lights_def.setDesignLevel(power)
-
-      # create ext light inst
-      # creating exterior lights object
-      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def, ext_lights_sch_other)
-      ext_lights.setMultiplier(multiplier)
-      ext_lights.setName(name_prefix)
-      ext_lights.setControlOption(exterior_lighting_properties['control_option'])
-      ext_lights.setEndUseSubcategory(name_prefix)
-      exterior_lights[name_prefix] = ext_lights
+      ext_lights = OpenstudioStandards::ExteriorLighting.model_create_exterior_lights(model,
+                                                                                      name: 'Emergency Canopies',
+                                                                                      power: power,
+                                                                                      units: 'W/ft^2',
+                                                                                      multiplier: multiplier,
+                                                                                      schedule: ext_lights_sch_other,
+                                                                                      control_option: exterior_lighting_properties['control_option'])
+      exterior_lights['Emergency Canopies'] = ext_lights
 
       # update installed power
       installed_power += power * multiplier
@@ -223,22 +200,17 @@ class Standard
       # lighting values
       multiplier = area_length_count_hash[:drive_through_windows]
       power = exterior_lighting_properties['drive_through_windows_and_doors']
-      name_prefix = 'Drive Through Windows'
 
-      # create ext light def
+      # create exterior lights
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W/drive through window of lighting for #{multiplier} drive through windows.")
-      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
-      ext_lights_def.setName("#{name_prefix} Def (W/ft^2)")
-      ext_lights_def.setDesignLevel(power)
-
-      # create ext light inst
-      # creating exterior lights object
-      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def, ext_lights_sch_other)
-      ext_lights.setMultiplier(multiplier)
-      ext_lights.setName(name_prefix)
-      ext_lights.setControlOption(exterior_lighting_properties['control_option'])
-      ext_lights.setEndUseSubcategory(name_prefix)
-      exterior_lights[name_prefix] = ext_lights
+      ext_lights = OpenstudioStandards::ExteriorLighting.model_create_exterior_lights(model,
+                                                                                      name: 'Drive Through Windows',
+                                                                                      power: power,
+                                                                                      units: 'W/ft^2',
+                                                                                      multiplier: multiplier,
+                                                                                      schedule: ext_lights_sch_other,
+                                                                                      control_option: exterior_lighting_properties['control_option'])
+      exterior_lights['Drive Through Windows'] = ext_lights
 
       # update installed power
       installed_power += power * multiplier
@@ -257,21 +229,17 @@ class Standard
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', 'Cannot determine target base site allowance power, will set to 0 W.')
         power = 0.0
       end
-      name_prefix = 'Base Site Allowance'
 
-      # create ext light def
+      # create exterior lights
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W of non landscape tradable exterior lighting. Will follow occupancy setback reduction.")
-      ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
-      ext_lights_def.setName("#{name_prefix} Def (W)")
-      ext_lights_def.setDesignLevel(power)
-
-      # create ext light inst
-      # creating exterior lights object
-      ext_lights = OpenStudio::Model::ExteriorLights.new(ext_lights_def, ext_lights_sch_other)
-      ext_lights.setName(name_prefix)
-      ext_lights.setControlOption(exterior_lighting_properties['control_option'])
-      ext_lights.setEndUseSubcategory(name_prefix)
-      exterior_lights[name_prefix] = ext_lights
+      ext_lights = OpenstudioStandards::ExteriorLighting.model_create_exterior_lights(model,
+                                                                                      name: 'Base Site Allowance',
+                                                                                      power: power,
+                                                                                      units: 'W',
+                                                                                      multiplier: 1.0,
+                                                                                      schedule: ext_lights_sch_other,
+                                                                                      control_option: exterior_lighting_properties['control_option'])
+      exterior_lights['Base Site Allowance'] = ext_lights
 
       # don't need to update installed power for this
     end
