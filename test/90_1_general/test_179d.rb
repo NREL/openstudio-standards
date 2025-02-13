@@ -546,14 +546,39 @@ class ACM179dASHRAE9012007Test < Minitest::Test
     s2 = z.spaces.last
     z2 = OpenStudio::Model::ThermalZone.new(@model)
     s2.setThermalZone(z2)
-    # Assigna  DSOA that is not per floor area
-    dsoa = OpenStudio::Model::DesignSpecificationOutdoorAir.new(@model)
-    dsoa.setOutdoorAirFlowAirChangesperHour(0.5)
-    s2.setDesignSpecificationOutdoorAir(dsoa)
     a.addBranchForZone(z2)
+    # Assign a  DSOA that is not per floor area
+    dsoa = OpenStudio::Model::DesignSpecificationOutdoorAir.new(@model)
+    dsoa.setName("DSOA ACH")
+    dsoa.setOutdoorAirFlowAirChangesperHour(0.5)
+    @model.getSpaces.each {|s| s.setDesignSpecificationOutdoorAir(dsoa) }
+
     assert(@standard.baseline_thermal_zone_demand_control_ventilation_required?(z))
     refute(@standard.baseline_thermal_zone_demand_control_ventilation_required?(z2))
     assert(@standard.baseline_air_loop_hvac_demand_control_ventilation_required?(a))
+    assert_equal(1, @model.getDesignSpecificationOutdoorAirs.size)
     @standard.model_set_baseline_demand_control_ventilation(@model, climate_zone)
+    # One regular, one per area
+    assert_equal(2, @model.getDesignSpecificationOutdoorAirs.size)
+
+    refute_empty(s2.designSpecificationOutdoorAir)
+    refute_equal(dsoa, s2.designSpecificationOutdoorAir.get)
+    assert_equal("DSOA ACH to per-area", s2.designSpecificationOutdoorAir.get.nameString)
+    refute_equal(dsoa, s2.designSpecificationOutdoorAir.get)
+    assert_equal(0.0, s2.designSpecificationOutdoorAir.get.outdoorAirFlowAirChangesperHour)
+    assert_equal(0.0, s2.designSpecificationOutdoorAir.get.outdoorAirFlowperPerson)
+    assert_equal(0.0, s2.designSpecificationOutdoorAir.get.outdoorAirFlowRate)
+    assert(s2.designSpecificationOutdoorAir.get.outdoorAirFlowperFloorArea > 0)
+
+    z.spaces.each do |s|
+      assert_equal(dsoa, s.designSpecificationOutdoorAir.get)
+      assert_equal("DSOA ACH", s.designSpecificationOutdoorAir.get.nameString)
+      assert_equal(dsoa, s.designSpecificationOutdoorAir.get)
+      assert_equal(0.5, s.designSpecificationOutdoorAir.get.outdoorAirFlowAirChangesperHour)
+      assert_equal(0.0, s.designSpecificationOutdoorAir.get.outdoorAirFlowperFloorArea)
+      assert_equal(0.0, s.designSpecificationOutdoorAir.get.outdoorAirFlowperPerson)
+      assert_equal(0.0, s.designSpecificationOutdoorAir.get.outdoorAirFlowRate)
+    end
+
   end
 end
