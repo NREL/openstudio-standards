@@ -511,4 +511,49 @@ class ACM179dASHRAE9012007Test < Minitest::Test
       assert_equal(tstat_info['cooling_sch'], tstat.coolingSetpointTemperatureSchedule.get.nameString)
     end
   end
+
+  def test_airloop_hvac_dcv
+    a = @model.getAirLoopHVACs.first
+    assert_equal(1, a.thermalZones.size)
+    z = @model.getThermalZones.first
+    refute(@standard.baseline_thermal_zone_demand_control_ventilation_required?(z))
+    refute(@standard.baseline_air_loop_hvac_demand_control_ventilation_required?(a))
+    z.additionalProperties.setFeature("apxg no need to have DCV", true)
+    z.additionalProperties.setFeature("zone DCV implemented in user model", true)
+    refute(@standard.baseline_thermal_zone_demand_control_ventilation_required?(z))
+    refute(@standard.baseline_air_loop_hvac_demand_control_ventilation_required?(a))
+    z.additionalProperties.setFeature("apxg no need to have DCV", false)
+    z.additionalProperties.setFeature("zone DCV implemented in user model", false)
+    refute(@standard.baseline_thermal_zone_demand_control_ventilation_required?(z))
+    refute(@standard.baseline_air_loop_hvac_demand_control_ventilation_required?(a))
+    z.additionalProperties.setFeature("apxg no need to have DCV", false)
+    z.additionalProperties.setFeature("zone DCV implemented in user model", true)
+    assert(@standard.baseline_thermal_zone_demand_control_ventilation_required?(z))
+    assert(@standard.baseline_air_loop_hvac_demand_control_ventilation_required?(a))
+
+    refute_empty(a.airLoopHVACOutdoorAirSystem)
+    oa_sys = a.airLoopHVACOutdoorAirSystem.get
+    controller_oa = oa_sys.getControllerOutdoorAir
+    controller_mv = controller_oa.controllerMechanicalVentilation
+    refute(controller_mv.demandControlledVentilation)
+
+    climate_zone = 'ASHRAE 169-2013-5A'
+    @standard.model_set_baseline_demand_control_ventilation(@model, climate_zone)
+    assert(controller_mv.demandControlledVentilation)
+
+    # To produce the original crash, we need a second thermal zone on the
+    # AirLoopHVAC that does NOT need DCV
+    s2 = z.spaces.last
+    z2 = OpenStudio::Model::ThermalZone.new(@model)
+    s2.setThermalZone(z2)
+    # Assigna  DSOA that is not per floor area
+    dsoa = OpenStudio::Model::DesignSpecificationOutdoorAir.new(@model)
+    dsoa.setOutdoorAirFlowAirChangesperHour(0.5)
+    s2.setDesignSpecificationOutdoorAir(dsoa)
+    a.addBranchForZone(z2)
+    assert(@standard.baseline_thermal_zone_demand_control_ventilation_required?(z))
+    refute(@standard.baseline_thermal_zone_demand_control_ventilation_required?(z2))
+    assert(@standard.baseline_air_loop_hvac_demand_control_ventilation_required?(a))
+    @standard.model_set_baseline_demand_control_ventilation(@model, climate_zone)
+  end
 end
