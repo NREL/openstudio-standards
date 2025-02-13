@@ -89,15 +89,31 @@ class ACM179dASHRAE9012007
       if ['Restroom', 'Kitchen', 'Cafeteria'].include?(space_type.standardsSpaceType.get)
         space = thermal_zone.spaces.first
         OpenStudio.logFree(OpenStudio::Warn, '179d.Standards.ThermalZone', "adding make up #{space_type.standardsSpaceType.get} infiltration object: thermal zone = '#{thermal_zone.nameString}' | space= '#{space.nameString}'")
-        makeup_infiltration_for_exhaust_fan = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(thermal_zone.model)
-        makeup_infiltration_for_exhaust_fan.setName("#{zone_exhaust_fan.name} Makeup infil")
-        makeup_infiltration_for_exhaust_fan.setDesignFlowRate(maximum_flow_rate_si)
-        makeup_infiltration_for_exhaust_fan.setSpace(space)
-        makeup_infiltration_for_exhaust_fan.setSchedule(acm_fan_sch)
+        air_terminal = thermal_zone.airLoopHVACTerminal
+        if air_terminal.is_initialized && air_terminal.to_AirTerminalSingleDuctVAVReheat.is_initialized
+          air_terminal = air_terminal.get.to_AirTerminalSingleDuctVAVReheat.get
+          air_terminal.setMaximumAirFlowRate(maximum_flow_rate_si)  # Add an abitrary multiplier here?
+          # Is this needed?
+          sz = thermal_zone.sizingZone
+          sz.setCoolingDesignAirFlowMethod("DesignDayWithLimit")
+          sz.setCoolingMinimumAirFlow(maximum_flow_rate_si)
+          sz.setHeatingDesignAirFlowMethod("DesignDayWithLimit")
+          sz.setHeatingMaximumAirFlow(maximum_flow_rate_si)
+        elsif thermal_zone.equipment.size > 2
+          OpenStudio.logFree(OpenStudio::Warn, '179d.Standards.ThermalZone', "=" * 80)
+          equipment = thermal_zone.equipment.map{|e| e.to_s}.join("\n")
+          OpenStudio.logFree(OpenStudio::Warn, '179d.Standards.ThermalZone', "#{equipment}")
+          raise "ATU not handled"
+          makeup_infiltration_for_exhaust_fan = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(thermal_zone.model)
+          makeup_infiltration_for_exhaust_fan.setName("#{zone_exhaust_fan.name} Makeup infil")
+          makeup_infiltration_for_exhaust_fan.setDesignFlowRate(maximum_flow_rate_si)
+          makeup_infiltration_for_exhaust_fan.setSpace(space)
+          makeup_infiltration_for_exhaust_fan.setSchedule(acm_fan_sch)
+          zone_exhaust_fan.setBalancedExhaustFractionSchedule(thermal_zone.model.alwaysOnDiscreteSchedule)
+        end
 
         zone_exhaust_fan.setAvailabilitySchedule(acm_fan_sch)
         zone_exhaust_fan.setFlowFractionSchedule(acm_fan_sch)
-        zone_exhaust_fan.setBalancedExhaustFractionSchedule(thermal_zone.model.alwaysOnDiscreteSchedule)
 
       # add and alter objectxs related to zone exhaust makeup air
       elsif exhaust_makeup_inputs.key?(makeup_target) && exhaust_makeup_inputs[makeup_target][:source_zone]
