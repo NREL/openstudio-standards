@@ -218,7 +218,7 @@ class NECB_scaling_loads_Tests < Minitest::Test
     # File paths.
     @output_folder = File.join(__dir__, 'output/test_scaling_loads')
     @expected_results_file = File.join(__dir__, '../expected_results/scaling_loads_expected_results.json')
-    @test_results_file = File.join(__dir__, '../expected_results/scaling_loads_test_results.json')
+    @test_results_file = File.join(__dir__, '../expected_results/scaling_loads-test_results.json')
     @sizing_run_dir = File.join(@output_folder, 'sizing_folder')
 
     # Initial test condition

@@ -148,7 +148,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
           end
 
           # Write actual results file
-          test_result_file = File.join(@test_results_folder, "ecm_modify_unitary_#{unitary_ecm.downcase.gsub(' ','_')}_test_results.csv")
+          test_result_file = File.join(@test_results_folder, "ecm_modify_unitary_#{unitary_ecm.downcase.gsub(' ','_')}-test_results.csv")
           File.open(test_result_file, 'w') {|f| f.write(unitary_res_file_output_text.chomp)}
           # Test that the values are correct by doing a file compare.
           b_result = FileUtils.compare_file(unitary_expected_result_file, test_result_file)

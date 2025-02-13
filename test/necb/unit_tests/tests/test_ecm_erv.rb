@@ -14,7 +14,7 @@ class ECM_ERV_Tests < Minitest::Test
     # File paths.
     @output_folder = File.join(__dir__, 'output/test_ecm_erv')
     @expected_results_file = File.join(__dir__, '../expected_results/ecm_erv_expected_results.json')
-    @test_results_file = File.join(__dir__, '../expected_results/ecm_erv_test_results.json')
+    @test_results_file = File.join(__dir__, '../expected_results/ecm_erv-test_results.json')
     @sizing_run_dir = File.join(@output_folder, 'sizing_folder')
 
     # Intial test condition
