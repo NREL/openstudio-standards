@@ -296,7 +296,7 @@ class Standard
           ua = u_eff * surface.netArea
       end
     else
-      ua = surface.uFactor.get * surface.netArea
+      ua = surface.uFactor.get * surface.netArea if surface.uFactor.is_initialized
     end
 
     surface.subSurfaces.sort.each do |subsurface|

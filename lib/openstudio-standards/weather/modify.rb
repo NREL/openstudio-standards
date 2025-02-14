@@ -147,7 +147,7 @@ module OpenstudioStandards
             full_epw_path = epw_path.get.to_s
           else
             # If this is an always-run Measure, need to check a different path
-            alt_weath_path = File.expand_path(File.join(Dir.pwd, '../../resources'))
+            alt_weath_path = File.expand_path(File.join(__dir__, '../../resources'))
             alt_epw_path = File.expand_path(File.join(alt_weath_path, epw_path.get.to_s))
             if File.exist?(alt_epw_path)
               full_epw_path = alt_epw_path

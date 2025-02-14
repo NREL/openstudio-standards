@@ -49,7 +49,7 @@ class NECB_HVAC_System_4_Test_NG_E_E < Minitest::Test
     hw_loop = nil
     if (baseboard_type == "Hot Water")
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, model.alwaysOnDiscreteSchedule)
     end
     standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(
         model: model,

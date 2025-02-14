@@ -74,6 +74,10 @@
       ]
     }
   ],
+  "os_standards_revision": "test",
+  "os_standards_version": "test",
+  "openstudio_version": "test",
+  "energyplus_version": "test",
   "building": {
     "name": "FullServiceRestaurant",
     "conditioned_floor_area_m2": 511.15331569,
@@ -246,9 +250,7 @@
         "infiltration_method": "Flow/ExteriorArea",
         "infiltration_flow_per_m2": 0.00025,
         "occupancy_schedule": null,
-        "waterUseEquipment": [
-
-        ]
+        "waterUseEquipment": []
       },
       {
         "name": "Dining",
@@ -310,9 +312,7 @@
       "infiltration_method": "Flow/ExteriorArea",
       "infiltration_flow_per_m2": 0.00025,
       "occupancy_schedule": null,
-      "waterUseEquipment": [
-
-      ]
+      "waterUseEquipment": []
     },
     {
       "name": "Dining",
@@ -378,9 +378,7 @@
           "type": "Space Function - undefined -"
         }
       ],
-      "equipment": [
-
-      ]
+      "equipment": []
     },
     {
       "name": "ALL_ST=Dining - family space_FL=Building Story 1_SCH=B",
@@ -468,12 +466,8 @@
             "nominal_total_capacity_w": 65653.65
           }
         ],
-        "dx_two_speed": [
-
-        ],
-        "coil_cooling_water": [
-
-        ]
+        "dx_two_speed": [],
+        "coil_cooling_water": []
       },
       "heating_coils": {
         "coil_heating_gas": [
@@ -484,15 +478,10 @@
             "nominal_capacity": 209949.22
           }
         ],
-        "coil_heating_electric": [
-
-        ],
-        "coil_heating_water": [
-
-        ]
+        "coil_heating_electric": [],
+        "coil_heating_water": []
       },
-      "heat_exchanger": {
-      }
+      "heat_exchanger": {}
     },
     {
       "name": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1",
@@ -524,12 +513,8 @@
             "nominal_total_capacity_w": 9939.64
           }
         ],
-        "dx_two_speed": [
-
-        ],
-        "coil_cooling_water": [
-
-        ]
+        "dx_two_speed": [],
+        "coil_cooling_water": []
       },
       "heating_coils": {
         "coil_heating_gas": [
@@ -540,15 +525,10 @@
             "nominal_capacity": 22010.39
           }
         ],
-        "coil_heating_electric": [
-
-        ],
-        "coil_heating_water": [
-
-        ]
+        "coil_heating_electric": [],
+        "coil_heating_water": []
       },
-      "heat_exchanger": {
-      }
+      "heat_exchanger": {}
     }
   ],
   "plant_loops": [
@@ -580,15 +560,9 @@
           "nominal_capacity": 0.001
         }
       ],
-      "chiller_electric_eir": [
-
-      ],
-      "cooling_tower_single_speed": [
-
-      ],
-      "water_heater_mixed": [
-
-      ]
+      "chiller_electric_eir": [],
+      "cooling_tower_single_speed": [],
+      "water_heater_mixed": []
     },
     {
       "name": "Main Service Water Loop",
@@ -604,15 +578,9 @@
           "motor_efficency": 0.7
         }
       ],
-      "boilers": [
-
-      ],
-      "chiller_electric_eir": [
-
-      ],
-      "cooling_tower_single_speed": [
-
-      ],
+      "boilers": [],
+      "chiller_electric_eir": [],
+      "cooling_tower_single_speed": [],
       "water_heater_mixed": [
         {
           "name": "49gal NaturalGas Water Heater - 33kBtu/hr 0.82 Therm Eff",
@@ -627,20 +595,8 @@
     "warnings": [
       "ProcessScheduleInput: Schedule:Day:Interval=\"ECONOMIZER MAX OA FRACTION 100 PCT DEFAULT\", Blank Schedule Type Limits Name input -- will not be validated.",
       "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 1\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 10\", Blank Schedule Type Limits Name input -- will not be validated.",
       "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 2\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 5\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 6\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 7\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 8\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 9\", Blank Schedule Type Limits Name input -- will not be validated.",
       "ProcessScheduleInput: Schedule:Year=\"ECONOMIZER MAX OA FRACTION 100 PCT\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 3\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 4\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 5\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 6\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 7\", Blank Schedule Type Limits Name input -- will not be validated.",
-      "ProcessScheduleInput: Schedule:Year=\"SCHEDULE RULESET 8\", Blank Schedule Type Limits Name input -- will not be validated.",
       "ProcessScheduleInput: Schedule:Constant=\"ALWAYS OFF DISCRETE\", Blank Schedule Type Limits Name input -- will not be validated.",
       "ProcessScheduleInput: Schedule:Constant=\"ALWAYS ON CONTINUOUS\", Blank Schedule Type Limits Name input -- will not be validated.",
       "CheckUsedConstructions: There are 30 nominally unused constructions in input.  For explicit details on each unused construction, use Output:Diagnostics,DisplayExtraWarnings;",
@@ -654,8 +610,8 @@
       "Output:Meter: invalid Key Name=\"DISTRICTCOOLING:FACILITY\" - not found.",
       "Output:Meter: invalid Key Name=\"DISTRICTHEATING:FACILITY\" - not found.",
       "Output:Meter:MeterFileOnly requested for \"Electricity:Facility\" (TimeStep), already on \"Output:Meter\". Will report to both eplusout.eso and eplusout.mtr",
-      "CalcEquipmentFlowRates: \"DINING SERVICE WATER USE 0.38GAL/MIN\" - Target water temperature is greater than the hot water temperature by (1.07 C)   Environment=RUN PERIOD 1, at Simulation time=01/01 00:00 - 00:10  ...target water temperature     = 60.00 C  ...hot water temperature        = 58.93 C  ...Target water temperature should be less than or equal to the hot water temperature. Verify temperature setpoints and schedules.",
-      "CalcEquipmentFlowRates: \"KITCHEN SERVICE WATER USE 0.07GAL/MIN\" - Target water temperature is greater than the hot water temperature by (1.07 C)   Environment=RUN PERIOD 1, at Simulation time=01/01 00:00 - 00:10  ...target water temperature     = 60.00 C  ...hot water temperature        = 58.93 C  ...Target water temperature should be less than or equal to the hot water temperature. Verify temperature setpoints and schedules.",
+      "CalcEquipmentFlowRates: \"DINING SERVICE WATER USE 0.38GPM 140F\" - Target water temperature is greater than the hot water temperature by (1.07 C)   Environment=RUN PERIOD 1, at Simulation time=01/01 00:00 - 00:10  ...target water temperature     = 60.00 C  ...hot water temperature        = 58.93 C  ...Target water temperature should be less than or equal to the hot water temperature. Verify temperature setpoints and schedules.",
+      "CalcEquipmentFlowRates: \"KITCHEN SERVICE WATER USE 0.07GPM 140F\" - Target water temperature is greater than the hot water temperature by (1.07 C)   Environment=RUN PERIOD 1, at Simulation time=01/01 00:00 - 00:10  ...target water temperature     = 60.00 C  ...hot water temperature        = 58.93 C  ...Target water temperature should be less than or equal to the hot water temperature. Verify temperature setpoints and schedules.",
       "Processing Monthly Tabular Reports: Variable names not valid for this simulation  ...use Output:Diagnostics,DisplayExtraWarnings; to show more details on individual variables.",
       "CalcDoe2DXCoil: Coil:Cooling:DX:SingleSpeed \"COILCOOLINGDXSINGLESPEED_DX 1 32KBTU/HR 14.0SEER\" - Air-cooled condenser inlet dry-bulb temperature below 0 C. Outdoor dry-bulb temperature = -18.23   ... Occurrence info = RUN PERIOD 1, 01/01 09:01 - 09:03  ... Operation at low ambient temperatures may require special performance curves.",
       "CalcDoe2DXCoil: Coil:Cooling:DX:SingleSpeed \"COILCOOLINGDXSINGLESPEED_DX 1 32KBTU/HR 14.0SEER\" - Full load outlet air dry-bulb temperature < 2C. This indicates the possibility of coil frost/freeze. Outlet temperature = 1.02 C.   ...Occurrence info = RUN PERIOD 1, 01/01 09:01 - 09:03  ... Possible reasons for low outlet air dry-bulb temperatures are: This DX coil     1) may have a low inlet air dry-bulb temperature. Inlet air temperature = 19.498 C.     2) may have a low air flow rate per watt of cooling capacity. Check inputs.     3) is used as part of a HX assisted cooling coil which uses a high sensible effectiveness. Check inputs.",
@@ -667,12 +623,8 @@
       "The resource referenced by LifeCycleCost:UsePriceEscalation= \"U.S. AVG  COMMERCIAL-NATURAL GAS\" has no energy cost.   ... It is likely that the wrong resource is used. The resource should match the meter used in Utility:Tariff.",
       "The resource referenced by LifeCycleCost:UsePriceEscalation= \"U.S. AVG  COMMERCIAL-COAL\" has no energy cost.   ... It is likely that the wrong resource is used. The resource should match the meter used in Utility:Tariff."
     ],
-    "fatal": [
-
-    ],
-    "severe": [
-
-    ]
+    "fatal": [],
+    "severe": []
   },
   "ruby_warnings": [
     "space.spaceType.get.defaultScheduleSet.get.numberofPeopleSchedule is empty for attic",

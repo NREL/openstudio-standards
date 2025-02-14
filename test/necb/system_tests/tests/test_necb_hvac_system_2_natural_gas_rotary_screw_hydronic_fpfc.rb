@@ -51,7 +51,7 @@ class NECB_HVAC_System_2_Test_NG_RS_H_FPFC < Minitest::Test
     weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
     OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
-    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, model.alwaysOnDiscreteSchedule)
     standard.add_sys2_FPFC_sys5_TPFC(model: model,
                                      zones: model.getThermalZones,
                                      chiller_type: chiller_type,

@@ -298,21 +298,21 @@ class NECB2011
     end
 
     # Create an ERV
+    erv = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(air_loop_hvac.model,
+                                                                            name: "#{air_loop_hvac.name} ERV",
+                                                                            type: "Rotary",
+                                                                            economizer_lockout: true,
+                                                                            supply_air_outlet_temperature_control: true,
+                                                                            frost_control_type: 'ExhaustOnly',
+                                                                            sensible_heating_100_eff: 0.5,
+                                                                            sensible_heating_75_eff: 0.5,
+                                                                            latent_heating_100_eff: 0.5,
+                                                                            latent_heating_75_eff: 0.5,
+                                                                            sensible_cooling_100_eff: 0.5,
+                                                                            sensible_cooling_75_eff: 0.5,
+                                                                            latent_cooling_100_eff: 0.5,
+                                                                            latent_cooling_75_eff: 0.5)
 
-    erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(air_loop_hvac.model)
-    erv.setName("#{air_loop_hvac.name} ERV")
-    erv.setSensibleEffectivenessat100HeatingAirFlow(0.5)
-    erv.setLatentEffectivenessat100HeatingAirFlow(0.5)
-    erv.setSensibleEffectivenessat75HeatingAirFlow(0.5)
-    erv.setLatentEffectivenessat75HeatingAirFlow(0.5)
-    erv.setSensibleEffectivenessat100CoolingAirFlow(0.5)
-    erv.setLatentEffectivenessat100CoolingAirFlow(0.5)
-    erv.setSensibleEffectivenessat75CoolingAirFlow(0.5)
-    erv.setLatentEffectivenessat75CoolingAirFlow(0.5)
-    erv.setSupplyAirOutletTemperatureControl(true)
-    erv.setHeatExchangerType('Rotary')
-    erv.setFrostControlType('ExhaustOnly')
-    erv.setEconomizerLockout(true)
     erv.setThresholdTemperature(-23.3) # -10F
     erv.setInitialDefrostTimeFraction(0.167)
     erv.setRateofDefrostTimeFractionIncrease(1.44)
@@ -381,20 +381,26 @@ class NECB2011
     raise("Could not find #{erv_name} in #{self.class.name} class' erv.json file or it's parents. The available ervs are #{@standards_data['tables']['erv']['table'].map { |item| item['erv_name'] }}") if erv_info.nil?
 
     heat_exchanger_air_to_air_sensible_and_latent.setHeatExchangerType(erv_info['HeatExchangerType'])
-    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(erv_info['LatentEffectivenessat100HeatingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(erv_info['SensibleEffectivenessat100CoolingAirFlow'])
-    heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(erv_info['LatentEffectivenessat100CoolingAirFlow'])
     if heat_exchanger_air_to_air_sensible_and_latent.model.version < OpenStudio::VersionString.new('3.8.0')
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100HeatingAirFlow(erv_info['SensibleEffectivenessat100HeatingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100HeatingAirFlow(erv_info['LatentEffectivenessat100HeatingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat100CoolingAirFlow(erv_info['SensibleEffectivenessat100CoolingAirFlow'])
+      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat100CoolingAirFlow(erv_info['LatentEffectivenessat100CoolingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow'])
       heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow'])
     else
-      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75HeatingAirFlow(erv_info['SensibleEffectivenessat75HeatingAirFlow']) unless erv_info['SensibleEffectivenessat75HeatingAirFlow'].zero?
-      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75HeatingAirFlow(erv_info['LatentEffectivenessat75HeatingAirFlow']) unless erv_info['LatentEffectivenessat75HeatingAirFlow'].zero?
-      heat_exchanger_air_to_air_sensible_and_latent.setSensibleEffectivenessat75CoolingAirFlow(erv_info['SensibleEffectivenessat75CoolingAirFlow']) unless erv_info['SensibleEffectivenessat75CoolingAirFlow'].zero?
-      heat_exchanger_air_to_air_sensible_and_latent.setLatentEffectivenessat75CoolingAirFlow(erv_info['LatentEffectivenessat75CoolingAirFlow']) unless erv_info['LatentEffectivenessat75CoolingAirFlow'].zero?
+      values = Hash.new{|hash, key| hash[key] = Hash.new}
+      values['Sensible Heating'][0.75] = erv_info['SensibleEffectivenessat75HeatingAirFlow']
+      values['Sensible Heating'][1.0] = erv_info['SensibleEffectivenessat100HeatingAirFlow']
+      values['Latent Heating'][0.75] = erv_info['LatentEffectivenessat75HeatingAirFlow']
+      values['Latent Heating'][1.0] = erv_info['LatentEffectivenessat100HeatingAirFlow']
+      values['Sensible Cooling'][0.75] = erv_info['SensibleEffectivenessat75CoolingAirFlow']
+      values['Sensible Cooling'][1.0] = erv_info['SensibleEffectivenessat100CoolingAirFlow']
+      values['Latent Cooling'][0.75] = erv_info['LatentEffectivenessat75CoolingAirFlow']
+      values['Latent Cooling'][1.0] = erv_info['LatentEffectivenessat100CoolingAirFlow']
+      heat_exchanger_air_to_air_sensible_and_latent = OpenstudioStandards::HVAC.heat_exchanger_air_to_air_set_effectiveness_values(heat_exchanger_air_to_air_sensible_and_latent, defaults: false, values: values)
     end
     heat_exchanger_air_to_air_sensible_and_latent.setSupplyAirOutletTemperatureControl(erv_info['SupplyAirOutletTemperatureControl'])
     heat_exchanger_air_to_air_sensible_and_latent.setFrostControlType(erv_info['FrostControlType'])
@@ -542,31 +548,38 @@ class NECB2011
     # Get the capacity
     capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
 
-    # Check if secondary and/or modulating boiler required
-    # If boiler names include 'Primary Boiler' or 'Secondary Boiler' then NECB rules are applied
     boiler_capacity = capacity_w
-    if boiler_hot_water.name.to_s.include?('Primary Boiler') || boiler_hot_water.name.to_s.include?('Secondary Boiler')
-      if capacity_w / 1000.0 >= 352.0
-        if boiler_hot_water.name.to_s.include?('Primary Boiler')
-          boiler_capacity = capacity_w
-          boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
-          boiler_hot_water.setMinimumPartLoadRatio(0.25)
-        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-          boiler_capacity = 0.001
-        end
-      elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
-        boiler_capacity = capacity_w / 2
-      elsif (capacity_w / 1000.0) <= 176.0
-        if boiler_hot_water.name.to_s.include?('Primary Boiler')
-          if capacity_w <= 1.0
-            boiler_capacity = 1.0
-          else
+    # Use the NECB capacities if the SystemFuels class is not defined (i.e. this method was not called from something
+    # that created a SystemFuels object) or if either primary or secondary boiler capacity fractions are not defined.
+    if !self.fuel_type_set.is_a?(SystemFuels) || self.fuel_type_set.primary_boiler_cap_frac.nil? || self.fuel_type_set.secondary_boiler_cap_frac.nil?
+      # Check if secondary and/or modulating boiler required
+      # If boiler names include 'Primary Boiler' or 'Secondary Boiler' then NECB rules are applied
+      if boiler_hot_water.name.to_s.include?('Primary Boiler') || boiler_hot_water.name.to_s.include?('Secondary Boiler')
+        if capacity_w / 1000.0 >= 352.0
+          if boiler_hot_water.name.to_s.include?('Primary Boiler')
             boiler_capacity = capacity_w
+            boiler_hot_water.setBoilerFlowMode('LeavingSetpointModulated')
+            boiler_hot_water.setMinimumPartLoadRatio(0.25)
+          elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+            boiler_capacity = 0.001
           end
-        elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
-          boiler_capacity = 0.001
+        elsif ((capacity_w / 1000.0) >= 176.0) && ((capacity_w / 1000.0) < 352.0)
+          boiler_capacity = capacity_w / 2
+        elsif (capacity_w / 1000.0) <= 176.0
+          if boiler_hot_water.name.to_s.include?('Primary Boiler')
+            if capacity_w <= 1.0
+              boiler_capacity = 1.0
+            else
+              boiler_capacity = capacity_w
+            end
+          elsif boiler_hot_water.name.to_s.include?('Secondary Boiler')
+            boiler_capacity = 0.001
+          end
         end
       end
+    else
+      boiler_capacity = capacity_w * self.fuel_type_set.primary_boiler_cap_frac if boiler_hot_water.name.to_s.include?('Primary Boiler')
+      boiler_capacity = capacity_w * self.fuel_type_set.secondary_boiler_cap_frac if boiler_hot_water.name.to_s.include?('Secondary Boiler')
     end
     boiler_hot_water.setNominalCapacity(boiler_capacity)
 
@@ -1117,7 +1130,7 @@ class NECB2011
     # This method will seem like an error in number of args..but this is due to swig voodoo.
     heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, 'Schedule:Constant', 'Schedule Value')
     heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    heat_pump_avail_sch_prog.setName("#{multi_speed_heat_pump.name.to_s.gsub(/[ +-.]/, '_')} Availability Schedule Program by Line")
+    heat_pump_avail_sch_prog.setName("#{ems_friendly_name(multi_speed_heat_pump.name)} Availability Schedule Program by Line")
     heat_pump_avail_sch_prog_body = <<-EMS
         IF #{heat_pump_avail_sch_sensor.handle} > 0.0
           SET #{heat_pump_avail_sch_actuator.handle} = #{heat_pump_avail_sch_sensor.handle}
@@ -1129,7 +1142,7 @@ class NECB2011
     EMS
     heat_pump_avail_sch_prog.setBody(heat_pump_avail_sch_prog_body)
     pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    pcm.setName("#{heat_pump_avail_sch_prog.name.to_s.gsub(/[ +-.]/, '_')} Calling Manager")
+    pcm.setName("#{heat_pump_avail_sch_prog.name} Calling Manager")
     pcm.setCallingPoint('InsideHVACSystemIterationLoop')
     pcm.addProgram(heat_pump_avail_sch_prog)
   end
@@ -1650,6 +1663,7 @@ class NECB2011
   def setup_hw_loop_with_components(model,
                                     hw_loop,
                                     boiler_fueltype,
+                                    backup_boiler_fueltype,
                                     pump_flow_sch)
     hw_loop.setName('Hot Water Loop')
     sizing_plant = hw_loop.sizingPlant
@@ -1671,7 +1685,7 @@ class NECB2011
     boiler1 = OpenStudio::Model::BoilerHotWater.new(model)
     boiler2 = OpenStudio::Model::BoilerHotWater.new(model)
     boiler1.setFuelType(boiler_fueltype)
-    boiler2.setFuelType(boiler_fueltype)
+    boiler2.setFuelType(backup_boiler_fueltype)
     boiler1.setName('Primary Boiler')
     boiler2.setName('Secondary Boiler')
 
@@ -2178,7 +2192,7 @@ class NECB2011
   end
 
   # Method to set the base system name based on the following syntax:
-  # |sys_abbr|sys_oa|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
+  # |sys_abbr|sys_oa|shr>?|sc>?|sh>?|ssf>?|zh>?|zc>?|srf>?|
   # "sys_abbr" designates the NECB system type ("sys_1, sys_2, ... sys_6")
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
@@ -2514,5 +2528,11 @@ class NECB2011
     end
     air_terminal_single_duct_vav_reheat.setMaximumReheatAirTemperature(43.0)
     return true
+  end
+
+  # Using a dummy method to overload the NREL one which applies VRF defaults.  This is to avoid the NREL method
+  # conflicting with NRCan's VRF ECMs.
+  def air_conditioner_variable_refrigerant_flow_apply_efficiency_and_curves(air_conditioner_variable_refrigerant_flow)
+    return
   end
 end

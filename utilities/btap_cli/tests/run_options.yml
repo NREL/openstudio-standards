@@ -3,6 +3,8 @@
 :analysis_name: test_analysis_para
 :baseline_system_zones_map_option: NECB_Default
 :boiler_eff: NECB_Default
+:boiler_fuel: NECB_Default
+:boiler_cap_ratio: NECB_Default
 :building_type: FullServiceRestaurant
 :chiller_type: NECB_Default
 :compute_environment: local

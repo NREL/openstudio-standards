@@ -95,7 +95,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                          zones: model.getThermalZones,
                                                          mau_type: mau_type,
@@ -192,7 +192,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
           model: model,
           zones: model.getThermalZones,
@@ -281,7 +281,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
     standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                    zones: model.getThermalZones,
                                                    mau_type: mau_type,
@@ -342,7 +342,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                        zones: model.getThermalZones,
                                                        mau_type: mau_type,

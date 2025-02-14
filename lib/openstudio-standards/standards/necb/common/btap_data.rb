@@ -2075,8 +2075,62 @@ class BTAPData
     dehumidification_degree_days = OpenstudioStandards::Weather.epw_file_get_dehumidification_degree_days(epw_file)
 
     ### annual global horizontal irradiance (GHI)
-    ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get
-    annual_ghi_kwh_per_m_sq = ghi_timeseries.values.sum / 1000.0
+
+    # Workaround for case when the weather file contains the February from a leap year but that February only has 28
+    # days of data.
+    has_leap_day = false
+
+    # Find the first day in February
+    feb_index = epw_file.data.find_index { |entry| entry.date.monthOfYear.value == 2 }
+
+    # Find the year for February
+    feb_year = epw_file.data[feb_index].year
+    # Determine if February's year is a leap year
+    leap_year = false
+    if (feb_year % 100) > 0
+      leap_year = true if (feb_year % 4) == 0
+    else
+      leap_year = true if (feb_year % 400) == 0
+    end
+    # If the February is from a leap year determine if it contains a leap day
+    if leap_year
+
+      day = epw_file.data[feb_index].date.dayOfMonth
+      inc = 0
+
+      while epw_file.data[feb_index].date.dayOfMonth == day
+        feb_index += 1
+        inc       += 1
+      end
+
+      has_leap_day = epw_file.data[feb_index + (inc * 28)].date.dayOfMonth == 29
+    end
+
+    # If the February is from a leap year and there is no leap day then do not use the faulty OpenStudio Epw
+    # .getTimeSeries method.  Otherwise, use the method.
+    if has_leap_day || !leap_year
+      ghi_timeseries = epw_file.getTimeSeries('Global Horizontal Radiation').get.values
+    else
+      # Access the data directly instead of using the OpenStudio API to avoid the faulty OpenStudioEpw
+      # .getTimeSeries method.
+
+      # Open the weather file
+      regex_csv = /[^,]+/
+      regex_num = /[0-9]/
+      f         = File.open(epw_file.path.to_s, 'r')
+      i         = 0
+
+      # Skip the header
+      i += 1 until f.readline[0] =~ regex_num
+
+      # Get all of the hourly weather data
+      lines         = IO.readlines(f)[i..-1]
+
+      # Get hourly weather data for a specific column
+      ghi_timeseries = lines.map {|line| Float(line.scan(regex_csv)[13])}
+    end
+
+    annual_ghi_kwh_per_m_sq = ghi_timeseries.sum / 1000.0
 
     ### THD-1 Temperature at the colder of the two heating design conditions in PHIUS, 2021
     ### ('Heating design temperature' in REF: Wright (2019))

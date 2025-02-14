@@ -20,7 +20,7 @@ module OpenstudioStandards
     # @param cooling_fuel [String] The primary HVAC cooling fuel type
     #   Options are 'Electricity', 'DistrictCooling', 'DistrictAmbient'
     # @param kitchen_makeup [String] Source of makeup air for kitchen exhaust
-    #   Options are 'None', 'Largest Zone', 'Adjacent'
+    #   Options are 'None', 'Adjacent'
     # @param exterior_lighting_zone [String] The exterior lighting zone for exterior lighting allowance.
     #   Options are '0 - Undeveloped Areas Parks', '1 - Developed Areas Parks', '2 - Neighborhood', '3 - All Other Areas', '4 - High Activity'
     # @param add_constructions [Boolean] Create and apply default construction set
@@ -28,6 +28,7 @@ module OpenstudioStandards
     #  Options are 'Inferred', 'Mass', 'Metal Building', 'WoodFramed', 'SteelFramed'
     # @param add_space_type_loads [Boolean] Populate existing standards space types in the model with internal loads
     # @param add_daylighting_controls [Boolean] Add daylighting controls
+    # @param add_infiltration [Boolean] Adds infiltration to the model based on cosntruction
     # @param add_elevators [Boolean] Apply elevators directly to a space in the model instead of to a space type
     # @param add_internal_mass [Boolean] Add internal mass to each space
     # @param add_exterior_lights [Boolean] Add exterior lightings objects to parking, canopies, and facades
@@ -66,6 +67,7 @@ module OpenstudioStandards
                                                 wall_construction_type: 'Inferred',
                                                 add_space_type_loads: true,
                                                 add_daylighting_controls: true,
+                                                add_infiltration: true,
                                                 add_elevators: true,
                                                 add_internal_mass: true,
                                                 add_exterior_lights: true,
@@ -225,8 +227,7 @@ module OpenstudioStandards
         end
 
         model.getSpaceTypes.sort.each do |space_type|
-          # Don't add infiltration here; will be added later in the script
-          test = standard.space_type_apply_internal_loads(space_type, true, true, true, true, true, false)
+          test = standard.space_type_apply_internal_loads(space_type, true, true, true, true, true)
           if test == false
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CreateTypical', "Could not add loads for #{space_type.name}. Not expected for #{template}")
             next
@@ -234,7 +235,7 @@ module OpenstudioStandards
 
           # apply internal load schedules
           # the last bool test it to make thermostat schedules. They are now added in HVAC section instead of here
-          standard.space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, false)
+          standard.space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, false)
 
           # extend space type name to include the template. Consider this as well for load defs
           space_type.setName("#{space_type.name} - #{template}")
@@ -285,8 +286,8 @@ module OpenstudioStandards
 
       # adjust F factor constructions to avoid simulation errors
       model.getFFactorGroundFloorConstructions.each do |cons|
-        # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons for 6" heavy concrete = 0.15m / 1.95 W/mK
-        if cons.area <= (0.135 + 0.03 + (0.15 / 1.95)) * cons.perimeterExposed * cons.fFactor
+        # Rfilm_in = 0.135, Rfilm_out = 0.03, Rcons for 6" heavy concrete = 0.15m / 1.95 W/mK, 0.001 minimum resistance of Rfic resistive layer
+        if cons.area <= (0.135 + 0.03 + (0.15 / 1.95) + 0.001) * cons.perimeterExposed * cons.fFactor
           # set minimum Rfic to ~ R1 = 0.18 m^2K/W
           new_area = 0.422 * cons.perimeterExposed * cons.fFactor
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "F-factor fictitious resistance for #{cons.name.get} with Area=#{cons.area.round(2)}, Exposed Perimeter=#{cons.perimeterExposed.round(2)}, and F-factor=#{cons.fFactor.round(2)} will result in a negative value and a failed simulation. Construction area is adjusted to be #{new_area.round(2)} m2.")
@@ -399,15 +400,22 @@ module OpenstudioStandards
           surface.setOutsideBoundaryCondition('Adiabatic')
         end
 
-        # modify the infiltration rates
-        if remove_objects
-          model.getSpaceInfiltrationDesignFlowRates.each(&:remove)
-        end
-        standard.model_apply_infiltration_standard(model)
-        standard.model_modify_infiltration_coefficients(model, primary_bldg_type, climate_zone)
 
         # set ground temperatures from DOE prototype buildings
         OpenstudioStandards::Weather.model_set_ground_temperatures(model, climate_zone: climate_zone)
+      end
+
+      # add infiltration
+      if add_infiltration
+        if remove_objects
+          model.getSpaceInfiltrationDesignFlowRates.each(&:remove)
+        end
+
+        # use NIST method for determining infiltration
+        # this sets a default always on; schedules are adjusted later if HVAC is added
+        OpenstudioStandards::Infiltration.model_set_nist_infiltration(model,
+                                                                      airtightness_value: standard.default_airtightness,
+                                                                      air_barrier: standard.default_air_barrier)
       end
 
       # add elevators (returns ElectricEquipment object)
@@ -463,17 +471,10 @@ module OpenstudioStandards
           model.getFanZoneExhausts.each(&:remove)
         end
 
-        zone_exhaust_fans = standard.model_add_exhaust(model, kitchen_makeup) # second argument is strategy for finding makeup zones for exhaust zones
-        zone_exhaust_fans.each do |k, v|
-          max_flow_rate_ip = OpenStudio.convert(k.maximumFlowRate.get, 'm^3/s', 'cfm').get
-          if v.key?(:zone_mixing)
-            zone_mixing = v[:zone_mixing]
-            mixing_source_zone_name = zone_mixing.sourceZone.get.name
-            mixing_design_flow_rate_ip = OpenStudio.convert(zone_mixing.designFlowRate.get, 'm^3/s', 'cfm').get
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding #{OpenStudio.toNeatString(max_flow_rate_ip, 0, true)} (cfm) of exhaust to #{k.thermalZone.get.name}, with #{OpenStudio.toNeatString(mixing_design_flow_rate_ip, 0, true)} (cfm) of makeup air from #{mixing_source_zone_name}")
-          else
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding #{OpenStudio.toNeatString(max_flow_rate_ip, 0, true)} (cfm) of exhaust to #{k.thermalZone.get.name}")
-          end
+        zone_exhaust_fans = standard.model_add_exhaust(model, makeup_source: kitchen_makeup)
+        zone_exhaust_fans.each do |zone_exhaust_fan|
+          max_flow_rate_ip = OpenStudio.convert(zone_exhaust_fan.maximumFlowRate.get, 'm^3/s', 'cfm').get
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding #{OpenStudio.toNeatString(max_flow_rate_ip, 0, true)} (cfm) of exhaust to #{zone_exhaust_fan.thermalZone.get.name}")
         end
       end
 
@@ -504,7 +505,7 @@ module OpenstudioStandards
           end
         end
 
-        typical_swh = standard.model_add_typical_swh(model, water_heater_fuel: service_water_heating_fuel)
+        typical_swh = OpenstudioStandards::ServiceWaterHeating.create_typical_service_water_heating(model, water_heating_fuel: service_water_heating_fuel)
         midrise_swh_loops = []
         stripmall_swh_loops = []
         typical_swh.each do |loop|
@@ -575,7 +576,7 @@ module OpenstudioStandards
           next if standard.space_type_get_standards_data(space_type).empty?
 
           # the last bool test it to make thermostat schedules. They are added to the model but not assigned
-          standard.space_type_apply_internal_load_schedules(space_type, false, false, false, false, false, false, true)
+          standard.space_type_apply_internal_load_schedules(space_type, false, false, false, false, false, true)
 
           # identify thermal thermostat and apply to zones (apply_internal_load_schedules names )
           model.getThermostatSetpointDualSetpoints.sort.each do |thermostat|
@@ -803,6 +804,11 @@ module OpenstudioStandards
           # Apply the HVAC efficiency standard
           standard.model_apply_hvac_efficiency_standard(model, climate_zone)
         end
+
+        # adjust infiltration schedules
+        if add_infiltration
+          OpenstudioStandards::Infiltration.model_set_nist_infiltration_schedules(model)
+        end
       end
 
       # set unmet hours tolerance
@@ -919,13 +925,13 @@ module OpenstudioStandards
           space_types_new << space_type
 
           # add internal loads (the nil check isn't necessary, but I will keep it in as a warning instad of an error)
-          test = standard.space_type_apply_internal_loads(space_type, true, true, true, true, true, true)
+          test = standard.space_type_apply_internal_loads(space_type, true, true, true, true, true)
           if test.nil?
             OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CreateTypical', "Could not add loads for #{space_type.name}. Not expected for #{template} #{lookup_building_type}")
           end
 
           # the last bool test it to make thermostat schedules. They are added to the model but not assigned
-          standard.space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
+          standard.space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true)
 
           # assign colors
           standard.space_type_apply_rendering_color(space_type)
