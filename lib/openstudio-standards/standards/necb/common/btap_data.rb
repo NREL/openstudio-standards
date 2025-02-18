@@ -7,7 +7,7 @@ class BTAPData
 
   def initialize(model:, runner: nil, cost_result:, baseline_cost_equipment_total_cost_per_m_sq: -1.0,
                  baseline_cost_utility_neb_total_cost_per_m_sq: -1.0, baseline_energy_eui_total_gj_per_m_sq: -1.0, qaqc:,
-                 npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_scc: 0.03)
+                 npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_carbon: 0.03)
     @model = model
     @error_warning = []
     # sets sql file.
@@ -88,7 +88,7 @@ class BTAPData
     # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
     bc_energy_step_code_performance_indicators
     # calculate net present value
-    net_present_value(npv_start_year: npv_start_year, npv_end_year: npv_end_year, npv_discount_rate: npv_discount_rate, npv_discount_rate_scc: npv_discount_rate_scc) unless cost_result.nil?
+    net_present_value(npv_start_year: npv_start_year, npv_end_year: npv_end_year, npv_discount_rate: npv_discount_rate, npv_discount_rate_carbon: npv_discount_rate_carbon) unless cost_result.nil?
     # calculates annual peak electricity cost (dollar)
     oerd_electricity_cost(model)
 
@@ -173,7 +173,7 @@ class BTAPData
     return building_data
   end
 
-  def net_present_value(npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_scc: 0.03)
+  def net_present_value(npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_carbon: 0.03)
 
     # Find end year in the neb data
     neb_header = CSV.read(@neb_prices_csv_file_name, headers: true).headers
@@ -191,8 +191,8 @@ class BTAPData
     if npv_discount_rate.instance_of?(String) && npv_discount_rate != 'NECB_Default' && npv_discount_rate != 'none' && !npv_discount_rate.nil?
       npv_discount_rate = npv_discount_rate.to_f
     end
-    if npv_discount_rate_scc.instance_of?(String) && npv_discount_rate_scc != 'NECB_Default' && npv_discount_rate_scc != 'none' && !npv_discount_rate_scc.nil?
-      npv_discount_rate_scc = npv_discount_rate_scc.to_f
+    if npv_discount_rate_carbon.instance_of?(String) && npv_discount_rate_carbon != 'NECB_Default' && npv_discount_rate_carbon != 'none' && !npv_discount_rate_carbon.nil?
+      npv_discount_rate_carbon = npv_discount_rate_carbon.to_f
     end
 
 
@@ -206,8 +206,8 @@ class BTAPData
     if npv_discount_rate == 'NECB_Default' || npv_discount_rate.nil? || npv_discount_rate == 'none'
       npv_discount_rate = 0.03
     end
-    if npv_discount_rate_scc == 'NECB_Default' || npv_discount_rate_scc.nil? || npv_discount_rate_scc == 'none'
-      npv_discount_rate_scc = 0.03
+    if npv_discount_rate_carbon == 'NECB_Default' || npv_discount_rate_carbon.nil? || npv_discount_rate_carbon == 'none'
+      npv_discount_rate_carbon = 0.03
     end
 
     # Set npv_end_year as year_max if users' input > neb's end year
@@ -243,7 +243,7 @@ class BTAPData
     if onsite_elec_generation > 0.0
       eui_elec = @btap_data['energy_eui_electricity_gj_per_m_sq'] - onsite_elec_generation
       # Calculate the save GHG emissions from onsite electricity generatation (assume it does not emmit GHGs)
-      ghg_saved = get_utility_ghg_kg_per_gj(province: province, fuel_type: "Electricity") * onsite_elec_generation
+      ghg_saved = get_utility_ghg_kg_per_gj(province: province_abbreviation, fuel_type: "Electricity") * onsite_elec_generation
       ghg_elec = @btap_data['cost_utility_ghg_electricity_kg_per_m_sq'] - ghg_saved
     else
       eui_elec = @btap_data['energy_eui_electricity_gj_per_m_sq']
@@ -261,7 +261,7 @@ class BTAPData
       for year in npv_start_year.to_int..npv_end_year.to_int
         # puts "year, #{year}, #{row[year.to_s]}, year_index, #{year_index}"
         npv_elec += (eui_elec * row[year.to_s]) / (1+npv_discount_rate)**year_index
-        npv_elec_ghg += (ghg_elec * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_scc)**year_index
+        npv_elec_ghg += (ghg_elec * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index
         year_index += 1.0
       end
     end
@@ -278,7 +278,7 @@ class BTAPData
     year_index = 1.0
     for year in npv_start_year.to_int..npv_end_year.to_int
       npv_ngas += (eui_ngas * row[year.to_s]) / (1+npv_discount_rate)**year_index
-      npv_ngas_ghg += (ghg_ngas * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_scc)**year_index
+      npv_ngas_ghg += (ghg_ngas * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index
       year_index += 1.0
     end
     # puts "npv_ngas is #{npv_ngas}"
@@ -294,7 +294,7 @@ class BTAPData
     year_index = 1.0
     for year in npv_start_year.to_int..npv_end_year.to_int
       npv_oil += (eui_oil * row[year.to_s]) / (1+npv_discount_rate)**year_index
-      npv_oil_ghg += (ghg_oil * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_scc)**year_index
+      npv_oil_ghg += (ghg_oil * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index
       year_index += 1.0
     end
     # puts "npv_oil is #{npv_oil}"
