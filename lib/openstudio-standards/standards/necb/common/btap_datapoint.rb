@@ -84,6 +84,7 @@ class BTAPDatapoint
     @npv_start_year = @options[:npv_start_year]
     @npv_end_year = @options[:npv_end_year]
     @npv_discount_rate = @options[:npv_discount_rate]
+    @npv_discount_rate_scc = @options[:npv_discount_rate_scc]
 
     # Save configuration to temp folder.
     File.open(File.join(@dp_temp_folder, 'run_options.yml'), 'w') { |file| file.write(@options.to_yaml) }
@@ -253,7 +254,8 @@ class BTAPDatapoint
                                   qaqc: @qaqc,
                                   npv_start_year: @npv_start_year,
                                   npv_end_year: @npv_end_year,
-                                  npv_discount_rate: @npv_discount_rate).btap_data
+                                  npv_discount_rate: @npv_discount_rate,
+                                  npv_discount_rate_scc: @npv_discount_rate_scc).btap_data
 
         # Write Files
         File.open(File.join(@dp_temp_folder, 'btap_data.json'), 'w') { |f| f.write(JSON.pretty_generate(@btap_data.sort.to_h, allow_nan: true)) }
