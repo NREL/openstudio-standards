@@ -8,7 +8,6 @@ begin
 rescue LoadError
   puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
 end
-require_relative '../measure.rb'
 require 'fileutils'
 require 'minitest/unit'
 require 'optparse'
@@ -241,82 +240,22 @@ class BTAPResults_HS14_Test < Minitest::Test
 
     # mimic the process of running this measure in OS App or PAT
     model_out_path = "#{run_dir}/final.osm"
-    workspace_path = "#{run_dir}/run/in.idf"
-    sql_path = "#{run_dir}/run/eplusout.sql"
     cost_result_json_path = "#{run_dir}/cost_results.json"
     cost_list_json_path = "#{run_dir}/btap_items.json"
 
     #create osm file to use mimic PAT/OS server called final
     model.save(model_out_path, true)
 
-    # set up runner, this will happen automatically when measure is run in PAT or OpenStudio. Ensure files exist.
-    runner = OpenStudio::Measure::OSRunner.new(OpenStudio::WorkflowJSON.new)
-    assert(File.exist?(model_out_path), "Could not find osm at this path:#{model_out_path}")
-    runner.setLastOpenStudioModelPath(OpenStudio::Path.new(model_out_path))
-    assert(File.exist?(workspace_path), "Could not find idf at this path:#{workspace_path}")
-    runner.setLastEnergyPlusWorkspacePath(OpenStudio::Path.new(workspace_path))
-    assert(File.exist?(sql_path), "Could not find sql at this path:#{sql_path}")
-    runner.setLastEnergyPlusSqlFilePath(OpenStudio::Path.new(sql_path))
-    model.save(model_out_path, true)
+    costing = BTAPCosting.new()
+    costing.load_database()
 
-    # temporarily change directory to the run directory and run the measure
-    start_dir = Dir.pwd
-    begin
-      # create an instance of the measure and runner
-      measure = BtapResults.new
-      arguments = measure.arguments(model)
-      argument_map = OpenStudio::Measure.convertOSArgumentVectorToMap(arguments)
-      assert_equal(16, arguments.size)
+    cost_result, _ = costing.cost_audit_all(model: model,
+                                         prototype_creator: standard,
+                                         template_type: template
+    )
 
-      hourly_data = arguments[0].clone
-      assert(hourly_data.setValue("false"))
-      argument_map['generate_hourly_report'] = hourly_data
+    File.open(cost_result_json_path, 'w') {|f| f.write(JSON.pretty_generate(cost_result, :allow_nan => true))}
 
-      output_diet = arguments[1].clone
-      assert(output_diet.setValue(false))
-      argument_map['output_diet'] = output_diet
-
-      envelope_costing = arguments[2].clone
-      assert(envelope_costing.setValue(true))
-      argument_map['envelope_costing'] = envelope_costing
-
-      lighting_costing = arguments[3].clone
-      assert(lighting_costing.setValue(true))
-      argument_map['lighting_costing'] = lighting_costing
-
-      boilers_costing = arguments[4].clone
-      assert(boilers_costing.setValue(true))
-      argument_map['boilers_costing'] = boilers_costing
-
-      chillers_costing = arguments[5].clone
-      assert(chillers_costing.setValue(true))
-      argument_map['chillers_costing'] = chillers_costing
-
-      cooling_towers_costing = arguments[6].clone
-      assert(cooling_towers_costing.setValue(true))
-      argument_map['cooling_towers_costing'] = cooling_towers_costing
-
-      shw_costing = arguments[7].clone
-      assert(shw_costing.setValue(true))
-      argument_map['shw_costing'] = shw_costing
-
-      ventilation_costing = arguments[8].clone
-      assert(ventilation_costing.setValue(true))
-      argument_map['ventilation_costing'] = ventilation_costing
-
-      zone_system_costing = arguments[9].clone
-      assert(zone_system_costing.setValue(true))
-      argument_map['zone_system_costing'] = zone_system_costing
-
-      Dir.chdir(run_dir)
-      # run the measure
-      measure.run(runner, argument_map)
-      result = runner.result
-      #show_output(result)
-      assert_equal('Success', result.value.valueName)
-    ensure
-      Dir.chdir(start_dir)
-    end
     assert(File.exist?(cost_result_json_path), "Could not find costing json at this path:#{cost_result_json_path}")
     regression_files_folder = "#{File.dirname(__FILE__)}/regression_files"
     expected_result_filename = "#{regression_files_folder}/#{model_name}_expected_result.cost.json"

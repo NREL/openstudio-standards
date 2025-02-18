@@ -34,7 +34,7 @@ class CommonPaths
 
   def initialize
     dir_relative                  = __dir__
-    dir_database                  = "#{dir_relative}/../../common_resources"
+    dir_database                  = "#{dir_relative}/common_resources"
 
     @locations_path               = "#{dir_database}/locations.csv"
     @construction_sets_path       = "#{dir_database}/construction_sets.csv"

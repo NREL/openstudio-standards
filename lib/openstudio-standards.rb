@@ -85,6 +85,17 @@ module OpenstudioStandards
 
   # BTAP (Natural Resources Canada)
   require_relative 'openstudio-standards/btap/btap'
+  require_relative 'openstudio-standards/btap/costing/btap_costing'
+  require_relative 'openstudio-standards/btap/costing/ventilation_costing'
+  require_relative 'openstudio-standards/btap/costing/envelope_costing'
+  require_relative 'openstudio-standards/btap/costing/lighting_costing'
+  require_relative 'openstudio-standards/btap/costing/heating_cooling_costing'
+  require_relative 'openstudio-standards/btap/costing/shw_costing'
+  require_relative 'openstudio-standards/btap/costing/dcv_costing'
+  require_relative 'openstudio-standards/btap/costing/daylighting_sensor_control_costing'
+  require_relative 'openstudio-standards/btap/costing/led_lighting_costing'
+  require_relative 'openstudio-standards/btap/costing/pv_ground_costing'
+  require_relative 'openstudio-standards/btap/costing/nv_costing'
 
   # Utilities
   require_relative 'openstudio-standards/utilities/logging'
