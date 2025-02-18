@@ -6427,7 +6427,7 @@ OS:SpaceType,
   {fa8e349c-6a95-4319-9ad6-a8ad113788c0}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {fa8e349c-6a95-4319-9ad6-a8ad113788c0}, !- Handle
@@ -6444,7 +6444,7 @@ OS:SpaceType,
   {f3a79c8b-753a-4d43-800b-7b41ca42acc5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f3a79c8b-753a-4d43-800b-7b41ca42acc5}, !- Handle
@@ -6461,7 +6461,7 @@ OS:SpaceType,
   {dd6acbd6-13bf-4848-b85d-4393f69a5e36}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  Corridor_topfloor;                      !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {dd6acbd6-13bf-4848-b85d-4393f69a5e36}, !- Handle
@@ -6478,7 +6478,7 @@ OS:SpaceType,
   {c02af3d7-2b46-4b65-ba55-43b9b2109d80}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  Apartment;                              !- Standards Space Type
+  multifamily;      !- Standards Space Type
 
 OS:Rendering:Color,
   {c02af3d7-2b46-4b65-ba55-43b9b2109d80}, !- Handle
@@ -6495,7 +6495,7 @@ OS:SpaceType,
   {56644041-06bb-44dd-ad1a-4cc4126ec016}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  Apartment_topfloor_WE;                  !- Standards Space Type
+  multifamily;      !- Standards Space Type
 
 OS:Rendering:Color,
   {56644041-06bb-44dd-ad1a-4cc4126ec016}, !- Handle
@@ -6512,7 +6512,7 @@ OS:SpaceType,
   {cda85b10-df59-4b24-836d-e9fea30febfd}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  Apartment_topfloor_NS;                  !- Standards Space Type
+  multifamily;      !- Standards Space Type
 
 OS:Rendering:Color,
   {cda85b10-df59-4b24-836d-e9fea30febfd}, !- Handle

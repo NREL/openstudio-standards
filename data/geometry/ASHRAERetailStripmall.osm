@@ -2969,7 +2969,7 @@ OS:SpaceType,
   {e185e757-f684-4834-8de5-a992fdf9cc51}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   StripMall,                              !- Standards Building Type
-  Strip mall - type 1;                    !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {e185e757-f684-4834-8de5-a992fdf9cc51}, !- Handle
@@ -2986,7 +2986,7 @@ OS:SpaceType,
   {1609d3a3-991f-4f05-945e-2e061cebaa9a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   StripMall,                              !- Standards Building Type
-  Strip mall - type 2;                    !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1609d3a3-991f-4f05-945e-2e061cebaa9a}, !- Handle
@@ -3003,7 +3003,7 @@ OS:SpaceType,
   {99a89640-fa94-4223-86ac-5730ec03257d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   StripMall,                              !- Standards Building Type
-  Strip mall - type 3;                    !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {99a89640-fa94-4223-86ac-5730ec03257d}, !- Handle

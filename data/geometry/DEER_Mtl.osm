@@ -5437,7 +5437,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Mtl,                                    !- Standards Building Type
-  Laundry;                                !- Standards Space Type
+  laundry/washing;      !- Standards Space Type
 
 OS:SpaceType,
   {a03333ef-47d7-4d91-ae4c-e6eac8d39a5b}, !- Handle
@@ -5447,7 +5447,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Mtl,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:ThermalZone,
   {cc477908-b3ba-4542-a123-f0bcc779d675}, !- Handle

@@ -1269,7 +1269,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RSD,                                    !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:SpaceType,
   {0ea74e37-eb42-439a-b930-ccdf2c2956f9}, !- Handle
@@ -1279,7 +1279,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RSD,                                    !- Standards Building Type
-  LobbyWaiting;                           !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:SpaceType,
   {6f22e2cb-6cd3-428a-8af0-096ead5c8f62}, !- Handle
@@ -1289,7 +1289,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RSD,                                    !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:SpaceType,
   {bf4c0ae1-4801-49f0-96dd-39afecbd7a32}, !- Handle
@@ -1299,7 +1299,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RSD,                                    !- Standards Building Type
-  Restroom;                               !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:ThermalZone,
   {30a91bb7-3e43-4b2f-ae67-c4228edfd6e2}, !- Handle
@@ -1965,5 +1965,5 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 

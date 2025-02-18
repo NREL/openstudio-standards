@@ -6208,7 +6208,7 @@ OS:SpaceType,
   {50b38936-f4c4-4b15-9320-b8141f10ddb6}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Banquet;                                !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {50b38936-f4c4-4b15-9320-b8141f10ddb6}, !- Handle
@@ -6225,7 +6225,7 @@ OS:SpaceType,
   {ad82c63e-7ff0-4e0e-9b38-9c1aa8df8180}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Basement;                               !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {ad82c63e-7ff0-4e0e-9b38-9c1aa8df8180}, !- Handle
@@ -6242,7 +6242,7 @@ OS:SpaceType,
   {d9846bdc-761e-4b74-b47d-4d9099132c2d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Cafe;                                   !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {d9846bdc-761e-4b74-b47d-4d9099132c2d}, !- Handle
@@ -6259,7 +6259,7 @@ OS:SpaceType,
   {3588649d-df17-4537-9d96-0bed9910e630}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3588649d-df17-4537-9d96-0bed9910e630}, !- Handle
@@ -6276,7 +6276,7 @@ OS:SpaceType,
   {5400f6e8-9423-4bcf-b3f0-8965dcf534d0}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Corridor2;                              !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5400f6e8-9423-4bcf-b3f0-8965dcf534d0}, !- Handle
@@ -6293,7 +6293,7 @@ OS:SpaceType,
   {e311b21f-427c-455e-b6f9-1a99271bf31b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  GuestRoom;                              !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {e311b21f-427c-455e-b6f9-1a99271bf31b}, !- Handle
@@ -6310,7 +6310,7 @@ OS:SpaceType,
   {df28cb16-bc1d-4ee9-b1b9-2df9ec5ddd20}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  GuestRoom2;                             !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {df28cb16-bc1d-4ee9-b1b9-2df9ec5ddd20}, !- Handle
@@ -6327,7 +6327,7 @@ OS:SpaceType,
   {cc564a68-10f5-4448-9d40-a5ce68c77860}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  GuestRoom3;                             !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {cc564a68-10f5-4448-9d40-a5ce68c77860}, !- Handle
@@ -6344,7 +6344,7 @@ OS:SpaceType,
   {db657990-5755-4ccd-924f-aeede9dcc85a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  GuestRoom4;                             !- Standards Space Type
+  guest room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {db657990-5755-4ccd-924f-aeede9dcc85a}, !- Handle
@@ -6361,7 +6361,7 @@ OS:SpaceType,
   {a6d4bd5f-7bbc-4f41-87f7-5d8f7fb109e3}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:Rendering:Color,
   {a6d4bd5f-7bbc-4f41-87f7-5d8f7fb109e3}, !- Handle
@@ -6378,7 +6378,7 @@ OS:SpaceType,
   {26b2859a-0872-4a25-a2e6-6dd7f963d667}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Laundry;                                !- Standards Space Type
+  laundry/washing;      !- Standards Space Type
 
 OS:Rendering:Color,
   {26b2859a-0872-4a25-a2e6-6dd7f963d667}, !- Handle
@@ -6395,7 +6395,7 @@ OS:SpaceType,
   {3144ec28-2569-45d4-9647-95541e2088b1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Lobby;                                  !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3144ec28-2569-45d4-9647-95541e2088b1}, !- Handle
@@ -6412,7 +6412,7 @@ OS:SpaceType,
   {d9bea9b1-2936-4e5f-a153-398cf2edc31c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Mechanical;                             !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {d9bea9b1-2936-4e5f-a153-398cf2edc31c}, !- Handle
@@ -6429,7 +6429,7 @@ OS:SpaceType,
   {5adaf293-f8d2-4480-80be-792c2af092a6}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Retail;                                 !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5adaf293-f8d2-4480-80be-792c2af092a6}, !- Handle
@@ -6446,7 +6446,7 @@ OS:SpaceType,
   {f118ef28-6a21-42dd-a9e5-44665a14c94a}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Retail2;                                !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f118ef28-6a21-42dd-a9e5-44665a14c94a}, !- Handle
@@ -6463,7 +6463,7 @@ OS:SpaceType,
   {13493879-6a84-4250-93da-925b138d817b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   LargeHotel,                             !- Standards Building Type
-  Storage;                                !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {13493879-6a84-4250-93da-925b138d817b}, !- Handle

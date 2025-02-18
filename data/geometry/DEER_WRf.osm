@@ -750,7 +750,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   WRf,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:SpaceType,
   {c6da30eb-4ece-43eb-a308-b34123674df8}, !- Handle

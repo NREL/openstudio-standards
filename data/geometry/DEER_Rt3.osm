@@ -3797,7 +3797,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Rt3,                                    !- Standards Building Type
-  RetailSales;                            !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:ThermalZone,
   {d07384aa-7bbb-466c-a025-a04af55fe006}, !- Handle
@@ -6267,5 +6267,5 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 

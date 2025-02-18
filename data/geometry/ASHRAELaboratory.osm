@@ -12402,7 +12402,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Laboratory,                             !- Standards Building Type
-  Equipment corridor;                     !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {7c449471-e44a-44cf-bf7e-8c3376bd55e7}, !- Handle
@@ -12420,7 +12420,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Laboratory,                             !- Standards Building Type
-  Lab with fume hood;                     !- Standards Space Type
+  laboratory;      !- Standards Space Type
 
 OS:Rendering:Color,
   {7faddff0-701a-4fb3-af24-6f0a8254bba7}, !- Handle
@@ -12438,7 +12438,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Laboratory,                             !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f35e15fc-a426-4389-98c5-8da170be761a}, !- Handle
@@ -12456,7 +12456,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Laboratory,                             !- Standards Building Type
-  Open lab;                               !- Standards Space Type
+  laboratory;      !- Standards Space Type
 
 OS:Rendering:Color,
   {ee4078eb-d19b-428c-8273-e6d2eaf64a50}, !- Handle
@@ -12726,7 +12726,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Laboratory,                             !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3cf0e9fa-2854-45ad-822f-49e2653d1463}, !- Handle
