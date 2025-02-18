@@ -302,11 +302,11 @@ class BTAPData
     # Calculate total npv
     npv_total = @btap_data['cost_equipment_total_cost_per_m_sq'] + npv_elec + npv_ngas + npv_oil
     npv_ghg_total = npv_elec_ghg + npv_ngas_ghg + npv_oil_ghg
-    npv_total_with_ghg = npv_ghg_total
+    npv_total_with_ghg = npv_ghg_total + npv_total
 
     @btap_data.merge!('npv_total_per_m_sq' => npv_total)
-    @btap_data.merge!('npv_total_with_ghg_pricing_per_m_sq' => npv_total_with_ghg)
-
+    @btap_data.merge!('carbon_pricing_over_npv_total_per_m_sq' => npv_ghg_total)
+    @btap_data.merge!('npv_with_carbon_pricing_total_per_m_sq' => npv_total_with_ghg)
   end
 
   def envelope(model)
