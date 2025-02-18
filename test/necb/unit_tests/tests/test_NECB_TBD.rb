@@ -24,7 +24,7 @@ class NECB_TBD_Tests < Minitest::Test
     # 'NECB2017'
     ]
 
-    @epws = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
+    @epws = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
 
     @buildings = [
       'FullServiceRestaurant',

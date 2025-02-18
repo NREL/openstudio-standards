@@ -1,7 +1,7 @@
 [
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "HighriseApartment",
     "primary_heating_fuel": "NaturalGas",
     "doas_type": "one_sys_per_bldg",
@@ -11,7 +11,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "HighriseApartment",
     "primary_heating_fuel": "NaturalGas",
     "doas_type": "one_sys_per_dwelling_unit",
@@ -100,7 +100,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeHotel",
     "primary_heating_fuel": "NaturalGas",
     "doas_type": "one_sys_per_bldg",
@@ -115,7 +115,7 @@
   },
   {
     "template": "NECB2011",
-    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2016.epw",
+    "epw_file": "CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw",
     "building_type": "LargeHotel",
     "primary_heating_fuel": "NaturalGas",
     "doas_type": "one_sys_per_dwelling_unit",

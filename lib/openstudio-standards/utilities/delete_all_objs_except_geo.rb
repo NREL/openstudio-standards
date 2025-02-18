@@ -4,7 +4,7 @@ require_relative '../../openstudio-standards/btap/fileio'
 
 puts "\nenter osm file name (without file extension):\n"
 osm_infile_name = gets.chomp
-osm_outfile_name = osm_infile_name.to_s + '_updated.osm'
+osm_outfile_name = "#{osm_infile_name}_updated.osm"
 
 model = BTAP::FileIO.safe_load_model("#{osm_infile_name}.osm")
 

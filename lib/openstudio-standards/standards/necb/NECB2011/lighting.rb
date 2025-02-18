@@ -54,7 +54,7 @@ class NECB2011
 
     # Remove all but the first instance
     instances = space_type.lights.sort
-    if instances.size.zero?
+    if instances.empty?
       definition = OpenStudio::Model::LightsDefinition.new(space_type.model)
       if lights_type == 'NECB_Default'
         definition.setName("#{space_type.name} Lights Definition")

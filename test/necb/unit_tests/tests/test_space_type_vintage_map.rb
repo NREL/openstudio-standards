@@ -1,22 +1,26 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
 
-# This class will perform tests that are HDD driven, A Test model will be created
-# that will have all of OpenStudios surface types with different contructions. All
-# components are created from scratch to ensure model are up to date and we will
-# not run into version issues with the test.
-## to specifically test aspects of the NECB2011 code that are HDD dependant.
+# This class will perform tests mapping of space types for different versions of NECB.
 class NECB_VintageMap_Test < Minitest::Test
 
 
   def test_necb2011()
-      vintage_mapper('NECB2011')
+    vintage_mapper('BTAP1980TO2010')
+  end
+  def test_necb2011()
+    vintage_mapper('BTAPPRE1980')
+  end
+  def test_necb2011()
+    vintage_mapper('NECB2011')
   end
   def test_necb2015()
     vintage_mapper('NECB2015')
   end
   def test_necb2017()
     vintage_mapper('NECB2017')
+  end
+  def test_necb2020()
+    vintage_mapper('NECB2020')
   end
 
   private

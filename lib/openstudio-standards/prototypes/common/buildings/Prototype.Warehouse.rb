@@ -36,7 +36,7 @@ module Warehouse
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 90.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 90.0)
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Adjusting geometry input')
     case template
@@ -82,17 +82,7 @@ module Warehouse
   # return [Hash] Door infiltration information
   def get_building_door_info(model)
     # Get Bulk storage space infiltration schedule name
-    sch = ''
-    model.getSpaces.sort.each do |space|
-      if space.spaceType.get.standardsSpaceType.get.to_s == 'Bulk'
-        space.spaceInfiltrationDesignFlowRates.each do |infil|
-          infil_sch = infil.schedule.get.to_ScheduleRuleset.get
-          if infil_sch.initialized
-            sch = infil_sch
-          end
-        end
-      end
-    end
+    sch = model_add_schedule(model, 'Warehouse INFIL_Door_Opening_SCH')
 
     if !sch.initialized
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.Warehouse', 'Could not find Bulk storage schedule.')

@@ -48,9 +48,8 @@ class TestAddCFactorWall < CreateDOEPrototypeBuildingTest
       #parse the modified model for the C-Factor constructions (it should be the only CFactor construction)
       c_factor_construction = model.getCFactorUndergroundWallConstructions[0]
 
-      c_factor_height =  c_factor_construction.height.round(3)
+      c_factor_height = c_factor_construction.height.round(3)
       c_factor_generated = c_factor_construction.cFactor.round(2)
-
 
       asserts = {
           'Height' => [c_factor_height, basement_wall_height],

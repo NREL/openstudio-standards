@@ -6,6 +6,7 @@ class ZEAEDGMultifamily < ASHRAE901
   attr_reader :template
 
   def initialize
+    super()
     @template = 'ZE AEDG Multifamily'
     load_standards_database
   end

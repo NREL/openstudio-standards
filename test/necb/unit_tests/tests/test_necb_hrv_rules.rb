@@ -1,45 +1,42 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 
 class NECB_HVAC_HRV_Tests < Minitest::Test
-  # set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-  # set to true to run the simulations.
-  FULL_SIMULATIONS = false
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
 
   # Test to validate the effectiveness of the hrv
   def test_NECB2011_hrv_eff
-    output_folder = "#{File.dirname(__FILE__)}/output/coolingtower"
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder
     template = 'NECB2011'
     standard = Standard.build(template)
- 
-    # Generate the osm files for all relevant cases to generate the test data
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+    save_intermediate_models = false
+
     name = "hrv"
-    puts "***************************************#{name}*******************************************************\n"
-    # add hvac system
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
+    # Add HVAC system.
     boiler_fueltype = 'Electricity'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'DX'
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, boiler_fueltype, always_on)
     standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
                                                                                                 zones: model.getThermalZones,
                                                                                                 heating_coil_type: heating_coil_type,
@@ -47,7 +44,8 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
                                                                                                 hw_loop: hw_loop,
                                                                                                 new_auto_zoner: false)
     systems = model.getAirLoopHVACs
-    # increase default outdoor air requirement so that some of the systems in the project would require an HRV
+
+    # Increase default outdoor air requirement so that some of the systems in the project would require an HRV.
     for isys in 0..0
       zones = systems[isys].thermalZones
       zones.each do |izone|
@@ -60,11 +58,9 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       end
     end
 
-    # run the standards
-    result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_shw_curves: Failure in Standards for #{name}")
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
+
     systems = model.getAirLoopHVACs
     tol = 1.0e-5
     necb_hrv_eff = 0.5
@@ -86,57 +82,5 @@ class NECB_HVAC_HRV_Tests < Minitest::Test
       end
     end
   end
-  
-  def run_simulations(output_folder)
-    if FULL_SIMULATIONS == true
-      file_array = []
-      BTAP::FileIO.get_find_files_from_folder_by_extension(output_folder, '.osm').each do |file|
-        # skip any sizing.osm file.
-        unless file.to_s.include? 'sizing.osm'
-          file_array << file
-        end
-      end
-      BTAP::SimManager.simulate_files(output_folder, file_array)
-      BTAP::Reporting.get_all_annual_results_from_runmanger_by_files(output_folder, file_array)
 
-      are_there_no_severe_errors = File.zero?("#{output_folder}/failed simulations.txt")
-      assert_equal(true, are_there_no_severe_errors, "Simulations had severe errors. Check #{output_folder}/failed simulations.txt")
-    end
-  end
-
-  def run_the_measure(model, template, sizing_dir)
-    if PERFORM_STANDARDS
-      # Hard-code the building vintage
-      building_vintage = template
-      building_type = 'NECB'
-      climate_zone = 'NECB'
-      standard = Standard.build(building_vintage)
-      
-      # Make a directory to run the sizing run in
-      unless Dir.exist? sizing_dir
-        FileUtils.mkdir_p(sizing_dir)
-      end
-
-      # Perform a sizing run
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun1"
-        raise("could not find sizing run #{sizing_dir}/SizingRun1")
-        return false
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun1"
-      end
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-      # need to set prototype assumptions so that HRV added
-      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-      # Apply the HVAC efficiency standard
-      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-
-      return true
-    end
-  end
 end

@@ -14,9 +14,7 @@ module OpenstudioStandards
     # @return [String] HTML output path
     def self.create_qaqc_html(html_in_path, sections, name)
       # read in template
-      if File.exist?(html_in_path)
-        html_in_path = html_in_path
-      else
+      unless File.exist?(html_in_path)
         html_in_path = "#{File.dirname(__FILE__)}/report.html.erb"
       end
       html_in = ''
@@ -95,11 +93,12 @@ module OpenstudioStandards
         flags = []
         # loop through attributes (name,category,description,then optionally one or more flag attributes)
         check.valueAsAttributeVector.each_with_index do |value, index|
-          if index == 0
+          case index
+          when 0
             check_name = value.valueAsString
-          elsif index == 1
+          when 1
             check_cat = value.valueAsString
-          elsif index == 2
+          when 2
             check_desc = value.valueAsString
           else # should be flag
             flags << value.valueAsString
@@ -118,11 +117,11 @@ module OpenstudioStandards
         end
 
         # color cells based and add logging messages based on flag status
-        if !flags.empty?
-          qaqc_check_summary[:data_color] << ['', '', 'indianred', '']
+        if flags.empty?
+          qaqc_check_summary[:data_color] << ['', '', 'lightgreen', '']
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.QAQC', "#{check_name.downcase.tr(' ', '_')} #{flags.size} flags")
         else
-          qaqc_check_summary[:data_color] << ['', '', 'lightgreen', '']
+          qaqc_check_summary[:data_color] << ['', '', 'indianred', '']
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.QAQC', "#{check_name.downcase.tr(' ', '_')} #{flags.size} flags")
         end
 

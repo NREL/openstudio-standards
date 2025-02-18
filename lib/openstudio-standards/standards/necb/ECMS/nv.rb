@@ -90,84 +90,88 @@ class ECMS
                 min_Tin_schedule_defaultDay.addValue(time, min_Tin_schedule_defaultDay_values_adjusted[i])
                 i += 1.0
               end
+
+
+              ##### Calculate how many windows a space has.
+              # The total number of windows is used to divide OA/person and OA/FloorArea of the space by it (i.e. number of windows).
+              # In this way, NV-driven OA in each space would be avoided to be more than required.
+              space.surfaces.sort.each do |surface|
+                surface.subSurfaces.sort.each do |subsurface|
+                  if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'
+                    number_of_windows += 1.0
+                  end
+                end
+              end
+              oa_per_person_normalized_by_number_of_windows = outdoor_air_flow_per_person / number_of_windows
+              oa_per_floor_area_normalized_by_number_of_windows = outdoor_air_flow_per_floor_area / number_of_windows
+
+              ##### Add NV in each space that has window(s) using two objects: "ZoneVentilation:DesignFlowRate" and "ZoneVentilation:WindandStackOpenArea"
+              space.surfaces.sort.each do |surface|
+                surface.subSurfaces.sort.each do |subsurface|
+                  if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'
+                    window_azimuth_deg = OpenStudio.convert(subsurface.azimuth, 'rad', 'deg').get
+                    window_area = subsurface.netArea
+
+                    ##### Define a constant schedule for operable windows
+                    operable_window_schedule = OpenStudio::Model::ScheduleConstant.new(model)
+                    operable_window_schedule.setName('operable_window_schedule_constant')
+                    operable_window_schedule.setScheduleTypeLimits(BTAP::Resources::Schedules::StandardScheduleTypeLimits.get_on_off(model))
+
+                    ##### Add a "ZoneVentilation:DesignFlowRate" object for NV to set OA per person.
+                    zn_vent_design_flow_rate_1 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
+                    zn_vent_design_flow_rate_1.setFlowRateperPerson(oa_per_person_normalized_by_number_of_windows)
+                    if model.version < OpenStudio::VersionString.new('3.5.0')
+                      # Design Flow Rate Calculation Method is automatically set in 3.5.0+
+                      zn_vent_design_flow_rate_1.setDesignFlowRateCalculationMethod('Flow/Person')
+                    end
+                    zn_vent_design_flow_rate_1.setVentilationType('Natural')
+                    zn_vent_design_flow_rate_1.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
+                    zn_vent_design_flow_rate_1.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
+                    zn_vent_design_flow_rate_1.setMinimumOutdoorTemperature(nv_temp_out_min)
+                    zn_vent_design_flow_rate_1.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
+                    zn_vent_design_flow_rate_1.setDeltaTemperature(nv_delta_temp_in_out) # E+ I/O Ref.: "This is the temperature difference between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."
+                    zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_1)
+
+                    ##### Add another "ZoneVentilation:DesignFlowRate" object for NV to set OA per floor area.
+                    zn_vent_design_flow_rate_2 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
+                    zn_vent_design_flow_rate_2.setFlowRateperZoneFloorArea(oa_per_floor_area_normalized_by_number_of_windows)
+                    if model.version < OpenStudio::VersionString.new('3.5.0')
+                      # Design Flow Rate Calculation Method is automatically set in 3.5.0+
+                      zn_vent_design_flow_rate_2.setDesignFlowRateCalculationMethod('Flow/Area')
+                    end
+                    zn_vent_design_flow_rate_2.setVentilationType('Natural')
+                    zn_vent_design_flow_rate_2.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
+                    zn_vent_design_flow_rate_2.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
+                    zn_vent_design_flow_rate_2.setMinimumOutdoorTemperature(nv_temp_out_min)
+                    zn_vent_design_flow_rate_2.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
+                    zn_vent_design_flow_rate_2.setDeltaTemperature(nv_delta_temp_in_out)
+                    zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_2)
+
+                    ##### Add the "ZoneVentilation:WindandStackOpenArea" for NV.
+                    # Note: it has been assumed that 'Opening Effectiveness' and 'Discharge Coefficient for Opening' are autocalculated (which are the default assumptions).
+                    zn_vent_wind_and_stack = OpenStudio::Model::ZoneVentilationWindandStackOpenArea.new(model)
+                    zn_vent_wind_and_stack.setOpeningArea(window_area * nv_opening_fraction)
+                    zn_vent_wind_and_stack.setOpeningAreaFractionSchedule(operable_window_schedule)
+                    # (Ref: E+ I/O) The Effective Angle value "is used to calculate the angle between the wind direction and the opening outward normal to determine the opening effectiveness values when the input field Opening Effectiveness = Autocalculate."
+                    # (Ref: E+ I/O) "Effective Angle is the angle in degrees counting from the North clockwise to the opening outward normal."
+                    zn_vent_wind_and_stack.setEffectiveAngle(window_azimuth_deg)
+                    zn_vent_wind_and_stack.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
+                    zn_vent_wind_and_stack.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
+                    zn_vent_wind_and_stack.setMinimumOutdoorTemperature(nv_temp_out_min)
+                    zn_vent_wind_and_stack.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
+                    zn_vent_wind_and_stack.setDeltaTemperature(nv_delta_temp_in_out)
+                    zone_hvac_equipment_list.addEquipment(zn_vent_wind_and_stack)
+                    # if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'
+                  end
+                  # surface.subSurfaces.sort.each do |subsurface|
+                end
+                # space.surfaces.sort.each do |surface|
+
             end
           end
         end
 
-        ##### Calculate how many windows a space has.
-        # The total number of windows is used to divide OA/person and OA/FloorArea of the space by it (i.e. number of windows).
-        # In this way, NV-driven OA in each space would be avoided to be more than required.
-        space.surfaces.sort.each do |surface|
-          surface.subSurfaces.sort.each do |subsurface|
-            if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'
-              number_of_windows += 1.0
-            end
-          end
-        end
-        oa_per_person_normalized_by_number_of_windows = outdoor_air_flow_per_person / number_of_windows
-        oa_per_floor_area_normalized_by_number_of_windows = outdoor_air_flow_per_floor_area / number_of_windows
 
-        ##### Add NV in each space that has window(s) using two objects: "ZoneVentilation:DesignFlowRate" and "ZoneVentilation:WindandStackOpenArea"
-        space.surfaces.sort.each do |surface|
-          surface.subSurfaces.sort.each do |subsurface|
-            if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'
-              window_azimuth_deg = OpenStudio.convert(subsurface.azimuth, 'rad', 'deg').get
-              window_area = subsurface.netArea
-
-              ##### Define a constant schedule for operable windows
-              operable_window_schedule = OpenStudio::Model::ScheduleConstant.new(model)
-              operable_window_schedule.setName('operable_window_schedule_constant')
-              operable_window_schedule.setScheduleTypeLimits(BTAP::Resources::Schedules::StandardScheduleTypeLimits.get_on_off(model))
-
-              ##### Add a "ZoneVentilation:DesignFlowRate" object for NV to set OA per person.
-              zn_vent_design_flow_rate_1 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
-              zn_vent_design_flow_rate_1.setFlowRateperPerson(oa_per_person_normalized_by_number_of_windows)
-              if model.version < OpenStudio::VersionString.new('3.5.0')
-                # Design Flow Rate Calculation Method is automatically set in 3.5.0+
-                zn_vent_design_flow_rate_1.setDesignFlowRateCalculationMethod('Flow/Person')
-              end
-              zn_vent_design_flow_rate_1.setVentilationType('Natural')
-              zn_vent_design_flow_rate_1.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
-              zn_vent_design_flow_rate_1.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
-              zn_vent_design_flow_rate_1.setMinimumOutdoorTemperature(nv_temp_out_min)
-              zn_vent_design_flow_rate_1.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
-              zn_vent_design_flow_rate_1.setDeltaTemperature(nv_delta_temp_in_out) # E+ I/O Ref.: "This is the temperature difference between the indoor and outdoor air dry-bulb temperatures below which ventilation is shutoff."
-              zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_1)
-
-              ##### Add another "ZoneVentilation:DesignFlowRate" object for NV to set OA per floor area.
-              zn_vent_design_flow_rate_2 = OpenStudio::Model::ZoneVentilationDesignFlowRate.new(model)
-              zn_vent_design_flow_rate_2.setFlowRateperZoneFloorArea(oa_per_floor_area_normalized_by_number_of_windows)
-              if model.version < OpenStudio::VersionString.new('3.5.0')
-                # Design Flow Rate Calculation Method is automatically set in 3.5.0+
-                zn_vent_design_flow_rate_2.setDesignFlowRateCalculationMethod('Flow/Area')
-              end
-              zn_vent_design_flow_rate_2.setVentilationType('Natural')
-              zn_vent_design_flow_rate_2.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
-              zn_vent_design_flow_rate_2.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
-              zn_vent_design_flow_rate_2.setMinimumOutdoorTemperature(nv_temp_out_min)
-              zn_vent_design_flow_rate_2.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
-              zn_vent_design_flow_rate_2.setDeltaTemperature(nv_delta_temp_in_out)
-              zone_hvac_equipment_list.addEquipment(zn_vent_design_flow_rate_2)
-
-              ##### Add the "ZoneVentilation:WindandStackOpenArea" for NV.
-              # Note: it has been assumed that 'Opening Effectiveness' and 'Discharge Coefficient for Opening' are autocalculated (which are the default assumptions).
-              zn_vent_wind_and_stack = OpenStudio::Model::ZoneVentilationWindandStackOpenArea.new(model)
-              zn_vent_wind_and_stack.setOpeningArea(window_area * nv_opening_fraction)
-              zn_vent_wind_and_stack.setOpeningAreaFractionSchedule(operable_window_schedule)
-              # (Ref: E+ I/O) The Effective Angle value "is used to calculate the angle between the wind direction and the opening outward normal to determine the opening effectiveness values when the input field Opening Effectiveness = Autocalculate."
-              # (Ref: E+ I/O) "Effective Angle is the angle in degrees counting from the North clockwise to the opening outward normal."
-              zn_vent_wind_and_stack.setEffectiveAngle(window_azimuth_deg)
-              zn_vent_wind_and_stack.setMinimumIndoorTemperatureSchedule(min_Tin_schedule)
-              zn_vent_wind_and_stack.setMaximumIndoorTemperatureSchedule(max_Tin_schedule)
-              zn_vent_wind_and_stack.setMinimumOutdoorTemperature(nv_temp_out_min)
-              zn_vent_wind_and_stack.setMaximumOutdoorTemperatureSchedule(max_Tin_schedule)
-              zn_vent_wind_and_stack.setDeltaTemperature(nv_delta_temp_in_out)
-              zone_hvac_equipment_list.addEquipment(zn_vent_wind_and_stack)
-              # if (subsurface.subSurfaceType == 'OperableWindow' || subsurface.subSurfaceType == 'FixedWindow') && subsurface.outsideBoundaryCondition == 'Outdoors'
-            end
-            # surface.subSurfaces.sort.each do |subsurface|
-          end
-          # space.surfaces.sort.each do |surface|
         end
         # thermal_zone.spaces.sort.each do |space|
       end

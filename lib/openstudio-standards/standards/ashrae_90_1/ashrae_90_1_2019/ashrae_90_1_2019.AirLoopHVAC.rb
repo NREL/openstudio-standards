@@ -57,6 +57,11 @@ class ASHRAE9012019 < ASHRAE901
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name} no economizer")
       return [nil, nil, nil]
     when 'FixedDryBulb'
+      # Process climate zone:
+      # Moisture regime is not needed for climate zone 8
+      climate_zone = climate_zone.split('-')[-1]
+      climate_zone = '8' if climate_zone.include?('8')
+s
       search_criteria = {
         'template' => template,
         'climate_zone' => climate_zone
@@ -448,106 +453,84 @@ class ASHRAE9012019 < ASHRAE901
       ann_op_hrs = 8760.0
     elsif avail_sch.to_ScheduleRuleset.is_initialized
       avail_sch = avail_sch.to_ScheduleRuleset.get
-      ann_op_hrs = schedule_ruleset_annual_hours_above_value(avail_sch, 0.0)
+      ann_op_hrs = OpenstudioStandards::Schedules.schedule_ruleset_get_hours_above_value(avail_sch, 0.0)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "For #{air_loop_hvac.name}: could not determine annual operating hours. Assuming less than 8,000 for ERV determination.")
     end
 
+    # Process climate zone:
+    # Moisture regime is not needed for climate zone 8
+    climate_zone = climate_zone.split('-')[-1]
+    climate_zone = '8' if climate_zone.include?('8')
+
+    # Check if air loop serves a non-transient dwelling unit
+    nontrans_dwel = false
+    air_loop_hvac.thermalZones.each do |zone|
+      next unless OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone)
+
+      nontrans_dwel = true
+    end
+
+    # Check annual operating hours
     if ann_op_hrs < 8000.0
-      # Table 6.5.6.1-1, less than 8000 hrs
-      search_criteria = {
-        'template' => template,
-        'climate_zone' => climate_zone,
-        'under_8000_hours' => true,
-        'nontransient_dwelling' => false,
-        'enthalpy_recovery_ratio_design_conditions' => 'Cooling'
-      }
-      energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
-      if energy_recovery_limits.nil?
-        # Repeat the search for heating
-        search_criteria['enthalpy_recovery_ratio_design_conditions'] = 'Heating'
-        energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
-        if energy_recovery_limits.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
-          return nil
-        end
-      end
-
-      if pct_oa < 0.1
-        erv_cfm = nil
-      elsif pct_oa >= 0.1 && pct_oa < 0.2
-        erv_cfm = energy_recovery_limits['10_to_20_percent_oa']
-      elsif pct_oa >= 0.2 && pct_oa < 0.3
-        erv_cfm = energy_recovery_limits['20_to_30_percent_oa']
-      elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = energy_recovery_limits['30_to_40_percent_oa']
-      elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = energy_recovery_limits['40_to_50_percent_oa']
-      elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = energy_recovery_limits['50_to_60_percent_oa']
-      elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = energy_recovery_limits['60_to_70_percent_oa']
-      elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = energy_recovery_limits['70_to_80_percent_oa']
-      elsif pct_oa >= 0.8
-        erv_cfm = energy_recovery_limits['greater_than_80_percent_oa']
-      end
+      under_8000_hours = true
+      string_for_log = 'under'
     else
-      # Check if air loop serves a non-transient dwelling unit,
-      # currently non-transient dwelling units are residential
-      # spaces in the apartment prototypes
-      building_data = model_get_building_properties(air_loop_hvac.model)
-      building_type = building_data['building_type']
-      nontrans_dwel = false
-      if building_type == 'MidriseApartment' || building_type == 'HighriseApartment'
-        air_loop_hvac.thermalZones.each do |zone|
-          next unless thermal_zone_residential?(zone)
+      under_8000_hours = false
+      string_for_log = 'over'
+    end
 
-          nontrans_dwel = true
-        end
-      end
+    # Search database
+    search_criteria = {
+      'template' => template,
+      'climate_zone' => climate_zone,
+      'under_8000_hours' => under_8000_hours,
+      'nontransient_dwelling' => nontrans_dwel,
+      'design_conditions' => 'Cooling'
+    }
+    energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
 
-      # Table 6.5.6.1-2, above 8000 hrs
-      search_criteria = {
-        'template' => template,
-        'climate_zone' => climate_zone,
-        'under_8000_hours' => false,
-        'nontransient_dwelling' => nontrans_dwel,
-        'enthalpy_recovery_ratio_design_conditions' => 'Cooling'
-      }
+    # Check if there is no cooling requirements...
+    repeat_search_with_heating = false
+    if energy_recovery_limits.nil?
+      repeat_search_with_heating = true
+    else
+      energy_recovery_limits['enthalpy_recovery_ratio'].nil?
+      repeat_search_with_heating = true
+    end
+
+    # ... if so, look for heating requirements
+    if repeat_search_with_heating
+      search_criteria['design_conditions'] = 'Heating'
       energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
       if energy_recovery_limits.nil?
-        # Repeat the search for heating
-        search_criteria['enthalpy_recovery_ratio_design_conditions'] = 'Heating'
-        energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
-        if energy_recovery_limits.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and under 8000 hours, assuming no energy recovery required.")
-          return nil
-        end
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.ashrae_90_1_2019.AirLoopHVAC', "Cannot find energy recovery limits for template '#{template}', climate zone '#{climate_zone}', and #{string_for_log} 8000 hours, assuming no energy recovery required.")
+        return nil
       end
-      if pct_oa < 0.1
-        if nontrans_dwel
-          erv_cfm = energy_recovery_limits['0_to_10_percent_oa']
-        else
-          erv_cfm = nil
-        end
-      elsif pct_oa >= 0.1 && pct_oa < 0.2
-        erv_cfm = energy_recovery_limits['10_to_20_percent_oa']
-      elsif pct_oa >= 0.2 && pct_oa < 0.3
-        erv_cfm = energy_recovery_limits['20_to_30_percent_oa']
-      elsif pct_oa >= 0.3 && pct_oa < 0.4
-        erv_cfm = energy_recovery_limits['30_to_40_percent_oa']
-      elsif pct_oa >= 0.4 && pct_oa < 0.5
-        erv_cfm = energy_recovery_limits['40_to_50_percent_oa']
-      elsif pct_oa >= 0.5 && pct_oa < 0.6
-        erv_cfm = energy_recovery_limits['50_to_60_percent_oa']
-      elsif pct_oa >= 0.6 && pct_oa < 0.7
-        erv_cfm = energy_recovery_limits['60_to_70_percent_oa']
-      elsif pct_oa >= 0.7 && pct_oa < 0.8
-        erv_cfm = energy_recovery_limits['70_to_80_percent_oa']
-      elsif pct_oa >= 0.8
-        erv_cfm = energy_recovery_limits['greater_than_80_percent_oa']
+    end
+
+    if pct_oa < 0.1
+      if nontrans_dwel
+        erv_cfm = energy_recovery_limits['percent_oa_0_to_10']
+      else
+        erv_cfm = nil
       end
+    elsif pct_oa >= 0.1 && pct_oa < 0.2
+      erv_cfm = energy_recovery_limits['percent_oa_10_to_20']
+    elsif pct_oa >= 0.2 && pct_oa < 0.3
+      erv_cfm = energy_recovery_limits['percent_oa_20_to_30']
+    elsif pct_oa >= 0.3 && pct_oa < 0.4
+      erv_cfm = energy_recovery_limits['percent_oa_30_to_40']
+    elsif pct_oa >= 0.4 && pct_oa < 0.5
+      erv_cfm = energy_recovery_limits['percent_oa_40_to_50']
+    elsif pct_oa >= 0.5 && pct_oa < 0.6
+      erv_cfm = energy_recovery_limits['percent_oa_50_to_60']
+    elsif pct_oa >= 0.6 && pct_oa < 0.7
+      erv_cfm = energy_recovery_limits['percent_oa_60_to_70']
+    elsif pct_oa >= 0.7 && pct_oa < 0.8
+      erv_cfm = energy_recovery_limits['percent_oa_70_to_80']
+    elsif pct_oa >= 0.8
+      erv_cfm = energy_recovery_limits['percent_oa_greater_than_80']
     end
 
     return erv_cfm
@@ -577,7 +560,7 @@ class ASHRAE9012019 < ASHRAE901
     air_loop_hvac.thermalZones.each do |zone|
       # Vou is the system uncorrected outdoor airflow:
       # Zone airflow is multiplied by the zone multiplier
-      v_ou += thermal_zone_outdoor_airflow_rate(zone) * zone.multiplier.to_f
+      v_ou += OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone) * zone.multiplier.to_f
     end
 
     v_ou_cfm = OpenStudio.convert(v_ou, 'm^3/s', 'cfm').get
@@ -593,7 +576,7 @@ class ASHRAE9012019 < ASHRAE901
 
     air_loop_hvac.thermalZones.sort.each do |zone|
       # Breathing zone airflow rate
-      v_bz = thermal_zone_outdoor_airflow_rate(zone)
+      v_bz = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
 
       # Zone air distribution, assumed 1 per PNNL
       e_z = 1.0
@@ -646,7 +629,7 @@ class ASHRAE9012019 < ASHRAE901
 
     # From ASHRAE Std 62.1-2019 Section 6.2.5.3
     if occ_diver_d < 0.6
-      e_v = 0.88 * occ_diver_d + 0.22
+      e_v = (0.88 * occ_diver_d) + 0.22
     else
       e_v = 0.75
     end
@@ -659,13 +642,7 @@ class ASHRAE9012019 < ASHRAE901
     oa_ctrl = air_loop_hvac.airLoopHVACOutdoorAirSystem.get.getControllerOutdoorAir
     max_oa_frac_sch = oa_ctrl.maximumFractionofOutdoorAirSchedule
 
-    if !max_oa_frac_sch.is_initialized
-      max_oa_frac_sch = OpenStudio::Model::ScheduleConstant.new(air_loop_hvac.model)
-      max_oa_frac_sch.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
-      max_oa_frac_sch.setValue(1.0)
-      max_oa_frac_sch_type = 'Schedule:Constant'
-      oa_ctrl.setMaximumFractionofOutdoorAirSchedule(max_oa_frac_sch)
-    else
+    if max_oa_frac_sch.is_initialized
       max_oa_frac_sch = max_oa_frac_sch.get
       if max_oa_frac_sch.to_ScheduleRuleset.is_initialized
         max_oa_frac_sch = max_oa_frac_sch.to_ScheduleRuleset.get
@@ -677,6 +654,12 @@ class ASHRAE9012019 < ASHRAE901
         max_oa_frac_sch = max_oa_frac_sch.to_ScheduleCompact.get
         max_oa_frac_sch_type = 'Schedule:Compact'
       end
+    else
+      max_oa_frac_sch = OpenStudio::Model::ScheduleConstant.new(air_loop_hvac.model)
+      max_oa_frac_sch.setName("#{air_loop_hvac.name}_MAX_OA_FRAC")
+      max_oa_frac_sch.setValue(1.0)
+      max_oa_frac_sch_type = 'Schedule:Constant'
+      oa_ctrl.setMaximumFractionofOutdoorAirSchedule(max_oa_frac_sch)
     end
 
     # Add EMS to "cap" the OA calculated by the
@@ -688,7 +671,7 @@ class ASHRAE9012019 < ASHRAE901
     if air_loop_hvac.model.version < OpenStudio::VersionString.new('3.3.0')
       # Add EMS sensors
       # OA mass flow calculated by the Controller:MechanicalVentilation
-      air_loop_hvac_name_ems = "EMS_#{air_loop_hvac.name.to_s.gsub(' ', '_')}"
+      air_loop_hvac_name_ems = ems_friendly_name(air_loop_hvac.name)
       oa_vrp_mass_flow = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Air System Outdoor Air Mechanical Ventilation Requested Mass Flow Rate')
       oa_vrp_mass_flow.setKeyName(air_loop_hvac.name.to_s)
       oa_vrp_mass_flow.setName("#{air_loop_hvac_name_ems}_OA_VRP")
@@ -754,7 +737,7 @@ class ASHRAE9012019 < ASHRAE901
           unitary_system = comp.to_AirLoopHVACUnitarySystem.get
         end
       end
-      return false unless !unitary_system.nil?
+      return false if unitary_system.nil?
 
       # Set fan operating schedule during assumed occupant standby mode time to 0 so the fan can cycle
       new_sch = model_set_schedule_value(unitary_system.supplyAirFanOperatingModeSchedule.get, '12' => 0)
@@ -783,7 +766,7 @@ class ASHRAE9012019 < ASHRAE901
                 air_terminal.setConstantMinimumAirFlowFraction(0)
               end
               air_terminal.setZoneMinimumAirFlowInputMethod('Scheduled')
-              air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(model_add_constant_schedule_ruleset(air_loop_hvac.model, mdp_org, name = "#{air_terminal.name} - MDP", sch_type_limit: 'Fraction'), '12' => 0.1))
+              air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(OpenstudioStandards::Schedules.create_constant_schedule_ruleset(air_loop_hvac.model, mdp_org, name: "#{air_terminal.name} - MDP", schedule_type_limit: 'Fraction'), '12' => 0.1))
             elsif air_terminal.zoneMinimumAirFlowInputMethod == 'Scheduled'
               air_terminal.setMinimumAirFlowFractionSchedule(model_set_schedule_value(air_terminal.minimumAirFlowFractionSchedule.get, '12' => 0.1))
             else

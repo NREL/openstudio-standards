@@ -1,8 +1,7 @@
-# Methods to add daylighting to a space
 module OpenstudioStandards
+  # The Daylighting module provides methods to add daylighting to a Space
   module Daylighting
     # @!group Space
-
 
     # add a daylight sensor to a space
     #

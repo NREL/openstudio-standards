@@ -7,6 +7,7 @@ class ComStockDOERef1980to2004 < DOERef1980to2004
   attr_reader :template
 
   def initialize
+    super()
     @template = 'ComStock DOE Ref 1980-2004'
     load_standards_database
   end

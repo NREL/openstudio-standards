@@ -62,11 +62,9 @@ module CoolingTower
     # Open Circuit Cooling Towers.
     if fan_type == 'Centrifugal'
       gpm_limit = cooling_tower_apply_minimum_power_per_flow_gpm_limit(cooling_tower)
-      if gpm_limit
-        if design_water_flow_gpm >= gpm_limit
-          fan_type = 'Propeller or Axial'
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, the design flow rate of #{design_water_flow_gpm.round} gpm is higher than the limit of #{gpm_limit.round} gpm for open centrifugal towers.  This tower must meet the minimum performance of #{fan_type} instead.")
-        end
+      if gpm_limit && design_water_flow_gpm >= gpm_limit
+        fan_type = 'Propeller or Axial'
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, the design flow rate of #{design_water_flow_gpm.round} gpm is higher than the limit of #{gpm_limit.round} gpm for open centrifugal towers.  This tower must meet the minimum performance of #{fan_type} instead.")
       end
     end
 
@@ -79,7 +77,7 @@ module CoolingTower
     end
 
     # Get cooling tower efficiency
-    min_gpm_per_hp = ct_props['minimum_performance']
+    min_gpm_per_hp = ct_props['minimum_performance_gpm_per_hp']
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, design water flow = #{design_water_flow_gpm.round} gpm, minimum performance = #{min_gpm_per_hp} gpm/hp (nameplate).")
 
     # Calculate the allowed fan brake horsepower
@@ -121,7 +119,7 @@ module CoolingTower
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, allowed fan motor nameplate hp = #{fan_motor_nameplate_hp.round(1)} hp, fan brake horsepower = #{fan_bhp.round(1)}, and fan motor actual power = #{fan_motor_actual_power_hp.round(1)} hp (#{fan_motor_actual_power_w.round} W) at #{fan_motor_eff} motor efficiency.")
 
     # Append the efficiency to the name
-    cooling_tower.setName("#{cooling_tower.name} #{min_gpm_per_hp.round(1)} gpm/hp")
+    cooling_tower.setName("#{cooling_tower.name} #{min_gpm_per_hp.to_f.round(1)} gpm/hp")
 
     # Hard size the design fan power.
     # Leave the water flow and air flow autosized.

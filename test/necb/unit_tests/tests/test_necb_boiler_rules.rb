@@ -1,42 +1,36 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
 
 class NECB_HVAC_Boiler_Tests < Minitest::Test
-  # set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-  # set to true to run the simulations.
-  FULL_SIMULATIONS = false
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '..')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
+
 
   # Test to validate the boiler thermal efficiency generated against expected values stored in the file:
   # 'compliance_boiler_efficiencies_expected_results.csv
-  def test_NECB_boiler_efficiency
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+  def test_boiler_efficiency
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    save_intermediate_models = false
 
     # Generate the osm files for all relevant cases to generate the test data for system 1
     boiler_fueltypes = ['Electricity','NaturalGas','FuelOilNo2']
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
     templates = ['NECB2011', 'NECB2015', 'NECB2020', 'BTAPPRE1980']
+
     templates.each do |template|
-      standard = Standard.build(template)
+      standard = get_standard(template)
       boiler_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
 
-      # Initialize hashes for storing expected boiler efficiency data from file
+      # Initialize hashes for storing expected boiler efficiency data from file.
       fuel_type_min_cap = {}
       fuel_type_min_cap['Electricity'] = []
       fuel_type_min_cap['NaturalGas'] = []
@@ -50,7 +44,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       efficiency_type['NaturalGas'] = []
       efficiency_type['FuelOilNo2'] = []
 
-      # read the file for the expected boiler efficiency values for different fuels and equipment capacity ranges
+      # Read the file for the expected boiler efficiency values for different fuels and equipment capacity ranges.
       CSV.foreach(boiler_expected_result_file, headers: true) do |data|
         fuel_type_min_cap[data['Fuel']] << data['Min Capacity (Btu per hr)']
         fuel_type_max_cap[data['Fuel']] << data['Max Capacity (Btu per hr)']
@@ -64,7 +58,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       end
 
       # Use the expected boiler efficiency data to generate suitable equipment capacities for the test to cover all
-      # the relevant equipment capacity ranges
+      # the relevant equipment capacity ranges.
       fuel_type_cap = {}
       fuel_type_min_cap.each do |fuel, cap|
         unless fuel_type_cap.key? fuel then
@@ -90,26 +84,32 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
       boiler_fueltypes.each do |boiler_fueltype|
         fuel_type_cap[boiler_fueltype].each do |boiler_cap|
           name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
-          puts "***************************************#{name}*******************************************************\n"
+          name.gsub!(/\s+/, "-")
+          puts "***************#{name}***************\n"
+
+          # Load model and set climate file.
           model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-          BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+          OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                          zones: model.getThermalZones,
                                                          mau_type: mau_type,
                                                          mau_heating_coil_type: mau_heating_coil_type,
                                                          baseboard_type: baseboard_type,
                                                          hw_loop: hw_loop)
-          # Save the model after btap hvac.
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
+
+          # Set the boiler capacity.
           model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
-          # run the standards
-          result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-          # Save the model
-          BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-          assert_equal(true, result, "test_boiler_efficiency: Failure in Standards for #{name}")
+
+          # Run sizing.
+          run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
+
+          # Recover the thermal efficiency set in the measure for checking below.
           model.getBoilerHotWaters.each do |iboiler|
             if iboiler.nominalCapacity.to_f > 1
               actual_boiler_thermal_eff[boiler_fueltype] << iboiler.nominalThermalEfficiency
@@ -119,7 +119,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
         end
       end
 
-      # Generate table of test boiler efficiencies
+      # Generate table of test boiler efficiencies.
       actual_boiler_eff = {}
       actual_boiler_eff['Electricity'] = []
       actual_boiler_eff['NaturalGas'] = []
@@ -143,14 +143,16 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
         boiler_res_file_output_text += output_line_text
       end
 
-      # Write actual results file
+      # Write test results file.
       test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_test_results.csv")
       File.open(test_result_file, 'w') {|f| f.write(boiler_res_file_output_text)}
+
       # Test that the values are correct by doing a file compare.
       expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_boiler_efficiencies_expected_results.csv")
-      b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-      assert(b_result,
-             "test_boiler_efficiency: Boiler efficiencies test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+      # Check if test results match expected.
+      msg = "Boiler efficiencies test results do not match what is expected in test"
+      file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
     end
   end
 
@@ -160,33 +162,37 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
   # if capacity > 176 kW and <= 352 kW ---> 2 boilers of equal capacity
   # if capacity > 352 kW ---> one modulating boiler down to 25% of capacity"
   def test_NECB2011_number_of_boilers
-    setup()
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
 
-    standard = Standard.build('NECB2011')
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2011'
+    standard = get_standard(template)
+    save_intermediate_models = false
+
     first_cutoff_blr_cap = 176000.0
     second_cutoff_blr_cap = 352000.0
     tol = 1.0e-3
-    # Generate the osm files for all relevant cases to generate the test data for system 3
+
+    # Generate the osm files for all relevant cases to generate the test data for system 3.
     boiler_fueltype = 'NaturalGas'
     baseboard_type = 'Hot Water'
     heating_coil_type = 'Electric'
     test_boiler_cap = [100000.0, 200000.0, 400000.0]
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    template = 'NECB2011'
+
     test_boiler_cap.each do |boiler_cap|
       name = "#{template}_sys1_Boiler-#{boiler_fueltype}_boiler_cap-#{boiler_cap}watts_HeatingCoilType#-#{heating_coil_type}_Baseboard-#{baseboard_type}"
-      puts "***************************************#{name}*******************************************************\n"
-      model = BTAP::FileIO.load_osm(File.join(@resources_folder, "5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      name.gsub!(/\s+/, "-")
+      puts "***************#{name}***************\n"
+
+      # Load model and set climate file.
+      model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
       standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(
           model: model,
           zones: model.getThermalZones,
@@ -194,16 +200,14 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
           baseboard_type: baseboard_type,
           hw_loop: hw_loop,
           new_auto_zoner: false)
-      # Save the model after btap hvac.
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
-      # run the standards
-      result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-      # Save the model
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "test_number_of_boilers: Failure in Standards for #{name}")
+
+      # Run sizing.
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
+
       boilers = model.getBoilerHotWaters
-      # check that there are two boilers in the model
+
+      # check that there are two boilers in the model.
       num_of_boilers_is_correct = false
       if boilers.size == 2 then
         num_of_boilers_is_correct = true
@@ -251,102 +255,108 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
   # Test to validate the boiler part load performance curve
   def test_NECB2011_boiler_plf_vs_plr_curve
-    setup()
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
-    standard = Standard.build('NECB2011')
 
-    # Generate the osm files for all relevant cases to generate the test data for system 1
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2011'
+    standard = get_standard(template)
+    save_intermediate_models = false
+
+    # Generate the osm files for all relevant cases to generate the test data for system 1.
     boiler_res_file_output_text = "Name,Type,coeff1,coeff2,coeff3,coeff4,min_x,max_x\n"
     boiler_fueltype = 'NaturalGas'
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
-    template = 'NECB2011'
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
+
     name = "#{template}_sys1_Boiler-#{boiler_fueltype}_Mau-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}"
-    puts "***************************************#{name}*******************************************************\n"
+    name.gsub!(/\s+/, "-")
+    puts "***************#{name}***************\n"
+
+    # Load model and set climate file.
+    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
     hw_loop = OpenStudio::Model::PlantLoop.new(model)
     always_on = model.alwaysOnDiscreteSchedule
-    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+    standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
     standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                    zones: model.getThermalZones,
                                                    mau_type: mau_type,
                                                    mau_heating_coil_type: mau_heating_coil_type,
                                                    baseboard_type: baseboard_type,
                                                    hw_loop: hw_loop)
-    # Save the model after btap hvac.
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
-    # run the standards
-    result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-    # Save the model
-    BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-    assert_equal(true, result, "test_boiler_plf_vs_plr_curve: Failure in Standards for #{name}")
+
+    # Run sizing.
+    run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
+
     boilers = model.getBoilerHotWaters
     boiler_curve = boilers[0].normalizedBoilerEfficiencyCurve.get.to_CurveCubic.get
     boiler_res_file_output_text += "BOILER-EFFFPLR-NECB2011,cubic,#{boiler_curve.coefficient1Constant},#{boiler_curve.coefficient2x},#{boiler_curve.coefficient3xPOW2}," +
         "#{boiler_curve.coefficient4xPOW3},#{boiler_curve.minimumValueofx},#{boiler_curve.maximumValueofx}"
 
-    # Write actual results file
+    # Write test results file.
     test_result_file = File.join( @test_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_test_results.csv")
     File.open(test_result_file, 'w') {|f| f.write(boiler_res_file_output_text)}
+
     # Test that the values are correct by doing a file compare.
     expected_result_file = File.join( @expected_results_folder, "#{template.downcase}_compliance_boiler_plfvsplr_curve_expected_results.csv")
-    b_result = FileUtils.compare_file(expected_result_file, test_result_file)
-    assert(b_result,
-           "test_boiler_plf_vs_plr_curve: Boiler plf vs plr curve coeffs test results do not match expected results! Compare/diff the output with the stored values here #{expected_result_file} and #{test_result_file}")
+
+    # Check if test results match expected.
+    msg = "Boiler plf vs plr curve coeffs test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
   # Test to validate the custom boiler thermal efficiencies applied against expected values stored in the file:
   # 'compliance_boiler_custom_efficiencies_expected_results.json
-  def test_NECB2011_custom_efficiency
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+  def test_custom_efficiency
 
-    # Generate the osm files for all relevant cases to generate the test data for system 1
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    templates = ['NECB2011', 'BTAPPRE1980']
+    save_intermediate_models = false
+
+    # Generate the osm files for all relevant cases to generate the test data for system 1.
     mau_type = true
     mau_heating_coil_type = 'Hot Water'
     baseboard_type = 'Hot Water'
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    templates = ['NECB2011', 'BTAPPRE1980']
     test_res = []
+
     templates.each do |template|
-      standard = Standard.build(template)
-      standard_ecms = Standard.build("ECMS")
+      standard = get_standard(template)
+      standard_ecms = get_standard("ECMS")
       boiler_fueltype = 'NaturalGas'
       boiler_cap = 1500000
       standard_ecms.standards_data["tables"]["boiler_eff_ecm"]["table"].each do |cust_eff_test|
         name = "#{template}_sys1_Boiler-#{boiler_fueltype}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{cust_eff_test["name"].to_s}"
-        puts "***************************************#{name}*******************************************************\n"
+        name.gsub!(/\s+/, "-")
+        puts "***************#{name}***************\n"
+
+        # Load model and set climate file.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-        BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
+
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, always_on)
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         standard.add_sys1_unitary_ac_baseboard_heating(model: model,
                                                        zones: model.getThermalZones,
                                                        mau_type: mau_type,
                                                        mau_heating_coil_type: mau_heating_coil_type,
                                                        baseboard_type: baseboard_type,
                                                        hw_loop: hw_loop)
-        # Save the model after btap hvac.
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
         model.getBoilerHotWaters.each {|iboiler| iboiler.setNominalCapacity(boiler_cap)}
-        # run the standards
-        result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-        # customize the efficiency
+
+        # Run sizing.
+        run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
+
+        # Customize the efficiency.
         standard_ecms.modify_boiler_efficiency(model: model, boiler_eff: cust_eff_test)
-        # Save the model
-        BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-        assert_equal(true, result, "test_boiler_efficiency: Failure in Standards for #{name}")
+
         boilers = model.getBoilerHotWaters
         boilers.each do |boiler|
           corr_coeff = []
@@ -427,47 +437,15 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
         end
       end
     end
-    test_result_file_name = File.join( @test_results_folder, "boiler_efficiency_modification_test_results.json")
-    File.write(test_result_file_name, JSON.pretty_generate(test_res))
-    expected_results_file_name = File.join( @test_results_folder, "boiler_efficiency_modification_expected_results.json")
-    # Test that the values are correct by doing a file compare.
-    b_result = FileUtils.compare_file(expected_results_file_name, test_result_file_name)
-    assert(b_result,
-           "test_boiler_custom_efficiency: Boiler custom efficiencies test results do not match expected results! Compare/diff the output with the stored values here #{expected_results_file_name} and #{test_result_file_name}")
+
+    # Write test results.
+    test_result_file = File.join( @test_results_folder, "boiler_efficiency_modification_test_results.json")
+    File.write(test_result_file, JSON.pretty_generate(test_res))
+    expected_result_file = File.join( @test_results_folder, "boiler_efficiency_modification_expected_results.json")
+
+    # Check if test results match expected.
+    msg = "Boiler custom efficiencies test results do not match what is expected in test"
+    file_compare(expected_results_file: expected_result_file, test_results_file: test_result_file, msg: msg)
   end
 
-  def run_the_measure(model, template, sizing_dir)
-    if PERFORM_STANDARDS
-      # Hard-code the building vintage
-      building_vintage = template
-      building_type = 'NECB'
-      climate_zone = 'NECB'
-      standard = Standard.build(building_vintage)
-
-      # Make a directory to run the sizing run in
-      unless Dir.exist? sizing_dir
-        FileUtils.mkdir_p(sizing_dir)
-      end
-
-      # Perform a sizing run
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun1"
-        raise("could not find sizing run #{sizing_dir}/SizingRun1")
-        return false
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun1"
-      end
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-      # need to set prototype assumptions so that HRV added
-      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-      # Apply the HVAC efficiency standard
-      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-      # BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-      return true
-    end
-  end
 end

@@ -37,9 +37,10 @@ class Standard
     sizing_plant.setLoopType('Cooling')
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
-    chw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                       dsgn_sup_wtr_temp_c,
-                                                       name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F")
+    chw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                   dsgn_sup_wtr_temp_c,
+                                                                                   name: "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F",
+                                                                                   schedule_type_limit: 'Temperature')
     chw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, chw_temp_sch)
     chw_stpt_manager.setName("#{chilled_water_loop.name} Setpoint Manager")
     chw_stpt_manager.addToNode(chilled_water_loop.supplyOutletNode)
@@ -302,17 +303,25 @@ class Standard
       next unless dd.dayType == 'SummerDesignDay'
       next unless dd.name.get.to_s.include?('WB=>MDB')
 
-      if dd.humidityIndicatingType == 'Wetbulb'
-        summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
-        summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+      if plant_loop.model.version < OpenStudio::VersionString.new('3.3.0')
+        if dd.humidityIndicatingType == 'Wetbulb'
+          summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+          summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
+        end
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
+        if dd.humidityConditionType == 'Wetbulb' && dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+          summer_oat_wbs_f << OpenStudio.convert(dd.wetBulbOrDewPointAtMaximumDryBulb.get, 'C', 'F').get
+        else
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{dd.name}, humidity is specified as #{dd.humidityConditionType}; cannot determine Twb.")
+        end
       end
     end
 
     # Use the value from the design days or 78F, the CTI rating condition, if no design day information is available.
     design_oat_wb_f = nil
-    if summer_oat_wbs_f.size.zero?
+    if summer_oat_wbs_f.empty?
       design_oat_wb_f = 78
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, no design day OATwb conditions were found.  CTI rating condition of 78F OATwb will be used for sizing cooling towers.")
     else
@@ -389,10 +398,8 @@ class Standard
 
     cw_t_stpt_manager = nil
     plant_loop.supplyOutletNode.setpointManagers.each do |spm|
-      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized
-        if spm.name.get.include? 'Setpoint Manager Follow OATwb'
-          cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
-        end
+      if spm.to_SetpointManagerFollowOutdoorAirTemperature.is_initialized && spm.name.get.include?('Setpoint Manager Follow OATwb')
+        cw_t_stpt_manager = spm.to_SetpointManagerFollowOutdoorAirTemperature.get
       end
     end
     if cw_t_stpt_manager.nil?
@@ -657,9 +664,9 @@ class Standard
         case sc.iddObjectType.valueName.to_s
         when 'OS_DistrictHeating'
           dist_htg = sc.to_DistrictHeating.get
-        when 'OS_DistrictHeatingWater'
+        when 'OS_DistrictHeating_Water'
           dist_htg = sc.to_DistrictHeatingWater.get
-        when 'OS_DistrictHeatingSteam'
+        when 'OS_DistrictHeating_Steam'
           dist_htg = sc.to_DistrictHeatingSteam.get
         end
         if dist_htg.nominalCapacity.is_initialized
@@ -821,7 +828,7 @@ class Standard
         pump_variable_speed_set_control_type(pump, pri_control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, control_type)
+        headered_pumps_variable_speed_set_control_type(pump, pri_control_type)
       end
     end
 
@@ -832,7 +839,7 @@ class Standard
         pump_variable_speed_set_control_type(pump, sec_control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, control_type)
+        headered_pumps_variable_speed_set_control_type(pump, sec_control_type)
       end
     end
 
@@ -894,7 +901,7 @@ class Standard
         pump_variable_speed_set_control_type(pump, control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, control_type)
+        headered_pumps_variable_speed_set_control_type(pump, control_type)
       end
     end
 
@@ -931,7 +938,7 @@ class Standard
 
     # Ensure there is only 1 boiler to start
     first_boiler = nil
-    return true if boilers.size.zero?
+    return true if boilers.empty?
 
     if boilers.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{boilers.size}, cannot split up per performance rating method baseline requirements.")
@@ -1016,7 +1023,7 @@ class Standard
 
     # Ensure there is only 1 chiller to start
     first_chiller = nil
-    return true if chillers.size.zero?
+    return true if chillers.empty?
 
     if chillers.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{chillers.size} chillers, cannot split up per performance rating method baseline requirements.")
@@ -1026,7 +1033,7 @@ class Standard
 
     # Ensure there is only 1 pump to start
     orig_pump = nil
-    if pumps.size.zero?
+    if pumps.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{pumps.size} pumps.  A loop must have at least one pump.")
       return false
     elsif pumps.size > 1
@@ -1146,7 +1153,7 @@ class Standard
 
     # Ensure there is only 1 cooling tower to start
     orig_twr = nil
-    return true if clg_twrs.size.zero?
+    return true if clg_twrs.empty?
 
     if clg_twrs.size > 1
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{clg_twrs.size} cooling towers, cannot split up per performance rating method baseline requirements.")
@@ -1157,7 +1164,7 @@ class Standard
 
     # Ensure there is only 1 pump to start
     orig_pump = nil
-    if pumps.size.zero?
+    if pumps.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "For #{plant_loop.name}, found #{pumps.size} pumps.  A loop must have at least one pump.")
       return false
     elsif pumps.size > 1
@@ -1346,11 +1353,9 @@ class Standard
     plant_loop.demandComponents.each do |comp|
       if comp.to_WaterHeaterMixed.is_initialized
         comp = comp.to_WaterHeaterMixed.get
-        if comp.plantLoop.is_initialized
-          if plant_loop_swh_loop?(comp.plantLoop.get)
-            serves_swh = true
-            break
-          end
+        if comp.plantLoop.is_initialized && plant_loop_swh_loop?(comp.plantLoop.get)
+          serves_swh = true
+          break
         end
       end
     end
@@ -1380,16 +1385,12 @@ class Standard
       obj_type = component.iddObjectType.valueName.to_s
 
       case obj_type
-        when 'OS_DistrictHeating', 'OS_DistrictHeatingWater', 'OS_DistrictHeatingSteam'
+        when 'OS_DistrictHeating', 'OS_DistrictHeating_Water', 'OS_DistrictHeating_Steam'
           primary_fuels << 'DistrictHeating'
           combination_system = false
         when 'OS_HeatPump_WaterToWater_EquationFit_Heating'
           primary_fuels << 'Electricity'
-        when 'OS_SolarCollector_FlatPlate_PhotovoltaicThermal'
-          primary_fuels << 'SolarEnergy'
-        when 'OS_SolarCollector_FlatPlate_Water'
-          primary_fuels << 'SolarEnergy'
-        when 'OS_SolarCollector_IntegralCollectorStorage'
+        when 'OS_SolarCollector_FlatPlate_PhotovoltaicThermal', 'OS_SolarCollector_FlatPlate_Water', 'OS_SolarCollector_IntegralCollectorStorage'
           primary_fuels << 'SolarEnergy'
         when 'OS_WaterHeater_HeatPump'
           primary_fuels << 'Electricity'

@@ -81,9 +81,10 @@ class Standard
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
     hot_water_loop.setMinimumLoopTemperature(10.0)
-    hw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_sup_wtr_temp_c,
-                                                      name = "#{hot_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F")
+    hw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_sup_wtr_temp_c,
+                                                                                  name: "#{hot_water_loop.name} Temp - #{dsgn_sup_wtr_temp.round(0)}F",
+                                                                                  schedule_type_limit: 'Temperature')
     hw_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, hw_temp_sch)
     hw_stpt_manager.setName("#{hot_water_loop.name} Setpoint Manager")
     hw_stpt_manager.addToNode(hot_water_loop.supplyOutletNode)
@@ -295,6 +296,10 @@ class Standard
         # Change the chilled water loop to have a two-way common pipes
         chilled_water_loop.setCommonPipeSimulation('CommonPipe')
       elsif pri_sec_config == 'heat_exchanger'
+        # Check number of chillers
+        if num_chillers > 3
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.PlantLoop', "EMS Code for multiple chiller pump has not been written for greater than 3 chillers. This has #{num_chillers} chillers")
+        end
         # NOTE: PRECONDITIONING for `const_pri_var_sec` pump type is only applicable for PRM routine and only applies to System Type 7 and System Type 8
         # See: model_add_prm_baseline_system under Model object.
         # In this scenario, we will need to create a primary and secondary configuration:
@@ -308,10 +313,15 @@ class Standard
         secondary_chilled_water_loop.setName(secondary_loop_name)
         chw_sizing_control(model, secondary_chilled_water_loop, dsgn_sup_wtr_temp, dsgn_sup_wtr_temp_delt)
         chilled_water_loop.additionalProperties.setFeature('is_primary_loop', true)
+        chilled_water_loop.additionalProperties.setFeature('secondary_loop_name', secondary_chilled_water_loop.name.to_s)
         secondary_chilled_water_loop.additionalProperties.setFeature('is_secondary_loop', true)
-        # primary chilled water pump
+        # primary chilled water pumps are added when adding chillers
         # Add Constant pump, in plant loop, the number of chiller adjustment will assign pump to each chiller
-        pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        # pri_chw_pump = OpenStudio::Model::PumpConstantSpeed.new(model)
+        pri_chw_pump = OpenStudio::Model::PumpVariableSpeed.new(model)
+        pump_variable_speed_set_control_type(pri_chw_pump, control_type = 'Riding Curve')
+        # This pump name is important for function add_ems_for_multiple_chiller_pumps_w_secondary_plant. If you update
+        # it here, you must update the logic there to account for this
         pri_chw_pump.setName("#{chilled_water_loop.name} Primary Pump")
         # Will need to adjust the pump power after a sizing run
         pri_chw_pump.setRatedPumpHead(OpenStudio.convert(15.0, 'ftH_{2}O', 'Pa').get / num_chillers)
@@ -354,17 +364,13 @@ class Standard
     end
 
     # check for existence of condenser_water_loop if WaterCooled
-    if chiller_cooling_type == 'WaterCooled'
-      if condenser_water_loop.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is WaterCooled but no condenser loop specified.')
-      end
+    if chiller_cooling_type == 'WaterCooled' && condenser_water_loop.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is WaterCooled but no condenser loop specified.')
     end
 
     # check for non-existence of condenser_water_loop if AirCooled
-    if chiller_cooling_type == 'AirCooled'
-      unless condenser_water_loop.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is AirCooled but condenser loop specified.')
-      end
+    if chiller_cooling_type == 'AirCooled' && !condenser_water_loop.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Requested chiller is AirCooled but condenser loop specified.')
     end
 
     if cooling_fuel == 'DistrictCooling'
@@ -374,8 +380,23 @@ class Standard
       dist_clg.autosizeNominalCapacity
       chilled_water_loop.addSupplyBranchForComponent(dist_clg)
     else
+
+      # use default efficiency from 90.1-2019
+      # 1.188 kw/ton for a 150 ton AirCooled chiller
+      # 0.66 kw/ton for a 150 ton Water Cooled positive displacement chiller
+      case chiller_cooling_type
+      when 'AirCooled'
+        default_cop = kw_per_ton_to_cop(1.188)
+      when 'WaterCooled'
+        default_cop = kw_per_ton_to_cop(0.66)
+      else
+        default_cop = kw_per_ton_to_cop(0.66)
+      end
+
       # make the correct type of chiller based these properties
       chiller_sizing_factor = (1.0 / num_chillers).round(2)
+
+      # Create chillers and set plant operation scheme
       num_chillers.times do |i|
         chiller = OpenStudio::Model::ChillerElectricEIR.new(model)
         chiller.setName("#{template} #{chiller_cooling_type} #{chiller_condenser_type} #{chiller_compressor_type} Chiller #{i}")
@@ -390,18 +411,6 @@ class Standard
         chiller.setMinimumUnloadingRatio(0.25)
         chiller.setChillerFlowMode('ConstantFlow')
         chiller.setSizingFactor(chiller_sizing_factor)
-
-        # use default efficiency from 90.1-2019
-        # 1.188 kw/ton for a 150 ton AirCooled chiller
-        # 0.66 kw/ton for a 150 ton Water Cooled positive displacement chiller
-        case chiller_cooling_type
-        when 'AirCooled'
-          default_cop = kw_per_ton_to_cop(1.188)
-        when 'WaterCooled'
-          default_cop = kw_per_ton_to_cop(0.66)
-        else
-          default_cop = kw_per_ton_to_cop(0.66)
-        end
         chiller.setReferenceCOP(default_cop)
 
         # connect the chiller to the condenser loop if one was supplied
@@ -611,23 +620,31 @@ class Standard
         next unless dd.dayType == 'SummerDesignDay'
         next unless dd.name.get.to_s.include?('WB=>MDB')
 
-        if dd.humidityIndicatingType == 'Wetbulb'
-          summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
-          summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+        if condenser_water_loop.model.version < OpenStudio::VersionString.new('3.3.0')
+          if dd.humidityIndicatingType == 'Wetbulb'
+            summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+            summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
+          end
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For #{dd.name}, humidity is specified as #{dd.humidityIndicatingType}; cannot determine Twb.")
+          if dd.humidityConditionType == 'Wetbulb' && dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+            summer_oat_wbs_f << OpenStudio.convert(dd.wetBulbOrDewPointAtMaximumDryBulb.get, 'C', 'F').get
+          else
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For #{dd.name}, humidity is specified as #{dd.humidityConditionType}; cannot determine Twb.")
+          end
         end
       end
 
       # if no design day objects are present in the model, attempt to load the .ddy file directly
-      if summer_oat_wbs_f.size.zero?
+      if summer_oat_wbs_f.empty?
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', 'No valid WB=>MDB Summer Design Days were found in the model.  Attempting to load wet bulb sizing from the .ddy file directly.')
         if model.weatherFile.is_initialized && model.weatherFile.get.path.is_initialized
-          weather_file = model.weatherFile.get.path.get.to_s
+          weather_file_path = model.weatherFile.get.path.get.to_s
           # Run differently depending on whether running from embedded filesystem in OpenStudio CLI or not
-          if weather_file[0] == ':' # Running from OpenStudio CLI
+          if weather_file_path[0] == ':' # Running from OpenStudio CLI
             # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
-            ddy_file = weather_file.gsub('.epw', '.ddy')
+            ddy_file = weather_file_path.gsub('.epw', '.ddy')
             if EmbeddedScripting.hasFile(ddy_file)
               ddy_string = EmbeddedScripting.getFileAsString(ddy_file)
               temp_ddy_path = "#{Dir.pwd}/in.ddy"
@@ -636,17 +653,17 @@ class Standard
                 f.flush
               end
               ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(temp_ddy_path).get
-              File.delete(temp_ddy_path) if File.exist?(temp_ddy_path)
+              FileUtils.rm_rf(temp_ddy_path)
             else
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file_path}")
             end
           else
             # Attempt to load in the ddy file based on convention that it is in the same directory and has the same basename as the epw file.
-            ddy_file = "#{File.join(File.dirname(weather_file), File.basename(weather_file, '.*'))}.ddy"
+            ddy_file = "#{File.join(File.dirname(weather_file_path), File.basename(weather_file_path, '.*'))}.ddy"
             if File.exist? ddy_file
               ddy_model = OpenStudio::EnergyPlus.loadAndTranslateIdf(ddy_file).get
             else
-              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file}")
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "Could not locate a .ddy file for weather file path #{weather_file_path}")
             end
           end
 
@@ -654,8 +671,15 @@ class Standard
             ddy_model.getDesignDays.sort.each do |dd|
               # Save the model wetbulb design conditions Condns WB=>MDB
               if dd.name.get.include? '4% Condns WB=>MDB'
-                summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
-                summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+                if model.version < OpenStudio::VersionString.new('3.3.0')
+                  summer_oat_wb_c = dd.humidityIndicatingConditionsAtMaximumDryBulb
+                  summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+                else
+                  if dd.wetBulbOrDewPointAtMaximumDryBulb.is_initialized
+                    summer_oat_wb_c = dd.wetBulbOrDewPointAtMaximumDryBulb.get
+                    summer_oat_wbs_f << OpenStudio.convert(summer_oat_wb_c, 'C', 'F').get
+                  end
+                end
               end
             end
           end
@@ -666,7 +690,7 @@ class Standard
 
       # if values are still absent, use the CTI rating condition 78F
       design_oat_wb_f = nil
-      if summer_oat_wbs_f.size.zero?
+      if summer_oat_wbs_f.empty?
         design_oat_wb_f = 78.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Prototype.hvac_systems', "For condenser loop #{condenser_water_loop.name}, no design day OATwb conditions found.  CTI rating condition of 78F OATwb will be used for sizing cooling towers.")
       else
@@ -770,12 +794,14 @@ class Standard
     heat_pump_water_loop.setMaximumLoopTemperature(35.0)
     sizing_plant.setDesignLoopExitTemperature(dsgn_sup_wtr_temp_c)
     sizing_plant.setLoopDesignTemperatureDifference(dsgn_sup_wtr_temp_delt_k)
-    hp_high_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                           sup_wtr_high_temp_c,
-                                                           name = "#{heat_pump_water_loop.name} High Temp - #{sup_wtr_high_temp.round(0)}F")
-    hp_low_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                          sup_wtr_low_temp_c,
-                                                          name = "#{heat_pump_water_loop.name} Low Temp - #{sup_wtr_low_temp.round(0)}F")
+    hp_high_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                       sup_wtr_high_temp_c,
+                                                                                       name: "#{heat_pump_water_loop.name} High Temp - #{sup_wtr_high_temp.round(0)}F",
+                                                                                       schedule_type_limit: 'Temperature')
+    hp_low_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                      sup_wtr_low_temp_c,
+                                                                                      name: "#{heat_pump_water_loop.name} Low Temp - #{sup_wtr_low_temp.round(0)}F",
+                                                                                      schedule_type_limit: 'Temperature')
     hp_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
     hp_stpt_manager.setName("#{heat_pump_water_loop.name} Scheduled Dual Setpoint")
     hp_stpt_manager.setHighSetpointSchedule(hp_high_temp_sch)
@@ -1001,22 +1027,25 @@ class Standard
     loop_stpt_manager.setName("#{ground_hx_loop.name} Supply Outlet Setpoint")
     loop_stpt_manager.addToNode(ground_hx_loop.supplyOutletNode)
 
+    # edit name to be EMS friendly
+    ground_hx_ems_name = ems_friendly_name(ground_hx.name)
+
     # sensor to read supply inlet temperature
     inlet_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model,
                                                                             'System Node Temperature')
-    inlet_temp_sensor.setName("#{ground_hx.name.to_s.gsub(/[ +-.]/, '_')} Inlet Temp Sensor")
+    inlet_temp_sensor.setName("#{ground_hx_ems_name} Inlet Temp Sensor")
     inlet_temp_sensor.setKeyName(ground_hx_loop.supplyInletNode.handle.to_s)
 
     # actuator to set supply outlet temperature
     outlet_temp_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(hx_temp_sch,
                                                                                  'Schedule:Constant',
                                                                                  'Schedule Value')
-    outlet_temp_actuator.setName("#{ground_hx.name} Outlet Temp Actuator")
+    outlet_temp_actuator.setName("#{ground_hx_ems_name} Outlet Temp Actuator")
 
     # program to control outlet temperature
     # adjusts delta-t based on calculation of slope and intercept from control temperatures
     program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    program.setName("#{ground_hx.name.to_s.gsub(/[ +-.]/, '_')} Temperature Control")
+    program.setName("#{ground_hx_ems_name} Temperature Control")
     program_body = <<-EMS
       SET Tin = #{inlet_temp_sensor.handle}
       SET Tout = #{slope_c_per_c.round(2)} * Tin + #{intercept_c.round(1)}
@@ -1026,7 +1055,7 @@ class Standard
 
     # program calling manager
     pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
-    pcm.setName("#{program.name.to_s.gsub(/[ +-.]/, '_')} Calling Manager")
+    pcm.setName("#{program.name} Calling Manager")
     pcm.setCallingPoint('InsideHVACSystemIterationLoop')
     pcm.addProgram(program)
 
@@ -1065,13 +1094,15 @@ class Standard
     amb_temp_sizing_c = OpenStudio.convert(amb_temp_sizing_f, 'F', 'C').get
     amb_delta_t_k = OpenStudio.convert(amb_delta_t_r, 'R', 'K').get
 
-    amb_high_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                            amb_high_temp_c,
-                                                            name = "Ambient Loop High Temp - #{amb_high_temp_f}F")
+    amb_high_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                        amb_high_temp_c,
+                                                                                        name: "Ambient Loop High Temp - #{amb_high_temp_f}F",
+                                                                                        schedule_type_limit: 'Temperature')
 
-    amb_low_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                           amb_low_temp_c,
-                                                           name = "Ambient Loop Low Temp - #{amb_low_temp_f}F")
+    amb_low_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                       amb_low_temp_c,
+                                                                                       name: "Ambient Loop Low Temp - #{amb_low_temp_f}F",
+                                                                                       schedule_type_limit: 'Temperature')
 
     amb_stpt_manager = OpenStudio::Model::SetpointManagerScheduledDualSetpoint.new(model)
     amb_stpt_manager.setName("#{ambient_loop.name} Supply Water Setpoint Manager")
@@ -1179,10 +1210,10 @@ class Standard
       chilled_water_loop_name = ems_friendly_name(chilled_water_loop.name)
 
       # create hot water plant availability schedule managers and create an EMS acuator
-      sch_hot_water_availability = model_add_constant_schedule_ruleset(model,
-                                                                       0,
-                                                                       name = "#{hot_water_loop.name} Availability Schedule",
-                                                                       sch_type_limit: 'OnOff')
+      sch_hot_water_availability = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                   0,
+                                                                                                   name: "#{hot_water_loop.name} Availability Schedule",
+                                                                                                   schedule_type_limit: 'OnOff')
 
       hot_water_loop_manager = OpenStudio::Model::AvailabilityManagerScheduled.new(model)
       hot_water_loop_manager.setName("#{hot_water_loop.name} Availability Manager")
@@ -1197,10 +1228,10 @@ class Standard
       hot_water_loop.addAvailabilityManager(hot_water_loop_manager)
 
       # create chilled water plant availability schedule managers and create an EMS acuator
-      sch_chilled_water_availability = model_add_constant_schedule_ruleset(model,
-                                                                           0,
-                                                                           name = "#{chilled_water_loop.name} Availability Schedule",
-                                                                           sch_type_limit: 'OnOff')
+      sch_chilled_water_availability = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                       0,
+                                                                                                       name: "#{chilled_water_loop.name} Availability Schedule",
+                                                                                                       schedule_type_limit: 'OnOff')
 
       chilled_water_loop_manager = OpenStudio::Model::AvailabilityManagerScheduled.new(model)
       chilled_water_loop_manager.setName("#{chilled_water_loop.name} Availability Manager")
@@ -1282,7 +1313,7 @@ class Standard
     # Check the total OA requirement for all zones on the system
     tot_oa_req = 0
     thermal_zones.each do |zone|
-      tot_oa_req += thermal_zone_outdoor_airflow_rate(zone)
+      tot_oa_req += OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
       break if tot_oa_req > 0
     end
 
@@ -1429,23 +1460,21 @@ class Standard
       oa_system = air_loop.airLoopHVACOutdoorAirSystem.get
 
       # create the ERV and set its properties
-      erv = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      erv.addToNode(oa_system.outboardOANode.get)
-      erv.setHeatExchangerType('Rotary')
       # @todo come up with scheme for estimating power of ERV motor wheel which might require knowing airflow.
       # erv.setNominalElectricPower(value_new)
-      erv.setEconomizerLockout(true)
-      erv.setSupplyAirOutletTemperatureControl(false)
-
-      erv.setSensibleEffectivenessat100HeatingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75HeatingAirFlow(0.81)
-      erv.setLatentEffectivenessat100HeatingAirFlow(0.68)
-      erv.setLatentEffectivenessat75HeatingAirFlow(0.73)
-
-      erv.setSensibleEffectivenessat100CoolingAirFlow(0.76)
-      erv.setSensibleEffectivenessat75CoolingAirFlow(0.81)
-      erv.setLatentEffectivenessat100CoolingAirFlow(0.68)
-      erv.setLatentEffectivenessat75CoolingAirFlow(0.73)
+      erv = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(model,
+                                                                              name: "#{zone.name} ERV HX",
+                                                                              type: "Rotary",
+                                                                              economizer_lockout: true,
+                                                                              sensible_heating_100_eff: 0.76,
+                                                                              sensible_heating_75_eff: 0.81,
+                                                                              latent_heating_100_eff: 0.68,
+                                                                              latent_heating_75_eff: 0.73,
+                                                                              sensible_cooling_100_eff: 0.76,
+                                                                              sensible_cooling_75_eff: 0.81,
+                                                                              latent_cooling_100_eff: 0.68,
+                                                                              latent_cooling_75_eff: 0.73)
+      erv.addToNode(oa_system.outboardOANode.get)
 
       # increase fan static pressure to account for ERV
       erv_pressure_rise = OpenStudio.convert(1.0, 'inH_{2}O', 'Pa').get
@@ -1515,7 +1544,7 @@ class Standard
     # Check the total OA requirement for all zones on the system
     tot_oa_req = 0
     thermal_zones.each do |zone|
-      tot_oa_req += thermal_zone_outdoor_airflow_rate(zone)
+      tot_oa_req += OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone)
     end
 
     # If the total OA requirement is zero do not add the DOAS system because the simulations will fail
@@ -1604,10 +1633,10 @@ class Standard
     # could add a humidity controller here set to limit supply air to a 16.6C/62F dewpoint
     # the default outdoor air reset to 60F prevents exceeding this dewpoint in all ASHRAE climate zones
     # the humidity controller needs a DX coil that can control humidity, e.g. CoilCoolingDXTwoStageWithHumidityControlMode
-    # max_humidity_ratio_sch = model_add_constant_schedule_ruleset(model,
-    #                                                              0.012,
-    #                                                              name = "0.012 Humidity Ratio Schedule",
-    #                                                              sch_type_limit: "Humidity Ratio")
+    # max_humidity_ratio_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+    #                                                                                          0.012,
+    #                                                                                          name: "0.012 Humidity Ratio Schedule",
+    #                                                                                          schedule_type_limit: "Humidity Ratio")
     # sat_oa_reset = OpenStudio::Model::SetpointManagerScheduled.new(model, max_humidity_ratio_sch)
     # sat_oa_reset.setName("#{air_loop.name.to_s} Humidity Controller")
     # sat_oa_reset.setControlVariable('MaximumHumidityRatio')
@@ -1698,7 +1727,7 @@ class Standard
     # add thermal zones to airloop
     thermal_zones.each do |zone|
       # skip zones with no outdoor air flow rate
-      unless thermal_zone_outdoor_airflow_rate(zone) > 0
+      unless OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate(zone) > 0
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Model.Model', "---#{zone.name} has no outdoor air flow rate and will not be added to #{air_loop.name}")
         next
       end
@@ -1852,9 +1881,10 @@ class Standard
     end
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -1989,7 +2019,8 @@ class Standard
         terminal.setDamperHeatingAction('Normal')
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, oa_rate)
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -2008,7 +2039,8 @@ class Standard
           terminal.setZoneMinimumAirFlowInputMethod('Constant')
         end
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+        oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
+        air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, oa_rate)
 
         # zone sizing
         sizing_zone = zone.sizingZone
@@ -2074,9 +2106,10 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -2226,9 +2259,10 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -2347,7 +2381,8 @@ class Standard
       terminal.setDamperHeatingAction('Normal')
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+      oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, oa_rate)
 
       unless return_plenum.nil?
         zone.setReturnPlenum(return_plenum)
@@ -2412,9 +2447,10 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps)
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -2568,9 +2604,10 @@ class Standard
     sizing_system = adjust_sizing_system(air_loop, dsgn_temps, min_sys_airflow_ratio: 1.0)
 
     # air handler controls
-    sa_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                      name = "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F")
+    sa_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                  name: "Supply Air Temp - #{dsgn_temps['clg_dsgn_sup_air_temp_f']}F",
+                                                                                  schedule_type_limit: 'Temperature')
     sa_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(model, sa_temp_sch)
     sa_stpt_manager.setName("#{air_loop.name} Supply Air Setpoint Manager")
     sa_stpt_manager.addToNode(air_loop.supplyOutletNode)
@@ -2651,7 +2688,8 @@ class Standard
       terminal.setMaximumFlowFractionDuringReheat(0.5)
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
-      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, thermal_zone_outdoor_airflow_rate_per_area(zone))
+      oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
+      air_terminal_single_duct_vav_reheat_apply_initial_prototype_damper_position(terminal, oa_rate)
 
       # zone sizing
       sizing_zone = zone.sizingZone
@@ -3512,9 +3550,10 @@ class Standard
 
       # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
       if supply_temp_sch.nil?
-        supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                              dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                              name = 'AHU Supply Temp Sch')
+        supply_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                          dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                          name: 'AHU Supply Temp Sch',
+                                                                                          schedule_type_limit: 'Temperature')
       end
       setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
       setpoint_mgr_cooling.setName('CRAC supply air setpoint manager')
@@ -3613,9 +3652,10 @@ class Standard
 
     # Add a setpoint manager for cooling to control the supply air temperature based on the needs of this zone
     if supply_temp_sch.nil?
-      supply_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                            dsgn_temps['clg_dsgn_sup_air_temp_c'],
-                                                            name = 'AHU Supply Temp Sch')
+      supply_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                        dsgn_temps['clg_dsgn_sup_air_temp_c'],
+                                                                                        name: 'AHU Supply Temp Sch',
+                                                                                        schedule_type_limit: 'Temperature')
     end
     setpoint_mgr_cooling = OpenStudio::Model::SetpointManagerScheduled.new(model, supply_temp_sch)
     setpoint_mgr_cooling.setName('CRAH supply air setpoint manager')
@@ -4419,20 +4459,20 @@ class Standard
       # Create a sensor to read the zone load
       zn_load_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model,
                                                                            'Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate')
-      zn_load_sensor.setName("#{zone_name_clean.to_s.gsub(/[ +-.]/, '_')} Clg Load Sensor")
+      zn_load_sensor.setName("#{ems_friendly_name(zone_name_clean)} Clg Load Sensor")
       zn_load_sensor.setKeyName(zone.handle.to_s)
 
       # Create an actuator to set the airloop availability
       air_loop_avail_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(air_loop_avail_sch,
                                                                                       'Schedule:Constant',
                                                                                       'Schedule Value')
-      air_loop_avail_actuator.setName("#{air_loop.name.to_s.gsub(/[ +-.]/, '_')} Availability Actuator")
+      air_loop_avail_actuator.setName("#{ems_friendly_name(air_loop.name)} Availability Actuator")
 
       # Create a program to turn on Evap Cooler if
       # there is a cooling load in the target zone.
       # Load < 0.0 is a cooling load.
       avail_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-      avail_program.setName("#{air_loop.name.to_s.gsub(/[ +-.]/, '_')} Availability Control")
+      avail_program.setName("#{ems_friendly_name(air_loop.name)} Availability Control")
       avail_program_body = <<-EMS
         IF #{zn_load_sensor.handle} < 0.0
           SET #{air_loop_avail_actuator.handle} = 1
@@ -4445,10 +4485,16 @@ class Standard
       programs << avail_program
 
       # Direct Evap Cooler
-      # @todo better assumptions for evap cooler performance and fan pressure rise
+      # @todo better assumptions for fan pressure rise
       evap = OpenStudio::Model::EvaporativeCoolerDirectResearchSpecial.new(model, model.alwaysOnDiscreteSchedule)
       evap.setName("#{zone.name} Evap Media")
+      # assume 90% design effectiveness from https://basc.pnnl.gov/resource-guides/evaporative-cooling-systems#edit-group-description
+      evap.setCoolerDesignEffectiveness(0.90)
       evap.autosizePrimaryAirDesignFlowRate
+      evap.autosizeRecirculatingWaterPumpPowerConsumption
+      # use suggested E+ default values of 90.0 W-s/m^3 for pump sizing factor and 3.0 for blowdown concentration
+      evap.setWaterPumpPowerSizingFactor(90.0)
+      evap.setBlowdownConcentrationRatio(3.0)
       evap.addToNode(air_loop.supplyInletNode)
 
       # Fan (cycling), must be inside unitary system to cycle on airloop
@@ -4816,7 +4862,7 @@ class Standard
     OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', "Replacing #{radiant_type} constructions with new radiant slab constructions.")
 
     # determine construction insulation thickness by climate zone
-    climate_zone = model_standards_climate_zone(model)
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
     if climate_zone.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Model.Model', 'Unable to determine climate zone for radiant slab insulation determination.  Defaulting to climate zone 5, R-20 insulation, 110F heating design supply water temperature.')
       cz_mult = 4
@@ -4972,9 +5018,10 @@ class Standard
     radiant_htg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_htg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
     hot_water_loop.sizingPlant.setDesignLoopExitTemperature(radiant_htg_dsgn_sup_wtr_temp_c)
     hot_water_loop.sizingPlant.setLoopDesignTemperatureDifference(radiant_htg_dsgn_sup_wtr_temp_delt_k)
-    hw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                      radiant_htg_dsgn_sup_wtr_temp_c,
-                                                      name = "#{hot_water_loop.name} Temp - #{radiant_htg_dsgn_sup_wtr_temp_f.round(0)}F")
+    hw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                  radiant_htg_dsgn_sup_wtr_temp_c,
+                                                                                  name: "#{hot_water_loop.name} Temp - #{radiant_htg_dsgn_sup_wtr_temp_f.round(0)}F",
+                                                                                  schedule_type_limit: 'Temperature')
     hot_water_loop.supplyOutletNode.setpointManagers.each do |spm|
       if spm.to_SetpointManagerScheduled.is_initialized
         spm = spm.to_SetpointManagerScheduled.get
@@ -4989,9 +5036,10 @@ class Standard
     radiant_clg_dsgn_sup_wtr_temp_delt_k = OpenStudio.convert(radiant_clg_dsgn_sup_wtr_temp_delt_r, 'R', 'K').get
     chilled_water_loop.sizingPlant.setDesignLoopExitTemperature(radiant_clg_dsgn_sup_wtr_temp_c)
     chilled_water_loop.sizingPlant.setLoopDesignTemperatureDifference(radiant_clg_dsgn_sup_wtr_temp_delt_k)
-    chw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                       radiant_clg_dsgn_sup_wtr_temp_c,
-                                                       name = "#{chilled_water_loop.name} Temp - #{radiant_clg_dsgn_sup_wtr_temp_f.round(0)}F")
+    chw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                   radiant_clg_dsgn_sup_wtr_temp_c,
+                                                                                   name: "#{chilled_water_loop.name} Temp - #{radiant_clg_dsgn_sup_wtr_temp_f.round(0)}F",
+                                                                                   schedule_type_limit: 'Temperature')
     chilled_water_loop.supplyOutletNode.setpointManagers.each do |spm|
       if spm.to_SetpointManagerScheduled.is_initialized
         spm = spm.to_SetpointManagerScheduled.get
@@ -5006,12 +5054,14 @@ class Standard
     zn_radiant_clg_dsgn_temp_f = 74.0
     zn_radiant_clg_dsgn_temp_c = OpenStudio.convert(zn_radiant_clg_dsgn_temp_f, 'F', 'C').get
 
-    htg_control_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                               zn_radiant_htg_dsgn_temp_c,
-                                                               name = "Zone Radiant Loop Heating Threshold Temperature Schedule - #{zn_radiant_htg_dsgn_temp_f.round(0)}F")
-    clg_control_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                               zn_radiant_clg_dsgn_temp_c,
-                                                               name = "Zone Radiant Loop Cooling Threshold Temperature Schedule - #{zn_radiant_clg_dsgn_temp_f.round(0)}F")
+    htg_control_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                           zn_radiant_htg_dsgn_temp_c,
+                                                                                           name: "Zone Radiant Loop Heating Threshold Temperature Schedule - #{zn_radiant_htg_dsgn_temp_f.round(0)}F",
+                                                                                           schedule_type_limit: 'Temperature')
+    clg_control_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                           zn_radiant_clg_dsgn_temp_c,
+                                                                                           name: "Zone Radiant Loop Cooling Threshold Temperature Schedule - #{zn_radiant_clg_dsgn_temp_f.round(0)}F",
+                                                                                           schedule_type_limit: 'Temperature')
     throttling_range_f = 4.0 # 2 degF on either side of control temperature
     throttling_range_c = OpenStudio.convert(throttling_range_f, 'F', 'C').get
 
@@ -5137,16 +5187,18 @@ class Standard
         space.surfaces.each do |surface|
           if radiant_type == 'floor'
             if surface.surfaceType == 'Floor'
-              if surface.outsideBoundaryCondition == 'Ground'
+              if surface.outsideBoundaryCondition.include? 'Ground'
                 surface.setConstruction(radiant_ground_slab_construction)
               elsif surface.outsideBoundaryCondition == 'Outdoors'
                 surface.setConstruction(radiant_exterior_slab_construction)
               else # interior floor
                 surface.setConstruction(radiant_interior_floor_slab_construction)
 
-                # also assign construciton to adjacent surface
-                adjacent_surface = surface.adjacentSurface.get
-                adjacent_surface.setConstruction(rev_radiant_interior_floor_slab_construction)
+                # also assign construction to adjacent surface
+                if surface.adjacentSurface.is_initialized
+                  adjacent_surface = surface.adjacentSurface.get
+                  adjacent_surface.setConstruction(rev_radiant_interior_floor_slab_construction)
+                end
               end
             end
           elsif radiant_type == 'ceiling'
@@ -5156,9 +5208,11 @@ class Standard
               else # interior ceiling
                 surface.setConstruction(radiant_interior_ceiling_slab_construction)
 
-                # also assign construciton to adjacent surface
-                adjacent_surface = surface.adjacentSurface.get
-                adjacent_surface.setConstruction(rev_radiant_interior_ceiling_slab_construction)
+                # also assign construction to adjacent surface
+                if surface.adjacentSurface.is_initialized
+                  adjacent_surface = surface.adjacentSurface.get
+                  adjacent_surface.setConstruction(rev_radiant_interior_ceiling_slab_construction)
+                end
               end
             end
           end
@@ -5224,8 +5278,6 @@ class Standard
                                          slab_oat_low: slab_oat_low,
                                          slab_sp_at_oat_high: slab_sp_at_oat_high,
                                          slab_oat_high: slab_oat_high)
-      else
-        # 'none'; use energyplus default controls
       end
     end
     return radiant_loops
@@ -5356,7 +5408,7 @@ class Standard
                                                        name: "#{air_loop.name} Cooling Coil",
                                                        type: 'Residential Central AC')
         clg_coil.setRatedSensibleHeatRatio(shr)
-        clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(eer_to_cop(eer)))
+        clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(eer_to_cop_no_fan(eer)))
         clg_coil.setRatedEvaporatorFanPowerPerVolumeFlowRate(OpenStudio::OptionalDouble.new(ac_w_per_cfm / OpenStudio.convert(1.0, 'cfm', 'm^3/s').get))
         clg_coil.setNominalTimeForCondensateRemovalToBegin(OpenStudio::OptionalDouble.new(1000.0))
         clg_coil.setRatioOfInitialMoistureEvaporationRateAndSteadyStateLatentCapacity(OpenStudio::OptionalDouble.new(1.5))
@@ -5470,7 +5522,7 @@ class Standard
         htg_coil = create_coil_heating_dx_single_speed(model,
                                                        name: "#{air_loop.name} heating coil",
                                                        type: 'Residential Central Air Source HP',
-                                                       cop: hspf_to_cop_heating_no_fan(hspf))
+                                                       cop: hspf_to_cop_no_fan(hspf))
         if model.version < OpenStudio::VersionString.new('3.5.0')
           htg_coil.setRatedSupplyFanPowerPerVolumeFlowRate(ac_w_per_cfm / OpenStudio.convert(1.0, 'cfm', 'm^3/s').get)
         else
@@ -5623,7 +5675,7 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding ERV for #{zone.name}.")
 
       # Determine the OA requirement for this zone
-      min_oa_flow_m3_per_s_per_m2 = thermal_zone_outdoor_airflow_rate_per_area(zone)
+      min_oa_flow_m3_per_s_per_m2 = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
       supply_fan = create_fan_by_name(model,
                                       'ERV_Supply_Fan',
                                       fan_name: "#{zone.name} ERV Supply Fan")
@@ -5641,19 +5693,19 @@ class Standard
       # erv_controller.setTimeofDayEconomizerFlowControlSchedule(self.alwaysOnDiscreteSchedule)
       # erv_controller.setHighHumidityControlFlag(false)
 
-      heat_exchanger = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-      heat_exchanger.setName("#{zone.name} ERV HX")
-      heat_exchanger.setHeatExchangerType('Plate')
-      heat_exchanger.setEconomizerLockout(false)
-      heat_exchanger.setSupplyAirOutletTemperatureControl(false)
-      heat_exchanger.setSensibleEffectivenessat100HeatingAirFlow(0.76)
-      heat_exchanger.setSensibleEffectivenessat75HeatingAirFlow(0.81)
-      heat_exchanger.setLatentEffectivenessat100HeatingAirFlow(0.68)
-      heat_exchanger.setLatentEffectivenessat75HeatingAirFlow(0.73)
-      heat_exchanger.setSensibleEffectivenessat100CoolingAirFlow(0.76)
-      heat_exchanger.setSensibleEffectivenessat75CoolingAirFlow(0.81)
-      heat_exchanger.setLatentEffectivenessat100CoolingAirFlow(0.68)
-      heat_exchanger.setLatentEffectivenessat75CoolingAirFlow(0.73)
+      heat_exchanger = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(model,
+                                                                                          name: "#{zone.name} ERV HX",
+                                                                                          type: "Plate",
+                                                                                          economizer_lockout: false,
+                                                                                          supply_air_outlet_temperature_control: false,
+                                                                                          sensible_heating_100_eff: 0.76,
+                                                                                          sensible_heating_75_eff: 0.81,
+                                                                                          latent_heating_100_eff: 0.68,
+                                                                                          latent_heating_75_eff: 0.73,
+                                                                                          sensible_cooling_100_eff: 0.76,
+                                                                                          sensible_cooling_75_eff: 0.81,
+                                                                                          latent_cooling_100_eff: 0.68,
+                                                                                          latent_cooling_75_eff: 0.73)
 
       zone_hvac = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
       zone_hvac.setName("#{zone.name} ERV")
@@ -5870,6 +5922,204 @@ class Standard
     return ideal_systems
   end
 
+  # Add a residential ERV: standalone ERV that operates to provide OA,
+  # used in conjuction with a system that having mechanical cooling and a heating coil
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to enable ideal air loads
+  # @return [Array<OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator>] an array of zone ERVs
+  def model_add_residential_erv(model,
+                                thermal_zones,
+                                min_oa_flow_m3_per_s_per_m2 = nil)
+    # Determine ERR and design basis when energy recovery is required
+    # enthalpy_recovery_ratio = nil will trigger an ERV with no effectiveness that only provides OA
+    enthalpy_recovery_ratio = nil
+
+    # Process climate zone:
+    # Moisture regime is not needed for climate zone 7 and 8
+    climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(model)
+    climate_zone_code = climate_zone.split('-')[-1]
+    climate_zone_code = 7 if ['7A', '7B'].include? climate_zone_code
+    climate_zone_code = 8 if ['8A', '8B'].include? climate_zone_code
+
+    case template
+      when '90.1-2019', '90.1-2016'
+        search_criteria = {
+          'template' => template,
+          'climate_zone' => climate_zone_code,
+          'under_8000_hours' => false,
+          'nontransient_dwelling' => true
+        }
+        metric = 'enthalpy_recovery_ratio'
+      else
+        search_criteria = {
+          'template' => template,
+          'climate_zone' => climate_zone_code,
+          'under_8000_hours' => false
+        }
+        metric = 'energy_recovery_effectiveness'
+    end
+
+    # Pick the most stringent of the heating or cooling Enthalpy Recovery Ratio (ERR)
+    # or Energy Recovery Effectiveness (ERE); ERR and ERE are virtually the same metrics
+    erv_enthalpy_recovery_ratio = nil
+    erv_enthalpy_recovery_ratios = model_find_objects(standards_data['energy_recovery'], search_criteria)
+    erv_enthalpy_recovery_ratios.each do |erv_data|
+      if erv_enthalpy_recovery_ratio.nil?
+        erv_enthalpy_recovery_ratio = erv_data
+      end
+      if !erv_data[metric].nil? && (erv_enthalpy_recovery_ratio[metric] <= erv_data[metric])
+        erv_enthalpy_recovery_ratio = erv_data
+      end
+    end
+
+    # Extract ERR/ERE from data lookup
+    if !erv_enthalpy_recovery_ratio.nil?
+      if erv_enthalpy_recovery_ratio[metric].nil? & erv_enthalpy_recovery_ratio['design_conditions'].nil?
+        # If not included in the data, an ERR of 50% is used
+        enthalpy_recovery_ratio = 0.5
+        case climate_zone
+          when 'ASHRAE 169-2006-6B',
+            'ASHRAE 169-2013-6B',
+            'ASHRAE 169-2006-7A',
+            'ASHRAE 169-2013-7A',
+            'ASHRAE 169-2006-7B',
+            'ASHRAE 169-2013-7B',
+            'ASHRAE 169-2006-8A',
+            'ASHRAE 169-2013-8A',
+            'ASHRAE 169-2006-8B',
+            'ASHRAE 169-2013-8B'
+            design_conditions = 'heating'
+          else
+            design_conditions = 'cooling'
+        end
+      else
+        design_conditions = erv_enthalpy_recovery_ratio['design_conditions'].downcase
+        enthalpy_recovery_ratio = erv_enthalpy_recovery_ratio[metric]
+      end
+    end
+
+    zone_ervs = []
+    thermal_zones.each do |thermal_zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding standalone ERV for #{thermal_zone.name}.")
+
+      # Fan power with energy recovery = 0.934 W/cfm
+      supply_fan = create_fan_by_name(model,
+                                      'ERV_Supply_Fan',
+                                      fan_name: "#{thermal_zone.name} ERV Supply Fan")
+      exhaust_fan = create_fan_by_name(model,
+                                        'ERV_Supply_Fan',
+                                        fan_name: "#{thermal_zone.name} ERV Exhaust Fan")
+      supply_fan.setMotorEfficiency(0.48)
+      exhaust_fan.setMotorEfficiency(0.48)
+      supply_fan.setFanTotalEfficiency(0.303158)
+      exhaust_fan.setFanTotalEfficiency(0.303158)
+      supply_fan.setPressureRise(270.64755)
+      exhaust_fan.setPressureRise(270.64755)
+
+      # Create heat exchanger
+      heat_exchanger = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(model,
+                                                                                          name: "#{thermal_zone.name} ERV HX",
+                                                                                          type: 'Rotary',
+                                                                                          economizer_lockout: false,
+                                                                                          supply_air_outlet_temperature_control: false,
+                                                                                          frost_control_type: 'ExhaustOnly')
+      heat_exchanger.setThresholdTemperature(-23.3)
+      heat_exchanger.setInitialDefrostTimeFraction(0.167)
+      heat_exchanger.setRateofDefrostTimeFractionIncrease(1.44)
+      heat_exchanger.setAvailabilitySchedule(model_add_schedule(model, 'Always On - No Design Day'))
+      heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio(heat_exchanger, enthalpy_recovery_ratio, design_conditions, climate_zone)
+
+      # Create ERV Controller
+      erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
+      erv_controller.setName("#{thermal_zone.name} ERV Controller")
+      erv_controller.setControlHighIndoorHumidityBasedonOutdoorHumidityRatio(false)
+
+      # Create ERV
+      erv = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
+      erv.setName("#{thermal_zone.name} ERV")
+      erv.setController(erv_controller)
+      erv.addToThermalZone(thermal_zone)
+
+      # Set OA requirements; Assumes a default of 55 cfm
+      if min_oa_flow_m3_per_s_per_m2.nil?
+        erv.setSupplyAirFlowRate(OpenStudio.convert(55.0, 'cfm', 'm^3/s').get)
+        erv.setExhaustAirFlowRate(OpenStudio.convert(55.0, 'cfm', 'm^3/s').get)
+      else
+        erv.setVentilationRateperUnitFloorArea(min_oa_flow_m3_per_s_per_m2)
+      end
+      erv.setVentilationRateperOccupant(0.0)
+
+      # Ensure the ERV takes priority, so ventilation load is included when treated by other zonal systems
+      # From EnergyPlus I/O reference:
+      # "For situations where one or more equipment types has limited capacity or limited control capability, order the
+      #  sequence so that the most controllable piece of equipment runs last. For example, with a dedicated outdoor air
+      #  system (DOAS), the air terminal for the DOAS should be assigned Heating Sequence = 1 and Cooling Sequence = 1.
+      #  Any other equipment should be assigned sequence 2 or higher so that it will see the net load after the DOAS air
+      #  is added to the zone."
+      thermal_zone.setCoolingPriority(erv.to_ModelObject.get, 1)
+      thermal_zone.setHeatingPriority(erv.to_ModelObject.get, 1)
+
+      zone_ervs << erv
+    end
+
+    return zone_ervs
+  end
+
+  # Add a residential ventilation: standalone unit ventilation and zone exhaust that operates to provide OA,
+  # used in conjuction with a system that having mechanical cooling and a heating coil
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to enable ideal air loads
+  # @return [Array<OpenStudio::Model::ZoneHVACUnitVentilator>] an array of zone Unit Ventilators
+  def model_add_residential_ventilator(model,
+                                       thermal_zones,
+                                       min_oa_flow_m3_per_s_per_m2 = nil)
+    unit_ventilators = []
+    thermal_zones.each do |thermal_zone|
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding standalone unit ventilator for #{thermal_zone.name}.")
+
+      # Fan power with no energy recovery = 0.806 W/cfm
+      supply_fan = create_fan_by_name(model,
+                                      'ERV_Supply_Fan',
+                                      fan_name: "#{thermal_zone.name} Ventilator Supply Fan")
+      supply_fan.setMotorEfficiency(0.48)
+      supply_fan.setFanTotalEfficiency(0.303158)
+      supply_fan.setPressureRise(233.6875)
+
+      unit_ventilator = OpenStudio::Model::ZoneHVACUnitVentilator.new(model, supply_fan)
+      unit_ventilator.setName("#{thermal_zone.name} Unit Ventilator")
+      unit_ventilator.addToThermalZone(thermal_zone)
+      fan_zone_exhaust = create_fan_zone_exhaust(model,
+                                                 fan_name: "#{thermal_zone.name} Exhaust Fan",
+                                                 fan_efficiency: 0.303158,
+                                                 pressure_rise: 233.6875)
+
+      # Set OA requirements; Assumes a default of 55 cfm
+      if min_oa_flow_m3_per_s_per_m2.nil?
+        unit_ventilator.setMaximumSupplyAirFlowRate(OpenStudio.convert(55.0, 'cfm', 'm^3/s').get)
+        fan_zone_exhaust.setMaximumFlowRate(OpenStudio.convert(55.0, 'cfm', 'm^3/s').get)
+      else
+        unit_ventilator.setMaximumSupplyAirFlowRate(min_oa_flow_m3_per_s_per_m2)
+        fan_zone_exhaust.setMaximumFlowRate(min_oa_flow_m3_per_s_per_m2)
+      end
+
+      # Ensure the unit ventilator takes priority, so ventilation load is included when treated by other zonal systems
+      # From EnergyPlus I/O reference:
+      # "For situations where one or more equipment types has limited capacity or limited control capability, order the
+      #  sequence so that the most controllable piece of equipment runs last. For example, with a dedicated outdoor air
+      #  system (DOAS), the air terminal for the DOAS should be assigned Heating Sequence = 1 and Cooling Sequence = 1.
+      #  Any other equipment should be assigned sequence 2 or higher so that it will see the net load after the DOAS air
+      #  is added to the zone."
+      thermal_zone.setCoolingPriority(unit_ventilator.to_ModelObject.get, 1)
+      thermal_zone.setHeatingPriority(unit_ventilator.to_ModelObject.get, 1)
+
+      unit_ventilators << unit_ventilator
+    end
+
+    return unit_ventilators
+  end
+
   # Adds an exhaust fan to each zone.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
@@ -5904,7 +6154,7 @@ class Standard
       # input the flow rate as a number (assign directly) or from an array (assign each flow rate to each zone)
       if flow_rate.is_a? Numeric
         fan.setMaximumFlowRate(flow_rate)
-      elsif flow_rate.class.to_s == 'Array'
+      elsif flow_rate.instance_of?(::Array)
         index = thermal_zones.index(zone)
         flow_rate_zone = flow_rate[index]
         fan.setMaximumFlowRate(flow_rate_zone)
@@ -6132,9 +6382,10 @@ class Standard
       end
 
       # plant loop supply water control actuator
-      sch_plant_swt_ctrl = model_add_constant_schedule_ruleset(model,
-                                                               swt_init,
-                                                               name = "#{plant_water_loop_name}_Sch_Supply_Water_Temperature")
+      sch_plant_swt_ctrl = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                           swt_init,
+                                                                                           name: "#{plant_water_loop_name}_Sch_Supply_Water_Temperature",
+                                                                                           schedule_type_limit: 'Temperature')
 
       cmd_plant_water_ctrl = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_plant_swt_ctrl,
                                                                                    'Schedule:Year',
@@ -6233,20 +6484,20 @@ class Standard
   # @param thermal_zones [Array<OpenStudio::Model::ThermalZone>] array of zones to dictate cooling or heating mode of water plant
   def model_add_zone_heat_cool_request_count_program(model, thermal_zones)
     # create container schedules to hold number of zones needing heating and cooling
-    sch_zones_needing_heating = model_add_constant_schedule_ruleset(model,
-                                                                    0,
-                                                                    name = 'Zones Needing Heating Count Schedule',
-                                                                    sch_type_limit: 'Dimensionless')
+    sch_zones_needing_heating = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                0,
+                                                                                                name: 'Zones Needing Heating Count Schedule',
+                                                                                                schedule_type_limit: 'Dimensionless')
 
     zone_needing_heating_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating,
                                                                                           'Schedule:Year',
                                                                                           'Schedule Value')
     zone_needing_heating_actuator.setName('Zones_Needing_Heating')
 
-    sch_zones_needing_cooling = model_add_constant_schedule_ruleset(model,
-                                                                    0,
-                                                                    name = 'Zones Needing Cooling Count Schedule',
-                                                                    sch_type_limit: 'Dimensionless')
+    sch_zones_needing_cooling = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                0,
+                                                                                                name: 'Zones Needing Cooling Count Schedule',
+                                                                                                schedule_type_limit: 'Dimensionless')
 
     zone_needing_cooling_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling,
                                                                                           'Schedule:Year',
@@ -6254,20 +6505,20 @@ class Standard
     zone_needing_cooling_actuator.setName('Zones_Needing_Cooling')
 
     # create container schedules to hold ratio of zones needing heating and cooling
-    sch_zones_needing_heating_ratio = model_add_constant_schedule_ruleset(model,
-                                                                          0,
-                                                                          name = 'Zones Needing Heating Ratio Schedule',
-                                                                          sch_type_limit: 'Dimensionless')
+    sch_zones_needing_heating_ratio = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                      0,
+                                                                                                      name: 'Zones Needing Heating Ratio Schedule',
+                                                                                                      schedule_type_limit: 'Dimensionless')
 
     zone_needing_heating_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_heating_ratio,
                                                                                                 'Schedule:Year',
                                                                                                 'Schedule Value')
     zone_needing_heating_ratio_actuator.setName('Zone_Heating_Ratio')
 
-    sch_zones_needing_cooling_ratio = model_add_constant_schedule_ruleset(model,
-                                                                          0,
-                                                                          name = 'Zones Needing Cooling Ratio Schedule',
-                                                                          sch_type_limit: 'Dimensionless')
+    sch_zones_needing_cooling_ratio = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                                      0,
+                                                                                                      name: 'Zones Needing Cooling Ratio Schedule',
+                                                                                                      schedule_type_limit: 'Dimensionless')
 
     zone_needing_cooling_ratio_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(sch_zones_needing_cooling_ratio,
                                                                                                 'Schedule:Year',
@@ -6285,13 +6536,13 @@ class Standard
     thermal_zones.each do |zone|
       # get existing 'sensors'
       exisiting_ems_sensors = model.getEnergyManagementSystemSensors
-      exisiting_ems_sensors_names = exisiting_ems_sensors.collect { |sensor| sensor.name.get + '-' + sensor.outputVariableOrMeterName }
+      exisiting_ems_sensors_names = exisiting_ems_sensors.collect { |sensor| "#{sensor.name.get}-#{sensor.outputVariableOrMeterName}" }
 
       # Create zone air temperature 'sensor' for the zone.
       zone_name = ems_friendly_name(zone.name)
       zone_air_sensor_name = "#{zone_name}_ctrl_temperature"
 
-      unless exisiting_ems_sensors_names.include? zone_air_sensor_name + '-Zone Air Temperature'
+      unless exisiting_ems_sensors_names.include?("#{zone_air_sensor_name}-Zone Air Temperature")
         zone_ctrl_temperature = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Zone Air Temperature')
         zone_ctrl_temperature.setName(zone_air_sensor_name)
         zone_ctrl_temperature.setKeyName(zone.name.get)
@@ -6312,14 +6563,14 @@ class Standard
       zone_clg_thermostat_sensor_name = "#{zone_name}_upper_comfort_limit"
       zone_htg_thermostat_sensor_name = "#{zone_name}_lower_comfort_limit"
 
-      unless exisiting_ems_sensors_names.include? zone_clg_thermostat_sensor_name + '-Schedule Value'
+      unless exisiting_ems_sensors_names.include?("#{zone_clg_thermostat_sensor_name}-Schedule Value")
         # Upper comfort limit for the zone. Taken from existing thermostat schedules in the zone.
         zone_upper_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
         zone_upper_comfort_limit.setName(zone_clg_thermostat_sensor_name)
         zone_upper_comfort_limit.setKeyName(zone_clg_thermostat.name.get)
       end
 
-      unless exisiting_ems_sensors_names.include? zone_htg_thermostat_sensor_name + '-Schedule Value'
+      unless exisiting_ems_sensors_names.include?("#{zone_htg_thermostat_sensor_name}-Schedule Value")
         # Lower comfort limit for the zone. Taken from existing thermostat schedules in the zone.
         zone_lower_comfort_limit = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Schedule Value')
         zone_lower_comfort_limit.setName(zone_htg_thermostat_sensor_name)
@@ -6503,9 +6754,10 @@ class Standard
         spm.setMinimumSetpointTemperature(dsgn_sup_wtr_temp_c)
       elsif spm.to_SetpointManagerScheduled.is_initialized
         spm = spm.to_SetpointManagerScheduled.get
-        cw_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                          dsgn_sup_wtr_temp_c,
-                                                          name = "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp_f.round(0)}F")
+        cw_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                      dsgn_sup_wtr_temp_c,
+                                                                                      name: "#{chilled_water_loop.name} Temp - #{dsgn_sup_wtr_temp_f.round(0)}F",
+                                                                                      schedule_type_limit: 'Temperature')
         spm.setSchedule(cw_temp_sch)
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Changing condenser water loop setpoint for '#{condenser_water_loop.name}' to '#{cw_temp_sch.name}' to account for the waterside economizer.")
       else
@@ -7060,9 +7312,7 @@ class Standard
                                fan_pressure_rise: 4.0)
 
     when 'Water Source Heat Pumps'
-      if main_heat_fuel.include?('DistrictHeating') && cool_fuel == 'DistrictCooling'
-        condenser_loop = model_get_or_add_ambient_water_loop(model)
-      elsif main_heat_fuel == 'AmbientLoop' && cool_fuel == 'AmbientLoop'
+      if (main_heat_fuel.include?('DistrictHeating') && cool_fuel == 'DistrictCooling') || (main_heat_fuel == 'AmbientLoop' && cool_fuel == 'AmbientLoop')
         condenser_loop = model_get_or_add_ambient_water_loop(model)
       else
         condenser_loop = model_get_or_add_heat_pump_loop(model, main_heat_fuel, cool_fuel,
@@ -7181,6 +7431,12 @@ class Standard
     when 'ERVs'
       model_add_zone_erv(model, zones)
 
+    when 'Residential ERVs'
+      model_add_residential_erv(model, zones)
+
+    when 'Residential Ventilators'
+      model_add_residential_ventilator(model, zones)
+
     when 'Evaporative Cooler'
       model_add_evap_cooler(model, zones)
 
@@ -7258,183 +7514,5 @@ class Standard
     # rename air loop and plant loop nodes for readability
     rename_air_loop_nodes(model)
     rename_plant_loop_nodes(model)
-  end
-
-  # Add a residential ERV: standalone ERV that operates to provide OA,
-  # use in conjuction witha system that having mechanical cooling and
-  # a heating coil
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio Model object
-  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
-  # @param climate_zone [String] Climate zone
-  # @param energy_recovery [Boolean] Indicates if the ERV is to recover energy, if false, only provides OA
-  # @return [OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator] Standalone ERV
-  def model_add_residential_erv(model,
-                                thermal_zone,
-                                climate_zone,
-                                energy_recovery,
-                                min_oa_flow_m3_per_s_per_m2 = nil)
-
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Adding standalone ERV for #{thermal_zone.name}.")
-
-    # Exception 3 to 6.5.6.1.1
-    case template
-      when '90.1-2019'
-        case climate_zone
-          when 'ASHRAE 169-2006-0A',
-            'ASHRAE 169-2006-0B',
-            'ASHRAE 169-2006-1A',
-            'ASHRAE 169-2006-1B',
-            'ASHRAE 169-2006-2A',
-            'ASHRAE 169-2006-2B',
-            'ASHRAE 169-2006-3A',
-            'ASHRAE 169-2006-3B',
-            'ASHRAE 169-2006-3C',
-            'ASHRAE 169-2006-4A',
-            'ASHRAE 169-2006-4B',
-            'ASHRAE 169-2006-4C',
-            'ASHRAE 169-2006-5A',
-            'ASHRAE 169-2006-5B',
-            'ASHRAE 169-2006-5C',
-            'ASHRAE 169-2013-0A',
-            'ASHRAE 169-2013-0B',
-            'ASHRAE 169-2013-1A',
-            'ASHRAE 169-2013-1B',
-            'ASHRAE 169-2013-2A',
-            'ASHRAE 169-2013-2B',
-            'ASHRAE 169-2013-3A',
-            'ASHRAE 169-2013-3B',
-            'ASHRAE 169-2013-3C',
-            'ASHRAE 169-2013-4A',
-            'ASHRAE 169-2013-4B',
-            'ASHRAE 169-2013-4C',
-            'ASHRAE 169-2013-5A',
-            'ASHRAE 169-2013-5B',
-            'ASHRAE 169-2013-5C'
-            if thermal_zone_floor_area(thermal_zone) <= OpenStudio.convert(500, 'ft^2', 'm^2').get
-              energy_recovery = false
-              OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Energy recovery will not be modeled for the ERV serving #{thermal_zone.name}.")
-            end
-        end
-    end
-
-    # Determine ERR and design basis when energy recovery is required
-    #
-    # enthalpy_recovery_ratio = nil will trigger an ERV with no effectiveness that only provides OA
-    enthalpy_recovery_ratio = nil
-    if energy_recovery
-      case template
-        when '90.1-2019'
-          search_criteria = {
-            'template' => template,
-            'climate_zone' => climate_zone,
-            'under_8000_hours' => false,
-            'nontransient_dwelling' => true
-          }
-        else
-          search_criteria = {
-            'template' => template,
-            'climate_zone' => climate_zone,
-            'under_8000_hours' => false
-          }
-      end
-
-      erv_enthalpy_recovery_ratio = model_find_object(standards_data['energy_recovery'], search_criteria)
-
-      # Extract ERR from data lookup
-      if !erv_enthalpy_recovery_ratio.nil?
-        if erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio'].nil? & erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio_design_conditions'].nil?
-          # If not included in the data, an enthalpy
-          # recovery ratio (ERR) of 50% is used
-          enthalpy_recovery_ratio = 0.5
-          case climate_zone
-            when 'ASHRAE 169-2006-6B',
-              'ASHRAE 169-2013-6B',
-              'ASHRAE 169-2006-7A',
-              'ASHRAE 169-2013-7A',
-              'ASHRAE 169-2006-7B',
-              'ASHRAE 169-2013-7B',
-              'ASHRAE 169-2006-8A',
-              'ASHRAE 169-2013-8A',
-              'ASHRAE 169-2006-8B',
-              'ASHRAE 169-2013-8B'
-              design_conditions = 'heating'
-            else
-              design_conditions = 'cooling'
-          end
-        else
-          design_conditions = erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio_design_conditions'].downcase
-          enthalpy_recovery_ratio = erv_enthalpy_recovery_ratio['enthalpy_recovery_ratio']
-        end
-      end
-    end
-
-    # Create fans
-    #
-    # Fan power:
-    # No energy recovery = 0.806 W/cfm
-    # Energy recovery = 0.934 W/cfm
-    supply_fan = create_fan_by_name(model,
-                                    'ERV_Supply_Fan',
-                                    fan_name: "#{thermal_zone.name} ERV Supply Fan")
-    exhaust_fan = create_fan_by_name(model,
-                                     'ERV_Supply_Fan',
-                                     fan_name: "#{thermal_zone.name} ERV Exhaust Fan")
-    supply_fan.setMotorEfficiency(0.48)
-    exhaust_fan.setMotorEfficiency(0.48)
-    supply_fan.setFanTotalEfficiency(0.303158)
-    exhaust_fan.setFanTotalEfficiency(0.303158)
-    if energy_recovery
-      supply_fan.setPressureRise(270.64755)
-      exhaust_fan.setPressureRise(270.64755)
-    else
-      supply_fan.setPressureRise(233.6875)
-      exhaust_fan.setPressureRise(233.6875)
-    end
-
-    # Create ERV Controller
-    erv_controller = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilatorController.new(model)
-    erv_controller.setName("#{thermal_zone.name} ERV Controller")
-    erv_controller.setControlHighIndoorHumidityBasedonOutdoorHumidityRatio(false)
-
-    # Create heat exchanger
-    heat_exchanger = OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.new(model)
-    heat_exchanger.setName("#{thermal_zone.name} ERV HX")
-    heat_exchanger.setSupplyAirOutletTemperatureControl(false)
-    heat_exchanger.setHeatExchangerType('Rotary')
-    heat_exchanger.setEconomizerLockout(false)
-    heat_exchanger.setFrostControlType('ExhaustOnly')
-    heat_exchanger.setThresholdTemperature(-23.3)
-    heat_exchanger.setInitialDefrostTimeFraction(0.167)
-    heat_exchanger.setRateofDefrostTimeFractionIncrease(1.44)
-    heat_exchanger.setAvailabilitySchedule(model_add_schedule(model, 'Always On - No Design Day'))
-    heat_exchanger_air_to_air_sensible_and_latent_apply_prototype_efficiency_enthalpy_recovery_ratio(heat_exchanger, enthalpy_recovery_ratio, design_conditions, climate_zone)
-
-    erv = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
-    erv.setName("#{thermal_zone.name} ERV")
-
-    erv.setController(erv_controller)
-    erv.addToThermalZone(thermal_zone)
-
-    # Set OA requirements; Assumes a default of 55 cfm
-    if min_oa_flow_m3_per_s_per_m2.nil?
-      erv.setSupplyAirFlowRate(OpenStudio.convert(55.0, 'cfm', 'm^3/s').get)
-      erv.setExhaustAirFlowRate(OpenStudio.convert(55.0, 'cfm', 'm^3/s').get)
-    else
-      erv.setVentilationRateperUnitFloorArea(min_oa_flow_m3_per_s_per_m2)
-    end
-    erv.setVentilationRateperOccupant(0.0)
-
-    # Ensure the ERV takes priority, so ventilation load is included when treated by other zonal systems
-    # From EnergyPlus I/O reference:
-    # "For situations where one or more equipment types has limited capacity or limited control capability, order the
-    #  sequence so that the most controllable piece of equipment runs last. For example, with a dedicated outdoor air
-    #  system (DOAS), the air terminal for the DOAS should be assigned Heating Sequence = 1 and Cooling Sequence = 1.
-    #  Any other equipment should be assigned sequence 2 or higher so that it will see the net load after the DOAS air
-    #  is added to the zone."
-    thermal_zone.setCoolingPriority(erv.to_ModelObject.get, 1)
-    thermal_zone.setHeatingPriority(erv.to_ModelObject.get, 1)
-
-    return erv
   end
 end

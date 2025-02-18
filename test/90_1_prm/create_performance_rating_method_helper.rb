@@ -9,7 +9,7 @@ def load_test_model(model_name)
   model = model.get
 
   return model
-  
+
 end
 
 def create_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false, load_existing_model = true)
@@ -25,7 +25,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   if load_existing_model
     model = load_baseline_model(test_specific_model_name, standard, climate_zone, building_type, custom, debug)
   end
-  
+
   # If the existing model was loaded, return that
   if model
     return model
@@ -33,13 +33,13 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
 
   # Make a directory to save the resulting models
   test_dir = "#{File.dirname(__FILE__)}/output"
-  if !Dir.exists?(test_dir)
+  if !Dir.exist?(test_dir)
     Dir.mkdir(test_dir)
   end
 
   model = load_test_model(model_name)
 
-  # @todo see Weather.Model.rb for weather file locations for each climate zone
+  # @todo see weather module for weather file locations for each climate zone
   base_rel_path = '../../../data/weather/'
   if model.weatherFile.empty?
     epw_name = nil
@@ -90,10 +90,9 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
       puts "No Weather file set, and CANNOT locate #{climate_zone}"
     else
       rel_path = base_rel_path + epw_name
-      weather_file =  File.expand_path(rel_path, __FILE__)
-      weather = BTAP::Environment::WeatherFile.new(weather_file)
-      #Set Weather file to model.
-      success = weather.set_weather_file(model)
+      weather_file_path =  File.expand_path(rel_path, __FILE__)
+      # set the weather file to the model
+      success = OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       if success
         puts "Set Weather file to '#{weather_file}'"
       else
@@ -110,12 +109,11 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
       unless File.exist?(epw_path_string)
         epw_name = File.basename(epw_path_string)
         rel_path = base_rel_path + epw_name
-        weather_file = File.expand_path(rel_path, __FILE__)
-        weather = BTAP::Environment::WeatherFile.new(weather_file)
-        #Set Weather file to model.
-        success = weather.set_weather_file(model)
+        weather_file_path = File.expand_path(rel_path, __FILE__)
+        # set the weather file to the model
+        success = OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
         if success
-          puts "Set Weather file to '#{weather_file}'"
+          puts "Set Weather file to '#{weather_file_path}'"
         else
           puts "Failed to set the weather file"
           return [false, ["Failed to set the weather file"]]
@@ -126,7 +124,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
 
   # Create a directory for the test result
   osm_directory = "#{test_dir}/#{test_specific_model_name}-#{standard}-#{climate_zone}-#{custom}"
-  if !Dir.exists?(osm_directory)
+  if !Dir.exist?(osm_directory)
     Dir.mkdir(osm_directory)
   end
 
@@ -141,7 +139,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   # Create the baseline model from the
   # supplied proposed test model
   standard = Standard.build(standard)
-  standard.model_create_prm_baseline_building(model, building_type, climate_zone, custom, osm_directory, debug) 
+  standard.model_create_prm_baseline_building(model, building_type, climate_zone, custom, osm_directory, debug)
 
   # Show the output messages
   errs = []
@@ -150,7 +148,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   log_name = "create_baseline.log"
   log_file_path = "#{osm_directory}/#{log_name}"
   messages = log_messages_to_file(log_file_path, debug)
-  
+
   msg_log.logMessages.each do |msg|
     # DLM: you can filter on log channel here for now
     if /openstudio.*/.match(msg.logChannel) #/openstudio\.model\..*/
@@ -162,7 +160,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
           msg.logMessage.include?("UseWeatherFile") || # 'UseWeatherFile' is not yet a supported option for YearDescription
           msg.logMessage.include?("has multiple parents") || # Bogus errors about curves having multiple parents
           msg.logMessage.include?('Prior to OpenStudio 2.6.2, this field was returning a double, it now returns an Optional double') # Warning about OS API change
-            
+
       # Report the message in the correct way
       if msg.logLevel == OpenStudio::Info
         puts(msg.logMessage)
@@ -176,33 +174,33 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
       end
     end
   end
-  
+
   # Save the test model
   baseline_model_name = "baseline"
   model.save(OpenStudio::Path.new("#{osm_directory}/#{baseline_model_name}.osm"), true)
 
   # Assert no errors
-  assert(errs.size == 0, "Model created, but had Errors: #{errs.join(',')}")    
-  
+  assert(errs.size == 0, "Model created, but had Errors: #{errs.join(',')}")
+
   # Run a sizing run for the baseline model
   # so that the sql matches the actual equipment names
   if standard.model_run_sizing_run(model, "#{osm_directory}/SRB") == false
     return false
   end
-  
+
   return model
 
 end
-  
-def load_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false)  
- 
+
+def load_baseline_model(model_name, standard, climate_zone, building_type, custom = nil, debug = false)
+
   # Get the test directory
   test_dir = "#{File.dirname(__FILE__)}/output"
   osm_directory = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}-#{custom}"
-  if !Dir.exists?(osm_directory)
+  if !Dir.exist?(osm_directory)
     return false
-  end  
-  
+  end
+
   # Load the test model
   base_model_name = "baseline"
   translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -213,7 +211,7 @@ def load_baseline_model(model_name, standard, climate_zone, building_type, custo
   else
     model = model.get
   end
-    
+
   # Attach the sql file from the last sizing run
   sql_path_1x = OpenStudio::Path.new("#{osm_directory}/SRB/EnergyPlus/eplusout.sql")
   sql_path_2x = OpenStudio::Path.new("#{osm_directory}/SRB/run/eplusout.sql")
@@ -237,12 +235,12 @@ def load_baseline_model(model_name, standard, climate_zone, building_type, custo
     end
     # Attach the sql file from the run to the model
     model.setSqlFile(sql)
-  else 
+  else
     puts "Results for the sizing run couldn't be found here: #{sql_path_1x} or here: #{sql_path_2x}."
     return false
-  end  
-  
+  end
+
   return model
- 
-end 
- 
+
+end
+

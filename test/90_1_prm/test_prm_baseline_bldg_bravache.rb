@@ -4,7 +4,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
 
   # Make a directory to save the resulting models
   test_dir = "#{File.dirname(__FILE__)}/output"
-  if !Dir.exists?(test_dir)
+  if !Dir.exist?(test_dir)
     Dir.mkdir(test_dir)
   end
 
@@ -69,10 +69,9 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
       puts "No Weather file set, and CANNOT locate #{climate_zone}"
     else
       rel_path = base_rel_path + epw_name
-      weather_file =  File.expand_path(rel_path, __FILE__)
-      weather = BTAP::Environment::WeatherFile.new(weather_file)
-      #Set Weather file to model.
-      success = weather.set_weather_file(model)
+      weather_file_path =  File.expand_path(rel_path, __FILE__)
+       # set the weather file to the model
+      success = OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
       if success
         puts "Set Weather file to '#{weather_file}'"
       else
@@ -85,7 +84,7 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, deb
 
   # Create a directory for the test result
   osm_directory = "#{test_dir}/#{model_name}-#{standard}-#{climate_zone}"
-  if !Dir.exists?(osm_directory)
+  if !Dir.exist?(osm_directory)
     Dir.mkdir(osm_directory)
   end
 

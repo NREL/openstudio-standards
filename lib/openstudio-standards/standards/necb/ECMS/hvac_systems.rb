@@ -103,6 +103,8 @@ class ECMS
       storey_cond = false
       total_area = 0.0
       sum = 0.0
+      raise("get_storey_avg_clg_zcoords: storey #{storey.name} has no spaces associated with it. Either delete the storey or " \
+            "assign spaces to it") if storey.spaces.empty?
       storey.spaces.each do |space|
         # Determine if any of the spaces/zones of the storey are conditioned? If yes then the floor is considered to be conditioned
         if space.thermalZone.is_initialized
@@ -464,8 +466,8 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # The first 5 letters of the air loop name designate the system type (sys_abbr). This method updates the system type designation 
-  # in the air loop name. At the same time the chosen air loop names are checked to avoid duplicate names from being used in the 
+  # The first 5 letters of the air loop name designate the system type (sys_abbr). This method updates the system type designation
+  # in the air loop name. At the same time the chosen air loop names are checked to avoid duplicate names from being used in the
   # hash for system to zones.
   def update_system_zones_map_keys(system_zones_map,sys_abbr)
     updated_system_zones_map = {}
@@ -502,13 +504,15 @@ class ECMS
     system_zones_map:,
     system_doas_flags:,
     ecm_system_zones_map_option:,
-    heating_fuel:,
     standard:,
     air_sys_eqpt_type: 'ccashp')
 
-    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
+
+    # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
 
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
@@ -521,20 +525,14 @@ class ECMS
     # Update system doas flags
     system_doas_flags = {}
     system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
-    # Set heating fuel
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS08_CCASHP_VRF' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+
     # use system zones map and generate new air system and zonal equipment
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
                                            zones: zones,
                                            system_doas_flags: system_doas_flags)
       sys_supp_htg_eqpt_type = 'coil_electric'
-      sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+      sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
       airloop,clg_dx_coil,htg_dx_coil,return_fan = add_air_system(model: model,
                                            zones: zones,
                                            sys_abbr: sys_info['sys_abbr'],
@@ -571,8 +569,8 @@ class ECMS
                     zone_fan_type: 'On_Off',
                     hw_loop: hw_loop)
       # add electric or hot-water baseboards for backup; Type of baseboard follows the primary heating fuel used in the building model.
-      zone_htg_eqpt_type = 'baseboard_hotwater' if heating_fuel == 'NaturalGas'
-      zone_htg_eqpt_type = 'baseboard_electric' if heating_fuel == 'Electricity'
+      zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
+      zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
 
       add_zone_eqpt(model: model,
                     airloop: airloop,
@@ -925,6 +923,7 @@ class ECMS
     when 'ptac_electric_off'
       zone_eqpt = OpenStudio::Model::ZoneHVACPackagedTerminalAirConditioner.new(model, always_on, zone_fan, zone_htg_eqpt, zone_clg_eqpt)
       zone_eqpt.setName('ZoneHVACPackagedTerminalAirConditioner')
+      zone_eqpt.setSupplyAirFanOperatingModeSchedule(always_off)
       if zone_vent_off
         zone_eqpt.setOutdoorAirFlowRateDuringCoolingOperation(1.0e-6)
         zone_eqpt.setOutdoorAirFlowRateDuringHeatingOperation(1.0e-6)
@@ -1047,7 +1046,7 @@ class ECMS
         htg_eqpt = OpenStudio::Model::DistrictHeatingWater.new(model)
       end
       htg_eqpt.setName("DistrictHeating")
-    
+
     when "heatpump_watertowater_equationfit"
       htg_eqpt = OpenStudio::Model::HeatPumpWaterToWaterEquationFitHeating.new(model)
       htg_eqpt.setName("HeatPumpWaterToWaterEquationFitHeating")
@@ -1187,7 +1186,7 @@ class ECMS
     sys_info['sys_htg_eqpt_type'] = 'coil_electric'
     sys_info['sys_supp_htg_eqpt_type'] = 'none'
     sys_info['sys_clg_eqpt_type'] = 'coil_dx'
-    if zones.size == 1
+    if (zones.size == 1) || (sys_info['sys_abbr'] == 'sys_4')
       sys_info['sys_setpoint_mgr_type'] = 'single_zone_reheat'
       sys_info['sys_setpoint_mgr_type'] = 'scheduled' if system_doas_flags[sys_name.to_s]
       sys_info['sys_supp_fan_type'] = 'constant_volume'
@@ -1220,23 +1219,18 @@ class ECMS
                                     system_zones_map:,    # hash of ailoop names as keys and array of zones as values
                                     system_doas_flags:,   # hash of system names as keys and flag for DOAS as values
                                     ecm_system_zones_map_option:,
-                                    heating_fuel:,
                                     standard:)
 
-    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
-    hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
 
-    # Set heating fuel
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS09_CCASHP_Baseboard' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Create one hot-water loop for hot-water baseboards if required
+    hw_loop = nil
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
+
     # Set supplemental heating for air loop
     sys_supp_htg_eqpt_type = 'coil_electric'
-    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1256,7 +1250,7 @@ class ECMS
         sys_ret_fan_type: sys_info['sys_ret_fan_type'],
         sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type']
       )
-      # Appy performance curves
+      # Apply performance curves
       eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
       coil_cooling_dx_variable_speed_apply_curves(clg_dx_coil, eqpt_name)
       coil_heating_dx_variable_speed_apply_curves(htg_dx_coil, eqpt_name)
@@ -1264,10 +1258,10 @@ class ECMS
       if sys_info['sys_vent_type'] == 'doas'
         zone_htg_eqpt_type = 'ptac_electric_off'
         zone_clg_eqpt_type = 'ptac_electric_off'
-        zone_fan_type = 'constant_volume'
+        zone_fan_type = 'on_off'
       else
-        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
-        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
         zone_clg_eqpt_type = 'none'
         zone_fan_type = 'none'
       end
@@ -1283,8 +1277,8 @@ class ECMS
                     hw_loop: hw_loop)
       # for doas use baseboard electric or hotwater as backup for PTAC units
       if sys_info['sys_vent_type'] == 'doas'
-        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
-        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
@@ -1397,20 +1391,14 @@ class ECMS
                              system_zones_map:,
                              system_doas_flags:,
                              ecm_system_zones_map_option:,
-                             standard:,
-                             heating_fuel:)
+                             standard:)
     hw_loop = nil
 
-    # Set heating fuel
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS11_ASHP_PTHP' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
-    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
     system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
@@ -1522,8 +1510,8 @@ class ECMS
             # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
             dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
             if dx_cap < clg_dx_coil_cap then dx_cap = clg_dx_coil_cap end
-            # clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
-            # htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
+            clg_dx_coil.setRatedTotalCoolingCapacity(dx_cap)
+            htg_dx_coil.setRatedTotalHeatingCapacity(dx_cap)
             # assign COPs
             search_criteria = {}
             search_criteria['name'] = pthp_eqpt_name
@@ -1549,23 +1537,18 @@ class ECMS
                                   system_zones_map:,
                                   system_doas_flags:,
                                   ecm_system_zones_map_option:,
-                                  standard:,
-                                  heating_fuel:)
+                                  standard:)
 
-    # Create one hot-water loop for hot-water baseboards if primary heating fuel is gas
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
+
+    # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model) if heating_fuel == 'NaturalGas'
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water'
 
-    # Set heating fuel
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS12_ASHP_Baseboard' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
     # Set supplemental heating fuel for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
-    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -1590,10 +1573,10 @@ class ECMS
       if sys_info['sys_vent_type'] == 'doas'
         zone_htg_eqpt_type = 'ptac_electric_off'
         zone_clg_eqpt_type = 'ptac_electric_off'
-        zone_fan_type = 'constant_volume'
+        zone_fan_type = 'on_off'
       else
-        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
-        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
         zone_clg_eqpt_type = 'none'
         zone_fan_type = 'none'
       end
@@ -1609,8 +1592,8 @@ class ECMS
                     hw_loop: hw_loop)
       # for doas use baseboard electric or hotwater as backup for PTAC units
       if sys_info['sys_vent_type'] == 'doas'
-        zone_htg_eqpt_type = 'baseboard_electric' if updated_heating_fuel == 'Electricity'
-        zone_htg_eqpt_type = 'baseboard_hotwater' if updated_heating_fuel == 'NaturalGas'
+        zone_htg_eqpt_type = 'baseboard_electric' if standard.fuel_type_set.baseboard_type == 'Electric'
+        zone_htg_eqpt_type = 'baseboard_hotwater' if standard.fuel_type_set.baseboard_type == 'Hot Water'
         add_zone_eqpt(model: model,
                       airloop: airloop,
                       zones: zones,
@@ -1708,15 +1691,13 @@ class ECMS
                             system_zones_map:,
                             system_doas_flags:,
                             ecm_system_zones_map_option:,
-                            standard:,
-                            heating_fuel:)
+                            standard:)
     # call method for ECM hs08 with ASHP in the air system
     add_ecm_hs08_ccashp_vrf(model: model,
                             system_zones_map: system_zones_map,
                             system_doas_flags: system_doas_flags,
                             ecm_system_zones_map_option: ecm_system_zones_map_option,
                             standard: standard,
-                            heating_fuel: heating_fuel,
                             air_sys_eqpt_type: 'ashp')
   end
 
@@ -1728,67 +1709,23 @@ class ECMS
   end
 
   # =============================================================================================================================
-  # Define object "SiteGroundTemperatureShallow" and use ground temperatures from weather file at 0.5 m depth
-  def set_undisturbed_ground_surface_temp_objs(model)
-    surface_ground_temp_obj = OpenStudio::Model::SiteGroundTemperatureShallow.new(model)
-    wfile_path = model.getWeatherFile.path.get.to_s
-    statsfile = EnergyPlus::StatFile.new(wfile_path.sub("epw","stat"))
-    surface_ground_temp_obj.setJanuarySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[0])
-    surface_ground_temp_obj.setFebruarySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[1])
-    surface_ground_temp_obj.setMarchSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[2])
-    surface_ground_temp_obj.setAprilSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[3])
-    surface_ground_temp_obj.setMaySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[4])
-    surface_ground_temp_obj.setJuneSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[5])
-    surface_ground_temp_obj.setJulySurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[6])
-    surface_ground_temp_obj.setAugustSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[7])
-    surface_ground_temp_obj.setSeptemberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[8])
-    surface_ground_temp_obj.setOctoberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[9])
-    surface_ground_temp_obj.setNovemberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[10])
-    surface_ground_temp_obj.setDecemberSurfaceGroundTemperature(statsfile.monthly_undis_ground_temps_0p5m[11])
-  end
-
-  # =============================================================================================================================
-  # Define object "SiteGroundTemperatureDeep" and use ground temperatures from weather file at 4.0 m depth
-  def set_undisturbed_ground_deep_temp_objs(model)
-    surface_ground_temp_obj = OpenStudio::Model::SiteGroundTemperatureDeep.new(model)
-    wfile_path = model.getWeatherFile.path.get.to_s
-    statsfile = EnergyPlus::StatFile.new(wfile_path.sub("epw","stat"))
-    surface_ground_temp_obj.setJanuaryDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[0])
-    surface_ground_temp_obj.setFebruaryDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[1])
-    surface_ground_temp_obj.setMarchDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[2])
-    surface_ground_temp_obj.setAprilDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[3])
-    surface_ground_temp_obj.setMayDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[4])
-    surface_ground_temp_obj.setJuneDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[5])
-    surface_ground_temp_obj.setJulyDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[6])
-    surface_ground_temp_obj.setAugustDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[7])
-    surface_ground_temp_obj.setSeptemberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[8])
-    surface_ground_temp_obj.setOctoberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[9])
-    surface_ground_temp_obj.setNovemberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[10])
-    surface_ground_temp_obj.setDecemberDeepGroundTemperature(statsfile.monthly_undis_ground_temps_4p0m[11])
-  end
-
-  # =============================================================================================================================
   # Add equipment for ECM "hs14_cgshp_fancoils"
   #   -Constant volume DOAS with hydronic htg and clg coils.
   #   -Zonal terminal fan coil (4-pipe) connected to central ground-source heat pump.
-  #   -Plant has a heating loop with water-to-water heat pump with a backup boiler. It also has a water-cooled chiller with a 
+  #   -Plant has a heating loop with water-to-water heat pump with a backup boiler. It also has a water-cooled chiller with a
   #    backup air-cooled chiller. Water-source heat pump and water-cooled chiller are connected to a ground-loop.
   def add_ecm_hs14_cgshp_fancoils(model:,
                                   system_zones_map:,
                                   system_doas_flags:,
                                   ecm_system_zones_map_option:,
-                                  standard:,
-                                  heating_fuel:)
+                                  standard:)
 
-    updated_heating_fuel = heating_fuel
-    if heating_fuel == 'DefaultFuel'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      updated_heating_fuel = standard.standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region)}['fueltype_set']
-    end
-    raise("Heating fuel for ECM 'HS11_ASHP_PTHP' is neither Electricity nor NaturalGas") if ((updated_heating_fuel != 'Electricity') && (updated_heating_fuel != 'NaturalGas'))
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
+
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
-    sys_supp_htg_eqpt_type = 'coil_gas' if updated_heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
     system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
@@ -1848,7 +1785,7 @@ class ECMS
       hw_loop_htg_eqpt.setHeatingCapacityCurve(hcapf_curve)
     else
       raise("Can not find curve hcapf for  #{hw_loop_htg_eqpt.name}")
-    end    
+    end
     hpowerf_curve_name = "HEATPUMP_WATERTOWATER_HPOWERF"
     hpowerf_curve = model_add_curve(model, hpowerf_curve_name)
     if hpowerf_curve
@@ -1857,7 +1794,7 @@ class ECMS
       raise("Can not find curve hpowerf for #{hw_loop_htg_eqpt.name}")
     end
     boiler = OpenStudio::Model::BoilerHotWater.new(model)
-    boiler.setFuelType(updated_heating_fuel)
+    boiler.setFuelType(heating_fuel)
     hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
     boiler.addToNode(hw_loop_htg_eqpt_outlet_node)
 
@@ -1870,7 +1807,7 @@ class ECMS
                                                loop_spm_type: 'Scheduled',
                                                loop_setpoint: 7.0,
                                                loop_temp_diff: 6.0)
-    
+
     chw_loop_clg_eqpt.setName('ChillerWaterCooled')
     chw_loop_clg_eqpt.setCondenserType("WaterCooled")
     model.getCoilCoolingWaters.sort.each {|coil| chw_loop.addDemandBranchForComponent(coil)}
@@ -1898,16 +1835,16 @@ class ECMS
     clg_eqpt_outlet_node = clg_eqpt.outletModelObject.get.to_Node.get
     clg_spm = create_plantloop_spm( model, 'Scheduled', 25.0)
     clg_spm.addToNode(heat_rej_loop.supplyOutletNode)
-    heat_rej_loop.setName("#{heat_rej_loop.name.to_s} GLHX")        
+    heat_rej_loop.setName("#{heat_rej_loop.name.to_s} GLHX")
     heat_rej_loop.addDemandBranchForComponent(hw_loop_htg_eqpt)
     heat_rej_loop.addDemandBranchForComponent(chw_loop_clg_eqpt)
 
     # add output variables  for district heating and cooling
     model.getOutputVariables.each {|ivar| ivar.remove}
-    dist_htg_var = OpenStudio::Model::OutputVariable.new("District Heating Hot Water Rate",model)
+    dist_htg_var = OpenStudio::Model::OutputVariable.new("District Heating Water Rate",model)
     dist_htg_var.setReportingFrequency("hourly")
     dist_htg_var.setKeyValue("*")
-    dist_clg_var = OpenStudio::Model::OutputVariable.new("District Cooling Chilled Water Rate",model)
+    dist_clg_var = OpenStudio::Model::OutputVariable.new("District Cooling Water Rate",model)
     dist_clg_var.setReportingFrequency("hourly")
     dist_clg_var.setKeyValue("*")
 
@@ -1918,7 +1855,7 @@ class ECMS
   # Appy efficiencies for ECM "hs14_cgshp_fancoils"
   def apply_efficiency_ecm_hs14_cgshp_fancoils(model,standard)
     heatpump_siz_f = 0.4  # sizing factor for water-source heat pump (heating mode)
-    chiller_siz_f = 0.4  # sizing factor for water-cooled chiller 
+    chiller_siz_f = 0.4  # sizing factor for water-cooled chiller
     # get water-source heat pump and boiler
     hw_loops = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'heating'}
     hw_heatpump_loop = nil
@@ -1977,7 +1914,7 @@ class ECMS
       chiller_water_cooled = chlr if chlr.name.to_s.include? 'ChillerWaterCooled'
       chiller_air_cooled = chlr if chlr.name.to_s.include? 'ChillerAirCooled'
       break if !chiller_water_cooled.nil? && !chiller_air_cooled.nil?
-    end 
+    end
     raise("apply_efficiency_ecm_hs14_cgshp_fancoils: no water-cooled chiller found in cooling loop #{chw_loop.name.to_s}") if chiller_water_cooled.nil?
     raise("apply_efficiency_ecm_hs14_cgshp_fancoils: no air-cooled chiller found in cooling loop #{chw_loop.name.to_s}") if chiller_air_cooled.nil?
     if chiller_water_cooled.autosizedReferenceCapacity.is_initialized
@@ -2012,9 +1949,9 @@ class ECMS
 
   #=============================================================================================================================
   def set_ghx_loop_district_cap(model)
-    # The autosized values for the district heating and cooling objects on a condenser loop are the sum of the peak heating and 
-    # cooling loads. Here the capacity of the district heating object of the condenser loop is set to the maximum district heating 
-    # rate on the winter design day. Similarily the capacity of the district cooling object of the condenser loop is set to the 
+    # The autosized values for the district heating and cooling objects on a condenser loop are the sum of the peak heating and
+    # cooling loads. Here the capacity of the district heating object of the condenser loop is set to the maximum district heating
+    # rate on the winter design day. Similarily the capacity of the district cooling object of the condenser loop is set to the
     # maximum district cooling rate on the summer design day.
 
     cw_loops = model.getPlantLoops.select{|loop| loop.sizingPlant.loopType.to_s.downcase == 'condenser'}
@@ -2026,9 +1963,9 @@ class ECMS
       case dist_htg_eqpts[0].iddObjectType.valueName.to_s
       when 'OS_DistrictHeating'
         dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeating.get
-      when 'OS_DistrictHeatingWater'
+      when 'OS_DistrictHeating_Water'
         dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeatingWater.get
-      when 'OS_DistrictHeatingSteam'
+      when 'OS_DistrictHeating_Steam'
         dist_htg_eqpt = dist_htg_eqpts[0].to_DistrictHeatingSteam.get
       end
     end
@@ -2037,7 +1974,7 @@ class ECMS
     raise("set_cond_loop_district_cap: condenser loop doesn't have a district heating and district cooling objects") if dist_htg_eqpts.empty? || dist_clg_eqpts.empty?
     # District Heating
     sql_command = "SELECT ReportVariableDataDictionaryIndex FROM ReportVariableDataDictionary
-               WHERE VariableName='District Heating Hot Water Rate'"
+               WHERE VariableName='District Heating Water Rate'"
     dhtg_index = model.sqlFile.get.execAndReturnFirstString(sql_command).get
     raise("set_ghx_loop_district_cap: EnergyPlus sql results file has no data for district heating hot water rate") if dhtg_index.nil?
     sql_command = "SELECT Value FROM ReportVariableWithTime
@@ -2048,7 +1985,7 @@ class ECMS
     dist_htg_s = model.sqlFile.get.execAndReturnVectorOfString(sql_command).get
     # District Cooling
     sql_command = "SELECT ReportVariableDataDictionaryIndex FROM ReportVariableDataDictionary
-               WHERE VariableName='District Cooling Chilled Water Rate'"
+               WHERE VariableName='District Cooling Water Rate'"
     dclg_index = model.sqlFile.get.execAndReturnFirstString(sql_command).get
     raise("set_ghx_loop_district_cap: EnergyPlus sql results file has no data for district cooling chilled water rate") if dclg_index.nil?
     sql_command = "SELECT Value FROM ReportVariableWithTime
@@ -2207,7 +2144,7 @@ class ECMS
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find heat_plf_fplr curve, will not be set.")
       successfully_set_all_properties = false
     end
-    
+
     # Make the HEAT-DEFROST-EIR-FT curve
     heat_defrost_eir_ft = model_add_curve(coil_heating_dx_single_speed.model, props['heat_defrost_eir_ft'])
     if heat_defrost_eir_ft
@@ -2272,7 +2209,7 @@ class ECMS
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find cop, will not be set.")
       successfully_set_all_properties = false
     end
-    
+
   end
 
   # =============================================================================================================================
@@ -2701,7 +2638,7 @@ class ECMS
     # If specified as SEER
     unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop_cooling_with_fan(min_seer)
+      cop = seer_to_cop_no_fan(min_seer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2709,7 +2646,7 @@ class ECMS
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -2717,7 +2654,7 @@ class ECMS
     # if specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
-      cop = seer_to_cop_cooling_with_fan(min_seer)
+      cop = seer_to_cop_no_fan(min_seer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2725,7 +2662,7 @@ class ECMS
     # If specified as EER (heat pump)
     unless ac_props['minimum_full_load_efficiency'].nil?
       min_eer = ac_props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{template}: #{coil_cooling_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -2741,7 +2678,7 @@ class ECMS
     if rename
       coil_cooling_dx_single_speed.setName(new_comp_name)
     end
-    
+
     # Set COP
     coil_cooling_dx_single_speed.setRatedCOP(cop.to_f) unless cop.nil?
 
@@ -2773,7 +2710,7 @@ class ECMS
     # If specified as EER
     unless props['minimum_energy_efficiency_ratio'].nil?
       min_eer = props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -2781,7 +2718,7 @@ class ECMS
     # if specified as HSPF (heat pump)
     unless props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      cop = hspf_to_cop_no_fan(min_hspf)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2789,14 +2726,15 @@ class ECMS
     # If specified as EER (heat pump)
     unless props['minimum_full_load_efficiency'].nil?
       min_eer = props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # If specified as COP
     unless props['minimum_coefficient_of_performance_heating'].nil?
-      cop = props['minimum_coefficient_of_performance_heating']
+      cop_min = props['minimum_coefficient_of_performance_heating']
+      cop = cop_heating_to_cop_heating_no_fan(cop_min, capacity_w)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{cop}COP"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -2837,7 +2775,7 @@ class ECMS
     # If specified as SEER
     unless ac_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = ac_props['minimum_seasonal_energy_efficiency_ratio']
-      cop = seer_to_cop_cooling_with_fan(min_seer)
+      cop = seer_to_cop_no_fan(min_seer)
       new_comp_name = "#{coil_cooling_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{template}: #{coil_cooling_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2845,7 +2783,7 @@ class ECMS
     # If specified as EER
     unless ac_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = ac_props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{coil_cooling_dx_single_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{template}: #{coil_cooling_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -2853,7 +2791,7 @@ class ECMS
     # if specified as SEER (heat pump)
     unless ac_props['minimum_seasonal_efficiency'].nil?
       min_seer = ac_props['minimum_seasonal_efficiency']
-      cop = seer_to_cop_cooling_with_fan(min_seer)
+      cop = seer_to_cop_no_fan(min_seer)
       new_comp_name = "#{coil_cooling_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{template}: #{coil_cooling_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2861,7 +2799,7 @@ class ECMS
     # If specified as EER (heat pump)
     unless ac_props['minimum_full_load_efficiency'].nil?
       min_eer = ac_props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{coil_cooling_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXVariableSpeed', "For #{template}: #{coil_cooling_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -2909,7 +2847,7 @@ class ECMS
     # If specified as EER
     unless props['minimum_energy_efficiency_ratio'].nil?
       min_eer = props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{template}: #{coil_heating_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -2917,7 +2855,7 @@ class ECMS
     # if specified as HSPF (heat pump)
     unless props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      cop = hspf_to_cop_no_fan(min_hspf)
       new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{template}: #{coil_heating_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2925,14 +2863,15 @@ class ECMS
     # If specified as EER (heat pump)
     unless props['minimum_full_load_efficiency'].nil?
       min_eer = props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{template}: #{coil_heating_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # If specified as COP
     unless props['minimum_coefficient_of_performance_heating'].nil?
-      cop = props['minimum_coefficient_of_performance_heating']
+      min_cop = props['minimum_coefficient_of_performance_heating']
+      cop = cop_heating_to_cop_heating_no_fan(min_cop, capacity_w)
       new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{cop}COP"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXVariableSpeed', "For #{template}: #{coil_heating_dx_variable_speed.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -2973,7 +2912,7 @@ class ECMS
     # If specified as EER
     unless props['minimum_energy_efficiency_ratio'].nil?
       min_eer = props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -2981,7 +2920,7 @@ class ECMS
     # if specified as HSPF (heat pump)
     unless props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      cop = hspf_to_cop_no_fan(min_hspf)
       new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -2989,7 +2928,7 @@ class ECMS
     # If specified as EER (heat pump)
     unless props['minimum_full_load_efficiency'].nil?
       min_eer = props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -3037,7 +2976,7 @@ class ECMS
     # If specified as EER
     unless props['minimum_energy_efficiency_ratio'].nil?
       min_eer = props['minimum_energy_efficiency_ratio']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -3045,7 +2984,7 @@ class ECMS
     # if specified as HSPF (heat pump)
     unless props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = props['minimum_heating_seasonal_performance_factor']
-      cop = hspf_to_cop_heating_with_fan(min_hspf)
+      cop = hspf_to_cop_no_fan(min_hspf)
       new_comp_name = "#{coil_heating_dx_variable_speed.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_seer}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
@@ -3053,14 +2992,15 @@ class ECMS
     # If specified as EER (heat pump)
     unless props['minimum_full_load_efficiency'].nil?
       min_eer = props['minimum_full_load_efficiency']
-      cop = eer_to_cop(min_eer)
+      cop = eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_eer}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
     # If specified as COP
     unless props['minimum_coefficient_of_performance_heating'].nil?
-      cop = props['minimum_coefficient_of_performance_heating']
+      min_cop = props['minimum_coefficient_of_performance_heating']
+      cop = cop_heating_to_cop_heating_no_fan(min_cop, capacity_w)
       new_comp_name = "#{airconditioner_variablerefrigerantflow.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{cop}COP"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{template}: #{airconditioner_variablerefrigerantflow.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
@@ -3205,6 +3145,10 @@ class ECMS
     raise 'You attempted to set the part load curve of boilers in this model to nil.  Please check the ECMS class boiler_set.json file and ensure that both the efficiency and part load curve are set.' if boiler_eff['part_load_curve'].nil?
 
     model.getBoilerHotWaters.sort.each do |mod_boiler|
+      if mod_boiler.fuelType.to_s.downcase == 'electricity'
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "The boiler #{mod_boiler.name.to_s} is electrically powered.  Only the efficiencies of fuel fired boilers are modified.  The efficiency of this boiler will not be changed.")
+        next
+      end
       reset_boiler_efficiency(model: model, component: mod_boiler.to_BoilerHotWater.get, eff: boiler_eff)
     end
   end
@@ -3247,7 +3191,7 @@ class ECMS
     end
     boiler_size_kbtu_per_hour = OpenStudio.convert(boiler_size_w, 'W', 'kBtu/h').get
     boiler_primacy = 'Primary '
-    if boiler_size_w < 1.0
+    if boiler_size_w < 1.0 || component.name.to_s.upcase.include?("SECONDARY")
       boiler_primacy = 'Secondary '
     end
     if eff['name'].nil?
@@ -3255,6 +3199,7 @@ class ECMS
     else
       eff_measure_name = eff['name']
     end
+    old_boiler_name = component.name.to_s
     new_boiler_name = (boiler_primacy + eff_measure_name + " #{boiler_size_kbtu_per_hour.round(0)}kBtu/hr #{component.nominalThermalEfficiency} Thermal Eff").strip
     component.setName(new_boiler_name)
   end
@@ -3481,8 +3426,8 @@ class ECMS
           'cool_plf_fplr' => cop_package['cool_plf_fplr']
         }
       end
-      next if unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_cop['minimum_seasonal_energy_efficiency_ratio'].nil? && 
-              unitary_cop['minimum_coefficient_of_performance_cooling'].nil? && unitary_cop['cool_cap_ft'].nil? && unitary_cop['cool_cap_fflow'].nil? && 
+      next if unitary_cop['minimum_energy_efficiency_ratio'].nil? && unitary_cop['minimum_seasonal_energy_efficiency_ratio'].nil? &&
+              unitary_cop['minimum_coefficient_of_performance_cooling'].nil? && unitary_cop['cool_cap_ft'].nil? && unitary_cop['cool_cap_fflow'].nil? &&
               unitary_cop['cool_eir_ft'].nil? && unitary_cop['cool_eir_fflow'].nil? && unitary_cop['cool_plf_fplr'].nil? && unitary_cop['ref_flow_rate_m3_per_sec'].nil?
 
       # If the dx coil is on an air loop then update its cop and the performance curves when these are specified in the ecm data
@@ -3492,9 +3437,9 @@ class ECMS
         if sizing_done
           cop = nil
           if unitary_cop['minimum_energy_efficiency_ratio']
-            cop = eer_to_cop(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
+            cop = eer_to_cop_no_fan(unitary_cop['minimum_energy_efficiency_ratio'].to_f)
           elsif unitary_cop['minimum_seasonal_energy_efficiency_ratio']
-            cop = seer_to_cop_cooling_with_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
+            cop = seer_to_cop_no_fan(unitary_cop['minimum_seasonal_energy_efficiency_ratio'].to_f)
           elsif unitary_cop['minimum_coefficient_of_performance_cooling']
             cop = unitary_cop['minimum_coefficient_of_performance_cooling'].to_f
           end
@@ -3525,7 +3470,7 @@ class ECMS
           cool_plf_fplr = @standards_data['curves'].select { |curve| curve['name'] == unitary_cop['cool_plf_fplr'] }[0] if unitary_cop['cool_plf_fplr']
           cool_plf_fplr = model_add_curve(model, unitary_cop['cool_plf_fplr']) if cool_plf_fplr
           rated_flow_rate = nil
-          rated_flow_rate = unitary_cop['ref_flow_rate_m3_per_sec'] * (capacity_w / unitary_cop['maximum_capacity']) if unitary_cop['ref_flow_rate_m3_per_sec'] 
+          rated_flow_rate = unitary_cop['ref_flow_rate_m3_per_sec'] * (capacity_w / unitary_cop['maximum_capacity']) if unitary_cop['ref_flow_rate_m3_per_sec']
           if coil_type == 'SingleSpeed'
             coil.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft) if cool_cap_ft
             coil.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow) if cool_cap_fflow
@@ -3559,28 +3504,21 @@ class ECMS
                                                   system_zones_map:,
                                                   system_doas_flags: nil,
                                                   ecm_system_zones_map_option:,
-                                                  standard:,
-                                                  heating_fuel:)
+                                                  standard:)
     # Set the primary fuel set to default to to specific fuel type.
     standards_info = standard.standards_data
 
-    if heating_fuel == 'DefaultFuel'
-      epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
-      heating_fuel = standards_info['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.state_province_region) }['fueltype_set']
-    end
-    # Get fuelset.
-    system_fuel_defaults = standards_info['fuel_type_sets'].detect { |fuel_type_set| fuel_type_set['name'] == heating_fuel }
-    raise("fuel_type_sets named #{heating_fuel} not found in fuel_type_sets table.") if system_fuel_defaults.nil?
-
     # Assign fuel sources.
-    boiler_fueltype = system_fuel_defaults['boiler_fueltype']
-    baseboard_type = system_fuel_defaults['baseboard_type']
+    boiler_fueltype = standard.fuel_type_set.boiler_fueltype
+    backup_boiler_fueltype = standard.fuel_type_set.backup_boiler_fueltype
+    baseboard_type = standard.fuel_type_set.baseboard_type
     mau_heating_coil_type = 'none'
 
     # Create the hot water loop if necessary.
     hw_loop = standard.create_hw_loop_if_required(
       baseboard_type,
       boiler_fueltype,
+      backup_boiler_fueltype,
       mau_heating_coil_type,
       model
     )
@@ -3738,15 +3676,17 @@ class ECMS
     end
   end
   # ============================================================================================================================
-  # Add one hot-water loop for hot-water baseboards if primary heating fuel is gas
-  def add_hotwater_loop(model:)
+  # Add one hot-water loop for hot-water baseboards if required
+  def add_hotwater_loop(model:, fuel_type_set:)
+    primary_boiler_fueltype = fuel_type_set.boiler_fueltype
+    backup_boiler_fueltype = fuel_type_set.backup_boiler_fueltype
     plant_loop_names = []
     model.getPlantLoops.sort.each do |plant_loop|
       plant_loop_names << plant_loop.name.to_s
     end
     unless plant_loop_names.include? 'Hot Water Loop'
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
-      setup_hw_loop_with_components(model, hw_loop, 'NaturalGas', model.alwaysOnDiscreteSchedule)
+      setup_hw_loop_with_components(model, hw_loop, primary_boiler_fueltype, backup_boiler_fueltype, model.alwaysOnDiscreteSchedule)
     end
     return hw_loop
   end

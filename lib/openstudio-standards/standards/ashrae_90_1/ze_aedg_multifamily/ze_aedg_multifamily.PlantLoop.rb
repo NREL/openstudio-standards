@@ -18,7 +18,7 @@ class ZEAEDGMultifamily < ASHRAE901
         has_secondary_pump = true
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, control_type)
+        headered_pumps_variable_speed_set_control_type(pump, control_type)
         has_secondary_pump = true
       end
     end
@@ -33,7 +33,7 @@ class ZEAEDGMultifamily < ASHRAE901
         pump_variable_speed_set_control_type(pump, pri_control_type)
       elsif sc.to_HeaderedPumpsVariableSpeed.is_initialized
         pump = sc.to_HeaderedPumpsVariableSpeed.get
-        headered_pump_variable_speed_set_control_type(pump, control_type)
+        headered_pumps_variable_speed_set_control_type(pump, control_type)
       end
     end
 

@@ -1,9 +1,10 @@
-require_relative './libs.rb'
+require_relative './libs'
 @argument = {}
 @options = {}
 # Default folders if not using s3
 @options[:input_folder] = File.join(__dir__, 'input')
 @options[:output_folder] = File.join(__dir__, 'output')
+@options[:weather_folder] = File.join(__dir__, 'weather')
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: #{$0} -s NAME id ..."
   opts.on('--help', 'Display this screen') do
@@ -16,6 +17,7 @@ end
 optparse.parse!
 BTAPDatapoint.new(input_folder: @options[:input_folder],
                   output_folder: @options[:output_folder],
+                  weather_folder: @options[:weather_folder],
                   input_folder_cache: File.join(__dir__, 'input_cache'))
 
 # Example command using s3 urls for input/output

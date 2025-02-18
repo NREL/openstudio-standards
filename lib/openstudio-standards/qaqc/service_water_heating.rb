@@ -49,11 +49,8 @@ module OpenstudioStandards
           if water_use_equipment.flowRateFractionSchedule.is_initialized
             # get annual equiv for model schedule
             schedule_inst = water_use_equipment.flowRateFractionSchedule.get
-            if schedule_inst.to_ScheduleRuleset.is_initialized
-              annual_equiv_flow_rate = std.schedule_ruleset_annual_equivalent_full_load_hrs(schedule_inst.to_ScheduleRuleset.get)
-            elsif schedule_inst.to_ScheduleConstant.is_initialized
-              annual_equiv_flow_rate = std.schedule_constant_annual_equivalent_full_load_hrs(schedule_inst.to_ScheduleConstant.get)
-            else
+            annual_equiv_flow_rate = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(schedule_inst)
+            if annual_equiv_flow_rate.nil?
               check_elems << OpenStudio::Attribute.new('flag', "#{schedule_inst.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
               next
             end
@@ -112,18 +109,13 @@ module OpenstudioStandards
                 space_type.peoples.each do |inst|
                   inst_num_people = inst.getNumberOfPeople(space_type_floor_area)
                   inst_schedule = inst.numberofPeopleSchedule.get # sim will fail prior to this if doesn't have it
-
-                  if inst_schedule.to_ScheduleRuleset.is_initialized
-                    annual_equiv_flow_rate = std.schedule_ruleset_annual_equivalent_full_load_hrs(inst_schedule.to_ScheduleRuleset.get)
-                  elsif inst_schedule.to_ScheduleConstant.is_initialized
-                    annual_equiv_flow_rate = std.schedule_constant_annual_equivalent_full_load_hrs(inst_schedule.to_ScheduleConstant.get)
-                  else
+                  annual_equivalent_people = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(inst_schedule)
+                  if annual_equivalent_people.nil?
                     check_elems << OpenStudio::Attribute.new('flag', "#{inst_schedule.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
-                    annual_equiv_flow_rate = 0.0
+                    annual_equivalent_people = 0.0
                   end
-
-                  inst_num_people_horus = annual_equiv_flow_rate * inst_num_people
-                  space_type_num_people_hours += inst_num_people_horus
+                  inst_num_people_hours = annual_equivalent_people * inst_num_people
+                  space_type_num_people_hours += inst_num_people_hours
                 end
 
                 num_people_hours += space_type_num_people_hours
@@ -210,18 +202,13 @@ module OpenstudioStandards
                 space_type.peoples.each do |inst|
                   inst_num_people = inst.getNumberOfPeople(space_type_floor_area)
                   inst_schedule = inst.numberofPeopleSchedule.get # sim will fail prior to this if doesn't have it
-
-                  if inst_schedule.to_ScheduleRuleset.is_initialized
-                    annual_equiv_flow_rate = std.schedule_ruleset_annual_equivalent_full_load_hrs(inst_schedule.to_ScheduleRuleset.get)
-                  elsif inst_schedule.to_ScheduleConstant.is_initialized
-                    annual_equiv_flow_rate = std.schedule_constant_annual_equivalent_full_load_hrs(inst_schedule.to_ScheduleConstant.get)
-                  else
+                  annual_equivalent_people = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(inst_schedule)
+                  if annual_equivalent_people.nil?
                     check_elems << OpenStudio::Attribute.new('flag', "#{inst_schedule.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
-                    annual_equiv_flow_rate = 0.0
+                    annual_equivalent_people = 0.0
                   end
-
-                  inst_num_people_horus = annual_equiv_flow_rate * inst_num_people
-                  space_type_num_people_hours += inst_num_people_horus
+                  inst_num_people_hours = annual_equivalent_people * inst_num_people
+                  space_type_num_people_hours += inst_num_people_hours
                 end
 
                 num_people_hours += space_type_num_people_hours

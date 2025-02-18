@@ -1,22 +1,16 @@
 require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 
 class NECB_2015PumpPower_Test < Minitest::Test
-  #set to true to run the standards in the test.
-  PERFORM_STANDARDS = true
-  #set to true to run the simulations.
-  FULL_SIMULATIONS = false
 
   def setup()
-    @file_folder = __dir__
-    @test_folder = File.join(@file_folder, '..')
-    @root_folder = File.join(@test_folder, '../../../')
-    @resources_folder = File.join(@test_folder, 'resources')
-    @expected_results_folder = File.join(@test_folder, 'expected_results')
-    @test_results_folder = @expected_results_folder
-    @top_output_folder = "#{@test_folder}/output/"
+    define_folders(__dir__)
+    define_std_ranges
   end
+
   # NECB2015 rules for cooling tower
   # power = 0.013 x capacity in kW
   # Note that most of the code was copied from 2015 part of test_necb_coolingtower_rules.rb because it creates a building
@@ -28,9 +22,13 @@ class NECB_2015PumpPower_Test < Minitest::Test
   # Until further testing is done test_necb_coolingtower_rules.rb should not be used with models containing headered pumps
   # or water source heat pumps.
   def test_NECB2015_pumppower
-    output_folder = File.join(@top_output_folder,__method__.to_s.downcase)
-    FileUtils.rm_rf(output_folder)
-    FileUtils.mkdir_p(output_folder)
+
+    # Set up remaining parameters for test.
+    output_folder = method_output_folder(__method__)
+    template = 'NECB2015'
+    standard = get_standard(template)
+    save_intermediate_models = false
+
     tol = 1.0e-3
     # Generate the osm files for all relevant cases to generate the test data for system 6
     boiler_fueltype = 'Electricity'
@@ -39,21 +37,21 @@ class NECB_2015PumpPower_Test < Minitest::Test
     heating_coil_type = 'Hot Water'
     fan_type = 'AF_or_BI_rdg_fancurve'
     chiller_cap = 1000000.0
-    model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-    BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
-    # save baseline
-    BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
-    template = 'NECB2015'
-    standard = Standard.build(template)
+
     clgtowerFanPowerFr = 0.013
     chiller_types.each do |chiller_type|
-      name = "sys6_#{template}_ChillerType_#{chiller_type}~#{chiller_cap}watts"
-      puts "***************************************#{name}*******************************************************\n"
+      name = "sys6_#{template}_ChillerType_#{chiller_type}-#{chiller_cap}watts"
+      name.gsub!(/\s+/, "-")
+      puts "***************#{name}***************\n"
+
+      # Load model and set climate file.
       model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
-      BTAP::Environment::WeatherFile.new('CAN_ON_Toronto.Pearson.Intl.AP.716240_CWEC2016.epw').set_weather_file(model)
+      weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+      OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm") if save_intermediate_models
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
-      standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, always_on)
+      standard.setup_hw_loop_with_components(model,hw_loop, boiler_fueltype, boiler_fueltype, always_on)
       standard.add_sys6_multi_zone_built_up_system_with_baseboard_heating(
           model: model,
           zones: model.getThermalZones,
@@ -62,14 +60,14 @@ class NECB_2015PumpPower_Test < Minitest::Test
           chiller_type: chiller_type,
           fan_type: fan_type,
           hw_loop: hw_loop)
-      # Save the model after btap hvac.
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.hvacrb")
       model.getChillerElectricEIRs.each { |ichiller| ichiller.setReferenceCapacity(chiller_cap) }
-      # run the standards
-      result = run_the_measure(model, template, "#{output_folder}/#{name}/sizing")
-      # Save the model
-      BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}.osm")
-      assert_equal(true, result, "Failure in Standards for #{name}")
+
+      # Run sizing.
+      run_sizing(model: model, template: template, test_name: name, save_model_versions: save_intermediate_models)
+
+      # Apply the NECB 2015 pump power rules to the model.
+      standard.apply_maximum_loop_pump_power(model)
+
       # From here to the end of the method the expected pump power is calculated and is compared to what was applied to the model.
       plant_loops = model.getPlantLoops
       plant_loops.each do |plantloop|
@@ -163,52 +161,6 @@ class NECB_2015PumpPower_Test < Minitest::Test
           assert(false, "The size of the pump(s) in plantloop #{plantloop.name.to_s} is incorrect by the following amount: #{error_value}")
         end
       end
-    end
-  end
-
-  def run_the_measure(model, template, sizing_dir)
-    if PERFORM_STANDARDS
-      # Hard-code the building vintage
-      building_vintage = template
-      building_type = 'NECB'
-      climate_zone = 'NECB'
-      standard = Standard.build(building_vintage)
-
-      # Make a directory to run the sizing run in
-      unless Dir.exist? sizing_dir
-        FileUtils.mkdir_p(sizing_dir)
-      end
-
-      # Perform a sizing run
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun1") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun1"
-        raise("could not find sizing run #{sizing_dir}/SizingRun1")
-        return false
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun1"
-      end
-
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/before.osm")
-
-      # need to set prototype assumptions so that HRV added
-      standard.model_apply_prototype_hvac_assumptions(model, building_type, climate_zone)
-      # Apply the HVAC efficiency standard
-      standard.model_apply_hvac_efficiency_standard(model, climate_zone)
-      # self.getCoilCoolingDXSingleSpeeds.sort.each {|obj| obj.setStandardEfficiencyAndCurves(self.template, self.standards)}
-
-      # Do another sizing run after applying the hvac assumptions and efficiency standars to properly apply the pump rules.
-      if standard.model_run_sizing_run(model, "#{sizing_dir}/SizingRun2") == false
-        puts "could not find sizing run #{sizing_dir}/SizingRun2"
-        raise ("could not find sizing run #{sizing_dir}/SizingRun2")
-      else
-        puts "found sizing run #{sizing_dir}/SizingRun2"
-      end
-      # Apply the pump power rules to the model
-      standard.apply_maximum_loop_pump_power(model)
-
-      BTAP::FileIO.save_osm(model, "#{File.dirname(__FILE__)}/after.osm")
-
-      return true
     end
   end
 end

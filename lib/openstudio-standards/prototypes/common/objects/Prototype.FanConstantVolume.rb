@@ -33,9 +33,7 @@ class Standard
     # If the fan lives inside of a zone hvac equipment
     if fan_constant_volume.containingZoneHVACComponent.is_initialized
       zone_hvac = fan_constant_volume.containingZoneHVACComponent.get
-      if zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
-        pressure_rise_in_h2o = 1.33
-      elsif zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
+      if zone_hvac.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized || zone_hvac.to_ZoneHVACFourPipeFanCoil.is_initialized
         pressure_rise_in_h2o = 1.33
       elsif zone_hvac.to_ZoneHVACUnitHeater.is_initialized
         pressure_rise_in_h2o = 0.2

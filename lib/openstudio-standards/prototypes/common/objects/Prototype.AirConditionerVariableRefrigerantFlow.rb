@@ -45,7 +45,7 @@ class Standard
     if schedule.nil?
       # default always on
       availability_schedule = model.alwaysOnDiscreteSchedule
-    elsif schedule.class == String
+    elsif schedule.instance_of?(String)
       availability_schedule = model_add_schedule(model, schedule)
 
       if availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'

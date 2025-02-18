@@ -1,6 +1,10 @@
 require_relative '../../../helpers/minitest_helper'
-require_relative '../../../helpers/create_doe_prototype_helper'
+#require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
+
+# *** This test needs a significant re-write to make use of standard naming and paths ***
 
 class NECB_nv_Tests < Minitest::Test
 
@@ -39,7 +43,7 @@ class NECB_nv_Tests < Minitest::Test
     # 'SmallHotel',
     # 'Warehouse' #
     ]
-    @epw_files = ['CAN_AB_Banff.CS.711220_CWEC2016.epw']
+    @epw_files = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
     @primary_heating_fuels = ['NaturalGas']
     @nv_types = ['add_nv']
 

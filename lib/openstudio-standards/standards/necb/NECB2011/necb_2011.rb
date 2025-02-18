@@ -12,15 +12,39 @@ class NECB2011 < Standard
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
   attr_accessor :fuel_type_set
-  
+
   # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
     return variable if variable.kind_of?(Numeric)
-    return default if variable.nil? || (variable == 'NECB_Default')
+    return default if variable.nil? || (variable.to_s == 'NECB_Default')
     return unless variable.kind_of?(String)
 
     variable = variable.strip
     return variable.to_f
+  end
+
+  # This method converts arguments to bool.  Anything other than a bool false or string 'false' is converted
+  # to a bool true.  Bool false and case insesitive string false are turned into bool false.
+  def convert_arg_to_bool(variable:, default:)
+    return default if variable.nil?
+    if variable.is_a? String
+      return default if variable.to_s.downcase == 'necb_default'
+      return false if variable.to_s.downcase == 'false'
+      return true if variable.to_s.downcase == 'true'
+    end
+    return false if variable == false
+    return variable
+  end
+
+  # This method checks if a variable is a string.  If it is anything but a string it returns the default.  If it is a
+  # string set to "NECB_Default" it return the default.  Otherwise it returns the strirng set to it.
+  def convert_arg_to_string(variable:, default:)
+    return default if variable.nil?
+    if variable.is_a? String
+      return default if variable.to_s.downcase == 'necb_default'
+      return variable
+    end
+    return default
   end
 
   def get_standards_table(table_name:)
@@ -151,25 +175,32 @@ class NECB2011 < Standard
     rm * c # Delta in meters
   end
 
-  def get_necb_hdd18(model)
+  def get_necb_hdd18(model:, necb_hdd: true)
     max_distance_tolerance = 500000
     min_distance = 100000000000000.0
     necb_closest = nil
-    epw = BTAP::Environment::WeatherFile.new(model.weatherFile.get.path.get)
+    weather_file_path = model.weatherFile.get.path.get.to_s
+    epw_file = model.weatherFile.get.file.get
+    stat_file_path = weather_file_path.gsub('.epw', '.stat')
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+    # If necb_hdd is false use the information in the .stat file associated with the.epw file.
+    unless necb_hdd
+      return stat_file.hdd18
+    end
     # this extracts the table from the json database.
     necb_2015_table_c1 = @standards_data['tables']['necb_2015_table_c1']['table']
     necb_2015_table_c1.each do |necb|
       next if necb['lat_long'].nil? # Need this until Tyson cleans up table.
 
-      dist = distance([epw.latitude.to_f, epw.longitude.to_f], necb['lat_long'])
+      dist = distance([epw_file.latitude, epw_file.longitude], necb['lat_long'])
       if min_distance > dist
         min_distance = dist
         necb_closest = necb
       end
     end
-    if ((min_distance / 1000.0) > max_distance_tolerance) && !epw.hdd18.nil?
+    if ((min_distance / 1000.0) > max_distance_tolerance) && !stat_file.hdd18.nil?
       puts "Could not find close NECB HDD from Table C1 < #{max_distance_tolerance}km. Closest city is #{min_distance / 1000.0}km away. Using epw hdd18 instead."
-      return epw.hdd18.to_f
+      return stat_file.hdd18
     else
       dist_clause = "%.2f % #{(min_distance / 1000.0)}"
       puts "INFO:NECB HDD18 of #{necb_closest['degree_days_below_18_c'].to_f}  at nearest city #{necb_closest['city']},#{necb_closest['province']}, at a distance of " + dist_clause + 'km from epw location. Ref: nbc_2015_table_c1'
@@ -181,9 +212,11 @@ class NECB2011 < Standard
   def model_create_prototype_model(template:,
                                    building_type:,
                                    epw_file:,
+                                   custom_weather_folder: nil,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
                                    primary_heating_fuel: 'Electricity',
+                                   swh_fuel: 'NECB_Default',
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
@@ -235,14 +268,19 @@ class NECB2011 < Standard
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil,
                                    tbd_option: nil,
-                                   tbd_interpolate: false)
+                                   tbd_interpolate: false,
+                                   necb_hdd: true,
+                                   boiler_fuel: nil,
+                                   boiler_cap_ratio: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
                                 tbd_interpolate: tbd_interpolate,
                                 epw_file: epw_file,
+                                custom_weather_folder: custom_weather_folder,
                                 sizing_run_dir: sizing_run_dir,
                                 primary_heating_fuel: primary_heating_fuel,
+                                swh_fuel: swh_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
                                 lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
                                 lights_scale: lights_scale,
@@ -292,9 +330,11 @@ class NECB2011 < Standard
                                 shw_scale: shw_scale,  # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) a float number larger than 0.0
                                 output_meters: output_meters,
                                 airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
-                                baseline_system_zones_map_option: baseline_system_zones_map_option  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                necb_hdd: necb_hdd,
+                                boiler_fuel: boiler_fuel,
+                                boiler_cap_ratio: boiler_cap_ratio
                                 )
-
   end
 
   def load_building_type_from_library(building_type:)
@@ -313,10 +353,12 @@ class NECB2011 < Standard
                            tbd_option: nil,
                            tbd_interpolate: nil,
                            epw_file:,
+                           custom_weather_folder: nil,
                            sizing_run_dir: Dir.pwd,
                            necb_reference_hp: false,
                            necb_reference_hp_supp_fuel: 'DefaultFuel',
                            primary_heating_fuel: 'DefaultFuel',
+                           swh_fuel: 'DefaultFuel',
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
                            lights_scale: 'NECB_Default',
@@ -366,19 +408,32 @@ class NECB2011 < Standard
                            shw_scale: nil,
                            output_meters: nil,
                            airloop_economizer_type: nil,
-                           baseline_system_zones_map_option: nil)
+                           baseline_system_zones_map_option: nil,
+                           necb_hdd: true,
+                           boiler_fuel: nil,
+                           boiler_cap_ratio: nil)
+
+    primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel)
     self.fuel_type_set = SystemFuels.new()
-    self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
+    swh_fuel = swh_fuel.nil? ? 'NECB_Default' : swh_fuel.to_s
+    self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel, swh_fuel: swh_fuel)
+    swh_fuel = self.fuel_type_set.swh_fueltype if swh_fuel.to_s.downcase == 'necb_default'
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
+    necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
+    boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
+    boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
+
+    boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
+    self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
       space.autocalculateVolume
     end
 
-    apply_weather_data(model: model, epw_file: epw_file)
+    apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -400,10 +455,12 @@ class NECB2011 < Standard
                    glass_door_solar_trans: glass_door_solar_trans,
                    fixed_wind_solar_trans: fixed_wind_solar_trans,
                    skylight_solar_trans: skylight_solar_trans,
-                   infiltration_scale: infiltration_scale)
+                   infiltration_scale: infiltration_scale,
+                   necb_hdd: necb_hdd)
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
-                               srr_set: srr_set)
+                               srr_set: srr_set,
+                               necb_hdd: necb_hdd)
     apply_thermal_bridging(model: model,
                            tbd_option: tbd_option,
                            tbd_interpolate: tbd_interpolate,
@@ -418,6 +475,7 @@ class NECB2011 < Standard
     apply_systems_and_efficiencies(model: model,
                                    sizing_run_dir: sizing_run_dir,
                                    primary_heating_fuel: primary_heating_fuel,
+                                   swh_fuel: swh_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
@@ -490,6 +548,7 @@ class NECB2011 < Standard
   def apply_systems_and_efficiencies(model:,
                                      sizing_run_dir:,
                                      primary_heating_fuel:,
+                                     swh_fuel:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      ecm_system_zones_map_option: 'NECB_Default',
@@ -521,6 +580,7 @@ class NECB2011 < Standard
     # Create Default Systems.
     apply_systems(model: model,
                   primary_heating_fuel: primary_heating_fuel,
+                  swh_fuel: swh_fuel,
                   sizing_run_dir: sizing_run_dir,
                   shw_scale: shw_scale,
                   baseline_system_zones_map_option: baseline_system_zones_map_option)
@@ -529,7 +589,6 @@ class NECB2011 < Standard
     ecm.apply_system_ecm(model: model,
                          ecm_system_name: ecm_system_name,
                          template_standard: self,
-                         primary_heating_fuel: self.fuel_type_set.ecm_fueltype,
                          ecm_system_zones_map_option: ecm_system_zones_map_option)
 
     # -------- Performace, Efficiencies, Controls and Sensors ------------
@@ -629,22 +688,25 @@ class NECB2011 < Standard
     ecm.scale_oa_loads(model: model, scale: oa_scale)
   end
 
-  def apply_weather_data(model:, epw_file:)
+  def apply_weather_data(model:, epw_file:, custom_weather_folder: nil)
     # Create full path to weather file
     weather_files = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
     weather_file = File.join(weather_files, epw_file)
     # Check if the weather file exists.  If it does continue as normal, otherwise try to dowload it from the
     # canmet-energy/btap_weather repository
     unless File.exist?(weather_file)
-      get_weather_file_from_repo(epw_file: epw_file)
+      # Check if btap_batch transferred the weather file
+      weather_transfer = check_datapoint_weather_folder(epw_file: epw_file, weather_folder: weather_files, custom_weather_folder: custom_weather_folder)
+      # If btap_batch didn't transfer the weather file, download it.
+      get_weather_file_from_repo(epw_file: epw_file) unless weather_transfer
     end
-    climate_zone = 'NECB HDD Method'
+
     # Fix EMS references. Temporary workaround for OS issue #2598
     model_temp_fix_ems_references(model)
     model.getThermostatSetpointDualSetpoints(&:remove)
     model.getYearDescription.setDayofWeekforStartDay('Sunday')
-    model_add_design_days_and_weather_file(model, climate_zone, epw_file) # Standards
-    model_add_ground_temperatures(model, nil, climate_zone)
+    weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(epw_file)
+    OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
   end
 
   def apply_envelope(model:,
@@ -662,7 +724,8 @@ class NECB2011 < Standard
                      glass_door_solar_trans: nil,
                      fixed_wind_solar_trans: nil,
                      skylight_solar_trans: nil,
-                     infiltration_scale: nil)
+                     infiltration_scale: nil,
+                     necb_hdd: true)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     model_apply_infiltration_standard(model)
@@ -685,7 +748,8 @@ class NECB2011 < Standard
                                            skylight_cond: skylight_cond,
                                            glass_door_solar_trans: glass_door_solar_trans,
                                            fixed_wind_solar_trans: fixed_wind_solar_trans,
-                                           skylight_solar_trans: skylight_solar_trans)
+                                           skylight_solar_trans: skylight_solar_trans,
+                                           necb_hdd: necb_hdd)
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
@@ -746,10 +810,10 @@ class NECB2011 < Standard
     kiva_settings = model.getFoundationKivaSettings if !model.getFoundationKivas.empty?
   end
 
-  # check if two surfaces are in contact. For every two consecutive vertices on surface 1, 
-  # loop through two consecutive vertices of surface two. Then check whether the vertices 
-  # of surfaces 2 are on the same line as the vertices from surface 1. If the two vectors 
-  # defined by the two vertices on surface 1 and those on surface 2 overlap, then the two 
+  # check if two surfaces are in contact. For every two consecutive vertices on surface 1,
+  # loop through two consecutive vertices of surface two. Then check whether the vertices
+  # of surfaces 2 are on the same line as the vertices from surface 1. If the two vectors
+  # defined by the two vertices on surface 1 and those on surface 2 overlap, then the two
   # surfaces are in contact. If a side from surface 2 is in contact with a side from surface 1,
   # the length of the side from surface 2 is limited to the length of the side from surface 1.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
@@ -789,9 +853,9 @@ class NECB2011 < Standard
     return surfaces_in_contact
   end
 
-  # Loop through the layers of the construction of the surface and replace any massless material with 
-  # a standard one. The material used instead is from the EnergyPlus dataset file 'ASHRAE_2005_HOF_Materials.idf' 
-  # with the name: 'Insulation: Expanded polystyrene - extruded (smooth skin surface) (HCFC-142b exp.)'. 
+  # Loop through the layers of the construction of the surface and replace any massless material with
+  # a standard one. The material used instead is from the EnergyPlus dataset file 'ASHRAE_2005_HOF_Materials.idf'
+  # with the name: 'Insulation: Expanded polystyrene - extruded (smooth skin surface) (HCFC-142b exp.)'.
   # The thickness of the new material is based on the thermal resistance of the massless material it replaces.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def replace_massless_material_with_std_material(model,surf)
@@ -830,8 +894,8 @@ class NECB2011 < Standard
 
   end
 
-  # Find the exposed perimeter of a floor surface. For each side of the floor loop through 
-  # the walls and find the walls that share sides with the floor. Then sum the lengths of 
+  # Find the exposed perimeter of a floor surface. For each side of the floor loop through
+  # the walls and find the walls that share sides with the floor. Then sum the lengths of
   # the sides of the walls that come in contact with sides of the floor.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def get_surface_exp_per(floor,walls)
@@ -866,7 +930,7 @@ class NECB2011 < Standard
           vert3 = vert4
         end
       end
-      # increment the exposed perimeter of the floor. Limit the length of the walls in contact with the 
+      # increment the exposed perimeter of the floor. Limit the length of the walls in contact with the
       # side of the floor to the length of the side of the floor.
       floor_exp_per += [walls_exp_per,side_length].min
       vert1 = vert2
@@ -875,7 +939,7 @@ class NECB2011 < Standard
     return floor_exp_per
   end
 
-  # check that three vertices are on the same line. Also check that the vectors 
+  # check that three vertices are on the same line. Also check that the vectors
   # from vert1 and vert2 and from vert1 and vert3 are in the same direction.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   def three_vertices_same_line_and_dir?(vert1,vert2,vert3)
@@ -906,7 +970,7 @@ class NECB2011 < Standard
 
     return same_line_same_dir
   end
-  
+
   # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
   #     # fdwr_set/srr_set settings:
   #     # 0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
@@ -916,12 +980,12 @@ class NECB2011 < Standard
   #     # limit
   #     # <-3.1:  Remove all the windows/skylights
   #     # > 1:  Do nothing
-  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0)
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0, necb_hdd: true)
     fdwr_set = -1.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil?
     srr_set = -1.0 if (srr_set == 'NECB_default') || srr_set.nil?
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
-    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set)
+    apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: necb_hdd)
     apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
@@ -992,6 +1056,27 @@ class NECB2011 < Standard
     true
   end
 
+  # Apply the air leakage requirements to the model, as described in PNNL section 5.2.1.6.
+  # This method creates customized infiltration objects for each space
+  # and removes the SpaceType-level infiltration objects.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] returns true if successful, false if not
+  # @todo This infiltration method is not used by the Reference buildings, fix this inconsistency.
+  def model_apply_infiltration_standard(model)
+    # Set the infiltration rate at each space
+    model.getSpaces.sort.each do |space|
+      space_apply_infiltration_rate(space)
+    end
+
+    # Remove infiltration rates set at the space type
+    model.getSpaceTypes.sort.each do |space_type|
+      space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
+    end
+
+    return true
+  end
+
   # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     raise('validation of model failed.') unless validate_initial_model(model)
@@ -1041,7 +1126,7 @@ class NECB2011 < Standard
 
     # Get the airloop occupancy schedule
     loop_occ_sch = air_loop_hvac_get_occupancy_schedule(air_loop_hvac, occupied_percentage_threshold: min_occ_pct)
-    flh = schedule_ruleset_annual_equivalent_full_load_hrs(loop_occ_sch)
+    flh = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(loop_occ_sch)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Annual occupied hours = #{flh.round} hr/yr, assuming a #{min_occ_pct} occupancy threshold.  This schedule will be used as the HVAC operation schedule.")
 
     # Set HVAC availability schedule to follow occupancy
@@ -1135,11 +1220,6 @@ class NECB2011 < Standard
     end
   end
 
-  # Determine whether or not water fixtures are attached to spaces
-  def model_attach_water_fixtures_to_spaces?(model)
-    return true
-  end
-
   # Set the infiltration rate for this space to include
   # the impact of air leakage requirements in the standard.
   #
@@ -1154,7 +1234,7 @@ class NECB2011 < Standard
     # Remove infiltration rates set at the space object.
     space.spaceInfiltrationDesignFlowRates.each(&:remove)
 
-    exterior_wall_and_roof_and_subsurface_area = space_exterior_wall_and_roof_and_subsurface_area(space) # To do
+    exterior_wall_and_roof_and_subsurface_area = OpenstudioStandards::Geometry.space_get_exterior_wall_and_subsurface_and_roof_area(space) # To do
     # Don't create an object if there is no exterior wall area
     if exterior_wall_and_roof_and_subsurface_area <= 0.0
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "For #{template}, no exterior wall area was found, no infiltration will be added.")
@@ -1881,7 +1961,7 @@ class NECB2011 < Standard
       space_type_apply_internal_loads(space_type: space_type, lights_type: lights_type, lights_scale: lights_scale)
 
       # Schedules
-      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
+      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
@@ -2219,28 +2299,14 @@ class NECB2011 < Standard
     historic_git_folder = @standards_data['constants']['historic_weather_folder_url']['value'].to_s
     # Get the files from the repository
     success_flag = download_and_save_file(weather_list_url: historic_weather_files_loc, weather_loc: weather_loc, git_folder: historic_git_folder)
-    return if success_flag == true
+    return if success_flag
     # If the file could not be found in the historical data look for it with the future weather data.
     puts "Could not find #{epw_file} in historical weather data files, looking in future weather data files."
     future_weather_files_loc = @standards_data['constants']['future_weather_file_list']['value'].to_s
     future_git_folder = @standards_data['constants']['future_weather_folder_url']['value'].to_s
     success_flag = download_and_save_file(weather_list_url: future_weather_files_loc, weather_loc: weather_loc, git_folder: future_git_folder)
-    if success_flag == true
-      # Rename the non-ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
-      # because the ASHRAE .ddy file includes sizing information not included in the regular .ddy file for future
-      # weather data files.  Unfortunately, openstudio-standards just looks for the regular .ddy file for sizing
-      # information which is why the switch is done.
-      puts "Renaming #{weather_loc}.ddy as #{weather_loc}_orig.ddy and #{weather_loc}_ASHRAE.ddy as #{weather_loc}.ddy."
-      puts "This is so that the design weather information in the #{weather_loc}_ASHRAE.ddy file is used."
-      weather_dir = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
-      orig_ddy_name = File.join(weather_dir, (weather_loc + ".ddy"))
-      ashrae_ddy_name = File.join(weather_dir, (weather_loc + "_ASHRAE.ddy"))
-      rev_ddy_name = File.join(weather_dir, (weather_loc + "_orig.ddy"))
-      FileUtils.cp(orig_ddy_name, rev_ddy_name)
-      FileUtils.cp(ashrae_ddy_name, orig_ddy_name)
-      return
-    end
-    raise("Could not locate the following file in the canmet/btap_weather repository: #{epw_file}.  Please check the spelling of the file or visit https://github.com/canmet-energy/btap_weather to see if the file exists.")
+    return if success_flag
+    raise("Could not locate the following file in the canmet/btap_weather repository or could not extract the data: #{epw_file}.  Please check the spelling of the file or visit https://github.com/canmet-energy/btap_weather to see if the file exists.")
   end
 
   # This method actually looks for and downloads the zip file from the https://github.com/canmet-energy/btap_weather
@@ -2273,7 +2339,6 @@ class NECB2011 < Standard
           # If the weather file is on the list proceed, otherwise report that it could not be found
           unless zip_name.nil?
             # Found the weather file on the list
-            status = true
             # Define the full url of the weather zip file we want to download
             save_file_url = git_folder + zip_name
             # Define the local location of where the weather zip file will be saved
@@ -2293,21 +2358,7 @@ class NECB2011 < Standard
                   File.open(save_file, 'wb') { |f| f.write(file_url.read) }
                   puts "Downloaded #{save_file_url} to #{save_file}"
                   # Extract the individual weother files from the zip file
-                  Zip::File.open(save_file) do |zip_file|
-                    puts "Expanding #{save_file}"
-                    # Cycle through each file in the zip file
-                    zip_file.each do |entry|
-                      # Define the location of where the file will be saved locally
-                      curr_save_file = File.join(weather_dir, entry.name.to_s)
-                      puts "Extracting #{entry.name} to #{curr_save_file}"
-                      # entry.extract # This was required before but now it isn't.  I'm confused so am saving this comment to
-                      # remind me if there are ploblems later
-                      # Read the data from the file
-                      content = entry.get_input_stream.read
-                      # Save the data locally
-                      File.open(curr_save_file, 'wb') { |save_f| save_f.write(content) }
-                    end
-                  end
+                  status = extract_weather_data(zipped_file: save_file, weather_dir: weather_dir)
                 end
                 attemptb = 10
               rescue
@@ -2326,4 +2377,139 @@ class NECB2011 < Standard
     return status
   end
 
+  # This method checks if a zip file containing weather data is stored in an external directory.  If it is, then it
+  # checks if the name of the zip file (without extension) matches the name of the desired epw file (without extension).
+  # If it does then it copies the zip file to the openstudio-standards weather directory and expands the file.
+  # Presumably the zip file contains the .ddy, .epw, and .stat files needed by the rest of BTAP.  If no appropriate
+  # weather zip files are present in the external directory then the method returns false.
+  # Arguments:
+  # epw_file (string): The name of the .epw file that BTAP will use.
+  # weather_folder (string): The path to the openstudio-standards weather folder.
+  # custom_weather_folder (string): The path to the external folder presumably containing the weather data zip file.
+  def check_datapoint_weather_folder(epw_file:, weather_folder:, custom_weather_folder: nil)
+    # Check if the external weather directory exists and return false if there isn't one
+    return false if custom_weather_folder.nil?
+    # Check if there are any zip files in the external weather directory and return false if there isn't any.
+    zip_search_term = File.join(custom_weather_folder.to_s, '*.zip')
+    zip_files = Dir[zip_search_term]
+    return false if zip_files.empty?
+    # Look for a zip file in the external directory named after the .epw file.  If there isn't one return false.
+    weather_loc = epw_file[0..-5]
+    weather_zip = weather_loc + '.zip'
+    zip_find = zip_files.select{ |check_file | File.basename(check_file).to_s.downcase == weather_zip.to_s.downcase }
+    return false if zip_find.empty?
+    # Copy the zip file we want from the external weather directory to the openstudio-standards weather directory and
+    # extract the weather data in the file.
+    puts "Copying: #{zip_find[0]} from the btap_cli weather folder to the openstudio-standards weather folder: #{weather_folder}"
+    FileUtils.cp(zip_find[0], weather_folder)
+    dest_zip = File.join(weather_folder, weather_zip)
+    # Return true if everything goes well.
+    return extract_weather_data(zipped_file: dest_zip, weather_dir: weather_folder)
+  end
+
+  # This method extracts data from a zip file.  The name implies it is to be used for zip files containing weather
+  # data but really it can be used to extract any zip file.
+  # Arguments:
+  # zipped_file (string): As the name implies, this is the name and path to the zip file we want to expand.
+  # weather_dir (string): This is the folder where the zipped files will be extracted to.  Don't let the name fool you.
+  #                       it can be any folder not just a weather directory.
+  def extract_weather_data(zipped_file:, weather_dir:)
+    # Set a flag to check if the weather data is for future weather.
+    future_file = false
+    # Start expanding the data.
+    Zip::File.open(zipped_file) do |zip_file|
+      puts "Expanding #{zipped_file}"
+      # Cycle through each file in the zip file
+      zip_file.each do |entry|
+        # Define the location of where the file will be saved locally
+        curr_save_file = File.join(weather_dir, entry.name.to_s)
+        puts "Extracting #{entry.name} to #{curr_save_file}"
+        # Check if the file includes a '_ASHRAE.ddy' term.  If there is, later on we will rename the '_ASHRAE.ddy' file
+        # to just '.ddy'. This is so the rest of BTAP uses the _ASHRAE.ddy file.
+        entry_name = entry.name.to_s
+        if entry_name.length > 11
+          future_file = true if entry_name[-11..-1] == '_ASHRAE.ddy'
+        end
+        # entry.extract # This was required before but now it isn't.  I'm confused so am saving this comment to
+        # remind me if there are problems later.
+        # Read the data from the file
+        content = entry.get_input_stream.read
+        # Save the data locally
+        File.open(curr_save_file, 'wb') { |save_f| save_f.write(content) }
+      end
+    end
+    if future_file
+      # Rename the non ASHRAE.ddy as '_non_ASHRAE.ddy' and save the '_ASHRAE.ddy' as the regular '.ddy' file.  This is
+      # because the ASHRAE .ddy file includes sizing information not included in the regular .ddy file for future
+      # weather data files.  Unfortunately, openstudio-standards just looks for the regular .ddy file for sizing
+      # information which is why the switch is done.
+      weather_loc = (File.basename(zipped_file).to_s)[0..-5]
+      puts "Renaming #{weather_loc}.ddy as #{weather_loc}_orig.ddy and #{weather_loc}_ASHRAE.ddy as #{weather_loc}.ddy."
+      puts "This is so that the design weather information in the #{weather_loc}_ASHRAE.ddy file is used."
+      orig_ddy_name = File.join(weather_dir, (weather_loc + ".ddy"))
+      ashrae_ddy_name = File.join(weather_dir, (weather_loc + "_ASHRAE.ddy"))
+      rev_ddy_name = File.join(weather_dir, (weather_loc + "_orig.ddy"))
+      FileUtils.cp(orig_ddy_name, rev_ddy_name)
+      FileUtils.cp(ashrae_ddy_name, orig_ddy_name)
+    end
+    # Return true if everything worked out
+    return true
+  end
+
+  # This method is defined and used by the vintage classes to address he issue with the heat pump fuel types.  This
+  # method does nothing when creating NECB reference buildings.
+  def validate_primary_heating_fuel(primary_heating_fuel:)
+    return primary_heating_fuel
+  end
+
+  # This method expects a string with the following pattern:  number-number
+  # The first number is the percent of the total capacity that the primary boiler's capacity will be set to.
+  # The second number is the percent of the total capacity that the secondary boiler's capacity will be set to.
+  # If no boiler_cap_ratio is provided the the primary boiler will have its capacity set to 75% of the total and the
+  # secondary boiler will have its capacity set to 25% of the total.  If a boiler_cap_ratio is set to '0_0' then the
+  # NECB default capacities are assigned.
+  def set_boiler_cap_ratios(boiler_cap_ratio:, boiler_fuel:)
+    # Rules if boiler_fuel is defined
+    unless boiler_fuel.nil?
+      # Set the NECB default boiler capacities if the boiler_cap_ratio is set to '0-0'
+      if boiler_cap_ratio == '0-0'
+        boiler_cap_ratios = {
+          primary_ratio: nil,
+          secondary_ratio: nil
+        }
+        return boiler_cap_ratios
+      elsif !boiler_fuel.to_s.downcase.include?('backup') && boiler_cap_ratio.nil?
+        # Set the NECB default boiler capacities if the boiler_cap_ratio in not defined and the boiler fuel type is set
+        # and the primary and secondary fuel types are the same.
+        boiler_cap_ratios = {
+          primary_ratio: nil,
+          secondary_ratio: nil
+        }
+        return boiler_cap_ratios
+      end
+    end
+    # Assuming the above rules do not apply, set the default boiler capacity ratio to 75% for the primary boiler and 25%
+    # for the secondary boiler
+    if boiler_cap_ratio.nil?
+      boiler_cap_ratios = {
+        primary_ratio: 0.75,
+        secondary_ratio: 0.25
+      }
+      return boiler_cap_ratios
+    end
+    # If you defined the boiler capacity ratios set them accordingly.
+    # Split the capacity ratio using the '-' symbol
+    string_ratios = boiler_cap_ratio.to_s.split('-')
+    # Turn the percentages into fractions
+    primary_ratio = string_ratios[0].to_f/100.0
+    secondary_ratio = string_ratios[1].to_f/100.0
+    # Set the hash containg the ratios and return
+    boiler_cap_ratios = {
+      primary_ratio: primary_ratio,
+      secondary_ratio: secondary_ratio
+    }
+    return boiler_cap_ratios
+  end
 end
+
+

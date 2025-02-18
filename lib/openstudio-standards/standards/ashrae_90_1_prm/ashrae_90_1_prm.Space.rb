@@ -62,12 +62,12 @@ class ASHRAE901PRM < Standard
       infil_sch = space.model.alwaysOnDiscreteSchedule
     else
       # Add specific schedule type object to insure compatibility with the OpenStudio infiltration object
-      infil_sch_limit_type = model_add_schedule_type_limits(space.model,
-                                                            name: 'Infiltration Schedule Type Limits',
-                                                            lower_limit_value: 0.0,
-                                                            upper_limit_value: 1.0,
-                                                            numeric_type: 'Continuous',
-                                                            unit_type: 'Dimensionless')
+      infil_sch_limit_type = OpenstudioStandards::Schedules.create_schedule_type_limits(space.model,
+                                                                                        name: 'Infiltration Schedule Type Limits',
+                                                                                        lower_limit_value: 0.0,
+                                                                                        upper_limit_value: 1.0,
+                                                                                        numeric_type: 'Continuous',
+                                                                                        unit_type: 'Dimensionless')
       infil_sch.setScheduleTypeLimits(infil_sch_limit_type)
     end
 
@@ -87,11 +87,10 @@ class ASHRAE901PRM < Standard
           infiltration.setFlowperSpaceFloorArea(adj_infil_flow_area.round(13)) if space.exteriorArea > 0
       end
       infiltration.setSchedule(infil_sch)
-      infiltration.setConstantTermCoefficient(infil_coefficients[0])
-      infiltration.setTemperatureTermCoefficient(infil_coefficients[1])
-      infiltration.setVelocityTermCoefficient(infil_coefficients[2])
-      infiltration.setVelocitySquaredTermCoefficient(infil_coefficients[3])
-
+      infiltration.setConstantTermCoefficient(infil_coefficients[0]) unless infil_coefficients[0].nil?
+      infiltration.setTemperatureTermCoefficient(infil_coefficients[1]) unless infil_coefficients[1].nil?
+      infiltration.setVelocityTermCoefficient(infil_coefficients[2]) unless infil_coefficients[2].nil?
+      infiltration.setVelocitySquaredTermCoefficient(infil_coefficients[3]) unless infil_coefficients[3].nil?
       infiltration.setSpace(space)
     end
 
@@ -127,7 +126,9 @@ class ASHRAE901PRM < Standard
     if standard_space_type == 'computerroom'
       space.spaceType.get.electricEquipment.each do |elec_equipment|
         # Only create the schedule if it could not be found
-        if !schedule_found.is_initialized
+        if schedule_found.is_initialized
+          computer_room_equipment_schedule_ruleset = model.getScheduleRulesetByName(schedule_name).get
+        else
           computer_room_equipment_schedule_ruleset = OpenStudio::Model::ScheduleRuleset.new(model)
           computer_room_equipment_schedule_ruleset.setName(schedule_name)
           schedule_fractions = [0.25, 0.5, 0.75, 1.0, 0.25, 0.5, 0.75, 1.0, 0.25, 0.5, 0.75, 1.0]
@@ -152,8 +153,6 @@ class ASHRAE901PRM < Standard
           computer_room_equipment_schedule_ruleset.setCustomDay2Schedule(equipment_on)
           computer_room_equipment_schedule_ruleset.setSummerDesignDaySchedule(equipment_on)
           computer_room_equipment_schedule_ruleset.setWinterDesignDaySchedule(equipment_off)
-        else
-          computer_room_equipment_schedule_ruleset = model.getScheduleRulesetByName(schedule_name).get
         end
         elec_equipment.setSchedule(computer_room_equipment_schedule_ruleset)
       end

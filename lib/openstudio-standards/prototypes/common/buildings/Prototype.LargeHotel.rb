@@ -23,7 +23,7 @@ module LargeHotel
     else
       transformer_efficiency = nil
     end
-    return true unless !transformer_efficiency.nil?
+    return true if transformer_efficiency.nil?
 
     model_add_transformer(model,
                           wired_lighting_frac: 0.0352,
@@ -32,70 +32,6 @@ module LargeHotel
 
     # add extra equipment for kitchen
     add_extra_equip_kitchen(model)
-
-    # Add Exhaust Fan
-    space_type_map = define_space_type_map(building_type, climate_zone)
-    exhaust_fan_space_types = []
-    case template
-      when '90.1-2004', '90.1-2007'
-        exhaust_fan_space_types = ['Kitchen', 'Laundry']
-      else
-        exhaust_fan_space_types = ['Banquet', 'Kitchen', 'Laundry']
-    end
-
-    exhaust_fan_space_types.each do |space_type_name|
-      space_type_data = standards_lookup_table_first(table_name: 'space_types', search_criteria: { 'template' => template,
-                                                                                                   'building_type' => building_type,
-                                                                                                   'space_type' => space_type_name })
-      if space_type_data.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find space type #{template}-#{building_type}-#{space_type_name}")
-        return false
-      end
-
-      exhaust_schedule = model_add_schedule(model, space_type_data['exhaust_availability_schedule'])
-      unless exhaust_schedule
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Unable to find Exhaust Schedule for space type #{template}-#{building_type}-#{space_type_name}")
-        return false
-      end
-
-      balanced_exhaust_schedule = model_add_schedule(model, space_type_data['balanced_exhaust_fraction_schedule'])
-
-      space_names = space_type_map[space_type_name]
-      space_names.each do |space_name|
-        space = model.getSpaceByName(space_name).get
-        thermal_zone = space.thermalZone.get
-
-        zone_exhaust_fan = OpenStudio::Model::FanZoneExhaust.new(model)
-        zone_exhaust_fan.setName(space.name.to_s + ' Exhaust Fan')
-        zone_exhaust_fan.setAvailabilitySchedule(exhaust_schedule)
-        zone_exhaust_fan.setFanEfficiency(space_type_data['exhaust_fan_efficiency'])
-        zone_exhaust_fan.setPressureRise(space_type_data['exhaust_fan_pressure_rise'])
-        maximum_flow_rate = OpenStudio.convert(space_type_data['exhaust_fan_maximum_flow_rate'], 'cfm', 'm^3/s').get
-
-        zone_exhaust_fan.setMaximumFlowRate(maximum_flow_rate)
-        if balanced_exhaust_schedule.class.to_s != 'NilClass'
-          zone_exhaust_fan.setBalancedExhaustFractionSchedule(balanced_exhaust_schedule)
-        end
-        zone_exhaust_fan.setEndUseSubcategory('Zone Exhaust Fans')
-        zone_exhaust_fan.addToThermalZone(thermal_zone)
-
-        if !space_type_data['exhaust_fan_power'].nil? && space_type_data['exhaust_fan_power'].to_f.nonzero?
-          # Create the electric equipment definition
-          exhaust_fan_equip_def = OpenStudio::Model::ElectricEquipmentDefinition.new(model)
-          exhaust_fan_equip_def.setName("#{space_name} Electric Equipment Definition")
-          exhaust_fan_equip_def.setDesignLevel(space_type_data['exhaust_fan_power'].to_f)
-          exhaust_fan_equip_def.setFractionLatent(0)
-          exhaust_fan_equip_def.setFractionRadiant(0)
-          exhaust_fan_equip_def.setFractionLost(1)
-
-          # Create the electric equipment instance and hook it up to the space type
-          exhaust_fan_elec_equip = OpenStudio::Model::ElectricEquipment.new(exhaust_fan_equip_def)
-          exhaust_fan_elec_equip.setName("#{space_name} Exhaust Fan Equipment")
-          exhaust_fan_elec_equip.setSchedule(exhaust_schedule)
-          exhaust_fan_elec_equip.setSpaceType(space.spaceType.get)
-        end
-      end
-    end
 
     # adjust VAV system sizing
     model.getAirLoopHVACs.each do |air_loop|
@@ -242,7 +178,7 @@ module LargeHotel
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 

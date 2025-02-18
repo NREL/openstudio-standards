@@ -1,7 +1,8 @@
-# Method to apply a typical CBECS HVAC system to thermal zones
 module OpenstudioStandards
+  # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
     # @!group Setpoint Managers:Information
+    # Methods to get information about setpoint managers
 
     # Get the min and max setpoint values for a setpoint manager
     #
@@ -18,11 +19,11 @@ module OpenstudioStandards
       when 'OS_SetpointManager_Scheduled'
         sch = spm.to_SetpointManagerScheduled.get.schedule
         if sch.to_ScheduleRuleset.is_initialized
-          min_c = std.schedule_ruleset_annual_min_max_value(sch.to_ScheduleRuleset.get)['min']
-          max_c = std.schedule_ruleset_annual_min_max_value(sch.to_ScheduleRuleset.get)['max']
+          min_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(sch.to_ScheduleRuleset.get)['min']
+          max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(sch.to_ScheduleRuleset.get)['max']
         elsif sch.to_ScheduleConstant.is_initialized
-          min_c = std.schedule_constant_annual_min_max_value(sch.to_ScheduleConstant.get)['min']
-          max_c = std.schedule_constant_annual_min_max_value(sch.to_ScheduleConstant.get)['max']
+          min_c = OpenstudioStandards::Schedules.schedule_constant_get_min_max(sch.to_ScheduleConstant.get)['min']
+          max_c = OpenstudioStandards::Schedules.schedule_constant_get_min_max(sch.to_ScheduleConstant.get)['max']
         else
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find min and max values for #{obj_type} Setpoint Manager.")
         end
@@ -48,9 +49,9 @@ module OpenstudioStandards
           low_sch = low_sch.get
           min_c = nil
           if low_sch.to_ScheduleRuleset.is_initialized
-            min_c = std.schedule_ruleset_annual_min_max_value(low_sch.to_ScheduleRuleset.get)['min']
+            min_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(low_sch.to_ScheduleRuleset.get)['min']
           elsif low_sch.to_ScheduleConstant.is_initialized
-            min_c = std.schedule_constant_annual_min_max_value(low_sch.to_ScheduleConstant.get)['min']
+            min_c = OpenstudioStandards::Schedules.schedule_constant_get_min_max(low_sch.to_ScheduleConstant.get)['min']
           else
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find min and max values for #{obj_type} Setpoint Manager.")
           end
@@ -63,9 +64,9 @@ module OpenstudioStandards
           high_sch = high_sch.get
           max_c = nil
           if high_sch.to_ScheduleRuleset.is_initialized
-            max_c = std.schedule_ruleset_annual_min_max_value(high_sch.to_ScheduleRuleset.get)['max']
+            max_c = OpenstudioStandards::Schedules.schedule_ruleset_get_min_max(high_sch.to_ScheduleRuleset.get)['max']
           elsif high_sch.to_ScheduleConstant.is_initialized
-            max_c = std.schedule_constant_annual_min_max_value(high_sch.to_ScheduleConstant.get)['max']
+            max_c = OpenstudioStandards::Schedules.schedule_constant_get_min_max(high_sch.to_ScheduleConstant.get)['max']
           else
             OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Could not find min and max values for #{obj_type} Setpoint Manager.")
           end

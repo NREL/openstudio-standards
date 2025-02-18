@@ -5,6 +5,66 @@ class TestSchedulesCreate < Minitest::Test
     @sch = OpenstudioStandards::Schedules
   end
 
+  def test_create_schedule_type_limits
+    model = OpenStudio::Model::Model.new
+
+    # test standard schedule type limits
+    for type in ['Dimensionless', 'Temperature', 'Humidity Ratio', 'Fraction', 'OnOff', 'Activity']
+      schedule_type_limits = @sch.create_schedule_type_limits(model, standard_schedule_type_limit: type)
+      name = schedule_type_limits.name.to_s
+      unit_type = schedule_type_limits.unitType.to_s
+      numeric_type = schedule_type_limits.numericType.to_s
+      case type
+      when 'Humidity Ratio'
+        expected_unit_type = 'Dimensionless'
+        expected_numeric_type = 'Continuous'
+      when 'Fraction', 'Fractional'
+        expected_unit_type = 'Dimensionless'
+        expected_numeric_type = 'Continuous'
+      when 'OnOff'
+        expected_unit_type = 'Availability'
+        expected_numeric_type = 'Discrete'
+      when 'Activity'
+        expected_unit_type = 'ActivityLevel'
+        expected_numeric_type = 'Continuous'
+      else
+        expected_unit_type = type
+        expected_numeric_type = 'Continuous'
+      end
+      assert(name == type, "Expected schedule type limits name #{schedule_type_limits.name} to be #{type}")
+      assert(unit_type == expected_unit_type, "Expected schedule type limits unit type #{schedule_type_limits.unitType} to be #{expected_unit_type}")
+      assert(numeric_type == expected_numeric_type, "Expected schedule type limits numeric type #{schedule_type_limits.unitType} to be #{expected_numeric_type}")
+    end
+
+    # test custom schedule type limits
+    schedule_type_limits = @sch.create_schedule_type_limits(model,
+                                                            name: 'Infiltration Schedule Type Limits',
+                                                            lower_limit_value: 0.0,
+                                                            upper_limit_value: 1.0,
+                                                            numeric_type: 'Continuous',
+                                                            unit_type: 'Dimensionless')
+    name = schedule_type_limits.name.to_s
+    unit_type = schedule_type_limits.unitType.to_s
+    numeric_type = schedule_type_limits.numericType.to_s
+    lower_limit = schedule_type_limits.lowerLimitValue.get
+    upper_limit = schedule_type_limits.upperLimitValue.get
+    assert(name = 'Infiltration Schedule Type Limits')
+    assert(unit_type = 'Continuous')
+    assert(numeric_type = 'Dimensionless')
+    assert(name = 0.0)
+    assert(name = 1.0)
+  end
+
+  def test_create_constant_schedule_ruleset
+    model = OpenStudio::Model::Model.new
+    schedule = @sch.create_constant_schedule_ruleset(model, 42.0,
+                                                     name: 'Test Schedule',
+                                                     schedule_type_limit: 'Temperature')
+    result = @sch.schedule_ruleset_get_min_max(schedule)
+    assert(result['min'] == 42.0)
+    assert(result['max'] == 42.0)
+  end
+
   def test_create_simple_schedule
     model = OpenStudio::Model::Model.new
     test_options = {
@@ -67,5 +127,50 @@ class TestSchedulesCreate < Minitest::Test
     assert(schedule['mergedSchedule'].to_ScheduleRuleset.is_initialized)
     assert(schedule['mergedSchedule'].name.to_s == 'Merged Schedule')
     assert(schedule['denominator'] == 10.0)
+  end
+
+  def test_create_inverted_schedule_day
+    model = OpenStudio::Model::Model.new
+    test_options = {
+      'name' => 'Test Create Simple',
+      'winter_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'summer_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 }
+    }
+    schedule = @sch.create_simple_schedule(model, test_options)
+    default_day_schedule = schedule.defaultDaySchedule
+    inverted_schedule = @sch.create_inverted_schedule_day(default_day_schedule)
+    assert(inverted_schedule.to_ScheduleDay.is_initialized)
+    assert_equal(1.0, inverted_schedule.values[0])
+    assert_equal(0.0, inverted_schedule.values[1])
+    assert_equal(1.0, inverted_schedule.values[2])
+  end
+
+  def test_create_inverted_schedule_ruleset
+    model = OpenStudio::Model::Model.new
+    test_options = {
+      'name' => 'Test Create Simple',
+      'winter_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'summer_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 },
+      'default_time_value_pairs' => { 8.0 => 0.0, 16.0 => 1.0, 24.0 => 0.0 }
+    }
+    schedule = @sch.create_simple_schedule(model, test_options)
+    inverted_schedule = @sch.create_inverted_schedule_ruleset(schedule)
+    assert(inverted_schedule.to_ScheduleRuleset.is_initialized)
+    assert_equal('Test Create Simple inverted', inverted_schedule.name.to_s)
+
+    rules = []
+    rules << ['Tuesdays and Thursdays', '1/1-12/31', 'Tue/Thu', [4, 0], [4.33, 1], [18, 0], [18.66, 1], [24, 0]]
+    test_options = {
+      'name' => 'Test Create Complex',
+      'winter_design_day' => [[24, 0]],
+      'summer_design_day' => [[24, 1]],
+      'default_day' => ['Test Create Complex Default', [11, 0], [11.33, 1], [23, 0], [23.33, 1], [24, 0]],
+      'rules' => rules
+    }
+    schedule = @sch.create_complex_schedule(model, test_options)
+    inverted_schedule = @sch.create_inverted_schedule_ruleset(schedule)
+    assert(inverted_schedule.to_ScheduleRuleset.is_initialized)
+    assert_equal('Test Create Complex inverted', inverted_schedule.name.to_s)
   end
 end

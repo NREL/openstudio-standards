@@ -30,7 +30,7 @@ class DEER2060 < DEER
 
     # Primary Sidelighting
     # Check if the primary sidelit area contains less than 120W of lighting
-    if areas['primary_sidelighted_area'] == 0.0
+    if areas['primary_sidelighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, primary sidelighting control not required because primary sidelighted area = 0ft2.")
       req_pri_ctrl = false
     elsif areas['primary_sidelighted_area'] * space_lpd_w_per_m2 < 120.0
@@ -46,7 +46,7 @@ class DEER2060 < DEER
 
     # Secondary Sidelighting
     # Check if the primary and secondary sidelit areas contains less than 120W of lighting
-    if areas['secondary_sidelighted_area'] == 0.0
+    if areas['secondary_sidelighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, secondary sidelighting control not required because secondary sidelighted area = 0ft2.")
       req_sec_ctrl = false
     elsif (areas['primary_sidelighted_area'] + areas['secondary_sidelighted_area']) * space_lpd_w_per_m2 < 120
@@ -62,7 +62,7 @@ class DEER2060 < DEER
 
     # Toplighting
     # Check if the toplit area contains less than 120W of lighting
-    if areas['toplighted_area'] == 0.0
+    if areas['toplighted_area'] < 0.01
       OpenStudio.logFree(OpenStudio::Debug, 'openstudio.model.Space', "For #{space.name}, toplighting control not required because toplighted area = 0ft2.")
       req_top_ctrl = false
     elsif areas['toplighted_area'] * space_lpd_w_per_m2 < 120

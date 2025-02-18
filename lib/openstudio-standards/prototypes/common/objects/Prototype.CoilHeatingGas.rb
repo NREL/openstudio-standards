@@ -29,7 +29,7 @@ class Standard
     if schedule.nil?
       # default always on
       coil_availability_schedule = model.alwaysOnDiscreteSchedule
-    elsif schedule.class == String
+    elsif schedule.instance_of?(String)
       coil_availability_schedule = model_add_schedule(model, schedule)
 
       if coil_availability_schedule.nil? && schedule == 'alwaysOffDiscreteSchedule'
@@ -39,8 +39,6 @@ class Standard
       end
     elsif !schedule.to_Schedule.empty?
       coil_availability_schedule = schedule
-    else
-      coil_availability_schedule = model.alwaysOnDiscreteSchedule
     end
     htg_coil.setAvailabilitySchedule(coil_availability_schedule)
 
@@ -51,8 +49,13 @@ class Standard
     htg_coil.setGasBurnerEfficiency(efficiency)
 
     # defaults
-    htg_coil.setParasiticElectricLoad(0)
-    htg_coil.setParasiticGasLoad(0)
+    if model.version < OpenStudio::VersionString.new('3.7.0')
+      htg_coil.setParasiticElectricLoad(0.0)
+      htg_coil.setParasiticGasLoad(0.0)
+    else
+      htg_coil.setOnCycleParasiticElectricLoad(0.0)
+      htg_coil.setOffCycleParasiticGasLoad(0.0)
+    end
 
     return htg_coil
   end

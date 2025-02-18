@@ -28,7 +28,7 @@ module HighriseApartment
     else
       transformer_efficiency = nil
     end
-    return true unless !transformer_efficiency.nil?
+    return true if transformer_efficiency.nil?
 
     # Change to output variable name in E+ 9.4 (OS 3.1.0)
     excluded_interiorequip_variable = if model.version < OpenStudio::VersionString.new('3.1.0')
@@ -159,7 +159,7 @@ module HighriseApartment
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 end

@@ -11,6 +11,7 @@ class NECB2020
   # @return [Boolean] returns true if successful, false if not
 
   def apply_standard_construction_properties(model:,
+                                             necb_hdd: true,
                                              runner: nil,
                                              # ext surfaces
                                              ext_wall_cond: nil,
@@ -57,7 +58,7 @@ class NECB2020
       end
 
       # hdd required to get correct conductance values from the json file. 
-      hdd = get_necb_hdd18(model)
+      hdd = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
 	  
       # Lambdas are preferred over methods in methods for small utility methods.
       correct_cond = lambda do |conductivity, surface_type|

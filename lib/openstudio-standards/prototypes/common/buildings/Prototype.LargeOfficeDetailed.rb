@@ -54,12 +54,14 @@ module LargeOfficeDetailed
       sup_wtr_low_temp_f = 41.0
       sup_wtr_high_temp_c = OpenStudio.convert(sup_wtr_high_temp_f, 'F', 'C').get
       sup_wtr_low_temp_c = OpenStudio.convert(sup_wtr_low_temp_f, 'F', 'C').get
-      hp_high_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                             sup_wtr_high_temp_c,
-                                                             name = "#{plant_loop.name} High Temp - #{sup_wtr_high_temp_f.round(0)}F")
-      hp_low_temp_sch = model_add_constant_schedule_ruleset(model,
-                                                            sup_wtr_low_temp_c,
-                                                            name = "#{plant_loop.name} Low Temp - #{sup_wtr_low_temp_f.round(0)}F")
+      hp_high_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                         sup_wtr_high_temp_c,
+                                                                                         name: "#{plant_loop.name} High Temp - #{sup_wtr_high_temp_f.round(0)}F",
+                                                                                         schedule_type_limit: 'Temperature')
+      hp_low_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
+                                                                                        sup_wtr_low_temp_c,
+                                                                                        name: "#{plant_loop.name} Low Temp - #{sup_wtr_low_temp_f.round(0)}F",
+                                                                                        schedule_type_limit: 'Temperature')
 
       # add cooling tower object
       cooling_tower = OpenStudio::Model::CoolingTowerTwoSpeed.new(model)
@@ -136,7 +138,7 @@ module LargeOfficeDetailed
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 

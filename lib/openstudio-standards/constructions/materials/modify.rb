@@ -1,8 +1,10 @@
-# Methods to modify material properties
 module OpenstudioStandards
+  # The Constructions module provides methods create, modify, and get information about model Constructions
   module Constructions
+    # The Materials module provides methods create, modify, and get information about Materials
     module Materials
       # @!group Modify
+      # Methods to modify Materials
 
       # change thermal resistance of opaque materials by increasing material thickness,
       # or setting thermal resistance directly for massless or airgap materials.
@@ -12,7 +14,7 @@ module OpenstudioStandards
       # @return [OpenStudio::Model::OpaqueMaterial] OpenStudio OpaqueMaterial object
       def self.opaque_material_set_thermal_resistance(opaque_material, thermal_resistance)
         unless opaque_material.to_OpaqueMaterial.is_initialized
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.constructions.materials', "Object #{opaque_material} cannot be cast as an OpaqueMaterial object.")
+          OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::Construction::Materials', "Object #{opaque_material} cannot be cast as an OpaqueMaterial object.")
           return false
         end
 
@@ -48,7 +50,7 @@ module OpenstudioStandards
                                                       solar_absorptance: nil,
                                                       visible_absorptance: nil)
         unless opaque_material.to_OpaqueMaterial.is_initialized
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.constructions.materials', "Object #{opaque_material} cannot be cast as an OpaqueMaterial object.")
+          OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::Construction::Materials', "Object #{opaque_material} cannot be cast as an OpaqueMaterial object.")
           return false
         end
 

@@ -23,7 +23,7 @@ module MediumOffice
     else
       transformer_efficiency = nil
     end
-    return true unless !transformer_efficiency.nil?
+    return true if transformer_efficiency.nil?
 
     # Change to output variable name in E+ 9.4 (OS 3.1.0)
     excluded_interiorequip_variable = if model.version < OpenStudio::VersionString.new('3.1.0')
@@ -57,31 +57,6 @@ module MediumOffice
     # add extra infiltration for entry door
     add_door_infiltration(climate_zone, model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Added door infiltration')
-
-    # set infiltration schedule for plenums
-    # @todo remove once infil_sch in Standards.Space pulls from default building infiltration schedule
-    model.getSpaces.each do |space|
-      next unless space.name.get.to_s.include? 'Plenum'
-
-      # add infiltration if DOE Ref vintage
-      if template == 'DOE Ref 1980-2004' || template == 'DOE Ref Pre-1980'
-        # Create an infiltration rate object for this space
-        infiltration = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space.model)
-        infiltration.setName("#{space.name} Infiltration")
-        all_ext_infil_m3_per_s_per_m2 = OpenStudio.convert(0.2232, 'ft^3/min*ft^2', 'm^3/s*m^2').get
-        infiltration.setFlowperExteriorSurfaceArea(all_ext_infil_m3_per_s_per_m2)
-        infiltration.setSchedule(model_add_schedule(model, 'Medium Office Infil Quarter On'))
-        infiltration.setConstantTermCoefficient(1.0)
-        infiltration.setTemperatureTermCoefficient(0.0)
-        infiltration.setVelocityTermCoefficient(0.0)
-        infiltration.setVelocitySquaredTermCoefficient(0.0)
-        infiltration.setSpace(space)
-      else
-        space.spaceInfiltrationDesignFlowRates.each do |infiltration_object|
-          infiltration_object.setSchedule(model_add_schedule(model, 'OfficeMedium INFIL_SCH_PNNL'))
-        end
-      end
-    end
 
     return true
   end
@@ -152,7 +127,7 @@ module MediumOffice
   # @return [Boolean] returns true if successful, false if not
   def model_custom_geometry_tweaks(model, building_type, climate_zone, prototype_input)
     # Set original building North axis
-    model_set_building_north_axis(model, 0.0)
+    OpenstudioStandards::Geometry.model_set_building_north_axis(model, 0.0)
     return true
   end
 

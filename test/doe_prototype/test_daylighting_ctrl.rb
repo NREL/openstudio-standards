@@ -4,18 +4,18 @@ require_relative '../helpers/create_doe_prototype_helper'
 class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
 
   def self.model_test(template, building_type, climate_zone)
-    epw_file = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
-    @test_dir = "#{Dir.pwd}/output"
-    if !Dir.exists?(@test_dir)
+    epw_file_name = 'USA_FL_Miami.Intl.AP.722020_TMY3.epw'
+    @test_dir = "#{__dir__}/output"
+    if !Dir.exist?(@test_dir)
       Dir.mkdir(@test_dir)
     end
     model_name = "#{building_type}-#{template}-#{climate_zone}"
     run_dir = "#{@test_dir}/#{model_name}"
-    if !Dir.exists?(run_dir)
+    if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
     end
     prototype_creator = Standard.build("#{template}_#{building_type}")
-    model = prototype_creator.model_create_prototype_model(climate_zone, epw_file, run_dir)
+    model = prototype_creator.model_create_prototype_model(climate_zone, epw_file_name, run_dir)
     osm_path_string = "#{run_dir}/#{model_name}.osm"
     osm_path = OpenStudio::Path.new(osm_path_string)
     idf_path_string = "#{run_dir}/#{model_name}.idf"
@@ -87,7 +87,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2010'
     building_type = 'MediumOffice'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Perimeter_bot_ZN_1 Daylt Sensor 1" => [3.048, 1.524, 0.762],
                          "Perimeter_bot_ZN_1 Daylt Sensor 2" => [24.9555, 1.524, 0.762],
                          "Perimeter_bot_ZN_2 Daylt Sensor 1" => [48.387, 16.6369, 0.762],
@@ -126,7 +126,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
                          "Perimeter_top_ZN_1" => [0.08, 0.46],
                          "Perimeter_top_ZN_2" => [0.43, 0.12],
                          "Perimeter_top_ZN_3" => [0.46, 0.08],
-                         "Perimeter_top_ZN_4" => [0.43, 0.12]}                             
+                         "Perimeter_top_ZN_4" => [0.43, 0.12]}
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
@@ -138,7 +138,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2013'
     building_type = 'MediumOffice'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Perimeter_bot_ZN_1 Daylt Sensor 1" => [24.9555, 1.524, 0.762],
                          "Perimeter_bot_ZN_1 Daylt Sensor 2" => [24.9555, 3.048, 0.762],
                          "Perimeter_bot_ZN_2 Daylt Sensor 1" => [48.387, 16.6369, 0.762],
@@ -177,7 +177,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
                          "Perimeter_top_ZN_1" => [0.3835, 0.1395],
                          "Perimeter_top_ZN_2" => [0.3835, 0.1395],
                          "Perimeter_top_ZN_3" => [0.3835, 0.1395],
-                         "Perimeter_top_ZN_4" => [0.3835, 0.1395]}                             
+                         "Perimeter_top_ZN_4" => [0.3835, 0.1395]}
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
@@ -189,7 +189,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2010'
     building_type = 'LargeOffice'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Perimeter_bot_ZN_1 Daylt Sensor 1" => [3.1242, 1.6764, 0.762],
                          "Perimeter_bot_ZN_1 Daylt Sensor 2" => [36.5536, 1.6764, 0.762],
                          "Perimeter_bot_ZN_2 Daylt Sensor 1" => [71.4308, 24.3691, 0.762],
@@ -228,7 +228,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
                          "Perimeter_top_ZN_1" => [0.05, 0.51],
                          "Perimeter_top_ZN_2" => [0.49, 0.08],
                          "Perimeter_top_ZN_3" => [0.51, 0.05],
-                         "Perimeter_top_ZN_4" => [0.49, 0.08]}                             
+                         "Perimeter_top_ZN_4" => [0.49, 0.08]}
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
@@ -240,7 +240,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2013'
     building_type = 'LargeOffice'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Perimeter_bot_ZN_1 Daylt Sensor 1" => [36.576, 1.6764, 0.762],
                          "Perimeter_bot_ZN_1 Daylt Sensor 2" => [36.576, 3.3528, 0.762],
                          "Perimeter_bot_ZN_2 Daylt Sensor 1" => [71.4308, 24.384, 0.762],
@@ -279,7 +279,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
                          "Perimeter_top_ZN_1" => [0.3857, 0.1385],
                          "Perimeter_top_ZN_2" => [0.3857, 0.1385],
                          "Perimeter_top_ZN_3" => [0.3857, 0.1385],
-                         "Perimeter_top_ZN_4" => [0.3857, 0.1385]}                             
+                         "Perimeter_top_ZN_4" => [0.3857, 0.1385]}
     model.getSpaces.each do |space|
       zone = space.thermalZone.get
       if true_daylght_ctrl.keys.include? (space.name.to_s)
@@ -291,7 +291,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2010'
     building_type = 'Warehouse'
     climate_zone = 'ASHRAE 169-2013-6A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Zone3 Bulk Storage Daylt Sensor 1" => [6.096, 45.718514, 0],
                          "Zone1 Office Daylt Sensor 1" => [2.4384, 2.4384, 0.762],
                          "Zone1 Office Daylt Sensor 2" => [20.4216, 1.6154, 0.762],}
@@ -311,7 +311,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2010'
     building_type = 'Warehouse'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Zone3 Bulk Storage Daylt Sensor 1" => [22.9, 48, 0],
                          "Zone3 Bulk Storage Daylt Sensor 2" => [22.9, 34.7, 0],
                          "Zone2 Fine Storage Daylt Sensor 1" => [27.8892, 24.9936, 0.762],
@@ -335,7 +335,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2013'
     building_type = 'Warehouse'
     climate_zone = 'ASHRAE 169-2013-6A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Zone3 Bulk Storage Daylt Sensor 1" => [6.096, 45.718514, 0],
                          "Zone1 Office Daylt Sensor 1" => [3.2675, 4.5718, 0.762],
                          "Zone1 Office Daylt Sensor 2" => [20.4216, 4.5718, 0.762],}
@@ -355,7 +355,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2013'
     building_type = 'Warehouse'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Zone1 Office Daylt Sensor 1" => [3.2675, 4.5718, 0.762],
                          "Zone1 Office Daylt Sensor 2" => [20.4216, 4.5718, 0.762],
                          "Zone3 Bulk Storage Daylt Sensor 1" => [22.9, 48, 0],
@@ -379,7 +379,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2010'
     building_type = 'FullServiceRestaurant'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Dining Daylt Sensor 1" => [1.9812, 1.9812, 0.762],
                          "Dining Daylt Sensor 2" => [20.574, 1.9812, 0.762],}
     model.getDaylightingControls.each do |daylght_ctrl|
@@ -397,7 +397,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2013'
     building_type = 'FullServiceRestaurant'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Dining Daylt Sensor 1" => [2.6548, 2.6548, 0.762],
                          "Dining Daylt Sensor 2" => [19.9539, 2.6548, 0.762],}
     model.getDaylightingControls.each do |daylght_ctrl|
@@ -415,7 +415,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2010'
     building_type = 'QuickServiceRestaurant'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Dining Daylt Sensor 1" => [1.9812, 1.9812, 0.762],
                          "Dining Daylt Sensor 2" => [13.2588, 1.9812, 0.762],}
     model.getDaylightingControls.each do |daylght_ctrl|
@@ -433,7 +433,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2013'
     building_type = 'QuickServiceRestaurant'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Dining Daylt Sensor 1" => [2.6548, 2.6548, 0.762],
                          "Dining Daylt Sensor 2" => [12.588, 2.6548, 0.762],}
     model.getDaylightingControls.each do |daylght_ctrl|
@@ -451,7 +451,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2013'
     building_type = 'RetailStandalone'
     climate_zone = 'ASHRAE 169-2013-1A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Core_Retail Daylt Sensor 1" => [14.2, 14.2, 0],
                          "Core_Retail Daylt Sensor 2" => [3.4, 14.2, 0],}
     model.getDaylightingControls.each do |daylght_ctrl|
@@ -469,7 +469,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
     template = '90.1-2013'
     building_type = 'RetailStandalone'
     climate_zone = 'ASHRAE 169-2013-8A'
-    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
     true_daylght_ctrl = {"Core_Retail Daylt Sensor 1" => [9.144, 24.698, 0],}
     model.getDaylightingControls.each do |daylght_ctrl|
       assert([daylght_ctrl.positionXCoordinate.to_f, daylght_ctrl.positionYCoordinate.to_f, daylght_ctrl.positionZCoordinate.to_f] == true_daylght_ctrl[daylght_ctrl.name.to_s], 'Standalone Retail - 2013 - 8A - Sensor Position Incorrect')
@@ -487,7 +487,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
 #    template = '90.1-2010'
 #    building_type = 'SecondarySchool'
 #    climate_zone = 'ASHRAE 169-2013-1A'
-#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
 #    true_daylght_ctrl = {"Gym_ZN_1_FLR_1 Daylt Sensor 1" => [19, 24, 0],
 #                         "Gym_ZN_1_FLR_1 Daylt Sensor 2" => [2, 24, 0],
 #                         "Aux_Gym_ZN_1_FLR_1 Daylt Sensor 1" => [12, 24, 0],
@@ -591,7 +591,7 @@ class TestDaylighting_Ctrl < CreateDOEPrototypeBuildingTest
 #    template = '90.1-2013'
 #    building_type = 'SecondarySchool'
 #    climate_zone = 'ASHRAE 169-2013-1A'
-#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)                        
+#    model = TestDaylighting_Ctrl.model_test(template, building_type, climate_zone)
 #    true_daylght_ctrl = {"Gym_ZN_1_FLR_1 Daylt Sensor 1" => [19, 24, 0],
 #                         "Gym_ZN_1_FLR_1 Daylt Sensor 2" => [2, 24, 0],
 #                         "Aux_Gym_ZN_1_FLR_1 Daylt Sensor 1" => [12, 24, 0],

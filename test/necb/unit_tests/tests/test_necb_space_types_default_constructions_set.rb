@@ -1,20 +1,29 @@
 require_relative '../../../helpers/minitest_helper'
-
+require_relative '../../../helpers/necb_helper'
+include(NecbHelper)
 
 # This class will perform tests that are Spacetype dependant, Test model will be created
 # to specifically test aspects of the NECB2011 code that are Spacetype dependant.
 class NECB_SpaceTypes_DefaultConstructions_Test < Minitest::Test
+
+  def setup()
+    define_folders(__dir__)
+    define_std_ranges
+  end
+
+  # Standards. *** Needs revised to include other versions of NECB ??? ***
   Templates = ['NECB2011', 'BTAPPRE1980'] #,'90.1-2004', '90.1-2007', '90.1-2010', '90.1-2013']
+
   def test_spacetype_construction_sets()
     @model = OpenStudio::Model::Model.new
     #Create only above ground geometry (Used for infiltration tests)
     length = 100.0; width = 100.0; num_above_ground_floors = 1; num_under_ground_floors = 0; floor_to_floor_height = 3.8; plenum_height = 1; perimeter_zone_depth = 4.57; initial_height = 10.0
-    BTAP::Geometry::Wizards::create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
+    OpenstudioStandards::Geometry.create_shape_rectangle(@model, length, width, num_above_ground_floors, num_under_ground_floors, floor_to_floor_height, plenum_height, perimeter_zone_depth, initial_height)
     header_output = ""
     output = ""
     #Iterate through all spacetypes/buildingtypes.
     Templates.each do |template|
-      standard = Standard.build(template)
+      standard = get_standard(template)
       #Get spacetypes from googledoc.
       search_criteria = {
           "template" => template,

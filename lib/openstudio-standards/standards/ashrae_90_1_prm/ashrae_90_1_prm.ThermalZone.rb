@@ -79,22 +79,18 @@ class ASHRAE901PRM < Standard
     end
 
     # Energy recovery device, other than coil runaround loop
-    if thermal_zone.additionalProperties.hasFeature('fan_power_credit_other_than_coil_runaround')
-      if is_energy_recovery_required
-        adj_in_wc = thermal_zone.additionalProperties.getFeatureAsDouble('fan_power_credit_other_than_coil_runaround').to_f
-        fan_pwr_adjustment_in_wc += adj_in_wc
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for energy recovery device other than coil runaround loop")
-      end
+    if thermal_zone.additionalProperties.hasFeature('fan_power_credit_other_than_coil_runaround') && is_energy_recovery_required
+      adj_in_wc = thermal_zone.additionalProperties.getFeatureAsDouble('fan_power_credit_other_than_coil_runaround').to_f
+      fan_pwr_adjustment_in_wc += adj_in_wc
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for energy recovery device other than coil runaround loop")
     end
 
     # Coil runaround loop
-    if thermal_zone.additionalProperties.hasFeature('has_fan_power_credit_coil_runaround')
-      if is_energy_recovery_required
-        mult = thermal_zone.additionalProperties.getFeatureAsDouble('has_fan_power_credit_coil_runaround').to_f
-        adj_in_wc = 0.6 * 2 * mult # for each stream
-        fan_pwr_adjustment_in_wc += adj_in_wc
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for coil runaround loop")
-      end
+    if thermal_zone.additionalProperties.hasFeature('has_fan_power_credit_coil_runaround') && is_energy_recovery_required
+      mult = thermal_zone.additionalProperties.getFeatureAsDouble('has_fan_power_credit_coil_runaround').to_f
+      adj_in_wc = 0.6 * 2 * mult # for each stream
+      fan_pwr_adjustment_in_wc += adj_in_wc
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "--Added #{adj_in_wc} in wc for coil runaround loop")
     end
 
     # Evaporative humidifier/cooler in series with another cooling coil

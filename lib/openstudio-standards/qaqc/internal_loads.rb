@@ -151,7 +151,7 @@ module OpenstudioStandards
               # skip if all spaces using this space type are plenums
               all_spaces_plenums = true
               space_type.spaces.each do |space|
-                unless std.space_plenum?(space)
+                unless OpenstudioStandards::Space.space_plenum?(space)
                   all_spaces_plenums = false
                   next
                 end
@@ -310,7 +310,7 @@ module OpenstudioStandards
 
           # warn if there are spaces in model that don't use space type unless they appear to be plenums
           @model.getSpaces.sort.each do |space|
-            next if std.space_plenum?(space)
+            next if OpenstudioStandards::Space.space_plenum?(space)
 
             if !space.spaceType.is_initialized
               check_elems << OpenStudio::Attribute.new('flag', "#{space.name} doesn't have a space type assigned, can't validate internal loads.")
@@ -375,15 +375,15 @@ module OpenstudioStandards
             # skip if all spaces using this space type are plenums
             all_spaces_plenums = true
             space_type.spaces.each do |space|
-              unless std.space_plenum?(space)
+              unless OpenstudioStandards::Space.space_plenum?(space)
                 all_spaces_plenums = false
                 break
-                end
+              end
             end
 
             unless all_spaces_plenums
               check_elems << OpenStudio::Attribute.new('flag', "Unexpected standards type for #{space_type.name}, can't validate schedules.")
-              end
+            end
 
             next
           end
@@ -402,7 +402,7 @@ module OpenstudioStandards
             else
               schedule_target = schedule_target.to_ScheduleRuleset.get
               # loop through and test individual load instances
-              expected_hours = std.schedule_ruleset_annual_equivalent_full_load_hrs(schedule_target)
+              expected_hours = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule_target)
               space_type.lights.each do |space_load_instance|
                 inst_sch_check = OpenstudioStandards::QAQC.space_load_instance_schedule_check(space_load_instance, expected_hours, std: std, min_pass_pct: min_pass_pct, max_pass_pct: max_pass_pct)
                 if inst_sch_check then check_elems << inst_sch_check end
@@ -422,8 +422,7 @@ module OpenstudioStandards
             else
               schedule_target = schedule_target.to_ScheduleRuleset.get
               # loop through and test individual load instances
-              expected_hours = std.schedule_ruleset_annual_equivalent_full_load_hrs(schedule_target)
-
+              expected_hours = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule_target)
               space_type.electricEquipment.each do |space_load_instance|
                 inst_sch_check = OpenstudioStandards::QAQC.space_load_instance_schedule_check(space_load_instance, expected_hours, std: std, min_pass_pct: min_pass_pct, max_pass_pct: max_pass_pct)
                 if inst_sch_check then check_elems << inst_sch_check end
@@ -443,7 +442,7 @@ module OpenstudioStandards
             else
               schedule_target = schedule_target.to_ScheduleRuleset.get
               # loop through and test individual load instances
-              expected_hours = std.schedule_ruleset_annual_equivalent_full_load_hrs(schedule_target)
+              expected_hours = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule_target)
               space_type.gasEquipment.each do |space_load_instance|
                 inst_sch_check = OpenstudioStandards::QAQC.space_load_instance_schedule_check(space_load_instance, expected_hours, std: std, min_pass_pct: min_pass_pct, max_pass_pct: max_pass_pct)
                 if inst_sch_check then check_elems << inst_sch_check end
@@ -462,7 +461,7 @@ module OpenstudioStandards
             else
               schedule_target = schedule_target.to_ScheduleRuleset.get
               # loop through and test individual load instances
-              expected_hours = std.schedule_ruleset_annual_equivalent_full_load_hrs(schedule_target)
+              expected_hours = OpenstudioStandards::Schedules.schedule_ruleset_get_equivalent_full_load_hours(schedule_target)
               space_type.people.each do |space_load_instance|
                 inst_sch_check = OpenstudioStandards::QAQC.space_load_instance_schedule_check(space_load_instance, expected_hours, std: std, min_pass_pct: min_pass_pct, max_pass_pct: max_pass_pct)
                 if inst_sch_check then check_elems << inst_sch_check end
@@ -496,7 +495,7 @@ module OpenstudioStandards
 
         # warn if there are spaces in model that don't use space type unless they appear to be plenums
         @model.getSpaces.sort.each do |space|
-          next if std.space_plenum?(space)
+          next if OpenstudioStandards::Space.space_plenum?(space)
 
           if !space.spaceType.is_initialized
             check_elems << OpenStudio::Attribute.new('flag', "#{space.name} doesn't have a space type assigned, can't validate schedules.")
@@ -538,7 +537,7 @@ module OpenstudioStandards
       if (space_load_instance.class.to_s == 'OpenStudio::Model::People') && space_load_instance.numberofPeopleSchedule.is_initialized
         schedule_inst = space_load_instance.numberofPeopleSchedule.get
       elsif (space_load_instance.class.to_s == 'OpenStudio::Model::DesignSpecificationOutdoorAir') && space_load_instance.outdoorAirFlowRateFractionSchedule.is_initialized
-        schedule_inst = space_load_instance.outdoorAirFlowRateFractionSchedule .get
+        schedule_inst = space_load_instance.outdoorAirFlowRateFractionSchedule.get
       elsif space_load_instance.schedule.is_initialized
         schedule_inst = space_load_instance.schedule.get
       else
@@ -546,11 +545,8 @@ module OpenstudioStandards
       end
 
       # get annual equiv for model schedule
-      if schedule_inst.to_ScheduleRuleset.is_initialized
-        inst_hrs = std.schedule_ruleset_annual_equivalent_full_load_hrs(schedule_inst.to_ScheduleRuleset.get)
-      elsif schedule_inst.to_ScheduleConstant.is_initialized
-        inst_hrs = std.schedule_constant_annual_equivalent_full_load_hrs(schedule_inst.to_ScheduleConstant.get)
-      else
+      inst_hrs = OpenstudioStandards::Schedules.schedule_get_equivalent_full_load_hours(schedule_inst)
+      if inst_hrs.nil?
         return OpenStudio::Attribute.new('flag', "#{schedule_inst.name} isn't a Ruleset or Constant schedule. Can't calculate annual equivalent full load hours.")
       end
 
