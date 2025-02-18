@@ -2897,41 +2897,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0037-000000000001},  !- Handle
   ems_sys_4_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_hw_zc_none_srf_none__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {b6146163-d4b1-4ffc-b31a-6370adff3c4e}<23.9 && {b6146163-d4b1-4ffc-b31a-6370adff3c4e}>1.7, !- Program Line 1
-  SET {a3794fdf-cb01-4e04-91c7-63a311a46cfe} = 29.4, !- Program Line 2
-  SET {2ee8a164-db28-44fc-938a-15bbcb6fa6f1} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {b6146163-d4b1-4ffc-b31a-6370adff3c4e}<23.9 && {b6146163-d4b1-4ffc-b31a-6370adff3c4e}>1.7, !- Program Line 4
-  SET {a3794fdf-cb01-4e04-91c7-63a311a46cfe} = 29.4, !- Program Line 5
-  SET {2ee8a164-db28-44fc-938a-15bbcb6fa6f1} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {b6146163-d4b1-4ffc-b31a-6370adff3c4e}<23.9 && {b6146163-d4b1-4ffc-b31a-6370adff3c4e}>1.7, !- Program Line 7
-  SET {a3794fdf-cb01-4e04-91c7-63a311a46cfe} = 29.4, !- Program Line 8
-  SET {2ee8a164-db28-44fc-938a-15bbcb6fa6f1} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {b6146163-d4b1-4ffc-b31a-6370adff3c4e}<23.9 && {b6146163-d4b1-4ffc-b31a-6370adff3c4e}>1.7, !- Program Line 10
-  SET {a3794fdf-cb01-4e04-91c7-63a311a46cfe} = 29.4, !- Program Line 11
-  SET {2ee8a164-db28-44fc-938a-15bbcb6fa6f1} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {178f50e5-0b9f-441e-a87f-88299b19ba9b}<23.9 && {178f50e5-0b9f-441e-a87f-88299b19ba9b}>1.7, !- Program Line 1
+  SET {0bd37ee2-e9ea-473d-b465-89fa5cf8bfed} = 29.4, !- Program Line 2
+  SET {aaa1a71d-4c2e-4764-80b5-5f594de5a611} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {178f50e5-0b9f-441e-a87f-88299b19ba9b}<23.9 && {178f50e5-0b9f-441e-a87f-88299b19ba9b}>1.7, !- Program Line 4
+  SET {0bd37ee2-e9ea-473d-b465-89fa5cf8bfed} = 29.4, !- Program Line 5
+  SET {aaa1a71d-4c2e-4764-80b5-5f594de5a611} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {178f50e5-0b9f-441e-a87f-88299b19ba9b}<23.9 && {178f50e5-0b9f-441e-a87f-88299b19ba9b}>1.7, !- Program Line 7
+  SET {0bd37ee2-e9ea-473d-b465-89fa5cf8bfed} = 29.4, !- Program Line 8
+  SET {aaa1a71d-4c2e-4764-80b5-5f594de5a611} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {178f50e5-0b9f-441e-a87f-88299b19ba9b}<23.9 && {178f50e5-0b9f-441e-a87f-88299b19ba9b}>1.7, !- Program Line 10
+  SET {0bd37ee2-e9ea-473d-b465-89fa5cf8bfed} = 29.4, !- Program Line 11
+  SET {aaa1a71d-4c2e-4764-80b5-5f594de5a611} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {a3794fdf-cb01-4e04-91c7-63a311a46cfe} = NULL, !- Program Line 14
-  SET {2ee8a164-db28-44fc-938a-15bbcb6fa6f1} = NULL, !- Program Line 15
+  SET {0bd37ee2-e9ea-473d-b465-89fa5cf8bfed} = NULL, !- Program Line 14
+  SET {aaa1a71d-4c2e-4764-80b5-5f594de5a611} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0037-000000000002},  !- Handle
   ems_sys_4_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_hw_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {3cb53351-577b-4a27-908f-8eab9b12ecd0}<23.9 && {3cb53351-577b-4a27-908f-8eab9b12ecd0}>1.7, !- Program Line 1
-  SET {bfe946d2-7730-422b-8a12-4d65eda61f19} = 29.4, !- Program Line 2
-  SET {8124e16a-20f3-46e9-afa2-53da2a8c74ea} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {3cb53351-577b-4a27-908f-8eab9b12ecd0}<23.9 && {3cb53351-577b-4a27-908f-8eab9b12ecd0}>1.7, !- Program Line 4
-  SET {bfe946d2-7730-422b-8a12-4d65eda61f19} = 29.4, !- Program Line 5
-  SET {8124e16a-20f3-46e9-afa2-53da2a8c74ea} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {3cb53351-577b-4a27-908f-8eab9b12ecd0}<23.9 && {3cb53351-577b-4a27-908f-8eab9b12ecd0}>1.7, !- Program Line 7
-  SET {bfe946d2-7730-422b-8a12-4d65eda61f19} = 29.4, !- Program Line 8
-  SET {8124e16a-20f3-46e9-afa2-53da2a8c74ea} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {3cb53351-577b-4a27-908f-8eab9b12ecd0}<23.9 && {3cb53351-577b-4a27-908f-8eab9b12ecd0}>1.7, !- Program Line 10
-  SET {bfe946d2-7730-422b-8a12-4d65eda61f19} = 29.4, !- Program Line 11
-  SET {8124e16a-20f3-46e9-afa2-53da2a8c74ea} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {2a93dc1a-2cf4-48c3-9a1c-7a248443e1e6}<23.9 && {2a93dc1a-2cf4-48c3-9a1c-7a248443e1e6}>1.7, !- Program Line 1
+  SET {ec69ddb7-78eb-4aa5-8c71-33aa87863ce6} = 29.4, !- Program Line 2
+  SET {cd86f584-6637-44d5-8cd8-2d3509e73611} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {2a93dc1a-2cf4-48c3-9a1c-7a248443e1e6}<23.9 && {2a93dc1a-2cf4-48c3-9a1c-7a248443e1e6}>1.7, !- Program Line 4
+  SET {ec69ddb7-78eb-4aa5-8c71-33aa87863ce6} = 29.4, !- Program Line 5
+  SET {cd86f584-6637-44d5-8cd8-2d3509e73611} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {2a93dc1a-2cf4-48c3-9a1c-7a248443e1e6}<23.9 && {2a93dc1a-2cf4-48c3-9a1c-7a248443e1e6}>1.7, !- Program Line 7
+  SET {ec69ddb7-78eb-4aa5-8c71-33aa87863ce6} = 29.4, !- Program Line 8
+  SET {cd86f584-6637-44d5-8cd8-2d3509e73611} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {2a93dc1a-2cf4-48c3-9a1c-7a248443e1e6}<23.9 && {2a93dc1a-2cf4-48c3-9a1c-7a248443e1e6}>1.7, !- Program Line 10
+  SET {ec69ddb7-78eb-4aa5-8c71-33aa87863ce6} = 29.4, !- Program Line 11
+  SET {cd86f584-6637-44d5-8cd8-2d3509e73611} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {bfe946d2-7730-422b-8a12-4d65eda61f19} = NULL, !- Program Line 14
-  SET {8124e16a-20f3-46e9-afa2-53da2a8c74ea} = NULL, !- Program Line 15
+  SET {ec69ddb7-78eb-4aa5-8c71-33aa87863ce6} = NULL, !- Program Line 14
+  SET {cd86f584-6637-44d5-8cd8-2d3509e73611} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -7655,9 +7655,9 @@ OS:WaterHeater:Mixed,
   {00000000-0000-0000-0064-000000000018},  !- Ambient Temperature Schedule Name
   ,                                        !- Ambient Temperature Thermal Zone Name
   ,                                        !- Ambient Temperature Outdoor Air Node Name
-  4.04634428202617,                        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
+  4.24409891583953,                        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
   ,                                        !- Off Cycle Loss Fraction to Thermal Zone
-  4.04634428202617,                        !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
+  4.24409891583953,                        !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
   ,                                        !- On Cycle Loss Fraction to Thermal Zone
   ,                                        !- Peak Use Flow Rate {m3/s}
   ,                                        !- Use Flow Rate Fraction Schedule Name

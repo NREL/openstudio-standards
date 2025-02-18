@@ -6642,9 +6642,9 @@ OS:WaterHeater:Mixed,
   {00000000-0000-0000-0059-000000000019},  !- Ambient Temperature Schedule Name
   ,                                        !- Ambient Temperature Thermal Zone Name
   ,                                        !- Ambient Temperature Outdoor Air Node Name
-  4.97773345277744,                        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
+  5.23054671566737,                        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
   ,                                        !- Off Cycle Loss Fraction to Thermal Zone
-  4.97773345277744,                        !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
+  5.23054671566737,                        !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
   ,                                        !- On Cycle Loss Fraction to Thermal Zone
   ,                                        !- Peak Use Flow Rate {m3/s}
   ,                                        !- Use Flow Rate Fraction Schedule Name
