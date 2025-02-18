@@ -173,7 +173,7 @@ class BTAPData
     return building_data
   end
 
-  def net_present_value(npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, nvp_discount_rate_scc: 0.03)
+  def net_present_value(npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_scc: 0.03)
 
     # Find end year in the neb data
     neb_header = CSV.read(@neb_prices_csv_file_name, headers: true).headers
@@ -182,7 +182,7 @@ class BTAPData
     year_max = neb_header.max
 
     # Convert a string to a float
-    if npv_start_year.instance_of?(String) && npv_start_year != 'NECB_Default' && npv_start_year != 'none' && !nvp_start_yeay.nil?
+    if npv_start_year.instance_of?(String) && npv_start_year != 'NECB_Default' && npv_start_year != 'none' && !npv_start_yeay.nil?
       npv_start_year = npv_start_year.to_f
     end
     if npv_end_year.instance_of?(String) && npv_end_year != 'NECB_Default' && npv_end_year != 'none' && !npv_end_year.nil?
