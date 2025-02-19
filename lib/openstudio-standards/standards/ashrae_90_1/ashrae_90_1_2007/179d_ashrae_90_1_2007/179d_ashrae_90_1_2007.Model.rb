@@ -1288,6 +1288,72 @@ class ACM179dASHRAE9012007
     # if a zone does not have this additional property, it means it was not served by airloop.
   end
 
+  # Convert total minimum OA requirement to a per-area value.
+  #
+  # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+  # @return [Boolean] returns true if successful, false if not
+  def thermal_zone_convert_outdoor_air_to_per_area(thermal_zone)
+    # For each space in the zone, convert
+    # all design OA to per-area
+    # unless the "Outdoor Air Method" is "Maximum"
+    thermal_zone.spaces.each do |space|
+      # Find the design OA, which may be assigned at either the
+      # SpaceType or directly at the Space
+      dsn_oa = space.designSpecificationOutdoorAir
+      next if dsn_oa.empty?
+
+      dsn_oa = dsn_oa.get
+      next if dsn_oa.outdoorAirMethod == 'Maximum'
+
+      # Get the space properties
+      floor_area = space.floorArea
+      number_of_people = space.numberOfPeople
+      volume = space.volume
+
+      # Sum up the total OA from all sources
+      oa_for_people = number_of_people * dsn_oa.outdoorAirFlowperPerson
+      oa_for_floor_area = floor_area * dsn_oa.outdoorAirFlowperFloorArea
+      oa_rate = dsn_oa.outdoorAirFlowRate
+      oa_for_volume = volume * dsn_oa.outdoorAirFlowAirChangesperHour / 3600
+      tot_oa = oa_for_people + oa_for_floor_area + oa_rate + oa_for_volume
+
+      # Convert total to per-area
+      tot_oa_per_area = tot_oa / floor_area
+
+      # Check if there is another design OA object that has already
+      # been converted from per-person to per-area that matches.
+      # If so, reuse that instead of creating a duplicate.
+      new_dsn_oa_name = "#{dsn_oa.name} to per-area"
+      if thermal_zone.model.getDesignSpecificationOutdoorAirByName(new_dsn_oa_name).is_initialized
+        new_dsn_oa = thermal_zone.model.getDesignSpecificationOutdoorAirByName(new_dsn_oa_name).get
+      else
+        new_dsn_oa = OpenStudio::Model::DesignSpecificationOutdoorAir.new(thermal_zone.model)
+        new_dsn_oa.setName(new_dsn_oa_name)
+      end
+
+      # Assign this new design OA to the space
+      space.setDesignSpecificationOutdoorAir(new_dsn_oa)
+
+      # Set the method
+      new_dsn_oa.setOutdoorAirMethod('Sum')
+      # Set the per-area requirement
+      new_dsn_oa.setOutdoorAirFlowperFloorArea(tot_oa_per_area)
+      # Zero-out the per-person, ACH, and flow requirements
+      new_dsn_oa.setOutdoorAirFlowperPerson(0.0)
+      new_dsn_oa.setOutdoorAirFlowAirChangesperHour(0.0)
+      new_dsn_oa.setOutdoorAirFlowRate(0.0)
+      # Copy the orignal OA schedule, if any
+      if dsn_oa.outdoorAirFlowRateFractionSchedule.is_initialized
+        oa_sch = dsn_oa.outdoorAirFlowRateFractionSchedule.get
+        new_dsn_oa.setOutdoorAirFlowRateFractionSchedule(oa_sch)
+      end
+
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: Converted total ventilation requirements to per-area value.")
+    end
+
+    return true
+  end
+
   # https://github.com/NREL/openstudio-standards/blob/master/lib/openstudio-standards/standards/ashrae_90_1_prm/ashrae_90_1_prm.Model.rb#L1382
   # Set DCV in baseline HVAC system if required
   #
@@ -1299,7 +1365,7 @@ class ACM179dASHRAE9012007
         air_loop_hvac_enable_demand_control_ventilation(air_loop_hvac, climate_zone)
         air_loop_hvac.thermalZones.sort.each do |zone|
           unless baseline_thermal_zone_demand_control_ventilation_required?(zone)
-            OpenstudioStandards::ThermalZone.thermal_zone_convert_outdoor_air_to_per_area(zone)
+            thermal_zone_convert_outdoor_air_to_per_area(zone)
           end
         end
       end

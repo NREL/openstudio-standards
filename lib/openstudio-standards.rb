@@ -243,9 +243,16 @@ module OpenstudioStandards
 
   # 179D
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.Model"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.AirLoopHVAC"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.AirTerminalSingleDuctVAVReheat"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.CoilHeatingDXMultiSpeed"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.CoilHeatingDXSingleSpeed"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.FanVariableVolume"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.PlanarSurface"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.PlantLoop"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.SpaceType"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.SubSurface"
-  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.PlantLoop"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/179d_ashrae_90_1_2007/179d_ashrae_90_1_2007.ZoneHVACComponent"
 
   # 90.1-2010
