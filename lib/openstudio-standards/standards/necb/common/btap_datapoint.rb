@@ -184,7 +184,7 @@ class BTAPDatapoint
                                        )
       end
 
-      # Save model to to disk.
+      # Save model to disk.
       puts "saving model to #{File.join(@dp_temp_folder, 'output.osm')}"
       BTAP::FileIO.save_osm(model, File.join(@dp_temp_folder, 'output.osm'))
 

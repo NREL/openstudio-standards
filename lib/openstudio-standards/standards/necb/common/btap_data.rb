@@ -305,7 +305,7 @@ class BTAPData
     npv_total_with_ghg = npv_ghg_total + npv_total
 
     @btap_data.merge!('npv_total_per_m_sq' => npv_total)
-    @btap_data.merge!('carbon_pricing_over_npv_total_per_m_sq' => npv_ghg_total)
+    @btap_data.merge!('npv_carbon_pricing_per_m_sq' => npv_ghg_total)
     @btap_data.merge!('npv_with_carbon_pricing_total_per_m_sq' => npv_total_with_ghg)
   end
 
@@ -2429,25 +2429,12 @@ class BTAPData
   def get_national_ghg_cost(year:)
     raise "Nil year submitted for national ghg cost" if year.nil?
     year = year.to_i
-    ghg_price_data = [
-      # Obtained from Federal Carbon Polution Pricing Benchmark https://www.canada.ca/en/environment-climate-change/services/climate-change/pricing-pollution-how-it-will-work/carbon-pollution-pricing-federal-benchmark-information.html accessed on 2025-02-18
-      { "year": 2019, "price/tonne": 20},
-      { "year": 2020, "price/tonne": 30},
-      { "year": 2021, "price/tonne": 40},
-      { "year": 2022, "price/tonne": 50},
-      { "year": 2023, "price/tonne": 65},
-      { "year": 2024, "price/tonne": 80},
-      { "year": 2025, "price/tonne": 95},
-      { "year": 2026, "price/tonne": 110},
-      { "year": 2027, "price/tonne": 125},
-      { "year": 2028, "price/tonne": 140},
-      { "year": 2029, "price/tonne": 155},
-      { "year": 2030, "price/tonne": 170},
-    ]
     if year < 2019
       price = 0.0
     elsif (year >= 2019) && (year <= 2030)
-      price = ghg_price_data.detect { |item| (item[:year] == year) }
+      ghg_price_data = @standards_data["tables"]["canada_national_carbon_pricing"]["table"]
+      year_price = ghg_price_data.detect { |item| (item["year"].to_i == year) }
+      price = year_price["price_per_tonne"].to_f
     elsif (year > 2030)
       price = 170.0
     end
