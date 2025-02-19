@@ -242,12 +242,14 @@ class BTAPData
     onsite_elec_generation = @btap_data['total_site_eui_gj_per_m_sq'] - @btap_data['net_site_eui_gj_per_m_sq']
     if onsite_elec_generation > 0.0
       eui_elec = @btap_data['energy_eui_electricity_gj_per_m_sq'] - onsite_elec_generation
-      # Calculate the save GHG emissions from onsite electricity generatation (assume it does not emmit GHGs)
+      # Calculate the saved GHG emissions from onsite electricity generatation (assume it does not emmit GHGs)
       ghg_saved = get_utility_ghg_kg_per_gj(province: province_abbreviation, fuel_type: "Electricity") * onsite_elec_generation
-      ghg_elec = @btap_data['cost_utility_ghg_electricity_kg_per_m_sq'] - ghg_saved
+      # Convert to tonnes of ghg/m^2
+      ghg_elec = (@btap_data['cost_utility_ghg_electricity_kg_per_m_sq'].to_f - ghg_saved.to_f)/1000.0
     else
       eui_elec = @btap_data['energy_eui_electricity_gj_per_m_sq']
-      ghg_elec = @btap_data['cost_utility_ghg_electricity_kg_per_m_sq']
+      # Convert to tonnes of ghg/m^2
+      ghg_elec = @btap_data['cost_utility_ghg_electricity_kg_per_m_sq'].to_f/1000.0
     end
     # puts "onsite_elec_generation is #{onsite_elec_generation}"
     # puts "eui_elec is #{eui_elec}"
@@ -269,7 +271,8 @@ class BTAPData
 
     # Calculate npv of natural gas
     eui_ngas= @btap_data['energy_eui_natural_gas_gj_per_m_sq']
-    ghg_ngas = @btap_data['cost_utility_ghg_natural gas_kg_per_m_sq']
+    # Convert to tonnes of ghg/m^2
+    ghg_ngas = @btap_data['cost_utility_ghg_natural gas_kg_per_m_sq'].to_f/1000.0
     row = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Natural Gas')
     end
@@ -285,7 +288,8 @@ class BTAPData
 
     # Calculate npv of oil
     eui_oil= @btap_data['energy_eui_additional_fuel_gj_per_m_sq']
-    ghg_oil = @btap_data['cost_utility_ghg_oil_kg_per_m_sq']
+    # Convert to tonnes of ghg/m^2
+    ghg_oil = @btap_data['cost_utility_ghg_oil_kg_per_m_sq'].to_f/1000.0
     row = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Oil')
     end
