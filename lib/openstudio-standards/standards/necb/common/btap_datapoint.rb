@@ -84,6 +84,7 @@ class BTAPDatapoint
     @npv_start_year = @options[:npv_start_year]
     @npv_end_year = @options[:npv_end_year]
     @npv_discount_rate = @options[:npv_discount_rate]
+    @npv_discount_rate_carbon = @options[:npv_discount_rate_carbon]
 
     # Save configuration to temp folder.
     File.open(File.join(@dp_temp_folder, 'run_options.yml'), 'w') { |file| file.write(@options.to_yaml) }
@@ -189,7 +190,7 @@ class BTAPDatapoint
                                        )
       end
 
-      # Save model to to disk.
+      # Save model to disk.
       puts "saving model to #{File.join(@dp_temp_folder, 'output.osm')}"
       BTAP::FileIO.save_osm(model, File.join(@dp_temp_folder, 'output.osm'))
 
@@ -259,7 +260,8 @@ class BTAPDatapoint
                                   qaqc: @qaqc,
                                   npv_start_year: @npv_start_year,
                                   npv_end_year: @npv_end_year,
-                                  npv_discount_rate: @npv_discount_rate).btap_data
+                                  npv_discount_rate: @npv_discount_rate,
+                                  npv_discount_rate_carbon: @npv_discount_rate_carbon).btap_data
 
         # Write Files
         File.open(File.join(@dp_temp_folder, 'btap_data.json'), 'w') { |f| f.write(JSON.pretty_generate(@btap_data.sort.to_h, allow_nan: true)) }
