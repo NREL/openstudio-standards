@@ -7,7 +7,7 @@ class BTAPData
 
   def initialize(model:, runner: nil, cost_result:, baseline_cost_equipment_total_cost_per_m_sq: -1.0,
                  baseline_cost_utility_neb_total_cost_per_m_sq: -1.0, baseline_energy_eui_total_gj_per_m_sq: -1.0, qaqc:,
-                 npv_start_year:, npv_end_year:, npv_discount_rate:)
+                 npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_carbon: 0.03)
     @model = model
     @error_warning = []
     # sets sql file.
@@ -88,7 +88,7 @@ class BTAPData
     # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
     bc_energy_step_code_performance_indicators
     # calculate net present value
-    net_present_value(npv_start_year, npv_end_year, npv_discount_rate) unless cost_result.nil?
+    net_present_value(npv_start_year: npv_start_year, npv_end_year: npv_end_year, npv_discount_rate: npv_discount_rate, npv_discount_rate_carbon: npv_discount_rate_carbon) unless cost_result.nil?
     # calculates annual peak electricity cost (dollar)
     oerd_electricity_cost(model)
 
@@ -173,7 +173,7 @@ class BTAPData
     return building_data
   end
 
-  def net_present_value(npv_start_year, npv_end_year, npv_discount_rate)
+  def net_present_value(npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_carbon: 0.03)
 
     # Find end year in the neb data
     neb_header = CSV.read(@neb_prices_csv_file_name, headers: true).headers
@@ -182,25 +182,32 @@ class BTAPData
     year_max = neb_header.max
 
     # Convert a string to a float
-    if npv_start_year.instance_of?(String) && npv_start_year != 'NECB_Default' && npv_start_year != 'none'
+    if npv_start_year.instance_of?(String) && npv_start_year != 'NECB_Default' && npv_start_year != 'none' && !npv_start_yeay.nil?
       npv_start_year = npv_start_year.to_f
     end
-    if npv_end_year.instance_of?(String) && npv_end_year != 'NECB_Default' && npv_end_year != 'none'
+    if npv_end_year.instance_of?(String) && npv_end_year != 'NECB_Default' && npv_end_year != 'none' && !npv_end_year.nil?
       npv_end_year = npv_end_year.to_f
     end
-    if npv_discount_rate.instance_of?(String) && npv_discount_rate != 'NECB_Default' && npv_discount_rate != 'none'
+    if npv_discount_rate.instance_of?(String) && npv_discount_rate != 'NECB_Default' && npv_discount_rate != 'none' && !npv_discount_rate.nil?
       npv_discount_rate = npv_discount_rate.to_f
     end
+    if npv_discount_rate_carbon.instance_of?(String) && npv_discount_rate_carbon != 'NECB_Default' && npv_discount_rate_carbon != 'none' && !npv_discount_rate_carbon.nil?
+      npv_discount_rate_carbon = npv_discount_rate_carbon.to_f
+    end
+
 
     # Set default npv_start_year as 2022, npv_end_year as 2041, npv_discount_rate as 3%
-    if npv_start_year == 'NECB_Default' || npv_start_year == nil || npv_start_year == 'none'
+    if npv_start_year == 'NECB_Default' || npv_start_year.nil? || npv_start_year == 'none'
       npv_start_year = 2022
     end
-    if npv_end_year == 'NECB_Default' || npv_end_year == nil || npv_end_year == 'none'
+    if npv_end_year == 'NECB_Default' || npv_end_year.nil? || npv_end_year == 'none'
       npv_end_year = 2041
     end
-    if npv_discount_rate == 'NECB_Default' || npv_discount_rate == nil || npv_discount_rate == 'none'
+    if npv_discount_rate == 'NECB_Default' || npv_discount_rate.nil? || npv_discount_rate == 'none'
       npv_discount_rate = 0.03
+    end
+    if npv_discount_rate_carbon == 'NECB_Default' || npv_discount_rate_carbon.nil? || npv_discount_rate_carbon == 'none'
+      npv_discount_rate_carbon = 0.03
     end
 
     # Set npv_end_year as year_max if users' input > neb's end year
@@ -235,8 +242,14 @@ class BTAPData
     onsite_elec_generation = @btap_data['total_site_eui_gj_per_m_sq'] - @btap_data['net_site_eui_gj_per_m_sq']
     if onsite_elec_generation > 0.0
       eui_elec = @btap_data['energy_eui_electricity_gj_per_m_sq'] - onsite_elec_generation
+      # Calculate the saved GHG emissions from onsite electricity generatation (assume it does not emmit GHGs)
+      ghg_saved = get_utility_ghg_kg_per_gj(province: province_abbreviation, fuel_type: "Electricity") * onsite_elec_generation
+      # Convert to tonnes of ghg/m^2
+      ghg_elec = (@btap_data['cost_utility_ghg_electricity_kg_per_m_sq'].to_f - ghg_saved.to_f)/1000.0
     else
       eui_elec = @btap_data['energy_eui_electricity_gj_per_m_sq']
+      # Convert to tonnes of ghg/m^2
+      ghg_elec = @btap_data['cost_utility_ghg_electricity_kg_per_m_sq'].to_f/1000.0
     end
     # puts "onsite_elec_generation is #{onsite_elec_generation}"
     # puts "eui_elec is #{eui_elec}"
@@ -245,10 +258,12 @@ class BTAPData
     end
     npv_elec = 0.0
     year_index = 1.0
+    npv_elec_ghg = 0.0
     if eui_elec > 0.0
       for year in npv_start_year.to_int..npv_end_year.to_int
         # puts "year, #{year}, #{row[year.to_s]}, year_index, #{year_index}"
         npv_elec += (eui_elec * row[year.to_s]) / (1+npv_discount_rate)**year_index
+        npv_elec_ghg += (ghg_elec * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index
         year_index += 1.0
       end
     end
@@ -256,35 +271,46 @@ class BTAPData
 
     # Calculate npv of natural gas
     eui_ngas= @btap_data['energy_eui_natural_gas_gj_per_m_sq']
+    # Convert to tonnes of ghg/m^2
+    ghg_ngas = @btap_data['cost_utility_ghg_natural gas_kg_per_m_sq'].to_f/1000.0
     row = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Natural Gas')
     end
     npv_ngas = 0.0
+    npv_ngas_ghg = 0.0
     year_index = 1.0
     for year in npv_start_year.to_int..npv_end_year.to_int
       npv_ngas += (eui_ngas * row[year.to_s]) / (1+npv_discount_rate)**year_index
+      npv_ngas_ghg += (ghg_ngas * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index
       year_index += 1.0
     end
     # puts "npv_ngas is #{npv_ngas}"
 
     # Calculate npv of oil
     eui_oil= @btap_data['energy_eui_additional_fuel_gj_per_m_sq']
+    # Convert to tonnes of ghg/m^2
+    ghg_oil = @btap_data['cost_utility_ghg_oil_kg_per_m_sq'].to_f/1000.0
     row = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Oil')
     end
     npv_oil = 0.0
+    npv_oil_ghg = 0.0
     year_index = 1.0
     for year in npv_start_year.to_int..npv_end_year.to_int
       npv_oil += (eui_oil * row[year.to_s]) / (1+npv_discount_rate)**year_index
+      npv_oil_ghg += (ghg_oil * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index
       year_index += 1.0
     end
     # puts "npv_oil is #{npv_oil}"
 
     # Calculate total npv
     npv_total = @btap_data['cost_equipment_total_cost_per_m_sq'] + npv_elec + npv_ngas + npv_oil
+    npv_ghg_total = npv_elec_ghg + npv_ngas_ghg + npv_oil_ghg
+    npv_total_with_ghg = npv_ghg_total + npv_total
 
     @btap_data.merge!('npv_total_per_m_sq' => npv_total)
-
+    @btap_data.merge!('npv_carbon_pricing_per_m_sq' => npv_ghg_total)
+    @btap_data.merge!('npv_with_carbon_pricing_total_per_m_sq' => npv_total_with_ghg)
   end
 
   def envelope(model)
@@ -548,7 +574,7 @@ class BTAPData
       "NL" => 0.13,
       "NS" => 0.22,
       "ON" => 0.16,
-      "PEI" => 0.17,
+      "PE" => 0.17,
       "QC" => 0.09,
       "SK" => 0.19,
       "YT" => 100000,
@@ -2402,5 +2428,20 @@ class BTAPData
       @btap_data.merge!('phius_necb_meet_cooling_peak_load' => 'False')
     end
     # def phius_metrics(model)
+  end
+
+  def get_national_ghg_cost(year:)
+    raise "Nil year submitted for national ghg cost" if year.nil?
+    year = year.to_i
+    if year < 2019
+      price = 0.0
+    elsif (year >= 2019) && (year <= 2030)
+      ghg_price_data = @standards_data["tables"]["canada_national_carbon_pricing"]["table"]
+      year_price = ghg_price_data.detect { |item| (item["year"].to_i == year) }
+      price = year_price["price_per_tonne"].to_f
+    elsif (year > 2030)
+      price = 170.0
+    end
+    return price.to_f
   end
 end
