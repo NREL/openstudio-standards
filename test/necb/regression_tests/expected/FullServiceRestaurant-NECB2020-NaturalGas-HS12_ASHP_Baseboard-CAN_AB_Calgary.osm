@@ -1,5 +1,49 @@
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000001},  !- Handle
+  {00000000-0000-0000-0031-000000000002},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.17999999999999999,                     !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  70,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Restaurant dinng rooms;                  !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0031-000000000003},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.12,                                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  20,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Kitchen (cooking);                       !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000003},  !- Handle
   {00000000-0000-0000-0060-000000000022},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -15,7 +59,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0001-000000000004},  !- Handle
   {00000000-0000-0000-0060-000000000021},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -905,12 +949,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000067},  !- Handle
   {00000000-0000-0000-0002-000000000002},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0045-000000000061},  !- Target Object
+  {00000000-0000-0000-0045-000000000065},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000068},  !- Handle
-  {00000000-0000-0000-0045-000000000062},  !- Source Object
+  {00000000-0000-0000-0045-000000000066},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0002-000000000002},  !- Target Object
   12;                                      !- Inlet Port
@@ -919,19 +963,19 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000069},  !- Handle
   {00000000-0000-0000-0002-000000000002},  !- Source Object
   11,                                      !- Outlet Port
-  {00000000-0000-0000-0045-000000000056},  !- Target Object
+  {00000000-0000-0000-0045-000000000058},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000070},  !- Handle
-  {00000000-0000-0000-0045-000000000057},  !- Source Object
+  {00000000-0000-0000-0045-000000000059},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0002-000000000002},  !- Target Object
   10;                                      !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000071},  !- Handle
-  {00000000-0000-0000-0045-000000000056},  !- Source Object
+  {00000000-0000-0000-0045-000000000058},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0005-000000000001},  !- Target Object
   2;                                       !- Inlet Port
@@ -940,7 +984,7 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000072},  !- Handle
   {00000000-0000-0000-0004-000000000001},  !- Source Object
   2,                                       !- Outlet Port
-  {00000000-0000-0000-0045-000000000057},  !- Target Object
+  {00000000-0000-0000-0045-000000000059},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
@@ -989,12 +1033,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000079},  !- Handle
   {00000000-0000-0000-0035-000000000002},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0045-000000000062},  !- Target Object
+  {00000000-0000-0000-0045-000000000066},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000080},  !- Handle
-  {00000000-0000-0000-0045-000000000061},  !- Source Object
+  {00000000-0000-0000-0045-000000000065},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0003-000000000001},  !- Target Object
   8;                                       !- Inlet Port
@@ -1003,12 +1047,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000081},  !- Handle
   {00000000-0000-0000-0003-000000000001},  !- Source Object
   5,                                       !- Outlet Port
-  {00000000-0000-0000-0045-000000000058},  !- Target Object
+  {00000000-0000-0000-0045-000000000062},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000082},  !- Handle
-  {00000000-0000-0000-0045-000000000058},  !- Source Object
+  {00000000-0000-0000-0045-000000000062},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0013-000000000002},  !- Target Object
   9;                                       !- Inlet Port
@@ -1080,12 +1124,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000092},  !- Handle
   {00000000-0000-0000-0002-000000000001},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0045-000000000054},  !- Target Object
+  {00000000-0000-0000-0045-000000000056},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000093},  !- Handle
-  {00000000-0000-0000-0045-000000000055},  !- Source Object
+  {00000000-0000-0000-0045-000000000057},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0002-000000000001},  !- Target Object
   12;                                      !- Inlet Port
@@ -1164,12 +1208,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000104},  !- Handle
   {00000000-0000-0000-0035-000000000001},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0045-000000000055},  !- Target Object
+  {00000000-0000-0000-0045-000000000057},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000105},  !- Handle
-  {00000000-0000-0000-0045-000000000054},  !- Source Object
+  {00000000-0000-0000-0045-000000000056},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0003-000000000002},  !- Target Object
   8;                                       !- Inlet Port
@@ -1178,12 +1222,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000106},  !- Handle
   {00000000-0000-0000-0003-000000000002},  !- Source Object
   5,                                       !- Outlet Port
-  {00000000-0000-0000-0045-000000000051},  !- Target Object
+  {00000000-0000-0000-0045-000000000053},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000107},  !- Handle
-  {00000000-0000-0000-0045-000000000051},  !- Source Object
+  {00000000-0000-0000-0045-000000000053},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0013-000000000001},  !- Target Object
   9;                                       !- Inlet Port
@@ -1260,7 +1304,7 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000118},  !- Handle
-  {00000000-0000-0000-0045-000000000059},  !- Source Object
+  {00000000-0000-0000-0045-000000000063},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0039-000000000002},  !- Target Object
   12;                                      !- Inlet Port
@@ -1269,12 +1313,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000119},  !- Handle
   {00000000-0000-0000-0039-000000000002},  !- Source Object
   13,                                      !- Outlet Port
-  {00000000-0000-0000-0045-000000000065},  !- Target Object
+  {00000000-0000-0000-0045-000000000060},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000120},  !- Handle
-  {00000000-0000-0000-0045-000000000065},  !- Source Object
+  {00000000-0000-0000-0045-000000000060},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0003-000000000001},  !- Target Object
   6;                                       !- Inlet Port
@@ -1283,12 +1327,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000121},  !- Handle
   {00000000-0000-0000-0003-000000000001},  !- Source Object
   7,                                       !- Outlet Port
-  {00000000-0000-0000-0045-000000000066},  !- Target Object
+  {00000000-0000-0000-0045-000000000061},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000122},  !- Handle
-  {00000000-0000-0000-0045-000000000066},  !- Source Object
+  {00000000-0000-0000-0045-000000000061},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0039-000000000002},  !- Target Object
   14;                                      !- Inlet Port
@@ -1297,12 +1341,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000123},  !- Handle
   {00000000-0000-0000-0039-000000000002},  !- Source Object
   15,                                      !- Outlet Port
-  {00000000-0000-0000-0045-000000000060},  !- Target Object
+  {00000000-0000-0000-0045-000000000064},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000124},  !- Handle
-  {00000000-0000-0000-0045-000000000052},  !- Source Object
+  {00000000-0000-0000-0045-000000000054},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0039-000000000001},  !- Target Object
   12;                                      !- Inlet Port
@@ -1311,12 +1355,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000125},  !- Handle
   {00000000-0000-0000-0039-000000000001},  !- Source Object
   13,                                      !- Outlet Port
-  {00000000-0000-0000-0045-000000000063},  !- Target Object
+  {00000000-0000-0000-0045-000000000051},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000126},  !- Handle
-  {00000000-0000-0000-0045-000000000063},  !- Source Object
+  {00000000-0000-0000-0045-000000000051},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0003-000000000002},  !- Target Object
   6;                                       !- Inlet Port
@@ -1325,12 +1369,12 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000127},  !- Handle
   {00000000-0000-0000-0003-000000000002},  !- Source Object
   7,                                       !- Outlet Port
-  {00000000-0000-0000-0045-000000000064},  !- Target Object
+  {00000000-0000-0000-0045-000000000052},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000128},  !- Handle
-  {00000000-0000-0000-0045-000000000064},  !- Source Object
+  {00000000-0000-0000-0045-000000000052},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0039-000000000001},  !- Target Object
   14;                                      !- Inlet Port
@@ -1339,7 +1383,7 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000129},  !- Handle
   {00000000-0000-0000-0039-000000000001},  !- Source Object
   15,                                      !- Outlet Port
-  {00000000-0000-0000-0045-000000000053},  !- Target Object
+  {00000000-0000-0000-0045-000000000055},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connector:Mixer,
@@ -2354,7 +2398,7 @@ OS:HeatBalanceAlgorithm,
 
 OS:HeatExchanger:AirToAir:SensibleAndLatent,
   {00000000-0000-0000-0039-000000000001},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV, !- Name
+  sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV, !- Name
   {00000000-0000-0000-0057-000000000002},  !- Availability Schedule
   autosize,                                !- Nominal Supply Air Flow Rate {m3/s}
   0.5,                                     !- Sensible Effectiveness at 100% Heating Air Flow {dimensionless}
@@ -2380,7 +2424,7 @@ OS:HeatExchanger:AirToAir:SensibleAndLatent,
 
 OS:HeatExchanger:AirToAir:SensibleAndLatent,
   {00000000-0000-0000-0039-000000000002},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| ERV, !- Name
+  sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| ERV, !- Name
   {00000000-0000-0000-0057-000000000002},  !- Availability Schedule
   autosize,                                !- Nominal Supply Air Flow Rate {m3/s}
   0.5,                                     !- Sensible Effectiveness at 100% Heating Air Flow {dimensionless}
@@ -3159,99 +3203,99 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0045-000000000051},  !- Handle
+  sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV Primary Outlet Air Node, !- Name
+  {00000000-0000-0000-0017-000000000125},  !- Inlet Port
+  {00000000-0000-0000-0017-000000000126};  !- Outlet Port
+
+OS:Node,
+  {00000000-0000-0000-0045-000000000052},  !- Handle
+  sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV Secondary Inlet Air Node, !- Name
+  {00000000-0000-0000-0017-000000000127},  !- Inlet Port
+  {00000000-0000-0000-0017-000000000128};  !- Outlet Port
+
+OS:Node,
+  {00000000-0000-0000-0045-000000000053},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 Mixed Air Node, !- Name
   {00000000-0000-0000-0017-000000000106},  !- Inlet Port
   {00000000-0000-0000-0017-000000000107};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000052},  !- Handle
+  {00000000-0000-0000-0045-000000000054},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0017-000000000124};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000053},  !- Handle
+  {00000000-0000-0000-0045-000000000055},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 Relief Air Node, !- Name
   {00000000-0000-0000-0017-000000000129},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000054},  !- Handle
+  {00000000-0000-0000-0045-000000000056},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 Supply Inlet Node, !- Name
   {00000000-0000-0000-0017-000000000092},  !- Inlet Port
   {00000000-0000-0000-0017-000000000105};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000055},  !- Handle
+  {00000000-0000-0000-0045-000000000057},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 Supply Outlet Node, !- Name
   {00000000-0000-0000-0017-000000000104},  !- Inlet Port
   {00000000-0000-0000-0017-000000000093};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000056},  !- Handle
+  {00000000-0000-0000-0045-000000000058},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| Demand Inlet Node, !- Name
   {00000000-0000-0000-0017-000000000069},  !- Inlet Port
   {00000000-0000-0000-0017-000000000071};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000057},  !- Handle
+  {00000000-0000-0000-0045-000000000059},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| Demand Outlet Node, !- Name
   {00000000-0000-0000-0017-000000000072},  !- Inlet Port
   {00000000-0000-0000-0017-000000000070};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000058},  !- Handle
+  {00000000-0000-0000-0045-000000000060},  !- Handle
+  sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| ERV Primary Outlet Air Node, !- Name
+  {00000000-0000-0000-0017-000000000119},  !- Inlet Port
+  {00000000-0000-0000-0017-000000000120};  !- Outlet Port
+
+OS:Node,
+  {00000000-0000-0000-0045-000000000061},  !- Handle
+  sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| ERV Secondary Inlet Air Node, !- Name
+  {00000000-0000-0000-0017-000000000121},  !- Inlet Port
+  {00000000-0000-0000-0017-000000000122};  !- Outlet Port
+
+OS:Node,
+  {00000000-0000-0000-0045-000000000062},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| Mixed Air Node, !- Name
   {00000000-0000-0000-0017-000000000081},  !- Inlet Port
   {00000000-0000-0000-0017-000000000082};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000059},  !- Handle
+  {00000000-0000-0000-0045-000000000063},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0017-000000000118};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000060},  !- Handle
+  {00000000-0000-0000-0045-000000000064},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| Relief Air Node, !- Name
   {00000000-0000-0000-0017-000000000123},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000061},  !- Handle
+  {00000000-0000-0000-0045-000000000065},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| Supply Inlet Node, !- Name
   {00000000-0000-0000-0017-000000000067},  !- Inlet Port
   {00000000-0000-0000-0017-000000000080};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0045-000000000062},  !- Handle
+  {00000000-0000-0000-0045-000000000066},  !- Handle
   sys_3|mixed|shr>erv|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| Supply Outlet Node, !- Name
   {00000000-0000-0000-0017-000000000079},  !- Inlet Port
   {00000000-0000-0000-0017-000000000068};  !- Outlet Port
-
-OS:Node,
-  {00000000-0000-0000-0045-000000000063},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV Primary Outlet Air Node, !- Name
-  {00000000-0000-0000-0017-000000000125},  !- Inlet Port
-  {00000000-0000-0000-0017-000000000126};  !- Outlet Port
-
-OS:Node,
-  {00000000-0000-0000-0045-000000000064},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV Secondary Inlet Air Node, !- Name
-  {00000000-0000-0000-0017-000000000127},  !- Inlet Port
-  {00000000-0000-0000-0017-000000000128};  !- Outlet Port
-
-OS:Node,
-  {00000000-0000-0000-0045-000000000065},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| ERV Primary Outlet Air Node, !- Name
-  {00000000-0000-0000-0017-000000000119},  !- Inlet Port
-  {00000000-0000-0000-0017-000000000120};  !- Outlet Port
-
-OS:Node,
-  {00000000-0000-0000-0045-000000000066},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-hw|zc>none|srf>none| ERV Secondary Inlet Air Node, !- Name
-  {00000000-0000-0000-0017-000000000121},  !- Inlet Port
-  {00000000-0000-0000-0017-000000000122};  !- Outlet Port
 
 OS:Output:Meter,
   {00000000-0000-0000-0046-000000000001},  !- Handle
@@ -5431,11 +5475,11 @@ OS:SetpointManager:OutdoorAirPretreat,
   99,                                      !- Maximum Setpoint Temperature {C}
   1e-05,                                   !- Minimum Setpoint Humidity Ratio {kgWater/kgDryAir}
   1,                                       !- Maximum Setpoint Humidity Ratio {kgWater/kgDryAir}
-  {00000000-0000-0000-0045-000000000058},  !- Reference Setpoint Node Name
-  {00000000-0000-0000-0045-000000000058},  !- Mixed Air Stream Node Name
-  {00000000-0000-0000-0045-000000000059},  !- Outdoor Air Stream Node Name
-  {00000000-0000-0000-0045-000000000061},  !- Return Air Stream Node Name
-  {00000000-0000-0000-0045-000000000065};  !- Setpoint Node or NodeList Name
+  {00000000-0000-0000-0045-000000000062},  !- Reference Setpoint Node Name
+  {00000000-0000-0000-0045-000000000062},  !- Mixed Air Stream Node Name
+  {00000000-0000-0000-0045-000000000063},  !- Outdoor Air Stream Node Name
+  {00000000-0000-0000-0045-000000000065},  !- Return Air Stream Node Name
+  {00000000-0000-0000-0045-000000000060};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:OutdoorAirPretreat,
   {00000000-0000-0000-0062-000000000002},  !- Handle
@@ -5445,11 +5489,11 @@ OS:SetpointManager:OutdoorAirPretreat,
   99,                                      !- Maximum Setpoint Temperature {C}
   1e-05,                                   !- Minimum Setpoint Humidity Ratio {kgWater/kgDryAir}
   1,                                       !- Maximum Setpoint Humidity Ratio {kgWater/kgDryAir}
-  {00000000-0000-0000-0045-000000000051},  !- Reference Setpoint Node Name
-  {00000000-0000-0000-0045-000000000051},  !- Mixed Air Stream Node Name
-  {00000000-0000-0000-0045-000000000052},  !- Outdoor Air Stream Node Name
-  {00000000-0000-0000-0045-000000000054},  !- Return Air Stream Node Name
-  {00000000-0000-0000-0045-000000000063};  !- Setpoint Node or NodeList Name
+  {00000000-0000-0000-0045-000000000053},  !- Reference Setpoint Node Name
+  {00000000-0000-0000-0045-000000000053},  !- Mixed Air Stream Node Name
+  {00000000-0000-0000-0045-000000000054},  !- Outdoor Air Stream Node Name
+  {00000000-0000-0000-0045-000000000056},  !- Return Air Stream Node Name
+  {00000000-0000-0000-0045-000000000051};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:OutdoorAirReset,
   {00000000-0000-0000-0063-000000000001},  !- Handle
@@ -5479,7 +5523,7 @@ OS:SetpointManager:SingleZone:Reheat,
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
   {00000000-0000-0000-0089-000000000002},  !- Control Zone Name
-  {00000000-0000-0000-0045-000000000062};  !- Setpoint Node or NodeList Name
+  {00000000-0000-0000-0045-000000000066};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
   {00000000-0000-0000-0065-000000000002},  !- Handle
@@ -5487,7 +5531,7 @@ OS:SetpointManager:SingleZone:Reheat,
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
   {00000000-0000-0000-0089-000000000003},  !- Control Zone Name
-  {00000000-0000-0000-0045-000000000055};  !- Setpoint Node or NodeList Name
+  {00000000-0000-0000-0045-000000000057};  !- Setpoint Node or NodeList Name
 
 OS:ShadowCalculation,
   {00000000-0000-0000-0066-000000000001},  !- Handle
