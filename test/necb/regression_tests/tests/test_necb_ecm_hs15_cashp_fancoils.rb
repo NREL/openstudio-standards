@@ -2,7 +2,7 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../resources/parametric_test_creator'
 
 # Sample test to demonstrate how to call the test creator
-class ECM_HS14_CGSHP_FanCoils_Test < ParametricTestCreator
+class ECM_HS15_CAWHP_FanCoils_Test < ParametricTestCreator
   params =
     {
       template:
@@ -20,7 +20,7 @@ class ECM_HS14_CGSHP_FanCoils_Test < ParametricTestCreator
         ],
       ecm_system_name:
         [
-          "HS15_CASHP_FanCoils"
+          "HS15_CAWHP_FanCoils"
         ]
     }
   self.generate_tests(params)

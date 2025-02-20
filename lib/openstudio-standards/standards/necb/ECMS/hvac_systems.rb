@@ -2028,20 +2028,15 @@ class ECMS
   end
 
   #=============================================================================================================================
-  # Add equipment for ECM "hs15_cashp_fancoils"
+  # Add equipment for ECM "hs15_cawhp_fancoils"
   #   -Constant volume DOAS with hydronic htg and clg coils.
-  #   -Zonal terminal fan coil (4-pipe) connected to central air-source heat pump.
-  #   -Plant has a heating loop with air-to-water heat pump with a backup boiler.
-  def add_ecm_hs15_cashp_fancoils(model:,
+  #   -Zonal terminal fan coil (4-pipe) connected to central air-to-water heat pump.
+  #   -Plant has a heating loop with air-to-water heat pump with one or two backup boiler.
+  def add_ecm_hs15_cawhp_fancoils(model:,
                                system_zones_map:,
                                system_doas_flags:,
                                ecm_system_zones_map_option:,
                                standard:)
-    # Get the heating fuel type from the system fuels object defined by the standards object
-    heating_fuel = standard.fuel_type_set.ecm_fueltype
-    # Set supplemental heaing for airloop
-    sys_supp_htg_eqpt_type = 'coil_electric'
-    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
     system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
@@ -2204,17 +2199,17 @@ class ECMS
   end
 
   #=============================================================================================================================
-  # Apply efficiency for ECM 'hs15_cashp_fancoils'
-  def apply_efficiency_ecm_hs15_cashp_fancoils(model, standard)
+  # Apply efficiency for ECM 'hs15_cawhp_fancoils'
+  def apply_efficiency_ecm_hs15_cawhp_fancoils(model, standard)
     heatpump_siz_f = 0.4 # heating heat pump sizing fraction
     # get heat pump heating and boiler objects
     hw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'heating'}
-    raise("apply_efficiency_ecm_hs15_cashp_fancoils: no hot-water loop is found") if hw_loop.empty?
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no hot-water loop is found") if hw_loop.empty?
     hw_loop = hw_loop[0].to_PlantLoop.get
     heatpump_htg = hw_loop.supplyComponents.select {|comp| comp.to_HeatPumpPlantLoopEIRHeating.is_initialized}
     hw_boilers = hw_loop.supplyComponents.select {|comp| comp.to_BoilerHotWater.is_initialized}
-    raise("apply_efficiency_ecm_hs15_cashp_fancoils: no air-source heat pump found on hot-water loop #{hw_loop.name.to_s}") if heatpump_htg.empty?
-    raise("apply_efficiency_ecm_hs15_cashp_fancoils: no boiler found on hot-water loop #{hw_loop.name.to_s}") if hw_boilers.empty?
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no air-source heat pump found on hot-water loop #{hw_loop.name.to_s}") if heatpump_htg.empty?
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no boiler found on hot-water loop #{hw_loop.name.to_s}") if hw_boilers.empty?
     heatpump_htg = heatpump_htg[0].to_HeatPumpPlantLoopEIRHeating.get
     primary_boiler = hw_boilers[0].to_BoilerHotWater.get
     # boiler total capacity
@@ -2223,7 +2218,7 @@ class ECMS
     elsif primary_boiler.nominalCapacity.is_initialized
       tot_hw_boiler_cap = primary_boiler.nominalCapacity.to_f
     else
-      raise("apply_efficiency_ecm_hs15_cashp_fancoils: capacity of boiler #{primary_boiler.name.to_s} is not defined")
+      raise("apply_efficiency_ecm_hs15_cawhp_fancoils: capacity of boiler #{primary_boiler.name.to_s} is not defined")
     end
     # If two boilers are present set their capacities by multiplying the total capacity by the defined primary and secondary 
     # boiler capacity ratios, respectively.
@@ -2237,10 +2232,10 @@ class ECMS
     end
     # get heat pump cooling object
     chw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'cooling'}
-    raise("apply_efficiency_ecm_hs15_cashp_fancoils: no chilled-water loop is found") if chw_loop.empty?
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no chilled-water loop is found") if chw_loop.empty?
     chw_loop = chw_loop[0].to_PlantLoop.get
     heatpump_clg = chw_loop.supplyComponents.select {|comp| comp.to_HeatPumpPlantLoopEIRCooling.is_initialized}
-    raise("apply_efficiency_ecm_hs15_cashp_fancoils: no heat pump on chilled-water loop #{chw_loop.name} is found") if heatpump_clg.empty?
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no heat pump on chilled-water loop #{chw_loop.name} is found") if heatpump_clg.empty?
     heatpump_clg = heatpump_clg[0].to_HeatPumpPlantLoopEIRCooling.get
     # get cooling capacity of air-source heat pump
     if heatpump_clg.autosizedReferenceCapacity.is_initialized
@@ -2248,7 +2243,7 @@ class ECMS
     elsif heatpump_clg.ratedReferenceCapacity.is_initialized
       hp_clg_cap = heatpump_clg.ratedReferenceCapacity.to_f
     else
-      raise("apply_efficiency_ecm_hs15_cashp_fancoils: capacity of air-source heat pump #{heatpump_htg.name.to_s} is not defined")
+      raise("apply_efficiency_ecm_hs15_cawhp_fancoils: capacity of air-source heat pump #{heatpump_htg.name.to_s} is not defined")
     end
     # set final heating capacity and cooling capacities of air-source heat pump
     hp_htg_cap = heatpump_siz_f*tot_hw_boiler_cap
