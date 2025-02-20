@@ -525,7 +525,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.hvac_systems"
   require_relative "#{proto}/common/objects/Prototype.Model.elevators"
   require_relative "#{proto}/common/objects/Prototype.Model.transformers"
-  require_relative "#{proto}/common/objects/Prototype.Model.exterior_lights"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
   require_relative "#{proto}/common/objects/Prototype.Pump"
