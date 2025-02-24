@@ -38,7 +38,7 @@ class Standard
     end_setback_shutoff = { hr: 6, min: 0 }
     shuttoff = false
     setback = false
-    
+
     if exterior_lighting_properties.has_key?('building_facade_and_landscape_automatic_shut_off')
       if exterior_lighting_properties['building_facade_and_landscape_automatic_shut_off'] == 1
         facade_automatic_shut_off = true
@@ -441,7 +441,7 @@ class Standard
           power += exterior_lighting_add_base_allowance['allowance'] * installed_power / 100 # should be of allowed vs. installed, but hard to calculate
         end
       end
-      
+
       # create ext light def
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Added #{power} W of non landscape tradable exterior lighting. Will follow occupancy setback reduction.")
       ext_lights_def = OpenStudio::Model::ExteriorLightsDefinition.new(model)
