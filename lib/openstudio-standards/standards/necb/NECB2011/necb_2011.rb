@@ -28,12 +28,11 @@ class NECB2011 < Standard
   def convert_arg_to_bool(variable:, default:)
     return default if variable.nil?
     if variable.is_a? String
-      return default if variable.to_s.downcase == 'necb_default'
-      return false if variable.to_s.downcase == 'false'
       return true if variable.to_s.downcase == 'true'
+      return false
     end
-    return false if variable == false
-    return variable
+    return true if variable == true
+    return default
   end
 
   # This method checks if a variable is a string.  If it is anything but a string it returns the default.  If it is a
@@ -2495,5 +2494,3 @@ class NECB2011 < Standard
     return boiler_cap_ratios
   end
 end
-
-
