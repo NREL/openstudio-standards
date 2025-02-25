@@ -7,7 +7,7 @@ class TestExteriorLightingInformation < Minitest::Test
     FileUtils.mkdir_p "#{__dir__}/output"
   end
 
-  def test_model_get_exterior_lighting_areas
+  def test_model_get_exterior_lighting_sizes
     # load model and set up weather file
     template = '90.1-2013'
     climate_zone = 'ASHRAE 169-2013-4A'
@@ -16,14 +16,14 @@ class TestExteriorLightingInformation < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_model_get_exterior_lighting_areas"
+    output_dir = "#{__dir__}/output/test_model_get_exterior_lighting_sizes"
     FileUtils.mkdir_p output_dir
 
     result = @create.create_typical_building_from_model(model, template,
                                                         climate_zone: climate_zone,
                                                         sizing_run_directory: output_dir)
 
-    areas = @ext.model_get_exterior_lighting_areas(model)
+    areas = @ext.model_get_exterior_lighting_sizes(model)
   end
 
   # add a test for a model with multiple building types

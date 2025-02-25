@@ -90,7 +90,7 @@ module OpenstudioStandards
       end
 
       # get model specific areas to for exterior lighting
-      area_length_count_hash = OpenstudioStandards::ExteriorLighting.model_get_exterior_lighting_areas(model)
+      area_length_count_hash = OpenstudioStandards::ExteriorLighting.model_get_exterior_lighting_sizes(model)
 
       # create schedules for exterior lighting objects using midnight to 6am setback or shutdown
       start_setback_shutoff = { hr: 24, min: 0 }

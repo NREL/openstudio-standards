@@ -7,7 +7,7 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @return [Hash] hash of exterior lighting value types and building type and model specific values
-    def self.model_get_exterior_lighting_areas(model)
+    def self.model_get_exterior_lighting_sizes(model)
       # load parking file and convert to hash table
       parking_csv = "#{__dir__}/data/parking.csv"
       unless File.exist?(parking_csv)
