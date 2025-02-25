@@ -46,7 +46,7 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param standard [Standard] standard object to use for lighting properties. If set, will override lighting_generation.
-    # @param lighting_generation [String] lighting generation to use for lighting properties.
+    # @param lighting_generation [String] lighting generation to use for lighting properties. Currently defaulted to a mix of Metal Halide, High Pressure Sodium, and LEDs.
     # @param exterior_lighting_zone_number [Integer] exterior lighting zone number, 0-4
     # @param onsite_parking_fraction [Double] onsite parking fraction, 0-1
     # @param add_base_site_allowance [Boolean] whether to include the base site allowance
@@ -54,7 +54,7 @@ module OpenstudioStandards
     # @return [Array<OpenStudio::Model::ExteriorLights>] Array of OpenStudio ExteriorLights object
     def self.model_create_typical_exterior_lighting(model,
                                                     standard: nil,
-                                                    lighting_generation: 'gen4_led',
+                                                    lighting_generation: 'default',
                                                     exterior_lighting_zone_number: 3,
                                                     onsite_parking_fraction: 1.0,
                                                     add_base_site_allowance: false,
@@ -69,8 +69,10 @@ module OpenstudioStandards
         }
         exterior_lighting_properties = standard.standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         lookup_key = standard.template
-
       else
+        # load typical water use equipment data
+        data = JSON.parse(File.read("#{__dir__}/data/typical_exterior_lighting.json"))
+        exterior_lighting_properties = data['exterior_lighting'].select { |hash| (hash['lighting_generation'] == lighting_generation) }[0]
         lookup_key = lighting_generation
       end
 
