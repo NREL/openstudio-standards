@@ -2029,21 +2029,24 @@ class ECMS
 
   #=============================================================================================================================
   # Add equipment for ECM "hs15_cawhp_fancoils"
-  #   -Constant volume DOAS with hydronic htg and clg coils.
+  #   -Constant volume DOAS with hydronic htg and clg coils served by central air-to-water heat pump.
   #   -Zonal terminal fan coil (4-pipe) connected to central air-to-water heat pump.
-  #   -Plant has a heating loop with air-to-water heat pump with one or two backup boiler.
+  #   -Plant has a heating loop with air-to-water heat pump with one or two backup boiler(s).
   def add_ecm_hs15_cawhp_fancoils(model:,
                                system_zones_map:,
                                system_doas_flags:,
                                ecm_system_zones_map_option:,
-                               standard:)
+                               standard:,
+                               sys_htg_eqpt_type: 'coil_hw',
+                               sys_clg_eqpt_type: 'coil_chw',
+                               sys_supp_htg_eqpt_type: 'none')
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
     system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
     # Update system doas flags
     system_doas_flags = {}
     system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
-    # use system zones map and generate new air system and zonal equipment
+    # generate new air system and zonal equipment
     systems = []
     system_zones_map.sort.each do |sys_name, zones|
       sys_info = air_sys_comps_assumptions(sys_name: sys_name,
@@ -2054,12 +2057,17 @@ class ECMS
              sys_abbr: sys_info['sys_abbr'],
              sys_vent_type: sys_info['sys_vent_type'],
              sys_heat_rec_type: sys_info['sys_heat_rec_type'],
-             sys_htg_eqpt_type: 'coil_hw',
-             sys_supp_htg_eqpt_type: 'none',
-             sys_clg_eqpt_type: 'coil_chw',
+             sys_htg_eqpt_type: sys_htg_eqpt_type,
+             sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
+             sys_clg_eqpt_type: sys_clg_eqpt_type,
              sys_supp_fan_type: sys_info['sys_supp_fan_type'],
              sys_ret_fan_type: sys_info['sys_ret_fan_type'],
              sys_setpoint_mgr_type: 'warmest')
+      if sys_htg_eqpt_type == 'ashp' && sys_clg_eqpt_type == 'ashp'
+        eqpt_name = 'NECB2015_ASHP'
+        coil_cooling_dx_single_speed_apply_curves(clg_coil,eqpt_name)
+        coil_heating_dx_single_speed_apply_curves(htg_coil,eqpt_name)
+      end
       # add zone fan coil equipment and diffuser
       zone_htg_eqpt_type = 'fancoil_4pipe'
       zone_clg_eqpt_type = 'fancoil_4pipe'
@@ -2275,8 +2283,43 @@ class ECMS
     heat_pump_ctlr_pcm.setCallingPoint('InsideHVACSystemIterationLoop')
     heat_pump_ctlr_pcm.addProgram(heatpump_cltr_prg)
 
-   return
- end
+    return
+  end
+
+  #=============================================================================================================================
+  # Add equipment for ECM "hs16_ashp_cawhp_fancoils"
+  #   -Constant volume DOAS with ashp for heating and cooling with a backup heating coil.
+  #   -Zonal terminal fan coil (4-pipe) connected to central air-to-water heat pump.
+  #   -Plant has a heating loop with air-to-water heat pump with one or two backup boiler(s).
+  def add_ecm_hs16_ashp_cawhp_fancoils(model:,
+                                    system_zones_map:,
+                                    system_doas_flags:,
+                                    ecm_system_zones_map_option:,
+                                    standard:)
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
+    # Set supplemental heaing for airloop
+    sys_supp_htg_eqpt_type = 'coil_electric'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+    # call ecm HS15 to add the air loop
+    add_ecm_hs15_cawhp_fancoils(model: model,
+                             system_zones_map: system_zones_map,
+                             system_doas_flags: system_doas_flags,
+                             ecm_system_zones_map_option: ecm_system_zones_map_option,
+                             standard: standard,
+                             sys_htg_eqpt_type: 'ashp',
+                             sys_clg_eqpt_type: 'ashp',
+                             sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type)
+    return
+  end
+
+  #=============================================================================================================================
+  # Apply efficiency for ECM 'hs16_ashp_cawhp_fancoils'
+  def apply_efficiency_ecm_hs16_ashp_cawhp_fancoils(model, standard)
+    # The air loop is the same as in ECM 12
+    apply_efficiency_ecm_hs12_ashp_baseboard(model, standard)
+    return
+  end
 
   # =============================================================================================================================
   # Applies the performance curves "CoilCoolingDXSingleSpeed" object.
