@@ -104,10 +104,6 @@ class Standard
         }
         exterior_lighting_parking_req = standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         power = exterior_lighting_parking_req['allowance']
-        if exterior_lighting_parking_req['allowance_unit'] == 'W'
-          multiplier = 1
-          ext_lights_def_name = "#{name_prefix} Def (W)"
-        end
       end
 
       # create ext light def
@@ -146,10 +142,6 @@ class Standard
         }
         exterior_lighting_facade_req = standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         power = exterior_lighting_facade_req['allowance']
-        if exterior_lighting_facade_req['allowance_unit'] == 'W'
-          multiplier = 1
-          ext_lights_def_name = "#{name_prefix} Def (W)"
-        end
       end
 
       # create ext light def
@@ -177,7 +169,7 @@ class Standard
       # lighting values
       name_prefix = 'Main Entries'
       multiplier = area_length_count_hash[:main_entries]
-      ext_lights_def_name = "#{name_prefix} Def (W/ft^2)"
+      ext_lights_def_name = "#{name_prefix} Def (W/Main Entry)"
       if exterior_lighting_properties.has_key?('main_entries')
         power = exterior_lighting_properties['main_entries']
       else
@@ -197,10 +189,6 @@ class Standard
           exterior_lighting_entries_req = standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         end
         power = exterior_lighting_entries_req['allowance']
-        if exterior_lighting_entries_req['allowance_unit'] == 'W'
-          multiplier = 1
-          ext_lights_def_name = "#{name_prefix} Def (W)"
-        end
       end
 
       # create ext light def
@@ -228,7 +216,7 @@ class Standard
       # lighting values
       name_prefix = 'Other Doors'
       multiplier = area_length_count_hash[:other_doors]
-      ext_lights_def_name = "#{name_prefix} Def (W/ft^2)"
+      ext_lights_def_name = "#{name_prefix} Def (W/ft of door)"
       if exterior_lighting_properties.has_key?('other_doors')
         power = exterior_lighting_properties['other_doors']
       else
@@ -248,10 +236,6 @@ class Standard
           exterior_lighting_doors_req = standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         end
         power = exterior_lighting_doors_req['allowance']
-        if exterior_lighting_doors_req['allowance_unit'] == 'W'
-          multiplier = 1
-          ext_lights_def_name = "#{name_prefix} Def (W)"
-        end
       end
 
       # create ext light def
@@ -299,10 +283,6 @@ class Standard
           exterior_lighting_canopies_req = standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         end
         power = exterior_lighting_canopies_req['allowance']
-        if exterior_lighting_canopies_req['allowance_unit'] == 'W'
-          multiplier = 1
-          ext_lights_def_name = "#{name_prefix} Def (W)"
-        end
       end
 
       # create ext light def
@@ -341,10 +321,6 @@ class Standard
         }
         exterior_lighting_emergency_canopies_req = standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         power = exterior_lighting_emergency_canopies_req['allowance']
-        if exterior_lighting_emergency_canopies_req['allowance_unit'] == 'W'
-          multiplier = 1
-          ext_lights_def_name = "#{name_prefix} Def (W)"
-        end
       end
 
       # create ext light def
@@ -372,7 +348,7 @@ class Standard
       # lighting values
       name_prefix = 'Drive Through Windows'
       multiplier = area_length_count_hash[:drive_through_windows]
-      ext_lights_def_name = "#{name_prefix} Def (W/ft^2)"
+      ext_lights_def_name = "#{name_prefix} Def (W/Drive Through Windows)"
       if exterior_lighting_properties.has_key?('drive_through_windows_and_doors')
         power = exterior_lighting_properties['drive_through_windows_and_doors']
       else
@@ -383,10 +359,6 @@ class Standard
         }
         exterior_lighting_emergency_drive_through_req = standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         power = exterior_lighting_emergency_drive_through_req['allowance']
-        if exterior_lighting_emergency_drive_through_req['allowance_unit'] == 'W'
-          multiplier = 1
-          ext_lights_def_name = "#{name_prefix} Def (W)"
-        end
       end
 
       # create ext light def
