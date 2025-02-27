@@ -1,0 +1,36 @@
+﻿Activity,Category,NECB 2011 Building Type,NECB 2015 Building Type,NECB 2017 Building Type,NECB 2020 Building Type
+arena,recreation,Sports arena,Sports arena,Sports arena,Sports arena
+gym,recreation,Gymnasium,Gymnasium,Gymnasium,Gymnasium
+exercise,commerce,Exercise centre,Exercise centre,Exercise centre,Exercise centre
+office,commerce,Office,Office,Office,Office
+retail,commerce,Retail,Retail area,Retail area,Retail area
+leisure,commerce,Dining - bar/lounge/leisure,Dining - bar lounge/leisure,Dining - bar lounge/leisure,Dining - bar lounge/leisure
+fastfood,commerce,Dining - cafeteria/fastfood,Dining - cafeteria/fastfood,Dining - cafeteria/fastfood,Dining - cafeteria/fastfood
+restaurant,commerce,Dining - family restaurant,Dining - family restaurant,Dining - family restaurant,Dining - family restaurant
+hotel,lodging,Hotel,Hotel and other lodging,Hotel and other lodging,Hotel and other lodging
+motel,lodging,Motel,,,
+dorm,housing,Dormitory,Dormitory,Dormitory,Dormitory
+residential,housing,Multi-unit residential,Multi-unit residential building,Multi-unit residential building,Multi-unit residential building
+care,housing,,Long-term care - dwelling units,Long-term care - dwelling units,Long-term care - dwelling units
+clinic,public,Health clinic,Health clinic,Health clinic,Health clinic
+hospital,public,Hospital,Hospital,Hospital,Hospital
+religious,public,Religious,Religious building,Religious building,Religious building
+terminal,public,Terminal (transportation),Terminal (transportation facility),Terminal (transportation facility),Terminal (transportation facility)
+theatre,public,Performing arts theatre,Performing arts theatre,Performing arts theatre,Performing arts theatre
+cineplex,public,Cineplex (motion picture),Cineplex (motion picture),Cineplex (motion picture),Cineplex (motion picture)
+convention,public,Convention centre,Convention centre,Convention centre,Convention centre
+museum,public,Museum,Museum,Museum,Museum
+library,public,Library,Library,Library,Library
+school,public,School/university,School/university,School/university,School/university
+postal,public,Postal building,Postal building,Postal building,Postal building
+townhall,public,Townhall,Townhall,Townhall,Townhall
+court,public,Courthouse,Courthouse,Courthouse,Courthouse
+precinct,public,Precinct (police station),Precinct (police station),Precinct (police station),Precinct (police station)
+penitentiary,robust,Penitentiary,Penitentiary,Penitentiary,Penitentiary
+parking,robust,Parking garage,,,
+storage,industry,,Storage garage,Storage garage,Storage garage
+warehouse,industry,Warehouse,Warehouse,Warehouse,Warehouse
+workshop,industry,Workshop,Workshop,Workshop,Workshop
+manufacturing,industry,Manufacturing facility,Manufacturing facility,Manufacturing facility,Manufacturing facility
+automotive,industry,Automotive facility,Automotive facility,Automotive facility,Automotive facility
+firehouse,industry,Firehouse (fire station),Firehouse (fire station),Firehouse (fire station),Firehouse (fire station)
