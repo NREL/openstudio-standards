@@ -192,7 +192,7 @@ OS:AdditionalProperties,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000001},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000038},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000005},  !- Availability Manager List Name
@@ -214,7 +214,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000002},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000039},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000006},  !- Availability Manager List Name
@@ -236,7 +236,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000003},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000040},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000007},  !- Availability Manager List Name
@@ -258,7 +258,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000004},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000041},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000008},  !- Availability Manager List Name
@@ -280,7 +280,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000005},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000042},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000009},  !- Availability Manager List Name
@@ -302,7 +302,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000006},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000043},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000010},  !- Availability Manager List Name
@@ -324,7 +324,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000007},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000044},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000011},  !- Availability Manager List Name
@@ -346,7 +346,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000008},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000045},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000002},  !- Availability Manager List Name
@@ -368,7 +368,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000009},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000046},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000003},  !- Availability Manager List Name
@@ -390,7 +390,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000010},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none|, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none|, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000047},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000004},  !- Availability Manager List Name
@@ -412,7 +412,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000011},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000048},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000001},  !- Availability Manager List Name
@@ -434,7 +434,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000012},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none|, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none|, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0063-000000000049},  !- Availability Schedule
   {00000000-0000-0000-0009-000000000012},  !- Availability Manager List Name
@@ -7720,7 +7720,7 @@ OS:ElectricEquipment:Definition,
 
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0035-000000000001},  !- Handle
-  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__7_ClgSch0, !- Name
+  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__7_ClgSch0, !- Name
   {00000000-0000-0000-0063-000000000031},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
@@ -7728,7 +7728,7 @@ OS:EnergyManagementSystem:Actuator,
 
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0035-000000000002},  !- Handle
-  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__7_HtgSch0, !- Name
+  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__7_HtgSch0, !- Name
   {00000000-0000-0000-0063-000000000032},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
@@ -7736,7 +7736,7 @@ OS:EnergyManagementSystem:Actuator,
 
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0035-000000000003},  !- Handle
-  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__9_ClgSch0, !- Name
+  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__9_ClgSch0, !- Name
   {00000000-0000-0000-0063-000000000031},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
@@ -7744,7 +7744,7 @@ OS:EnergyManagementSystem:Actuator,
 
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0035-000000000004},  !- Handle
-  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__9_HtgSch0, !- Name
+  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__9_HtgSch0, !- Name
   {00000000-0000-0000-0063-000000000032},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
@@ -7752,53 +7752,53 @@ OS:EnergyManagementSystem:Actuator,
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0036-000000000001},  !- Handle
-  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__7_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {51079781-7037-45f7-9d17-557cbef27774}<23.9 && {51079781-7037-45f7-9d17-557cbef27774}>1.7, !- Program Line 1
-  SET {c0cd4a54-b7f8-434d-af86-8a063f898196} = 29.4, !- Program Line 2
-  SET {9e8bbaf6-64b0-49cb-bedb-06f60af91b16} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {51079781-7037-45f7-9d17-557cbef27774}<23.9 && {51079781-7037-45f7-9d17-557cbef27774}>1.7, !- Program Line 4
-  SET {c0cd4a54-b7f8-434d-af86-8a063f898196} = 29.4, !- Program Line 5
-  SET {9e8bbaf6-64b0-49cb-bedb-06f60af91b16} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {51079781-7037-45f7-9d17-557cbef27774}<23.9 && {51079781-7037-45f7-9d17-557cbef27774}>1.7, !- Program Line 7
-  SET {c0cd4a54-b7f8-434d-af86-8a063f898196} = 29.4, !- Program Line 8
-  SET {9e8bbaf6-64b0-49cb-bedb-06f60af91b16} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {51079781-7037-45f7-9d17-557cbef27774}<23.9 && {51079781-7037-45f7-9d17-557cbef27774}>1.7, !- Program Line 10
-  SET {c0cd4a54-b7f8-434d-af86-8a063f898196} = 29.4, !- Program Line 11
-  SET {9e8bbaf6-64b0-49cb-bedb-06f60af91b16} = 15.6, !- Program Line 12
+  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__7_OptimumStartProg0, !- Name
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {b7916860-722a-41f6-95f0-2bff755b6bb8}<23.9 && {b7916860-722a-41f6-95f0-2bff755b6bb8}>1.7, !- Program Line 1
+  SET {10c7dfbe-a3eb-45e2-9fa5-c08af549a214} = 29.4, !- Program Line 2
+  SET {e5500c27-d0bd-4ce4-bbb5-f123779043d3} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {b7916860-722a-41f6-95f0-2bff755b6bb8}<23.9 && {b7916860-722a-41f6-95f0-2bff755b6bb8}>1.7, !- Program Line 4
+  SET {10c7dfbe-a3eb-45e2-9fa5-c08af549a214} = 29.4, !- Program Line 5
+  SET {e5500c27-d0bd-4ce4-bbb5-f123779043d3} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {b7916860-722a-41f6-95f0-2bff755b6bb8}<23.9 && {b7916860-722a-41f6-95f0-2bff755b6bb8}>1.7, !- Program Line 7
+  SET {10c7dfbe-a3eb-45e2-9fa5-c08af549a214} = 29.4, !- Program Line 8
+  SET {e5500c27-d0bd-4ce4-bbb5-f123779043d3} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {b7916860-722a-41f6-95f0-2bff755b6bb8}<23.9 && {b7916860-722a-41f6-95f0-2bff755b6bb8}>1.7, !- Program Line 10
+  SET {10c7dfbe-a3eb-45e2-9fa5-c08af549a214} = 29.4, !- Program Line 11
+  SET {e5500c27-d0bd-4ce4-bbb5-f123779043d3} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {c0cd4a54-b7f8-434d-af86-8a063f898196} = NULL, !- Program Line 14
-  SET {9e8bbaf6-64b0-49cb-bedb-06f60af91b16} = NULL, !- Program Line 15
+  SET {10c7dfbe-a3eb-45e2-9fa5-c08af549a214} = NULL, !- Program Line 14
+  SET {e5500c27-d0bd-4ce4-bbb5-f123779043d3} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0036-000000000002},  !- Handle
-  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__9_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {90353d7b-7459-47fa-9df7-7ce34cdda53e}<23.9 && {90353d7b-7459-47fa-9df7-7ce34cdda53e}>1.7, !- Program Line 1
-  SET {a36aabd7-35ee-4aa7-9bc3-41071ecfb6e1} = 29.4, !- Program Line 2
-  SET {5f6750eb-6ebe-40a0-9471-016d1e2870bc} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {90353d7b-7459-47fa-9df7-7ce34cdda53e}<23.9 && {90353d7b-7459-47fa-9df7-7ce34cdda53e}>1.7, !- Program Line 4
-  SET {a36aabd7-35ee-4aa7-9bc3-41071ecfb6e1} = 29.4, !- Program Line 5
-  SET {5f6750eb-6ebe-40a0-9471-016d1e2870bc} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {90353d7b-7459-47fa-9df7-7ce34cdda53e}<23.9 && {90353d7b-7459-47fa-9df7-7ce34cdda53e}>1.7, !- Program Line 7
-  SET {a36aabd7-35ee-4aa7-9bc3-41071ecfb6e1} = 29.4, !- Program Line 8
-  SET {5f6750eb-6ebe-40a0-9471-016d1e2870bc} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {90353d7b-7459-47fa-9df7-7ce34cdda53e}<23.9 && {90353d7b-7459-47fa-9df7-7ce34cdda53e}>1.7, !- Program Line 10
-  SET {a36aabd7-35ee-4aa7-9bc3-41071ecfb6e1} = 29.4, !- Program Line 11
-  SET {5f6750eb-6ebe-40a0-9471-016d1e2870bc} = 15.6, !- Program Line 12
+  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__9_OptimumStartProg0, !- Name
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {4180fec2-fdc7-45c9-9803-5dcafb9bd468}<23.9 && {4180fec2-fdc7-45c9-9803-5dcafb9bd468}>1.7, !- Program Line 1
+  SET {bb2c17fe-a5dd-4e9b-89bd-43671a34c3d3} = 29.4, !- Program Line 2
+  SET {e7a43ec6-30d3-4a79-879a-699f3430405f} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {4180fec2-fdc7-45c9-9803-5dcafb9bd468}<23.9 && {4180fec2-fdc7-45c9-9803-5dcafb9bd468}>1.7, !- Program Line 4
+  SET {bb2c17fe-a5dd-4e9b-89bd-43671a34c3d3} = 29.4, !- Program Line 5
+  SET {e7a43ec6-30d3-4a79-879a-699f3430405f} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {4180fec2-fdc7-45c9-9803-5dcafb9bd468}<23.9 && {4180fec2-fdc7-45c9-9803-5dcafb9bd468}>1.7, !- Program Line 7
+  SET {bb2c17fe-a5dd-4e9b-89bd-43671a34c3d3} = 29.4, !- Program Line 8
+  SET {e7a43ec6-30d3-4a79-879a-699f3430405f} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {4180fec2-fdc7-45c9-9803-5dcafb9bd468}<23.9 && {4180fec2-fdc7-45c9-9803-5dcafb9bd468}>1.7, !- Program Line 10
+  SET {bb2c17fe-a5dd-4e9b-89bd-43671a34c3d3} = 29.4, !- Program Line 11
+  SET {e7a43ec6-30d3-4a79-879a-699f3430405f} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {a36aabd7-35ee-4aa7-9bc3-41071ecfb6e1} = NULL, !- Program Line 14
-  SET {5f6750eb-6ebe-40a0-9471-016d1e2870bc} = NULL, !- Program Line 15
+  SET {bb2c17fe-a5dd-4e9b-89bd-43671a34c3d3} = NULL, !- Program Line 14
+  SET {e7a43ec6-30d3-4a79-879a-699f3430405f} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {00000000-0000-0000-0037-000000000001},  !- Handle
-  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__7_OptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__7_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,            !- EnergyPlus Model Calling Point
   {00000000-0000-0000-0036-000000000001};  !- Program Name 1
 
 OS:EnergyManagementSystem:ProgramCallingManager,
   {00000000-0000-0000-0037-000000000002},  !- Handle
-  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__9_OptimumStartCallingManager0, !- Name
+  ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__9_OptimumStartCallingManager0, !- Name
   BeginTimestepBeforePredictor,            !- EnergyPlus Model Calling Point
   {00000000-0000-0000-0036-000000000002};  !- Program Name 1
 
@@ -9662,505 +9662,505 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0049-000000000106},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000108},  !- Inlet Port
   {00000000-0000-0000-0016-000000000110};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000107},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000111},  !- Inlet Port
   {00000000-0000-0000-0016-000000000109};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000108},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000116},  !- Inlet Port
   {00000000-0000-0000-0016-000000000117};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000109},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000112};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000110},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000113},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000111},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000106},  !- Inlet Port
   {00000000-0000-0000-0016-000000000115};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000112},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000114},  !- Inlet Port
   {00000000-0000-0000-0016-000000000107};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000113},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000126},  !- Inlet Port
   {00000000-0000-0000-0016-000000000128};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000114},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000129},  !- Inlet Port
   {00000000-0000-0000-0016-000000000127};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000115},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000134},  !- Inlet Port
   {00000000-0000-0000-0016-000000000135};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000116},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000130};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000117},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000131},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000118},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000124},  !- Inlet Port
   {00000000-0000-0000-0016-000000000133};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000119},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000132},  !- Inlet Port
   {00000000-0000-0000-0016-000000000125};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000120},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000144},  !- Inlet Port
   {00000000-0000-0000-0016-000000000146};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000121},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000147},  !- Inlet Port
   {00000000-0000-0000-0016-000000000145};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000122},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000152},  !- Inlet Port
   {00000000-0000-0000-0016-000000000153};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000123},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000148};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000124},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000149},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000125},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000142},  !- Inlet Port
   {00000000-0000-0000-0016-000000000151};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000126},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000150},  !- Inlet Port
   {00000000-0000-0000-0016-000000000143};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000127},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000162},  !- Inlet Port
   {00000000-0000-0000-0016-000000000164};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000128},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000165},  !- Inlet Port
   {00000000-0000-0000-0016-000000000163};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000129},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000170},  !- Inlet Port
   {00000000-0000-0000-0016-000000000171};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000130},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000166};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000131},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000167},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000132},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000160},  !- Inlet Port
   {00000000-0000-0000-0016-000000000169};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000133},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000168},  !- Inlet Port
   {00000000-0000-0000-0016-000000000161};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000134},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000180},  !- Inlet Port
   {00000000-0000-0000-0016-000000000182};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000135},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000183},  !- Inlet Port
   {00000000-0000-0000-0016-000000000181};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000136},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000188},  !- Inlet Port
   {00000000-0000-0000-0016-000000000189};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000137},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000184};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000138},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000185},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000139},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000178},  !- Inlet Port
   {00000000-0000-0000-0016-000000000187};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000140},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000186},  !- Inlet Port
   {00000000-0000-0000-0016-000000000179};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000141},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000198},  !- Inlet Port
   {00000000-0000-0000-0016-000000000200};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000142},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000201},  !- Inlet Port
   {00000000-0000-0000-0016-000000000199};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000143},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000206},  !- Inlet Port
   {00000000-0000-0000-0016-000000000207};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000144},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000202};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000145},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000203},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000146},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000196},  !- Inlet Port
   {00000000-0000-0000-0016-000000000205};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000147},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000204},  !- Inlet Port
   {00000000-0000-0000-0016-000000000197};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000148},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000216},  !- Inlet Port
   {00000000-0000-0000-0016-000000000218};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000149},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000219},  !- Inlet Port
   {00000000-0000-0000-0016-000000000217};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000150},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000224},  !- Inlet Port
   {00000000-0000-0000-0016-000000000225};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000151},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000220};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000152},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000221},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000153},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000214},  !- Inlet Port
   {00000000-0000-0000-0016-000000000223};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000154},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000222},  !- Inlet Port
   {00000000-0000-0000-0016-000000000215};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000155},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000234},  !- Inlet Port
   {00000000-0000-0000-0016-000000000236};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000156},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000237},  !- Inlet Port
   {00000000-0000-0000-0016-000000000235};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000157},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000242},  !- Inlet Port
   {00000000-0000-0000-0016-000000000243};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000158},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000238};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000159},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000239},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000160},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000232},  !- Inlet Port
   {00000000-0000-0000-0016-000000000241};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000161},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000240},  !- Inlet Port
   {00000000-0000-0000-0016-000000000233};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000162},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000252},  !- Inlet Port
   {00000000-0000-0000-0016-000000000254};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000163},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000255},  !- Inlet Port
   {00000000-0000-0000-0016-000000000253};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000164},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000260},  !- Inlet Port
   {00000000-0000-0000-0016-000000000261};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000165},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000256};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000166},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000257},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000167},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000250},  !- Inlet Port
   {00000000-0000-0000-0016-000000000259};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000168},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000258},  !- Inlet Port
   {00000000-0000-0000-0016-000000000251};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000169},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Demand Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000090},  !- Inlet Port
   {00000000-0000-0000-0016-000000000092};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000170},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Demand Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000093},  !- Inlet Port
   {00000000-0000-0000-0016-000000000091};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000171},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Mixed Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000098},  !- Inlet Port
   {00000000-0000-0000-0016-000000000099};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000172},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Outdoor Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000094};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000173},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Relief Air Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000095},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000174},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Supply Inlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000088},  !- Inlet Port
   {00000000-0000-0000-0016-000000000097};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000175},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Supply Outlet Node, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000096},  !- Inlet Port
   {00000000-0000-0000-0016-000000000089};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000176},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Demand Inlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000060},  !- Inlet Port
   {00000000-0000-0000-0016-000000000062};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000177},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Demand Outlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000063},  !- Inlet Port
   {00000000-0000-0000-0016-000000000061};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000178},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Mixed Air Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000068},  !- Inlet Port
   {00000000-0000-0000-0016-000000000069};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000179},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Outdoor Air Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000064};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000180},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Relief Air Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000065},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000181},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Supply Inlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000058},  !- Inlet Port
   {00000000-0000-0000-0016-000000000067};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000182},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Supply Outlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000066},  !- Inlet Port
   {00000000-0000-0000-0016-000000000059};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000183},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Demand Inlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Demand Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000042},  !- Inlet Port
   {00000000-0000-0000-0016-000000000044};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000184},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Demand Outlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Demand Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000045},  !- Inlet Port
   {00000000-0000-0000-0016-000000000043};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000185},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Mixed Air Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Mixed Air Node, !- Name
   {00000000-0000-0000-0016-000000000050},  !- Inlet Port
   {00000000-0000-0000-0016-000000000051};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000186},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Outdoor Air Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0016-000000000046};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000187},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Relief Air Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Relief Air Node, !- Name
   {00000000-0000-0000-0016-000000000047},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000188},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Supply Inlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Supply Inlet Node, !- Name
   {00000000-0000-0000-0016-000000000040},  !- Inlet Port
   {00000000-0000-0000-0016-000000000049};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0049-000000000189},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Supply Outlet Node, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Supply Outlet Node, !- Name
   {00000000-0000-0000-0016-000000000048},  !- Inlet Port
   {00000000-0000-0000-0016-000000000041};  !- Outlet Port
 
@@ -13732,7 +13732,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000139},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
@@ -13747,7 +13747,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000140},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13756,7 +13756,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000141},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13765,7 +13765,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000142},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   9,                                       !- Hour 1
@@ -13786,7 +13786,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000143},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13795,7 +13795,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000144},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13804,7 +13804,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000145},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   9,                                       !- Hour 1
@@ -13825,7 +13825,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000146},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13834,7 +13834,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000147},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13843,7 +13843,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000148},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   9,                                       !- Hour 1
@@ -13858,7 +13858,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000149},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13867,7 +13867,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000150},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13876,7 +13876,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000151},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   9,                                       !- Hour 1
@@ -13891,7 +13891,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000152},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13900,7 +13900,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000153},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13909,7 +13909,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000154},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
@@ -13924,7 +13924,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000155},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13933,7 +13933,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000156},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13942,7 +13942,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000157},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   9,                                       !- Hour 1
@@ -13963,7 +13963,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000158},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13972,7 +13972,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000159},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -13981,7 +13981,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000160},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   8,                                       !- Hour 1
@@ -13996,7 +13996,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000161},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -14005,7 +14005,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000162},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -14014,7 +14014,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000163},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   9,                                       !- Hour 1
@@ -14035,7 +14035,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000164},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -14044,7 +14044,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000165},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -14053,7 +14053,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000166},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Default, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   9,                                       !- Hour 1
@@ -14068,7 +14068,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000167},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Summer Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -14077,7 +14077,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000168},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Winter Design Day, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -14086,7 +14086,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000169},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Default, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   9,                                       !- Hour 1
@@ -14107,7 +14107,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000170},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Summer Design Day, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -14116,7 +14116,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000171},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Winter Design Day, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -14125,7 +14125,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000172},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Default, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   9,                                       !- Hour 1
@@ -14146,7 +14146,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000173},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Summer Design Day, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -14155,7 +14155,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000174},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Winter Design Day, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -16231,7 +16231,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000038},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000139},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000140},  !- Summer Design Day Schedule Name
@@ -16239,7 +16239,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000039},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 2 Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 2 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000142},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000143},  !- Summer Design Day Schedule Name
@@ -16247,7 +16247,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000040},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 3 Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 3 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000145},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000146},  !- Summer Design Day Schedule Name
@@ -16255,7 +16255,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000041},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 4 Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 4 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000148},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000149},  !- Summer Design Day Schedule Name
@@ -16263,7 +16263,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000042},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 5 Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 5 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000151},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000152},  !- Summer Design Day Schedule Name
@@ -16271,7 +16271,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000043},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 6 Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 6 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000154},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000155},  !- Summer Design Day Schedule Name
@@ -16279,7 +16279,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000044},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 7 Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 7 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000157},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000158},  !- Summer Design Day Schedule Name
@@ -16287,7 +16287,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000045},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 8 Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 8 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000160},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000161},  !- Summer Design Day Schedule Name
@@ -16295,7 +16295,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000046},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 9 Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 9 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000163},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000164},  !- Summer Design Day Schedule Name
@@ -16303,7 +16303,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000047},  !- Handle
-  sys_3|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch, !- Name
+  sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000166},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000167},  !- Summer Design Day Schedule Name
@@ -16311,7 +16311,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000048},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000169},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000170},  !- Summer Design Day Schedule Name
@@ -16319,7 +16319,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000049},  !- Handle
-  sys_4|mixed|shr>none|sc>ashp|sh>ashp|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch, !- Name
+  sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000172},  !- Default Day Schedule Name
   {00000000-0000-0000-0061-000000000173},  !- Summer Design Day Schedule Name

@@ -9,6 +9,7 @@ class SystemFuels
   attr_accessor :mau_heating_coil_type
   attr_accessor :mau_cooling_type
   attr_accessor :chiller_type
+  attr_accessor :heating_coil_type_sys2
   attr_accessor :heating_coil_type_sys3
   attr_accessor :heating_coil_type_sys4
   attr_accessor :heating_coil_type_sys6
@@ -33,6 +34,7 @@ class SystemFuels
     @mau_cooling_type = system_fuel_defaults['mau_cooling_type']
     @chiller_type = system_fuel_defaults['chiller_type']
     @mau_heating_coil_type = system_fuel_defaults['mau_heating_coil_type']
+    @heating_coil_type_sys2 = system_fuel_defaults['heating_coil_type_sys2']
     @heating_coil_type_sys3 = system_fuel_defaults['heating_coil_type_sys3']
     @heating_coil_type_sys4 = system_fuel_defaults['heating_coil_type_sys4']
     @heating_coil_type_sys6 = system_fuel_defaults['heating_coil_type_sys6']
@@ -59,5 +61,44 @@ class SystemFuels
   # Reset the Service Hot Water fuel.
   def set_swh_fuel(swh_fuel:)
     @swh_fueltype = swh_fuel
+  end
+
+  # Reset system fuels to match parameters defined by hvac_system_primary
+  def set_fuel_to_hvac_system_primary(hvac_system_primary:, standards_data:)
+    hvac_system_data = standards_data['hvac_types'].find { |system| system['description'].to_s.downcase == hvac_system_primary.to_s.downcase }
+    return if hvac_system_data.nil? || hvac_system_data.empty?
+    @baseboard_type = hvac_system_data["baseboard_type"].to_s unless hvac_system_data["baseboard_type"].nil?
+    @mau_heating_coil_type = hvac_system_data["mau_heating_type"].to_s unless hvac_system_data["mau_heating_type"].nil?
+    @mau_type = hvac_system_data["mau_type"].to_bool unless hvac_system_data["mau_type"].nil?
+    @necb_reference_hp = hvac_system_data["necb_reference_hp"].to_bool unless hvac_system_data["necb_reference_hp"].nil?
+    @necb_reference_hp_supp_fuel = hvac_system_data["necb_reference_hp_supp_fuel"] unless hvac_system_data["necb_reference_hp_supp_fuel"].nil?
+    # If applying a hvac_system_primary with an NECB reference HP, make sure that the system 4 systems (if left at
+    # NECB_Default) work with the NECB reference HP.
+    if hvac_system_data["necb_reference_hp"].to_bool
+      @heating_coil_type_sys4 = "DX"
+    end
+  end
+
+  # Reset to default fuel info
+  def reset_default_fuel_info(init_fuel_type:)
+    @name = init_fuel_type[:name]
+    @boiler_fueltype = init_fuel_type[:boiler_fueltype]
+    @backup_boiler_fueltype = init_fuel_type[:backup_boiler_fueltype]
+    @primary_boiler_cap_frac = init_fuel_type[:primary_boiler_cap_frac]
+    @secondary_boiler_cap_frac = init_fuel_type[:secondary_boiler_cap_frac]
+    @baseboard_type = init_fuel_type[:baseboard_type]
+    @mau_type = init_fuel_type[:mau_type]
+    @mau_heating_coil_type = init_fuel_type[:mau_heating_coil_type]
+    @mau_cooling_type = init_fuel_type[:mau_cooling_type]
+    @chiller_type = init_fuel_type[:chiller_type]
+    @heating_coil_type_sys2 = init_fuel_type[:heating_coil_type_sys2]
+    @heating_coil_type_sys3 = init_fuel_type[:heating_coil_type_sys3]
+    @heating_coil_type_sys4 = init_fuel_type[:heating_coil_type_sys4]
+    @heating_coil_type_sys6 = init_fuel_type[:heating_coil_type_sys6]
+    @necb_reference_hp = init_fuel_type[:necb_reference_hp]
+    @necb_reference_hp_supp_fuel = init_fuel_type[:necb_reference_hp_supp_fuel]
+    @fan_type = init_fuel_type[:fan_type]
+    @ecm_fueltype = init_fuel_type[:ecm_fueltype]
+    @swh_fueltype = init_fuel_type[:swh_fueltype]
   end
 end
