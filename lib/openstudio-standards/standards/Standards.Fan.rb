@@ -231,7 +231,7 @@ module Fan
 
   # Determines the minimum fan motor efficiency and nominal size for a given motor bhp.
   # This should be the total brake horsepower with any desired safety factor already included.
-  # This method picks the next nominal motor catgory larger than the required brake horsepower,
+  # This method picks the next nominal motor category larger than the required brake horsepower,
   # and the efficiency is based on that size.
   # For example, if the bhp = 6.3, the nominal size will be 7.5HP and the efficiency
   # for 90.1-2010 will be 91.7% from Table 10.8B.
@@ -267,34 +267,29 @@ module Fan
     # In this case, use the 0.5 HP for the lookup.
     if fan_small_fan?(fan)
       nominal_hp = 0.5
+
+      # Get the efficiency based on the nominal horsepower
+      # Add 0.01 hp to avoid search errors.
+      motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
+
+      if motor_properties.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
+        return [fan_motor_eff, nominal_hp]
+      end
     else
-      motor_properties = model_find_object(motors, search_criteria, motor_bhp)
+      motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
         return [fan_motor_eff, nominal_hp]
       end
-
-      nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
-      # If the biggest fan motor size is hit, use the highest category efficiency
-      if nominal_hp > 9998.0
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Fan', "For #{fan.name}, there is no greater nominal HP.  Use the efficiency of the largest motor category.")
-        nominal_hp = motor_bhp
-      end
-
-      # Round to nearest whole HP for niceness
-      if nominal_hp >= 2
-        nominal_hp = nominal_hp.round
-      end
     end
 
-    # Get the efficiency based on the nominal horsepower
-    # Add 0.01 hp to avoid search errors.
-    motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
-
-    if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
-      return [fan_motor_eff, nominal_hp]
+    nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
+    # Round to nearest whole HP for niceness
+    if nominal_hp >= 2
+      nominal_hp = nominal_hp.round
     end
+
     fan_motor_eff = motor_properties['nominal_full_load_efficiency']
 
     return [fan_motor_eff, nominal_hp]
