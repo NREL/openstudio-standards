@@ -57,7 +57,7 @@
 :skylight_solar_trans: NECB_Default
 :srr_set: NECB_Default
 :swh_fuel: NECB_Default
-:template: NECB2017
+:template: NECB2020
 :npv_start_year: NECB_Default
 :npv_end_year: NECB_Default
 :npv_discount_rate: NECB_Default
@@ -67,11 +67,4 @@
 :tbd_option: NECB_Default
 :output_variables: [
   {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}
-]
-:output_meters: [
-  {    name: 'NaturalGas:Facility',     frequency: 'hourly'},
-  {    name: 'Electricity:Facility',     frequency: 'hourly'},
-  {    name: 'DISTRICTHEATING:FACILITY',     frequency: 'hourly'},
-  {    name: 'DISTRICTCOOLING:FACILITY',     frequency: 'hourly'},
-  {    name: 'FuelOil#2:Facility',     frequency: 'hourly'}
 ]

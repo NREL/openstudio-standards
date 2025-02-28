@@ -574,9 +574,48 @@ class BTAPData
     #===================================================================================================================
     ##################### Calculate annual electricity peak cost using OERD's electricity rate #########################
     #===================================================================================================================
-    ### Get number of timesteps from the model
-    #number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
+    #===================================================================================================================
+    ### Find index for hourly data of 'ElectricityNet:Facility' (J)
+    query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE Name=='ElectricityNet:Facility' AND ReportingFrequency == 'Hourly' AND Units == 'J'
+        "
+    index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
     number_of_timesteps_per_hour = 1
+    puts "Trying hourly ElectricityNet:Facility"
+
+    ### Find index for timestep data of 'Electricity:Facility' (J) if 'ElectricityNet:Facility' data is not available
+    if index_timestep_electricity.nil?
+      query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE Name=='Electricity:Facility' AND ReportingFrequency == 'Zone Timestep' AND Units == 'J'
+        "
+      index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+      number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
+      puts "Trying timestep Electricity:Facility"
+    end
+
+    ### Find index for hourly data of 'Electricity:Facility' (J) if timestep data is not available
+    if index_timestep_electricity.nil?
+      query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE Name=='Electricity:Facility' AND ReportingFrequency == 'Hourly' AND Units == 'J'
+        "
+      index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+      number_of_timesteps_per_hour = 1
+      puts "Trying hourly Electricity:Facility"
+    end
+
+    if index_timestep_electricity.nil?
+      puts "No hourly or timestep data available.  Peak data not available"
+      @btap_data.merge!('cost_utility_oerd_electricity_peak_annual_cost_per_m_sq' => 0.00) unless oerd_utility_pricing
+      @btap_data.merge!('cost_utility_oerd_electricity_energy_annual_cost_per_m_sq' => 0.00) unless oerd_utility_pricing
+      return 0.00
+    end
+    ### Get number of timesteps from the model
     timestep_second = 3600 / number_of_timesteps_per_hour
     #===================================================================================================================
     ### Calculate number of timesteps of the whole year, and create dates/times for the whole year
@@ -587,13 +626,7 @@ class BTAPData
       timesteps_of_year << (d + (60 * 60 / number_of_timesteps_per_hour) * increment).strftime('%Y-%m-%d %H:%M')
     end
     #===================================================================================================================
-    ### Find index for timestep data of 'ElectricityNet:Facility' (J)
-    query = "
-        SELECT ReportDataDictionaryIndex
-        FROM ReportDataDictionary
-        WHERE Name=='ElectricityNet:Facility' AND ReportingFrequency == 'Hourly' AND Units == 'J'
-        "
-    index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+
     #===================================================================================================================
     ### Get timestep output for Electricity:Facility output.
     query = "
