@@ -7,7 +7,8 @@ class BTAPData
 
   def initialize(model:, runner: nil, cost_result:, baseline_cost_equipment_total_cost_per_m_sq: -1.0,
                  baseline_cost_utility_neb_total_cost_per_m_sq: -1.0, baseline_energy_eui_total_gj_per_m_sq: -1.0, qaqc:,
-                 npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_carbon: 0.03)
+                 npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_carbon: 0.03, oerd_utility_pricing: nil,
+                 utility_pricing_year: 2020)
     @model = model
     @error_warning = []
     # sets sql file.
@@ -17,6 +18,7 @@ class BTAPData
     @btap_data = {}
     @btap_results_version = 1.00
     @neb_prices_csv_file_name = File.join(__dir__, 'neb_end_use_prices.csv')
+    @neb_prices_csv_file_name = File.join(__dir__, 'utility_pricing_2025-02-20.csv') if oerd_utility_pricing.to_bool
     @necb_reference_runs_csv_file_name = File.join(__dir__, 'necb_reference_runs.csv')
 
     # Conditioned floor area is used so much. May as well make it a object variable.
@@ -49,7 +51,7 @@ class BTAPData
     @btap_data.merge!(service_water_heating_data)
     @btap_data.merge!(energy_eui_data(model))
     @btap_data.merge!(energy_peak_data)
-    @btap_data.merge!(utility(model))
+    @btap_data.merge!(utility(model: model, utility_pricing_year: utility_pricing_year))
     @btap_data.merge!(unmet_hours(model))
     @btap_data.merge!outdoor_air_data(model)
 
@@ -87,10 +89,10 @@ class BTAPData
     phius_performance_indicators(model)
     # The below method calculates energy performance indicators (i.e. TEDI and MEUI) as per BC Energy Step Code
     bc_energy_step_code_performance_indicators
+        # calculates annual peak electricity cost (dollar)
+    annual_peak_kW_per_m_sq = oerd_electricity_cost(model: model, utility_pricing_year: utility_pricing_year, oerd_utility_pricing: oerd_utility_pricing)
     # calculate net present value
-    net_present_value(npv_start_year: npv_start_year, npv_end_year: npv_end_year, npv_discount_rate: npv_discount_rate, npv_discount_rate_carbon: npv_discount_rate_carbon) unless cost_result.nil?
-    # calculates annual peak electricity cost (dollar)
-    oerd_electricity_cost(model)
+    net_present_value(npv_start_year: npv_start_year, npv_end_year: npv_end_year, npv_discount_rate: npv_discount_rate, npv_discount_rate_carbon: npv_discount_rate_carbon, oerd_utility_pricing: oerd_utility_pricing, annual_peak_kW_per_m_sq: annual_peak_kW_per_m_sq) unless cost_result.nil?
 
     measure_metrics(qaqc)
     @btap_data
@@ -173,11 +175,12 @@ class BTAPData
     return building_data
   end
 
-  def net_present_value(npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_carbon: 0.03)
+  def net_present_value(npv_start_year: 2022, npv_end_year: 2041, npv_discount_rate: 0.03, npv_discount_rate_carbon: 0.03, oerd_utility_pricing: false, annual_peak_kW_per_m_sq: nil)
 
     # Find end year in the neb data
     neb_header = CSV.read(@neb_prices_csv_file_name, headers: true).headers
     neb_header.delete_if { |item| ["building_type", "province", "fuel_type"].include?(item) } # remove "building_type", "province", "fuel_type" from neb_header in order to have only years in neb_header
+    neb_header.delete_if { |item| ["rate_class", "units", "references", "links"].include?(item) } if oerd_utility_pricing # remove additional headers if the OERD data is used
     neb_header.map(&:to_f)  #convert years to float
     year_max = neb_header.max
 
@@ -220,7 +223,7 @@ class BTAPData
     # puts "npv_discount_rate is #{npv_discount_rate}"
 
     # Get energy end-use prices (CER data from https://apps.cer-rec.gc.ca/ftrppndc/dflt.aspx?GoCTemplateCulture=en-CA)
-    @neb_prices_csv_file_name = "#{File.dirname(__FILE__)}/neb_end_use_prices.csv"
+    # @neb_prices_csv_file_name = "#{File.dirname(__FILE__)}/neb_end_use_prices.csv"
 
     # Create a hash of the neb data.
     neb_data = CSV.parse(File.read(@neb_prices_csv_file_name), headers: true, converters: :numeric).map(&:to_h)
@@ -256,14 +259,22 @@ class BTAPData
     row = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Electricity')
     end
+    row_peak = nil
+    if oerd_utility_pricing && !annual_peak_kW_per_m_sq.nil?
+      row_peak = neb_data.detect do |data|
+        (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Electricity Peak')
+      end
+    end
     npv_elec = 0.0
     year_index = 1.0
     npv_elec_ghg = 0.0
+    npv_elec_peak = 0.0
     if eui_elec > 0.0
       for year in npv_start_year.to_int..npv_end_year.to_int
         # puts "year, #{year}, #{row[year.to_s]}, year_index, #{year_index}"
         npv_elec += (eui_elec * row[year.to_s]) / (1+npv_discount_rate)**year_index
         npv_elec_ghg += (ghg_elec * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index
+        npv_elec_peak += (annual_peak_kW_per_m_sq * row_peak[year.to_s]) / (1+npv_discount_rate)**year_index unless row_peak.nil? || annual_peak_kW_per_m_sq.nil?
         year_index += 1.0
       end
     end
@@ -306,11 +317,11 @@ class BTAPData
     # Calculate total npv
     npv_total = @btap_data['cost_equipment_total_cost_per_m_sq'] + npv_elec + npv_ngas + npv_oil
     npv_ghg_total = npv_elec_ghg + npv_ngas_ghg + npv_oil_ghg
-    npv_total_with_ghg = npv_ghg_total + npv_total
-
+    npv_total_with_ghg_and_peak = npv_ghg_total + npv_total + npv_elec_peak
     @btap_data.merge!('npv_total_per_m_sq' => npv_total)
     @btap_data.merge!('npv_carbon_pricing_per_m_sq' => npv_ghg_total)
-    @btap_data.merge!('npv_with_carbon_pricing_total_per_m_sq' => npv_total_with_ghg)
+    @btap_data.merge!('npv_peak_elec_per_m_sq' => npv_elec_peak)
+    @btap_data.merge!('npv_with_carbon_and_peak_pricing_total_per_m_sq' => npv_total_with_ghg_and_peak)
   end
 
   def envelope(model)
@@ -546,41 +557,16 @@ class BTAPData
   ### The 'annual_peak_electricity_cost_dollar' function calculates annual peak electricity cost (dollar)
   ### for OEE-Electrification project using the OERD's electricity rates for commercial buildings
   ### that Danielle Krauel of OEE provided to CE-O
-  def oerd_electricity_cost(model)
+  def oerd_electricity_cost(model:, utility_pricing_year: 2020, oerd_utility_pricing: false)
+    unless oerd_utility_pricing
+      @btap_data.merge!('cost_utility_oerd_electricity_peak_annual_cost_per_m_sq' => 0.00) unless oerd_utility_pricing
+      @btap_data.merge!('cost_utility_oerd_electricity_energy_annual_cost_per_m_sq' => 0.00) unless oerd_utility_pricing
+      return 0.00
+    end
+
     #===================================================================================================================
     ### OERD's electricity rates for commercial buildings
-    ### Note: provinces' abbreviations were checked with: /standards/necb/NECB2011/data/province_map.json
-    ### Note: OERD's electricity rate does not provide rates for three P/Ts: YT, NT, NU. To avoid errors in simulation runs, I have assigned a dummy value for each.
-    dollar_kW_month = {
-      "AB" => 13.68,
-      "BC" => 10.20,
-      "MB" => 9.76,
-      "NB" => 10.05,
-      "NL" => 8.36,
-      "NS" => 12.62,
-      "ON" => 12.25,
-      "PE" => 13.70,
-      "QC" => 14.90,
-      "SK" => 20.02,
-      "YT" => 10000000,
-      "NT" => 10000000,
-      "NU" => 10000000
-    }
-    dollar_kWh = {
-      "AB" => 0.15,
-      "BC" => 0.11,
-      "MB" => 0.09,
-      "NB" => 0.16,
-      "NL" => 0.13,
-      "NS" => 0.22,
-      "ON" => 0.16,
-      "PE" => 0.17,
-      "QC" => 0.09,
-      "SK" => 0.19,
-      "YT" => 100000,
-      "NT" => 100000,
-      "NU" => 100000
-    }
+    neb_data = CSV.parse(File.read(@neb_prices_csv_file_name), headers: true, converters: :numeric).map(&:to_h)
     #===================================================================================================================
     #===================================================================================================================
     #===================================================================================================================
@@ -588,8 +574,48 @@ class BTAPData
     #===================================================================================================================
     ##################### Calculate annual electricity peak cost using OERD's electricity rate #########################
     #===================================================================================================================
+    #===================================================================================================================
+    ### Find index for hourly data of 'ElectricityNet:Facility' (J)
+    query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE Name=='ElectricityNet:Facility' AND ReportingFrequency == 'Hourly' AND Units == 'J'
+        "
+    index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+    number_of_timesteps_per_hour = 1
+    puts "Trying hourly ElectricityNet:Facility"
+
+    ### Find index for timestep data of 'Electricity:Facility' (J) if 'ElectricityNet:Facility' data is not available
+    if index_timestep_electricity.nil?
+      query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE Name=='Electricity:Facility' AND ReportingFrequency == 'Zone Timestep' AND Units == 'J'
+        "
+      index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+      number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
+      puts "Trying timestep Electricity:Facility"
+    end
+
+    ### Find index for hourly data of 'Electricity:Facility' (J) if timestep data is not available
+    if index_timestep_electricity.nil?
+      query = "
+        SELECT ReportDataDictionaryIndex
+        FROM ReportDataDictionary
+        WHERE Name=='Electricity:Facility' AND ReportingFrequency == 'Hourly' AND Units == 'J'
+        "
+      index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+      number_of_timesteps_per_hour = 1
+      puts "Trying hourly Electricity:Facility"
+    end
+
+    if index_timestep_electricity.nil?
+      puts "No hourly or timestep data available.  Peak data not available"
+      @btap_data.merge!('cost_utility_oerd_electricity_peak_annual_cost_per_m_sq' => 0.00) unless oerd_utility_pricing
+      @btap_data.merge!('cost_utility_oerd_electricity_energy_annual_cost_per_m_sq' => 0.00) unless oerd_utility_pricing
+      return 0.00
+    end
     ### Get number of timesteps from the model
-    number_of_timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
     timestep_second = 3600 / number_of_timesteps_per_hour
     #===================================================================================================================
     ### Calculate number of timesteps of the whole year, and create dates/times for the whole year
@@ -600,13 +626,7 @@ class BTAPData
       timesteps_of_year << (d + (60 * 60 / number_of_timesteps_per_hour) * increment).strftime('%Y-%m-%d %H:%M')
     end
     #===================================================================================================================
-    ### Find index for timestep data of 'Electricity:Facility' (J)
-    query = "
-        SELECT ReportDataDictionaryIndex
-        FROM ReportDataDictionary
-        WHERE Name=='Electricity:Facility' AND ReportingFrequency == 'Zone Timestep' AND Units == 'J'
-                                                       "
-    index_timestep_electricity = model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+
     #===================================================================================================================
     ### Get timestep output for Electricity:Facility output.
     query = "
@@ -627,10 +647,20 @@ class BTAPData
     #===================================================================================================================
     ### Convert J to kW of maximum electricity energy use (J)
     monthly_peak_kW = monthly_peak_J.map { |key, value| [key, value * 0.001 / timestep_second] }.to_h
+    ### Normalize by building floor area
+    annual_peak_kW_per_m_sq = monthly_peak_kW.values.sum / @btap_data['bldg_conditioned_floor_area_m_sq'].to_f
     #===================================================================================================================
-    ### Get province of the model and find its peak electricity price using the 'dollar_kW_month' hash
+    ### Get province of the model and find its peak electricity price from the utility_pricing_2025-02-20.csv
     province = @btap_data['location_state_province_region']
-    province_dollar_kW_month = dollar_kW_month.fetch_values(province)[0]
+    # Find which province the proposed building is located in
+    building_type = 'Commercial'
+    geography_data = climate_data
+    province_abbreviation = geography_data['location_state_province_region']
+    province = @standards_data['province_map'][province_abbreviation]
+    row_peak = neb_data.detect do |data|
+      (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Electricity Peak')
+    end
+    province_dollar_kW_month = row_peak[utility_pricing_year.to_s]
     #===================================================================================================================
     ### Calculate cost of peak electricity for each month
     monthly_peak_cost = monthly_peak_kW.map { |key, value| [key, value * province_dollar_kW_month] }.to_h
@@ -650,9 +680,11 @@ class BTAPData
     #===================================================================================================================
     ################### Calculate annual electricity energy use cost using OERD's electricity rate #####################
     #===================================================================================================================
-    ### Get province of the model and find its peak electricity price using the 'dollar_kW_month' hash
-    province = @btap_data['location_state_province_region']
-    province_dollar_kWh = dollar_kWh.fetch_values(province)[0]
+    ### Get province of the model and find its peak electricity price from the pricing_2025-02-20.csv
+    row_elec = neb_data.detect do |data|
+      (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Electricity')
+    end
+    province_dollar_kWh = row_elec[utility_pricing_year.to_s]
     #===================================================================================================================
     # Calculate cost of energy electricity for the whole year in dollar normalized by floor area
     annual_energy_cost_dollar_per_m_sq = @btap_data['energy_eui_electricity_gj_per_m_sq'] * 277.778 * province_dollar_kWh
@@ -660,9 +692,10 @@ class BTAPData
     ### Merge the calculated value to @btap_data
     @btap_data.merge!('cost_utility_oerd_electricity_energy_annual_cost_per_m_sq' => annual_energy_cost_dollar_per_m_sq.round(2))
     #===================================================================================================================
+    return annual_peak_kW_per_m_sq
   end
 
-  def utility(model)
+  def utility(model:, utility_pricing_year: 2020)
     economics_data = {}
     building_type = 'Commercial'
     province = @standards_data['province_map'][model.getWeatherFile.stateProvinceRegion]
@@ -685,12 +718,14 @@ class BTAPData
     neb_data = CSV.parse(File.read(@neb_prices_csv_file_name), headers: true, converters: :numeric).map(&:to_h)
 
     neb_eplus_fuel_map.each do |neb_fuel, ep_fuel|
+      next if neb_fuel.to_s.downcase == 'electricity peak'
       row = neb_data.detect do |data|
-        (data['building_type'] == building_type) &&
-          (data['province'] == province) &&
-          (data['fuel_type'] == neb_fuel)
+        (data['building_type'].to_s == building_type) &&
+          (data['province'].to_s == province) &&
+          (data['fuel_type'].to_s == neb_fuel)
       end
-      neb_fuel_cost = row['2021']
+      utility_pricing_year_s = utility_pricing_year.to_i.to_s
+      neb_fuel_cost = row[utility_pricing_year_s]
       fuel_consumption_gj = 0.0
       sql_command = "SELECT Value FROM tabulardatawithstrings
                      WHERE ReportName='EnergyMeters'
