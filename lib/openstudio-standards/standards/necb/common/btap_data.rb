@@ -660,7 +660,7 @@ class BTAPData
     row_peak = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Electricity Peak')
     end
-    province_dollar_kW_month = row_peak[utility_pricing_year.to_s]
+    province_dollar_kW_month = row_peak[utility_pricing_year.to_i.to_s]
     #===================================================================================================================
     ### Calculate cost of peak electricity for each month
     monthly_peak_cost = monthly_peak_kW.map { |key, value| [key, value * province_dollar_kW_month] }.to_h
@@ -684,7 +684,7 @@ class BTAPData
     row_elec = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Electricity')
     end
-    province_dollar_kWh = row_elec[utility_pricing_year.to_s]
+    province_dollar_kWh = row_elec[utility_pricing_year.to_i.to_s]
     #===================================================================================================================
     # Calculate cost of energy electricity for the whole year in dollar normalized by floor area
     annual_energy_cost_dollar_per_m_sq = @btap_data['energy_eui_electricity_gj_per_m_sq'] * 277.778 * province_dollar_kWh
