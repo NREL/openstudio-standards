@@ -14,16 +14,16 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{parking_csv}")
         return false
       end
-      parking_tbl = CSV.table(parking_csv, encoding: "ISO8859-1:utf-8" )
+      parking_tbl = CSV.table(parking_csv, encoding: 'ISO8859-1:utf-8')
       parking_hsh = parking_tbl.map(&:to_hash)
 
-      # load parking file and convert to hash table
+      # load entryways file and convert to hash table
       entryways_csv = "#{__dir__}/data/entryways.csv"
       unless File.exist?(entryways_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{entryways_csv}")
         return false
       end
-      entryways_tbl = CSV.table(entryways_csv, encoding: "ISO8859-1:utf-8" )
+      entryways_tbl = CSV.table(entryways_csv, encoding: 'ISO8859-1:utf-8')
       entryways_hsh = entryways_tbl.map(&:to_hash)
 
       # get space properties from the model
@@ -91,7 +91,7 @@ module OpenstudioStandards
         parking_properties = parking_hsh.select { |h| h[:building_type] == building_type }
 
         if parking_properties.nil? || parking_properties.empty?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.ExteriorLighting', "Could not find parking data for #{building_type}.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.prototype.ExteriorLighting', "Could not find parking data for #{building_type}. Will not add exterior parking lighting. The building type data needs to be added to the parking lighting data.")
           return {}
         end
         parking_properties = parking_properties[0]
@@ -106,15 +106,13 @@ module OpenstudioStandards
           num_spots += hash[:number_of_students] / parking_properties[:students_per_spot].to_f
         elsif !parking_properties[:beds_per_spot].nil?
           num_spots += hash[:number_of_beds] / parking_properties[:beds_per_spot].to_f
-        else
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.prototype.exterior_lights', "Unexpected key, can't calculate number of parking spots from #{parking_properties.keys.first}.")
         end
 
         # add to cumulative parking area
         parking_area_and_drives_area += num_spots * parking_properties[:parking_area_per_spot]
 
         # load entryways properties for standards building type
-        entryways_properties = entryways_hsh.select { |hash| hash[:building_type] == building_type }
+        entryways_properties = entryways_hsh.select { |eh| eh[:building_type] == building_type }
 
         if entryways_properties.nil? || entryways_properties.empty?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.prototype.ExteriorLighting', "Could not find entryway data for #{building_type}.")
@@ -166,7 +164,7 @@ module OpenstudioStandards
       rollup_door_width_ft = 8.0
 
       # ensure the building has at least 1 main entry
-      main_entries = 1.0 if main_entries > 0 && main_entries < 1
+      main_entries = [1.0, main_entries].max
 
       # populate hash
       area_length_count_hash = {}

@@ -53,8 +53,8 @@ module OpenstudioStandards
         number_of_students = 0
         case standards_space_type
         when 'Classroom'
-          typical_class_size = 20.0
-          number_of_students = number_of_people * ((typical_class_size - 1.0) / typical_class_size)
+          # assume 1 teacher
+          number_of_students = number_of_people - 1.0
         end
 
         # populate space hash

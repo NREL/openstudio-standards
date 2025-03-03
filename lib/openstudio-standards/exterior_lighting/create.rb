@@ -22,7 +22,18 @@ module OpenstudioStandards
                                           schedule: nil,
                                           control_option: 'AstronomicalClock')
       # default name
-      name = "Exterior Lights #{power.round(0)}" if name.nil?
+      if name.nil?
+        name = "Exterior Lights #{power.round(2)} #{units}"
+      else
+        end_use_category = name
+        name = "#{name} #{power.round(2)} #{units}"
+      end
+
+      # warn if incorrect control option
+      unless (control_option == 'AstronomicalClock') || (control_option == 'ScheduleNameOnly')
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ExteriorLighting', "Invalid control option #{control_option}. Use either ScheduleNameOnly' or 'AstronomicalClock'. Defaulting to 'AstronomicalClock'.")
+        control_option = 'AstronomicalClock'
+      end
 
       # default schedule
       schedule = model.alwaysOnDiscreteSchedule if schedule.nil?
@@ -37,7 +48,7 @@ module OpenstudioStandards
       exterior_lights.setMultiplier(multiplier)
       exterior_lights.setName(name)
       exterior_lights.setControlOption(control_option)
-      exterior_lights.setEndUseSubcategory(name)
+      exterior_lights.setEndUseSubcategory(end_use_category)
 
       return exterior_lights
     end
@@ -51,6 +62,8 @@ module OpenstudioStandards
     # @param onsite_parking_fraction [Double] onsite parking fraction, 0-1
     # @param add_base_site_allowance [Boolean] whether to include the base site allowance
     # @param use_model_for_entries_and_canopies [Boolean] use building geometry for number of entries and canopy size
+    # @param control_option [String] Options are 'ScheduleNameOnly' and 'AstronomicalClock'.
+    #   'ScheduleNameOnly' will follow the schedule. 'AstronomicalClock' will follow the schedule, but turn off lights when the sun is up.
     # @return [Array<OpenStudio::Model::ExteriorLights>] Array of OpenStudio ExteriorLights object
     def self.model_create_typical_exterior_lighting(model,
                                                     standard: nil,
@@ -63,17 +76,17 @@ module OpenstudioStandards
       exterior_lights = []
       installed_power = 0.0
       # get the exterior lighting properties from standard or the lighting_generation
-      unless standard.nil?
+      if standard.nil?
+        # load typical exterior lighting data
+        data = JSON.parse(File.read("#{__dir__}/data/typical_exterior_lighting.json"))
+        exterior_lighting_properties = data['exterior_lighting'].select { |hash| (hash['lighting_generation'] == lighting_generation) }[0]
+        lookup_key = lighting_generation
+      else
         search_criteria = {
           'exterior_lighting_zone_number' => exterior_lighting_zone_number
         }
         exterior_lighting_properties = standard.standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         lookup_key = standard.template
-      else
-        # load typical water use equipment data
-        data = JSON.parse(File.read("#{__dir__}/data/typical_exterior_lighting.json"))
-        exterior_lighting_properties = data['exterior_lighting'].select { |hash| (hash['lighting_generation'] == lighting_generation) }[0]
-        lookup_key = lighting_generation
       end
 
       # make sure lighting properties were found
@@ -132,7 +145,7 @@ module OpenstudioStandards
                                                                                         multiplier: multiplier,
                                                                                         schedule: ext_lights_sch_other,
                                                                                         control_option: control_option)
-        exterior_lights <<  ext_lights
+        exterior_lights << ext_lights
         installed_power += power * multiplier
       end
 
@@ -170,7 +183,7 @@ module OpenstudioStandards
                                                                                         multiplier: multiplier,
                                                                                         schedule: ext_lights_sch_other,
                                                                                         control_option: control_option)
-        exterior_lights <<  ext_lights
+        exterior_lights << ext_lights
         installed_power += power * multiplier
       end
 
@@ -189,7 +202,7 @@ module OpenstudioStandards
                                                                                         multiplier: multiplier,
                                                                                         schedule: ext_lights_sch_other,
                                                                                         control_option: control_option)
-        exterior_lights <<  ext_lights
+        exterior_lights << ext_lights
         installed_power += power * multiplier
       end
 
@@ -208,7 +221,7 @@ module OpenstudioStandards
                                                                                         multiplier: multiplier,
                                                                                         schedule: ext_lights_sch_other,
                                                                                         control_option: control_option)
-        exterior_lights <<  ext_lights
+        exterior_lights << ext_lights
         installed_power += power * multiplier
       end
 
@@ -227,7 +240,7 @@ module OpenstudioStandards
                                                                                         multiplier: multiplier,
                                                                                         schedule: ext_lights_sch_other,
                                                                                         control_option: control_option)
-        exterior_lights <<  ext_lights
+        exterior_lights << ext_lights
         installed_power += power * multiplier
       end
 
@@ -246,7 +259,7 @@ module OpenstudioStandards
                                                                                         multiplier: multiplier,
                                                                                         schedule: ext_lights_sch_other,
                                                                                         control_option: control_option)
-        exterior_lights <<  ext_lights
+        exterior_lights << ext_lights
         installed_power += power * multiplier
       end
 
