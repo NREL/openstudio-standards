@@ -30,7 +30,7 @@ module OpenstudioStandards
       end
 
       # warn if incorrect control option
-      unless (control_option == 'AstronomicalClock') || (control_option == 'ScheduleNameOnly')
+      unless OpenStudio::Model::ExteriorLights::validControlOptionValues.include? control_option
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ExteriorLighting', "Invalid control option #{control_option}. Use either ScheduleNameOnly' or 'AstronomicalClock'. Defaulting to 'AstronomicalClock'.")
         control_option = 'AstronomicalClock'
       end
