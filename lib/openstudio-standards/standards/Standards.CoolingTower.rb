@@ -100,8 +100,11 @@ module CoolingTower
 
     motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = fan_bhp)
     if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{fan_motor_nameplate_hp} hp.")
-      return false
+        # Retry without the date
+        motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
+        if motor_properties.nil?
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CoolingTower', "For #{cooling_tower.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{fan_motor_nameplate_hp} hp. Using a default value of #{fan_motor_eff}.")
+        end
     end
 
     fan_motor_eff = motor_properties['nominal_full_load_efficiency']
