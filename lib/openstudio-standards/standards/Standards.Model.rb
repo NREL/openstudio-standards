@@ -304,7 +304,7 @@ class Standard
       zone_fan_scheds = get_fan_schedule_for_each_zone(model)
 
       # Set the construction properties of all the surfaces in the model
-      model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
+      model_apply_standard_constructions(model, climate_zone, wwr_building_type: wwr_building_type, wwr_info: wwr_info)
 
       # Update ground temperature profile (for F/C-factor construction objects)
       model_update_ground_temperature_profile(model, climate_zone)
@@ -4073,6 +4073,17 @@ class Standard
     # Surface
     # Outdoors
     # Ground
+    # Foundation
+    # GroundFCfactorMethod
+    # OtherSideCoefficients
+    # OtherSideConditionsModel
+    # GroundSlabPreprocessorAverage
+    # GroundSlabPreprocessorCore
+    # GroundSlabPreprocessorPerimeter
+    # GroundBasementPreprocessorAverageWall
+    # GroundBasementPreprocessorAverageFloor
+    # GroundBasementPreprocessorUpperWall
+    # GroundBasementPreprocessorLowerWall
 
     # Possible surface types are
     # AtticFloor
@@ -4129,8 +4140,37 @@ class Standard
     types_to_modify << ['Outdoors', 'ExteriorWall', 'SteelFramed']
     types_to_modify << ['Outdoors', 'ExteriorRoof', 'IEAD']
     types_to_modify << ['Outdoors', 'ExteriorFloor', 'SteelFramed']
+    types_to_modify << ['Outdoors', 'ExteriorWindow', 'Any Vertical Glazing']
+    types_to_modify << ['Outdoors', 'GlassDoor', 'Any Vertical Glazing']
+    types_to_modify << ['Outdoors', 'ExteriorDoor', 'NonSwinging']
+    types_to_modify << ['Outdoors', 'ExteriorDoor', 'Swinging']
     types_to_modify << ['Ground', 'GroundContactFloor', 'Unheated']
     types_to_modify << ['Ground', 'GroundContactWall', 'Mass']
+
+    # Foundation
+    types_to_modify << ['Foundation', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['Foundation', 'GroundContactWall', 'Mass']
+
+    # F/C-Factor methods
+    types_to_modify << ['GroundFCfactorMethod', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundFCfactorMethod', 'GroundContactWall', 'Mass']
+
+    # Other side coefficients
+    types_to_modify << ['OtherSideCoefficients', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['OtherSideConditionsModel', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['OtherSideCoefficients', 'GroundContactWall', 'Mass']
+    types_to_modify << ['OtherSideConditionsModel', 'GroundContactWall', 'Mass']
+
+    # Slab preprocessor
+    types_to_modify << ['GroundSlabPreprocessorAverage', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundSlabPreprocessorCore', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundSlabPreprocessorPerimeter', 'GroundContactFloor', 'Unheated']
+
+    # Basement preprocessor
+    types_to_modify << ['GroundBasementPreprocessorAverageWall', 'GroundContactWall', 'Mass']
+    types_to_modify << ['GroundBasementPreprocessorAverageFloor', 'GroundContactFloor', 'Unheated']
+    types_to_modify << ['GroundBasementPreprocessorUpperWall', 'GroundContactWall', 'Mass']
+    types_to_modify << ['GroundBasementPreprocessorLowerWall', 'GroundContactWall', 'Mass']
 
     # Modify all constructions of each type
     types_to_modify.each do |boundary_cond, surf_type, const_type|
@@ -6148,17 +6188,6 @@ class Standard
     cooling_tolerance_deg_c = OpenStudio.convert(cooling_tolerance_deg_f, 'R', 'K').get
     reporting_tolerances.setToleranceforTimeHeatingSetpointNotMet(heating_tolerance_deg_c)
     reporting_tolerances.setToleranceforTimeCoolingSetpointNotMet(cooling_tolerance_deg_c)
-
-    true
-  end
-
-  # Apply the standard construction to each surface in the model, based on the construction type currently assigned.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @param climate_zone [String] ASHRAE climate zone, e.g. 'ASHRAE 169-2013-4A'
-  # @return [Boolean] returns true if successful, false if not
-  def model_apply_constructions(model, climate_zone, wwr_building_type, wwr_info)
-    model_apply_standard_constructions(model, climate_zone, wwr_building_type: nil, wwr_info: {})
 
     true
   end
