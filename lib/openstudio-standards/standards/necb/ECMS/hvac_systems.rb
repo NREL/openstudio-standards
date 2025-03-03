@@ -270,7 +270,11 @@ class ECMS
     outdoor_vrf_unit.setName('VRF Outdoor Unit')
     outdoor_vrf_unit.setHeatPumpWasteHeatRecovery(true)
     outdoor_vrf_unit.setRatedHeatingCOP(4.0)
-    outdoor_vrf_unit.setRatedCoolingCOP(4.0)
+    if model.version < OpenStudio::VersionString.new('2.9.0')
+      outdoor_vrf_unit.setRatedCoolingCOP(4.0)
+    else
+      outdoor_vrf_unit.setGrossRatedCoolingCOP(4.0)
+    end
     outdoor_vrf_unit.setMinimumOutdoorTemperatureinHeatingMode(-25.0)
     outdoor_vrf_unit.setHeatingPerformanceCurveOutdoorTemperatureType('WetBulbTemperature')
     outdoor_vrf_unit.setMasterThermostatPriorityControlType('ThermostatOffsetPriority')
@@ -2946,8 +2950,13 @@ class ECMS
     end
 
     # Set COP
-    airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f) unless cop.nil?
-
+    unless cop.nil?
+      if model.version < OpenStudio::VersionString.new('2.9.0')
+        airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f)
+      else
+        airconditioner_variablerefrigerantflow.setGrossRatedCoolingCOP(cop.to_f)
+      end
+    end
   end
 
   # =============================================================================================================================
