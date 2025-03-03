@@ -2951,7 +2951,7 @@ class ECMS
 
     # Set COP
     unless cop.nil?
-      if model.version < OpenStudio::VersionString.new('2.9.0')
+      if airconditioner_variablerefrigerantflow.model.version < OpenStudio::VersionString.new('2.9.0')
         airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f)
       else
         airconditioner_variablerefrigerantflow.setGrossRatedCoolingCOP(cop.to_f)
