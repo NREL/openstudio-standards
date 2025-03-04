@@ -28,12 +28,23 @@ class BTAPCosting
     plant_loop_info = {}
     plant_loop_info[:shwtanks] = []
     plant_loop_info[:shwpumps] = []
+    hphw_tank_names = []
 
     num_reg_gas_tanks = 0
     num_reg_oil_tanks = 0
     num_elec_tanks = 0
+    num_hphw_tanks = 0
     num_high_eff_gas_tanks = 0
     num_high_eff_oil_tanks = 0
+ 
+    # HPHW heaters are stored outside of the plant loop
+    # Iterate through these first to determine if their are HPHW heaters
+    model.getWaterHeaterHeatPumps.each do |hphw|
+      if hphw.to_WaterHeaterHeatPump.is_initialized
+        hphw_tank_name = hphw.tank.name.get
+        hphw_tank_names << hphw_tank_name
+      end
+    end
     # Iterate through the plant loops to get shw tank & pump data...
     model.getPlantLoops.each do |plant_loop|
       next unless plant_loop.name.get.to_s =~ /Main Service Water Loop/i
@@ -50,11 +61,20 @@ class BTAPCosting
           tank_info[:heater_volume_gal] = (OpenStudio.convert(tank.tankVolume.to_f, 'm^3', 'gal').get)
           tank_info[:eff_mult] = 1.0
           if tank.heaterFuelType =~ /Electric/i
-            tank_info[:heater_fuel_type] = 'WaterElec'
-            tank_info[:tank_mult] = get_HVAC_multiplier(tank_info[:heater_fuel_type], tank_info[:nominal_capacity])
-            tank_info[:nominal_capacity] /= tank_info[:tank_mult]
-            tank_info[:heater_volume_gal] /= tank_info[:tank_mult]
-            num_elec_tanks += tank_info[:tank_mult]
+            # Check if the tank is associated with a HPHW heater
+            if hphw_tank_names.include?(tank.name.get)
+              tank_info[:heater_fuel_type] = 'HPHW_Heater'
+              tank_info[:tank_mult] = get_HVAC_multiplier(tank_info[:heater_fuel_type], tank_info[:nominal_capacity])
+              tank_info[:nominal_capacity] /= tank_info[:tank_mult]
+              tank_info[:heater_volume_gal] /= tank_info[:tank_mult]
+              num_hphw_tanks += tank_info[:tank_mult]
+            elsif !hphw_tank_names.include?(tank.name.get)
+              tank_info[:heater_fuel_type] = 'WaterElec'
+              tank_info[:tank_mult] = get_HVAC_multiplier(tank_info[:heater_fuel_type], tank_info[:nominal_capacity])
+              tank_info[:nominal_capacity] /= tank_info[:tank_mult]
+              tank_info[:heater_volume_gal] /= tank_info[:tank_mult]
+              num_elec_tanks += tank_info[:tank_mult]
+            end
           elsif tank.heaterFuelType =~ /NaturalGas/i
             tank_info[:heater_fuel_type] = 'WaterGas'
             tank_info[:tank_mult] = get_HVAC_multiplier(tank_info[:heater_fuel_type], tank_info[:nominal_capacity])
@@ -133,10 +153,14 @@ class BTAPCosting
         tank[:heater_volume_gal] = shwTankCostInfo[:Vol_USGal]
         tank[:nominal_capacity] = shwTankCostInfo[:Cap_kW]
         if shwTankCostInfo[:multiplier] > 1.0
-          if primaryFuel.include?("WaterELec")
+          if primaryFuel.include?("WaterElec")
             num_elec_tanks -= tank[:tank_mult]
             tank[:tank_mult] *= shwTankCostInfo[:multiplier]
             num_elec_tanks += tank[:tank_mult]
+          elsif primaryFuel.include?("HPHW_Heater")
+            num_hphw_tanks -= tank[:tank_mult]
+            tank[:tank_mult] *= shwTankCostInfo[:multiplier]
+            num_hphw_tanks += tank[:tank_mult]
           else
             if tank[:heater_thermal_efficiency] >= 0.85
               num_high_eff_oil_tanks -= tank[:tank_mult]
@@ -175,7 +199,7 @@ class BTAPCosting
       end
     end
 
-    numTanks = num_elec_tanks + num_reg_gas_tanks + num_high_eff_gas_tanks + num_reg_oil_tanks + num_high_eff_oil_tanks
+    numTanks = num_elec_tanks + num_hphw_tanks + num_reg_gas_tanks + num_high_eff_gas_tanks + num_reg_oil_tanks + num_high_eff_oil_tanks
     numFuelTanks = num_reg_gas_tanks + num_high_eff_gas_tanks + num_reg_oil_tanks + num_high_eff_oil_tanks
 
     if numTanks > 0
@@ -191,8 +215,8 @@ class BTAPCosting
       matCost, labCost = getCost('1 inch metal conduit', materialHash, multiplier)
       metalConduitCost = matCost * regional_material_elec / 100.0 + labCost * regional_installation_elec / 100.0
 
-      # Electric utility wire and conduit cost used by all tanks
-      utilCost += (metalConduitCost * util_dist + elecWireCost * util_dist / 100) * numTanks
+      # Electric utility wire and conduit cost used by all tanks except HPHW
+      utilCost += (metalConduitCost * util_dist + elecWireCost * util_dist / 100) * (numTanks - num_hphw_tanks)
 
       # Get costs condition on fuel types.
       if numFuelTanks> 0
@@ -297,7 +321,7 @@ class BTAPCosting
     pumpCost = 0.0; pipingCost = 0.0; numPumps = 0; pumpName = ''; pumpSize = 0.0
     plant_loop_info[:shwpumps].each do |pump|
       numPumps += 1
-      # Cost variable and constant volume pumps the same (the difference is in extra cost for VFD controller
+      # Cost variable and constant volume pumps the same (the difference is in extra cost for VFD controller)
       pumpSize = pump[:size]; pumpName = pump[:name]
       matCost, labCost = getHVACCost(pumpName, 'Pumps', pumpSize, false)
       pumpCost += matCost * regional_material / 100.0 + labCost * regional_installation / 100.0
@@ -359,6 +383,7 @@ class BTAPCosting
         'shw_tanks' => tankCost.round(2),
         'shw_num_of_modeled_tanks' => plant_loop_info[:shwtanks].size,
         'num_elec_tanks' => num_elec_tanks,
+        'num_hphw_tanks' => num_hphw_tanks,
         'shw_num_reg_eff_gas_tanks' => num_reg_gas_tanks,
         'shw_num_high_eff_gas_tanks' => num_high_eff_gas_tanks,
         'shw_num_reg_eff_oil_tanks' => num_reg_oil_tanks,

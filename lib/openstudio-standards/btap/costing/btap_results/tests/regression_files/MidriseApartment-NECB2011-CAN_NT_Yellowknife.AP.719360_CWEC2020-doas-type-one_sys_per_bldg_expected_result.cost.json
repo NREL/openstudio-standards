@@ -1361,6 +1361,7 @@
     "shw_tanks": 9917.02,
     "shw_num_of_modeled_tanks": 1,
     "num_elec_tanks": 0,
+    "num_hphw_tanks": 0,
     "shw_num_reg_eff_gas_tanks": 0,
     "shw_num_high_eff_gas_tanks": 0,
     "shw_num_reg_eff_oil_tanks": 1.0,
