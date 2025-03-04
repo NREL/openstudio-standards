@@ -1896,3 +1896,9 @@ id,sheet,source,description,city,province_state,materialOpCost,laborOpCost,equip
 321895,materials_hvac,custom,"Buried pipe from building to ground source heat pump bore field, over 200 mm",NATIONAL,NATIONAL,4085.8904734493485,0.0,0.0
 171896,materials_hvac,placeholder,"Pipe, steel, black, welded, 6"" diameter, schedule 40, Spec. A-53, includes yoke & roll hanger assembly, sized for covering, 10' OC",,,215.15842626439107,8.373906381510501,15.15461501818302
 171897,materials_hvac,placeholder,"Pipe, steel, black, welded, 8"" diameter, schedule 40, Spec. A-53, includes yoke & roll hanger assembly, sized for covering, 10' OC",,,224.1997356532522,144.4718376646824,7.9823398422124665
+171898,materials_hvac,custom,"HPHW, 9 kW, 30 MBH 30-gallon (US)",TORONTO,ONTARIO,8372.248954125269,3291.5663042811398,0.0
+171899,materials_hvac,custom,"HPHW, 11 kW, 35 MBH 40-gallon (US)",TORONTO,ONTARIO,4144.717285757672,4848.338843870052,0.0
+171900,materials_hvac,custom,"HPHW, 15 kW, 50 MBH 50-gallon (US)",TORONTO,ONTARIO,6167.451762208893,4463.263428764677,0.0
+171901,materials_hvac,custom,"HPHW, 25 kW, 80 MBH 80-gallon (US)",TORONTO,ONTARIO,10824.819112688692,3629.9406452428143,0.0
+171902,materials_hvac,custom,"HPHW, 30 kW, 100 MBH 100-gallon (US)",TORONTO,ONTARIO,7854.588566652141,11974.19480746643,0.0
+171903,materials_hvac,custom,"HPHW, 35 kW, 120 MBH 120-gallon (US)",TORONTO,ONTARIO,14694.498071142936,7582.735530825686,0.0

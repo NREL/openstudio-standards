@@ -1691,3 +1691,9 @@ material_id,Material,description,Size,Fuel,source,type,id,unit,province_state,ci
 1708,gshp_buried_pipe,"Buried pipe from building to ground source heat pump bore field, over 200 mm",250,,custom,,321895,L.M.,NATIONAL,NATIONAL,2022,1400,0,0,1,1,1,Cost Estimate of $1400/m for piping done in spring 2022-2023.,1,1
 1709,SteelPipe,"Pipe, steel, black, welded, 6"" diameter, schedule 40, Spec. A-53, includes yoke & roll hanger assembly, sized for covering, 10' OC",6,,rs-means,Unit,171896,L.F.,,,,,,,,,,,1,1
 1710,SteelPipe,"Pipe, steel, black, welded, 8"" diameter, schedule 40, Spec. A-53, includes yoke & roll hanger assembly, sized for covering, 10' OC",8,,rs-means,Unit,171897,L.F.,,,,,,,,,,,1,1
+1711,HPHW_Heater,"HPHW, 9 kW, 30 MBH 30-gallon (US)",9,30,custom,Unit,171898,each,ONTARIO,TORONTO,2020,1760.00,1210.00,0.00,1,1,1,,1,1
+1712,HPHW_Heater,"HPHW, 11 kW, 35 MBH 40-gallon (US)",11,40,custom,Unit,171899,each,ONTARIO,TORONTO,2020,2090.00,1210.00,0.00,1,1,1,,1,1
+1713,HPHW_Heater,"HPHW, 15 kW, 50 MBH 50-gallon (US)",15,50,custom,Unit,171900,each,ONTARIO,TORONTO,2020,2420.00,1540.00,0.00,1,1,1,,1,1
+1714,HPHW_Heater,"HPHW, 25 kW, 80 MBH 80-gallon (US)",25,80,custom,Unit,171901,each,ONTARIO,TORONTO,2020,3960.00,2200.00,0.00,1,1,1,,1,1
+1715,HPHW_Heater,"HPHW, 30 kW, 100 MBH 100-gallon (US)",30,100,custom,Unit,171902,each,ONTARIO,TORONTO,2020,7260.00,3520.00,0.00,1,1,1,,1,1
+1716,HPHW_Heater,"HPHW, 35 kW, 120 MBH 120-gallon (US)",35,120,custom,Unit,171903,each,ONTARIO,TORONTO,2020,8360.00,3850.00,0.00,1,1,1,,1,1

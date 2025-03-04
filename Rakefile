@@ -175,7 +175,7 @@ namespace :data do
 
   desc 'BTAP Costing: Reload CSV data into costing_database.json and validate the costing database'
   task 'update:costing' do
-    require_relative './lib/openstudio-standards/btap/costing/btap_results/resources/btap_costing'
+    require_relative './lib/openstudio-standards/btap/costing/btap_costing'
     data = BTAPCosting.new
     data.validate_database
   end
