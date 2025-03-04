@@ -93,7 +93,7 @@ class Standard
     motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = fan_bhp)
     if motor_properties.nil?
         # Retry without the date
-        motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
+        motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = fan_bhp)
         if motor_properties.nil?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp. Using a default value of #{fan_motor_eff}.")
         end
