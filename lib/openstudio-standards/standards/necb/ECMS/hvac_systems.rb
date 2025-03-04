@@ -2317,6 +2317,7 @@ class ECMS
     # Set supplemental heaing for airloop
     sys_supp_htg_eqpt_type = 'coil_electric'
     sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+    sys_supp_htg_eqpt_type = 'coil_hw' if standard.fuel_type_set.force_airloop_hot_water
     # call ecm HS15 to add the air loop
     add_ecm_hs15_cawhp_fancoils(model: model,
                              system_zones_map: system_zones_map,
