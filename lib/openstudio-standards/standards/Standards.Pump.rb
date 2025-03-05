@@ -142,7 +142,7 @@ module Pump
       'type' => 'Enclosed'
     }
 
-    motor_properties = model_find_object(motors, search_criteria, motor_bhp)
+    motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
     if motor_properties.nil?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
       return [motor_eff, nominal_hp]
@@ -154,15 +154,6 @@ module Pump
     if nominal_hp >= 2
       nominal_hp = nominal_hp.round
     end
-
-    # Get the efficiency based on the nominal horsepower
-    # Add 0.01 hp to avoid search errors.
-    motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
-    if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{pump.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
-      return [motor_eff, nominal_hp]
-    end
-    motor_eff = motor_properties['nominal_full_load_efficiency']
 
     return [motor_eff, nominal_hp]
   end
