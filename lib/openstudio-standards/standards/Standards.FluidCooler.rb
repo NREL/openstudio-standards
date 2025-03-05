@@ -81,6 +81,7 @@ class Standard
 
     # Lookup the minimum motor efficiency
     fan_motor_eff = 0.85
+    nominal_hp = fan_bhp
     motors = standards_data['motors']
 
     # Assuming all fan motors are 4-pole Enclosed
@@ -99,8 +100,10 @@ class Standard
         end
     end
 
-    fan_motor_eff = motor_properties['nominal_full_load_efficiency']
-    nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
+    unless motor_properties.nil?
+      fan_motor_eff = motor_properties['nominal_full_load_efficiency']
+      nominal_hp = motor_properties['maximum_capacity'].to_f.round(1)
+    end
     # Round to nearest whole HP for niceness
     if nominal_hp >= 2
       nominal_hp = nominal_hp.round
