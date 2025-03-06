@@ -12,7 +12,7 @@ class RunAllCostTests < Minitest::Test
 
     # The OpenStudio v3.2.1 CLI has issues so running the tests by calling the methods directly
     #test_cli = File.join(__dir__, "measures", "btap_results", "tests", "test_helper.rb")
-    test_cli = File.join(__dir__, "measures", "btap_results", "tests", "test_helper_nocli.rb")
+    test_cli = File.join(__dir__, "btap_results", "tests", "test_helper_nocli.rb")
     building_types = [
       #'Hospital',
       #'Outpatient',
