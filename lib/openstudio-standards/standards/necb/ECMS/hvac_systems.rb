@@ -2316,8 +2316,10 @@ class ECMS
   #=============================================================================================================================
   # Apply efficiency for ECM 'hs16_ashp_cawhp_fancoils'
   def apply_efficiency_ecm_hs16_ashp_cawhp_fancoils(model, standard)
-    # The air loop is the same as in ECM 12
+    # The air loop is the same as in ECM HS12
     apply_efficiency_ecm_hs12_ashp_baseboard(model, standard)
+    # The plant loop is the same as in ECM HS15
+    apply_efficiency_ecm_hs15_cawhp_fancoils(model, standard)
     return
   end
 
