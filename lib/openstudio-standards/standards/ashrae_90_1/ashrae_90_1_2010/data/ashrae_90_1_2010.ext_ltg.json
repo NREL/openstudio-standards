@@ -482,7 +482,7 @@
     },
     {
       "lighting_zone": 0,
-      "allowance_type": "lanscaping",
+      "allowance_type": "landscaping",
       "allowance": 0,
       "allowance_unit": "W/ft2",
       "tradable": true,
@@ -494,7 +494,7 @@
     },
     {
       "lighting_zone": 1,
-      "allowance_type": "lanscaping",
+      "allowance_type": "landscaping",
       "allowance": 0.04,
       "allowance_unit": "W/ft2",
       "tradable": true,
@@ -506,7 +506,7 @@
     },
     {
       "lighting_zone": 2,
-      "allowance_type": "lanscaping",
+      "allowance_type": "landscaping",
       "allowance": 0.05,
       "allowance_unit": "W/ft2",
       "tradable": true,
@@ -518,7 +518,7 @@
     },
     {
       "lighting_zone": 3,
-      "allowance_type": "lanscaping",
+      "allowance_type": "landscaping",
       "allowance": 0.05,
       "allowance_unit": "W/ft2",
       "tradable": true,
@@ -530,7 +530,7 @@
     },
     {
       "lighting_zone": 4,
-      "allowance_type": "lanscaping",
+      "allowance_type": "landscaping",
       "allowance": 0.05,
       "allowance_unit": "W/ft2",
       "tradable": true,
