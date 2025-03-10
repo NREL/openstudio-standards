@@ -43,7 +43,7 @@ class TestExteriorLightingCreate < Minitest::Test
     # add lights
     exterior_lights = @ext.model_create_typical_exterior_lighting(model,
                                                                   standard: Standard.build('90.1-2013'),
-                                                                  exterior_lighting_zone_number: 3,
+                                                                  lighting_zone: 3,
                                                                   add_base_site_allowance: true)
     # check results
     assert(exterior_lights.size == 5)
@@ -68,7 +68,7 @@ class TestExteriorLightingCreate < Minitest::Test
     # add lights
     exterior_lights = @ext.model_create_typical_exterior_lighting(model,
                                                                   lighting_generation: 'default',
-                                                                  exterior_lighting_zone_number: 3,
+                                                                  lighting_zone: 3,
                                                                   add_base_site_allowance: true)
     # check results
     assert(exterior_lights.size == 5)
@@ -93,7 +93,7 @@ class TestExteriorLightingCreate < Minitest::Test
     # add lights
     exterior_lights = @ext.model_create_typical_exterior_lighting(model,
                                                                   standard: Standard.build('90.1-2004'),
-                                                                  exterior_lighting_zone_number: 4)
+                                                                  lighting_zone: 4)
 
     # check results
     assert(exterior_lights.size == 5)
@@ -123,7 +123,7 @@ class TestExteriorLightingCreate < Minitest::Test
     # add lights
     exterior_lights = @ext.model_create_typical_exterior_lighting(model,
                                                                   standard: Standard.build('DOE Ref Pre-1980'),
-                                                                  exterior_lighting_zone_number: 4)
+                                                                  lighting_zone: 4)
 
     # check results
     assert(exterior_lights.size == 5)
@@ -149,7 +149,7 @@ class TestExteriorLightingCreate < Minitest::Test
     # add lights
     exterior_lights = @ext.model_create_typical_exterior_lighting(model,
                                                                   standard: Standard.build('DOE Ref 1980-2004'),
-                                                                  exterior_lighting_zone_number: 2)
+                                                                  lighting_zone: 2)
 
     # check results
     assert(exterior_lights.size == 4)
@@ -171,7 +171,7 @@ class TestExteriorLightingCreate < Minitest::Test
     # add lights
     exterior_lights = @ext.model_create_typical_exterior_lighting(model,
                                                                   standard: Standard.build('90.1-2010'),
-                                                                  exterior_lighting_zone_number: 1)
+                                                                  lighting_zone: 1)
 
     # check results
     assert(exterior_lights.size == 5)

@@ -58,7 +58,7 @@ module OpenstudioStandards
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param standard [Standard] standard object to use for lighting properties. If set, will override lighting_generation.
     # @param lighting_generation [String] lighting generation to use for lighting properties. Currently defaulted to a mix of Metal Halide, High Pressure Sodium, and LEDs.
-    # @param exterior_lighting_zone_number [Integer] exterior lighting zone number, 0-4
+    # @param lighting_zone [Integer] exterior lighting zone number, 0-4
     # @param onsite_parking_fraction [Double] onsite parking fraction, 0-1
     # @param add_base_site_allowance [Boolean] whether to include the base site allowance
     # @param use_model_for_entries_and_canopies [Boolean] use building geometry for number of entries and canopy size
@@ -68,7 +68,7 @@ module OpenstudioStandards
     def self.model_create_typical_exterior_lighting(model,
                                                     standard: nil,
                                                     lighting_generation: 'default',
-                                                    exterior_lighting_zone_number: 3,
+                                                    lighting_zone: 3,
                                                     onsite_parking_fraction: 1.0,
                                                     add_base_site_allowance: false,
                                                     use_model_for_entries_and_canopies: false,
@@ -83,7 +83,7 @@ module OpenstudioStandards
         lookup_key = lighting_generation
       else
         search_criteria = {
-          'exterior_lighting_zone_number' => exterior_lighting_zone_number
+          'lighting_zone' => lighting_zone
         }
         exterior_lighting_properties = standard.standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         lookup_key = standard.template
@@ -91,7 +91,7 @@ module OpenstudioStandards
 
       # make sure lighting properties were found
       if exterior_lighting_properties.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ExteriorLighting', "Exterior lighting properties not found for #{lookup_key}, ext lighting zone #{exterior_lighting_zone_number}, none will be added to model.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ExteriorLighting', "Exterior lighting properties not found for #{lookup_key}, ext lighting zone #{lighting_zone}, none will be added to model.")
         return exterior_lights
       end
 

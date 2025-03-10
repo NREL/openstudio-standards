@@ -458,7 +458,7 @@ module OpenstudioStandards
         end
         exterior_lights = OpenstudioStandards::ExteriorLighting.model_create_typical_exterior_lighting(model,
                                                                                                        lighting_generation: 'default',
-                                                                                                       exterior_lighting_zone_number: exterior_lighting_zone.chars[0].to_i,
+                                                                                                       lighting_zone: exterior_lighting_zone.chars[0].to_i,
                                                                                                        onsite_parking_fraction: onsite_parking_fraction)
         exterior_lights.each do |v|
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding Exterior Lights named #{v.exteriorLightsDefinition.name} with design level of #{v.exteriorLightsDefinition.designLevel} * #{OpenStudio.toNeatString(v.multiplier, 0, true)}.")
