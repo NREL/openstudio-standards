@@ -3306,6 +3306,12 @@ class Standard
     end
 
     if !props
+      # Third search for legacy energy codes (2016 or earlier), which does not have standards_construction_type
+      search_criteria.delete('standards_construction_type')
+      props = model_find_object(standards_data['construction_properties'], search_criteria)
+    end
+
+    if !props
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Model', "Could not find construction properties for: #{template}-#{climate_zone_set}-#{intended_surface_type}-#{standards_construction_type}-#{building_category}.")
       # Return an empty construction
       construction = OpenStudio::Model::Construction.new(model)
