@@ -20,6 +20,8 @@ class BTAPData
     @neb_prices_csv_file_name = File.join(__dir__, 'neb_end_use_prices.csv')
     @neb_prices_csv_file_name = File.join(__dir__, 'utility_pricing_2025-02-20.csv') if oerd_utility_pricing.to_bool
     @necb_reference_runs_csv_file_name = File.join(__dir__, 'necb_reference_runs.csv')
+    @eccc_ghg_electricity = File.join(__dir__, 'eccc_electric_grid_intensity_20250311.csv') #REF (Retrieved March 11, 2025) for ECCC's emissions factors for the current and future years for GHG "without Biomass and RNG CO2 emissions": https://data-donnees.az.ec.gc.ca/data/substances/monitor/canada-s-greenhouse-gas-emissions-projections/Current-Projections-Actuelles/Energy-Energie/AM%20Scenario%20AMS/Grid-O%26G-Intensities-Intensites-Reseau-Delectricite-P%26G?lang=en
+    @nir_ghg_gas = File.join(__dir__, 'nir_gas_grid_intensity_20250311.csv') #REF (Retrieved March 11, 2025) for Year 2022 of "Table A6.1–1 CO2 Emission Factors for Marketable Natural Gas" of National Inventory Report: https://data-donnees.az.ec.gc.ca/api/file?path=%2Fsubstances%2Fmonitor%2Fcanada-s-official-greenhouse-gas-inventory%2FD-Emission-Factors%2FEN_Annex6_Emission_Factors.pdf
 
     # Conditioned floor area is used so much. May as well make it a object variable.
     # setup the queries
@@ -228,6 +230,10 @@ class BTAPData
     # Create a hash of the neb data.
     neb_data = CSV.parse(File.read(@neb_prices_csv_file_name), headers: true, converters: :numeric).map(&:to_h)
 
+    # Create a hash of the National Inventory Report's data for GHG emission factors for marketable natural gas data.
+    nir_ghg_gas_emission_factor = CSV.parse(File.read(@nir_ghg_gas), headers: true, converters: :numeric).map(&:to_h) #TODO Sara
+    puts "nir_ghg_gas_emission_factor #{nir_ghg_gas_emission_factor}" #TODO Sara
+
     # Find which province the proposed building is located in
     building_type = 'Commercial'
     geography_data = climate_data
@@ -282,8 +288,12 @@ class BTAPData
 
     # Calculate npv of natural gas
     eui_ngas= @btap_data['energy_eui_natural_gas_gj_per_m_sq']
+    # Convert eui_ngas to m3 of natural gas #Sara
+    # REF: https://apps.cer-rec.gc.ca/Conversion/conversion-tables.aspx#s1ss2 (Retrieved March 11, 2025)
+    # A per the reference above: 1.0 Cubic metres (m³) natural gas = 0.0373 Gigajoules (GJ)
+    eui_gas_m3_per_m_sq = eui_ngas / 0.0373
     # Convert to tonnes of ghg/m^2
-    ghg_ngas = @btap_data['cost_utility_ghg_natural gas_kg_per_m_sq'].to_f/1000.0
+    ghg_ngas = @btap_data['cost_utility_ghg_natural gas_kg_per_m_sq'].to_f/1000.0 #TODO Sara to delete
     row = neb_data.detect do |data|
       (data['building_type'] == building_type) && (data['province'] == province) && (data['fuel_type'] == 'Natural Gas')
     end
@@ -292,7 +302,8 @@ class BTAPData
     year_index = 1.0
     for year in npv_start_year.to_int..npv_end_year.to_int
       npv_ngas += (eui_ngas * row[year.to_s]) / (1+npv_discount_rate)**year_index
-      npv_ngas_ghg += (ghg_ngas * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index
+      npv_ngas_ghg += (ghg_ngas * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index #TODO Sara to delete
+      #TODO npv_ngas_ghg += (eui_gas_m3_per_m_sq * XXX  * get_national_ghg_cost(year: year.to_i)) / (1+npv_discount_rate_carbon)**year_index ) #TODO Sara to add
       year_index += 1.0
     end
     # puts "npv_ngas is #{npv_ngas}"
