@@ -204,7 +204,8 @@ module OpenstudioStandards
           search_criteria = {
             'template' => lookup_key,
             'lighting_zone' => lighting_zone,
-            'allowance_type' => 'building facades'
+            'allowance_type' => 'building facades',
+            'allowance_unit' => 'W/ft2'
           }
           exterior_lighting_facade_req = standard.standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
           power = exterior_lighting_facade_req['allowance']
