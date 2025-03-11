@@ -2571,13 +2571,35 @@ class NECB2011 < Standard
         {
           "name" => "ElectricityNet:Facility",
           "frequency" => "Hourly"
+        },
+        {
+          "name" => "Heating:Electricity",
+          "frequency" => "Hourly"
+        },
+        {
+          "name" => "WaterSystems:Electricity",
+          "frequency" => "Hourly"
         }
       ]
     else
-      electnet_facility = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "electricitynet:facility") && (output_meter["frequency"].to_s.downcase == "zone timestep") }
+      electnet_facility = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "electricitynet:facility") && (output_meter["frequency"].to_s.downcase == "hourly") }
       if electnet_facility.empty?
         output_meters << {
           "name" => "ElectricityNet:Facility",
+          "frequency" => "Hourly"
+        }
+      end
+      heating_elec = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "heating:electricity") && (output_meter["frequency"].to_s.downcase == "hourly") }
+      if electnet_facility.empty?
+        output_meters << {
+          "name" => "Heating:Electricity",
+          "frequency" => "Hourly"
+        }
+      end
+      watersys_elec = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "watersystems:electricity") && (output_meter["frequency"].to_s.downcase == "hourly") }
+      if electnet_facility.empty?
+        output_meters << {
+          "name" => "WaterSystems:Electricity",
           "frequency" => "Hourly"
         }
       end

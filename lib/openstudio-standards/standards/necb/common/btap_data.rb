@@ -1582,6 +1582,142 @@ class BTAPData
     cooling_peak_w = [cooling_peak_w_electricity.to_f, cooling_peak_w_gas.to_f].max
     data['cooling_peak_w_per_m_sq'] = cooling_peak_w / @conditioned_floor_area_m_sq
 
+    # Peak water system load  # @todo IMPORTANT NOTE: Peak water system load must be updated if a combination of fuel types is used in a building model.
+    command = "SELECT Value
+               FROM TabularDataWithStrings
+               WHERE ReportName='EnergyMeters'
+               AND ReportForString='Entire Facility'
+               AND TableName='Annual and Peak Values - Electricity'
+               AND RowName='WaterSystems:Electricity'
+               AND ColumnName='Electricity Maximum Value'
+               AND Units='W'"
+    water_heating_peak_w_electricity = @sqlite_file.get.execAndReturnFirstDouble(command)
+    command = "SELECT Value
+              FROM TabularDataWithStrings
+              WHERE ReportName='EnergyMeters'
+              AND ReportForString='Entire Facility'
+              AND TableName='Annual and Peak Values - Natural Gas'
+              AND RowName='WaterSystems:NaturalGas'
+              AND ColumnName='Natural Gas Maximum Value'
+              AND Units='W'"
+    water_heating_peak_w_gas = @sqlite_file.get.execAndReturnFirstDouble(command)
+    water_heating_peak_w = [water_heating_peak_w_electricity.to_f, water_heating_peak_w_gas.to_f].max
+    data['energy_peak_water_systems_w_per_m_sq'] = water_heating_peak_w / @conditioned_floor_area_m_sq
+
+    #===================================================================================================================
+    # Winter peak values
+    ### Get number of timesteps from the model
+    number_of_timesteps_per_hour = 1
+    timestep_second = 3600 / number_of_timesteps_per_hour
+    #===================================================================================================================
+    ### Calculate number of timesteps of the whole year, and create dates/times for the whole year
+    number_of_timesteps_of_year = 365 * 24 * number_of_timesteps_per_hour
+    timesteps_of_year = []
+    d = Time.new(2006, 1, 1, 0)
+    (0...number_of_timesteps_of_year).each do |increment|
+      timesteps_of_year << (d + (60 * 60 / number_of_timesteps_per_hour) * increment).strftime('%Y-%m-%d %H:%M')
+    end
+    # Find month of each timestep
+    keys_month = timesteps_of_year.map{ |timestep| DateTime.parse(timestep).to_date.month }
+    # Peak electricity in winter
+    query = "
+    SELECT ReportDataDictionaryIndex
+    FROM ReportDataDictionary
+    WHERE Name=='Electricity:Facility' AND ReportingFrequency == 'Hourly' AND Units == 'J'
+    "
+    index_timestep_electricity = @model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+    number_of_timesteps_per_hour = 1
+    if index_timestep_electricity.nil?
+      puts "No hourly or timestep data available.  Peak data not available"
+      data['energy_peak_electric_w_per_m_sq_winter'] = 0
+    else
+      ### Get timestep output for Electricity:Facility output.
+      query = "
+      Select VariableValue
+      FROM ReportVariableData
+      WHERE
+      ReportVariableDataDictionaryIndex = #{index_timestep_electricity}
+      "
+      timestep_values = @model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+          # Create a hash where its keys are months and values for eahc month are electricity energy use (J) of all timesteps for that month
+      hash_months_electricity = keys_month.zip(timestep_values).group_by(&:first).map{|key, value| [key, value.map(&:last)]}.to_h
+      # Find maximum of electricity energy use (J) among all timesteps for each month of the year
+      monthly_peak_J = hash_months_electricity.map { |key, value| [key, value.max()] }.to_h
+      ### Convert J to W of maximum electricity energy use (J)
+      monthly_peak_W = monthly_peak_J.map { |key, value| [key, value / timestep_second] }.to_h
+      # Get winter peak
+      winter_peak_W = [monthly_peak_W[12].to_f, monthly_peak_W[1].to_f, monthly_peak_W[2].to_f].max
+      ### Normalize by building floor area
+      annual_peak_W_per_m_sq = winter_peak_W / @btap_data['bldg_conditioned_floor_area_m_sq'].to_f
+      data['energy_peak_electric_w_per_m_sq_winter'] = annual_peak_W_per_m_sq
+    end
+
+    # Peak electricity heating in winter
+    query = "
+    SELECT ReportDataDictionaryIndex
+    FROM ReportDataDictionary
+    WHERE Name=='Heating:Electricity' AND ReportingFrequency == 'Hourly' AND Units == 'J'
+    "
+    index_timestep_electricity = @model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+    number_of_timesteps_per_hour = 1
+    if index_timestep_electricity.nil?
+      puts "No hourly or timestep data available.  Peak data not available"
+      data['energy_peak_electric_heating_w_per_m_sq_winter'] = 0
+    else
+      ### Get timestep output for Electricity:Facility output.
+      query = "
+      Select VariableValue
+      FROM ReportVariableData
+      WHERE
+      ReportVariableDataDictionaryIndex = #{index_timestep_electricity}
+      "
+      timestep_values = @model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+      # Create a hash where its keys are months and values for eahc month are electricity energy use (J) of all timesteps for that month
+      hash_months_electricity = keys_month.zip(timestep_values).group_by(&:first).map{|key, value| [key, value.map(&:last)]}.to_h
+      # Find maximum of electricity energy use (J) among all timesteps for each month of the year
+      monthly_peak_J = hash_months_electricity.map { |key, value| [key, value.max()] }.to_h
+      ### Convert J to W of maximum electricity energy use (J)
+      monthly_peak_W = monthly_peak_J.map { |key, value| [key, value / timestep_second] }.to_h
+      # Get winter peak
+      winter_peak_W = [monthly_peak_W[12].to_f, monthly_peak_W[1].to_f, monthly_peak_W[2].to_f].max
+      ### Normalize by building floor area
+      annual_peak_W_per_m_sq = winter_peak_W / @btap_data['bldg_conditioned_floor_area_m_sq'].to_f
+      data['energy_peak_electric_heating_w_per_m_sq_winter'] = annual_peak_W_per_m_sq
+    end
+
+    # Peak water system electricity heating in winter
+    query = "
+    SELECT ReportDataDictionaryIndex
+    FROM ReportDataDictionary
+    WHERE Name=='WaterSystems:Electricity' AND ReportingFrequency == 'Hourly' AND Units == 'J'
+    "
+    index_timestep_electricity = @model.sqlFile.get.execAndReturnVectorOfInt(query).get[0]
+    number_of_timesteps_per_hour = 1
+    if index_timestep_electricity.nil?
+      puts "No hourly or timestep data available.  Peak data not available"
+      data['energy_peak_electric_water_systems_w_per_m_sq_winter'] = 0
+    else
+      ### Get timestep output for Electricity:Facility output.
+      query = "
+      Select VariableValue
+      FROM ReportVariableData
+      WHERE
+      ReportVariableDataDictionaryIndex = #{index_timestep_electricity}
+      "
+      timestep_values = @model.sqlFile.get.execAndReturnVectorOfDouble(query).get
+          # Create a hash where its keys are months and values for eahc month are electricity energy use (J) of all timesteps for that month
+      hash_months_electricity = keys_month.zip(timestep_values).group_by(&:first).map{|key, value| [key, value.map(&:last)]}.to_h
+      # Find maximum of electricity energy use (J) among all timesteps for each month of the year
+      monthly_peak_J = hash_months_electricity.map { |key, value| [key, value.max()] }.to_h
+      ### Convert J to W of maximum electricity energy use (J)
+      monthly_peak_W = monthly_peak_J.map { |key, value| [key, value / timestep_second] }.to_h
+      # Get winter peak
+      winter_peak_W = [monthly_peak_W[12].to_f, monthly_peak_W[1].to_f, monthly_peak_W[2].to_f].max
+      ### Normalize by building floor area
+      annual_peak_W_per_m_sq = winter_peak_W / @btap_data['bldg_conditioned_floor_area_m_sq'].to_f
+      data['energy_peak_electric_water_systems_w_per_m_sq_winter'] = annual_peak_W_per_m_sq
+    end
+
     return data
   end
 
