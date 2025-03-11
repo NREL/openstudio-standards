@@ -6,6 +6,12 @@ require 'json'
 require 'parallel'
 #require 'hashdiff'
 
+# Useful bit of code to debug json files. When 'unreadable' character error run this:
+#puts "Reading file #{file}"
+#data_str = File.read(file)
+#clean_str = data_str.encode('utf-8', 'binary', :invalid => :replace, :undef => :replace, :replace => 'XXX')
+#File.write("#{file}-new", JSON.pretty_generate(clean_str))
+
 # Add significant digits capability to float amd integer class to tidy up reporting.
 class Float
   def signif(digits=4)
