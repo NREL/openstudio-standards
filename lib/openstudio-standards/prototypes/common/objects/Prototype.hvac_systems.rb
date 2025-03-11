@@ -6282,6 +6282,7 @@ class Standard
         if chilled_water_loop_cooling_type == 'AirCooled'
           chilled_water_loop = model_add_chw_loop(model,
                                                   chw_pumping_type: 'const_pri',
+                                                  chiller_cooling_type: 'AirCooled',
                                                   cooling_fuel: cool_fuel)
         else
           fan_type = model_cw_loop_cooling_tower_fan_type(model)
