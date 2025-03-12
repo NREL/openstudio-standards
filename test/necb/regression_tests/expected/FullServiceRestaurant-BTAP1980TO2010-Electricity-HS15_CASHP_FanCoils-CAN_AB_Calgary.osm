@@ -1686,10 +1686,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000006},  !- Handle
-  BTAP-Ext-Door:U-2.95,                    !- Name
+  BTAP-Ext-Door:U-2.95 R-1.92,             !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0044-000000000016},  !- Layer 1
-  {00000000-0000-0000-0045-000000000011};  !- Layer 2
+  {00000000-0000-0000-0045-000000000010};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000007},  !- Handle
@@ -1713,7 +1713,7 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000010},  !- Handle
-  BTAP-Ext-Floor-Mass:U-3.822,             !- Name
+  BTAP-Ext-Floor-Mass:U-3.822 R-1.49,      !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0045-000000000008},  !- Layer 1
   {00000000-0000-0000-0044-000000000007},  !- Layer 2
@@ -1739,9 +1739,9 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000014},  !- Handle
-  BTAP-Ext-OverHeadDoor:U-2.95,            !- Name
+  BTAP-Ext-OverHeadDoor:U-2.95 R-1.92,     !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0045-000000000012};  !- Layer 1
+  {00000000-0000-0000-0045-000000000009};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000015},  !- Handle
@@ -1752,10 +1752,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000016},  !- Handle
-  BTAP-Ext-Roof-Metal:U-0.227,             !- Name
+  BTAP-Ext-Roof-Metal:U-0.227 R-25.01,     !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0044-000000000022},  !- Layer 1
-  {00000000-0000-0000-0045-000000000010};  !- Layer 2
+  {00000000-0000-0000-0045-000000000012};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000017},  !- Handle
@@ -1780,11 +1780,11 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000020},  !- Handle
-  BTAP-Ext-Wall-Mass:U-0.346,              !- Name
+  BTAP-Ext-Wall-Mass:U-0.346 R-16.41,      !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0044-000000000005},  !- Layer 1
   {00000000-0000-0000-0044-000000000013},  !- Layer 2
-  {00000000-0000-0000-0045-000000000009},  !- Layer 3
+  {00000000-0000-0000-0045-000000000011},  !- Layer 3
   {00000000-0000-0000-0044-000000000001};  !- Layer 4
 
 OS:Construction,
@@ -1796,14 +1796,14 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000022},  !- Handle
-  BTAP-Grnd-Floor-Mass:U-0.678,            !- Name
+  BTAP-Grnd-Floor-Mass:U-0.678 R-8.38,     !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0044-000000000009},  !- Layer 1
-  {00000000-0000-0000-0045-000000000004};  !- Layer 2
+  {00000000-0000-0000-0045-000000000006};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000023},  !- Handle
-  BTAP-Grnd-Floor-Mass:U-0.678_std,        !- Name
+  BTAP-Grnd-Floor-Mass:U-0.678 R-8.38_std, !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0044-000000000009},  !- Layer 1
   {00000000-0000-0000-0044-000000000015};  !- Layer 2
@@ -1817,10 +1817,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000025},  !- Handle
-  BTAP-Grnd-Roof-Mass:U-0.678,             !- Name
+  BTAP-Grnd-Roof-Mass:U-0.678 R-8.38,      !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0044-000000000011},  !- Layer 1
-  {00000000-0000-0000-0045-000000000006};  !- Layer 2
+  {00000000-0000-0000-0045-000000000005};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000026},  !- Handle
@@ -1831,10 +1831,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000027},  !- Handle
-  BTAP-Grnd-Wall-Mass:U-0.425,             !- Name
+  BTAP-Grnd-Wall-Mass:U-0.425 R-13.36,     !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0044-000000000010},  !- Layer 1
-  {00000000-0000-0000-0045-000000000005};  !- Layer 2
+  {00000000-0000-0000-0045-000000000004};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000028},  !- Handle
@@ -2925,16 +2925,7 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000004},  !- Handle
-  Typical Carpet Pad 2,                    !- Name
-  Smooth,                                  !- Roughness
-  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
-  0.9,                                     !- Thermal Absorptance
-  0.7,                                     !- Solar Absorptance
-  0.8;                                     !- Visible Absorptance
-
-OS:Material:NoMass,
-  {00000000-0000-0000-0045-000000000005},  !- Handle
-  Typical Carpet Pad 3,                    !- Name
+  Typical Carpet Pad 2 R-12.99,            !- Name
   Smooth,                                  !- Roughness
   2.28696715049656,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -2942,8 +2933,17 @@ OS:Material:NoMass,
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
+  {00000000-0000-0000-0045-000000000005},  !- Handle
+  Typical Carpet Pad 2 R-8.0 1,            !- Name
+  Smooth,                                  !- Roughness
+  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
+  0.9,                                     !- Thermal Absorptance
+  0.7,                                     !- Solar Absorptance
+  0.8;                                     !- Visible Absorptance
+
+OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000006},  !- Handle
-  Typical Carpet Pad 4,                    !- Name
+  Typical Carpet Pad 2 R-8.0,              !- Name
   Smooth,                                  !- Roughness
   1.40895222771329,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -2961,7 +2961,7 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000008},  !- Handle
-  Typical Insulation 1,                    !- Name
+  Typical Insulation 1 R-0.01,             !- Name
   Smooth,                                  !- Roughness
   0.00118044780801591,                     !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -2970,25 +2970,16 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000009},  !- Handle
-  Typical Insulation 2,                    !- Name
+  Typical Insulation 1 R-1.92 1,           !- Name
   Smooth,                                  !- Roughness
-  2.61923096091624,                        !- Thermal Resistance {m2-K/W}
+  0.338983050847458,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000010},  !- Handle
-  Typical Insulation 3,                    !- Name
-  Smooth,                                  !- Roughness
-  4.40526867576781,                        !- Thermal Resistance {m2-K/W}
-  0.9,                                     !- Thermal Absorptance
-  0.7,                                     !- Solar Absorptance
-  0.7;                                     !- Visible Absorptance
-
-OS:Material:NoMass,
-  {00000000-0000-0000-0045-000000000011},  !- Handle
-  Typical Insulation 4,                    !- Name
+  Typical Insulation 1 R-1.92,             !- Name
   Smooth,                                  !- Roughness
   0.338965383002935,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -2996,10 +2987,19 @@ OS:Material:NoMass,
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
-  {00000000-0000-0000-0045-000000000012},  !- Handle
-  Typical Insulation 5,                    !- Name
+  {00000000-0000-0000-0045-000000000011},  !- Handle
+  Typical Insulation 1 R-14.87,            !- Name
   Smooth,                                  !- Roughness
-  0.338983050847458,                       !- Thermal Resistance {m2-K/W}
+  2.61923096091624,                        !- Thermal Resistance {m2-K/W}
+  0.9,                                     !- Thermal Absorptance
+  0.7,                                     !- Solar Absorptance
+  0.7;                                     !- Visible Absorptance
+
+OS:Material:NoMass,
+  {00000000-0000-0000-0045-000000000012},  !- Handle
+  Typical Insulation 1 R-25.01,            !- Name
+  Smooth,                                  !- Roughness
+  4.40526867576781,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
@@ -6532,7 +6532,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000019},  !- Handle
-  {00000000-0000-0000-0045-000000000009};  !- Material Name
+  {00000000-0000-0000-0045-000000000011};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000020},  !- Handle
@@ -6544,7 +6544,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000022},  !- Handle
-  {00000000-0000-0000-0045-000000000010};  !- Material Name
+  {00000000-0000-0000-0045-000000000012};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000023},  !- Handle
@@ -6552,7 +6552,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000024},  !- Handle
-  {00000000-0000-0000-0045-000000000004};  !- Material Name
+  {00000000-0000-0000-0045-000000000006};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000025},  !- Handle
@@ -6560,7 +6560,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000026},  !- Handle
-  {00000000-0000-0000-0045-000000000005};  !- Material Name
+  {00000000-0000-0000-0045-000000000004};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000027},  !- Handle
@@ -6568,7 +6568,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000028},  !- Handle
-  {00000000-0000-0000-0045-000000000006};  !- Material Name
+  {00000000-0000-0000-0045-000000000005};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000029},  !- Handle
@@ -6576,11 +6576,11 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000030},  !- Handle
-  {00000000-0000-0000-0045-000000000011};  !- Material Name
+  {00000000-0000-0000-0045-000000000010};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0083-000000000031},  !- Handle
-  {00000000-0000-0000-0045-000000000012};  !- Material Name
+  {00000000-0000-0000-0045-000000000009};  !- Material Name
 
 OS:SubSurface,
   {00000000-0000-0000-0084-000000000001},  !- Handle

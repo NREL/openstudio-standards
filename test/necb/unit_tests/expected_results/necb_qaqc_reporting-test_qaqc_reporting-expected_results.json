@@ -222,13 +222,13 @@
           ],
           "exterior_opaque": [
             {
-              "name": "BTAP-Ext-Roof-Metal:U-0.183",
+              "name": "BTAP-Ext-Roof-Metal:U-0.183 R-31.03",
               "net_area_m2": 569.51,
               "thermal_conductance_m2_w_per_k": 0.183,
               "solar_absorptance": 0.7
             },
             {
-              "name": "BTAP-Ext-Wall-Mass:U-0.247",
+              "name": "BTAP-Ext-Wall-Mass:U-0.247 R-22.99",
               "net_area_m2": 172.87,
               "thermal_conductance_m2_w_per_k": 0.247,
               "solar_absorptance": 0.92
@@ -236,7 +236,7 @@
           ],
           "ground": [
             {
-              "name": "BTAP-Grnd-Floor-Mass:U-0.757_std",
+              "name": "BTAP-Grnd-Floor-Mass:U-0.757 R-7.5_std",
               "net_area_m2": 511.15,
               "thermal_conductance_m2_w_per_k": 0.757,
               "solar_absorptance": 0.7

@@ -1391,7 +1391,7 @@ OS:BuildingStory,
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0012-000000000001},  !- Handle
   Primary Chiller WaterCooled Scroll 3tons 0.8kW/ton, !- Name
-  10667.9199867556,                        !- Reference Capacity {W}
+  10667.9199867564,                        !- Reference Capacity {W}
   4.50320102432778,                        !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
@@ -1650,7 +1650,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.65735733581364,                        !- Rated COP {W/W}
+  3.65735733581368,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1685,7 +1685,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.66741587061575,                        !- Rated COP {W/W}
+  3.66741587061573,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1790,7 +1790,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.62990726132877,                        !- Rated COP {W/W}
+  3.62990726132872,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2070,7 +2070,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.66462699929493,                        !- Rated COP {W/W}
+  3.66462699929483,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2105,7 +2105,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.61627592645792,                        !- Rated COP {W/W}
+  3.61627592645796,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2175,7 +2175,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.5612134872597,                         !- Rated COP {W/W}
+  3.56121348725963,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2385,7 +2385,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.58363210679423,                        !- Rated COP {W/W}
+  3.58363210679427,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2490,7 +2490,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.38409900454492,                        !- Rated COP {W/W}
+  3.38409900454478,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2560,7 +2560,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.76430716192376,                        !- Rated COP {W/W}
+  3.76430716192369,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2595,7 +2595,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.26392561643802,                        !- Rated COP {W/W}
+  3.26392561643808,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2630,7 +2630,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.54971272449364,                        !- Rated COP {W/W}
+  3.54971272449365,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2665,7 +2665,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.71705825295542,                        !- Rated COP {W/W}
+  3.71705825295549,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -11163,10 +11163,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000006},  !- Handle
-  BTAP-Ext-Door:U-2.2,                     !- Name
+  BTAP-Ext-Door:U-2.2 R-2.58,              !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0046-000000000016},  !- Layer 1
-  {00000000-0000-0000-0047-000000000011};  !- Layer 2
+  {00000000-0000-0000-0047-000000000009};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000007},  !- Handle
@@ -11190,9 +11190,9 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000010},  !- Handle
-  BTAP-Ext-Floor-Mass:U-0.162,             !- Name
+  BTAP-Ext-Floor-Mass:U-0.162 R-35.05,     !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0047-000000000008},  !- Layer 1
+  {00000000-0000-0000-0047-000000000011},  !- Layer 1
   {00000000-0000-0000-0046-000000000007},  !- Layer 2
   {00000000-0000-0000-0047-000000000003};  !- Layer 3
 
@@ -11216,9 +11216,9 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000014},  !- Handle
-  BTAP-Ext-OverHeadDoor:U-2.2,             !- Name
+  BTAP-Ext-OverHeadDoor:U-2.2 R-2.58,      !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0047-000000000012};  !- Layer 1
+  {00000000-0000-0000-0047-000000000008};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000015},  !- Handle
@@ -11229,10 +11229,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000016},  !- Handle
-  BTAP-Ext-Roof-Metal:U-0.162,             !- Name
+  BTAP-Ext-Roof-Metal:U-0.162 R-35.05,     !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0046-000000000022},  !- Layer 1
-  {00000000-0000-0000-0047-000000000010};  !- Layer 2
+  {00000000-0000-0000-0047-000000000012};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000017},  !- Handle
@@ -11257,11 +11257,11 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000020},  !- Handle
-  BTAP-Ext-Wall-Mass:U-0.21,               !- Name
+  BTAP-Ext-Wall-Mass:U-0.21 R-27.04,       !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0046-000000000005},  !- Layer 1
   {00000000-0000-0000-0046-000000000013},  !- Layer 2
-  {00000000-0000-0000-0047-000000000009},  !- Layer 3
+  {00000000-0000-0000-0047-000000000010},  !- Layer 3
   {00000000-0000-0000-0046-000000000001};  !- Layer 4
 
 OS:Construction,
@@ -11273,14 +11273,14 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000022},  !- Handle
-  BTAP-Grnd-Floor-Mass:U-0.757,            !- Name
+  BTAP-Grnd-Floor-Mass:U-0.757 R-7.5,      !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0046-000000000009},  !- Layer 1
-  {00000000-0000-0000-0047-000000000004};  !- Layer 2
+  {00000000-0000-0000-0047-000000000006};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000023},  !- Handle
-  BTAP-Grnd-Floor-Mass:U-0.757_std,        !- Name
+  BTAP-Grnd-Floor-Mass:U-0.757 R-7.5_std,  !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0046-000000000009},  !- Layer 1
   {00000000-0000-0000-0046-000000000015};  !- Layer 2
@@ -11294,10 +11294,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000025},  !- Handle
-  BTAP-Grnd-Roof-Mass:U-0.284,             !- Name
+  BTAP-Grnd-Roof-Mass:U-0.284 R-19.99,     !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0046-000000000011},  !- Layer 1
-  {00000000-0000-0000-0047-000000000006};  !- Layer 2
+  {00000000-0000-0000-0047-000000000004};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000026},  !- Handle
@@ -11308,7 +11308,7 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0020-000000000027},  !- Handle
-  BTAP-Grnd-Wall-Mass:U-0.284,             !- Name
+  BTAP-Grnd-Wall-Mass:U-0.284 R-19.99,     !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0046-000000000010},  !- Layer 1
   {00000000-0000-0000-0047-000000000005};  !- Layer 2
@@ -11696,7 +11696,7 @@ OS:CoolingTower:SingleSpeed,
   {00000000-0000-0000-0017-000000000814},  !- Water Outlet Node Name
   autosize,                                !- Design Water Flow Rate {m3/s}
   autosize,                                !- Design Air Flow Rate {m3/s}
-  195.553256055199,                        !- Fan Power at Design Air Flow Rate {W}
+  195.553256055213,                        !- Fan Power at Design Air Flow Rate {W}
   autosize,                                !- U-Factor Times Area Value at Design Air Flow Rate {W/K}
   autosize,                                !- Air Flow Rate in Free Convection Regime {m3/s}
   autosize,                                !- U-Factor Times Area Value at Free Convection Air Flow Rate {W/K}
@@ -16810,16 +16810,16 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0047-000000000004},  !- Handle
-  Typical Carpet Pad 2,                    !- Name
+  Typical Carpet Pad 2 R-19.62 1,          !- Name
   Smooth,                                  !- Roughness
-  1.25502993703786,                        !- Thermal Resistance {m2-K/W}
+  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0047-000000000005},  !- Handle
-  Typical Carpet Pad 3,                    !- Name
+  Typical Carpet Pad 2 R-19.62,            !- Name
   Smooth,                                  !- Roughness
   3.45515273458935,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -16828,9 +16828,9 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0047-000000000006},  !- Handle
-  Typical Carpet Pad 4,                    !- Name
+  Typical Carpet Pad 2 R-7.13,             !- Name
   Smooth,                                  !- Roughness
-  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
+  1.25502993703786,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
@@ -16846,34 +16846,16 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0047-000000000008},  !- Handle
-  Typical Insulation 1,                    !- Name
+  Typical Insulation 1 R-2.58 1,           !- Name
   Smooth,                                  !- Roughness
-  5.91237683519488,                        !- Thermal Resistance {m2-K/W}
+  0.454545454545455,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0047-000000000009},  !- Handle
-  Typical Insulation 2,                    !- Name
-  Smooth,                                  !- Roughness
-  4.49096231241638,                        !- Thermal Resistance {m2-K/W}
-  0.9,                                     !- Thermal Absorptance
-  0.7,                                     !- Solar Absorptance
-  0.7;                                     !- Visible Absorptance
-
-OS:Material:NoMass,
-  {00000000-0000-0000-0047-000000000010},  !- Handle
-  Typical Insulation 3,                    !- Name
-  Smooth,                                  !- Roughness
-  6.17282183832832,                        !- Thermal Resistance {m2-K/W}
-  0.9,                                     !- Thermal Absorptance
-  0.7,                                     !- Solar Absorptance
-  0.7;                                     !- Visible Absorptance
-
-OS:Material:NoMass,
-  {00000000-0000-0000-0047-000000000011},  !- Handle
-  Typical Insulation 4,                    !- Name
+  Typical Insulation 1 R-2.58,             !- Name
   Smooth,                                  !- Roughness
   0.454527786700932,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -16881,10 +16863,28 @@ OS:Material:NoMass,
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
-  {00000000-0000-0000-0047-000000000012},  !- Handle
-  Typical Insulation 5,                    !- Name
+  {00000000-0000-0000-0047-000000000010},  !- Handle
+  Typical Insulation 1 R-25.5,             !- Name
   Smooth,                                  !- Roughness
-  0.454545454545455,                       !- Thermal Resistance {m2-K/W}
+  4.49096231241638,                        !- Thermal Resistance {m2-K/W}
+  0.9,                                     !- Thermal Absorptance
+  0.7,                                     !- Solar Absorptance
+  0.7;                                     !- Visible Absorptance
+
+OS:Material:NoMass,
+  {00000000-0000-0000-0047-000000000011},  !- Handle
+  Typical Insulation 1 R-33.57,            !- Name
+  Smooth,                                  !- Roughness
+  5.91237683519488,                        !- Thermal Resistance {m2-K/W}
+  0.9,                                     !- Thermal Absorptance
+  0.7,                                     !- Solar Absorptance
+  0.7;                                     !- Visible Absorptance
+
+OS:Material:NoMass,
+  {00000000-0000-0000-0047-000000000012},  !- Handle
+  Typical Insulation 1 R-35.05,            !- Name
+  Smooth,                                  !- Roughness
+  6.17282183832831,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
@@ -36620,7 +36620,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000014},  !- Handle
-  {00000000-0000-0000-0047-000000000008};  !- Material Name
+  {00000000-0000-0000-0047-000000000011};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000015},  !- Handle
@@ -36640,7 +36640,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000019},  !- Handle
-  {00000000-0000-0000-0047-000000000009};  !- Material Name
+  {00000000-0000-0000-0047-000000000010};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000020},  !- Handle
@@ -36652,7 +36652,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000022},  !- Handle
-  {00000000-0000-0000-0047-000000000010};  !- Material Name
+  {00000000-0000-0000-0047-000000000012};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000023},  !- Handle
@@ -36660,7 +36660,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000024},  !- Handle
-  {00000000-0000-0000-0047-000000000004};  !- Material Name
+  {00000000-0000-0000-0047-000000000006};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000025},  !- Handle
@@ -36676,7 +36676,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000028},  !- Handle
-  {00000000-0000-0000-0047-000000000006};  !- Material Name
+  {00000000-0000-0000-0047-000000000004};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000029},  !- Handle
@@ -36684,11 +36684,11 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000030},  !- Handle
-  {00000000-0000-0000-0047-000000000011};  !- Material Name
+  {00000000-0000-0000-0047-000000000009};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0086-000000000031},  !- Handle
-  {00000000-0000-0000-0047-000000000012};  !- Material Name
+  {00000000-0000-0000-0047-000000000008};  !- Material Name
 
 OS:SubSurface,
   {00000000-0000-0000-0087-000000000001},  !- Handle

@@ -15695,10 +15695,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000006},  !- Handle
-  BTAP-Ext-Door:U-2.95,                    !- Name
+  BTAP-Ext-Door:U-2.95 R-1.92,             !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0055-000000000017},  !- Layer 1
-  {00000000-0000-0000-0056-000000000011};  !- Layer 2
+  {00000000-0000-0000-0056-000000000010};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000007},  !- Handle
@@ -15722,7 +15722,7 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000010},  !- Handle
-  BTAP-Ext-Floor-Mass:U-3.822,             !- Name
+  BTAP-Ext-Floor-Mass:U-3.822 R-1.49,      !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0056-000000000008},  !- Layer 1
   {00000000-0000-0000-0055-000000000007},  !- Layer 2
@@ -15748,9 +15748,9 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000014},  !- Handle
-  BTAP-Ext-OverHeadDoor:U-2.95,            !- Name
+  BTAP-Ext-OverHeadDoor:U-2.95 R-1.92,     !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0056-000000000012};  !- Layer 1
+  {00000000-0000-0000-0056-000000000009};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000015},  !- Handle
@@ -15761,10 +15761,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000016},  !- Handle
-  BTAP-Ext-Roof-Metal:U-0.227,             !- Name
+  BTAP-Ext-Roof-Metal:U-0.227 R-25.01,     !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0055-000000000023},  !- Layer 1
-  {00000000-0000-0000-0056-000000000010};  !- Layer 2
+  {00000000-0000-0000-0056-000000000012};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000017},  !- Handle
@@ -15789,11 +15789,11 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000020},  !- Handle
-  BTAP-Ext-Wall-Mass:U-0.346,              !- Name
+  BTAP-Ext-Wall-Mass:U-0.346 R-16.41,      !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0055-000000000005},  !- Layer 1
   {00000000-0000-0000-0055-000000000013},  !- Layer 2
-  {00000000-0000-0000-0056-000000000009},  !- Layer 3
+  {00000000-0000-0000-0056-000000000011},  !- Layer 3
   {00000000-0000-0000-0055-000000000001};  !- Layer 4
 
 OS:Construction,
@@ -15805,14 +15805,14 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000022},  !- Handle
-  BTAP-Grnd-Floor-Mass:U-0.678,            !- Name
+  BTAP-Grnd-Floor-Mass:U-0.678 R-8.38,     !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0055-000000000009},  !- Layer 1
-  {00000000-0000-0000-0056-000000000004};  !- Layer 2
+  {00000000-0000-0000-0056-000000000006};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000023},  !- Handle
-  BTAP-Grnd-Floor-Mass:U-0.678_std,        !- Name
+  BTAP-Grnd-Floor-Mass:U-0.678 R-8.38_std, !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0055-000000000009},  !- Layer 1
   {00000000-0000-0000-0055-000000000016};  !- Layer 2
@@ -15826,10 +15826,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000025},  !- Handle
-  BTAP-Grnd-Roof-Mass:U-0.678,             !- Name
+  BTAP-Grnd-Roof-Mass:U-0.678 R-8.38,      !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0055-000000000011},  !- Layer 1
-  {00000000-0000-0000-0056-000000000006};  !- Layer 2
+  {00000000-0000-0000-0056-000000000005};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000026},  !- Handle
@@ -15840,14 +15840,14 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000027},  !- Handle
-  BTAP-Grnd-Wall-Mass:U-0.425,             !- Name
+  BTAP-Grnd-Wall-Mass:U-0.425 R-13.36,     !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0055-000000000010},  !- Layer 1
-  {00000000-0000-0000-0056-000000000005};  !- Layer 2
+  {00000000-0000-0000-0056-000000000004};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0024-000000000028},  !- Handle
-  BTAP-Grnd-Wall-Mass:U-0.425_std,         !- Name
+  BTAP-Grnd-Wall-Mass:U-0.425 R-13.36_std, !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0055-000000000010},  !- Layer 1
   {00000000-0000-0000-0055-000000000015};  !- Layer 2
@@ -21692,41 +21692,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0042-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}<23.9 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}>1.7, !- Program Line 1
-  SET {5fcf15f9-335c-49ad-92dc-872235904903} = 29.4, !- Program Line 2
-  SET {8fac4a80-28b5-4363-89aa-41f4a22af371} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}<23.9 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}>1.7, !- Program Line 4
-  SET {5fcf15f9-335c-49ad-92dc-872235904903} = 29.4, !- Program Line 5
-  SET {8fac4a80-28b5-4363-89aa-41f4a22af371} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}<23.9 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}>1.7, !- Program Line 7
-  SET {5fcf15f9-335c-49ad-92dc-872235904903} = 29.4, !- Program Line 8
-  SET {8fac4a80-28b5-4363-89aa-41f4a22af371} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}<23.9 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}>1.7, !- Program Line 10
-  SET {5fcf15f9-335c-49ad-92dc-872235904903} = 29.4, !- Program Line 11
-  SET {8fac4a80-28b5-4363-89aa-41f4a22af371} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {3389a1ff-d90e-41eb-918b-709277c258ab}<23.9 && {3389a1ff-d90e-41eb-918b-709277c258ab}>1.7, !- Program Line 1
+  SET {641d19b2-2180-41e6-80bc-6557ef37517e} = 29.4, !- Program Line 2
+  SET {7e6a8d0e-a4c0-4dba-9c60-4a940f9a0a9d} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {3389a1ff-d90e-41eb-918b-709277c258ab}<23.9 && {3389a1ff-d90e-41eb-918b-709277c258ab}>1.7, !- Program Line 4
+  SET {641d19b2-2180-41e6-80bc-6557ef37517e} = 29.4, !- Program Line 5
+  SET {7e6a8d0e-a4c0-4dba-9c60-4a940f9a0a9d} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {3389a1ff-d90e-41eb-918b-709277c258ab}<23.9 && {3389a1ff-d90e-41eb-918b-709277c258ab}>1.7, !- Program Line 7
+  SET {641d19b2-2180-41e6-80bc-6557ef37517e} = 29.4, !- Program Line 8
+  SET {7e6a8d0e-a4c0-4dba-9c60-4a940f9a0a9d} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {3389a1ff-d90e-41eb-918b-709277c258ab}<23.9 && {3389a1ff-d90e-41eb-918b-709277c258ab}>1.7, !- Program Line 10
+  SET {641d19b2-2180-41e6-80bc-6557ef37517e} = 29.4, !- Program Line 11
+  SET {7e6a8d0e-a4c0-4dba-9c60-4a940f9a0a9d} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {5fcf15f9-335c-49ad-92dc-872235904903} = NULL, !- Program Line 14
-  SET {8fac4a80-28b5-4363-89aa-41f4a22af371} = NULL, !- Program Line 15
+  SET {641d19b2-2180-41e6-80bc-6557ef37517e} = NULL, !- Program Line 14
+  SET {7e6a8d0e-a4c0-4dba-9c60-4a940f9a0a9d} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0042-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__OptimumStartProg1, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}<23.9 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}>1.7, !- Program Line 1
-  SET {1e8ece7a-f3c6-4598-bf9c-d464e420e0be} = 29.4, !- Program Line 2
-  SET {f2a1b8e4-4b0b-4f92-a371-d0510ca1258b} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}<23.9 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}>1.7, !- Program Line 4
-  SET {1e8ece7a-f3c6-4598-bf9c-d464e420e0be} = 29.4, !- Program Line 5
-  SET {f2a1b8e4-4b0b-4f92-a371-d0510ca1258b} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}<23.9 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}>1.7, !- Program Line 7
-  SET {1e8ece7a-f3c6-4598-bf9c-d464e420e0be} = 29.4, !- Program Line 8
-  SET {f2a1b8e4-4b0b-4f92-a371-d0510ca1258b} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}<23.9 && {c5ed0958-771a-4211-92ca-a5a4fd69ea09}>1.7, !- Program Line 10
-  SET {1e8ece7a-f3c6-4598-bf9c-d464e420e0be} = 29.4, !- Program Line 11
-  SET {f2a1b8e4-4b0b-4f92-a371-d0510ca1258b} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {3389a1ff-d90e-41eb-918b-709277c258ab}<23.9 && {3389a1ff-d90e-41eb-918b-709277c258ab}>1.7, !- Program Line 1
+  SET {940d0cfa-dd74-4092-9830-bf9bf569eafd} = 29.4, !- Program Line 2
+  SET {b1cf2649-fa51-435c-8529-02fd812a7905} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {3389a1ff-d90e-41eb-918b-709277c258ab}<23.9 && {3389a1ff-d90e-41eb-918b-709277c258ab}>1.7, !- Program Line 4
+  SET {940d0cfa-dd74-4092-9830-bf9bf569eafd} = 29.4, !- Program Line 5
+  SET {b1cf2649-fa51-435c-8529-02fd812a7905} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {3389a1ff-d90e-41eb-918b-709277c258ab}<23.9 && {3389a1ff-d90e-41eb-918b-709277c258ab}>1.7, !- Program Line 7
+  SET {940d0cfa-dd74-4092-9830-bf9bf569eafd} = 29.4, !- Program Line 8
+  SET {b1cf2649-fa51-435c-8529-02fd812a7905} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {3389a1ff-d90e-41eb-918b-709277c258ab}<23.9 && {3389a1ff-d90e-41eb-918b-709277c258ab}>1.7, !- Program Line 10
+  SET {940d0cfa-dd74-4092-9830-bf9bf569eafd} = 29.4, !- Program Line 11
+  SET {b1cf2649-fa51-435c-8529-02fd812a7905} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {1e8ece7a-f3c6-4598-bf9c-d464e420e0be} = NULL, !- Program Line 14
-  SET {f2a1b8e4-4b0b-4f92-a371-d0510ca1258b} = NULL, !- Program Line 15
+  SET {940d0cfa-dd74-4092-9830-bf9bf569eafd} = NULL, !- Program Line 14
+  SET {b1cf2649-fa51-435c-8529-02fd812a7905} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -23371,16 +23371,7 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0056-000000000004},  !- Handle
-  Typical Carpet Pad 2,                    !- Name
-  Smooth,                                  !- Roughness
-  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
-  0.9,                                     !- Thermal Absorptance
-  0.7,                                     !- Solar Absorptance
-  0.8;                                     !- Visible Absorptance
-
-OS:Material:NoMass,
-  {00000000-0000-0000-0056-000000000005},  !- Handle
-  Typical Carpet Pad 3,                    !- Name
+  Typical Carpet Pad 2 R-12.99,            !- Name
   Smooth,                                  !- Roughness
   2.28696715049656,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -23388,8 +23379,17 @@ OS:Material:NoMass,
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
+  {00000000-0000-0000-0056-000000000005},  !- Handle
+  Typical Carpet Pad 2 R-8.0 1,            !- Name
+  Smooth,                                  !- Roughness
+  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
+  0.9,                                     !- Thermal Absorptance
+  0.7,                                     !- Solar Absorptance
+  0.8;                                     !- Visible Absorptance
+
+OS:Material:NoMass,
   {00000000-0000-0000-0056-000000000006},  !- Handle
-  Typical Carpet Pad 4,                    !- Name
+  Typical Carpet Pad 2 R-8.0,              !- Name
   Smooth,                                  !- Roughness
   1.40895222771329,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -23407,7 +23407,7 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0056-000000000008},  !- Handle
-  Typical Insulation 1,                    !- Name
+  Typical Insulation 1 R-0.01,             !- Name
   Smooth,                                  !- Roughness
   0.00118044780801591,                     !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -23416,25 +23416,16 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0056-000000000009},  !- Handle
-  Typical Insulation 2,                    !- Name
+  Typical Insulation 1 R-1.92 1,           !- Name
   Smooth,                                  !- Roughness
-  2.61923096091624,                        !- Thermal Resistance {m2-K/W}
+  0.338983050847458,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0056-000000000010},  !- Handle
-  Typical Insulation 3,                    !- Name
-  Smooth,                                  !- Roughness
-  4.40526867576781,                        !- Thermal Resistance {m2-K/W}
-  0.9,                                     !- Thermal Absorptance
-  0.7,                                     !- Solar Absorptance
-  0.7;                                     !- Visible Absorptance
-
-OS:Material:NoMass,
-  {00000000-0000-0000-0056-000000000011},  !- Handle
-  Typical Insulation 4,                    !- Name
+  Typical Insulation 1 R-1.92,             !- Name
   Smooth,                                  !- Roughness
   0.338965383002935,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
@@ -23442,10 +23433,19 @@ OS:Material:NoMass,
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
-  {00000000-0000-0000-0056-000000000012},  !- Handle
-  Typical Insulation 5,                    !- Name
+  {00000000-0000-0000-0056-000000000011},  !- Handle
+  Typical Insulation 1 R-14.87,            !- Name
   Smooth,                                  !- Roughness
-  0.338983050847458,                       !- Thermal Resistance {m2-K/W}
+  2.61923096091624,                        !- Thermal Resistance {m2-K/W}
+  0.9,                                     !- Thermal Absorptance
+  0.7,                                     !- Solar Absorptance
+  0.7;                                     !- Visible Absorptance
+
+OS:Material:NoMass,
+  {00000000-0000-0000-0056-000000000012},  !- Handle
+  Typical Insulation 1 R-25.01,            !- Name
+  Smooth,                                  !- Roughness
+  4.40526867576781,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
@@ -34292,7 +34292,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000149},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -34370,7 +34370,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000150},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -34379,7 +34379,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000151},  !- Handle
   Schedule Day 7,                          !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -34589,7 +34589,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000159},  !- Handle
   satCW Temp 1,                            !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -35057,7 +35057,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000165},  !- Handle
   sunCW Temp 1,                            !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -35738,7 +35738,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000192},  !- Handle
   wkdCW Temp 1,                            !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -38234,7 +38234,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0073-000000000004},  !- Handle
   CW Temp,                                 !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0071-000000000149};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -38470,13 +38470,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0073-000000000043},  !- Handle
   Schedule Ruleset 1,                      !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0071-000000000150};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0073-000000000044},  !- Handle
   Schedule Ruleset 2,                      !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0071-000000000151};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -44072,7 +44072,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000019},  !- Handle
-  {00000000-0000-0000-0056-000000000009};  !- Material Name
+  {00000000-0000-0000-0056-000000000011};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000020},  !- Handle
@@ -44084,7 +44084,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000022},  !- Handle
-  {00000000-0000-0000-0056-000000000010};  !- Material Name
+  {00000000-0000-0000-0056-000000000012};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000023},  !- Handle
@@ -44092,7 +44092,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000024},  !- Handle
-  {00000000-0000-0000-0056-000000000004};  !- Material Name
+  {00000000-0000-0000-0056-000000000006};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000025},  !- Handle
@@ -44100,7 +44100,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000026},  !- Handle
-  {00000000-0000-0000-0056-000000000005};  !- Material Name
+  {00000000-0000-0000-0056-000000000004};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000027},  !- Handle
@@ -44108,7 +44108,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000028},  !- Handle
-  {00000000-0000-0000-0056-000000000006};  !- Material Name
+  {00000000-0000-0000-0056-000000000005};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000029},  !- Handle
@@ -44116,11 +44116,11 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000030},  !- Handle
-  {00000000-0000-0000-0056-000000000011};  !- Material Name
+  {00000000-0000-0000-0056-000000000010};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0096-000000000031},  !- Handle
-  {00000000-0000-0000-0056-000000000012};  !- Material Name
+  {00000000-0000-0000-0056-000000000009};  !- Material Name
 
 OS:SubSurface,
   {00000000-0000-0000-0097-000000000001},  !- Handle

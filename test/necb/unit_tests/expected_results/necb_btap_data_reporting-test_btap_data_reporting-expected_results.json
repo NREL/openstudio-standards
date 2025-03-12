@@ -204,7 +204,7 @@
         },
         {
           "name": "EAST-ROOF",
-          "construction": "BTAP-EXT-ROOF-METAL:U-0.183",
+          "construction": "BTAP-EXT-ROOF-METAL:U-0.183 R-31.03",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.179,
           "u-factor_no_film_W/m2-K": 0.183,
@@ -218,7 +218,7 @@
         },
         {
           "name": "NORTH-ROOF",
-          "construction": "BTAP-EXT-ROOF-METAL:U-0.183",
+          "construction": "BTAP-EXT-ROOF-METAL:U-0.183 R-31.03",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.179,
           "u-factor_no_film_W/m2-K": 0.183,
@@ -231,7 +231,7 @@
         },
         {
           "name": "SOUTH-ROOF",
-          "construction": "BTAP-EXT-ROOF-METAL:U-0.183",
+          "construction": "BTAP-EXT-ROOF-METAL:U-0.183 R-31.03",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.179,
           "u-factor_no_film_W/m2-K": 0.183,
@@ -245,7 +245,7 @@
         },
         {
           "name": "WEST-ROOF",
-          "construction": "BTAP-EXT-ROOF-METAL:U-0.183",
+          "construction": "BTAP-EXT-ROOF-METAL:U-0.183 R-31.03",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.179,
           "u-factor_no_film_W/m2-K": 0.183,
@@ -259,7 +259,7 @@
         },
         {
           "name": "DINING_WALL_EAST",
-          "construction": "BTAP-EXT-WALL-MASS:U-0.278",
+          "construction": "BTAP-EXT-WALL-MASS:U-0.278 R-20.43",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -274,7 +274,7 @@
         },
         {
           "name": "DINING_WALL_SOUTH",
-          "construction": "BTAP-EXT-WALL-MASS:U-0.278",
+          "construction": "BTAP-EXT-WALL-MASS:U-0.278 R-20.43",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -289,7 +289,7 @@
         },
         {
           "name": "DINING_WALL_WEST",
-          "construction": "BTAP-EXT-WALL-MASS:U-0.278",
+          "construction": "BTAP-EXT-WALL-MASS:U-0.278 R-20.43",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -304,7 +304,7 @@
         },
         {
           "name": "DINING_FLOOR",
-          "construction": "BTAP-GRND-FLOOR-MASS:U-0.757_STD",
+          "construction": "BTAP-GRND-FLOOR-MASS:U-0.757 R-7.5_STD",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.674,
           "u-factor_no_film_W/m2-K": 0.757,
@@ -317,7 +317,7 @@
         },
         {
           "name": "KITCHEN_WALL_EAST",
-          "construction": "BTAP-EXT-WALL-MASS:U-0.278",
+          "construction": "BTAP-EXT-WALL-MASS:U-0.278 R-20.43",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -332,7 +332,7 @@
         },
         {
           "name": "KITCHEN_WALL_NORTH",
-          "construction": "BTAP-EXT-WALL-MASS:U-0.278",
+          "construction": "BTAP-EXT-WALL-MASS:U-0.278 R-20.43",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -346,7 +346,7 @@
         },
         {
           "name": "KITCHEN_WALL_WEST",
-          "construction": "BTAP-EXT-WALL-MASS:U-0.278",
+          "construction": "BTAP-EXT-WALL-MASS:U-0.278 R-20.43",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -361,7 +361,7 @@
         },
         {
           "name": "KITCHEN_FLOOR",
-          "construction": "BTAP-GRND-FLOOR-MASS:U-0.757_STD",
+          "construction": "BTAP-GRND-FLOOR-MASS:U-0.757 R-7.5_STD",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.674,
           "u-factor_no_film_W/m2-K": 0.757,
