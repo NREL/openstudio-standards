@@ -129,7 +129,7 @@ module BTAP
         #@author Phylroy A. Lopez <plopez@nrcan.gc.ca>
         #@param model [OpenStudio::Model::Model]
         #@param construction <String>
-        #@param conductance [Fixnum]
+        #@param conductance [Fixnum] or 'default'  If numerical value then W/m2K
         #@return [<String]OpenStudio::Model::getConstructionByName] new_construction
         def self.customize_opaque_construction(model, construction, conductance)
           #Will convert from a string identifier to an object if required.
@@ -157,8 +157,6 @@ module BTAP
           new_construction.setName(name_prefix)
 
           if conductance.kind_of?(Float)
-            #re-find insulation layer
-            OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(new_construction)
 
             #Determine how low the resistance can be set. Subtract exisiting insulation
             #Values from the total resistance to see how low we can go.
@@ -170,8 +168,13 @@ module BTAP
               # Changing the insulation layer will not be enough so either start removing layers or modify them to get
               # to the required conductance.
               new_construction = adjust_opaque_construction(construction: new_construction, req_conductance: conductance.to_f)
+              OpenstudioStandards::Constructions.construction_find_and_set_insulation_layer(new_construction)
             else
-              unless new_construction.setConductance(conductance)
+              # Update U-value. This also re-sets the insulation layer.
+              target_u_value_ip = OpenStudio.convert(conductance.to_f, 'W/m^2*K', 'Btu/ft^2*hr*R').get 
+              unless OpenstudioStandards::Constructions.construction_set_u_value(new_construction, target_u_value_ip.to_f,
+                                                                          target_includes_interior_film_coefficients: false,
+                                                                          target_includes_exterior_film_coefficients: false)
                 raise("could not set conductance of construction #{new_construction.name.to_s}")
               end
             end
