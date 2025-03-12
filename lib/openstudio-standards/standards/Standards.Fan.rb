@@ -277,6 +277,13 @@ module Fan
         return [fan_motor_eff, nominal_hp]
       end
     else
+      # Use the maximum capacity
+      data = model_find_objects(motors, search_criteria)
+      maximum_capacity = model_find_maximum_value(data, 'maximum_capacity')
+      if motor_bhp > maximum_capacity
+        motor_bhp = maximum_capacity
+      end
+
       motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
       if motor_properties.nil?
         # Retry without the date

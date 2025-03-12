@@ -113,7 +113,7 @@ module Pump
   # Determines the minimum pump motor efficiency and nominal size
   # for a given motor bhp.  This should be the total brake horsepower with
   # any desired safety factor already included.  This method picks
-  # the next nominal motor catgory larger than the required brake
+  # the next nominal motor category larger than the required brake
   # horsepower, and the efficiency is based on that size.  For example,
   # if the bhp = 6.3, the nominal size will be 7.5HP and the efficiency
   # for 90.1-2010 will be 91.7% from Table 10.8B.  This method assumes
@@ -142,10 +142,21 @@ module Pump
       'type' => 'Enclosed'
     }
 
+    # Use the maximum capacity
+    data = model_find_objects(motors, search_criteria)
+    maximum_capacity = model_find_maximum_value(data, 'maximum_capacity')
+    if motor_bhp > maximum_capacity
+      motor_bhp = maximum_capacity
+    end
+
     motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
     if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
-      return [motor_eff, nominal_hp]
+      # Retry without the date
+      motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
+      if motor_properties.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+        return [motor_eff, nominal_hp]
+      end
     end
 
     motor_eff = motor_properties['nominal_full_load_efficiency']

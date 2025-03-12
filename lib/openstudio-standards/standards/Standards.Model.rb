@@ -260,10 +260,8 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Adding Daylighting Controls ***')
 
       # Run a sizing run to calculate VLT for layer-by-layer windows.
-      if model_create_prm_baseline_building_requires_vlt_sizing_run(model)
-        if model_run_sizing_run(model, "#{sizing_run_dir}/SRVLT") == false
-          return false
-        end
+      if model_create_prm_baseline_building_requires_vlt_sizing_run(model) && (model_run_sizing_run(model, "#{sizing_run_dir}/SRVLT") == false)
+        return false
       end
 
       # Add or remove daylighting controls to each space
@@ -683,10 +681,8 @@ class Standard
 
       # Check if the object needs to be checked for autosizing
       obj_to_be_checked_for_autosizing = false
-      if obj_type.include?('chiller') || obj_type.include?('boiler') || obj_type.include?('coil') || obj_type.include?('fan') || obj_type.include?('pump') || obj_type.include?('waterheater')
-        if !obj_type.include?('controller')
-          obj_to_be_checked_for_autosizing = true
-        end
+      if (obj_type.include?('chiller') || obj_type.include?('boiler') || obj_type.include?('coil') || obj_type.include?('fan') || obj_type.include?('pump') || obj_type.include?('waterheater')) && !obj_type.include?('controller')
+        obj_to_be_checked_for_autosizing = true
       end
 
       # Check for autosizing
@@ -696,11 +692,9 @@ class Standard
         next if casted_obj.nil?
 
         casted_obj.methods.each do |method|
-          if method.to_s.include?('is') && method.to_s.include?('Autosized')
-            if casted_obj.public_send(method) == true
-              is_hvac_autosized = true
-              OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The #{method.to_s.sub('is', '').sub('Autosized', '').sub(':', '')} field of the #{obj_type} named #{casted_obj.name} is autosized. It should be hard sized.")
-            end
+          if method.to_s.include?('is') && method.to_s.include?('Autosized') && (casted_obj.public_send(method) == true)
+            is_hvac_autosized = true
+            OpenStudio.logFree(OpenStudio::Info, 'prm.log', "The #{method.to_s.sub('is', '').sub('Autosized', '').sub(':', '')} field of the #{obj_type} named #{casted_obj.name} is autosized. It should be hard sized.")
           end
         end
       end
@@ -756,12 +750,10 @@ class Standard
         next
       end
 
-      if !applicable_zones.nil?
-        # This is only used for the stable baseline (2016 and later)
-        if !applicable_zones.include?(zone)
-          # This zone is not part of the current hvac_building_type
-          next
-        end
+      # This is only used for the stable baseline (2016 and later)
+      if !applicable_zones.nil? && !applicable_zones.include?(zone)
+        # This zone is not part of the current hvac_building_type
+        next
       end
 
       # Skip unconditioned zones
@@ -2335,6 +2327,19 @@ class Standard
     return false
   end
 
+  # Get the maximum value for a field of a hash
+  #
+  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param field [String] field name from the hash
+  # @return [float] Return the first matching object hash if successful, nil if not.
+  def model_find_maximum_value(hash_of_objects, field)
+    maximum_value = 0
+    hash_of_objects.each do |set|
+      maximum_value = [maximum_value, set[field]].max if set[field].to_f > 0
+    end
+    return maximum_value
+  end
+
   # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
@@ -2534,7 +2539,7 @@ class Standard
   #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
   # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
   #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
-  # @return [Hash] Return tbe first matching object hash if successful, nil if not.
+  # @return [Hash] Return the first matching object hash if successful, nil if not.
   # @example Find the motor that meets these size criteria
   #   search_criteria = {
   #   'template' => template,
@@ -2706,7 +2711,7 @@ class Standard
   #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
   # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
   #   the objects will only be returned if the specified date is between the start_date and end_date.
-  # @return [Hash] Return tbe first matching object hash if successful, nil if not.
+  # @return [Hash] Return the first matching object hash if successful, nil if not.
   # @example Find the motor that meets these size criteria
   #   search_criteria = {
   #   'template' => template,
@@ -5536,7 +5541,7 @@ class Standard
     if sch_type == 'Constant'
       day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), values[0])
     elsif sch_type == 'Hourly'
-      (0..23).each do |i|
+      24.times do |i|
         next if values[i] == values[i + 1]
 
         day_sch.addValue(OpenStudio::Time.new(0, i + 1, 0, 0), values[i])
