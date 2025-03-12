@@ -125,38 +125,45 @@ module Pump
   # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
   def pump_standard_minimum_motor_efficiency_and_size(pump, motor_bhp)
     motor_eff = 0.85
-    nominal_hp = motor_bhp
+    nominal_hp = motor_bhp / motor_eff
 
     # Don't attempt to look up motor efficiency
     # for zero-hp pumps (required for circulation-pump-free
     # service water heating systems).
     return [1.0, 0] if motor_bhp < 0.0001 # under 1 watt
 
-    # Lookup the minimum motor efficiency
-    motors = standards_data['motors']
+    if nominal_hp < 1.0
+      motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = 'PSC')
+    else
+      motor_properties.nil?
+      # Lookup the minimum motor efficiency
+      motors = standards_data['motors']
 
-    # Assuming all pump motors are 4-pole ODP
-    search_criteria = {
-      'template' => template,
-      'number_of_poles' => 4.0,
-      'type' => 'Enclosed'
-    }
+      # Assuming all pump motors are 4-pole ODP
+      search_criteria = {
+        'template' => template,
+        'number_of_poles' => 4.0,
+        'type' => 'Enclosed'
+      }
 
-    # Use the maximum capacity
-    data = model_find_objects(motors, search_criteria)
-    maximum_capacity = model_find_maximum_value(data, 'maximum_capacity')
-    if motor_bhp > maximum_capacity
-      motor_bhp = maximum_capacity
+      # Use the efficiency largest motor efficiency when BHP is greater than the largest size for which a requirement is provided
+      data = model_find_objects(motors, search_criteria)
+      maximum_capacity = model_find_maximum_value(data, 'maximum_capacity')
+      if motor_bhp > maximum_capacity
+        motor_bhp = maximum_capacity
+      end
+
+      motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
+
+      if motor_properties.nil?
+        # Retry without the date
+        motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
+      end
     end
 
-    motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
     if motor_properties.nil?
-      # Retry without the date
-      motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = motor_bhp)
-      if motor_properties.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
-        return [motor_eff, nominal_hp]
-      end
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Pump', "For #{pump.name}, could not find motor properties using search criteria: #{search_criteria}, motor_bhp = #{motor_bhp} hp.")
+      return [motor_eff, nominal_hp]
     end
 
     motor_eff = motor_properties['nominal_full_load_efficiency']

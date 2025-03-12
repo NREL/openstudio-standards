@@ -243,7 +243,7 @@ module Fan
   # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
   def fan_standard_minimum_motor_efficiency_and_size(fan, motor_bhp)
     fan_motor_eff = 0.85
-    nominal_hp = motor_bhp
+    nominal_hp = motor_bhp / fan_motor_eff
 
     # Don't attempt to look up motor efficiency
     # for zero-hp fans, which may occur when there is no
@@ -269,15 +269,14 @@ module Fan
       nominal_hp = 0.5
 
       # Get the efficiency based on the nominal horsepower
-      # Add 0.01 hp to avoid search errors.
-      motor_properties = model_find_object(motors, search_criteria, nominal_hp + 0.01)
+      motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = 'PSC')
 
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")
         return [fan_motor_eff, nominal_hp]
       end
     else
-      # Use the maximum capacity
+      # Use the efficiency largest motor efficiency when BHP is greater than the largest size for which a requirement is provided
       data = model_find_objects(motors, search_criteria)
       maximum_capacity = model_find_maximum_value(data, 'maximum_capacity')
       if motor_bhp > maximum_capacity

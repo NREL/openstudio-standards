@@ -280,6 +280,7 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.HeaderedPumpsVariableSpeed"
   require_relative "#{stds}/Standards.HeatExchangerSensLat"
   require_relative "#{stds}/Standards.Model"
+  require_relative "#{stds}/Standards.Motor"
   require_relative "#{stds}/Standards.PlanarSurface"
   require_relative "#{stds}/Standards.PlantLoop"
   require_relative "#{stds}/Standards.PumpConstantSpeed"

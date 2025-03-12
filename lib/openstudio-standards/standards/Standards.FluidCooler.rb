@@ -81,23 +81,37 @@ class Standard
 
     # Lookup the minimum motor efficiency
     fan_motor_eff = 0.85
-    nominal_hp = fan_bhp
-    motors = standards_data['motors']
+    nominal_hp = fan_bhp / fan_motor_eff
 
-    # Assuming all fan motors are 4-pole Enclosed
-    search_criteria = {
-      'template' => template,
-      'number_of_poles' => 4.0,
-      'type' => 'Enclosed'
-    }
+    if nominal_hp < 1.0
+      motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = 'PSC')
+    else
+      # Lookup the minimum motor efficiency
+      motors = standards_data['motors']
 
-    motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = fan_bhp)
-    if motor_properties.nil?
+      # Assuming all fan motors are 4-pole Enclosed
+      search_criteria = {
+        'template' => template,
+        'number_of_poles' => 4.0,
+        'type' => 'Enclosed'
+      }
+
+      # Use the efficiency largest motor efficiency when BHP is greater than the largest size for which a requirement is provided
+      data = model_find_objects(motors, search_criteria)
+      maximum_capacity = model_find_maximum_value(data, 'maximum_capacity')
+      if fan_bhp > maximum_capacity
+        fan_bhp = maximum_capacity
+      end
+
+      motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = Date.today, area = nil, num_floors = nil, fan_motor_bhp = fan_bhp)
+      if motor_properties.nil?
         # Retry without the date
         motor_properties = model_find_object(motors, search_criteria, capacity = nil, date = nil, area = nil, num_floors = nil, fan_motor_bhp = fan_bhp)
-        if motor_properties.nil?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp. Using a default value of #{fan_motor_eff}.")
-        end
+      end
+    end
+
+    if motor_properties.nil?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp. Using a default value of #{fan_motor_eff}.")
     end
 
     unless motor_properties.nil?
