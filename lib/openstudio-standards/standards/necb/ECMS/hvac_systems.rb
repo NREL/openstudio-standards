@@ -1332,6 +1332,8 @@ class ECMS
           backup_coil = icomp.to_CoilHeatingElectric.get
         elsif icomp.to_CoilHeatingGas.is_initialized
           backup_coil = icomp.to_CoilHeatingGas.get
+        elsif icomp.to_CoilHeatingWater.is_initialized
+          backup_coil = icomp.to_CoilHeatingWater.get
         elsif icomp.to_FanConstantVolume.is_initialized
           fans << icomp.to_FanConstantVolume.get
         elsif icomp.to_FanVariableVolume.is_initialized
@@ -1377,12 +1379,24 @@ class ECMS
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, false)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        if backup_coil.nominalCapacity.is_initialized
-          backup_coil_cap = backup_coil.nominalCapacity.to_f
-        elsif backup_coil.autosizedNominalCapacity.is_initialized
-           backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if (backup_coil.class.name.to_s.include? "CoilHeatingGas") || (backup_coil.class.name.to_s.include? "CoilHeatingElectric")
+          if backup_coil.nominalCapacity.is_initialized
+            backup_coil_cap = backup_coil.nominalCapacity.to_f
+          elsif backup_coil.autosizedNominalCapacity.is_initialized
+            backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+          else
+            raise "Nominal capacity is undefiled for coil #{backup_coil.name.to_s}"
+          end
+        elsif backup_coil.class.name.to_s.include? "CoilHeatingWater"
+          if backup_coil.ratedCapacity.is_initialized
+            backup_coil_cap = backup_coil.ratedCapacity.to_f
+          elsif backup_coil.autosizedRatedCapacity.is_initialized
+            backup_coil_cap = backup_coil.autosizedRatedCapacity.to_f
+          else
+            raise "Rated capacity is undefiled for coil #{backup_coil.name.to_s}"
+          end
         else
-          raise "Nominal capacity is undefiled for coil #{backup_coil.name.to_s}"
+          raise("Backup coil type is not supported")
         end
         # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
@@ -1668,6 +1682,8 @@ class ECMS
           backup_coil = icomp.to_CoilHeatingElectric.get
         elsif icomp.to_CoilHeatingGas.is_initialized
           backup_coil = icomp.to_CoilHeatingGas.get
+        elsif icomp.to_CoilHeatingWater.is_initialized
+          backup_coil = icomp.to_CoilHeatingWater.get
         end
       end
       if clg_dx_coil && htg_dx_coil && backup_coil
@@ -1683,12 +1699,24 @@ class ECMS
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        if backup_coil.nominalCapacity.is_initialized
-          backup_coil_cap = backup_coil.nominalCapacity.to_f
-        elsif backup_coil.autosizedNominalCapacity.is_initialized
-          backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if (backup_coil.class.name.include? "CoilHeatingElectric") || (backup_coil.class.name.include? "CoilHeatingGas")
+          if backup_coil.nominalCapacity.is_initialized
+            backup_coil_cap = backup_coil.nominalCapacity.to_f
+          elsif backup_coil.autosizedNominalCapacity.is_initialized
+            backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+          else
+            raise "Nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+          end
+        elsif backup_coil.class.name.include? "CoilHeatingWater"
+          if backup_coil.ratedCapacity.is_initialized
+            backup_coil_cap = backup_coil.ratedCapacity.to_f
+          elsif backup_coil.autosizedRatedCapacity.is_initialized
+            backup_coil_cap = backup_coil.autosizedRatedCapacity.to_f
+          else
+            raise "Rated capacity is undefined for coil #{backup_coil.name.to_s}"
+          end
         else
-          raise "Nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+          raise("Backup coil type is not supported")
         end
         # set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
