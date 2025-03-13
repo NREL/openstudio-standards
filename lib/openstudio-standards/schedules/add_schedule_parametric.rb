@@ -1,4 +1,4 @@
-require_relative 'information.rb'
+require_relative 'information'
 module OpenstudioStandards
   module Schedules
     # apply the smootherstep function to a given input located beetween a starting and ending value
@@ -97,6 +97,7 @@ module OpenstudioStandards
 
         time_value_pairs << [time, val]
       end
+      # p time_value_pairs
       # apply smoothing to intermediate values between
       return smooth_schedule_from_time_values(time_value_pairs, timesteps_per_hour)
     end
@@ -224,9 +225,64 @@ module OpenstudioStandards
         props.setFeature('end_time', et)
         props.setFeature('base', base)
         props.setFeature('peak', peak)
-        
       end
       return sch_ruleset
+    end
+
+    # Revised method to construct ScheduleRulesets from data in parametric form, which uses the existing Schedules module method
+    # Constructs all day schedules and assign appropriate rules
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param schedule_array [Array] array of default schedule data objects to load from - TODO: extract this part out
+    # @param schedule_name [String] name of schedule to create
+    # @param params [Hash] hash of schedule input parameters. Specific key/values will depend on the schedule type
+    # @return [ScheduleRuleset] the resulting schedule ruleset
+    def self.model_add_parametric_schedule_full(model, schedule_array, schedule_name, params)
+      timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
+      schedule_objs = schedule_array.select { |o| o[:name].to_s == schedule_name }
+
+      options = {}
+      options['name'] = schedule_array[0][:name]
+      options['rules'] = []
+      schedule_objs.each do |obj|
+        sch_type = obj[:type]
+        control_points = obj[:control_points]
+
+        st = params[:st].nil? ? obj[:st_std] : params[:st]
+        et = params[:et].nil? ? obj[:et_std] : params[:et]
+        base = params[:base].nil? ? obj[:base_std] : params[:base]
+        peak = params[:peak].nil? ? obj[:peak_std] : params[:peak]
+
+        time_value_pairs = expand_schedule_control_points(control_points, base, peak, st, et, timesteps_per_hour)
+
+        tv_pairs_reduced = time_value_pairs.reject.with_index { |e, i| e[1] == time_value_pairs[i + 1][1] unless i == (time_value_pairs.size - 1) }
+
+        day_types = obj[:day_types].split('|')
+        day_types.each do |day_type|
+          case day_type
+          when 'Default'
+            options['default_day'] = ['default'] + tv_pairs_reduced
+          when 'WntrDsn'
+            options['winter_design_day'] = tv_pairs_reduced
+          when 'SmrDsn'
+            options['summer_design_day'] = tv_pairs_reduced
+          when 'Hol'
+            # do nothing
+          else
+            start_date = DateTime.strptime(obj[:start_date], '%m/%d/%Y').strftime('%m/%d')
+            end_date = DateTime.strptime(obj[:end_date], '%m/%d/%Y').strftime('%m/%d')
+            rule_a = [day_type]
+            rule_a << "#{start_date}-#{end_date}"
+            rule_a << day_type
+            rule_a += tv_pairs_reduced
+            options['rules'] << rule_a
+          end
+        end
+      end
+
+      # puts options
+      schedule = OpenstudioStandards::Schedules.create_complex_schedule(model, options)
+      return schedule
     end
 
     # Add an equipment schedule derived from an occupancy schedule and parametric data
@@ -237,7 +293,6 @@ module OpenstudioStandards
     # @param schedule_name [String] name of schedule to add
     # @param params [Hash] hash of schedule input parameters. Specific key/values will depend on the schedule type
     def self.model_derive_equipment_schedule(model, occ_schedule, schedule_array, schedule_name, params)
-      
       timesteps_per_hour = model.getTimestep.numberOfTimestepsPerHour
 
       rules = schedule_array.select { |o| o[:name] == schedule_name }
@@ -257,15 +312,15 @@ module OpenstudioStandards
         # categorize occupancy schedule profiles
         occ_profiles = schedule_ruleset_categorize_day_schedules(occ_schedule)
 
-
         day_type_array.each do |day_type|
           puts day_type
           target_occ_profile = nil
 
           # puts occ_profiles
-        
+
           occ_profiles.each do |key, value|
             next unless target_occ_profile.nil?
+
             if value.split('|').include? day_type
               target_occ_profile = key
             end
@@ -278,12 +333,12 @@ module OpenstudioStandards
           puts target_occ_profile
 
           # get corresponding target rule
-          target_occ_rule = occ_schedule.scheduleRules.select{ |rule| rule.daySchedule == target_occ_profile }.first
+          target_occ_rule = occ_schedule.scheduleRules.select { |rule| rule.daySchedule == target_occ_profile }.first
 
           # puts target_occ_rule
 
           # get occ schedule time value pairs
-          occ_times = target_occ_profile.times.map{ |t| t.totalHours}
+          occ_times = target_occ_profile.times.map { |t| t.totalHours }
           occ_time_values = occ_times.zip(target_occ_profile.values)
 
           # override inputs if included in params
@@ -294,7 +349,7 @@ module OpenstudioStandards
           # implement derivation
           derived_pairs = []
           occ_time_values.each do |initial_pair|
-            derived_value = base + (peak - base) * (initial_pair[1]**(1/response.to_f))
+            derived_value = base + ((peak - base) * (initial_pair[1]**(1 / response.to_f)))
             derived_pairs << [initial_pair[0], derived_value]
           end
 
@@ -327,14 +382,14 @@ module OpenstudioStandards
 
           # Other days (weekdays, weekends, etc)
           if day_type_array.include?('Wknd') ||
-            day_type.include?('Wkdy') ||
-            day_type.include?('Sat') ||
-            day_type.include?('Sun') ||
-            day_type.include?('Mon') ||
-            day_type.include?('Tue') ||
-            day_type.include?('Wed') ||
-            day_type.include?('Thu') ||
-            day_type.include?('Fri')
+             day_type.include?('Wkdy') ||
+             day_type.include?('Sat') ||
+             day_type.include?('Sun') ||
+             day_type.include?('Mon') ||
+             day_type.include?('Tue') ||
+             day_type.include?('Wed') ||
+             day_type.include?('Thu') ||
+             day_type.include?('Fri')
 
             # Make the Rule
             sch_rule = OpenStudio::Model::ScheduleRule.new(sch_ruleset)
@@ -378,42 +433,43 @@ module OpenstudioStandards
           props.setFeature('derived_from', target_occ_profile.name.get)
         end
       end
-      
-      return sch_ruleset
 
+      return sch_ruleset
     end
   end
 end
 
-require 'json'
-require 'openstudio'
+def test_add_parametric
+  require 'json'
+  require 'openstudio'
 
-schedule_data = JSON.parse(File.read('schedules_data_test.json'), symbolize_names: true)
+  schedule_data = JSON.parse(File.read('schedules_data_test.json'), symbolize_names: true)
 
-model = OpenStudio::Model::Model.new
-model.getTimestep.setNumberOfTimestepsPerHour(4)
+  model = OpenStudio::Model::Model.new
+  model.getTimestep.setNumberOfTimestepsPerHour(4)
 
-# default params
-occ_sch = OpenstudioStandards::Schedules.model_add_parametric_schedule(model, schedule_data, 'conference_meeting_multipurpose_occupancy', {})
-# puts occ_sch.defaultDaySchedule
+  # default params
+  occ_sch = OpenstudioStandards::Schedules.model_add_parametric_schedule(model, schedule_data, 'conference_meeting_multipurpose_occupancy', {})
+  # puts occ_sch.defaultDaySchedule
 
-[0.5, 0.75, 1.0].each do |peak|
-  [0.5, 1, 10].each do |response|
-    equip_sch = OpenstudioStandards::Schedules.model_derive_equipment_schedule(model, occ_sch, schedule_data, 'conference_meeting_multipurpose_equipment', {base: 0.1, peak: peak, response: response})
-    equip_sch.setName("equipment_peak:#{peak}_resp:#{response}")
+  [0.5, 0.75, 1.0].each do |peak|
+    [0.5, 1, 10].each do |response|
+      equip_sch = OpenstudioStandards::Schedules.model_derive_equipment_schedule(model, occ_sch, schedule_data, 'conference_meeting_multipurpose_equipment', { base: 0.1, peak: peak, response: response })
+      equip_sch.setName("equipment_peak:#{peak}_resp:#{response}")
+    end
   end
-end
   # puts equip_sch.defaultDaySchedule
 
   # equip_sch = OpenstudioStandards::Schedules.model_derive_equipment_schedule(model, occ_sch, schedule_data, 'conference_meeting_multipurpose_equipment', {base: 0.1, peak: 0.5, response: 10})
 
-# model.save('test1.osm', true)
-model.save('test4.osm', true)
+  # model.save('test1.osm', true)
+  model.save('test4.osm', true)
 
-# model = OpenStudio::Model::Model.new
-# model.getTimestep.setNumberOfTimestepsPerHour(4)
+  # model = OpenStudio::Model::Model.new
+  # model.getTimestep.setNumberOfTimestepsPerHour(4)
 
-# # modified params
-# sch = OpenstudioStandards::Schedules.model_add_parametric_schedule(model, schedule_data, 'conference_meeting_multipurpose', { st: 6.0, et: 23.0, base: 0.25, peak: 0.75 })
-# puts sch.defaultDaySchedule
-# model.save('test2.osm', true)
+  # # modified params
+  # sch = OpenstudioStandards::Schedules.model_add_parametric_schedule(model, schedule_data, 'conference_meeting_multipurpose', { st: 6.0, et: 23.0, base: 0.25, peak: 0.75 })
+  # puts sch.defaultDaySchedule
+  # model.save('test2.osm', true)
+end
