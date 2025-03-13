@@ -251,7 +251,7 @@ module OpenstudioStandards
       default_data_array.delete_at(0)
       default_data_array.each do |data_pair|
         hour = data_pair[0].truncate
-        min = ((data_pair[0] - hour) * 60).to_i
+        min = ((data_pair[0] - hour) * 60).round
         default_day.addValue(OpenStudio::Time.new(0, hour, min, 0), data_pair[1])
       end
 
@@ -273,6 +273,8 @@ module OpenstudioStandards
           rule.setApplyThursday(true) if days.include? 'Thu'
           rule.setApplyFriday(true) if days.include? 'Fri'
           rule.setApplySaturday(true) if days.include? 'Sat'
+          rule.setApplyWeekdays(true) if days.include? 'Wkdy'
+          rule.setApplyWeekends(true) if days.include? 'Wknd'
           day_schedule = rule.daySchedule
           day_schedule.setName("#{sch_ruleset.name} #{data_array[0]}")
           data_array.delete_at(0)
