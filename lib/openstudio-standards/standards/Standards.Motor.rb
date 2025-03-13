@@ -1,5 +1,19 @@
 class Standard
   # @!group Motor
+
+  # Determine the type of motor to model
+  #
+  # @param nominal_hp [Float] nominal or nameplate motor horsepower
+  # @return [String] motor type
+  def motor_type(nominal_hp)
+    return 'PSC'
+  end
+
+  # Determine the efficiency of fractional horsepower motors
+  #
+  # @param nominal_hp [Float] nominal or nameplate motor horsepower
+  # @param motor_type [String] motor type, either 'PSC' or 'ECM'
+  # @return [Float] motor efficiency
   def motor_fractional_hp_efficiencies(nominal_hp, motor_type = 'PSC')
     # Unless specified otherwise, the efficiencies are calculated from
     # Table 5-3 from Energy Savings Potential and Research & Development Opportunities for Commercial Refrigeration, Navigant, 2009

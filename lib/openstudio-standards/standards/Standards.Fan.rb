@@ -243,7 +243,12 @@ module Fan
   # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
   def fan_standard_minimum_motor_efficiency_and_size(fan, motor_bhp)
     fan_motor_eff = 0.85
-    nominal_hp = motor_bhp / fan_motor_eff
+    # Calculate the allowed fan brake horsepower
+    # per method used in PNNL prototype buildings.
+    # Assumes that the fan brake horsepower is 90%
+    # of the fan nameplate rated motor power.
+    # Source: Thornton et al. (2011), Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010, Section 4.5.4
+    nominal_hp = motor_bhp * 1.1
 
     # Don't attempt to look up motor efficiency
     # for zero-hp fans, which may occur when there is no
@@ -269,7 +274,8 @@ module Fan
       nominal_hp = 0.5
 
       # Get the efficiency based on the nominal horsepower
-      motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = 'PSC')
+      motor_type = motor_type(nominal_hp)
+      motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = motor_type)
 
       if motor_properties.nil?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Fan', "For #{fan.name}, could not find nominal motor properties using search criteria: #{search_criteria}, motor_hp = #{nominal_hp} hp.")

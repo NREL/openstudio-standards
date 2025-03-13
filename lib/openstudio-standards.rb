@@ -334,6 +334,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Motor"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.PlantLoop"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.ThermalZone"
@@ -349,6 +350,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Model"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Motor"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.ThermalZone"
   # 90.1-2019
@@ -363,6 +365,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Motor"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.WaterHeaterMixed"

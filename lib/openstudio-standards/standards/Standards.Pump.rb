@@ -125,15 +125,21 @@ module Pump
   # @return [Array<Double>] minimum motor efficiency (0.0 to 1.0), nominal horsepower
   def pump_standard_minimum_motor_efficiency_and_size(pump, motor_bhp)
     motor_eff = 0.85
-    nominal_hp = motor_bhp / motor_eff
+    # Calculate the allowed fan brake horsepower
+    # per method used in PNNL prototype buildings.
+    # Assumes that the fan brake horsepower is 90%
+    # of the fan nameplate rated motor power.
+    # Source: Thornton et al. (2011), Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010, Section 4.5.4
+    nominal_hp = motor_bhp * 1.1
 
     # Don't attempt to look up motor efficiency
     # for zero-hp pumps (required for circulation-pump-free
     # service water heating systems).
     return [1.0, 0] if motor_bhp < 0.0001 # under 1 watt
 
-    if nominal_hp < 1.0
-      motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = 'PSC')
+    if nominal_hp <= 0.75
+      motor_type = motor_type(nominal_hp)
+      motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = motor_type)
     else
       motor_properties.nil?
       # Lookup the minimum motor efficiency

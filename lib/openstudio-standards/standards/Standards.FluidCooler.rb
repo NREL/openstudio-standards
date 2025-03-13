@@ -76,15 +76,14 @@ class Standard
     # per method used in PNNL prototype buildings.
     # Assumes that the fan brake horsepower is 90%
     # of the fan nameplate rated motor power.
-    fan_motor_nameplate_hp = design_water_flow_gpm / min_gpm_per_hp
-    fan_bhp = 0.9 * fan_motor_nameplate_hp
-
-    # Lookup the minimum motor efficiency
+    # Source: Thornton et al. (2011), Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010, Section 4.5.4
+    nominal_hp = design_water_flow_gpm / min_gpm_per_hp
+    fan_bhp = 0.9 * nominal_hp
     fan_motor_eff = 0.85
-    nominal_hp = fan_bhp / fan_motor_eff
 
-    if nominal_hp < 1.0
-      motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = 'PSC')
+    if nominal_hp <= 0.75
+      motor_type = motor_type(nominal_hp)
+      motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = motor_type)
     else
       # Lookup the minimum motor efficiency
       motors = standards_data['motors']
@@ -98,6 +97,13 @@ class Standard
 
       # Use the efficiency largest motor efficiency when BHP is greater than the largest size for which a requirement is provided
       data = model_find_objects(motors, search_criteria)
+      if data.empty?
+        search_criteria = {
+          'template' => template,
+          'type' => nil
+        }
+        data = model_find_objects(motors, search_criteria)
+      end
       maximum_capacity = model_find_maximum_value(data, 'maximum_capacity')
       if fan_bhp > maximum_capacity
         fan_bhp = maximum_capacity
@@ -111,7 +117,7 @@ class Standard
     end
 
     if motor_properties.nil?
-      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{motor_hp} hp. Using a default value of #{fan_motor_eff}.")
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, could not find motor properties using search criteria: #{search_criteria}, motor_hp = #{norminal_hp} hp. Using a default value of #{fan_motor_eff}.")
     end
 
     unless motor_properties.nil?
@@ -128,7 +134,7 @@ class Standard
     # Convert to W
     fan_motor_actual_power_w = fan_motor_actual_power_hp * 745.7 # 745.7 W/HP
 
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, allowed fan motor nameplate hp = #{fan_motor_nameplate_hp.round(1)} hp, fan brake horsepower = #{fan_bhp.round(1)}, and fan motor actual power = #{fan_motor_actual_power_hp.round(1)} hp (#{fan_motor_actual_power_w.round} W) at #{fan_motor_eff} motor efficiency.")
+    OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.FluidCooler', "For #{fluid_cooler.name}, allowed fan motor nameplate hp = #{nominal_hp.round(1)} hp, fan brake horsepower = #{fan_bhp.round(1)}, and fan motor actual power = #{fan_motor_actual_power_hp.round(1)} hp (#{fan_motor_actual_power_w.round} W) at #{fan_motor_eff} motor efficiency.")
 
     # Append the efficiency to the name
     fluid_cooler.setName("#{fluid_cooler.name} #{min_gpm_per_hp.to_f.round(1)} gpm/hp")

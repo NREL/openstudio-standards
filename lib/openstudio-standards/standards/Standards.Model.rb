@@ -2470,7 +2470,7 @@ class Standard
       matching_capacity_objects = matching_objects.reject { |object| fan_motor_bhp.to_f <= object['minimum_capacity'].to_f || fan_motor_bhp.to_f > object['maximum_capacity'].to_f }
 
       # Filter based on motor type
-      matching_capacity_objects = matching_capacity_objects.select { |object| object['type'].downcase == search_criteria['type'].downcase } if search_criteria.keys.include?('type')
+      matching_capacity_objects = matching_capacity_objects.select { |object| object['type'].to_s.downcase == search_criteria['type'].to_s.downcase } if search_criteria.keys.include?('type')
 
       # If no object was found, round the fan_motor_bhp down in case the number fell between the limits in the json file.
       if matching_capacity_objects.empty?
