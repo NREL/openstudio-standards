@@ -1,5 +1,14 @@
-
 class OpenStudio::Model::Model
+
+  # NOTE: 179D SQUASHES it because we want to correctly determine the fuel type
+  # used by the central air source heat pump that is modeled as a PlantComponentUserDefined
+  # via openstudio-standards/lib/openstudio-standards/prototypes/common/objects/Prototype.CentralAirSourceHeatPump.rb
+  # Overriding is **NOT** possible in this case because this is a method that
+  # is patched onto OpenStudio::Model::Model and not in the Standard class
+  # But this is **SAFE** because we're just adding a `when` case
+  # (I can't patch it at openstudio-standards/lib/openstudio-standards/hvac_sizing/Siz.HeatingCoolingFuels.rb
+  # because we do NOT want to have to pull the openstudio-standards gem from
+  # github as it is way too large)
 
   # Get the heating fuel type of a plant loop
   # @todo If no heating equipment is found, check if there's a heat exchanger,
@@ -63,6 +72,30 @@ class OpenStudio::Model::Model
         if !cooling_hx_control_types.include?(hx.controlType.downcase) && hx.secondaryPlantLoop.is_initialized
           fuels += self.plant_loop_heating_fuels(hx.secondaryPlantLoop.get)
         end
+      # NOTE: begin 179D addition
+      when 'OS_PlantComponent_UserDefined'
+        # I could just assume 'Electricity' here too
+        plant_comp = component.to_PlantComponentUserDefined.get
+        if plant_comp.plantSimulationProgram.is_initialized
+          heating_cats = [
+            "heating", "heatingcoils", "boilers", "baseboard",
+            "heatrecoveryforheating", "onsitegeneration"
+          ]
+          sim_pgrm = plant_comp.plantSimulationProgram.get
+          sources = sim_pgrm.getSources("OS_EnergyManagementSystem_MeteredOutputVariable".to_IddObjectType)
+          sources.each do |s|
+            ems_metered_var = s.to_EnergyManagementSystemMeteredOutputVariable.get
+            if heating_cats.include?(ems_metered_var.endUseCategory.downcase)
+              fuel_string = ems_metered_var.resourceType
+              begin
+                fuels << OpenStudio::FuelType.new(fuel_string).valueDescription
+              rescue
+                OpenStudio::logFree(OpenStudio::Warn, 'openstudio.sizing.Model', "Could not determine what fuel type '#{fuel_string}' is in EMS:MeteredOutputVariable '#{ems_metered_var.nameString}' for PlantComponentUserDefined '#{plant_comp.nameString}'")
+              end
+            end
+          end
+        end
+        # NOTE: end 179D addition
       when 'OS_Node', 'OS_Pump_ConstantSpeed', 'OS_Pump_VariableSpeed', 'OS_Connector_Splitter', 'OS_Connector_Mixer', 'OS_Pipe_Adiabatic'
         # To avoid extraneous debug messages
       else
