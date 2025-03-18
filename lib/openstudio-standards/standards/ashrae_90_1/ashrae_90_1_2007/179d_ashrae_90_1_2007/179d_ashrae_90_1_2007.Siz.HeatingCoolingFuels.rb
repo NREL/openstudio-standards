@@ -1,5 +1,4 @@
 class OpenStudio::Model::Model
-
   # NOTE: 179D SQUASHES it because we want to correctly determine the fuel type
   # used by the central air source heat pump that is modeled as a PlantComponentUserDefined
   # via openstudio-standards/lib/openstudio-standards/prototypes/common/objects/Prototype.CentralAirSourceHeatPump.rb
@@ -78,11 +77,11 @@ class OpenStudio::Model::Model
         plant_comp = component.to_PlantComponentUserDefined.get
         if plant_comp.plantSimulationProgram.is_initialized
           heating_cats = [
-            "heating", "heatingcoils", "boilers", "baseboard",
-            "heatrecoveryforheating", "onsitegeneration"
+            'heating', 'heatingcoils', 'boilers', 'baseboard',
+            'heatrecoveryforheating', 'onsitegeneration'
           ]
           sim_pgrm = plant_comp.plantSimulationProgram.get
-          sources = sim_pgrm.getSources("OS_EnergyManagementSystem_MeteredOutputVariable".to_IddObjectType)
+          sources = sim_pgrm.getSources('OS_EnergyManagementSystem_MeteredOutputVariable'.to_IddObjectType)
           sources.each do |s|
             ems_metered_var = s.to_EnergyManagementSystemMeteredOutputVariable.get
             if heating_cats.include?(ems_metered_var.endUseCategory.downcase)

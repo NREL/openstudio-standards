@@ -178,6 +178,5 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
         info['minimum_energy_efficiency_ratio'] = nil
       end
     end
-
   end
 end
