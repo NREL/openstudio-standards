@@ -84,6 +84,7 @@ class BTAPDatapoint
     @npv_start_year = @options[:npv_start_year]
     @npv_end_year = @options[:npv_end_year]
     @npv_discount_rate = @options[:npv_discount_rate]
+    @npv_discount_rate_carbon = @options[:npv_discount_rate_carbon]
 
     # Save configuration to temp folder.
     File.open(File.join(@dp_temp_folder, 'run_options.yml'), 'w') { |file| file.write(@options.to_yaml) }
@@ -92,6 +93,10 @@ class BTAPDatapoint
       # This dynamically creates a class by string using the factory method design pattern.
       @options[:template] = 'NECB2011' if @options[:algorithm_type] == 'osm_batch'
       @standard = Standard.build(@options[:template])
+
+      # Set use the convert_arg_to_bool method from the standard class to set the @oerd_utility_pricing_flag
+      @oerd_utility_pricing = @standard.convert_arg_to_bool(variable: @options[:oerd_utility_pricing], default: false)
+      @utility_pricing_year = @standard.convert_arg_to_f(variable: @options[:utility_pricing_year], default: 2020)
 
       # This allows you to select the skeleton model from our built in starting points. You can add a custom file as
       # it will search the libary first,.
@@ -179,11 +184,12 @@ class BTAPDatapoint
                                        necb_hdd: @options[:necb_hdd],
                                        boiler_fuel: @options[:boiler_fuel],
                                        boiler_cap_ratio: @options[:boiler_cap_ratio],
-                                       swh_fuel: @options[:swh_fuel]
+                                       swh_fuel: @options[:swh_fuel],
+                                       oerd_utility_pricing: @oerd_utility_pricing
                                        )
       end
 
-      # Save model to to disk.
+      # Save model to disk.
       puts "saving model to #{File.join(@dp_temp_folder, 'output.osm')}"
       BTAP::FileIO.save_osm(model, File.join(@dp_temp_folder, 'output.osm'))
 
@@ -253,7 +259,10 @@ class BTAPDatapoint
                                   qaqc: @qaqc,
                                   npv_start_year: @npv_start_year,
                                   npv_end_year: @npv_end_year,
-                                  npv_discount_rate: @npv_discount_rate).btap_data
+                                  npv_discount_rate: @npv_discount_rate,
+                                  npv_discount_rate_carbon: @npv_discount_rate_carbon,
+                                  oerd_utility_pricing: @oerd_utility_pricing,
+                                  utility_pricing_year: @utility_pricing_year).btap_data
 
         # Write Files
         File.open(File.join(@dp_temp_folder, 'btap_data.json'), 'w') { |f| f.write(JSON.pretty_generate(@btap_data.sort.to_h, allow_nan: true)) }
@@ -477,7 +486,7 @@ class BTAPDatapoint
         SELECT ReportDataDictionaryIndex
         FROM ReportDataDictionary
         WHERE ReportingFrequency == 'Zone Timestep'
-                                                       "
+        "
     #===================================================================================================================
     # Get timestep data for each output.
     model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|
