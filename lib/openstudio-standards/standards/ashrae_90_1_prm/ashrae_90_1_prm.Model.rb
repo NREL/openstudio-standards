@@ -2285,7 +2285,7 @@ class ASHRAE901PRM < Standard
         run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations']
       end
     end
-    return run_orients_flag
+    run_orients_flag
   end
 
   # Function that extract the total fenestration area from a model by orientations.
