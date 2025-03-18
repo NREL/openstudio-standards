@@ -31,11 +31,12 @@ class NECB2011 < Standard
   def convert_arg_to_bool(variable:, default:)
     return default if variable.nil?
     if variable.is_a? String
+      return default if variable.to_s.downcase == 'necb_default'
+      return false if variable.to_s.downcase == 'false'
       return true if variable.to_s.downcase == 'true'
-      return false
     end
-    return true if variable == true
-    return default
+    return false if variable == false
+    return variable
   end
 
   # This method checks if a variable is a string.  If it is anything but a string it returns the default.  If it is a
@@ -375,8 +376,7 @@ class NECB2011 < Standard
                                 baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
                                 necb_hdd: necb_hdd,
                                 boiler_fuel: boiler_fuel,
-                                boiler_cap_ratio: boiler_cap_ratio,
-                                oerd_utility_pricing: oerd_utility_pricing
+                                boiler_cap_ratio: boiler_cap_ratio
                                 )
   end
 
@@ -455,8 +455,7 @@ class NECB2011 < Standard
                            baseline_system_zones_map_option: nil,
                            necb_hdd: true,
                            boiler_fuel: nil,
-                           boiler_cap_ratio: nil,
-                           oerd_utility_pricing: nil)
+                           boiler_cap_ratio: nil)
 
     apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
@@ -470,7 +469,6 @@ class NECB2011 < Standard
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
     swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
-    oerd_utility_pricing = convert_arg_to_bool(variable: oerd_utility_pricing, default: false)
 
     boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
     self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
