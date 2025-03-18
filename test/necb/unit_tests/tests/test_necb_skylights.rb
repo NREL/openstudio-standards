@@ -35,14 +35,13 @@ class NECB_Skylights_Tests < Minitest::Test
       'FullServiceRestaurant',
       'LargeOffice',
       'MediumOffice',
-      # 'NorthernEducation',
+      # 'NorthernEducation', # fails to open/validate with OS v3.7.0
       'QuickServiceRestaurant',
       'SmallOffice'
     ]
 
     # NOTE: Skipping NorthernEducation for now:
     #   Minitest::UnexpectedError: RuntimeError: validation of model failed.
-    #   ... /openstudio-standards/lib/openstudio-standards/standards/necb/NECB2011/necb_2011.rb:714:in `apply_loads'
 
     # Range of test options. NECB2011 for now. Skipping later NECBs - they're
     # systematically easier to deploy, given their lower reference building SRR

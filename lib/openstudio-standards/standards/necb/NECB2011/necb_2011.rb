@@ -478,7 +478,7 @@ class NECB2011 < Standard
       space.autocalculateVolume
     end
 
-    assign_building_activity(model: model)
+    assign_building_activity(model)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -1036,13 +1036,13 @@ class NECB2011 < Standard
   end
 
   ##
-  # Assigns BTAP building ACTIVITY (based on NECB 2011 building types).
+  # Assigns BTAP building ACTIVITY.
   #
   # @param model [OpenStudio::Model::Model] a model
   #
-  # @return [Symbol] BTAP building ACTIVITY (:office if failed, see logs)
-  def assign_building_activity(model: nil)
-    @activity = BTAP::Activity.new(model, 2011)
+  # @return [Symbol] BTAP building ACTIVITY (see logs if failed)
+  def assign_building_activity(model = nil)
+    @activity = BTAP::Activity.new(model, @template)
   end
 
   ##
