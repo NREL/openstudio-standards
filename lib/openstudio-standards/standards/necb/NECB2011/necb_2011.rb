@@ -279,7 +279,8 @@ class NECB2011 < Standard
                                    tbd_interpolate: false,
                                    necb_hdd: true,
                                    boiler_fuel: nil,
-                                   boiler_cap_ratio: nil)
+                                   boiler_cap_ratio: nil,
+                                   oerd_utility_pricing: nil)
 
     model = load_building_type_from_library(building_type: building_type)
 
@@ -477,6 +478,8 @@ class NECB2011 < Standard
     model.getSpaces.sort.each do |space|
       space.autocalculateVolume
     end
+
+    output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
 
     assign_building_activity(model)
     apply_loads(model: model,
@@ -2541,5 +2544,29 @@ class NECB2011 < Standard
       secondary_ratio: secondary_ratio
     }
     return boiler_cap_ratios
+  end
+
+  # This method checks if the output_meters argument contains a net electricity meter with 'timestep' frequency.  If one
+  # is then the method does nothing.  If one is not then it is added.  This is used in conjunction with the
+  # 'oerd_utility_pricing' argument.  If that argument is present then a net electricity meter with 'timestep' frequency
+  # is required to determine the peak net electricity usage.
+  def check_output_meters(output_meters: nil)
+    if output_meters.nil?
+      output_meters = [
+        {
+          "name" => "ElectricityNet:Facility",
+          "frequency" => "Hourly"
+        }
+      ]
+    else
+      electnet_facility = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "electricitynet:facility") && (output_meter["frequency"].to_s.downcase == "zone timestep") }
+      if electnet_facility.empty?
+        output_meters << {
+          "name" => "ElectricityNet:Facility",
+          "frequency" => "Hourly"
+        }
+      end
+    end
+    return output_meters
   end
 end
