@@ -4179,10 +4179,20 @@ class Standard
     types_to_modify << ['GroundBasementPreprocessorLowerWall', 'GroundContactWall', 'Mass']
 
     # Modify all constructions of each type
+    construction_modified = {}
     types_to_modify.each do |boundary_cond, surf_type, const_type|
       constructions = OpenstudioStandards::Constructions.model_get_constructions(model, boundary_cond, surf_type)
 
       constructions.sort.each do |const|
+        const_name = const.name.to_s
+        if construction_modified.key?(const_name)
+          # create a copy
+          const = OpenstudioStandards::Constructions.construction_deep_copy(const)
+          # Reset the name by including surf_type and boundary_cond
+          const_name = "#{const_name}_#{surf_type}_#{boundary_cond}"
+          const.setName(const_name)
+        end
+        construction_modified[const_name] = const
         standards_info = const.standardsInformation
         standards_info.setIntendedSurfaceType(surf_type)
         standards_info.setStandardsConstructionType(const_type)
