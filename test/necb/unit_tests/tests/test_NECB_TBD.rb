@@ -20,8 +20,8 @@ class NECB_TBD_Tests < Minitest::Test
     #Range of test options.
     @templates = [
       'NECB2011',
-      # 'NECB2015',
-      'NECB2017'
+    # 'NECB2015',
+    # 'NECB2017'
     ]
 
     @epws = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
@@ -55,7 +55,7 @@ class NECB_TBD_Tests < Minitest::Test
     # Otherwise, :bad vs :good PSI factor sets refer to costed BTAP details.
     @options = ['none',
                 'bad',
-                # 'good',
+                'good',
                 'uprate']
 
     # BTAP holds discrete performance levels for each e.g. wall construction:

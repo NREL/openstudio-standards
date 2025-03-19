@@ -1,5 +1,5 @@
 # *********************************************************************
-# *  Copyright (c) 2008-2025, Natural Resources Canada
+# *  Copyright (c) 2008-2015, Natural Resources Canada
 # *  All rights reserved.
 # *
 # *  This library is free software; you can redistribute it and/or
@@ -17,7 +17,6 @@
 # *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 # **********************************************************************/
 
-require 'tbd'
 
 module BTAP
   module Geometry
@@ -490,6 +489,7 @@ module BTAP
         return array
       end
 
+
       def self.filter_spaces_by_space_types(model, spaces_array, spacetype_array)
         spaces_array = BTAP::Common::validate_array(model, spaces_array, "Space")
         spacetype_array = BTAP::Common::validate_array(model, spacetype_array, "SpaceType")
@@ -499,80 +499,6 @@ module BTAP
           returnarray << spacetype_array.include?(space.spaceType())
         end
         return returnarray
-      end
-
-      ##
-      # Fetch a space's full height.
-      #
-      # @param space [OpenStudio::Model::Space] a space
-      #
-      # @return [Float] full height of space (0 if invalid input)
-      def self.space_height(space = nil)
-        return 0 unless space.is_a?(OpenStudio::Model::Space)
-
-        minZ = 1000
-        maxZ = 0
-
-        # An alternative to BTAP's "get_max_space_height_for_space_type".
-        #   - considering all surface types: "Floor" vs "Wall" vs "RoofCeiling"
-        #   - no presumption that atria floor are necessarily at ground level
-        space.surfaces.each do |surface|
-          minZ = [surface.vertices.min_by(&:z).z, minZ].min
-          maxZ = [surface.vertices.max_by(&:z).z, maxZ].max
-        end
-
-        maxZ < minZ ? 0 : maxZ - minZ
-      end
-
-      ##
-      # Fetch a space's width.
-      #
-      # @param space [OpenStudio::Model::Space] a space
-      #
-      # @return [Float] width of a space (0 if invalid input)
-      def self.space_width(space = nil)
-        return 0 unless space.is_a?(OpenStudio::Model::Space)
-
-        floors = TBD.facets(space, "all", "Floor")
-        return 0 if floors.empty?
-
-        # Automatically determining a space's "width" is not straightforward:
-        #   - a space may hold multiple floor surfaces at various Z-axis levels
-        #   - a space may hold multiple floor surfaces, with unique "widths"
-        #   - a floor surface may expand/contract (in "width") along its length.
-        #
-        # First, attempt to merge all floor surfaces together as 1x polygon:
-        #   - select largest floor surface (in area)
-        #   - determine its 3D plane
-        #   - retain only other floor surfaces sharing same 3D plane
-        #   - recover potential union between floor surfaces
-        #   - fall back to largest floor surface if invalid union
-        floors = floors.sort_by(&:grossArea).reverse
-        floor  = floors.first
-        plane  = floor.plane
-        t      = OpenStudio::Transformation.alignFace(floor.vertices)
-        polyg  = TBD.poly(floor, false, true, true, t, :ulc).to_a.reverse
-
-        TBD.clean!
-        return 0 if polyg.empty?
-
-        if floors.size > 1
-          floors = floors.select { |flr| plane.equal(flr.plane, 0.001) }
-
-          if floors.size > 1
-            polygs = floors.map    { |flr| TBD.poly(flr, false, true, true, t, :ulc) }
-            polygs = polygs.reject { |plg| plg.empty? }
-            polygs = polygs.map    { |plg| plg.to_a.reverse }
-            union  = OpenStudio.joinAll(polygs, 0.01).first
-            polyg  = TBD.poly(union, false, true, true)
-          end
-        end
-
-        box   = TBD.boundedBox(polyg)
-        width = TBD.height(box)
-        TBD.clean!
-
-        width
       end
     end
 
