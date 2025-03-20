@@ -6,6 +6,8 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
   attr_reader :template, :whole_building_space_type_name
 
   def initialize
+    # Lazy load the patch
+    require_relative '179d_ashrae_90_1_2007.Siz.HeatingCoolingFuels'
     @template = '179d-90.1-2007'
     load_standards_database
 
@@ -176,6 +178,5 @@ class ACM179dASHRAE9012007 < ASHRAE9012007
         info['minimum_energy_efficiency_ratio'] = nil
       end
     end
-
   end
 end
