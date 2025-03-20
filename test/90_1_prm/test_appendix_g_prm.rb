@@ -186,6 +186,7 @@ class AppendixGPRMTests < Minitest::Test
 
   def test_pe_userdata_handling
     model_hash = prm_test_helper('pe_userdata_handling', require_prototype = false, require_baseline = true)
+    
     check_power_equipment_handling(model_hash['baseline'])
   end
 
