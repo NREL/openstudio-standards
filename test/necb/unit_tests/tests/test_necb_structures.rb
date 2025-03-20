@@ -3,12 +3,12 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
 
 
-# Checks if BTAP::Activity instances are correctly deployed within BTAP.
-class NECB_Activity_Tests < Minitest::Test
-  def test_necb_activities()
-    outd = "output/test_necb_activities"
-    eres = "../expected_results/necb_activities_expected_results.json"
-    tres = "../expected_results/necb_activities_test_results.json"
+# Checks if BTAP::Structure instances are correctly deployed within BTAP.
+class NECB_Structure_Tests < Minitest::Test
+  def test_necb_structures()
+    outd = "output/test_necb_structures"
+    eres = "../expected_results/necb_structures_expected_results.json"
+    tres = "../expected_results/necb_structures_test_results.json"
     sizd = "sizing_folder"
 
     @output_folder         = File.join(__dir__, outd)
@@ -56,7 +56,7 @@ class NECB_Activity_Tests < Minitest::Test
 
     fdback = []
     fdback << ""
-    fdback << "BTAP::Activity Unit Tests"
+    fdback << "BTAP::Structure Unit Tests"
     fdback << "~~~~ ~~~~ ~~~~ ~~~~ ~~~~ "
 
     @epws.sort.each          do |epw      |
@@ -70,29 +70,39 @@ class NECB_Activity_Tests < Minitest::Test
                                                   building_type: building,
                                                   sizing_run_dir: @sizing_run_dir)
 
-          a = st.activity
+          s = st.structure
 
-          err_msg = "Empty BTAP::Activity (#{cas})?"
-          assert(a.is_a?(BTAP::Activity), err_msg)
-          err_msg = "BTAP::Activity activity (#{cas})?"
-          assert(a.activity.is_a?(String), err_msg)
-          err_msg = "BTAP::Activity category (#{cas})?"
-          assert(a.category.is_a?(String), err_msg)
+          err_msg = "BTAP::Structure #{s.class} (#{cas})?"
+          assert(s.is_a?(BTAP::Structure), err_msg)
 
-          if a.activity.empty?
-            fdback << "Empty BTAP::Activity activity (#{cas})!"
+          err_msg = "BTAP::Structure data #{s.data.class} (#{cas})?"
+          assert(s.data.is_a?(Hash), err_msg)
+
+          err_msg = "BTAP::Structure category #{s.category.class} (#{cas})?"
+          assert(s.category.is_a?(String), err_msg)
+
+          err_msg = "BTAP::Structure structure #{s.structure.class} (#{cas})?"
+          assert(s.structure.is_a?(Symbol), err_msg)
+
+          err_msg = "BTAP::Structure missing categories (#{cas})?"
+          assert(s.data.key?(:category), err_msg)
+
+          err_msg = "BTAP::Structure missing structures (#{cas})?"
+          assert(s.data.key?(:structure), err_msg)
+
+          unless s.data[:category].include?(s.category)
+            fdback << "BTAP::Structure invalid category #{s.category} (#{cas})!"
             @test_passed = false
-          elsif a.category.empty?
-            fdback << "Empty BTAP::Activity category (#{cas})!"
-            @test_passed = false
-          elsif a.category == "common"
-            fdback << "Common BTAP::Activity (#{cas})!"
-            @test_passed = false
-          else
-            fdback << "#{cas} : #{a.activity} (#{a.category})"
           end
 
-          a.feedback[:logs].each { |log| puts log }
+          unless s.data[:structure].include?(s.structure)
+            fdback << "BTAP::Structure invalid structure #{s.structure} (#{cas})!"
+            @test_passed = false
+          end
+
+          fdback << "#{cas} : #{s.category} (#{s.structure})" if @test_passed
+
+          s.feedback[:logs].each { |log| puts log }
         end                   # |template |
       end                     # |building |
     end                       # |epw      |

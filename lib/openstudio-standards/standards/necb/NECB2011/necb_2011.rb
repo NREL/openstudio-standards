@@ -479,9 +479,10 @@ class NECB2011 < Standard
       space.autocalculateVolume
     end
 
-    output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
+    # output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
 
     assign_building_activity(model)
+    assign_building_structure(model, @activity.category)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -1046,6 +1047,17 @@ class NECB2011 < Standard
   # @return [Symbol] BTAP building ACTIVITY (see logs if failed)
   def assign_building_activity(model = nil)
     @activity = BTAP::Activity.new(model, @template)
+  end
+
+  ##
+  # Assigns BTAP building STRUCTURE.
+  #
+  # @param model [OpenStudio::Model::Model] a model
+  # @param category [String] a building category (e.g. "residential")
+  #
+  # @return [Symbol] BTAP building STRUCTURE (see logs if failed)
+  def assign_building_structure(model = nil, category = "commerce")
+    @structure = BTAP::Structure.new(model, category)
   end
 
   ##

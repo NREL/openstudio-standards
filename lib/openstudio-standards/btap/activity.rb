@@ -217,13 +217,12 @@ module BTAP
     # @param model [OpenStudio::Model::Model] a model
     def initialize(model = nil, template = "NECB2011")
       mth         = "BTAP::Activity::#{__callee__}"
-      @feedback   = { logs: [] }
+      @feedback   = {logs: []}
       lgs         = @feedback[:logs]
       @template   = template.respond_to?(:to_s) ? template.to_s : ""
       @activity   = ""
       @activities = {}
       @category   = ""
-      @feedback   = {logs: []}
 
       unless model.is_a?(OpenStudio::Model::Model)
         lgs << "Invalid or empty OpenStudio model (#{mth})"
@@ -451,6 +450,8 @@ module BTAP
                    else                    "office"
                    end
       end
+
+      activity = "office" if activity.empty?
 
       activity
     end
