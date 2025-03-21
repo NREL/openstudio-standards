@@ -3032,6 +3032,10 @@ class ASHRAE901PRM < Standard
     return heat_type_props['heat_type']
   end
 
+  def has_space_conditioning_category
+    true
+  end
+
   private
 
   # Check if the PRM process uses user data. The function returns a hash when

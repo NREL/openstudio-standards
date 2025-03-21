@@ -4181,21 +4181,80 @@ class Standard
     # Modify all constructions of each type
     construction_modified = {}
     types_to_modify.each do |boundary_cond, surf_type, const_type|
-      constructions = OpenstudioStandards::Constructions.model_get_constructions(model, boundary_cond, surf_type)
+      # constructions = OpenstudioStandards::Constructions.model_get_constructions(model, boundary_cond, surf_type)
+      # Hard-assigned surfaces
+      model.getSurfaces.sort.each do |surface|
+        # surfaces with outside / ground / underground boundary conditions
+        # interior surfaces facing unconditioned spaces
+        next unless surface.outsideBoundaryCondition == boundary_cond || (has_space_conditioning_category && surface.outsideBoundaryCondition == 'Surface' && space_conditioning_category(surface.adjacentSurface.get.space.get) == 'Unconditioned')
 
-      constructions.sort.each do |const|
+        if surface.surfaceType == 'Floor' || surface.surfaceType == 'Wall'
+          next unless surf_type.include?(surface.surfaceType)
+        elsif surface.surfaceType == 'RoofCeiling'
+          next unless surf_type.include?('Roof') || surf_type.include?('Ceiling')
+        end
+
+        # check if need to duplicate the construction for the surface
+        const = surface.construction
+        next unless const.is_initialized
+
+        const = const.get
         const_name = const.name.to_s
         if construction_modified.key?(const_name)
-          # create a copy
-          const = OpenstudioStandards::Constructions.construction_deep_copy(const)
+          # create a copy for each of constructions to meet its unique boundary_cond, surf_type and const_type
+          new_const = OpenstudioStandards::Constructions.construction_deep_copy(const)
           # Reset the name by including surf_type and boundary_cond
-          const_name = "#{const_name}_#{surf_type}_#{boundary_cond}"
-          const.setName(const_name)
+          new_const_name = "#{const_name}_#{surf_type}_#{boundary_cond}"
+          new_const.setName(new_const_name)
+          standards_info = new_const.standardsInformation
+          standards_info.setIntendedSurfaceType(surf_type)
+          standards_info.setStandardsConstructionType(const_type)
+          surface.setConstruction(new_const)
+          construction_modified[new_const_name] = new_const
+        else
+          standards_info = const.standardsInformation
+          standards_info.setIntendedSurfaceType(surf_type)
+          standards_info.setStandardsConstructionType(const_type)
+          construction_modified[const_name] = const
         end
-        construction_modified[const_name] = const
-        standards_info = const.standardsInformation
-        standards_info.setIntendedSurfaceType(surf_type)
-        standards_info.setStandardsConstructionType(const_type)
+      end
+
+      # Hard-assigned subsurfaces
+      model.getSubSurfaces.sort.each do |surface|
+        next unless surface.outsideBoundaryCondition == boundary_cond
+
+        case surface.subSurfaceType
+        when 'FixedWindow', 'OperableWindow'
+          next unless surf_type == 'ExteriorWindow'
+        when 'Door'
+          next unless surf_type.include?('Door')
+        else
+          next unless surface.subSurfaceType == surf_type
+        end
+
+        # check if need to duplicate the construction for the surface
+        const = surface.construction
+        next unless const.is_initialized
+
+        const = const.get
+        const_name = const.name.to_s
+        if construction_modified.key?(const_name)
+          # create a copy for each of constructions to meet its unique boundary_cond, surf_type and const_type
+          new_const = OpenstudioStandards::Constructions.construction_deep_copy(const)
+          # Reset the name by including surf_type and boundary_cond
+          new_const_name = "#{const_name}_#{surf_type}_#{boundary_cond}"
+          new_const.setName(new_const_name)
+          standards_info = new_const.standardsInformation
+          standards_info.setIntendedSurfaceType(surf_type)
+          standards_info.setStandardsConstructionType(const_type)
+          surface.setConstruction(new_const)
+          construction_modified[new_const_name] = new_const
+        else
+          standards_info = const.standardsInformation
+          standards_info.setIntendedSurfaceType(surf_type)
+          standards_info.setStandardsConstructionType(const_type)
+          construction_modified[const_name] = const
+        end
       end
     end
 
@@ -4250,6 +4309,7 @@ class Standard
     types_to_modify << ['Outdoors', 'OperableWindow']
     types_to_modify << ['Outdoors', 'Door']
     types_to_modify << ['Outdoors', 'GlassDoor']
+    types_to_modify << ['Outdoors', 'ExteriorDoor']
     types_to_modify << ['Outdoors', 'OverheadDoor']
     types_to_modify << ['Outdoors', 'Skylight']
     types_to_modify << ['Surface', 'Floor']
@@ -4288,7 +4348,7 @@ class Standard
         next unless surf.surfaceType == surface_type
 
         # Check if surface is adjacent to an unenclosed or unconditioned space (e.g. attic or parking garage)
-        if surf.outsideBoundaryCondition == 'Surface'
+        if has_space_conditioning_category && surf.outsideBoundaryCondition == 'Surface'
           adj_space = surf.adjacentSurface.get.space.get
           adj_space_cond_type = space_conditioning_category(adj_space)
           if adj_space_cond_type == 'Unconditioned'
@@ -4319,6 +4379,7 @@ class Standard
 
       # SubSurfaces
       model.getSubSurfaces.sort.each do |surf|
+        new_surf = surf
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.subSurfaceType == surface_type
 
@@ -4330,12 +4391,16 @@ class Standard
     # Modify these surfaces
     prev_created_consts = {}
     surfaces_to_modify.sort.each do |surf|
-      # Get space conditioning
-      space = surf.space.get
-      space_cond_type = space_conditioning_category(space)
-
-      # Do not modify constructions for unconditioned spaces
-      prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf]) unless space_cond_type == 'Unconditioned'
+      if has_space_conditioning_category
+        # Get space conditioning
+        space = surf.space.get
+        space_cond_type = space_conditioning_category(space)
+        # Do not modify constructions for unconditioned spaces
+        prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf]) unless space_cond_type == 'Unconditioned'
+      else
+        # No space conditioning requirements for legacy code
+        prev_created_consts = planar_surface_apply_standard_construction(surf, climate_zone, prev_created_consts, wwr_building_type, wwr_info, surface_category[surf])
+      end
 
       # Reset boundary conditions to original if they were temporary modified
       if org_surface_boundary_conditions.include?(surf.name.to_s)
@@ -6223,6 +6288,12 @@ class Standard
   def model_update_ground_temperature_profile(model, climate_zone)
     true
   end
+end
+
+# Flag function to indicate whether the energy code uses conditioning category
+# for PRM calculation - default to false for legacy energy codes
+def has_space_conditioning_category
+  false
 end
 
 # Dummy method to avoid adjusting infiltration in PRM models using older ASHRAE 90.1 PRM methodology.
