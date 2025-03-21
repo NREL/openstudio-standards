@@ -31,26 +31,26 @@ class NECB_Structure_Tests < Minitest::Test
     @epws = ["CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw"]
 
     @buildings = [
-      # 'FullServiceRestaurant',
-      # 'HighriseApartment',
-      # 'Hospital',
-      # 'LargeHotel',
-      # 'LargeOffice',
-      # 'LEEPMidriseApartment',
-      # 'LEEPPointTower',
-      # 'LEEPTownHouse',
-      # 'LEEPMultiTower',
-      # 'LowRiseApartment',
-      # 'MediumOffice',
-      # 'MidriseApartment',
-      # 'Outpatient',
-      # 'PrimarySchool',
-      # 'QuickServiceRestaurant',
-      # 'RetailStandalone',
-      # 'RetailStripMall',
-      # 'SecondarySchool',
-      # 'SmallHotel',
-      # 'SmallOffice',
+      'FullServiceRestaurant',
+      'HighriseApartment',
+      'Hospital',
+      'LargeHotel',
+      'LargeOffice',
+      'LEEPMidriseApartment',
+      'LEEPPointTower',
+      'LEEPTownHouse',
+      'LEEPMultiTower',
+      'LowRiseApartment',
+      'MediumOffice',
+      'MidriseApartment',
+      'Outpatient',
+      'PrimarySchool',
+      'QuickServiceRestaurant',
+      'RetailStandalone',
+      'RetailStripMall',
+      'SecondarySchool',
+      'SmallHotel',
+      'SmallOffice',
       'Warehouse'
     ]
 
@@ -74,19 +74,14 @@ class NECB_Structure_Tests < Minitest::Test
 
           err_msg = "BTAP::Structure #{s.class} (#{cas})?"
           assert(s.is_a?(BTAP::Structure), err_msg)
-
           err_msg = "BTAP::Structure data #{s.data.class} (#{cas})?"
           assert(s.data.is_a?(Hash), err_msg)
-
           err_msg = "BTAP::Structure category #{s.category.class} (#{cas})?"
           assert(s.category.is_a?(String), err_msg)
-
           err_msg = "BTAP::Structure structure #{s.structure.class} (#{cas})?"
           assert(s.structure.is_a?(Symbol), err_msg)
-
           err_msg = "BTAP::Structure missing categories (#{cas})?"
           assert(s.data.key?(:category), err_msg)
-
           err_msg = "BTAP::Structure missing structures (#{cas})?"
           assert(s.data.key?(:structure), err_msg)
 

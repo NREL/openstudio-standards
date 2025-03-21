@@ -243,8 +243,8 @@ module BTAP
     @@data[:category]["housing"   ][:stories] =  4
     @@data[:category]["lodging"   ][:stories] =  2
     @@data[:category]["public"    ][:stories] =  2
-    @@data[:category]["industry"  ][:height ] =  4
-    @@data[:category]["recreation"][:height ] = 10
+    @@data[:category]["industry"  ][:height ] =  3.5
+    @@data[:category]["recreation"][:height ] = 10.0
 
     # For instance, a multi-unit residential buildings (MURB) would have a
     # typical "wood" framed, load-bearing envelope/STRUCTURE up to (and
@@ -321,9 +321,35 @@ module BTAP
         return
       end
 
+      bldg       = model.getBuilding
       @category  = cat
-      @structure = data[:category][cat][:small] # @todo, based on height vs stories
+      @structure = data[:category][cat][:small]
       @co2       = 0
+
+      # Switch to :large structure, instead of default :small.
+      if data[:category][cat].key?(:stories)
+        mx = data[:category][cat][:stories]
+        n  = bldg.standardsNumberOfAboveGroundStories
+        n  = n.empty? ? 1 : n.get
+
+        @structure = data[:category][cat][:large] if n > mx
+      elsif data[:category][cat].key?(:height)
+        mx = data[:category][cat][:height]
+        n  = bldg.standardsNumberOfAboveGroundStories
+        n  = n.empty? ? 1 : n.get
+
+        if n > 1
+          @structure = data[:category][cat][:large]
+        else
+          h = 0
+
+          model.getSpaces.each do |space|
+            h = [mx, BTAP::Geometry::Spaces.space_height(space)].max
+          end
+
+          @structure = data[:category][cat][:large] if h > mx
+        end
+      end
 
       true
     end
