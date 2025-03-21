@@ -33,12 +33,6 @@ module OpenstudioStandards
       return new_construction
     end
 
-    def self.construction_f_factor_deep_copy(construction)
-      new_f_construction = construction.clone.to_FFactorGroundFloorConstruction.get
-      new_f_construction.setFFactor(construction.fFactor.get)
-
-    end
-
     # Return the existing adiabatic floor construction, or create one if absent.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
