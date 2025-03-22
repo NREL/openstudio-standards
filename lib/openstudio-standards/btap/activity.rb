@@ -239,6 +239,37 @@ module BTAP
         end
       end
 
+      # Tag spaces as un/conditioned with "space_conditioning_category". For now,
+      # this is simply determined based on whether spaces are:
+      #   - part of the total floor area (i.e. occupied)
+      #   - have "attic" included in their identifiers (i.e. unconditioned)
+      #
+      # As per ASHRE 90.1, OpenStudio-Standards distinguishes between:
+      #   - "nonresconditioned" vs
+      #   - "resconditioned"
+      #
+      # Sticking to "nonresconditioned" - NECBs do not distinguish between "res"
+      # vs "non-res" (for e.g. envelope), as opposed to ASHRAE 90.1.
+      #
+      # The solution could be further refined in future BTAP versions by e.g.:
+      #   - relying on user-defined thermostats
+      #   - expanded to cover semi-heated and refrigerated spaces
+      tag = "space_conditioning_category"
+
+      model.getSpaces.each do |space|
+        next unless space.additionalProperties.getFeatureAsString(tag).empty?
+
+        if space.partofTotalFloorArea
+          space.additionalProperties.setFeature(tag, "nonresconditioned")
+        else
+          if space.nameString.downcase.include?("attic")
+            space.additionalProperties.setFeature(tag, "unconditioned")
+          else # treat all other cases as indirectly-conditioned e.g. plenums
+            space.additionalProperties.setFeature(tag, "nonresconditioned")
+          end
+        end
+      end
+
       # Determine activities of occupied spaces in the model, then building.
       @activities = self.getSpaceActivities(model)
       @activity   = self.getBuildingActivity(model)
