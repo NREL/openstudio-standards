@@ -1627,10 +1627,10 @@ class AppendixGPRMTests < Minitest::Test
         baseline_equipments = baseline_model.getElectricEquipments
         baseline_equipments.each do |equipment|
           baseline_equipment_name = equipment.name.get
-          if baseline_equipment_name == 'Office WholeBuilding - Sm Office Elec Equip 4'
+          if baseline_equipment_name == 'Office WholeBuilding - Sm Office Elec Equip'
             base_electric_equipment_schedule = equipment.schedule.get.to_ScheduleRuleset.get
             receptacle_power_credits = base_electric_equipment_schedule.name.get.split('_')[3].to_f
-            assert((0.05 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.05 (5%) but get #{receptacle_power_credits}")
+            assert((0.025 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.025 (5%) but get #{receptacle_power_credits}")
           end
         end
       end
