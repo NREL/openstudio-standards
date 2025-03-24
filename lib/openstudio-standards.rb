@@ -33,6 +33,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/exterior_lighting/create'
   require_relative 'openstudio-standards/exterior_lighting/information'
 
+  # Refrigeration Module
+  require_relative 'openstudio-standards/refrigeration/create_case'
+
   # Schedules Module
   require_relative 'openstudio-standards/schedules/create'
   require_relative 'openstudio-standards/schedules/modify'
