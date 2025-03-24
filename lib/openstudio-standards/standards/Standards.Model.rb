@@ -4347,7 +4347,9 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
         next unless surf.outsideBoundaryCondition == boundary_condition
         next unless surf.surfaceType == surface_type
         # legacy energy code does not require processing surface type surface.
-        next unless has_space_conditioning_category && surf.outsideBoundaryCondition == 'Surface'
+        if surf.outsideBoundaryCondition == 'Surface' && !has_space_conditioning_category
+          next
+        end
 
         # Check if surface is adjacent to an unenclosed or unconditioned space (e.g. attic or parking garage)
         if has_space_conditioning_category && surf.outsideBoundaryCondition == 'Surface'

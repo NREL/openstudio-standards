@@ -23,7 +23,21 @@ module OpenstudioStandards
         new_construction.setCFactor(c_const.cFactor)
         new_construction.setHeight(c_const.height)
       else
-        new_construction = construction.clone.to_Construction.get
+        # Layer by layer construction
+        if cons_obj_type == 'OS_Construction_AirBoundary'
+          a_const = construction.to_ConstructionAirBoundary.get
+          new_construction = a_const.clone.to_ConstructionAirBoundary.get
+        elsif cons_obj_type == 'OS_Construction_InternalSource'
+          new_construction = construction.clone.to_ConstructionWithInternalSource.get
+          i_const = construction.to_ConstructionWithInternalSource.get
+          new_construction.setSourcePresentAfterLayerNumber(i_const.sourcePresentAfterLayerNumber)
+          new_construction.setTemperatureCalculationRequestedAfterLayerNumber(i_const.temperatureCalculationRequestedAfterLayerNumber)
+          new_construction.setDimensionsForTheCTFCalculation(i_const.dimensionsForTheCTFCalculation)
+          new_construction.setTubeSpacing(i_const.tubeSpacing)
+          new_construction.setTwoDimensionalTemperatureCalculationPosition(i_const.twoDimensionalTemperatureCalculationPosition)
+        else
+          new_construction = construction.clone.to_Construction.get
+        end
         (0..new_construction.layers.length - 1).each do |layer_number|
           cloned_layer = new_construction.getLayer(layer_number).clone.to_Material.get
           new_construction.setLayer(layer_number, cloned_layer)
