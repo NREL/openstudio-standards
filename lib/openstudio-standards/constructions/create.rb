@@ -11,23 +11,27 @@ module OpenstudioStandards
     # @return [OpenStudio::Model::Construction] New OpenStudio Construction object
     def self.construction_deep_copy(construction)
       cons_obj_type = construction.iddObjectType.valueName.to_s
-      if cons_obj_type == 'OS_Construction_FfactorGroundFloor'
+      case cons_obj_type
+      when 'OS_Construction_FfactorGroundFloor'
         new_construction = construction.clone.to_FFactorGroundFloorConstruction.get
         f_const = construction.to_FFactorGroundFloorConstruction.get
         new_construction.setFFactor(f_const.fFactor)
         new_construction.setArea(f_const.area)
         new_construction.setPerimeterExposed(f_const.perimeterExposed)
-      elsif cons_obj_type == 'OS_Construction_CfactorUndergroundWall'
+      when 'OS_Construction_CfactorUndergroundWall'
         c_const = construction.to_CFactorUndergroundWallConstruction.get
         new_construction = c_const.clone.to_CFactorUndergroundWallConstruction.get
         new_construction.setCFactor(c_const.cFactor)
         new_construction.setHeight(c_const.height)
+      when 'OS_Construction_AirBoundary'
+        a_const = construction.to_ConstructionAirBoundary.get
+        new_construction = a_const.clone.to_ConstructionAirBoundary.get
+        new_construction.setAirExchangeMethod(a_const.airExchangeMethod)
+        new_construction.setSimpleMixingAirChangesPerHour(a_const.simpleMixingAirChangesPerHour)
+        new_construction.setSimpleMixingSchedule(a_const.simpleMixingSchedule)
       else
         # Layer by layer construction
-        if cons_obj_type == 'OS_Construction_AirBoundary'
-          a_const = construction.to_ConstructionAirBoundary.get
-          new_construction = a_const.clone.to_ConstructionAirBoundary.get
-        elsif cons_obj_type == 'OS_Construction_InternalSource'
+        if cons_obj_type == 'OS_Construction_InternalSource'
           new_construction = construction.clone.to_ConstructionWithInternalSource.get
           i_const = construction.to_ConstructionWithInternalSource.get
           new_construction.setSourcePresentAfterLayerNumber(i_const.sourcePresentAfterLayerNumber)
