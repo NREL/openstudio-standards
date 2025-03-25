@@ -23,7 +23,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{cases_csv}")
         return false
       end
-      cases_tbl = CSV.table(cases_csv, encoding: "ISO8859-1:utf-8" )
+      cases_tbl = CSV.table(cases_csv, encoding: 'ISO8859-1:utf-8')
       cases_hsh = cases_tbl.map(&:to_hash)
 
       # get case properties
@@ -39,7 +39,7 @@ module OpenstudioStandards
       ref_case.setRatedLatentHeatRatio(case_properties[:rated_latent_heat_ratio])
       ref_case.setRatedRuntimeFraction(case_properties[:rated_runtime_fraction])
       ref_case.setLatentCaseCreditCurveType(case_properties[:latent_case_credit_curve_type])
-      # TODO replace once curves are standardized
+      # TODO: replace once curves are standardized
       std = Standard.build('90.1-2013')
       latent_case_credit_curve = std.model_add_curve(model, case_properties[:latent_case_credit_curve_name])
       ref_case.setLatentCaseCreditCurve(latent_case_credit_curve)
@@ -58,7 +58,7 @@ module OpenstudioStandards
       ref_case.setCaseDefrostType(case_properties[:defrost_type])
       ref_case.setDefrostEnergyCorrectionCurveType(case_properties[:defrost_energy_correction_curve_type]) unless case_properties[:defrost_energy_correction_curve_type].nil?
       unless case_properties[:defrost_energy_correction_curve_name].nil?
-        # TODO replace once curves are standardized
+        # TODO: replace once curves are standardized
         defrost_correction_curve_name = std.model_add_curve(model, case_properties[:defrost_energy_correction_curve_name])
         ref_case.setDefrostEnergyCorrectionCurve(defrost_correction_curve_name)
       end
@@ -101,8 +101,7 @@ module OpenstudioStandards
       length_ft = OpenStudio.convert(case_properties[:unit_length], 'm', 'ft').get
       cooling_capacity_w = ref_case.caseLength * ref_case.ratedTotalCoolingCapacityperUnitLength
       cooling_capacity_btu_per_hr = OpenStudio.convert(cooling_capacity_w, 'W', 'Btu/hr').get
-      thermal_zone_name = thermal_zone.nil? ? nil : thermal_zone.name
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Refrigeration', "Added #{length_ft.round} ft display case called #{case_type} with a cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone_name}.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Refrigeration', "Added #{length_ft.round} ft display case called #{case_type} with a cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone&.name}.")
 
       return ref_case
     end
