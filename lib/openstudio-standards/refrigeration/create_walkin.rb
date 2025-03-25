@@ -9,9 +9,9 @@ module OpenstudioStandards
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
     # @param operation_type [String] Temperature regime, either 'MT' Medium Temperature, or 'LT' Low Temperature
-    # @param walkin_type [String] The case type. See refrigeration_cases data for valid options under walkin_type.
+    # @param walkin_type [String] The walkin type. See refrigeration_walkins data for valid options under walkin_type.
     # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
-    # @return [OpenStudio::Model::RefrigerationCase] the refrigeration case
+    # @return [OpenStudio::Model::RefrigerationWalkIn] the refrigeration walkin
     def self.create_walkin(model,
                            template: 'new',
                            operation_type: 'MT',
