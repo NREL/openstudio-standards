@@ -1200,7 +1200,7 @@ class ASHRAE901PRM < Standard
         standards_data['userdata_airloop_hvac'].each do |row|
           next unless row['name'].to_s.downcase.strip == air_loop_hvac.name.to_s.downcase.strip
 
-          if row['dcv_exception_airloop'].to_s.upcase.strip == 'TRUE'
+          if row['dcv_exception_airloop']
             dcv_airloop_user_exception = true
             break
           end
@@ -1221,7 +1221,7 @@ class ASHRAE901PRM < Standard
         standards_data['userdata_thermal_zone'].each do |row|
           next unless row['name'].to_s.downcase.strip == thermal_zone.name.to_s.downcase.strip
 
-          if row['dcv_exception_thermal_zone'].to_s.upcase.strip == 'TRUE'
+          if row['dcv_exception_thermal_zone']
             dcv_zone_user_exception = true
             break
           end
@@ -2282,10 +2282,10 @@ class ASHRAE901PRM < Standard
                            'prm.log',
                            "User data in the userdata_building.csv indicate building #{building_name} is exempted from rotation. Update the run to a single orientation PRM generation.")
         # @todo need to use user data enums later.
-        run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations'].casecmp('False') == 0
+        run_orients_flag = user_buildings[user_building_index]['is_exempt_from_rotations']
       end
     end
-    return run_orients_flag
+    run_orients_flag
   end
 
   # Function that extract the total fenestration area from a model by orientations.
