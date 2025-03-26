@@ -29,6 +29,10 @@ module OpenstudioStandards
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
 
+  # Exterior Lighting Module
+  require_relative 'openstudio-standards/exterior_lighting/create'
+  require_relative 'openstudio-standards/exterior_lighting/information'
+
   # Schedules Module
   require_relative 'openstudio-standards/schedules/create'
   require_relative 'openstudio-standards/schedules/modify'
@@ -62,6 +66,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/create_typical/space_type_ratios'
   require_relative 'openstudio-standards/create_typical/create_typical'
   require_relative 'openstudio-standards/create_typical/space_type_blend'
+  require_relative 'openstudio-standards/create_typical/space_type_information'
 
   # QAQC Module
   require_relative 'openstudio-standards/qaqc/calibration'
@@ -522,7 +527,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.hvac_systems"
   require_relative "#{proto}/common/objects/Prototype.Model.elevators"
   require_relative "#{proto}/common/objects/Prototype.Model.transformers"
-  require_relative "#{proto}/common/objects/Prototype.Model.exterior_lights"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
   require_relative "#{proto}/common/objects/Prototype.Pump"
