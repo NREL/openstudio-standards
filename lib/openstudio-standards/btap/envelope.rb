@@ -173,8 +173,8 @@ module BTAP
               # Update U-value. This also re-sets the insulation layer.
               target_u_value_ip = OpenStudio.convert(conductance.to_f, 'W/m^2*K', 'Btu/ft^2*hr*R').get 
               unless OpenstudioStandards::Constructions.construction_set_u_value(new_construction, target_u_value_ip.to_f,
-                                                                          target_includes_interior_film_coefficients: false,
-                                                                          target_includes_exterior_film_coefficients: false)
+                                                                          target_includes_interior_film_coefficients: true,
+                                                                          target_includes_exterior_film_coefficients: true)
                 raise("could not set conductance of construction #{new_construction.name.to_s}")
               end
             end
