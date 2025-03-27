@@ -13,7 +13,7 @@ class Standard
   #
   # @param nominal_hp [Float] nominal or nameplate motor horsepower
   # @param motor_type [String] motor type, either 'PSC' or 'ECM'
-  # @return [Float] motor efficiency
+  # @return [Hash, NilClass] motor efficiency
   def motor_fractional_hp_efficiencies(nominal_hp, motor_type = 'PSC')
     # Unless specified otherwise, the efficiencies are calculated from
     # Table 5-3 from Energy Savings Potential and Research & Development Opportunities for Commercial Refrigeration, Navigant, 2009
@@ -54,6 +54,7 @@ class Standard
         return nil
       end
     else
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.motor', "#{motor_type} was passed as a motor_type, it should either be ECM or PSC.")
       return nil
     end
     motor_properties = {
