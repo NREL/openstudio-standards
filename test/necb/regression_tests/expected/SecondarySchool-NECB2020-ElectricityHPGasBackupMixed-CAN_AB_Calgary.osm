@@ -2246,7 +2246,7 @@ OS:ClimateZones,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000001},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 1 432kBtu/hr 9.8EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 1 433kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
@@ -2351,7 +2351,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000004},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 12 66kBtu/hr 11.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 12 65kBtu/hr 11.0EER, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
@@ -2491,7 +2491,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000008},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 15 294kBtu/hr 9.8EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 15 290kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
@@ -2526,7 +2526,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000009},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 16 51kBtu/hr 11.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 16 50kBtu/hr 11.0EER, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
@@ -2596,7 +2596,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000011},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 18 70kBtu/hr 11.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 18 69kBtu/hr 11.0EER, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
@@ -2631,7 +2631,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000012},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 19 57kBtu/hr 11.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 19 56kBtu/hr 11.0EER, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
@@ -2736,7 +2736,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000015},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 4 310kBtu/hr 9.8EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 4 306kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
@@ -2948,8 +2948,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000001},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 1 313 Clg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  91714.7698417027,                        !- Rated Total Heating Capacity {W}
-  3.5466101763627,                         !- Rated COP {W/W}
+  91857.2634713315,                        !- Rated Total Heating Capacity {W}
+  3.54684044468278,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3002,8 +3002,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000003},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 11 84 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  24684.5932981299,                        !- Rated Total Heating Capacity {W}
-  3.54573662723421,                        !- Rated COP {W/W}
+  24647.8627184991,                        !- Rated Total Heating Capacity {W}
+  3.54567541609153,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3027,10 +3027,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000004},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 12 48 Clg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 12 47 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  14116.3945077915,                        !- Rated Total Heating Capacity {W}
-  3.52812482991089,                        !- Rated COP {W/W}
+  13837.9949986766,                        !- Rated Total Heating Capacity {W}
+  3.52766087992029,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3056,8 +3056,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000005},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 13 17 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  4971.79218097954,                        !- Rated Total Heating Capacity {W}
-  3.51288544182052,                        !- Rated COP {W/W}
+  4893.33167833005,                        !- Rated Total Heating Capacity {W}
+  3.51275468817953,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3081,10 +3081,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000006},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 14 85 Clg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 14 84 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  24801.568304539,                         !- Rated Total Heating Capacity {W}
-  3.54593156490956,                        !- Rated COP {W/W}
+  24744.6627126009,                        !- Rated Total Heating Capacity {W}
+  3.54583673231115,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3108,10 +3108,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000007},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 15 213 Clg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 15 210 Clg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  62311.3879601421,                        !- Rated Total Heating Capacity {W}
-  3.49909459711797,                        !- Rated COP {W/W}
+  61650.007495157,                         !- Rated Total Heating Capacity {W}
+  3.49802581271686,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3135,10 +3135,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000008},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 16 37 Clg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 16 36 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  10845.8160857626,                        !- Rated Total Heating Capacity {W}
-  3.52267444376265,                        !- Rated COP {W/W}
+  10595.6093980288,                        !- Rated Total Heating Capacity {W}
+  3.52225747682621,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3189,10 +3189,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000010},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 18 51 Clg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 18 50 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  14887.0927262847,                        !- Rated Total Heating Capacity {W}
-  3.5294091907647,                         !- Rated COP {W/W}
+  14616.9021929063,                        !- Rated Total Heating Capacity {W}
+  3.52895892094986,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3218,8 +3218,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000011},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 19 41 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  12131.4450873135,                        !- Rated Total Heating Capacity {W}
-  3.52481693160353,                        !- Rated COP {W/W}
+  11922.4943858527,                        !- Rated Total Heating Capacity {W}
+  3.52446871735456,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3243,10 +3243,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000012},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 2 272 Clg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 2 271 Clg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  79595.985616275,                         !- Rated Total Heating Capacity {W}
-  3.5270263388799,                         !- Rated COP {W/W}
+  79510.8978159108,                        !- Rated Total Heating Capacity {W}
+  3.52688883782178,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3270,10 +3270,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000013},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 3 63 Clg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 3 62 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  18331.5916141452,                        !- Rated Total Heating Capacity {W}
-  3.53514941362546,                        !- Rated COP {W/W}
+  18302.2299375486,                        !- Rated Total Heating Capacity {W}
+  3.53510048268581,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3297,10 +3297,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000014},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 4 225 Clg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 4 221 Clg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  65809.9055366295,                        !- Rated Total Heating Capacity {W}
-  3.50474816750706,                        !- Rated COP {W/W}
+  64877.8433381396,                        !- Rated Total Heating Capacity {W}
+  3.50324196405632,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3353,8 +3353,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000016},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 6 78 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0063-000000000001},  !- Availability Schedule Name
-  22906.7481949425,                        !- Rated Total Heating Capacity {W}
-  3.5427738661951,                         !- Rated COP {W/W}
+  22880.2598638037,                        !- Rated Total Heating Capacity {W}
+  3.54272972365684,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -8784,7 +8784,7 @@ OS:Construction,
   BTAP-Ext-Door:U-1.73 R-3.28,             !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0047-000000000016},  !- Layer 1
-  {00000000-0000-0000-0048-000000000010};  !- Layer 2
+  {00000000-0000-0000-0048-000000000009};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000007},  !- Handle
@@ -8836,7 +8836,7 @@ OS:Construction,
   {00000000-0000-0000-0019-000000000014},  !- Handle
   BTAP-Ext-OverHeadDoor:U-1.73 R-3.28,     !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0048-000000000009};  !- Layer 1
+  {00000000-0000-0000-0048-000000000008};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000015},  !- Handle
@@ -8879,7 +8879,7 @@ OS:Construction,
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0047-000000000005},  !- Layer 1
   {00000000-0000-0000-0047-000000000013},  !- Layer 2
-  {00000000-0000-0000-0048-000000000008},  !- Layer 3
+  {00000000-0000-0000-0048-000000000010},  !- Layer 3
   {00000000-0000-0000-0047-000000000001};  !- Layer 4
 
 OS:Construction,
@@ -13024,81 +13024,81 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__13_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {ee491e2c-dcd9-40a4-8f66-b9a0455b9e74}<23.9 && {ee491e2c-dcd9-40a4-8f66-b9a0455b9e74}>1.7, !- Program Line 1
-  SET {8067b195-9ad2-436e-812f-d2210048bec4} = 29.4, !- Program Line 2
-  SET {a97dd453-725b-4f11-9061-72a954ab652b} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {ee491e2c-dcd9-40a4-8f66-b9a0455b9e74}<23.9 && {ee491e2c-dcd9-40a4-8f66-b9a0455b9e74}>1.7, !- Program Line 4
-  SET {8067b195-9ad2-436e-812f-d2210048bec4} = 29.4, !- Program Line 5
-  SET {a97dd453-725b-4f11-9061-72a954ab652b} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {ee491e2c-dcd9-40a4-8f66-b9a0455b9e74}<23.9 && {ee491e2c-dcd9-40a4-8f66-b9a0455b9e74}>1.7, !- Program Line 7
-  SET {8067b195-9ad2-436e-812f-d2210048bec4} = 29.4, !- Program Line 8
-  SET {a97dd453-725b-4f11-9061-72a954ab652b} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {ee491e2c-dcd9-40a4-8f66-b9a0455b9e74}<23.9 && {ee491e2c-dcd9-40a4-8f66-b9a0455b9e74}>1.7, !- Program Line 10
-  SET {8067b195-9ad2-436e-812f-d2210048bec4} = 29.4, !- Program Line 11
-  SET {a97dd453-725b-4f11-9061-72a954ab652b} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {0cc4cc1c-02a4-43ea-9302-b0a8de7701cb}<23.9 && {0cc4cc1c-02a4-43ea-9302-b0a8de7701cb}>1.7, !- Program Line 1
+  SET {aa678966-3018-496a-97d3-6b9bb6391c83} = 29.4, !- Program Line 2
+  SET {ead595d5-ac41-49f4-a96b-4a70e35d9c0a} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {0cc4cc1c-02a4-43ea-9302-b0a8de7701cb}<23.9 && {0cc4cc1c-02a4-43ea-9302-b0a8de7701cb}>1.7, !- Program Line 4
+  SET {aa678966-3018-496a-97d3-6b9bb6391c83} = 29.4, !- Program Line 5
+  SET {ead595d5-ac41-49f4-a96b-4a70e35d9c0a} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {0cc4cc1c-02a4-43ea-9302-b0a8de7701cb}<23.9 && {0cc4cc1c-02a4-43ea-9302-b0a8de7701cb}>1.7, !- Program Line 7
+  SET {aa678966-3018-496a-97d3-6b9bb6391c83} = 29.4, !- Program Line 8
+  SET {ead595d5-ac41-49f4-a96b-4a70e35d9c0a} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {0cc4cc1c-02a4-43ea-9302-b0a8de7701cb}<23.9 && {0cc4cc1c-02a4-43ea-9302-b0a8de7701cb}>1.7, !- Program Line 10
+  SET {aa678966-3018-496a-97d3-6b9bb6391c83} = 29.4, !- Program Line 11
+  SET {ead595d5-ac41-49f4-a96b-4a70e35d9c0a} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {8067b195-9ad2-436e-812f-d2210048bec4} = NULL, !- Program Line 14
-  SET {a97dd453-725b-4f11-9061-72a954ab652b} = NULL, !- Program Line 15
+  SET {aa678966-3018-496a-97d3-6b9bb6391c83} = NULL, !- Program Line 14
+  SET {ead595d5-ac41-49f4-a96b-4a70e35d9c0a} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000002},  !- Handle
   ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {3f95d470-9800-463f-aa03-33e8d4dfd3e9}<23.9 && {3f95d470-9800-463f-aa03-33e8d4dfd3e9}>1.7, !- Program Line 1
-  SET {cd023674-163e-478c-bd52-c2498325fb3d} = 29.4, !- Program Line 2
-  SET {0f35024d-924f-44b0-90f9-60d6c9137f8e} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {3f95d470-9800-463f-aa03-33e8d4dfd3e9}<23.9 && {3f95d470-9800-463f-aa03-33e8d4dfd3e9}>1.7, !- Program Line 4
-  SET {cd023674-163e-478c-bd52-c2498325fb3d} = 29.4, !- Program Line 5
-  SET {0f35024d-924f-44b0-90f9-60d6c9137f8e} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {3f95d470-9800-463f-aa03-33e8d4dfd3e9}<23.9 && {3f95d470-9800-463f-aa03-33e8d4dfd3e9}>1.7, !- Program Line 7
-  SET {cd023674-163e-478c-bd52-c2498325fb3d} = 29.4, !- Program Line 8
-  SET {0f35024d-924f-44b0-90f9-60d6c9137f8e} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {3f95d470-9800-463f-aa03-33e8d4dfd3e9}<23.9 && {3f95d470-9800-463f-aa03-33e8d4dfd3e9}>1.7, !- Program Line 10
-  SET {cd023674-163e-478c-bd52-c2498325fb3d} = 29.4, !- Program Line 11
-  SET {0f35024d-924f-44b0-90f9-60d6c9137f8e} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {26480303-9025-45e4-a8b2-16c365006eba}<23.9 && {26480303-9025-45e4-a8b2-16c365006eba}>1.7, !- Program Line 1
+  SET {da6d535b-aa91-4dbb-83f3-c8766ecb70cd} = 29.4, !- Program Line 2
+  SET {f0c57d99-9ba8-4c84-a9e8-473f93ebc7e4} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {26480303-9025-45e4-a8b2-16c365006eba}<23.9 && {26480303-9025-45e4-a8b2-16c365006eba}>1.7, !- Program Line 4
+  SET {da6d535b-aa91-4dbb-83f3-c8766ecb70cd} = 29.4, !- Program Line 5
+  SET {f0c57d99-9ba8-4c84-a9e8-473f93ebc7e4} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {26480303-9025-45e4-a8b2-16c365006eba}<23.9 && {26480303-9025-45e4-a8b2-16c365006eba}>1.7, !- Program Line 7
+  SET {da6d535b-aa91-4dbb-83f3-c8766ecb70cd} = 29.4, !- Program Line 8
+  SET {f0c57d99-9ba8-4c84-a9e8-473f93ebc7e4} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {26480303-9025-45e4-a8b2-16c365006eba}<23.9 && {26480303-9025-45e4-a8b2-16c365006eba}>1.7, !- Program Line 10
+  SET {da6d535b-aa91-4dbb-83f3-c8766ecb70cd} = 29.4, !- Program Line 11
+  SET {f0c57d99-9ba8-4c84-a9e8-473f93ebc7e4} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {cd023674-163e-478c-bd52-c2498325fb3d} = NULL, !- Program Line 14
-  SET {0f35024d-924f-44b0-90f9-60d6c9137f8e} = NULL, !- Program Line 15
+  SET {da6d535b-aa91-4dbb-83f3-c8766ecb70cd} = NULL, !- Program Line 14
+  SET {f0c57d99-9ba8-4c84-a9e8-473f93ebc7e4} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000003},  !- Handle
   ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {4a9e3bdd-2326-4764-8987-46900e2fcd4e}<23.9 && {4a9e3bdd-2326-4764-8987-46900e2fcd4e}>1.7, !- Program Line 1
-  SET {2652e1cd-c0b9-45be-8aa8-60064b6240a2} = 29.4, !- Program Line 2
-  SET {8a3687c4-7559-483c-8056-512199c01a1d} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {4a9e3bdd-2326-4764-8987-46900e2fcd4e}<23.9 && {4a9e3bdd-2326-4764-8987-46900e2fcd4e}>1.7, !- Program Line 4
-  SET {2652e1cd-c0b9-45be-8aa8-60064b6240a2} = 29.4, !- Program Line 5
-  SET {8a3687c4-7559-483c-8056-512199c01a1d} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {4a9e3bdd-2326-4764-8987-46900e2fcd4e}<23.9 && {4a9e3bdd-2326-4764-8987-46900e2fcd4e}>1.7, !- Program Line 7
-  SET {2652e1cd-c0b9-45be-8aa8-60064b6240a2} = 29.4, !- Program Line 8
-  SET {8a3687c4-7559-483c-8056-512199c01a1d} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {4a9e3bdd-2326-4764-8987-46900e2fcd4e}<23.9 && {4a9e3bdd-2326-4764-8987-46900e2fcd4e}>1.7, !- Program Line 10
-  SET {2652e1cd-c0b9-45be-8aa8-60064b6240a2} = 29.4, !- Program Line 11
-  SET {8a3687c4-7559-483c-8056-512199c01a1d} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {99314cf2-2c08-4441-b4bc-0b8efcef10b7}<23.9 && {99314cf2-2c08-4441-b4bc-0b8efcef10b7}>1.7, !- Program Line 1
+  SET {816123f4-bc9f-4624-9eb1-620ec9fa4e90} = 29.4, !- Program Line 2
+  SET {23918a60-bae4-42de-ae86-eb6c28acea8a} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {99314cf2-2c08-4441-b4bc-0b8efcef10b7}<23.9 && {99314cf2-2c08-4441-b4bc-0b8efcef10b7}>1.7, !- Program Line 4
+  SET {816123f4-bc9f-4624-9eb1-620ec9fa4e90} = 29.4, !- Program Line 5
+  SET {23918a60-bae4-42de-ae86-eb6c28acea8a} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {99314cf2-2c08-4441-b4bc-0b8efcef10b7}<23.9 && {99314cf2-2c08-4441-b4bc-0b8efcef10b7}>1.7, !- Program Line 7
+  SET {816123f4-bc9f-4624-9eb1-620ec9fa4e90} = 29.4, !- Program Line 8
+  SET {23918a60-bae4-42de-ae86-eb6c28acea8a} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {99314cf2-2c08-4441-b4bc-0b8efcef10b7}<23.9 && {99314cf2-2c08-4441-b4bc-0b8efcef10b7}>1.7, !- Program Line 10
+  SET {816123f4-bc9f-4624-9eb1-620ec9fa4e90} = 29.4, !- Program Line 11
+  SET {23918a60-bae4-42de-ae86-eb6c28acea8a} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {2652e1cd-c0b9-45be-8aa8-60064b6240a2} = NULL, !- Program Line 14
-  SET {8a3687c4-7559-483c-8056-512199c01a1d} = NULL, !- Program Line 15
+  SET {816123f4-bc9f-4624-9eb1-620ec9fa4e90} = NULL, !- Program Line 14
+  SET {23918a60-bae4-42de-ae86-eb6c28acea8a} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000004},  !- Handle
   ems_sys_4_mixed_shr_none_sc_ashp_sh_ashp_ssf_cv_zh_b_e_zc_none_srf_none__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {1d759a92-55dc-441d-a30b-fab11725ae07}<23.9 && {1d759a92-55dc-441d-a30b-fab11725ae07}>1.7, !- Program Line 1
-  SET {5e203c94-abd4-46ac-bc1e-7c95f0bbbbd4} = 29.4, !- Program Line 2
-  SET {65385191-e905-4358-95e5-281271a05a75} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {1d759a92-55dc-441d-a30b-fab11725ae07}<23.9 && {1d759a92-55dc-441d-a30b-fab11725ae07}>1.7, !- Program Line 4
-  SET {5e203c94-abd4-46ac-bc1e-7c95f0bbbbd4} = 29.4, !- Program Line 5
-  SET {65385191-e905-4358-95e5-281271a05a75} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {1d759a92-55dc-441d-a30b-fab11725ae07}<23.9 && {1d759a92-55dc-441d-a30b-fab11725ae07}>1.7, !- Program Line 7
-  SET {5e203c94-abd4-46ac-bc1e-7c95f0bbbbd4} = 29.4, !- Program Line 8
-  SET {65385191-e905-4358-95e5-281271a05a75} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {1d759a92-55dc-441d-a30b-fab11725ae07}<23.9 && {1d759a92-55dc-441d-a30b-fab11725ae07}>1.7, !- Program Line 10
-  SET {5e203c94-abd4-46ac-bc1e-7c95f0bbbbd4} = 29.4, !- Program Line 11
-  SET {65385191-e905-4358-95e5-281271a05a75} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {a9314651-c11c-4e3f-9fdd-de1b49a67c7d}<23.9 && {a9314651-c11c-4e3f-9fdd-de1b49a67c7d}>1.7, !- Program Line 1
+  SET {9d4bcf9f-dad5-4288-b3e0-98c7d893ff87} = 29.4, !- Program Line 2
+  SET {ab45e731-3ddf-40ba-a133-84528a6554fa} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {a9314651-c11c-4e3f-9fdd-de1b49a67c7d}<23.9 && {a9314651-c11c-4e3f-9fdd-de1b49a67c7d}>1.7, !- Program Line 4
+  SET {9d4bcf9f-dad5-4288-b3e0-98c7d893ff87} = 29.4, !- Program Line 5
+  SET {ab45e731-3ddf-40ba-a133-84528a6554fa} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {a9314651-c11c-4e3f-9fdd-de1b49a67c7d}<23.9 && {a9314651-c11c-4e3f-9fdd-de1b49a67c7d}>1.7, !- Program Line 7
+  SET {9d4bcf9f-dad5-4288-b3e0-98c7d893ff87} = 29.4, !- Program Line 8
+  SET {ab45e731-3ddf-40ba-a133-84528a6554fa} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {a9314651-c11c-4e3f-9fdd-de1b49a67c7d}<23.9 && {a9314651-c11c-4e3f-9fdd-de1b49a67c7d}>1.7, !- Program Line 10
+  SET {9d4bcf9f-dad5-4288-b3e0-98c7d893ff87} = 29.4, !- Program Line 11
+  SET {ab45e731-3ddf-40ba-a133-84528a6554fa} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {5e203c94-abd4-46ac-bc1e-7c95f0bbbbd4} = NULL, !- Program Line 14
-  SET {65385191-e905-4358-95e5-281271a05a75} = NULL, !- Program Line 15
+  SET {9d4bcf9f-dad5-4288-b3e0-98c7d893ff87} = NULL, !- Program Line 14
+  SET {ab45e731-3ddf-40ba-a133-84528a6554fa} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -14615,7 +14615,7 @@ OS:Material,
   {00000000-0000-0000-0047-000000000015},  !- Handle
   Expanded Polystyrene,                    !- Name
   MediumSmooth,                            !- Roughness
-  0.0363958681740979,                      !- Thickness {m}
+  0.0320547521463291,                      !- Thickness {m}
   0.029,                                   !- Conductivity {W/m-K}
   29,                                      !- Density {kg/m3}
   1210;                                    !- Specific Heat {J/kg-K}
@@ -14742,27 +14742,27 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000004},  !- Handle
-  Typical Carpet Pad 2 R-19.62 1,          !- Name
+  Typical Carpet Pad 2 R-18.77 1,          !- Name
   Smooth,                                  !- Roughness
-  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
+  3.30545907845939,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000005},  !- Handle
-  Typical Carpet Pad 2 R-19.62,            !- Name
+  Typical Carpet Pad 2 R-18.77,            !- Name
   Smooth,                                  !- Roughness
-  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
+  3.30545907845939,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000006},  !- Handle
-  Typical Carpet Pad 2 R-7.13,             !- Name
+  Typical Carpet Pad 2 R-6.28,             !- Name
   Smooth,                                  !- Roughness
-  1.25502993703786,                        !- Thermal Resistance {m2-K/W}
+  1.1053362809079,                         !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
@@ -14778,45 +14778,45 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000008},  !- Handle
-  Typical Insulation 1 R-24.87,            !- Name
+  Typical Insulation 1 R-2.43 1,           !- Name
   Smooth,                                  !- Roughness
-  4.38022034120929,                        !- Thermal Resistance {m2-K/W}
+  0.428341025950965,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000009},  !- Handle
-  Typical Insulation 1 R-3.28 1,           !- Name
+  Typical Insulation 1 R-2.43,             !- Name
   Smooth,                                  !- Roughness
-  0.578034682080925,                       !- Thermal Resistance {m2-K/W}
+  0.428323358106442,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000010},  !- Handle
-  Typical Insulation 1 R-3.28,             !- Name
+  Typical Insulation 1 R-24.02,            !- Name
   Smooth,                                  !- Roughness
-  0.578017014236402,                       !- Thermal Resistance {m2-K/W}
+  4.23052668507933,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000011},  !- Handle
-  Typical Insulation 1 R-39.67,            !- Name
+  Typical Insulation 1 R-38.82,            !- Name
   Smooth,                                  !- Roughness
-  6.98591414061624,                        !- Thermal Resistance {m2-K/W}
+  6.83622048448628,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000012},  !- Handle
-  Typical Insulation 1 R-46.93,            !- Name
+  Typical Insulation 1 R-46.08,            !- Name
   Smooth,                                  !- Roughness
-  8.26444514207283,                        !- Thermal Resistance {m2-K/W}
+  8.11475148594287,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
@@ -29149,7 +29149,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0088-000000000019},  !- Handle
-  {00000000-0000-0000-0048-000000000008};  !- Material Name
+  {00000000-0000-0000-0048-000000000010};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0088-000000000020},  !- Handle
@@ -29193,11 +29193,11 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0088-000000000030},  !- Handle
-  {00000000-0000-0000-0048-000000000010};  !- Material Name
+  {00000000-0000-0000-0048-000000000009};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0088-000000000031},  !- Handle
-  {00000000-0000-0000-0048-000000000009};  !- Material Name
+  {00000000-0000-0000-0048-000000000008};  !- Material Name
 
 OS:SubSurface,
   {00000000-0000-0000-0089-000000000001},  !- Handle

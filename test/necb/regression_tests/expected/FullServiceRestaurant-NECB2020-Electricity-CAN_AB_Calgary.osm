@@ -994,7 +994,7 @@ OS:Construction,
   BTAP-Ext-Door:U-1.73 R-3.28,             !- Name
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0039-000000000016},  !- Layer 1
-  {00000000-0000-0000-0040-000000000010};  !- Layer 2
+  {00000000-0000-0000-0040-000000000009};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0017-000000000007},  !- Handle
@@ -1046,7 +1046,7 @@ OS:Construction,
   {00000000-0000-0000-0017-000000000014},  !- Handle
   BTAP-Ext-OverHeadDoor:U-1.73 R-3.28,     !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0040-000000000009};  !- Layer 1
+  {00000000-0000-0000-0040-000000000008};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0017-000000000015},  !- Handle
@@ -1089,7 +1089,7 @@ OS:Construction,
   ,                                        !- Surface Rendering Name
   {00000000-0000-0000-0039-000000000005},  !- Layer 1
   {00000000-0000-0000-0039-000000000013},  !- Layer 2
-  {00000000-0000-0000-0040-000000000008},  !- Layer 3
+  {00000000-0000-0000-0040-000000000010},  !- Layer 3
   {00000000-0000-0000-0039-000000000001};  !- Layer 4
 
 OS:Construction,
@@ -1975,7 +1975,7 @@ OS:Material,
   {00000000-0000-0000-0039-000000000015},  !- Handle
   Expanded Polystyrene,                    !- Name
   MediumSmooth,                            !- Roughness
-  0.0363958681740979,                      !- Thickness {m}
+  0.0320547521463291,                      !- Thickness {m}
   0.029,                                   !- Conductivity {W/m-K}
   29,                                      !- Density {kg/m3}
   1210;                                    !- Specific Heat {J/kg-K}
@@ -2102,27 +2102,27 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0040-000000000004},  !- Handle
-  Typical Carpet Pad 2 R-19.62 1,          !- Name
+  Typical Carpet Pad 2 R-18.77 1,          !- Name
   Smooth,                                  !- Roughness
-  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
+  3.30545907845939,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0040-000000000005},  !- Handle
-  Typical Carpet Pad 2 R-19.62,            !- Name
+  Typical Carpet Pad 2 R-18.77,            !- Name
   Smooth,                                  !- Roughness
-  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
+  3.30545907845939,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0040-000000000006},  !- Handle
-  Typical Carpet Pad 2 R-7.13,             !- Name
+  Typical Carpet Pad 2 R-6.28,             !- Name
   Smooth,                                  !- Roughness
-  1.25502993703786,                        !- Thermal Resistance {m2-K/W}
+  1.1053362809079,                         !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
@@ -2138,45 +2138,45 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0040-000000000008},  !- Handle
-  Typical Insulation 1 R-24.87,            !- Name
+  Typical Insulation 1 R-2.43 1,           !- Name
   Smooth,                                  !- Roughness
-  4.38022034120929,                        !- Thermal Resistance {m2-K/W}
+  0.428341025950965,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0040-000000000009},  !- Handle
-  Typical Insulation 1 R-3.28 1,           !- Name
+  Typical Insulation 1 R-2.43,             !- Name
   Smooth,                                  !- Roughness
-  0.578034682080925,                       !- Thermal Resistance {m2-K/W}
+  0.428323358106442,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0040-000000000010},  !- Handle
-  Typical Insulation 1 R-3.28,             !- Name
+  Typical Insulation 1 R-24.02,            !- Name
   Smooth,                                  !- Roughness
-  0.578017014236402,                       !- Thermal Resistance {m2-K/W}
+  4.23052668507933,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0040-000000000011},  !- Handle
-  Typical Insulation 1 R-39.67,            !- Name
+  Typical Insulation 1 R-38.82,            !- Name
   Smooth,                                  !- Roughness
-  6.98591414061624,                        !- Thermal Resistance {m2-K/W}
+  6.83622048448628,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0040-000000000012},  !- Handle
-  Typical Insulation 1 R-46.93,            !- Name
+  Typical Insulation 1 R-46.08,            !- Name
   Smooth,                                  !- Roughness
-  8.26444514207283,                        !- Thermal Resistance {m2-K/W}
+  8.11475148594287,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
@@ -5430,7 +5430,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0078-000000000019},  !- Handle
-  {00000000-0000-0000-0040-000000000008};  !- Material Name
+  {00000000-0000-0000-0040-000000000010};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0078-000000000020},  !- Handle
@@ -5474,11 +5474,11 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0078-000000000030},  !- Handle
-  {00000000-0000-0000-0040-000000000010};  !- Material Name
+  {00000000-0000-0000-0040-000000000009};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0078-000000000031},  !- Handle
-  {00000000-0000-0000-0040-000000000009};  !- Material Name
+  {00000000-0000-0000-0040-000000000008};  !- Material Name
 
 OS:SubSurface,
   {00000000-0000-0000-0079-000000000001},  !- Handle

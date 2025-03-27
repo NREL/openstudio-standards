@@ -184,9 +184,9 @@ OS:AvailabilityManagerAssignmentList,
 
 OS:Boiler:HotWater,
   {00000000-0000-0000-0009-000000000001},  !- Handle
-  Primary Boiler 112kBtu/hr 0.8 Thermal Eff, !- Name
+  Primary Boiler 113kBtu/hr 0.8 Thermal Eff, !- Name
   NaturalGas,                              !- Fuel Type
-  32737.8315144741,                        !- Nominal Capacity {W}
+  33129.9069025627,                        !- Nominal Capacity {W}
   0.8,                                     !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0027-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -269,7 +269,7 @@ OS:Coil:Cooling:DX:VariableSpeed,
   {00000000-0000-0000-0019-000000000111},  !- Indoor Air Inlet Node Name
   {00000000-0000-0000-0019-000000000100},  !- Indoor Air Outlet Node Name
   1,                                       !- Nominal Speed Level {dimensionless}
-  10057.8193359375,                        !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {W}
+  10141.1689453125,                        !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {W}
   autosize,                                !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}
   0,                                       !- Nominal Time for Condensate to Begin Leaving the Coil {s}
   0,                                       !- Initial Moisture Evaporation Rate Divided by Steady-State AC Latent Capacity {dimensionless}
@@ -357,7 +357,7 @@ OS:Coil:Heating:DX:VariableSpeed,
   {00000000-0000-0000-0019-000000000101},  !- Indoor Air Inlet Node Name
   {00000000-0000-0000-0019-000000000102},  !- Indoor Air Outlet Node Name
   1,                                       !- Nominal Speed Level {dimensionless}
-  10057.8193359375,                        !- Rated Heating Capacity At Selected Nominal Speed Level {W}
+  10141.1689453125,                        !- Rated Heating Capacity At Selected Nominal Speed Level {W}
   autosize,                                !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}
   {00000000-0000-0000-0090-000000000003},  !- Energy Part Load Fraction Curve Name
   {00000000-0000-0000-0090-000000000002},  !- Defrost Energy Input Ratio Function of Temperature Curve Name
@@ -412,7 +412,7 @@ OS:Coil:Heating:DX:VariableSpeed:SpeedData,
   {00000000-0000-0000-0016-000000000002},  !- Handle
   Coil Heating DX Variable Speed Speed Data 2, !- Name
   9124.853458,                             !- Reference Unit Gross Rated Heating Capacity {W}
-  4.21496271441372,                        !- Reference Unit Gross Rated Heating COP {dimensionless}
+  4.21512897504672,                        !- Reference Unit Gross Rated Heating COP {dimensionless}
   0.653,                                   !- Reference Unit Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Air Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Air Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1440,11 +1440,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0022-000000000010},  !- Handle
-  BTAP-Ext-Floor-Mass:U-3.822 R-1.49,      !- Name
+  BTAP-Ext-Floor-Mass:U-3.822 R-2.33,      !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0044-000000000008},  !- Layer 1
-  {00000000-0000-0000-0043-000000000007},  !- Layer 2
-  {00000000-0000-0000-0044-000000000003};  !- Layer 3
+  {00000000-0000-0000-0043-000000000007},  !- Layer 1
+  {00000000-0000-0000-0044-000000000003};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0022-000000000011},  !- Handle
@@ -2521,7 +2520,7 @@ OS:Material,
   {00000000-0000-0000-0043-000000000015},  !- Handle
   Expanded Polystyrene,                    !- Name
   MediumSmooth,                            !- Roughness
-  0.0408596146036854,                      !- Thickness {m}
+  0.0365184985759166,                      !- Thickness {m}
   0.029,                                   !- Conductivity {W/m-K}
   29,                                      !- Density {kg/m3}
   1210;                                    !- Specific Heat {J/kg-K}
@@ -2648,27 +2647,27 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000004},  !- Handle
-  Typical Carpet Pad 2 R-12.99,            !- Name
+  Typical Carpet Pad 2 R-12.14,            !- Name
   Smooth,                                  !- Roughness
-  2.28696715049656,                        !- Thermal Resistance {m2-K/W}
+  2.1372734943666,                         !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000005},  !- Handle
-  Typical Carpet Pad 2 R-8.0 1,            !- Name
+  Typical Carpet Pad 2 R-7.15 1,           !- Name
   Smooth,                                  !- Roughness
-  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
+  1.25925857158333,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000006},  !- Handle
-  Typical Carpet Pad 2 R-8.0,              !- Name
+  Typical Carpet Pad 2 R-7.15,             !- Name
   Smooth,                                  !- Roughness
-  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
+  1.25925857158333,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
@@ -2684,45 +2683,45 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000008},  !- Handle
-  Typical Insulation 1 R-0.01,             !- Name
+  Typical Insulation 1,                    !- Name
   Smooth,                                  !- Roughness
-  0.00118044780801591,                     !- Thermal Resistance {m2-K/W}
+  0.101874652714525,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000009},  !- Handle
-  Typical Insulation 1 R-1.92 1,           !- Name
+  Typical Insulation 2 R-1.07 1,           !- Name
   Smooth,                                  !- Roughness
-  0.338983050847458,                       !- Thermal Resistance {m2-K/W}
+  0.189289394717498,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000010},  !- Handle
-  Typical Insulation 1 R-1.92,             !- Name
+  Typical Insulation 2 R-1.07,             !- Name
   Smooth,                                  !- Roughness
-  0.338965383002935,                       !- Thermal Resistance {m2-K/W}
+  0.189271726872975,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000011},  !- Handle
-  Typical Insulation 1 R-14.87,            !- Name
+  Typical Insulation 2 R-14.02,            !- Name
   Smooth,                                  !- Roughness
-  2.61923096091624,                        !- Thermal Resistance {m2-K/W}
+  2.46953730478628,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000012},  !- Handle
-  Typical Insulation 1 R-25.01,            !- Name
+  Typical Insulation 2 R-24.16,            !- Name
   Smooth,                                  !- Roughness
-  4.40526867576781,                        !- Thermal Resistance {m2-K/W}
+  4.25557501963785,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
@@ -3064,13 +3063,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0046-000000000044},  !- Handle
-  Primary Boiler 112kBtu/hr 0.8 Thermal Eff Inlet Water Node, !- Name
+  Primary Boiler 113kBtu/hr 0.8 Thermal Eff Inlet Water Node, !- Name
   {00000000-0000-0000-0019-000000000043},  !- Inlet Port
   {00000000-0000-0000-0019-000000000053};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0046-000000000045},  !- Handle
-  Primary Boiler 112kBtu/hr 0.8 Thermal Eff Outlet Water Node, !- Name
+  Primary Boiler 113kBtu/hr 0.8 Thermal Eff Outlet Water Node, !- Name
   {00000000-0000-0000-0019-000000000054},  !- Inlet Port
   {00000000-0000-0000-0019-000000000055};  !- Outlet Port
 

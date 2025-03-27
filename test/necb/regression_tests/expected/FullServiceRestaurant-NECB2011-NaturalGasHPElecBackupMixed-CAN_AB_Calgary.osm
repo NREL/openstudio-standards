@@ -222,9 +222,9 @@ OS:AvailabilityManagerAssignmentList,
 
 OS:Boiler:HotWater,
   {00000000-0000-0000-0010-000000000001},  !- Handle
-  Primary Boiler 83kBtu/hr 0.85 AFUE,      !- Name
+  Primary Boiler 84kBtu/hr 0.85 AFUE,      !- Name
   NaturalGas,                              !- Fuel Type
-  24425.4302500327,                        !- Nominal Capacity {W}
+  24640.2686242289,                        !- Nominal Capacity {W}
   0.85,                                    !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0026-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -375,8 +375,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000001},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 1 15 Clg kBtu/hr 3.1COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  4367.31204173057,                        !- Rated Total Heating Capacity {W}
-  3.29903698586684,                        !- Rated COP {W/W}
+  4410.60317267749,                        !- Rated Total Heating Capacity {W}
+  3.29910475772459,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2448,7 +2448,7 @@ OS:Material,
   {00000000-0000-0000-0043-000000000015},  !- Handle
   Expanded Polystyrene,                    !- Name
   MediumSmooth,                            !- Roughness
-  0.0363958681740979,                      !- Thickness {m}
+  0.0320547521463291,                      !- Thickness {m}
   0.029,                                   !- Conductivity {W/m-K}
   29,                                      !- Density {kg/m3}
   1210;                                    !- Specific Heat {J/kg-K}
@@ -2575,27 +2575,27 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000004},  !- Handle
-  Typical Carpet Pad 2 R-19.62 1,          !- Name
+  Typical Carpet Pad 2 R-18.77 1,          !- Name
   Smooth,                                  !- Roughness
-  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
+  3.30545907845939,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000005},  !- Handle
-  Typical Carpet Pad 2 R-19.62,            !- Name
+  Typical Carpet Pad 2 R-18.77,            !- Name
   Smooth,                                  !- Roughness
-  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
+  3.30545907845939,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000006},  !- Handle
-  Typical Carpet Pad 2 R-7.13,             !- Name
+  Typical Carpet Pad 2 R-6.28,             !- Name
   Smooth,                                  !- Roughness
-  1.25502993703786,                        !- Thermal Resistance {m2-K/W}
+  1.1053362809079,                         !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
@@ -2611,45 +2611,45 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000008},  !- Handle
-  Typical Insulation 1 R-2.58 1,           !- Name
+  Typical Insulation 1 R-1.73 1,           !- Name
   Smooth,                                  !- Roughness
-  0.454545454545455,                       !- Thermal Resistance {m2-K/W}
+  0.304851798415495,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000009},  !- Handle
-  Typical Insulation 1 R-2.58,             !- Name
+  Typical Insulation 1 R-1.73,             !- Name
   Smooth,                                  !- Roughness
-  0.454527786700932,                       !- Thermal Resistance {m2-K/W}
+  0.304834130570972,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000010},  !- Handle
-  Typical Insulation 1 R-25.5,             !- Name
+  Typical Insulation 1 R-24.65,            !- Name
   Smooth,                                  !- Roughness
-  4.49096231241638,                        !- Thermal Resistance {m2-K/W}
+  4.34126865628642,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000011},  !- Handle
-  Typical Insulation 1 R-33.57,            !- Name
+  Typical Insulation 1 R-32.72,            !- Name
   Smooth,                                  !- Roughness
-  5.91237683519488,                        !- Thermal Resistance {m2-K/W}
+  5.76268317906492,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0044-000000000012},  !- Handle
-  Typical Insulation 1 R-35.05,            !- Name
+  Typical Insulation 1 R-34.2,             !- Name
   Smooth,                                  !- Roughness
-  6.17282183832831,                        !- Thermal Resistance {m2-K/W}
+  6.02312818219835,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
@@ -2919,13 +2919,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0046-000000000038},  !- Handle
-  Primary Boiler 83kBtu/hr 0.85 AFUE Inlet Water Node, !- Name
+  Primary Boiler 84kBtu/hr 0.85 AFUE Inlet Water Node, !- Name
   {00000000-0000-0000-0018-000000000005},  !- Inlet Port
   {00000000-0000-0000-0018-000000000015};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0046-000000000039},  !- Handle
-  Primary Boiler 83kBtu/hr 0.85 AFUE Outlet Water Node, !- Name
+  Primary Boiler 84kBtu/hr 0.85 AFUE Outlet Water Node, !- Name
   {00000000-0000-0000-0018-000000000016},  !- Inlet Port
   {00000000-0000-0000-0018-000000000017};  !- Outlet Port
 

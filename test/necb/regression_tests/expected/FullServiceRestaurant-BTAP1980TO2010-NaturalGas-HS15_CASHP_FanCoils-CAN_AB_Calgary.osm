@@ -190,7 +190,7 @@ OS:Boiler:HotWater,
   {00000000-0000-0000-0009-000000000001},  !- Handle
   Boiler Hot Water 1 750kBtu/hr 0.8 Thermal Eff, !- Name
   NaturalGas,                              !- Fuel Type
-  219701.171875,                           !- Nominal Capacity {W}
+  219869.359375,                           !- Nominal Capacity {W}
   0.8,                                     !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0024-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -1713,11 +1713,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000010},  !- Handle
-  BTAP-Ext-Floor-Mass:U-3.822 R-1.49,      !- Name
+  BTAP-Ext-Floor-Mass:U-3.822 R-2.33,      !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0045-000000000008},  !- Layer 1
-  {00000000-0000-0000-0044-000000000007},  !- Layer 2
-  {00000000-0000-0000-0045-000000000003};  !- Layer 3
+  {00000000-0000-0000-0044-000000000007},  !- Layer 1
+  {00000000-0000-0000-0045-000000000003};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0018-000000000011},  !- Handle
@@ -2559,7 +2558,7 @@ OS:HeatPump:PlantLoop:EIR:Cooling,
   ,                                        !- Companion Heat Pump Name
   Autosize,                                !- Load Side Reference Flow Rate {m3/s}
   Autosize,                                !- Source Side Reference Flow Rate {m3/s}
-  87880.46875,                             !- Reference Capacity {W}
+  87947.74375,                             !- Reference Capacity {W}
   3,                                       !- Reference Coefficient of Performance {W/W}
   1,                                       !- Sizing Factor
   {00000000-0000-0000-0023-000000000007},  !- Capacity Modifier Function of Temperature Curve Name
@@ -2582,7 +2581,7 @@ OS:HeatPump:PlantLoop:EIR:Heating,
   {00000000-0000-0000-0040-000000000001},  !- Companion Heat Pump Name
   Autosize,                                !- Load Side Reference Flow Rate {m3/s}
   Autosize,                                !- Source Side Reference Flow Rate {m3/s}
-  87880.46875,                             !- Reference Capacity {W}
+  87947.74375,                             !- Reference Capacity {W}
   3,                                       !- Reference Coefficient of Performance {W/W}
   1,                                       !- Sizing Factor
   {00000000-0000-0000-0023-000000000005},  !- Capacity Modifier Function of Temperature Curve Name
@@ -2808,7 +2807,7 @@ OS:Material,
   {00000000-0000-0000-0044-000000000015},  !- Handle
   Expanded Polystyrene,                    !- Name
   MediumSmooth,                            !- Roughness
-  0.0408596146036854,                      !- Thickness {m}
+  0.0365184985759166,                      !- Thickness {m}
   0.029,                                   !- Conductivity {W/m-K}
   29,                                      !- Density {kg/m3}
   1210;                                    !- Specific Heat {J/kg-K}
@@ -2935,27 +2934,27 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000004},  !- Handle
-  Typical Carpet Pad 2 R-12.99,            !- Name
+  Typical Carpet Pad 2 R-12.14,            !- Name
   Smooth,                                  !- Roughness
-  2.28696715049656,                        !- Thermal Resistance {m2-K/W}
+  2.1372734943666,                         !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000005},  !- Handle
-  Typical Carpet Pad 2 R-8.0 1,            !- Name
+  Typical Carpet Pad 2 R-7.15 1,           !- Name
   Smooth,                                  !- Roughness
-  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
+  1.25925857158333,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000006},  !- Handle
-  Typical Carpet Pad 2 R-8.0,              !- Name
+  Typical Carpet Pad 2 R-7.15,             !- Name
   Smooth,                                  !- Roughness
-  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
+  1.25925857158333,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
@@ -2971,45 +2970,45 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000008},  !- Handle
-  Typical Insulation 1 R-0.01,             !- Name
+  Typical Insulation 1,                    !- Name
   Smooth,                                  !- Roughness
-  0.00118044780801591,                     !- Thermal Resistance {m2-K/W}
+  0.101874652714525,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000009},  !- Handle
-  Typical Insulation 1 R-1.92 1,           !- Name
+  Typical Insulation 2 R-1.07 1,           !- Name
   Smooth,                                  !- Roughness
-  0.338983050847458,                       !- Thermal Resistance {m2-K/W}
+  0.189289394717498,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000010},  !- Handle
-  Typical Insulation 1 R-1.92,             !- Name
+  Typical Insulation 2 R-1.07,             !- Name
   Smooth,                                  !- Roughness
-  0.338965383002935,                       !- Thermal Resistance {m2-K/W}
+  0.189271726872975,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000011},  !- Handle
-  Typical Insulation 1 R-14.87,            !- Name
+  Typical Insulation 2 R-14.02,            !- Name
   Smooth,                                  !- Roughness
-  2.61923096091624,                        !- Thermal Resistance {m2-K/W}
+  2.46953730478628,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0045-000000000012},  !- Handle
-  Typical Insulation 1 R-25.01,            !- Name
+  Typical Insulation 2 R-24.16,            !- Name
   Smooth,                                  !- Roughness
-  4.40526867576781,                        !- Thermal Resistance {m2-K/W}
+  4.25557501963785,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance

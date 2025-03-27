@@ -1344,9 +1344,9 @@ OS:AvailabilityManagerAssignmentList,
 
 OS:Boiler:HotWater,
   {00000000-0000-0000-0010-000000000001},  !- Handle
-  Primary Boiler 425kBtu/hr 0.83 Thermal Eff, !- Name
+  Primary Boiler 427kBtu/hr 0.83 Thermal Eff, !- Name
   NaturalGas,                              !- Fuel Type
-  124667.516746745,                        !- Nominal Capacity {W}
+  125181.691490613,                        !- Nominal Capacity {W}
   0.83,                                    !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0030-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -1365,9 +1365,9 @@ OS:Boiler:HotWater,
 
 OS:Boiler:HotWater,
   {00000000-0000-0000-0010-000000000002},  !- Handle
-  Secondary Boiler 425kBtu/hr 0.83 Thermal Eff, !- Name
+  Secondary Boiler 427kBtu/hr 0.83 Thermal Eff, !- Name
   NaturalGas,                              !- Fuel Type
-  124667.516746745,                        !- Nominal Capacity {W}
+  125181.691490613,                        !- Nominal Capacity {W}
   0.83,                                    !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0030-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -1437,7 +1437,7 @@ OS:BuildingStory,
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0013-000000000001},  !- Handle
   Primary Chiller WaterCooled Scroll 2tons 0.8kW/ton, !- Name
-  6862.91611489872,                        !- Reference Capacity {W}
+  6767.4494595003,                         !- Reference Capacity {W}
   4.50320102432778,                        !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
@@ -1556,7 +1556,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.42649505707795,                        !- Rated COP {W/W}
+  3.43032429556723,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1626,7 +1626,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.28297585622793,                        !- Rated COP {W/W}
+  3.28329435823821,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1696,7 +1696,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.80274933127954,                        !- Rated COP {W/W}
+  3.80241356928865,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1836,7 +1836,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.7771698361082,                         !- Rated COP {W/W}
+  3.77628408555369,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1906,7 +1906,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.2680513388641,                         !- Rated COP {W/W}
+  3.26832786005101,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1937,11 +1937,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000013},  !- Handle
-  Coil Cooling DX Single Speed 20 11kBtu/hr 10.2EER, !- Name
+  Coil Cooling DX Single Speed 20 11kBtu/hr 10.1EER, !- Name
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.51868499256707,                        !- Rated COP {W/W}
+  3.51603712339245,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1976,7 +1976,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.34613941013865,                        !- Rated COP {W/W}
+  3.34290467743602,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2011,7 +2011,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.30912934240748,                        !- Rated COP {W/W}
+  3.30589076387597,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2116,7 +2116,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.75173321546276,                        !- Rated COP {W/W}
+  3.75532040479889,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2151,7 +2151,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.63178316063531,                        !- Rated COP {W/W}
+  3.6328785663232,                         !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2221,7 +2221,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.58122976800854,                        !- Rated COP {W/W}
+  3.58139629176633,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2431,7 +2431,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.73534702145739,                        !- Rated COP {W/W}
+  3.73567700289656,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2536,7 +2536,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.4309568304573,                         !- Rated COP {W/W}
+  3.43445112411455,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2641,7 +2641,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.35345401766743,                        !- Rated COP {W/W}
+  3.35327752728734,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2676,7 +2676,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.6973557099524,                         !- Rated COP {W/W}
+  3.69768312961164,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2777,7 +2777,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000037},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 2 75kBtu/hr 9.26EER, !- Name
+  CoilCoolingDXSingleSpeed_dx 2 74kBtu/hr 9.26EER, !- Name
   {00000000-0000-0000-0065-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
@@ -3461,7 +3461,7 @@ OS:Coil:Heating:Water,
   ,                                        !- Air Inlet Node Name
   ,                                        !- Air Outlet Node Name
   NominalCapacity,                         !- Performance Input Method
-  3602.25251913071,                        !- Rated Capacity {W}
+  3526.19225978851,                        !- Rated Capacity {W}
   ,                                        !- Rated Inlet Water Temperature {C}
   ,                                        !- Rated Inlet Air Temperature {C}
   ,                                        !- Rated Outlet Water Temperature {C}
@@ -15003,7 +15003,7 @@ OS:CoolingTower:SingleSpeed,
   {00000000-0000-0000-0021-000000001088},  !- Water Outlet Node Name
   autosize,                                !- Design Water Flow Rate {m3/s}
   autosize,                                !- Design Air Flow Rate {m3/s}
-  109.030018482756,                        !- Fan Power at Design Air Flow Rate {W}
+  107.513355445016,                        !- Fan Power at Design Air Flow Rate {W}
   autosize,                                !- U-Factor Times Area Value at Design Air Flow Rate {W/K}
   autosize,                                !- Air Flow Rate in Free Convection Regime {m3/s}
   autosize,                                !- U-Factor Times Area Value at Free Convection Air Flow Rate {W/K}
@@ -20212,7 +20212,7 @@ OS:Material,
   {00000000-0000-0000-0050-000000000015},  !- Handle
   Expanded Polystyrene,                    !- Name
   MediumSmooth,                            !- Roughness
-  0.0363958681740979,                      !- Thickness {m}
+  0.0320547521463291,                      !- Thickness {m}
   0.029,                                   !- Conductivity {W/m-K}
   29,                                      !- Density {kg/m3}
   1210;                                    !- Specific Heat {J/kg-K}
@@ -20339,27 +20339,27 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0051-000000000004},  !- Handle
-  Typical Carpet Pad 2 R-19.62 1,          !- Name
+  Typical Carpet Pad 2 R-18.77 1,          !- Name
   Smooth,                                  !- Roughness
-  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
+  3.30545907845939,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0051-000000000005},  !- Handle
-  Typical Carpet Pad 2 R-19.62,            !- Name
+  Typical Carpet Pad 2 R-18.77,            !- Name
   Smooth,                                  !- Roughness
-  3.45515273458935,                        !- Thermal Resistance {m2-K/W}
+  3.30545907845939,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0051-000000000006},  !- Handle
-  Typical Carpet Pad 2 R-7.13,             !- Name
+  Typical Carpet Pad 2 R-6.28,             !- Name
   Smooth,                                  !- Roughness
-  1.25502993703786,                        !- Thermal Resistance {m2-K/W}
+  1.1053362809079,                         !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
@@ -20375,45 +20375,45 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0051-000000000008},  !- Handle
-  Typical Insulation 1 R-2.99 1,           !- Name
+  Typical Insulation 1 R-2.14 1,           !- Name
   Smooth,                                  !- Roughness
-  0.526315789473684,                       !- Thermal Resistance {m2-K/W}
+  0.376622133343724,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0051-000000000009},  !- Handle
-  Typical Insulation 1 R-2.99,             !- Name
+  Typical Insulation 1 R-2.14,             !- Name
   Smooth,                                  !- Roughness
-  0.526298121629161,                       !- Thermal Resistance {m2-K/W}
+  0.376604465499201,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0051-000000000010},  !- Handle
-  Typical Insulation 1 R-25.5,             !- Name
+  Typical Insulation 1 R-24.65,            !- Name
   Smooth,                                  !- Roughness
-  4.49096231241638,                        !- Thermal Resistance {m2-K/W}
+  4.34126865628642,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0051-000000000011},  !- Handle
-  Typical Insulation 1 R-33.57,            !- Name
+  Typical Insulation 1 R-32.72,            !- Name
   Smooth,                                  !- Roughness
-  5.91237683519488,                        !- Thermal Resistance {m2-K/W}
+  5.76268317906492,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0051-000000000012},  !- Handle
-  Typical Insulation 1 R-41.15,            !- Name
+  Typical Insulation 1 R-40.3,             !- Name
   Smooth,                                  !- Roughness
-  7.24635914374968,                        !- Thermal Resistance {m2-K/W}
+  7.09666548761972,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
@@ -22489,7 +22489,7 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0053-000000000323},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 2 75kBtu/hr 9.26EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_dx 2 74kBtu/hr 9.26EER Outlet Air Node, !- Name
   {00000000-0000-0000-0021-000000000700},  !- Inlet Port
   {00000000-0000-0000-0021-000000000701};  !- Outlet Port
 
@@ -24025,13 +24025,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0053-000000000579},  !- Handle
-  Primary Boiler 425kBtu/hr 0.83 Thermal Eff Inlet Water Node, !- Name
+  Primary Boiler 427kBtu/hr 0.83 Thermal Eff Inlet Water Node, !- Name
   {00000000-0000-0000-0021-000000000136},  !- Inlet Port
   {00000000-0000-0000-0021-000000000146};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0053-000000000580},  !- Handle
-  Primary Boiler 425kBtu/hr 0.83 Thermal Eff Outlet Water Node, !- Name
+  Primary Boiler 427kBtu/hr 0.83 Thermal Eff Outlet Water Node, !- Name
   {00000000-0000-0000-0021-000000000147},  !- Inlet Port
   {00000000-0000-0000-0021-000000000148};  !- Outlet Port
 
@@ -24079,13 +24079,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0053-000000000588},  !- Handle
-  Secondary Boiler 425kBtu/hr 0.83 Thermal Eff Inlet Water Node, !- Name
+  Secondary Boiler 427kBtu/hr 0.83 Thermal Eff Inlet Water Node, !- Name
   {00000000-0000-0000-0021-000000000149},  !- Inlet Port
   {00000000-0000-0000-0021-000000000150};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0053-000000000589},  !- Handle
-  Secondary Boiler 425kBtu/hr 0.83 Thermal Eff Outlet Water Node, !- Name
+  Secondary Boiler 427kBtu/hr 0.83 Thermal Eff Outlet Water Node, !- Name
   {00000000-0000-0000-0021-000000000151},  !- Inlet Port
   {00000000-0000-0000-0021-000000000152};  !- Outlet Port
 
@@ -26308,9 +26308,9 @@ OS:Pump:VariableSpeed,
   {00000000-0000-0000-0021-000000001059},  !- Inlet Node Name
   {00000000-0000-0000-0021-000000001060},  !- Outlet Node Name
   ,                                        !- Rated Flow Rate {m3/s}
-  234161.928009366,                        !- Rated Pump Head {Pa}
+  191711.520007668,                        !- Rated Pump Head {Pa}
   ,                                        !- Rated Power Consumption {W}
-  0.855,                                   !- Motor Efficiency
+  0.7,                                     !- Motor Efficiency
   ,                                        !- Fraction of Motor Inefficiencies to Fluid Stream
   ,                                        !- Coefficient 1 of the Part Load Performance Curve
   ,                                        !- Coefficient 2 of the Part Load Performance Curve

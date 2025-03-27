@@ -198,7 +198,7 @@ OS:Boiler:HotWater,
   {00000000-0000-0000-0009-000000000001},  !- Handle
   Boiler Hot Water 1 750kBtu/hr 0.8 Thermal Eff, !- Name
   NaturalGas,                              !- Fuel Type
-  131820.703125,                           !- Nominal Capacity {W}
+  131921.615625,                           !- Nominal Capacity {W}
   0.8,                                     !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0025-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -250,7 +250,7 @@ OS:BuildingStory,
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0012-000000000001},  !- Handle
   ChillerAirCooled Scroll,                 !- Name
-  45384.196875,                            !- Reference Capacity {W}
+  45449.19375,                             !- Reference Capacity {W}
   2.866,                                   !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
@@ -287,7 +287,7 @@ OS:Chiller:Electric:EIR,
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0012-000000000002},  !- Handle
   ChillerWaterCooled Reciprocating 9tons 0.9kW/ton, !- Name
-  30256.13125,                             !- Reference Capacity {W}
+  30299.4625,                              !- Reference Capacity {W}
   3.8,                                     !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
@@ -2047,11 +2047,10 @@ OS:Construction,
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000010},  !- Handle
-  BTAP-Ext-Floor-Mass:U-3.822 R-1.49,      !- Name
+  BTAP-Ext-Floor-Mass:U-3.822 R-2.33,      !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0048-000000000008},  !- Layer 1
-  {00000000-0000-0000-0047-000000000007},  !- Layer 2
-  {00000000-0000-0000-0048-000000000003};  !- Layer 3
+  {00000000-0000-0000-0047-000000000007},  !- Layer 1
+  {00000000-0000-0000-0048-000000000003};  !- Layer 2
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000011},  !- Handle
@@ -2816,7 +2815,7 @@ OS:DistrictCooling,
   DistrictCooling GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000190},  !- Chilled Water Inlet Node Name
   {00000000-0000-0000-0016-000000000191},  !- Chilled Water Outlet Node Name
-  32338.1457019455,                        !- Nominal Capacity {W}
+  32292.1058627346,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0063-000000000002};  !- Capacity Fraction Schedule
 
 OS:DistrictHeating:Water,
@@ -2824,7 +2823,7 @@ OS:DistrictHeating:Water,
   DistrictHeating GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000181},  !- Hot Water Inlet Node Name
   {00000000-0000-0000-0016-000000000182},  !- Hot Water Outlet Node Name
-  39714.8448763997,                        !- Nominal Capacity {W}
+  39745.4393791331,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0063-000000000002};  !- Capacity Fraction Schedule
 
 OS:ElectricEquipment,
@@ -2973,7 +2972,7 @@ OS:HeatPump:WaterToWater:EquationFit:Heating,
   {00000000-0000-0000-0016-000000000194},  !- Load Side Outlet Node Name
   Autosize,                                !- Reference Load Side Flow Rate {m3/s}
   Autosize,                                !- Reference Source Side Flow Rate {m3/s}
-  87880.46875,                             !- Reference Heating Capacity {W}
+  87947.74375,                             !- Reference Heating Capacity {W}
   Autosize,                                !- Reference Heating Power Consumption {W}
   {00000000-0000-0000-0027-000000000003},  !- Heating Capacity Curve Name
   {00000000-0000-0000-0027-000000000004},  !- Heating Compressor Power Curve Name
@@ -3186,7 +3185,7 @@ OS:Material,
   {00000000-0000-0000-0047-000000000015},  !- Handle
   Expanded Polystyrene,                    !- Name
   MediumSmooth,                            !- Roughness
-  0.0408596146036854,                      !- Thickness {m}
+  0.0365184985759166,                      !- Thickness {m}
   0.029,                                   !- Conductivity {W/m-K}
   29,                                      !- Density {kg/m3}
   1210;                                    !- Specific Heat {J/kg-K}
@@ -3313,27 +3312,27 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000004},  !- Handle
-  Typical Carpet Pad 2 R-12.99,            !- Name
+  Typical Carpet Pad 2 R-12.14,            !- Name
   Smooth,                                  !- Roughness
-  2.28696715049656,                        !- Thermal Resistance {m2-K/W}
+  2.1372734943666,                         !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000005},  !- Handle
-  Typical Carpet Pad 2 R-8.0 1,            !- Name
+  Typical Carpet Pad 2 R-7.15 1,           !- Name
   Smooth,                                  !- Roughness
-  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
+  1.25925857158333,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000006},  !- Handle
-  Typical Carpet Pad 2 R-8.0,              !- Name
+  Typical Carpet Pad 2 R-7.15,             !- Name
   Smooth,                                  !- Roughness
-  1.40895222771329,                        !- Thermal Resistance {m2-K/W}
+  1.25925857158333,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.8;                                     !- Visible Absorptance
@@ -3349,45 +3348,45 @@ OS:Material:NoMass,
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000008},  !- Handle
-  Typical Insulation 1 R-0.01,             !- Name
+  Typical Insulation 1,                    !- Name
   Smooth,                                  !- Roughness
-  0.00118044780801591,                     !- Thermal Resistance {m2-K/W}
+  0.101874652714525,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000009},  !- Handle
-  Typical Insulation 1 R-1.92 1,           !- Name
+  Typical Insulation 2 R-1.07 1,           !- Name
   Smooth,                                  !- Roughness
-  0.338983050847458,                       !- Thermal Resistance {m2-K/W}
+  0.189289394717498,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000010},  !- Handle
-  Typical Insulation 1 R-1.92,             !- Name
+  Typical Insulation 2 R-1.07,             !- Name
   Smooth,                                  !- Roughness
-  0.338965383002935,                       !- Thermal Resistance {m2-K/W}
+  0.189271726872975,                       !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000011},  !- Handle
-  Typical Insulation 1 R-14.87,            !- Name
+  Typical Insulation 2 R-14.02,            !- Name
   Smooth,                                  !- Roughness
-  2.61923096091624,                        !- Thermal Resistance {m2-K/W}
+  2.46953730478628,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
 
 OS:Material:NoMass,
   {00000000-0000-0000-0048-000000000012},  !- Handle
-  Typical Insulation 1 R-25.01,            !- Name
+  Typical Insulation 2 R-24.16,            !- Name
   Smooth,                                  !- Roughness
-  4.40526867576781,                        !- Thermal Resistance {m2-K/W}
+  4.25557501963785,                        !- Thermal Resistance {m2-K/W}
   0.9,                                     !- Thermal Absorptance
   0.7,                                     !- Solar Absorptance
   0.7;                                     !- Visible Absorptance
@@ -4231,7 +4230,7 @@ OS:PlantLoop,
   {00000000-0000-0000-0050-000000000045},  !- Loop Temperature Setpoint Node Name
   ,                                        !- Maximum Loop Temperature {C}
   ,                                        !- Minimum Loop Temperature {C}
-  0.00547289997339249,                     !- Maximum Loop Flow Rate {m3/s}
+  0.00547789055854082,                     !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
   {00000000-0000-0000-0016-000000000170},  !- Plant Side Inlet Node Name
@@ -4431,7 +4430,7 @@ OS:Pump:VariableSpeed,
   PumpVariableSpeed 2,                     !- Name
   {00000000-0000-0000-0016-000000000178},  !- Inlet Node Name
   {00000000-0000-0000-0016-000000000179},  !- Outlet Node Name
-  0.00547289997339249,                     !- Rated Flow Rate {m3/s}
+  0.00547789055854082,                     !- Rated Flow Rate {m3/s}
   ,                                        !- Rated Pump Head {Pa}
   ,                                        !- Rated Power Consumption {W}
   0.865,                                   !- Motor Efficiency
@@ -5469,7 +5468,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000040},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   2,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5484,7 +5483,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000041},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5505,7 +5504,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000042},  !- Handle
   Schedule Day 7,                          !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   2,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5520,7 +5519,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000043},  !- Handle
   Schedule Day 8,                          !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5568,7 +5567,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000047},  !- Handle
   sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Default, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5583,7 +5582,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000048},  !- Handle
   sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Summer Design Day, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -5592,7 +5591,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000049},  !- Handle
   sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Winter Design Day, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -5601,7 +5600,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000050},  !- Handle
   sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Default, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5616,7 +5615,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000051},  !- Handle
   sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Summer Design Day, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -5625,7 +5624,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000052},  !- Handle
   sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Winter Design Day, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -6187,7 +6186,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000020},  !- Handle
   sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000047},  !- Default Day Schedule Name
   {00000000-0000-0000-0064-000000000048},  !- Summer Design Day Schedule Name
   {00000000-0000-0000-0064-000000000049};  !- Winter Design Day Schedule Name
@@ -6195,7 +6194,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000021},  !- Handle
   sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000005},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000050},  !- Default Day Schedule Name
   {00000000-0000-0000-0064-000000000051},  !- Summer Design Day Schedule Name
   {00000000-0000-0000-0064-000000000052};  !- Winter Design Day Schedule Name
