@@ -218,6 +218,9 @@ module OpenstudioStandards
       # get climate zone number
       climate_zone_number = OpenstudioStandards::Weather.model_get_ashrae_climate_zone_number(model)
 
+      # there is no data for climate zone 0, so use data for climate zone 1
+      climate_zone_number = 1 if climate_zone_number == 0
+
       # get nist building type
       if nist_building_type.nil?
         nist_building_type = model_infer_nist_building_type(model)
