@@ -45,13 +45,6 @@ module PrototypeFan
       allowed_hp = 0.01
     end
 
-    # Minimum motor size for efficiency lookup
-    # is 1 HP unless the motor serves an exhaust fan,
-    # a powered VAV terminal, or a fan coil unit.
-    if !fan_small_fan?(fan) && allowed_hp < 1.0
-      allowed_hp = 1.01
-    end
-
     # Find the motor efficiency
     motor_eff, nominal_hp = fan_standard_minimum_motor_efficiency_and_size(fan, allowed_hp)
 
