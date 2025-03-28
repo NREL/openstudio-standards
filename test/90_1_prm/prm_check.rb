@@ -1621,17 +1621,16 @@ class AppendixGPRMTests < Minitest::Test
                'motor_horsepower data is missing or incorrect. The motor_horsepower for test case 3 shall be 10.0')
         assert(base_electric_equipment_ap.hasFeature('motor_efficiency') && base_electric_equipment_ap.getFeatureAsDouble('motor_efficiency').get == 0.72,
                'motor_efficiency data is missing or incorrect. The motor_efficiency for test case 3 shall be 0.72')
-        assert(base_electric_equipment_ap.hasFeature('motor_is_exempt') && base_electric_equipment_ap.getFeatureAsString('motor_is_exempt').get == 'False',
+        assert(base_electric_equipment_ap.hasFeature('motor_is_exempt') && base_electric_equipment_ap.getFeatureAsBoolean('motor_is_exempt').get == false,
                'motor_is_exempt data is missing or incorrect. The motor_is_exempt for test case 3 shall be False')
       elsif base_user_data_dir == 'userdata_pe_04'
         baseline_equipments = baseline_model.getElectricEquipments
         baseline_equipments.each do |equipment|
           baseline_equipment_name = equipment.name.get
-          if baseline_equipment_name == 'Office WholeBuilding - Sm Office Elec Equip 4'
+          if baseline_equipment_name == 'Office WholeBuilding - Sm Office Elec Equip'
             base_electric_equipment_schedule = equipment.schedule.get.to_ScheduleRuleset.get
             receptacle_power_credits = base_electric_equipment_schedule.name.get.split('_')[3].to_f
-            assert((0.025 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.025 (5%) but get #{receptacle_power_credits}")
-          end
+            assert((0.025 - receptacle_power_credits).abs < 0.0001, "Building: #{base_building_type}; Template: #{base_template}; Climate: #{base_climate_Zone}. The receptacle_power_credits shall be 0.025 (5%) but get #{receptacle_power_credits}")          end
         end
       end
     end
@@ -1993,6 +1992,20 @@ class AppendixGPRMTests < Minitest::Test
     end
   end
 
+  def check_swh_single_building_type(prototypes_base)
+    prototypes_base.each do |prototype, model_baseline|
+      # set the fuel type according to the building area type (Small Office)
+      new_fuel = "Electricity"
+      water_heater_efficiency = 1.0
+      ua_w_per_k = 0.9647
+      model_baseline.getWaterHeaterMixeds.sort.each do |water_heater|
+        assert(water_heater.heaterFuelType == new_fuel, "New fuel type is not the expected value.")
+        assert((water_heater.heaterThermalEfficiency.get - water_heater_efficiency)/water_heater_efficiency < 0.01, "New efficiency is not the expected value.")
+        assert((water_heater.offCycleLossCoefficienttoAmbientTemperature.get - ua_w_per_k)/ua_w_per_k < 0.01, "New surface loss coefficient is not the expected value.")
+      end
+    end
+  end
+
   # Check primary/secondary chilled water loop for the baseline models
   #
   # @param prototypes_base [Hash] Baseline prototypes
@@ -2062,7 +2075,5 @@ class AppendixGPRMTests < Minitest::Test
       assert(has_secondary_chilled_water_loop, "The primary/secondary test did not find a secondary chilled water loop for #{building_type}, #{template}, #{climate_zone}.")
 
     end
-
   end
-
 end
