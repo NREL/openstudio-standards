@@ -22,8 +22,8 @@ class NECB_Structure_Tests < Minitest::Test
 
     # Range of test options.
     @templates = [
-      # "NECB2011",
-      "NECB2015",
+      "NECB2011",
+      # "NECB2015",
       # "NECB2017",
       # "NECB2020"
     ]
@@ -31,26 +31,26 @@ class NECB_Structure_Tests < Minitest::Test
     @epws = ["CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw"]
 
     @buildings = [
-      # 'FullServiceRestaurant',
-      # 'HighriseApartment',
+      'FullServiceRestaurant',
+      'HighriseApartment',
       # 'Hospital',
       # 'LargeHotel',
       # 'LargeOffice',
-      # 'LEEPMidriseApartment',
-      # 'LEEPPointTower',
-      # 'LEEPTownHouse',
-      # 'LEEPMultiTower',
-      # 'LowRiseApartment',
-      # 'MediumOffice',
-      # 'MidriseApartment',
-      # 'Outpatient',
-      # 'PrimarySchool',
-      # 'QuickServiceRestaurant',
-      # 'RetailStandalone',
-      # 'RetailStripMall',
-      # 'SecondarySchool',
-      # 'SmallHotel',
-      # 'SmallOffice',
+      'LEEPMidriseApartment',
+      'LEEPPointTower',
+      'LEEPTownHouse',
+      'LEEPMultiTower',
+      'LowRiseApartment',
+      'MediumOffice',
+      'MidriseApartment',
+      'Outpatient',
+      'PrimarySchool',
+      'QuickServiceRestaurant',
+      'RetailStandalone',
+      'RetailStripMall',
+      'SecondarySchool',
+      'SmallHotel',
+      'SmallOffice',
       'Warehouse'
     ]
 
@@ -63,12 +63,85 @@ class NECB_Structure_Tests < Minitest::Test
       @buildings.sort.each   do |building |
         @templates.sort.each do |template |
           cas = "CASE #{building} (#{template})"
+          tag = "space_conditioning_category"
 
           st    = Standard.build(template)
           model = st.model_create_prototype_model(template: template,
                                                   epw_file: epw,
                                                   building_type: building,
+                                                  construction_opt: 'structure',
                                                   sizing_run_dir: @sizing_run_dir)
+
+          attics  = []
+          plenums = []
+
+          model.getSpaces.each do |space|
+            prop = space.additionalProperties.getFeatureAsString(tag)
+            next if prop.empty?
+            next if space.partofTotalFloorArea
+
+            prop = prop.get.downcase
+            attics  << space if prop == "unconditioned"
+            plenums << space if prop == "nonresconditioned"
+          end
+
+          attics.each do |attic|
+            id  = attic.nameString
+            set = attic.defaultConstructionSet
+            err_msg = "BTAP::Structure #{id} default construction set (#{cas})?"
+            refute_empty(set, err_msg)
+
+            set = set.get
+            id  = set.nameString
+            err_msg = "BTAP::Structure default construction set #{id} (#{cas})?"
+            assert(id.include?("ATTIC"), err_msg)
+
+            attic.surfaces.each do |surface|
+              id = surface.nameString
+              c  = surface.construction.get.to_LayeredConstruction.get
+              next unless c.layers.size == 2
+              next unless surface.surfaceType.downcase == "floor"
+
+              if id.include?("soffit")
+                err_msg = "BTAP::Structure #{id} insulated (#{cas})?"
+
+                # Soffit 'floor' not insulated.
+                c.layers.each do |layer|
+                  assert(layer.nameString.include?("material"), err_msg)
+                end
+              else
+                id = c.layers.last.nameString
+                err_msg = "BTAP::Structure #{id} insulation layer (#{cas})?"
+                assert(id.include?("cellulose"), err_msg)
+              end
+            end
+          end
+
+          plenums.each do |plenum|
+            id  = plenum.nameString
+            set = plenum.defaultConstructionSet
+            err_msg = "BTAP::Structure #{id} default construction set (#{cas})?"
+            refute_empty(set, err_msg)
+
+            set = set.get
+            id  = set.nameString
+            err_msg = "BTAP::Structure default construction set #{id} (#{cas})?"
+            assert(id.include?("PLENUM"), err_msg)
+
+            plenum.surfaces.each do |surface|
+              next unless surface.surfaceType.downcase == "floor"
+
+              id = surface.nameString
+              c  = surface.construction.get.to_LayeredConstruction.get
+              n  = c.layers.size
+              err_msg = "BTAP::Structure #{id} ##{n} layers (#{cas})?"
+              assert(n == 1, err_msg)
+
+              id = c.layers.first.nameString
+              err_msg = "BTAP::Structure #{id} tile (#{cas})?"
+              assert(id.include?("material"), err_msg)
+            end
+          end
 
           s = st.structure
 

@@ -218,6 +218,7 @@ class NECB2011 < Standard
   # This method is a wrapper to create the 16 archetypes easily.
   def model_create_prototype_model(template:,
                                    building_type:,
+                                   construction_opt:'',
                                    epw_file:,
                                    custom_weather_folder: nil,
                                    debug: false,
@@ -285,6 +286,7 @@ class NECB2011 < Standard
     model = load_building_type_from_library(building_type: building_type)
 
     return model_apply_standard(model: model,
+                                construction_opt: construction_opt,
                                 tbd_option: tbd_option,
                                 tbd_interpolate: tbd_interpolate,
                                 epw_file: epw_file,
@@ -362,6 +364,7 @@ class NECB2011 < Standard
   # Created this method so that additional methods can be addded for bulding the prototype model in later
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
   def model_apply_standard(model:,
+                           construction_opt: '',
                            tbd_option: nil,
                            tbd_interpolate: nil,
                            epw_file:,
@@ -434,6 +437,8 @@ class NECB2011 < Standard
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
     srr_opt = convert_arg_to_string(variable: srr_opt, default: '')
+    construction_opt = convert_arg_to_string(variable: construction_opt, default: '')
+    massless = construction_opt == 'structure' ? true : false
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
@@ -449,7 +454,6 @@ class NECB2011 < Standard
     end
 
     # output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
-
     assign_building_activity(model)
     assign_building_structure(model, @activity.category)
     apply_loads(model: model,
@@ -459,6 +463,9 @@ class NECB2011 < Standard
                 electrical_loads_scale: electrical_loads_scale,
                 oa_scale: oa_scale)
     apply_envelope(model: model,
+                   construction_opt: construction_opt,
+                   bldg_category: @activity.category,
+                   bldg_structure: @structure.structure,
                    ext_wall_cond: ext_wall_cond,
                    ext_floor_cond: ext_floor_cond,
                    ext_roof_cond: ext_roof_cond,
@@ -490,7 +497,7 @@ class NECB2011 < Standard
                       sizing_run_dir: sizing_run_dir,
                       lights_type: lights_type,
                       lights_scale: lights_scale)
-    apply_kiva_foundation(model)
+    apply_kiva_foundation(model, massless)
     apply_systems_and_efficiencies(model: model,
                                    sizing_run_dir: sizing_run_dir,
                                    primary_heating_fuel: primary_heating_fuel,
@@ -725,6 +732,9 @@ class NECB2011 < Standard
   end
 
   def apply_envelope(model:,
+                     construction_opt: '',
+                     bldg_category: '',
+                     bldg_structure: '',
                      ext_wall_cond: nil,
                      ext_floor_cond: nil,
                      ext_roof_cond: nil,
@@ -741,6 +751,7 @@ class NECB2011 < Standard
                      skylight_solar_trans: nil,
                      infiltration_scale: nil,
                      necb_hdd: true)
+
     raise('validation of model failed.') unless validate_initial_model(model)
 
     model_apply_infiltration_standard(model)
@@ -748,29 +759,41 @@ class NECB2011 < Standard
     ecm.scale_infiltration_loads(model: model, scale: infiltration_scale)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
-    model_add_constructions(model)
-    apply_standard_construction_properties(model: model,
-                                           ext_wall_cond: ext_wall_cond,
-                                           ext_floor_cond: ext_floor_cond,
-                                           ext_roof_cond: ext_roof_cond,
-                                           ground_wall_cond: ground_wall_cond,
-                                           ground_floor_cond: ground_floor_cond,
-                                           ground_roof_cond: ground_roof_cond,
-                                           door_construction_cond: door_construction_cond,
-                                           fixed_window_cond: fixed_window_cond,
-                                           glass_door_cond: glass_door_cond,
-                                           overhead_door_cond: overhead_door_cond,
-                                           skylight_cond: skylight_cond,
-                                           glass_door_solar_trans: glass_door_solar_trans,
-                                           fixed_wind_solar_trans: fixed_wind_solar_trans,
-                                           skylight_solar_trans: skylight_solar_trans,
-                                           necb_hdd: necb_hdd)
+
+    construction_opt = '' unless construction_opt.respond_to?(:to_s)
+    bldg_structure   = '' unless bldg_structure.respond_to?(:to_s)
+    construction_opt = construction_opt.to_s.downcase
+    bldg_structure   = bldg_structure.to_s.downcase.to_sym
+    bldg_structures  = @structure.data[:structure].keys
+
+    if construction_opt == 'structure' && bldg_structures.include?(bldg_structure)
+      add_construction_sets(model, necb_hdd)
+    else
+      model_add_constructions(model)
+      apply_standard_construction_properties(model: model,
+                                             ext_wall_cond: ext_wall_cond,
+                                             ext_floor_cond: ext_floor_cond,
+                                             ext_roof_cond: ext_roof_cond,
+                                             ground_wall_cond: ground_wall_cond,
+                                             ground_floor_cond: ground_floor_cond,
+                                             ground_roof_cond: ground_roof_cond,
+                                             door_construction_cond: door_construction_cond,
+                                             fixed_window_cond: fixed_window_cond,
+                                             glass_door_cond: glass_door_cond,
+                                             overhead_door_cond: overhead_door_cond,
+                                             skylight_cond: skylight_cond,
+                                             glass_door_solar_trans: glass_door_solar_trans,
+                                             fixed_wind_solar_trans: fixed_wind_solar_trans,
+                                             skylight_solar_trans: skylight_solar_trans,
+                                             necb_hdd: necb_hdd)
+    end
+
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
   # apply the Kiva foundation model to floors and walls with ground boundary condition
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
-  def apply_kiva_foundation(model)
+  def apply_kiva_foundation(model, massless = false)
     # define a Kiva model for the whole bldg that's used for the first floor in contact with ground in each zone
     bldg_kiva_model = OpenStudio::Model::FoundationKiva.new(model)
     bldg_kiva_model.setName("Bldg Kiva Foundation")
@@ -799,9 +822,17 @@ class NECB2011 < Standard
             zone_kiva_models << kiva_model
           end
           # Kiva model only works with standard materials. Replace constructions massless materials with standard ones.
-          replace_massless_material_with_std_material(model,gfloor)
-          gfloor.setOutsideBoundaryCondition('Foundation')
-          gfloor.setAdjacentFoundation(zone_kiva_models.last)
+          if massless
+            c = gfloor.construction.get.to_LayeredConstruction.get
+            gfloor.setOutsideBoundaryCondition('Foundation')
+            gfloor.setAdjacentFoundation(zone_kiva_models.last)
+            gfloor.setConstruction(c)
+          else
+            replace_massless_material_with_std_material(model,gfloor)
+            gfloor.setOutsideBoundaryCondition('Foundation')
+            gfloor.setAdjacentFoundation(zone_kiva_models.last)
+          end
+
           # Set the exposed perimeter for space floors in contact with the ground.
           floor_exp_per = 0.0
           if !space_ground_walls.empty?
@@ -814,9 +845,16 @@ class NECB2011 < Standard
           # contact with the space floor in contact with ground 'gfloor'
           space_ground_walls.each do |gwall|
             if surfaces_are_in_contact?(gfloor,gwall)
-              replace_massless_material_with_std_material(model,gwall)
-              gwall.setOutsideBoundaryCondition('Foundation')
-              gwall.setAdjacentFoundation(zone_kiva_models.last)
+              if massless
+                c = gwall.construction.get.to_LayeredConstruction.get
+                gwall.setOutsideBoundaryCondition('Foundation')
+                gwall.setAdjacentFoundation(zone_kiva_models.last)
+                gwall.setConstruction(c)
+              else
+                replace_massless_material_with_std_material(model,gwall)
+                gwall.setOutsideBoundaryCondition('Foundation')
+                gwall.setAdjacentFoundation(zone_kiva_models.last)
+              end
             end
           end
         end

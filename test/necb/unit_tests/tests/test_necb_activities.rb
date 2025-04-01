@@ -11,6 +11,9 @@ class NECB_Activity_Tests < Minitest::Test
     tres = "../expected_results/necb_activities_test_results.json"
     sizd = "sizing_folder"
 
+    plnums = ["LargeOffice", "MediumOffice"]
+    attics = ["FullServiceRestaurant", "QuickServiceRestaurant", "SmallOffice"]
+
     @output_folder         = File.join(__dir__, outd)
     @expected_results_file = File.join(__dir__, eres)
     @test_results_file     = File.join(__dir__, tres)
@@ -31,26 +34,26 @@ class NECB_Activity_Tests < Minitest::Test
     @epws = ["CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw"]
 
     @buildings = [
-      # 'FullServiceRestaurant',
-      # 'HighriseApartment',
+      'FullServiceRestaurant',
+      'HighriseApartment',
       # 'Hospital',
       # 'LargeHotel',
       # 'LargeOffice',
-      # 'LEEPMidriseApartment',
-      # 'LEEPPointTower',
-      # 'LEEPTownHouse',
-      # 'LEEPMultiTower',
-      # 'LowRiseApartment',
-      # 'MediumOffice',
-      # 'MidriseApartment',
-      # 'Outpatient',
-      # 'PrimarySchool',
-      # 'QuickServiceRestaurant',
-      # 'RetailStandalone',
-      # 'RetailStripMall',
-      # 'SecondarySchool',
-      # 'SmallHotel',
-      # 'SmallOffice',
+      'LEEPMidriseApartment',
+      'LEEPPointTower',
+      'LEEPTownHouse',
+      'LEEPMultiTower',
+      'LowRiseApartment',
+      'MediumOffice',
+      'MidriseApartment',
+      'Outpatient',
+      'PrimarySchool',
+      'QuickServiceRestaurant',
+      'RetailStandalone',
+      'RetailStripMall',
+      'SecondarySchool',
+      'SmallHotel',
+      'SmallOffice',
       'Warehouse'
     ]
 
@@ -63,12 +66,87 @@ class NECB_Activity_Tests < Minitest::Test
       @buildings.sort.each   do |building |
         @templates.sort.each do |template |
           cas = "CASE #{building} (#{template})"
+          tag = "space_conditioning_category"
 
           st    = Standard.build(template)
           model = st.model_create_prototype_model(template: template,
                                                   epw_file: epw,
                                                   building_type: building,
+                                                  construction_opt: 'structure',
                                                   sizing_run_dir: @sizing_run_dir)
+
+          # BTAP initializes thermal zones and thermostats of unoccupied spaces
+          # like plenums and attics, while maintaining empty thermostat heating
+          # and cooling setpoint schedules. In activity.rb, such unoccupied
+          # spaces are nontheless tagged using the AdditionalProperty:
+          #
+          #   "space_conditioning_category"
+          #
+          # Unconditioned spaces like attics are expected to be tagged as
+          # "unconditioned". Indirectly-conditioned spaces like plenums are
+          # instead expected to be tagged as "nonresconditioned" (just like the
+          # conditioned spaces they serve).
+          #
+          # Keeping track of which unoccupied spaces are unconditioned matters
+          # greatly for building envelope parameters (ex. construction, thermal
+          # bridging, embodied carbon, costing).
+          model.getSpaces.each do |space|
+            id   = space.nameString
+            zone = space.thermalZone
+            prop = space.additionalProperties.getFeatureAsString(tag)
+
+            err_msg = "BTAP::Activity #{id} empty property (#{cas})?"
+            refute_empty(prop, err_msg)
+            err_msg = "BTAP::Activity #{id} empty zone (#{cas})?"
+            refute_empty(zone, err_msg)
+
+            prop  = prop.get
+            zone  = zone.get
+            id    = zone.nameString
+            tstat = zone.thermostatSetpointDualSetpoint
+
+            err_msg = "BTAP::Activity #{id} empty thermostat (#{cas})?"
+            refute_empty(tstat, err_msg)
+
+            tstat = tstat.get
+            heat  = tstat.heatingSetpointTemperatureSchedule
+            cool  = tstat.coolingSetpointTemperatureSchedule
+            next if space.partofTotalFloorArea
+
+            err_msg = "BTAP::Activity #{id} thermostat, heating (#{cas})?"
+            assert_empty(heat, err_msg)
+            err_msg = "BTAP::Activity #{id} thermostat, cooling (#{cas})?"
+            assert_empty(cool, err_msg)
+
+            # Original OSM identifiers.
+            # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+            # CASE FullServiceRestaurant (NECB2011) : restaurant (commerce) :
+            #   'attic'              : UNCONDITIONED
+            # CASE LargeOffice (NECB2011) : office (commerce) :
+            #   'GroundFloor_Plenum' : INDIRECTLYCONDITIONED
+            #   'TopFloor_Plenum'    : INDIRECTLYCONDITIONED
+            #   'MidFloor_Plenum'    : INDIRECTLYCONDITIONED
+            # CASE MediumOffice (NECB2011) : office (commerce) :
+            #   'TopFloor_Plenum'    : INDIRECTLYCONDITIONED
+            #   'FirstFloor_Plenum'  : INDIRECTLYCONDITIONED
+            #   'MidFloor_Plenum'    : INDIRECTLYCONDITIONED
+            # CASE QuickServiceRestaurant (NECB2011) : restaurant (commerce) :
+            #   'attic'              : UNCONDITIONED
+            # CASE SmallOffice (NECB2011) : office (commerce) :
+            #   'Attic'              : UNCONDITIONED
+            if attics.include?(building)
+              err_msg = "BTAP::Activity #{id} conditioned (#{cas})?"
+              assert_equal(prop, "unconditioned", err_msg)
+              fdback << "'#{space.nameString}' : UNCONDITIONED"
+            else
+              err_msg = "BTAP::Activity #{id} plenum (#{cas})?"
+              assert(plnums.include?(building), err_msg)
+
+              err_msg = "BTAP::Activity #{id} unconditioned (#{cas})?"
+              assert_equal(prop, "nonresconditioned", err_msg)
+              fdback << "'#{space.nameString}' : INDIRECTLYCONDITIONED"
+            end
+          end
 
           a = st.activity
 
@@ -91,6 +169,8 @@ class NECB_Activity_Tests < Minitest::Test
           else
             fdback << "#{cas} : #{a.activity} (#{a.category})"
           end
+
+
 
           a.feedback[:logs].each { |log| puts log }
         end                   # |template |

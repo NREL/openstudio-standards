@@ -228,7 +228,7 @@ module BTAP
     #
     # Each CATEGORY holds "small"-scale and "large"-scale STRUCTURE options by
     # defaults, depending on the characteristics of the building.
-    @@data[:category]              = {}
+    @@data[:category]               = {}
     @@data[:category]["housing"   ] = {small: :wood    , large: :concrete}
     @@data[:category]["lodging"   ] = {small: :wood    , large: :concrete}
     @@data[:category]["robust"    ] = {small: :concrete, large: :concrete}
@@ -276,11 +276,20 @@ module BTAP
   class BTAP::Structure
     extend StructureData
 
-    # @return [String] building type CATEGORY (e.g. :institutional)
+    # @return [String] building type CATEGORY (e.g. "public")
     attr_reader :category
 
     # @return [Symbol] building STRUCTURE selection (e.g. :steel)
     attr_reader :structure
+
+    # @return [Symbol] building framing (e.g. :steel)
+    attr_reader :framing
+
+    # @return [Symbol] building cladding (e.g. :medium)
+    attr_reader :cladding
+
+    # @return [Symbol] building finish (e.g. :light)
+    attr_reader :finish
 
     # @return [Float] calculated embodied carbon of STRUCTURE (CO2-e kg/m2)
     attr_reader :co2
@@ -351,6 +360,23 @@ module BTAP
         end
       end
 
+      # Reset :clt and :metal structure selections - not yet available. @todo
+      @structure = :steel    if @structure == :metal
+      @structure = :concrete if @structure == :clt
+
+      # Set building framing, e.g. light-gauge :steel.
+      @framing = data[:structure][@structure][:framing]
+
+      # Set exterior cladding.
+      @cladding = :light
+      @cladding = :medium if @category == "public"
+      @cladding = :heavy  if @category == "robust"
+
+      # Set interior finish.
+      @finish = :light
+      @finish = :none  if @framing == :cmu
+      @finish = :heavy if @category == "robust"
+
       true
     end
 
@@ -376,13 +402,4 @@ module BTAP
       #   @todo
     end
   end
-
-  # Temporary testing.
-  # require "openstudio"
-  # require_relative "activity"
-  #
-  # m = OpenStudio::Model::Model.new
-  # a = BTAP::Activity.new(m)
-  # s = BTAP::Structure.new(m, a.category)
-  # puts "#{a.template} : #{a.activity} : #{a.category} : #{s.structure}"
 end
