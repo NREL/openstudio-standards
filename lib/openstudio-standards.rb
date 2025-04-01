@@ -36,6 +36,8 @@ module OpenstudioStandards
   # Refrigeration Module
   require_relative 'openstudio-standards/refrigeration/create_case'
   require_relative 'openstudio-standards/refrigeration/create_compressor'
+  require_relative 'openstudio-standards/refrigeration/create_refrigeration_system'
+  require_relative 'openstudio-standards/refrigeration/create_typical_refrigeration'
   require_relative 'openstudio-standards/refrigeration/create_walkin'
 
   # Schedules Module

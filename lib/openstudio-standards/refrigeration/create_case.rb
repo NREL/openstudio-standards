@@ -10,12 +10,14 @@ module OpenstudioStandards
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
     # @param operation_type [String] Temperature regime, either 'MT' Medium Temperature, or 'LT' Low Temperature
     # @param case_type [String] The case type. See refrigeration_cases data for valid options under case_name.
+    # @param case_length [String] The case length in meters.
     # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
     # @return [OpenStudio::Model::RefrigerationCase] the refrigeration case
     def self.create_case(model,
                          template: 'new',
                          operation_type: 'MT',
                          case_type: 'Vertical Open - All',
+                         case_length: nil,
                          thermal_zone: nil)
       # load refrigeration cases data
       cases_csv = "#{__dir__}/data/refrigerated_cases.csv"
@@ -32,7 +34,8 @@ module OpenstudioStandards
       # add case
       ref_case = OpenStudio::Model::RefrigerationCase.new(model, model.alwaysOnDiscreteSchedule)
       ref_case.setName(case_type)
-      ref_case.setCaseLength(case_properties[:unit_length])
+      case_length_m = case_length.nil? ? case_properties[:unit_length] : case_length
+      ref_case.setCaseLength(case_length_m)
       ref_case.setRatedTotalCoolingCapacityperUnitLength(case_properties[:rated_capacity])
       ref_case.setCaseOperatingTemperature(case_properties[:case_operating_temperature])
       ref_case.setDesignEvaporatorTemperatureorBrineInletTemperature(case_properties[:evaporator_temperature])
@@ -98,7 +101,7 @@ module OpenstudioStandards
       ref_case.setCaseCreditFractionSchedule(case_credit_sch)
 
       # reporting
-      length_ft = OpenStudio.convert(case_properties[:unit_length], 'm', 'ft').get
+      length_ft = OpenStudio.convert(ref_case.caseLength, 'm', 'ft').get
       cooling_capacity_w = ref_case.caseLength * ref_case.ratedTotalCoolingCapacityperUnitLength
       cooling_capacity_btu_per_hr = OpenStudio.convert(cooling_capacity_w, 'W', 'Btu/hr').get
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Refrigeration', "Added #{length_ft.round} ft display case called #{case_type} with a cooling capacity of #{cooling_capacity_btu_per_hr.round} Btu/hr to #{thermal_zone&.name}.")
