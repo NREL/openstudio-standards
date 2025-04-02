@@ -19,7 +19,7 @@ module OpenstudioStandards
       ref_system = OpenStudio::Model::RefrigerationSystem.new(model)
       ref_system.setName('Refrigeration System')
       ref_system.setRefrigerationSystemWorkingFluidType(refrigerant)
-      ref_system.setSuctionTemperatureControlType(refrigerant)
+      ref_system.setSuctionTemperatureControlType('ConstantSuctionTemperature')
 
       # Add equipment to the system and sum capacity.
       # Allowable equipment are refrigeration cases and walkins.
@@ -38,7 +38,7 @@ module OpenstudioStandards
 
       # Calculate number of compressors
       rated_compressor_capacity_btu_per_hr = 60_000.0
-      number_of_compressors = (rated_case_capacity_w / OpenStudio.convert(rated_compressor_capacity_btu_per_hr, 'Btu/h', 'W').get).ceil
+      number_of_compressors = (rated_capacity_w / OpenStudio.convert(rated_compressor_capacity_btu_per_hr, 'Btu/h', 'W').get).ceil
 
       # add compressors
       (1..number_of_compressors).each do |compressor_number|
@@ -48,7 +48,7 @@ module OpenstudioStandards
         compressor.setName("#{ref_system.name} Compressor #{compressor_number}")
         ref_system.addCompressor(compressor)
       end
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Refrigeration', "Added #{number_of_compressors} compressors, each with a capacity of #{rated_compressor_capacity_btu_per_hr.round} Btu/hr to serve #{OpenStudio.convert(rated_case_capacity_w, 'W', 'Btu/hr').get.round} Btu/hr of case and walkin load.")
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Refrigeration', "Added #{number_of_compressors} compressors, each with a capacity of #{rated_compressor_capacity_btu_per_hr.round} Btu/hr to serve #{OpenStudio.convert(rated_capacity_w, 'W', 'Btu/hr').get.round} Btu/hr of case and walkin load.")
 
       # Heat rejection as a function of temperature
       heat_rejection_curve = OpenStudio::Model::CurveLinear.new(model)
@@ -63,7 +63,7 @@ module OpenstudioStandards
       condenser.setRatedEffectiveTotalHeatRejectionRateCurve(heat_rejection_curve)
       condenser.setRatedSubcoolingTemperatureDifference(OpenStudio.convert(2.0, 'F', 'C').get)
       condenser.setMinimumFanAirFlowRatio(0.0)
-      condenser.setRatedFanPower(0.04 * rated_case_capacity_w)
+      condenser.setRatedFanPower(0.04 * rated_capacity_w)
       condenser.setCondenserFanSpeedControlType('VariableSpeed')
       ref_system.setRefrigerationCondenser(condenser)
 
