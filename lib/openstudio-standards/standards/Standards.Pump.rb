@@ -141,7 +141,6 @@ module Pump
       motor_type = motor_type(nominal_hp)
       motor_properties = motor_fractional_hp_efficiencies(nominal_hp, motor_type = motor_type)
     else
-      motor_properties.nil?
       # Lookup the minimum motor efficiency
       motors = standards_data['motors']
 
