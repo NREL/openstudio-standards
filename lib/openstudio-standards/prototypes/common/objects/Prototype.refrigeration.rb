@@ -767,7 +767,7 @@ class Standard
         ref_system = OpenStudio::Model::RefrigerationSystem.new(model)
         ref_system.setName(system_type)
         ref_system.setRefrigerationSystemWorkingFluidType(props_ref_system['refrigerant'])
-        ref_system.setSuctionTemperatureControlType(props_ref_system['refrigerant'])
+        ref_system.setSuctionTemperatureControlType('ConstantSuctionTemperature')
 
         # Sum the capacity required by all cases and walkins
         # and attach the cases and walkins to the system.
