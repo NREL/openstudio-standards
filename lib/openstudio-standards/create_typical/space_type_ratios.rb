@@ -285,20 +285,19 @@ module OpenstudioStandards
         hash['Toilet'] = { ratio: 0.0193, space_type_gen: true, default: false }
         hash['Undeveloped'] = { ratio: 0.0835, space_type_gen: false, default: false }
         hash['Xray'] = { ratio: 0.0220, space_type_gen: true, default: false }
-      when 'SuperMarket'
-        # @todo populate ratios for SuperMarket
-        hash['Bakery'] = { ratio: 0.99, space_type_gen: true, default: false }
-        hash['Deli'] = { ratio: 0.99, space_type_gen: true, default: false }
-        hash['DryStorage'] = { ratio: 0.99, space_type_gen: true, default: false }
-        hash['Office'] = { ratio: 0.99, space_type_gen: true, default: false }
-        hash['Produce'] = { ratio: 0.99, space_type_gen: true, default: true }
-        hash['Sales'] = { ratio: 0.99, space_type_gen: true, default: true }
-        hash['Corridor'] = { ratio: 0.99, space_type_gen: true, default: true }
-        hash['Dining'] = { ratio: 0.99, space_type_gen: true, default: true }
-        hash['Elec/MechRoom'] = { ratio: 0.99, space_type_gen: true, default: true }
-        hash['Meeting'] = { ratio: 0.99, space_type_gen: true, default: true }
-        hash['Restroom'] = { ratio: 0.99, space_type_gen: true, default: true }
-        hash['Vestibule'] = { ratio: 0.99, space_type_gen: true, default: true }
+      when 'SuperMarket', 'GroceryStore'
+        hash['Bakery'] = { ratio: 0.05, space_type_gen: true, default: false }
+        hash['Deli'] = { ratio: 0.0537, space_type_gen: true, default: false }
+        hash['DryStorage'] = { ratio: 0.1010, space_type_gen: true, default: false }
+        hash['Office'] = { ratio: 0.0067, space_type_gen: true, default: false }
+        hash['Produce'] = { ratio: 0.1701, space_type_gen: true, default: true }
+        hash['Sales'] = { ratio: 0.5495, space_type_gen: true, default: true }
+        hash['Corridor'] = { ratio: 0.0118, space_type_gen: true, default: true }
+        hash['Dining'] = { ratio: 0.0111, space_type_gen: true, default: true }
+        hash['Elec/MechRoom'] = { ratio: 0.0133, space_type_gen: true, default: true }
+        hash['Meeting'] = { ratio: 0.0111, space_type_gen: true, default: true }
+        hash['Restroom'] = { ratio: 0.0150, space_type_gen: true, default: true }
+        hash['Vestibule'] = { ratio: 0.0067, space_type_gen: true, default: true }
       when 'Laboratory'
         hash['Office'] = { ratio: 0.50, space_type_gen: true, default: true }
         hash['Open lab'] = { ratio: 0.35, space_type_gen: true, default: true }
