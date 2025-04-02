@@ -767,6 +767,7 @@ class NECB2011 < Standard
     bldg_structures  = @structure.data[:structure].keys
 
     if construction_opt == 'structure' && bldg_structures.include?(bldg_structure)
+      assign_contruction_to_adiabatic_surfaces(model)
       add_construction_sets(model, necb_hdd)
     else
       model_add_constructions(model)
