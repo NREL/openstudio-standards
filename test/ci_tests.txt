@@ -19,6 +19,7 @@ modules/infiltration/test_nist_infiltration.rb
 modules/refrigeration/test_create_case.rb
 modules/refrigeration/test_create_compressor.rb
 modules/refrigeration/test_create_refrigeration_system.rb
+modules/refrigeration/test_create_typical_refrigeration.rb
 modules/refrigeration/test_create_walkin.rb
 modules/schedules/test_schedules_create.rb
 modules/schedules/test_schedules_information.rb

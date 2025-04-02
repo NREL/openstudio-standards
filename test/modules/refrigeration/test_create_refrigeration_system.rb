@@ -15,7 +15,6 @@ class TestRefrigerationCreateRefrigerationSystem < Minitest::Test
     # old case
     case2 = @refrig.create_case(model,
                                 template: 'old',
-                                operation_type: 'MT',
                                 case_length: 30.0,
                                 thermal_zone: zone)
 

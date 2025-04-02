@@ -17,7 +17,6 @@ class TestRefrigerationCreateCase < Minitest::Test
     # old case
     case2 = @refrig.create_case(model,
                                 template: 'old',
-                                operation_type: 'MT',
                                 thermal_zone: zone)
     assert_equal(2.4, case2.caseLength)
     assert_in_delta(0.6, case2.caseOperatingTemperature, 0.1)
@@ -25,7 +24,6 @@ class TestRefrigerationCreateCase < Minitest::Test
     # advanced case
     case3 = @refrig.create_case(model,
                                 template: 'advanced',
-                                operation_type: 'LT',
                                 case_type: 'Coffin - Frozen Food',
                                 thermal_zone: zone)
     assert_equal(2.2, case3.caseLength)

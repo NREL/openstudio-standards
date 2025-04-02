@@ -8,14 +8,12 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
-    # @param operation_type [String] Temperature regime, either 'MT' Medium Temperature, or 'LT' Low Temperature
     # @param case_type [String] The case type. See refrigeration_cases data for valid options under case_name.
     # @param case_length [String] The case length in meters.
     # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
     # @return [OpenStudio::Model::RefrigerationCase] the refrigeration case
     def self.create_case(model,
                          template: 'new',
-                         operation_type: 'MT',
                          case_type: 'Vertical Open - All',
                          case_length: nil,
                          thermal_zone: nil)
@@ -29,7 +27,7 @@ module OpenstudioStandards
       cases_hsh = cases_tbl.map(&:to_hash)
 
       # get case properties
-      case_properties = cases_hsh.select { |r| (r[:template] == template) && (r[:operation_type] == operation_type) && (r[:case_name] == case_type) }[0]
+      case_properties = cases_hsh.select { |r| (r[:template] == template) && (r[:case_name] == case_type) }[0]
 
       # add case
       ref_case = OpenStudio::Model::RefrigerationCase.new(model, model.alwaysOnDiscreteSchedule)
