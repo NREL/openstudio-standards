@@ -116,6 +116,8 @@ def unique_properties(sheet_name)
            ['template', 'cooling_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'unitary_acs'
            ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
+          when 'computer_room_acs'
+            ['template', 'cooling_type', 'heating_type', 'subcategory', 'minimum_capacity', 'maximum_capacity', 'start_date', 'end_date']
          when 'water_heaters'
            ['template', 'equipment_type', 'fuel_type', 'minimum_capacity', 'maximum_capacity', 'minimum_storage', 'maximum_storage', 'minimum_capacity_per_storage', 'maximum_capacity_per_storage', 'draw_profile', 'start_date', 'end_date']
          when 'elevators'
