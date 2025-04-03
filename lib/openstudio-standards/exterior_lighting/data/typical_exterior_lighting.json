@@ -1,7 +1,7 @@
 {
   "exterior_lighting": [
     {
-      "exterior_lighting_zone_number": 3.0,
+      "lighting_zone": 3.0,
       "exterior_lighting_zone_name": "All Other Areas",
       "lighting_generation": "default",
       "control_option": "AstronomicalClock",

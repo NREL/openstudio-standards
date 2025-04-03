@@ -93,7 +93,7 @@ def unique_properties(sheet_name)
          when 'space_types', 'space_types_lighting', 'space_types_rendering_color', 'space_types_ventilation', 'space_types_occupancy', 'space_types_infiltration', 'space_types_equipment', 'space_types_thermostats', 'space_types_swh'
            ['template', 'building_type', 'space_type']
          when 'exterior_lighting'
-           ['exterior_lighting_zone_number', 'template']
+           ['lighting_zone', 'template']
          when 'schedules'
            ['name', 'day_types', 'start_date', 'end_date']
          when 'construction_properties'
