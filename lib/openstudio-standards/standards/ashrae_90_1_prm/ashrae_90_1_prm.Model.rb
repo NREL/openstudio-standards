@@ -446,8 +446,7 @@ class ASHRAE901PRM < Standard
           elevator_counter_weight_of_car = elevator_weight_of_car + (0.4 * elevator_rated_load)
         end
         search_criteria = {
-          'template' => template,
-          'type' => 'Any'
+          'template' => template
         }
       end
       elevator_motor_bhp = (elevator_weight_of_car + elevator_rated_load - elevator_counter_weight_of_car) * elevator_speed_of_car / (33000 * elevator_mech_eff) # Lookup the minimum motor efficiency
