@@ -1376,7 +1376,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RtL,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:SpaceType,
   {321df5cb-26ab-4daf-80a2-93a8df1d727b}, !- Handle
@@ -1406,7 +1406,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RtL,                                    !- Standards Building Type
-  RetailSales;                            !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:SpaceType,
   {ed250944-b7bf-4150-9635-a53bd0b94ac9}, !- Handle
@@ -1416,7 +1416,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   RtL,                                    !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:ThermalZone,
   {f689a3a4-0d49-4b78-bb77-49e08a8e27e8}, !- Handle
