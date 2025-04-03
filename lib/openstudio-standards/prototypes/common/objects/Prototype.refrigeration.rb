@@ -539,7 +539,11 @@ class Standard
       if floor_area_ft2 < 35_000 # this is in m2
         size_category = '<35k ft2'
         floor_area_scaling_factor = floor_area_ft2 / 35_000
-      else # '35k - 50k ft2', '>50k ft2'
+      elsif floor_area_ft2 < 50_000
+        size_category = '35k - 50k ft2'
+        floor_area_scaling_factor = floor_area_ft2 / 50_000
+      else '>50k ft2'
+        size_category = '>50k ft2'
         floor_area_scaling_factor = floor_area_ft2 / 50_000
       end
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.Model.Model', "Refrigeration size category is #{size_category}, with a scaling factor of #{floor_area_scaling_factor} because the floor area is #{floor_area_ft2.round} ft2.  All cases and walkins added later will subsequently be scaled by this factor.")
