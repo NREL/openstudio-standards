@@ -150,7 +150,7 @@ module BTAP
     # heftier 8" of (poured) reinforced concrete. Option "none" for CLADDING is
     # rare, even in pre-code buildings. An example would be a load-bearing,
     # "cmu" wall with 2 coats of paint in a semi-heated industrial facility. The
-    # "none" FINSIH option is slightly more common, e.g. exposed ceilings, bare
+    # "none" FINISH option is slightly more common, e.g. exposed ceilings, bare
     # "clt" walls, and again bare "cmu" walls (or with 2 coats of paint).
     @@data[:cladding] = [:none, :light, :medium, :heavy]
     @@data[:finish  ] = [:none, :light, :medium, :heavy]

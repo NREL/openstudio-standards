@@ -69,11 +69,12 @@ module BTAP
       table = CSV.open(@@data[:bldg][:file], headers: true).read
 
       # 35 unique entries (rows), 5 columns per row, e.g.:
-      #    COL1     COL2  COL3                             COL4         COL5
-      #  ______ ________ _____ ________________________________ ____________
-      #  "care, housing, care, health/clinic/multi/residential, residential"
+      #    COL1 COL2     COL3  COL4                             COL5        COL6
+      #  ______ ____ ________ _____ ________________________________ ___________
+      #  "care,  25, housing, care, health/clinic/multi/residential, residential"
       #
       #   COL1: BTAP building ACTIVITY e.g. "care"
+      #   COL2: NECB occupancy density e.g. 25 m2/occupant
       #   COL2: BTAP building CATEGORY e.g. "housing"
       #   COL3: selected sub-string(s) e.g. "care", as in "Long-term care"
       #   COL4: rejected sub-string(s) e.g. "health", "multi", "residential"
@@ -103,10 +104,11 @@ module BTAP
         key = row[0]
 
         @@data[:bldg][:activity][key]             = {}
-        @@data[:bldg][:activity][key][:category ] = row[1].to_s
-        @@data[:bldg][:activity][key][:includes ] = row[2].to_s.split("/")
-        @@data[:bldg][:activity][key][:excludes ] = row[3].to_s.split("/")
-        @@data[:bldg][:activity][key][:fallback ] = row[4].to_s
+        @@data[:bldg][:activity][key][:density  ] = row[1].to_i
+        @@data[:bldg][:activity][key][:category ] = row[2].to_s
+        @@data[:bldg][:activity][key][:includes ] = row[3].to_s.split("/")
+        @@data[:bldg][:activity][key][:excludes ] = row[4].to_s.split("/")
+        @@data[:bldg][:activity][key][:fallback ] = row[5].to_s
       end
 
       # Keep CSV table. Ensure building activities & categories uniqueness. Add

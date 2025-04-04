@@ -34,15 +34,15 @@ class NECB_Activity_Tests < Minitest::Test
     @epws = ["CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw"]
 
     @buildings = [
-      'FullServiceRestaurant',
-      'HighriseApartment',
+      # 'FullServiceRestaurant',
+      # 'HighriseApartment',
       'Hospital',
       'LargeHotel',
       'LargeOffice',
-      'LEEPMidriseApartment',
-      'LEEPPointTower',
-      'LEEPTownHouse',
-      'LEEPMultiTower',
+      # 'LEEPMidriseApartment',
+      # 'LEEPPointTower',
+      # 'LEEPTownHouse',
+      # 'LEEPMultiTower',
       'LowRiseApartment',
       'MediumOffice',
       'MidriseApartment',

@@ -72,6 +72,9 @@ class NECB_Structure_Tests < Minitest::Test
                                                   construction_opt: 'structure',
                                                   sizing_run_dir: @sizing_run_dir)
 
+          nb  = model.getBuilding.standardsNumberOfAboveGroundStories.get
+          nst = nb < 2 ? "#{nb} storey" : "#{nb} stories"
+
           attics  = []
           plenums = []
 
@@ -168,7 +171,7 @@ class NECB_Structure_Tests < Minitest::Test
             @test_passed = false
           end
 
-          fdback << "#{cas} : #{s.category} (#{s.structure})" if @test_passed
+          fdback << "#{cas} : #{s.category} (#{s.structure}, #{nst})" if @test_passed
 
           s.feedback[:logs].each { |log| puts log }
         end                   # |template |
