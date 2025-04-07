@@ -388,141 +388,6 @@ class Standard
     return compressor
   end
 
-  # Find the thermal zone that is best for adding refrigerated display cases into.
-  # First, check for space types that typically have refrigeration.
-  # Fall back to largest zone in the model if no typical space types are found.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [OpenStudio::Model::ThermalZone] returns a thermal zone if found, nil if not.
-  def model_typical_display_case_zone(model)
-    # Ideally, look for one of the space types
-    # that would typically have refrigeration.
-    display_case_zone = nil
-    display_case_zone_area_m2 = 0
-    model.getThermalZones.each do |zone|
-      space_type = OpenstudioStandards::ThermalZone.thermal_zone_get_space_type(zone)
-      next if space_type.empty?
-
-      space_type = space_type.get
-      next if space_type.standardsSpaceType.empty?
-      next if space_type.standardsBuildingType.empty?
-
-      stds_spc_type = space_type.standardsSpaceType.get
-      stds_bldg_type = space_type.standardsBuildingType.get
-      case "#{stds_bldg_type} #{stds_spc_type}"
-      when 'PrimarySchool Kitchen',
-          'SecondarySchool Kitchen',
-          'SuperMarket Sales',
-          'QuickServiceRestaurant Kitchen',
-          'FullServiceRestaurant Kitchen',
-          'LargeHotel Kitchen',
-          'Hospital Kitchen',
-          'EPr Kitchen',
-          'ESe Kitchen',
-          'Gro GrocSales',
-          'RFF StockRoom',
-          'RSD StockRoom',
-          'Htl Kitchen',
-          'Hsp Kitchen'
-        if zone.floorArea > display_case_zone_area_m2
-          display_case_zone = zone
-          display_case_zone_area_m2 = zone.floorArea
-        end
-      end
-    end
-
-    unless display_case_zone.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Display case zone is #{display_case_zone.name}, the largest zone with a space type typical for display cases.")
-      return display_case_zone
-    end
-
-    # If no typical space type was found,
-    # choose the largest zone in the model.
-    display_case_zone = nil
-    display_case_zone_area_m2 = 0
-    model.getThermalZones.each do |zone|
-      if zone.floorArea > display_case_zone_area_m2
-        display_case_zone = zone
-        display_case_zone_area_m2 = zone.floorArea
-      end
-    end
-
-    unless display_case_zone.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "No space types typical for display cases were found, so the display cases will be placed in #{display_case_zone.name}, the largest zone.")
-      return display_case_zone
-    end
-
-    return display_case_zone
-  end
-
-  # Find the thermal zone that is best for adding refrigerated walkins into.
-  # First, check for space types that typically have refrigeration.
-  # Fall back to largest zone in the model if no typical space types are found.
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [OpenStudio::Model::ThermalZone] returns a thermal zone if found, nil if not.
-  def model_typical_walkin_zone(model)
-    # Ideally, look for one of the space types
-    # that would typically have refrigeration walkins.
-    walkin_zone = nil
-    walkin_zone_area_m2 = 0
-    model.getThermalZones.each do |zone|
-      space_type = OpenstudioStandards::ThermalZone.thermal_zone_get_space_type(zone)
-      next if space_type.empty?
-
-      space_type = space_type.get
-      next if space_type.standardsSpaceType.empty?
-      next if space_type.standardsBuildingType.empty?
-
-      stds_spc_type = space_type.standardsSpaceType.get
-      stds_bldg_type = space_type.standardsBuildingType.get
-      case "#{stds_bldg_type} #{stds_spc_type}"
-      when 'PrimarySchool Kitchen',
-          'SecondarySchool Kitchen',
-          'SuperMarket DryStorage',
-          'QuickServiceRestaurant	Kitchen',
-          'FullServiceRestaurant Kitchen',
-          'LargeHotel Kitchen',
-          'Hospital Kitchen',
-          'EPr Kitchen',
-          'ESe Kitchen',
-          'Gro RefWalkInCool',
-          'Gro RefWalkInFreeze',
-          'RFF StockRoom',
-          'RSD StockRoom',
-          'Htl Kitchen',
-          'Hsp Kitchen'
-        if zone.floorArea > walkin_zone_area_m2
-          walkin_zone = zone
-          walkin_zone_area_m2 = zone.floorArea
-        end
-      end
-    end
-
-    unless walkin_zone.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "Walkin zone is #{walkin_zone.name}, the largest zone with a space type typical for walkins.")
-      return walkin_zone
-    end
-
-    # If no typical space type was found,
-    # choose the largest zone in the model.
-    walkin_zone = nil
-    walkin_zone_area_m2 = 0
-    model.getThermalZones.each do |zone|
-      if zone.floorArea > walkin_zone_area_m2
-        walkin_zone = zone
-        walkin_zone_area_m2 = zone.floorArea
-      end
-    end
-
-    unless walkin_zone.nil?
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', "No space types typical for walkins were found, so the walkins will be placed in #{walkin_zone.name}, the largest zone.")
-      return walkin_zone
-    end
-
-    return walkin_zone
-  end
-
   # Add a typical refrigeration system to the model, including cases, walkins,
   # compressors, and condensors.  For small stores, each case and walkin is served
   # by one compressor and one condenser.  For larger stores, all medium temp cases and walkins
@@ -574,7 +439,7 @@ class Standard
       # Find the thermal zones most suited for holding the display cases
       thermal_zone_case = nil
       if number_of_display_cases > 0
-        thermal_zone_case = model_typical_display_case_zone(model)
+        thermal_zone_case = OpenstudioStandards::Refrigeration.refrigeration_case_zone(model)
         if thermal_zone_case.nil?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Attempted to add #{number_of_display_cases} display cases to the model, but could find no thermal zone to put them into.")
           return false
@@ -647,7 +512,7 @@ class Standard
       # Find the thermal zones most suited for holding the walkins
       thermal_zone_walkin = nil
       if number_of_walkins > 0
-        thermal_zone_walkin = model_typical_walkin_zone(model)
+        thermal_zone_walkin = OpenstudioStandards::Refrigeration.refrigeration_walkin_zone(model)
         if thermal_zone_walkin.nil?
           OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', "Attempted to add #{number_of_walkins} walkins to the model, but could find no thermal zone to put them into.")
           return false

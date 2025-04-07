@@ -6,10 +6,11 @@ module OpenstudioStandards
 
     # Adds a refrigerated system to the model.
     #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param refrigeration_equipment [Array<OpenStudio::Model::ModelObject>] Array of RefrigerationCase and/or RefrigerationWalkIn objects
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
     # @param operation_type [String] Temperature regime, either 'MT' Medium Temperature, or 'LT' Low Temperature
     # @param refrigerant [String] Refrigerant type.
-    # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @return [OpenStudio::Model::RefrigerationCase] the refrigeration case
     def self.create_refrigeration_system(model, refrigeration_equipment,
                                          template: 'new',
