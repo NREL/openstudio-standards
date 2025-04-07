@@ -709,16 +709,6 @@ class Standard
     return true
   end
 
-  # Determine the latent case credit curve to use for walkins. Defaults to values after 90.1-2007.
-  # @todo Should probably use the model_add_refrigeration_walkin and lookups from the spreadsheet instead of hard-coded values
-  #
-  # @param model [OpenStudio::Model::Model] OpenStudio model object
-  # @return [Boolean] returns true if successful, false if not
-  def model_walkin_freezer_latent_case_credit_curve(model)
-    latent_case_credit_curve_name = 'Single Shelf Horizontal Latent Energy Multiplier_After2004'
-    return latent_case_credit_curve_name
-  end
-
   # Adds a full commercial refrigeration rack to the model, as would be found in a supermarket
   # @todo Move refrigeration compressors to spreadsheet
   #
