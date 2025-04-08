@@ -15,13 +15,17 @@ class TestRefrigerationCreateWalkIn < Minitest::Test
     # old walkin
     walkin2 = @refrig.create_walkin(model,
                                     template: 'old',
-                                    operation_type: 'MT',
+                                    thermal_zone: zone)
+
+    # new walkin
+    walkin3 = @refrig.create_walkin(model,
+                                    template: 'new',
+                                    walkin_type: 'Walk-in Freezer - 480SF',
                                     thermal_zone: zone)
 
     # advanced walkin
-    walkin3 = @refrig.create_walkin(model,
+    walkin4 = @refrig.create_walkin(model,
                                     template: 'advanced',
-                                    operation_type: 'LT',
                                     walkin_type: 'Walk-in Freezer - 240SF',
                                     thermal_zone: zone)
   end

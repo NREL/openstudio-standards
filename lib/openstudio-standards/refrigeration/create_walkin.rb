@@ -8,13 +8,11 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
-    # @param operation_type [String] Temperature regime, either 'MT' Medium Temperature, or 'LT' Low Temperature
     # @param walkin_type [String] The walkin type. See refrigeration_walkins data for valid options under walkin_type.
     # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
     # @return [OpenStudio::Model::RefrigerationWalkIn] the refrigeration walkin
     def self.create_walkin(model,
                            template: 'new',
-                           operation_type: 'MT',
                            walkin_type: 'Walk-in Cooler - 120SF with no glass door',
                            thermal_zone: nil)
       # load refrigeration walkin data
@@ -26,8 +24,13 @@ module OpenstudioStandards
       walkins_tbl = CSV.table(walkins_csv, encoding: 'ISO8859-1:utf-8')
       walkins_hsh = walkins_tbl.map(&:to_hash)
 
-      # get case properties
-      walkins_properties = walkins_hsh.select { |r| (r[:template] == template) && (r[:operation_type] == operation_type) && (r[:walkin_name] == walkin_type) }[0]
+      # get walkin properties
+      walkins_properties = walkins_hsh.select { |r| (r[:template] == template) && (r[:walkin_name] == walkin_type) }
+      if walkins_properties.empty?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find walkin properties for walkin #{template} #{walkin_type}.")
+        return false
+      end
+      walkins_properties = walkins_properties[0]
 
       # add walkin
       ref_walkin = OpenStudio::Model::RefrigerationWalkIn.new(model, model.alwaysOnDiscreteSchedule)

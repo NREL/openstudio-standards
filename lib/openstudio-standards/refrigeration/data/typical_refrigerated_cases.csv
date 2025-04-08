@@ -1,0 +1,15 @@
+﻿building_type,space_type,case_type,length_ft,reference_space_type_area_ft2
+SuperMarket,Sales,Reach-in - Ice Cream,120,27500
+SuperMarket,Sales,Coffin - Ice Cream,12,27500
+SuperMarket,Sales,Reach-in - Frozen Food,270,27500
+SuperMarket,Sales,"Reach-in - Dairy, Deli, Beverage Case",90,27500
+SuperMarket,Sales,Service - Meat Deli Bakery,180,27500
+SuperMarket,Sales,Island - Deli Produce,36,27500
+SuperMarket,Sales,Vertical Open - All,90,27500
+Gro,GrocSales,Reach-in - Ice Cream,120,40000
+Gro,GrocSales,Coffin - Ice Cream,12,40000
+Gro,GrocSales,Reach-in - Frozen Food,270,40000
+Gro,GrocSales,"Reach-in - Dairy, Deli, Beverage Case",90,40000
+Gro,GrocSales,Service - Meat Deli Bakery,180,40000
+Gro,GrocSales,Island - Deli Produce,36,40000
+Gro,GrocSales,Vertical Open - All,90,40000

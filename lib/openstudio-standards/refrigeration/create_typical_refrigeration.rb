@@ -13,7 +13,6 @@ module OpenstudioStandards
                                           template: 'new')
       # get refrigeration equipment list based on space types and area
       ref_equip_list = OpenstudioStandards::Refrigeration.typical_refrigeration_equipment_list(model)
-      refrigeration_space_type_area = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
 
       # Find the thermal zones most suited for holding the display cases
       thermal_zone_case = OpenstudioStandards::Refrigeration.refrigeration_case_zone(model)
@@ -58,34 +57,25 @@ module OpenstudioStandards
         end
       end
 
-      medium_temperature_equip = medium_temperature_cases + medium_temperature_walkins
-      low_temperature_equip = low_temperature_cases + low_temperature_walkins
+      refrigeration_space_type_area = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
       separate_system_size_limit = 20_000.0
       if refrigeration_space_type_area < separate_system_size_limit
-        # each piece of equipment gets its own refrigeration system
-        unless medium_temperature_equip.empty?
-          medium_temperature_equip.each do |ref_equip|
-            OpenstudioStandards::Refrigeration.create_compressor_rack(model, ref_equip,
-                                                                      template: template)
-          end
-        end
-        unless low_temperature_equip.empty?
-          low_temperature_equip.each do |ref_equip|
-            OpenstudioStandards::Refrigeration.create_compressor_rack(model, ref_equip,
-                                                                      template: template)
-          end
-        end
+        # each case is self-contained
+        medium_temperature_cases.each { |ref_equip| OpenstudioStandards::Refrigeration.create_compressor_rack(model, ref_equip, template: template) }
+        low_temperature_cases.each { |ref_equip| OpenstudioStandards::Refrigeration.create_compressor_rack(model, ref_equip, template: template) }
+
+        # each walkin gets its own refrigeration system
+        medium_temperature_walkins.each { |ref_equip| OpenstudioStandards::Refrigeration.create_refrigeration_system(model, [ref_equip], template: template, operation_type: 'MT') }
+        low_temperature_walkins.each { |ref_equip| OpenstudioStandards::Refrigeration.create_refrigeration_system(model, [ref_equip], template: template, operation_type: 'LT') }
       else
-        unless medium_temperature_equip.empty?
-          OpenstudioStandards::Refrigeration.create_refrigeration_system(model, medium_temperature_equip,
-                                                                         template: template,
-                                                                         operation_type: 'MT')
-        end
-        unless low_temperature_equip.empty?
-          OpenstudioStandards::Refrigeration.create_refrigeration_system(model, low_temperature_equip,
-                                                                         template: template,
-                                                                         operation_type: 'LT')
-        end
+        medium_temperature_equip = medium_temperature_cases + medium_temperature_walkins
+        OpenstudioStandards::Refrigeration.create_refrigeration_system(model, medium_temperature_equip,
+                                                                       template: template,
+                                                                       operation_type: 'MT')
+        low_temperature_equip = low_temperature_cases + low_temperature_walkins
+        OpenstudioStandards::Refrigeration.create_refrigeration_system(model, low_temperature_equip,
+                                                                       template: template,
+                                                                       operation_type: 'LT')
       end
 
       return true
@@ -96,28 +86,54 @@ module OpenstudioStandards
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @return [Hash] Hash of refrigeration case lengths and walkin area
     def self.typical_refrigeration_equipment_list(model)
-      # get building type
-      building_type = 'SuperMarket'
-      building_type_area_ft2 = 50000.0
+      # load refrigeration cases data
+      cases_csv = "#{__dir__}/data/typical_refrigerated_cases.csv"
+      unless File.exist?(cases_csv)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{cases_csv}")
+        return false
+      end
+      cases_tbl = CSV.table(cases_csv, encoding: 'ISO8859-1:utf-8')
+      cases_hsh = cases_tbl.map(&:to_hash)
 
-      # when grocery store
+      # load refrigeration walkin data
+      walkins_csv = "#{__dir__}/data/typical_refrigerated_walkins.csv"
+      unless File.exist?(walkins_csv)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{walkins_csv}")
+        return false
+      end
+      walkins_tbl = CSV.table(walkins_csv, encoding: 'ISO8859-1:utf-8')
+      walkins_hsh = walkins_tbl.map(&:to_hash)
+
+      # loop through space types to get collection of cases and walkins
       cases_list = []
       walkins_list = []
-      case building_type
-      when 'SuperMarket', 'GroceryStore'
-        # cases
-        cases_list << { case_type: 'Reach-in - Ice Cream', length: 30.0 * (building_type_area_ft2 / 50000.0) }
-        cases_list << { case_type: 'Coffin - Ice Cream', length: 4.0 * (building_type_area_ft2 / 50000.0) }
-        cases_list << { case_type: 'Reach-in - Frozen Food', length: 90.0 * (building_type_area_ft2 / 50000.0) }
-        cases_list << { case_type: 'Reach-in - Dairy, Deli, Beverage Case', length: 30.0 * (building_type_area_ft2 / 50000.0) }
-        cases_list << { case_type: 'Service - Meat Deli Bakery', length: 60.0 * (building_type_area_ft2 / 50000.0) }
-        cases_list << { case_type: 'Island - Deli Produce', length: 12.0 * (building_type_area_ft2 / 50000.0) }
-        cases_list << { case_type: 'Vertical Open - All', length: 30.0 * (building_type_area_ft2 / 50000.0) }
+      model.getSpaceTypes.sort.each do |space_type|
+        total_space_floor_area_m2 = space_type.floorArea
+        total_space_floor_area_ft2 = OpenStudio.convert(total_space_floor_area_m2, 'm^2', 'ft^2').get
 
-        # walkins
-        walkins_list << {
-          walkin_type: 'Walk-in Cooler - 120SF with no glass door'
-        }
+        next unless space_type.standardsSpaceType.is_initialized
+        next unless space_type.standardsBuildingType.is_initialized
+        standards_space_type = space_type.standardsSpaceType.get
+        standards_building_type = space_type.standardsBuildingType.get
+
+        # create list of cases
+        ref_cases = cases_hsh.select { |hash| (hash[:space_type] == standards_space_type) && (hash[:building_type] == standards_building_type) }
+        ref_cases.each do |ref_case|
+          length_modifier = total_space_floor_area_ft2 / ref_case[:reference_space_type_area_ft2]
+          case_length = OpenStudio.convert(ref_case[:length_ft] * length_modifier, 'ft', 'm').get
+          cases_list << { case_type: ref_case[:case_type], length: case_length }
+        end
+
+        # create list of walkins
+        ref_walkins = walkins_hsh.select { |hash| (hash[:space_type] == standards_space_type) && (hash[:building_type] == standards_building_type) }
+        ref_walkins.each do |ref_walkin|
+          area_modifier = total_space_floor_area_ft2 / ref_walkin[:reference_space_type_area_ft2]
+          # round to the nearest 120 ft2, with a minimum size of 80 ft2 and maximum size of 480 ft2
+          walkin_size_ft2 = [[80.0, 120.0 * ((ref_walkin[:size_ft2] * area_modifier) / 120.0).round].max, 480.0].min.to_int
+          walkin_name = "#{ref_walkin[:walkin_type]} - #{walkin_size_ft2}SF"
+          walkin_name = "#{walkin_name} with no glass door" if walkin_name.include? 'Cooler'
+          walkins_list << { walkin_type: walkin_name }
+        end
       end
 
       equipment_list = {
