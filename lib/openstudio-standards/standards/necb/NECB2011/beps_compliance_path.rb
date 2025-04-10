@@ -118,6 +118,9 @@ class NECB2011
         # set fraction radiant  ##
         definition.setFractionRadiant(0.3)
 
+        # Set thermal comfort model type to Fanger
+        definition.setThermalComfortModelType(0,'Fanger')
+
         # Clothing schedule for thermal comfort metrics
         clothing_sch = space_type.model.getScheduleRulesetByName('Clothing Schedule')
         if clothing_sch.is_initialized
